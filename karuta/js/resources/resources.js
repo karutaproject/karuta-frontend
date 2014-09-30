@@ -1,0 +1,13 @@
+$.getScript('../../karuta/js/resources/Type_Calendar.js');
+$.getScript('../../karuta/js/resources/Type_Comments.js');
+$.getScript('../../karuta/js/resources/Type_Document.js');
+$.getScript('../../karuta/js/resources/Type_Proxy.js');
+$.getScript('../../karuta/js/resources/Type_TextField.js');
+$.getScript('../../karuta/js/resources/Type_Field.js');
+$.getScript('../../karuta/js/resources/Type_Image.js');
+$.getScript('../../karuta/js/resources/Type_Get_Resource.js');
+$.getScript('../../karuta/js/resources/Type_Get_Get_Resource.js');
+$.getScript('../../karuta/js/resources/Type_URL.js');
+$.getScript('../../karuta/js/resources/Type_Item.js');
+$.getScript('../../karuta/js/resources/Type_Video.js');
+$.getScript('../../karuta/js/resources/Type_CompetencyEvaluation.js');

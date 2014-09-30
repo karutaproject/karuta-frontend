@@ -1,0 +1,589 @@
+
+/* --- Problem with button ---*/
+.btn-mini [class*="icon-"] {
+	margin-top:3px;
+	margin-bottom:3px;
+}
+.btn-mini .icon-font {
+	margin-top:0px;
+	margin-bottom:0px;
+}
+/* --------------------------*/
+.versions {
+	width:300px;
+}
+/* --------------------------*/
+#progress{
+	width:100%;
+}
+.bar {
+	height: 18px;
+	background: green;
+}
+#file-loader {
+    border: 0 none;
+    height: 80px;
+    padding: 0;
+}
+
+hr {
+	margin-bottom: 7px;
+	margin-top: 5px;
+}
+
+.accordion-inner .title {
+	margin-left:7px;
+}
+.accordion-inner .accordion-inner .title {
+	margin-left:14px;
+}
+
+.asmStructure,
+.asmUnit,
+.asmContext {
+	margin-top:5px;
+}
+.asmUnitStructure {
+	margin-top:10px;
+}
+
+.asmRoot .title {
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 30px;
+}
+
+
+.asmStructure .title {
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 30px;
+}
+
+.asmStructure .asmStructure .title,
+.asmRoot .asmStructure .title {
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 20px;
+}
+
+.asmUnit .title {
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 30px;
+}
+
+.asmStructure .asmUnit .title,
+.asmRoot .asmUnit .title {
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 20px;
+}
+
+.asmUnitStructure .title {
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 20px;
+}
+
+.asmUnitStructure .asmUnitStructure .title {
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 20px;
+}
+
+.asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 20px;
+}
+
+.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 20px;
+}
+
+.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .asmContext .title,
+.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmContext .title,
+.asmUnitStructure .asmUnitStructure .asmContext .title,
+.asmUnitStructure .asmContext .title,
+.asmContext .title {
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 16px;
+}
+
+.text-editor {
+	background-color: white;
+	border: 1px solid rgb(204, 204, 204); 
+	padding: 4px; 
+	box-sizing: content-box; 
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px; 
+	border-top-left-radius: 3px;
+}
+/* ---------------- resource Comments --------------------- */
+.author-date {
+		font-size:11px;
+		font-style:italic;
+}
+
+/* ---------------- list portfolios --------------------- */
+
+.item {
+	margin-top:5px;
+}
+/* -------------------------------------------------- */
+/* --------------old WAD css    --------------------- */
+/* -------------------------------------------------- */
+
+
+
+/* -------------------------------------------------- */
+/* Container */
+
+body {
+	font-size: 12px;
+}
+
+#content .texte{
+	text-align:justify;
+}
+
+/* -------------------------------------------------- */
+/* Container */
+
+#container {
+	padding-top: 80px;
+}
+
+textarea {
+	width:100%;
+	height:200px;
+}
+
+/* -------------------------------------------------- */
+/* Main Nav */
+
+.sidebar-title {
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 22px;
+	margin-bottom: 15px;
+}
+#main-nav .title a {
+	color: #333;
+}
+
+#main-nav div.divider {
+	background-color: #e5e5e5;
+	border-bottom: 1px solid #fff;
+	height: 1px;
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+#main-nav .nav-list {
+	padding: 0;
+}
+
+#main-nav .nav-list .branch-top > a {
+	background-image: url('images/main-nav-arrow-closed.png');
+	background-position: 0 9px;
+	background-repeat: no-repeat;
+	font-weight: bold;
+	margin-left: 0;
+	margin-right: 0;
+	padding-right: 10px;
+}
+#main-nav .nav-list .selected > a {
+	background-image: url('images/main-nav-arrow-opened.png');
+}
+
+#main-nav .nav-list ul.nested li {
+	margin-bottom: 5px;
+}
+#main-nav .nav-list ul.nested {
+	display: none;
+	padding-top: 11px;
+}
+
+
+
+#sidebar li.selected ul.nested {
+	display: block;
+}
+#sidebar li.selected ul.nested li.selected a {
+	background-image: none;
+	color: #000;
+}
+#sidebar li.nested {
+	text-indent: 15px;
+}
+#sidebar .number {
+	color: #aaa;
+	float: right;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+
+.activeTreeColor, .parentTreeColor {
+	color:#01A9DB;
+}
+
+.noTreeColor {
+	color:inherit;
+}
+
+#wait-window,
+#saved-window {
+	width:100px;
+	margin-left:-50px;
+	background-color:lightgrey;
+	position:fixed;
+	top:25%;
+	left:50%;
+}
+
+
+
+/* -------------------------------------------------- */
+/* Content */
+
+
+hr {
+	margin-bottom: 7px;
+	margin-top: 5px;
+}
+
+
+
+#content h1,
+#content h2,
+#content h3,
+#content h4,
+#content h5,
+#content h6 {
+	margin-top: 0;
+}
+
+#content hr.spacer {
+	margin-bottom: 66px;
+}
+
+
+
+#content .icon-move {
+	cursor: move;
+}
+
+#content .comment {
+	font-size: 12px;
+	padding-bottom: 22px;
+	padding-left: 40px;
+}
+
+#content h2 .popover-inner {
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 16px;
+}
+
+/* -------------------------------------------------- */
+/* ----------------- ADMIN -------------------------- */
+/* -------------------------------------------------- */
+
+.portfolio, .user , .account ,.group {
+	min-height:30px;
+	border-top: 1px solid rgb(227, 227, 227);
+	margin-top: 0px;
+	padding-top: 8px;
+}
+
+#metadata .control-group {
+	margin-bottom:3px;
+}
+/* -------------------------------------------------- */
+/* -------------------------------------------------- */
+/* -------------------------------------------------- */
+
+
+/* ====================== 
+				ARBRE
+    ====================== */
+
+.children {
+	margin-left:20px;
+}
+
+
+a:hover {
+	text-decoration: none;
+	color:#01A9DB;
+}
+
+/* ====================== */
+/*        LOGIN          */
+/* ====================== */
+
+
+
+.login {
+	margin-top:200px;
+	text-align:center;
+	width:100%;
+}
+
+
+.login span {
+	text-align:right;
+	display: inline-block;
+	width:100px;
+	margin-right:10px;
+}
+.login div {
+	margin-bottom:15px;
+}
+
+.login .newpwd {
+	font-size:90%;
+	width:320px;
+	text-align:justify;
+}
+
+.login .check {
+	vertical-align:middle;
+	height:50px;
+}
+
+.selectUserRole {
+	background-color: #DDDDDD;
+}
+.selectRole {
+	background-color:white;
+	border: 1px solid gray;
+	z-index:20;
+	margin-left:40%;
+	margin-right:40%;
+	margin-top:150px;
+	padding:10px;
+	width:300px;
+}
+
+.selectRole td{
+	padding-top:10px;
+	padding-right:5px;
+}
+
+.wad{
+	font-size:800%;
+	width:100%;
+	text-align:center;
+	font-weight:bold;
+	color:#BBBBBB;
+}
+
+/* ====================== */
+/*      PAGE            */
+/* ====================== */
+
+/*
+.asmRoot,
+.asmStructure,
+.asmUnit {
+	display:none;
+	margin-top:15px;
+}
+*/
+.pageCode {
+	font-size:12px;
+	font-weight:normal;
+	margin-left:20px;
+}
+
+
+
+
+
+
+.asmRoot .node,
+.asmUnit .node,
+.asmStructure .node {
+	font-size:110%;
+	padding-left:10px;
+	padding-top:10px;
+	padding-bottom:10px;
+	border-top:1px solid #ddd;
+}
+
+.novisible > .row{
+	display:none;
+}
+.novisible  div .section{
+	display:block;
+}
+
+
+
+
+/* ====================== */
+/*      EDITOR            */
+/* ====================== */
+
+.edit-shared {
+	width:150px;
+	padding-left:4px;
+}
+
+.edit-field {
+	display:inline-block;
+	width:150px;
+	padding-left:3px;
+}
+
+.editwad-field {
+	display:inline-block;
+	width:180px;
+	padding-left:3px;
+}
+
+.editnode-field {
+	display:inline-block;
+	width:80px;
+	padding-left:3px;
+}
+
+.file-loader{
+  border:0px;
+  padding:0px;
+  height:80px;
+ }
+
+input {
+/*	width:320px; */
+}
+
+/* ====================
+	TextRaw
+   ====================*/
+.rawtext blockquote {
+	margin-bottom:0px;
+}
+
+/* =========== asmResource_Text ==========
+.text-title {
+	font-weight:bold;
+}
+
+/* ====================
+	Annotation
+   ====================*/
+.annotation-content {
+	margin-top:5px;
+	font-size:12px;
+	font-weight:normal;
+	line-height:14px;
+}
+
+.annotation-content .writer {
+	font-style:italic;
+
+	}
+
+
+/* ====================
+	divers
+   ====================*/
+.metainfo {
+	color: #808080;
+	font-size: 10px;
+	line-height: 12px;
+}
+
+
+.comments {
+	font-style:italic;
+	font-size:11px;
+}
+
+#wait-window {
+	padding:20px;
+	background-color:#F0F0F0;
+	position:fixed;
+	top:20%;
+	left:48%;
+	z-index:3000;
+	display:none;
+	text-align:center;
+	border: 1px solid black;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px; 
+	border-top-left-radius: 3px;
+}
+
+table.tablesorter thead tr th, table.tablesorter tfoot tr th
+{
+	min-width:150px;
+}
+
+#th_menus {
+	min-width:35px;
+}
+
+/* ====================
+	partage
+   ====================*/
+
+.partage td {
+	padding:3px;
+}
+
+.ajout-mani  {
+}
+
+.ajout-mani hr.asmUnitStructure {
+	margin-top:20px;
+	border-width:5px;
+}
+
+.free-fieldname{
+	font-weight:bold;
+}
+
+/*
+.rowContext {
+	border-top:1px solid #C0C0C0;
+	margin-top:5px;
+	padding-top: 5px;
+}
+*/
+/* ====================
+	Badges
+   ====================*/
+
+.badge-warning {
+  background-color: #f89406;
+}
+.badge-success {
+  background-color: #468847;
+}
+.badge-danger {
+  background-color: #b94a48;
+}
+
+/* ====================
+	Batch Model
+   ====================*/
+
+#batchmodel_list_table td
+{
+	padding:5px;
+	border-top:1px solid #C0C0C0;
+	border-bottom:1px solid #C0C0C0;
+}
+
+

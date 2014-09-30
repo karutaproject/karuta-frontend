@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Batch Processor</title>
+	<!-- =========================================== -->
+	<script src="../../other/js/jquery-1.10.2.js"></script>
+	<script src="../../other/js/bootstrap-wysihtml5.js"></script>
+	<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../karuta/js/karuta.js"></script>
+	<script src="../../karuta/js/UICom.js"></script>
+	<script src="../../karuta/js/batch.js"></script>
+	<script src="../../karuta/js/model/Type_Portfolio.js"></script>
+	<script src="../../application/js/_init.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../other/js/jquery.ui.widget.js"></script>
+	<script src="../../other/js/jquery.iframe-transport.js"></script>
+	<script src="../../other/js/jquery.fileupload.js"></script>
+	<!-- =============================================================== -->
+</head>
+<body>
+	<h3>Batch</h3>
+	<div id='content'></div>
+	<script language='JavaScript'>
+		var data = "{ "
+				+"		\"template1\" : \"model1\","
+				+"		\"template2\" : \"model2\","
+				+"		\"prefix\" : \"\","
+				+"		\"suffix\" : \"\","
+				+"		\"lines\" :["
+				+"			{"
+				+"			\"user1\":{\"identifier\": \"AAA\", \"lastname\": \"XXX\", \"firstname\": \"YYY\", \"email\": \"yyy.xxx@zzz\", \"roleA\": \"owner\", \"roleB\": \"designer\" }"
+				+"			}"
+				+"		]"
+				+"	}";
+		var json = JSON.parse(data);
+		var model = "<model>"
+				+  "	<for-each-line>"
+				+  "		<!-- ====================================== -->"
+				+  "		<create-user>"
+				+  "			<identifier>"
+				+  "				<txtval select='user1.identifier'/>"
+				+  "			</identifier>"
+				+  "			<lastname>"
+				+  "				<txtval select='user1.lastname'/>"
+				+  "			</lastname>"
+				+  "			<firstname>"
+				+  "				<txtval select='user1.firstname'/>"
+				+  "			</firstname>"
+				+  "			<email>"
+				+  "				<txtval select='user1.email'/>"
+				+  "			</email>"
+				+  "			<designer>"
+				+  "				<txtval>1</txtval>"
+				+  "			</designer>"
+				+  "		</create-user>"
+				+  "		<!-- ====================================== -->"
+				+  "		<create-tree id='profile'>"
+				+  "			<template>"
+				+  "				<txtval>_profile_</txtval>"
+				+  "			</template>"
+				+  "			<code>"
+				+  "				<txtval>Profile</txtval>"
+				+  "				<txtval select='user1.identifier'/>"
+				+  "			</code>"
+				+  "			<label>"
+				+  "				<txtval>Profil </txtval>"
+				+  "				<txtval select='user1.lastname'/>"
+				+  "				<txtval> </txtval>"
+				+  "				<txtval select='user1.firstname'/>"
+				+  "			</label>"
+				+  "		</create-tree>"
+				+  "		<copy-tree id='template1'>"
+				+  "			<template>"
+				+  "				<txtval select='//template1'/>"
+				+  "			</template>"
+				+  "			<code>"
+				+  "				<txtval select='//template1'/>"
+				+  "				<txtval select='user1.identifier'/>"
+				+  "			</code>"
+				+  "		</copy-tree>"
+				+  "		<copy-tree id='template2'>"
+				+  "			<template>"
+				+  "				<txtval select='//template2'/>"
+				+  "			</template>"
+				+  "			<code>"
+				+  "				<txtval select='//template2'/>"
+				+  "				<txtval select='user1.identifier'/>"
+				+  "			</code>"
+				+  "		</copy-tree>"
+				+  "		<!-- ====================================== -->"
+				+  "		<update-resource type='Field' select='profile.lastname'>"
+				+  "				<text>"
+				+  "					<txtval select='user1.lastname'/>"
+				+  "				</text>"
+				+  "		</update-resource>"
+				+  "		<update-resource type='Field' select='profile.firstname'>"
+				+  "				<text>"
+				+  "					<txtval select='user1.firstname'/>"
+				+  "				</text>"
+				+  "		</update-resource>"
+				+  "		<!-- ====================================== -->"
+				+  "		<share-tree select='profile'>"
+				+  "			<role select='user1.roleA'/>"
+				+  "			<user select='user1.identifier'/>"
+				+  "		</share-tree>"
+				+  "		<share-tree select='template1'>"
+				+  "			<role select='user1.roleB'/>"
+				+  "			<user select='user1.identifier'/>"
+				+  "		</share-tree>"
+				+  "		<share-tree select='template2'>"
+				+  "			<role select='user1.roleB'/>"
+				+  "			<user select='user1.identifier'/>"
+				+  "		</share-tree>"
+				+  "		<!-- ====================================== -->"
+				+  "	</for-each-line>"
+				+  "</model>";
+		var xmlDoc = null;
+		if (window.DOMParser) {
+			parser=new DOMParser();
+			xmlDoc=parser.parseFromString(model,"text/xml");
+		} else { // code for IE
+			xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+			xmlDoc.async = false;
+			xmlDoc.loadXML(model); 
+		}
+
+
+		//============================================================================
+		//============================================================================
+		//============================================================================
+		var created_trees = {};
+		$(document).ready(function() {
+			$.ajaxSetup({async: false});
+			$("#content").append("<br>template:|"+json.template+"|");
+			$("#content").append("<br>prefix:|"+json.prefix+"|");
+			$("#content").append("<br>suffix:|"+json.suffix+"|");
+			for (var i=0; i<json.lines.length; i++) {
+				//===========================================================
+				$("#content").append("<hr>");
+				$("#content").append("<b>Line "+(i+1)+"</b>");
+				$("#content").append("<br>-------user1");
+				$("#content").append("<br>identifier:|"+json.lines[i].user1.identifier+"|");
+				$("#content").append("<br>lastname:|"+json.lines[i].user1.lastname+"|");
+				$("#content").append("<br>firstname:|"+json.lines[i].user1.firstname+"|");
+				$("#content").append("<br>email:|"+json.lines[i].user1.email+"|");
+				$("#content").append("<br>role:|"+json.lines[i].user1.role+"|");
+				//===========================================================
+				process(xmlDoc,i);
+				//===========================================================
+			}
+		});
+
+	</script>
+
+</body>
+</html>

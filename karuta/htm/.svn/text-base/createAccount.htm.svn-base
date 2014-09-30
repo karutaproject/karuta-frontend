@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Create a Karuta account</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- =========================================== -->
+	<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-wysihtml5.css" />
+	<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
+	<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
+	<!-- =========================================== -->
+	<link rel="stylesheet" href="../../application/css/specific.css" />
+	<!-- =========================================== -->
+	<script src="../../other/js/jquery-1.10.2.js"></script>
+	<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/karuta.js"></script>
+	<script src="../../karuta/js/UICom.js"></script>
+	<script src="../../karuta/js/batch.js"></script>
+	<script src="../../karuta/js/model/Type_Portfolio.js"></script>
+	<!-- =========================================== -->
+	<script src="../../application/js/_init.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/version.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../other/js/jquery.ui.widget.js"></script>
+	<script src="../../other/js/jquery.iframe-transport.js"></script>
+	<script src="../../other/js/jquery.fileupload.js"></script>
+	<!-- =============================================================== -->
+	<script language='javascript'>
+	//==============================
+	function callSubmit()
+	//==============================
+	{
+		var ok = true;
+		var useridentifier = $("#useridentifier").val();
+		var firstname = $("#firstname").val();
+		var lastname = $("#lastname").val();
+		var password = $("#password").val();
+		if (useridentifier==""){
+			alert("email is required");
+			ok =false;
+		}
+		if (lastname==""){
+			alert("lastname is required");
+			ok =false;
+		}
+		if (firstname==""){
+			alert("firstname is required");
+			ok =false;
+		}
+		if (password==""){
+			alert("password is required");
+			ok =false;
+		}
+		if (ok){
+			json.lines[0].user1.identifier = useridentifier;
+			json.lines[0].user1.firstname = firstname;
+			json.lines[0].user1.lastname = lastname;
+			json.lines[0].user1.password = password;
+			json.lines[0].user1.email = useridentifier;
+			process(xmlDoc,0);
+			window.location = "../../application/htm/login.htm"
+		}
+	}
+		
+		//==============================
+		function getInputs()
+		//==============================
+		{
+			var html = "";
+			html += "<input id='useridentifier' class='input-block-level' placeholder='"+karutaStr[LANG]['email']+"' type='text'>";
+			html += "<input id='firstname' class='input-block-level' placeholder='"+karutaStr[LANG]['firstname']+"' type='text'>";
+			html += "<input id='lastname' class='input-block-level' placeholder='"+karutaStr[LANG]['lastname']+"' type='text'>";
+			html += "<input id='password' class='input-block-level' placeholder='"+karutaStr[LANG]['password']+"' type='password'>";
+			html += "<button class='btn btn-large btn-primary' onclick='javascript:callSubmit()'>"+karutaStr[LANG]['create_account']+"</button>";
+			return html;
+		}
+
+		//------------------------------
+		var lang = getURLParameter('lang');
+		if (lang!=null) {
+			LANG = lang;
+			for (var i=0; i<languages.length;i++){
+				if (languages[i]==lang)
+					LANGCODE = i;
+			}
+		}
+		//------------------------------
+	</script></head>
+<body class="welcome">
+
+		<div id='navigation_bar'></div>
+		<div class="container">
+
+		<h2 class="line">KARUTA - Create an Account</h2>
+		<!--h4 class="line">powered by Karuta</h2-->
+
+		<div class="form-signin" id="login"></div>
+	</div>
+
+	<script language='javascript'>
+		//------------------------------
+		$(document).ready(function() {
+			$.ajaxSetup({async: false});
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverVER+"/version",
+				data: "",
+				success : function(data) {		
+					karuta_backend_version = $("number",$("#backend",data)).text();
+					karuta_backend_date = $("date",$("#backend",data)).text();
+					karuta_fileserver_version = $("number",$("#fileserver",data)).text();
+					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
+				}
+			});
+			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('login',null));$("#login").html(getInputs());});
+		});
+		//------------------------------
+	</script>
+
+
+
+	<script language='JavaScript'>
+		var data = "{ "
+				+"		\"template1\" : \"MiamiParts\","
+				+"		\"template2\" : \"MiamiPortfolio\","
+				+"		\"template3\" : \"MiamiRubrics\","
+				+"		\"prefix\" : \"\","
+				+"		\"suffix\" : \"\","
+				+"		\"lines\" :["
+				+"			{"
+				+"			\"user1\":{\"identifier\": \"AAA\", \"lastname\": \"XXX\", \"firstname\": \"YYY\", \"email\": \"yyy.xxx@zzz\",  \"password\": \"ppp\", \"roleA\": \"owner\", \"roleB\": \"designer\" }"
+				+"			}"
+				+"		]"
+				+"	}";
+		var json = JSON.parse(data);
+		var model = "<model>"
+				+  "	<for-each-line>"
+				+  "		<!-- ====================================== -->"
+				+  "		<create-user>"
+				+  "			<identifier>"
+				+  "				<txtval select='user1.identifier'/>"
+				+  "			</identifier>"
+				+  "			<lastname>"
+				+  "				<txtval select='user1.lastname'/>"
+				+  "			</lastname>"
+				+  "			<firstname>"
+				+  "				<txtval select='user1.firstname'/>"
+				+  "			</firstname>"
+				+  "			<email>"
+				+  "				<txtval select='user1.email'/>"
+				+  "			</email>"
+				+  "			<password>"
+				+  "				<txtval select='user1.password'/>"
+				+  "			</password>"
+				+  "			<designer>"
+				+  "				<txtval>1</txtval>"
+				+  "			</designer>"
+				+  "		</create-user>"
+				+  "		<!-- ====================================== -->"
+				+  "		<create-tree id='profile'>"
+				+  "			<template>"
+				+  "				<txtval>_profile_</txtval>"
+				+  "			</template>"
+				+  "			<code>"
+				+  "				<txtval select='user1.identifier'/>"
+				+  "				<txtval>-</txtval>"
+				+  "				<txtval>Profile</txtval>"
+				+  "			</code>"
+				+  "			<label>"
+				+  "				<txtval>Profile </txtval>"
+				+  "				<txtval select='user1.firstname'/>"
+				+  "				<txtval> </txtval>"
+				+  "				<txtval select='user1.lastname'/>"
+				+  "			</label>"
+				+  "		</create-tree>"
+				+  "		<copy-tree id='template1'>"
+				+  "			<template>"
+				+  "				<txtval select='//template1'/>"
+				+  "			</template>"
+				+  "			<code>"
+				+  "				<txtval select='user1.identifier'/>"
+				+  "				<txtval>-</txtval>"
+				+  "				<txtval select='//template1'/>"
+				+  "			</code>"
+				+  "		</copy-tree>"
+				+  "		<copy-tree id='template2'>"
+				+  "			<template>"
+				+  "				<txtval select='//template2'/>"
+				+  "			</template>"
+				+  "			<code>"
+				+  "				<txtval select='user1.identifier'/>"
+				+  "				<txtval>-</txtval>"
+				+  "				<txtval select='//template2'/>"
+				+  "			</code>"
+				+  "		</copy-tree>"
+				+  "		<copy-tree id='template3'>"
+				+  "			<template>"
+				+  "				<txtval select='//template3'/>"
+				+  "			</template>"
+				+  "			<code>"
+				+  "				<txtval select='user1.identifier'/>"
+				+  "				<txtval>-</txtval>"
+				+  "				<txtval select='//template3'/>"
+				+  "			</code>"
+				+  "		</copy-tree>"
+				+  "		<!-- ====================================== -->"
+				+  "		<update-resource type='Field' select='profile.lastname'>"
+				+  "				<text>"
+				+  "					<txtval select='user1.lastname'/>"
+				+  "				</text>"
+				+  "		</update-resource>"
+				+  "		<update-resource type='Field' select='profile.firstname'>"
+				+  "				<text>"
+				+  "					<txtval select='user1.firstname'/>"
+				+  "				</text>"
+				+  "		</update-resource>"
+				+  "		<update-resource type='Field' select='profile.email'>"
+				+  "				<text>"
+				+  "					<txtval select='user1.email'/>"
+				+  "				</text>"
+				+  "		</update-resource>"
+				+  "		<!-- ====================================== -->"
+				+  "		<share-tree select='profile'>"
+				+  "			<role select='user1.roleA'/>"
+				+  "			<user select='user1.identifier'/>"
+				+  "		</share-tree>"
+				+  "		<share-tree select='template1'>"
+				+  "			<role select='user1.roleB'/>"
+				+  "			<user select='user1.identifier'/>"
+				+  "		</share-tree>"
+				+  "		<share-tree select='template2'>"
+				+  "			<role select='user1.roleB'/>"
+				+  "			<user select='user1.identifier'/>"
+				+  "		</share-tree>"
+				+  "		<share-tree select='template3'>"
+				+  "			<role select='user1.roleB'/>"
+				+  "			<user select='user1.identifier'/>"
+				+  "		</share-tree>"
+				+  "		<!-- ====================================== -->"
+				+  "	</for-each-line>"
+				+  "</model>";
+		var xmlDoc = null;
+		if (window.DOMParser) {
+			parser=new DOMParser();
+			xmlDoc=parser.parseFromString(model,"text/xml");
+		} else { // code for IE
+			xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+			xmlDoc.async = false;
+			xmlDoc.loadXML(model); 
+		}
+		var created_trees = {};
+
+
+
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- CSV Format
+model_code;portfolio_code
+...
+identifier1;lastname1;firstname1;email1;role1
+...
+ -->
+<model>
+	<for-each-line>
+		<!-- ====================================== -->
+		<create-user>
+			<identifier>
+				<txtval select='identifier1'/>
+			</identifier>
+			<lastname>
+				<txtval select='lastname1'/>
+			</lastname>
+			<firstname>
+				<txtval select='firstname1'/>
+			</firstname>
+			<email>
+				<txtval select='email1'/>
+			</email>
+			<password>
+				<txtval select='email1'/>
+			</password>
+			<designer>
+				<txtval>0</txtval>
+			</designer>
+		</create-user>
+		<!-- ====================================== -->
+		<select-tree id='portfolio'>
+			<code>
+				<txtval select='identifier1'/>
+				<txtval>-</txtval>
+				<txtval select='//portfolio_code'/>
+			</code>
+		</select-tree>
+		<!-- ====================================== -->
+		<share-tree select='portfolio'>
+			<role select='role1'/>
+			<user select='identifier1'/>
+		</share-tree>
+		<!-- ====================================== -->
+	</for-each-line>
+</model>

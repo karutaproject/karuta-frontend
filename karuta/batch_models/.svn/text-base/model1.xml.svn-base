@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- FORMAT CSV
+model_code;
+identifier;lastname,firstname;email
+-->
+<model>
+	<for-each-line>
+		<!-- ====================================== -->
+		<create-user>
+			<identifier>
+				<txtval select='identifier'/>
+			</identifier>
+			<lastname>
+				<txtval select='lastname'/>
+			</lastname>
+			<firstname>
+				<txtval select='firstname'/>
+			</firstname>
+			<email>
+				<txtval select='email'/>
+			</email>
+			<password>
+				<txtval select='email'/>
+			</password>
+			<designer>
+				<txtval>1</txtval>
+			</designer>
+		</create-user>
+	</for-each-line>
+</model>

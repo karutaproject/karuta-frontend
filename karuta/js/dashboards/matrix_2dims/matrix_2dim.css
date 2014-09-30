@@ -1,0 +1,19 @@
+
+.matrice_2dims td,
+.matrice_2dims th 
+{
+	width:200px;
+	height:50px;
+	border:1px solid #E5E5E5;
+	padding:5px;
+}
+
+.matrice_2dims td.dim1
+{
+	text-align:center;
+}
+
+.matrice_2dims td.cell
+{
+	background-color:#F0F0F0;
+}
