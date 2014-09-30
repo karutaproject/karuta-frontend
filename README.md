@@ -22,8 +22,8 @@ MySQL 5.5 is recommended.
 ####Simple file server
 1. Download karuta-fileserver zip file from karuta-fileserver repository
 1. Unpack and import as existing project in Eclipse
-1. Create a RestFile Server_config into the webapps working directory of Eclipse
-1. Copy WebContent/persistence_config.properties to the RestFile Server_config directory
+1. Create a *RestFileServer_config* into the webapps working directory of Eclipse
+1. Copy WebContent/persistence_config.properties to the *RestFileServer_config* directory
 2. Run on server
 
 ####Front-end
