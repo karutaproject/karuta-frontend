@@ -31,4 +31,4 @@ MySQL 5.5 is recommended.
 1. Unpack and import as existing project in Eclipse
 1. Run on server
 1. Open localhost:8080/karuta in a browser
-1. Connect as *root* with password *admin* to start
+1. Connect as *root* with password *mati* to start
