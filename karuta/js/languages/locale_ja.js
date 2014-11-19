@@ -55,8 +55,8 @@ karutaStr['ja']['not-logged']="Vous are not connected.";
 
 karutaStr['ja']['label']="ラベル";
 karutaStr['ja']['edit']="編集";
-karutaStr['ja']['comments']="Comments";
-karutaStr['ja']['help-label']="Information";
+karutaStr['ja']['comments']="コメント";
+karutaStr['ja']['help-label']="情報";
 
 //=========================================
 //========== METADATA =====================
@@ -98,17 +98,17 @@ karutaStr['ja']['width']="位置 - 幅";
 karutaStr['ja']['height']="位置 - 高さ";
 karutaStr['ja']['public']="公開";
 karutaStr['ja']['text-align']="位置調整";
-karutaStr['ja']['sharedResource']="Shared Resource";
-karutaStr['ja']['sharedNodeResource']="Shared Node Resource";
-karutaStr['ja']['resizeroles']="Roles - Resize Image";
-karutaStr['ja']['img-size']="Image - Size";
-karutaStr['ja']['inline']="inline editing";
-karutaStr['ja']['edittargetroles']="Roles - Edit Proxy Target";
-karutaStr['ja']['showroles']="Roles - Show/Hide";
-karutaStr['ja']['showtoroles']="Rôles - Show to";
-karutaStr['ja']['private']="Hidden";
-karutaStr['ja']['hide-metainfo']="Hide Metadata";
-karutaStr['ja']['show-metainfo']="Show Metadata";
+karutaStr['ja']['sharedResource']="共有リソース";
+karutaStr['ja']['sharedNodeResource']="共有ノードリソース";
+karutaStr['ja']['resizeroles']="ロール - 画像をリサイズ";
+karutaStr['ja']['img-size']="画像 - サイズ";
+karutaStr['ja']['inline']="インライン編集";
+karutaStr['ja']['edittargetroles']="ロール - プロクシ対象を編集";
+karutaStr['ja']['showroles']="ロール - 表示/非表示";
+karutaStr['ja']['showtoroles']="ロール - 表示対象";
+karutaStr['ja']['private']="非表示";
+karutaStr['ja']['hide-metainfo']="メタデータを非表示";
+karutaStr['ja']['show-metainfo']="メタデータを表示";
 
 //=========================================
 //========== ADMIN ========================
@@ -128,27 +128,27 @@ karutaStr['ja']['bin']="ゴミ箱";
 karutaStr['ja']['nogroup']="グループなし";
 karutaStr['ja']['create_portfolio']="ポートフォリオを作成";
 karutaStr['ja']['code_portfolio']="ポートフォリオコード";
-karutaStr['ja']['import_portfolio']="ポートフォリオをインポート .xml";
-karutaStr['ja']['import_zip']="Import a portfolio .zip";
+karutaStr['ja']['import_portfolio']="ポートフォリオ (.xml) をインポート";
+karutaStr['ja']['import_zip']="ポートフォリオ (.zip) をインポート";
 karutaStr['ja']['instantiate_portfolio']="ポートフォリオを実体化";
-karutaStr['ja']['button-instantiate']="Instantiate";
+karutaStr['ja']['button-instantiate']="実体化";
 karutaStr['ja']['unshare']="ポートフォリオを非共有";
 karutaStr['ja']['addshare']="ポートフォリオを共有";
 karutaStr['ja']['shared']="共有済み";
-karutaStr['ja']['noshared']="No Sharing";
+karutaStr['ja']['noshared']="非共有";
 karutaStr['ja']['sharing']="共有中";
-karutaStr['ja']['sharing_with_designers']="Share with designers";
+karutaStr['ja']['sharing_with_designers']="デザイナと共有";
 karutaStr['ja']['unsharing']="非共有";
 karutaStr['ja']['export']="エクスポート";
 karutaStr['ja']['export-with-files']="ファイル付きでエクスポート";
-karutaStr['ja']['button-duplicate']="Duplicate";
-karutaStr['ja']['getPDF']="Create PDF";
+karutaStr['ja']['button-duplicate']="複製";
+karutaStr['ja']['getPDF']="PDF を作成";
 
 //=========================================
 //========== USERS ========================
 //=========================================
 
-karutaStr['ja']['create_account']="Create account";
+karutaStr['ja']['create_account']="アカウントを作成";
 karutaStr['ja']['create_user']="ユーザを追加";
 karutaStr['ja']['active_users']="有効なユーザ";
 karutaStr['ja']['inactive_users']="無効なユーザ";
@@ -158,9 +158,9 @@ karutaStr['ja']['firstname']="名";
 karutaStr['ja']['email']="電子メール";
 karutaStr['ja']['change_password']="パスワードを変更";
 karutaStr['ja']['password']="パスワード";
-karutaStr['ja']['new_password']="New Password";
+karutaStr['ja']['new_password']="新しいパスワード";
 karutaStr['ja']['admin']="管理者";
-karutaStr['ja']['designer']="creator";
+karutaStr['ja']['designer']="作成者";
 karutaStr['ja']['active']="有効";
 karutaStr['ja']['select_users']="ユーザを選択";
 
@@ -174,7 +174,7 @@ karutaStr['ja']['select_role']="ロールを選択";
 //========== BATCH ========================
 //=========================================
 
-karutaStr['ja']['batch']="Create Batch Accounts";
-karutaStr['ja']['upload_csv']="Upload a CSV File";
-karutaStr['ja']['process_csv']="Process";
+karutaStr['ja']['batch']="バッチアカウントを作成";
+karutaStr['ja']['upload_csv']="CSV ファイルをアップロード";
+karutaStr['ja']['process_csv']="処理";
 
