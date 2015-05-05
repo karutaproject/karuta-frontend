@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -37,7 +37,7 @@ UIFactory["Comments"] = function( node )
 			if (i==0 && $("text",$("asmResource[xsi_type='Comments']",node)).length==1) { // for WAD6 imported portfolio
 				this.text_node[i] = $("text",$("asmResource[xsi_type='Comments']",node));
 			} else {
-				var newelement = document.createElement("text");
+				var newelement = createXmlElement("text");
 				$(newelement).attr('lang', languages[i]);
 				$(newelement).removeAttr('xmlns');
 				$("asmResource[xsi_type='Comments']",node)[0].appendChild(newelement);
@@ -62,6 +62,8 @@ UIFactory["Comments"].prototype.getValues = function(type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -79,14 +81,18 @@ UIFactory["Comments"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
 	var html = "";
-	html += $("<div class='text'>").append($(this.text_node[langcode]).clone()).html();
+	var text = $(this.text_node[langcode]).text();
+
+	html += "<div class='text'>"+text+"</div>";
 	html +="<div  class='author-date'>";
 	html +="<span name='author' class='author' id='author'>"+$(this.author_node).text()+"</span>";
 	if ($(this.author_node).text()!='' && $(this.date_node).text()!='')
@@ -105,44 +111,57 @@ UIFactory["Comments"].prototype.update = function(langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	if ($(this.author_node).text()==''){
-		var author = USER.firstname_node.text()+" "+USER.lastname_node.text();
-		$(this.author_node).text(author);
-	}
-	var value = $.trim($("#"+this.id+"_edit").val());
-	$(this.text_node[langcode]).html($.parseHTML(value));
-	var date = new Date().toLocaleDateString();
-	$(this.date_node).text(date);
+	var now = new Date().toLocaleDateString();
+	var author = USER.getView(null,'firstname-lastname');
+	this.date_node.text(now);
+	this.author_node.text(author);
+	var value = $.trim($("#"+this.id+"_edit_"+langcode).val());
+	$(this.text_node[langcode]).text(value);//	$(this.text_node[langcode]).html($.parseHTML(value));
 	this.save();
 };
 
 
 //==================================
-UIFactory["Comments"].prototype.displayEditor = function(destid,type,langcode)
+UIFactory["Comments"].prototype.displayEditor = function(destid,type,langcode,disabled)
 //==================================
 {
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
+	if (disabled==null)
+		disabled = false;
 	//---------------------
 	if (type==null)
 		type = 'default';
 	var text = xml2string($(this.text_node[langcode])[0]);
-	if (type=='default')
-		html = "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit' style='height:200px'>"+text+"</textarea></div>";
+	var uuid = this.id;
+	var html = "";
+	if (type=='default') {
+		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit_"+langcode+"' style='height:200px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
+		if (disabled)
+			html += "disabled='disabled' ";
+		html += ">"+text+"</textarea></div>";
+	}
 	else if(type.indexOf('x')>-1) {
-		var width = type.substring(0,type.indexOf('x'));
+//		var width = type.substring(0,type.indexOf('x'));
 		var height = type.substring(type.indexOf('x')+1);
-		html = "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit' style='height:"+height+"px'>"+text+"</textarea></div>";
+		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit_"+langcode+"' style='height:"+height+"px' ";
+		if (disabled)
+			html += "disabled='disabled' ";
+		html += ">"+text+"</textarea></div>";
 	}
 	$("#"+destid).append($(html));
-	var uuid = this.id;
-	$("#"+this.id+"_edit").wysihtml5({size:'mini','image': false,'font-styles': false,'uuid':uuid,locale:languages[langcode],'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update()},'focus': function(){currentTexfieldUuid=uuid} }});
+	$("#"+this.id+"_edit_"+langcode).wysihtml5({size:'mini','font-styles': false,'image': false,'uuid':uuid,'locale':LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;} }});
+	//------------------------------------------------
 };
 
 //==================================
@@ -158,7 +177,7 @@ UIFactory["Comments"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

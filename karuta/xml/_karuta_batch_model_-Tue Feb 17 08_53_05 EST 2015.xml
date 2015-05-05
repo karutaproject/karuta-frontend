@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><portfolio code="0" id="97f05309-af7e-4e50-bc87-ffc7f78b18f7" owner="Y"><version>4</version><asmRoot  delete="Y" id="7c5f90a6-b7fd-48da-80f1-17d0e416350a" read="Y" role="" submit="Y" write="Y" xsi_type="" ><metadata-wad editnoderoles="batcher" menuroles="_karuta_batch_parts_,for-each-line,Add for-each-line/Ajouter for-each-line,batcher;_karuta_batch_parts_,create-person,Add create-person/Ajouter create-person,batcher;_karuta_batch_parts_,create-tree,Add create-tree/Ajouter create-tree,batcher;_karuta_batch_parts_,share-tree,Add create-share-tree/Ajouter share-tree,batcher;_karuta_batch_parts_,select-tree,Add select-tree/Ajouter select-tree,batcher;_karuta_batch_parts_,update-field,Add update-field/Ajouter update-field,batcher;_karuta_batch_parts_,update-proxy,Add update-proxy/Ajouter update-proxy,batcher" seenoderoles="all" /><metadata-epm /><metadata display-type="model" multilingual-node="Y" semantictag="root batch" sharedNode="N" sharedResource="N" /><asmResource contextid="7c5f90a6-b7fd-48da-80f1-17d0e416350a" id="dce3819c-b232-4505-bf39-09c3add0b4b3" xsi_type="nodeRes"><code>_karuta_batch_model_</code>
+			<label lang="fr">_karuta_batch_model_</label>
+			<label lang="en">_karuta_batch_model_</label></asmResource><asmResource contextid="7c5f90a6-b7fd-48da-80f1-17d0e416350a" id="237dfe59-0383-4953-83eb-63a9d9aca46c" xsi_type="context"><text lang="fr"/>
+			<text lang="en"/></asmResource><asmContext  delete="Y" id="831457c7-d55b-41c2-8972-0e635941a2eb" read="Y" role="" submit="Y" write="Y" xsi_type="" ><metadata-wad editresroles="batcher" seenoderoles="all" /><metadata-epm /><metadata multilingual-node="Y" semantictag="description" sharedNode="N" sharedNodeResource="N" sharedResource="N" /><asmResource contextid="831457c7-d55b-41c2-8972-0e635941a2eb" id="29238a6f-d5d9-459b-a264-bb4281abfbdc" xsi_type="nodeRes"><code/>
+				<label lang="fr">Description</label>
+				<label lang="en">Description</label></asmResource><asmResource contextid="831457c7-d55b-41c2-8972-0e635941a2eb" id="f08707fe-f216-4bb9-bc59-8c3bcb5b4dd5" xsi_type="context"><text lang="en"/>
+				<text lang="fr"/></asmResource><asmResource contextid="831457c7-d55b-41c2-8972-0e635941a2eb" id="6a5637c5-83cc-4df2-ba22-9cb08101ba6d" xsi_type="TextField"><text lang="fr">Création&lt;br&gt;- usager&lt;br&gt;-
+					profile&lt;br&gt;- portfolio&lt;br&gt;- cv</text>
+				<text lang="en"/></asmResource></asmContext><asmContext  delete="Y" id="bc460105-5638-49ca-9e94-7ed8959fc11a" read="Y" role="" submit="Y" write="Y" xsi_type="" ><metadata-wad editresroles="batcher" seenoderoles="all" /><metadata-epm /><metadata multilingual-node="Y" semantictag="cvsfile" sharedNode="N" sharedNodeResource="N" sharedResource="N" /><asmResource contextid="bc460105-5638-49ca-9e94-7ed8959fc11a" id="fd37ea58-3364-4bd8-be82-46be201110bf" xsi_type="nodeRes"><code/>
+				<label lang="fr">Fichier CVS associé (optionel)</label>
+				<label lang="en">Associated CVS File (optional)</label></asmResource><asmResource contextid="bc460105-5638-49ca-9e94-7ed8959fc11a" id="2087eb5c-6b41-436e-84e9-583e66a76b02" xsi_type="context"><text lang="en"/>
+				<text lang="fr"/></asmResource><asmResource contextid="bc460105-5638-49ca-9e94-7ed8959fc11a" id="99840d78-4664-403d-9c79-0a5d90e3b283" xsi_type="Document"><filename lang="fr">IUT2_batch_creer.csv</filename>
+				<size lang="fr">420</size>
+				<type lang="fr">text/csv</type>
+				<fileid lang="fr">fbba1af1-7b23-43f4-be19-22624dfa7504</fileid>
+				<filename lang="en"/>
+				<size lang="en"/>
+				<type lang="en"/>
+				<fileid lang="en"/></asmResource></asmContext></asmRoot></portfolio>

@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -33,7 +33,7 @@ UIFactory["Calendar"] = function( node )
 			if (i==0 && $("text",$("asmResource[xsi_type='Calendar']",node)).length==1) { // for WAD6 imported portfolio
 				this.text_node[i] = $("text",$("asmResource[xsi_type='Calendar']",node));
 			} else {
-				var newelement = document.createElement("text");
+				var newelement = createXmlElement("text");
 				$(newelement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
 				this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
@@ -52,11 +52,13 @@ UIFactory["Calendar"].prototype.getView = function(dest,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
 	return $(this.text_node[langcode]).text();
 };
@@ -69,6 +71,8 @@ UIFactory["Calendar"].update = function(input,itself,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -84,6 +88,8 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	if (disabled==null)
@@ -97,7 +103,7 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	var obj = $(html);
 	var self = this;
 	$(obj).change(function (){
-		UIFactory["Calendar"].update(obj,self);
+		UIFactory["Calendar"].update(obj,self,langcode);
 	});
 	return obj;
 };
@@ -115,7 +121,7 @@ UIFactory["Calendar"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

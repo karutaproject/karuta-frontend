@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -35,13 +35,14 @@ UIFactory["TextField"] = function( node )
 			if (i==0 && $("text",$("asmResource[xsi_type='TextField']",node)).length==1) { // for WAD6 imported portfolio
 				this.text_node[i] = $("text",$("asmResource[xsi_type='TextField']",node));
 			} else {
-				var newelement = document.createElement("text");
+				var newelement = createXmlElement("text");
 				$(newelement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='TextField']",node)[0].appendChild(newelement);
 				this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='TextField']",node));
 			}
 		}
 	}
+	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
 };
@@ -54,14 +55,24 @@ UIFactory["TextField"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
-	var text = $(this.text_node[langcode]).text(); 
-	return text;
+	//---------------------
+	if (type==null)
+		type = "standard";
+	var html = $(this.text_node[langcode]).text();
+	//---------------------
+	if(type=='standard') {
+		if (this.encrypted)
+			html = decrypt(html.substring(3),g_rc4key);
+	}
+	return html;
 };
 
 /// Editor
@@ -72,10 +83,14 @@ UIFactory["TextField"].prototype.update = function(langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	var value = $.trim($("#"+this.id+"_edit").val());
+	var value = $.trim($("#"+this.id+"_edit_"+langcode).val());
+	if (this.encrypted)
+		value = "rc4"+encrypt(value,g_rc4key);
 	$(this.text_node[langcode]).text(value);//	$(this.text_node[langcode]).html($.parseHTML(value));
 	this.save();
 };
@@ -90,6 +105,8 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	if (disabled==null)
@@ -97,19 +114,19 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	//---------------------
 	if (type==null)
 		type = 'default';
-	var text = xml2string($(this.text_node[langcode])[0]);
+	//---------------------
+	var text = "";
+	if (this.encrypted){
+		var cipher = $(this.text_node[langcode]).text().substring(3);
+		text = decrypt(cipher,g_rc4key);
+	}
+	else
+		text = xml2string($(this.text_node[langcode])[0]);
+	//---------------------
 	var uuid = this.id;
 	var html = "";
-/*	//------------------------------------------------
-	html += "<div id='wysihtml5-toolbar-"+uuid+"' style='display: none;'>";
-	html += "<a class='btn btn-mini' data-wysihtml5-command='bold'><i class='icon-bold'></i></a>";
-	html += "<a class='btn btn-mini'data-wysihtml5-command='italic'><i class='icon-italic'></i></a>";
-	html += "<a data-wysihtml5-command='insertOrderedList'><i class='icon-list-ul'></i></a>";
-	html += "<a data-wysihtml5-command='insertUnorderedList'>insert unordered list</a>";
-	html += "</div>";
-*/	//------------------------------------------------
 	if (type=='default') {
-		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit' style='height:200px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
+		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit_"+langcode+"' style='height:200px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
 		if (disabled)
 			html += "disabled='disabled' ";
 		html += ">"+text+"</textarea></div>";
@@ -117,22 +134,13 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	else if(type.indexOf('x')>-1) {
 //		var width = type.substring(0,type.indexOf('x'));
 		var height = type.substring(type.indexOf('x')+1);
-		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit' style='height:"+height+"px' ";
+		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit_"+langcode+"' style='height:"+height+"px' ";
 		if (disabled)
 			html += "disabled='disabled' ";
 		html += ">"+text+"</textarea></div>";
 	}
 	$("#"+destid).append($(html));
-/*	//-------------------------------
-	editor[uuid] = new wysihtml5.Editor(this.id+"_edit", {
-		toolbar: 'wysihtml5-toolbar-'+uuid,
-		stylesheets: ["../../other/wysihtml5/reset-min.css", "../../other/wysihtml5/editor.css"],
-		parserRules: wysihtml5ParserRules
-	});
-	editor[uuid].on("focus",function(){currentTexfieldUuid=uuid;});
-	editor[uuid].on("change:textarea",function(){UICom.structure['ui'][currentTexfieldUuid].resource.update();});
-*/	//-------------------------------
-	$("#"+this.id+"_edit").wysihtml5({size:'mini','font-styles': false,'image': false,'uuid':uuid,'locale':LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update();},'focus': function(){currentTexfieldUuid=uuid;} }});
+	$("#"+this.id+"_edit_"+langcode).wysihtml5({size:'mini','font-styles': false,'image': false,'uuid':uuid,'locale':LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;} }});
 	//------------------------------------------------
 };
 
@@ -149,7 +157,7 @@ UIFactory["TextField"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

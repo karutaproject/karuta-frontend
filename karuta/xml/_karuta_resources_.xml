@@ -196,6 +196,28 @@
 				<fileid lang="en" ></fileid>
 			</asmResource>
 		</asmContext>
+		//===================== Audio =======================
+		<asmContext xsi_type="">
+			<metadata-wad seenoderoles="all" />
+			<metadata-epm width="100"/>
+			<metadata multilingual-node="Y" semantictag ="Audio" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<code />
+				<label lang="fr" />
+				<label lang="en" />
+			</asmResource>
+			<asmResource xsi_type="context" />
+			<asmResource xsi_type="Audio">
+				<filename lang="fr" />
+				<size lang="fr" />
+				<type lang="fr" />
+				<fileid lang="fr" ></fileid>
+				<filename  lang="en" />
+				<size lang="en" />
+				<type lang="en" />
+				<fileid lang="en" ></fileid>
+			</asmResource>
+		</asmContext>
 		//===================== Comments =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
@@ -251,6 +273,28 @@
 				<label lang="en" />
 			</asmResource>
 		</asmContext>
+		//===================== Get_Double_Resource =======================
+		<asmContext xsi_type="">
+			<metadata-wad seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" semantictag ="Get_Double_Resource" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<code />
+				<label lang="fr" />
+				<label lang="en" />
+			</asmResource>
+			<asmResource xsi_type="context" />
+			<asmResource xsi_type="Get_Double_Resource">
+				<value1 />
+				<code1 />				
+				<label1 lang="fr" />
+				<label1 lang="en" />
+				<value2 />
+				<code2 />				
+				<label2 lang="fr" />
+				<label2 lang="en" />				
+			</asmResource>
+		</asmContext>
 		//===================== Proxy =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
@@ -270,7 +314,7 @@
 			</asmResource>
 		</asmContext>
 		//===================== Get_Proxy =======================
-		<asmContext xsi_type="">
+		<!--asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Get_Proxy" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
@@ -286,7 +330,7 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-		</asmContext>
+		</asmContext-->
 		//===================== Item =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
@@ -302,6 +346,61 @@
 				<code />
 				<label lang="fr" />
 				<label lang="en" />
+			</asmResource>
+		</asmContext>
+		//===================== SendEmail =======================
+		<asmContext xsi_type="">
+			<metadata-wad seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" semantictag ="SendEmail" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<code />
+				<label lang="fr">Envoyez un courriel à</label>
+				<label lang="en">Send an email to</label>>
+			</asmResource>
+			<asmResource xsi_type="context" />
+			<asmResource xsi_type="SendEmail">
+				<firstname lang="fr" />
+				<firstname lang="en" />
+				<lastname lang="fr" />
+				<lastname lang="en" />
+				<email lang="fr" />
+				<email lang="en" />
+			</asmResource>
+		</asmContext>
+		//===================== URL2Unit =======================
+		<asmContext xsi_type="">
+			<metadata-wad seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" semantictag ="URL2Unit" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<code />
+				<label lang="fr">Allez à</label>
+				<label lang="en">Go to</label>>
+			</asmResource>
+			<asmResource xsi_type="context" />
+			<asmResource xsi_type="URL2Unit">
+				<local-label lang="fr" />
+				<local-label lang="en" />
+				<label lang="fr" />
+				<label lang="en" />
+				<uuid/>
+			</asmResource>
+		</asmContext>
+		//===================== Dashboard =======================
+		<asmContext xsi_type="">
+			<metadata-wad seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" semantictag ="Dashboard" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<code />
+				<label lang="fr" />
+				<label lang="en" />
+			</asmResource>
+			<asmResource xsi_type="context" />
+			<asmResource xsi_type="Dashboard">
+				<text lang="fr"/>
+				<text lang="en"/>
 			</asmResource>
 		</asmContext>
 		//------------------------------------------------------
@@ -404,7 +503,7 @@
 			//======================= Document_free ====================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
-				<metadata-epm height="35px" left="300px" top="30px" width="400px" />
+				<metadata-epm height="35px" left="300" top="30" width="400px" />
 				<metadata multilingual-node="Y" semantictag ="Document_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
@@ -440,7 +539,7 @@
 
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
-				<metadata-epm height="35px" left="300px" top="30px" width="400px" />
+				<metadata-epm height="35px" left="300" top="30" width="400px" />
 				<metadata multilingual-node="Y" semantictag ="URL_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
@@ -469,7 +568,7 @@
 			//======================= Calendar_free ====================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
-				<metadata-epm height="35px" left="300px" top="30px" width="400px" />
+				<metadata-epm height="35px" left="300" top="30" width="400px" />
 				<metadata multilingual-node="Y" semantictag ="Calendar_free" sharedNode="N"
 					sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
@@ -498,7 +597,7 @@
 			//======================= Image_free ====================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
-				<metadata-epm height="100px" left="300px" top="30px" width="400px" />
+				<metadata-epm height="100px" left="300" top="30" width="400px" />
 				<metadata multilingual-node="Y" semantictag ="Image_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
@@ -526,6 +625,41 @@
 			<metadata multilingual-node="Y" semantictag ="" sharedNode="N" sharedNodeResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
+				<label lang="fr">Audio_free</label>
+				<label lang="en">Audio_free</label>
+			</asmResource>
+			<asmResource xsi_type="context" />
+			//======================= Audio_free ====================
+			<asmContext xsi_type="">
+				<metadata-wad seenoderoles="all" />
+				<metadata-epm height="100px" left="300" top="30" width="400px" />
+				<metadata multilingual-node="Y" semantictag ="Audio_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<asmResource xsi_type="nodeRes">
+					<code />
+					<label lang="fr" />
+					<label lang="en" />
+				</asmResource>
+				<asmResource xsi_type="context" />
+				<asmResource xsi_type="Audio">
+				<filename lang="fr" />
+					<size lang="fr" />
+					<type lang="fr" />
+					<fileid lang="fr" ></fileid>
+					<filename  lang="en" />
+					<size lang="en" />
+					<type lang="en" />
+					<fileid lang="en" ></fileid>
+				</asmResource>
+			</asmContext>
+			//==============================================
+		</asmUnit>
+		//------------------------------------------------------
+		<asmUnit xsi_type="asmUnit">
+			<metadata-wad seenoderoles="all" contentfreenode="Y"/>
+			<metadata-epm />
+			<metadata multilingual-node="Y" semantictag ="" sharedNode="N" sharedNodeResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<code />
 				<label lang="fr">Video_free</label>
 				<label lang="en">Video_free</label>
 			</asmResource>
@@ -533,7 +667,7 @@
 			//======================= Video_free ====================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
-				<metadata-epm height="400px" left="300" top="30px" width="600px" />
+				<metadata-epm height="400px" left="300" top="30" width="600px" />
 				<metadata multilingual-node="Y" semantictag ="Video_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />

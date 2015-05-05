@@ -53,17 +53,19 @@
 			//==============================
 			{
 				var html = "";
-//				html += "<div class='span6'>";
-				html += "<h3>"+karutaStr[LANG]['portfolios']+"</h3>";
+				var text1 = karutaStr[LANG]['portfolios'];
+				if (USER.admin)
+					text1 = karutaStr[LANG]['portfolios-admin'];
+				html += "<h3>"+text1+"</h3>";
 				html += "<div  id='portfolios'>";
 				html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
 				html += "	<h4>"+karutaStr[LANG]['loading']+"</h4>";
 				html += "</div>";
-//				html += "</div>";
-//				html += "<div class='span1'></div>";
-//				html += "<div class='span4'>";
 				if (USER.admin || USER.creator) {
-					html += "<h3>"+karutaStr[LANG]['bin']+"</h3>";
+					var text2 = karutaStr[LANG]['bin'];
+					if (USER.admin)
+						text2 = karutaStr[LANG]['bin-admin'];
+					html += "<h3>"+text2+"</h3>";
 					html += "<div  id='bin'>";
 					html += "<img src='../../karuta/img/ajax-loader.gif'><br>";
 					html += "<h4>"+karutaStr[LANG]['loading']+"</h4>";
@@ -99,6 +101,16 @@
 			$(document).ready(function() {
 				//----------------
 				$.ajaxSetup({async: false});
+				// --- list of users to display name of owner
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : "../../../"+serverBCK+"/users",
+					success : function(data) {
+						UIFactory["User"].parse(data);
+					}
+				});
+				//-----------------------------------------
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
@@ -122,10 +134,16 @@
 						});
 						var html = "";
 						html += "<div class='btn-group'>";
-						html += "<a href='#' data-toggle='dropdown' class='btn  btn-mini dropdown-toggle'>Menu</a>";
+						html += "<a href='#' data-toggle='dropdown' class='btn  btn-mini dropdown-toggle'><div class='btn-text'>Menu <b class='caret'></b></div></a>";
 						html += "<ul class='dropdown-menu'>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].create()\" href='#'>"+karutaStr[LANG]['create_portfolio']+"</a></li>";
+						html += "<hr>";
+						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createBatch()\" href='#'>"+karutaStr[LANG]['create_batch']+"</a></li>";
+						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createReport()\" href='#'>"+karutaStr[LANG]['create_report']+"</a></li>";
+						html += "<hr>";
+						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" href='#'>"+karutaStr[LANG]['import_instance']+"</a></li>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile()\" href='#'>"+karutaStr[LANG]['import_portfolio']+"</a></li>";
+						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" href='#'>"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip()\" href='#'>"+karutaStr[LANG]['import_zip']+"</a></li>";
 //						html += "<li><a onclick='javascript:UIFactory['Portfolio'].instantiate()' href='#'>"+karutaStr[LANG]['instantiate_portfolio']+"</a></li>";
 						html += "</ul>";
@@ -144,7 +162,7 @@
 								$('[data-toggle=tooltip]').tooltip();
 							},
 							error : function(jqxhr,textStatus) {
-								alert("Server Error: "+textStatus);
+								alert("Server Error GET active: "+textStatus);
 							}
 						});
 						//----------------
@@ -159,13 +177,13 @@
 									UIFactory["Portfolio"].displayBin('bin','bin');
 								},
 								error : function(jqxhr,textStatus) {
-									alert("Server Error: "+textStatus);
+									alert("Server Error GET bin: "+textStatus);
 								}
 							});
 						}
 						//----------------
-						$("#table_portfolio").tablesorter( {sortList: [[0,0], [1,0],[2,1]],headers : {3:{sorter:false}}} ); 
-						$("#table_bin").tablesorter( {sortList: [[0,0], [1,0]],headers : {2:{sorter:false}}} ); 
+						$("#table_portfolio").tablesorter( {sortList: [[1,0], [2,0],[3,1]],headers : {0:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
+						$("#table_bin").tablesorter( {sortList: [[1,0], [2,0]],headers : {0:{sorter:false},3:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
 
 					},
 					error : function(jqxhr,textStatus) {

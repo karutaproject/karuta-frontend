@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -37,7 +37,7 @@ UIFactory["Get_Proxy"] = function( node )
 			if (i==0 && $("label",$("asmResource[xsi_type='Get_Proxy']",node)).length==1) { // for WAD6 imported portfolio
 				this.label_node[i] = $("text",$("asmResource[xsi_type='Get_Proxy']",node));
 			} else {
-				var newelement = document.createElement("label");
+				var newelement = createXmlElement("label");
 				$(newelement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='Get_Proxy']",node)[0].appendChild(newelement);
 				this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='Get_Proxy']",node));
@@ -56,25 +56,33 @@ UIFactory["Get_Proxy"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
 	return this.label_node[langcode].text();
 };
 
 //==================================
-UIFactory["Get_Proxy"].prototype.displayView = function(dest,type,lang)
+UIFactory["Get_Proxy"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
-	if (lang==null)
-		lang = LANG;
-	$(dest).html(this.label_node[lang].text());
+	$(dest).html(this.label_node[langcode].text());
 };
 
 
@@ -238,7 +246,11 @@ UIFactory["Get_Proxy"].prototype.save = function()
 	UICom.UpdateResource(this.id,proxy_reload);
 	this.refresh();
 };
-function proxy_reload() {
+
+//==================================
+function proxy_reload()
+//==================================
+{
 	UIFactory['Node'].reloadUnit();
 }
 //==================================
@@ -246,7 +258,7 @@ UIFactory["Get_Proxy"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -41,6 +41,7 @@ UIFactory["User"] = function( node )
 	this.designer_node = $("designer",node);
 	this.admin_node = $("admin",node);
 	this.active_node = $("active",node);
+	this.substitute_node = $("substitute",node);
 	this.attributes = {};
 	this.attributes["username"] = this.username_node;
 	this.attributes["firstname"] = this.firstname_node;
@@ -50,6 +51,7 @@ UIFactory["User"] = function( node )
 	this.attributes["admin"] = this.admin_node;
 	this.attributes["designer"] = this.designer_node;
 	this.attributes["active"] = this.active_node;
+	this.attributes["substitute"] = this.substitute_node;
 	this.admin = this.admin_node.text()=='1';
 	this.creator = this.designer_node.text()=='1' || this.admin_node.text()=='1';
 	this.display = {};
@@ -62,7 +64,7 @@ UIFactory["User"] = function( node )
 UIFactory["User"].displayActive = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<table id='table_users' class='tablesorter'><thead><th>Firstname</th><th>Lastname</th><th>Username</th><th></th></thead><tbody id='list_users'></tbody></table>");
+	$("#"+destid).html("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_users'></tbody></table>");
 	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var itemid = destid+"_"+UsersActive_list[i].id;
@@ -75,7 +77,7 @@ UIFactory["User"].displayActive = function(destid,type,lang)
 UIFactory["User"].displayInactive = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<table id='table_unusers' class='tablesorter'><thead><th>Firstname</th><th>Lastname</th><th>Username</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
+	$("#"+destid).html("<table id='table_unusers' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
 	$("#list_unusers").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersInactive_list.length; i++) {
 		var itemid = destid+"_"+UsersInactive_list[i].id;
@@ -93,16 +95,25 @@ UIFactory["User"].prototype.getView = function(dest,type,lang)
 	}
 	if (lang==null)
 		lang = LANG;
-	var html = "<td>"+this.firstname_node.text() + "</td><td>" + this.lastname_node.text()+ "</td><td> (" + this.username_node.text() + ")</td>";
+	if (type==null)
+		type = 'list';
+	var html = "";
 	if (type=='list') {
+		html = "<td>"+this.firstname_node.text() + "</td><td>" + this.lastname_node.text()+ "</td><td> (" + this.username_node.text() + ")</td>";
 		if (USER.admin){
-			html += " <td><a class='btn btn-mini pull-right' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-			html += "<i class='icon-remove'></i>";
-			html += "</a>";
+			html += "<td>";
+			if (this.username_node.text()!='root') {
+				html += "<a class='btn btn-mini pull-right' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<i class='icon-remove'></i>";
+				html += "</a>";
+			}
 			html += " <a class='btn btn-mini pull-right' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
 			html += "<i class='icon-edit'></i>";
 			html += "</a></td>";
 		}
+	}
+	if (type=='firstname-lastname') {
+		html = this.firstname_node.text() + " " + this.lastname_node.text();
 	}
 	return html;
 };
@@ -188,21 +199,89 @@ UIFactory["User"].prototype.getEditor = function(type,lang)
 {
 	var html = "";
 	html += "<form id='metadata' class='form-horizontal'>";
-	html += UIFactory["User"].getAttributeEditor(this.id,"username",this.username_node.text());
 	html += UIFactory["User"].getAttributeEditor(this.id,"lastname",this.lastname_node.text());
 	html += UIFactory["User"].getAttributeEditor(this.id,"firstname",this.firstname_node.text());
 	html += UIFactory["User"].getAttributeEditor(this.id,"email",this.email_node.text());
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"designer",this.designer_node.text());
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"admin",this.admin_node.text());
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"active",this.active_node.text());
+	html +="<hr/>";
+	html += UIFactory["User"].getAttributeEditor(this.id,"username",this.username_node.text());
 	html += "<div class='control-group'>";
 	html += "  <label class='control-label'>"+karutaStr[LANG]['new_password']+"</label>";
 	html += "  <div class='controls'><input";
 	html += " type='password'";
 	html += " onchange=\"javascript:UIFactory['User'].changePassword('"+this.id+"',this.value)\" value='' ></div>";
 	html += "</div>";
+	html +="<hr/>";
+	html += UIFactory["User"].getAttributeRadioEditor(this.id,"designer",this.designer_node.text());
+	html += UIFactory["User"].getAttributeRadioEditor(this.id,"admin",this.admin_node.text());
+	html += UIFactory["User"].getAttributeRadioEditor(this.id,"substitute",this.substitute_node.text());
+	html += UIFactory["User"].getAttributeRadioEditor(this.id,"active",this.active_node.text());
 	html += "</form>";
 	return html;
+};
+
+//==================================================
+UIFactory["User"].getAttributeCreator = function(attribute,value,pwd)
+//==================================================
+{
+	var html = "";
+	html += "<div class='control-group'>";
+	html += "<label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "<div class='controls'><input id='user_"+attribute+"'";
+	if (pwd!=null && pwd)
+		html += " type='password'";
+	else
+		html += " type='text'";
+	html += " value='"+value+"' ></div>";
+	html += "</div>";
+	return html;
+};
+
+//==================================================
+UIFactory["User"].getAttributeRadioCreator = function(attribute,value)
+//==================================================
+{
+	var html = "";
+	html += "<div class='control-group'>";
+	html += "	<label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "	<div class='controls'>";
+	html += "		<input type='radio' name='user_"+attribute+"'";
+	if (value=='1')
+		html += " checked='true' ";
+	html += "	 value='1' /> oui ";
+	html += "		<input type='radio' name='user_"+attribute+"'";
+	if (value=='0')
+		html += " checked='true' ";
+	html += "	 value='0' /> non ";
+	html += "	</div>";
+	html += "</div>";
+	return html;
+};
+//==================================
+UIFactory["User"].callCreate = function()
+//==================================
+{
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var js2 = "javascript:UIFactory['User'].create()";
+	var footer = "<span class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</span><span class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</span>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['create_user']);
+	var html = "";
+	html += "<form id='metadata' class='form-horizontal'>";
+	html += UIFactory["User"].getAttributeCreator("lastname","");
+	html += UIFactory["User"].getAttributeCreator("firstname","");
+	html += UIFactory["User"].getAttributeCreator("email","");
+	html +="<hr/>";
+	html += UIFactory["User"].getAttributeCreator("username","");
+	html += UIFactory["User"].getAttributeCreator("password","",true);
+	html +="<hr/>";
+	html += UIFactory["User"].getAttributeRadioCreator("designer","0");
+	html += UIFactory["User"].getAttributeRadioCreator("admin","0");
+	html += UIFactory["User"].getAttributeRadioCreator("substitute","0");
+	html += UIFactory["User"].getAttributeRadioCreator("active","1");
+	html += "</form>";
+	$("#edit-window-body-content").html(html);
+	//--------------------------
+	$('#edit-window').modal('show');
 };
 
 //==================================
@@ -311,62 +390,8 @@ UIFactory["User"].displaySelectMultipleActive = function(destid,type,lang)
 	}
 };
 
-//==================================
-UIFactory["User"].displaySelectMultipleActiveDesigner = function(destid,type,lang)
-//==================================
-{
-	$("#"+destid).html("");
-	for ( var i = 0; i < UsersActive_list.length; i++) {
-		if (UsersActive_list[i].designer){
-			var input = UsersActive_list[i].getSelector(null,null,'select_designers');
-			$("#"+destid).append($(input));
-			$("#"+destid).append($("<br>"));
-		}
-	}
-};
 
 
-//==================================================
-UIFactory["User"].getAttributeCreator = function(attribute,value,pwd)
-//==================================================
-{
-	var html = "";
-	html += "<div class='control-group'>";
-	html += "<label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "<div class='controls'><input id='user_"+attribute+"'";
-	if (pwd!=null && pwd)
-		html += " type='password'";
-	else
-		html += " type='text'";
-	html += " value='"+value+"' ></div>";
-	html += "</div>";
-	return html;
-};
-
-//==================================
-UIFactory["User"].callCreate = function()
-//==================================
-{
-	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "javascript:UIFactory['User'].create()";
-	var footer = "<span class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</span><span class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</span>";
-	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['create_user']);
-	var html = "";
-	html += "<form id='metadata' class='form-horizontal'>";
-	html += UIFactory["User"].getAttributeCreator("username","");
-	html += UIFactory["User"].getAttributeCreator("lastname","");
-	html += UIFactory["User"].getAttributeCreator("firstname","");
-	html += UIFactory["User"].getAttributeCreator("email","");
-	html += UIFactory["User"].getAttributeCreator("password","",true);
-	html += UIFactory["User"].getAttributeCreator("designer","0");
-	html += UIFactory["User"].getAttributeCreator("admin","0");
-	html += UIFactory["User"].getAttributeCreator("active","1");
-	html += "</form>";
-	$("#edit-window-body-content").html(html);
-	//--------------------------
-	$('#edit-window').modal('show');
-};
 
 //==================================
 UIFactory["User"].create = function()
@@ -382,9 +407,10 @@ UIFactory["User"].create = function()
 	xml +="	<firstname>"+$("#user_firstname").val()+"</firstname>";
 	xml +="	<email>"+$("#user_email").val()+"</email>";
 	xml +="	<password>"+$("#user_password").val()+"</password>";
-	xml +="	<active>"+$("#user_active").val()+"</active>";
-	xml +="	<admin>"+$("#user_admin").val()+"</admin>";
-	xml +="	<designer>"+$("#user_designer").val()+"</designer>";
+	xml +="	<active>"+$("input[name=user_active]:checked").val()+"</active>";
+	xml +="	<admin>"+$("input[name=user_admin]:checked").val()+"</admin>";
+	xml +="	<designer>"+$("input[name=user_designer]:checked").val()+"</designer>";
+	xml +="	<substitute>"+$("input[name=user_substitute]:checked").val()+"</substitute>";
 	xml +="</user>";
 	xml +="</users>";
 	var url = "../../../"+serverBCK+"/users";

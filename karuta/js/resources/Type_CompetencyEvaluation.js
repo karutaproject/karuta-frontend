@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -53,11 +53,11 @@ UIFactory["CompetencyEvaluation"].prototype.getView = function(dest,type,lang)
 //==================================
 
 	{
-		if (dest!=null) {
-			this.display[dest]=true;
-		}
 		if (lang==null)
 			lang = LANG;
+		if (dest!=null) {
+			this.display[dest] = lang;
+		}
 		var value = this.label_eval_node[lang].text();
 		value = $.trim(value.replace(/[\n\r]/g, ''));
 		var badge_type = "";
@@ -225,7 +225,7 @@ UIFactory["CompetencyEvaluation"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

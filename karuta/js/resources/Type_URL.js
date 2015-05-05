@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -37,7 +37,7 @@ UIFactory["URL"] = function( node )
 			if (i==0 && $("label",$("asmResource[xsi_type='URL']",node)).length==1) { // for WAD6 imported portfolio
 				this.label_node[i] = $("text",$("asmResource[xsi_type='URL']",node));
 			} else {
-				var newelement = document.createElement("label");
+				var newelement = createXmlElement("label");
 				$(newelement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='URL']",node)[0].appendChild(newelement);
 				this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL']",node));
@@ -51,7 +51,7 @@ UIFactory["URL"] = function( node )
 			if (i==0 && $("url",$("asmResource[xsi_type='URL']",node)).length==1) { // for WAD6 imported portfolio
 				this.url_node[i] = $("text",$("asmResource[xsi_type='URL']",node));
 			} else {
-				var newelement = document.createElement("url");
+				var newelement = createXmlElement("url");
 				$(newelement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='URL']",node)[0].appendChild(newelement);
 				this.url_node[i] = $("url[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL']",node));
@@ -70,11 +70,13 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
 	//---------------------
 	if (type==null)
@@ -82,22 +84,23 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 	var html = "";
 	//---------------------
 	if(type=='standard') {
-		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'>"+$(this.label_node[langcode]).text()+"</a>";
+		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+$(this.label_node[langcode]).text()+"</a>";
 		if ($(this.label_node[langcode]).text()=='')
 			type = 'same';
 	}
 	if(type=='same')
-		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'>"+$(this.url_node[langcode]).text()+"</a>";
+		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+$(this.url_node[langcode]).text()+"</a>";
 	if (type=='icon-url-label'){
-		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'>"+$(this.url_node[langcode]).text()+urlIcon["web"]+"</a>";
+		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+$(this.url_node[langcode]).text()+urlIcon["web"]+"</a>";
 	}
 	if (type=='icon-url'){
-		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'>"+urlIcon["web"]+"</a>";
+		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+urlIcon["web"]+"</a>";
 	}
 	if (type=='icon'){
 		html = urlIcon["web"];
 	}
-
+	if (this.url_node[langcode].text()=='')
+			html =  "<img src='../img/link-icon.png' width='25px'>"+karutaStr[LANG]['no-URL'];
 	return html;
 };
 
@@ -109,6 +112,8 @@ UIFactory["URL"].update = function(obj,itself,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -128,6 +133,8 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -142,7 +149,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		$(obj).append($("<span> URL (http://)</span>"));
 		var input_url = $("<input type='text' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type);
+			UIFactory["URL"].update(obj,self,type,langcode);
 		});
 		$(obj).append(input_url);
 	}
@@ -151,7 +158,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		obj = $("<div class='control-group'><label class='control-label'> URL (http://)</label></div>");
 		var input_url = $("<div class='controls'><input type='text' name='url' value=\""+$(this.url_node[langcode]).text()+"\"></div>");
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type);
+			UIFactory["URL"].update(obj,self,type,langcode);
 		});
 		$(obj).append(input_url);
 	}
@@ -159,14 +166,14 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		$(obj).append($("<span> "+karutaStr[LANG]['label']+" : </span>"));
 		var input_label = $("<input type='text' name='label'  value='"+$(this.label_node[langcode]).text()+"'>");
 		$(input_label).change(function (){
-			UIFactory["URL"].update(obj,self,type);
+			UIFactory["URL"].update(obj,self,type,langcode);
 		});
 		$(obj).append(input_label);
 		//------------------------
 		$(obj).append($("<span> URL (http://) : </span>"));
 		var input_url = $("<input type='text' name='url' value='"+$(this.url_node[langcode]).text()+"'>");
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type);
+			UIFactory["URL"].update(obj,self,type,langcode);
 		});
 		$(obj).append(input_url);
 	}
@@ -174,7 +181,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		$(obj).append($("<span> URL (http://) : </span>"));
 		var input_url = $("<input type='text' name='url' value='"+$(this.url_node[langcode]).text()+"'>");
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type);
+			UIFactory["URL"].update(obj,self,type,langcode);
 		});
 		$(obj).append(input_url);
 	}
@@ -185,7 +192,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		html += ">";
 		var input_url = $(html);
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type);
+			UIFactory["URL"].update(obj,self,type,langcode);
 		});
 		$(obj).append(input_url);
 	}
@@ -193,14 +200,14 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		$(obj).append($("<label> "+karutaStr[LANG]['label']+"</label>"));
 		var input_label = $("<input type='text' name='label'  value=\""+$(this.label_node[langcode]).text()+"\">");
 		$(input_label).change(function (){
-			UIFactory["URL"].update(obj,self,type);
+			UIFactory["URL"].update(obj,self,type,langcode);
 		});
 		$(obj).append(input_label);
 		//------------------------
 		$(obj).append($("<label> URL (http://)</label>"));
 		var input_url = $("<input type='text' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type);
+			UIFactory["URL"].update(obj,self,type,langcode);
 		});
 		$(obj).append(input_url);
 	}
@@ -221,7 +228,7 @@ UIFactory["URL"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

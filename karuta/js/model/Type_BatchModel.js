@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -44,11 +44,11 @@ UIFactory["BatchModel"] = function( node )
 UIFactory["BatchModel"].prototype.getView = function(dest,type,lang)
 //==================================
 {
-	if (dest!=null) {
-		this.display[dest]=true;
-	}
 	if (lang==null)
 		lang = LANG;
+	if (dest!=null) {
+		this.display[dest]=lang;
+	}
 	var html = "";
 	if (type=='list') {
 		html += "<tr><td><input type='radio' name='batch_model' value='"+this.batch_model_file_nodeid+"'/></td>";

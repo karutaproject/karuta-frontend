@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -30,7 +30,7 @@ UIFactory["Video"] = function( node )
 	this.type = 'Video';
 /*	this.fileid_node = $("fileid",$("asmResource[xsi_type='Video']",node));
 	if (this.fileid_node.length==0) {	//old version
-		var fileid = document.createElement("fileid");
+		var fileid = createXmlElement("fileid");
 		$("asmResource[xsi_type='Video']",node)[0].appendChild(fileid);
 		this.fileid_node = $("fileid",$("asmResource[xsi_type='Image']",node));
 	}*/
@@ -43,29 +43,35 @@ UIFactory["Video"] = function( node )
 		this.type_node[i] = $("type[lang='"+languages[i]+"']",$("asmResource[xsi_type='Video']",node));
 		this.size_node[i] = $("size[lang='"+languages[i]+"']",$("asmResource[xsi_type='Video']",node));
 		this.fileid_node[i] = $("fileid[lang='"+languages[i]+"']",$("asmResource[xsi_type='Video']",node));
+		//----------------------------
 		if (this.filename_node[i].length==0) {
-			//----------------------------
-			var newfilename = document.createElement("filename");
+			var newfilename = createXmlElement("filename");
 			$(newfilename).attr('lang', languages[i]);
 			$("asmResource[xsi_type='Video']",node)[0].appendChild(newfilename);
 			this.filename_node[i] = $("filename[lang='"+languages[i]+"']",$("asmResource[xsi_type='Video']",node));
-			//----------------------------
-			var newtype = document.createElement("type");
+		}
+		//----------------------------
+		if (this.type_node[i].length==0) {
+			var newtype = createXmlElement("type");
 			$(newtype).attr('lang', languages[i]);
 			$("asmResource[xsi_type='Video']",node)[0].appendChild(newtype);
 			this.type_node[i] = $("type[lang='"+languages[i]+"']",$("asmResource[xsi_type='Video']",node));
-			//----------------------------
-			var newsize = document.createElement("size");
+		}
+		//----------------------------
+		if (this.size_node[i].length==0) {
+			var newsize = createXmlElement("size");
 			$(newsize).attr('lang', languages[i]);
 			$("asmResource[xsi_type='Video']",node)[0].appendChild(newsize);
 			this.size_node[i] = $("size[lang='"+languages[i]+"']",$("asmResource[xsi_type='Video']",node));
-			//----------------------------
-			var newfileid = document.createElement("fileid");
+		}
+		//----------------------------
+		if (this.fileid_node[i].length==0) {
+			var newfileid = createXmlElement("fileid");
 			$(newfileid).attr('lang', languages[i]);
 			$("asmResource[xsi_type='Video']",node)[0].appendChild(newfileid);
 			this.fileid_node[i] = $("fileid[lang='"+languages[i]+"']",$("asmResource[xsi_type='Video']",node));
-			//----------------------------
 		}
+		//----------------------------
 	}
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
@@ -83,7 +89,7 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
 	if (type==null)
 		type='default';
@@ -135,6 +141,13 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 	html += "  </div>";
 	html += "</div>";
 	html += "  </div>";
+	/*
+	html = "";
+	html += "<video width='320' height='240' controls>";
+	var srce = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
+	html += "<source src='"+srce+"' type='video/mp4'/>";
+	html += "</video>";
+	*/
 	return html;
 };
 
@@ -159,6 +172,7 @@ UIFactory["Video"].prototype.setParameter = function(langcode)
 			});
 		},
 		swfPath: "../../other/jplayer",
+		solution:"flash,html",
 		supplied: "m4v"
 	});
 };
@@ -172,13 +186,15 @@ UIFactory["Video"].update = function(data,uuid,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var filename = data.files[0].name;
 	var size = data.files[0].size;
 	var type = data.files[0].type;
-	$("#fileVideo_"+uuid).html(filename);
+	$("#fileVideo_"+uuid+"_"+langcode).html(filename);
 	var fileid = data.files[0].fileid;
 	itself.resource.fileid_node[langcode].text(fileid);
 	itself.resource.filename_node[langcode].text(filename);
@@ -195,13 +211,15 @@ UIFactory["Video"].remove = function(uuid,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var filename = "";
 	var size = "";
 	var type = "";
-	$("#fileVideo_"+uuid).html(filename);
+	$("#fileVideo_"+uuid+"_"+langcode).html(filename);
 	var fileid = "";
 	itself.resource.fileid_node[langcode].text(fileid);
 	itself.resource.filename_node[langcode].text(filename);
@@ -218,28 +236,31 @@ UIFactory["Video"].prototype.displayEditor = function(destid,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	if (this.multilingual!=undefined && !this.multilingual)
-		langcode = NONMULTILANGCODE;
+		langcode = 0;
 	//---------------------
 	var html ="";
 	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
-	html +=" <div id='divfileupload'>";
-	html +=" <input id='fileupload' type='file' name='uploadfile' data-url='"+url+"'>";
+	html +=" <div id='div_f_"+this.id+"_"+langcode+"'>";
+	html +=" <input id='f_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</div>";
-	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
-	html += "<span id='fileVideo_"+this.id+"'>"+$(this.filename_node[langcode]).text()+"</span>";
-	html +=  " <button type='button' class='btn btn-mini' onclick=\"UIFactory.Video.remove('"+this.id+"')\">"+karutaStr[LANG]['button-delete']+"</button>";
+	html +=" <div id='progress_f_"+this.id+"_"+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
+	html += "<span id='fileVideo_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
+	html +=  " <button type='button' class='btn btn-mini' onclick=\"UIFactory.Video.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
-	$('#fileupload').fileupload({
+	$("#f_"+this.id+"_"+langcode).fileupload({
 		progressall: function (e, data) {
-			$("#progress").css('border','1px solid lightgrey');
-			$("#divfileupload").html("<img src='../../karuta/img/ajax-loader.gif'>");
+			$("#div_"+this.id).html("<img src='../../karuta/img/ajax-loader.gif'>");
+			$("#progress_"+this.id).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
-			$('#progress .bar').css('width',progress + '%');
+			$('#progress_'+this.id+' .bar').css('width',progress + '%');
 		},
 		done: function (e, data,uuid) {
-			$("#divfileupload").html("Loaded");
+			$("#progress_"+this.id).css('border','1px solid lightgrey');
+			var progress = parseInt(data.loaded / data.total * 100, 10);
+			$('#progress_'+this.id+' .bar').css('width',progress + '%');
+			$("#div_"+this.id).html("Loaded");
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
-			UIFactory["Video"].update(data.result,uuid);
+			UIFactory["Video"].update(data.result,uuid,langcode);
 		}
     });
 };
@@ -258,7 +279,7 @@ UIFactory["Video"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -35,32 +35,38 @@ UIFactory["Field"] = function( node )
 			if (i==0 && $("text",$("asmResource[xsi_type='Field']",node)).length==1) { // for WAD6 imported portfolio
 				this.text_node[i] = $("text",$("asmResource[xsi_type='Field']",node));
 			} else {
-				var newelement = document.createElement("text");
+				var newelement = createXmlElement("text");
 				$(newelement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='Field']",node)[0].appendChild(newelement);
 				this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Field']",node));
 			}
 		}
 	}
+	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
 };
 
 /// Display
 //==================================
-UIFactory["Field"].prototype.getView = function(dest,langcode)
+UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
-	return $(this.text_node[langcode]).text();
+	var html = $(this.text_node[langcode]).text();
+	if (this.encrypted)
+		html = decrypt(html.substring(3),g_rc4key);
+	return html;
 };
 
 /// Editor
@@ -71,10 +77,14 @@ UIFactory["Field"].update = function(input,itself,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var value = $.trim($(input).val());
+	if (itself.encrypted)
+		value = "rc4"+encrypt(value,g_rc4key);
 	$(itself.text_node[langcode]).text(value);
 	itself.save();
 };
@@ -86,20 +96,25 @@ UIFactory["Field"].prototype.getEditor = function(type,langcode,disabled)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
 	//---------------------
+	var value = $(this.text_node[langcode]).text();
+	if (this.encrypted)
+		value = decrypt(value.substring(3),g_rc4key);
 	var html = "";
 	html += "<input type='text' ";
 	if (disabled)
 		html += "disabled='disabled' ";
-	html += "value=\""+$(this.text_node[langcode]).text()+"\" >";
+	html += "value=\""+value+"\" >";
 	var obj = $(html);
 	var self = this;
 	$(obj).change(function (){
-		UIFactory["Field"].update(obj,self);
+		UIFactory["Field"].update(obj,self,langcode);
 	});
 	return obj;
 };
@@ -117,7 +132,7 @@ UIFactory["Field"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

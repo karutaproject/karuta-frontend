@@ -35,7 +35,6 @@
 		<script src="../../karuta/js/resources/Type_Audio.js"></script>
 		<script src="../../karuta/js/resources/Type_SendEmail.js"></script>
 		<script src="../../karuta/js/resources/Type_URL2Unit.js"></script>
-		<script src="../../karuta/js/resources/Type_Dashboard.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../other/js/jquery-1.10.2.js"></script>
 		<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
@@ -51,7 +50,6 @@
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/karuta.js"></script>
 		<script src="../../karuta/js/UICom.js"></script>
-		<script src="../../karuta/js/report.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/model/Type_Portfolio.js"></script>
 		<script src="../../karuta/js/model/Type_Node.js"></script>
@@ -85,7 +83,7 @@
 		<!-- =============================================================== -->
 	</head>
 	<body>
-		<div id='main-body'>
+		<div id='main-body' style='margin-left:100px'>
 			<div id="wait-window">
 				<img src="../../karuta/img/ajax-loader.gif"/>
 			</div>
@@ -94,9 +92,10 @@
 		<script>document.write(EditBox());</script>
 		<script>document.write(DeleteBox());</script>
 		<script>document.write(savedBox());</script>
-		<script language='javascript'>
+		<script>
 			//------------------------------
 			var edit_str = getURLParameter('edit');
+			var type = getURLParameter('type');
 			g_edit = (edit_str=='true')? true : false;
 			var lang = getURLParameter('lang');
 			if (lang!=null) {
@@ -107,7 +106,7 @@
 				}
 			}
 			//------------------------------
-			var portfolioid = getURLParameter('id');
+			var pageid = getURLParameter('id');
 			var role = getURLParameter('role');
 			userrole = role;
 			if (userrole=='undefined')
@@ -138,66 +137,29 @@
 										g_userrole='none';
 								}
 							});
-						} else {
-							g_userrole='designer'
-							g_designerrole = true;
 						}
-						$.ajax({
-							type : "GET",
-							dataType : "xml",
-							url : "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?resources=true",
-							success : function(data) {
-								g_portfolio_current = data;
-								// --------Display Type------------------
-								g_display_type = $("metadata[display-type]",data).attr('display-type');
-								if (g_display_type=="" || g_display_type==null || g_display_type==undefined)
-									g_display_type = 'standard';
-								// --------CSS File------------------
-								var cssfile = $("metadata[cssfile]",data).attr('cssfile');
-								if (cssfile!=undefined && cssfile!=''){
-									if (cssfile.indexOf(".css")<0)
-										cssfile += ".css";
-									$('<link/>', { rel: 'stylesheet', type: 'text/css', href: '../../application/css/'+cssfile}).appendTo('head');
+						loadLanguages(function() {
+							$.ajax({
+								type : "GET",
+								dataType : "xml",
+								url : "../../../"+serverBCK+"/nodes/node/" + pageid + "?resources=true",
+								success : function(data) {
+									UICom.parseStructure(data);
+									if (type=='standard')
+										UIFactory['Node'].displayStandard(UICom.structure['tree'][pageid],'main-body',100,LANGCODE,g_edit);
+									if (type=='translate')
+										UIFactory['Node'].displayTranslate(UICom.structure['tree'][pageid],'main-body',100,LANGCODE,g_edit);
+									if (type=='model')
+										UIFactory['Node'].displayModel(UICom.structure['tree'][pageid],'main-body',100,LANGCODE,g_edit);
+									$('a[data-toggle=tooltip]').tooltip({html:true});
+									//---------------------------
+									if (g_display_type=="standard")
+										loadLanguages();
+									if (g_encrypted)
+										g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);
+									$("#wait-window").hide();
 								}
-								// --------------------------
-								UICom.parseStructure(data);
-								UIFactory["Portfolio"].parse(data);
-								if (g_display_type=="header")
-									loadLanguages(function(data) {UIFactory["Portfolio"].displayPortfolio('main-body','header',LANGCODE,g_edit);});
-								if (g_display_type=="standard")
-									UIFactory["Portfolio"].displayPortfolio('main-body','standard',LANGCODE,g_edit);
-								if (g_display_type=="model")
-									UIFactory["Portfolio"].displayPortfolio('main-body','model',LANGCODE,g_edit);
-								$('a[data-toggle=tooltip]').tooltip({html:true});
-								// --------------------------
-								$.ajax({
-									type : "GET",
-									dataType : "xml",
-									url : "../../../"+serverVER+"/version",
-									data: "",
-									success : function(data) {		
-										karuta_backend_version = $("number",$("#backend",data)).text();
-										karuta_backend_date = $("date",$("#backend",data)).text();
-										karuta_fileserver_version = $("number",$("#fileserver",data)).text();
-										karuta_fileserver_date = $("date",$("#fileserver",data)).text();
-									}
-								});
-								// --------------------------
-								if (g_display_type=="standard")
-									loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));});
-								if (g_display_type=="model")
-									loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);});
-								
-
-								if (g_display_type=="header")
-									$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));
-								//---------------------------
-								if (g_encrypted)
-									loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});
-									
-								//---------------------------
-								$("#wait-window").hide();
-							}
+							});
 						});
 					},
 					error : function(jqxhr,textStatus) {

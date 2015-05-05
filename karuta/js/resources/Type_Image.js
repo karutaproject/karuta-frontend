@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -30,7 +30,7 @@ UIFactory["Image"] = function( node )
 	this.type = 'Image';
 //	this.fileid_node = $("fileid",$("asmResource[xsi_type='Image']",node));
 /*	if (this.fileid_node.length==0) {	//old version
-		var fileid = document.createElement("fileid");
+		var fileid = createXmlElement("fileid");
 		$("asmResource[xsi_type='Image']",node)[0].appendChild(fileid);
 		this.fileid_node = $("fileid",$("asmResource[xsi_type='Image']",node));
 	}*/
@@ -39,33 +39,40 @@ UIFactory["Image"] = function( node )
 	this.size_node = [];
 	this.fileid_node = [];
 	for (var i=0; i<languages.length;i++){
+		//----------------------------
 		this.filename_node[i] = $("filename[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
 		this.type_node[i] = $("type[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
 		this.size_node[i] = $("size[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
 		this.fileid_node[i] = $("fileid[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
+		//----------------------------
 		if (this.filename_node[i].length==0) {
-			//----------------------------
-			var newfilename = document.createElement("filename");
+			var newfilename = createXmlElement("filename");
 			$(newfilename).attr('lang', languages[i]);
 			$("asmResource[xsi_type='Image']",node)[0].appendChild(newfilename);
 			this.filename_node[i] = $("filename[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
-			//----------------------------
-			var newtype = document.createElement("type");
+		}
+		//----------------------------
+		if (this.type_node[i].length==0) {
+			var newtype = createXmlElement("type");
 			$(newtype).attr('lang', languages[i]);
 			$("asmResource[xsi_type='Image']",node)[0].appendChild(newtype);
 			this.type_node[i] = $("type[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
-			//----------------------------
-			var newsize = document.createElement("size");
+		}
+		//----------------------------
+		if (this.size_node[i].length==0) {
+			var newsize = createXmlElement("size");
 			$(newsize).attr('lang', languages[i]);
 			$("asmResource[xsi_type='Image']",node)[0].appendChild(newsize);
 			this.size_node[i] = $("size[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
-			//----------------------------
-			var newfileid = document.createElement("fileid");
+		}
+		//----------------------------
+		if (this.fileid_node[i].length==0) {
+			var newfileid = createXmlElement("fileid");
 			$(newfileid).attr('lang', languages[i]);
 			$("asmResource[xsi_type='Image']",node)[0].appendChild(newfileid);
 			this.fileid_node[i] = $("fileid[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
-			//----------------------------
 		}
+		//----------------------------
 	}
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
@@ -79,20 +86,26 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (this.multilingual!=undefined && !this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest]=langcode;
 	}
 	if (type==null)
 		type='default';
 	var html ="";
-	if (type=='default' && $(this.filename_node[langcode]).text()!="") {
+	if (type=='default') {
 		html +="<div uuid='img_"+this.id+"'>";
-		html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-		html += "<img resizable='yes' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image'>";
-		html += "</a>";
+		if ($(this.filename_node[langcode]).text()!="") {
+			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+			html += "<img resizable='yes' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image'>";
+			html += "</a>";
+		}
+		else
+			html += "<img src='../img/image-icon.png' width='25px'>"+karutaStr[LANG]['no-image'];
 		html += "</div>";
 	}
 	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
@@ -111,7 +124,6 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
-/// Editor
 //==================================
 UIFactory["Image"].update = function(data,uuid,langcode)
 //==================================
@@ -120,11 +132,13 @@ UIFactory["Image"].update = function(data,uuid,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var filename = data.files[0].name;
-	$("#fileimage_"+uuid).html(filename);
+	$("#fileimage_"+uuid+"_"+langcode).html(filename);
 	var size = data.files[0].size;
 	var type = data.files[0].type;
 	var fileid = data.files[0].fileid;
@@ -143,13 +157,14 @@ UIFactory["Image"].remove = function(uuid,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var filename = "";
 	var size = "";
 	var type = "";
-	$("#fileimage_"+uuid).html(filename);
+	$("#fileimage_"+uuid+"_"+langcode).html(filename);
 	var fileid = "";
 	itself.resource.fileid_node[langcode].text(fileid);
 	itself.resource.filename_node[langcode].text(filename);
@@ -165,30 +180,32 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var html ="";
-	html += " <span id='editimage_"+this.id+"'>"+this.getView('editimage_'+this.id)+"</span> ";
+	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,null,langcode)+"</span> ";
 	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
-	html +=" <div id='divfileupload'>";
-	html +=" <input id='fileupload_"+this.id+"' type='file' name='uploadfile' data-url='"+url+"'>";
+	html +=" <div id='divfileupload_"+this.id+"_"+langcode+"'>";
+	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</div>";
-	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
-	html += "<span id='fileimage_"+this.id+"'>"+$(this.filename_node[langcode]).text()+"</span>";
-	html +=  " <button type='button' class='btn btn-mini' onclick=\"UIFactory.Image.remove('"+this.id+"')\">"+karutaStr[LANG]['button-delete']+"</button>";
+	html +=" <div id='progress_"+this.id+"_"+langcode+"''><div class='bar' style='width: 0%;'></div></div>";
+	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
+	html +=  " <button type='button' class='btn btn-mini' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
-	$('#fileupload_'+this.id).fileupload({
+	$('#fileupload_'+this.id+"_"+langcode).fileupload({
 		progressall: function (e, data) {
-			$("#progress").css('border','1px solid lightgrey');
-			$("#divfileupload").html("<img src='../../karuta/img/ajax-loader.gif'> Transfert");
+			$("#progress_"+this.id+"_"+langcode).css('border','1px solid lightgrey');
+			$("#divfileupload_"+this.id+"_"+langcode).html("<img src='../../karuta/img/ajax-loader.gif'> Transfert");
 			var progress = parseInt(data.loaded / data.total * 100, 10);
-			$('#progress .bar').css('width',progress + '%');
+			$('#progress_'+this.id+"_"+langcode+' .bar').css('width',progress + '%');
 		},
 		done: function (e, data) {
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
-			UIFactory["Image"].update(data.result,uuid);
-			$("#divfileupload").html("Loaded");
+			UIFactory["Image"].update(data.result,uuid,langcode);
+			$("#divfileupload_"+this.id+"_"+langcode).html("Loaded");
 		}
     });
 };
@@ -206,7 +223,7 @@ UIFactory["Image"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

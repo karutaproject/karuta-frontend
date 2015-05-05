@@ -19,27 +19,21 @@ if( UIFactory === undefined )
   var UIFactory = {};
 }
 
-
-/// Define our type
 //==================================
-UIFactory["Oembed"] = function( node )
+UIFactory["Dashboard"] = function( node )
 //==================================
 {
 	this.id = $(node).attr('id');
 	this.node = node;
-	this.type = 'Oembed';
-	this.url_node = [];
+	this.type = 'Dashboard';
+	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
-		this.url_node[i] = $("url[lang='"+languages[i]+"']",$("asmResource[xsi_type='Oembed']",node));
-		if (this.url_node[i].length==0) {
-			if (i==0 && $("url",$("asmResource[xsi_type='Oembed']",node)).length==1) { // for WAD6 imported portfolio
-				this.url_node[i] = $("text",$("asmResource[xsi_type='Oembed']",node));
-			} else {
-				var newelement = createXmlElement("url");
-				$(newelement).attr('lang', languages[i]);
-				$("asmResource[xsi_type='Oembed']",node)[0].appendChild(newelement);
-				this.url_node[i] = $("url[lang='"+languages[i]+"']",$("asmResource[xsi_type='Oembed']",node));
-			}
+		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Dashboard']",node));
+		if (this.text_node[i].length==0) {
+			var newelement = createXmlElement("text");
+			$(newelement).attr('lang', languages[i]);
+			$("asmResource[xsi_type='Dashboard']",node)[0].appendChild(newelement);
+			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Dashboard']",node));
 		}
 	}
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
@@ -48,7 +42,7 @@ UIFactory["Oembed"] = function( node )
 
 /// Display
 //==================================
-UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
+UIFactory["Dashboard"].prototype.getView = function(dest,langcode)
 //==================================
 {
 	//---------------------
@@ -62,22 +56,12 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
-	//---------------------
-	if (type==null)
-		type = "standard";
-	var html = "";
-	//---------------------
-	if(type=='standard') {
-		if ($(this.url_node[langcode]).text()!='')
-			html = "<a id='embed"+this.id+langcode+"' href='"+$(this.url_node[langcode]).text()+"' class='embed'></a>";
-	}
-
-	return html;
+	return $(this.text_node[langcode]).text();
 };
 
 /// Editor
 //==================================
-UIFactory["Oembed"].update = function(obj,itself,type,langcode)
+UIFactory["Dashboard"].update = function(input,itself,langcode)
 //==================================
 {
 	//---------------------
@@ -88,13 +72,13 @@ UIFactory["Oembed"].update = function(obj,itself,type,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	var url = $("input[name='url']",obj).val();
-	$(itself.url_node[langcode]).text(url);
-	itself.save();
+		var value = $.trim($(input).val());
+		$(itself.text_node[langcode]).text(value);
+		itself.save();
 };
 
 //==================================
-UIFactory["Oembed"].prototype.getEditor = function(type,langcode)
+UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 //==================================
 {
 	//---------------------
@@ -104,35 +88,34 @@ UIFactory["Oembed"].prototype.getEditor = function(type,langcode)
 	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
+	if (disabled==null)
+		disabled = false;
 	//---------------------
-	if (type==null)
-		type = 'default';
+	var value = $(this.text_node[langcode]).text();
+	var html = "";
+	html += "<input type='text' ";
+	if (disabled)
+		html += "disabled='disabled' ";
+	html += "value=\""+value+"\" >";
+	var obj = $(html);
 	var self = this;
-	var obj = $("<span class='url_editor'></span>");
-	//------------------------
-	if(type=='default') {
-		$(obj).append($("<label> URL (http://)</label>"));
-		var input_url = $("<input type='text' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
-		$(input_url).change(function (){
-			UIFactory["Oembed"].update(obj,self,type,langcode);
-		});
-		$(obj).append(input_url);
-	}
-	//------------------------
+	$(obj).change(function (){
+		UIFactory["Field"].update(obj,self,langcode);
+	});
 	return obj;
 };
 
+
 //==================================
-UIFactory["Oembed"].prototype.save = function()
+UIFactory["Dashboard"].prototype.save = function()
 //==================================
 {
 	UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
-	$("a.embed").oembed();
 };
 
 //==================================
-UIFactory["Oembed"].prototype.refresh = function()
+UIFactory["Dashboard"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {

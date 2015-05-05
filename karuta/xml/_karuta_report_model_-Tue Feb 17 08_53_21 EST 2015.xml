@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portfolio code="0" id="d7b51abc-26ac-4593-8196-be50ebb14cf7"
+	owner="Y">
+	<version>4</version>
+	<asmRoot delete="Y" id="d33ae556-155e-4c86-81fd-2ec3a0a2ea20"
+		read="Y" role="" submit="Y" write="Y" xsi_type="">
+		<metadata-wad
+			menuroles="_karuta_report_parts_,model-table,Ajouter table/Add table,reporter;_karuta_report_parts_,for-each-person,Ajouter for-each-person/Add for-each-person,reporter;_karuta_report_parts_,for-each-portfolio,Ajouter for-each-portfolio/Add for-each-portfolio,reporter"
+			seenoderoles="all reporter" />
+		<metadata-epm />
+		<metadata display-type="model" multilingual-node="Y"
+			semantictag="root report" sharedNode="N" sharedResource="N" />
+		<asmResource contextid="d33ae556-155e-4c86-81fd-2ec3a0a2ea20"
+			id="887ccfe2-3a15-490a-ab1f-ecf04d342923" xsi_type="nodeRes">
+			<code>_karuta_report_model_</code>
+			<label lang="fr">_karuta_report_model_</label>
+			<label lang="en">_karuta_report_model_</label>
+		</asmResource>
+		<asmResource contextid="d33ae556-155e-4c86-81fd-2ec3a0a2ea20"
+			id="54527070-6850-4a18-a6b5-079bebd67416" xsi_type="context">
+			<text lang="en" />
+			<text lang="fr" />
+		</asmResource>
+		<asmContext delete="Y" id="9618c3d1-4cee-4fc0-b0d8-44ad20a23c81"
+			read="Y" role="" submit="Y" write="Y" xsi_type="">
+			<metadata-wad editresroles="reporter" seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" semantictag="TextField"
+				sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource contextid="9618c3d1-4cee-4fc0-b0d8-44ad20a23c81"
+				id="4a2d56ad-ae96-4c83-b16e-2ac3e32b4bc6" xsi_type="nodeRes">
+				<code />
+				<label lang="fr" />
+				<label lang="en">Description</label>
+			</asmResource>
+			<asmResource contextid="9618c3d1-4cee-4fc0-b0d8-44ad20a23c81"
+				id="53e136df-6952-45c7-b632-d9c168062bc7" xsi_type="context">
+				<text lang="en" />
+				<text lang="fr" />
+			</asmResource>
+			<asmResource contextid="9618c3d1-4cee-4fc0-b0d8-44ad20a23c81"
+				id="d539a227-b6d8-4e86-b34d-c46add7dde95" xsi_type="TextField">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
+		</asmContext>
+		<asmContext delete="Y" id="84049da5-1c90-4890-937d-662629fa51e0"
+			read="Y" role="" submit="Y" write="Y" xsi_type="">
+			<metadata-wad editresroles="reporter" seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" semantictag="Document"
+				sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource contextid="84049da5-1c90-4890-937d-662629fa51e0"
+				id="1f78475e-a12a-43fd-a0f8-971ec5bf5c2e" xsi_type="nodeRes">
+				<code />
+				<label lang="fr" />
+				<label lang="en">Associated CSV File (optional)</label>
+			</asmResource>
+			<asmResource contextid="84049da5-1c90-4890-937d-662629fa51e0"
+				id="ad48f9b1-92fa-4112-abc8-dc65c2c0492f" xsi_type="context">
+				<text lang="en" />
+				<text lang="fr" />
+			</asmResource>
+			<asmResource contextid="84049da5-1c90-4890-937d-662629fa51e0"
+				id="5ab59ff0-91de-497e-b1a0-f998209c8197" xsi_type="Document">
+				<filename lang="fr" />
+				<size lang="fr" />
+				<type lang="fr" />
+				<fileid lang="fr" />
+				<filename lang="en" />
+				<size lang="en" />
+				<type lang="en" />
+				<fileid lang="en" />
+			</asmResource>
+		</asmContext>
+	</asmRoot>
+</portfolio>

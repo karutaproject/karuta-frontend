@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -15,11 +15,18 @@
 
 //--------- for langugges
 var karutaStr = new Array();
+var portfolioid = null;
 
 
 // -------------------
-var g_userrole = "none";
+var g_userrole = "";
 var g_designerrole = false;
+var g_rc4key = "";
+var g_encrypted = false;
+var g_display_type = "";
+var g_edit = false;
+
+var g_dashboard_models = {}; // cache for dashboard_models
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------
@@ -34,12 +41,26 @@ function setDesignerRole(role)
 	g_userrole = role;
 	$("#userrole").html(" ("+role+")");
 	if (g_display_type=='standard'){
+		var html = "";
+		html += "	<div class='row'>";
+		html += "		<div class='span3' id='sidebar'></div>";
+		html += "		<div class='span9' id='contenu'></div>";
+		html += "	</div>";
+		$("#main-container").html(html);
+		UIFactory["Portfolio"].displaySidebar('sidebar','standard',LANGCODE,true);
 		var uuid = $("#page").attr('uuid');
 		$("#sidebar_"+uuid).click();
 	};
+	if (g_display_type=='model'){
+		displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);
+	}
 	if (g_display_type=='header'){
-		UIFactory["Portfolio"].displayNodes('header',UICom.root.node,'header');
-		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,null,UICom.root.node);
+		if (g_userrole!='designer')
+			$("#rootnode").hide();
+		else
+			$("#rootnode").show();
+		UIFactory["Portfolio"].displayNodes('header',UICom.root.node,'header',LANGCODE,g_edit);
+		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,g_edit,UICom.root.node);
 		var uuid = $("#page").attr('uuid');
 		$("#sidebar_"+uuid).click();
 	};
@@ -58,8 +79,10 @@ function getNavBar(type,portfolioid,edit)
 	html += "			<span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span>";
 	html += "		</a>";
 	html += "		<div class='nav'>";
-//	html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' href='#'>XXX powered by Karuta</a>";
-	html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' href='#'><img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA beta</a>";
+	if (typeof navbar_title != 'undefined')
+		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' href='#'>"+navbar_title[LANG]+"</a>";
+	else
+		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' href='#'><img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA beta</a>";
 	html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
 	html += "				<li><b>Versions</b></li>";
 	html += "				<li>Application : "+application_version+" (" +application_date+")</li>";
@@ -104,40 +127,29 @@ function getNavBar(type,portfolioid,edit)
 	html += "			</ul>";
 	}
 	//----------------------------------------------------------
-	if (type=='main'){
-		html += UIFactory["Portfolio"].getActions(portfolioid);
-	}
+	html += "			<ul class='nav'>";
+	html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<b class='caret'></b></a>";
+	html += "					<ul class='dropdown-menu'>";
 	//----------------------------------------------------------
-	if ((type=='list' || type=='users' || type=='batch') && USER.admin){
-		html += "			<ul class='nav'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<b class='caret'></b></a>";
-		html += "					<ul class='dropdown-menu'>";
-		html += "						<li><a href='../../karuta/htm/list.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
-		html += "						<li><a href='../../karuta/htm/listUsers.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_users']+"</a></li>";
-//		html += "						<li><a href='../../karuta/htm/createBatchAccounts.htm?lang="+LANG+"'>"+karutaStr[LANG]['batch']+"</a></li>";
-//		html += "						<li><a href='../../karuta/htm/listRoles.htm'>"+karutaStr[LANG]['list_roles']+"</a></li>";
-//		html += "						<li><a href='../../karuta/htm/listGroups.htm'>"+karutaStr[LANG]['list_groups']+"</a></li>";
+	if (type!='login') {
+		if (USER.admin){
+			html += "						<li><a href='../../karuta/htm/list.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
+			html += "						<li><a href='../../karuta/htm/listUsers.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_users']+"</a></li>";
+			html += "						<li><a href='../../karuta/htm/createBatch.htm?lang="+LANG+"'>"+karutaStr[LANG]['batch']+"</a></li>";
+			html += "						<li><a href='../../karuta/htm/createReport.htm?lang="+LANG+"'>"+karutaStr[LANG]['report']+"</a></li>";
+	//		html += "						<li><a href='../../karuta/htm/listRoles.htm'>"+karutaStr[LANG]['list_roles']+"</a></li>";
+	//		html += "						<li><a href='../../karuta/htm/listGroups.htm'>"+karutaStr[LANG]['list_groups']+"</a></li>";
+		}
+		if (USER.admin && type=='main'){
+			html += "<hr>";
+		}
+		if (type=='main'){
+			html += UIFactory["Portfolio"].getActions(portfolioid);
+		}
 		html += "					</ul>";
 		html += "				</li>";
 		html += "			</ul>";
-	}
-	if (type=='main' && g_userrole=='designer'){
-		var mode = false;
-		if ($("*:has(metadata[semantictag='header'])",UICom.root.node).length>0)
-			mode = true;
-		if (mode) {
-			html += "			<ul class='nav'>";
-			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Mode<b class='caret'></b></a>";
-			html += "					<ul class='dropdown-menu'>";
-			html += "						<li><a href='../../karuta/htm/main.htm?id="+portfolioid+"&edit="+edit+"'>standard</a></li>";
-			html += "						<li><a href='../../karuta/htm/main.htm?id="+portfolioid+"&display_type=header&edit="+edit+"''>header</a></li>";
-			html += "					</ul>";
-			html += "				</li>";
-			html += "			</ul>";
-		}
-	}
-	//----------------------------------------------------------
-	if (type!='login') {
+		//----------------------------------------------------------
 		html += "			<ul class='nav pull-right'>";
 		html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+USER.firstname_node.text()+" "+USER.lastname_node.text();
 		if (g_userrole=='designer') 
@@ -149,9 +161,9 @@ function getNavBar(type,portfolioid,edit)
 		if (g_userrole=='designer') {
 			html += "						<li class='divider'></li>";
 			html += "	<li><a href='#' onclick=\"setDesignerRole('designer')\">designer</a></li>";
-			var roles = UICom.roles.asArray();
-			for (var i=0; i<roles.length;i++) {
-			html += "	<li><a href='#' onclick=\"setDesignerRole('"+roles[i]+"')\">"+roles[i]+"</a></li>";
+			for (role in UICom.roles) {
+				if (role!="designer")
+					html += "	<li><a href='#' onclick=\"setDesignerRole('"+role+"')\">"+role+"</a></li>";
 			}
 		}
 		html += "						<li class='divider'></li><li><a href='login.htm?lang="+LANG+"''>Logout</a></li>";
@@ -192,6 +204,50 @@ function EditBox()
 	html += "\n<!-- ============================================== -->";
 	return html;
 }
+
+//==============================
+function MessageBox()
+//==============================
+{
+	var html = "";
+	html += "\n<!-- ==================== MessageBox ==================== -->";
+	html += "\n<div id='message-window' class='modal hide' style='padding:10px;width:200px;margin-left:0px;background-color:lightgrey;position:fixed;top:65px;left:40%;'>";
+	html += "\n	<div id='message-body' class='message-body'></div>";
+	html += "\n</div>";
+	html += "\n<!-- ============================================== -->";
+	return html;
+}
+
+//==============================
+function setMessageBox(html)
+//==============================
+{
+	html = "<span>" + html + "</span>";
+	$("#message-body").html($(html));
+}
+
+//==============================
+function addMessageBox(html)
+//==============================
+{
+	html = "<span>" + html + "</span>";
+	$("#message-body").add($(html));
+}
+
+//==============================
+function showMessageBox()
+//==============================
+{
+	$("#message-window").show();
+}
+
+//==============================
+function hideMessageBox()
+//==============================
+{
+	$("#message-window").hide();
+}
+
 
 //==================================
 function getEditBox(uuid,js2) {
@@ -324,7 +380,7 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 	}
 	else
 		if (type!=null)
-			UIFactory[type].remove(uuid,callback,param1,param2); // application defined type
+			UIFactory[type].remove(uuid,parentid,destid,callback,param1,param2); // application defined type
 	// ----------------------------------
 	UICom.structure['tree'][uuid] = null;
 	// ----------------------------------
@@ -359,14 +415,21 @@ function getURLParameter(sParam) {
 function displayPage(uuid,depth,type,langcode,edit) {
 //==================================
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
+	$("a.sidebar").removeClass("active");
+	$("#sidebar_"+uuid).addClass("active");
+	$("#sidebar_"+uuid).parents(".accordion-body").collapse('show');
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (depth==null)
 		depth=100;
 	if (name=='asmRoot' || name=='asmStructure')
 		depth = 1;
 	if (UICom.structure['tree'][uuid]!=null) {
-//		if (type=='standard')
+		if (type=='standard')
 			UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+		if (type=='translate')
+			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+		if (type=='model')
+			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 	}
 }
 
@@ -396,6 +459,21 @@ function displayControlGroup_displayEditor(destid,label,controlsid,nodeid,type,c
 	UICom.structure["ui"][nodeid].resource.displayEditor(controlsid,type);
 }
 
+//==================================
+function displayControlGroup_getView(destid,label,controlsid,nodeid) {
+//==================================
+	$("#"+destid).append($("<div class='control-group'><label class='control-label'>"+label+"</label><div id='"+controlsid+"' class='controls'></div></div>"));
+	$("#"+controlsid).append(UICom.structure["ui"][nodeid].resource.getView());
+}
+
+//==================================
+function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,classitem) {
+//==================================
+	if (classitem==null)
+		classitem="";
+	$("#"+destid).append($("<div class='control-group'><label class='control-label "+classitem+"'>"+label+"</label><div id='"+controlsid+"' class='controls'></div></div>"));
+	$("#"+controlsid).append(UICom.structure["ui"][nodeid].resource.getView());
+}
 
 //=======================================================================
 function writeSaved(uuid,data)
@@ -445,7 +523,7 @@ function loadLanguages(callback)
 			$.ajax({
 				type : "GET",
 				dataType : "script",
-				url : "../../karuta/js/languages/locale_"+languages[i]+".js",
+				url : "../../karuta/js/languages/locale_"+languages[i]+".js"
 			});
 		else
 			$.ajax({
@@ -484,6 +562,17 @@ function submit(uuid)
 		}
 	});
 }
+
+//=======================================================================
+function postAndDownload(url,data)
+//=======================================================================
+{
+	var html = "<form id='form-data' action='"+url+"' method='post' enctype='multipart/form-data' ><input id='input-data' type='hidden' name='data'></form>";
+	$("body").append($(html));
+	$("#input-data").val(data);
+	$("#form-data").submit();
+}
+
 
 //=======================================================================
 function show(uuid)
@@ -526,19 +615,37 @@ function Set()
 }
 Set.prototype.add = function(val) {
 	this.content[val]=true;
-}
+};
 Set.prototype.remove = function(val) {
 	delete this.content[val];
-}
+};
 Set.prototype.contains = function(val) {
 	return (val in this.content);
-}
+};
 Set.prototype.asArray = function() {
 	var res = [];
 	for (var val in this.content) res.push(val);
 	return res;
-}
+};
 
+//==================================
+function encrypt(text,key){  
+	//==================================
+    var result = $.rc4EncryptStr(text,key);
+	return result;
+}  
+//==================================
+function decrypt(text,key){  
+//==================================
+	var result = "";
+	try {
+		result = $.rc4DecryptStr(text,key);
+	}
+	catch(err) {
+		result = karutaStr[LANG]['error_rc4key'];
+	}
+		return result;
+	}  
 
 //==================================
 function sortOn1(a,b)

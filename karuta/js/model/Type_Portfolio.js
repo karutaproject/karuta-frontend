@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -23,6 +23,7 @@ if( UIFactory === undefined )
   var UIFactory = {};
 }
 
+var nb_del_list = 0;
 
 /// Define our type
 //==================================
@@ -31,7 +32,9 @@ UIFactory["Portfolio"] = function( node )
 {
 	this.id = $(node).attr('id');
 	this.owner = $(node).attr('owner');
+	this.ownerid = $(node).attr('ownerid');
 	this.node = node;
+	this.rootid = $("asmRoot",node).attr("id");
 	this.code_node = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",node));
 	this.date_modified = $(node).attr('modified');
 	//------------------------------
@@ -43,7 +46,7 @@ UIFactory["Portfolio"] = function( node )
 	for (var i=0; i<languages.length;i++){
 		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",node)[0]);
 		if (this.label_node[i].length==0) {
-			var newElement = document.createElement("label");
+			var newElement = createXmlElement("label");
 			$(newElement).attr('lang', languages[i]);
 			$(newElement).text(karutaStr[languages[languages[i]],'new']);
 			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newElement);
@@ -63,8 +66,8 @@ UIFactory["Portfolio"] = function( node )
 UIFactory["Portfolio"].displayAll = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<table id='table_portfolio' class='tablesorter'><thead><th>label</th><th>code</th><th>date</th><th id='th_menus'></th></thead><tbody id='list_portfolios'></tbody></table>");
-	$("#list_portfolios").append($("<tr><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+	$("#"+destid).html("<table id='table_portfolio' class='tablesorter'><thead><th class='del-checkbox'></th><th>"+karutaStr[LANG]["label"]+"</th><th>Code</th><th>Date</th><th>"+karutaStr[LANG]["owner"]+"</th><th id='th_menus'></th></thead><tbody id='list_portfolios'></tbody></table>");
+	$("#list_portfolios").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < portfolios_list.length; i++) {
 		if (portfolios_list[i]!=null) { // not removed
 			var itemid = destid+"_"+portfolios_list[i].id;
@@ -89,14 +92,49 @@ UIFactory["Portfolio"].displayAll = function(destid,type,lang)
 			}
 		}
 	}
+	$("#table_portfolio").tablesorter( {sortList: [[1,0], [2,0],[3,1]],headers : {0:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
+	$("#table_bin").tablesorter( {sortList: [[1,0], [2,0]],headers : {0:{sorter:false},3:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
+	if (portfolios_list.length>0 && nb_del_list>0)
+		$("#"+destid).append($("<div class='btn btn-mini delete-portfolio' onclick='UIFactory.Portfolio.removeSelection()'>"+karutaStr[LANG]["remove-selection"]+"</div>"));
 };
 
 //==================================
+UIFactory["Portfolio"].removeSelection = function()
+//==================================
+{
+	var removes = $("input[name=delete-remove]:checked");
+	for (var i=0; i<removes.length;i++)
+		UIFactory["Portfolio"].remove($(removes[i]).val());
+};
+
+//==================================
+UIFactory["Portfolio"].deleteSelection = function()
+//==================================
+{
+	var removes = $("input[name=delete-remove]:checked");
+	for (var i=0; i<removes.length;i++)
+		UIFactory["Portfolio"].del($(removes[i]).val());
+	UIFactory["Portfolio"].displayAll('portfolios','list');
+};
+
+//==================================
+UIFactory["Portfolio"].toggleDelBin = function(destid,self)
+//==================================
+{
+	if ($(self).prop("checked"))
+		$('input:checkbox',$("#"+destid)).attr('checked',true);
+	else
+		$('input:checkbox',$("#"+destid)).attr('checked',false);
+};
+		//==================================
 UIFactory["Portfolio"].displayBin = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<table id='table_bin' class='tablesorter'><thead><th>label</th><th>code</th><th></th></thead><tbody id='list_bin'></tbody></table>");
-	$("#list_bin").append($("<tr><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+	var html = "<table id='table_bin' class='tablesorter'><thead><th class='del-checkbox'>";
+//	html += "<input type='checkbox' onclick=\"UIFactory.Portfolio.toggleDelBin('"+destid+"',this)\">";
+	html += "</th><th>"+karutaStr[LANG]["label"]+"</th><th>Code</th><th>Date</th><th>"+karutaStr[LANG]["owner"]+"</th><th class='restore'></th></thead><tbody id='list_bin'></tbody></table>";
+	$("#"+destid).html(html);
+	$("#list_bin").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < bin_list.length; i++) {
 		if (bin_list[i]!=null) { // not delete
 			var itemid = destid+"_"+bin_list[i].id;
@@ -104,6 +142,8 @@ UIFactory["Portfolio"].displayBin = function(destid,type,lang)
 			$("#"+itemid).html(bin_list[i].getView(destid,type,lang));
 		}
 	}
+	if (bin_list.length>0)
+		$("#"+destid).append($("<div class='btn btn-mini delete-portfolio' onclick='UIFactory.Portfolio.deleteSelection()'>"+karutaStr[LANG]["delete-selection"]+"</div>"));
 };
 
 //==================================
@@ -111,7 +151,7 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
 	//---------------------
 	if (langcode==null)
@@ -119,6 +159,16 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	var html = "";
 	if (type=='list') {
+		if (USER.admin || this.owner=='Y') {
+			html += "<td style='padding-left:5px'> ";
+			html += " <input type='checkbox' name='delete-remove' value='"+this.id+"'/>";
+			html += "</td>";
+			nb_del_list++;
+		}
+		else {
+			html += "<td style='padding-left:5px'> ";
+			html += "</td>";
+		}
 		html += "<td>";
 		//------------ portfolio label --------
 		html += " <a href='main.htm?id="+this.id+"&edit=true&lang="+LANG+"'>"+this.label_node[langcode].text()+"</a> ";
@@ -145,38 +195,47 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 		html += "</td>";
 		html += "<td>"+this.code_node.text()+"</td>";
 		html += "<td>"+this.date_modified.substring(0,10)+"</td>";
+		var owner = (Users_byid[this.ownerid]==null) ? "??? "+this.ownerid:Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
+		html += "<td>"+owner+"</td>";
 		//------------ buttons ---------------
-		html += "<td style='padding-left:10px'> ";
 		if (USER.admin || this.owner=='Y') {
+			html += "<td style='padding-left:5px'> ";
 			html += "<div class='btn-group'>";
 			html += "<a href='#' data-toggle='dropdown' class='btn  btn-mini dropdown-toggle'>&nbsp;<b class='caret'></b>&nbsp;</a>";
 			html += "<ul class='dropdown-menu'>";
+			html += "<li><a onclick=\"UIFactory['Portfolio'].callRename('"+this.id+"')\" href='#'><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a></li>";
 			html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].copy('"+this.id+"','"+this.code_node.text()+"-copy',true)\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i> "+karutaStr[LANG]["button-duplicate"]+"</a></li>";
 			html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].instantiate('"+this.id+"','"+this.code_node.text()+"-instance',true)\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file'></i> "+karutaStr[LANG]["button-instantiate"]+"</a></li>";
-			html += "<li><a onclick=\"UIFactory['Portfolio'].remove('"+this.id+"')\" href='#'><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
+//			html += "<li><a onclick=\"UIFactory['Portfolio'].remove('"+this.id+"')\" href='#'><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callShare('"+this.id+"')\" href='#'><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare"]+"</a></li>";
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callUnShare('"+this.id+"')\" href='#'><i class='fa fa-times'></i><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["unshare"]+"</a></li>";
 			html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
 			html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&files=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-with-files"]+"</a></li>";
 			html += "</ul></div>";
+			html += "</td>";
 		}
-		html += "</td>";
 	}
 	if (type=='bin') {
 		if (USER.admin || USER.creator){
-			html += "<td>";
-			html += this.label_node[langcode].text();
+			html += "<td style='padding-left:5px'> ";
+			html += " <input type='checkbox' name='delete-remove' value='"+this.id+"'/>";
 			html += "</td>";
 			html += "<td>";
-			html += this.code_node.text();
+			html += " <a href='main.htm?id="+this.id+"&edit=true&lang="+LANG+"'>"+this.label_node[langcode].text()+"</a> ";
 			html += "</td>";
+			html += "<td>"+this.code_node.text()+"</td>";
+			html += "<td>"+this.date_modified.substring(0,10)+"</td>";
+			if (Users_byid[this.ownerid]!=undefined)
+				html += "<td>"+Users_byid[this.ownerid].getView(null,'firstname-lastname',null)+"</td>";
+			else
+				html += "<td>"+this.ownerid+"</td>";
 			html += "<td>";
 			html += " <a class='btn btn-mini' onclick=\"UIFactory['Portfolio'].restore('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
-			html += "<i class='icon-arrow-left'></i>";
+			html += "<i class='icon-arrow-up'></i>";
 			html += "</a>";
-			html += " <a class='btn btn-mini' onclick=\"UIFactory['Portfolio'].del('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
-			html += "<i class='icon-remove'></i>";
-			html += "</a>";
+//			html += " <a class='btn btn-mini' onclick=\"UIFactory['Portfolio'].del('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
+//			html += "<i class='icon-remove'></i>";
+//			html += "</a>";
 			html += "</td>";
 		}
 	}	return html;
@@ -186,6 +245,7 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 //======================
 {	var html = "";
+	$("#main-container").html("");
 	if (type==null || type==undefined)
 		type = 'standard';
 	if (type=='standard'){
@@ -198,18 +258,42 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		html += "</div>";
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displaySidebar('sidebar','standard',LANGCODE,edit);
+		UIFactory["Portfolio"].displaySidebar('sidebar',type,LANGCODE,edit);
+	}
+	if (type=='model'){
+		html += "<div id='navigation_bar'></div>";
+		html += "<div id='main-container' class='container' style = 'padding-top:60px'>";
+		html += "	<div id='contenu'>";
+		html += "	</div>";
+		html += "</div>";
+		html += "<div id='footer'></div>";
+		$("#"+destid).append($(html));
+	}
+	if (type=='translate'){
+		html += "	<div class='row'>";
+		html += "		<div class='span3' id='sidebar'></div>";
+		html += "		<div class='span9' id='contenu'></div>";
+		html += "	</div>";
+		$("#"+destid).append($(html));
+		UIFactory["Portfolio"].displaySidebar('sidebar',type,LANGCODE,edit);
 	}
 	if (type=='header'){
-		html += "<div id='main-header' class='navbar navbar-fixed-top'>";
-		html += "   <div id='header' style='height:200px'></div>";
+		if ($("*:has(metadata[semantictag=header])",UICom.root.node).length==0)
+			alert("Error: header semantic tag is missing");
+		if (g_userrole=='designer') {
+			html += "   <div id='rootnode' style='position:absolute;top:70px;left:10px;'>";
+			html += "<a class='btn btn-mini' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+UICom.rootid+"')\"><div class='btn-text'>Root</div></a>";
+			html += "</div>";
+		}
+		html += "<div id='main-header' class=' container navbar navbar-fixed-top' style = 'padding-top:50px'>";
+		html += "   <div id='header'></div>";
 		html += "   <div id='menu'></div>";
 		html += "</div>";
 		html += "<div id='navigation_bar'></div>";
-		html += "<div id='contenu' class='container' style = 'padding-top:250px'></div>";
+		html += "<div id='contenu' class='container header-container'></div>";
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displayNodes('header',UICom.root.node,'header');
+		UIFactory["Portfolio"].displayNodes('header',UICom.root.node,'header',LANGCODE,edit);
 		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,edit,UICom.root.node);
 	}
 	$('a[data-toggle=tooltip]').tooltip({html:true});
@@ -222,10 +306,10 @@ UIFactory["Portfolio"].displaySidebar = function(destid,type,langcode,edit)
 	var html = "";
 	if (type==null || type==undefined)
 		type = 'standard';
-	if (type=='standard'){
+	if (type=='standard' || type=='translate' || type=='model'){
 		html += "<div id='main-nav' class='well'>";
-		html += "<div class='panel-group' id='group-"+portfolios_list[0]+"'>";
-		html += "<div id='sidebar-title' class='sidebar-title'><a id='sidebar_"+UICom.rootid+"' href='#' onclick=\"displayPage('"+UICom.rootid+"',1,'"+type+"','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][$(UICom.root.node).attr('id')].getLabel('sidebar-title')+"</a></div>";
+		html += "<div class='panel-group' id='group-"+portfolios_list[0].id+"'>";
+		html += "<div id='sidebar-title' class='sidebar-title'><a id='sidebar_"+UICom.rootid+"' class='sidebar' href='#' onclick=\"displayPage('"+UICom.rootid+"',1,'"+type+"','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][$(UICom.root.node).attr('id')].getLabel('sidebar_'+UICom.rootid)+"</a></div>";
 		html += "<div id='sidebar-content'></div>";
 		html += "</div><!-- panel-group -- >";
 		html += "</div>";
@@ -242,11 +326,11 @@ UIFactory["Portfolio"].displayMenu = function(destid,type,langcode,edit,tree)
 	if (type==null || type==undefined)
 		type = 'horizontal_menu';
 	if (type=='horizontal_menu'){
-		var nodes = $("asmUnit:has(metadata[semantictag='horizontal_menu'])",tree);
-		html += "<ul class='nav nav-tabs' style='width:85%;border-top:1px solid lightgrey;margin-right:90px;margin-left:40px'>";
+		var nodes = $("*:has(metadata[semantictag='horizontal_menu'])",tree);
+		html += "<ul class='nav nav-tabs header-menu' style='float:none'>";
 		for (var i=0; i<nodes.length; i++){
 			uuid = $(nodes[i]).attr('id');
-			html += "<li><a  id='sidebar_"+uuid+"' href='#' onclick=\"displayPage('"+uuid+"',99,'standard','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][uuid].getLabel()+"</a></li>";
+			html += "<li><a  id='sidebar_"+uuid+"' class='sidebar' href='#' onclick=\"displayPage('"+uuid+"',99,'standard','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][uuid].getLabel()+"</a></li>";
 		}
 		html += "</ul>";
 		$("#"+destid).html(html);
@@ -300,7 +384,7 @@ UIFactory["Portfolio"].reload = function(portfolioid)
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 		success : function(data) {
-			UICom.parseStructure(data);
+			UICom.parseStructure(data,true);
 		}
 	});
 };
@@ -314,7 +398,7 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 		success : function(data) {
-			UICom.parseStructure(data);
+			UICom.parseStructure(data,true);
 			UIFactory["Portfolio"].parse(data);
 			$("#sidebar").html("");
 			UIFactory["Portfolio"].displaySidebar('sidebar',null,null,g_edit);
@@ -328,15 +412,15 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 UIFactory["Portfolio"].parse = function(data) 
 //==================================
 {
-	var portfolioid ="";
+	var uuid = "";
 	var items = $("portfolio",data);
 	for ( var i = 0; i < items.length; i++) {
 		try {
-			portfolioid = $(items[i]).attr('id');
-			portfolios_byid[portfolioid] = new UIFactory["Portfolio"](items[i]);
-			portfolios_list[i] = portfolios_byid[portfolioid];
+			uuid = $(items[i]).attr('id');
+			portfolios_byid[uuid] = new UIFactory["Portfolio"](items[i]);
+			portfolios_list[i] = portfolios_byid[uuid];
 		} catch(e) {
-			alert("Error:"+portfolioid);
+			alert("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
 		}
 	}
 };
@@ -352,7 +436,7 @@ UIFactory["Portfolio"].parseBin = function(data)
 			portfolioid = $(items[i]).attr('id');
 			bin_list[i] = new UIFactory["Portfolio"](items[i]);
 		} catch(e) {
-			alert("Error:"+portfolioid);
+			alert("Error UIFactory.Portfolio.parseBin:"+portfolioid+" - "+e.message);
 		}
 	}
 };
@@ -363,6 +447,7 @@ UIFactory["Portfolio"].create = function()
 //==================================
 {
 	$("#edit-window-title").html(karutaStr[LANG]['create_portfolio']);
+	$("#edit-window-footer").html("");
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var create_button = "<span id='creste_button' class='btn'>"+karutaStr[LANG]['Create']+"</span>";
 	var obj = $(create_button);
@@ -387,7 +472,7 @@ UIFactory["Portfolio"].create = function()
 				type : "POST",
 				contentType: "application/xml",
 				dataType : "xml",
-				url : url,
+				url : "../../../"+serverBCK+"/portfolios",
 				data : xml,
 				success : function(data) {
 					window.location.reload();
@@ -405,7 +490,65 @@ UIFactory["Portfolio"].create = function()
 	//--------------------------
 	$("#edit-window-body-content").html(karutaStr[LANG]['code_portfolio']+" ");
 	//--------------------------
-	var url = "../../../"+serverBCK+"/portfolios";
+	var html = "<input id='codetree' type='text'>";
+	$("#edit-window-body-content").html(html);
+	//--------------------------
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].createBatch = function()
+//==================================
+{
+	$("#edit-window-title").html(karutaStr[LANG]['create_batch']);
+	$("#edit-window-footer").html("");
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var create_button = "<span id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</span>";
+	var obj = $(create_button);
+	$(obj).click(function (){
+		var code = $("#codetree").val();
+		if (code!='') {
+			var uuid = UIFactory["Portfolio"].getid_bycode("_karuta_batch_model_",false); 
+			UIFactory["Portfolio"].instantiate(uuid,code,true);
+		}
+	});
+	$("#edit-window-footer").append(obj);
+	var footer = " <span class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</span>";
+	$("#edit-window-footer").append($(footer));
+
+	//--------------------------
+	$("#edit-window-body-content").html(karutaStr[LANG]['code_portfolio']+" ");
+	//--------------------------
+	var html = "<input id='codetree' type='text'>";
+	$("#edit-window-body-content").html(html);
+	//--------------------------
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].createReport = function()
+//==================================
+{
+	$("#edit-window-title").html(karutaStr[LANG]['create_batch']);
+	$("#edit-window-footer").html("");
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var create_button = "<span id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</span>";
+	var obj = $(create_button);
+	$(obj).click(function (){
+		var code = $("#codetree").val();
+		if (code!='') {
+			var uuid = UIFactory["Portfolio"].getid_bycode("_karuta_report_model_",false); 
+			UIFactory["Portfolio"].instantiate(uuid,code,true);
+//			UIFactory["Portfolio"].instantiate_bycode("_karuta_report_model_",code);
+		}
+	});
+	$("#edit-window-footer").append(obj);
+	var footer = " <span class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</span>";
+	$("#edit-window-footer").append($(footer));
+
+	//--------------------------
+	$("#edit-window-body-content").html(karutaStr[LANG]['code_portfolio']+" ");
+	//--------------------------
 	var html = "<input id='codetree' type='text'>";
 	$("#edit-window-body-content").html(html);
 	//--------------------------
@@ -417,11 +560,12 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 //==================================
 {
 	var result = "";
+	var url = "../../../"+serverBCK+"/portfolios/portfolio/code/" + code +( (resources)?"?resources=true":"");
 	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/code/" + code + (resources)?"?resources=true":"",
+		url : url,
 		success : function(data) {
 			var portfolio = $("portfolio", data);
 			result = $(portfolio).attr('id');
@@ -433,11 +577,12 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 
 
 //==================================
-UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode)
+UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode,callback)
 //==================================
 {
 	var uuid = null;
-	var url = "../../../"+serverBCK+"/portfolios/instanciate/null?sourcecode="+sourcecode+"&targetcode="+targetcode;
+	var url = "../../../"+serverBCK+"/portfolios/instanciate/null?sourcecode="+sourcecode+"&targetcode="+targetcode+"&owner=true";
+	$.ajaxSetup({async: false});
 	$.ajax({
 			type : "POST",
 			contentType: "application/xml",
@@ -445,9 +590,13 @@ UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode)
 			url : url,
 			data : "",
 			success : function(data) {
+				$("#wait-window").hide();
 				uuid = data;
+				if (callback!=null)
+					callback(data);
 			}
 	});
+	$.ajaxSetup({async: true});
 	return uuid;
 };
 
@@ -456,7 +605,8 @@ UIFactory["Portfolio"].instantiate = function(templateid,targetcode,reload)
 //==================================
 {
 	var uuid = null;
-	var url = "../../../"+serverBCK+"/portfolios/instanciate/"+templateid+"?targetcode="+targetcode;
+	var url = "../../../"+serverBCK+"/portfolios/instanciate/"+templateid+"?targetcode="+targetcode+"&owner=true";
+	$.ajaxSetup({async: false});
 	$.ajax({
 			type : "POST",
 			contentType: "application/xml",
@@ -465,20 +615,22 @@ UIFactory["Portfolio"].instantiate = function(templateid,targetcode,reload)
 			data : "",
 			success : function(data) {
 				uuid = data;
-				if (reload!=null && reload){
+				$("#wait-window").hide();
+				if (reload!=null && reload)
 					window.location.reload();
-				}
 			}
 	});
+	$.ajaxSetup({async: true});
 	return uuid;
 };
 
 //==================================
-UIFactory["Portfolio"].copy_bycode = function(sourcecode,targetcode)
+UIFactory["Portfolio"].copy_bycode = function(sourcecode,targetcode,reload)
 //==================================
 {
 	var uuid = null;
-	var url = "../../../"+serverBCK+"/portfolios/copy/null?sourcecode="+sourcecode+"&targetcode="+targetcode;
+	var url = "../../../"+serverBCK+"/portfolios/copy/null?sourcecode="+sourcecode+"&targetcode="+targetcode+"&owner=true";;
+	$.ajaxSetup({async: false});
 	$.ajax({
 			type : "POST",
 			contentType: "application/xml",
@@ -486,9 +638,13 @@ UIFactory["Portfolio"].copy_bycode = function(sourcecode,targetcode)
 			url : url,
 			data : "",
 			success : function(data) {
+				$("#wait-window").hide();
 				uuid = data;
+				if (reload!=null && reload)
+					window.location.reload();
 			}
 	});
+	$.ajaxSetup({async: true});
 	return uuid;
 };
 
@@ -497,7 +653,8 @@ UIFactory["Portfolio"].copy = function(templateid,targetcode,reload)
 //==================================
 {
 	var uuid = null;
-	var url = "../../../"+serverBCK+"/portfolios/copy/"+templateid+"?targetcode="+targetcode;
+	var url = "../../../"+serverBCK+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";;
+	$.ajaxSetup({async: false});
 	$.ajax({
 			type : "POST",
 			contentType: "application/xml",
@@ -506,15 +663,17 @@ UIFactory["Portfolio"].copy = function(templateid,targetcode,reload)
 			data : "",
 			success : function(data) {
 				uuid = data;
+				$("#wait-window").hide();
 				if (reload!=null && reload)
 					window.location.reload();
 			}
 	});
+	$.ajaxSetup({async: true});
 	return uuid;
 };
 
 //==================================
-UIFactory["Portfolio"].importFile = function()
+UIFactory["Portfolio"].importFile = function(instance)
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
@@ -525,6 +684,8 @@ UIFactory["Portfolio"].importFile = function()
 	$("#edit-window-body-content").html($(html));
 	//--------------------------
 	var url = "../../../"+serverBCK+"/portfolios";
+	if (instance)
+		url += "?instance=true";
 	html +=" <div id='divfileupload'>";
 	html +=" <input id='fileupload' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</div>";
@@ -552,7 +713,7 @@ UIFactory["Portfolio"].importFile = function()
 };
 
 //==================================
-UIFactory["Portfolio"].importZip = function()
+UIFactory["Portfolio"].importZip = function(instance)
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
@@ -562,6 +723,8 @@ UIFactory["Portfolio"].importZip = function()
 	$("#edit-window-body-content").html($(html));
 	//--------------------------
 	var url = "../../../"+serverBCK+"/portfolios/zip";
+	if (instance)
+		url += "?instance=true";
 	html +=" <div id='divfileupload'>";
 	html +=" <input id='fileupload' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</div>";
@@ -608,9 +771,9 @@ UIFactory["Portfolio"].remove = function(portfolioid)
 				}
 			}
 			UIFactory["Portfolio"].displayAll('portfolios','list');
-			$("#table_portfolio").tablesorter( {sortList: [[0,0], [1,0]],headers : {2:{sorter:false}}} ); 
 			UIFactory["Portfolio"].displayBin('bin','bin');
-			$("#table_bin").tablesorter( {sortList: [[0,0], [1,0]],headers : {2:{sorter:false}}} ); 
+			$("#table_portfolio").tablesorter( {sortList: [[1,0], [2,0],[3,1]],headers : {0:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
+			$("#table_bin").tablesorter( {sortList: [[1,0], [2,0]],headers : {0:{sorter:false},3:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
 			$('[data-toggle=tooltip]').tooltip();
 		}
 	});
@@ -630,15 +793,15 @@ UIFactory["Portfolio"].restore = function(portfolioid)
 		success : function(data) {
 			for (var i=0;i<bin_list.length;i++){
 				if (bin_list[i]!=null && bin_list[i].id==portfolioid) {
-					portfolios_list[length] = bin_list[i];
+					portfolios_list[portfolios_list.length] = bin_list[i];
 					bin_list[i] = null;
 					break;
 				}
 			}
 			UIFactory["Portfolio"].displayAll('portfolios','list');
-			$("#table_portfolio").tablesorter( {sortList: [[0,0], [1,0]],headers : {2:{sorter:false}}} ); 
 			UIFactory["Portfolio"].displayBin('bin','bin');
-			$("#table_bin").tablesorter( {sortList: [[0,0], [1,0]],headers : {2:{sorter:false}}} ); 
+			$("#table_portfolio").tablesorter( {sortList: [[1,0], [2,0],[3,1]],headers : {0:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
+			$("#table_bin").tablesorter( {sortList: [[1,0], [2,0]],headers : {0:{sorter:false},3:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
 			$('[data-toggle=tooltip]').tooltip();
 		}
 	});
@@ -662,9 +825,11 @@ UIFactory["Portfolio"].del = function(portfolioid)
 					break;
 				}
 			}
-			UIFactory["Portfolio"].displayBin('bin','bin');
-			$("#table_bin").tablesorter( {sortList: [[0,0], [1,0]],headers : {2:{sorter:false}}} ); 
-			$('[data-toggle=tooltip]').tooltip();
+			if ($("#table_bin").length>0) { // not a batch call
+				UIFactory["Portfolio"].displayBin('bin','bin');
+				$("#table_bin").tablesorter( {sortList: [[1,0], [2,0]],headers : {0:{sorter:false},3:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
+				$('[data-toggle=tooltip]').tooltip();
+			}
 		}
 	});
 };
@@ -680,7 +845,7 @@ UIFactory["Portfolio"].getPDF = function(portfolioid)
 	        Accept : "application/pdf; charset=utf-8",
 	        "Content-Type": "application/pdf; charset=utf-8"
 	    },
-		url : urlS,
+		url : urlS
 	 });
 };
 
@@ -691,11 +856,11 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
 	var html ="";
-	html += "			<ul class='nav'>";
-	html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<b class='caret'></b></a>";
-	html += "					<ul class='dropdown-menu'>";
+//	html += "			<ul class='nav'>";
+//	html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<b class='caret'></b></a>";
+//	html += "					<ul class='dropdown-menu'>";
 	html += "						<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+bckname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
-	if (USER.admin || portfolios_byid[portfolioid].owner=='Y') {
+	if (USER.admin || portfolios_byid[portfolioid].owner=='Y' || g_userrole=='designer') {
 		html += "						<li><a onclick=\"javascript:UIFactory['Portfolio'].callShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['addshare']+"</a></li>";
 		html += "						<li><a onclick=\"javascript:UIFactory['Portfolio'].callUnShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['unshare']+"</a></li>";
 	}
@@ -704,13 +869,77 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		html += "						<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a></li>";
 		html += "						<li><a href='#' onclick=\"$('.metainfo').css('visibility','hidden');\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
 		html += "						<li><a href='#' onclick=\"$('.metainfo').css('visibility','visible');\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
+		if(languages.length>1)
+			html += "					<li><a href='#' onclick=\"UIFactory.Portfolio.displayPortfolio('main-container','translate')\">"+karutaStr[LANG]['translate']+"</a></li>";
 	}
-	html += "					</ul>";
-	html += "				</li>";
-	html += "			</ul>";
+//	html += "					</ul>";
+//	html += "				</li>";
+//	html += "			</ul>";
 	return html;
 };
 
+
+//==================================
+UIFactory["Portfolio"].callRename = function(portfolioid,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var footer = "<span class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</span>";
+	var self = portfolios_byid[portfolioid];
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['addshare']);
+	var div = $("<div></div>");
+	if (USER.creator || USER.admin) {
+		var htmlCode = $("<label>Code&nbsp; </label>");
+		var inputCode = "<input id='code_"+self.id+"' type='text' name='input_code' value=\""+self.code_node.text()+"\">";
+		var objCode = $(inputCode);
+		$(objCode).change(function (){
+			UIFactory["Portfolio"].rename(self,langcode);
+		});
+		$(htmlCode).append($(objCode));
+		$(div).append($(htmlCode));
+	}
+	if (USER.creator || USER.admin) {
+		var htmlLabel = $("<label>"+karutaStr[LANG]['label']+"&nbsp; </label>");
+		var inputLabel = "<input id='label_"+self.id+"_"+langcode+"' type='text'  value=\""+self.label_node[langcode].text()+"\">";
+		var objLabel = $(inputLabel);
+		$(objLabel).change(function (){
+			UIFactory["Portfolio"].rename(self,langcode);
+		});
+		$(htmlLabel).append($(objLabel));
+		$(div).append($(htmlLabel));
+	}
+
+	$("#edit-window-body-content").html(div);
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].rename = function(itself,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var code = $.trim($("#code_"+itself.id).val());
+	$(itself.code_node).text(code);
+	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
+	$(itself.label_node[langcode]).text(label);
+	var xml = "";
+	xml +="		<asmResource xsi_type='nodeRes'>";
+	xml +="			<code>"+code+"</code>";
+	for (var i=0; i<languages.length;i++){
+		xml +="			<label lang='"+languages[i]+"'>"+$(itself.label_node[i]).text()+"</label>";	
+	}
+	xml +="		</asmResource>";
+	strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+	var callback = function () {$("#portfolios_"+itself.id).html($(itself.getView('portfolios_'+itself.id,'list')));};
+	UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
+};
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
 //-------------------------- SHARING - UNSHARING -----------------------------------
@@ -761,7 +990,6 @@ UIFactory["Portfolio"].callShare = function(portfolioid)
 		success : function(data) {
 			UIFactory["User"].parse(data);
 			UIFactory["User"].displaySelectMultipleActive('sharing_users');
-			UIFactory["User"].displaySelectMultipleActiveDesigner('sharing_designers');
 			//--------------------------
 			$.ajax({
 				type : "GET",
@@ -833,7 +1061,7 @@ UIFactory["Portfolio"].displayShared = function(destid,data)
 					if (Users_byid[userid]==undefined)
 						alert('error userid:'+userid);
 					else
-						html += "<div>"+Users_byid[userid].getView()+"</div>";
+						html += "<div>"+Users_byid[userid].getView(null,"firstname-lastname")+"</div>";
 				}
 				html += "</div></div>";
 			}
@@ -916,6 +1144,78 @@ UIFactory["Portfolio"].share = function(portfolioid)
 };
 
 //==================================
+UIFactory["Portfolio"].shareUser = function(portfolioid,userid,role)
+//==================================
+{
+	var groupid = "";
+	//--------select group--------
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/rolerightsgroups?portfolio="+portfolioid,
+		success : function(data) {
+			var groups = $("rolerightsgroup",data);
+			for (var i=0; i<groups.length; i++) {
+				var id = $(groups[i]).attr('id');
+				var label = $("label",groups[i]).text();
+				if (label==role)
+					groupid = id;
+			}
+			//---------share--------------
+			if (groupid!=""){
+				var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+				var xml = "<users><user id='"+userid+"'/></users>";
+				$.ajax({
+					type : "POST",
+					contentType: "application/xml",
+					dataType : "xml",
+					url : url,
+					data : xml
+				});
+			} else
+				alert("Error in shareUser");
+			//-----------------------------
+		}
+	});
+};
+
+//==================================
+UIFactory["Portfolio"].unshareUser = function(portfolioid,userid,role)
+//==================================
+{
+	var groupid = "";
+	//--------select group--------
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/rolerightsgroups?portfolio="+portfolioid,
+		success : function(data) {
+			var groups = $("rolerightsgroup",data);
+			for (var i=0; i<groups.length; i++) {
+				var id = $(groups[i]).attr('id');
+				var label = $("label",groups[i]).text();
+				if (label==role)
+					groupid = id;
+			}
+			//---------unshare--------------
+			if (groupid!=""){
+				var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+				var xml = "<users><user id='"+userid+"'/></users>";
+				$.ajax({
+					type : "DELETE",
+					contentType: "application/xml",
+					dataType : "xml",
+					url : url,
+					data : xml
+				});
+			} else
+				alert("Error in shareUser");
+			//-----------------------------
+		}
+	});
+};
+
+//==================================
 UIFactory["Portfolio"].callUnShare = function(portfolioid)
 //==================================
 {
@@ -958,7 +1258,7 @@ UIFactory["Portfolio"].callUnShare = function(portfolioid)
 					success : function(data) {
 						UIFactory["Portfolio"].displayUnSharing('shared',data);
 					}
-				});
+				});				//--------------------------		
 				//--------------------------
 			}
 		});
@@ -1027,3 +1327,4 @@ UIFactory["Portfolio"].unshare = function(portfolioid)
 		});
 	}
 };
+

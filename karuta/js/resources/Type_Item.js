@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -36,7 +36,7 @@ UIFactory["Item"] = function( node )
 			if (i==0 && $("label",$("asmResource[xsi_type='Item']",node)).length==1) { // for WAD6 imported portfolio
 				this.label_node[i] = $("text",$("asmResource[xsi_type='Item']",node));
 			} else {
-				var newelement = document.createElement("label");
+				var newelement = createXmlElement("label");
 				$(newelement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='Item']",node)[0].appendChild(newelement);
 				this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='Item']",node));
@@ -48,6 +48,14 @@ UIFactory["Item"] = function( node )
 };
 
 /// Display
+
+//==================================
+UIFactory["Item"].prototype.getCode = function()
+//==================================
+{
+	return this.code_node.text();
+};
+
 //==================================
 UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 //==================================
@@ -55,11 +63,13 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
 	var html = "";
 	html += "<span class='code_Item'>"+$(this.code_node).text()+" </span>";
@@ -75,6 +85,8 @@ UIFactory["Item"].update = function(obj,itself,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -93,6 +105,8 @@ UIFactory["Item"].prototype.getEditor = function(type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -133,7 +147,7 @@ UIFactory["Item"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

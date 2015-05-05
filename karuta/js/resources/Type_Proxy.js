@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://www.osedu.org/licenses/ECL-2.0
+	http://opensource.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -37,7 +37,7 @@ UIFactory["Proxy"] = function( node )
 			if (i==0 && $("label",$("asmResource[xsi_type='Proxy']",node)).length==1) { // for WAD6 imported portfolio
 				this.label_node[i] = $("text",$("asmResource[xsi_type='Proxy']",node));
 			} else {
-				var newelement = document.createElement("label");
+				var newelement = createXmlElement("label");
 				$(newelement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='Proxy']",node)[0].appendChild(newelement);
 				this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='Proxy']",node));
@@ -56,11 +56,13 @@ UIFactory["Proxy"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
 	return this.label_node[langcode].text();
 };
@@ -69,18 +71,24 @@ UIFactory["Proxy"].prototype.getView = function(dest,type,langcode)
 UIFactory["Proxy"].prototype.displayView = function(dest,type,lang)
 //==================================
 {
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
 	if (dest!=null) {
-		this.display[dest]=true;
+		this.display[dest] = langcode;
 	}
-	if (lang==null)
-		lang = LANG;
-	$(dest).html(this.label_node[lang].text());
+	$(dest).html(this.label_node[langcode].text());
 };
 
 
 /// Editor
 //==================================
-UIFactory["Proxy"].update = function(select,itself,lang,type)
+UIFactory["Proxy"].update = function(select,itself,lang,type,portfolio_label)
 //==================================
 {
 	if (lang==null)
@@ -92,12 +100,19 @@ UIFactory["Proxy"].update = function(select,itself,lang,type)
 		var option = $(select).find("option:selected");
 		var value = $(option).attr('value');
 		var code = $(option).attr('code');
-		var label_fr = $(option).attr('label_fr');
-		var label_en = $(option).attr('label_en');
 		$(itself.value_node).text(value);
 		$(itself.code_node).text(code);
+		var empty = true;
 		for (var i=0; i<languages.length;i++){
-			var label = $(option).attr('label_'+languages[i]);
+			if($(option).attr('label_'+languages[i])!="")
+				empty = false;
+		}
+		if (empty)
+			portfolio_label = "";
+		else
+			portfolio_label += ".";
+		for (var i=0; i<languages.length;i++){
+			var label = portfolio_label+$(option).attr('label_'+languages[i]);
 			$(itself.label_node[i]).text(label);
 		}
 	}
@@ -106,12 +121,10 @@ UIFactory["Proxy"].update = function(select,itself,lang,type)
 		var checked = $('input[name='+name+']').filter(':checked');
 		var value = $(checked).attr('value');
 		var code = $(checked).attr('code');
-		var label_fr = $(checked).attr('label_fr');
-		var label_en = $(checked).attr('label_en');
 		$(itself.value_node).text(value);
 		$(itself.code_node).text(code);
 		for (var i=0; i<languages.length;i++){
-			var label = $(checked).attr('label_'+languages[i]);
+			var label = portfolio_label+$(checked).attr('label_'+languages[i]);
 			$(itself.label_node[i]).text(label);
 		}
 	}
@@ -120,31 +133,75 @@ UIFactory["Proxy"].update = function(select,itself,lang,type)
 };
 
 //==================================
-UIFactory["Proxy"].prototype.displayEditor = function(destid,type,lang)
+UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 //==================================
 {
+	if (langcode==null)
+		langcode = LANGCODE;
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		var p1 = queryattr_value.indexOf('.');
 		var p2 = queryattr_value.indexOf('.',p1+1);
 		var code = queryattr_value.substring(0,p1);
-		if (code=='self')
-			code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 		var semtag = queryattr_value.substring(p1+1,p2);
 		var self = this;
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
-			success : function(data) {
-				UIFactory["Proxy"].parse(destid,type,lang,data,self);
-			}
-		});
+		if (code!='all') {
+			if (code=='self')
+				code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
+				success : function(data) {
+					UIFactory["Proxy"].parse(destid,type,langcode,data,self,code);
+				}
+			});
+		} else {  // code==all
+			// retrieve active portfolios
+			$.ajaxSetup({async: false});
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/portfolios?active=1",
+				success : function(data) {
+					UIFactory["Portfolio"].parse(data);
+					for ( var i = 0; i < portfolios_list.length; i++) {
+						code = portfolios_list[i].code_node.text();
+						label = portfolios_list[i].label_node[langcode].text();
+						$.ajax({
+							type : "GET",
+							dataType : "xml",
+							url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
+							success : function(data) {
+								var nodes = $("node",data);
+								var display = false;
+								for ( var i = 0; i < $(nodes).length; ++i) {
+									var semtag = $("metadata",nodes[i]).attr('semantictag');
+									if (semtag.indexOf("proxy-")<0)
+										display = true;
+								}
+								if (nodes.length>0 && display) {									
+									var html = "";
+									html += "<div class='portfolio-proxy'>"+label+"</div>";
+									html += "<div id='"+code+"'></div>";
+									$("#"+destid).append($(html));
+									UIFactory["Proxy"].parse(code,type,langcode,data,self,label);
+								}
+							}
+						});
+					}
+				},
+				error : function(jqxhr,textStatus) {
+					alert("Server Error UIFactory.Proxy.prototype.displayEditor: "+textStatus);
+				}
+			});
+			$.ajaxSetup({async: true});
+		}
 	}
 };
 
 //==================================
-UIFactory["Proxy"].parse = function(destid,type,langcode,data,self) {
+UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_label) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -181,7 +238,7 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self) {
 			}
 		}
 		$(obj).change(function (){
-			UIFactory["Proxy"].update(obj,self,langcode);
+			UIFactory["Proxy"].update(obj,self,langcode,type,portfolio_label);
 		});
 		$("#"+destid).append(obj);
 	}
@@ -207,7 +264,7 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self) {
 			input += "> "+$("label[lang='"+languages[langcode]+"']",resource).text()+" </input>";
 			var obj = $(input);
 			$(obj).click(function (){
-				UIFactory["Proxy"].update(obj,self,langcode,type);
+				UIFactory["Proxy"].update(obj,self,langcode,type,portfolio_label);
 			});
 			$("#"+destid).append(obj);
 		}
@@ -227,7 +284,7 @@ UIFactory["Proxy"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView());
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };

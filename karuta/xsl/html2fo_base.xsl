@@ -293,4 +293,32 @@
 <!-- =========================================================================-->
 <!-- =========================================================================-->
 
+<!-- =====================================-->
+<xsl:template match="table">
+<!-- =====================================-->
+	<fo:table width="100%">
+		<fo:table-body>
+			<xsl:apply-templates select="*"/>
+		</fo:table-body>
+	</fo:table>
+</xsl:template>
+
+<!-- =====================================-->
+<xsl:template match="tr">
+<!-- =====================================-->
+	<fo:table-row>
+			<xsl:apply-templates select="*"/>
+	</fo:table-row>
+</xsl:template>
+
+<!-- =====================================-->
+<xsl:template match="td">
+<!-- =====================================-->
+	<fo:table-cell border="1px solid gray" padding="2px">
+		<fo:block>
+			<xsl:apply-templates select="*"/>
+		</fo:block>
+	</fo:table-cell>
+</xsl:template>
+
 </xsl:stylesheet>

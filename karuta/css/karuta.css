@@ -8,10 +8,24 @@
 	margin-top:0px;
 	margin-bottom:0px;
 }
+
+a.btn {
+	font-weight:normal;
+}
+a.btn-mini {
+	min-height:24px;
+	vertical-align:middle;
+}
+.btn-text {
+	margin-top:2px;
+	vertical-align:middle;
+}
+
 /* --------------------------*/
 .versions {
 	width:300px;
 }
+
 /* --------------------------*/
 #progress{
 	width:100%;
@@ -47,6 +61,9 @@ hr {
 	margin-top:10px;
 }
 
+.title {
+	padding:2px;
+}
 .asmRoot .title {
 	font-size: 24px;
 	font-weight: bold;
@@ -114,6 +131,17 @@ hr {
 	line-height: 16px;
 }
 
+.col-md-2 .title,
+.col-md-7 .title{
+	padding-left:3px;
+	padding-right:2px;
+	padding-bottom:2px;
+}
+
+.col-md-2 {
+	padding-top:2px;
+}
+
 .text-editor {
 	background-color: white;
 	border: 1px solid rgb(204, 204, 204); 
@@ -132,9 +160,14 @@ hr {
 
 /* ---------------- list portfolios --------------------- */
 
-.item {
-	margin-top:5px;
+.item td{
+	padding-left:5px;
 }
+
+.item:hover td{
+	background-color:lightgrey;
+}
+
 /* -------------------------------------------------- */
 /* --------------old WAD css    --------------------- */
 /* -------------------------------------------------- */
@@ -387,6 +420,19 @@ a:hover {
 }
 
 /* ====================== */
+/*      SIDEBAR            */
+/* ====================== */
+
+a.active {
+	font-weight:bold;
+	color:#848484;
+}
+
+a.active:over{
+	color:black;
+}
+
+/* ====================== */
 /*      PAGE            */
 /* ====================== */
 
@@ -473,11 +519,6 @@ input {
 	margin-bottom:0px;
 }
 
-/* =========== asmResource_Text ==========
-.text-title {
-	font-weight:bold;
-}
-
 /* ====================
 	Annotation
    ====================*/
@@ -503,7 +544,9 @@ input {
 	line-height: 12px;
 }
 
-
+.translate label span.lang {
+	width:40px;
+}
 .comments {
 	font-style:italic;
 	font-size:11px;
@@ -529,6 +572,17 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th
 {
 	min-width:150px;
 }
+
+table.tablesorter th.del-checkbox {
+	min-width:20px;
+	width:20px;
+}
+
+table.tablesorter th.restore {
+	min-width:35px;
+	width:35px;
+}
+
 
 #th_menus {
 	min-width:35px;
@@ -586,4 +640,264 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th
 	border-bottom:1px solid #C0C0C0;
 }
 
+/* ====================
+	Role Rights
+   ====================*/
 
+#rights {
+	margin-left:180px;
+	border: 1px solid lightgrey;
+}
+
+#rights td{
+	padding:5px;
+	border: 1px solid lightgrey;
+}
+
+/* ====================
+	Report
+   ====================*/
+.report .asmUnitStructure{
+	padding:10px;
+}
+
+.report .for-each-person{
+	border:1px solid lightgrey;
+}
+
+.report .for-each-line{
+	border:1px solid lightgrey;
+}
+
+.report .for-each-portfolio{
+	border:1px solid lightgrey ;
+}
+
+.report .for-each-node{
+	border:1px solid lightgrey ;
+}
+
+
+.report .model-table {
+	border:2px solid Navy;
+}
+
+.report .model-row {
+	border:2px solid SeaGreen;
+}
+
+.report .model-cell {
+	border:2px solid Crimson;
+}
+
+.report .node_resource,
+.report .text,
+.report .aggregate{
+	border:1px dashed lightgrey;
+	margin-bottom:5px;
+}
+.report .select{
+	padding-left:0px;
+	border-left:0px solid lightgrey;
+}
+
+.report .select select,
+.report .select input{
+	margin-bottom:0px;
+}
+
+.report .model_button {
+	float:right
+}
+
+.createreport table {
+	margin-bottom:5px;
+}
+
+.createreport td {
+	padding:5px;
+	border:1px solid lightgrey;
+}
+
+.aggregatetype select,
+.nodetype select,
+.todisplay select {
+	width:150px;
+}
+
+.aggregationselect input,
+.ref input {
+	width:130px;
+}
+
+.asmNop .model_row {
+	display:none;
+}
+
+.asmNop .row {
+	margin-top:-20px;;
+	margin-left: -30px;;
+}
+/* ====================
+	Batch
+   ====================*/
+
+.batch .asmUnitStructure{
+	padding:10px;
+}
+
+.batch .for-each-line{
+	border:1px solid lightgrey;
+}
+
+.batch .create-person{
+	border:1px solid Navy ;
+}
+
+.batch .text,
+.batch .code,
+.batch .person,
+.batch .role,
+.batch .tree-template,
+.batch .tree-code,
+.batch .tree-label {
+	margin-top:4px;
+	padding-top:2px;
+	padding-bottom:0px;
+	border-top:1px solid lightgrey;
+}
+
+
+.batch .create-tree{
+	border:1px solid SeaGreen ;
+}
+
+.batch .share-tree{
+	border:1px solid lightGreen ;
+}
+
+.batch .select-tree{
+	border:1px solid GreenYellow ;
+}
+
+.batch .delete-tree{
+	border:1px solid Aquamarine ;
+}
+
+
+.batch .update-field {
+	border:1px solid Crimson;
+}
+
+.batch .update-proxy{
+	border:1px solid Gold;
+}
+
+.batch .model_button {
+	float:right
+}
+
+.batch input {
+	margin-bottom:0px;
+}
+
+
+
+/* ====================
+	Translate
+   ====================*/
+.lang {
+	padding:5px;
+	background-color:lightgrey;
+}
+
+
+/* ====================
+	Free
+   ====================*/
+.free-toolbar {
+	visibility:hidden;
+	z-index:10;
+	position:absolute;
+	top:-15px;
+}
+
+.movable {
+	cursor:move;
+}
+
+/* ====================
+	DisplayType : header
+   ====================*/
+#main-header{
+	background-color:white;
+}
+
+#header {
+	height:150px;
+    overflow: auto;
+}
+
+.header-container {
+	padding-top:250px;
+
+}
+
+.header-menu {
+	border-top:1px solid lightgrey;
+}
+	
+/* ====================
+	Document/Image\URL
+   ====================*/
+
+.resource-Document {
+	display:inline-block;
+	min-height:50px;
+}
+
+
+.resource-URL {
+	display:inline-block;
+	min-height:50px;
+}
+
+.resource-Image {
+	display:inline-block;
+	min-height:25px;
+	min-width:50px;
+}
+
+/* ====================
+	Select with color
+   ====================*/
+
+select.BDG0, option[value="BDG0"] {color: #fff; background: gray;}
+select.BDG1, option[value="BDG1"] {color: #fff; background: red;}
+select.BDG2, option[value="BDG2"] { color: #fff; background: #FF6600; }
+select.BDG3, option[value="BDG3"] { color: black; background: #fff; }
+select.BDG4, option[value="BDG4"] { color: black; background: #CCFF99; }
+select.BDG5, option[value="BDG5"] { color: #fff; background: #66CC00; }
+
+select.Y0, option[value="Y0"] {color: #fff; background: gray;}
+select.Y1, option[value="Y1"] {color: #fff; background: red;}
+select.Y2, option[value="Y2"] {color: #fff; background: green;}
+.Y0 {color: #fff; background: gray;}
+.Y1 {color: #fff; background: red;}
+.Y2 {color: #fff; background: green;}
+
+/* ====================
+	Other
+   ====================*/
+
+.rounded-border {
+	margin-top:10px;
+	margin-bottom:10px;
+	border-radius:4px;
+	padding-left:5px;
+	border: 1px solid lightGrey;
+}
+
+.name_SendEmail {
+	font-weight:bold;
+}

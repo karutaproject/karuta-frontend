@@ -50,13 +50,47 @@
 		}
 		
 		//==============================
+		function callSend()
+		//==============================
+		{
+			var data = "<credential><login>"+document.getElementById("useridentifier_new").value+"</login></credential>";
+			$.ajaxSetup({
+				Accept: "application/xml",
+				contentType: "application/xml"
+				});
+			$.ajax({
+				type : "POST",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/credential/forgot",
+				data: data,
+				success : function(data) {
+					window.location="list.htm?lang="+LANG;
+				},
+				error : function(jqxhr,textStatus) {
+					alert("Identification : "+jqxhr.responseText);
+				}
+			});
+		}
+
+		//==============================
 		function getLogin()
 		//==============================
 		{
 			var html = "";
-			html += "<input id='useridentifier' class='input-block-level' placeholder='"+karutaStr[LANG]['email']+"' type='text'>";
+			html += "<input id='useridentifier' class='input-block-level' placeholder='"+karutaStr[LANG]['username']+"' type='text'>";
 			html += "<input id='password' class='input-block-level' placeholder='"+karutaStr[LANG]['password']+"' type='password'>";
 			html += "<button class='btn btn-large btn-primary' onclick='javascript:callSubmit()'>"+karutaStr[LANG]['login']+"</button>";
+			return html;
+		}
+
+		//==============================
+		function getNew()
+		//==============================
+		{
+			var html = "";
+			html += "<p>"+karutaStr[LANG]['newpassword']+"</p>";
+			html += "<input id='useridentifier_new' class='input-block-level' placeholder='"+karutaStr[LANG]['username']+"' type='text'/>";
+			html += "<button class='btn' id='form-send' onclick='javascript:callSend()'>"+karutaStr[LANG]['button-send']+"</button>";
 			return html;
 		}
 
@@ -76,19 +110,27 @@
 
 		<div id='navigation_bar'></div>
 		<div class="container">
-
-		<h2 class="line">KARUTA</h2>
-		<!--h4 class="line">powered by Karuta</h2-->
-
-		<div class="form-signin" id="login"></div>
-		<div class="form-signin" id="create" style="display:none">
-			If you have not an account, you can create one <a href='../../karuta/htm/createAccount.htm'>here</a>
+		<div class='row'>
+			<div class='span3'>
+				<h2 id="welcome1">KARUTA</h2>
+				<h4 id="welcome2"></h4>
+				<div id="welcome3"></div>
+			</div>
+			<div class='span7'>
+				<div class="form-signin" id="login"></div>
+				<div class="form-newpassword" id="newpassword"></div>
+			</div>
 		</div>
 	</div>
 
 	<script language='javascript'>
 		//------------------------------
 		$(document).ready(function() {
+			if (typeof welcome1 != 'undefined') {
+				$("#welcome1").html(welcome1[LANG]);
+				$("#welcome2").html(welcome2[LANG]);
+				$("#welcome3").html(welcome3[LANG]);
+			}
 			$.ajaxSetup({async: false});
 			$.ajax({
 				type : "GET",
@@ -102,7 +144,7 @@
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 				}
 			});
-			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('login',null));$("#login").html(getLogin());});
+			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('login',null));$("#login").html(getLogin());$("#newpassword").html(getNew());});
 			$.ajax({
 				type : "POST",
 				dataType : "xml",
