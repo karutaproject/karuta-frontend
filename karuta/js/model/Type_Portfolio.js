@@ -867,8 +867,8 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	html += "						<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a></li>";
 	if (USER.admin || g_userrole=='designer') {
 		html += "						<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a></li>";
-		html += "						<li><a href='#' onclick=\"$('.metainfo').css('visibility','hidden');\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
-		html += "						<li><a href='#' onclick=\"$('.metainfo').css('visibility','visible');\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
+		html += "						<li><a href='#' onclick=\"$('.metainfo').css('visibility','hidden');g_visible='hidden'\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
+		html += "						<li><a href='#' onclick=\"$('.metainfo').css('visibility','visible');g_visible='visible'\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
 		if(languages.length>1)
 			html += "					<li><a href='#' onclick=\"UIFactory.Portfolio.displayPortfolio('main-container','translate')\">"+karutaStr[LANG]['translate']+"</a></li>";
 	}

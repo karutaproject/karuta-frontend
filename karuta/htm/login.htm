@@ -37,7 +37,7 @@
 				});
 			$.ajax({
 				type : "POST",
-				dataType : "xml",
+				dataType : "text",
 				url : "../../../"+serverBCK+"/credential/login",
 				data: data,
 				success : function(data) {
@@ -60,11 +60,12 @@
 				});
 			$.ajax({
 				type : "POST",
-				dataType : "xml",
+				dataType : "text",
 				url : "../../../"+serverBCK+"/credential/forgot",
 				data: data,
 				success : function(data) {
-					window.location="list.htm?lang="+LANG;
+					alert(karutaStr[LANG]['password-sent']);
+					window.location="login.htm?lang="+LANG;
 				},
 				error : function(jqxhr,textStatus) {
 					alert("Identification : "+jqxhr.responseText);
@@ -108,8 +109,8 @@
 </head>
 <body class="welcome">
 
-		<div id='navigation_bar'></div>
-		<div class="container">
+	<div id='navigation_bar'></div>
+	<div class="container">
 		<div class='row'>
 			<div class='span3'>
 				<h2 id="welcome1">KARUTA</h2>
@@ -119,6 +120,7 @@
 			<div class='span7'>
 				<div class="form-signin" id="login"></div>
 				<div class="form-newpassword" id="newpassword"></div>
+				<div class="form-newaccount" id="newaccount"></div>
 			</div>
 		</div>
 	</div>
@@ -144,7 +146,7 @@
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 				}
 			});
-			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('login',null));$("#login").html(getLogin());$("#newpassword").html(getNew());});
+			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('login',null));$("#login").html(getLogin());$("#newpassword").html(getNew());$("#newaccount").html(karutaStr[LANG]['new-account']);});
 			$.ajax({
 				type : "POST",
 				dataType : "xml",

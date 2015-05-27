@@ -1,14 +1,14 @@
 10
 
 dir
-275
+685
 svn+ssh://tanami.upmf-grenoble.fr/usr/local/svn/karuta/karuta-clients/karuta-new/WebContent/other/css/blue
 svn+ssh://tanami.upmf-grenoble.fr/usr/local/svn/karuta
 
 
 
-2014-09-23T19:33:32.647098Z
-275
+2014-12-05T15:24:06.549958Z
+414
 gerbe
 
 
@@ -141,10 +141,10 @@ file
 
 
 
-2014-06-26T19:12:37.000000Z
-336b6077dedf09a8de95205190f90177
-2014-09-23T19:33:32.647098Z
-275
+2014-12-05T14:23:04.000000Z
+fdf960048376a936d92a2f42239813b7
+2014-12-05T15:24:06.549958Z
+414
 gerbe
 
 
@@ -167,5 +167,5 @@ gerbe
 
 
 
-1088
+1106
 

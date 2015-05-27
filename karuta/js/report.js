@@ -366,9 +366,11 @@ function processNodeResource(xmlDoc,destid,data)
 //==================================
 {
 	var text = "";
+	var style = "";
 	try {
 		var select = $(xmlDoc).attr("select");
 		var ref = $(xmlDoc).attr("ref");
+		style = $(xmlDoc).attr("style");
 		var selector = getSelector(select);
 		var node = $(selector.jquery,data);
 		if (node.length==0) // try the node itself
@@ -379,6 +381,8 @@ function processNodeResource(xmlDoc,destid,data)
 			var nodeid = $(node).attr("id");
 			if (selector.type=='resource')
 				text = UICom.structure["ui"][nodeid].resource.getView();
+			if (selector.type=='resource code')
+				text = UICom.structure["ui"][nodeid].resource.getValue();
 			if (selector.type=='node label')
 				text = UICom.structure["ui"][nodeid].getLabel();
 		}
@@ -391,6 +395,7 @@ function processNodeResource(xmlDoc,destid,data)
 		text = "not found";
 	}
 	text = "<span>"+text+"</span>";
+	$("#"+destid).attr("style",style);
 	$("#"+destid).append($(text));
 }
 
@@ -399,7 +404,9 @@ function processText(xmlDoc,destid,data)
 //==================================
 {
 	var text = $(xmlDoc).text();
+	var style = $(xmlDoc).attr("style");
 	text = "<span>"+text+"</span>";
+	$("#"+destid).attr("style",style);
 	$("#"+destid).append($(text));
 }
 
@@ -407,6 +414,7 @@ function processText(xmlDoc,destid,data)
 function processAggregate(aggregate,destid)
 //==================================
 {
+	var style = $(xmlDoc).attr("style");
 	var ref = $(aggregate).attr("ref");
 	var type = $(aggregate).attr("type");
 	var select = $(aggregate).attr("select");
@@ -431,6 +439,7 @@ function processAggregate(aggregate,destid)
 		aggregates[ref][aggregates[ref].length] = text;
 	}
 	text = "<span>"+text+"</span>";
+	$("#"+destid).attr("style",style);
 	$("#"+destid).append($(text));
 }
 //===============================================================

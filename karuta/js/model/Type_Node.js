@@ -272,11 +272,11 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		$(htmlLabel).append($(objLabel));
 		$(div).append($(htmlLabel));
 	}
+	//-----------------------------
 	var resizeroles = $(this.metadatawad).attr('resizeroles');
 	if (resizeroles==undefined)
 		resizeroles="";
 	if ((g_userrole=='designer' || USER.admin || resizeroles.indexOf(g_userrole)>-1 || resizeroles.indexOf(this.userrole)>-1) && this.resource!=undefined && this.resource.type=='Image') {
-		//-----------------------------
 		var htmlSize = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'width',$(this.metadataepm).attr('width'));
 		$(div).append($(htmlSize));
 	}
@@ -500,7 +500,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
 							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
 							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
-							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',false);
+							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',true);
 							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
 							style +="'";
@@ -754,7 +754,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			else
 				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'parent-background-color',false);
 				
-			if (name == "asmUnitStructure" || UICom.structure["ui"][uuid].resource_type=='TextField') {
+			if (name == "asmUnitStructure" || UICom.structure["ui"][uuid].resource_type=='TextField' || UICom.structure["ui"][uuid].resource_type=='Document' || UICom.structure["ui"][uuid].resource_type=='URL') {
 				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'width',true);
 				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'height',true);
 				style += UIFactory["Node"].getOtherMetadataEpm(metadataepm,'othercss');
@@ -811,7 +811,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 					}
 					html += "</div>";
 				} else {
-					html += "<div>";
+					html += "<div class='free-context'>";
 					//----------node label ----------------------------
 					if (UICom.structure["ui"][uuid].getLabel()!='<span></span>') {
 						html += "<span ";
@@ -840,13 +840,18 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',false);
 					style += UIFactory["Node"].getOtherMetadataEpm(metadataepm,'node-othercss');
 					html += "style='"+style+"'";
 					html+=">";
 					//-----------------
-					html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
+					var res_type = UICom.structure["ui"][uuid].resource.type;
+					if (res_type=='Document' || res_type=='URL')
+						html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid,'free-positioning');
+					else
+						html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 					//-----------------
 					html+="</div>";
 					//--------------------------------------
@@ -944,7 +949,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 						stop: function(){UIFactory["Node"].updateSize(this);}
 					}
 					);
-				if (UICom.structure["ui"][uuid].resource_type=='TextField')
+				if (UICom.structure["ui"][uuid].resource_type=='TextField' || UICom.structure["ui"][uuid].resource_type=='Document' || UICom.structure["ui"][uuid].resource_type=='URL')
 					$("#std_resource_"+uuid).resizable({
 						stop: function(){UIFactory["Node"].updateSize(this);}
 					}
@@ -958,10 +963,14 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			if (edit &&  (USER.admin || g_userrole=='designer' || graphicerroles.indexOf(g_userrole)>-1 || delnoderoles.indexOf(g_userrole)>-1 || editresroles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole)>-1 || delnoderoles.indexOf(this.userrole)>-1 || editresroles.indexOf(this.userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1)) {
 				//-------------------------------
 				if (!inline) {
-					if (name!='asmContext')
-						$("#free_"+uuid).css('border','1px dashed lightgrey');
-					else
-						$("#std_resource_"+uuid).css('border','1px dashed lightgrey');
+					if ($("#std_resource_"+uuid).attr('style')!=null && $("#std_resource_"+uuid).attr('style').indexOf('border')<0)
+						if (name!='asmContext')
+							$("#free_"+uuid).css('border','1px dashed lightgrey');
+						else
+							if (UICom.structure["ui"][uuid].resource_type=='Document' || UICom.structure["ui"][uuid].resource_type=='URL')
+								$("#std_resource_"+uuid).css('border','1px solid lightgrey');
+							else
+								$("#std_resource_"+uuid).css('border','1px dashed lightgrey');
 				}
 				//-------------------------------
 				$("#free_"+uuid).mouseover(function(){
@@ -1254,7 +1263,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 								style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
 								style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
 								style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
-								style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',false);
+								style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',true);
 								style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 								style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
 								style +="'";
@@ -1666,6 +1675,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Video','Video',databack,callback,param2,param3,param4,freenode);
 			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Audio','Audio',databack,callback,param2,param3,param4,freenode);
 			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Oembed','Oembed',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Color','Color',databack,callback,param2,param3,param4,freenode);
 			if (!freenode) {
 				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','URL2Unit','URL2Unit',databack,callback,param2,param3,param4,freenode);
 				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
@@ -1956,7 +1966,9 @@ UIFactory["Node"].displayMetadataEpm = function(data,attribute,number)
 			html += attribute.substring(9) + ":" + value;
 		else
 			html += attribute + ":" + value;
-		if (number && value.indexOf('%')<0 && value.indexOf('px')<0)
+		if (attribute.indexOf("font-size")>-1 && number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
+			html += 'pt';			
+		else if (number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
 			html += 'px';
 		html += ';';
 	}	return html;
@@ -2363,6 +2375,9 @@ UIFactory["Node"].getMetadataEpmAttributeEditor = function(nodeid,attribute,valu
 			html +=" checked";
 		html +="> Italic";
 		html += "</div>";
+	}
+	else if (attribute.indexOf('color')>-1){
+		html += "  <div class='controls'><input type='text' class='pickcolor' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+value+"' ></div>";
 	}
 	else if (attribute.indexOf('text-align')>-1){
 		html += "  <div class='controls'>";

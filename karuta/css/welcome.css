@@ -29,14 +29,15 @@ body {
   padding: 7px 9px;
 }
 
-.form-newpassword {
+.form-newpassword,
+.form-newaccount {
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	max-width: 300px;
-	padding-top: 5px ;
-	padding-bottom: 5px ;
+	padding-top: 19px ;
+	padding-bottom: 19px ;
 	padding-left: 29px ;
 	padding-right: 29px ;
 	margin: 30px auto 20px;

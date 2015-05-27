@@ -25,6 +25,7 @@ var g_rc4key = "";
 var g_encrypted = false;
 var g_display_type = "";
 var g_edit = false;
+var g_visible = 'visible';
 
 var g_dashboard_models = {}; // cache for dashboard_models
 //-------------- used for designer-----
@@ -94,13 +95,6 @@ function getNavBar(type,portfolioid,edit)
 	html += "		<div class='nav-collapse collapse'>";
 	html += "			<ul class='nav'>";
 	if (type=='main'){
-//		html += "				<li class=''><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Portfolios<b class='caret'></b></a>";
-//		html += "					<ul id='list_portfolios' class='dropdown-menu'>";
-//		html += "						<li>";
-//		html += "							<a href='main.jsp?id=6b68a028-95ea-43a9-bf83-fd2bfd722c71'>wad_tutorial</a>";
-//		html += "						</li>";
-//		html += "					</ul>";
-//		html += "				</li>";
 		html += "				<li><a href='list.htm?lang="+LANG+"'>"+karutaStr[LANG]['home']+"</a></li>";
 	}
 	html += "				<li><a href='mailto:"+technical_support+"'>"+karutaStr[LANG]['technical_support']+"</a></li>";
@@ -118,6 +112,8 @@ function getNavBar(type,portfolioid,edit)
 			url = "listUsers.htm?lang="+languages[i];
 		if (type=='login')
 			url = "login.htm?lang="+languages[i];
+		if (type=='create_account')
+			url = "createAccount.htm?lang="+languages[i];
 		if (type=='batch')
 			url = "createBatchAccounts.htm?lang="+languages[i];
 		html += "			<li><a href='"+url+"'>"+karutaStr[languages[i]]['language']+"</a></li>";
@@ -131,7 +127,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<b class='caret'></b></a>";
 	html += "					<ul class='dropdown-menu'>";
 	//----------------------------------------------------------
-	if (type!='login') {
+	if (type!='login' && type!='create_account') {
 		if (USER.admin){
 			html += "						<li><a href='../../karuta/htm/list.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
 			html += "						<li><a href='../../karuta/htm/listUsers.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_users']+"</a></li>";
@@ -194,8 +190,8 @@ function EditBox()
 	html += "\n		</div>";
 	html += "\n		<div id='edit-window-body' class='modal-body'>";
 	html += "\n			<div id='edit-window-body-content'></div>";
-	html += "\n			<div id='edit-window-body-context'></div>";
 	html += "\n			<div id='edit-window-body-node'></div>";
+	html += "\n			<div id='edit-window-body-context'></div>";
 	html += "\n			<div id='edit-window-body-metadata'></div>";
 	html += "\n			<div id='edit-window-body-metadata-epm'></div>";
 	html += "\n		</div>";
@@ -293,6 +289,7 @@ function getEditBox(uuid,js2) {
 	var editHtml = UIFactory["Node"].getMetadataEpmAttributesEditor(UICom.structure["ui"][uuid]);
 	$("#edit-window-body-metadata-epm").html($(editHtml));
 	// ------------------------------
+	$(".pickcolor").colorpicker();
 	$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd',language: LANG});
 	// ------------------------------
 	$("#edit-window").modal('show');
@@ -340,6 +337,7 @@ function DeleteBox()
 	html += "\n<!-- ============================================== -->";
 	return html;
 }
+
 
 //==============================
 function savedBox()
@@ -431,6 +429,7 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		if (type=='model')
 			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 	}
+	$('.metainfo').css('visibility',g_visible);
 }
 
 //==================================

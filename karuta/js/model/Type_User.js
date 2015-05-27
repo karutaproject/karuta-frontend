@@ -4,7 +4,7 @@
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
 
-	http://opensource.org/licenses/ECL-2.0
+	http://www.osedu.org/licenses/ECL-2.0
 
 	Unless required by applicable law or agreed to in writing,
 	software distributed under the License is distributed on an "AS IS"
@@ -430,29 +430,37 @@ UIFactory["User"].create = function()
 UIFactory["User"].changePassword = function(userid,value)
 //==================================
 {
+	var value2 = null;
 	if (userid==null)
 		userid = USER.id;
-	if (value==null)
+	if (value==null){
 		value = $("#user_password").val();
-	var xml = "";
-	xml +="<?xml version='1.0' encoding='UTF-8'?>";
-	xml +="<user>";
-	xml +="	<password>"+value+"</password>";
-	xml +="</user>";
-	var url = "../../../"+serverBCK+"/users/user/" + userid;
-	$.ajax({
-		type : "PUT",
-		contentType: "application/xml",
-		dataType : "text",
-		url : url,
-		data : xml,
-		success : function(data) {
-			alert("saved");
-			window.location.reload();
-		}
-	});
-
+		value2 = $("#user_confirm-password").val();
+	}
+	if (value2 == null || (value2 != null && value2 == value)) {
+		var xml = "";
+		xml +="<?xml version='1.0' encoding='UTF-8'?>";
+		xml +="<user>";
+		xml +="	<password>"+value+"</password>";
+		xml +="</user>";
+		var url = "../../../"+serverBCK+"/users/user/" + userid;
+		$.ajax({
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			data : xml,
+			success : function(data) {
+				alert(karutaStr[LANG]['saved']);
+				window.location.reload();
+			}
+		});
+	} else {
+		alert(karutaStr[LANG]['password-mismatch']);
+		UIFactory["User"].callChangePassword();
+	}
 };
+
 //==================================
 UIFactory["User"].callChangePassword = function()
 //==================================
@@ -464,10 +472,20 @@ UIFactory["User"].callChangePassword = function()
 	$("#edit-window-title").html(karutaStr[LANG]['change_password']);
 	var html = "";
 	html += "<form id='metadata' class='form-horizontal'>";
-	html += UIFactory["User"].getAttributeCreator("password","",true);
+	html += UIFactory["User"].getPasswordCreator();
 	html += "</form>";
 	$("#edit-window-body-content").html(html);
 	//--------------------------
 	$('#edit-window').modal('show');
 
 }
+
+//==================================================
+UIFactory["User"].getPasswordCreator = function()
+//==================================================
+{
+	var html = "";
+	html += UIFactory["User"].getAttributeCreator("password","",true);
+	html += UIFactory["User"].getAttributeCreator("confirm-password","",true);
+	return html;
+};

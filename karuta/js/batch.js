@@ -67,6 +67,7 @@ function getTxtvals(node)
 function processAll()
 //=================================================
 {
+	$.ajaxSetup({async: false});
 	g_create_users = $("create-user",g_xmlDoc);
 	g_create_trees = $("create-tree",g_xmlDoc);
 	g_select_trees = $("select-tree",g_xmlDoc);
@@ -166,7 +167,7 @@ function createUser(node)
 						$("#log").append("<br>- user created("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 						//===========================================================
 						g_nb_createUser[g_noline]++;
-						if (g_nb_createUser[g_noline]==g_create_users.length) {
+						if (g_nb_createUser[g_noline]>=g_create_users.length) {
 							processCreateTrees();
 						}
 						//===========================================================
@@ -179,7 +180,7 @@ function createUser(node)
 				$("#log").append("<br>-TRACE user created() - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 				//===========================================================
 				g_nb_createUser[g_noline]++;
-				if (g_nb_createUser[g_noline]==g_create_users.length) {
+				if (g_nb_createUser[g_noline]>=g_create_users.length) {
 					processCreateTrees();
 				}
 				//===========================================================
@@ -229,7 +230,8 @@ function createTree(node,treeref)
 				var nodeid = $("asmRoot",data).attr('id');
 				var xml = "<asmResource xsi_type='nodeRes'>";
 				xml += "<code>"+code+"</code>";
-				xml += "<label lang='"+LANG+"'>"+label+"</label>";
+				for (var lan=0; lan<languages.length;lan++)
+					xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
 				xml += "</asmResource>";
 				$.ajax({
 					async:false,
@@ -254,7 +256,7 @@ function createTree(node,treeref)
 			}
 		});
 	else {
-		$("#log").append("<br>-TRACE tree created - code:"+code+" - label:"+label);
+		$("#log").append("<br>-TRACE tree created - template:"+template+" - code:"+code+" - label:"+label);
 		//===========================================================
 		g_nb_createTree[g_noline]++;
 		if (g_create_trees.length==g_nb_createTree[g_noline]) {
@@ -426,7 +428,7 @@ function updateResource(node)
 							$("#log").append("<br>- resource updated ("+nodeid+") - semtag="+semtag);
 							//===========================================================
 							g_nb_updateResource[g_noline]++;
-							if (g_update_resources.length==g_nb_updateResource[g_noline]) {
+							if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
 								processShareTrees();
 							}
 							//===========================================================
@@ -441,7 +443,7 @@ function updateResource(node)
 			$("#log").append("<br>-TRACE resource FIELD updated - semtag="+semtag);
 			//===========================================================
 			g_nb_updateResource[g_noline]++;
-			if (g_update_resources.length==g_nb_updateResource[g_noline]) {
+			if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
 				processShareTrees();
 			}
 			//===========================================================
@@ -481,12 +483,15 @@ function updateResource(node)
 								contentType: "application/xml",
 								dataType : "text",
 								data : xml,
+								targetid : targetid,
+								sourceid : sourceid,
+								semtag : semtag,
 								url : "../../../"+serverBCK+"/resources/resource/" + targetid,
 								success : function(data) {
-									$("#log").append("<br>- resource updated ("+targetid+") - semtag="+semtag + " - srce:"+sourceid);
-									//===========================================================
 									g_nb_updateResource[g_noline]++;
-									if (g_update_resources.length==g_nb_updateResource[g_noline]) {
+//									alert(g_nb_updateResource[g_noline]);
+									$("#log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
+									if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
 										processShareTrees();
 									}
 									//===========================================================
@@ -503,13 +508,138 @@ function updateResource(node)
 			$("#log").append("<br>-TRACE resource PROXY updated - semtag="+semtag);
 			//===========================================================
 			g_nb_updateResource[g_noline]++;
-			if (g_update_resources.length==g_nb_updateResource[g_noline]) {
+			if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
 				processShareTrees();
 			}
 			//===========================================================
 		}
-	//----------------------------------------------------
 	}
+	//----------------------------------------------------
+	if (type=='Metadatawad') {
+		var text = getTxtvals($("text",node));
+		if ($("source",node).length>0){
+			var source_select = $("source",node).attr("select");
+			var source_idx = source_select.indexOf(".");
+			var source_treeref = source_select.substring(0,source_idx);
+			var source_semtag = source_select.substring(source_idx+1);
+			if (source_semtag=="UUID")
+				text = g_trees[source_treeref][0];
+		}
+		if (!trace)
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+				success : function(data) {
+					var nodes = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data);
+					if (nodes.length==0)
+						nodes = $("asmUnitStructure:has(metadata[semantictag='"+semtag+"'])",data);
+					if (nodes.length==0)
+						nodes = $("asmUnit:has(metadata[semantictag='"+semtag+"'])",data);
+					if (nodes.length==0)
+						nodes = $("asmStructure:has(metadata[semantictag='"+semtag+"'])",data);
+					var nb = nodes.length;
+					var nodeid ="";
+					for (var i=0; i<nb; i++){
+						nodeid = $(nodes[i]).attr('id');
+						$.ajax({
+							async:false,
+							type : "PUT",
+							contentType: "application/xml",
+							dataType : "text",
+							data : text,
+							nodeid : nodeid,
+							semtag : semtag,
+							url : "../../../"+serverBCK+"/nodes/node/" + nodeid+"/metadatawad",
+							idx : i,
+							nb : nb-1,
+							success : function(data) {
+								$("#log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semtag+" "+this.idx+" "+this.nb+" - "+(this.idx==this.nb));
+								//===========================================================
+								if (this.idx==this.nb) {
+									g_nb_updateResource[g_noline]++;
+//									alert(g_nb_updateResource[g_noline]);
+								}
+								if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
+									processShareTrees();
+								}
+								//===========================================================
+							},
+							error : function(data,nodeid,semtag) {
+								$("#log").append("<br>- ERROR in update metadatawad("+this.nodeid+") - semtag="+this.semtag);
+							}
+						});
+						}
+				}
+			});
+		else {
+			$("#log").append("<br>-TRACE resource metadatawad updated - semtag="+semtag);
+			//===========================================================
+			g_nb_updateResource[g_noline]++;
+			if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
+				processShareTrees();
+			}
+			//===========================================================
+		}
+	}
+	if (type=='Dashboard') {
+		var text = getTxtvals($("text",node));
+		if ($("source",node).length>0){
+			var source_select = $("source",node).attr("select");
+			var source_idx = source_select.indexOf(".");
+			var source_treeref = source_select.substring(0,source_idx);
+			var source_semtag = source_select.substring(source_idx+1);
+			if (source_semtag=="UUID")
+				text = g_trees[source_treeref][0];
+		}
+		if (!trace)
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+				success : function(data) {
+					var nodeid = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data).attr('id');
+					var xml = "<asmResource xsi_type='Dashboard'>";
+					for (var lan=0; lan<languages.length;lan++)
+						xml += "<text lang='"+languages[lan]+"'>"+text+"</text>";
+					xml += "</asmResource>";
+					$.ajax({
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						nodeid : nodeid,
+						semtag : semtag,
+						url : "../../../"+serverBCK+"/resources/resource/" + nodeid,
+						success : function(data) {
+							$("#log").append("<br>- resource Dashboard update("+this.nodeid+") - semtag="+this.semtag);
+							//===========================================================
+							g_nb_updateResource[g_noline]++;
+//							alert(g_nb_updateResource[g_noline]);
+							if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
+								processShareTrees();
+							}
+							//===========================================================
+						},
+						error : function(data) {
+							$("#log").append("<br>- ERROR in update Dashboard("+nodeid+") - semtag="+semtag);
+						}
+					});
+				}
+			});
+		else {
+			$("#log").append("<br>-TRACE resource Dashboard updated - semtag="+semtag);
+			//===========================================================
+			g_nb_updateResource[g_noline]++;
+			if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
+				processShareTrees();
+			}
+			//===========================================================
+		}
+	}
+	//----------------------------------------------------
 }
 
 //=================================================
@@ -573,8 +703,8 @@ function shareTree(node)
 									g_nb_shareTree[g_noline]++;
 									if (g_nb_shareTree[g_noline]==g_share_trees.length) {
 										g_noline++;
-										if (g_noline>g_json.lines.length)
-											processEnd();
+										if (g_noline>=g_json.lines.length)
+											processDeleteTrees();
 										else
 											processLine();
 									}
@@ -585,19 +715,19 @@ function shareTree(node)
 								}
 							});
 						else
-							$("#log").append("<br>TRACE - tree shared ("+g_trees[treeref][0]+") - user:"+user_id+" - role:"+role);
+							$("#log").append("<br>TRACE - tree shared ("+g_trees[treeref][0]+") - user:"+user+" - role:"+role);
 					}
 				});
 			}
 		});
 	else {
-		$("#log").append("<br>TRACE - tree shared ("+g_trees[treeref][0]+") - user:"+userid+" - role:"+role);
+		$("#log").append("<br>TRACE tree shared ("+g_trees[treeref][0]+") - user:"+user+" - role:"+role);
 		//===========================================================
 		g_nb_shareTree[g_noline]++;
 		if (g_nb_shareTree[g_noline]==g_share_trees.length) {
 			g_noline++;
-			if (g_noline==g_json.lines.length)
-				processEnd();
+			if (g_noline>=g_json.lines.length)
+				processDeleteTrees();
 			else
 				processLine();
 		}
@@ -643,8 +773,11 @@ function processEnd()
 //=================================================
 {
 	g_noline++;
-	if (g_noline==g_json.lines.length)
+	if (g_noline>=g_json.lines.length) {
 		$("#log").append("<br>================ END ========================================================");
+		if (demo)
+			window.location.reload();
+	}
 	else
 		processLine();
 }

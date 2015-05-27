@@ -281,6 +281,15 @@ textarea {
 	left:50%;
 }
 
+#info-window {
+	width:200px;
+	margin-left:-100px;
+/*	background-color:lightgrey;*/
+	position:fixed;
+	top:60px;
+	left:50%;
+}
+
 
 
 /* -------------------------------------------------- */
@@ -542,6 +551,7 @@ input {
 	color: #808080;
 	font-size: 10px;
 	line-height: 12px;
+	visibility: hidden;
 }
 
 .translate label span.lang {
@@ -789,6 +799,14 @@ table.tablesorter th.restore {
 	border:1px solid Crimson;
 }
 
+.batch .update-metadatawad {
+	border:1px solid #FE642E;
+}
+
+.batch .update-dashboard {
+	border:1px solid #F7BE81;
+}
+
 .batch .update-proxy{
 	border:1px solid Gold;
 }
@@ -850,22 +868,67 @@ table.tablesorter th.restore {
 /* ====================
 	Document/Image\URL
    ====================*/
-
-.resource-Document {
-	display:inline-block;
-	min-height:50px;
+.free-context {
+	height:100%;
 }
 
 
+.resource-Document,
 .resource-URL {
-	display:inline-block;
-	min-height:50px;
+	border:1px lightgrey solid;
 }
+
+.resource-TextField,
+.resource-Document,
+.resource-URL {
+	min-width:100px;
+	min-height:100px;
+	width:100%;
+	height:100%;
+}
+
+.resource-Video:hover,
+.resource-Field:hover,
+.resource-TextField:hover,
+.resource-Image:hover,
+.resource-Document:hover,
+.resource-URL:hover {
+	opacity:0.5;
+}
+
+.resource-Document a,
+.resource-URL a{
+	color : inherit;
+}
+
 
 .resource-Image {
 	display:inline-block;
 	min-height:25px;
 	min-width:50px;
+}
+
+.doc-up,
+.url-up {
+	padding-top:5px;
+	height:60%;
+	background-color:white;
+	width:100%;
+}
+
+.doc-bottom,
+.url-bottom {
+	height:40%;
+	width:100%;
+	text-align:center;
+	border-top:1px lightgrey solid;
+	font-size:10pt;
+  display: table;
+}
+
+.doc-bottom span, .url-bottom span {
+  display: table-cell;
+  vertical-align: middle;
 }
 
 /* ====================
@@ -878,6 +941,13 @@ select.BDG2, option[value="BDG2"] { color: #fff; background: #FF6600; }
 select.BDG3, option[value="BDG3"] { color: black; background: #fff; }
 select.BDG4, option[value="BDG4"] { color: black; background: #CCFF99; }
 select.BDG5, option[value="BDG5"] { color: #fff; background: #66CC00; }
+
+.BDG0 { color: black; background: lightgrey; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG1 { color: black; background: red; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG2 { color: black; background: #FF6600; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG3 { color: black; background: ##fff; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG4 { color: black; background: #CCFF99; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG5 { color: black; background: #66CC00; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
 
 select.Y0, option[value="Y0"] {color: #fff; background: gray;}
 select.Y1, option[value="Y1"] {color: #fff; background: red;}
@@ -900,4 +970,12 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 
 .name_SendEmail {
 	font-weight:bold;
+}
+
+/* -- colorpicker --*/
+.evo-colorind,
+.evo-colorind-ff {
+	height:14px;
+	width:14px;
+	margin-top:7px;
 }

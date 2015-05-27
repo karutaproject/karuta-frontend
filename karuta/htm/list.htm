@@ -28,6 +28,7 @@
 		<!--script src="../../other/js/bootstrap-wysiwyg.js"></script-->
 		<script src="../../karuta/js/karuta.js"></script>
 		<script src="../../karuta/js/UICom.js"></script>
+		<script src="../../karuta/js/batch.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../other/js/jquery.ui.widget.js"></script>
 		<script src="../../other/js/jquery.iframe-transport.js"></script>
@@ -42,6 +43,7 @@
 		<script src="../../karuta/js/UICom.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../application/js/_init.js"></script>
+		<script src="../../application/js/create_batch.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/version.js"></script>
 		<!-- =============================================================== -->
@@ -93,6 +95,7 @@
 		<div id='navigation_bar'></div>
 		<div class="container" style = "padding-top:60px">
 			<div id='menu'></div>
+			<div id='log' style='margin-left:20px;margin-top:20px'></div>
 			<div id='list'></div>
 		</div>
 		<script>
@@ -145,7 +148,8 @@
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile()\" href='#'>"+karutaStr[LANG]['import_portfolio']+"</a></li>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" href='#'>"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip()\" href='#'>"+karutaStr[LANG]['import_zip']+"</a></li>";
-//						html += "<li><a onclick='javascript:UIFactory['Portfolio'].instantiate()' href='#'>"+karutaStr[LANG]['instantiate_portfolio']+"</a></li>";
+						if (demo)
+							html += "<hr><li><a onclick=\"create_karuta_demo_portfolios('"+USER.username_node.text()+"')\" href='#'>"+karutaStr[LANG]['demo-portfolios']+"</a></li>";
 						html += "</ul>";
 						html += "</div>";
 						if (USER.admin || USER.creator)

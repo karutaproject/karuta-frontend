@@ -8,8 +8,8 @@
 		<metadata sharedNode="N" sharedNodeResource="N" />
 		<asmResource xsi_type="nodeRes">
 			<code>_karuta_resources_</code>
-			<label lang="fr">_karuta_resources_</label>
-			<label lang="en">_karuta_resources_</label>
+			<label lang="fr">_karuta_resources_v1.1.1</label>
+			<label lang="en">_karuta_resources_v1.1.1</label>
 		</asmResource>
 		<asmResource xsi_type="context" />
 		//===================== asmStructure =======================
@@ -77,6 +77,22 @@
 			</asmResource>
 			<asmResource xsi_type="context" />
 			<asmResource xsi_type="Field">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
+		</asmContext>
+		//===================== Color =======================
+		<asmContext xsi_type="">
+			<metadata-wad seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" semantictag ="Color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<code />
+				<label lang="fr" />
+				<label lang="en" />
+			</asmResource>
+			<asmResource xsi_type="context" />
+			<asmResource xsi_type="Color">
 				<text lang="fr" />
 				<text lang="en" />
 			</asmResource>

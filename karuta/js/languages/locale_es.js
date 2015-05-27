@@ -103,6 +103,16 @@ karutaStr['es']['resizeroles']="Rôles - changer taille img";
 karutaStr['es']['img-size']="Image - taille";
 karutaStr['es']['inline']="Édition en ligne";
 karutaStr['es']['edittargetroles']="Rôles - éditer cible proxy";
+karutaStr['es']['inline']="Inline Editing";
+karutaStr['es']['edittargetroles']="Roles - Edit Proxy Target";
+karutaStr['es']['showroles']="Roles - Show/Hide";
+karutaStr['es']['showtoroles']="Roles - Show To";
+karutaStr['es']['private']="Hidden";
+karutaStr['es']['hide-metainfo']="Hide Metadata";
+karutaStr['es']['show-metainfo']="Show Metadata";
+karutaStr['es']['margin-top']="Space before (in pixels)";
+karutaStr['es']['background-color']="Background-color";
+karutaStr['es']['moveroles']="Roles - Move";
 
 //=========================================
 //========== ADMIN ========================
