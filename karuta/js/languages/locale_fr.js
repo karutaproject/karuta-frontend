@@ -59,11 +59,14 @@ karutaStr['fr']['password-mismatch']="Les deux mots de passe ne correspondent pa
 karutaStr['fr']['saved']="Enregistré";
 karutaStr['fr']['password-sent']="Un nouveau mot de passe a été envoyé par courriel.";
 karutaStr['fr']['new-account']="Vous n'avez pas de compte? <a href='createAccount.htm?lang=fr'>Inscrivez-vous!</a>";
-karutaStr['fr']['demo-portfolios']="Créer les portfolios démos";
 karutaStr['fr']['disconnected']="Oups! Vous avez été accidentellement déconnecté!";
+karutaStr['fr']['demo-documentation']="Importer la documentation Karuta";
+karutaStr['fr']['demo-ecommerce']="Importer les portfolios démo e-commerce";
+karutaStr['fr']['demo-aacu']="Importer les portfolios démo AACU";
+karutaStr['fr']['demo-video']="Importer les portfolios démo des vidéos";
 
 //=========================================
-//========== NODE =====================
+//========== NODE =========================
 //=========================================
 
 karutaStr['fr']['label']="Libellé";

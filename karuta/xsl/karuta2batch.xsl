@@ -54,7 +54,7 @@
 				<txtval select='{$password}'/>
 			</password>
 			<designer>
-				<txtval select='{$designer}'/>
+				<txtval><xsl:value-of select="$designer"/></txtval>
 			</designer>
 		</create-user>
 	</xsl:template>

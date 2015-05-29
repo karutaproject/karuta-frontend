@@ -115,7 +115,7 @@ function createUser(node)
 	var lastname = getTxtvals($("lastname",node));
 	var firstname = getTxtvals($("firstname",node));
 	var email = getTxtvals($("email",node));
-	var designer = getTxtvals($("creator",node));
+	var designer = getTxtvals($("designer",node));
 	var password = getTxtvals($("password",node));
 	if (designer==undefined || designer=='')
 		designer ='0';
@@ -660,11 +660,19 @@ function processShareTrees()
 function shareTree(node)
 //=================================================
 {
+	var role = "";
+	var user = "";
 	var treeref = $(node).attr("select");
-	var select_node = $("role>txtval",node).attr("select") + $("role>txtval",node).text();
-	var role = eval("g_json.lines["+g_noline+"]."+select_node);
-	var select_user = $("user>txtval",node).attr("select") + $("user>txtval",node).text();
-	var user = eval("g_json.lines["+g_noline+"]."+select_user);
+	var select_node = $("role>txtval",node).attr("select");
+	if (typeof(selectnode)== 'undefined')
+		role = $("role>txtval",node).text();
+	else
+		role = eval("g_json.lines["+g_noline+"]."+select_node);
+	var select_user = $("user>txtval",node).attr("select");
+	if(typeof(select_user)=='undefined')
+		user = $("user>txtval",node).text();
+	else
+		user = eval("g_json.lines["+g_noline+"]."+select_user);
 	//---- get userid ----------
 	var url = "../../../"+serverBCK+"/users/user/username/"+user;
 	if (!trace)

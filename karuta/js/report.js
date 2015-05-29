@@ -136,13 +136,13 @@ function processNode(no,xmlDoc,destid,data,line)
 			for (var j=0; j<children.length;j++){
 				var tagname = $(children[j])[0].tagName;
 				if (tagname=="for-each-node")
-					processNode(no+"_"+i,children[j],destid,nodes[i],i);
+					processNode(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="table")
-					processTable(no+"_"+i,children[j],destid,nodes[i],i);
+					processTable(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="row")
-					processRow(no+"_"+i,children[j],destid,nodes[i],i);
+					processRow(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="cell")
-					processCell(no+"_"+i,children[j],destid,nodes[i],i);
+					processCell(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="aggregate")
 					processAggregate(children[i],destid,nodes[i],i);
 				if (tagname=="node_resource")
@@ -172,11 +172,11 @@ function processTable(no,xmlDoc,destid,data,line)
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
 		if (tagname=="for-each-line")
-			processLine(no,xmlDoc,'table_'+no,data,'table_'+no);
+			processLine(no+"_"+i,xmlDoc,'table_'+no,data,'table_'+no);
 		if (tagname=="for-each-person")
-			getUsers(no,children[i],'table_'+no,data,line);
+			getUsers(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="for-each-portfolio")
-			getPortfolios(no,children[i],'table_'+no,data,line);
+			getPortfolios(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="row")
 			processRow(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="for-each-node")
@@ -304,6 +304,8 @@ function getPortfolios(no,xmlDoc,destid,data,line)
 		for (var i=0;i<ref_inits.length;i++)
 			aggregates[ref_inits[i]] = new Array();
 	}
+	if (userid==null)
+		userid = USER.id;
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -328,6 +330,10 @@ function processPortfolios(no,xmlDoc,destid,data,line)
 		if (select.indexOf("code*=")>-1) {
 			value = select.substring(7,select.length-1);  // inside quote
 			condition = code.indexOf(value)>-1;
+		}
+		if (select.indexOf("code=")>-1) {
+			value = select.substring(6,select.length-1);  // inside quote
+			condition = code==value;
 		}
 		//------------------------------------
 		if (condition){

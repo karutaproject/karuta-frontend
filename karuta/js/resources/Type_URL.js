@@ -76,31 +76,44 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest] = langcode;
+		this.display[dest] = {langcode: langcode, type : type};
 	}
 	//---------------------
 	if (type==null)
 		type = "standard";
 	var html = "";
 	//---------------------
+	var url = $(this.url_node[langcode]).text();
+	var label = $(this.label_node[langcode]).text();
+	if (label=="")
+		label = url;
 	if(type=='standard') {
-		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+$(this.label_node[langcode]).text()+"</a>";
-		if ($(this.label_node[langcode]).text()=='')
-			type = 'same';
+		if (url!="")
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+label+"</a>";
+		else
+			html =  "<img src='../img/link-icon.png' width='25px'> "+karutaStr[LANG]['no-URL'];
 	}
-	if(type=='same')
-		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+$(this.url_node[langcode]).text()+"</a>";
+	if (type=='free-positioning'){
+		if (url!="")
+			html = "<a href='"+url+"'><div class='url-up'><p style='text-align:center;'>"+label+"</p></div><div class='url-bottom'><span>URL</span></div></a>";
+		else
+			html = "<div class='url-up'><p style='text-align:center;'>"+karutaStr[LANG]['no-URL']+"</p></div><div class='url-bottom'><span>URL</span></div>";
+	}
 	if (type=='icon-url-label'){
-		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+$(this.url_node[langcode]).text()+urlIcon["web"]+"</a>";
+		if (url!="")
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+label+urlIcon["web"]+"</a>";
+		else
+			html =  "<img src='../img/link-icon.png' width='25px'><p style='text-align:center;'>"+karutaStr[LANG]['no-URL']+"</p>";
 	}
 	if (type=='icon-url'){
-		html = "<a href='"+$(this.url_node[langcode]).text()+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+urlIcon["web"]+"</a>";
+		if (url!="")
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+urlIcon["web"]+"</a>";
+		else
+			html =  "<img src='../img/link-icon.png' width='25px'>"+karutaStr[LANG]['no-URL'];
 	}
 	if (type=='icon'){
 		html = urlIcon["web"];
 	}
-	if (this.url_node[langcode].text()=='')
-			html =  "<img src='../img/link-icon.png' width='25px'>"+karutaStr[LANG]['no-URL'];
 	return html;
 };
 
@@ -228,7 +241,7 @@ UIFactory["URL"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,null,this.display[dest]));
+		$("#"+dest).html(this.getView(null,this.display[dest].type,this.display[dest].langcode));
 	};
 
 };

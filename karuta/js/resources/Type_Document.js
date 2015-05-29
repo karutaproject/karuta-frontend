@@ -18,6 +18,7 @@ if( UIFactory === undefined )
 {
   var UIFactory = {};
 }
+
  var documentIcon = {};
  documentIcon['png'] = "<i class='icon-picture'></i>";
  documentIcon['gif'] = "<i class='icon-picture'></i>";
@@ -28,7 +29,9 @@ if( UIFactory === undefined )
  documentIcon['xls'] = "<i class='icon-file'></i>";
  documentIcon['xlsx'] = "<i class='icon-file'></i>";
  documentIcon['pdf'] = "<i class='icon-file'></i>";
+ 
 
+ 
 /// Define our type
 //==================================
 UIFactory["Document"] = function( node )
@@ -92,6 +95,16 @@ UIFactory["Document"] = function( node )
 UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
+	var documentIcon = {};
+	documentIcon['.doc'] = "../img/word.gif";
+	documentIcon['.docx'] = "../img/word.gif'";
+	documentIcon['.xls'] = "../img/excel.gif";
+	documentIcon['.xlsx'] = "../img/excel.gif";
+	documentIcon['.ppt'] = "../img/powerpoint.gif";
+	documentIcon['.pptx'] = "../img/powerpoint.gif";
+	documentIcon['.pdf'] = "../img/adobe.gif";
+	documentIcon['.txt'] = "../img/text.png";
+
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -101,7 +114,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
-		this.display[dest] = langcode;
+		this.display[dest] = {langcode: langcode, type : type};
 	}
 	//---------------------
 	if (type==null)
@@ -113,6 +126,15 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' width='25px'> "+$(this.filename_node[langcode]).text()+"</a>";
 		else
 			html =  "<img src='../img/document-icon.png' width='25px'>"+karutaStr[LANG]['no-document'];
+	}
+	if (type=='free-positioning'){
+		if ($(this.filename_node[langcode]).text()!="") {
+			var filename = $(this.filename_node[langcode]).text();
+			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+			//alert(extension);
+			html = "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><div class='doc-up'><p style='text-align:center;'>"+$(this.filename_node[langcode]).text()+"</p></div><div class='doc-bottom'><span>Document</span></div></a>";
+		} else
+			html = "<div class='doc-up'><p style='text-align:center;'>"+karutaStr[LANG]['no-document']+"</p></div><div class='doc-bottom'><span>Document</span></div>";
 	}
 	if (type=='icon-url-label'){
 		if ($(this.filename_node[langcode]).text()!=""){
@@ -246,7 +268,7 @@ UIFactory["Document"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,null,this.display[dest]));
+		$("#"+dest).html(this.getView(null,this.display[dest].type,this.display[dest].langcode));
 	};
 
 };

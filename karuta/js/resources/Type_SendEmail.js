@@ -205,6 +205,7 @@ UIFactory["SendEmail"].send = function(obj,itself,langcode)
 	xml +="<recipient>"+$(itself.email_node[langcode]).text()+"</recipient>";
 	xml +="<subject>"+subject+"</subject>";
 	xml +="<message>"+message+"</message>";
+	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
 	xml +="</node>";
 
 	$.ajax({

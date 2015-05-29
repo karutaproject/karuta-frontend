@@ -979,3 +979,13 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	width:14px;
 	margin-top:7px;
 }
+
+.start {
+	margin-top:10px;
+	margin-right:10px;
+	border-radius:4px;
+	padding:10px;
+	background-image:linear-gradient(#FFF, #EEE);
+	border: 1px solid lightGrey;
+	box-shadow: 3px 3px 3px #CCC;
+}

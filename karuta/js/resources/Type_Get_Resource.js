@@ -54,6 +54,21 @@ UIFactory["Get_Resource"] = function(node,condition)
 };
 
 /// Display
+
+//==================================
+UIFactory["Get_Resource"].prototype.getCode = function()
+//==================================
+{
+	return this.code_node.text();
+};
+
+//==================================
+UIFactory["Get_Resource"].prototype.getValue = function()
+//==================================
+{
+	return this.value_node.text();
+};
+
 //==================================
 UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode)
 //==================================
