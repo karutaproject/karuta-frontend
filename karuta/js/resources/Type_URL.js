@@ -210,21 +210,36 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		$(obj).append(input_url);
 	}
 	if(type=='default') {
-		$(obj).append($("<label> "+karutaStr[LANG]['label']+"</label>"));
-		var input_label = $("<input type='text' name='label'  value=\""+$(this.label_node[langcode]).text()+"\">");
-		$(input_label).change(function (){
-			UIFactory["URL"].update(obj,self,type,langcode);
-		});
-		$(obj).append(input_label);
+		var htmlFormObj = $("<form class='form-horizontal'></form>");
+		$(obj).append($(htmlFormObj));
 		//------------------------
-		$(obj).append($("<label> URL (http://)</label>"));
-		var input_url = $("<input type='text' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
-		$(input_url).change(function (){
+		var htmlLabelGroupObj = $("<div class='form-group'></div>")
+		var htmlLabelLabelObj = $("<label for='label_"+this.id+"' class='col-sm-3 control-label'> "+karutaStr[LANG]['label']+"</label>");
+		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
+		var htmlLabelInputObj = $("<input id='label_"+this.id+"' type='text' class='form-control' name='label' value=\""+$(this.label_node[langcode]).text()+"\">");
+		$(htmlLabelInputObj).change(function (){
 			UIFactory["URL"].update(obj,self,type,langcode);
 		});
-		$(obj).append(input_url);
+		$(htmlLabelDivObj).append($(htmlLabelInputObj));
+		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
+		$(htmlLabelGroupObj).append($(htmlLabelDivObj));
+		$(htmlFormObj).append($(htmlLabelGroupObj));
+		//------------------------
+		var htmlUrlGroupObj = $("<div class='form-group'></div>")
+		var htmlUrlLabelObj = $("<label for='url_"+this.id+"' class='col-sm-3 control-label'>URL</label>");
+		var htmlUrlDivObj = $("<div class='col-sm-9'></div>");
+		var htmlUrlInputObj = $("<input id='url_"+this.id+"' type='text' class='form-control' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
+		$(htmlUrlInputObj).change(function (){
+			UIFactory["URL"].update(obj,self,type,langcode);
+		});
+		$(htmlUrlDivObj).append($(htmlUrlInputObj));
+		$(htmlUrlGroupObj).append($(htmlUrlLabelObj));
+		$(htmlUrlGroupObj).append($(htmlUrlDivObj));
+		$(htmlFormObj).append($(htmlUrlGroupObj));
 	}
 	//------------------------
+	if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1)
+		$(obj).append($("<hr/>"));
 	return obj;
 };
 

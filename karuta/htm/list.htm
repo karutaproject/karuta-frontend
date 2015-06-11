@@ -6,8 +6,7 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
 		<!-- =========================================== -->
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-responsive.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-wysihtml5.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/blue/style.css">
@@ -90,13 +89,13 @@
 	</head>
 	<body>
 		<div id='navigation_bar'></div>
-		<div class="container" style = "padding-top:60px">
+		<div class="container-fluid">
 			<div class='row'>
-				<div class='span9'>
+				<div class='col-md-9'>
 					<div id='menu'></div>
 					<div id='list'></div>
 				</div>
-				<div id='start' class='span3' style='display:none'>
+				<div id='start' class='col-md-3' style='display:none'>
 					<div class='start'>
 						To <b>start</b> click the <b>Menu</b> button<br/>
 						<p>You can create</p>
@@ -164,9 +163,9 @@
 							}
 						});
 						var html = "";
-						html += "<div class='btn-group'>";
-						html += "<a href='#' data-toggle='dropdown' class='btn  btn-mini dropdown-toggle'><div class='btn-text'>Menu <b class='caret'></b></div></a>";
-						html += "<ul class='dropdown-menu'>";
+						html += "<div class='dropdown'>";
+						html += "<button id='list_menu' class='btn' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><div class='btn-text'>Menu <b class='caret'></b></div></button>";
+						html += "<ul class='dropdown-menu' role='menu' aria-labelledby='list_menu'>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].create()\" href='#'>"+karutaStr[LANG]['create_portfolio']+"</a></li>";
 						html += "<hr>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createBatch()\" href='#'>"+karutaStr[LANG]['create_batch']+"</a></li>";

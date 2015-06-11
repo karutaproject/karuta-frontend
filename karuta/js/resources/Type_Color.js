@@ -88,7 +88,7 @@ UIFactory["Color"].prototype.getView = function(dest,type,langcode)
 	var value = $(this.text_node[langcode]).text();
 	if (this.encrypted)
 		value = decrypt(html.substring(3),g_rc4key);
-	var html = "<div style='height:20px;width:20px;background-color:#"+value+"'></div>#"+value; 
+	var html = "<div style='height:20px;width:20px;background-color:"+value+"'></div> "+value; 
 	return html;
 };
 
@@ -129,16 +129,21 @@ UIFactory["Color"].prototype.getEditor = function(type,langcode,disabled)
 	var value = $(this.text_node[langcode]).text();
 	if (this.encrypted)
 		value = decrypt(value.substring(3),g_rc4key);
-	var html = "";
-	html += "<input type='text' class='pick-a-color form-control'";
+	var obj = $("<div></div>");
+	var obj1 = $("<div style='margin-bottom:30px'></div>");
+	var input = "<input type='text' class='pickcolor form-control' style='width:150px;' ";
 	if (disabled)
-		html += "disabled='disabled' ";
-	html += "value=\""+value+"\" >";
-	var obj = $(html);
+		input += "disabled='disabled' ";
+	input += "value=\""+value+"\" >";
+	var input_obj = $(input);
 	var self = this;
-	$(obj).change(function (){
-		UIFactory["Color"].update(obj,self,langcode);
-	});
+	$(input_obj).on("change.color", function(event, color){
+		UIFactory["Color"].update(input_obj,self,langcode);	});
+	$(obj1).append($(input_obj));
+	$(obj).append($(obj1));
+	if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1)
+		$(obj).append($("<hr/>"));
+	
 	return obj;
 };
 

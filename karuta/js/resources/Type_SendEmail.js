@@ -123,47 +123,64 @@ UIFactory["SendEmail"].prototype.getEditor = function(type,langcode)
 	if (type==null)
 		type = 'default';
 	var self = this;
-	var obj = $("<span class='SendEmail_editor'></span>");
+	var htmlFormObj = $("<form class='form-horizontal'></form>");
 	//---------------------
 	if(type=='default')
-		if (g_userrole=='designer') {
+		if (g_userrole=='designer' || USER.admin) {
 			//------------------------
-			$(obj).append($("<label>"+karutaStr[LANG]['firstname']+"</label>"));
-			var input_firstname = $("<input type='text' name='firstname_SendEmail' value=\""+$(this.firstname_node[langcode]).text()+"\">");
-			$(input_firstname).change(function (){
-				UIFactory["SendEmail"].update(obj,self,langcode);
+			var htmlFirstGroupObj = $("<div class='form-group'></div>");
+			var htmlFirstLabelObj = $("<label for='firstname"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['firstname']+"</label>");
+			var htmlFirstDivObj = $("<div class='col-sm-9'></div>");
+			var htmlFirstInputObj = $("<input id='firstname"+this.id+"' type='text' class='form-control' name='firstname_SendEmail' value=\""+this.firstname_node[langcode].text()+"\">");
+			$(htmlFirstInputObj).change(function (){
+				UIFactory["SendEmail"].update(htmlFirstInputObj,self,langcode);
 			});
-			$(obj).append(input_firstname);
+			$(htmlFirstDivObj).append($(htmlFirstInputObj));
+			$(htmlFirstGroupObj).append($(htmlFirstLabelObj));
+			$(htmlFirstGroupObj).append($(htmlFirstDivObj));
+			$(htmlFormObj).append($(htmlFirstGroupObj));
 			//------------------------
-			$(obj).append($("<label>"+karutaStr[LANG]['lastname']+"</label>"));
-			var input_lastname = $("<input type='text' name='lastname_SendEmail' value=\""+$(this.lastname_node[langcode]).text()+"\">");
-			$(input_lastname).change(function (){
-				UIFactory["SendEmail"].update(obj,self,langcode);
+			var htmlLastGroupObj = $("<div class='form-group'></div>");
+			var htmlLastLabelObj = $("<label for='lastname"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['lastname']+"</label>");
+			var htmlLastDivObj = $("<div class='col-sm-9'></div>");
+			var htmlLastInputObj = $("<input id='lastname"+this.id+"' type='text' class='form-control' name='lastname_SendEmail' value=\""+this.lastname_node[langcode].text()+"\">");
+			$(htmlLastInputObj).change(function (){
+				UIFactory["SendEmail"].update(htmlLastInputObj,self,langcode);
 			});
-			$(obj).append(input_lastname);
+			$(htmlLastDivObj).append($(htmlLastInputObj));
+			$(htmlLastGroupObj).append($(htmlLastLabelObj));
+			$(htmlLastGroupObj).append($(htmlLastDivObj));
+			$(htmlFormObj).append($(htmlLastGroupObj));
 			//------------------------
-			$(obj).append($("<label>"+karutaStr[LANG]['email']+"</label>"));
-			var input_email = $("<input type='text' name='email_SendEmail' value=\""+$(this.email_node[langcode]).text()+"\">");
-			$(input_email).change(function (){
-				UIFactory["SendEmail"].update(obj,self,langcode);
+			var htmlEmailGroupObj = $("<div class='form-group'></div>");
+			var htmlEmailLabelObj = $("<label for='email"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>");
+			var htmlEmailDivObj = $("<div class='col-sm-9'></div>");
+			var htmlEmailInputObj = $("<input id='email"+this.id+"' type='text' class='form-control' name='email_SendEmail' value=\""+this.email_node[langcode].text()+"\">");
+			$(htmlEmailInputObj).change(function (){
+				UIFactory["SendEmail"].update(htmlEmailInputObj,self,langcode);
 			});
-			$(obj).append(input_email);
+			$(htmlEmailDivObj).append($(htmlEmailInputObj));
+			$(htmlEmailGroupObj).append($(htmlEmailLabelObj));
+			$(htmlEmailGroupObj).append($(htmlEmailDivObj));
+			$(htmlFormObj).append($(htmlEmailGroupObj));
+			$(htmlFormObj).append($("<hr/>"));
+			//------------------------
 		} else{
 			var html = "";
 			html +=  "<div class='name_SendEmail'> "+$(this.firstname_node[langcode]).text()+" "+$(this.lastname_node[langcode]).text()+"</div>";
 			html +=  "<div class='email_SendEmail'> "+$(this.email_node[langcode]).text()+"</div>";
 			html += "<label>"+karutaStr[LANG]['subject']+"</label>";
-			html += "<input type='text' style='width:100%' id='subject_SendEmail'>";
+			html += "<input type='text' class='form-control' style='width:100%' id='subject_SendEmail'>";
 			html += "<label>"+karutaStr[LANG]['message']+"</label>";
-			html += "<textarea id='message_SendEmail'></textarea>";
-			$(obj).append($(html));
-			var button_send= $("<button class='btn btn-large btn-primary'>"+karutaStr[LANG]['button-send']+"</button>");
+			html += "<textarea class='form-control' id='message_SendEmail'></textarea>";
+			$(htmlFormObj).append($(html));
+			var button_send= $("<button class='btn btn-large btn-primary' style='margin-top:5px'>"+karutaStr[LANG]['button-send']+"</button>");
 			$(button_send).click(function (){
-				UIFactory["SendEmail"].send(obj,self,langcode);
+				UIFactory["SendEmail"].send(htmlFormObj,self,langcode);
 			});
-			$(obj).append(button_send);
+			$(htmlFormObj).append(button_send);
 		}
-	return obj;
+	return htmlFormObj;
 };
 
 //==================================

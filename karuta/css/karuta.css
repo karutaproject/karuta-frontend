@@ -1,10 +1,19 @@
 
 /* --- Problem with button ---*/
-.btn-mini [class*="icon-"] {
+
+.menu-xs{
+	height:22px;
+}
+
+.menu-xs .btn-text{
+	margin-top:0px;
+}
+
+.btn-xs [class*="icon-"] {
 	margin-top:3px;
 	margin-bottom:3px;
 }
-.btn-mini .icon-font {
+.btn-xs .icon-font {
 	margin-top:0px;
 	margin-bottom:0px;
 }
@@ -12,7 +21,7 @@
 a.btn {
 	font-weight:normal;
 }
-a.btn-mini {
+a.btn-xs {
 	min-height:24px;
 	vertical-align:middle;
 }
@@ -432,14 +441,43 @@ a:hover {
 /*      SIDEBAR            */
 /* ====================== */
 
-a.active {
+.selected,
+.selected a {
 	font-weight:bold;
 	color:#848484;
+}
+
+.panel-default > .panel-heading {
+	background-color:transparent;
+}
+
+.panel-default,
+.panel-default > .panel-heading {
+	border-color:transparent;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0);
+	padding-left:0px;
+	padding-top:0px;
+	padding-bottom:0px;
+}
+
+.panel-body{
+	padding-top:0px;
+	padding-bottom:0px;
+}
+
+.well{
+	background-color:transparent;
+}
+.link-unit{
+	padding-top:4px;
+	padding-bottom:5px;
+	padding-left:1px;
 }
 
 a.active:over{
 	color:black;
 }
+
 
 /* ====================== */
 /*      PAGE            */
@@ -978,6 +1016,7 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	height:14px;
 	width:14px;
 	margin-top:7px;
+	float:left;
 }
 
 .start {

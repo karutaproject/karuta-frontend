@@ -93,7 +93,7 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 	//---------------------
 	var value = $(this.text_node[langcode]).text();
 	var html = "";
-	html += "<input type='text' ";
+	html += "<input type='text' class='form-control'";
 	if (disabled)
 		html += "disabled='disabled' ";
 	html += "value=\""+value+"\" >";

@@ -141,7 +141,7 @@ function displayMatrixInside(uuid,lang)
 	$("#edit-window-body-metadata-epm").html("");
 	var html = "";
 	//-----------------------------------------
-//	html += "<a  class='btn btn-mini' onclick='' data-title='éditer' rel='tooltip'>";
+//	html += "<a  class='btn btn-xs' onclick='' data-title='éditer' rel='tooltip'>";
 //	html += "Quitter le mode édition";
 //	html += "</a>";
 	//-----------------------------------------
@@ -151,7 +151,7 @@ function displayMatrixInside(uuid,lang)
 	UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'window-page',100,lang,null,inline);
 	//------------------ footer ---------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var footer = "<span class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</span>";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
 	//-----------------------------------------
 	$("#edit-window").modal('show');

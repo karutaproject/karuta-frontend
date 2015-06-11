@@ -54,7 +54,7 @@
 			//==============================
 			{
 				var html = "";
-				html += "<a class='btn btn-mini' onclick=\"javascript:UIFactory['User'].callCreate()\" ><div class='btn-text'>"+karutaStr[LANG]['create_user']+"</div></a>";
+				html += "<button class='btn btn-xs' onclick=\"javascript:UIFactory['User'].callCreate()\" ><div class='btn-text'>"+karutaStr[LANG]['create_user']+"</div></button>";
 				return html;
 			}
 
@@ -63,14 +63,14 @@
 			//==============================
 			{
 				var html = "";
-				html += "<div class='span6'>";
+				html += "<div class='col-md-6'>";
 				html += "<h3>"+karutaStr[LANG]['active_users']+"</h3>";
 				html += "<div  id='active'>";
 				html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
 				html += "	<h4>"+karutaStr[LANG]['loading']+"</h4>";
 				html += "</div>";
 				html += "</div>";
-				html += "<div class='span1'></div>";
+				html += "<div class='col-md-1'></div>";
 				html += "<div class='span4'>";
 				html += "<h3>"+karutaStr[LANG]['inactive_users']+"</h3>";
 				html += "<div  id='inactive'>";

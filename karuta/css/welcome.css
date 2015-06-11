@@ -1,9 +1,5 @@
 
 
-body {
-	padding-top: 0px; /* 60px to make the container go all the way to the bottom of the topbar */
-	background-color:#fff;
-}
 .form-signin {
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
@@ -48,13 +44,6 @@ body {
 	box-shadow: 0 1px 2px rgba(0,0,0,.05);
 }
 
-.form-newpassword input[type="text"]{
-  font-size: 12px;
-  height: 15px;
-  width : 200px;
-  margin-top: 5px;
-  margin-right:10px;
-}
 
 #form-send {
 	margin-bottom:7px;
@@ -62,7 +51,6 @@ body {
 
 h2 {
 	color:#01A9DB;
-	margin-top:50px;
 }
 
 .ss-titre {

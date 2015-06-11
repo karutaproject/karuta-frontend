@@ -40,12 +40,13 @@ function setDesignerRole(role)
 	if (role=='')
 		role = 'designer';
 	g_userrole = role;
+	fillEditBoxBody();
 	$("#userrole").html(" ("+role+")");
 	if (g_display_type=='standard'){
 		var html = "";
 		html += "	<div class='row'>";
-		html += "		<div class='span3' id='sidebar'></div>";
-		html += "		<div class='span9' id='contenu'></div>";
+		html += "		<div class='col-md-3' id='sidebar'></div>";
+		html += "		<div class='col-md-9' id='contenu'></div>";
 		html += "	</div>";
 		$("#main-container").html(html);
 		UIFactory["Portfolio"].displaySidebar('sidebar','standard',LANGCODE,true);
@@ -73,13 +74,14 @@ function getNavBar(type,portfolioid,edit)
 //==============================
 {
 	var html = "";
-	html += "<div class='navbar navbar-fixed-top'>";
+	html += "<nav class='navbar navbar-default'>";
 	html += "<div class='navbar-inner'>";
-	html += "	<div class='container'>";
-	html += "		<a data-target='.nav-collapse' data-toggle='collapse' class='btn btn-navbar'>";
+	html += "	<div class='container-fluid'>";
+	html += "	  <div class='nav-bar-header'>";
+	html += "		<button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#collapse-1'>";
 	html += "			<span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span>";
-	html += "		</a>";
-	html += "		<div class='nav'>";
+	html += "		</button>";
+	html += "		<div class='navbar-brand'>";
 	if (typeof navbar_title != 'undefined')
 		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' href='#'>"+navbar_title[LANG]+"</a>";
 	else
@@ -92,8 +94,10 @@ function getNavBar(type,portfolioid,edit)
 	html += "				<li>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</li>";
 	html += "			</ul>";
 	html += "		</div>";
-	html += "		<div class='nav-collapse collapse'>";
-	html += "			<ul class='nav'>";
+	html += "	  </div>";
+	//-----------------------------------------------------------
+	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
+	html += "			<ul class='nav navbar-nav'>";
 	if (type=='main'){
 		html += "				<li><a href='list.htm?lang="+LANG+"'>"+karutaStr[LANG]['home']+"</a></li>";
 	}
@@ -101,7 +105,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "			</ul>";
 	//----------------------------------------------------------
 	if (languages.length>1) {
-		html += "			<ul class='nav'>";
+		html += "			<ul class='nav navbar-nav'>";
 	html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+karutaStr[LANG]['language']+"<b class='caret'></b></a>";
 	html += "					<ul class='dropdown-menu'>";
 	for (var i=0; i<languages.length;i++) {
@@ -123,9 +127,11 @@ function getNavBar(type,portfolioid,edit)
 	html += "			</ul>";
 	}
 	//----------------------------------------------------------
-	html += "			<ul class='nav'>";
-	html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<b class='caret'></b></a>";
-	html += "					<ul class='dropdown-menu'>";
+	if (type!='login' && type!='create_account') {
+		html += "			<ul class='nav navbar-nav'>";
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<b class='caret'></b></a>";
+		html += "					<ul class='dropdown-menu'>";
+	}
 	//----------------------------------------------------------
 	if (type!='login' && type!='create_account') {
 		if (USER.admin){
@@ -146,13 +152,13 @@ function getNavBar(type,portfolioid,edit)
 		html += "				</li>";
 		html += "			</ul>";
 		//----------------------------------------------------------
-		html += "			<ul class='nav pull-right'>";
+		html += "			<ul class='nav navbar-nav pull-right'>";
 		html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+USER.firstname_node.text()+" "+USER.lastname_node.text();
 		if (g_userrole=='designer') 
 			html += " <span id='userrole'>(designer)</span><b class='caret'></b></a>";
 		else
 			html += " <span id='userrole'></span><b class='caret'></b></a>";
-		html += "					<ul class='dropdown-menu'>";
+		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
 		if (g_userrole=='designer') {
 			html += "						<li class='divider'></li>";
@@ -173,7 +179,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "</div>";
 	html += "</div>";
 	
-	html += "</div>";
+	html += "</nav>";
 	return html;
 }
 
@@ -183,22 +189,52 @@ function EditBox()
 {
 	var html = "";
 	html += "\n<!-- ==================== Edit box ==================== -->";
-	html += "\n<div id='edit-window' class='modal hide fade'>";
+	html += "\n<div id='edit-window' class='modal fade'>";
+	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-content'>";
 	html += "\n		<div id='edit-window-header' class='modal-header'>";
 	html += "\n			<div id='edit-window-type' style='float:right'></div>";
 	html += "\n			<h3 id='edit-window-title' >Édition / Sélection</h3>";
 	html += "\n		</div>";
-	html += "\n		<div id='edit-window-body' class='modal-body'>";
-	html += "\n			<div id='edit-window-body-content'></div>";
-	html += "\n			<div id='edit-window-body-node'></div>";
-	html += "\n			<div id='edit-window-body-context'></div>";
-	html += "\n			<div id='edit-window-body-metadata'></div>";
-	html += "\n			<div id='edit-window-body-metadata-epm'></div>";
-	html += "\n		</div>";
+	html += "\n		<div id='edit-window-body' class='modal-body'></div>";
 	html += "\n		<div class='modal-footer' id='edit-window-footer'></div>";
+	html += "\n		</div>";
+	html += "\n		</div>";
 	html += "\n	</div>";
 	html += "\n<!-- ============================================== -->";
 	return html;
+}
+
+
+//==============================
+function fillEditBoxBody()
+//==============================
+{
+	var html = "";
+	if (g_userrole=='designer' || USER.admin) {
+		html += "\n			<div role='tabpanel'>";
+		html += "\n				<ul class='nav nav-tabs' role='tablist'>";
+		html += "\n					<li role='presentation' class='active'><a href='#edit-window-body-content' aria-controls='home' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
+		html += "\n					<li role='presentation'><a href='#edit-window-body-metadata' aria-controls='edit-window-body-metadata' role='tab' data-toggle='tab'>Metadata</a></li>";
+		html += "\n					<li role='presentation'><a href='#edit-window-body-metadata-epm' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>CSS Styles</a></li>";
+		html += "\n				</ul>";
+		html += "\n				<div class='tab-content'>";
+		html += "\n					<div role='tabpanel' class='tab-pane active' id='edit-window-body-content'></div>";
+		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-node'></div>";
+		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-context'></div>";
+		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata'></div>";
+		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata-epm'></div>";
+		html += "\n				</div>";
+		html += "\n			</div>";
+	}
+	else {
+		html += "\n					<div id='edit-window-body-content'></div>";
+		html += "\n					<div id='edit-window-body-node'></div>";
+		html += "\n					<div id='edit-window-body-context'></div>";
+		html += "\n					<div id='edit-window-body-metadata'></div>";
+		html += "\n					<div id='edit-window-body-metadata-epm'></div>";
+	}
+	$('#edit-window-body').html(html);
 }
 
 //==============================
@@ -207,7 +243,7 @@ function MessageBox()
 {
 	var html = "";
 	html += "\n<!-- ==================== MessageBox ==================== -->";
-	html += "\n<div id='message-window' class='modal hide' style='padding:10px;width:200px;margin-left:0px;background-color:lightgrey;position:fixed;top:65px;left:40%;'>";
+	html += "\n<div id='message-window' class='modal' style='padding:10px;width:200px;margin-left:0px;background-color:lightgrey;position:fixed;top:65px;left:40%;'>";
 	html += "\n	<div id='message-body' class='message-body'></div>";
 	html += "\n</div>";
 	html += "\n<!-- ============================================== -->";
@@ -257,7 +293,7 @@ function getEditBox(uuid,js2) {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	if (js2!=null)
 		js1 += ";"+js2;
-	var footer = "<span class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</span>";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
 	var html = "";
 	//--------------------------
@@ -292,7 +328,6 @@ function getEditBox(uuid,js2) {
 	$(".pickcolor").colorpicker();
 	$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd',language: LANG});
 	// ------------------------------
-	$("#edit-window").modal('show');
 	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');}
 
 
@@ -311,8 +346,8 @@ function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
 {
 	var html = "";
 	html += "\n<!-- ==================== Delete Button ==================== -->";
-	html += "<a id='del-"+uuid+"' class='btn btn-mini' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-	html += "<i class='icon-remove'></i>";
+	html += "<button id='del-"+uuid+"' class='btn btn-xs' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+	html += "<span class='glyphicon glyphicon-remove'></span>";
 	html += "</a>";
 	return html;
 }
@@ -323,7 +358,9 @@ function DeleteBox()
 {
 	var html = "";
 	html += "\n<!-- ==================== Delete box ==================== -->";
-	html += "\n<div id='delete-window' class='modal hide fade'>";
+	html += "\n<div id='delete-window' class='modal fade'>";
+	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-content'>";
 	html += "\n	<div class='modal-header'>";
 	html += "\n		<div id='edit-window-type' style='float:right'></div>";
 	html += "\n		<h3 id='edit-window-title' >Attention</h3>";
@@ -333,6 +370,8 @@ function DeleteBox()
 	html += "\n		</div>";
 	html += "\n	</div>";
 	html += "\n	<div class='modal-footer' id='delete-window-footer'></div>";
+	html += "\n</div>";
+	html += "\n</div>";
 	html += "\n</div>";
 	html += "\n<!-- ============================================== -->";
 	return html;
@@ -390,8 +429,8 @@ function confirmDel(uuid,type,parentid,destid,callback,param1,param2)
 // =======================================================================
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<span class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</span>";
-	buttons += "<span class='btn btn-danger' onclick=\"javascript:deleteandhidewindow('"+uuid+"','"+type+"','"+parentid+"','"+destid+"',"+callback+",'"+param1+"','"+param2+"')\">" + karutaStr[LANG]["button-delete"] + "</span>";
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:deleteandhidewindow('"+uuid+"','"+type+"','"+parentid+"','"+destid+"',"+callback+",'"+param1+"','"+param2+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
