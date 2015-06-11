@@ -139,27 +139,11 @@ UIFactory["Get_Get_Resource"].prototype.displayView = function(dest,type,langcod
 
 /// Editor
 //==================================
-UIFactory["Get_Get_Resource"].update = function(select_radio,itself,langcode,type)
+UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
-	var option = "";
-	var value = "";
-	var code = "";
-	var portfoliocode = "";
-	
-	if (type==null)
-		type = 'select';
-	if (type=='select') {
-		option = $(select_radio).find("option:selected");
-		value = $(option).attr('value');
-		code = $(option).attr('code');
-		portfoliocode = $(option).attr('portfoliocode');
-	}
-	if (type=='radio') {
-		option = $(select_radio).find("input:checked");
-		value = $(option).attr('value');
-		code = $(option).attr('code');
-	}
+	var value = $(selected_item).attr('value');
+	var code = $(selected_item).attr('code');
 	//---------------------
 	if (itself.encrypted)
 		value = "rc4"+encrypt(value,g_rc4key);
@@ -168,9 +152,8 @@ UIFactory["Get_Get_Resource"].update = function(select_radio,itself,langcode,typ
 	//---------------------
 	$(itself.value_node).text(value);
 	$(itself.code_node).text(code);
-	$(itself.portfoliocode_node).text(portfoliocode);
 	for (var i=0; i<languages.length;i++){
-		var label = $(option).attr('label_'+languages[i]);
+		var label = $(selected_item).attr('label_'+languages[i]);
 		//---------------------
 		if (itself.encrypted)
 			label = "rc4"+encrypt(label,g_rc4key);
@@ -181,9 +164,11 @@ UIFactory["Get_Get_Resource"].update = function(select_radio,itself,langcode,typ
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,langcode)
+UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable)
 //==================================
 {
+	if (type==undefined || type==null)
+		type = $("metadata-wad",this.node).attr('seltype');
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		try {
@@ -217,6 +202,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			var p2 = ref.indexOf('.',p1+1);
 			var semtag_parent = ref.substring(0,p1);
 			var semtag = ref.substring(p1+1,p2);
+			var srce = ref.substring(p2+1);
 			var code_parent = "";
 			if (query.indexOf('#')==0)
 				code_parent = semtag_parent;
@@ -247,7 +233,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				dataType : "xml",
 				url : url,
 				success : function(data) {
-					UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self);
+					UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce);
 				},
 				error : function(jqxhr,textStatus) {
 					$("#"+dest).html("No result");
@@ -261,7 +247,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self) {
+UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -275,17 +261,19 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self) {
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
+	//------------------------------------------------------------
 	if (type=='select') {
-		var select = "<select>";
-		select += "<option code='' value='' ";
-		for (var j=0; j<languages.length;j++){
-			select += "label_"+languages[j]+"='' ";
-		}
-		select += "></option></select>";
-		var obj = $(select);
+		var selected_value = "";
+		var html = "<div class='btn-group'>";
+		html += "<button type='button' class='btn btn-default select select-label' id='button_"+self.id+"'>&nbsp;</button>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$("#"+destid).append($(btn_group));
+		html = "<ul class='dropdown-menu' role='menu'></ul>";
+		var select  = $(html);
 		var nodes = $("node",data);
-		for ( var i = 0; i < $(nodes).length; ++i) {
-			var option = null;
+		for ( var i = 0; i < $(nodes).length; i++) {
 			var resource = null;
 			if ($("asmResource",nodes[i]).length==3)
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
@@ -293,26 +281,76 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self) {
 				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
 			var code = $('code',resource).text();
 			if (code.indexOf('-#')>-1) {
-				option = "<optgroup label=\"" + $("label[lang='"+languages[langcode]+"']",resource).text() + "\" >";
+				html = "<li class='divider'></li><li></li>";
 			} else {
-				option = "<option code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
-				for (var j=0; j<languages.length;j++){
-					option += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
-				}
-				if (self_value==code)
-					option += " selected ";
-				option += ">"+$("label[lang='"+languages[langcode]+"']",resource).text()+"</option>";
+				html = "<li></li>";
 			}
-			$(obj).append($(option));
+			var select_item = $(html);
+			if (code.indexOf('-#')>-1) {
+				html = "<a href='#'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
+				$(select_item).html(html);
+			} else {
+				html = "<a href='#' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
+				for (var j=0; j<languages.length;j++){
+					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+				}
+				html += ">";
+				
+				if (code.indexOf("@")<0)
+					html += code + " ";
+				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
+				var select_item_a = $(html);
+				$(select_item_a).click(function (ev){
+					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+					$(this).attr('class', '').addClass($(this).children(':selected').val());
+					UIFactory["Get_Get_Resource"].update(this,self,langcode);
+				});
+				$(select_item).append($(select_item_a))
+				//-------------- update button -----
+				if (code!="" && self_value==code) {
+					selected_value = code;
+					$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
+				}
+			}
+			$(select).append($(select_item));
 		}
-		$(obj).change(function (){
-			UIFactory["Get_Get_Resource"].update(obj,self,langcode);
-		});
-		$("#"+destid).append(obj);
+		$(btn_group).append($(select));
+		
 	}
 	if (type.indexOf('radio')>-1) {
-		var inputs = "<div></div>";
-		var obj = $(inputs);
+		var nodes = $("node",data);
+		var first = true;
+		for ( var i = 0; i < $(nodes).length; i++) {
+			var radio_obj = $("<div class='get-radio'></div>");
+			var input = "";
+			var resource = null;
+			if ($("asmResource",nodes[i]).length==3)
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			else
+				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+			var code = $('code',resource).text();
+			first = false;
+			input += "<input type='radio' name='radio_"+self.id+"' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
+			if (disabled)
+				input +="disabled='disabled' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+			}
+			if (code!="" && self_value==code)
+				input += " checked ";
+			input += ">&nbsp;&nbsp;"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</input>";
+			var obj = $(input);
+			$(obj).click(function (){
+				UIFactory["Get_Get_Resource"].update(this,self,langcode,type);
+			});
+			$(radio_obj).append(obj);
+			$("#"+destid).append(radio_obj);
+		}
+	}
+	//------------------------------------------------------------
+	if (type.indexOf('click')>-1) {
+		var inputs = "<div class='click'></div>";
+		var inputs_obj = $(inputs);
 		var nodes = $("node",data);
 		var first = true;
 		for ( var i = 0; i < $(nodes).length; ++i) {
@@ -323,23 +361,29 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self) {
 			else
 				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
 			var code = $('code',resource).text();
-			if (!first && type!='radio-inline')
-				input += '<br>';
-			first = false;
-			input += "<input type='radio' name='radio_"+self.id+"' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
+			input += "<div name='click_"+self.id+"' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' class='click-item";
+			if (self_value==code)
+				input += " clicked";
+			input += "' ";
 			for (var j=0; j<languages.length;j++){
 				input += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
 			if (self_value==code)
-				input += " checked ";
-			input += "> "+$("label[lang='"+languages[langcode]+"']",resource).text()+" </input>";
+				input += " clicked";
+			input += "> ";
+			if (code.indexOf("@")<0)
+				input += code + " ";
+			input +=$("label[lang='"+languages[langcode]+"']",resource).text()+" </div>";
 			var input_obj = $(input);
 			$(input_obj).click(function (){
-				UIFactory["Get_Get_Resource"].update(obj,self,langcode,type);
+				$('.clicked',inputs_obj).removeClass('clicked');
+				$(this).addClass('clicked');
+				UIFactory["Get_Get_Resource"].update(this,self,langcode,type);
 			});
-			$(obj).append(input_obj);
-			$("#"+destid).append(obj);
+			$(inputs_obj).append(input_obj);
+			$("#"+destid).append(inputs_obj);
 		}
+		//------------------------------------------------------------
 	}
 };
 

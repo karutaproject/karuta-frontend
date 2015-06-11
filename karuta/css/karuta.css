@@ -555,9 +555,57 @@ a.active:over{
   height:80px;
  }
 
-input {
-/*	width:320px; */
+#metadata input[type='checkbox'],
+#metadata input[type='radio'] {
+	margin-top:10px;
 }
+
+.get-radio{
+	font-size:14px;
+	margin-top:5px;
+}
+
+.get-radio:first-of-type{
+	margin-top:20px;
+}
+
+.click-item{
+	font-size:14px;
+	margin-top:5px;
+}
+/* ====================
+	Select Drop Down
+   ====================*/
+button.select {
+	margin-top:20px;
+}
+
+
+button.select-label {
+	width:500px;
+	word-wrap: break-word;
+	white-space: normal;
+	text-align:left;
+}
+
+.dropdown-menu li a{
+	max-width:500px;
+	word-wrap: break-word;
+	white-space: normal;
+}
+.click{
+	margin-top:20px;
+}
+
+.click div{
+	margin-top:5px;
+	cursor: pointer;
+}
+
+.clicked {
+	background-color:lightgrey;
+}
+
 
 /* ====================
 	TextRaw
@@ -993,6 +1041,7 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .Y0 {color: #fff; background: gray;}
 .Y1 {color: #fff; background: red;}
 .Y2 {color: #fff; background: green;}
+
 
 /* ====================
 	Other

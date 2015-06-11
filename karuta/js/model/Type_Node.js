@@ -2335,7 +2335,22 @@ UIFactory["Node"].getMetadataWadAttributeEditor = function(nodeid,attribute,valu
 			html+= " checked ";
 		html+= "></div>";
 	}
-	else {
+	else if (attribute.indexOf('seltype')>-1){
+		html += "  <div class='col-sm-9'>";
+		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='select' ";
+		if (value=='select' || value=='')
+			html +=" checked";
+		html +="> Select";
+		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='radio'";
+		if (value=='radio')
+			html +=" checked";
+		html +="> Radio";
+		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='click'";
+		if (value=='click')
+			html +=" checked";
+		html +="> Click";
+		html += "</div>";
+	} else {
 		html += "  <div class='col-sm-9'><input type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+value+"'";
 		if(disabled!=null && disabled)
 			html+= " disabled='disabled' ";			
@@ -2483,6 +2498,10 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 		html  = "<hr><label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
 		$("#metadata_texts").append($(html));
 		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'query',$(node.metadatawad).attr('query'));
+	}
+	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
+		html = UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seltype',$(node.metadatawad).attr('seltype'));
+		$("#metadata_texts").append($(html));
 	}
 	//----------------------Menu----------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
