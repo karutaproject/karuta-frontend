@@ -237,9 +237,6 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlUrlGroupObj).append($(htmlUrlDivObj));
 		$(htmlFormObj).append($(htmlUrlGroupObj));
 	}
-	//------------------------
-	if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1)
-		$(obj).append($("<hr/>"));
 	return obj;
 };
 

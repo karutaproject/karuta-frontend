@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2014 - ePortfolium - Licensed under the
+	Copyright 2015 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -254,7 +254,6 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		editnoderoles="";
 	if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1) {
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
-		$(div).append($(htmlFormObj));
 		if (g_userrole=='designer' || USER.admin) {
 			var htmlCodeGroupObj = $("<div class='form-group'></div>")
 			var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
@@ -281,6 +280,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			$(htmlLabelGroupObj).append($(htmlLabelDivObj));
 			$(htmlFormObj).append($(htmlLabelGroupObj));
 		}
+		$(div).append($(htmlFormObj));
 	}
 	//-----------------------------
 	var resizeroles = $(this.metadatawad).attr('resizeroles');
@@ -384,8 +384,8 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 //				$("#"+destid).append($(link));
 				var html = "";
 				html += "<div class='panel panel-group panel-default' id='parent-"+uuid+"' role='tablist'>";
-				html += "<div class='panel-heading'role='tab' id='sidebar_"+uuid+"'>";
-				html += "  <a  class='sidebar-link' data-toggle='collapse' data-parent='#parent-"+parentid+"' onclick=\"$('.selected').removeClass('selected');$(this).parent().addClass('selected');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" href='#collapse"+uuid+"' aria-expanded='false' aria-controls='collapse"+uuid+"'>"+text+"</a>";
+				html += "<div class='panel-heading'role='tab'>";
+				html += "  <a id='sidebar_"+uuid+"' class='sidebar-link' data-toggle='collapse' data-parent='#parent-"+parentid+"' onclick=\"$('.selected').removeClass('selected');$(this).parent().addClass('selected');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" href='#collapse"+uuid+"' aria-expanded='false' aria-controls='collapse"+uuid+"'>"+text+"</a>";
 				html += "</div><!-- panel-heading -->";
 				html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 				html += "<div id='panel-body"+uuid+"'></div><!-- panel-body -->";
@@ -1716,17 +1716,17 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- submit button -------------------
 	if ((submitnode || USER.admin || g_userrole=='designer') && submitroles!='none' && submitroles!='') {
-		html += "<a id='submit-"+node.id+"' class='btn btn-xs'onclick=\"javascript:submit('"+node.id+"')\" ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></a>";
+		html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></button>";
 	}
 	//------------- private button -------------------
 	if ((showroles==g_userrole || USER.admin || g_userrole=='designer') && showroles!='none' && showroles!='') {
 		if (privatevalue) {
 			html += "<button class='btn btn-xs'>";
-			html += "<i id='icon-"+node.id+"' class='icon-eye-close' onclick=\"javascript:show('"+node.id+"')\"></i>";
+			html += "<span class='glyphicon glyphicon-eye-close' aria-hidden='true' onclick=\"javascript:show('"+node.id+"')\"></span>";
 			html += "</button>";
 		} else {
 			html += "<button class='btn btn-xs'>";
-			html += "<i id='icon-"+node.id+"' class='icon-eye-open' onclick=\"javascript:hide('"+node.id+"')\"></i>";
+			html += "<span class='glyphicon glyphicon-eye-open' aria-hidden='true' onclick=\"javascript:hide('"+node.id+"')\"></span>";
 			html += "</button>";				
 		}
 	}
@@ -2499,7 +2499,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 		$("#metadata_texts").append($(html));
 		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'query',$(node.metadatawad).attr('query'));
 	}
-	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
+	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Get_Double_Resource') {
 		html = UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seltype',$(node.metadatawad).attr('seltype'));
 		$("#metadata_texts").append($(html));
 	}

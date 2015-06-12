@@ -43,6 +43,7 @@ function setDesignerRole(role)
 	fillEditBoxBody();
 	$("#userrole").html(" ("+role+")");
 	if (g_display_type=='standard'){
+		var uuid = $("#page").attr('uuid');
 		var html = "";
 		html += "	<div class='row'>";
 		html += "		<div class='col-md-3' id='sidebar'></div>";
@@ -50,7 +51,6 @@ function setDesignerRole(role)
 		html += "	</div>";
 		$("#main-container").html(html);
 		UIFactory["Portfolio"].displaySidebar('sidebar','standard',LANGCODE,true);
-		var uuid = $("#page").attr('uuid');
 		$("#sidebar_"+uuid).click();
 	};
 	if (g_display_type=='model'){
@@ -214,14 +214,16 @@ function fillEditBoxBody()
 	if (g_userrole=='designer' || USER.admin) {
 		html += "\n			<div role='tabpanel'>";
 		html += "\n				<ul class='nav nav-tabs' role='tablist'>";
-		html += "\n					<li role='presentation' class='active'><a href='#edit-window-body-content' aria-controls='home' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
+		html += "\n					<li role='presentation' class='active'><a href='#edit-window-body-resource' aria-controls='edit-window-body-resource' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
 		html += "\n					<li role='presentation'><a href='#edit-window-body-metadata' aria-controls='edit-window-body-metadata' role='tab' data-toggle='tab'>Metadata</a></li>";
 		html += "\n					<li role='presentation'><a href='#edit-window-body-metadata-epm' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>CSS Styles</a></li>";
 		html += "\n				</ul>";
 		html += "\n				<div class='tab-content'>";
-		html += "\n					<div role='tabpanel' class='tab-pane active' id='edit-window-body-content'></div>";
-		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-node'></div>";
-		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-context'></div>";
+		html += "\n					<div role='tabpanel' class='tab-pane active' id='edit-window-body-resource' style='margin-top:10px'>";
+		html += "\n						<div id='edit-window-body-content'></div>";
+		html += "\n						<div id='edit-window-body-node'></div>";
+		html += "\n						<div id='edit-window-body-context'></div>";
+		html += "\n					</div>";
 		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata'></div>";
 		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata-epm'></div>";
 		html += "\n				</div>";

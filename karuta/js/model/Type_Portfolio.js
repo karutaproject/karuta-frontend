@@ -95,7 +95,7 @@ UIFactory["Portfolio"].displayAll = function(destid,type,lang)
 	$("#table_portfolio").tablesorter( {sortList: [[1,0], [2,0],[3,1]],headers : {0:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
 	$("#table_bin").tablesorter( {sortList: [[1,0], [2,0]],headers : {0:{sorter:false},3:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
 	if (portfolios_list.length>0 && nb_del_list>0)
-		$("#"+destid).append($("<div class='btn btn-xs delete-portfolio' onclick='UIFactory.Portfolio.removeSelection()'>"+karutaStr[LANG]["remove-selection"]+"</div>"));
+		$("#"+destid).append($("<button class='btn btn-xs delete-portfolio' onclick='UIFactory.Portfolio.removeSelection()'>"+karutaStr[LANG]["remove-selection"]+"</button>"));
 };
 
 //==================================
@@ -126,7 +126,8 @@ UIFactory["Portfolio"].toggleDelBin = function(destid,self)
 	else
 		$('input:checkbox',$("#"+destid)).attr('checked',false);
 };
-		//==================================
+	
+//==================================
 UIFactory["Portfolio"].displayBin = function(destid,type,lang)
 //==================================
 {
@@ -160,8 +161,8 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 	var html = "";
 	if (type=='list') {
 		if (USER.admin || this.owner=='Y') {
-			html += "<td style='padding-left:5px'> ";
-			html += " <input type='checkbox' name='delete-remove' value='"+this.id+"'/>";
+			html += "<td style='padding:7px'> ";
+			html += " <input style='margin-top:-4px' type='checkbox' name='delete-remove' value='"+this.id+"'/>";
 			html += "</td>";
 			nb_del_list++;
 		}
@@ -217,8 +218,8 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 	}
 	if (type=='bin') {
 		if (USER.admin || USER.creator){
-			html += "<td style='padding-left:5px'> ";
-			html += " <input type='checkbox' name='delete-remove' value='"+this.id+"'/>";
+			html += "<td style='padding:7px'> ";
+			html += " <input style='margin-top:-4px' type='checkbox' name='delete-remove' value='"+this.id+"'/>";
 			html += "</td>";
 			html += "<td>";
 			html += " <a href='main.htm?id="+this.id+"&edit=true&lang="+LANG+"'>"+this.label_node[langcode].text()+"</a> ";
@@ -231,7 +232,7 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 				html += "<td>"+this.ownerid+"</td>";
 			html += "<td>";
 			html += " <button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].restore('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
-			html += "<i class='icon-arrow-up'></i>";
+			html += "<span class='glyphicon glyphicon-arrow-up'></span>";
 			html += "</button>";
 //			html += " <button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].del('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
 //			html += "<i class='icon-remove'></i>";
@@ -447,10 +448,11 @@ UIFactory["Portfolio"].create = function()
 	$("#edit-window-title").html(karutaStr[LANG]['create_portfolio']);
 	$("#edit-window-footer").html("");
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var create_button = "<span id='creste_button' class='btn'>"+karutaStr[LANG]['Create']+"</span>";
+	var create_button = "<button id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</button>";
 	var obj = $(create_button);
 	$(obj).click(function (){
 		var code = $("#codetree").val();
+		var label = $("#labeltree").val();
 		if (code!='') {
 			var xml = "";
 			xml +="<?xml version='1.0' encoding='UTF-8'?>";
@@ -460,8 +462,8 @@ UIFactory["Portfolio"].create = function()
 			xml +="		<metadata-wad seenoderoles='all' />";
 			xml +="		<asmResource xsi_type='nodeRes'>";
 			xml +="			<code>"+code+"</code>";
-			xml +="			<label lang='fr'>"+code+"</label>";
-			xml +="			<label lang='en'>"+code+"</label>";
+			xml +="			<label lang='fr'>"+label+"</label>";
+			xml +="			<label lang='en'>"+label+"</label>";
 			xml +="		</asmResource>";
 			xml +="		<asmResource xsi_type='context'></asmResource>";
 			xml +="	</asmRoot>";
@@ -484,12 +486,22 @@ UIFactory["Portfolio"].create = function()
 	$("#edit-window-footer").append(obj);
 	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").append($(footer));
-
 	//--------------------------
-	$("#edit-window-body-content").html(karutaStr[LANG]['code_portfolio']+" ");
-	//--------------------------
-	var html = "<input id='codetree' type='text'>";
-	$("#edit-window-body-content").html(html);
+	var html = "<div class='form-horizontal'>";
+	html += "<div class='form-group'>";
+	html += "		<label for='codetree' class='col-sm-3 control-label'>Code</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='codetree' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "<div class='form-group'>";
+	html += "		<label for='labeltree' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='labeltree' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "</div>";
+	$("#edit-window-body").html(html);
 	//--------------------------
 	$('#edit-window').modal('show');
 };
@@ -527,7 +539,7 @@ UIFactory["Portfolio"].createBatch = function()
 UIFactory["Portfolio"].createReport = function()
 //==================================
 {
-	$("#edit-window-title").html(karutaStr[LANG]['create_batch']);
+	$("#edit-window-title").html(karutaStr[LANG]['create_model']);
 	$("#edit-window-footer").html("");
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var create_button = "<span id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</span>";

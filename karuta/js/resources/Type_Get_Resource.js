@@ -87,7 +87,11 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode)
 	var label = this.label_node[langcode].text();
 	if (this.encrypted)
 		label = decrypt(label.substring(3),g_rc4key);
-	return "<span class='"+$(this.value_node).text()+"'>"+label+"</span>";
+	var code = $(this.code_node).text();
+	if (code.indexOf("@")>-1)
+		code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+
+	return "<span class='"+code+"'>"+label+"</span>";
 };
 
 //==================================
@@ -108,7 +112,10 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 	var label = this.label_node[langcode].text();
 	if (this.encrypted)
 		label = decrypt(label.substring(3),g_rc4key);
-	label = "<span class='"+$(this.value_node).text()+"'>"+label+"</span>";
+	var code = $(this.code_node).text();
+	if (code.indexOf("@")>-1)
+		code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+	label = "<span class='"+code+"'>"+label+"</span>";
 	$("#"+dest).html("");
 	$("#"+dest).append($(label));
 };
@@ -186,15 +193,15 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 	if (disabled==null)
 		disabled = false;
 	//---------------------
-	var self_value = $(self.value_node).text();
+	var self_code = $(self.code_node).text();
 	if (self.encrypted)
-		self_value = decrypt(self_value.substring(3),g_rc4key);
+		self_code = decrypt(self_code.substring(3),g_rc4key);
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
+
 	//------------------------------------------------------------
 	if (type=='select') {
-		var selected_value = "";
 		var html = "<div class='btn-group'>";
 		html += "<button type='button' class='btn btn-default select select-label' id='button_"+self.id+"'>&nbsp;</button>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
@@ -211,6 +218,11 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			else
 				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
 			var code = $('code',resource).text();
+			var display_code = true;
+			if (code.indexOf("@")>-1) {
+				display_code = false;
+				code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+			}
 			if (code.indexOf('-#')>-1) {
 				html = "<li class='divider'></li><li></li>";
 			} else {
@@ -221,26 +233,26 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				html = "<a href='#'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
 				$(select_item).html(html);
 			} else {
-				html = "<a href='#' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
+				html = "<a href='#' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' class='sel"+code+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
 				html += ">";
 				
-				if (code.indexOf("@")<0)
+				if (display_code)
 					html += code + " ";
 				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
 					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
-					$(this).attr('class', '').addClass($(this).children(':selected').val());
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+$(this).attr("code"));
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
 				$(select_item).append($(select_item_a))
 				//-------------- update button -----
-				if (code!="" && self_value==code) {
-					selected_value = code;
+				if (code!="" && self_code==code) {
 					$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 				}
 			}
 			$(select).append($(select_item));
@@ -261,16 +273,24 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			else
 				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
 			var code = $('code',resource).text();
+			var display_code = true;
+			if (code.indexOf("@")>-1) {
+				display_code = false;
+				code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+			}
 			first = false;
-			input += "<input type='radio' name='radio_"+self.id+"' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
+			input += "<input type='radio' name='radio_"+self.id+"' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' ";
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
 				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
-			if (code!="" && self_value==code)
+			if (code!="" && self_code==code)
 				input += " checked ";
-			input += ">&nbsp;&nbsp;"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</input>";
+			input += ">&nbsp;&nbsp;";
+			if (display_code)
+				input += code + " ";
+			input += "<span  class='sel"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></input>";
 			var obj = $(input);
 			$(obj).click(function (){
 				UIFactory["Get_Resource"].update(this,self,langcode,type);
@@ -293,19 +313,22 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			else
 				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
 			var code = $('code',resource).text();
-			input += "<div name='click_"+self.id+"' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' class='click-item";
-			if (self_value==code)
+			var display_code = true;
+			if (code.indexOf("@")>-1) {
+				display_code = false;
+				code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+			}
+			input += "<div name='click_"+self.id+"' vlaue='"+$(nodes[i]).attr('id')+"' code='"+code+"' class='click-item";
+			if (self_code==code)
 				input += " clicked";
 			input += "' ";
 			for (var j=0; j<languages.length;j++){
 				input += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
-			if (self_value==code)
-				input += " clicked";
 			input += "> ";
-			if (code.indexOf("@")<0)
+			if (display_code)
 				input += code + " ";
-			input +=$("label[lang='"+languages[langcode]+"']",resource).text()+" </div>";
+			input +="<span  class='"+code+"'>"+$("label[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
 			var input_obj = $(input);
 			$(input_obj).click(function (){
 				$('.clicked',inputs_obj).removeClass('clicked');
