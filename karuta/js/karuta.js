@@ -194,7 +194,7 @@ function EditBox()
 	html += "\n		<div class='modal-content'>";
 	html += "\n		<div id='edit-window-header' class='modal-header'>";
 	html += "\n			<div id='edit-window-type' style='float:right'></div>";
-	html += "\n			<h3 id='edit-window-title' >Édition / Sélection</h3>";
+	html += "\n			<h3 id='edit-window-title' ></h3>";
 	html += "\n		</div>";
 	html += "\n		<div id='edit-window-body' class='modal-body'></div>";
 	html += "\n		<div class='modal-footer' id='edit-window-footer'></div>";
@@ -214,13 +214,13 @@ function fillEditBoxBody()
 	if (g_userrole=='designer' || USER.admin) {
 		html += "\n			<div role='tabpanel'>";
 		html += "\n				<ul class='nav nav-tabs' role='tablist'>";
-		html += "\n					<li role='presentation' class='active'><a href='#edit-window-body-resource' aria-controls='edit-window-body-resource' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
+		html += "\n					<li role='presentation' class='active'><a href='#edit-window-body-main' aria-controls='edit-window-body-main' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
 		html += "\n					<li role='presentation'><a href='#edit-window-body-metadata' aria-controls='edit-window-body-metadata' role='tab' data-toggle='tab'>Metadata</a></li>";
 		html += "\n					<li role='presentation'><a href='#edit-window-body-metadata-epm' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>CSS Styles</a></li>";
 		html += "\n				</ul>";
 		html += "\n				<div class='tab-content'>";
-		html += "\n					<div role='tabpanel' class='tab-pane active' id='edit-window-body-resource' style='margin-top:10px'>";
-		html += "\n						<div id='edit-window-body-content'></div>";
+		html += "\n					<div role='tabpanel' class='tab-pane active' id='edit-window-body-main' style='margin-top:10px'>";
+		html += "\n						<div id='edit-window-body-resource'></div>";
 		html += "\n						<div id='edit-window-body-node'></div>";
 		html += "\n						<div id='edit-window-body-context'></div>";
 		html += "\n					</div>";
@@ -230,7 +230,6 @@ function fillEditBoxBody()
 		html += "\n			</div>";
 	}
 	else {
-		html += "\n					<div id='edit-window-body-content'></div>";
 		html += "\n					<div id='edit-window-body-node'></div>";
 		html += "\n					<div id='edit-window-body-context'></div>";
 		html += "\n					<div id='edit-window-body-metadata'></div>";
@@ -286,12 +285,7 @@ function hideMessageBox()
 //==================================
 function getEditBox(uuid,js2) {
 //==================================
-	$("#edit-window-body-content").html("");
-	$("#edit-window-body-node").html("");
-	$("#edit-window-body-context").html("");
-	$("#edit-window-body-metadata").html("");
-	$("#edit-window-body-metadata-epm").html("");
-
+	fillEditBoxBody();
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	if (js2!=null)
 		js1 += ";"+js2;
@@ -302,18 +296,18 @@ function getEditBox(uuid,js2) {
 	if(UICom.structure["ui"][uuid].resource!=null) {
 		try {
 			html = UICom.structure["ui"][uuid].resource.getEditor();
-			$("#edit-window-body-content").html($(html));
+			$("#edit-window-body-resource").html($(html));
 			html = UICom.structure["ui"][uuid].getEditor();
 			$("#edit-window-body-node").html($(html));
 		}
 		catch(e) {
-			UICom.structure["ui"][uuid].resource.displayEditor("edit-window-body-content");
+			UICom.structure["ui"][uuid].resource.displayEditor("edit-window-body-resource");
 			html = UICom.structure["ui"][uuid].getEditor();
 			$("#edit-window-body-node").html($(html));
 		}
 	} else {
 		html = UICom.structure["ui"][uuid].getEditor();
-		$("#edit-window-body-content").html($(html));
+		$("#edit-window-body-node").html($(html));
 	}
 	// ------------admin and designer----------
 	if (USER.admin || g_userrole=='designer') {
@@ -549,9 +543,9 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 function edit_displayEditor(uuid,type)
 //=======================================================================
 {
-	$("#edit-window-body-content").remove();
-	$("#edit-window-body").append($("<div id='edit-window-body-content'></div>"));
-	UICom.structure["ui"][uuid].resource.displayEditor("edit-window-body-content",type);
+	$("#edit-window-body").remove();
+	$("#edit-window-body").append($("<div id='edit-window-body'></div>"));
+	UICom.structure["ui"][uuid].resource.displayEditor("edit-window-body",type);
 }
 
 //=======================================================================
@@ -721,4 +715,92 @@ function sortOn1_2_3(a,b)
 	a = a[0]+a[1]+a[2];
 	b = b[0]+b[1]+b[2];
 	return a == b ? 0 : (a > b ? 1 : -1);
+}
+
+
+//==================================
+function getSendPublicURL(uuid,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	$("#edit-window-footer").html("");
+	fillEditBoxBody();
+	$("#edit-window-title").html(karutaStr[LANG]['share-URL']);
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
+	var obj = $(send_button);
+	$(obj).click(function (){
+		var email = $("#email").val();
+		if (email!='') {
+			getPublicURL(uuid,email,role,langcode)
+		}
+	});
+	$("#edit-window-footer").append(obj);
+	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	$("#edit-window-footer").append($(footer));
+
+	var html = "<div class='form-horizontal'>";
+	html += "<div class='form-group'>";
+	html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='email' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "</div>";
+	$("#edit-window-body").html(html);
+	//--------------------------
+	$('#edit-window').modal('show');
+}
+
+//==================================
+function getPublicURL(uuid,email,role,langcode) {
+//==================================
+	//post /directlink?uuid=&user=&role=
+	role = "all";
+	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role;
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		success : function (data){
+			sendEmailPublicURL(data,email,langcode);
+		}
+	});
+}
+
+//==================================
+function sendEmailPublicURL(encodeddata,email,langcode) {
+//==================================
+	var url = window.location.href;
+	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	url = serverURL+"/"+appliname+"/karuta/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
+	var message ="&lt;img src='"+serverURL+"/"+appliname+"/karuta/img/logofonbleu.jpg' style='width:300px;margin-bottom:4px;margin-top:30px;'&gt;";
+	message +=  "&lt;div style='margin:30px;border-radius:4px;padding:10px;border: 1px solid lightGrey;box-shadow: 3px 3px 3px #CCC'&gt;";
+	message += "&lt;br/&gt;"+USER.firstname+" "+USER.lastname+karutaStr[LANG]['want-sharing'];
+	message += "&lt;div style='font-weight:bold;font-size:14pt;margin:30px;width:150px;'&gt;";
+	message +="&lt;a href='"+url+"' style='text-decoration: none;color:black;padding:10px;padding-left:40px;padding-right:40px;border-radius:4px;background-color:lightgrey'&gt;";
+	message += karutaStr[LANG]['see'];
+	message +="&lt;/a&gt;";
+	message +="&lt;/div&gt;";
+	message += "Karuta Team";
+	message +="&lt;/div&gt;";
+	var xml ="<node>";
+	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
+	xml +="<recipient>"+email+"</recipient>";
+	xml +="<subject>"+USER.firstname+" "+USER.lastname+" "+karutaStr[LANG]['want-sharing']+"</subject>";
+	xml +="<message>"+message+"</message>";
+	xml +="</node>";
+	$.ajax({
+		type : "POST",
+		dataType : "xml",
+		url : "../../../"+serverFIL+"/mail",
+		data: xml,
+		success : function(data) {
+			alert(karutaStr[LANG]['email-sent']);
+		}
+	});
 }

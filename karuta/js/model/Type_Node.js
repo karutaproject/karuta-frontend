@@ -509,7 +509,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						}
 					} else {
 						html = UICom.structure["ui"][uuid].getEditor();
-						$("#edit-window-body-content").html($(html));
+						$("#edit-window-body-node").html($(html));
 					}
 					html += "</div>";
 				} else {
@@ -828,7 +828,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 						}
 					} else {
 						html = UICom.structure["ui"][uuid].getEditor();
-						$("#edit-window-body-content").html($(html));
+						$("#edit-window-body-node").html($(html));
 					}
 					html += "</div>";
 				} else {
@@ -1243,7 +1243,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 						}
 					} else {
 						html = UICom.structure["ui"][uuid].getEditor();
-						$("#edit-window-body-content").html($(html));
+						$("#edit-window-body-node").html($(html));
 					}
 					html += "</div>";
 				} else {
@@ -1271,7 +1271,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 							}
 						} else {
 							html = UICom.structure["ui"][uuid].getEditor();
-							$("#edit-window-body-content").html($(html));
+							$("#edit-window-body-node").html($(html));
 						}
 						html += "</div>";
 					} else {
@@ -1503,7 +1503,7 @@ UIFactory['Node'].upNode = function(nodeid)
 UIFactory['Node'].moveNode = function(nodeid)
 //==================================================
 {
-	var option = $("select",$("#edit-window-body-content")).find("option:selected");
+	var option = $("select",$("#edit-window-body")).find("option:selected");
 	var parentid = $(option).attr('uuid');
 	if (parent !=undefined)
 		$.ajax({
@@ -1527,7 +1527,6 @@ UIFactory["Node"].selectNode = function(nodeid,node)
 	//---------------------
 	var langcode = LANGCODE;
 	//---------------------
-	$("#edit-window-body-content").html("");
 	$("#edit-window-body-node").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
@@ -1546,14 +1545,14 @@ UIFactory["Node"].selectNode = function(nodeid,node)
 	$("#edit-window-footer").html($(footer));
 	// ------------------------------
 	/// Traverse tree
-	var html = "<select>";
+	var html = "<select class='form-control'>";
 	var uuid = $(node.node).attr("id");
 	var label = UICom.structure["ui"][uuid].label_node[langcode].text();
 	html += "<option uuid = '"+uuid+"'>"+label+"</option>";
 	html += UIFactory["Node"].getSubNodes(node, nodeid, UICom.structure.ui[nodeid].asmtype);
 	html += "</select>";
 	// ------------------------------
-	$("#edit-window-body-content").html($(html));
+	$("#edit-window-body").html($(html));
 	// ------------------------------
 	$("#edit-window").modal('show');	
 
@@ -1571,7 +1570,6 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved)
 	for( var i=0;i<root.childs.length;++i )
 	{
 		var uuid = root.childs[i];
-//		var uuid = $(child.node).attr("id");
 		var label = UICom.structure["ui"][uuid].label_node[langcode].text();
 		var name = UICom.structure["ui"][uuid].asmtype;
 		if (name!='asmContext' && (typemoved != "asmUnit" || name != "asmUnit") && (uuid !=idmoved)){
@@ -1658,6 +1656,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		if ((moveroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && node.asmtype != 'asmRoot') {
 			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-arrow-up'></span></button>";
 			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" href='#'><span class='glyphicon glyphicon-random'></span></button>";
+		}
+		//------------- share node button ---------------
+		if (node.asmtype=='asmUnit' || node.asmtype=='asmUnitStructure') {
+			html+= "<button class='btn btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
 		}
 	}
 	//------------- node menus button ---------------

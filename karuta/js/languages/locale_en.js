@@ -64,6 +64,9 @@ karutaStr['en']['demo-documentation']="Import Karuta Documentation";
 karutaStr['en']['demo-ecommerce']="Import e-commerce Demo Portfolios";
 karutaStr['en']['demo-aacu']="Import AACU Demo Portfolios";
 karutaStr['en']['demo-video']="Import Video Demo Portfolios";
+karutaStr['en']['want-sharing']=" wants to share with you a part of a portfolio.";
+karutaStr['en']['share-URL']="Sharing Portfolio";
+karutaStr['en']['see']="See";
 
 //=========================================
 //========== NODE =====================

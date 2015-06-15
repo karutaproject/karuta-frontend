@@ -134,7 +134,7 @@ function displayMatrixInside(uuid,lang)
 	$("#edit-window").css("margin-left","0");
 	$("#edit-window").css("left","15%");
 	$("#edit-window-header").html("");
-	$("#edit-window-body-content").html("");
+	$("#edit-window-body").html("");
 	$("#edit-window-body-node").html("");
 	$("#edit-window-body-context").html("");
 	$("#edit-window-body-metadata").html("");
@@ -146,7 +146,7 @@ function displayMatrixInside(uuid,lang)
 //	html += "</a>";
 	//-----------------------------------------
 	html += "<div id='window-page' uuid='"+uuid+"'></div>";
-	$("#edit-window-body-content").append($(html));
+	$("#edit-window-body").append($(html));
 	var inline = false;
 	UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'window-page',100,lang,null,inline);
 	//------------------ footer ---------------

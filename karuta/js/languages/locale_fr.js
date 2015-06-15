@@ -64,6 +64,9 @@ karutaStr['fr']['demo-documentation']="Importer la documentation Karuta";
 karutaStr['fr']['demo-ecommerce']="Importer les portfolios démo e-commerce";
 karutaStr['fr']['demo-aacu']="Importer les portfolios démo AACU";
 karutaStr['fr']['demo-video']="Importer les portfolios démo des vidéos";
+karutaStr['fr']['want-sharing']=" désire partager avec vous une partie de son portfolio.";
+karutaStr['fr']['share-URL']="Partage du portfolio";
+karutaStr['fr']['see']="Voir";
 
 //=========================================
 //========== NODE =========================

@@ -514,8 +514,9 @@ function updateResource(node)
 			//===========================================================
 		}
 	}
+
 	//----------------------------------------------------
-	if (type=='Metadatawad') {
+	if (type=='MetadatawadQuery' || type=='MetadatawadMenu') {
 		var text = getTxtvals($("text",node));
 		if ($("source",node).length>0){
 			var source_select = $("source",node).attr("select");
@@ -543,12 +544,18 @@ function updateResource(node)
 					var nodeid ="";
 					for (var i=0; i<nb; i++){
 						nodeid = $(nodes[i]).attr('id');
+						var metadatawad = $("metadata-wad",nodes[i]);
+						if (type=='MetadatawadQuery')
+							$(metadatawad).attr('query',text);
+						if (type=='MetadatawadMenu')
+							$(metadatawad).attr('menu',text);
+						var xml = xml2string(metadatawad[0]);;
 						$.ajax({
 							async:false,
 							type : "PUT",
 							contentType: "application/xml",
 							dataType : "text",
-							data : text,
+							data : xml,
 							nodeid : nodeid,
 							semtag : semtag,
 							url : "../../../"+serverBCK+"/nodes/node/" + nodeid+"/metadatawad",
@@ -559,7 +566,6 @@ function updateResource(node)
 								//===========================================================
 								if (this.idx==this.nb) {
 									g_nb_updateResource[g_noline]++;
-//									alert(g_nb_updateResource[g_noline]);
 								}
 								if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
 									processShareTrees();
@@ -583,6 +589,7 @@ function updateResource(node)
 			//===========================================================
 		}
 	}
+	//----------------------------------------------------
 	if (type=='Dashboard') {
 		var text = getTxtvals($("text",node));
 		if ($("source",node).length>0){

@@ -33,6 +33,9 @@ UIFactory["User"] = function( node )
 {
 	this.id = $(node).attr('id');
 	this.node = node;
+	this.firstname = $("firstname",node).text();
+	this.lastname = $("lastname",node).text();
+	this.lastname_node = $("lastname",node);
 	this.username_node = $("username",node);
 	this.firstname_node = $("firstname",node);
 	this.lastname_node = $("lastname",node);
@@ -279,7 +282,7 @@ UIFactory["User"].callCreate = function()
 	html += UIFactory["User"].getAttributeRadioCreator("substitute","0");
 	html += UIFactory["User"].getAttributeRadioCreator("active","1");
 	html += "</form>";
-	$("#edit-window-body-content").html(html);
+	$("#edit-window-body").html(html);
 	//--------------------------
 	$('#edit-window').modal('show');
 };
@@ -310,10 +313,10 @@ UIFactory["User"].edit = function(userid)
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['user']);
 	var html = "";
-	$("#edit-window-body-content").html(html);
+	$("#edit-window-body").html(html);
 	//--------------------------
 	html = Users_byid[userid].getEditor();
-	$("#edit-window-body-content").append(html);
+	$("#edit-window-body").append(html);
 	//--------------------------
 	$('#edit-window').modal('show');
 };
@@ -474,7 +477,7 @@ UIFactory["User"].callChangePassword = function()
 	html += "<form id='metadata' class='form-horizontal'>";
 	html += UIFactory["User"].getPasswordCreator();
 	html += "</form>";
-	$("#edit-window-body-content").html(html);
+	$("#edit-window-body").html(html);
 	//--------------------------
 	$('#edit-window').modal('show');
 
