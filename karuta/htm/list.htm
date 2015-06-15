@@ -10,6 +10,8 @@
 		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/blue/style.css">
 		<!-- =========================================== -->
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
 		<link rel="stylesheet" href="../../application/css/specific.css" />
 		<!-- =========================================== -->
 		<script src="../../other/js/jquery-1.10.2.js"></script>
@@ -40,9 +42,6 @@
 		<script src="../../application/js/create_batch.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/version.js"></script>
-		<!-- =============================================================== -->
-		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
-		<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
 		<script>
 			//==============================
 			function getList()
@@ -84,33 +83,13 @@
 	</head>
 	<body>
 		<div id='navigation_bar'></div>
-		<div class="container-fluid">
+		<div class="container">
 			<div class='row'>
+				<div id='start' class='col-md-3'>
+				</div>
 				<div class='col-md-9'>
 					<div id='menu'></div>
 					<div id='list'></div>
-				</div>
-				<div id='start' class='col-md-3' style='display:none'>
-					<div class='start'>
-						To <b>start</b> click the <b>Menu</b> button<br/>
-						<p>You can create</p>
-						<ul>
-						<li>portfolios</li>
-						<li>batch and report models</li>
-						</ul>
-						<p>You can import</p>
-						<ul>
-						<li>portfolios models from files</li>
-						<li>portfolios instances from files</li>
-						</ul>
-						<p>You can import</p>
-						<ul>
-						<li>Karuta Documentation</li>
-						<li>Video Demo Portfolios</li>
-						<li>AACU Demo Portfolios</li>
-						<li>e-commerce Demo Portfolios</li>
-						</ul>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -143,7 +122,7 @@
 					data: "",
 					success : function(data) {
 						USER = new UIFactory["User"]($("user",data));
-						loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('list',null));$("#list").html(getList());});
+						loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('list',null));$("#list").html(getList());$("#start").html(listinfo[LANG]);});
 						$.ajax({
 							type : "GET",
 							dataType : "xml",

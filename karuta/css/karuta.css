@@ -927,7 +927,6 @@ table.tablesorter th.restore {
 	visibility:hidden;
 	z-index:10;
 	position:absolute;
-	top:-15px;
 }
 
 .movable {
@@ -1072,12 +1071,9 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	float:left;
 }
 
-.start {
-	margin-top:10px;
-	margin-right:10px;
+#start {
 	border-radius:4px;
 	padding:10px;
-	background-image:linear-gradient(#FFF, #EEE);
 	border: 1px solid lightGrey;
 	box-shadow: 3px 3px 3px #CCC;
 }

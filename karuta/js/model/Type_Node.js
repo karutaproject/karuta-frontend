@@ -788,6 +788,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			html += ">";
 			//------------------- Toolbar and Buttons --------------------------
 			if (edit && (!inline || g_userrole=='designer')) {
+				html += "<button class='btn btn-xs' id='free-toolbar-menu-"+uuid+"' class='free-toolbar-menu'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
 				html += "<div id='toolbar-"+uuid+"' class='free-toolbar'>";
 				html += "	<div id='buttons-"+uuid+"'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
 				html += "</div>";
@@ -851,8 +852,8 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 						html+="</span>";
 					}
 					//--------------------------------------
-					if (UICom.structure["ui"][uuid].resource_type!='Audio' && UICom.structure["ui"][uuid].resource_type!='Video' && UICom.structure["ui"][uuid].resource.getView()=='') // resource is empty
-						html += "<span style='z-index:-5;color:lightgrey'>"+UICom.structure["ui"][uuid].resource_type+"</span>";
+//					if (UICom.structure["ui"][uuid].resource_type!='Audio' && UICom.structure["ui"][uuid].resource_type!='Video' && UICom.structure["ui"][uuid].resource.getView()=='') // resource is empty
+//						html += "<span style='z-index:-5;color:lightgrey'>"+UICom.structure["ui"][uuid].resource_type+"</span>";
 					//----------------- resource ---------------------
 					html += "<div  id='std_resource_"+uuid+"' uuid='"+uuid+"' class='resource-"+node.resource.type+"' ";
 					style = "";
@@ -993,15 +994,12 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 								$("#std_resource_"+uuid).css('border','1px dashed lightgrey');
 				}
 				//-------------------------------
-				$("#free_"+uuid).mouseover(function(){
-					$('#toolbar-'+uuid).css('visibility','visible');
-				}
-				);
-				//-------------------------------
-				$("#free_"+uuid).mouseout(function(){
-					$('#toolbar-'+uuid).css('visibility','hidden');
-				}
-				);  
+				$("#free-toolbar-menu-"+uuid).click(function(){
+					if ($('#toolbar-'+uuid).css('visibility')=='hidden')
+						$('#toolbar-'+uuid).css('visibility','visible');
+					else
+						$('#toolbar-'+uuid).css('visibility','hidden');
+				});
 			}
 			//----------------------------
 			if (UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
@@ -2284,9 +2282,9 @@ UIFactory["Node"].getMetadataDisplayTypeAttributeEditor = function(nodeid,attrib
 	if (value==null || value==undefined || value=='undefined')
 		value = "";
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "  <label class='control-label'>"+karutaStr[languages[langcode]][attribute]+"</label>";
-		html += "  <div class='controls'><select onchange=\"javascript:UIFactory['Node'].updateMetadataDisplayTypeAttribute('"+nodeid+"','"+attribute+"',this)\"";
+	html += "<div class='form-group'>";
+	html += "  <label class='col-sm-3 control-label'>"+karutaStr[languages[langcode]][attribute]+"</label>";
+		html += "  <div class='col-sm-9'><select class='form-control' onchange=\"javascript:UIFactory['Node'].updateMetadataDisplayTypeAttribute('"+nodeid+"','"+attribute+"',this)\"";
 		if(disabled!=null && disabled)
 			html+= " disabled='disabled' ";			
 		html+= ">";
