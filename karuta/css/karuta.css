@@ -30,6 +30,10 @@ a.btn-xs {
 	vertical-align:middle;
 }
 
+.btn {
+	background-color:lightgrey;
+}
+
 /* --------------------------*/
 .versions {
 	width:300px;
@@ -923,10 +927,22 @@ table.tablesorter th.restore {
 /* ====================
 	Free
    ====================*/
-.free-toolbar {
+.free-toolbar{
+	width:100%;
+	background-color:white;
+	min-width:100px;
+}
+
+.free-toolbar-buttons {
 	visibility:hidden;
 	z-index:10;
-	position:absolute;
+	position:relative;
+	top:22px;
+}
+
+.free-toolbar-menu{
+	position:relative;
+	top:20px;
 }
 
 .movable {

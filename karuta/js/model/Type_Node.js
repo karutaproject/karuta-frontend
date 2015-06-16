@@ -788,9 +788,11 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			html += ">";
 			//------------------- Toolbar and Buttons --------------------------
 			if (edit && (!inline || g_userrole=='designer')) {
-				html += "<button class='btn btn-xs' id='free-toolbar-menu-"+uuid+"' class='free-toolbar-menu'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
-				html += "<div id='toolbar-"+uuid+"' class='free-toolbar'>";
+				html += "<div class='free-toolbar'>";
+				html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu-"+uuid+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
+				html += "<div id='toolbar-"+uuid+"' class='free-toolbar-buttons'>";
 				html += "	<div id='buttons-"+uuid+"'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
+				html += "</div>";
 				html += "</div>";
 			}
 			//-------------------------------------------------------------------
@@ -963,7 +965,6 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 					stop: function(){UIFactory["Node"].updatePosition(this);}
 				}
 				);
-				//-------------------------------
 				if (UICom.structure["ui"][uuid].resource_type=='Image')
 					$("#std_resource_"+uuid).resizable({
 						aspectRatio:true,
@@ -1362,16 +1363,24 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 };
 
 //========================================================
+UIFactory["Node"].updateIpadPosition = function (obj,top,left)
+//========================================================
+{
+	var nodeid = obj.getAttribute("uuid");
+    var offset = $(obj).offset();
+    alert(top+"-"+left+"/"+offset.top+"-"+offset.left);
+	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',top);
+	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',left);
+};
+
+//========================================================
 UIFactory["Node"].updatePosition = function (obj)
 //========================================================
 {
 	var nodeid = obj.getAttribute("uuid");
-	var top = obj.style.top;
-	var left = obj.style.left;
-//	if (parseInt(top)<0)
-//		top = "0px";
-//	if (parseInt(left)<0)
-//		left = "0px";
+    var pos = $(obj).position();
+    var top = pos.top;
+    var left = pos.left;
 	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',top);
 	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',left);
 };
