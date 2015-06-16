@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Karuta Production</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+		<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
+		<!-- =============================================================== -->
+		<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
+		<!-- =========================================== -->
+		<link rel="stylesheet" href="../../application/css/specific.css" />
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/resources/Type_Calendar.js"></script>
+		<script src="../../karuta/js/resources/Type_Comments.js"></script>
+		<script src="../../karuta/js/resources/Type_Document.js"></script>
+		<script src="../../karuta/js/resources/Type_Proxy.js"></script>
+		<script src="../../karuta/js/resources/Type_Get_Proxy.js"></script>
+		<script src="../../karuta/js/resources/Type_TextField.js"></script>
+		<script src="../../karuta/js/resources/Type_Field.js"></script>
+		<script src="../../karuta/js/resources/Type_Image.js"></script>
+		<script src="../../karuta/js/resources/Type_Get_Resource.js"></script>
+		<script src="../../karuta/js/resources/Type_Get_Double_Resource.js"></script>
+		<script src="../../karuta/js/resources/Type_Get_Get_Resource.js"></script>
+		<script src="../../karuta/js/resources/Type_URL.js"></script>
+		<script src="../../karuta/js/resources/Type_Item.js"></script>
+		<script src="../../karuta/js/resources/Type_Video.js"></script>
+		<script src="../../karuta/js/resources/Type_CompetencyEvaluation.js"></script>
+		<script src="../../karuta/js/resources/Type_Oembed.js"></script>
+		<script src="../../karuta/js/resources/Type_Audio.js"></script>
+		<script src="../../karuta/js/resources/Type_SendEmail.js"></script>
+		<script src="../../karuta/js/resources/Type_URL2Unit.js"></script>
+		<script src="../../karuta/js/resources/Type_Dashboard.js"></script>
+		<script src="../../karuta/js/resources/Type_Color.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../other/js/jquery-1.10.2.js"></script>
+		<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
+		<!--script src='../../other/wysihtml5/parser.js'> </script-->
+		<!--[if lt IE 9]>
+			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
+		<![endif]-->
+		<!--script src="../../other/js/bootstrap-wysihtml5.js"--></script>
+		<!-- =============================================================== -->
+		<link rel="stylesheet" type="text/css" href='../../other/wysihtml5/bootstrap3-wysihtml5.min.css'/>
+		<script src='../../other/wysihtml5/bootstrap3-wysihtml5.all.min.js'> </script>
+		<!-- =============================================================== -->
+		<script src="../../other/js/jquery_hotkeys.js"></script>
+		<script src="../../other/js/JQueryRC4.js"></script>
+		<!-- =========================================== -->
+		<script src="../../other/colorpicker/js/evol.colorpicker.min.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/karuta.js"></script>
+		<script src="../../karuta/js/UICom.js"></script>
+		<script src="../../karuta/js/report.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/model/Type_Portfolio.js"></script>
+		<script src="../../karuta/js/model/Type_Node.js"></script>
+		<script src="../../karuta/js/model/Type_User.js"></script>
+		<!-- =============================================================== -->
+		<link type="text/css" href="../../other/lightbox/css/lightbox.css" rel="stylesheet" />
+		<script src="../../other/lightbox/js/lightbox-2.6.min.js"></script>
+		<!-- =============================================================== -->
+		<link type="text/css" href="../../other/jplayer/jplayer.blue.monday.css" rel="stylesheet" />
+		<script src="../../other/jplayer/jquery.jplayer.min.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../other/js/jquery.ui.widget.js"></script>
+		<script src="../../other/js/jquery.iframe-transport.js"></script>
+		<script src="../../other/js/jquery.fileupload.js"></script>
+		<!-- =============================================================== -->
+		<link rel="stylesheet" href="../../other/oembed/jquery.oembed.css"/>
+		<script src="../../other/oembed/jquery.oembed.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+		<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.fr.js"></script>
+		<link rel="stylesheet" href="../../other/bootstrap-datepicker/datepicker.css" />
+		<!-- =============================================================== -->
+		<script src="../../application/js/_init.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/version.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/dashboards/matrix_2dims/matrix_2dim.js"></script>
+		<!-- =============================================================== -->
+	</head>
+	<body>
+		<div id='main-container' class='container-fluid'>
+			<div class='row'>
+				<div class='col-md-3' id='sidebar'></div>
+				<div class='col-md-9' id='contenu' style='margin-top:50px'></div>
+			</div>
+		</div>
+		
+		<script language='javascript'>
+			//------------------------------
+			var iid = getURLParameter('i');
+			var lang = getURLParameter('lang');
+			if (lang!=null) {
+				LANG = lang;
+				for (var i=0; i<languages.length;i++){
+					if (languages[i]==lang)
+						LANGCODE = i;
+				}
+			}
+			$(window).load(function() {
+				//---------------------------
+				$("#sidebar").html(welcome1[LANG]);
+				$.ajaxSetup({async: false});
+				$.ajaxSetup({async: false});
+				//----------------
+				$.ajax({
+					type : "GET",
+					url : "../../../"+serverFIL+"/direct?i=" + iid,
+					success : function(data) {
+						g_uuid = data;
+					}
+				});
+				//----------------
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : "../../../"+serverBCK+"/credential",
+					data: "",
+					success : function(data) {
+						USER = new UIFactory["User"]($("user",data));
+					}
+				});
+				//----------------
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : "../../../"+serverBCK+"/nodes/node/" + g_uuid,
+					success : function(data) {
+						UICom.parseStructure(data);
+						var depth = 99;
+						UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE);
+					}
+				});
+				$(document).click(function(e) {
+				    if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {
+				        $('.popover').hide();
+				    }
+				});
+			});
+
+		</script>
+	</body>
+</html>
