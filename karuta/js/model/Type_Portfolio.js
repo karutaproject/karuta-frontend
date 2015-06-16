@@ -259,7 +259,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		html += "</div>";
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displaySidebar('sidebar',type,LANGCODE,edit);
+		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
 	if (type=='model'){
 		html += "<div id='navigation_bar'></div>";
@@ -276,7 +276,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		html += "		<div class='col-md-9' id='contenu'></div>";
 		html += "	</div>";
 		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displaySidebar('sidebar',type,LANGCODE,edit);
+		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
 	if (type=='header'){
 		if ($("*:has(metadata[semantictag=header])",UICom.root.node).length==0)
@@ -301,7 +301,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 };
 
 //======================
-UIFactory["Portfolio"].displaySidebar = function(destid,type,langcode,edit)
+UIFactory["Portfolio"].displaySidebar = function(root,destid,type,langcode,edit,rootid)
 //======================
 {	
 	var html = "";
@@ -309,11 +309,11 @@ UIFactory["Portfolio"].displaySidebar = function(destid,type,langcode,edit)
 		type = 'standard';
 	if (type=='standard' || type=='translate' || type=='model'){
 		html += "<div id='main-nav' class='well'>";
-		html += "<div id='sidebar-title' class='sidebar-title'><a id='sidebar_"+UICom.rootid+"' class='sidebar' href='#' onclick=\"displayPage('"+UICom.rootid+"',1,'"+type+"','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][$(UICom.root.node).attr('id')].getLabel('sidebar_'+UICom.rootid)+"</a></div>";
-		html += "<div  class='panel-group' id='parent-"+UICom.rootid+"' role='tablist'></div>";
+		html += "<div id='sidebar-title' class='sidebar-title'><a id='sidebar_"+rootid+"' class='sidebar' href='#' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][$(UICom.root.node).attr('id')].getLabel('sidebar_'+rootid)+"</a></div>";
+		html += "<div  class='panel-group' id='parent-"+rootid+"' role='tablist'></div>";
 		html += "</div><!-- panel-group -- >";
 		$("#"+destid).append($(html));
-		UIFactory["Node"].displaySidebar(UICom.root,'parent-'+UICom.rootid,type,langcode,edit,UICom.rootid);
+		UIFactory["Node"].displaySidebar(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
 	}
 };
 

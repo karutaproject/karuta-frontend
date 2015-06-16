@@ -145,6 +145,7 @@ karutaStr['fr']['encrypted']="Encrypter la ressource";
 karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
 karutaStr['fr']['display']="Présentation ";
+karutaStr['fr']['shareroles']="Roles - Share";
 
 //=========================================
 //========== ADMIN ========================

@@ -85,7 +85,7 @@
 		<div id='navigation_bar'></div>
 		<div class="container">
 			<div class='row'>
-				<div id='start' class='col-md-3'>
+				<div id='start' class='col-md-3' style='visibility:hidden'>
 				</div>
 				<div class='col-md-9'>
 					<div id='menu'></div>
@@ -100,8 +100,6 @@
 		</div>
 		<script>
 			document.write(EditBox());
-			if (demo && LANG=='en')
-				$("#start").show();
 			$(document).ready(function() {
 				//----------------
 				$.ajaxSetup({async: false});
@@ -122,7 +120,7 @@
 					data: "",
 					success : function(data) {
 						USER = new UIFactory["User"]($("user",data));
-						loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('list',null));$("#list").html(getList());$("#start").html(listinfo[LANG]);});
+						loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('list',null));$("#list").html(getList());});
 						$.ajax({
 							type : "GET",
 							dataType : "xml",
@@ -159,8 +157,13 @@
 						}
 						html += "</ul>";
 						html += "</div>";
-						if (USER.admin || USER.creator)
+						if (USER.admin || USER.creator){
 							$("#menu").html(html);
+							if (demo && LANG=='en') {
+								$("#start").html(listinfo[LANG]);
+								$("#start").attr('style','visibility:visible');
+							}
+						}
 						//----------------
 						$.ajax({
 							type : "GET",

@@ -120,6 +120,8 @@ UIFactory["Get_Double_Resource"].update = function(itself,langcode,type)
 UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,langcode,disabled)
 //==================================
 {
+	if (type==undefined || type==null)
+		type = $("metadata-wad",this.node).attr('seltype');
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		var p1 = queryattr_value.indexOf('.');

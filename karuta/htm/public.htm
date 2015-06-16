@@ -89,7 +89,10 @@
 	<body>
 		<div id='main-container' class='container-fluid'>
 			<div class='row'>
-				<div class='col-md-3' id='sidebar'></div>
+				<div class='col-md-3'>
+					<div id='welcome'></div>
+					<div id='sidebar'></div>
+				</div>
 				<div class='col-md-9' id='contenu' style='margin-top:50px'></div>
 			</div>
 		</div>
@@ -107,7 +110,7 @@
 			}
 			$(window).load(function() {
 				//---------------------------
-				$("#sidebar").html(welcome1[LANG]);
+				$("#welcome").html(welcome1[LANG]);
 				$.ajaxSetup({async: false});
 				$.ajaxSetup({async: false});
 				//----------------
@@ -136,7 +139,14 @@
 					success : function(data) {
 						UICom.parseStructure(data);
 						var depth = 99;
-						UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE);
+						var rootnode = UICom.structure['ui'][g_uuid];
+						if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
+							depth = 1;
+						loadLanguages(function(data) {
+							if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
+								UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
+							UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE);
+						});
 					}
 				});
 				$(document).click(function(e) {

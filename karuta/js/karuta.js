@@ -230,6 +230,7 @@ function fillEditBoxBody()
 		html += "\n			</div>";
 	}
 	else {
+		html += "\n					<div id='edit-window-body-resource'></div>";
 		html += "\n					<div id='edit-window-body-node'></div>";
 		html += "\n					<div id='edit-window-body-context'></div>";
 		html += "\n					<div id='edit-window-body-metadata'></div>";
@@ -448,9 +449,8 @@ function getURLParameter(sParam) {
 function displayPage(uuid,depth,type,langcode,edit) {
 //==================================
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
-	$("a.sidebar").removeClass("active");
-	$("#sidebar_"+uuid).addClass("active");
-	$("#sidebar_"+uuid).parents(".accordion-body").collapse('show');
+	$('.selected').removeClass('selected');
+	$("#sidebar_"+uuid).parent().addClass('selected');
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (depth==null)
 		depth=100;
@@ -739,7 +739,7 @@ function getSendPublicURL(uuid,langcode)
 		}
 	});
 	$("#edit-window-footer").append(obj);
-	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").append($(footer));
 
 	var html = "<div class='form-horizontal'>";

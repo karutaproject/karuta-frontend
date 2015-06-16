@@ -31,7 +31,8 @@ a.btn-xs {
 }
 
 .btn {
-	background-color:lightgrey;
+	background-color:#FAFAFA;
+	border: 1px solid lightGrey;
 }
 
 /* --------------------------*/
@@ -598,6 +599,12 @@ button.select-label {
 	word-wrap: break-word;
 	white-space: normal;
 }
+
+.click-item:hover,
+.dropdown-menu li a:hover {
+	background-color:lightgrey;
+}
+
 .click{
 	margin-top:20px;
 }
@@ -656,6 +663,9 @@ button.select-label {
 	font-size:11px;
 }
 
+.evo-palette {
+	margin-right:5px;
+}
 #wait-window {
 	padding:20px;
 	background-color:#F0F0F0;
@@ -1093,3 +1103,4 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	border: 1px solid lightGrey;
 	box-shadow: 3px 3px 3px #CCC;
 }
+

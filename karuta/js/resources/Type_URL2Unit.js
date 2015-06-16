@@ -191,7 +191,7 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 	var local_label = self.local_label_node[langcode].text();
 	if (self.encrypted)
 		local_label = decrypt(local_label.substring(3),g_rc4key);
-	var input_local_label = $("<input type='text' name='local-label' value=\""+local_label+"\">");
+	var input_local_label = $("<input type='text' class='form-control' name='local-label' value=\""+local_label+"\">");
 	$(input_local_label).change(function (ev){
 		UIFactory["URL2Unit"].update(input_local_label,self,langcode);
 	});
@@ -199,90 +199,67 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
+	//------------------------------------------------------------
 	if (type=='select') {
-		var selected_value = "";
-		var select = "<select ";
-		if (disabled)
-			select += "disabled='disabled'";
-		select += "><option code='' value='' ";
-		for (var j=0; j<languages.length;j++){
-			select += "label_"+languages[j]+"='' ";
-		}
-		select += "></option></select>";
-		var obj = $(select);
+		var html = "<div class='btn-group'>";
+		html += "<button type='button' class='btn btn-default select select-label' id='button_"+self.id+"'>&nbsp;</button>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$("#"+destid).append($(btn_group));
+		html = "<ul class='dropdown-menu' role='menu'></ul>";
+		var select  = $(html);
 		var nodes = $("node",data);
 		for ( var i = 0; i < $(nodes).length; i++) {
-			var option = null;
-			var resource = null;
-			if ($("asmResource",nodes[i]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-			else
-				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-			var code = $(nodes[i]).attr('id');
-			if (code.indexOf('-#')>-1) {
-				option = "<optgroup label=\"" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "\" >";
-			} else {
-				option = "<option code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
-				for (var j=0; j<languages.length;j++){
-					option += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
-				}
-				if (code!="" && self_uuid==code) {
-					selected_value = code;
-					option += " selected ";
-				}
-				option += ">";
-//				if (code.indexOf("@")==-1)
-//					option+= code + " ";
-				option += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</option>";
-			}
-			$(obj).append($(option));
-		}
-		$(obj).addClass(selected_value);
-		$(obj).change(function (ev){
-			$(this).attr('class', '').addClass($(this).children(':selected').val());
-			UIFactory["URL2Unit"].update(obj,self,langcode);
-		});
-		//-------------------------
-		$("#"+destid).append(obj);
-		$("#"+destid).append($("<label>"+karutaStr[LANG]['alternative-label']+"</label>"));
-		$("#"+destid).append(input_local_label);
-	}
-	if (type.indexOf('radio')>-1) {
-		var nodes = $("node",data);
-		var first = true;
-		for ( var i = 0; i < $(nodes).length; i++) {
-			var input = "";
 			var resource = null;
 			if ($("asmResource",nodes[i]).length==3)
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
 			else
 				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
 			var code = $('code',resource).text();
-			if (!first && type!='radio-inline')
-				input += '<br>';
-			first = false;
-			input += "<input type='radio' name='radio_"+self.id+"' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
-			if (disabled)
-				input +="disabled='disabled' ";
-			for (var j=0; j<languages.length;j++){
-				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+			var display_code = true;
+			if (code.indexOf("@")>-1) {
+				display_code = false;
+				code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
 			}
-			if (code!="" && self_value==code)
-				input += " checked ";
-			input += "> "+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+" </input>";
-			var obj = $(input);
-			$(obj).click(function (){
-				UIFactory["URL2Unit"].update(obj,self,langcode,type);
-			});
-			//-------------------------
-			$(obj).append($(input_local_label));
-			$(input_local_label).change(function (ev){
-				UIFactory["URL2Unit"].update(obj,self,langcode);
-			});
-			//-------------------------
-			$("#"+destid).append(obj);
+			if (code.indexOf('-#')>-1) {
+				html = "<li class='divider'></li><li></li>";
+			} else {
+				html = "<li></li>";
+			}
+			var select_item = $(html);
+			if (code.indexOf('-#')>-1) {
+				html = "<a href='#'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
+				$(select_item).html(html);
+			} else {
+				html = "<a href='#' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' class='sel"+code+"' ";
+				for (var j=0; j<languages.length;j++){
+					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+				}
+				html += ">";
+				
+				if (display_code)
+					html += code + " ";
+				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
+				var select_item_a = $(html);
+				$(select_item_a).click(function (ev){
+					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+$(this).attr("code"));
+					UIFactory["Get_Resource"].update(this,self,langcode);
+				});
+				$(select_item).append($(select_item_a))
+				//-------------- update button -----
+				if (code!="" && self_code==code) {
+					$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+				}
+			}
+			$(select).append($(select_item));
 		}
+		$(btn_group).append($(select));
+		
 	}
+
 };
 
 //==================================

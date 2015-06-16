@@ -385,7 +385,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				var html = "";
 				html += "<div class='panel panel-group panel-default' id='parent-"+uuid+"' role='tablist'>";
 				html += "<div class='panel-heading'role='tab'>";
-				html += "  <a id='sidebar_"+uuid+"' class='sidebar-link' data-toggle='collapse' data-parent='#parent-"+parentid+"' onclick=\"$('.selected').removeClass('selected');$(this).parent().addClass('selected');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" href='#collapse"+uuid+"' aria-expanded='false' aria-controls='collapse"+uuid+"'>"+text+"</a>";
+				html += "  <a id='sidebar_"+uuid+"' class='sidebar-link' data-toggle='collapse' data-parent='#parent-"+parentid+"' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" href='#collapse"+uuid+"' aria-expanded='false' aria-controls='collapse"+uuid+"'>"+text+"</a>";
 				html += "</div><!-- panel-heading -->";
 				html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 				html += "<div id='panel-body"+uuid+"'></div><!-- panel-body -->";
@@ -398,8 +398,8 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				var depth = 1;
 				var html = "";
 				html += "<div class='panel panel-group panel-default' id='parent-"+uuid+"' role='tablist'>";
-				html += "<div class='panel-heading'role='tab' id='sidebar_"+uuid+"'>";
-				html += "  <a  class='sidebar-link' data-toggle='collapse' data-parent='#parent-"+parentid+"' onclick=\"$('.selected').removeClass('selected');$(this).parent().addClass('selected');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" href='#collapse"+uuid+"' aria-expanded='false' aria-controls='collapse"+uuid+"'>"+text+"</a>";
+				html += "<div class='panel-heading'role='tab'>";
+				html += "  <a   id='sidebar_"+uuid+"' class='sidebar-link' data-toggle='collapse' data-parent='#parent-"+parentid+"' onclick=\"$('.selected').removeClass('selected');$(this).parent().addClass('selected');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" href='#collapse"+uuid+"' aria-expanded='false' aria-controls='collapse"+uuid+"'>"+text+"</a>";
 				html += "</div><!-- panel-heading -->";
 				html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 				html += "<div id='panel-body"+uuid+"' class='panel-body'></div><!-- panel-body -->";
@@ -1461,7 +1461,7 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		html += "<h4>"+karutaStr[LANG]['comments']+"</h4>";
 		html += "<div id='div_"+uuid+"'><textarea id='"+uuid+"_edit_comment' class='form-control' style='height:200px'>"+text+"</textarea></div>";
 		$("#"+destid).append($(html));
-		$("#"+uuid+"_edit_comment").wysihtml5({toolbar:{"size":"xs","font-styles": false,"blockquote": false,"image": false},'uuid':uuid,locale:lang,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments();},'focus': function(){currentTexfieldUuid=uuid;} }});
+		$("#"+uuid+"_edit_comment").wysihtml5({toolbar:{"size":"xs","font-styles": false,"html": true,"blockquote": false,"image": false},'uuid':uuid,locale:lang,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments();},'focus': function(){currentTexfieldUuid=uuid;} }});
 	}
 };
 
@@ -1637,6 +1637,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
 	var moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'none':$(node.metadatawad).attr('moveroles');
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
 	if (g_designerrole) {
 		deletenode = (delnoderoles.indexOf(g_userrole)>-1)? true : false;
 		writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
@@ -1665,10 +1666,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		if ((moveroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && node.asmtype != 'asmRoot') {
 			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-arrow-up'></span></button>";
 			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" href='#'><span class='glyphicon glyphicon-random'></span></button>";
-		}
-		//------------- share node button ---------------
-		if (node.asmtype=='asmUnit' || node.asmtype=='asmUnitStructure') {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
 		}
 	}
 	//------------- node menus button ---------------
@@ -1739,7 +1736,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html += "</button>";				
 		}
 	}
-	html += "</div>"; // class='btn-group'
 	//------------- specific menu button ---------------
 	if (menu) {
 		try {
@@ -1800,6 +1796,11 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			alert('Menu Error : check the format: '+e);
 		}
 	}
+	//------------- share node button ---------------
+	if ((shareroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && shareroles!='none' && shareroles!='') {
+			html+= "<button class='btn btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
+	}
+	html += "</div>"; // class='btn-group'
 	//--------------------------------------------------
 	if (html!="")
 		html = "<div id='btn-"+node.id+"'>" + html + "</div>";
@@ -2128,6 +2129,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 //	if ($(node.metadatawad).attr('showroles')!='')
 //		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'private',$(node.metadatawad).attr('private'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showtoroles',$(node.metadatawad).attr('showtoroles'));
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'shareroles',$(node.metadatawad).attr('shareroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
@@ -2485,7 +2487,7 @@ UIFactory["Node"].displayMetadatawWadTextAttributeEditor = function(destid,nodei
 	$("#"+destid).append($(html));
 	//---------------------------
 	if (attribute=='help')
-		$("#"+nodeid+"_"+attribute).wysihtml5({toolbar:{"size":"xs","font-styles": false,"blockquote": false,"image": false},'uuid':nodeid,locale:languages[lang],'events': {'change': function(){UIFactory['Node'].updateMetadatawWadTextAttribute(nodeid,attribute);} }});
+		$("#"+nodeid+"_"+attribute).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html": true,"blockquote": false,"image": false},'uuid':nodeid,locale:languages[lang],'events': {'change': function(){UIFactory['Node'].updateMetadatawWadTextAttribute(nodeid,attribute);} }});
 	else
 		$("#"+nodeid+"_"+attribute).change(function(){UIFactory['Node'].updateMetadatawWadTextAttribute(nodeid,attribute);});
 	//---------------------------

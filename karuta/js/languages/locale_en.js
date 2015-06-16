@@ -145,6 +145,7 @@ karutaStr['en']['encrypted']="Encrypt Ressource";
 karutaStr['en']['get_rc4key']="Parts of this document are encrypted.\nFist Visit: Choose a key sentence.\nReturning Visits: Type your key sentence. ";
 karutaStr['en']['error_rc4key']="Error in key sentence.";
 karutaStr['en']['seltype']="Display";
+karutaStr['en']['shareroles']="Roles - Share";
 
 //=========================================
 //========== ADMIN ========================
