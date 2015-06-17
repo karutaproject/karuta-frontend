@@ -50,7 +50,7 @@ function setDesignerRole(role)
 		html += "		<div class='col-md-9' id='contenu'></div>";
 		html += "	</div>";
 		$("#main-container").html(html);
-		UIFactory["Portfolio"].displaySidebar('sidebar','standard',LANGCODE,true);
+		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,true,UICom.rootid);
 		$("#sidebar_"+uuid).click();
 	};
 	if (g_display_type=='model'){

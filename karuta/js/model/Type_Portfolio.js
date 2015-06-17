@@ -400,7 +400,7 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 			UICom.parseStructure(data,true);
 			UIFactory["Portfolio"].parse(data);
 			$("#sidebar").html("");
-			UIFactory["Portfolio"].displaySidebar('sidebar',null,null,g_edit);
+			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.root);
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 		}
 	});

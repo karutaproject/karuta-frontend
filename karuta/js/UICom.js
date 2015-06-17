@@ -55,7 +55,6 @@ var UICom =
 	{
 		if (treeroot==null || treeroot) {
 			treeroot = true;
-//			g_portfolio_current = data;
 		}
 		if( UICom.structure["tree"] == null )
 			UICom.structure["tree"] = {};
@@ -91,7 +90,6 @@ var UICom =
 				UICom.treerootid[treerootname] = id;
 			}
 		} else {
-//			if (UICom.structure["tree"][id]==null || UICom.structure["tree"][id]==undefined)
 			if (UICom.structure["tree"][parentid]!=undefined)
 				UICom.structure["tree"][parentid].childs.push(id);
 		}
@@ -103,7 +101,7 @@ var UICom =
 
 
 	//=======================================================================
-	parseElement: function( currentNode)
+	parseElement: function(currentNode)
 	//=======================================================================
 	{
 		if (g_userrole=='designer')

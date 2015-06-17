@@ -1,14 +1,12 @@
 
 /* --- Problem with button ---*/
 
-.menu-xs{
-	height:23px;
-}
 
 .menu-xs .btn-text{
 	margin-top:0px;
 }
 
+/* --- buuton are redefined to use with Ipas and solve size errors */
 .btn-xs [class*="icon-"] {
 	margin-top:3px;
 	margin-bottom:3px;
@@ -33,6 +31,9 @@ a.btn-xs {
 .btn {
 	background-color:#FAFAFA;
 	border: 1px solid lightGrey;
+}
+.btn-danger {
+	background-color:#d9534f;
 }
 
 /* --------------------------*/
