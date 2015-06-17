@@ -251,7 +251,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		type = 'standard';
 	if (type=='standard'){
 		html += "<div id='navigation_bar'></div>";
-		html += "<div id='main-container' class='container-fluid'>";
+		html += "<div id='main-container' class='container'>";
 		html += "	<div class='row'>";
 		html += "		<div class='col-md-3' id='sidebar'></div>";
 		html += "		<div class='col-md-9' id='contenu'></div>";

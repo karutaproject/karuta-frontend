@@ -61,9 +61,9 @@ karutaStr['fr']['password-sent']="Un nouveau mot de passe a été envoyé par co
 karutaStr['fr']['new-account']="Vous n'avez pas de compte? <a href='createAccount.htm?lang=fr'>Inscrivez-vous!</a>";
 karutaStr['fr']['disconnected']="Oups! Vous avez été accidentellement déconnecté!";
 karutaStr['fr']['demo-documentation']="Importer la documentation Karuta";
-karutaStr['fr']['demo-ecommerce']="Importer les portfolios démo e-commerce";
+karutaStr['fr']['demo-ecommerce']="Importer les portfolios démo eCommerce";
 karutaStr['fr']['demo-aacu']="Importer les portfolios démo AACU";
-karutaStr['fr']['demo-video']="Importer les portfolios démo des vidéos";
+karutaStr['fr']['demo-video']="Importer les portfolios démo des vidéos YouTube";
 karutaStr['fr']['want-sharing']=" désire partager avec vous une partie de son portfolio.";
 karutaStr['fr']['share-URL']="Partage du portfolio";
 karutaStr['fr']['see']="Voir";

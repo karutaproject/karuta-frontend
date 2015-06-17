@@ -2099,7 +2099,8 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 //==================================================
 {
 	var name = node.asmtype;
-	var html = "<hr>";
+	var html = "<div><br>";
+//	var html = "<hr>";
 	html += "<form id='metadata' class='form-horizontal'>";
 	if (name=='asmContext' && node.resource.type=='Proxy')
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'semantictag',$(node.metadata).attr('semantictag'),false,true);
@@ -2125,7 +2126,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += "<hr><h4>Metadata</h4>";
 	if (USER.admin)
 		html += UIFactory["Node"].displayRights(node.id);
-	html += "<hr>";
+//	html += "<hr>";
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seenoderoles',$(node.metadatawad).attr('seenoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'delnoderoles',$(node.metadatawad).attr('delnoderoles'));
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')	{
@@ -2160,6 +2161,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 //	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'veriffunction',$(node.metadatawad).attr('veriffunction'));
 	html += "<div id='metadata_texts'></div>";
 	html += "</form>";
+	html += "</div>";
 	return html;
 };
 
@@ -2179,11 +2181,12 @@ UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'none':$(node.metadatawad).attr('editnoderoles');
 	var graphicerroles = ($(node.metadatawad).attr('graphicerroles')==undefined)?'none':$(node.metadatawad).attr('graphicerroles');
 	if (USER.admin || g_userrole=='designer' || graphicerroles.indexOf(g_userrole)>-1 || graphicerroles.indexOf(userrole)>-1) {
-		html += "<hr><h4>CSS - Styles</h4>";
+//		html += "<hr><h4>CSS - Styles</h4>";
 		html += "<form id='metadata' class='form-horizontal'>";
 		//----------------------------------
 		if (USER.admin || g_userrole=='designer' || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(userrole)>-1) {
-			html += "<h5>"+karutaStr[languages[langcode]]['label']+"</h5>";
+			html += "<h4>"+karutaStr[languages[langcode]]['label']+"</h4>";
+//			html += "<h5>"+karutaStr[languages[langcode]]['label']+"</h5>";
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'font-weight',$(node.metadataepm).attr('font-weight'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'font-style',$(node.metadataepm).attr('font-style'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'text-align',$(node.metadataepm).attr('text-align'));
@@ -2195,20 +2198,23 @@ UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 		}
 		//----------------------------------
 		if (name=='asmContext') 
-			html += "<h5>"+karutaStr[languages[langcode]]['resource']+"</h5>";
+			html += "<hr><h4>"+karutaStr[languages[langcode]]['resource']+"</h4>";
+//			html += "<h5>"+karutaStr[languages[langcode]]['resource']+"</h5>";
 		else
-			html += "<h5>"+karutaStr[languages[langcode]]['node']+"</h5>";
-		html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-font-weight',$(node.metadataepm).attr('node-font-weight'));
-		html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-font-style',$(node.metadataepm).attr('node-font-style'));
-		html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-text-align',$(node.metadataepm).attr('node-text-align'));
-		html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-font-size',$(node.metadataepm).attr('node-font-size'));
-		html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-color',$(node.metadataepm).attr('node-color'));
-		html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-padding-top',$(node.metadataepm).attr('node-padding-top'));
-		html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-background-color',$(node.metadataepm).attr('node-background-color'));
-		html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-othercss',$(node.metadataepm).attr('node-othercss'));
+			html += "<hr><h4>"+karutaStr[languages[langcode]]['node']+"</h4>";
+//			html += "<h5>"+karutaStr[languages[langcode]]['node']+"</h5>";
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-font-weight',$(node.metadataepm).attr('node-font-weight'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-font-style',$(node.metadataepm).attr('node-font-style'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-text-align',$(node.metadataepm).attr('node-text-align'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-font-size',$(node.metadataepm).attr('node-font-size'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-color',$(node.metadataepm).attr('node-color'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-padding-top',$(node.metadataepm).attr('node-padding-top'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-background-color',$(node.metadataepm).attr('node-background-color'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-othercss',$(node.metadataepm).attr('node-othercss'));
 		//----------------------------------
 		if (name=='asmStructure' || name=='asmUnit') {
-			html += "<h5>"+karutaStr[languages[langcode]]['inparent']+"</h5>";
+			html += "<hr><h4>"+karutaStr[languages[langcode]]['inparent']+"</h4>";
+//			html += "<h5>"+karutaStr[languages[langcode]]['inparent']+"</h5>";
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-font-weight',$(node.metadataepm).attr('inparent-font-weight'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-font-style',$(node.metadataepm).attr('inparent-font-style'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-text-align',$(node.metadataepm).attr('inparent-text-align'));
@@ -2550,7 +2556,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'menuroles',$(node.metadatawad).attr('menuroles'));
 	}
 	//--------------------------------------------------
-	html = "<hr><label>"+karutaStr[languages[langcode]]['help'];
+	html = "<br><hr><label>"+karutaStr[languages[langcode]]['help'];
 	if (languages.length>1){
 		var first = true;
 		for (var i=0; i<languages.length;i++){

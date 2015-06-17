@@ -176,7 +176,8 @@ hr {
 /* ---------------- list portfolios --------------------- */
 
 .item td{
-	padding-left:5px;
+	padding-left:10px;
+	height:23px;
 }
 
 .item:hover td{
@@ -1105,3 +1106,17 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	box-shadow: 3px 3px 3px #CCC;
 }
 
+/* ====================
+	Isabelle
+   ====================*/
+
+/* list of structures/units in a portfolio */
+.btn-group {
+	height:24px;
+}
+
+/* no underline in sidebar */
+.well a:focus,
+.well a:hover {
+	text-decoration: none;
+}
