@@ -3,10 +3,10 @@
 
 
 .menu-xs .btn-text{
-	margin-top:0px;
+	margin-top:2px;
 }
 
-/* --- buuton are redefined to use with Ipas and solve size errors */
+/* --- buton are redefined to use with Ipas and solve size errors */
 .btn-xs [class*="icon-"] {
 	margin-top:3px;
 	margin-bottom:3px;
@@ -14,6 +14,10 @@
 .btn-xs .icon-font {
 	margin-top:0px;
 	margin-bottom:0px;
+}
+
+.btn, .btn-xs {
+	padding: 0px 5px;
 }
 
 a.btn {
@@ -31,7 +35,16 @@ a.btn-xs {
 .btn {
 	background-color:#FAFAFA;
 	border: 1px solid lightGrey;
+	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
+    background-repeat: repeat-x;
 }
+/*
+a.dropdown-toggle {
+	background-color:#FAFAFA;
+	border: none;
+	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
+    background-repeat: repeat-x;
+}*/
 .btn-danger {
 	background-color:#d9534f;
 }
@@ -175,13 +188,20 @@ hr {
 
 /* ---------------- list portfolios --------------------- */
 
-.item td{
+tr.item {
 	padding-left:10px;
-	height:23px;
+	/*height:23px;*/
 }
 
-.item:hover td{
+.item td {
+	padding-top:4px;
+}
+.item:hover td {
 	background-color:lightgrey;
+}
+
+button.delete-portfolio {
+	margin-top:5px;
 }
 
 /* -------------------------------------------------- */

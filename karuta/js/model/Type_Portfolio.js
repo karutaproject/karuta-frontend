@@ -162,7 +162,7 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 	if (type=='list') {
 		if (USER.admin || this.owner=='Y') {
 			html += "<td style='padding:7px'> ";
-			html += " <input style='margin-top:-4px' type='checkbox' name='delete-remove' value='"+this.id+"'/>";
+			html += " <input style='margin-top:-2px' type='checkbox' name='delete-remove' value='"+this.id+"'/>";
 			html += "</td>";
 			nb_del_list++;
 		}
@@ -198,11 +198,13 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 		html += "<td>"+this.date_modified.substring(0,10)+"</td>";
 		var owner = (Users_byid[this.ownerid]==null) ? "??? "+this.ownerid:Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
 		html += "<td>"+owner+"</td>";
+		html += "<td style='padding-left:5px'> ";
+		html += "<div class='btn-group'>";
 		//------------ buttons ---------------
 		if (USER.admin || this.owner=='Y') {
-			html += "<td style='padding-left:5px'> ";
-			html += "<div class='btn-group'>";
-			html += "<button href='#' data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<b class='caret'></b>&nbsp;</button>";
+//			html += "<td style='padding-left:5px'> ";
+//			html += "<div class='btn-group'>";
+			html += "<button href='#' data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 			html += "<ul class='dropdown-menu  pull-right'>";
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callRename('"+this.id+"')\" href='#'><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a></li>";
 			html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].copy('"+this.id+"','"+this.code_node.text()+"-copy',true)\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i> "+karutaStr[LANG]["button-duplicate"]+"</a></li>";
@@ -212,14 +214,17 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callUnShare('"+this.id+"')\" href='#'><i class='fa fa-times'></i><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["unshare"]+"</a></li>";
 			html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
 			html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&files=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-with-files"]+"</a></li>";
-			html += "</ul></div>";
-			html += "</td>";
+//			html += "</ul></div>";
+//			html += "</td>";
+			html += "</ul>";
 		}
+		html += "</div>";
+		html += "</td>";
 	}
 	if (type=='bin') {
 		if (USER.admin || USER.creator){
 			html += "<td style='padding:7px'> ";
-			html += " <input style='margin-top:-4px' type='checkbox' name='delete-remove' value='"+this.id+"'/>";
+			html += " <input style='margin-top:-2px' type='checkbox' name='delete-remove' value='"+this.id+"'/>";
 			html += "</td>";
 			html += "<td>";
 			html += " <a href='main.htm?id="+this.id+"&edit=true&lang="+LANG+"'>"+this.label_node[langcode].text()+"</a> ";
@@ -941,7 +946,7 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
 	var html ="";
 //	html += "			<ul class='nav'>";
-//	html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<b class='caret'></b></a>";
+//	html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
 //	html += "					<ul class='dropdown-menu'>";
 	html += "						<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+bckname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
 	if (USER.admin || portfolios_byid[portfolioid].owner=='Y' || g_userrole=='designer') {

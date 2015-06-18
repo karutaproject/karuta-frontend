@@ -106,7 +106,7 @@ function getNavBar(type,portfolioid,edit)
 	//----------------------------------------------------------
 	if (languages.length>1) {
 		html += "			<ul class='nav navbar-nav'>";
-	html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+karutaStr[LANG]['language']+"<b class='caret'></b></a>";
+	html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+karutaStr[LANG]['language']+"<span class='caret'></span></a>";
 	html += "					<ul class='dropdown-menu'>";
 	for (var i=0; i<languages.length;i++) {
 		var url = "list.htm?lang="+languages[i];
@@ -127,9 +127,10 @@ function getNavBar(type,portfolioid,edit)
 	html += "			</ul>";
 	}
 	//----------------------------------------------------------
-	if (type!='login' && type!='create_account') {
+//	if (type!='login' && type!='create_account') {
+	if (type!='login' && type!='create_account' && type!='list') {
 		html += "			<ul class='nav navbar-nav'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<b class='caret'></b></a>";
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
 		html += "					<ul class='dropdown-menu'>";
 	}
 	//----------------------------------------------------------
@@ -155,9 +156,9 @@ function getNavBar(type,portfolioid,edit)
 		html += "			<ul class='nav navbar-nav pull-right'>";
 		html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+USER.firstname_node.text()+" "+USER.lastname_node.text();
 		if (g_userrole=='designer') 
-			html += " <span id='userrole'>(designer)</span><b class='caret'></b></a>";
+			html += " <span id='userrole'>(designer)</span><span class='caret'></span></a>";
 		else
-			html += " <span id='userrole'></span><b class='caret'></b></a>";
+			html += " <span id='userrole'></span><span class='caret'></span></a>";
 		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
 		if (g_userrole=='designer') {

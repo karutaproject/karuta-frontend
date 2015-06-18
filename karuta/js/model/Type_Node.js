@@ -1672,11 +1672,11 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	if (menu) {
 		if ((USER.admin || g_userrole=='designer') && (node.asmtype != 'asmContext' && (depth>0 || node.asmtype == 'asmUnitStructure'))) {
 			html += "<button class='btn btn-xs menu-xs' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' ";
-			if (navigator.userAgent.indexOf('Firefox')>-1)
+/*			if (navigator.userAgent.indexOf('Firefox')>-1)
 				html += "style='height:23px;' ";
 			if (navigator.userAgent.indexOf('Chrome')>-1 || navigator.userAgent.indexOf('Safari')>-1)
 				html += "style='height:24px;' ";
-			html += "><div class='btn-text'>"+karutaStr[languages[langcode]]['Add']+" <b class='caret'></b></div></button>";
+*/			html += "><div class='btn-text'>"+karutaStr[languages[langcode]]['Add']+" <span class='caret'></span></div></button>";
 			html += "<ul class='dropdown-menu pull-right'>";
 			if (node.asmtype == 'asmRoot' || node.asmtype == 'asmStructure') {
 				var databack = false;
@@ -1728,11 +1728,11 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- submit button -------------------
 	if ((submitnode || USER.admin || g_userrole=='designer') && submitroles!='none' && submitroles!='') {
 		html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
-		if (navigator.userAgent.indexOf('Firefox')>-1)
+/*		if (navigator.userAgent.indexOf('Firefox')>-1)
 			html += "style='height:23px;' ";
 		if (navigator.userAgent.indexOf('Chrome')>-1 || navigator.userAgent.indexOf('Safari')>-1)
 			html += "style='height:24px;' ";
-		html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></button>";
+*/		html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></button>";
 	}
 	//------------- private button -------------------
 	if ((showroles==g_userrole || USER.admin || g_userrole=='designer') && showroles!='none' && showroles!='') {
@@ -1782,11 +1782,11 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "<div class='btn-group'>";
 					//-----------------------
 					html += "<button class='btn btn-xs menu-xs dropdown-toggle'  data-toggle='dropdown' href='#' ";
-					if (navigator.userAgent.indexOf('Firefox')>-1)
+/*					if (navigator.userAgent.indexOf('Firefox')>-1)
 						html += "style='height:23px;' ";
 					if (navigator.userAgent.indexOf('Chrome')>-1 || navigator.userAgent.indexOf('Safari')>-1)
 						html += "style='height:24px;' ";
-					html += "><div class='btn-text'>Menu <b class='caret'></b></div></button>";
+*/					html += "><div class='btn-text'>Menu <span class='caret'></span></div></button>";
 					//-----------------------
 					html += "<ul class='dropdown-menu pull-right'>";
 					for (var i=0; i<menus.length; i++){

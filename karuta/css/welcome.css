@@ -7,7 +7,9 @@
 	border-bottom-right-radius: 5px;
 	max-width: 300px;
 	padding: 19px 29px 29px;
-	margin: 80px auto 20px;
+/*	margin: 80px auto 20px; */
+	margin-top: 30px;
+	margin-left: 40px;
 	background-color: rgb(245, 245, 245);
 	border: 1px solid #e5e5e5;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
@@ -36,7 +38,9 @@
 	padding-bottom: 19px ;
 	padding-left: 29px ;
 	padding-right: 29px ;
-	margin: 30px auto 20px;
+/*	margin: 30px auto 20px; */
+	margin-top: 20px;
+	margin-left: 40px;
 	background-color: rgb(245, 245, 245); 
 	border: 1px solid #e5e5e5;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
@@ -52,7 +56,8 @@
 }
 
 .form-newpassword button {
-background-color:lightgrey;
+	background-color: #e1e1e1;
+	border: 1px solid #e0e0e0;
 }
 
 #form-send {
