@@ -250,7 +250,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 				$(formobj).append($("<span>"+separator+"</span>"));			
 			} else {
 //				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='margin-top:20px;width:200px;' ";
-				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='margin-top:35px;width:200px;' ";
+				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='width:200px;' ";
 				if (disabled)
 					html += "disabled='disabled' ";
 				html += "value=\""+separator+"\" >";
@@ -362,7 +362,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			if (g_userrole!='designer'){
 				$(formobj).append($("<span>"+separator+"</span>"));			
 			} else {
-				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='margin-top:20px;width:200px;' ";
+				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='width:200px;' ";
 				if (disabled)
 					html += "disabled='disabled' ";
 				html += "value=\""+separator+"\" >";
@@ -456,7 +456,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			if (g_userrole!='designer'){
 				$(formobj).append($("<span>"+separator+"</span>"));			
 			} else {
-				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='margin-top:20px;width:200px;' ";
+				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='width:200px;' ";
 				if (disabled)
 					html += "disabled='disabled' ";
 				html += "value=\""+separator+"\" >";

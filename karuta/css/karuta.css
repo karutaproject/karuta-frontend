@@ -2,9 +2,6 @@
 /* --- Problem with button ---*/
 
 
-.menu-xs .btn-text{
-	margin-top:2px;
-}
 
 /* --- buton are redefined to use with Ipas and solve size errors */
 .btn-xs [class*="icon-"] {
@@ -16,21 +13,11 @@
 	margin-bottom:0px;
 }
 
-.btn, .btn-xs {
-	padding: 0px 5px;
-}
 
 a.btn {
 	font-weight:normal;
 }
-a.btn-xs {
-	min-height:24px;
-	vertical-align:middle;
-}
-.btn-text {
-	margin-top:2px;
-	vertical-align:middle;
-}
+
 
 .btn {
 	background-color:#FAFAFA;
@@ -47,7 +34,7 @@ a.dropdown-toggle {
 }*/
 .btn-danger {
 	background-color:#d9534f;
-}
+	background-image: none;}
 
 /* --------------------------*/
 .versions {
@@ -604,13 +591,10 @@ a.active:over{
 /* ====================
 	Select Drop Down
    ====================*/
-button.select {
-	margin-top:20px;
-}
 
 
 button.select-label {
-	width:500px;
+	min-width:200px;
 	word-wrap: break-word;
 	white-space: normal;
 	text-align:left;
@@ -960,9 +944,7 @@ table.tablesorter th.restore {
 	Free
    ====================*/
 .free-toolbar{
-	width:100%;
-	background-color:white;
-	min-width:100px;
+	width:100px;
 }
 
 .free-toolbar-buttons {
@@ -1131,7 +1113,7 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
    ====================*/
 
 /* list of structures/units in a portfolio */
-.btn-group {
+.btn-group .btn-xs{
 	height:24px;
 }
 

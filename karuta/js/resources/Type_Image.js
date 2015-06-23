@@ -101,7 +101,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		html +="<div uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
 			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img resizable='yes' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image'>";
+			html += "<img resizable='yes' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image img-responsive'>";
 			html += "</a>";
 		}
 		else
@@ -109,16 +109,16 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		html += "</div>";
 	}
 	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image'>";
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image img-responsive'>";
 	}
 	if (type=='withfilename'  && $(this.filename_node[langcode]).text()!=""){
 		html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image'>";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image img-responsive'>";		
 		html += "</a>";
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='withfilename-withoutlightbox'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image'>";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image img-responsive'>";		
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	return html;

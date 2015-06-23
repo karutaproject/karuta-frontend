@@ -280,15 +280,15 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			$(htmlLabelGroupObj).append($(htmlLabelDivObj));
 			$(htmlFormObj).append($(htmlLabelGroupObj));
 		}
+		//-----------------------------
+		var resizeroles = $(this.metadatawad).attr('resizeroles');
+		if (resizeroles==undefined)
+			resizeroles="";
+		if ((g_userrole=='designer' || USER.admin || resizeroles.indexOf(g_userrole)>-1 || resizeroles.indexOf(this.userrole)>-1) && this.resource!=undefined && this.resource.type=='Image') {
+			var htmlSize = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'width',$(this.metadataepm).attr('width'));
+			$(htmlFormObj).append($(htmlSize));
+		}
 		$(div).append($(htmlFormObj));
-	}
-	//-----------------------------
-	var resizeroles = $(this.metadatawad).attr('resizeroles');
-	if (resizeroles==undefined)
-		resizeroles="";
-	if ((g_userrole=='designer' || USER.admin || resizeroles.indexOf(g_userrole)>-1 || resizeroles.indexOf(this.userrole)>-1) && this.resource!=undefined && this.resource.type=='Image') {
-		var htmlSize = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'width',$(this.metadataepm).attr('width'));
-		$(div).append($(htmlSize));
 	}
 	//--------------- set editbox title --------------
 	var title = "&nbsp;"; // karutaStr[LANG]['edit'];
@@ -769,10 +769,13 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			var metadataepm = $(node.metadataepm);
 			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'top',true);
 			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'left',true);
+			html += " style='"+style+"' ";
+			//------------------------
+			html += ">";
 			if (depth>0)
-				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
+				style = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 			else
-				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'parent-background-color',false);
+				style = UIFactory["Node"].displayMetadataEpm(metadataepm,'parent-background-color',false);
 				
 			if (name == "asmUnitStructure" || UICom.structure["ui"][uuid].resource_type=='TextField' || UICom.structure["ui"][uuid].resource_type=='Document' || UICom.structure["ui"][uuid].resource_type=='URL') {
 				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'width',true);
@@ -783,9 +786,6 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				if (proxy_target)
 					metadataepm = UICom.structure["ui"][proxies_nodeid["proxy-"+semtag]].metadataepm;
 			}
-			html += " style='"+style+"' ";
-			//------------------------
-			html += ">";
 			//------------------- Toolbar and Buttons --------------------------
 			if (edit && (!inline || g_userrole=='designer')) {
 				html += "<div class='free-toolbar'>";
@@ -795,6 +795,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				html += "</div>";
 				html += "</div>";
 			}
+			html += "<div style='"+style+"'>";
 			//-------------------------------------------------------------------
 			if (name == "asmContext") {
 				//-------------- resource -------------------------
@@ -878,6 +879,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 					//-----------------
 					html+="</div>";
 					//--------------------------------------
+					html += "</div>";
 					html += "</div>";
 				}
 			}
@@ -1398,6 +1400,10 @@ UIFactory["Node"].updateSize = function (obj)
 		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'width',width);
 		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'height',height);
 		UICom.structure["ui"][nodeid].resource.refresh();
+		$("#std_resource_"+nodeid).resizable({
+			stop: function(){UIFactory["Node"].updateSize(obj);}
+		}
+		);
 	}
 	else {
 		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'width',width);
