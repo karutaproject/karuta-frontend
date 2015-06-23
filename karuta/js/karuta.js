@@ -128,7 +128,7 @@ function getNavBar(type,portfolioid,edit)
 	}
 	//----------------------------------------------------------
 //	if (type!='login' && type!='create_account') {
-	if (type!='login' && type!='create_account' && type!='list') {
+	if ((type!='login' && type!='create_account' && type!='list') || (type=='list' && USER.admin)) {
 		html += "			<ul class='nav navbar-nav'>";
 		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
 		html += "					<ul class='dropdown-menu'>";

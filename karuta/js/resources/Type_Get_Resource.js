@@ -202,7 +202,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 
 	//------------------------------------------------------------
 	if (type=='select') {
-		var html = "<div class='btn-group'>";
+//		var html = "<div class='btn-group'>";
+		var html = "<div class='btn-group' style='margin-bottom:20px;'>";		
 		html += "<button type='button' class='btn btn-default select select-label' id='button_"+self.id+"'>&nbsp;</button>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
 		html += "</div>";

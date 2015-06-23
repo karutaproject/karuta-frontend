@@ -249,7 +249,8 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			if (g_userrole!='designer'){
 				$(formobj).append($("<span>"+separator+"</span>"));			
 			} else {
-				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='margin-top:20px;width:200px;' ";
+//				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='margin-top:20px;width:200px;' ";
+				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='margin-top:35px;width:200px;' ";
 				if (disabled)
 					html += "disabled='disabled' ";
 				html += "value=\""+separator+"\" >";
@@ -263,7 +264,8 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		}
 		//--------------------------------------------------------------
 		{
-			var html = "<div class='btn-group'>";
+//			var html = "<div class='btn-group'>";
+			var html = "<div class='btn-group' style='margin-bottom:20px;'>";
 			html += "<button type='button' class='btn btn-default select select-label' id='button2_"+self.id+"'>&nbsp;</button>";
 			html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
 			html += "</div>";
