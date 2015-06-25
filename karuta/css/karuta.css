@@ -1,9 +1,11 @@
 
 /* --- Problem with button ---*/
 
+/*
 tr.item td{
 	height:24px;
 }
+*/
 
 /* --- buton are redefined to use with Ipas and solve size errors */
 .btn-xs [class*="icon-"] {
@@ -27,6 +29,7 @@ a.btn {
 	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
     background-repeat: repeat-x;
 }
+
 /*
 a.dropdown-toggle {
 	background-color:#FAFAFA;
@@ -34,6 +37,7 @@ a.dropdown-toggle {
 	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
     background-repeat: repeat-x;
 }*/
+
 .btn-danger {
 	background-color:#d9534f;
 	background-image: none;}
@@ -388,8 +392,11 @@ hr {
 
 
 a:hover {
-	text-decoration: none;
 	color:#01A9DB;
+}
+
+a, a:hover, a:active, a:focus {
+	text-decoration: none;
 }
 
 /* ====================== */
@@ -596,7 +603,8 @@ a.active:over{
 
 
 button.select-label {
-	min-width:200px;
+/*	min-width:200px; */
+	min-width:300px;
 	word-wrap: break-word;
 	white-space: normal;
 	text-align:left;
@@ -1123,4 +1131,10 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .well a:focus,
 .well a:hover {
 	text-decoration: none;
+}
+
+/* line spacing for GR, GGR and GDR in select type display */
+.choice-group {
+	margin-top:20px;
+	margin-bottom:20px;
 }

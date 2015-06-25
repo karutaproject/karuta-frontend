@@ -189,7 +189,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 	if (type=='select') {
 		//--------------------------------------------------------------
 		{
-			var html = "<div class='btn-group'>";
+			var html = "<div class='btn-group choice-group'>";
 			html += "<button type='button' class='btn btn-default select select-label' id='button1_"+self.id+"'>&nbsp;</button>";
 			html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
 			html += "</div>";
@@ -265,7 +265,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		//--------------------------------------------------------------
 		{
 //			var html = "<div class='btn-group'>";
-			var html = "<div class='btn-group' style='margin-bottom:20px;'>";
+			var html = "<div class='btn-group choice-group'>";
 			html += "<button type='button' class='btn btn-default select select-label' id='button2_"+self.id+"'>&nbsp;</button>";
 			html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
 			html += "</div>";
@@ -325,6 +325,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 	if (type.indexOf('radio')>-1) {
 		{
 			var nodes = $("node",data1);
+			var radio_gr = $("<div class='choice-group'></div>");			
 			for ( var i = 0; i < $(nodes).length; i++) {
 				var radio_obj = $("<div class='get-radio'></div>");
 				var input = "";
@@ -354,8 +355,9 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 					UIFactory["Get_Double_Resource"].update(self,langcode);
 				});
 				$(radio_obj).append(obj);
-				$(formobj).append(radio_obj);
+				$(radio_gr).append(radio_obj);
 			}
+			$(formobj).append(radio_gr);
 		}
 		//--------------------------------------------------------------
 		{
@@ -377,6 +379,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		//--------------------------------------------------------------
 		{
 			var nodes = $("node",data2);
+			var radio_gr = $("<div class='choice-group'></div>");			
 			for ( var i = 0; i < $(nodes).length; i++) {
 				var radio_obj = $("<div class='get-radio'></div>");
 				var input = "";
@@ -406,14 +409,15 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 					UIFactory["Get_Double_Resource"].update(self,langcode);
 				});
 				$(radio_obj).append(obj);
-				$(formobj).append(radio_obj);
+				$(radio_gr).append(radio_obj);
 			}
+			$(formobj).append(radio_gr);
 		}
 	}
 	//======================================================================================
 	if (type.indexOf('click')>-1) {
 		{
-			var inputs = "<div class='click'></div>";
+			var inputs = "<div class='click choice-group'></div>";
 			var inputs_obj1 = $(inputs);
 			var nodes = $("node",data1);
 			var first = true;

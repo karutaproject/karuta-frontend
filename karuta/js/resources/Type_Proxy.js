@@ -145,7 +145,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 								}
 								if (nodes.length>0 && display) {									
 									var html = "";
-									html += "<div class='portfolio-proxy'>"+label+"</div>";
+									html += "<div class='portfolio-proxy' style='margin-top:20px'>"+label+"</div>";
 									html += "<div id='"+code+"'></div>";
 									$("#"+destid).append($(html));
 									UIFactory["Proxy"].parse(code,type,langcode,data,self,label,srce);

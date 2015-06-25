@@ -198,7 +198,7 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 		html += "<td>"+this.date_modified.substring(0,10)+"</td>";
 		var owner = (Users_byid[this.ownerid]==null) ? "??? "+this.ownerid:Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
 		html += "<td>"+owner+"</td>";
-		html += "<td style='padding-left:5px'> ";
+		html += "<td style='padding-left:5px;padding-top:0px;'> ";
 		html += "<div class='btn-group'>";
 		//------------ buttons ---------------
 		if (USER.admin || this.owner=='Y') {
@@ -217,6 +217,8 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 //			html += "</ul></div>";
 //			html += "</td>";
 			html += "</ul>";
+		} else { // pour que toutes les lignes aient la même hauteur
+			html += "<button href='#' data-toggle='dropdown' class='btn  btn-xs dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 		}
 		html += "</div>";
 		html += "</td>";
