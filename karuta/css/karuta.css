@@ -1,7 +1,9 @@
 
 /* --- Problem with button ---*/
 
-
+tr.item td{
+	height:24px;
+}
 
 /* --- buton are redefined to use with Ipas and solve size errors */
 .btn-xs [class*="icon-"] {
