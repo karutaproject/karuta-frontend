@@ -592,6 +592,7 @@ function submit(uuid)
 		dataType : "text",
 		contentType: "application/xml",
 		url : urlS,
+		uuid : uuid,
 		success : function (data){
 			UIFactory.Node.reloadUnit();
 		}

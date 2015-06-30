@@ -84,7 +84,8 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 		label = "---";
 	var html ="";
 	if (this.query.indexOf('self.')>-1)
-		html = "<a href='#' class='URL2Unit-link' onclick=\"javascript:displayPage('"+this.uuid_node.text()+"',100,'standard','0',true)\">"+label+"</a>";
+		html = "<a href='#' class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+this.uuid_node.text()+"').click()\">"+label+"</a>";
+//		html = "<a href='#' class='URL2Unit-link' onclick=\"javascript:displayPage('"+this.uuid_node.text()+"',100,'standard','0',true)\">"+label+"</a>";
 	else
 		html = "<a href='page.htm?id="+this.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>"+label+"</a>";
 	return html;
@@ -93,50 +94,23 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 
 /// Editor
 //==================================
-UIFactory["URL2Unit"].update = function(select,itself,langcode,type)
+UIFactory["URL2Unit"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
-	if (type==undefined || type==null)
-		type = 'select';
-	
-	if (type=='select') {
-		var option = $(select).find("option:selected");
-		var uuid = $(option).attr('code');
+	var value = $(selected_item).attr('value');
+	//---------------------
+	if (itself.encrypted)
+		value = "rc4"+encrypt(value,g_rc4key);
+	//---------------------
+	$(itself.uuid_node).text(value);
+	for (var i=0; i<languages.length;i++){
+		var label = $(selected_item).attr('label_'+languages[i]);
+		//---------------------
 		if (itself.encrypted)
-			uuid = "rc4"+encrypt(uuid,g_rc4key);
-		$(itself.uuid_node).text(uuid);
-		for (var i=0; i<languages.length;i++){
-			var label = $(option).attr('label_'+languages[i]);
-			//---------------------
-			if (itself.encrypted)
-				label = "rc4"+encrypt(label,g_rc4key);
-			//---------------------
-			$(itself.label_node[i]).text(label);
-		}
+			label = "rc4"+encrypt(label,g_rc4key);
+		//---------------------
+		$(itself.label_node[i]).text(label);
 	}
-	if (type.indexOf('radio')>-1) {
-		var name = 'radio_'+itself.id;
-		var checked = $('input[name='+name+']').filter(':checked');
-		var uuid = $(checked).attr('uuid');
-		if (itself.encrypted)
-			uuid = "rc4"+encrypt(uuid,g_rc4key);
-		$(itself.uuid_node).text(uuid);
-		for (var i=0; i<languages.length;i++){
-			var label = $(checked).attr('label_'+languages[i]);
-			//---------------------
-			if (itself.encrypted)
-				label = "rc4"+encrypt(label,g_rc4key);
-			//---------------------
-			$(itself.label_node[i]).text(label);
-		}
-	}
-	var local_label = $('input[name=local-label]').val();
-	if ($(itself.label_node[langcode]).text()=='') {
-		local_label ='';
-		$('input[name=local-label]').val('');
-	}
-	$(itself.local_label_node[langcode]).text(local_label);
-
 	itself.save();
 };
 
@@ -245,7 +219,7 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 				$(select_item_a).click(function (ev){
 					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+$(this).attr("code"));
-					UIFactory["Get_Resource"].update(this,self,langcode);
+					UIFactory["URL2Unit"].update(this,self,langcode);
 				});
 				$(select_item).append($(select_item_a))
 				//-------------- update button -----

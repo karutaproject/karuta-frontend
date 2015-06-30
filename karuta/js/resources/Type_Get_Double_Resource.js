@@ -197,6 +197,28 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			$(formobj).append($(btn_group));
 			html = "<ul class='dropdown-menu' role='menu'></ul>";
 			var select  = $(html);
+			//----------------- null value to erase
+			html = "<li></li>";
+			var select_item = $(html);
+			html = "<a href='#' value='' code='' ";
+			for (var j=0; j<languages.length;j++) {
+				html += "label_"+languages[j]+"='&nbsp;' ";
+			}
+			html += ">";
+			html += "&nbsp;</a>";
+			var select_item_a = $(html);
+			$(select_item_a).click(function (ev){
+				$("#button1_"+self.id).html($(this).attr("label_"+languages[langcode]));
+				for (var i=0; i<languages.length;i++){
+					$(self.label1_node[i]).text($(this).attr("label_"+languages[i]));
+				}
+				$(self.code1_node).text($(this).attr("code"));
+				$(self.value1_node).text($(this).attr("value"));
+				UIFactory["Get_Double_Resource"].update(self,langcode);
+			});
+			$(select_item).append($(select_item_a))
+			$(select).append($(select_item));
+			//--------------------
 			var nodes = $("node",data1);
 			for ( var i = 0; i < $(nodes).length; i++) {
 				var resource = null;
@@ -273,6 +295,24 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			$(formobj).append($(btn_group));
 			html = "<ul class='dropdown-menu' role='menu'></ul>";
 			var select  = $(html);
+			//----------------- null value to erase
+			html = "<li></li>";
+			var select_item = $(html);
+			html = "<a href='#' value='' code='' ";
+			for (var j=0; j<languages.length;j++) {
+				html += "label_"+languages[j]+"='&nbsp;' ";
+			}
+			html += ">";
+			html += "&nbsp;</a>";
+			var select_item_a = $(html);
+			$(select_item_a).click(function (ev){
+				$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+				$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
+				UIFactory["Get_Resource"].update(this,self,langcode);
+			});
+			$(select_item).append($(select_item_a))
+			$(select).append($(select_item));
+			//--------------------
 			var nodes = $("node",data2);
 			for ( var i = 0; i < $(nodes).length; i++) {
 				var resource = null;

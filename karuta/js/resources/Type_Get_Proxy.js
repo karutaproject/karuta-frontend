@@ -209,34 +209,6 @@ UIFactory["Get_Proxy"].parse = function(destid,type,langcode,data,self) {
 		});
 		$("#"+destid).append(obj);
 	}
-	if (type.indexOf('radio')>-1) {
-		var nodes = $("node",data);
-		var first = true;
-		for ( var i = 0; i < $(nodes).length; i++) {
-			var input = "";
-			var resource = null;
-			if ($("asmResource",nodes[i]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-			else
-				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-			var code = $('code',resource).text();
-			if (!first && type!='radio-inline')
-				input += '<br>';
-			first = false;
-			input += "<input type='radio' name='radio_"+self.id+"' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
-			for (var j=0; j<languages.length;j++){
-				input += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
-			}
-			if ($(self.value_node).text()==code)
-				input += " checked ";
-			input += "> "+$("label[lang='"+languages[langcode]+"']",resource).text()+" </input>";
-			var obj = $(input);
-			$(obj).click(function (){
-				UIFactory["Get_Proxy"].update(obj,self,langcode,type);
-			});
-			$("#"+destid).append(obj);
-		}
-	}
 };
 
 //==================================

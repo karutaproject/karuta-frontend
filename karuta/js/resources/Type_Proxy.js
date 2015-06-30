@@ -188,6 +188,24 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 		$(formobj).append($(btn_group));
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
+		//----------------- null value to erase
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a href='#' value='' code='' ";
+		for (var j=0; j<languages.length;j++) {
+			html += "label_"+languages[j]+"='&nbsp;' ";
+		}
+		html += ">";
+		html += "&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
+			UIFactory["Proxy"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//--------------------
 		var nodes = $("node",data);
 		for ( var i = 0; i < $(nodes).length; i++) {
 			var semtag = $("metadata",nodes[i]).attr('semantictag');

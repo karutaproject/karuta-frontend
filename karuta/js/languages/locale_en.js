@@ -146,6 +146,8 @@ karutaStr['en']['get_rc4key']="Parts of this document are encrypted.\nFist Visit
 karutaStr['en']['error_rc4key']="Error in key sentence.";
 karutaStr['en']['seltype']="Display";
 karutaStr['en']['shareroles']="Roles - Share";
+karutaStr['en']['submitted']="Submitted";
+karutaStr['en']['notsubmitted']="Not Yet Submitted";
 
 //=========================================
 //========== ADMIN ========================

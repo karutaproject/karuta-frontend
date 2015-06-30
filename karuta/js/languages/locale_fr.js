@@ -146,6 +146,8 @@ karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPre
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
 karutaStr['fr']['display']="Présentation ";
 karutaStr['fr']['shareroles']="Roles - Share";
+karutaStr['fr']['submitted']="Soumis";
+karutaStr['fr']['notsubmitted']="Non soumis";
 
 //=========================================
 //========== ADMIN ========================

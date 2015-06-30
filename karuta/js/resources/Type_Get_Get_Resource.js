@@ -264,7 +264,6 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 	//------------------------------------------------------------
 	if (type=='select') {
 		var selected_value = "";
-//		var html = "<div class='btn-group'>";
 		var html = "<div class='btn-group choice-group'>";
 		html += "<button type='button' class='btn btn-default select select-label' id='button_"+self.id+"'>&nbsp;</button>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
@@ -273,6 +272,24 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 		$("#"+destid).append($(btn_group));
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
+		//----------------- null value to erase
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a href='#' value='' code='' ";
+		for (var j=0; j<languages.length;j++) {
+			html += "label_"+languages[j]+"='&nbsp;' ";
+		}
+		html += ">";
+		html += "&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//--------------------
 		var nodes = $("node",data);
 		for ( var i = 0; i < $(nodes).length; i++) {
 			var resource = null;
@@ -319,6 +336,24 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 		
 	}
 	if (type.indexOf('radio')>-1) {
+		//----------------- null value to erase
+		var radio_obj = $("<div class='get-radio'></div>");
+		var input = "";
+		input += "<input type='radio' name='radio_"+self.id+"' value='' code='' ";
+		if (disabled)
+			input +="disabled='disabled' ";
+		for (var j=0; j<languages.length;j++){
+			input += "label_"+languages[j]+"='&nbsp;'";
+		}
+		input += ">&nbsp;&nbsp;";
+		input += "</input>";
+		var obj = $(input);
+		$(obj).click(function (){
+			UIFactory["Get_Get_Resource"].update(this,self,langcode,type);
+		});
+		$(radio_obj).append(obj);
+		$("#"+destid).append(radio_obj);
+		//-------------------
 		var nodes = $("node",data);
 		var first = true;
 		for ( var i = 0; i < $(nodes).length; i++) {
@@ -352,6 +387,22 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 	if (type.indexOf('click')>-1) {
 		var inputs = "<div class='click'></div>";
 		var inputs_obj = $(inputs);
+		//----------------- null value to erase
+		var input = "";
+		input += "<div name='click_"+self.id+"' value='' code='' class='click-item' ";
+		for (var j=0; j<languages.length;j++){
+			input += "label_"+languages[j]+"='&nbsp;' ";
+		}
+		input += "> ";
+		input +="<span  class='"+code+"'>&nbsp;</span></div>";
+		var input_obj = $(input);
+		$(input_obj).click(function (){
+			$('.clicked',inputs_obj).removeClass('clicked');
+			$(this).addClass('clicked');
+			UIFactory["Get_Get_Resource"].update(this,self,langcode,type);
+		});
+		$(inputs_obj).append(input_obj);
+		//-----------------------
 		var nodes = $("node",data);
 		var first = true;
 		for ( var i = 0; i < $(nodes).length; ++i) {

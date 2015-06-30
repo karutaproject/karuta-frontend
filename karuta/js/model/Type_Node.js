@@ -367,9 +367,9 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 		langcode = LANGCODE;
 	//---------------------
 	/// Traverse tree
-	for( var i=0;i<root.childs.length;i++ )
+	for( var i=0;i<root.children.length;i++ )
 	{
-		var child = UICom.structure["tree"][root.childs[i]].node;
+		var child = UICom.structure["tree"][root.children[i]].node;
 		var name = child.tagName;
 		var uuid = $(child).attr("id");
 		var text = UICom.structure["ui"][uuid].getLabel('sidebar_'+uuid,'div');
@@ -406,7 +406,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				html += "</div><!-- panel-collapse -->";
 				html += "</div><!-- panel -->";
 				$("#"+destid).append($(html));
-				UIFactory["Node"].displaySidebar(UICom.structure["tree"][root.childs[i]],'panel-body'+uuid,type,langcode,g_edit,uuid);
+				UIFactory["Node"].displaySidebar(UICom.structure["tree"][root.children[i]],'panel-body'+uuid,type,langcode,g_edit,uuid);
 			}
 		}
 	}
@@ -610,7 +610,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				html += "</div>";
 				//--------------------------------------------------*/
-				if (root.childs.length>0 && depth>0) {
+				if (root.children.length>0 && depth>0) {
 					html += "<div id='content-"+uuid+"' ";
 					style = "position:relative;";
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
@@ -672,10 +672,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 //				processPortfolio(0,data,,"dashboard_"+uuid,g_portfolio_current,0);
 			}
 			// ---------------------------- For each child ----------------------
-			for( var i=0; i<root.childs.length; ++i ) {
+			for( var i=0; i<root.children.length; ++i ) {
 				// Recurse
-				var child = UICom.structure["tree"][root.childs[i]];
-				var childnode = UICom.structure["ui"][root.childs[i]];
+				var child = UICom.structure["tree"][root.children[i]];
+				var childnode = UICom.structure["ui"][root.children[i]];
 				//-------------------
 				var freenode = ($(childnode.metadatawad).attr('freenode')==undefined)?'':$(childnode.metadatawad).attr('freenode');
 				if (contentfreenode == 'Y' || freenode == 'Y')
@@ -1012,11 +1012,11 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			}
 		
 			/// For each child
-			for( var i=0; i<root.childs.length; ++i ) 
+			for( var i=0; i<root.children.length; ++i ) 
 			{
 				// Recurse
-				var child = UICom.structure["tree"][root.childs[i]];
-				var childnode = UICom.structure["ui"][root.childs[i]];
+				var child = UICom.structure["tree"][root.children[i]];
+				var childnode = UICom.structure["ui"][root.children[i]];
 				var freenode = ($(childnode.metadatawad).attr('freenode')==undefined)?'':$(childnode.metadatawad).attr('freenode');
 				if (contentfreenode == 'Y' || freenode == 'Y')
 					UIFactory["Node"].displayFree(child, 'content-'+uuid, depth-1,langcode,edit,inline);
@@ -1152,10 +1152,10 @@ UIFactory["Node"].displayTranslate = function(root,dest,depth)
 		if (name=='asmUnitStructure')
 			depth=100;	
 		// ---------------------------- For each child 
-		for( var i=0; i<root.childs.length; ++i ) {
+		for( var i=0; i<root.children.length; ++i ) {
 			// Recurse
-			var child = UICom.structure["tree"][root.childs[i]];
-			var childnode = UICom.structure["ui"][root.childs[i]];
+			var child = UICom.structure["tree"][root.children[i]];
+			var childnode = UICom.structure["ui"][root.children[i]];
 			UIFactory["Node"].displayTranslate(child, 'content-'+uuid, depth-1);
 		}
 		//----------------------------
@@ -1315,7 +1315,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				//--------------------------------------------------
 				html += "</div><!-- row -->";
 				//--------------------------------------------------*/
-				if (root.childs.length>0 && depth>0) {
+				if (root.children.length>0 && depth>0) {
 					if (semtag=="asmNop" || semtag=="node_resource" || semtag=="aggregate")
 						html += "<div id='content-"+uuid+"' class='row'></div>";
 					else
@@ -1350,9 +1350,9 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				});
 			}
 			
-				for( var i=0; i<root.childs.length; ++i ) {
+				for( var i=0; i<root.children.length; ++i ) {
 					// Recurse
-					var child = UICom.structure["tree"][root.childs[i]];
+					var child = UICom.structure["tree"][root.children[i]];
 					//-------------------
 						UIFactory["Node"].displayModel(child, 'content-'+uuid, depth-1,langcode,edit,inline);
 				}
@@ -1582,9 +1582,9 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved)
 	//---------------------
 	/// Traverse tree
 	var html = "";
-	for( var i=0;i<root.childs.length;++i )
+	for( var i=0;i<root.children.length;++i )
 	{
-		var uuid = root.childs[i];
+		var uuid = root.children[i];
 		var label = UICom.structure["ui"][uuid].label_node[langcode].text();
 		var name = UICom.structure["ui"][uuid].asmtype;
 		if (name!='asmContext' && (typemoved != "asmUnit" || name != "asmUnit") && (uuid !=idmoved)){
@@ -1639,6 +1639,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'none':$(node.metadatawad).attr('editresroles');
 	var delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'none':$(node.metadatawad).attr('delnoderoles');
 	var submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
+	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
 	var menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
 	var moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'none':$(node.metadatawad).attr('moveroles');
@@ -1731,14 +1732,17 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html += "</ul>"; // class='dropdown-menu'
 		}
 	}
-	//------------- submit button -------------------
-	if ((submitnode || USER.admin || g_userrole=='designer') && submitroles!='none' && submitroles!='') {
-		html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
-/*		if (navigator.userAgent.indexOf('Firefox')>-1)
-			html += "style='height:23px;' ";
-		if (navigator.userAgent.indexOf('Chrome')>-1 || navigator.userAgent.indexOf('Safari')>-1)
-			html += "style='height:24px;' ";
-*/		html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></button>";
+	//------------- submit  -------------------
+	if (submitroles!='none' && submitroles!='') {
+		if ( (submitnode && submitroles.indexOf(g_userrole)>-1) || USER.admin || g_userrole=='designer') {
+			html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
+			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></button>";
+		} else {
+			if (submitted=='Y')
+				html += "<div class='btn-text'>"+karutaStr[languages[langcode]]['submitted']+"</div>";
+			else
+				html += "<div class='btn-text'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
+		}
 	}
 	//------------- private button -------------------
 	if ((showroles==g_userrole || USER.admin || g_userrole=='designer') && showroles!='none' && showroles!='') {
@@ -1788,11 +1792,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "<div class='btn-group'>";
 					//-----------------------
 					html += "<button class='btn btn-xs menu-xs dropdown-toggle'  data-toggle='dropdown' href='#' ";
-/*					if (navigator.userAgent.indexOf('Firefox')>-1)
-						html += "style='height:23px;' ";
-					if (navigator.userAgent.indexOf('Chrome')>-1 || navigator.userAgent.indexOf('Safari')>-1)
-						html += "style='height:24px;' ";
-*/					html += "><div class='btn-text'>Menu <span class='caret'></span></div></button>";
+					html += "><div class='btn-text'>Menu <span class='caret'></span></div></button>";
 					//-----------------------
 					html += "<ul class='dropdown-menu pull-right'>";
 					for (var i=0; i<menus.length; i++){
@@ -1973,6 +1973,7 @@ UIFactory["Node"].displayRights = function(uuid)
 //==================================
 {
 	var html = "";
+	roles_by_role = {};
 	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
@@ -2106,7 +2107,6 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 {
 	var name = node.asmtype;
 	var html = "<div><br>";
-//	var html = "<hr>";
 	html += "<form id='metadata' class='form-horizontal'>";
 	if (name=='asmContext' && node.resource.type=='Proxy')
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'semantictag',$(node.metadata).attr('semantictag'),false,true);
@@ -2132,7 +2132,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += "<hr><h4>Metadata</h4>";
 	if (USER.admin)
 		html += UIFactory["Node"].displayRights(node.id);
-//	html += "<hr>";
+	html += "<hr>";
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seenoderoles',$(node.metadatawad).attr('seenoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'delnoderoles',$(node.metadatawad).attr('delnoderoles'));
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')	{
