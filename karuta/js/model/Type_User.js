@@ -102,7 +102,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang)
 		type = 'list';
 	var html = "";
 	if (type=='list') {
-		html = "<td>"+this.firstname_node.text() + "</td><td>" + this.lastname_node.text()+ "</td><td> (" + this.username_node.text() + ")</td>";
+		html = "<td style='padding-left:4px;padding-right:4px'>"+this.firstname_node.text() + "</td><td style='padding-left:4px;padding-right:4px'>" + this.lastname_node.text()+ "</td><td style='padding-left:4px;padding-right:4px'> (" + this.username_node.text() + ")</td>";
 		if (USER.admin){
 			html += "<td><div class='btn-group'>";
 			html += " <button class='btn btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";

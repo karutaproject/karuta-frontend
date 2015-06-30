@@ -170,7 +170,7 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 			html += "<td style='padding-left:5px'> ";
 			html += "</td>";
 		}
-		html += "<td>";
+		html += "<td style='padding-left:4px;padding-right:4px'>";
 		//------------ portfolio label --------
 		html += " <a href='main.htm?id="+this.id+"&edit=true&lang="+LANG+"'>"+this.label_node[langcode].text()+"</a> ";
 		//------------ edit button ---------------
@@ -194,11 +194,11 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 			html += "</button>";
 		}*/
 		html += "</td>";
-		html += "<td>"+this.code_node.text()+"</td>";
-		html += "<td>"+this.date_modified.substring(0,10)+"</td>";
+		html += "<td style='padding-left:4px;padding-right:4px'>"+this.code_node.text()+"</td>";
+		html += "<td style='padding-left:4px;padding-right:4px'>"+this.date_modified.substring(0,10)+"</td>";
 		var owner = (Users_byid[this.ownerid]==null) ? "??? "+this.ownerid:Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
-		html += "<td>"+owner+"</td>";
-		html += "<td style='padding-left:5px;padding-top:0px;'> ";
+		html += "<td style='padding-left:4px;padding-right:4px'>"+owner+"</td>";
+		html += "<td style='padding-left:7px;padding-top:0px;'> ";
 		html += "<div class='btn-group'>";
 		//------------ buttons ---------------
 		if (USER.admin || this.owner=='Y') {
@@ -228,22 +228,24 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 			html += "<td style='padding:7px'> ";
 			html += " <input style='margin-top:-2px' type='checkbox' name='delete-remove' value='"+this.id+"'/>";
 			html += "</td>";
-			html += "<td>";
+			html += "<td style='padding-left:4px;padding-right:4px'>";
 			html += " <a href='main.htm?id="+this.id+"&edit=true&lang="+LANG+"'>"+this.label_node[langcode].text()+"</a> ";
 			html += "</td>";
-			html += "<td>"+this.code_node.text()+"</td>";
-			html += "<td>"+this.date_modified.substring(0,10)+"</td>";
+			html += "<td style='padding-left:4px;padding-right:4px'>"+this.code_node.text()+"</td>";
+			html += "<td style='padding-left:4px;padding-right:4px'>"+this.date_modified.substring(0,10)+"</td>";
 			if (Users_byid[this.ownerid]!=undefined)
-				html += "<td>"+Users_byid[this.ownerid].getView(null,'firstname-lastname',null)+"</td>";
+				html += "<td style='padding-left:4px;padding-right:4px'>"+Users_byid[this.ownerid].getView(null,'firstname-lastname',null)+"</td>";
 			else
-				html += "<td>"+this.ownerid+"</td>";
-			html += "<td>";
-			html += " <button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].restore('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
+				html += "<td style='padding-left:4px;padding-right:4px'>"+this.ownerid+"</td>";
+			html += "<td style='padding-left:7px;padding-top:0px;'>";
+			html += "<div class='btn-group'>";
+			html += "<button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].restore('"+this.id+"')\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
 			html += "<span class='glyphicon glyphicon-arrow-up'></span>";
 			html += "</button>";
 //			html += " <button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].del('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
 //			html += "<i class='icon-remove'></i>";
 //			html += "</button>";
+			html += "</div>";
 			html += "</td>";
 		}
 	}	return html;
