@@ -442,11 +442,11 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	var contentfreenode = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	//-------------------- test if visible
-	if ((display=='N' && (g_userrole=='designer'  || USER.admin)) || (display=='Y' && (((seenoderoles.indexOf(g_userrole)>-1 || showtoroles.indexOf(g_userrole)>-1) && privatevalue) || !privatevalue || g_userrole=='designer'))) {
+	if ( (display=='N' && (g_userrole=='designer'  || USER.admin)) || (display=='Y' && ( seenoderoles.indexOf(g_userrole)>-1 || (showtoroles.indexOf(g_userrole)>-1 && !privatevalue) || !privatevalue || g_userrole=='designer')) ) {
 		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.indexOf(g_userrole)>-1) || (g_userrole=='designer'  || USER.admin)) {
 			var readnode = true; // if we got the node the node is readable
 			if (g_designerrole)
-				readnode = (g_userrole=='designer' || seenoderoles.indexOf(USER.username_node.text())>-1 || seenoderoles.indexOf(g_userrole)>-1 || seenoderoles.indexOf('all')>-1)? true : false;
+				readnode = (g_userrole=='designer' || seenoderoles.indexOf(USER.username_node.text())>-1 || seenoderoles.indexOf(g_userrole)>-1 || (showtoroles.indexOf(g_userrole)>-1 && !privatevalue) || seenoderoles.indexOf('all')>-1)? true : false;
 			if( depth < 0 || !readnode) return;
 			//----------------edit control on proxy target ------------
 			if (proxies_edit[uuid]!=undefined) {
@@ -1743,12 +1743,12 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- private button -------------------
 	if ((showroles==g_userrole || USER.admin || g_userrole=='designer') && showroles!='none' && showroles!='') {
 		if (privatevalue) {
-			html += "<button class='btn btn-xs'>";
-			html += "<span class='glyphicon glyphicon-eye-close' aria-hidden='true' onclick=\"javascript:show('"+node.id+"')\"></span>";
+			html += "<button class='btn btn-xs' onclick=\"javascript:show('"+node.id+"')\">";
+			html += "<span class='glyphicon glyphicon-eye-close'></span>";
 			html += "</button>";
 		} else {
-			html += "<button class='btn btn-xs'>";
-			html += "<span class='glyphicon glyphicon-eye-open' aria-hidden='true' onclick=\"javascript:hide('"+node.id+"')\"></span>";
+			html += "<button class='btn btn-xs' onclick=\"javascript:hide('"+node.id+"')\">";
+			html += "<span class='glyphicon glyphicon-eye-open'></span>";
 			html += "</button>";				
 		}
 	}
@@ -1847,9 +1847,9 @@ UIFactory['Node'].reloadStruct = function(uuid)
 		url : "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
-			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
+//			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
 			$("#sidebar").html("");
-			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.root);
+			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
 			var uuid = $("#page").attr('uuid');
 			if (g_display_type=='model')
 				displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);

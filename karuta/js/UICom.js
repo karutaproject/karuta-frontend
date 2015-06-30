@@ -90,8 +90,15 @@ var UICom =
 				UICom.treerootid[treerootname] = id;
 			}
 		} else {
-			if (UICom.structure["tree"][parentid]!=undefined)
-				UICom.structure["tree"][parentid].childs.push(id);
+			if (UICom.structure["tree"][parentid]!=undefined) {
+				var push = true;
+				for( var i=0; i<root.childs.length; ++i ){
+					if (root.childs[i]==id)
+						push = false;
+				}
+				if (push)
+					UICom.structure["tree"][parentid].childs.push(id);
+			}
 		}
 		//---------------------
 		UICom.structure["tree"][id] = r;

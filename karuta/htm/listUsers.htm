@@ -6,28 +6,21 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
 		<!-- =========================================== -->
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-responsive.min.css" />
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-wysihtml5.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
-		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
-		<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
 		<link rel="stylesheet" type="text/css" href="../../other/css/blue/style.css">
 		<!-- =========================================== -->
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
 		<link rel="stylesheet" href="../../application/css/specific.css" />
 		<!-- =========================================== -->
 		<script src="../../other/js/jquery-1.10.2.js"></script>
 		<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
-		<script src='../../other/wysihtml5/wysihtml5-0.3.0.js'> </script>
-		<script src='../../other/wysihtml5/parser.js'> </script>
 		<script src="../../other/js/jquery.tablesorter.min.js"></script>
 		<!--[if lt IE 9]>
 			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
 		<![endif]-->
-		<script src="../../other/js/bootstrap-wysihtml5.js"></script>
 		<script src="../../other/js/jquery_hotkeys.js"></script>
-		<!--script src="../../other/js/bootstrap-wysiwyg.js"></script-->
 		<script src="../../karuta/js/karuta.js"></script>
 		<script src="../../karuta/js/UICom.js"></script>
 		<!-- =============================================================== -->
@@ -54,7 +47,7 @@
 			//==============================
 			{
 				var html = "";
-				html += "<button class='btn btn-xs' onclick=\"javascript:UIFactory['User'].callCreate()\" ><div class='btn-text'>"+karutaStr[LANG]['create_user']+"</div></button>";
+				html += "<button class='btn' onclick=\"javascript:UIFactory['User'].callCreate()\" ><div class='btn-text'>"+karutaStr[LANG]['create_user']+"</div></button>";
 				return html;
 			}
 

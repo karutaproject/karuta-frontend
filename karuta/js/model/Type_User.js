@@ -104,15 +104,20 @@ UIFactory["User"].prototype.getView = function(dest,type,lang)
 	if (type=='list') {
 		html = "<td>"+this.firstname_node.text() + "</td><td>" + this.lastname_node.text()+ "</td><td> (" + this.username_node.text() + ")</td>";
 		if (USER.admin){
-			html += "<td>";
+			html += "<td><div class='btn-group'>";
+			html += " <button class='btn btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
+			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
+			html += "</button>";
 			if (this.username_node.text()!='root') {
-				html += "<a class='btn btn-xs pull-right' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-				html += "<i class='icon-remove'></i>";
-				html += "</a>";
+				html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<span class='glyphicon glyphicon-remove'></span>";
+				html += "</button>";
+			} else {
+				html += "<button class='btn btn-xs' disabled='true' data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<span class='glyphicon glyphicon-remove'></span>";
+				html += "</button>";
 			}
-			html += " <a class='btn btn-xs pull-right' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
-			html += "<i class='icon-edit'></i>";
-			html += "</a></td>";
+			html += "</div></td>";
 		}
 	}
 	if (type=='firstname-lastname') {
@@ -149,9 +154,9 @@ UIFactory["User"].getAttributeEditor = function(userid,attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "  <label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "  <div class='controls'><input";
+	html += "<div class='form-group'>";
+	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "  <div class='col-sm-9'><input class='form-control'";
 	html += " type='text'";
 	html += " onchange=\"javascript:UIFactory['User'].update('"+userid+"','"+attribute+"',this.value)\" value='"+value+"' ></div>";
 	html += "</div>";
@@ -163,9 +168,9 @@ UIFactory["User"].getAttributeCheckEditor = function(userid,attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "  <label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "  <div class='controls'><input";
+	html += "<div class='form-group'>";
+	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "  <div class='col-sm-9'><input";
 	html += " type='checkbox'";
 	if (value=='1')
 		html += " checked='true' ";
@@ -179,9 +184,9 @@ UIFactory["User"].getAttributeRadioEditor = function(userid,attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "	<label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "	<div class='controls'>";
+	html += "<div class='form-group'>";
+	html += "	<label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "	<div class='col-sm-9'>";
 	html += "		<input type='radio' name='"+attribute+"'";
 	if (value=='1')
 		html += " checked='true' ";
@@ -207,9 +212,9 @@ UIFactory["User"].prototype.getEditor = function(type,lang)
 	html += UIFactory["User"].getAttributeEditor(this.id,"email",this.email_node.text());
 	html +="<hr/>";
 	html += UIFactory["User"].getAttributeEditor(this.id,"username",this.username_node.text());
-	html += "<div class='control-group'>";
-	html += "  <label class='control-label'>"+karutaStr[LANG]['new_password']+"</label>";
-	html += "  <div class='controls'><input";
+	html += "<div class='form-group'>";
+	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG]['new_password']+"</label>";
+	html += "  <div class='col-sm-9'><input class='form-control'";
 	html += " type='password'";
 	html += " onchange=\"javascript:UIFactory['User'].changePassword('"+this.id+"',this.value)\" value='' ></div>";
 	html += "</div>";
