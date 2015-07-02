@@ -76,7 +76,8 @@ hr {
 .asmStructure,
 .asmUnit,
 .asmContext {
-	margin-top:5px;
+/*	margin-top:5px;*/
+	padding-top:5px;
 }
 .asmUnitStructure {
 	margin-top:10px;
@@ -1137,4 +1138,14 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .choice-group {
 	margin-top:20px;
 	margin-bottom:20px;
+}
+
+/* for submitted / not submitted alert */
+.alert {
+	padding: 1px 5px;
+	margin-bottom:0px;
+}
+	
+	
+	
 }

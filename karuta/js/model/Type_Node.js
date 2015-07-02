@@ -468,7 +468,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			var style = "";
 			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'padding-top',true);
 			if (style.length>0)
-				html += " style='"+style+"' ";
+				html += " style='"+style+"' ";   // WHY DOES THIS NOT WORK ???
 			//----------------------------------
 			html += ">";
 			//----------------------------
@@ -549,8 +549,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//----------------------------
 				if (name=='asmUnitStructure')
 					depth=100;	
-				html += "<div ";
-				style = "";
+//				html += "<div ";
+//				style = "";
 				if (depth>0) {
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-weight',false);
@@ -567,27 +567,31 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-othercss',false);
 				}
-				html +=" style='"+style+"'";
-				html += "><div class='row'>";
+//				html +=" style='"+style+"'";
+//				html += "><div class='row'>";
+				html += "<div class='row'>";
 	
 				//-------------- node -----------------------------
 				if (depth!=1 && depth<10 && name=='asmStructure') {
 					if (g_display_type=='standard')
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
+//						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
+						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
 					if (g_display_type=='header')
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
 					html += "<a href='#' onclick=\"displayPage('"+uuid+"',1,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>";
 					}
 				else if (depth!=1 && depth<10 && name=='asmUnit') {
 					if (g_display_type=='standard')
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
+//						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
+						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
 					if (g_display_type=='header')
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
 					html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
 					}
 				else {
 					if (g_display_type=='standard')
-						html += "<div id='std_node_"+uuid+"' class='col-md-9'>";
+//						html += "<div id='std_node_"+uuid+"' class='col-md-9'>";
+						html += "<div id='std_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
 						if (g_userrole!='designer' && semtag=='header')
@@ -1739,9 +1743,13 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></button>";
 		} else {
 			if (submitted=='Y')
-				html += "<div class='btn-text'>"+karutaStr[languages[langcode]]['submitted']+"</div>";
+	//		html += "<div class='btn-text'>"+karutaStr[languages[langcode]]['submitted']+"</div>";
+				html += "<div class='alert alert-success'><strong>"+karutaStr[languages[langcode]]['submitted']+"</strong></div>";
+	//			html += "<button class='btn btn-xs menu-xs disabled'><div class='btn-text'>"+karutaStr[languages[langcode]]['submitted']+"</div></button>";
 			else
-				html += "<div class='btn-text'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
+	//			html += "<div class='btn-text'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
+				html += "<div class='alert alert-danger'><strong>"+karutaStr[languages[langcode]]['notsubmitted']+"</strong></div>";			
+	//			html += "<button class='btn btn-xs menu-xs disabled'><div class='btn-text'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div></button>";			
 		}
 	}
 	//------------- private button -------------------
@@ -1816,7 +1824,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 				}
 			}
 		} catch(e){
-			alert('Menu Error : check the format: '+e);
+			alert('Menu Error: check the format: '+e);
 		}
 	}
 	//------------- share node button ---------------

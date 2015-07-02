@@ -493,7 +493,7 @@ UIFactory["User"].getPasswordCreator = function()
 //==================================================
 {
 	var html = "";
-	html += UIFactory["User"].getAttributeCreator("password","",true);
+	html += UIFactory["User"].getAttributeCreator("password-new","",true);
 	html += UIFactory["User"].getAttributeCreator("confirm-password","",true);
 	return html;
 };
