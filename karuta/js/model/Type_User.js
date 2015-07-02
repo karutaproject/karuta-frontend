@@ -232,9 +232,9 @@ UIFactory["User"].getAttributeCreator = function(attribute,value,pwd)
 //==================================================
 {
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "<label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "<div class='controls'><input id='user_"+attribute+"'";
+	html += "<div class='form-group'>";
+	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "  <div class='col-sm-9'><input class='form-control' id='user_"+attribute+"'";
 	if (pwd!=null && pwd)
 		html += " type='password'";
 	else
@@ -249,9 +249,9 @@ UIFactory["User"].getAttributeRadioCreator = function(attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "	<label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "	<div class='controls'>";
+	html += "<div class='form-group'>";
+	html += "	<label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "	<div class='col-sm-9'>";
 	html += "		<input type='radio' name='user_"+attribute+"'";
 	if (value=='1')
 		html += " checked='true' ";

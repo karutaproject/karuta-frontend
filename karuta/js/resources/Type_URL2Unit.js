@@ -169,7 +169,7 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 	$(input_local_label).change(function (ev){
 		UIFactory["URL2Unit"].update(input_local_label,self,langcode);
 	});
-	
+	$("#"+destid).append($(btn_group));
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
@@ -183,6 +183,23 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 		$("#"+destid).append($(btn_group));
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
+		//----------------- null value to erase
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a href='#' value='' code='' ";
+		for (var j=0; j<languages.length;j++) {
+			html += "label_"+languages[j]+"='&nbsp;' ";
+		}
+		html += ">";
+		html += "&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+			UIFactory["URL2Unit"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//--------------------
 		var nodes = $("node",data);
 		for ( var i = 0; i < $(nodes).length; i++) {
 			var resource = null;
@@ -223,15 +240,14 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 				});
 				$(select_item).append($(select_item_a))
 				//-------------- update button -----
-				if (code!="" && self_code==code) {
+				if (self_uuid!="" && self_uuid==$(nodes[i]).attr('id')) {
 					$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
-					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+$(this).attr("code"));
 				}
 			}
 			$(select).append($(select_item));
 		}
 		$(btn_group).append($(select));
-		
 	}
 
 };

@@ -286,7 +286,6 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		}
 		//--------------------------------------------------------------
 		{
-//			var html = "<div class='btn-group'>";
 			var html = "<div class='btn-group choice-group'>";
 			html += "<button type='button' class='btn btn-default select select-label' id='button2_"+self.id+"'>&nbsp;</button>";
 			html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
@@ -306,9 +305,13 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			html += "&nbsp;</a>";
 			var select_item_a = $(html);
 			$(select_item_a).click(function (ev){
-				$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
-				$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
-				UIFactory["Get_Resource"].update(this,self,langcode);
+				$("#button2_"+self.id).html($(this).attr("label_"+languages[langcode]));
+				for (var i=0; i<languages.length;i++){
+					$(self.label2_node[i]).text($(this).attr("label_"+languages[i]));
+				}
+				$(self.code2_node).text($(this).attr("code"));
+				$(self.value2_node).text($(this).attr("value"));
+				UIFactory["Get_Double_Resource"].update(self,langcode);
 			});
 			$(select_item).append($(select_item_a))
 			$(select).append($(select_item));
@@ -365,9 +368,33 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 	if (type.indexOf('radio')>-1) {
 		{
 			var nodes = $("node",data1);
-			var radio_gr = $("<div class='choice-group'></div>");			
+			var radio_gr1 = $("<div class='choice-group'></div>");			
+			//-------------------
+			var radio_obj1 = $("<div class='get-radio'></div>");
+			var input = "";
+			input += "<input type='radio' name='radio1_"+self.id+"' value='' code='' ";
+			if (disabled)
+				input +="disabled='disabled' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"='' ";
+			}
+			if (self_code1=='')
+				input += " checked ";
+			input += ">&nbsp;&nbsp;</input>";
+			var obj = $(input);
+			$(obj).click(function (){
+				for (var i=0; i<languages.length;i++){
+					$(self.label1_node[i]).text($(this).attr("label_"+languages[i]));
+				}
+				$(self.code1_node).text($(this).attr("code"));
+				$(self.value1_node).text($(this).attr("value"));
+				UIFactory["Get_Double_Resource"].update(self,langcode);
+			});
+			$(radio_obj1).append(obj);
+			$(radio_gr1).append(radio_obj1);
+			//-------------------			
 			for ( var i = 0; i < $(nodes).length; i++) {
-				var radio_obj = $("<div class='get-radio'></div>");
+				var radio_obj1 = $("<div class='get-radio'></div>");
 				var input = "";
 				var resource = null;
 				if ($("asmResource",nodes[i]).length==3)
@@ -394,10 +421,10 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 					$(self.value1_node).text($(this).attr("value"));
 					UIFactory["Get_Double_Resource"].update(self,langcode);
 				});
-				$(radio_obj).append(obj);
-				$(radio_gr).append(radio_obj);
+				$(radio_obj1).append(obj);
+				$(radio_gr1).append(radio_obj1);
 			}
-			$(formobj).append(radio_gr);
+			$(formobj).append(radio_gr1);
 		}
 		//--------------------------------------------------------------
 		{
@@ -419,7 +446,31 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		//--------------------------------------------------------------
 		{
 			var nodes = $("node",data2);
-			var radio_gr = $("<div class='choice-group'></div>");			
+			var radio_gr2 = $("<div class='choice-group'></div>");			
+			//-------------------
+			var radio_obj2 = $("<div class='get-radio'></div>");
+			var input = "";
+			input += "<input type='radio' name='radio2_"+self.id+"' value='' code='' ";
+			if (disabled)
+				input +="disabled='disabled' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"='' ";
+			}
+			if (self_code2=='')
+				input += " checked ";
+			input += ">&nbsp;&nbsp;</input>";
+			var obj = $(input);
+			$(obj).click(function (){
+				for (var i=0; i<languages.length;i++){
+					$(self.label2_node[i]).text($(this).attr("label_"+languages[i]));
+				}
+				$(self.code2_node).text($(this).attr("code"));
+				$(self.value2_node).text($(this).attr("value"));
+				UIFactory["Get_Double_Resource"].update(self,langcode);
+			});
+			$(radio_obj2).append(obj);
+			$(radio_gr2).append(radio_obj2);
+			//-------------------			
 			for ( var i = 0; i < $(nodes).length; i++) {
 				var radio_obj = $("<div class='get-radio'></div>");
 				var input = "";
@@ -449,9 +500,9 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 					UIFactory["Get_Double_Resource"].update(self,langcode);
 				});
 				$(radio_obj).append(obj);
-				$(radio_gr).append(radio_obj);
+				$(radio_gr2).append(radio_obj);
 			}
-			$(formobj).append(radio_gr);
+			$(formobj).append(radio_gr2);
 		}
 	}
 	//======================================================================================
@@ -459,8 +510,31 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		{
 			var inputs = "<div class='click choice-group'></div>";
 			var inputs_obj1 = $(inputs);
+			//----------------------------
+			var input = "";
+			input += "<div name='click_"+self.id+"' value='' code='' class='click-item";
+			if (self_code1=='')
+				input += " clicked";
+			input += "' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"='&nbsp;' ";
+			}
+			input += "> ";
+			input +="&nbsp; </div>";
+			var input_obj = $(input);
+			$(input_obj).click(function (){
+				$('.clicked',inputs_obj1).removeClass('clicked');
+				$(this).addClass('clicked');
+				for (var i=0; i<languages.length;i++){
+					$(self.label1_node[i]).text($(this).attr("label_"+languages[i]));
+				}
+				$(self.code1_node).text($(this).attr("code"));
+				$(self.value1_node).text($(this).attr("value"));
+				UIFactory["Get_Double_Resource"].update(self,langcode);
+			});
+			$(inputs_obj1).append(input_obj);
+			//----------------------------
 			var nodes = $("node",data1);
-			var first = true;
 			for ( var i = 0; i < $(nodes).length; ++i) {
 				var input = "";
 				var resource = null;
@@ -492,8 +566,8 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 					UIFactory["Get_Double_Resource"].update(self,langcode);
 				});
 				$(inputs_obj1).append(input_obj);
-				$(formobj).append(inputs_obj1);
 			}
+			$(formobj).append(inputs_obj1);
 		}
 		//--------------------------------------------------------------
 		{
@@ -516,8 +590,31 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		{
 			var inputs = "<div class='click'></div>";
 			var inputs_obj2 = $(inputs);
+			//----------------------------
+			var input = "";
+			input += "<div name='click_"+self.id+"' value='' code='' class='click-item";
+			if (self_code2=='')
+				input += " clicked";
+			input += "' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"='&nbsp;' ";
+			}
+			input += "> ";
+			input +="&nbsp; </div>";
+			var input_obj = $(input);
+			$(input_obj).click(function (){
+				$('.clicked',inputs_obj2).removeClass('clicked');
+				$(this).addClass('clicked');
+				for (var i=0; i<languages.length;i++){
+					$(self.label2_node[i]).text($(this).attr("label_"+languages[i]));
+				}
+				$(self.code2_node).text($(this).attr("code"));
+				$(self.value2_node).text($(this).attr("value"));
+				UIFactory["Get_Double_Resource"].update(self,langcode);
+			});
+			$(inputs_obj2).append(input_obj);
+			//----------------------------
 			var nodes = $("node",data2);
-			var first = true;
 			for ( var i = 0; i < $(nodes).length; ++i) {
 				var input = "";
 				var resource = null;

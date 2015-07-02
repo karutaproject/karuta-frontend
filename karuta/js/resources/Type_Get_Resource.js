@@ -289,6 +289,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		for (var j=0; j<languages.length;j++){
 			input += "label_"+languages[j]+"='&nbsp;'";
 		}
+		if (self_code=='')
+			input += " checked ";
 		input += ">&nbsp;&nbsp;";
 		input += "</input>";
 		var obj = $(input);
@@ -339,7 +341,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		var inputs_obj = $(inputs);
 		//----------------- null value to erase
 		var input = "";
-		input += "<div name='click_"+self.id+"' value='' code='' class='click-item' ";
+		input += "<div name='click_"+self.id+"' value='' code='' class='click-item";
+		if (self_code==code)
+			input += " clicked";
+		input += "' ";
 		for (var j=0; j<languages.length;j++){
 			input += "label_"+languages[j]+"='&nbsp;' ";
 		}
