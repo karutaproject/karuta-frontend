@@ -72,17 +72,15 @@ hr {
 .accordion-inner .accordion-inner .title {
 	margin-left:14px;
 }
-
+/*
 .asmStructure,
-.asmUnit,
-.asmContext {
-/*	margin-top:5px;*/
-	padding-top:5px;
+.asmUnit {
+	margin-top:5px;
 }
 .asmUnitStructure {
 	margin-top:10px;
 }
-
+*/
 .title {
 	padding:2px;
 }
