@@ -118,7 +118,7 @@ UIFactory["Item"].prototype.getEditor = function(type,langcode)
 		var htmlCodeGroupObj = $("<div class='form-group'></div>")
 		var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Item - Code</label>");
 		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
-		var htmlCodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' name='code_Item' value=\""+this.code_node.text()+"\">");
+		var htmlCodeInputObj = $("<input id='item_code_"+this.id+"' type='text' class='form-control' name='code_Item' value=\""+this.code_node.text()+"\">");
 		$(htmlCodeInputObj).change(function (){
 			UIFactory["Item"].update(htmlFormObj,self,langcode);
 		});
@@ -129,7 +129,7 @@ UIFactory["Item"].prototype.getEditor = function(type,langcode)
 		var htmlLabelGroupObj = $("<div class='form-group'></div>")
 		var htmlLabelLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Item - "+karutaStr[LANG]['label']+"</label>");
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
-		var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' name='label_Item' value=\""+this.label_node[langcode].text()+"\">");
+		var htmlLabelInputObj = $("<input id='item_label_"+this.id+"_"+langcode+"' type='text' class='form-control' name='label_Item' value=\""+this.label_node[langcode].text()+"\">");
 		$(htmlLabelInputObj).change(function (){
 			UIFactory["Item"].update(htmlFormObj,self,langcode);
 		});

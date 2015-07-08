@@ -73,17 +73,10 @@ hr {
 	margin-left:14px;
 }
 /*
-.asmStructure,
-.asmUnit {
-	margin-top:5px;
-}
-.asmUnitStructure {
-	margin-top:10px;
-}
-*/
 .title {
 	padding:2px;
-}
+}*/
+
 .asmRoot .title {
 	font-size: 24px;
 	font-weight: bold;
@@ -158,10 +151,6 @@ hr {
 	padding-bottom:2px;
 }
 
-.col-md-2 {
-	padding-top:2px;
-}
-
 .text-editor {
 	background-color: white;
 	border: 1px solid rgb(204, 204, 204); 
@@ -182,7 +171,6 @@ hr {
 
 tr.item {
 	padding-left:10px;
-	/*height:23px;*/
 }
 
 .item td {
@@ -344,8 +332,6 @@ hr {
 	margin-bottom: 66px;
 }
 
-
-
 #content .icon-move {
 	cursor: move;
 }
@@ -389,7 +375,6 @@ hr {
 	margin-left:20px;
 }
 
-
 a:hover {
 	color:#01A9DB;
 }
@@ -402,14 +387,11 @@ a, a:hover, a:active, a:focus {
 /*        LOGIN          */
 /* ====================== */
 
-
-
 .login {
 	margin-top:200px;
 	text-align:center;
 	width:100%;
 }
-
 
 .login span {
 	text-align:right;
@@ -513,16 +495,12 @@ a.active:over{
 	margin-top:15px;
 }
 */
+
 .pageCode {
 	font-size:12px;
 	font-weight:normal;
 	margin-left:20px;
 }
-
-
-
-
-
 
 .asmRoot .node,
 .asmUnit .node,
@@ -676,6 +654,7 @@ button.select-label {
 .comments {
 	font-style:italic;
 	font-size:11px;
+	font-weight:normal;
 }
 
 .evo-palette {
@@ -744,6 +723,8 @@ table.tablesorter th.restore {
 	padding-top: 5px;
 }
 */
+
+
 /* ====================
 	Badges
    ====================*/
@@ -994,12 +975,11 @@ table.tablesorter th.restore {
 }
 	
 /* ====================
-	Document/Image\URL
+	Document/Image/URL
    ====================*/
 .free-context {
 	height:100%;
 }
-
 
 .resource-Document,
 .resource-URL {
@@ -1028,7 +1008,6 @@ table.tablesorter th.restore {
 .resource-URL a{
 	color : inherit;
 }
-
 
 .resource-Image {
 	display:inline-block;

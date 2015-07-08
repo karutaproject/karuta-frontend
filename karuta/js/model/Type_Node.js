@@ -164,7 +164,10 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userrole=='designer' || USER.admin)) {
 			html += this.code_node.text()+" ";
 		}
-		html += this.label_node[langcode].text()+"<span id='help_"+this.id+"' class='ihelp'></span>";
+		var label = this.label_node[langcode].text();
+		if (label == "")
+			label="&nbsp;";
+		html += label+"<span id='help_"+this.id+"' class='ihelp'></span>";
 		if (type=="default")
 			html += "</div>";
 		if (type=="span")
@@ -546,14 +549,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//--------------------------------------------------
 				html += "</div><!-- col-md-9 -->";
 				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='col-md-3'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
+				html += "<div id='buttons-"+uuid+"' class='col-md-3' style='padding-top:5px;'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
 				html += "</div><!-- col-md-3 buttons -->";
-				//-------------- context -------------------------
-//				html += "<div class='row'><div class='col-md-2'></div><div class='col-md-7'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
-				//-------------- metainfo -------------------------
-//				if (g_edit && (g_userrole=='designer' || USER.admin)) {
-//					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
-//				}
 				html += "</div><!-- outer row -->";
 				//--------------------------------------------------
 			}
@@ -620,16 +617,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				html += "</div><!-- col-md-9 -->";
 				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='col-md-3'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
+				html += "<div id='buttons-"+uuid+"' class='col-md-3' style='padding-top:5px;'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
 				//--------------------------------------------------
 				html += "</div><!-- row -->";
-				//-------------- context -------------------------
-//				html += "<div class='row'><div class='col-md-2'></div><div class='col-md-7'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
-				//-------------- metainfo -------------------------
-//				if (g_edit && (g_userrole=='designer' || USER.admin)) {
-//					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
-//				}
-//				html += "</div>";
 				//--------------------------------------------------*/
 				if (root.children.length>0 && depth>0) {
 					html += "<div id='content-"+uuid+"' ";
@@ -2049,7 +2039,7 @@ UIFactory["Node"].displayMetadataEpm = function(data,attribute,number)
 		else
 			html += attribute + ":" + value;
 		if (attribute.indexOf("font-size")>-1 && number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
-			html += 'pt';			
+			html += 'px';			
 		else if (number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
 			html += 'px';
 		html += ';';
