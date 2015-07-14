@@ -76,7 +76,7 @@ function getNavBar(type,portfolioid,edit)
 	var html = "";
 	html += "<nav class='navbar navbar-default'>";
 	html += "<div class='navbar-inner'>";
-	html += "	<div class='container-fluid'>";
+	html += "	<div class='container'>";
 	html += "	  <div class='nav-bar-header'>";
 	html += "		<button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#collapse-1'>";
 	html += "			<span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span>";

@@ -480,14 +480,14 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//-------------- node -----------------------------
 				html += "<div class='col-md-9' style='padding-top:5px;" + backgroundParent + "'>";
 				html += "<div class='row'>";
-				html += "<div id='std_node_"+uuid+"' class='col-md-2' ";
+				html += "<div id='std_node_"+uuid+"' class='col-md-3' ";
 				style = "style='";
 				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
 				style +="'";
 				html += style;
 				html += ">";
 				html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
-				html += "</div><!-- col-md-2 label of resource -->";
+				html += "</div><!-- col-md-3 label of resource -->";
 				//-------------- resource -------------------------
 				if (g_designerrole) {
 					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
@@ -502,7 +502,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						writenode = (g_userrole=='designer')? true : false;
 				}
 				if (edit && inline && writenode && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL'){
-					html += "<div id='std_resource_"+uuid+"' class='col-md-7'>";
+					html += "<div id='std_resource_"+uuid+"' class='col-md-9'>";
 					//-----------------------
 					if(UICom.structure["ui"][uuid].resource!=null) {
 						try {
@@ -516,10 +516,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						html = UICom.structure["ui"][uuid].getEditor();
 						$("#edit-window-body-node").html($(html));
 					}
-					html += "</div><!-- col-md-7 resource -->";
+					html += "</div><!-- col-md-9 resource -->";
 				} else {
 						if (g_display_type=='standard') {
-							html += "<div id='std_resource_"+uuid+"' class='col-md-7' ";
+							html += "<div id='std_resource_"+uuid+"' class='col-md-9' ";
 							style = "style='";
 							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
 							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
@@ -533,14 +533,14 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 							html += ">";
 						}
 						if (g_display_type=='header')
-							html += "<div id='std_resource_"+uuid+"' class='col-md-7'>";
+							html += "<div id='std_resource_"+uuid+"' class='col-md-9'>";
 						if (node.resource.type!='Dashboard' || g_userrole=='designer')
 							html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
-						html += "</div><!-- col-md-7 resource -->";
+						html += "</div><!-- col-md-9 resource -->";
 				}
 				html += "</div><!-- inner row -->";
 				//-------------- context -------------------------
-				html += "<div class='row'><div class='col-md-2'></div><div class='col-md-7'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
+				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
 
 				//-------------- metainfo -------------------------
 				if (g_edit && (g_userrole=='designer' || USER.admin)) {
@@ -610,7 +610,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
 				}				
 				//-------------- context -------------------------
-				html += "<div class='row'><div class='col-md-2'></div><div class='col-md-7'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
+				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
 				//-------------- metainfo -------------------------
 				if (g_edit && (g_userrole=='designer' || USER.admin)) {
 					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
