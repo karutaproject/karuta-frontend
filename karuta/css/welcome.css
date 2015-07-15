@@ -1,4 +1,29 @@
+/* -- boutons du navbar --*/
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .open > a, 
+.navbar-default .navbar-nav > .open > a:focus, 
+.navbar-default .navbar-nav > .open > a:hover {
+	background-color: #ECECEC;
+	border-color: #E7E7E7;
+}
 
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .open > a {
+	border-color: #E7E7E7;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.125) inset;
+}
+
+#form-send {
+	background-color: #E7E7E7;
+	border-color: #D0D0D0;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.125) inset;
+	
+}
+
+#form-send:hover {
+	background-color: #ECECEC;	
+}
+/* ----------------------- */
 
 .form-signin {
 	border-top-left-radius: 5px;

@@ -1,11 +1,22 @@
 
-/* --- Problem with button ---*/
-
-/*
-tr.item td{
-	height:24px;
+/* -- boutons du navbar --*/
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .open > a, 
+.navbar-default .navbar-nav > .open > a:focus, 
+.navbar-default .navbar-nav > .open > a:hover {
+	background-color: #ECECEC;
+	border-color: #E7E7E7;
 }
-*/
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .open > a {
+	border-color: #E7E7E7;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.125) inset;
+}
+
+.navbar-default{
+	font-size: 14px;
+}	
 
 /* --- buton are redefined to use with Ipas and solve size errors */
 .btn-xs [class*="icon-"] {
@@ -17,11 +28,9 @@ tr.item td{
 	margin-bottom:0px;
 }
 
-
 a.btn {
 	font-weight:normal;
 }
-
 
 .btn {
 	background-color:#FAFAFA;
@@ -29,14 +38,6 @@ a.btn {
 	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
     background-repeat: repeat-x;
 }
-
-/*
-a.dropdown-toggle {
-	background-color:#FAFAFA;
-	border: none;
-	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
-    background-repeat: repeat-x;
-}*/
 
 .btn-danger {
 	background-color:#d9534f;
@@ -1090,10 +1091,12 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 }
 
 #start {
-	border-radius:4px;
-	padding:10px;
-	border: 1px solid lightGrey;
-	box-shadow: 3px 3px 3px #CCC;
+	background-image: linear-gradient(#fff, #eee);
+    border: 1px solid lightGrey;
+    border-radius: 4px;
+    box-shadow: 3px 3px 3px #ccc;
+    margin-right: 10px;
+    padding: 10px;
 }
 
 /* ====================
