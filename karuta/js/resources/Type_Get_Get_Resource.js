@@ -207,7 +207,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (query.indexOf('#')==0)
 				code_parent = semtag_parent;
 			else
-				code_parent = $("value",$("asmContext:has(metadata[semantictag='"+semtag_parent+"'])",parent)[0]).text();
+				code_parent = $("code",$("asmContext:has(metadata[semantictag='"+semtag_parent+"'])",parent)[0]).text();
 			//----------------------
 			if ($("asmContext:has(metadata[semantictag='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
 				code_parent = decrypt(code_parent.substring(3),g_rc4key);
