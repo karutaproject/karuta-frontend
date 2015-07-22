@@ -308,7 +308,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 				html = "<a href='#'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
 				$(select_item).html(html);
 			} else {
-				html = "<a href='#' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
+				html = "<a href='#' code='"+code+"' value='"+$(nodes[i]).attr('id')+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
