@@ -15,7 +15,7 @@
 		//===================== asmStructure =======================
 		<asmStructure xsi_type="asmStructure">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm font-size="24" font-weight="bold" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="asmStructure" sharedNode="N" sharedNodeResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -40,7 +40,7 @@
 		//===================== asmUnitStructure =======================
 		<asmUnitStructure xsi_type="asmUnitStructure">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm font-size="20" font-weight="bold" padding-top="5" /> 
+			<metadata-epm padding-top="5" /> 
 			<metadata multilingual-node="Y" semantictag ="asmUnitStructure" sharedNode="N" sharedNodeResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
