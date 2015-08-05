@@ -1,4 +1,11 @@
 
+/* -- information icon -- */
+.glyphicon {
+	color:#333;
+	font-size:12px;
+	vertical-align: text-top;
+}
+
 /* -- boutons du navbar --*/
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .open > a, 

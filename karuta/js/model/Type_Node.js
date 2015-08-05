@@ -587,7 +587,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='padding-top:10px;"+style+"'>";
 					if (g_display_type=='header')
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
-					html += "<a href='#' onclick=\"displayPage('"+uuid+"',1,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>";
+						html += "<a href='#' onclick=\"displayPage('"+uuid+"',1,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>";
 					}
 				else if (depth!=1 && depth<10 && name=='asmUnit') {
 					if (g_display_type=='standard')
@@ -595,7 +595,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='padding-top:6px;"+style+"'>";
 					if (g_display_type=='header')
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
-					html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
+						html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
 					}
 				else {
 					if (g_display_type=='standard')
@@ -604,7 +604,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
 						if (g_userrole!='designer' && semtag=='header')
-							html += " style='display:none'";
+						html += " style='display:none'";
 						html += ">";
 					}
 					html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
@@ -650,20 +650,23 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
-				var attr_help = $($("metadata-wad",data)[0]).attr('help');
-				var helps = attr_help.split("/"); // lang1/lang2/...
-				var help_text = helps[langcode];  
-				var help =  " <a href='javascript://'  data-toggle='popover' class='popinfo'><i class='icon-info-sign'></i></a> ";
-				$("#help_"+uuid).html(help);
-				$(".popinfo").popover({ 
-				    placement : 'right',
-				    container : 'body',
-				    title:karutaStr[LANG]['help-label'],
-				    html : true,
-				    content: help_text
-				    })
-				    .click(function(e) {
-				});
+				if (depth>0) {
+					var attr_help = $($("metadata-wad",data)[0]).attr('help');
+					var helps = attr_help.split("/"); // lang1/lang2/...
+					var help_text = helps[langcode];  
+//					var help =  " <a href='javascript://'  data-toggle='popover' class='popinfo'><i class='icon-info-sign'></i></a> "; //Bootstrap 2
+					var help = " <a href='javascript://' data-trigger='hover' data-toggle='popover' class='popinfo'><span class='glyphicon glyphicon-info-sign'></span></a> ";
+					$("#help_"+uuid).html(help);
+					$(".popinfo").popover({ 
+					    placement : 'right',
+					    container : 'body',
+					    title:karutaStr[LANG]['help-label'],
+					    html : true,
+					    content: help_text
+					    })
+					    .click(function(e) {
+					});
+				}
 			}
 			//---------- video ------------------
 			if (UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
