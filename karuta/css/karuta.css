@@ -974,12 +974,13 @@ table.tablesorter th.restore {
 }
 
 .header-container {
-	padding-top:250px;
+	padding-top:200px;
 
 }
 
 .header-menu {
-	border-top:1px solid lightgrey;
+/*	border-top:1px solid lightgrey; */
+	margin-top:10px;
 }
 	
 /* ====================

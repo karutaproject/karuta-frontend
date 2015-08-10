@@ -217,7 +217,7 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 //			html += "</ul></div>";
 //			html += "</td>";
 			html += "</ul>";
-		} else { // pour que toutes les lignes aient la même hauteur
+		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
 			html += "<button href='#' data-toggle='dropdown' class='btn  btn-xs dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 		}
 		html += "</div>";
@@ -338,7 +338,8 @@ UIFactory["Portfolio"].displayMenu = function(destid,type,langcode,edit,tree)
 		html += "<ul class='nav nav-tabs header-menu' style='float:none'>";
 		for (var i=0; i<nodes.length; i++){
 			uuid = $(nodes[i]).attr('id');
-			html += "<li><a  id='sidebar_"+uuid+"' class='sidebar' href='#' onclick=\"displayPage('"+uuid+"',99,'standard','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][uuid].getLabel()+"</a></li>";
+//			html += "<li><a  id='sidebar_"+uuid+"' class='sidebar' href='#' onclick=\"displayPage('"+uuid+"',99,'standard','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][uuid].getLabel()+"</a></li>"; // Bootstrap 2
+			html += "<li><a  id='sidebar_"+uuid+"' class='sidebar' href='#' data-toggle='tab' onclick=\"displayPage('"+uuid+"',99,'standard','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][uuid].getLabel()+"</a></li>";
 		}
 		html += "</ul>";
 		$("#"+destid).html(html);
