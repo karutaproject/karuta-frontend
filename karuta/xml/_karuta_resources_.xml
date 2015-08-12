@@ -4,7 +4,7 @@
 	<metadata-wad owner="N" prog="main.jsp" />
 	<asmRoot xsi_type="asmRoot">
 		<metadata-wad seenoderoles="all" />
-		<metadata-epm font-size="24" font-weight="bold" />
+		<metadata-epm />
 		<metadata sharedNode="N" sharedNodeResource="N" />
 		<asmResource xsi_type="nodeRes">
 			<code>_karuta_resources_</code>
@@ -27,7 +27,7 @@
 		//===================== asmUnit =======================
 		<asmUnit xsi_type="asmUnit">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm font-size="24" font-weight="bold" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="asmUnit" sharedNode="N"
 				sharedNodeResource="N" />
 			<asmResource xsi_type="nodeRes">
@@ -40,7 +40,7 @@
 		//===================== asmUnitStructure =======================
 		<asmUnitStructure xsi_type="asmUnitStructure">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm padding-top="5" /> 
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="asmUnitStructure" sharedNode="N" sharedNodeResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -52,7 +52,7 @@
 		//===================== TextField =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="TextField" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -68,7 +68,7 @@
 		//===================== Field =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Field" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -84,7 +84,7 @@
 		//===================== Color =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -100,7 +100,7 @@
 		//===================== Document =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Document" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -122,7 +122,7 @@
 		//===================== Video =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Video" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -144,7 +144,7 @@
 		//===================== URL =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="URL" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -162,7 +162,7 @@
 		//===================== Oembed =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Oembed" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -178,7 +178,7 @@
 		//===================== Calendar =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Calendar" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -193,7 +193,7 @@
 		//===================== Image =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" width="100" />
+			<metadata-epm width="100"/>
 			<metadata multilingual-node="Y" semantictag ="Image" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -215,7 +215,7 @@
 		//===================== Audio =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" width="100" />
+			<metadata-epm width="100"/>
 			<metadata multilingual-node="Y" semantictag ="Audio" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -237,7 +237,7 @@
 		//===================== Comments =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Comments" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -255,7 +255,7 @@
 		//===================== Get_Resource =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Get_Resource" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -273,7 +273,7 @@
 		//===================== Get_Get_Resource =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Get_Get_Resource" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -292,7 +292,7 @@
 		//===================== Get_Double_Resource =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Get_Double_Resource" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -314,7 +314,7 @@
 		//===================== Proxy =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Proxy" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -350,7 +350,7 @@
 		//===================== Item =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="Item" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -367,7 +367,7 @@
 		//===================== SendEmail =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-color="#333333" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="SendEmail" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
@@ -387,7 +387,7 @@
 		//===================== URL2Unit =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm color="#333333" font-size="12" node-font-size="12" />
+			<metadata-epm />
 			<metadata multilingual-node="Y" semantictag ="URL2Unit" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />

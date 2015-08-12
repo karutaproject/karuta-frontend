@@ -671,7 +671,7 @@ function shareTree(node)
 	var user = "";
 	var treeref = $(node).attr("select");
 	var select_node = $("role>txtval",node).attr("select");
-	if (typeof(selectnode)== 'undefined')
+	if (typeof(select_node)== 'undefined')
 		role = $("role>txtval",node).text();
 	else
 		role = eval("g_json.lines["+g_noline+"]."+select_node);
