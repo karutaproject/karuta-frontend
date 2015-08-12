@@ -295,11 +295,12 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 			html += "<button class='btn btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+UICom.rootid+"')\"><div class='btn-text'>Root</div></button>";
 			html += "</div>";
 		}
-		html += "<div id='main-header' class=' container navbar navbar-fixed-top' style = 'padding-top:50px'>";
+		html += "<div id='navigation_bar'></div>";
+		html += "<div id='main-header' class='container navbar navbar-fixed-top' style='margin-top:55px;'>";
 		html += "   <div id='header'></div>";
 		html += "   <div id='menu'></div>";
 		html += "</div>";
-		html += "<div id='navigation_bar'></div>";
+//		html += "<div id='navigation_bar'></div>";
 		html += "<div id='contenu' class='container header-container'></div>";
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));

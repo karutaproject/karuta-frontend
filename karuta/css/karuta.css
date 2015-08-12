@@ -970,19 +970,23 @@ table.tablesorter th.restore {
 
 #header {
 	height:150px;
-    overflow: auto;
+/*    overflow: auto;*/
 }
 
 .header-container {
-	padding-top:200px;
+	margin-top:225px;
 
 }
 
 .header-menu {
-/*	border-top:1px solid lightgrey; */
-	margin-top:10px;
+/*	border-top:1px solid lightgrey;  */
+/*	margin-top:10px; */
 }
-	
+
+.dropdown-menu {
+  	z-index: 10000;	
+}
+
 /* ====================
 	Document/Image/URL
    ====================*/

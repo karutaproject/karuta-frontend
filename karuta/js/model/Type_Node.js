@@ -600,7 +600,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				else {
 					if (g_display_type=='standard')
 //						html += "<div id='std_node_"+uuid+"' class='col-md-9'>";
-						html += "<div id='std_node_"+uuid+"' class='col-md-9' style='padding-top:6px;"+style+"'>";
+						html += "<div id='std_node_"+uuid+"' class='col-md-9' style='padding-top:6px;'>";
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
 						if (g_userrole!='designer' && semtag=='header')
