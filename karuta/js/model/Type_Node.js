@@ -604,7 +604,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
 						if (g_userrole!='designer' && semtag=='header')
-						html += " style='display:none'";
+						html += " style='visibility:hidden'";
 						html += ">";
 					}
 					html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
@@ -806,13 +806,20 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			//------------------- Toolbar and Buttons --------------------------
 			if (edit && (!inline || g_userrole=='designer')) {
 				html += "<div class='free-toolbar'>";
-				html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu-"+uuid+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
-				html += "<div id='toolbar-"+uuid+"' class='free-toolbar-buttons'>";
-				html += "	<div id='buttons-"+uuid+"'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
-				html += "</div>";
+				var freeButtons = UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu);
+				if (freeButtons.length > 100) {
+					html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu-"+uuid+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
+					html += "<div id='toolbar-"+uuid+"' class='free-toolbar-buttons'>";
+					html += "	<div id='buttons-"+uuid+"'>"+ freeButtons +"</div>";
+					html += "</div>";
+				}
 				html += "</div>";
 			}
-			html += "<div style='"+style+"'>";
+			else {
+				html += "<div class='free-toolbar'>";
+				html += "</div>";				
+			}
+			html += "<div id='free-content' style='"+style+"'>";
 			//-------------------------------------------------------------------
 			if (name == "asmContext") {
 				//-------------- resource -------------------------

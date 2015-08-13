@@ -943,18 +943,23 @@ table.tablesorter th.restore {
    ====================*/
 .free-toolbar{
 	width:100px;
+	height:48px;
 }
 
 .free-toolbar-buttons {
 	visibility:hidden;
 	z-index:10;
 	position:relative;
-	top:22px;
+/*	top:22px;*/
 }
 
 .free-toolbar-menu{
 	position:relative;
-	top:20px;
+/*	top:20px;*/
+}
+
+#free-content {
+	margin-top:-23px;
 }
 
 .movable {
@@ -985,6 +990,10 @@ table.tablesorter th.restore {
 
 .dropdown-menu {
   	z-index: 10000;	
+}
+
+.header .row {
+	height:44px;
 }
 
 /* ====================
