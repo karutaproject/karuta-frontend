@@ -8,10 +8,13 @@
 		<metadata sharedNode="N" sharedNodeResource="N" />
 		<asmResource xsi_type="nodeRes">
 			<code>_karuta_resources_</code>
-			<label lang="fr">_karuta_resources_v1.1.1</label>
-			<label lang="en">_karuta_resources_v1.1.1</label>
+			<label lang="fr">_karuta_resources_ v1.1.2 (2015/08/13)</label>
+			<label lang="en">_karuta_resources_ v1.1.2 (2015/08/13)</label>
 		</asmResource>
-		<asmResource xsi_type="context" />
+		<asmResource xsi_type="context">
+			<text lang="fr" />
+			<text lang="en" />
+		</asmResource>
 		//===================== asmStructure =======================
 		<asmStructure xsi_type="asmStructure">
 			<metadata-wad seenoderoles="all" />
@@ -22,7 +25,10 @@
 				<label lang="fr">Nouvelle structure</label>
 				<label lang="en">New Structure</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 		</asmStructure>
 		//===================== asmUnit =======================
 		<asmUnit xsi_type="asmUnit">
@@ -35,7 +41,10 @@
 				<label lang="fr">Nouvelle Unité</label>
 				<label lang="en">New Unit</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 		</asmUnit>
 		//===================== asmUnitStructure =======================
 		<asmUnitStructure xsi_type="asmUnitStructure">
@@ -47,7 +56,10 @@
 				<label lang="fr">Nouvelle section</label>
 				<label lang="en">New Section</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 		</asmUnitStructure>
 		//===================== TextField =======================
 		<asmContext xsi_type="">
@@ -59,7 +71,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="TextField">
 				<text lang="fr" />
 				<text lang="en" />
@@ -75,7 +90,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Field">
 				<text lang="fr" />
 				<text lang="en" />
@@ -91,7 +109,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Color">
 				<text lang="fr" />
 				<text lang="en" />
@@ -107,7 +128,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Document">
 				<filename lang="fr" />
 				<size lang="fr" />
@@ -129,7 +153,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Video">
 				<filename lang="fr" />
 				<size lang="fr" />
@@ -151,7 +178,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="URL">
 				<label lang="fr"/>
 				<label lang="en"/>
@@ -169,7 +199,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Oembed">
 				<url lang="fr"/>
 				<url lang="en"/>
@@ -185,9 +218,13 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Calendar">
 				<text lang="fr"/>
+				<text lang="en"/>
 			</asmResource>
 		</asmContext>
 		//===================== Image =======================
@@ -200,16 +237,19 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Image">
 				<filename lang="fr" />
 				<size lang="fr" />
 				<type lang="fr" />
-				<fileid lang="fr" ></fileid>
+				<fileid lang="fr" />
 				<filename  lang="en" />
 				<size lang="en" />
 				<type lang="en" />
-				<fileid lang="en" ></fileid>
+				<fileid lang="en" />
 			</asmResource>
 		</asmContext>
 		//===================== Audio =======================
@@ -222,16 +262,19 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Audio">
 				<filename lang="fr" />
 				<size lang="fr" />
 				<type lang="fr" />
-				<fileid lang="fr" ></fileid>
+				<fileid lang="fr" />
 				<filename  lang="en" />
 				<size lang="en" />
 				<type lang="en" />
-				<fileid lang="en" ></fileid>
+				<fileid lang="en" />
 			</asmResource>
 		</asmContext>
 		//===================== Comments =======================
@@ -244,7 +287,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Comments">
 				<author />
 				<date />
@@ -262,7 +308,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Get_Resource">
 				<code />
 				<value />
@@ -280,7 +329,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Get_Get_Resource">
 				<code />
 				<portfoliocode />
@@ -299,7 +351,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Get_Double_Resource">
 				<value1 />
 				<code1 />				
@@ -321,7 +376,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Proxy">
 				<code />
 				<value />
@@ -339,7 +397,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Get_Proxy">
 				<code />
 				<value />
@@ -357,7 +418,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Item">
 				<code />
 				<label lang="fr" />
@@ -374,7 +438,10 @@
 				<label lang="fr">Envoyez un courriel à</label>
 				<label lang="en">Send an email to</label>>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="SendEmail">
 				<firstname lang="fr" />
 				<firstname lang="en" />
@@ -394,7 +461,10 @@
 				<label lang="fr">Allez à</label>
 				<label lang="en">Go to</label>>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="URL2Unit">
 				<local-label lang="fr" />
 				<local-label lang="en" />
@@ -413,7 +483,10 @@
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			<asmResource xsi_type="Dashboard">
 				<text lang="fr"/>
 				<text lang="en"/>
@@ -433,7 +506,10 @@
 				<label lang="fr">asmUnitStructure_free</label>
 				<label lang="en">asmUnitStructure_free</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			//================ asmUnitStructure_free ==========
 			<asmUnitStructure xsi_type="asmUnitStructure">
 				<metadata-wad seenoderoles="all" />
@@ -444,7 +520,10 @@
 					<label lang="fr">Nouvelle section</label>
 					<label lang="en">New Section</label>
 				</asmResource>
-				<asmResource xsi_type="context" />
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
 			</asmUnitStructure>
 			//==============================================
 		</asmUnit>
@@ -458,7 +537,10 @@
 				<label lang="fr">TextField_free</label>
 				<label lang="en">TextField_free</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			//======================= TextField_free ====================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
@@ -469,7 +551,10 @@
 					<label lang="fr" />
 					<label lang="en" />
 				</asmResource>
-				<asmResource xsi_type="context" />
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
 				<asmResource xsi_type="TextField">
 					<text lang="fr"/>
 					<text lang="en" />
@@ -487,7 +572,10 @@
 				<label lang="fr">Field_free</label>
 				<label lang="en">Field_free</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			//======================= Field_free ============
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
@@ -498,9 +586,13 @@
 					<label lang="fr" />
 					<label lang="en" />
 				</asmResource>
-				<asmResource xsi_type="context" />
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
 				<asmResource xsi_type="Field">
-					<text />
+					<text lang="fr" />
+					<text lang="en" />
 				</asmResource>
 			</asmContext>
 			//==============================================
@@ -515,7 +607,10 @@
 				<label lang="fr">Document_free</label>
 				<label lang="en">Document_free</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			//======================= Document_free ====================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
@@ -526,16 +621,19 @@
 					<label lang="fr" />
 					<label lang="en" />
 				</asmResource>
-				<asmResource xsi_type="context" />
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
 				<asmResource xsi_type="Document">
 					<filename lang="fr" />
 					<size lang="fr" />
 					<type lang="fr" />
-					<fileid lang="fr" ></fileid>
+					<fileid lang="fr" />
 					<filename  lang="en" />
 					<size lang="en" />
 					<type lang="en" />
-					<fileid lang="en" ></fileid>
+					<fileid lang="en" />
 				</asmResource>
 			</asmContext>
 			//==============================================
@@ -550,9 +648,11 @@
 				<label lang="fr">URL_free</label>
 				<label lang="en">URL_free</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			//======================= URL_free ====================
-
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm height="35px" left="300" top="30" width="400px" />
@@ -562,10 +662,15 @@
 					<label lang="fr" />
 					<label lang="en" />
 				</asmResource>
-				<asmResource xsi_type="context" />
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
 				<asmResource xsi_type="URL">
-					<label>url</label>
-					<url />
+					<label lang="fr"/>
+					<label lang="en"/>
+					<url lang="fr"/>
+					<url lang="en"/>
 				</asmResource>
 			</asmContext>
 			//==============================================
@@ -580,7 +685,10 @@
 				<label lang="fr">Calendar_free</label>
 				<label lang="en">Calendar_free</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			//======================= Calendar_free ====================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
@@ -592,9 +700,13 @@
 					<label lang="fr" />
 					<label lang="en" />
 				</asmResource>
-				<asmResource xsi_type="context" />
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
 				<asmResource xsi_type="Calendar">
-					<text />
+					<text lang="fr" />
+					<text lang="en" />
 				</asmResource>
 			</asmContext>
 			//==============================================
@@ -609,7 +721,10 @@
 				<label lang="fr">Image_free</label>
 				<label lang="en">Image_free</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			//======================= Image_free ====================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
@@ -620,16 +735,19 @@
 					<label lang="fr" />
 					<label lang="en" />
 				</asmResource>
-				<asmResource xsi_type="context" />
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
 				<asmResource xsi_type="Image">
-				<filename lang="fr" />
+					<filename lang="fr" />
 					<size lang="fr" />
 					<type lang="fr" />
-					<fileid lang="fr" ></fileid>
+					<fileid lang="fr" />
 					<filename  lang="en" />
 					<size lang="en" />
 					<type lang="en" />
-					<fileid lang="en" ></fileid>
+					<fileid lang="en" />
 				</asmResource>
 			</asmContext>
 			//==============================================
@@ -644,7 +762,10 @@
 				<label lang="fr">Audio_free</label>
 				<label lang="en">Audio_free</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			//======================= Audio_free ====================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
@@ -655,16 +776,19 @@
 					<label lang="fr" />
 					<label lang="en" />
 				</asmResource>
-				<asmResource xsi_type="context" />
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
 				<asmResource xsi_type="Audio">
-				<filename lang="fr" />
+					<filename lang="fr" />
 					<size lang="fr" />
 					<type lang="fr" />
-					<fileid lang="fr" ></fileid>
+					<fileid lang="fr" />
 					<filename  lang="en" />
 					<size lang="en" />
 					<type lang="en" />
-					<fileid lang="en" ></fileid>
+					<fileid lang="en" />
 				</asmResource>
 			</asmContext>
 			//==============================================
@@ -679,7 +803,10 @@
 				<label lang="fr">Video_free</label>
 				<label lang="en">Video_free</label>
 			</asmResource>
-			<asmResource xsi_type="context" />
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
 			//======================= Video_free ====================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
@@ -690,19 +817,445 @@
 					<label lang="fr" />
 					<label lang="en" />
 				</asmResource>
-				<asmResource xsi_type="context" />
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
 				<asmResource xsi_type="Video">
 					<filename lang="fr" />
 					<size lang="fr" />
 					<type lang="fr" />
-					<fileid lang="fr" ></fileid>
+					<fileid lang="fr" />
 					<filename  lang="en" />
 					<size lang="en" />
 					<type lang="en" />
-					<fileid lang="en" ></fileid>
+					<fileid lang="en" />
 				</asmResource>
 			</asmContext>
 			//==============================================
+		</asmUnit>
+		//------------------------------------------------------
+		<asmUnit xsi_type="asmUnit">
+			<metadata-wad seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" semantictag="" sharedNode="N" sharedNodeResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<code />
+				<label lang="fr">Carte interactive</label>
+				<label lang="en">Bubble Map</label>
+			</asmResource>
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
+			//======================= level3_url ====================
+			<asmContext xsi_type="asmContext">
+				<metadata-wad seenoderoles="all" />
+				<metadata-epm />
+				<metadata multilingual-node="Y" semantictag="level3_url" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<asmResource xsi_type="nodeRes">
+					<code />
+					<label lang="fr">Lien</label>
+					<label lang="en">Link</label>
+				</asmResource>
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
+				<asmResource xsi_type="URL">
+					<label lang="fr" />
+					<label lang="en" />
+					<url lang="fr" />
+					<url lang="en" />
+				</asmResource>
+			</asmContext>
+			//======================= bubble_level1 ====================
+			<asmUnitStructure xsi_type="asmUnitStructure">
+				<metadata-wad menuroles="_karuta_resources_,bubble_level2,Add a bubble/Ajouter une bulle,designer" seenoderoles="all" />
+				<metadata-epm />
+				<metadata multilingual-node="Y" semantictag="bubble_level1" sharedNode="N" sharedNodeResource="N" />
+				<asmResource xsi_type="nodeRes">
+					<code />
+					<label lang="fr">Libellé de la bulle</label>
+					<label lang="en">Bubble Label</label>
+				</asmResource>
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
+				<asmContext xsi_type="asmContext">
+					<metadata-wad seenoderoles="all" />
+					<metadata-epm />
+					<metadata multilingual-node="Y" semantictag="level1_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<asmResource xsi_type="nodeRes">
+						<code />
+						<label lang="fr">Description</label>
+						<label lang="en">Description</label>
+					</asmResource>
+					<asmResource xsi_type="context">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+					<asmResource xsi_type="TextField">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+				</asmContext>
+				<asmContext xsi_type="asmContext">
+					<metadata-wad seenoderoles="all" />
+					<metadata-epm />
+					<metadata multilingual-node="Y" semantictag="level1_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<asmResource xsi_type="nodeRes">
+						<code />
+						<label lang="fr">Pondération</label>
+						<label lang="en">Weight</label>
+					</asmResource>
+					<asmResource xsi_type="context">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+					<asmResource xsi_type="Field">
+						<text lang="fr">1000</text>
+						<text lang="en">1000</text>
+					</asmResource>
+				</asmContext>
+				<asmContext xsi_type="asmContext">
+					<metadata-wad seenoderoles="all" />
+					<metadata-epm />
+					<metadata multilingual-node="Y" semantictag="level1_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<asmResource xsi_type="nodeRes">
+						<code />
+						<label lang="fr" />
+						<label lang="en" />
+					</asmResource>
+					<asmResource xsi_type="context">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+					<asmResource xsi_type="Color">
+						<text lang="fr">#8db3e2</text>
+						<text lang="en">#8db3e2</text>
+					</asmResource>
+				</asmContext>
+			</asmUnitStructure>
+			//======================= bubble_level2 ====================
+			<asmUnitStructure xsi_type="asmUnitStructure">
+				<metadata-wad menuroles="_karuta_resources_,bubble_level3,Add a Bubbele/Ajouter une bulle,designer" seenoderoles="all" />
+				<metadata-epm />
+				<metadata multilingual-node="Y" semantictag="bubble_level2" sharedNode="N" sharedNodeResource="N" />
+				<asmResource xsi_type="nodeRes">
+					<code />
+					<label lang="fr">Niveau 2</label>
+					<label lang="en">Level2</label>
+				</asmResource>
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
+				<asmContext xsi_type="asmContext">
+					<metadata-wad seenoderoles="all" />
+					<metadata-epm />
+					<metadata multilingual-node="Y" semantictag="level2_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<asmResource xsi_type="nodeRes">
+						<code />
+						<label lang="fr">Description</label>
+						<label lang="en">Description</label>
+					</asmResource>
+					<asmResource xsi_type="context">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+					<asmResource xsi_type="TextField">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+				</asmContext>
+				<asmContext xsi_type="asmContext">
+					<metadata-wad seenoderoles="all" />
+					<metadata-epm />
+					<metadata multilingual-node="Y" semantictag="level2_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<asmResource xsi_type="nodeRes">
+						<code />
+						<label lang="fr">Pondération</label>
+						<label lang="en">Weight</label>
+					</asmResource>
+					<asmResource xsi_type="context">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+					<asmResource xsi_type="Field">
+						<text lang="fr">300</text>
+						<text lang="en">300</text>
+					</asmResource>
+				</asmContext>
+				<asmContext xsi_type="asmContext">
+					<metadata-wad seenoderoles="all" />
+					<metadata-epm />
+					<metadata multilingual-node="Y" semantictag="level2_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<asmResource xsi_type="nodeRes">
+						<code />
+						<label lang="fr" />
+						<label lang="en" />
+					</asmResource>
+					<asmResource xsi_type="context">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+					<asmResource xsi_type="Color">
+						<text lang="fr">#fbd5b5</text>
+						<text lang="en">#fbd5b5</text>
+					</asmResource>
+				</asmContext>
+				//======================= bubble_level3-1 ====================
+				<asmUnitStructure xsi_type="asmUnitStructure">
+					<metadata-wad seenoderoles="all" />
+					<metadata-epm />
+					<metadata multilingual-node="Y" semantictag="bubble_level3" sharedNode="N" sharedNodeResource="N" />
+					<asmResource xsi_type="nodeRes">
+						<code />
+						<label lang="fr">Niveau 3</label>
+						<label lang="en">Level 3</label>
+					</asmResource>
+					<asmResource xsi_type="context">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+					<asmContext xsi_type="asmContext">
+						<metadata-wad seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="level3_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">Description</label>
+							<label lang="en">Description</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+						<asmResource xsi_type="TextField">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+					</asmContext>
+					<asmContext xsi_type="asmContext">
+						<metadata-wad seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="level3_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">Pondération</label>
+							<label lang="en">Weight</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+						<asmResource xsi_type="Field">
+							<text lang="fr">200</text>
+							<text lang="en">200</text>
+						</asmResource>
+					</asmContext>
+					<asmContext xsi_type="asmContext">
+						<metadata-wad seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="level3_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">Couleur</label>
+							<label lang="en">Color</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+						<asmResource xsi_type="Color">
+							<text lang="fr">008000</text>
+							<text lang="en">008000</text>
+						</asmResource>
+					</asmContext>
+					<asmUnitStructure xsi_type="asmUnitStructure">
+						<metadata-wad menuroles="_karuta_resources_,level3_url,Add a link/Ajouter un lien,designer" seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="asmUnitStructure" sharedNode="N" sharedNodeResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">URLs</label>
+							<label lang="en">URLs</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+					</asmUnitStructure>
+				</asmUnitStructure>
+				//======================= bubble_level3-2 ====================
+				<asmUnitStructure xsi_type="asmUnitStructure">
+					<metadata-wad seenoderoles="all" />
+					<metadata-epm />
+					<metadata multilingual-node="Y" semantictag="bubble_level3" sharedNode="N" sharedNodeResource="N" />
+					<asmResource xsi_type="nodeRes">
+						<code />
+						<label lang="fr">Niveau 3</label>
+						<label lang="en">Level 3</label>
+					</asmResource>
+					<asmResource xsi_type="context">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+					<asmContext xsi_type="asmContext">
+						<metadata-wad seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="level3_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">Description</label>
+							<label lang="en">Description</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+						<asmResource xsi_type="TextField">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+					</asmContext>
+					<asmContext xsi_type="asmContext">
+						<metadata-wad seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="level3_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">Pondération</label>
+							<label lang="en">Weight</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+						<asmResource xsi_type="Field">
+							<text lang="fr">200</text>
+							<text lang="en">200</text>
+						</asmResource>
+					</asmContext>
+					<asmContext xsi_type="asmContext">
+						<metadata-wad seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="level3_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">Couleur</label>
+							<label lang="en">Color</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+						<asmResource xsi_type="Color">
+							<text lang="fr">#008000</text>
+							<text lang="en">#008000</text>
+						</asmResource>
+					</asmContext>
+					<asmUnitStructure xsi_type="asmUnitStructure">
+						<metadata-wad menuroles="_karuta_resources_,level3_url,Add a link/Ajouter un lien,designer" seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="asmUnitStructure" sharedNode="N" sharedNodeResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">URLs</label>
+							<label lang="en">URLs</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+					</asmUnitStructure>
+				</asmUnitStructure>
+				//======================= bubble_level3-3 ====================
+				<asmUnitStructure xsi_type="asmUnitStructure">
+					<metadata-wad seenoderoles="all" />
+					<metadata-epm />
+					<metadata multilingual-node="Y" semantictag="bubble_level3" sharedNode="N" sharedNodeResource="N" />
+					<asmResource xsi_type="nodeRes">
+						<code />
+						<label lang="fr">Niveau 3</label>
+						<label lang="en">Level 3</label>
+					</asmResource>
+					<asmResource xsi_type="context">
+						<text lang="fr" />
+						<text lang="en" />
+					</asmResource>
+					<asmContext xsi_type="asmContext">
+						<metadata-wad seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="level3_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">Description</label>
+							<label lang="en">Description</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+						<asmResource xsi_type="TextField">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+					</asmContext>
+					<asmContext xsi_type="asmContext">
+						<metadata-wad seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="level3_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">Pondération</label>
+							<label lang="en">Weight</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+						<asmResource xsi_type="Field">
+							<text lang="fr">200</text>
+							<text lang="en">200</text>
+						</asmResource>
+					</asmContext>
+					<asmContext xsi_type="asmContext">
+						<metadata-wad seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="level3_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">Couleur</label>
+							<label lang="en">Color</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+						<asmResource xsi_type="Color">
+							<text lang="fr">008000</text>
+							<text lang="en">008000</text>
+						</asmResource>
+					</asmContext>
+					<asmUnitStructure xsi_type="asmUnitStructure">
+						<metadata-wad menuroles="_karuta_resources_,level3_url,Add a link/Ajouter un lien,designer" seenoderoles="all" />
+						<metadata-epm />
+						<metadata multilingual-node="Y" semantictag="asmUnitStructure" sharedNode="N" sharedNodeResource="N" />
+						<asmResource xsi_type="nodeRes">
+							<code />
+							<label lang="fr">URLs</label>
+							<label lang="en">URLs</label>
+						</asmResource>
+						<asmResource xsi_type="context">
+							<text lang="fr" />
+							<text lang="en" />
+						</asmResource>
+					</asmUnitStructure>
+				</asmUnitStructure>
+			</asmUnitStructure>
 		</asmUnit>
 		//------------------------------------------------------
 	</asmRoot>

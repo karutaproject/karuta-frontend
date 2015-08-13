@@ -89,9 +89,9 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 		label = url;
 	if(type=='standard') {
 		if (url!="")
-			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+label+"</a>";
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' style='width:25px'> "+label+"</a>";
 		else
-			html =  "<img src='../img/link-icon.png' width='25px'> "+karutaStr[LANG]['no-URL'];
+			html =  "<img src='../img/link-icon.png' style='width:25px'> "+karutaStr[LANG]['no-URL'];
 	}
 	if (type=='free-positioning'){
 		if (url!="")
@@ -101,15 +101,15 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 	}
 	if (type=='icon-url-label'){
 		if (url!="")
-			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+label+urlIcon["web"]+"</a>";
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' style='width:25px'> "+label+urlIcon["web"]+"</a>";
 		else
-			html =  "<img src='../img/link-icon.png' width='25px'><p style='text-align:center;'>"+karutaStr[LANG]['no-URL']+"</p>";
+			html =  "<img src='../img/link-icon.png' style='width:25px'><p style='text-align:center;'>"+karutaStr[LANG]['no-URL']+"</p>";
 	}
 	if (type=='icon-url'){
 		if (url!="")
-			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+urlIcon["web"]+"</a>";
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' style='width:25px'> "+urlIcon["web"]+"</a>";
 		else
-			html =  "<img src='../img/link-icon.png' width='25px'>"+karutaStr[LANG]['no-URL'];
+			html =  "<img src='../img/link-icon.png' style='width:25px'>"+karutaStr[LANG]['no-URL'];
 	}
 	if (type=='icon'){
 		html = urlIcon["web"];

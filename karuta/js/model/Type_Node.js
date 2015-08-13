@@ -607,7 +607,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						html += " style='display:none'";
 						html += ">";
 					}
-					html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
+					if (semtag!='bubble_level1')
+						html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
+					else  // Bubble Map
+						html += " "+UICom.structure["ui"][uuid].getBubbleView('std_node_'+uuid);
 				}				
 				//-------------- context -------------------------
 				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
@@ -688,17 +691,19 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			// ---------------------------- For each child ----------------------
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 
-			for( var i=0; i<root.children.length; ++i ) {
-				// Recurse
-				var child = UICom.structure["tree"][root.children[i]];
-				var childnode = UICom.structure["ui"][root.children[i]];
-
-				//-------------------
-				var freenode = ($(childnode.metadatawad).attr('freenode')==undefined)?'':$(childnode.metadatawad).attr('freenode');
-				if (contentfreenode == 'Y' || freenode == 'Y')
-					UIFactory["Node"].displayFree(child, 'content-'+uuid, depth-1,langcode,edit,inline);
-				else
-					UIFactory["Node"].displayStandard(child, 'content-'+uuid, depth-1,langcode,edit,inline,backgroundParent);
+			if (semtag!='bubble_level1') {
+				for( var i=0; i<root.children.length; ++i ) {
+					// Recurse
+					var child = UICom.structure["tree"][root.children[i]];
+					var childnode = UICom.structure["ui"][root.children[i]];
+	
+					//-------------------
+					var freenode = ($(childnode.metadatawad).attr('freenode')==undefined)?'':$(childnode.metadatawad).attr('freenode');
+					if (contentfreenode == 'Y' || freenode == 'Y')
+						UIFactory["Node"].displayFree(child, 'content-'+uuid, depth-1,langcode,edit,inline);
+					else
+						UIFactory["Node"].displayStandard(child, 'content-'+uuid, depth-1,langcode,edit,inline,backgroundParent);
+				}
 			}
 			//------------- javascript dashboard --------------------
 			if (depth>1 && $($("metadata",data)[0]).attr('semantictag')!=undefined) {
@@ -1733,9 +1738,11 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Color','Color',databack,callback,param2,param3,param4,freenode);
 			if (!freenode) {
 				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','URL2Unit','URL2Unit',databack,callback,param2,param3,param4,freenode);
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Comments','Comments',databack,callback,param2,param3,param4,freenode);
+				html += "<hr>";
+				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','bubble_level1','Bubble Map',databack,callback,param2,param3,param4,freenode);
 				html += "<hr>";
 				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Item','Item',databack,callback,param2,param3,param4,freenode);
 				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Get_Resource','Get_Resource',databack,callback,param2,param3,param4,freenode);
@@ -2596,4 +2603,26 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	html += karutaStr[languages[langcode]]['help3']+"</label>";
 	$("#metadata_texts").append($(html));
 	UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'help',$(node.metadatawad).attr('help'));
+};
+
+//==================================
+UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
+	}
+	if (type==null)
+		type='default';
+	var html ="";
+	UIFactory["Bubble"].parse(this.node);  // this.node
+	html += "<iframe id='bubble_iframe' src='bubble.html?uuid="+this.id+"' height='500' width='100%'></iframe>";
+	html += "<div id='bubble_display'></div>";
+	return html;
 };
