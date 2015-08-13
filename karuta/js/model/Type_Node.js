@@ -654,17 +654,16 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
 					var helps = attr_help.split("/"); // lang1/lang2/...
 					var help_text = helps[langcode];  
-//					var help =  " <a href='javascript://'  data-toggle='popover' class='popinfo'><i class='icon-info-sign'></i></a> "; //Bootstrap 2
-					var help = " <a href='javascript://' data-trigger='hover' data-toggle='popover' class='popinfo'><span class='glyphicon glyphicon-info-sign'></span></a> ";
+//					var help = " <a href='javascript://' data-toggle='popover' class='popinfo'><i class='icon-info-sign'></i></a> ";  //Bootstrap 2
+					var help = " <a href='javascript://' class='popinfo'><span class='glyphicon glyphicon-info-sign'></span></a> ";
 					$("#help_"+uuid).html(help);
 					$(".popinfo").popover({ 
 					    placement : 'right',
 					    container : 'body',
 					    title:karutaStr[LANG]['help-label'],
 					    html : true,
+					    trigger:'click hover',
 					    content: help_text
-					    })
-					    .click(function(e) {
 					});
 				}
 			}
