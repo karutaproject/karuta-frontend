@@ -944,9 +944,9 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				else
 					html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
 				//-------------- metainfo -------------------------
-				if (g_userrole=='designer' || USER.admin) {
-					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
-				}
+//				if (g_userrole=='designer' || USER.admin) {
+//					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
+//				}
 				//----------------------------
 				html += "</div>";
 				html += "<div id='context-"+uuid+"'></div>";
