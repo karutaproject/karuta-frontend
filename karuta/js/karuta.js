@@ -74,7 +74,7 @@ function getNavBar(type,portfolioid,edit)
 //==============================
 {
 	var html = "";
-	html += "<nav class='navbar navbar-default'>";
+	html += "<nav class='navbar navbar-default navbar-fixed-top'>";
 	html += "<div class='navbar-inner'>";
 	html += "	<div class='container'>";
 	html += "	  <div class='nav-bar-header'>";

@@ -470,7 +470,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	//			metadataepm = UICom.structure["ui"][proxies_nodeid["proxy-"+semtag]].metadataepm;
 			var style = "";
 			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'padding-top',true);
-			if (style.length>0)
+			if (style.length>0 && depth>0)
 				html += " style='"+style+"' ";
 			//----------------------------------
 			html += ">";
@@ -600,11 +600,13 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				else {
 					if (g_display_type=='standard')
 //						html += "<div id='std_node_"+uuid+"' class='col-md-9'>";
-						html += "<div id='std_node_"+uuid+"' class='col-md-9' style='padding-top:6px;'>";
+						html += "<div id='std_node_"+uuid+"' class='col-md-9' style='padding-top:6px;"+style+"'>";
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
 						if (g_userrole!='designer' && semtag=='header')
-						html += " style='visibility:hidden'";
+							html += " style='visibility:hidden'";
+						if (semtag!='header')
+							html += " style='padding-top:6px;"+style+"'";
 						html += ">";
 					}
 					if (semtag!='bubble_level1')

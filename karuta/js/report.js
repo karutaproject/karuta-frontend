@@ -398,7 +398,7 @@ function processNodeResource(xmlDoc,destid,data)
 			aggregates[ref][aggregates[ref].length] = text;
 		}
 	} catch(e){
-		text = "not found";
+		text = "&mdash;";
 	}
 	text = "<span>"+text+"</span>";
 	$("#"+destid).attr("style",style);
