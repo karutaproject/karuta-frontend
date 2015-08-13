@@ -107,7 +107,7 @@ UIFactory["Field"].prototype.getEditor = function(type,langcode,disabled)
 	if (this.encrypted)
 		value = decrypt(value.substring(3),g_rc4key);
 	var html = "";
-	html += "<input type='text' ";
+	html += "<input type='text' class='form-control'";
 	if (disabled)
 		html += "disabled='disabled' ";
 	html += "value=\""+value+"\" >";

@@ -88,48 +88,10 @@ UIFactory["Proxy"].prototype.displayView = function(dest,type,lang)
 
 /// Editor
 //==================================
-UIFactory["Proxy"].update = function(select,itself,lang,type,portfolio_label)
+UIFactory["Proxy"].update = function(itself,lang,type,portfolio_label)
 //==================================
 {
-	if (lang==null)
-		lang = LANG;
-	if (type==undefined || type==null)
-		type = 'select';
-	
-	if (type=='select') {
-		var option = $(select).find("option:selected");
-		var value = $(option).attr('value');
-		var code = $(option).attr('code');
-		$(itself.value_node).text(value);
-		$(itself.code_node).text(code);
-		var empty = true;
-		for (var i=0; i<languages.length;i++){
-			if($(option).attr('label_'+languages[i])!="")
-				empty = false;
-		}
-		if (empty)
-			portfolio_label = "";
-		else
-			portfolio_label += ".";
-		for (var i=0; i<languages.length;i++){
-			var label = portfolio_label+$(option).attr('label_'+languages[i]);
-			$(itself.label_node[i]).text(label);
-		}
-	}
-	if (type.indexOf('radio')>-1) {
-		var name = 'radio_'+itself.id;
-		var checked = $('input[name='+name+']').filter(':checked');
-		var value = $(checked).attr('value');
-		var code = $(checked).attr('code');
-		$(itself.value_node).text(value);
-		$(itself.code_node).text(code);
-		for (var i=0; i<languages.length;i++){
-			var label = portfolio_label+$(checked).attr('label_'+languages[i]);
-			$(itself.label_node[i]).text(label);
-		}
-	}
 	itself.save();
-	writeSaved(this.id);
 };
 
 //==================================
@@ -144,6 +106,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 		var p2 = queryattr_value.indexOf('.',p1+1);
 		var code = queryattr_value.substring(0,p1);
 		var semtag = queryattr_value.substring(p1+1,p2);
+		var srce = queryattr_value.substring(p2+1);
 		var self = this;
 		if (code!='all') {
 			if (code=='self')
@@ -153,7 +116,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 				dataType : "xml",
 				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
 				success : function(data) {
-					UIFactory["Proxy"].parse(destid,type,langcode,data,self,code);
+					UIFactory["Proxy"].parse(destid,type,langcode,data,self,code,srce);
 				}
 			});
 		} else {  // code==all
@@ -182,10 +145,10 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 								}
 								if (nodes.length>0 && display) {									
 									var html = "";
-									html += "<div class='portfolio-proxy'>"+label+"</div>";
+									html += "<div class='portfolio-proxy' style='margin-top:20px'>"+label+"</div>";
 									html += "<div id='"+code+"'></div>";
 									$("#"+destid).append($(html));
-									UIFactory["Proxy"].parse(code,type,langcode,data,self,label);
+									UIFactory["Proxy"].parse(code,type,langcode,data,self,label,srce);
 								}
 							}
 						});
@@ -201,72 +164,80 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 };
 
 //==================================
-UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_label) {
+UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_label,srce) 
 //==================================
+{
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	if (!self.multilingual)
 		langcode = NONMULTILANGCODE;
+	var self_value = $(self.value_node).text();
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
+	var formobj = $("<div class='form-horizontal'></div>");
+	$("#"+destid).append($(formobj));
 	if (type=='select') {
-		var select = "<select>";
-		select += "<option code='' value='' ";
-		for (var j=0; j<languages.length;j++){
-			select += "label_"+languages[j]+"='' ";
+		//--------------------------------------------------------------
+		var html = "<div class='btn-group'>";
+		html += "<button type='button' class='btn btn-default select select-label' id='button_"+self.id+"'>&nbsp;</button>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(formobj).append($(btn_group));
+		html = "<ul class='dropdown-menu' role='menu'></ul>";
+		var select  = $(html);
+		//----------------- null value to erase
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a href='#' value='' code='' ";
+		for (var j=0; j<languages.length;j++) {
+			html += "label_"+languages[j]+"='&nbsp;' ";
 		}
-		select += "></option></select>";
-		var obj = $(select);
+		html += ">";
+		html += "&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
+			UIFactory["Proxy"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//--------------------
 		var nodes = $("node",data);
-		for ( var i = 0; i < $(nodes).length; ++i) {
+		for ( var i = 0; i < $(nodes).length; i++) {
 			var semtag = $("metadata",nodes[i]).attr('semantictag');
 			if (semtag.indexOf("proxy-")<0){
-				var option = null;
-				var resource = null;
 				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-				var code = $(nodes[i]).attr('id');
-					option = "<option code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
-					for (var j=0; j<languages.length;j++){
-						option += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
+				var value = $(nodes[i]).attr('id');
+				var html = "<li></li>";
+				var select_item = $(html);
+				html = "<a href='#' value='"+value+"' code='"+value+"' ";
+				for (var j=0; j<languages.length;j++){
+					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+				}
+				html += ">";
+				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
+				var select_item_a = $(html);
+				$(select_item_a).click(function (ev){
+					$("#button_"+self.id).html(portfolio_label+"."+$(this).attr("label_"+languages[langcode]));
+					for (var i=0; i<languages.length;i++){
+						$(self.label_node[i]).text($(this).attr("label_"+languages[i]));
 					}
-					if ($(self.code_node).text()==code && code!="")
-						option += " selected ";
-					option += ">"+$("label[lang='"+languages[langcode]+"']",resource).text()+"</option>";
-				$(obj).append($(option));
+					$(self.code_node).text($(this).attr("code"));
+					$(self.value_node).text($(this).attr("value"));
+					UIFactory["Proxy"].update(self,langcode);
+				});
+				$(select_item).append($(select_item_a))
+				//-------------- update button -----
+				if (value!="" && self_value==value) {
+					$("#button_"+self.id).html(portfolio_label+"."+$(srce+"[lang='"+languages[langcode]+"']",resource).text());
+				}
+				$(select).append($(select_item));
 			}
-		}
-		$(obj).change(function (){
-			UIFactory["Proxy"].update(obj,self,langcode,type,portfolio_label);
-		});
-		$("#"+destid).append(obj);
-	}
-	if (type.indexOf('radio')>-1) {
-		var nodes = $("node",data);
-		var first = true;
-		for ( var i = 0; i < $(nodes).length; ++i) {
-			var input = "";
-			var resource = null;
-			if ($("#asmResource",nodes[i]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-			else
-				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-			var code = $('code',resource).text();
-			if (!first && type!='radio-inline')
-				input += '<br>';
-			first = false;
-			input += "<input type='radio' name='radio_"+self.id+"' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' " +
-					"label_fr='"+$("label[lang='fr']",resource).text()+"' " +
-					"label_en='"+$("label[lang='en']",resource).text()+"' ";
-			if ($(self.code_node).text()==code)
-				input += " checked ";
-			input += "> "+$("label[lang='"+languages[langcode]+"']",resource).text()+" </input>";
-			var obj = $(input);
-			$(obj).click(function (){
-				UIFactory["Proxy"].update(obj,self,langcode,type,portfolio_label);
-			});
-			$("#"+destid).append(obj);
+		$(btn_group).append($(select));
 		}
 	}
 };

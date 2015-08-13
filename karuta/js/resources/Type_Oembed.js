@@ -109,16 +109,23 @@ UIFactory["Oembed"].prototype.getEditor = function(type,langcode)
 		type = 'default';
 	var self = this;
 	var obj = $("<span class='url_editor'></span>");
+	var htmlFormObj = $("<form class='form-horizontal'></form>");
+	$(obj).append($(htmlFormObj));
 	//------------------------
 	if(type=='default') {
-		$(obj).append($("<label> URL (http://)</label>"));
-		var input_url = $("<input type='text' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
-		$(input_url).change(function (){
+		//------------------------
+		var htmlUrlGroupObj = $("<div class='form-group'></div>")
+		var htmlUrlLabelObj = $("<label for='url_"+this.id+"' class='col-sm-3 control-label'>URL</label>");
+		var htmlUrlDivObj = $("<div class='col-sm-9'></div>");
+		var htmlUrlInputObj = $("<input id='url_"+this.id+"' type='text' class='form-control' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
+		$(htmlUrlInputObj).change(function (){
 			UIFactory["Oembed"].update(obj,self,type,langcode);
 		});
-		$(obj).append(input_url);
+		$(htmlUrlDivObj).append($(htmlUrlInputObj));
+		$(htmlUrlGroupObj).append($(htmlUrlLabelObj));
+		$(htmlUrlGroupObj).append($(htmlUrlDivObj));
+		$(htmlFormObj).append($(htmlUrlGroupObj));
 	}
-	//------------------------
 	return obj;
 };
 

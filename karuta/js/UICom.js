@@ -55,7 +55,6 @@ var UICom =
 	{
 		if (treeroot==null || treeroot) {
 			treeroot = true;
-//			g_portfolio_current = data;
 		}
 		if( UICom.structure["tree"] == null )
 			UICom.structure["tree"] = {};
@@ -91,9 +90,15 @@ var UICom =
 				UICom.treerootid[treerootname] = id;
 			}
 		} else {
-//			if (UICom.structure["tree"][id]==null || UICom.structure["tree"][id]==undefined)
-			if (UICom.structure["tree"][parentid]!=undefined)
-				UICom.structure["tree"][parentid].childs.push(id);
+			if (UICom.structure["tree"][parentid]!=undefined) {
+				var push = true;
+				for( var i=0; i<UICom.structure["tree"][parentid].children.length; ++i ){
+					if (UICom.structure["tree"][parentid].children[i]==id)
+						push = false;
+				}
+				if (push)
+					UICom.structure["tree"][parentid].children.push(id);
+			}
 		}
 		//---------------------
 		UICom.structure["tree"][id] = r;
@@ -103,7 +108,7 @@ var UICom =
 
 
 	//=======================================================================
-	parseElement: function( currentNode)
+	parseElement: function(currentNode)
 	//=======================================================================
 	{
 		if (g_userrole=='designer')
@@ -117,7 +122,7 @@ var UICom =
 			if( "asmRoot" == name || "asmStructure" == name || "asmUnit" == name || "asmUnitStructure" == name || "asmContext" == name ) {
 				var id = $(child).attr("id");
 				var childTree = new UICom.Tree(child);
-				currentNode.childs.push(id);
+				currentNode.children.push(id);
 				UICom.structure["tree"][id] = childTree;
 				UICom.structure["ui"][id] = new UIFactory["Node"](child);
 				if (name=='asmContext') {
@@ -228,7 +233,7 @@ var UICom =
 	//========================================
 	{
 		this.node = node;
-		this.childs = [];
+		this.children = [];
 	},
 
 	//=======================================================================
@@ -263,9 +268,9 @@ var UICom =
 				UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
-//				alert("Error in UpdateMeta : "+jqxhr.responseText);
-				alert(karutaStr[LANG]['disconnected']);
-				window.location = "login.htm";
+			alert("Error in UpdateMeta : "+jqxhr.responseText);
+//				alert(karutaStr[LANG]['disconnected']);
+//				window.location = "login.htm";
 			}
 		});
 	},
@@ -288,9 +293,9 @@ var UICom =
 				UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
-//				alert("Error in UpdateMetaWad : "+jqxhr.responseText);
-				alert(karutaStr[LANG]['disconnected']);
-				window.location = "login.htm";
+				alert("Error in UpdateMetaWad : "+jqxhr.responseText);
+//				alert(karutaStr[LANG]['disconnected']);
+//				window.location = "login.htm";
 			}
 		});
 	},
@@ -313,9 +318,9 @@ var UICom =
 				UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
-//				alert("Error in UpdateMetaEpm : "+jqxhr.responseText);
-				alert(karutaStr[LANG]['disconnected']);
-				window.location = "login.htm";
+				alert("Error in UpdateMetaEpm : "+jqxhr.responseText);
+//				alert(karutaStr[LANG]['disconnected']);
+//				window.location = "login.htm";
 			}
 		});
 	},
@@ -346,9 +351,9 @@ var UICom =
 					cb2(uuid,data);
 			},
 			error : function(jqxhr,textStatus) {
-//				alert("Error in UpdateResource : "+jqxhr.responseText);
-				alert(karutaStr[LANG]['disconnected']);
-				window.location = "login.htm";
+				alert("Error in UpdateResource : "+jqxhr.responseText);
+//				alert(karutaStr[LANG]['disconnected']);
+//				window.location = "login.htm";
 			}
 		});
 	},

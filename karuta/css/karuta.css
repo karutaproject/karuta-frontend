@@ -1,10 +1,36 @@
 
-/* --- Problem with button ---*/
-.btn-mini [class*="icon-"] {
+/* -- information icon -- */
+.glyphicon {
+	color:#333;
+	font-size:12px;
+	vertical-align: text-top;
+}
+
+/* -- boutons du navbar --*/
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .open > a, 
+.navbar-default .navbar-nav > .open > a:focus, 
+.navbar-default .navbar-nav > .open > a:hover {
+	background-color: #ECECEC;
+	border-color: #E7E7E7;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .open > a {
+	border-color: #E7E7E7;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.125) inset;
+}
+
+.navbar-default{
+	font-size: 14px;
+}	
+
+/* --- buton are redefined to use with Ipas and solve size errors */
+.btn-xs [class*="icon-"] {
 	margin-top:3px;
 	margin-bottom:3px;
 }
-.btn-mini .icon-font {
+.btn-xs .icon-font {
 	margin-top:0px;
 	margin-bottom:0px;
 }
@@ -12,14 +38,17 @@
 a.btn {
 	font-weight:normal;
 }
-a.btn-mini {
-	min-height:24px;
-	vertical-align:middle;
+
+.btn {
+	background-color:#FAFAFA;
+	border: 1px solid lightGrey;
+	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
+    background-repeat: repeat-x;
 }
-.btn-text {
-	margin-top:2px;
-	vertical-align:middle;
-}
+
+.btn-danger {
+	background-color:#d9534f;
+	background-image: none;}
 
 /* --------------------------*/
 .versions {
@@ -51,19 +80,11 @@ hr {
 .accordion-inner .accordion-inner .title {
 	margin-left:14px;
 }
-
-.asmStructure,
-.asmUnit,
-.asmContext {
-	margin-top:5px;
-}
-.asmUnitStructure {
-	margin-top:10px;
-}
-
+/*
 .title {
 	padding:2px;
-}
+}*/
+
 .asmRoot .title {
 	font-size: 24px;
 	font-weight: bold;
@@ -138,10 +159,6 @@ hr {
 	padding-bottom:2px;
 }
 
-.col-md-2 {
-	padding-top:2px;
-}
-
 .text-editor {
 	background-color: white;
 	border: 1px solid rgb(204, 204, 204); 
@@ -160,12 +177,19 @@ hr {
 
 /* ---------------- list portfolios --------------------- */
 
-.item td{
-	padding-left:5px;
+tr.item {
+	padding-left:10px;
 }
 
-.item:hover td{
+.item td {
+	padding-top:4px;
+}
+.item:hover td {
 	background-color:lightgrey;
+}
+
+button.delete-portfolio {
+	margin-top:5px;
 }
 
 /* -------------------------------------------------- */
@@ -316,8 +340,6 @@ hr {
 	margin-bottom: 66px;
 }
 
-
-
 #content .icon-move {
 	cursor: move;
 }
@@ -361,24 +383,23 @@ hr {
 	margin-left:20px;
 }
 
-
 a:hover {
-	text-decoration: none;
 	color:#01A9DB;
+}
+
+a, a:hover, a:active, a:focus {
+	text-decoration: none;
 }
 
 /* ====================== */
 /*        LOGIN          */
 /* ====================== */
 
-
-
 .login {
 	margin-top:200px;
 	text-align:center;
 	width:100%;
 }
-
 
 .login span {
 	text-align:right;
@@ -432,14 +453,43 @@ a:hover {
 /*      SIDEBAR            */
 /* ====================== */
 
-a.active {
+.selected,
+.selected a {
 	font-weight:bold;
 	color:#848484;
+}
+
+.panel-default > .panel-heading {
+	background-color:transparent;
+}
+
+.panel-default,
+.panel-default > .panel-heading {
+	border-color:transparent;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0);
+	padding-left:0px;
+	padding-top:0px;
+	padding-bottom:0px;
+}
+
+.panel-body{
+	padding-top:0px;
+	padding-bottom:0px;
+}
+
+.well{
+	background-color:transparent;
+}
+.link-unit{
+	padding-top:4px;
+	padding-bottom:5px;
+	padding-left:1px;
 }
 
 a.active:over{
 	color:black;
 }
+
 
 /* ====================== */
 /*      PAGE            */
@@ -453,16 +503,12 @@ a.active:over{
 	margin-top:15px;
 }
 */
+
 .pageCode {
 	font-size:12px;
 	font-weight:normal;
 	margin-left:20px;
 }
-
-
-
-
-
 
 .asmRoot .node,
 .asmUnit .node,
@@ -517,8 +563,64 @@ a.active:over{
   height:80px;
  }
 
-input {
-/*	width:320px; */
+#metadata input[type='checkbox'],
+#metadata input[type='radio'] {
+	margin-top:10px;
+}
+
+.get-radio{
+	font-size:14px;
+	margin-top:5px;
+}
+
+.get-radio:first-of-type{
+	margin-top:20px;
+}
+
+.click-item{
+	padding-left:5px;
+	font-size:14px;
+	margin-top:5px;
+}
+/* ====================
+	Select Drop Down
+   ====================*/
+
+
+button.select-label {
+/*	min-width:200px; */
+	min-width:300px;
+	word-wrap: break-word;
+	white-space: normal;
+	text-align:left;
+}
+
+.dropdown-menu li a{
+	max-width:500px;
+	word-wrap: break-word;
+	white-space: normal;
+}
+
+.click-item:hover,
+.dropdown-menu li a:hover {
+	background-color:lightgrey;
+}
+
+.click{
+	margin-top:20px;
+}
+
+.click div{
+	margin-top:5px;
+	cursor: pointer;
+}
+
+.clicked {
+	background-color:#DCDCDC;
+}
+
+.url_editor .form-horizontal{
+	margin-top:20px;
 }
 
 /* ====================
@@ -560,8 +662,12 @@ input {
 .comments {
 	font-style:italic;
 	font-size:11px;
+	font-weight:normal;
 }
 
+.evo-palette {
+	margin-right:5px;
+}
 #wait-window {
 	padding:20px;
 	background-color:#F0F0F0;
@@ -625,6 +731,8 @@ table.tablesorter th.restore {
 	padding-top: 5px;
 }
 */
+
+
 /* ====================
 	Badges
    ====================*/
@@ -833,11 +941,25 @@ table.tablesorter th.restore {
 /* ====================
 	Free
    ====================*/
-.free-toolbar {
+.free-toolbar{
+	width:100px;
+	height:48px;
+}
+
+.free-toolbar-buttons {
 	visibility:hidden;
 	z-index:10;
-	position:absolute;
-	top:-15px;
+	position:relative;
+/*	top:22px;*/
+}
+
+.free-toolbar-menu{
+	position:relative;
+/*	top:20px;*/
+}
+
+#free-content {
+	margin-top:-23px;
 }
 
 .movable {
@@ -852,26 +974,34 @@ table.tablesorter th.restore {
 }
 
 #header {
-	height:150px;
-    overflow: auto;
+	min-height:150px;
+/*    overflow: auto;*/
 }
 
 .header-container {
-	padding-top:250px;
+	margin-top:225px;
 
 }
 
 .header-menu {
-	border-top:1px solid lightgrey;
+/*	border-top:1px solid lightgrey;  */
+/*	margin-top:10px; */
 }
-	
+
+.dropdown-menu {
+  	z-index: 10000;	
+}
+
+#header .row {
+	height:44px;
+}
+
 /* ====================
-	Document/Image\URL
+	Document/Image/URL
    ====================*/
 .free-context {
 	height:100%;
 }
-
 
 .resource-Document,
 .resource-URL {
@@ -900,7 +1030,6 @@ table.tablesorter th.restore {
 .resource-URL a{
 	color : inherit;
 }
-
 
 .resource-Image {
 	display:inline-block;
@@ -935,19 +1064,25 @@ table.tablesorter th.restore {
 	Select with color
    ====================*/
 
-select.BDG0, option[value="BDG0"] {color: #fff; background: gray;}
-select.BDG1, option[value="BDG1"] {color: #fff; background: red;}
-select.BDG2, option[value="BDG2"] { color: #fff; background: #FF6600; }
-select.BDG3, option[value="BDG3"] { color: black; background: #fff; }
-select.BDG4, option[value="BDG4"] { color: black; background: #CCFF99; }
-select.BDG5, option[value="BDG5"] { color: #fff; background: #66CC00; }
+.selBDG0, option[value="BDG0"] {color: #fff; background: gray;}
+.selBDG1, option[value="BDG1"] {color: #fff; background: DarkOrange;}
+.selBDG2, option[value="BDG2"] { color: #fff; background: #FF6600; }
+.selBDG3, option[value="BDG3"] { color: black; background: #fff; }
+.selBDG4, option[value="BDG4"] { color: black; background: #CCFF99; }
+.selBDG5, option[value="BDG5"] { color: #fff; background: #66CC00; }
 
-.BDG0 { color: black; background: lightgrey; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG1 { color: black; background: red; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG2 { color: black; background: #FF6600; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG3 { color: black; background: ##fff; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG4 { color: black; background: #CCFF99; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG5 { color: black; background: #66CC00; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+//.BDG0 { color: black; background: lightgrey; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG0 { color: black; background: lightgrey; padding:4px;}
+//.BDG1 { color: black; background: red; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG1 { color: black; background: DarkOrange; padding:4px; }
+//.BDG2 { color: black; background: #FF6600; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG2 { color: black; background: #FF6600; padding:4px;}
+//.BDG3 { color: black; background: ##fff; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG3 { color: black; background: ##fff; padding:4px;}
+//.BDG4 { color: black; background: #CCFF99; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG4 { color: black; background: #CCFF99; padding:4px;}
+//.BDG5 { color: black; background: #66CC00; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
+.BDG5 { color: black; background: #66CC00; padding:4px;}
 
 select.Y0, option[value="Y0"] {color: #fff; background: gray;}
 select.Y1, option[value="Y1"] {color: #fff; background: red;}
@@ -955,6 +1090,7 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .Y0 {color: #fff; background: gray;}
 .Y1 {color: #fff; background: red;}
 .Y2 {color: #fff; background: green;}
+
 
 /* ====================
 	Other
@@ -978,14 +1114,45 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	height:14px;
 	width:14px;
 	margin-top:7px;
+	float:left;
 }
 
-.start {
-	margin-top:10px;
-	margin-right:10px;
-	border-radius:4px;
-	padding:10px;
-	background-image:linear-gradient(#FFF, #EEE);
-	border: 1px solid lightGrey;
-	box-shadow: 3px 3px 3px #CCC;
+#start {
+	background-image: linear-gradient(#fff, #eee);
+    border: 1px solid lightGrey;
+    border-radius: 4px;
+    box-shadow: 3px 3px 3px #ccc;
+    margin-right: 10px;
+    padding: 10px;
+}
+
+/* ====================
+	Isabelle
+   ====================*/
+
+/* list of structures/units in a portfolio */
+.btn-group .btn-xs{
+	height:24px;
+}
+
+/* no underline in sidebar */
+.well a:focus,
+.well a:hover {
+	text-decoration: none;
+}
+
+/* line spacing for GR, GGR and GDR in select type display */
+.choice-group {
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
+/* for submitted / not submitted alert */
+.alert {
+	padding: 1px 5px;
+	margin-bottom:0px;
+}
+	
+	
+	
 }

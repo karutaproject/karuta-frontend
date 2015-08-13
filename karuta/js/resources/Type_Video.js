@@ -245,7 +245,7 @@ UIFactory["Video"].prototype.displayEditor = function(destid,type,langcode)
 	html += "</div>";
 	html +=" <div id='progress_f_"+this.id+"_"+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileVideo_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
-	html +=  " <button type='button' class='btn btn-mini' onclick=\"UIFactory.Video.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Video.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
 	$("#f_"+this.id+"_"+langcode).fileupload({
 		progressall: function (e, data) {

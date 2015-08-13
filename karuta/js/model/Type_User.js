@@ -33,6 +33,9 @@ UIFactory["User"] = function( node )
 {
 	this.id = $(node).attr('id');
 	this.node = node;
+	this.firstname = $("firstname",node).text();
+	this.lastname = $("lastname",node).text();
+	this.lastname_node = $("lastname",node);
 	this.username_node = $("username",node);
 	this.firstname_node = $("firstname",node);
 	this.lastname_node = $("lastname",node);
@@ -99,17 +102,22 @@ UIFactory["User"].prototype.getView = function(dest,type,lang)
 		type = 'list';
 	var html = "";
 	if (type=='list') {
-		html = "<td>"+this.firstname_node.text() + "</td><td>" + this.lastname_node.text()+ "</td><td> (" + this.username_node.text() + ")</td>";
+		html = "<td style='padding-left:4px;padding-right:4px'>"+this.firstname_node.text() + "</td><td style='padding-left:4px;padding-right:4px'>" + this.lastname_node.text()+ "</td><td style='padding-left:4px;padding-right:4px'> (" + this.username_node.text() + ")</td>";
 		if (USER.admin){
-			html += "<td>";
+			html += "<td><div class='btn-group'>";
+			html += " <button class='btn btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
+			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
+			html += "</button>";
 			if (this.username_node.text()!='root') {
-				html += "<a class='btn btn-mini pull-right' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-				html += "<i class='icon-remove'></i>";
-				html += "</a>";
+				html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<span class='glyphicon glyphicon-remove'></span>";
+				html += "</button>";
+			} else {
+				html += "<button class='btn btn-xs' disabled='true' data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<span class='glyphicon glyphicon-remove'></span>";
+				html += "</button>";
 			}
-			html += " <a class='btn btn-mini pull-right' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
-			html += "<i class='icon-edit'></i>";
-			html += "</a></td>";
+			html += "</div></td>";
 		}
 	}
 	if (type=='firstname-lastname') {
@@ -146,9 +154,9 @@ UIFactory["User"].getAttributeEditor = function(userid,attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "  <label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "  <div class='controls'><input";
+	html += "<div class='form-group'>";
+	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "  <div class='col-sm-9'><input class='form-control'";
 	html += " type='text'";
 	html += " onchange=\"javascript:UIFactory['User'].update('"+userid+"','"+attribute+"',this.value)\" value='"+value+"' ></div>";
 	html += "</div>";
@@ -160,9 +168,9 @@ UIFactory["User"].getAttributeCheckEditor = function(userid,attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "  <label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "  <div class='controls'><input";
+	html += "<div class='form-group'>";
+	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "  <div class='col-sm-9'><input";
 	html += " type='checkbox'";
 	if (value=='1')
 		html += " checked='true' ";
@@ -176,9 +184,9 @@ UIFactory["User"].getAttributeRadioEditor = function(userid,attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "	<label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "	<div class='controls'>";
+	html += "<div class='form-group'>";
+	html += "	<label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "	<div class='col-sm-9'>";
 	html += "		<input type='radio' name='"+attribute+"'";
 	if (value=='1')
 		html += " checked='true' ";
@@ -204,9 +212,9 @@ UIFactory["User"].prototype.getEditor = function(type,lang)
 	html += UIFactory["User"].getAttributeEditor(this.id,"email",this.email_node.text());
 	html +="<hr/>";
 	html += UIFactory["User"].getAttributeEditor(this.id,"username",this.username_node.text());
-	html += "<div class='control-group'>";
-	html += "  <label class='control-label'>"+karutaStr[LANG]['new_password']+"</label>";
-	html += "  <div class='controls'><input";
+	html += "<div class='form-group'>";
+	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG]['new_password']+"</label>";
+	html += "  <div class='col-sm-9'><input class='form-control'";
 	html += " type='password'";
 	html += " onchange=\"javascript:UIFactory['User'].changePassword('"+this.id+"',this.value)\" value='' ></div>";
 	html += "</div>";
@@ -224,9 +232,9 @@ UIFactory["User"].getAttributeCreator = function(attribute,value,pwd)
 //==================================================
 {
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "<label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "<div class='controls'><input id='user_"+attribute+"'";
+	html += "<div class='form-group'>";
+	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "  <div class='col-sm-9'><input class='form-control' id='user_"+attribute+"'";
 	if (pwd!=null && pwd)
 		html += " type='password'";
 	else
@@ -241,9 +249,9 @@ UIFactory["User"].getAttributeRadioCreator = function(attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='control-group'>";
-	html += "	<label class='control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "	<div class='controls'>";
+	html += "<div class='form-group'>";
+	html += "	<label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "	<div class='col-sm-9'>";
 	html += "		<input type='radio' name='user_"+attribute+"'";
 	if (value=='1')
 		html += " checked='true' ";
@@ -262,7 +270,7 @@ UIFactory["User"].callCreate = function()
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['User'].create()";
-	var footer = "<span class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</span><span class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</span>";
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['create_user']);
 	var html = "";
@@ -279,7 +287,7 @@ UIFactory["User"].callCreate = function()
 	html += UIFactory["User"].getAttributeRadioCreator("substitute","0");
 	html += UIFactory["User"].getAttributeRadioCreator("active","1");
 	html += "</form>";
-	$("#edit-window-body-content").html(html);
+	$("#edit-window-body").html(html);
 	//--------------------------
 	$('#edit-window').modal('show');
 };
@@ -289,14 +297,14 @@ UIFactory["User"].prototype.getSelector = function(attr,value,name)
 //==================================
 {
 	var userid = this.id;
-	if (userid==1)
-		return "";
 	var firstname = this.firstname_node.text();
 	var lastname = this.lastname_node.text();
 	var username = this.username_node.text();
 	var html = "<input type='checkbox' name='"+name+"' value='"+userid+"'";
 	if (attr!=null && value!=null)
 		html += " "+attr+"='"+value+"'";
+	if (userid==1)
+		html+= " disabled='disabled' ";			
 	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
 	return html;
 };
@@ -306,14 +314,14 @@ UIFactory["User"].edit = function(userid)
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var footer = "<span class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</span>";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['user']);
 	var html = "";
-	$("#edit-window-body-content").html(html);
+	$("#edit-window-body").html(html);
 	//--------------------------
 	html = Users_byid[userid].getEditor();
-	$("#edit-window-body-content").append(html);
+	$("#edit-window-body").append(html);
 	//--------------------------
 	$('#edit-window').modal('show');
 };
@@ -356,8 +364,8 @@ UIFactory["User"].confirmRemove = function(userid)
 //==================================
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<span class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</span>";
-	buttons += "<span class='btn btn-danger' onclick=\"javascript:UIFactory['User'].remove('"+userid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</span>";
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:UIFactory['User'].remove('"+userid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 };
@@ -467,14 +475,14 @@ UIFactory["User"].callChangePassword = function()
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['User'].changePassword()";
-	var footer = "<span class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Change']+"</span><span class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</span>";
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Change']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['change_password']);
 	var html = "";
 	html += "<form id='metadata' class='form-horizontal'>";
 	html += UIFactory["User"].getPasswordCreator();
 	html += "</form>";
-	$("#edit-window-body-content").html(html);
+	$("#edit-window-body").html(html);
 	//--------------------------
 	$('#edit-window').modal('show');
 
@@ -485,7 +493,7 @@ UIFactory["User"].getPasswordCreator = function()
 //==================================================
 {
 	var html = "";
-	html += UIFactory["User"].getAttributeCreator("password","",true);
+	html += UIFactory["User"].getAttributeCreator("password-new","",true);
 	html += UIFactory["User"].getAttributeCreator("confirm-password","",true);
 	return html;
 };

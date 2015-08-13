@@ -89,9 +89,9 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 		label = url;
 	if(type=='standard') {
 		if (url!="")
-			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+label+"</a>";
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' style='width:25px'> "+label+"</a>";
 		else
-			html =  "<img src='../img/link-icon.png' width='25px'> "+karutaStr[LANG]['no-URL'];
+			html =  "<img src='../img/link-icon.png' style='width:25px'> "+karutaStr[LANG]['no-URL'];
 	}
 	if (type=='free-positioning'){
 		if (url!="")
@@ -101,15 +101,15 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 	}
 	if (type=='icon-url-label'){
 		if (url!="")
-			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+label+urlIcon["web"]+"</a>";
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' style='width:25px'> "+label+urlIcon["web"]+"</a>";
 		else
-			html =  "<img src='../img/link-icon.png' width='25px'><p style='text-align:center;'>"+karutaStr[LANG]['no-URL']+"</p>";
+			html =  "<img src='../img/link-icon.png' style='width:25px'><p style='text-align:center;'>"+karutaStr[LANG]['no-URL']+"</p>";
 	}
 	if (type=='icon-url'){
 		if (url!="")
-			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' width='25px'> "+urlIcon["web"]+"</a>";
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' style='width:25px'> "+urlIcon["web"]+"</a>";
 		else
-			html =  "<img src='../img/link-icon.png' width='25px'>"+karutaStr[LANG]['no-URL'];
+			html =  "<img src='../img/link-icon.png' style='width:25px'>"+karutaStr[LANG]['no-URL'];
 	}
 	if (type=='icon'){
 		html = urlIcon["web"];
@@ -210,21 +210,33 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		$(obj).append(input_url);
 	}
 	if(type=='default') {
-		$(obj).append($("<label> "+karutaStr[LANG]['label']+"</label>"));
-		var input_label = $("<input type='text' name='label'  value=\""+$(this.label_node[langcode]).text()+"\">");
-		$(input_label).change(function (){
-			UIFactory["URL"].update(obj,self,type,langcode);
-		});
-		$(obj).append(input_label);
+		var htmlFormObj = $("<form class='form-horizontal'></form>");
+		$(obj).append($(htmlFormObj));
 		//------------------------
-		$(obj).append($("<label> URL (http://)</label>"));
-		var input_url = $("<input type='text' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
-		$(input_url).change(function (){
+		var htmlLabelGroupObj = $("<div class='form-group'></div>")
+		var htmlLabelLabelObj = $("<label for='label_"+this.id+"' class='col-sm-3 control-label'> "+karutaStr[LANG]['label']+"</label>");
+		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
+		var htmlLabelInputObj = $("<input id='label_"+this.id+"' type='text' class='form-control' name='label' value=\""+$(this.label_node[langcode]).text()+"\">");
+		$(htmlLabelInputObj).change(function (){
 			UIFactory["URL"].update(obj,self,type,langcode);
 		});
-		$(obj).append(input_url);
+		$(htmlLabelDivObj).append($(htmlLabelInputObj));
+		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
+		$(htmlLabelGroupObj).append($(htmlLabelDivObj));
+		$(htmlFormObj).append($(htmlLabelGroupObj));
+		//------------------------
+		var htmlUrlGroupObj = $("<div class='form-group'></div>")
+		var htmlUrlLabelObj = $("<label for='url_"+this.id+"' class='col-sm-3 control-label'>URL</label>");
+		var htmlUrlDivObj = $("<div class='col-sm-9'></div>");
+		var htmlUrlInputObj = $("<input id='url_"+this.id+"' type='text' class='form-control' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
+		$(htmlUrlInputObj).change(function (){
+			UIFactory["URL"].update(obj,self,type,langcode);
+		});
+		$(htmlUrlDivObj).append($(htmlUrlInputObj));
+		$(htmlUrlGroupObj).append($(htmlUrlLabelObj));
+		$(htmlUrlGroupObj).append($(htmlUrlDivObj));
+		$(htmlFormObj).append($(htmlUrlGroupObj));
 	}
-	//------------------------
 	return obj;
 };
 

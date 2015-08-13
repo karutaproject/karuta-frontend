@@ -96,7 +96,7 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 		disabled = false;
 	//---------------------
 	var html = "";
-	html += "<input type='text' name='datepicker' ";
+	html += "<input type='text' name='datepicker' class='form-control' style='width:150px;' ";
 	if (disabled)
 		html += "disabled='disabled' ";
 	html += "value=\""+$(this.text_node[langcode]).text()+"\" >";

@@ -123,9 +123,9 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 	var html = "";
 	if (type=='standard'){
 		if ($(this.filename_node[langcode]).text()!="")
-			html =  "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' width='25px'> "+$(this.filename_node[langcode]).text()+"</a>";
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' style='width:25px'> "+$(this.filename_node[langcode]).text()+"</a>";
 		else
-			html =  "<img src='../img/document-icon.png' width='25px'>"+karutaStr[LANG]['no-document'];
+			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
 	}
 	if (type=='free-positioning'){
 		if ($(this.filename_node[langcode]).text()!="") {
@@ -142,7 +142,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
 		} else
-			html =  "<img src='../img/document-icon.png' width='25px'>"+karutaStr[LANG]['no-document'];
+			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
 	}
 	if (type=='icon-url'){
 		if ($(this.filename_node[langcode]).text()!=""){
@@ -150,7 +150,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
 		} else
-			html =  "<img src='../img/document-icon.png' width='25px'>";
+			html =  "<img src='../img/document-icon.png' style='width:25px'>";
 	}
 	if (type=='icon'){
 		if ($(this.filename_node[langcode]).text()!=""){
@@ -158,7 +158,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			var extension = filename.substring(filename.lastIndexOf(".")+1);
 			html =  documentIcon[extension]; 
 		} else
-			html =  "<img src='../img/document-icon.png' width='25px'>";
+			html =  "<img src='../img/document-icon.png' style='width:25px'>";
 
 	}
 	return html;
@@ -236,7 +236,7 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode)
 	html += "</div>";
 	html +=" <div id='progress_"+this.id+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
 	html +=  "<a id='file__"+this.id+"_"+langcode+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+"</a>"; 
-	html +=  " <button type='button' class='btn btn-mini' onclick=\"UIFactory.Document.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Document.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
 	$("#fileupload_"+this.id+langcode).fileupload({
 		progressall: function (e, data) {

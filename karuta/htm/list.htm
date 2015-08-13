@@ -6,26 +6,21 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
 		<!-- =========================================== -->
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-responsive.min.css" />
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-wysihtml5.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/blue/style.css">
 		<!-- =========================================== -->
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
 		<link rel="stylesheet" href="../../application/css/specific.css" />
 		<!-- =========================================== -->
 		<script src="../../other/js/jquery-1.10.2.js"></script>
 		<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
-		<script src='../../other/wysihtml5/wysihtml5-0.3.0.js'></script>
-		<script src='../../other/wysihtml5/parser.js'></script>
 		<script src="../../other/js/jquery.tablesorter.min.js"></script>
 		<!--[if lt IE 9]>
 			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
 		<![endif]-->
-		<script src="../../other/js/bootstrap-wysihtml5.js"></script>
 		<script src="../../other/js/jquery_hotkeys.js"></script>
-		<!--script src="../../other/js/bootstrap-wysiwyg.js"></script-->
 		<script src="../../karuta/js/karuta.js"></script>
 		<script src="../../karuta/js/UICom.js"></script>
 		<script src="../../karuta/js/batch.js"></script>
@@ -46,9 +41,6 @@
 		<script src="../../application/js/create_batch.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/version.js"></script>
-		<!-- =============================================================== -->
-		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
-		<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
 		<script>
 			//==============================
 			function getList()
@@ -90,33 +82,15 @@
 	</head>
 	<body>
 		<div id='navigation_bar'></div>
-		<div class="container" style = "padding-top:60px">
+		<div class="container">
 			<div class='row'>
-				<div class='span9'>
+				<div class='col-md-3'>
+					<div id='start' style='visibility:hidden'>
+					</div>
+				</div>
+				<div class='col-md-9'>
 					<div id='menu'></div>
 					<div id='list'></div>
-				</div>
-				<div id='start' class='span3' style='display:none'>
-					<div class='start'>
-						To <b>start</b> click the <b>Menu</b> button<br/>
-						<p>You can create</p>
-						<ul>
-						<li>portfolios</li>
-						<li>batch and report models</li>
-						</ul>
-						<p>You can import</p>
-						<ul>
-						<li>portfolios models from files</li>
-						<li>portfolios instances from files</li>
-						</ul>
-						<p>You can import</p>
-						<ul>
-						<li>Karuta Documentation</li>
-						<li>Video Demo Portfolios</li>
-						<li>AACU Demo Portfolios</li>
-						<li>e-commerce Demo Portfolios</li>
-						</ul>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -127,8 +101,6 @@
 		</div>
 		<script>
 			document.write(EditBox());
-			if (demo && LANG=='en')
-				$("#start").show();
 			$(document).ready(function() {
 				//----------------
 				$.ajaxSetup({async: false});
@@ -164,9 +136,9 @@
 							}
 						});
 						var html = "";
-						html += "<div class='btn-group'>";
-						html += "<a href='#' data-toggle='dropdown' class='btn  btn-mini dropdown-toggle'><div class='btn-text'>Menu <b class='caret'></b></div></a>";
-						html += "<ul class='dropdown-menu'>";
+						html += "<div class='dropdown'>";
+						html += "<button id='list_menu' class='btn' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><div class='btn-text'>Menu <span class='caret'></span></div></button>";
+						html += "<ul class='dropdown-menu' role='menu' aria-labelledby='list_menu'>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].create()\" href='#'>"+karutaStr[LANG]['create_portfolio']+"</a></li>";
 						html += "<hr>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createBatch()\" href='#'>"+karutaStr[LANG]['create_batch']+"</a></li>";
@@ -186,8 +158,13 @@
 						}
 						html += "</ul>";
 						html += "</div>";
-						if (USER.admin || USER.creator)
+						if (USER.admin || USER.creator){
 							$("#menu").html(html);
+							if (demo) {
+								$("#start").html(listinfo[LANG]);
+								$("#start").attr('style','visibility:visible');
+							}
+						}
 						//----------------
 						$.ajax({
 							type : "GET",
@@ -230,6 +207,7 @@
 					}
 				});
 				$.ajaxSetup({async: true});
+				$('[data-toggle="tooltip"]').tooltip(); 
 			});
 		</script>
 	</body>

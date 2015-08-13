@@ -146,7 +146,7 @@ UIFactory["Comments"].prototype.displayEditor = function(destid,type,langcode,di
 	var uuid = this.id;
 	var html = "";
 	if (type=='default') {
-		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit_"+langcode+"' style='height:200px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
+		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' style='height:200px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
 		if (disabled)
 			html += "disabled='disabled' ";
 		html += ">"+text+"</textarea></div>";
@@ -154,13 +154,13 @@ UIFactory["Comments"].prototype.displayEditor = function(destid,type,langcode,di
 	else if(type.indexOf('x')>-1) {
 //		var width = type.substring(0,type.indexOf('x'));
 		var height = type.substring(type.indexOf('x')+1);
-		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit_"+langcode+"' style='height:"+height+"px' ";
+		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' style='height:"+height+"px' ";
 		if (disabled)
 			html += "disabled='disabled' ";
 		html += ">"+text+"</textarea></div>";
 	}
 	$("#"+destid).append($(html));
-	$("#"+this.id+"_edit_"+langcode).wysihtml5({size:'mini','font-styles': false,'image': false,'uuid':uuid,'locale':LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;} }});
+	$("#"+this.id+"_edit_"+langcode).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},'uuid':uuid,'locale':LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;} }});
 	//------------------------------------------------
 };
 

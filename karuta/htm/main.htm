@@ -6,9 +6,7 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
 		<!-- =============================================================== -->
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-responsive.min.css" />
-		<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-wysihtml5.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
@@ -38,16 +36,21 @@
 		<script src="../../karuta/js/resources/Type_URL2Unit.js"></script>
 		<script src="../../karuta/js/resources/Type_Dashboard.js"></script>
 		<script src="../../karuta/js/resources/Type_Color.js"></script>
+		<script src="../../karuta/js/resources/Type_Bubble.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../other/js/jquery-1.10.2.js"></script>
 		<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
-		<script src='../../other/wysihtml5/wysihtml5-0.3.0.js'> </script>
-		<script src='../../other/wysihtml5/parser.js'> </script>
+		<script src="../../other/js/jquery.ui.touch-punch.min.js"></script>
+		<!--script src='../../other/wysihtml5/parser.js'> </script-->
 		<!--[if lt IE 9]>
 			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
 		<![endif]-->
-		<script src="../../other/js/bootstrap-wysihtml5.js"></script>
+		<!--script src="../../other/js/bootstrap-wysihtml5.js"--></script>
+		<!-- =============================================================== -->
+		<link rel="stylesheet" type="text/css" href='../../other/wysihtml5/bootstrap3-wysihtml5.min.css'/>
+		<script src='../../other/wysihtml5/bootstrap3-wysihtml5.all.min.js'> </script>
+		<!-- =============================================================== -->
 		<script src="../../other/js/jquery_hotkeys.js"></script>
 		<script src="../../other/js/JQueryRC4.js"></script>
 		<!-- =========================================== -->
@@ -82,10 +85,9 @@
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/version.js"></script>
 		<!-- =============================================================== -->
-		<script src="../../karuta/js/dashboards/dashboards.js"></script>
 		<script src="../../karuta/js/dashboards/matrix_2dims/matrix_2dim.js"></script>
-		<script src="../../karuta/js/dashboards/portfolio_2dims/portfolio_2dims.js"></script>
-		<script src="../../karuta/js/dashboards/scedu/scedu.js"></script>
+		<!-- =============================================================== -->
+		<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css"> <!-- cursive font LAMP example -->
 		<!-- =============================================================== -->
 	</head>
 	<body>
@@ -201,6 +203,8 @@
 									
 								//---------------------------
 								$("#wait-window").hide();
+								$("#sidebar_"+UICom.rootid).click();
+								fillEditBoxBody();
 							}
 						});
 					},
