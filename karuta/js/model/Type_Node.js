@@ -604,7 +604,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
 						if (g_userrole!='designer' && semtag=='header')
-						html += " style='display:none'";
+						html += " style='visibility:hidden'";
 						html += ">";
 					}
 					if (semtag!='bubble_level1')
@@ -657,17 +657,16 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
 					var helps = attr_help.split("/"); // lang1/lang2/...
 					var help_text = helps[langcode];  
-//					var help =  " <a href='javascript://'  data-toggle='popover' class='popinfo'><i class='icon-info-sign'></i></a> "; //Bootstrap 2
-					var help = " <a href='javascript://' data-trigger='hover' data-toggle='popover' class='popinfo'><span class='glyphicon glyphicon-info-sign'></span></a> ";
+//					var help = " <a href='javascript://' data-toggle='popover' class='popinfo'><i class='icon-info-sign'></i></a> ";  //Bootstrap 2
+					var help = " <a href='javascript://' class='popinfo'><span class='glyphicon glyphicon-info-sign'></span></a> ";
 					$("#help_"+uuid).html(help);
 					$(".popinfo").popover({ 
 					    placement : 'right',
 					    container : 'body',
 					    title:karutaStr[LANG]['help-label'],
 					    html : true,
+					    trigger:'click hover',
 					    content: help_text
-					    })
-					    .click(function(e) {
 					});
 				}
 			}
@@ -811,13 +810,20 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			//------------------- Toolbar and Buttons --------------------------
 			if (edit && (!inline || g_userrole=='designer')) {
 				html += "<div class='free-toolbar'>";
-				html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu-"+uuid+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
-				html += "<div id='toolbar-"+uuid+"' class='free-toolbar-buttons'>";
-				html += "	<div id='buttons-"+uuid+"'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
-				html += "</div>";
+				var freeButtons = UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu);
+				if (freeButtons.length > 100) {
+					html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu-"+uuid+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
+					html += "<div id='toolbar-"+uuid+"' class='free-toolbar-buttons'>";
+					html += "	<div id='buttons-"+uuid+"'>"+ freeButtons +"</div>";
+					html += "</div>";
+				}
 				html += "</div>";
 			}
-			html += "<div style='"+style+"'>";
+			else {
+				html += "<div class='free-toolbar'>";
+				html += "</div>";				
+			}
+			html += "<div id='free-content' style='"+style+"'>";
 			//-------------------------------------------------------------------
 			if (name == "asmContext") {
 				//-------------- resource -------------------------
@@ -942,9 +948,9 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				else
 					html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
 				//-------------- metainfo -------------------------
-				if (g_userrole=='designer' || USER.admin) {
-					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
-				}
+//				if (g_userrole=='designer' || USER.admin) {
+//					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
+//				}
 				//----------------------------
 				html += "</div>";
 				html += "<div id='context-"+uuid+"'></div>";
