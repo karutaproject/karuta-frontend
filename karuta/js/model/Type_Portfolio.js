@@ -296,7 +296,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 			html += "</div>";
 		}
 		html += "<div id='navigation_bar'></div>";
-		html += "<div id='main-header' class='container navbar navbar-fixed-top' style='margin-top:55px;'>";
+		html += "<div id='main-header' class='container navbar navbar-fixed-top'>";
 		html += "   <div id='header'></div>";
 		html += "   <div id='menu'></div>";
 		html += "</div>";
@@ -1174,6 +1174,7 @@ UIFactory["Portfolio"].displayShared = function(destid,data)
 		$("#"+destid).html(karutaStr[LANG]['noshared']);
 	}
 	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');
+//	$('#edit-window-body').scrollTop(0);
 };
 
 //==================================

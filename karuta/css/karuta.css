@@ -975,6 +975,8 @@ table.tablesorter th.restore {
    ====================*/
 #main-header{
 	background-color:white;
+	margin-top:55px;
+	z-index:1000;
 }
 
 #header {

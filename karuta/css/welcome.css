@@ -1,3 +1,7 @@
+#main-container {
+	padding-top:60px;
+}
+
 /* -- boutons du navbar --*/
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .open > a, 

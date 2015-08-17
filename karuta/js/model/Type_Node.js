@@ -478,7 +478,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			if (name == "asmContext"){
 				html += "<div class='row'>";
 				//-------------- node -----------------------------
-				html += "<div class='col-md-9' style='padding-top:6px;" + backgroundParent + "'>";
+				html += "<div class='col-md-9' style='" + backgroundParent + "'>";
 				html += "<div class='row'>";
 				html += "<div id='std_node_"+uuid+"' class='col-md-3' ";
 				style = "style='";
@@ -584,7 +584,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (depth!=1 && depth<10 && name=='asmStructure') {
 					if (g_display_type=='standard')
 //						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='padding-top:10px;"+style+"'>";
+						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
 					if (g_display_type=='header')
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',1,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>";
@@ -592,7 +592,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				else if (depth!=1 && depth<10 && name=='asmUnit') {
 					if (g_display_type=='standard')
 //						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='padding-top:6px;"+style+"'>";
+						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
 					if (g_display_type=='header')
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
@@ -600,7 +600,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				else {
 					if (g_display_type=='standard')
 //						html += "<div id='std_node_"+uuid+"' class='col-md-9'>";
-						html += "<div id='std_node_"+uuid+"' class='col-md-9' style='padding-top:6px;"+style+"'>";
+						html += "<div id='std_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
 						if (g_userrole!='designer' && semtag=='header')
