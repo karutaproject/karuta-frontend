@@ -83,10 +83,11 @@ hr {
 .accordion-inner .accordion-inner .title {
 	margin-left:14px;
 }
-/*
-.title {
-	padding:2px;
-}*/
+
+.row .col-md-9 .row:first-child,
+.row .col-md-9 .title:first-child {
+	min-height:24px;
+}
 
 .asmRoot .title {
 	font-size: 24px;
