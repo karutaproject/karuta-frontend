@@ -873,18 +873,16 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			}
 			//---------------------------------------------------------
 			var html = "";
-			html += "<div id='free_"+uuid+"' uuid='"+uuid+"' class='free-node "+name+"'";
+			html += "<div id='free_"+uuid+"' uuid='"+uuid+"' ";
 			if (name != "asmContext") 
 				html += "style='"+style_position+style_size+style_background+"' ";
 			 else 
 				html += "style='"+style_position+"' ";
+				html += "class='free-node "+name+" ";
 			if (USER.admin || g_userrole=='designer' || graphicerroles.indexOf(g_userrole)>-1 || graphicerroles.indexOf(this.userrole)>-1) {
-				html += "draggable='yes' ";
-				html += "class='movable ";
+				html += "movable ";
 			}
-			else
-				html += "class='";
-			html += name+" "+semtag+"' ";
+			html += semtag+"' ";
 			//------------------------
 			html += ">";
 			if (name == "asmContext" && node.resource.type!='Proxy') {
