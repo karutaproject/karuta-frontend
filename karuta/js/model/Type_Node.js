@@ -531,7 +531,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					html += "</div><!-- col-md-9 resource -->";
 				} else {
 						if (g_display_type=='standard') {
-							html += "<div id='std_resource_"+uuid+"' class='col-md-9' ";
+							html += "<div id='std_resource_"+uuid+"' class='resource col-md-9' ";
 							style = "style='";
 							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
 							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
@@ -570,7 +570,6 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//----------------------------
 				if (name=='asmUnitStructure')
 					depth=100;	
-//				html += "<div ";
 				style = "";
 				if (depth>0) {
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
@@ -588,14 +587,11 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-othercss',false);
 				}
-//				html +=" style='"+style+"'";
-//				html += "><div class='row'>";
 				html += "<div class='row'>";
 	
 				//-------------- node -----------------------------
 				if (depth!=1 && depth<10 && name=='asmStructure') {
 					if (g_display_type=='standard')
-//						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
 					if (g_display_type=='header')
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
@@ -603,7 +599,6 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					}
 				else if (depth!=1 && depth<10 && name=='asmUnit') {
 					if (g_display_type=='standard')
-//						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
 					if (g_display_type=='header')
 						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
@@ -650,8 +645,12 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
 					html +=" style='"+style+"'";
 					html += ">";
+					//-----------------------------------------
+					var graphicers = $("metadatawad[graphicerroles*="+this.userrole+"]",node);
+//					alert(graphicers.length);
 					if (contentfreenode=='Y')
 						html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
+					//-----------------------------------------
 					html += "</div>";
 				}
 			}
