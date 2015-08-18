@@ -345,7 +345,7 @@ function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
 	html += "\n<!-- ==================== Delete Button ==================== -->";
 	html += "<button id='del-"+uuid+"' class='btn btn-xs' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 	html += "<span class='glyphicon glyphicon-remove'></span>";
-	html += "</a>";
+	html += "</button>";
 	return html;
 }
 

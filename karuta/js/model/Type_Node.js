@@ -491,7 +491,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += "<div class='row'>";
 				//-------------- node -----------------------------
 				html += "<div class='col-md-9' style='" + backgroundParent + "'>";
-				html += "<div class='row'>";
+				html += "<div class='row '>";
 				html += "<div id='std_node_"+uuid+"' class='col-md-3' ";
 				style = "style='";
 				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
@@ -985,11 +985,13 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 					else
 						html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 					//-----------------
-					html+="</div>";
+					html+="</div><!-- div #std_resource_uuid -->";
 					//--------------------------------------
 					html += "</div>";
 					html += "</div>";
 				}
+				html += "<div id='context-"+uuid+"'></div><!-- div #context-uuid -->";
+				html += "</div><!-- div #free-content_uuid -->";
 			}
 			else { // other than asmContext
 				html += "<div id='free-content_"+uuid+"' uuid='"+uuid+"'>";
@@ -1033,15 +1035,16 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 //					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
 //				}
 				//----------------------------
-				html += "</div>";
-				html += "<div id='context-"+uuid+"'></div>";
+				html += "</div><!-- div for metadata epm-->";
+				html += "<div id='context-"+uuid+"'></div><!-- div #context-uuid -->";
 				//--------------------------------------------------*/
-				html += "<div id='content-"+uuid+"'></div>";
+				html += "<div id='content-"+uuid+"'></div><!-- div #content-uuid -->";
+				html += "</div><!-- div #free-content_uuid -->";
 			}
-			html += "<div id='context-"+uuid+"'></div>";
-			html += "</div><!-- name -->";
+			//--------------------------------------------------
+			html += "</div><!-- div #free_uuid -->";
 			//---------------------
-			$("#"+dest).append(html);
+			$("#"+dest).append($(html));
 			if ($("#display_editor_"+uuid).length>0) {
 				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
 			}
