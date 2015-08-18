@@ -689,13 +689,14 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					});
 				}
 			}
+			//----------------------------------------------
 			$("#free-toolbar-menu_"+uuid).click(function(){
-				if ($(".free-toolbar").css('visibility')=='hidden') {
-					$(".free-toolbar").css('visibility','visible');
+				if ($(".free-toolbar",$("#content-"+uuid)).css('visibility')=='hidden') {
+					$(".free-toolbar",$("#content-"+uuid)).css('visibility','visible');
 					g_free_toolbar_visibility = 'visible';
 				}
 				else {
-					$(".free-toolbar").css('visibility','hidden');
+					$(".free-toolbar",$("#content-"+uuid)).css('visibility','hidden');
 					g_free_toolbar_visibility = 'hidden';
 				}
 			});
