@@ -26,7 +26,8 @@ var g_encrypted = false;
 var g_display_type = "";
 var g_edit = false;
 var g_visible = 'visible';
-
+var g_visible = 'visible';
+var g_free_toolbar_visibility = 'hidden';
 var g_dashboard_models = {}; // cache for dashboard_models
 //-------------- used for designer-----
 var redisplays = {};

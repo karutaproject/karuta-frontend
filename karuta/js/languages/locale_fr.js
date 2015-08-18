@@ -67,6 +67,7 @@ karutaStr['fr']['demo-video']="Importer les portfolios démo des vidéos YouTube
 karutaStr['fr']['want-sharing']=" désire partager avec vous une partie de son portfolio.";
 karutaStr['fr']['share-URL']="Partage du portfolio";
 karutaStr['fr']['see']="Voir";
+karutaStr['fr']['free-toolbar-menu-tooltip']="Cliquer pour éditer";
 
 //=========================================
 //========== NODE =========================

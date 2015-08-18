@@ -74,6 +74,7 @@ UIFactory["Node"] = function( node )
 		//------------------------------
 		this.display = {}; // to refresh after changes
 		this.display_label = {}; // to refresh after changes
+		this.display_node = {}; // to refresh after changes (metadataepm)
 	}
 	catch(err) {
 		alert("UIFactory['Node']--"+err.message+"--"+this.id+"--"+this.resource_type);
@@ -341,15 +342,23 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2)
 UIFactory["Node"].prototype.refresh = function()
 //==================================
 {
-	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,null,this.display[dest]));
+	for (dest1 in this.display) {
+		$("#"+dest1).html(this.getView(null,null,this.display[dest1]));
 	};
-	for (dest in this.display_label) {
-		$("#"+dest).html(this.getLabel(null,this.display_label[dest],null));
+	for (dest2 in this.display_label) {
+		$("#"+dest2).html(this.getLabel(null,this.display_label[dest2],null));
 	};
-
+	for (dest3 in this.display_node) {
+		if (this.display_node[dest3].display=="free"){
+			$("#free_"+this.display_node[dest3].uuid).remove();
+			UIFactory["Node"].displayFree(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline);
+		}
+		if (this.display_node[dest3].display=="standard"){
+			$("#standard_"+this.display_node[dest3].uuid).remove();
+			UIFactory["Node"].displayStandard(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent);
+		}
+	};
 };
-
 
 //==================================
 UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,depth,edit,menu)
@@ -432,6 +441,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 //	var proxy_target = false;
 
 	var node = UICom.structure["ui"][uuid];
+	// ---- store info to redisplay after change ---
+	node.display_node[dest] = {"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":"standard"};
+	//----------------------------------------------
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
@@ -460,7 +472,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					}
 			}
 			//---------------------------------------------------------
-			var html = "<div class='"+name+" "+semtag+" ";
+			var html = "<div id='standard_"+uuid+"' class='"+name+" "+semtag+" ";
 			if(UICom.structure["ui"][uuid].resource!=null)
 				html += UICom.structure["ui"][uuid].resource.type;
 			html += "'";
@@ -635,7 +647,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',true);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
 					html +=" style='"+style+"'";
-					html += "></div>";
+					html += ">";
+					if (contentfreenode=='Y')
+						html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
+					html += "</div>";
 				}
 			}
 			html += "</div><!-- name -->";
@@ -672,6 +687,16 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					});
 				}
 			}
+			$("#free-toolbar-menu_"+uuid).click(function(){
+				if ($(".free-toolbar").css('visibility')=='hidden') {
+					$(".free-toolbar").css('visibility','visible');
+					g_free_toolbar_visibility = 'visible';
+				}
+				else {
+					$(".free-toolbar").css('visibility','hidden');
+					g_free_toolbar_visibility = 'hidden';
+				}
+			});
 			//---------- video ------------------
 			if (UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
 				UICom.structure["ui"][uuid].resource.setParameter();
@@ -732,6 +757,53 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	} //---- end of private
 };
 
+//========================================================
+UIFactory["Node"].updateIpadPosition = function (obj,top,left)
+//========================================================
+{
+	var nodeid = obj.getAttribute("uuid");
+    var offset = $(obj).offset();
+    alert(top+"-"+left+"/"+offset.top+"-"+offset.left);
+	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',top);
+	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',left);
+};
+
+//========================================================
+UIFactory["Node"].updatePosition = function (obj)
+//========================================================
+{
+	var nodeid = obj.getAttribute("uuid");
+    var pos = $(obj).position();
+    var top = pos.top;
+    var left = pos.left;
+	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',top);
+	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',left);
+};
+
+//========================================================
+UIFactory["Node"].updateSize = function (obj)
+//========================================================
+{
+	var nodeid = obj.getAttribute("uuid");
+	if (nodeid==undefined)
+		nodeid = obj.parentNode.parentNode.getAttribute("uuid");
+	var width = obj.style.width;
+	var height = obj.style.height;
+	if (UICom.structure["ui"][nodeid].resource_type=='Image'){
+		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'width',width);
+		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'height',height);
+		UICom.structure["ui"][nodeid].resource.refresh();
+		$("#std_resource_"+nodeid).resizable({
+			stop: function(){UIFactory["Node"].updateSize(obj);}
+		}
+		);
+	}
+	else {
+		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'width',width);
+		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'height',height);
+	}
+};
+
 
 //==================================================
 UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
@@ -749,6 +821,9 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 	var proxy_target = false;
 
 	var node = UICom.structure["ui"][uuid];
+	// ---- store info to redisplay after change ---
+	node.display_node[dest] = {"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"display":"free"};
+	//----------------------------------------------
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
@@ -777,9 +852,29 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 						edit = menu = (proxies_edit["proxy-"+semtag].indexOf(g_userrole)>-1);
 					}
 			}
-			//---------------------------------------------------------	//---------------------------------------------------------
+			//---------------------------------------------------------
+			var metadataepm = $(node.metadataepm);
+			var style_position ="position:absolute;";
+			style_position += UIFactory["Node"].displayMetadataEpm(metadataepm,'top',true);
+			style_position += UIFactory["Node"].displayMetadataEpm(metadataepm,'left',true);
+			var style_background = "";
+			if (depth>0)
+				style_background += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
+			else
+				style_background += UIFactory["Node"].displayMetadataEpm(metadataepm,'parent-background-color',false);
+			var style_size = "";
+			if (name == "asmUnitStructure" || UICom.structure["ui"][uuid].resource_type=='TextField' || UICom.structure["ui"][uuid].resource_type=='Document' || UICom.structure["ui"][uuid].resource_type=='URL') {
+				style_size += UIFactory["Node"].displayMetadataEpm(metadataepm,'width',true);
+				style_size += UIFactory["Node"].displayMetadataEpm(metadataepm,'height',true);
+				style_size += UIFactory["Node"].getOtherMetadataEpm(metadataepm,'othercss');
+			}
+			//---------------------------------------------------------
 			var html = "";
-			html += "<div id='free_"+uuid+"' uuid='"+uuid+"' ";
+			html += "<div id='free_"+uuid+"' uuid='"+uuid+"' class='free-node "+name+"'";
+			if (name != "asmContext") 
+				html += "style='"+style_position+style_size+style_background+"' ";
+			 else 
+				html += "style='"+style_position+"' ";
 			if (USER.admin || g_userrole=='designer' || graphicerroles.indexOf(g_userrole)>-1 || graphicerroles.indexOf(this.userrole)>-1) {
 				html += "draggable='yes' ";
 				html += "class='movable ";
@@ -787,47 +882,30 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			else
 				html += "class='";
 			html += name+" "+semtag+"' ";
-			//--------- style --------------
-			var style ="position:absolute;";
-			var metadataepm = $(node.metadataepm);
-			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'top',true);
-			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'left',true);
-			html += " style='"+style+"' ";
 			//------------------------
 			html += ">";
-			if (depth>0)
-				style = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
-			else
-				style = UIFactory["Node"].displayMetadataEpm(metadataepm,'parent-background-color',false);
-				
-			if (name == "asmUnitStructure" || UICom.structure["ui"][uuid].resource_type=='TextField' || UICom.structure["ui"][uuid].resource_type=='Document' || UICom.structure["ui"][uuid].resource_type=='URL') {
-				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'width',true);
-				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'height',true);
-				style += UIFactory["Node"].getOtherMetadataEpm(metadataepm,'othercss');
-			}
 			if (name == "asmContext" && node.resource.type!='Proxy') {
 				if (proxy_target)
 					metadataepm = UICom.structure["ui"][proxies_nodeid["proxy-"+semtag]].metadataepm;
 			}
 			//------------------- Toolbar and Buttons --------------------------
 			if (edit && (!inline || g_userrole=='designer')) {
-				html += "<div class='free-toolbar'>";
+				html += "<div class='free-toolbar' style='visibility:"+g_free_toolbar_visibility+"'>";
 				var freeButtons = UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu);
 				if (freeButtons.length > 100) {
-					html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu-"+uuid+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
 					html += "<div id='toolbar-"+uuid+"' class='free-toolbar-buttons'>";
-					html += "	<div id='buttons-"+uuid+"'>"+ freeButtons +"</div>";
-					html += "</div>";
+					html += "	<div id='buttons-"+uuid+"'>"+ freeButtons +"</div><!-- #buttons-uuid -->";
+					html += "</div><!-- #toolbar--uuid -->";
 				}
-				html += "</div>";
+				html += "</div><!-- class='free-toolbar' -->";
 			}
 			else {
 				html += "<div class='free-toolbar'>";
-				html += "</div>";				
+				html += "</div><!-- class='free-toolbar' -->";				
 			}
-			html += "<div id='free-content' style='"+style+"'>";
 			//-------------------------------------------------------------------
 			if (name == "asmContext") {
+				html += "<div id='free-content_"+uuid+"' uuid='"+uuid+"' style='"+style_size+style_background+"'>";
 				//-------------- resource -------------------------
 				if (g_designerrole) {
 					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
@@ -913,7 +991,8 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 					html += "</div>";
 				}
 			}
-			else {
+			else { // other than asmContext
+				html += "<div id='free-content_"+uuid+"' uuid='"+uuid+"'>";
 				//-------------- node -----------------------------
 				html += "<div ";
 				style = "";
@@ -948,7 +1027,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				else if (depth!=1 && depth<10 && name=='asmUnit')
 					html += "<a id='std_node_"+uuid+"' href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getView('std_node_'+uuid)+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
 				else
-					html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
+					html += "<span id='title_"+uuid+"'>"+UICom.structure["ui"][uuid].getView('title_'+uuid)+"</span>";
 				//-------------- metainfo -------------------------
 //				if (g_userrole=='designer' || USER.admin) {
 //					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
@@ -961,6 +1040,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			}
 			html += "<div id='context-"+uuid+"'></div>";
 			html += "</div><!-- name -->";
+			//---------------------
 			$("#"+dest).append(html);
 			if ($("#display_editor_"+uuid).length>0) {
 				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
@@ -1004,7 +1084,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 					}
 					);
 				if (UICom.structure["ui"][uuid].resource_type=='TextField' || UICom.structure["ui"][uuid].resource_type=='Document' || UICom.structure["ui"][uuid].resource_type=='URL')
-					$("#std_resource_"+uuid).resizable({
+					$("#free-content_"+uuid).resizable({
 						stop: function(){UIFactory["Node"].updateSize(this);}
 					}
 					);
@@ -1026,13 +1106,6 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 							else
 								$("#std_resource_"+uuid).css('border','1px dashed lightgrey');
 				}
-				//-------------------------------
-				$("#free-toolbar-menu-"+uuid).click(function(){
-					if ($('#toolbar-'+uuid).css('visibility')=='hidden')
-						$('#toolbar-'+uuid).css('visibility','visible');
-					else
-						$('#toolbar-'+uuid).css('visibility','hidden');
-				});
 			}
 			//----------------------------
 			if (UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
@@ -1040,10 +1113,9 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			if (g_userrole=='designer' || USER.admin) {  //display metainfo
 				UIFactory["Node"].displayMetainfo("metainfo_"+uuid,data);
 			}
-		
-			/// For each child
-			for( var i=0; i<root.children.length; ++i ) 
-			{
+			//==================================
+			// For each child
+			for( var i=0; i<root.children.length; ++i ) {
 				// Recurse
 				var child = UICom.structure["tree"][root.children[i]];
 				var childnode = UICom.structure["ui"][root.children[i]];
@@ -1053,7 +1125,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				else
 					UIFactory["Node"].displayStandard(child, 'content-'+uuid, depth-1,langcode,edit,inline);
 			}
-			//----------------------------
+			//==================================
 			$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			//----------------------------
@@ -1394,52 +1466,6 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 	} //---- end of private
 };
 
-//========================================================
-UIFactory["Node"].updateIpadPosition = function (obj,top,left)
-//========================================================
-{
-	var nodeid = obj.getAttribute("uuid");
-    var offset = $(obj).offset();
-    alert(top+"-"+left+"/"+offset.top+"-"+offset.left);
-	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',top);
-	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',left);
-};
-
-//========================================================
-UIFactory["Node"].updatePosition = function (obj)
-//========================================================
-{
-	var nodeid = obj.getAttribute("uuid");
-    var pos = $(obj).position();
-    var top = pos.top;
-    var left = pos.left;
-	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',top);
-	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',left);
-};
-
-//========================================================
-UIFactory["Node"].updateSize = function (obj)
-//========================================================
-{
-	var nodeid = obj.getAttribute("uuid");
-	if (nodeid==undefined)
-		nodeid = obj.parentNode.parentNode.getAttribute("uuid");
-	var width = obj.style.width;
-	var height = obj.style.height;
-	if (UICom.structure["ui"][nodeid].resource_type=='Image'){
-		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'width',width);
-		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'height',height);
-		UICom.structure["ui"][nodeid].resource.refresh();
-		$("#std_resource_"+nodeid).resizable({
-			stop: function(){UIFactory["Node"].updateSize(obj);}
-		}
-		);
-	}
-	else {
-		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'width',width);
-		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'height',height);
-	}
-};
 
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
@@ -1848,7 +1874,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 						}
 					}
 					html += "</ul>"; // class='dropdown-menu'
-					html += "</div>"; // class='btn-group'
+					html += "</div><!-- class='btn-group' for specific menu button -->"; // class='btn-group'
 				}
 			}
 		} catch(e){
@@ -1859,10 +1885,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	if ((shareroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && shareroles!='none' && shareroles!='') {
 			html+= "<button class='btn btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
 	}
-	html += "</div>"; // class='btn-group'
+	html += "</div><!-- class='btn-group' -->";
 	//--------------------------------------------------
 	if (html!="")
-		html = "<div id='btn-"+node.id+"'>" + html + "</div>";
+		html = "<div id='btn-"+node.id+"'>" + html + "</div><!-- #btn-+node.id -->";
 	return html;
 };
 
@@ -2319,7 +2345,10 @@ UIFactory["Node"].updateMetadataEpmAttribute = function(nodeid,attribute,value,c
 	if (checked!=undefined && !checked)
 		value = "N";
 	$($("metadata-epm",node)[0]).attr(attribute,value);
-	UICom.UpdateMetaEpm(nodeid);
+	var refresh = true;
+	if (attribute=="top" || attribute=="left")
+		refresh = false;
+	UICom.UpdateMetaEpm(nodeid,refresh);
 };
 
 //==================================================

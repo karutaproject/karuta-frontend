@@ -301,7 +301,7 @@ var UICom =
 	},
 
 	//=======================================================================
-	 UpdateMetaEpm: function( uuid, cb )
+	 UpdateMetaEpm: function(uuid,refresh)
 	//=======================================================================
 	{
 		var treenode = UICom.structure["tree"][uuid];
@@ -315,18 +315,17 @@ var UICom =
 			url : urlS,
 			data : data,
 			success : function (data){
-				UICom.structure["ui"][uuid].refresh();
+				if (refresh)
+					UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
 				alert("Error in UpdateMetaEpm : "+jqxhr.responseText);
-//				alert(karutaStr[LANG]['disconnected']);
-//				window.location = "login.htm";
 			}
 		});
 	},
 	
 	//=======================================================================
-	  UpdateResource: function( uuid, cb1, cb2 )
+	  UpdateResource: function(uuid, cb1, cb2 )
 	//=======================================================================
 	{
 		var treenode = UICom.structure["tree"][uuid];

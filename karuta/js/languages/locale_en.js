@@ -67,6 +67,7 @@ karutaStr['en']['demo-video']="Import Demo Portfolios from YouTube Videos";
 karutaStr['en']['want-sharing']=" wants to share with you a part of a portfolio.";
 karutaStr['en']['share-URL']="Sharing Portfolio";
 karutaStr['en']['see']="See";
+karutaStr['en']['free-toolbar-menu-tooltip']="Edit Toogle";
 
 //=========================================
 //========== NODE =====================

@@ -946,20 +946,18 @@ table.tablesorter th.restore {
 	Free
    ====================*/
 .free-toolbar{
-	width:100px;
-	height:48px;
-}
-
-.free-toolbar-buttons {
-	visibility:hidden;
+	height:24px;
 	z-index:10;
-	position:relative;
-/*	top:22px;*/
+}
+.asmUnitStructure .free-toolbar {
+	margin-top:-24px;
+}
+.free-toolbar-buttons {
+	z-index:10;
 }
 
 .free-toolbar-menu{
-	position:relative;
-/*	top:20px;*/
+	margin-left:-24px;
 }
 
 #free-content {
@@ -1017,8 +1015,8 @@ table.tablesorter th.restore {
 .resource-TextField,
 .resource-Document,
 .resource-URL {
-	min-width:100px;
-	min-height:100px;
+/*	min-width:100px;
+	min-height:100px;*/
 	width:100%;
 	height:100%;
 }
