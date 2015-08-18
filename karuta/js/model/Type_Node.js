@@ -631,6 +631,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//-------------- metainfo -------------------------
 				if (g_edit && (g_userrole=='designer' || USER.admin)) {
 					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
+				} else {
+					html += "<div id='metainfo_"+uuid+"' class='metainfo' style='visibility:hidden'></div><!-- metainfo -->";					
 				}
 				html += "</div><!-- col-md-9 -->";
 				//-------------- buttons --------------------------

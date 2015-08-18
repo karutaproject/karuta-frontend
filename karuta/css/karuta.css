@@ -657,7 +657,7 @@ button.select-label {
 	color: #808080;
 	font-size: 10px;
 	font-weight: normal;
-	line-height: 12px;
+	min-height: 14px;
 	visibility: hidden;
 }
 
@@ -996,10 +996,10 @@ table.tablesorter th.restore {
 .dropdown-menu {
   	z-index: 10000;	
 }
-
+/*
 #header .row {
 	height:44px;
-}
+}*/
 
 /* ====================
 	Document/Image/URL

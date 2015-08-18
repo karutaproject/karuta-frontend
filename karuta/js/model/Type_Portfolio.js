@@ -300,7 +300,6 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		html += "   <div id='header'></div>";
 		html += "   <div id='menu'></div>";
 		html += "</div>";
-//		html += "<div id='navigation_bar'></div>";
 		html += "<div id='contenu' class='container header-container'></div>";
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
