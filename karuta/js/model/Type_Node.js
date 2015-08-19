@@ -1798,7 +1798,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
-		if ( submitnode || submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') {
+		if ( submitted!='Y' && (submitnode || submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
 			html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></button>";
 		} else {

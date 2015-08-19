@@ -1083,7 +1083,7 @@
 					<asmUnitStructure xsi_type="asmUnitStructure">
 						<metadata-wad menuroles="_karuta_resources_,level3_url,Add a link/Ajouter un lien,designer" seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="asmUnitStructure" sharedNode="N" sharedNodeResource="N" />
+						<metadata multilingual-node="Y" semantictag="level3_urls" sharedNode="N" sharedNodeResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">URLs</label>
@@ -1166,7 +1166,7 @@
 					<asmUnitStructure xsi_type="asmUnitStructure">
 						<metadata-wad menuroles="_karuta_resources_,level3_url,Add a link/Ajouter un lien,designer" seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="asmUnitStructure" sharedNode="N" sharedNodeResource="N" />
+						<metadata multilingual-node="Y" semantictag="level3_urls" sharedNode="N" sharedNodeResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">URLs</label>
@@ -1249,7 +1249,7 @@
 					<asmUnitStructure xsi_type="asmUnitStructure">
 						<metadata-wad menuroles="_karuta_resources_,level3_url,Add a link/Ajouter un lien,designer" seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="asmUnitStructure" sharedNode="N" sharedNodeResource="N" />
+						<metadata multilingual-node="Y" semantictag="level3_urls" sharedNode="N" sharedNodeResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">URLs</label>
