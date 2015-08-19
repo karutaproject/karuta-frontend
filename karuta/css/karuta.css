@@ -164,6 +164,9 @@ hr {
 	padding-bottom:2px;
 }
 
+.resource {
+	min-height:24px;
+}
 .text-editor {
 	background-color: white;
 	border: 1px solid rgb(204, 204, 204); 

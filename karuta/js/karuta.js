@@ -323,7 +323,6 @@ function getEditBox(uuid,js2) {
 	$("#edit-window-body-metadata-epm").html($(editHtml));
 	// ------------------------------
 	$(".pickcolor").colorpicker();
-	$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd',language: LANG});
 	// ------------------------------
 	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');}
 

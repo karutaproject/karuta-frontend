@@ -8,8 +8,8 @@
 		<metadata sharedNode="N" sharedNodeResource="N" />
 		<asmResource xsi_type="nodeRes">
 			<code>_karuta_resources_</code>
-			<label lang="fr">_karuta_resources_ v1.1.2 (2015/08/13)</label>
-			<label lang="en">_karuta_resources_ v1.1.2 (2015/08/13)</label>
+			<label lang="fr">_karuta_resources_ v1.1.2 (2015/08/19)</label>
+			<label lang="en">_karuta_resources_ v1.1.2 (2015/08/19)</label>
 		</asmResource>
 		<asmResource xsi_type="context">
 			<text lang="fr" />
@@ -223,8 +223,11 @@
 				<text lang="en" />
 			</asmResource>
 			<asmResource xsi_type="Calendar">
+				<minViewMode>days</minViewMode>
 				<text lang="fr"/>
 				<text lang="en"/>
+				<format lang="fr">yyyy/mm/dd</format>
+				<format lang="en">yyyy/mm/dd</format>
 			</asmResource>
 		</asmContext>
 		//===================== Image =======================
@@ -705,8 +708,11 @@
 					<text lang="en" />
 				</asmResource>
 				<asmResource xsi_type="Calendar">
-					<text lang="fr" />
-					<text lang="en" />
+					<minViewMode>days</minViewMode>
+					<text lang="fr"/>
+					<text lang="en"/>
+					<format lang="fr">yyyy/mm/dd</format>
+					<format lang="en">yyyy/mm/dd</format>
 				</asmResource>
 			</asmContext>
 			//==============================================

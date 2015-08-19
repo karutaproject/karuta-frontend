@@ -256,7 +256,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	var editnoderoles = $(this.metadatawad).attr('editnoderoles');
 	if (editnoderoles==undefined)
 		editnoderoles="";
-	if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1) {
+	if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
 		if (g_userrole=='designer' || USER.admin) {
 			var htmlCodeGroupObj = $("<div class='form-group'></div>")
@@ -271,7 +271,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			$(htmlCodeGroupObj).append($(htmlCodeDivObj));
 			$(htmlFormObj).append($(htmlCodeGroupObj));
 		}
-		if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1) {
+		if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 			var htmlLabelGroupObj = $("<div class='form-group'></div>")
 			var htmlLabelLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
 			var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
@@ -354,7 +354,6 @@ UIFactory["Node"].prototype.refresh = function()
 			UIFactory["Node"].displayFree(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline);
 		}
 		if (this.display_node[dest3].display=="standard"){
-			$("#standard_"+this.display_node[dest3].uuid).remove();
 			UIFactory["Node"].displayStandard(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent);
 		}
 	};
@@ -646,9 +645,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					html +=" style='"+style+"'";
 					html += ">";
 					//-----------------------------------------
-					var graphicers = $("metadatawad[graphicerroles*="+this.userrole+"]",node);
-//					alert(graphicers.length);
-					if (contentfreenode=='Y')
+					var graphicers = $("metadata-wad[graphicerroles*="+g_userrole+"]",data);
+					if (contentfreenode=='Y' && (graphicers.length>0 || g_userrole=='designer'))
 						html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
 					//-----------------------------------------
 					html += "</div>";
@@ -656,7 +654,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			html += "</div><!-- name -->";
 			//------------------------------------------
-			$("#"+dest).append($(html));
+			if ( $("#standard_"+uuid).length>0 )
+				$("#standard_"+uuid).replaceWith($(html));
+			else
+				$("#"+dest).append($(html));
 			//--------------------set editor------------------------------------------
 			if ($("#display_editor_"+uuid).length>0) {
 				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
@@ -746,7 +747,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 			}
 			//----------------------------
-			$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
+//			$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			//----------------------------
 			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
@@ -1795,7 +1796,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
-		if ( (submitnode && submitroles.indexOf(g_userrole)>-1) || USER.admin || g_userrole=='designer') {
+		if ( submitnode || submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') {
 			html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></button>";
 		} else {
