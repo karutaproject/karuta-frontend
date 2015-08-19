@@ -84,10 +84,13 @@ hr {
 	margin-left:14px;
 }
 
+/* rows should never be shorter than a button otherwise
+   the background is wrong (Contexts & unitStructures)
+   and lists of stuctures and units are too tight      */
 .row .col-md-9 .row:first-child,
-.row .col-md-9 .title:first-child,
-.row .col-md-9 .resource:first-child {
-	min-height:24px;
+.row .col-md-9 .title,
+.row .col-md-9 .resource {
+	min-height:24px; 
 }
 
 .asmRoot .title {
@@ -1161,12 +1164,6 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .well a:focus,
 .well a:hover {
 	text-decoration: none;
-}
-
-/* line spacing for GR, GGR and GDR in select type display */
-.choice-group {
-	margin-top:20px;
-	margin-bottom:20px;
 }
 
 /* for submitted / not submitted alert */
