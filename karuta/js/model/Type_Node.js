@@ -612,7 +612,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						if (g_userrole!='designer' && semtag=='header')
 							html += " style='visibility:hidden'";
 						if (semtag!='header')
-							html += " style='padding-top:6px;"+style+"'";
+							html += " style='"+style+"'";
 						html += ">";
 					}
 					if (semtag!='bubble_level1')
