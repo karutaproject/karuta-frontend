@@ -104,7 +104,7 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	var form = $(html);
 	//------
 	var group1 = $("<div class='form-group'></div>");
-	var div1 = $("<div class='col-sm-offset-3 col-sm-9'></div>"); 
+	var div1 = $("<div class='col-sm-9'></div>"); 
 	html = "<input type='text' name='datepicker' class='form-control' style='width:150px;' ";
 	if (disabled)
 		html += "disabled='disabled' ";
