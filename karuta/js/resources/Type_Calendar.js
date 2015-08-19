@@ -127,7 +127,7 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	$(form).append(group1);
 	//------
 	if (g_userrole=='designer' || USER.admin){
-		var group2 = $("<div class='form-group'><label class='col-sm-3 control-label'>Diplay Format</label></div>");
+		var group2 = $("<div class='form-group calendar-format'><label class='col-sm-3 control-label'>Diplay Format</label></div>");
 		var div2 = $("<div class='col-sm-9'></div>");
 		html = "<input type='text' class='form-control' style='width:150px;' ";
 		if (disabled)
@@ -143,7 +143,7 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 		$(group2).append(div2);
 		$(form).append(group2);
 		//---
-		var group3 = $("<div class='form-group'><label class='col-sm-3 control-label'>Pick Format</label></div>");
+		var group3 = $("<div class='form-group calendar-format'><label class='col-sm-3 control-label'>Pick Format</label></div>");
 		var div3 = $("<div class='col-sm-9'></div>");
 		html = "<input type='radio' name='radio"+this.id+"' ";
 		if (disabled)
