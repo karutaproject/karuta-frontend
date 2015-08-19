@@ -849,11 +849,12 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				readnode = (g_userrole=='designer' || seenoderoles.indexOf(USER.username_node.text())>-1 || seenoderoles.indexOf(g_userrole)>-1 || seenoderoles.indexOf('all')>-1)? true : false;
 			if( depth < 0 || !readnode) return;
 			//----------------edit control on proxy target ------------
-			if (proxies_edit["proxy-"+semtag]!=undefined) {
-					var parent = proxies_parent["proxy-"+semtag];
-					if (parent==dest.substring(8)) { // dest = content_{parentid}
+			//----------------edit control on proxy target ------------
+			if (proxies_edit[uuid]!=undefined) {
+					var parent = proxies_parent[uuid];
+					if (parent==dest.substring(8) || dest=='contenu') { // dest = content_{parentid}
 						proxy_target = true;
-						edit = menu = (proxies_edit["proxy-"+semtag].indexOf(g_userrole)>-1);
+						edit = menu = (proxies_edit[uuid].indexOf(g_userrole)>-1 || g_userrole=='designer');
 					}
 			}
 			//---------------------------------------------------------
@@ -886,10 +887,10 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			html += semtag+"' ";
 			//------------------------
 			html += ">";
-			if (name == "asmContext" && node.resource.type!='Proxy') {
-				if (proxy_target)
-					metadataepm = UICom.structure["ui"][proxies_nodeid["proxy-"+semtag]].metadataepm;
-			}
+//			if (name == "asmContext" && node.resource.type!='Proxy') {
+//				if (proxy_target)
+//					metadataepm = UICom.structure["ui"][proxies_nodeid["proxy-"+semtag]].metadataepm;
+//			}
 			//------------------- Toolbar and Buttons --------------------------
 			if (edit && (!inline || g_userrole=='designer')) {
 				html += "<div class='free-toolbar' style='visibility:"+g_free_toolbar_visibility+"'>";
