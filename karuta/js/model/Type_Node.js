@@ -749,6 +749,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//----------------------------
 //			$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
 			$('a[data-toggle=tooltip]').tooltip({html:true});
+			$(".pickcolor").colorpicker();
 			//----------------------------
 			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
 			if (!multilingual_resource)
