@@ -947,7 +947,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				} else {
 					html += "<div class='free-context'>";
 					//----------node label ----------------------------
-					if (UICom.structure["ui"][uuid].getLabel()!='<span></span>') {
+/*					if (UICom.structure["ui"][uuid].getLabel()!='<span></span>') {
 						html += "<span ";
 						style = "";
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
@@ -963,7 +963,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 						html += UICom.structure["ui"][uuid].getLabel()+"&nbsp;";
 						//-----------------
 						html+="</span>";
-					}
+					} */
 					//--------------------------------------
 //					if (UICom.structure["ui"][uuid].resource_type!='Audio' && UICom.structure["ui"][uuid].resource_type!='Video' && UICom.structure["ui"][uuid].resource.getView()=='') // resource is empty
 //						html += "<span style='z-index:-5;color:lightgrey'>"+UICom.structure["ui"][uuid].resource_type+"</span>";
