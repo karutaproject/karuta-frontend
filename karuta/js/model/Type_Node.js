@@ -715,7 +715,6 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,g_portfolio_current,0);
 				else
 					g_dashboard_models[model_code] = getModelAndPortfolio(model_code,g_portfolio_current,"dashboard_"+uuid);
-//				processPortfolio(0,data,,"dashboard_"+uuid,g_portfolio_current,0);
 			}
 			// ---------------------------- For each child ----------------------
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
@@ -1496,10 +1495,7 @@ UIFactory["Node"].displayComments = function(destid,node,type,langcode)
 			langcode = NONMULTILANGCODE;
 		//---------------------
 		var uuid = node.id;
-		var text = "";
-		if (type==null)
-			type = 'default';
-		text = $(UICom.structure['ui'][uuid].context_text_node[langcode]).text();
+		var text = $(UICom.structure['ui'][uuid].context_text_node[langcode]).text();
 		html += "<div>"+text+"</div>";
 		$("#"+destid).append($(html));
 	}
@@ -1546,7 +1542,7 @@ UIFactory["Node"].prototype.updateComments = function(langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var value = $.trim($("#"+this.id+"_edit_comment").val());
-	$(this.context_text_node[langcode]).html($.parseHTML(value));
+	$(this.context_text_node[langcode]).text(value);
 	this.save();
 	writeSaved(this.id);
 };
