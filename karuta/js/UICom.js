@@ -161,7 +161,12 @@ var UICom =
 							}
 						});
 					}
+				} // end of asmContext
+				var semtag = $("metadata",child).attr('semantictag');
+				if (semtag=='EuropassL'){
+					UIFactory["EuropassL"].parse(child);
 				}
+
 				// recurse
 				UICom.parseElement(childTree);
 			}

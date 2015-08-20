@@ -615,10 +615,13 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 							html += " style='"+style+"'";
 						html += ">";
 					}
-					if (semtag!='bubble_level1')
-						html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
-					else  // Bubble Map
+					var gotView = false;
+					if (semtag=='bubble_level1'){
 						html += " "+UICom.structure["ui"][uuid].getBubbleView('std_node_'+uuid);
+						gotView = true;
+					}
+					if (!gotView)
+						html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
 				}				
 				//-------------- context -------------------------
 				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
@@ -716,16 +719,19 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				else
 					g_dashboard_models[model_code] = getModelAndPortfolio(model_code,g_portfolio_current,"dashboard_"+uuid);
 			}
-			// ---------------------------- For each child ----------------------
+			// ================================= For each child =====================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
-
-			if (semtag!='bubble_level1') {
+			var gotDisplay = false;
+			if (semtag=="EuropassL"){
+				gotDisplay = true;
+				UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid,writenode);
+			}
+			if (!gotDisplay && semtag!='bubble_level1') {
 				for( var i=0; i<root.children.length; ++i ) {
 					// Recurse
 					var child = UICom.structure["tree"][root.children[i]];
 					var childnode = UICom.structure["ui"][root.children[i]];
-	
-					//-------------------
+					var childsemtag = $(childnode.metadata).attr('semantictag');
 					var freenode = ($(childnode.metadatawad).attr('freenode')==undefined)?'':$(childnode.metadatawad).attr('freenode');
 					if (contentfreenode == 'Y' || freenode == 'Y')
 						UIFactory["Node"].displayFree(child, 'content-'+uuid, depth-1,langcode,edit,inline);
@@ -1867,7 +1873,14 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 							var title = "";
 							try {
 								titles = menus[i][2].split("/");
-								title = titles[langcode];  // lang1/lang2/...
+								if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
+									for (var j=0; j<titles.length; j++){
+										if (titles[j].indexOf(languages[langcode])>-1)
+											title = titles[j].substring(0,titles[j].indexOf("@"));
+									}
+								} else { // lang1/lang2/...
+									title = titles[langcode];  // lang1/lang2/...
+								}
 							} catch(e){
 								title = menus[i][2];
 							}

@@ -2,6 +2,8 @@
 	padding-top:60px;
 }
 
+/* for Chrome - bug fix */
+.datepicker {z-index:1200 !important;}
 /* -- information icon -- */
 .glyphicon {
 	color:#333;
@@ -1171,4 +1173,47 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	padding: 1px 5px;
 	margin-bottom:0px;
 }
-	
+
+/* ====================
+	EUROPASS
+   ====================*/
+.europass_table{
+	margin-bottom:10px;
+}
+
+.europass_table td {
+	width:150px;
+	height:40px;
+	text-align:center;
+}
+
+.europass_table select {
+	width:150px;
+}
+
+.europass_table tr.en-tete {
+	color:#999;
+}
+
+.europass_table td.bordure {
+	border:1px solid lightgrey;
+}
+
+#langues-detail h5{
+	height:30px;
+}
+.mother-tongue .title{
+	font-weight:bold;
+	text-transform: uppercase;
+}
+
+
+.EuropassL .select-label {
+	min-width:100px;
+	padding: 1px;
+}
+
+.EuropassL .select {
+	padding: 1px 5px;
+}
+

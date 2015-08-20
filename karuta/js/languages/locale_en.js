@@ -251,3 +251,19 @@ karutaStr['en']['message']="Message";
 karutaStr['en']['email-sent']="The message has been sent.";
 karutaStr['en']['alternative-label']="Alternative Label";
 karutaStr['en']['sent-by']="Sent by";
+
+//=========================================
+//========== EUROPASS =====================
+//=========================================
+
+karutaStr['en']['mother-tongue']="Mother Tongue";
+karutaStr['en']['foreign-languages']="Foreign Languages";
+karutaStr['en']['add-foreign-language']="Add a Foreign Language";
+
+karutaStr['en']['understanding']="UNDERSTANDING";
+karutaStr['en']['listening']="Listening";
+karutaStr['en']['reading']="Reading";
+karutaStr['en']['speaking']="SPEAKING";
+karutaStr['en']['spoken-interaction']="Spoken Interaction";
+karutaStr['en']['spoken-production']="Spoken Production";
+karutaStr['en']['writing']="WRITING";

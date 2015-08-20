@@ -184,6 +184,26 @@ function getNavBar(type,portfolioid,edit)
 }
 
 //==============================
+function LangueBox()
+//==============================
+{
+	var html = "";
+	html += "\n<!-- ==================== Edit box ==================== -->";
+	html += "\n<div id='langue-window' class='modal fade'>";
+	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-content'>";
+	html += "\n		<div id='langue-window-header' class='modal-header'>";
+	html += "\n		</div>";
+	html += "\n		<div id='langue-window-body' class='modal-body'></div>";
+	html += "\n		<div class='modal-footer' id='langue-window-footer'></div>";
+	html += "\n		</div>";
+	html += "\n		</div>";
+	html += "\n	</div>";
+	html += "\n<!-- ============================================== -->";
+	return html;
+}
+
+//==============================
 function EditBox()
 //==============================
 {
