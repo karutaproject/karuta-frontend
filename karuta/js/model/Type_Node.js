@@ -1804,14 +1804,16 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></button>";
 		} else {
-			if (submitted=='Y')
-	//		html += "<div class='btn-text'>"+karutaStr[languages[langcode]]['submitted']+"</div>";
+			if (submitted=='Y') {
 				html += "<div class='alert alert-success'><strong>"+karutaStr[languages[langcode]]['submitted']+"</strong></div>";
-	//			html += "<button class='btn btn-xs menu-xs disabled'><div class='btn-text'>"+karutaStr[languages[langcode]]['submitted']+"</div></button>";
-			else
-	//			html += "<div class='btn-text'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
+				if (USER.admin || g_userrole=='designer') {
+					html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:reset('"+node.id+"')\" ";
+					html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['unsubmit']+"</div></button>";
+				}
+			} 
+			else {
 				html += "<div class='alert alert-danger'><strong>"+karutaStr[languages[langcode]]['notsubmitted']+"</strong></div>";			
-	//			html += "<button class='btn btn-xs menu-xs disabled'><div class='btn-text'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div></button>";			
+			}
 		}
 	}
 	//------------- private button -------------------

@@ -8,8 +8,8 @@
 		<metadata sharedNode="N" sharedNodeResource="N" />
 		<asmResource xsi_type="nodeRes">
 			<code>_karuta_resources_</code>
-			<label lang="fr">_karuta_resources_ v1.1.2 (2015/08/19)</label>
-			<label lang="en">_karuta_resources_ v1.1.2 (2015/08/19)</label>
+			<label lang="fr">#karuta_resources_ v1.1.2 (2015/08/21)</label>
+			<label lang="en">#karuta_resources_ v1.1.2 (2015/08/21)</label>
 		</asmResource>
 		<asmResource xsi_type="context">
 			<text lang="fr" />
@@ -65,7 +65,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="TextField" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="TextField" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -84,7 +84,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Field" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Field" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -103,7 +103,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -122,7 +122,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Document" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Document" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -147,7 +147,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Video" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Video" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -172,7 +172,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="URL" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="URL" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -193,7 +193,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Oembed" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Oembed" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -212,7 +212,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Calendar" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Calendar" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -234,7 +234,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm width="100"/>
-			<metadata multilingual-node="Y" semantictag ="Image" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Image" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -259,7 +259,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm width="100"/>
-			<metadata multilingual-node="Y" semantictag ="Audio" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Audio" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -284,7 +284,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Comments" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Comments" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -305,7 +305,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Get_Resource" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Get_Resource" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -326,7 +326,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Get_Get_Resource" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Get_Get_Resource" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -348,7 +348,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Get_Double_Resource" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Get_Double_Resource" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -373,7 +373,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Proxy" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Proxy" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -394,7 +394,7 @@
 		<!--asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Get_Proxy" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Get_Proxy" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -415,7 +415,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Item" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Item" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -435,7 +435,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="SendEmail" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="SendEmail" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr">Envoyez un courriel à</label>
@@ -458,7 +458,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="URL2Unit" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="URL2Unit" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr">Allez à</label>
@@ -480,7 +480,7 @@
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />
 			<metadata-epm />
-			<metadata multilingual-node="Y" semantictag ="Dashboard" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Dashboard" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<code />
 				<label lang="fr" />
@@ -517,7 +517,7 @@
 			<asmUnitStructure xsi_type="asmUnitStructure">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm height="50px" top="30" width="600px" />
-				<metadata multilingual-node="Y" semantictag ="asmUnitStructure_free" sharedNode="N" sharedNodeResource="N" />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="asmUnitStructure_free" sharedNode="N" sharedNodeResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
 					<label lang="fr">Nouvelle section</label>
@@ -548,7 +548,7 @@
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm height="50px" left="300" top="30" width="400px" />
-				<metadata multilingual-node="Y" semantictag ="TextField_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="TextField_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
 					<label lang="fr" />
@@ -583,7 +583,7 @@
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm height="35px" left="300" top="30" width="400px" />
-				<metadata multilingual-node="Y" semantictag ="Field_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Field_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
 					<label lang="fr" />
@@ -618,7 +618,7 @@
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm height="35px" left="300" top="30" width="400px" />
-				<metadata multilingual-node="Y" semantictag ="Document_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Document_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
 					<label lang="fr" />
@@ -659,7 +659,7 @@
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm height="35px" left="300" top="30" width="400px" />
-				<metadata multilingual-node="Y" semantictag ="URL_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="URL_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
 					<label lang="fr" />
@@ -696,7 +696,7 @@
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm height="35px" left="300" top="30" width="400px" />
-				<metadata multilingual-node="Y" semantictag ="Calendar_free" sharedNode="N"
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Calendar_free" sharedNode="N"
 					sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
@@ -735,7 +735,7 @@
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm height="100px" left="300" top="30" width="400px" />
-				<metadata multilingual-node="Y" semantictag ="Image_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Image_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
 					<label lang="fr" />
@@ -776,7 +776,7 @@
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm height="100px" left="300" top="30" width="400px" />
-				<metadata multilingual-node="Y" semantictag ="Audio_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Audio_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
 					<label lang="fr" />
@@ -817,7 +817,7 @@
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm height="400px" left="300" top="30" width="600px" />
-				<metadata multilingual-node="Y" semantictag ="Video_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Video_free" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
 					<label lang="fr" />
@@ -858,7 +858,7 @@
 			<asmContext xsi_type="asmContext">
 				<metadata-wad seenoderoles="all" />
 				<metadata-epm />
-				<metadata multilingual-node="Y" semantictag="level3_url" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level3_url" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<code />
 					<label lang="fr">Lien</label>
@@ -892,7 +892,7 @@
 				<asmContext xsi_type="asmContext">
 					<metadata-wad seenoderoles="all" />
 					<metadata-epm />
-					<metadata multilingual-node="Y" semantictag="level1_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level1_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 					<asmResource xsi_type="nodeRes">
 						<code />
 						<label lang="fr">Description</label>
@@ -910,7 +910,7 @@
 				<asmContext xsi_type="asmContext">
 					<metadata-wad seenoderoles="all" />
 					<metadata-epm />
-					<metadata multilingual-node="Y" semantictag="level1_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level1_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 					<asmResource xsi_type="nodeRes">
 						<code />
 						<label lang="fr">Pondération</label>
@@ -928,7 +928,7 @@
 				<asmContext xsi_type="asmContext">
 					<metadata-wad seenoderoles="all" />
 					<metadata-epm />
-					<metadata multilingual-node="Y" semantictag="level1_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level1_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 					<asmResource xsi_type="nodeRes">
 						<code />
 						<label lang="fr" />
@@ -961,7 +961,7 @@
 				<asmContext xsi_type="asmContext">
 					<metadata-wad seenoderoles="all" />
 					<metadata-epm />
-					<metadata multilingual-node="Y" semantictag="level2_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level2_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 					<asmResource xsi_type="nodeRes">
 						<code />
 						<label lang="fr">Description</label>
@@ -979,7 +979,7 @@
 				<asmContext xsi_type="asmContext">
 					<metadata-wad seenoderoles="all" />
 					<metadata-epm />
-					<metadata multilingual-node="Y" semantictag="level2_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level2_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 					<asmResource xsi_type="nodeRes">
 						<code />
 						<label lang="fr">Pondération</label>
@@ -997,7 +997,7 @@
 				<asmContext xsi_type="asmContext">
 					<metadata-wad seenoderoles="all" />
 					<metadata-epm />
-					<metadata multilingual-node="Y" semantictag="level2_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+					<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level2_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 					<asmResource xsi_type="nodeRes">
 						<code />
 						<label lang="fr" />
@@ -1029,7 +1029,7 @@
 					<asmContext xsi_type="asmContext">
 						<metadata-wad seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="level3_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level3_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">Description</label>
@@ -1047,7 +1047,7 @@
 					<asmContext xsi_type="asmContext">
 						<metadata-wad seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="level3_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level3_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">Pondération</label>
@@ -1065,7 +1065,7 @@
 					<asmContext xsi_type="asmContext">
 						<metadata-wad seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="level3_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level3_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">Couleur</label>
@@ -1112,7 +1112,7 @@
 					<asmContext xsi_type="asmContext">
 						<metadata-wad seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="level3_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level3_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">Description</label>
@@ -1130,7 +1130,7 @@
 					<asmContext xsi_type="asmContext">
 						<metadata-wad seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="level3_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level3_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">Pondération</label>
@@ -1148,7 +1148,7 @@
 					<asmContext xsi_type="asmContext">
 						<metadata-wad seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="level3_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level3_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">Couleur</label>
@@ -1195,7 +1195,7 @@
 					<asmContext xsi_type="asmContext">
 						<metadata-wad seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="level3_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level3_description" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">Description</label>
@@ -1213,7 +1213,7 @@
 					<asmContext xsi_type="asmContext">
 						<metadata-wad seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="level3_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level3_amount" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">Pondération</label>
@@ -1231,7 +1231,7 @@
 					<asmContext xsi_type="asmContext">
 						<metadata-wad seenoderoles="all" />
 						<metadata-epm />
-						<metadata multilingual-node="Y" semantictag="level3_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+						<metadata multilingual-node="Y" multilingual-resource="Y" semantictag="level3_color" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 						<asmResource xsi_type="nodeRes">
 							<code />
 							<label lang="fr">Couleur</label>
