@@ -618,6 +618,23 @@ function submit(uuid)
 }
 
 //=======================================================================
+function reset(uuid)
+//=======================================================================
+{
+	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/reset';
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		uuid : uuid,
+		success : function (data){
+			UIFactory.Node.reloadUnit();
+		}
+	});
+}
+
+//=======================================================================
 function postAndDownload(url,data)
 //=======================================================================
 {

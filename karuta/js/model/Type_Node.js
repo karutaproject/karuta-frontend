@@ -1802,17 +1802,17 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	if (submitroles!='none' && submitroles!='') {
 		if ( submitted!='Y' && (submitnode || submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
 			html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
-			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['submit']+"</div></button>";
+			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['button-submit']+"</div></button>";
 		} else {
 			if (submitted=='Y') {
-				html += "<div class='alert alert-success'><strong>"+karutaStr[languages[langcode]]['submitted']+"</strong></div>";
 				if (USER.admin || g_userrole=='designer') {
 					html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:reset('"+node.id+"')\" ";
-					html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['unsubmit']+"</div></button>";
+					html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['button-unsubmit']+"</div></button>";
 				}
+				html += "<div class='btn btn-xs disabled alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+"</div>";
 			} 
 			else {
-				html += "<div class='alert alert-danger'><strong>"+karutaStr[languages[langcode]]['notsubmitted']+"</strong></div>";			
+				html += "<div class='btn btn-xs disabled alert alert-danger'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
 			}
 		}
 	}
