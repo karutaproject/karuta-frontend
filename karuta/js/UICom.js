@@ -210,7 +210,7 @@ var UICom =
 							roles = subitems[3].split(" ");
 							//----------------------------
 							for (var j=0;j<roles.length;j++){
-								if (roles[j]!='all' && roles[j]!='')
+								if (roles[j]!='all' && roles[j]!='' && roles[j]!='user')
 									UICom.roles[roles[j]] = true;
 							}
 						}
@@ -221,7 +221,7 @@ var UICom =
 					roles = $("metadata-wad",node).attr(attribute).split(" ");
 					//----------------------------
 					for (var i=0;i<roles.length;i++){
-						if (roles[i]!='all' && roles[i]!='')
+						if (roles[i]!='all' && roles[i]!='' && roles[j]!='user')
 							UICom.roles[roles[i]] = true;
 					}
 					//----------------------------

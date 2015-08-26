@@ -396,7 +396,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				var html = "";
 				html += "<div class='panel panel-group panel-default' id='parent-"+uuid+"' role='tablist'>";
 				html += "<div class='panel-heading'role='tab'>";
-				html += "  <a id='sidebar_"+uuid+"' class='sidebar-link' data-toggle='collapse' data-parent='#parent-"+parentid+"' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" href='#collapse"+uuid+"' aria-expanded='false' aria-controls='collapse"+uuid+"'>"+text+"</a>";
+				html += "  <a id='sidebar_"+uuid+"' class='sidebar-link' data-toggle='collapse' data-parent='#parent-"+parentid+"' onclick=\"displayPage('"+uuid+"',100,'"+type+"','"+langcode+"',"+g_edit+")\" href='#collapse"+uuid+"' aria-expanded='false' aria-controls='collapse"+uuid+"'>"+text+"</a>";
 				html += "</div><!-- panel-heading -->";
 				html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 				html += "<div id='panel-body"+uuid+"'></div><!-- panel-body -->";
@@ -410,7 +410,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				var html = "";
 				html += "<div class='panel panel-group panel-default' id='parent-"+uuid+"' role='tablist'>";
 				html += "<div class='panel-heading'role='tab'>";
-				html += "  <a   id='sidebar_"+uuid+"' class='sidebar-link' data-toggle='collapse' data-parent='#parent-"+parentid+"' onclick=\"$('.selected').removeClass('selected');$(this).parent().addClass('selected');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" href='#collapse"+uuid+"' aria-expanded='false' aria-controls='collapse"+uuid+"'>"+text+"</a>";
+				html += "  <a   id='sidebar_"+uuid+"' class='sidebar-link' data-toggle='collapse' data-parent='#parent-"+parentid+"' onclick=\"$('.selected').removeClass('selected');$(this).parent().addClass('selected');displayPage('"+uuid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\" href='#collapse"+uuid+"' aria-expanded='false' aria-controls='collapse"+uuid+"'>"+text+"</a>";
 				html += "</div><!-- panel-heading -->";
 				html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 				html += "<div id='panel-body"+uuid+"' class='panel-body'></div><!-- panel-body -->";
@@ -678,7 +678,14 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (depth>0) {
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
 					var helps = attr_help.split("/"); // lang1/lang2/...
-					var help_text = helps[langcode];  
+					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
+						for (var j=0; j<helps.length; j++){
+							if (helps[j].indexOf(languages[langcode])>-1)
+								help_text = helps[j].substring(0,helps[j].indexOf("@"));
+						}
+					} else { // lang1/lang2/...
+						help_text = helps[langcode];  // lang1/lang2/...
+					}
 //					var help = " <a href='javascript://' data-toggle='popover' class='popinfo'><i class='icon-info-sign'></i></a> ";  //Bootstrap 2
 					var help = " <a href='javascript://' class='popinfo'><span class='glyphicon glyphicon-info-sign'></span></a> ";
 					$("#help_"+uuid).html(help);
@@ -1800,7 +1807,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
-		if ( submitted!='Y' && (submitnode || submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
+		if ( submitted!='Y' && submitnode && ( submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
 			html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['button-submit']+"</div></button>";
 		} else {
@@ -2598,7 +2605,7 @@ UIFactory["Node"].displayMetadatawWadTextAttributeEditor = function(destid,nodei
 	$("#"+destid).append($(html));
 	//---------------------------
 	if (attribute=='help')
-		$("#"+nodeid+"_"+attribute).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html": true,"blockquote": false,"image": false},'uuid':nodeid,locale:languages[lang],'events': {'change': function(){UIFactory['Node'].updateMetadatawWadTextAttribute(nodeid,attribute);} }});
+		$("#"+nodeid+"_"+attribute).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html": true,"blockquote": false,"image": false},'uuid':nodeid,locale:languages[LANG],'events': {'change': function(){UIFactory['Node'].updateMetadatawWadTextAttribute(nodeid,attribute);} }});
 	else
 		$("#"+nodeid+"_"+attribute).change(function(){UIFactory['Node'].updateMetadatawWadTextAttribute(nodeid,attribute);});
 	//---------------------------
