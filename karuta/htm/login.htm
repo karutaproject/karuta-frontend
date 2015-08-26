@@ -18,6 +18,8 @@
 	<!-- =============================================================== -->
 	<script src="../../karuta/js/karuta.js"></script>
 	<script src="../../karuta/js/UICom.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../other/js/js.cookie.js"></script>
 	<!-- =========================================== -->
 	<script src="../../application/js/_init.js"></script>
 	<!-- =============================================================== -->
@@ -94,14 +96,7 @@
 		}
 
 		//------------------------------
-		var lang = getURLParameter('lang');
-		if (lang!=null) {
-			LANG = lang;
-			for (var i=0; i<languages.length;i++){
-				if (languages[i]==lang)
-					LANGCODE = i;
-			}
-		}
+		setLanguage();
 		//------------------------------
 	</script>
 </head>

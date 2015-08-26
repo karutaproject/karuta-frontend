@@ -841,3 +841,22 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 		}
 	});
 }
+
+
+//==================================
+function setLanguage() {
+//==================================
+	var lang = Cookies.get('karuta-language');
+	var param_lang = getURLParameter('lang');
+	if (param_lang!= null && param_lang!=lang) {
+		lang = param_lang;
+		Cookies.set('karuta-language',lang,{ expires: 60 });
+	}
+	if (lang!=null) {
+		LANG = lang;
+		for (var i=0; i<languages.length;i++){
+			if (languages[i]==lang)
+				LANGCODE = i;
+		}
+	}
+}
