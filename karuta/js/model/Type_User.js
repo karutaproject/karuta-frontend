@@ -430,6 +430,9 @@ UIFactory["User"].create = function()
 		data : xml,
 		success : function(data) {
 			window.location.reload();
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error : "+jqxhr.responseText);
 		}
 	});
 };

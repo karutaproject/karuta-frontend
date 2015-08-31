@@ -954,7 +954,7 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 //	html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
 //	html += "					<ul class='dropdown-menu'>";
 	html += "						<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+bckname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
-	if (USER.admin || portfolios_byid[portfolioid].owner=='Y' || g_userrole=='designer') {
+	if (USER.admin || portfolios_byid[portfolioid].owner=='Y') {
 		html += "						<li><a onclick=\"javascript:UIFactory['Portfolio'].callShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['addshare']+"</a></li>";
 		html += "						<li><a onclick=\"javascript:UIFactory['Portfolio'].callUnShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['unshare']+"</a></li>";
 	}
