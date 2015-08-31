@@ -461,9 +461,10 @@ function xml2string(node)
 function createXmlElement(tag)
 //=======================================================================
 {
-	var IE = (navigator.userAgent.toLowerCase().indexOf("msie") != -1);
-	if (IE) {
-		var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+	var navigator_agent = navigator.userAgent.toLowerCase()
+	var IE = (navigator_agent.indexOf("msie") != -1);
+	if (IE && navigator_agent.indexOf("10")<-1) {
+		var xmlDoc = new ActiveXObject("Microsoft.XMLDOM"); 
 		return xmlDoc.createElement(tag);
 	}
 	else
