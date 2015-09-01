@@ -84,7 +84,7 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 	var html = "";
 	//---------------------
 	var url = $(this.url_node[langcode]).text();
-	if (url.indexOf("http")<0)
+	if (url!="" && url.indexOf("http")<0)
 		url = "http://"+url;
 	var label = $(this.label_node[langcode]).text();
 	if (label=="")
