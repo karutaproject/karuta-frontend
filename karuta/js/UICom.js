@@ -402,9 +402,9 @@ var UICom =
 							cb(uuid,data);
 					},
 					error : function(jqxhr,textStatus) {
-//						alert("Error in UpdateNode : "+jqxhr.responseText);
-						alert(karutaStr[LANG]['disconnected']);
-						window.location = "login.htm";
+						alert("Error in UpdateNode : "+jqxhr.responseText);
+//						alert(karutaStr[LANG]['disconnected']);
+//						window.location = "login.htm";
 					}
 				});
 			}
@@ -428,9 +428,9 @@ var UICom =
 						eval(callback+"('"+param1+"','"+param2+"')");
 			},
 			error : function(jqxhr,textStatus) {
-//				alert("Error in DeleteNode : "+jqxhr.responseText);
-				alert(karutaStr[LANG]['disconnected']);
-				window.location = "login.htm";
+				alert("Error in DeleteNode : "+jqxhr.responseText);
+//				alert(karutaStr[LANG]['disconnected']);
+//				window.location = "login.htm";
 			}
 
 		});

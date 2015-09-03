@@ -445,7 +445,7 @@ UIFactory["User"].changePassword = function(userid,value)
 	if (userid==null)
 		userid = USER.id;
 	if (value==null){
-		value = $("#user_password").val();
+		value = $("#user_password-new").val();
 		value2 = $("#user_confirm-password").val();
 	}
 	if (value2 == null || (value2 != null && value2 == value)) {
