@@ -44,7 +44,7 @@ a.btn {
 	font-weight:normal;
 }
 
-.btn {
+#main-body .btn {
 	background-color:#FAFAFA;
 	border: 1px solid lightGrey;
 	background-image: linear-gradient(to bottom, #fff, #e6e6e6);

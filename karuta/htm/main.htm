@@ -202,6 +202,7 @@
 								$("#wait-window").hide();
 								$("#sidebar_"+UICom.rootid).click();
 								fillEditBoxBody();
+								UIFactory.Node.reloadUnit(UICom.rootid); // for IE9
 							}
 						});
 					},
