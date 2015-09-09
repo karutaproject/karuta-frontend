@@ -1538,7 +1538,7 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		html += "<h4>"+karutaStr[LANG]['comments']+"</h4>";
 		html += "<div id='div_"+uuid+"'><textarea id='"+uuid+"_edit_comment' class='form-control' style='height:200px'>"+text+"</textarea></div>";
 		$("#"+destid).append($(html));
-		$("#"+uuid+"_edit_comment").wysihtml5({toolbar:{"size":"xs","font-styles": false,"html": true,"blockquote": false,"image": false},'uuid':uuid,locale:lang,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments();},'focus': function(){currentTexfieldUuid=uuid;} }});
+		$("#"+uuid+"_edit_comment").wysihtml5({toolbar:{"size":"xs","font-styles": false,"html": true,"blockquote": false,"image": false},'uuid':uuid,locale:langcode,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments();},'focus': function(){currentTexfieldUuid=uuid;} }});
 	}
 };
 

@@ -35,7 +35,7 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='password']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="designer">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='designer']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='designer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
 		<create-user>
 			<identifier>
