@@ -724,7 +724,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
 					processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,g_portfolio_current,0);
 				else
-					g_dashboard_models[model_code] = getModelAndPortfolio(model_code,g_portfolio_current,"dashboard_"+uuid);
+					getModelAndPortfolio(model_code,g_portfolio_current,"dashboard_"+uuid,g_dashboard_models);
 			}
 			// ================================= For each child =====================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
@@ -1933,7 +1933,7 @@ UIFactory['Node'].reloadStruct = function(uuid)
 		url : "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
-//			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
+			g_portfolio_current = data;
 			$("#sidebar").html("");
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
 			var uuid = $("#page").attr('uuid');

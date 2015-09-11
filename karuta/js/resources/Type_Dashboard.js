@@ -100,7 +100,7 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 	var obj = $(html);
 	var self = this;
 	$(obj).change(function (){
-		UIFactory["Field"].update(obj,self,langcode);
+		UIFactory["Dashboard"].update(obj,self,langcode);
 	});
 	return obj;
 };

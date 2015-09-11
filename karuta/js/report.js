@@ -462,7 +462,7 @@ function processCode()
 }
 
 //==================================
-function getModelAndPortfolio(model_code,node,destid)
+function getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 {
 	var xml_model = "";
@@ -479,13 +479,12 @@ function getModelAndPortfolio(model_code,node,destid)
 				dataType : "xml",
 				url : urlS,
 				success : function(data) {
-					xml_model = data;
+					g_dashboard_models[model_code] = data;
 					processPortfolio(0,data,destid,node,0);
 				}
 			 });
 		}
 	});
-	return xml_model;
 }
 
 //==================================
