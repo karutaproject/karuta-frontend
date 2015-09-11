@@ -50,6 +50,7 @@ UIFactory["Get_Resource"] = function(node,condition)
 	}
 	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	this.inline = ($("metadata",node).attr('inline')=='Y') ? true : false;
 	this.display = {};
 };
 
@@ -402,7 +403,8 @@ UIFactory["Get_Resource"].prototype.save = function()
 //==================================
 {
 	UICom.UpdateResource(this.id,writeSaved);
-	this.refresh();
+	if (!this.inline)
+		this.refresh();
 };
 
 //==================================
