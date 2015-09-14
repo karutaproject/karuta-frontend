@@ -407,23 +407,13 @@ function savedBox()
 	return html;
 }
 
-//==============================
-function waitBox()
-//==============================
-{
-	var html = "";
-	html += "\n<!-- ==================== Wait box ==================== -->";
-	html += "\n<div id='wait-window' class='modal hide'>";
-	html += "\n	<div id='wait-window-body' class='modal-body' style='text-align:center'><img src='../../karuta/img/ajax-loader.gif'></div>";
-	html += "\n</div>";
-	html += "\n<!-- ================================================== -->";
-	return html;
-}
 
 //=======================================================================
 function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2) 
 // =======================================================================
 {
+	$('#delete-window').modal('hide');
+	$('#wait-window').modal('show');
 	if (type!=null && (type=='asmStructure' || type=='asmUnit' || type=='asmUnitStructure' || type=='asmContext')) {
 		UIFactory['Node'].remove(uuid,callback,param1,param2); //asm node
 		if (parentid!=null) {
@@ -437,7 +427,6 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 	// ----------------------------------
 	UICom.structure['tree'][uuid] = null;
 	// ----------------------------------
-	$('#delete-window').modal('hide');
 }
 
 //=======================================================================
@@ -540,6 +529,7 @@ function writeSaved(uuid,data)
 function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,param4,param5,param6,param7,param8) 
 //=======================================================================
 {
+	$("#wait-window").modal('show');
 	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	if (USER.admin || g_userrole=='designer')
 		urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
@@ -554,6 +544,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 					callback(data,param2,param3,param4,param5,param6,param7,param8);
 				else
 					callback(param2,param3,param4,param5,param6,param7,param8);
+			$("#wait-window").modal('hide');			
 		}
 	});
 }

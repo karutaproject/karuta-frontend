@@ -1968,6 +1968,7 @@ UIFactory['Node'].reloadUnit = function()
 				var window_uuid = $("#window-page").attr('uuid');
 				eval(redisplays[window_uuid]);
 			}
+			$('#wait-window').modal('hide');
 		}
 	});
 	$.ajaxSetup({async: true});

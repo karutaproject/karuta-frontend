@@ -93,7 +93,6 @@ UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid,edit
 				langues_list[i].displayView(destid+"_"+langues_list[i].id,type,null,"accordion_"+destid);
 		}
 	}
-
 }
 
 
@@ -255,6 +254,7 @@ UIFactory["Langue"].remove = function(uuid,destid,parentid,type,edit)
 	UIFactory["EuropassL"].parse(g_portfolio_current);
 	var parentid = $("asmUnit:has(metadata[semantictag='EuropassL'])", g_portfolio_current).attr('id');
 	UIFactory["EuropassL"].displayView(destid,null,type,parentid,edit);
+	$("#wait-window").modal('hide');
 };
 
 //==================================
