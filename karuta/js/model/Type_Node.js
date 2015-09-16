@@ -229,7 +229,7 @@ UIFactory["Node"].prototype.getNodeLabelEditor = function(type,langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var self = this;
-	var inputLabel = "<input id='label_"+this.id+"_"+langcode+"' type='text'  value=\""+this.label_node[langcode].text()+"\">";
+	var inputLabel = "<input class='form-control' id='label_"+this.id+"_"+langcode+"' type='text'  value=\""+this.label_node[langcode].text()+"\">";
 	var objLabel = $(inputLabel);
 	$(objLabel).change(function (){
 		UIFactory["Node"].updateLabel(objLabel,self,langcode);
@@ -2056,30 +2056,42 @@ RoleRights.prototype.getEditor = function()
 };
 
 //==================================
-UIFactory["Node"].displayRights = function(uuid)
+UIFactory["Node"].getRights = function(uuid)
 //==================================
 {
-	var html = "";
-	roles_by_role = {};
+	var rights = null;
 	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/nodes/node/"+uuid+"/rights",
 		success : function(data) {
-			html += "<table id='rights'>";
-			html+= "<tr><td></td><td> Read </td><td> Write </td><td> Delete </td><td> Submit </td>";
-			var roles = $("role",data);
-			for (var i=0;i<roles.length;i++){
-				var rolename = $(roles[i]).attr("name");
-				roles_by_role[rolename] = new RoleRights(roles[i],uuid);
-			}
-			for (role in roles_by_role)
-				html += roles_by_role[role].getEditor();
-			html += "<table>";
+			rights = data;
 		}
 	});
 	$.ajaxSetup({async: true});
+	return rights;
+}
+
+
+//==================================
+UIFactory["Node"].displayRights = function(uuid)
+//==================================
+{
+	var html = "";
+	roles_by_role = {};
+	var rights = UIFactory["Node"].getRights(uuid);
+	var roles = $("role",rights);
+	html += "<table id='rights'>";
+	html+= "<tr><td></td><td> Read </td><td> Write </td><td> Delete </td><td> Submit </td>";
+	for (var i=0;i<roles.length;i++){
+		var rolename = $(roles[i]).attr("name");
+		roles_by_role[rolename] = new RoleRights(roles[i],uuid);
+	}
+	for (role in roles_by_role) {
+		html += roles_by_role[role].getEditor();
+	}
+	html += "<table>";
 	return html;
 }
 
@@ -2684,7 +2696,7 @@ UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
 		type='default';
 	var html ="";
 	UIFactory["Bubble"].parse(this.node);  // this.node
-	html += "<iframe id='bubble_iframe' src='bubble.html?uuid="+this.id+"' height='500' width='100%'></iframe>";
-	html += "<div id='bubble_display'></div>";
+	html += "<iframe id='bubble_iframe_"+this.id+"' class='bubble_iframe' src='bubble.html?uuid="+this.id+"' height='500' width='100%'></iframe>";
+	html += "<div id='bubble_display_"+this.id+"' class='bubble_display'></div>";
 	return html;
 };

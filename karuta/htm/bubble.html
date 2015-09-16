@@ -9,11 +9,13 @@
 	<script type="text/javascript" src="../../other/bubbletree/lib/Tween.js"></script>
 	<script type="text/javascript" src="../../other/bubbletree/build/bubbletree.js"></script>
 	<link rel="stylesheet" type="text/css" href="../../other/bubbletree/build/bubbletree.css" />
-	<link rel="stylesheet" href="../css/specific.css" />
+	<link rel="stylesheet" href="../../application/css/specific.css" />
 	<script type="text/javascript" src="../../karuta/js/bubbleKaruta.js"></script>	
 	<script type="text/javascript" src="../../karuta/js/karuta.js"></script>	
 	<script type="text/javascript" src="../../karuta/js/resources/Type_Bubble.js"></script>	
-	<!-- =============================================================== -->
+		<!-- =============================================================== -->
+		<script src="../../application/js/_init.js"></script>
+		<!-- =============================================================== -->
 	<script src="../../other/js/js.cookie.js"></script>
 	<script type="text/javascript">     
 		var map = null;
@@ -25,6 +27,7 @@
  
 	<script type="text/javascript">
 		var uuid = getURLParameter('uuid');
+		parent.g_current_mapid = uuid;
 		$('#PageRefresh').click(function() {
 	 		if (map == null) {
 	 			map = new BubbleTree({
@@ -50,5 +53,11 @@
 	<div class="bubbletree-wrapper">
 		<div class="bubbletree"></div>
 	</div>
+	<script>
+		$(window).load(function() {
+			//------------ display bubbles -------------------
+			$("#PageRefresh").click();
+		});	
+	</script>
 </body>
 </html>

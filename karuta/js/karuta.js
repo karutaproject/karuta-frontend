@@ -75,7 +75,7 @@ function getNavBar(type,portfolioid,edit)
 //==============================
 {
 	var html = "";
-	html += "<nav class='navbar navbar-default navbar-fixed-top'>";
+	html += "<div class='navbar navbar-default navbar-fixed-top'>";
 	html += "<div class='navbar-inner'>";
 	html += "	<div class='container'>";
 	html += "	  <div class='nav-bar-header'>";
@@ -179,7 +179,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "</div>";
 	html += "</div>";
 	
-	html += "</nav>";
+	html += "</div>";
 	return html;
 }
 
@@ -488,7 +488,7 @@ function toggleZoom(uuid) {
 //==================================
 function displayControlGroup_getEditor(destid,label,controlsid,nodeid) {
 //==================================
-	$("#"+destid).append($("<div class='control-group'><label class='control-label'>"+label+"</label><div id='"+controlsid+"' class='controls'></div></div>"));
+	$("#"+destid).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+label+"</label><div id='"+controlsid+"' class='col-sm-9'></div></div>"));
 	$("#"+controlsid).append(UICom.structure["ui"][nodeid].resource.getEditor());
 }
 
@@ -531,8 +531,12 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 {
 	$("#wait-window").modal('show');
 	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
-	if (USER.admin || g_userrole=='designer')
-		urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+	if (USER.admin || g_userrole=='designer') {
+		var rights = UIFactory["Node"].getRights(destid);
+		var roles = $("role",rights);
+		if (roles.length==0) // test if model (otherwise it an instance and we import)
+			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+	}
 	$.ajax({
 		type : "POST",
 		dataType : "text",

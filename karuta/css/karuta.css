@@ -1218,3 +1218,35 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	padding: 1px 5px;
 }
 
+/* ====================
+	BUBBLE
+   ====================*/
+   
+.bubble_iframe{
+	border: 1px solid lightgrey;
+}
+
+.bubble_display .editbutton {
+	float:right;
+}
+
+.bubble_display .control-group {
+	margin-top:5px;
+}
+
+.bubble_label{
+	margin-top:5px;
+	margin-left:5px;
+	height:20px;
+}
+
+.bubble_link_editor{
+	border:1px solid lightgrey;
+	padding-top:5px;
+	padding-right:5px;
+	border-radius: 4px;
+}
+
+.bubble_link_editor .editbutton{
+	margin-bottom:5px;
+}

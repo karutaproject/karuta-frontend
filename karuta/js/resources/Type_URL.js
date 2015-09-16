@@ -179,14 +179,14 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 	}
 	if(type=='inline') {
 		$(obj).append($("<span> "+karutaStr[LANG]['label']+" : </span>"));
-		var input_label = $("<input type='text' name='label'  value='"+$(this.label_node[langcode]).text()+"'>");
+		var input_label = $("<input class='form-control' type='text' name='label'  value='"+$(this.label_node[langcode]).text()+"'>");
 		$(input_label).change(function (){
 			UIFactory["URL"].update(obj,self,type,langcode);
 		});
 		$(obj).append(input_label);
 		//------------------------
 		$(obj).append($("<span> URL (http://) : </span>"));
-		var input_url = $("<input type='text' name='url' value='"+$(this.url_node[langcode]).text()+"'>");
+		var input_url = $("<input class='form-control' type='text' name='url' value='"+$(this.url_node[langcode]).text()+"'>");
 		$(input_url).change(function (){
 			UIFactory["URL"].update(obj,self,type,langcode);
 		});

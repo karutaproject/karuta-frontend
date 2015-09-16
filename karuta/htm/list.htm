@@ -213,7 +213,8 @@
 					}
 				});
 				$.ajaxSetup({async: true});
-				$("#navigation_bar").html(getNavBar('list',null));
+				var navbar_html = getNavBar('list',null);
+				$("#navigation_bar").html(navbar_html);
 				$('[data-toggle="tooltip"]').tooltip(); 
 			});
 		</script>
