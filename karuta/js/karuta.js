@@ -534,7 +534,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 	if (USER.admin || g_userrole=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
-		if (roles.length==0) // test if model (otherwise it an instance and we import)
+		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	}
 	$.ajax({

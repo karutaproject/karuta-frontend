@@ -269,3 +269,12 @@ karutaStr['en']['speaking']="SPEAKING";
 karutaStr['en']['spoken-interaction']="Spoken Interaction";
 karutaStr['en']['spoken-production']="Spoken Production";
 karutaStr['en']['writing']="WRITING";
+
+//=========================================
+//========== BUBBLE MAP ===================
+//=========================================
+karutaStr['en']['bubble-links']="Links";
+karutaStr['en']['bubble-information']="Information";
+karutaStr['en']['bubble-add-link']="Add a link";
+karutaStr['en']['bubble-add-bubble']="Add a bubble to ";
+

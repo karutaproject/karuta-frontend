@@ -270,3 +270,11 @@ karutaStr['fr']['spoken-interaction']="Prendre part à une conversation";
 karutaStr['fr']['spoken-production']="S'exprimer oralement en continu";
 karutaStr['fr']['writing']="ÉCRIRE";
 
+//=========================================
+//========== BUBBLE MAP ===================
+//=========================================
+karutaStr['fr']['bubble-links']="Liens";
+karutaStr['fr']['bubble-information']="Information";
+karutaStr['fr']['bubble-add-link']="Ajouter un lien";
+karutaStr['fr']['bubble-add-bubble']="Ajouter une bulle à ";
+

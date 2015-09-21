@@ -98,7 +98,7 @@ UIFactory["Bubble"].bubble.prototype.displayView = function(destid,type,lang)
 		var urls = $("asmContext:has(metadata[semantictag*='level"+this.level+"_url'])",this.node);
 		for (var i=0;i<urls.length;i++){
 			if (i==0)  // first one
-				html += "<h4 class='title'>Liens</h4>";
+				html += "<h4 class='title'>"+karutaStr[LANG]['bubble-links']+"</h4>";
 			var uuid = $(urls[i]).attr("id");
 			html += "<div class='bubble_url'>"+UICom.structure["ui"][uuid].resource.getView()+"</div>";
 			html += "</div>";
@@ -121,7 +121,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 		var form_horizontal = $(html)
 		html = "<div><button  class='editbutton btn btn-xs' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayView('"+destid+"');\" data-title='éditer' rel='tooltip'>";
 		html += karutaStr[LANG]['quit-edit'];
-		html += "</button><h4>Information</h4></div>";
+		html += "</button><h4>"+karutaStr[LANG]['bubble-information']+"</h4></div>";
 		$(form_horizontal).html(html);
 		//-------------------------
 		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>Libellé</label><div id='label_"+this.id+"' class='col-sm-9'></div></div>"));
@@ -144,7 +144,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param4 = "null";
 			var level_plus = this.level+1;
 			var js1 = "importBranch('"+this.id+"','_karuta_resources_','bubble_level"+level_plus+"',"+databack+","+callback+","+param2+","+param3+","+param4+")";
-			html = "<button class='btn btn-xs' onclick=\""+js1+";\">Ajouter une bulle à '"+UICom.structure["ui"][this.id].getLabel('none')+"'</button>";
+			html = "<button class='btn btn-xs' onclick=\""+js1+";\">"+karutaStr[LANG]['bubble-add-bubble']+"'"+UICom.structure["ui"][this.id].getLabel('none')+"'</button>";
 
 			var children = $("asmUnitStructure:has(metadata[semantictag*='bubble_level"+level_plus+"'])",this.node);
 			for (var i=0;i<children.length;i++){
@@ -171,8 +171,8 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param3 = "'"+this.id+"'";
 			var param4 = "null";
 			var js1 = "importBranch('"+this.id+"','_karuta_resources_','level"+this.level+"_url',"+databack+","+callback+","+param2+","+param3+","+param4+")";
-			html = "<button class='editbutton btn btn-xs' onclick=\""+js1+";\">Ajouter un lien</button>";
-			html += "<h4>Liens</h4>";
+			html = "<button class='editbutton btn btn-xs' onclick=\""+js1+";\">"+karutaStr[LANG]['bubble-add-link']+"</button>";
+			html += "<h4>"+karutaStr[LANG]['bubble-links']+"</h4>";
 
 			var urls = $("asmContext:has(metadata[semantictag*='level"+this.level+"_url'])",this.node);
 			for (var i=0;i<urls.length;i++){
