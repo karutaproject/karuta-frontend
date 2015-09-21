@@ -314,7 +314,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			var display_code = true;
 			if (code.indexOf("@")>-1) {
 				display_code = false;
-				code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+				code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
 			}
 			input += "<input type='radio' name='radio_"+self.id+"' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' ";
 			if (disabled)

@@ -764,16 +764,6 @@ table.tablesorter th.restore {
   background-color: #b94a48;
 }
 
-/* ====================
-	Batch Model
-   ====================*/
-
-#batchmodel_list_table td
-{
-	padding:5px;
-	border-top:1px solid #C0C0C0;
-	border-bottom:1px solid #C0C0C0;
-}
 
 /* ====================
 	Role Rights
@@ -873,9 +863,21 @@ table.tablesorter th.restore {
 	margin-top:-20px;;
 	margin-left: -30px;;
 }
+
 /* ====================
-	Batch
+	Batch Model
    ====================*/
+
+#batchmodel_list_table td
+{
+	padding:5px;
+	border-top:1px solid #C0C0C0;
+	border-bottom:1px solid #C0C0C0;
+}
+
+.model-content .asmContext{
+	margin-top:2px;
+}
 
 .batch .asmUnitStructure{
 	padding:10px;
@@ -886,6 +888,7 @@ table.tablesorter th.restore {
 }
 
 .batch .create-person{
+	margin-top:7px;
 	border:1px solid Navy ;
 }
 
@@ -896,7 +899,7 @@ table.tablesorter th.restore {
 .batch .tree-template,
 .batch .tree-code,
 .batch .tree-label {
-	margin-top:4px;
+	margin-top:7px;
 	padding-top:2px;
 	padding-bottom:0px;
 	border-top:1px solid lightgrey;
@@ -904,35 +907,43 @@ table.tablesorter th.restore {
 
 
 .batch .create-tree{
+	margin-top:7px;
 	border:1px solid SeaGreen ;
 }
 
 .batch .share-tree{
+	margin-top:7px;
 	border:1px solid lightGreen ;
 }
 
 .batch .select-tree{
+	margin-top:7px;
 	border:1px solid GreenYellow ;
 }
 
 .batch .delete-tree{
+	margin-top:7px;
 	border:1px solid Aquamarine ;
 }
 
 
 .batch .update-field {
+	margin-top:7px;
 	border:1px solid Crimson;
 }
 
 .batch .update-metadatawad {
+	margin-top:7px;
 	border:1px solid #FE642E;
 }
 
 .batch .update-dashboard {
+	margin-top:7px;
 	border:1px solid #F7BE81;
 }
 
 .batch .update-proxy{
+	margin-top:7px;
 	border:1px solid Gold;
 }
 
@@ -942,6 +953,7 @@ table.tablesorter th.restore {
 
 .batch input {
 	margin-bottom:0px;
+	height:32px;
 }
 
 

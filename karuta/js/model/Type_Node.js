@@ -731,7 +731,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			var gotDisplay = false;
 			if (semtag=="EuropassL"){
 				gotDisplay = true;
-				UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid,writenode);
+				UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid);
 			}
 			if (!gotDisplay && semtag!='bubble_level1') {
 				for( var i=0; i<root.children.length; ++i ) {

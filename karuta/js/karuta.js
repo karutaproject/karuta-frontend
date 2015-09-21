@@ -120,7 +120,7 @@ function getNavBar(type,portfolioid,edit)
 		if (type=='create_account')
 			url = "createAccount.htm?lang="+languages[i];
 		if (type=='batch')
-			url = "createBatchAccounts.htm?lang="+languages[i];
+			url = "createBatch.htm?lang="+languages[i];
 		html += "			<li><a href='"+url+"'>"+karutaStr[languages[i]]['language']+"</a></li>";
 	}
 	html += "					</ul>";
@@ -180,26 +180,6 @@ function getNavBar(type,portfolioid,edit)
 	html += "</div>";
 	
 	html += "</div>";
-	return html;
-}
-
-//==============================
-function LangueBox()
-//==============================
-{
-	var html = "";
-	html += "\n<!-- ==================== Edit box ==================== -->";
-	html += "\n<div id='langue-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
-	html += "\n		<div class='modal-content'>";
-	html += "\n		<div id='langue-window-header' class='modal-header'>";
-	html += "\n		</div>";
-	html += "\n		<div id='langue-window-body' class='modal-body'></div>";
-	html += "\n		<div class='modal-footer' id='langue-window-footer'></div>";
-	html += "\n		</div>";
-	html += "\n		</div>";
-	html += "\n	</div>";
-	html += "\n<!-- ============================================== -->";
 	return html;
 }
 

@@ -29,7 +29,7 @@ UIFactory["EuropassL"].parse = function(data)
 };
 
 //==================================
-UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid,edit)
+UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid)
 //==================================
 {
 	if (langcode==null)
@@ -38,6 +38,7 @@ UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid,edit
 	$("#"+destid).html("");
 	var html ="";
 	if (type=='detail') {
+		var edit =  ($(UICom.structure["ui"][g_mother_tongueid].node).attr('write')=='Y')? true:false;
 		//  if databack is true callback(data,param2,param3,param4) else callback(param2,param3,param4)
 		var databack = false;
 		var callback = "UIFactory['Langue'].reloadparse";
@@ -69,28 +70,6 @@ UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid,edit
 		for ( var i = 0; i < langues_list.length; i++) {
 				$("#"+destid+"europass_table").append($("<tr id='"+destid+"_"+langues_list[i].id+"'></tr>"));			
 				langues_list[i].displayView(destid+"_"+langues_list[i].id,type,langcode,edit);
-		}
-	}
-	if (type=='short' || type=='comp-short') {
-		for ( var i = 0; i < langues_list.length; i++) {
-			$("#"+destid).append($("<div id='"+destid+"_"+langues_list[i].id+"'></div>"));			
-			langues_list[i].displayView(destid+"_"+langues_list[i].id,type,langcode,edit);
-		}
-	}
-	if (type=='cv' || type=='comp') {
-		//  if databack is true callback(data,param2,param3,param4) else callback(param2,param3,param4)
-		if (type=='cv' && langues_list.length>0)
-			$("#other-tongue").show();
-		if (type=='cv' && langues_list.length==0)
-			$("#other-tongue").hide();
-		html += "<table id='"+destid+"europass_table' class='europass_table'>";
-		html += "<tr class='en-tete'><td> </td><td class='bordure' colspan='2'>COMPRENDRE</td><td class='bordure' colspan='2'>PARLER</td><td class='bordure'>�CRIRE</td></tr>";
-		html += "<tr class='en-tete'><td> </td><td class='bordure'>�couter</td><td class='bordure'>Lire</td><td class='bordure'>Prendre part � une conversation</td><td class='bordure'>S'exprimer oralement en continu</td><td class='bordure'> </td></tr>";
-		html += "</table>";
-		$("#"+destid).html(html);
-		for ( var i = 0; i < langues_list.length; i++) {
-				$("#"+destid+"europass_table").append($("<tr id='"+destid+"_"+langues_list[i].id+"'></tr>"));			
-				langues_list[i].displayView(destid+"_"+langues_list[i].id,type,null,"accordion_"+destid);
 		}
 	}
 }
@@ -169,33 +148,33 @@ UIFactory["Langue"].prototype.displayEditor = function(destid,type,lang)
 		//---------------------------------------------------------
 		html +="<td id='language_edit'></td>";
 		html +="<td class='bordure'><span id='listening_"+this.id+"_edit'>"+UICom.structure["ui"][this.listening_nodeid].resource.getValue("listening_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('listening_edit','"+this.listening_nodeid+"','�couter')\" data-title='�diter' rel='tooltip'>";
-		html += "Choisir";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('listening_edit','"+this.listening_nodeid+"','"+karutaStr[LANG]['listening']+"')\" data-title='�diter' rel='tooltip'>";
+		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='reading_"+this.id+"_edit'>"+UICom.structure["ui"][this.reading_nodeid].resource.getValue("reading_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('reading_edit','"+this.reading_nodeid+"','Lire')\" data-title='�diter' rel='tooltip'>";
-		html += "Choisir";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('reading_edit','"+this.reading_nodeid+"','"+karutaStr[LANG]['reading']+"')\" data-title='�diter' rel='tooltip'>";
+		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='spokenInteraction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getValue("spokenInteraction_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenInteraction_edit','"+this.spokenInteraction_nodeid+"','Prendre part � une conversation')\" data-title='�diter' rel='tooltip'>";
-		html += "Choisir";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenInteraction_edit','"+this.spokenInteraction_nodeid+"','"+karutaStr[LANG]['spoken-interaction']+"')\" data-title='�diter' rel='tooltip'>";
+		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='spokenProduction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getValue("spokenProduction_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenProduction_edit','"+this.spokenProduction_nodeid+"','S&amp;#39;exprimer oralement en continu')\" data-title='�diter' rel='tooltip'>";
-		html += "Choisir";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenProduction_edit','"+this.spokenProduction_nodeid+"','"+karutaStr[LANG]['spoken-production']+"')\" data-title='�diter' rel='tooltip'>";
+		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='writing_"+this.id+"_edit'>"+UICom.structure["ui"][this.writing_nodeid].resource.getValue("writing_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('writing_edit','"+this.writing_nodeid+"','�crire')\" data-title='�diter' rel='tooltip'>";
-		html += "Choisir";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('writing_edit','"+this.writing_nodeid+"','"+karutaStr[LANG]['writing']+"')\" data-title='�diter' rel='tooltip'>";
+		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td style='text-align:left'>";
 		html += "&nbsp;<a  class='btn btn-xs editbutton' onclick=\"javascript:langues_byid['"+this.id+"'].displayView('"+destid+"','detail',lang,true);$('#collapse"+this.id+"').collapse('show');toggleZoom('"+this.id+"')\" data-title='éditer' rel='tooltip'>";
-		html += "Quitter";
+		html += karutaStr[LANG]['quit'];
 		html += "</a>";
 		html +="</td>";
 		//---------------------------------------------------------
@@ -213,6 +192,9 @@ UIFactory["Langue"].editSkill = function(destid,uuid,title)
 	$("#langue-window-body").html("<div id='"+destid+"'></div>");
 	UICom.structure["ui"][uuid].resource.displayEditor(destid,"radio");
 	$("#langue-window").modal("show");
+	var js1 = "javascript:$('#langue-window').modal('hide')";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#langue-window-footer").html($(footer));
 };
 
 //==================================
@@ -279,11 +261,30 @@ UIFactory["Langue"].editMothertongue = function(uuid,destid)
 	$("#"+destid).html("");
 	UICom.structure["ui"][uuid].resource.displayEditor("mother_tongue");
 	var html = "<a  class='btn btn-xs' style='margin-left:5px' onclick=\"UIFactory.Langue.displayMothertongue('"+uuid+"','"+destid+"',true);\">";
-	html += "Quitter";
+	html += karutaStr[LANG]['quit'];
 	html += "</a>";
 	$("#"+destid).append($(html));
 };
 
+//==============================
+function LangueBox()
+//==============================
+{
+	var html = "";
+	html += "\n<!-- ==================== Edit box ==================== -->";
+	html += "\n<div id='langue-window' class='modal fade'>";
+	html += "\n		<div class='modal-dialog'>";
+	html += "\n		<div class='modal-content'>";
+	html += "\n		<div id='langue-window-header' class='modal-header'>";
+	html += "\n		</div>";
+	html += "\n		<div id='langue-window-body' class='modal-body'></div>";
+	html += "\n		<div class='modal-footer' id='langue-window-footer'></div>";
+	html += "\n		</div>";
+	html += "\n		</div>";
+	html += "\n	</div>";
+	html += "\n<!-- ============================================== -->";
+	return html;
+}
 
 
 

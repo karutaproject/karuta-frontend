@@ -374,7 +374,10 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			}
 			if (code!="" && self_value==code)
 				input += " checked ";
-			input += ">&nbsp;&nbsp;"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</input>";
+			input += ">";
+			if (code.indexOf("@")<0)
+				input += "&nbsp;&nbsp;"+ code;
+			input += "&nbsp;&nbsp;"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</input>";
 			var obj = $(input);
 			$(obj).click(function (){
 				UIFactory["Get_Get_Resource"].update(this,self,langcode,type);

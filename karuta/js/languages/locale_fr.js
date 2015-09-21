@@ -70,6 +70,8 @@ karutaStr['fr']['share-URL']="Partage du portfolio";
 karutaStr['fr']['see']="Voir";
 karutaStr['fr']['free-toolbar-menu-tooltip']="Cliquer pour éditer";
 karutaStr['fr']['quit-edit']="Quitter le mode édition";
+karutaStr['fr']['choose']="Choisir";
+karutaStr['fr']['quit']="Quitter";
 
 //=========================================
 //========== NODE =========================
