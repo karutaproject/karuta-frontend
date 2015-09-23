@@ -72,8 +72,14 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 		this.display[dest] = langcode;
 	}
 	var html = "";
+	var code = $(this.code_node).text();
+	if (code.indexOf("@")>-1) {
+		display_code = false;
+		code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+	}
+
 	html += "<span class='code_Item'>"+$(this.code_node).text()+" </span>";
-	html +=  "<span class='label_Item'> "+$(this.label_node[langcode]).text()+"</span>";
+	html +=  "<span class='label_Item "+code+"'> "+$(this.label_node[langcode]).text()+"</span>";
 	return html;
 };
 
