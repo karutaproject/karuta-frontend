@@ -29,6 +29,7 @@ var g_visible = 'visible';
 var g_visible = 'visible';
 var g_free_toolbar_visibility = 'hidden';
 var g_dashboard_models = {}; // cache for dashboard_models
+var g_wysihtml5_autosave = 120000; // 120 seconds
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------
@@ -463,6 +464,19 @@ function toggleZoom(uuid) {
 		$("#zoom_"+uuid).attr("class","fa fa-search-minus");
 	else
 		$("#zoom_"+uuid).attr("class","fa fa-search-plus");
+}
+
+//==================================
+function toggleContent(uuid) {
+//==================================
+	var classname = $("#toggleContent_"+uuid).attr("class");
+	if (classname=="glyphicon glyphicon-triangle-bottom"){
+		$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-right");
+		$("#content-"+uuid).hide();
+	} else {
+		$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-bottom");
+		$("#content-"+uuid).show();
+	}
 }
 
 //==================================

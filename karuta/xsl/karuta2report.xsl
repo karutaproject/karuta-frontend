@@ -128,12 +128,16 @@
 		<xsl:variable name="semtag">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="test">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/></xsl:variable>
 		<for-each-node>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
 			</xsl:if>
 			<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			<xsl:attribute name="test"><xsl:value-of select="$test"/></xsl:attribute>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-node>
 	</xsl:template>

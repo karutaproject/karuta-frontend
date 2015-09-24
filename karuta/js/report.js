@@ -25,7 +25,7 @@ Selector = function(jquery,type)
 };
 
 //==================================
-function getSelector(select)
+function getSelector(select,test)
 //==================================
 {
 	var selects = select.split("."); // nodetype.semtag.[node|resource] or .[node|resource]
@@ -34,6 +34,8 @@ function getSelector(select)
 		var jquery = selects[0];
 		if (selects[1]!="")
 			jquery +=":has(metadata[semantictag='"+selects[1]+"'])";
+		if (test!=null && test!='')
+			jquery +=":has("+test+")";
 		var type = selects[2];
 		var selector = new Selector(jquery,type);
 		return selector;
@@ -120,8 +122,9 @@ function processNode(no,xmlDoc,destid,data,line)
 //==================================
 {
 	var select = $(xmlDoc).attr("select");
+	var test = $(xmlDoc).attr("test");
 	if (select!=undefined) {
-		var selector = getSelector(select);
+		var selector = getSelector(select,test);
 		var nodes = $(selector.jquery,data);
 		for (var i=0; i<nodes.length;i++){
 			//---------------------------

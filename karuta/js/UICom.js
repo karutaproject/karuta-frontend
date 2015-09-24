@@ -192,6 +192,7 @@ var UICom =
 		UICom.addRole(node,'resizeroles');
 		UICom.addRole(node,'edittargetroles');
 		UICom.addRole(node,'graphicerroles');
+		UICom.addRole(node,'duplicateroles');
 	},
 	
 	//=======================================================================

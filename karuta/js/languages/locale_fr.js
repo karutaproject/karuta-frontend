@@ -96,6 +96,7 @@ karutaStr['fr']['commentnoderoles']="Rôles - Commenter";
 karutaStr['fr']['annotnoderoles']="Rôles - Annoter";
 karutaStr['fr']['submitroles']="Rôles - Soumettre";
 karutaStr['fr']['editnoderoles']="Rôles - Éditer libellé";
+karutaStr['fr']['duplicateroles']="Rôles - Dupliquer";
 karutaStr['fr']['editboxtitle']="Titre boîte d'édition";
 karutaStr['fr']['queryGet_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
 karutaStr['fr']['queryURL2Unit']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
@@ -149,10 +150,11 @@ karutaStr['fr']['inparent']="Dans le parent";
 karutaStr['fr']['encrypted']="Encrypter la ressource";
 karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
-karutaStr['fr']['display']="Présentation ";
+karutaStr['fr']['seltype']="Présentation ";
 karutaStr['fr']['shareroles']="Rôles - Partager";
 karutaStr['fr']['submitted']="Soumis";
 karutaStr['fr']['notsubmitted']="Non soumis";
+karutaStr['fr']['collapsible']="Repliable";
 
 //=========================================
 //========== ADMIN ========================

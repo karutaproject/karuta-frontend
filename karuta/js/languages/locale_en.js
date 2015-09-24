@@ -96,6 +96,7 @@ karutaStr['en']['commentnoderoles']="Roles - Comment";
 karutaStr['en']['annotnoderoles']="Roles - Annotate";
 karutaStr['en']['submitroles']="Roles - Submit";
 karutaStr['en']['editnoderoles']="Roles - Edit Label";
+karutaStr['en']['duplicateroles']="Roles - Duplicate";
 karutaStr['en']['editboxtitle']="Editing Box Title";
 karutaStr['en']['queryGet_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
 karutaStr['en']['queryURL2Unit']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
@@ -153,6 +154,7 @@ karutaStr['en']['seltype']="Display";
 karutaStr['en']['shareroles']="Roles - Share";
 karutaStr['en']['submitted']="Submitted";
 karutaStr['en']['notsubmitted']="Not Submitted";
+karutaStr['en']['collapsible']="Collapsible";
 
 //=========================================
 //========== ADMIN ========================

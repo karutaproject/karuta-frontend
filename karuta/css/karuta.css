@@ -602,7 +602,6 @@ a.active:over{
 
 
 button.select-label {
-/*	min-width:200px; */
 	min-width:300px;
 	word-wrap: break-word;
 	white-space: normal;
@@ -787,37 +786,45 @@ table.tablesorter th.restore {
 }
 
 .report .for-each-person{
+	margin-top:7px;
 	border:1px solid lightgrey;
 }
 
 .report .for-each-line{
+	margin-top:7px;
 	border:1px solid lightgrey;
 }
 
 .report .for-each-portfolio{
+	margin-top:7px;
 	border:1px solid lightgrey ;
 }
 
 .report .for-each-node{
+	margin-top:7px;
 	border:1px solid lightgrey ;
 }
 
 
 .report .model-table {
+	margin-top:7px;
 	border:2px solid Navy;
 }
 
 .report .model-row {
+	margin-top:7px;
 	border:2px solid SeaGreen;
 }
 
 .report .model-cell {
+	margin-top:7px;
 	border:2px solid Crimson;
 }
 
 .report .node_resource,
 .report .text,
 .report .aggregate{
+	margin-top:7px;
 	border:1px dashed lightgrey;
 	margin-bottom:5px;
 }
@@ -856,7 +863,7 @@ table.tablesorter th.restore {
 }
 
 .asmNop .model_row {
-	display:none;
+	visibility:hidden;
 }
 
 .asmNop .row {
@@ -864,6 +871,10 @@ table.tablesorter th.restore {
 	margin-left: -30px;;
 }
 
+.report button.select-label {
+	padding-left:5px;
+	min-width:120px;
+}
 /* ====================
 	Batch Model
    ====================*/
