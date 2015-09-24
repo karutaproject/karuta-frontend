@@ -783,6 +783,41 @@ function deleteTree(node)
 		$("#log").append("<br>- tree deleted - code:|"+code+" ---- NOT FOUND ----");
 	}
 }
+
+//=================================================
+function processImportNodes()
+//=================================================
+{
+	if (g_import_nodes.length==0)
+		processEnd();
+	else {
+		$("#log").append("<br>---------------------import_nodes-------------------------------");
+		for  (var j=0; j<g_import_nodes.length; j++) {
+			importNode(g_import_nodes[j]);
+		}
+		g_noline++;
+		if (g_noline==g_json.lines.length)
+			processEnd();
+		else
+			processLine();
+	}
+}
+
+//=================================================
+function importNode(node)
+//=================================================
+{
+	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		url : urlS,
+		data : "",
+		success : function(data) {
+		}
+	});
+}
+
 //=================================================
 function processEnd()
 //=================================================
