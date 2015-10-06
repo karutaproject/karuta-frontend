@@ -322,7 +322,7 @@ function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
 {
 	var html = "";
 	html += "\n<!-- ==================== Delete Button ==================== -->";
-	html += "<span id='del-"+uuid+"' class='button glyphicon glyphicon-remove' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'></button>";
+	html += "<span id='del-"+uuid+"' class='button glyphicon glyphicon-remove' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'></span>";
 	return html;
 }
 
@@ -844,6 +844,7 @@ function toggleSideBar() {
 		$("#contenu").removeClass().addClass('col-md-9');
 		$("#sidebar").show();
 	}
+	UIFactory['Node'].reloadUnit();
 }
 
 //==================================
@@ -860,8 +861,9 @@ function togglePlusMinus(uuid) {
 }
 
 //==================================
-function changeCss(className, classValue) {
-	//==================================
+function changeCss(className, classValue)
+//==================================
+{
     var cssMainContainer = $('#css-modifier-container');
 
     if (cssMainContainer.length == 0) {
@@ -872,3 +874,16 @@ function changeCss(className, classValue) {
     cssMainContainer.append(className + " {" + classValue + "}\n");
 }
 
+//==================================
+function equalize_column_height(uuid)
+//==================================
+{
+	var heights = $("#node_"+uuid).find(".same-height").map(function() {
+		if (UICom.structure["ui"][uuid].resource!=undefined && UICom.structure["ui"][uuid].resource.type == 'image')
+			return $("#image_uuid").height();
+		else
+			return $(this).height();
+	});
+	var maxHeight = Math.max.apply(null, heights);
+	$("#node_"+uuid).find(".same-height").height(maxHeight);
+}

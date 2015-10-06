@@ -192,10 +192,8 @@ hr {
    the background is wrong (Contexts & unitStructures)
    and lists of stuctures and units are too tight      */
 .row .col-md-9 .row:first-child,
-.row .col-md-9 .title,
-.row .col-md-9 .resource {
+.row .col-md-9 .title {
 	min-height:24px; 
-	padding-left:6%;
 }
 
 .asmRoot .title {
@@ -265,12 +263,6 @@ hr {
 	line-height: 16px;
 }
 
-.col-md-2 .title,
-.col-md-7 .title{
-	padding-left:3px;
-	padding-right:2px;
-	padding-bottom:2px;
-}
 
 .asmnode{
 	height:100%;
@@ -289,30 +281,46 @@ hr {
 	margin-bottom: 0;
 }
 
-.resource-Image .inside-full-height{
+.row-node .node-label{
+	padding-left:10px;
+	padding-right:0px;
+}
+
+.row-resource .node-label{
+	margin-top:-6px;
+	padding-left:10px;
+	padding-right:0px;
+}
+
+.resource-Image{
 	padding:0px;	
 	overflow:hidden;
 }
 
-.row-resource .col-md-2{
-	background: lightgrey;
-	opacity:0.5;
-	margin-left:0px;
-	border: 1px solid lightgrey;
-	padding-left:0px;
-	padding-right:0px;
-}
 
-.row-resource .col-md-6{
+
+.row-resource .resource{
 	margin-right:0px;
 	background:white;
 	border: 1px solid lightgrey;
 	padding-left:0px;
 	padding-right:0px;
+	margin-left:0px;
 }
 
-.row-resource .node-label{
-	padding-left:6%;
+.row-node .buttons {
+	border: 1px solid lightgrey;
+/*	margin-left:0px;
+	padding-left:0px;
+	padding-right:0px;*/
+}
+
+.row-resource .buttons{
+	background: lightgrey;
+	border: 1px solid lightgrey;
+/*	margin-left:0px;
+	padding-left:0px;
+	padding-right:0px;*/
 }
 
 .button{
@@ -323,14 +331,6 @@ hr {
 	z-index:10;
 }
 
-.node-label .title{
-}
-
-
-.resource {
-	min-height:24px;
-	border: 1px solid red;
-}
 
 .text-editor {
 	background-color: white;

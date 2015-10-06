@@ -624,7 +624,11 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 }
 
 //==================================================
+//==================================================
+//==================================================
 UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inline,backgroundParent)
+//==================================================
+//==================================================
 //==================================================
 {
 	if (edit==null || edit==undefined)
@@ -634,13 +638,13 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	var menu = true;
 	//---------------------------------------
 	var data = root.node;
-	var name = $(data).prop("nodeName");
+	var nodetype = $(data).prop("nodeName");
 	var uuid = $(data).attr("id");
 
 	var node = UICom.structure["ui"][uuid];
 	// ---- store info to redisplay after change ---
 	node.display_node[dest] = {"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":"standard"};
-	//----------------------------------------------
+	//------------------metadata----------------------------
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
@@ -669,8 +673,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						edit = menu = (proxies_edit[uuid].indexOf(g_userrole)>-1 || g_userrole=='designer');
 					}
 			}
-			//---------------------------------------------------------
-			var html = "<div id='standard_"+uuid+"' class='asmnode "+name+" "+semtag+" ";
+			//================================================================================================
+			var html = "<div id='node_"+uuid+"' class='asmnode "+nodetype+" "+semtag+" ";
 			if(UICom.structure["ui"][uuid].resource!=null)
 				html += UICom.structure["ui"][uuid].resource.type;
 			html += "'";
@@ -685,19 +689,17 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//----------------------------------
 			html += ">";
 			//============================== ASMCONTEXT =============================
-			if (name == "asmContext"){
+			if (nodetype == "asmContext"){
 				html += "<div class='row row-resource'>";
 				//-------------- node -----------------------------
-				html += "<div id='std_node_"+uuid+"' class='node-label col-md-3 same-height' ";
-				style = "style='";
-				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
-				style +="'";
-				html += style;
-				html += ">";
-				html += "<div class='inside inside-full-height'>";
+				html += "<div id='std_node_"+uuid+"' class='col-md-offset-1 col-md-2 node-label same-height'>";
+				style = UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
+				html += "<div class='inside-full-height' style='"+style+"'>";
 				html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
-				html += "</div><!-- inside inside-full-height -->";
-				html += "</div><!-- col-md-3 label of resource -->";
+				html += "</div><!-- inside-full-height -->";
+				html += "</div><!-- col-md-3 -->";
+				html += "<div class='col-md-9' >";
+				html += "<table  style='width:*;margin-left:5px;'><tr>";
 				//-------------- resource -------------------------
 				if (g_designerrole) {
 					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
@@ -713,7 +715,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				if (edit && inline && writenode && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL'){
 					//------ edit inline ----------------
-					html += "<div id='std_resource_"+uuid+"' class='resource col-md-6 same-height'>";
+					html += "<div id='std_resource_"+uuid+"' class='col-md-6 resource same-height'>";
 					html += "<div class='inside-full-height'>";
 					if(UICom.structure["ui"][uuid].resource!=null) {
 						try {
@@ -732,7 +734,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				} else {
 					//--------- display ------------
 					if (g_display_type=='standard' || g_display_type=='flat') {
-						style = "style='";
+						style = "style='width:80%;";
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
@@ -741,18 +743,19 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
 						style +="'";
-						html += "<div  class='col-md-6  same-height ";
-						if (node.resource_type!=null)
-							html+= "resource-"+node.resource_type;
+						html += "<td  class='col-md-6 resource same-height ";
 						html += "' ";
 						html += style;
 						html += ">";
 					}
-					html += "<div id='std_resource_"+uuid+"' class='inside-full-height'>";
+					html += "<div id='std_resource_"+uuid+"' class='inside-full-height ";
+					if (node.resource_type!=null)
+						html+= "resource-"+node.resource_type;
+					html+= "' >";
 					if (node.resource.type!='Dashboard' || g_userrole=='designer')
 						html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 					html += "</div><!-- inside-full-height -->";
-					html += "</div><!-- col-md-6 resource -->";
+					html += "</td><!-- col-md-6 resource -->";
 				}
 				//-------------- context -------------------------
 //				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
@@ -761,17 +764,18 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (g_edit && (g_userrole=='designer' || USER.admin)) {
 //					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
 				}
-				//--------------------------------------------------
 				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='buttons col-md-2 same-height'>";
+				html += "<td id='buttons-"+uuid+"' class=' buttons same-height' style='width:200px'>";
 				html += "<div class='inside-full-height'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
-				html += "</div><!-- col-md-3  -->";
-							//--------------------------------------------------
+				html += "</td><!-- col-md-2  -->";
+				//--------------------------------------------------
+				html += "</tr></table><!-- inner row -->";
+				html += "</div><!-- col-md-9  -->";
 				html += "</div><!-- inner row -->";
 			}
 			else { // other than asmContext
 				//============================== NODE ===================================
-				if (name=='asmUnitStructure')
+				if (nodetype=='asmUnitStructure')
 					depth=100;	
 				style = "";
 				if (depth>0) {
@@ -790,40 +794,42 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-othercss',false);
 				}
-				if (name=='asmUnitStructure' && collapsible=='Y')
+				//-------------------- collapsible -------------------
+				if (nodetype=='asmUnitStructure' && collapsible=='Y')
 					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" style='position:relative;top:20px;left:-20px;cursor:pointer'><span id='toggleContent_"+uuid+"' class='glyphicon glyphicon-triangle-bottom'></span></div>";
-				html += "<div class='row'>";
+				html += "<div class='row row-node'>";
 	
 				//-------------- node -----------------------------
-				if (depth!=1 && depth<10 && name=='asmStructure') {
+				if (depth!=1 && depth<10 && nodetype=='asmStructure') {
 					if (g_display_type=='standard' || g_display_type=='flat')
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8 same-height' style='"+style+"'>";
 					if (g_display_type=='header')
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8 same-height'>";
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',1,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>";
 					}
-				else if (depth!=1 && depth<10 && name=='asmUnit') {
+				else if (depth!=1 && depth<10 && nodetype=='asmUnit') {
 					if (g_display_type=='standard' || g_display_type=='flat')
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8 same-height' style='"+style+"'>";
 					if (g_display_type=='header')
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8'>";
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
 					}
 				else {
 					if (g_display_type=='standard' || g_display_type=='flat')
-						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
-					if (name=='asmUnitStructure' && collapsible=='Y')
+						html += "<div id='std_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8  same-height'";
+					if (nodetype=='asmUnitStructure' && collapsible=='Y')
 						html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
 					else
 						html += " style='"+style+"'>";
 					if (g_display_type=='header') {
-						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
+						html += "<div id='std_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8  same-height'";
 						if (g_userrole!='designer' && semtag=='header')
 							html += " style='visibility:hidden'";
 						if (semtag!='header')
 							html += " style='"+style+"'";
 						html += ">";
 					}
+					//-------------------------------------------------
 					var gotView = false;
 					if (semtag=='bubble_level1'){
 						html += " "+UICom.structure["ui"][uuid].getBubbleView('std_node_'+uuid);
@@ -842,7 +848,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				html += "</div><!-- col-md-9 -->";
 				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='col-md-3'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
+				html += "<div id='buttons-"+uuid+"' class='col-md-2 buttons same-height'>";
+				html += "<div class='inside-full-height'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
+				html += "</div><!-- col-md-2  -->";
 				//--------------------------------------------------
 				html += "</div><!-- row -->";
 				//--------------------------------------------------*/
@@ -864,23 +872,14 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					html += "</div>";
 				}
 			}
-			html += "</div><!-- name -->";
-			//=====================================================================
-			if ( $("#standard_"+uuid).length>0 )
-				$("#standard_"+uuid).replaceWith($(html));
+			html += "</div><!-- nodetype -->";
+			//==============================fin NODE ===================================
+			if ( $("#node_"+uuid).length>0 )
+				$("#node_"+uuid).replaceWith($(html));
 			else
 				$("#"+dest).append($(html));
 			//-------------------- equalize columns height ------------------------------------------
-			    var heights = $("#standard_"+uuid).find(".same-height").map(function() {
-			    	if (UICom.structure["ui"][uuid].resource!=undefined && UICom.structure["ui"][uuid].resource.type == 'image')
-			    		return $("#image_uuid").height();
-			    	else
-			    		return $(this).height();
-			    });
-
-			    var maxHeight = Math.max.apply(null, heights);
-
-			    $("#standard_"+uuid).find(".same-height").height(maxHeight);
+//			equalize_column_height(uuid);
 			//--------------------set editor------------------------------------------
 			if ($("#display_editor_"+uuid).length>0) {
 				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
@@ -938,7 +937,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				UIFactory["Node"].displayMetainfo("metainfo_"+uuid,data);
 			}
 			//------------ Dashboard -----------------
-			if (name == "asmContext" && node.resource.type=='Dashboard') {
+			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
 				$("#"+dest).append($("<div id='dashboard_"+uuid+"' class='createreport'></div>"));
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
 				if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
@@ -1045,7 +1044,7 @@ UIFactory["Node"].displayStandardOld = function(root,dest,depth,langcode,edit,in
 					}
 			}
 			//---------------------------------------------------------
-			var html = "<div id='standard_"+uuid+"' class='"+name+" "+semtag+" ";
+			var html = "<div id='node_"+uuid+"' class='"+name+" "+semtag+" ";
 			if(UICom.structure["ui"][uuid].resource!=null)
 				html += UICom.structure["ui"][uuid].resource.type;
 			html += "'";
@@ -1236,8 +1235,8 @@ UIFactory["Node"].displayStandardOld = function(root,dest,depth,langcode,edit,in
 			}
 			html += "</div><!-- name -->";
 			//------------------------------------------
-			if ( $("#standard_"+uuid).length>0 )
-				$("#standard_"+uuid).replaceWith($(html));
+			if ( $("#node_"+uuid).length>0 )
+				$("#node_"+uuid).replaceWith($(html));
 			else
 				$("#"+dest).append($(html));
 			//--------------------set editor------------------------------------------
