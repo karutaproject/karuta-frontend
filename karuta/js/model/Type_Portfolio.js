@@ -270,6 +270,20 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#"+destid).append($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
+	if (type=='flat'){
+		html += "<div id='navigation_bar'></div>";
+		html += "<div id='portfolio-navbar'></div>";
+		html += "<div id='main-container' class='container-fluid'>";
+		html += "	<div id='main-row' class='row'>";
+		html += "		<div class='col-md-3' id='sidebar'></div>";
+		html += "		<div class='col-md-12' id='contenu'></div>";
+		html += "	</div>";
+		html += "</div>";
+		html += "<div id='footer'></div>";
+		$("#"+destid).append($(html));
+		$("#sidebar").hide();
+		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
+	}
 	if (type=='model'){
 		html += "<div id='navigation_bar'></div>";
 		html += "<div id='main-container' class='container'>";
@@ -324,6 +338,11 @@ UIFactory["Portfolio"].displaySidebar = function(root,destid,type,langcode,edit,
 		$("#"+destid).append($(html));
 		UIFactory["Node"].displaySidebar(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
 	}
+	if (type=='flat'){
+		html += "<div id='sidebar-content'><div  class='panel-group' id='parent-"+rootid+"' role='tablist'></div></div>";
+		$("#"+destid).append($(html));
+		UIFactory["Node"].displaySidebar(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
+	}
 };
 
 //======================
@@ -338,7 +357,6 @@ UIFactory["Portfolio"].displayMenu = function(destid,type,langcode,edit,tree)
 		html += "<ul class='nav nav-tabs header-menu' style='float:none'>";
 		for (var i=0; i<nodes.length; i++){
 			uuid = $(nodes[i]).attr('id');
-//			html += "<li><a  id='sidebar_"+uuid+"' class='sidebar' href='#' onclick=\"displayPage('"+uuid+"',99,'standard','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][uuid].getLabel()+"</a></li>"; // Bootstrap 2
 			html += "<li><a  id='sidebar_"+uuid+"' class='sidebar' href='#' data-toggle='tab' onclick=\"displayPage('"+uuid+"',99,'standard','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][uuid].getLabel()+"</a></li>";
 		}
 		html += "</ul>";
@@ -1405,4 +1423,56 @@ UIFactory["Portfolio"].unshare = function(portfolioid)
 		});
 	}
 };
+
+//==============================
+UIFactory["Portfolio"].getNavBar = function (type,langcode,edit)
+//==============================
+{
+	var html = "";
+	var rootid = $(UICom.root.node).attr('id');
+	html += "<nav class='navbar navbar-default'>";
+	html += "<div class='container-fluid'>";
+	html += "<div class='navbar-inner'>";
+	html += "	<div class='nav-bar-header'>";
+	html += "		<button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#collapse-2'>";
+	html += "			<span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span>";
+	html += "		</button>";
+	html += "		<div class='navbar-brand' >";
+	html += "			<a id='navbar-brand' class='sidebar' href='#' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+edit+")\">";
+	html += UICom.structure["ui"][rootid].getLabel('navbar-brand')+"</a>";
+	html += "		 	<a href='#' onclick='toggleSideBar()' class='btn-lg'><span class='glyphicon glyphicon-menu-hamburger'></span></a>";
+	html += "		</div><!-- class='navbar-brand' -->";
+	html += "	</div><!-- class='nav-bar-header' -->";
+	html += "</div><!-- class='navbar-inner' -->";
+	html += "<div class='collapse navbar-collapse' id='collapse-2'>";
+	html += "	<ul class='nav navbar-nav navbar-right'>";
+	//-------------------- WELCOME PAGE EDIT -----------
+	html += "		<li id='welcome-edit'></li>";
+	//-------------------- ACTIONS----------------------
+	html += "		<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
+	html += "			<ul class='dropdown-menu'>";
+	html += UIFactory["Portfolio"].getActions(portfolioid);
+	html += "			</ul>";
+	html += "		</li>";
+	//-------------------- ROLES-------------------------
+	if (g_userrole=='designer') {
+		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Role : <span id='userrole'>designer</span><span class='caret'></span></a>";
+		html += "	<ul class='dropdown-menu pull-right'>";
+		html += "		<li><a href='#' onclick=\"setDesignerRole('designer')\">designer</a></li>";
+		for (role in UICom.roles) {
+			if (role!="designer")
+				html += "	<li><a href='#' onclick=\"setDesignerRole('"+role+"')\">"+role+"</a></li>";
+		}
+		html += "	</ul><!-- class='nav navbar-nav navbar-right' -->";
+	}
+	else
+		html += " Role : <span id='userrole'></span><span class='caret'></span></a>";
+
+	html += "	</ul>";
+	//------------------------------------------------
+	html += "</div><!-- class='collapse navbar-collapse' -->";
+	html += "</div><!-- class='container-fluid' -->";
+	html += "</nav>";
+	return html;
+}
 

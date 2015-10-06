@@ -12,7 +12,6 @@
 		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
 		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
-		<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
 		<!-- =========================================== -->
 		<link rel="stylesheet" href="../../application/css/specific.css" />
 		<!-- =============================================================== -->
@@ -171,12 +170,55 @@
 								// --------------------------
 								UICom.parseStructure(data);
 								UIFactory["Portfolio"].parse(data);
+								// --------CSS Portfolio------------------
+								var portfolio_navbar_id = $("asmContext:has(metadata[semantictag='portfolio-navbar'])",data).attr("id");
+								var portfolio_navbar_color = UICom.structure["ui"][portfolio_navbar_id].resource.getValue();
+								changeCss("#portfolio-navbar .navbar-default", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
+								changeCss("#portfolio-navbar .dropdown-menu", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
+								changeCss("#portfolio-navbar .open > a", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
+								//--------------
+								var portfolio_navbar_link_id = $("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).attr("id");
+								var portfolio_navbar_link_color = UICom.structure["ui"][portfolio_navbar_link_id].resource.getValue();
+								changeCss("#portfolio-navbar a", "color:"+portfolio_navbar_link_color+";");
+								//--------------------------------
+								var portfolio_sidebar_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).attr("id");
+								var portfolio_sidebar_color = UICom.structure["ui"][portfolio_sidebar_id].resource.getValue();
+								changeCss("#sidebar", "background-color:"+portfolio_sidebar_color+";height:100%;");
+								//--------------------------------
+								var portfolio_sidebar_link_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).attr("id");
+								var portfolio_sidebar_link_color = UICom.structure["ui"][portfolio_sidebar_link_id].resource.getValue();								
+								changeCss(".sidebar-link", "color:"+portfolio_sidebar_link_color+";padding:9px;");
+								changeCss(".sidebar-link a", "color:"+portfolio_sidebar_link_color+";");
+								//--------------------------------
+								var portfolio_sidebar_link_selected_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).attr("id");
+								var portfolio_sidebar_link_selected_color = UICom.structure["ui"][portfolio_sidebar_link_selected_id].resource.getValue();								
+								changeCss(".selected", "border-right:4px solid #e0006d;padding-right:5px;");
+								changeCss(".selected a", "color:"+portfolio_sidebar_link_selected_color+";font-weight:bold;");
+								changeCss(".sidebar-link a:hover", "color:"+portfolio_sidebar_link_selected_color+";");
+								changeCss("a.sidebar-link:hover", "color:"+portfolio_sidebar_link_selected_color+";");
+								//--------------------------------
+								var portfolio_sidebar_selected_border_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-selected-border'])",data).attr("id");
+								var portfolio_sidebar_selected_border_color = UICom.structure["ui"][portfolio_sidebar_selected_border_id].resource.getValue();								
+								changeCss(".selected", "border-right:4px solid "+portfolio_sidebar_selected_border_color+";padding-right:5px;");
+								//--------------------------------
+								var portfolio_sidebar_separator_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).attr("id");
+								var portfolio_sidebar_separator_color = UICom.structure["ui"][portfolio_sidebar_separator_id].resource.getValue();								
+								changeCss(".sidebar-item", "border-bottom:1px solid "+portfolio_sidebar_separator_color+";padding-left:15px;padding-top:8px;padding-bottom:8px;");
+								changeCss(".sidebar-item .sidebar-item", "border-bottom:1px solid "+portfolio_sidebar_separator_color+";padding-top:5px;padding-bottom:5px;");
+								//--------------------------------
+								var welcome_title_color_id = $("asmContext:has(metadata[semantictag='welcome-title-color'])",data).attr("id");
+								var welcome_title_color = UICom.structure["ui"][welcome_title_color_id].resource.getValue();								
+								changeCss(".page-welcome .welcome-title", "color:"+welcome_title_color+";text-align:center;width:100%;font-size:30px;");
+								//--------------------------------
+								var welcome_line_color_id = $("asmContext:has(metadata[semantictag='welcome-line-color'])",data).attr("id");
+								var welcome_line_color = UICom.structure["ui"][welcome_line_color_id].resource.getValue();								
+								changeCss(".welcome-line", "border-bottom:1px solid "+welcome_line_color+";width:25%;margin-left:auto;margin-right:auto;");
+								// ---------------------------------------
 								if (g_display_type=="header")
 									loadLanguages(function(data) {UIFactory["Portfolio"].displayPortfolio('main-body','header',LANGCODE,g_edit);});
-								if (g_display_type=="standard")
-									UIFactory["Portfolio"].displayPortfolio('main-body','standard',LANGCODE,g_edit);
-								if (g_display_type=="model")
-									UIFactory["Portfolio"].displayPortfolio('main-body','model',LANGCODE,g_edit);
+								else
+									UIFactory["Portfolio"].displayPortfolio('main-body',g_display_type,LANGCODE,g_edit);
+								// --------------------------
 								$('a[data-toggle=tooltip]').tooltip({html:true});
 								// --------------------------
 								$.ajax({
@@ -192,8 +234,8 @@
 									}
 								});
 								// --------------------------
-								if (g_display_type=="standard")
-									loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));});
+								if (g_display_type=="standard" || g_display_type=="flat")
+									loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));$("#portfolio-navbar").append(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit));});
 								if (g_display_type=="model")
 									loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);});
 								
@@ -206,7 +248,14 @@
 									
 								//---------------------------
 								$("#wait-window").modal('hide');
-								$("#sidebar_"+UICom.rootid).click();
+								//---------------------------
+								if (g_display_type=="flat") {
+									var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-block'])",data);
+									var welcomeid = $(welcomes[0]).attr('id');
+									$("#sidebar_"+welcomeid).click();
+								} else
+									$("#sidebar_"+UICom.rootid).click();
+								//---------------------------
 								fillEditBoxBody();
 								UIFactory.Node.reloadUnit(UICom.rootid); // for IE9
 							}

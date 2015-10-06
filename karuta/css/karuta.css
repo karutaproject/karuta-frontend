@@ -1,35 +1,136 @@
-
-#main-container {
-	padding-top:60px;
+#navigation_bar .navbar-default{
+	background-color:white;
 }
 
-/* for Chrome - bug fix */
-.datepicker {z-index:1200 !important;}
-/* -- information icon -- */
-.glyphicon {
-	color:#333;
-	font-size:12px;
-	vertical-align: text-top;
+
+html, body, #main-body, #main-container, #main-row, #contenu {
+	height:100%;	
 }
 
-/* -- boutons du navbar --*/
-.navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .open > a, 
-.navbar-default .navbar-nav > .open > a:focus, 
-.navbar-default .navbar-nav > .open > a:hover {
-	background-color: #ECECEC;
-	border-color: #E7E7E7;
+#contenu {
+	padding-left:0px;
+	padding-right:0px;
 }
 
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav > .open > a {
-	border-color: #E7E7E7;
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.125) inset;
+#contenu .page {
+	padding-left:10px;
+	padding-right:10px;
+}
+
+.navbar {
+	margin-bottom:0px;
+	border-radius:0px;
 }
 
 .navbar-default{
 	font-size: 14px;
-}	
+}
+
+#edit-window-body-resource{
+	overflow:hidden;
+}
+
+
+
+/* ====================== */
+/*      SIDEBAR            */
+/* ====================== */
+
+
+.panel-default > .panel-heading {
+	background-color:transparent;
+}
+
+.panel-default,
+.panel-default > .panel-heading {
+	border-color:transparent;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0);
+	padding-left:0px;
+	padding-top:0px;
+	padding-bottom:0px;
+}
+
+.panel-body{
+	padding-top:0px;
+	padding-bottom:0px;
+}
+
+.well{
+	background-color:transparent;
+}
+
+.link-unit{
+	padding-top:4px;
+	padding-bottom:5px;
+	padding-left:1px;
+}
+
+#sidebar-content {
+	padding-top:15px;
+	height: 100%;
+	padding-left:0px;
+	padding-right:0px
+  }
+
+.sidebar-item a {
+	width:100%;
+}
+
+/* =========== PORTFOLIO-WELCOME ================= */
+
+.welcome-block{
+	margin-left:0px;
+	margin-right:0px;
+}
+
+#welcome-image {
+	padding-top:50px;
+	width: 100%;
+    height: 250px;
+}
+
+.welcome-box {
+	margin-left:auto;
+	margin-right:auto;
+	width:50%;
+	min-width:200px;
+	background-color:black;
+	padding:10px;
+	border:1px solid white;
+	opacity: 0.5;
+}
+
+.welcome-block .welcome-title {
+	font-size:24px;
+	text-align:center;
+	width:100%;
+	padding-bottom:5px;
+}
+
+.welcome-block .welcome-block .welcome-title {
+	font-size:18px;
+}
+
+.welcome-block .image{
+	margin-left:auto;
+	margin-right:auto;
+	
+}
+
+.page-welcome .welcome-baseline, .page-welcome .welcome-text{
+	padding:10px;
+	width:100%;
+}
+
+
+.welcome-block .col-md-6, .welcome-block .col-md-4, .welcome-block .col-md-3, .welcome-block .col-md-2, .welcome-block .col-md-1{
+	height:100%
+}
+
+/* ============================================== */
+
+/* ============================================== */
+
 
 /* --- buton are redefined to use with Ipas and solve size errors */
 .btn-xs [class*="icon-"] {
@@ -94,6 +195,7 @@ hr {
 .row .col-md-9 .title,
 .row .col-md-9 .resource {
 	min-height:24px; 
+	padding-left:6%;
 }
 
 .asmRoot .title {
@@ -170,9 +272,66 @@ hr {
 	padding-bottom:2px;
 }
 
+.asmnode{
+	height:100%;
+	margin-top:10px;
+}
+
+.content {
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+.inside-full-height {
+	padding:7px;
+	height: 100%;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.resource-Image .inside-full-height{
+	padding:0px;	
+	overflow:hidden;
+}
+
+.row-resource .col-md-2{
+	background: lightgrey;
+	opacity:0.5;
+	margin-left:0px;
+	border: 1px solid lightgrey;
+	padding-left:0px;
+	padding-right:0px;
+}
+
+.row-resource .col-md-6{
+	margin-right:0px;
+	background:white;
+	border: 1px solid lightgrey;
+	padding-left:0px;
+	padding-right:0px;
+}
+
+.row-resource .node-label{
+	padding-left:6%;
+}
+
+.button{
+	font-size: 12px;
+	line-height: 1.5;
+	padding: 1px 5px;
+	opacity:1.0;
+	z-index:10;
+}
+
+.node-label .title{
+}
+
+
 .resource {
 	min-height:24px;
+	border: 1px solid red;
 }
+
 .text-editor {
 	background-color: white;
 	border: 1px solid rgb(204, 204, 204); 
@@ -1055,11 +1214,11 @@ table.tablesorter th.restore {
 .resource-Document,
 .resource-URL {
 /*	min-width:100px;
-	min-height:100px;*/
+	min-height:100px;
 	width:100%;
 	height:100%;
 }
-
+*/
 .resource-Video:hover,
 .resource-Field:hover,
 .resource-TextField:hover,
@@ -1199,8 +1358,9 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
    ====================*/
 
 /* list of structures/units in a portfolio */
-.btn-group .btn-xs{
+.btn-xs{
 	height:24px;
+	cursor:pointer;
 }
 
 /* no underline in sidebar */
@@ -1290,3 +1450,4 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .bubble_link_editor .editbutton{
 	margin-bottom:5px;
 }
+

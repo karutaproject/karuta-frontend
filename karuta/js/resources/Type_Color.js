@@ -89,7 +89,7 @@ UIFactory["Color"].prototype.getView = function(dest,type,langcode)
 	var value = $(this.text_node[langcode]).text();
 	if (this.encrypted)
 		value = decrypt(html.substring(3),g_rc4key);
-	var html = "<div style='height:20px;width:20px;background-color:"+value+"'></div> "+value; 
+	var html = "<span style='display:inline-block;width:1.5em;background-color:"+value+"'>&nbsp;&nbsp;&nbsp;</span>&nbsp;"+value; 
 	return html;
 };
 
