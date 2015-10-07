@@ -287,7 +287,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		if (resizeroles==undefined)
 			resizeroles="";
 		if ((g_userrole=='designer' || USER.admin || resizeroles.indexOf(g_userrole)>-1 || resizeroles.indexOf(this.userrole)>-1) && this.resource!=undefined && this.resource.type=='Image') {
-			var htmlSize = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'height',$(this.metadataepm).attr('height'));
+			var htmlSize = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'width',$(this.metadataepm).attr('width'));
 			$(htmlFormObj).append($(htmlSize));
 		}
 		$(div).append($(htmlFormObj));
@@ -698,8 +698,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
 				html += "</div><!-- inside-full-height -->";
 				html += "</div><!-- col-md-3 -->";
-				html += "<div class='col-md-9' >";
-				html += "<table  style='width:*;margin-left:5px;'><tr>";
+				html += "<div class='col-md-8' >";
+				html += "<table><tr>";
 				//-------------- resource -------------------------
 				if (g_designerrole) {
 					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
@@ -734,7 +734,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				} else {
 					//--------- display ------------
 					if (g_display_type=='standard' || g_display_type=='flat') {
-						style = "style='width:80%;";
+						style = "style='";
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
@@ -743,7 +743,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
 						style +="'";
-						html += "<td  class='col-md-6 resource same-height ";
+						html += "<td  width='80%' class='resource";
 						html += "' ";
 						html += style;
 						html += ">";
@@ -765,7 +765,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 //					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
 				}
 				//-------------- buttons --------------------------
-				html += "<td id='buttons-"+uuid+"' class=' buttons same-height' style='width:200px'>";
+				html += "<td id='buttons-"+uuid+"' class='buttons same-height'>";
 				html += "<div class='inside-full-height'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
 				html += "</td><!-- col-md-2  -->";
 				//--------------------------------------------------
@@ -796,13 +796,13 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				//-------------------- collapsible -------------------
 				if (nodetype=='asmUnitStructure' && collapsible=='Y')
-					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" style='position:relative;top:20px;left:-20px;cursor:pointer'><span id='toggleContent_"+uuid+"' class='glyphicon glyphicon-triangle-bottom'></span></div>";
-				html += "<div class='row row-node'>";
+					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" style='float:right;margin-right:5px;cursor:pointer'><span id='toggleContent_"+uuid+"' class='glyphicon glyphicon-triangle-bottom'></span></div>";
+				html += "<div class='row row-node'  style='"+style+"'>";
 	
 				//-------------- node -----------------------------
 				if (depth!=1 && depth<10 && nodetype=='asmStructure') {
 					if (g_display_type=='standard' || g_display_type=='flat')
-						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8 same-height' style='"+style+"'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8 same-height'>";
 					if (g_display_type=='header')
 						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8 same-height'>";
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',1,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>";
@@ -848,7 +848,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				html += "</div><!-- col-md-9 -->";
 				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='col-md-2 buttons same-height'>";
+				html += "<div id='buttons-"+uuid+"' class='col-md-3 buttons same-height'>";
 				html += "<div class='inside-full-height'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
 				html += "</div><!-- col-md-2  -->";
 				//--------------------------------------------------
@@ -2339,13 +2339,11 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- node menus button ---------------
 	if (menu) {
 		if ((USER.admin || g_userrole=='designer') && (node.asmtype != 'asmContext' && (depth>0 || node.asmtype == 'asmUnitStructure'))) {
-			html += "<button class='btn btn-xs menu-xs' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' ";
-/*			if (navigator.userAgent.indexOf('Firefox')>-1)
-				html += "style='height:23px;' ";
-			if (navigator.userAgent.indexOf('Chrome')>-1 || navigator.userAgent.indexOf('Safari')>-1)
-				html += "style='height:24px;' ";
-*/			html += "><div class='btn-text'>"+karutaStr[languages[langcode]]['Add']+" <span class='caret'></span></div></button>";
-			html += "<ul class='dropdown-menu pull-right'>";
+			html += "<span class='dropdown'>";
+			html += "<button class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' id='add_"+node.id+"'>";
+			html += " <div class='btn-text'><span class='glyphicon glyphicon-menu-hamburger'></span> "+karutaStr[languages[langcode]]['Add']+"</div>";
+			html += "</button>";
+			html += "<ul class='dropdown-menu' aria-labelledby='add_"+node.id+"'>";
 			if (node.asmtype == 'asmRoot' || node.asmtype == 'asmStructure') {
 				var databack = false;
 				var callback = "UIFactory['Node'].reloadStruct";
@@ -2388,11 +2386,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Get_Get_Resource','Get_Get_Resource',databack,callback,param2,param3,param4,freenode);
 				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Get_Double_Resource','Get_Double_Resource',databack,callback,param2,param3,param4,freenode);
 				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Proxy','Proxy',databack,callback,param2,param3,param4,freenode);
-				if (appliname=='zonecours')
-					html += UIFactory["Node"].getItemMenu(node.id,'_zc_resources_','Person','Person',databack,callback,param2,param3,param4,freenode);
 	//			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4,freenode);
 			}
 			html += "</ul>"; // class='dropdown-menu'
+			html += "</span><!-- class='dropdown -->";
 		}
 	}
 	//------------- submit  -------------------
@@ -2458,12 +2455,13 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					var param2 = "'"+portfolioid+"'";
 					var param3 = null;
 					var param4 = null;
-					html += "<div class='btn-group'>";
+					html += "<span class='dropdown'>";
 					//-----------------------
-					html += "<button class='btn btn-xs menu-xs dropdown-toggle'  data-toggle='dropdown' href='#' ";
-					html += "><div class='btn-text'>Menu <span class='caret'></span></div></button>";
+					html += "<button class='dropdown-toggle'  data-toggle='dropdown' id='specific_"+node.id+"'> ";
+					html += "<div class='btn-text'>Menu <span class='caret'></span></div>";
+					html += "</button>";
 					//-----------------------
-					html += "<ul class='dropdown-menu pull-right'>";
+					html += "<ul class='dropdown-menu' aria-labelledby='specific_"+node.id+"'>";
 					for (var i=0; i<menus.length; i++){
 						if (menus[i][0]=="#line") {
 							html += "<hr>";
@@ -2488,7 +2486,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 						}
 					}
 					html += "</ul>"; // class='dropdown-menu'
-					html += "</div><!-- class='btn-group' for specific menu button -->"; // class='btn-group'
+					html += "</span><!-- class='dropdown -->";
 				}
 			}
 		} catch(e){

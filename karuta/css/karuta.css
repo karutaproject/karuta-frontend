@@ -263,15 +263,16 @@ hr {
 	line-height: 16px;
 }
 
-
+#contenu .row{
+	margin-left:0px;
+}
 .asmnode{
 	height:100%;
-	margin-top:10px;
 }
 
 .content {
-	padding-top:10px;
 	padding-bottom:10px;
+	border-top:1px solid lightgrey;
 }
 
 .inside-full-height {
@@ -281,25 +282,32 @@ hr {
 	margin-bottom: 0;
 }
 
+.row-node{
+	padding-top:15px;
+	border-top:1px solid lightgrey;
+}
+
 .row-node .node-label{
 	padding-left:10px;
 	padding-right:0px;
 }
 
+.row-resource{
+	padding-top:10px;
+}
 .row-resource .node-label{
 	margin-top:-6px;
 	padding-left:10px;
 	padding-right:0px;
 }
 
-.resource-Image{
-	padding:0px;	
-	overflow:hidden;
+.row-resource table{
+	widht:100%;
+	margin-left:5px;
 }
 
-
-
-.row-resource .resource{
+.row-resource td.resource{
+	width:80%;
 	margin-right:0px;
 	background:white;
 	border: 1px solid lightgrey;
@@ -308,16 +316,10 @@ hr {
 	margin-left:0px;
 }
 
-.row-node .buttons {
-	border: 1px solid lightgrey;
-/*	margin-left:0px;
-	padding-left:0px;
-	padding-right:0px;*/
-}
-
-.row-resource .buttons{
+.row-resource td.buttons{
 	background: lightgrey;
 	border: 1px solid lightgrey;
+	width:200px;
 /*	margin-left:0px;
 	padding-left:0px;
 	padding-right:0px;*/
@@ -329,8 +331,13 @@ hr {
 	padding: 1px 5px;
 	opacity:1.0;
 	z-index:10;
+	cursor:pointer;
 }
 
+.resource-Image{
+	padding:0px;	
+	overflow:hidden;
+}
 
 .text-editor {
 	background-color: white;

@@ -126,21 +126,25 @@ function getNavBar(type,portfolioid,edit)
 		}
 		html += "					</ul>";
 		html += "				</li>";
+		html += "			</ul>";
 	}
 	//-----------------ACTIONS-------------------------------
-	if (type!='login' && USER!=undefined && USER.admin) {
-		html += "				<li>&nbsp;</li>";
-		html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
-		html += "					<ul class='dropdown-menu'>";
-		html += "						<li><a href='../../karuta/htm/list.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
-		html += "						<li><a href='../../karuta/htm/listUsers.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_users']+"</a></li>";
-		html += "						<li><a href='../../karuta/htm/createBatch.htm?lang="+LANG+"'>"+karutaStr[LANG]['batch']+"</a></li>";
-		html += "						<li><a href='../../karuta/htm/createReport.htm?lang="+LANG+"'>"+karutaStr[LANG]['report']+"</a></li>";
-//		html += "						<li><a href='../../karuta/htm/listRoles.htm'>"+karutaStr[LANG]['list_roles']+"</a></li>";
-//		html += "						<li><a href='../../karuta/htm/listGroups.htm'>"+karutaStr[LANG]['list_groups']+"</a></li>";
-		html += "					</ul>";
-		html += "				</li>";
-		html += "			</ul>";
+	if (type!='login' && USER!=undefined) {
+		if (USER.admin) {
+			html += "			<ul class='nav navbar-nav'>";
+			html += "				<li>&nbsp;</li>";
+			html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
+			html += "					<ul class='dropdown-menu'>";
+			html += "						<li><a href='../../karuta/htm/list.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
+			html += "						<li><a href='../../karuta/htm/listUsers.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_users']+"</a></li>";
+			html += "						<li><a href='../../karuta/htm/createBatch.htm?lang="+LANG+"'>"+karutaStr[LANG]['batch']+"</a></li>";
+			html += "						<li><a href='../../karuta/htm/createReport.htm?lang="+LANG+"'>"+karutaStr[LANG]['report']+"</a></li>";
+	//		html += "						<li><a href='../../karuta/htm/listRoles.htm'>"+karutaStr[LANG]['list_roles']+"</a></li>";
+	//		html += "						<li><a href='../../karuta/htm/listGroups.htm'>"+karutaStr[LANG]['list_groups']+"</a></li>";
+			html += "					</ul>";
+			html += "				</li>";
+			html += "			</ul>";
+		}
 		//-----------------USERNAME-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
 		html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+USER.firstname_node.text()+" "+USER.lastname_node.text();
