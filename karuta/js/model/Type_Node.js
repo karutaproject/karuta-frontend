@@ -715,8 +715,23 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				if (edit && inline && writenode && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL'){
 					//------ edit inline ----------------
-					html += "<div id='std_resource_"+uuid+"' class='col-md-6 resource same-height'>";
-					html += "<div class='inside-full-height'>";
+					style = "style='";
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',true);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
+					style +="'";
+					html += "<td  width='80%' class='resource";
+					html += "' ";
+					html += style;
+					html += ">";
+					html += "<div id='std_resource_"+uuid+"' class='inside-full-height ";
+					if (node.resource_type!=null)
+						html+= "resource-"+node.resource_type;
+					html+= "' >";
 					if(UICom.structure["ui"][uuid].resource!=null) {
 						try {
 							var test = UICom.structure["ui"][uuid].resource.getEditor();
@@ -794,29 +809,31 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-othercss',false);
 				}
-				//-------------------- collapsible -------------------
-				if (nodetype=='asmUnitStructure' && collapsible=='Y')
-					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" style='float:right;margin-right:5px;cursor:pointer'><span id='toggleContent_"+uuid+"' class='glyphicon glyphicon-triangle-bottom'></span></div>";
 				html += "<div class='row row-node'  style='"+style+"'>";
+				//-------------------- collapsible -------------------
+				if (collapsible=='Y')
+					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='col-md-1 toggle-content'><span id='toggleContent_"+uuid+"' class='glyphicon glyphicon-expand'></span></div>";
+				if (collapsible!='Y')
+					html += "<div class='col-md-1 toggle-content'>&nbsp;</div>";
 	
 				//-------------- node -----------------------------
 				if (depth!=1 && depth<10 && nodetype=='asmStructure') {
 					if (g_display_type=='standard' || g_display_type=='flat')
-						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8 same-height'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-8 same-height'>";
 					if (g_display_type=='header')
-						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8 same-height'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-8 same-height'>";
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',1,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>";
 					}
 				else if (depth!=1 && depth<10 && nodetype=='asmUnit') {
 					if (g_display_type=='standard' || g_display_type=='flat')
-						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8 same-height' style='"+style+"'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-8 same-height' style='"+style+"'>";
 					if (g_display_type=='header')
-						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-8'>";
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
 					}
 				else {
 					if (g_display_type=='standard' || g_display_type=='flat')
-						html += "<div id='std_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8  same-height'";
+						html += "<div id='std_node_"+uuid+"' class='node-label col-md-8  same-height'";
 					if (nodetype=='asmUnitStructure' && collapsible=='Y')
 						html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
 					else
@@ -878,8 +895,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				$("#node_"+uuid).replaceWith($(html));
 			else
 				$("#"+dest).append($(html));
-			//-------------------- equalize columns height ------------------------------------------
-//			equalize_column_height(uuid);
+			//-------------------- if collapsible we hide by default ------------------------------------------
+			if (nodetype=='asmUnitStructure' && collapsible=='Y')
+				$("#content-"+uuid).hide();
 			//--------------------set editor------------------------------------------
 			if ($("#display_editor_"+uuid).length>0) {
 				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
@@ -2339,11 +2357,11 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- node menus button ---------------
 	if (menu) {
 		if ((USER.admin || g_userrole=='designer') && (node.asmtype != 'asmContext' && (depth>0 || node.asmtype == 'asmUnitStructure'))) {
-			html += "<span class='dropdown'>";
-			html += "<button class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' id='add_"+node.id+"'>";
-			html += " <div class='btn-text'><span class='glyphicon glyphicon-menu-hamburger'></span> "+karutaStr[languages[langcode]]['Add']+"</div>";
-			html += "</button>";
-			html += "<ul class='dropdown-menu' aria-labelledby='add_"+node.id+"'>";
+			html += "<span class='dropdown dropdown-button'>";
+			html += "<span class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' id='add_"+node.id+"'>";
+			html += " <span class='btn-text'><span class='glyphicon glyphicon-menu-hamburger'></span> "+karutaStr[languages[langcode]]['Add']+"</span>";
+			html += "</span>";
+			html += "<ul class='dropdown-menu dropdown-menu-right' aria-labelledby='add_"+node.id+"'>";
 			if (node.asmtype == 'asmRoot' || node.asmtype == 'asmStructure') {
 				var databack = false;
 				var callback = "UIFactory['Node'].reloadStruct";
@@ -2455,13 +2473,13 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					var param2 = "'"+portfolioid+"'";
 					var param3 = null;
 					var param4 = null;
-					html += "<span class='dropdown'>";
+					html += "<span class='dropdown dropdown-menu-left dropdown-button'>";
 					//-----------------------
-					html += "<button class='dropdown-toggle'  data-toggle='dropdown' id='specific_"+node.id+"'> ";
-					html += "<div class='btn-text'>Menu <span class='caret'></span></div>";
-					html += "</button>";
+					html += "<span class='dropdown-toggle'  data-toggle='dropdown' id='specific_"+node.id+"'> ";
+					html += " <span class='btn-text'><span class='glyphicon glyphicon-menu-hamburger'></span> "+karutaStr[languages[langcode]]['menu']+"</span>";
+					html += "</span>";
 					//-----------------------
-					html += "<ul class='dropdown-menu' aria-labelledby='specific_"+node.id+"'>";
+					html += "<ul class='dropdown-menu dropdown-menu-right' aria-labelledby='specific_"+node.id+"'>";
 					for (var i=0; i<menus.length; i++){
 						if (menus[i][0]=="#line") {
 							html += "<hr>";

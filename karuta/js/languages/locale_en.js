@@ -72,6 +72,7 @@ karutaStr['en']['free-toolbar-menu-tooltip']="Edit Toogle";
 karutaStr['en']['quit-edit']="Quit Edit Mode";
 karutaStr['en']['choose']="Choose";
 karutaStr['en']['quit']="Quit";
+karutaStr['en']['menu']="Menu";
 
 //=========================================
 //========== NODE =====================

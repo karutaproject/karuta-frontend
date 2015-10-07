@@ -444,29 +444,6 @@ function displayPage(uuid,depth,type,langcode,edit) {
 }
 
 //==================================
-function toggleZoom(uuid) {
-//==================================
-	var classname = $("#zoom_"+uuid).attr("class");
-	if (classname=="fa fa-search-plus")
-		$("#zoom_"+uuid).attr("class","fa fa-search-minus");
-	else
-		$("#zoom_"+uuid).attr("class","fa fa-search-plus");
-}
-
-//==================================
-function toggleContent(uuid) {
-//==================================
-	var classname = $("#toggleContent_"+uuid).attr("class");
-	if (classname=="glyphicon glyphicon-triangle-bottom"){
-		$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-right");
-		$("#content-"+uuid).hide();
-	} else {
-		$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-bottom");
-		$("#content-"+uuid).show();
-	}
-}
-
-//==================================
 function displayControlGroup_getEditor(destid,label,controlsid,nodeid) {
 //==================================
 	$("#"+destid).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+label+"</label><div id='"+controlsid+"' class='col-sm-9'></div></div>"));
@@ -834,6 +811,30 @@ function setLanguage() {
 			if (languages[i]==lang)
 				LANGCODE = i;
 		}
+	}
+}
+
+//==================================
+function toggleZoom(uuid) {
+//==================================
+	var classname = $("#zoom_"+uuid).attr("class");
+	if (classname=="fa fa-search-plus")
+		$("#zoom_"+uuid).attr("class","fa fa-search-minus");
+	else
+		$("#zoom_"+uuid).attr("class","fa fa-search-plus");
+}
+
+//==================================
+function toggleContent(uuid) {
+//==================================
+	if ($("#toggleContent_"+uuid).hasClass("glyphicon-expand")) {
+		$("#toggleContent_"+uuid).removeClass("glyphicon-expand")
+		$("#toggleContent_"+uuid).addClass("glyphicon-collapse-down")
+		$("#content-"+uuid).show();
+	} else {
+		$("#toggleContent_"+uuid).removeClass("glyphicon-collapse-down")
+		$("#toggleContent_"+uuid).addClass("glyphicon-expand")
+		$("#content-"+uuid).hide();
 	}
 }
 

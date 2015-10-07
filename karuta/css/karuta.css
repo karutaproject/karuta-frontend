@@ -266,13 +266,21 @@ hr {
 #contenu .row{
 	margin-left:0px;
 }
+
 .asmnode{
 	height:100%;
+	margin-top:10px;
 }
 
-.content {
-	padding-bottom:10px;
-	border-top:1px solid lightgrey;
+.asmRoot,
+.asmUnit {
+	margin-top:0px;
+}
+
+
+.asmUnit .content .content {
+	padding-bottom:6px;
+/*	border-bottom:1px solid lightgrey;*/
 }
 
 .inside-full-height {
@@ -285,6 +293,13 @@ hr {
 .row-node{
 	padding-top:15px;
 	border-top:1px solid lightgrey;
+	border-bottom:1px solid lightgrey;
+}
+
+.asmStructure .row-node,
+.asmRoot .row-node{
+	border-top:0px solid lightgrey;
+	border-bottom:0px solid lightgrey;
 }
 
 .row-node .node-label{
@@ -304,6 +319,7 @@ hr {
 .row-resource table{
 	widht:100%;
 	margin-left:5px;
+	margin-right:5px;
 }
 
 .row-resource td.resource{
@@ -320,6 +336,7 @@ hr {
 	background: lightgrey;
 	border: 1px solid lightgrey;
 	width:200px;
+	vertical-align: top;
 /*	margin-left:0px;
 	padding-left:0px;
 	padding-right:0px;*/
@@ -329,11 +346,14 @@ hr {
 	font-size: 12px;
 	line-height: 1.5;
 	padding: 1px 5px;
-	opacity:1.0;
-	z-index:10;
 	cursor:pointer;
+	display: inline-block;
+	white-space:nowrap;
 }
 
+.drop-down-menu{
+	border:1px solid gray;
+}
 .resource-Image{
 	padding:0px;	
 	overflow:hidden;
@@ -348,6 +368,22 @@ hr {
 	border-bottom-right-radius: 3px;
 	border-bottom-left-radius: 3px; 
 	border-top-left-radius: 3px;
+}
+
+.asmUnit .row-node{
+	min-height:100px;
+}
+
+.asmStructure .asmUnit .row-node,
+.asmRoot .asmUnit .row-node,
+.asmUnit .content .row-node{
+	min-height:0px;
+}
+
+
+.toggle-content{
+	font-size:16px;
+	cursor:pointer
 }
 /* ---------------- resource Comments --------------------- */
 .author-date {
@@ -766,6 +802,15 @@ a.active:over{
 	Select Drop Down
    ====================*/
 
+.dropdown-button{
+	border:1px solid gray;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px; 
+	border-top-left-radius: 3px;
+	padding:2px;
+	margin-left:2px;
+}
 
 button.select-label {
 	min-width:300px;
@@ -1159,7 +1204,8 @@ table.tablesorter th.restore {
 }
 
 .free-toolbar-menu{
-	margin-left:-24px;
+	margin-left:10px;
+	margin-top:10px;
 }
 
 #free-content {
