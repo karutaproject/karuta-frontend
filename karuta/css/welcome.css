@@ -2,49 +2,27 @@
 	padding-top:60px;
 }
 
-/* -- boutons du navbar --*/
-.navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .open > a, 
-.navbar-default .navbar-nav > .open > a:focus, 
-.navbar-default .navbar-nav > .open > a:hover {
-	background-color: #ECECEC;
-	border-color: #E7E7E7;
+body {
+	background: url("../../karuta/img/login-background.jpg") no-repeat;
 }
 
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav > .open > a {
-	border-color: #E7E7E7;
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.125) inset;
-}
 
-#form-send {
-	background-color: #E7E7E7;
-	border-color: #D0D0D0;
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.125) inset;
-	
-}
-
-#form-send:hover {
-	background-color: #ECECEC;	
-}
 /* ----------------------- */
 
 .form-signin {
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px;
-	max-width: 300px;
+	max-width: 400px;
 	padding: 19px 29px 29px;
-/*	margin: 80px auto 20px; */
 	margin-top: 30px;
-	margin-left: 40px;
-	background-color: rgb(245, 245, 245);
-	border: 1px solid #e5e5e5;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #09bbd9;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	text-align:center;
 }
+
+
 .form-signin .form-signin-heading {
   margin-bottom: 10px;
 }
@@ -56,25 +34,45 @@
   padding: 7px 9px;
 }
 
-.form-newpassword,
-.form-newaccount {
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px;
-	max-width: 300px;
+.button-login {
+	background-color:black;
+	color:white;
+	-moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.button-login:hover {
+	color:#e0006d;
+}
+
+.form-newpassword {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 400px;
 	padding-top: 19px ;
 	padding-bottom: 19px ;
 	padding-left: 29px ;
 	padding-right: 29px ;
-/*	margin: 30px auto 20px; */
-	margin-top: 20px;
-	margin-left: 40px;
 	background-color: rgb(245, 245, 245); 
-	border: 1px solid #e5e5e5;
+	border-left: 1px solid #e5e5e5;
+	border-right: 1px solid #e5e5e5;
+	border-top: 1px solid #e5e5e5;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	text-align:center;
 }
 
 .form-newpassword input[type="text"] {
@@ -89,22 +87,45 @@
 	border: 1px solid #e0e0e0;
 }
 
+.form-newaccount {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 400px;
+	padding-bottom: 19px ;
+	padding-left: 29px ;
+	padding-right: 29px ;
+	background-color: rgb(245, 245, 245); 
+	border-left: 1px solid #e5e5e5;
+	border-right: 1px solid #e5e5e5;
+	border-bottom: 1px solid #e5e5e5;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	text-align:center;
+}
+
+
+
 #form-send {
-	margin-bottom:7px;
+	background-color:#b9da00;
+	color:black;
+	-moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 
-h2 {
-	color:#01A9DB;
+#form-send:hover {
+	color:#e0006d;
 }
 
-.ss-titre {
-	text-align:left;
-	position:relative;
-	left:50px;
-	font-size:150%;
-	margin-top:20px;
-	width:300px;
-}
-
-#welcome3 {
-}

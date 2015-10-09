@@ -12,9 +12,9 @@ languages [1] = 'fr';
 //languages [2] = 'ja';
 //----------------------------------
 var navbar_title = {};
-	navbar_title["fr"] = "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA";
-	navbar_title["en"] = "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA";
-	navbar_title["ja"] = "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA";
+	navbar_title["fr"] = "<img style='margin-bottom:4px;' src='../../karuta/img/logofonblanc140x50.jpg'/>";
+	navbar_title["en"] = "<img style='margin-bottom:4px;' src='../../karuta/img/logofonblanc140x50.jpg'/>";
+	navbar_title["ja"] = "<img style='margin-bottom:4px;' src='../../karuta/img/logofonblanc140x50.jpg'/>";
 var welcome1 = {};// Welcome title
 	welcome1["fr"] = "<img class='img-responsive' style='width:300px;margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
 	welcome1["en"] = "<img class='img-responsive' style='width:300px;margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";

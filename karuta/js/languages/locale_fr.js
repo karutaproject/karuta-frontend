@@ -3,6 +3,7 @@
 karutaStr['fr'] = new Array();
 //----------------------------------------------------
 karutaStr['fr']['language']="Français";
+karutaStr['fr']['flag-name']="France";
 //----------------------------------------------------
 karutaStr['fr']['new']="Nouvel élément";
 karutaStr['fr']['email']="Courriel";
@@ -200,6 +201,7 @@ karutaStr['fr']['import_zip_instance']="Importer un portfolio instance .zip";
 karutaStr['fr']['rename']="Renommer";
 karutaStr['fr']['create_batch']="Créer un modèle batch";
 karutaStr['fr']['create_report']="Créer un modèle de rapport";
+karutaStr['fr']['create_tree']="Créer un arbre vide";
 
 //=========================================
 //========== USERS ========================

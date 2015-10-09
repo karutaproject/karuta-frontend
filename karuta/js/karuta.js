@@ -25,7 +25,7 @@ var g_rc4key = "";
 var g_encrypted = false;
 var g_display_type = "";
 var g_edit = false;
-var g_visible = 'visible';
+var g_visible = 'hidden';
 var g_welcome_edit = false;
 var g_free_toolbar_visibility = 'hidden';
 var g_dashboard_models = {}; // cache for dashboard_models
@@ -87,7 +87,7 @@ function getNavBar(type,portfolioid,edit)
 	if (typeof navbar_title != 'undefined')
 		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' href='#'>"+navbar_title[LANG]+"</a>";
 	else
-		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' href='#'><img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA beta</a>";
+		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' href='#'><img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA </a>";
 	html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
 	html += "				<li><b>Versions</b></li>";
 	html += "				<li>Application : "+application_version+" (" +application_date+")</li>";
@@ -97,18 +97,18 @@ function getNavBar(type,portfolioid,edit)
 	html += "			</ul>";
 	html += "		</div>";
 	html += "	  </div>";
-	//---------------------TECHNICAL SUPPORT-----------------------
+	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
 	if (type=='main'){
-		html += "				<li><a href='list.htm?lang="+LANG+"'>"+karutaStr[LANG]['home']+"</a></li>";
+		html += "			<li><a href='list.htm?lang="+LANG+"' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
 	}
-	html += "				<li><a href='mailto:"+technical_support+"'>"+karutaStr[LANG]['technical_support']+"</a></li>";
+	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench'></span></a></li>";
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------
 	if (languages.length>1) {
 		html += "			<ul class='nav navbar-nav'>";
-		html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+karutaStr[LANG]['language']+"<span class='caret'></span></a>";
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' href='#'><img style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu'>";
 		for (var i=0; i<languages.length;i++) {
 			var url = "list.htm?lang="+languages[i];
@@ -122,7 +122,7 @@ function getNavBar(type,portfolioid,edit)
 				url = "createAccount.htm?lang="+languages[i];
 			if (type=='batch')
 				url = "createBatchAccounts.htm?lang="+languages[i];
-			html += "			<li><a href='"+url+"'>"+karutaStr[languages[i]]['language']+"</a></li>";
+			html += "			<li><a href='"+url+"'><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 		}
 		html += "					</ul>";
 		html += "				</li>";
@@ -145,10 +145,14 @@ function getNavBar(type,portfolioid,edit)
 			html += "				</li>";
 			html += "			</ul>";
 		}
+		//-----------------LOGOUT-----------------------------------------
+		html += "			<ul class='nav navbar-nav navbar-right'>";
+		html += "						<li><a href='login.htm?lang="+LANG+"'' class='navbar-icon'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+		html += "			</ul>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+USER.firstname_node.text()+" "+USER.lastname_node.text();
-		html += " 					<span class='caret'></span></a>";
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' href='#'><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname_node.text()+" "+USER.lastname_node.text();
+		html += " 					<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
 		html += "						<li class='divider'></li><li><a href='login.htm?lang="+LANG+"''>Logout</a></li>";
@@ -428,8 +432,6 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		depth = 1;
 	if (UICom.structure['tree'][uuid]!=null) {
 		if (type=='standard')
-			UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
-		if (type=='flat')
 			$("#welcome-edit").html("");
 			if (UICom.structure["ui"][uuid].semantictag=='welcome-unit' && !g_welcome_edit)
 				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
@@ -891,4 +893,10 @@ function equalize_column_height(uuid)
 	});
 	var maxHeight = Math.max.apply(null, heights);
 	$("#node_"+uuid).find(".same-height").height(maxHeight);
+}
+
+function rgb(red, green, blue)
+{
+    var rgb = blue | (green << 8) | (red << 16);
+    return '#' + (0x1000000 + rgb).toString(16).slice(1)
 }

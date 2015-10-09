@@ -30,7 +30,52 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 	overflow:hidden;
 }
 
+/* ====================== */
+/*     DEFAULT COLORS     */
+/* ====================== */
 
+.row-node-asmRoot,
+.row-node-asmStructure,
+.row-node-asmUnit {
+	background-color:#e8e8e8;
+	min-height:100px;
+}
+
+.asmRoot .row-node-asmStructure,
+.asmRoot .row-node-asmUnit,
+.asmStructure .asmStructure .row-node-asmStructure,
+.asmStructure .row-node-asmUnit {
+	background-color:inherit;
+	min-height:0px;
+}
+
+.row-node-asmRoot .title-subline,
+.row-node-asmStructure .title-subline,
+.row-node-asmUnit .title-subline {
+	margin-top:10px;
+	border-bottom:1px solid #09bbd9;
+	width:50px;;
+}
+
+.asmRoot .row-node-asmStructure .title-subline,
+.asmStructure .asmStructure .row-node-asmStructure .title-subline,
+.asmStructure .row-node-asmUnit  .title-subline{
+	margin-top:0px;
+	border-bottom:0px solid #09bbd9;
+}
+
+a.navbar-icon .glyphicon{
+	color:#09bbd9;
+	font-size:16px;
+}
+
+.button {
+	color:#09bbd9;
+}
+
+.dropdown-button{
+	border:1px solid #09bbd9;
+}
 
 /* ====================== */
 /*      SIDEBAR            */
@@ -94,10 +139,16 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 	margin-right:auto;
 	width:50%;
 	min-width:200px;
+	padding:3px;
+	border:1px solid white;
+}
+
+.welcome-subbox {
+	width:100%;
+	height:100%;
 	background-color:black;
 	padding:10px;
-	border:1px solid white;
-	opacity: 0.5;
+	opacity: 0.6;
 }
 
 .welcome-block .welcome-title {
@@ -188,24 +239,14 @@ hr {
 	margin-left:14px;
 }
 
-/* rows should never be shorter than a button otherwise
-   the background is wrong (Contexts & unitStructures)
-   and lists of stuctures and units are too tight      */
-.row .col-md-9 .row:first-child,
-.row .col-md-9 .title {
-	min-height:24px; 
-}
-
 .asmRoot .title {
 	font-size: 24px;
-	font-weight: bold;
 	line-height: 30px;
 }
 
 
 .asmStructure .title {
 	font-size: 24px;
-	font-weight: bold;
 	line-height: 30px;
 }
 
@@ -218,7 +259,6 @@ hr {
 
 .asmUnit .title {
 	font-size: 24px;
-	font-weight: bold;
 	line-height: 30px;
 }
 
@@ -231,25 +271,21 @@ hr {
 
 .asmUnitStructure .title {
 	font-size: 20px;
-	font-weight: bold;
 	line-height: 20px;
 }
 
 .asmUnitStructure .asmUnitStructure .title {
 	font-size: 16px;
-	font-weight: bold;
 	line-height: 20px;
 }
 
 .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
 	font-size: 14px;
-	font-weight: bold;
 	line-height: 20px;
 }
 
 .asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
 	font-size: 12px;
-	font-weight: bold;
 	line-height: 20px;
 }
 
@@ -270,9 +306,20 @@ hr {
 .asmnode{
 	height:100%;
 	margin-top:10px;
+
 }
 
+.asmContext {
+	margin-top:0px;
+}
+
+.content .asmContext:first-child {
+	padding-top:10px;
+}
+
+
 .asmRoot,
+.asmStructure,
 .asmUnit {
 	margin-top:0px;
 }
@@ -280,7 +327,6 @@ hr {
 
 .asmUnit .content .content {
 	padding-bottom:6px;
-/*	border-bottom:1px solid lightgrey;*/
 }
 
 .inside-full-height {
@@ -293,7 +339,7 @@ hr {
 .row-node{
 	padding-top:15px;
 	border-top:1px solid lightgrey;
-	border-bottom:1px solid lightgrey;
+/*	border-bottom:1px solid lightgrey;*/
 }
 
 .asmStructure .row-node,
@@ -381,7 +427,7 @@ hr {
 }
 
 
-.toggle-content{
+.toggle-content .button {
 	font-size:16px;
 	cursor:pointer
 }
@@ -803,14 +849,20 @@ a.active:over{
    ====================*/
 
 .dropdown-button{
-	border:1px solid gray;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
 	border-bottom-left-radius: 3px; 
 	border-top-left-radius: 3px;
-	padding:2px;
 	margin-left:2px;
+	font-size:10pt;
+	padding:1px;
 }
+
+.dropdown-button .button{
+	padding-left:1px;
+	padding-right:1px;
+}
+
 
 button.select-label {
 	min-width:300px;
@@ -1258,20 +1310,7 @@ table.tablesorter th.restore {
 	height:100%;
 }
 
-.resource-Document,
-.resource-URL {
-	border:1px lightgrey solid;
-}
 
-.resource-TextField,
-.resource-Document,
-.resource-URL {
-/*	min-width:100px;
-	min-height:100px;
-	width:100%;
-	height:100%;
-}
-*/
 .resource-Video:hover,
 .resource-Field:hover,
 .resource-TextField:hover,

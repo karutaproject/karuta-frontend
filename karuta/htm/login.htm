@@ -109,9 +109,12 @@
 		//==============================
 		{
 			var html = "";
+			html += "<div id='welcome1'></div>";
+			html += "<div id='welcome2'></div>";
+			html += "<div id='welcome3'></div>";
 			html += "<input id='useridentifier' class='form-control' placeholder='"+karutaStr[LANG]['username']+"' type='text'>";
 			html += "<input id='password' class='form-control' placeholder='"+karutaStr[LANG]['password']+"' type='password'>";
-			html += "<button class='btn btn-large btn-primary' onclick='javascript:callSubmit()'>"+karutaStr[LANG]['login']+"</button>";
+			html += "<button class='button-login' onclick='javascript:callSubmit()'>"+karutaStr[LANG]['login']+"</button>";
 			return html;
 		}
 
@@ -122,7 +125,7 @@
 			var html = "";
 			html += "<p>"+karutaStr[LANG]['newpassword']+"</p>";
 			html += "<input id='useridentifier_new' class='form-control' placeholder='"+karutaStr[LANG]['username']+"' type='text'/>";
-			html += "<button class='btn  btn-large' id='form-send' onclick='javascript:callSend()'>"+karutaStr[LANG]['button-send']+"</button>";
+			html += "<button id='form-send' onclick='javascript:callSend()'>"+karutaStr[LANG]['button-send']+"</button>";
 			return html;
 		}
 
@@ -135,28 +138,14 @@
 	<div id='main-welcome'>
 		<div id='navigation_bar'></div>
 		<div id='main-container' class="container">
-			<div class='row'>
-				<div class='col-md-4'>
-					<h2 id="welcome1">KARUTA</h2>
-					<h4 id="welcome2"></h4>
-					<div id="welcome3"></div>
-				</div>
-				<div class='col-md-7'>
-					<div class="form-signin" id="login"></div>
-					<div class="form-newpassword" id="newpassword"></div>
-					<div class="form-newaccount" id="newaccount"></div>
-				</div>
-			</div>
+			<div class="form-signin" id="login"></div>
+			<div class="form-newpassword" id="newpassword"></div>
+			<div class="form-newaccount" id="newaccount"></div>
 		</div>
 	</div>
 	<script language='javascript'>
 		//------------------------------
 		$(window).load(function() {
-			if (typeof welcome1 != 'undefined') {
-				$("#welcome1").html(welcome1[LANG]);
-				$("#welcome2").html(welcome2[LANG]);
-				$("#welcome3").html(welcome3[LANG]);
-			}
 			$.ajaxSetup({async: false});
 			$.ajax({
 				type : "GET",
@@ -182,6 +171,11 @@
 				if (code == 13)
 					callSubmit();
 			});
+			if (typeof welcome1 != 'undefined') {
+				$("#welcome1").html(welcome1[LANG]);
+				$("#welcome2").html(welcome2[LANG]);
+				$("#welcome3").html(welcome3[LANG]);
+			}
 			$.ajaxSetup({async: true});
 		});
 		//------------------------------

@@ -260,18 +260,6 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		type = 'standard';
 	if (type=='standard'){
 		html += "<div id='navigation_bar'></div>";
-		html += "<div id='main-container' class='container "+portfolios_byid[portfolioid].code_node.text()+"'>";
-		html += "	<div class='row'>";
-		html += "		<div class='col-md-3' id='sidebar'></div>";
-		html += "		<div class='col-md-9' id='contenu'></div>";
-		html += "	</div>";
-		html += "</div>";
-		html += "<div id='footer'></div>";
-		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
-	}
-	if (type=='flat'){
-		html += "<div id='navigation_bar'></div>";
 		html += "<div id='portfolio-navbar'></div>";
 		html += "<div id='main-container' class='container-fluid'>";
 		html += "	<div id='main-row' class='row'>";
@@ -331,14 +319,6 @@ UIFactory["Portfolio"].displaySidebar = function(root,destid,type,langcode,edit,
 	if (type==null || type==undefined)
 		type = 'standard';
 	if (type=='standard' || type=='translate' || type=='model'){
-		html += "<div id='main-nav' class='well'>";
-		html += "<div id='sidebar-title' class='sidebar-title'><a id='sidebar_"+rootid+"' class='sidebar' href='#' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+edit+")\">"+UICom.structure["ui"][$(UICom.root.node).attr('id')].getLabel('sidebar_'+rootid)+"</a></div>";
-		html += "<div  class='panel-group' id='parent-"+rootid+"' role='tablist'></div>";
-		html += "</div><!-- panel-group -- >";
-		$("#"+destid).append($(html));
-		UIFactory["Node"].displaySidebar(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
-	}
-	if (type=='flat'){
 		html += "<div id='sidebar-content'><div  class='panel-group' id='parent-"+rootid+"' role='tablist'></div></div>";
 		$("#"+destid).append($(html));
 		UIFactory["Node"].displaySidebar(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
@@ -597,6 +577,46 @@ UIFactory["Portfolio"].createReport = function()
 	//--------------------------
 	$("#edit-window-body").html(karutaStr[LANG]['code_portfolio']+" ");
 	//--------------------------
+	var html = "<div class='form-horizontal'>";
+	html += "<div class='form-group'>";
+	html += "		<label for='codetree' class='col-sm-3 control-label'>Code</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='codetree' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "<div class='form-group'>";
+	html += "		<label for='labeltree' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='labeltree' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "</div>";
+	$("#edit-window-body").html(html);
+	//--------------------------
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].createPortfolio = function()
+//==================================
+{
+	$("#edit-window-title").html(karutaStr[LANG]['create_portfolio']);
+	$("#edit-window-footer").html("");
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var create_button = "<button id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</button>";
+	var obj = $(create_button);
+	$(obj).click(function (){
+		var code = $("#codetree").val();
+		var label = $("#labeltree").val();
+		if (code!='' && label!='') {
+			var uuid = UIFactory["Portfolio"].getid_bycode("karuta.portfolio",false); 
+			UIFactory["Portfolio"].instantiate_rename(uuid,code,true,label);
+		}
+	});
+	$("#edit-window-footer").append(obj);
+	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	$("#edit-window-footer").append($(footer));
+
 	var html = "<div class='form-horizontal'>";
 	html += "<div class='form-group'>";
 	html += "		<label for='codetree' class='col-sm-3 control-label'>Code</label>";
@@ -1438,8 +1458,8 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit)
 	html += "			<span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span>";
 	html += "		</button>";
 	html += "		<div class='navbar-brand' >";
-	html += "			<a id='navbar-brand' class='sidebar' href='#' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+edit+")\">";
-	html += UICom.structure["ui"][rootid].getLabel('navbar-brand')+"</a>";
+	html += "			<a id='sidebar_"+rootid+"' class='sidebar' href='#' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+edit+")\">";
+	html += UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid)+"</a>";
 	html += "		 	<a href='#' onclick='toggleSideBar()' class='btn-lg'><span class='glyphicon glyphicon-menu-hamburger'></span></a>";
 	html += "		</div><!-- class='navbar-brand' -->";
 	html += "	</div><!-- class='nav-bar-header' -->";
