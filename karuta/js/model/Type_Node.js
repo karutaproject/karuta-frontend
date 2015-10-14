@@ -1717,6 +1717,9 @@ UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callba
 {	// note: #xxx is to avoid to scroll to the top of the page
 //	if (freenode)
 //		tag += '_free';
+	if (srce=="self")
+		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+
 	var html = "<li><a href='#xxx' onclick=\"javascript:importBranch('"+parentid+"','"+srce+"','"+tag+"',"+databack+","+callback+","+param2+","+param3+","+param4+")\">";
 	html += title;
 	html += "</a></li>";
