@@ -174,9 +174,12 @@ UIFactory["Document"].update = function(data,uuid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+//	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
+	//--------------------- if IE the file server returns a string --------
+//	if(typeof data=='string')
+//		data = jQuery.parseJSON(data);
 	//---------------------
 	var filename = data.files[0].name;
 	var size = data.files[0].size;
@@ -231,25 +234,25 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode)
 	//---------------------
 	var html ="";
 	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
-	html +=" <div id='divfileupload_"+this.id+langcode+"'>";
+	html +=" <form id='divfileupload_"+this.id+langcode+"' enctype='multipart/form-data'>";
 	html +=" <input id='fileupload_"+this.id+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
-	html += "</div>";
+	html += "</form>";
 	html +=" <div id='progress_"+this.id+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
 	html +=  "<a id='file__"+this.id+"_"+langcode+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+"</a>"; 
 	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Document.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
 	$("#fileupload_"+this.id+langcode).fileupload({
+		dataType: 'json',
 		progressall: function (e, data) {
 			$("#progress_"+this.id+langcode).css('border','1px solid lightgrey');
 			$("#divfileupload_"+this.id+langcode).html("<img src='../../karuta/img/ajax-loader.gif'>");
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+langcode+' .bar').css('width',progress + '%');
 		},
-		done: function (e, data,uuid) {
-			var uuid = data.url.substring(data.url.lastIndexOf('/')+1);
-			uuid = uuid.substring(0,uuid.indexOf('?lang'));
-			$("#divfileupload_"+this.id+langcode).html("Loaded");
+		done: function (e, data) {
+			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
 			UIFactory["Document"].update(data.result,uuid,langcode);
+			$("#divfileupload_"+this.id+"_"+langcode).html("Loaded");
 		}
     });
 };

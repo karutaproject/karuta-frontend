@@ -26,8 +26,10 @@ var g_encrypted = false;
 var g_display_type = "";
 var g_edit = false;
 var g_visible = 'visible';
-
+var g_visible = 'visible';
+var g_free_toolbar_visibility = 'hidden';
 var g_dashboard_models = {}; // cache for dashboard_models
+var g_wysihtml5_autosave = 120000; // 120 seconds
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------
@@ -74,7 +76,7 @@ function getNavBar(type,portfolioid,edit)
 //==============================
 {
 	var html = "";
-	html += "<nav class='navbar navbar-default'>";
+	html += "<div class='navbar navbar-default navbar-fixed-top'>";
 	html += "<div class='navbar-inner'>";
 	html += "	<div class='container'>";
 	html += "	  <div class='nav-bar-header'>";
@@ -119,7 +121,7 @@ function getNavBar(type,portfolioid,edit)
 		if (type=='create_account')
 			url = "createAccount.htm?lang="+languages[i];
 		if (type=='batch')
-			url = "createBatchAccounts.htm?lang="+languages[i];
+			url = "createBatch.htm?lang="+languages[i];
 		html += "			<li><a href='"+url+"'>"+karutaStr[languages[i]]['language']+"</a></li>";
 	}
 	html += "					</ul>";
@@ -178,7 +180,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "</div>";
 	html += "</div>";
 	
-	html += "</nav>";
+	html += "</div>";
 	return html;
 }
 
@@ -322,7 +324,6 @@ function getEditBox(uuid,js2) {
 	$("#edit-window-body-metadata-epm").html($(editHtml));
 	// ------------------------------
 	$(".pickcolor").colorpicker();
-	$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd',language: LANG});
 	// ------------------------------
 	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');}
 
@@ -344,7 +345,7 @@ function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
 	html += "\n<!-- ==================== Delete Button ==================== -->";
 	html += "<button id='del-"+uuid+"' class='btn btn-xs' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 	html += "<span class='glyphicon glyphicon-remove'></span>";
-	html += "</a>";
+	html += "</button>";
 	return html;
 }
 
@@ -387,23 +388,13 @@ function savedBox()
 	return html;
 }
 
-//==============================
-function waitBox()
-//==============================
-{
-	var html = "";
-	html += "\n<!-- ==================== Wait box ==================== -->";
-	html += "\n<div id='wait-window' class='modal hide'>";
-	html += "\n	<div id='wait-window-body' class='modal-body' style='text-align:center'><img src='../../karuta/img/ajax-loader.gif'></div>";
-	html += "\n</div>";
-	html += "\n<!-- ================================================== -->";
-	return html;
-}
 
 //=======================================================================
 function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2) 
 // =======================================================================
 {
+	$('#delete-window').modal('hide');
+	$('#wait-window').modal('show');
 	if (type!=null && (type=='asmStructure' || type=='asmUnit' || type=='asmUnitStructure' || type=='asmContext')) {
 		UIFactory['Node'].remove(uuid,callback,param1,param2); //asm node
 		if (parentid!=null) {
@@ -417,7 +408,6 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 	// ----------------------------------
 	UICom.structure['tree'][uuid] = null;
 	// ----------------------------------
-	$('#delete-window').modal('hide');
 }
 
 //=======================================================================
@@ -477,9 +467,22 @@ function toggleZoom(uuid) {
 }
 
 //==================================
+function toggleContent(uuid) {
+//==================================
+	var classname = $("#toggleContent_"+uuid).attr("class");
+	if (classname=="glyphicon glyphicon-triangle-bottom"){
+		$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-right");
+		$("#content-"+uuid).hide();
+	} else {
+		$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-bottom");
+		$("#content-"+uuid).show();
+	}
+}
+
+//==================================
 function displayControlGroup_getEditor(destid,label,controlsid,nodeid) {
 //==================================
-	$("#"+destid).append($("<div class='control-group'><label class='control-label'>"+label+"</label><div id='"+controlsid+"' class='controls'></div></div>"));
+	$("#"+destid).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+label+"</label><div id='"+controlsid+"' class='col-sm-9'></div></div>"));
 	$("#"+controlsid).append(UICom.structure["ui"][nodeid].resource.getEditor());
 }
 
@@ -520,9 +523,14 @@ function writeSaved(uuid,data)
 function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,param4,param5,param6,param7,param8) 
 //=======================================================================
 {
+	$("#wait-window").modal('show');
 	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
-	if (USER.admin || g_userrole=='designer')
-		urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+	if (USER.admin || g_userrole=='designer') {
+		var rights = UIFactory["Node"].getRights(destid);
+		var roles = $("role",rights);
+		if (roles.length==0) // test if model (otherwise it is an instance and we import)
+			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+	}
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -534,6 +542,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 					callback(data,param2,param3,param4,param5,param6,param7,param8);
 				else
 					callback(param2,param3,param4,param5,param6,param7,param8);
+			$("#wait-window").modal('hide');			
 		}
 	});
 }
@@ -585,6 +594,23 @@ function submit(uuid)
 //=======================================================================
 {
 	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/submit';
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		uuid : uuid,
+		success : function (data){
+			UIFactory.Node.reloadUnit();
+		}
+	});
+}
+
+//=======================================================================
+function reset(uuid)
+//=======================================================================
+{
+	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/reset';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -803,4 +829,23 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 			alert(karutaStr[LANG]['email-sent']);
 		}
 	});
+}
+
+
+//==================================
+function setLanguage() {
+//==================================
+	var lang = Cookies.get('karuta-language');
+	var param_lang = getURLParameter('lang');
+	if (param_lang!= null && param_lang!=lang) {
+		lang = param_lang;
+		Cookies.set('karuta-language',lang,{ expires: 60 });
+	}
+	if (lang!=null) {
+		LANG = lang;
+		for (var i=0; i<languages.length;i++){
+			if (languages[i]==lang)
+				LANGCODE = i;
+		}
+	}
 }

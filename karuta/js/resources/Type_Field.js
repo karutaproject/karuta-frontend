@@ -71,21 +71,11 @@ UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 
 /// Editor
 //==================================
-UIFactory["Field"].update = function(input,itself,langcode)
+UIFactory["Field"].update = function(itself,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!itself.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
-	var value = $.trim($(input).val());
 	if (itself.encrypted)
-		value = "rc4"+encrypt(value,g_rc4key);
-	$(itself.text_node[langcode]).text(value);
+		$(itself.text_node[langcode]).text("rc4"+encrypt($(itself.text_node[langcode]).text(),g_rc4key));
 	itself.save();
 };
 
@@ -114,7 +104,8 @@ UIFactory["Field"].prototype.getEditor = function(type,langcode,disabled)
 	var obj = $(html);
 	var self = this;
 	$(obj).change(function (){
-		UIFactory["Field"].update(obj,self,langcode);
+		$(self.text_node[langcode]).text($(this).val());
+		UIFactory["Field"].update(self,langcode);
 	});
 	return obj;
 };

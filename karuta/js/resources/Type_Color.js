@@ -95,23 +95,13 @@ UIFactory["Color"].prototype.getView = function(dest,type,langcode)
 
 /// Editor
 //==================================
-UIFactory["Color"].update = function(input,itself,langcode)
+UIFactory["Color"].update = function(itself,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!itself.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
-	var value = $.trim($(input).val());
 	if (itself.encrypted)
-		value = "rc4"+encrypt(value,g_rc4key);
-	$(itself.text_node[langcode]).text(value);
+		$(itself.text_node[langcode]).text("rc4"+encrypt($(itself.text_node[langcode]).text(),g_rc4key));
 	itself.save();
-};
+}
 
 //==================================
 UIFactory["Color"].prototype.getEditor = function(type,langcode,disabled)
@@ -139,11 +129,11 @@ UIFactory["Color"].prototype.getEditor = function(type,langcode,disabled)
 	var input_obj = $(input);
 	var self = this;
 	$(input_obj).on("change.color", function(event, color){
-		UIFactory["Color"].update(input_obj,self,langcode);	});
+		$(self.text_node[langcode]).text($(this).val());
+		UIFactory["Color"].update(self,langcode);
+	});
 	$(obj1).append($(input_obj));
 	$(obj).append($(obj1));
-	if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1)
-		$(obj).append($("<hr/>"));
 	
 	return obj;
 };

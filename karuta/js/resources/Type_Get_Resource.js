@@ -50,6 +50,7 @@ UIFactory["Get_Resource"] = function(node,condition)
 	}
 	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	this.inline = ($("metadata",node).attr('inline')=='Y') ? true : false;
 	this.display = {};
 };
 
@@ -77,7 +78,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+//	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -102,7 +103,7 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+//	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -313,7 +314,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			var display_code = true;
 			if (code.indexOf("@")>-1) {
 				display_code = false;
-				code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+				code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
 			}
 			input += "<input type='radio' name='radio_"+self.id+"' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' ";
 			if (disabled)
@@ -402,7 +403,8 @@ UIFactory["Get_Resource"].prototype.save = function()
 //==================================
 {
 	UICom.UpdateResource(this.id,writeSaved);
-	this.refresh();
+	if (!this.inline)
+		this.refresh();
 };
 
 //==================================

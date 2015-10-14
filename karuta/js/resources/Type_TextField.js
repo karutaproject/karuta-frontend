@@ -97,6 +97,7 @@ UIFactory["TextField"].prototype.update = function(langcode)
 
 var editor =  [];
 var currentTexfieldUuid = "";
+var currentTexfieldInterval = "";
 
 //==================================
 UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,disabled)
@@ -140,7 +141,8 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 		html += ">"+text+"</textarea></div>";
 	}
 	$("#"+destid).append($(html));
-	$("#"+this.id+"_edit_"+langcode).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;} }});
+	$("#"+uuid+"_edit_"+langcode).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
+	
 	//------------------------------------------------
 };
 

@@ -17,6 +17,8 @@ var Bubble_bubbles_list = [];
 
 var dataBubble = ''; 
 
+g_current_mapid = "";
+
 //==================================
 UIFactory["Bubble"] = function(node,no)
 //==================================
@@ -87,18 +89,16 @@ UIFactory["Bubble"].bubble.prototype.displayView = function(destid,type,lang)
 		type='detail';
 	if (type=='detail') {
 		if ( (writenode && editnoderoles.indexOf(g_userrole)>-1) || g_userrole=='designer') {
-			html += "<span  class='editbutton' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\" data-title='éditer' rel='tooltip'>";
-			html += "<i class='fa fa-edit fa-2x'></i>";
-			html += "</span>";
+			html += "<button  class='editbutton btn btn-xs' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\" data-title='éditer' rel='tooltip'>";
+			html += karutaStr[LANG]['Update'];
+			html += "</button>";
 		}
 		html += "<div class='bubble_label'>"+UICom.structure["ui"][this.id].getView()+"</div>";
 		html += "<div class='bubble_decription'>"+UICom.structure["ui"][this.bubble_description_nodeid].resource.getView()+"</div>";
-//		html += "<div class='bubble_amount'>"+UICom.structure["ui"][this.bubble_amount_nodeid].resource.getView()+"</div>";
-//		html += "<div class='bubble_color'>"+UICom.structure["ui"][this.bubble_color_nodeid].resource.getView()+"</div>";
 		var urls = $("asmContext:has(metadata[semantictag*='level"+this.level+"_url'])",this.node);
 		for (var i=0;i<urls.length;i++){
 			if (i==0)  // first one
-				html += "<h4 class='title'>Liens</h4>";
+				html += "<h4 class='title'>"+karutaStr[LANG]['bubble-links']+"</h4>";
 			var uuid = $(urls[i]).attr("id");
 			html += "<div class='bubble_url'>"+UICom.structure["ui"][uuid].resource.getView()+"</div>";
 			html += "</div>";
@@ -116,12 +116,23 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 	if (type==null)
 		type='detail';
 	if (type=='detail') {
-		$("#"+destid).append($("<div class='control-group'><label class='control-label'>Libellé</label><div id='label_"+this.id+"' class='controls'></div></div>"));
+		//-------------------------
+		html = "<div class='form-horizontal'></div>";
+		var form_horizontal = $(html)
+		html = "<div><button  class='editbutton btn btn-xs' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayView('"+destid+"');\" data-title='éditer' rel='tooltip'>";
+		html += karutaStr[LANG]['quit-edit'];
+		html += "</button><h4>"+karutaStr[LANG]['bubble-information']+"</h4></div>";
+		$(form_horizontal).html(html);
+		//-------------------------
+		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>Libellé</label><div id='label_"+this.id+"' class='col-sm-9'></div></div>"));
+		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>Description</label><div id='description_"+this.id+"' class='col-sm-9'></div></div>"));
+		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>Pondération</label><div id='amount_"+this.id+"' class='col-sm-9'></div></div>"));
+		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>Couleur</label><div id='color_"+this.id+"' class='col-sm-9'></div></div>"));
+		$("#"+destid).append(form_horizontal);
 		$("#label_"+this.id).append(UICom.structure.ui[this.id].getNodeLabelEditor());
-		$("#"+destid).append($("<label class='inline'>Description</label>"));
-		UICom.structure["ui"][this.bubble_description_nodeid].resource.displayEditor(destid,'x100');
-		displayControlGroup_getEditor(destid,"Pondération","amount_"+this.id,this.bubble_amount_nodeid);
-		displayControlGroup_getEditor(destid,"Couleur","color_"+this.id,this.bubble_color_nodeid);
+		UICom.structure["ui"][this.bubble_description_nodeid].resource.displayEditor('description_'+this.id);
+		$("#amount_"+this.id).append(UICom.structure["ui"][this.bubble_amount_nodeid].resource.getEditor());
+		$("#color_"+this.id).append(UICom.structure["ui"][this.bubble_color_nodeid].resource.getEditor());
 		$(".pickcolor").colorpicker();
 		//----------------- children ----------------------
 		if (this.level<3) {
@@ -133,18 +144,19 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param4 = "null";
 			var level_plus = this.level+1;
 			var js1 = "importBranch('"+this.id+"','_karuta_resources_','bubble_level"+level_plus+"',"+databack+","+callback+","+param2+","+param3+","+param4+")";
-			html += "<span class='btn' onclick=\""+js1+";\">Ajouter une bulle à '"+UICom.structure["ui"][this.id].getLabel('none')+"'</span>";
+			html = "<button class='btn btn-xs' onclick=\""+js1+";\">"+karutaStr[LANG]['bubble-add-bubble']+"'"+UICom.structure["ui"][this.id].getLabel('none')+"'</button>";
 
 			var children = $("asmUnitStructure:has(metadata[semantictag*='bubble_level"+level_plus+"'])",this.node);
 			for (var i=0;i<children.length;i++){
 				var uuid = $(children[i]).attr("id");
 				var js2 = "Bubble_bubbles_byid['"+uuid+"'].displayEditor('"+destid+"')";
-				html += "<div class='bubble_label'><span style='cursor:pointer' onclick=\""+js2+"\">"+UICom.structure["ui"][uuid].getLabel()+"</span>";
-				if (this.data.children.length>2) {
-					var callback2 = "UIFactory.Bubble.refreshedit";
+				html += "<div class='bubble_label'>"+UICom.structure["ui"][uuid].getLabel();
+				html += "<button  class='editbutton btn btn-xs'  style='cursor:pointer' onclick=\""+js2+"\"><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>";
+				if (i>2) {
+					var callback2 = "UIFactory.Bubble.reloadparse";
 					var param2_2 = "'"+destid+"'";
 					var param2_3 = "'"+this.id+"'";
-					html += "<span  class='editbutton'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\" data-title='supprimer' rel='tooltip'><i class='fa fa-trash-o'></i></span>";
+					html += "<button  class='editbutton btn btn-xs'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\" data-title='supprimer' rel='tooltip'><span class='glyphicon glyphicon-remove'></span></button>";
 				}
 				html += "</div>";
 			}
@@ -159,7 +171,8 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param3 = "'"+this.id+"'";
 			var param4 = "null";
 			var js1 = "importBranch('"+this.id+"','_karuta_resources_','level"+this.level+"_url',"+databack+","+callback+","+param2+","+param3+","+param4+")";
-			html += "<div class='btn btn-mini' onclick=\""+js1+";\">Ajouter un lien</div>";
+			html = "<button class='editbutton btn btn-xs' onclick=\""+js1+";\">"+karutaStr[LANG]['bubble-add-link']+"</button>";
+			html += "<h4>"+karutaStr[LANG]['bubble-links']+"</h4>";
 
 			var urls = $("asmContext:has(metadata[semantictag*='level"+this.level+"_url'])",this.node);
 			for (var i=0;i<urls.length;i++){
@@ -167,14 +180,16 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 				var callback2 = "UIFactory.Bubble.refreshedit";
 				var param2_2 = "'"+destid+"'";
 				var param2_3 = "'"+this.id+"'";
+				html += "<div class='bubble_link_editor'>";
+				html += "<button  class='editbutton btn btn-xs'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\" data-title='supprimer' rel='tooltip'><span class='glyphicon glyphicon-remove'></span></button>";
 				html += "<div id='edit_"+uuid+"'>";
-				html += "<span  class='editbutton'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\" data-title='supprimer' rel='tooltip'><i class='fa fa-trash-o'></i></span>";
 				html += "</div>";
+				html += "</div><!-- bubble_link_editor -->";
 			}
 			$("#"+destid).append($(html));
 			for (var i=0;i<urls.length;i++){
 				var uuid = $(urls[i]).attr("id");
-				$("#edit_"+uuid).append(UICom.structure.ui[uuid].resource.getEditor('inline'));
+				$("#edit_"+uuid).append(UICom.structure.ui[uuid].resource.getEditor());
 			}
 		}
 	}
@@ -193,6 +208,7 @@ UIFactory["Bubble"].refreshedit = function(param1,param2)
 //==================================
 {
 	Bubble_bubbles_byid[param2].displayEditor(param1);
+	$('#wait-window').modal('hide');
 };
 
 //==================================
@@ -219,31 +235,35 @@ UIFactory["Bubble"].parse = function(data)
 UIFactory["Bubble"].reloadparse = function(param2,param3) 
 //==================================
 {
+	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data);
-			//------ carte ----------
+			//------ cartes ----------
 			var niveau1s = $("asmUnitStructure:has(metadata[semantictag*='bubble_level1'])",data);
 			for ( var i = 0; i < niveau1s.length; i++) {
 				var uuid = $(niveau1s[i]).attr('id');
 				Bubble_byid[uuid] = new UIFactory["Bubble"](niveau1s[i],i);
 			}
-			dataBubble = Bubble_list[0].data;
 			//-----------------------
-			if (param2!=null)
+			if (param2!=null) {
 				Bubble_bubbles_byid[param3].displayEditor(param2);
+				$("#bubble_iframe_"+g_current_mapid).contents().find("#PageRefresh").click();
+			}
+			$('#wait-window').modal('hide');
 		}
 	});
+	$.ajaxSetup({async: true});
 };
 
 //====================================
 function clickBubble(node)
 //====================================
 {
-	Bubble_bubbles_byid[node.id].displayView("bubble_display")
+	Bubble_bubbles_byid[node.id].displayView("bubble_display_"+g_current_mapid);
 }
 
 

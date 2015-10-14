@@ -161,7 +161,12 @@ var UICom =
 							}
 						});
 					}
+				} // end of asmContext
+				var semtag = $("metadata",child).attr('semantictag');
+				if (semtag=='EuropassL'){
+					UIFactory["EuropassL"].parse(child);
 				}
+
 				// recurse
 				UICom.parseElement(childTree);
 			}
@@ -187,6 +192,7 @@ var UICom =
 		UICom.addRole(node,'resizeroles');
 		UICom.addRole(node,'edittargetroles');
 		UICom.addRole(node,'graphicerroles');
+		UICom.addRole(node,'duplicateroles');
 	},
 	
 	//=======================================================================
@@ -205,7 +211,7 @@ var UICom =
 							roles = subitems[3].split(" ");
 							//----------------------------
 							for (var j=0;j<roles.length;j++){
-								if (roles[j]!='all' && roles[j]!='')
+								if (roles[j]!='all' && roles[j]!='' && roles[j]!='user')
 									UICom.roles[roles[j]] = true;
 							}
 						}
@@ -216,7 +222,7 @@ var UICom =
 					roles = $("metadata-wad",node).attr(attribute).split(" ");
 					//----------------------------
 					for (var i=0;i<roles.length;i++){
-						if (roles[i]!='all' && roles[i]!='')
+						if (roles[i]!='all' && roles[i]!='' && roles[j]!='user')
 							UICom.roles[roles[i]] = true;
 					}
 					//----------------------------
@@ -301,7 +307,7 @@ var UICom =
 	},
 
 	//=======================================================================
-	 UpdateMetaEpm: function( uuid, cb )
+	 UpdateMetaEpm: function(uuid,refresh)
 	//=======================================================================
 	{
 		var treenode = UICom.structure["tree"][uuid];
@@ -315,18 +321,17 @@ var UICom =
 			url : urlS,
 			data : data,
 			success : function (data){
-				UICom.structure["ui"][uuid].refresh();
+				if (refresh)
+					UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
 				alert("Error in UpdateMetaEpm : "+jqxhr.responseText);
-//				alert(karutaStr[LANG]['disconnected']);
-//				window.location = "login.htm";
 			}
 		});
 	},
 	
 	//=======================================================================
-	  UpdateResource: function( uuid, cb1, cb2 )
+	  UpdateResource: function(uuid, cb1, cb2 )
 	//=======================================================================
 	{
 		var treenode = UICom.structure["tree"][uuid];
@@ -398,9 +403,9 @@ var UICom =
 							cb(uuid,data);
 					},
 					error : function(jqxhr,textStatus) {
-//						alert("Error in UpdateNode : "+jqxhr.responseText);
-						alert(karutaStr[LANG]['disconnected']);
-						window.location = "login.htm";
+						alert("Error in UpdateNode : "+jqxhr.responseText);
+//						alert(karutaStr[LANG]['disconnected']);
+//						window.location = "login.htm";
 					}
 				});
 			}
@@ -424,9 +429,9 @@ var UICom =
 						eval(callback+"('"+param1+"','"+param2+"')");
 			},
 			error : function(jqxhr,textStatus) {
-//				alert("Error in DeleteNode : "+jqxhr.responseText);
-				alert(karutaStr[LANG]['disconnected']);
-				window.location = "login.htm";
+				alert("Error in DeleteNode : "+jqxhr.responseText);
+//				alert(karutaStr[LANG]['disconnected']);
+//				window.location = "login.htm";
 			}
 
 		});
@@ -457,9 +462,10 @@ function xml2string(node)
 function createXmlElement(tag)
 //=======================================================================
 {
-	var IE = (navigator.userAgent.toLowerCase().indexOf("msie") != -1);
-	if (IE) {
-		var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+	var navigator_agent = navigator.userAgent.toLowerCase()
+	var IE = (navigator_agent.indexOf("msie") != -1);
+	if (IE && navigator_agent.indexOf("10")<-1) {
+		var xmlDoc = new ActiveXObject("Microsoft.XMLDOM"); 
 		return xmlDoc.createElement(tag);
 	}
 	else

@@ -29,6 +29,7 @@ karutaStr["fr"]["button-edit"] = "Éditer";
 karutaStr["fr"]["button-delete"] = "Supprimer";
 karutaStr["fr"]["button-restore"] = "Restaurer";
 karutaStr['fr']['button-submit']="Soumettre";
+karutaStr['fr']['button-unsubmit']="Réinitialiser";
 karutaStr["fr"]["button-send"] = "Envoyer";
 karutaStr["fr"]["button-show"] = "Montrer";
 karutaStr["fr"]["button-hide"] = "Cacher";
@@ -67,6 +68,10 @@ karutaStr['fr']['demo-video']="Importer les portfolios démo des vidéos YouTube
 karutaStr['fr']['want-sharing']=" désire partager avec vous une partie de son portfolio.";
 karutaStr['fr']['share-URL']="Partage du portfolio";
 karutaStr['fr']['see']="Voir";
+karutaStr['fr']['free-toolbar-menu-tooltip']="Cliquer pour éditer";
+karutaStr['fr']['quit-edit']="Quitter le mode édition";
+karutaStr['fr']['choose']="Choisir";
+karutaStr['fr']['quit']="Quitter";
 
 //=========================================
 //========== NODE =========================
@@ -91,6 +96,7 @@ karutaStr['fr']['commentnoderoles']="Rôles - Commenter";
 karutaStr['fr']['annotnoderoles']="Rôles - Annoter";
 karutaStr['fr']['submitroles']="Rôles - Soumettre";
 karutaStr['fr']['editnoderoles']="Rôles - Éditer libellé";
+karutaStr['fr']['duplicateroles']="Rôles - Dupliquer";
 karutaStr['fr']['editboxtitle']="Titre boîte d'édition";
 karutaStr['fr']['queryGet_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
 karutaStr['fr']['queryURL2Unit']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
@@ -144,10 +150,11 @@ karutaStr['fr']['inparent']="Dans le parent";
 karutaStr['fr']['encrypted']="Encrypter la ressource";
 karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
-karutaStr['fr']['display']="Présentation ";
+karutaStr['fr']['seltype']="Présentation ";
 karutaStr['fr']['shareroles']="Rôles - Partager";
 karutaStr['fr']['submitted']="Soumis";
 karutaStr['fr']['notsubmitted']="Non soumis";
+karutaStr['fr']['collapsible']="Repliable";
 
 //=========================================
 //========== ADMIN ========================
@@ -250,3 +257,28 @@ karutaStr['fr']['message']="Message";
 karutaStr['fr']['email-sent']="Le message a été envoyé.";
 karutaStr['fr']['alternative-label']="Libellé alternatif";
 karutaStr['fr']['sent-by']="Envoyé par";
+
+//=========================================
+//========== EUROPASS =====================
+//=========================================
+
+karutaStr['fr']['mother-tongue']="Langue maternelle";
+karutaStr['fr']['foreign-languages']="Langues étrangères";
+karutaStr['fr']['add-foreign-language']="Ajouter une langue étrangère";
+
+karutaStr['fr']['understanding']="COMPRENDRE";
+karutaStr['fr']['listening']="Écouter";
+karutaStr['fr']['reading']="Lire";
+karutaStr['fr']['speaking']="PARLER";
+karutaStr['fr']['spoken-interaction']="Prendre part à une conversation";
+karutaStr['fr']['spoken-production']="S'exprimer oralement en continu";
+karutaStr['fr']['writing']="ÉCRIRE";
+
+//=========================================
+//========== BUBBLE MAP ===================
+//=========================================
+karutaStr['fr']['bubble-links']="Liens";
+karutaStr['fr']['bubble-information']="Information";
+karutaStr['fr']['bubble-add-link']="Ajouter un lien";
+karutaStr['fr']['bubble-add-bubble']="Ajouter une bulle à ";
+

@@ -430,6 +430,9 @@ UIFactory["User"].create = function()
 		data : xml,
 		success : function(data) {
 			window.location.reload();
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error : "+jqxhr.responseText);
 		}
 	});
 };
@@ -442,7 +445,7 @@ UIFactory["User"].changePassword = function(userid,value)
 	if (userid==null)
 		userid = USER.id;
 	if (value==null){
-		value = $("#user_password").val();
+		value = $("#user_password-new").val();
 		value2 = $("#user_confirm-password").val();
 	}
 	if (value2 == null || (value2 != null && value2 == value)) {

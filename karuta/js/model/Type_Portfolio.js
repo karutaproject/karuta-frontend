@@ -260,7 +260,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		type = 'standard';
 	if (type=='standard'){
 		html += "<div id='navigation_bar'></div>";
-		html += "<div id='main-container' class='container'>";
+		html += "<div id='main-container' class='container "+portfolios_byid[portfolioid].code_node.text()+"'>";
 		html += "	<div class='row'>";
 		html += "		<div class='col-md-3' id='sidebar'></div>";
 		html += "		<div class='col-md-9' id='contenu'></div>";
@@ -296,11 +296,10 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 			html += "</div>";
 		}
 		html += "<div id='navigation_bar'></div>";
-		html += "<div id='main-header' class='container navbar navbar-fixed-top' style='margin-top:55px;'>";
+		html += "<div id='main-header' class='container navbar navbar-fixed-top'>";
 		html += "   <div id='header'></div>";
 		html += "   <div id='menu'></div>";
 		html += "</div>";
-//		html += "<div id='navigation_bar'></div>";
 		html += "<div id='contenu' class='container header-container'></div>";
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
@@ -955,7 +954,7 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 //	html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
 //	html += "					<ul class='dropdown-menu'>";
 	html += "						<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+bckname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
-	if (USER.admin || portfolios_byid[portfolioid].owner=='Y' || g_userrole=='designer') {
+	if (USER.admin || portfolios_byid[portfolioid].owner=='Y') {
 		html += "						<li><a onclick=\"javascript:UIFactory['Portfolio'].callShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['addshare']+"</a></li>";
 		html += "						<li><a onclick=\"javascript:UIFactory['Portfolio'].callUnShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['unshare']+"</a></li>";
 	}
@@ -1174,6 +1173,7 @@ UIFactory["Portfolio"].displayShared = function(destid,data)
 		$("#"+destid).html(karutaStr[LANG]['noshared']);
 	}
 	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');
+//	$('#edit-window-body').scrollTop(0);
 };
 
 //==================================

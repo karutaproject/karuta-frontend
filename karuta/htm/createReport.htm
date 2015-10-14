@@ -40,6 +40,8 @@
 	<script src="../../karuta/js/resources/Type_SendEmail.js"></script>
 	<script src="../../karuta/js/resources/Type_URL2Unit.js"></script>
 	<script src="../../karuta/js/resources/Type_Dashboard.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../other/js/js.cookie.js"></script>
 	<!-- =========================================== -->
 	<script src="../../application/js/_init.js"></script>
 	<!-- =============================================================== -->
@@ -52,21 +54,14 @@
 	<!-- =============================================================== -->
 	<script language='javascript'>
 	//------------------------------
-	var lang = getURLParameter('lang');
-	if (lang!=null) {
-		LANG = lang;
-		for (var i=0; i<languages.length;i++){
-			if (languages[i]==lang)
-				LANGCODE = i;
-		}
-	}
+	setLanguage();
 	//------------------------------
 	</script>
 </head>
 <body class="welcome">
 
 		<div id='navigation_bar'></div>
-		<div class="container">
+		<div id='main-container' class="container">
 
 		<h2 class="line">KARUTA - <span id='title-page'></span></h2>
 		<h4 class="line"><span class="badge">1</span> <span id='title-1'></span></h4>

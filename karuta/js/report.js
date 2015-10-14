@@ -25,7 +25,7 @@ Selector = function(jquery,type)
 };
 
 //==================================
-function getSelector(select)
+function getSelector(select,test)
 //==================================
 {
 	var selects = select.split("."); // nodetype.semtag.[node|resource] or .[node|resource]
@@ -34,6 +34,8 @@ function getSelector(select)
 		var jquery = selects[0];
 		if (selects[1]!="")
 			jquery +=":has(metadata[semantictag='"+selects[1]+"'])";
+		if (test!=null && test!='')
+			jquery +=":has("+test+")";
 		var type = selects[2];
 		var selector = new Selector(jquery,type);
 		return selector;
@@ -120,8 +122,9 @@ function processNode(no,xmlDoc,destid,data,line)
 //==================================
 {
 	var select = $(xmlDoc).attr("select");
+	var test = $(xmlDoc).attr("test");
 	if (select!=undefined) {
-		var selector = getSelector(select);
+		var selector = getSelector(select,test);
 		var nodes = $(selector.jquery,data);
 		for (var i=0; i<nodes.length;i++){
 			//---------------------------
@@ -398,7 +401,7 @@ function processNodeResource(xmlDoc,destid,data)
 			aggregates[ref][aggregates[ref].length] = text;
 		}
 	} catch(e){
-		text = "not found";
+		text = "&mdash;";
 	}
 	text = "<span>"+text+"</span>";
 	$("#"+destid).attr("style",style);
@@ -462,10 +465,11 @@ function processCode()
 }
 
 //==================================
-function getModelAndPortfolio(model_code,node,destid)
+function getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 {
 	var xml_model = "";
+	$("#wait-window").modal('show');
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -479,13 +483,13 @@ function getModelAndPortfolio(model_code,node,destid)
 				dataType : "xml",
 				url : urlS,
 				success : function(data) {
-					xml_model = data;
+					g_dashboard_models[model_code] = data;
 					processPortfolio(0,data,destid,node,0);
+					$("#wait-window").modal('hide');
 				}
 			 });
 		}
 	});
-	return xml_model;
 }
 
 //==================================

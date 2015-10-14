@@ -29,6 +29,7 @@ karutaStr["en"]["button-edit"] = "Edit";
 karutaStr["en"]["button-delete"] = "Delete";
 karutaStr["en"]["button-restore"] = "Restore";
 karutaStr["en"]["button-submit"] = "Submit";
+karutaStr["en"]["button-unsubmit"] = "Reset";
 karutaStr["en"]["button-send"] = "Send";
 karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
@@ -67,6 +68,10 @@ karutaStr['en']['demo-video']="Import Demo Portfolios from YouTube Videos";
 karutaStr['en']['want-sharing']=" wants to share with you a part of a portfolio.";
 karutaStr['en']['share-URL']="Sharing Portfolio";
 karutaStr['en']['see']="See";
+karutaStr['en']['free-toolbar-menu-tooltip']="Edit Toogle";
+karutaStr['en']['quit-edit']="Quit Edit Mode";
+karutaStr['en']['choose']="Choose";
+karutaStr['en']['quit']="Quit";
 
 //=========================================
 //========== NODE =====================
@@ -91,6 +96,7 @@ karutaStr['en']['commentnoderoles']="Roles - Comment";
 karutaStr['en']['annotnoderoles']="Roles - Annotate";
 karutaStr['en']['submitroles']="Roles - Submit";
 karutaStr['en']['editnoderoles']="Roles - Edit Label";
+karutaStr['en']['duplicateroles']="Roles - Duplicate";
 karutaStr['en']['editboxtitle']="Editing Box Title";
 karutaStr['en']['queryGet_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
 karutaStr['en']['queryURL2Unit']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
@@ -148,6 +154,7 @@ karutaStr['en']['seltype']="Display";
 karutaStr['en']['shareroles']="Roles - Share";
 karutaStr['en']['submitted']="Submitted";
 karutaStr['en']['notsubmitted']="Not Submitted";
+karutaStr['en']['collapsible']="Collapsible";
 
 //=========================================
 //========== ADMIN ========================
@@ -250,3 +257,28 @@ karutaStr['en']['message']="Message";
 karutaStr['en']['email-sent']="The message has been sent.";
 karutaStr['en']['alternative-label']="Alternative Label";
 karutaStr['en']['sent-by']="Sent by";
+
+//=========================================
+//========== EUROPASS =====================
+//=========================================
+
+karutaStr['en']['mother-tongue']="Mother Tongue";
+karutaStr['en']['foreign-languages']="Foreign Languages";
+karutaStr['en']['add-foreign-language']="Add a Foreign Language";
+
+karutaStr['en']['understanding']="UNDERSTANDING";
+karutaStr['en']['listening']="Listening";
+karutaStr['en']['reading']="Reading";
+karutaStr['en']['speaking']="SPEAKING";
+karutaStr['en']['spoken-interaction']="Spoken Interaction";
+karutaStr['en']['spoken-production']="Spoken Production";
+karutaStr['en']['writing']="WRITING";
+
+//=========================================
+//========== BUBBLE MAP ===================
+//=========================================
+karutaStr['en']['bubble-links']="Links";
+karutaStr['en']['bubble-information']="Information";
+karutaStr['en']['bubble-add-link']="Add a link";
+karutaStr['en']['bubble-add-bubble']="Add a bubble to ";
+

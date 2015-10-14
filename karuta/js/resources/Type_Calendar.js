@@ -26,6 +26,7 @@ UIFactory["Calendar"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Calendar';
+	this.minViewMode_node = $("minViewMode",$("asmResource[xsi_type='Calendar']",node));
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
@@ -37,6 +38,20 @@ UIFactory["Calendar"] = function( node )
 				$(newelement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
 				this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
+			}
+		}
+	}
+	this.format_node = [];
+	for (var i=0; i<languages.length;i++){
+		this.format_node[i] = $("format[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
+		if (this.format_node[i].length==0) {
+			if (i==0 && $("format",$("asmResource[xsi_type='Calendar']",node)).length==1) { // for WAD6 imported portfolio
+				this.format_node[i] = $("format",$("asmResource[xsi_type='Calendar']",node));
+			} else {
+				var newelement = createXmlElement("format");
+				$(newelement).attr('lang', languages[i]);
+				$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
+				this.format_node[i] = $("format[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
 			}
 		}
 	}
@@ -65,19 +80,9 @@ UIFactory["Calendar"].prototype.getView = function(dest,langcode)
 
 /// Editor
 //==================================
-UIFactory["Calendar"].update = function(input,itself,langcode)
+UIFactory["Calendar"].update = function(itself,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!itself.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
-		var value = $.trim($(input).val());
-		$(itself.text_node[langcode]).text(value);
 		itself.save();
 };
 
@@ -95,17 +100,93 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	if (disabled==null)
 		disabled = false;
 	//---------------------
-	var html = "";
-	html += "<input type='text' name='datepicker' class='form-control' style='width:150px;' ";
+	var html = "<form class='form-horizontal' role='form'></form>";
+	var form = $(html);
+	//------
+	var group1 = $("<div class='form-group'></div>");
+	var div1 = $("<div class='col-sm-9'></div>"); 
+	html = "<input type='text' name='datepicker' class='datepicker form-control' style='width:150px;' ";
 	if (disabled)
 		html += "disabled='disabled' ";
 	html += "value=\""+$(this.text_node[langcode]).text()+"\" >";
-	var obj = $(html);
+	var input1 = $(html);
 	var self = this;
-	$(obj).change(function (){
-		UIFactory["Calendar"].update(obj,self,langcode);
+	$(input1).change(function (){
+		$(self.text_node[langcode]).text($(this).val());
+		UIFactory["Calendar"].update(self,langcode);
 	});
-	return obj;
+	var format = $(this.format_node[langcode]).text();
+	if (format.length<2)
+		format = "yyyy/mm/dd";
+	var minViewMode = $(this.minViewMode_node).text();
+	if (minViewMode.length==0)
+		minViewMode = "days";
+	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
+	$(div1).append(input1);
+	$(group1).append(div1);
+	$(form).append(group1);
+	//------
+	if (g_userrole=='designer' || USER.admin){
+		var group2 = $("<div class='form-group calendar-format'><label class='col-sm-3 control-label'>Diplay Format</label></div>");
+		var div2 = $("<div class='col-sm-9'></div>");
+		html = "<input type='text' class='form-control' style='width:150px;' ";
+		if (disabled)
+			html += "disabled='disabled' ";
+		html += "value=\""+$(this.format_node[langcode]).text()+"\" >";
+		var input2 = $(html);
+		var self = this;
+		$(input2).change(function (){
+			$(self.format_node[langcode]).text($(this).val());
+			UIFactory["Calendar"].update(self,langcode);
+		});
+		$(div2).append(input2);
+		$(group2).append(div2);
+		$(form).append(group2);
+		//---
+		var group3 = $("<div class='form-group calendar-format'><label class='col-sm-3 control-label'>Pick Format</label></div>");
+		var div3 = $("<div class='col-sm-9'></div>");
+		html = "<input type='radio' name='radio"+this.id+"' ";
+		if (disabled)
+			html += "disabled='disabled' ";
+		if ($(this.minViewMode_node).text()=='days')
+			html += "checked='true' ";
+		html += "value='days'  > Days </input>";
+		var input3_1 = $(html);
+		$(input3_1).click(function (){
+			$(self.minViewMode_node).text($(this).val());
+			UIFactory["Calendar"].update(self,langcode);
+		});
+		$(div3).append(input3_1);
+		html = "<input type='radio' name='radio"+this.id+"' ";
+		if (disabled)
+			html += "disabled='disabled' ";
+		if ($(this.minViewMode_node).text()=='months')
+			html += "checked='true' ";
+		html += "value='months' > Months </input>";
+		var input3_2 = $(html);
+		$(input3_2).click(function (){
+			$(self.minViewMode_node).text($(this).val());
+			UIFactory["Calendar"].update(self,langcode);
+		});
+		$(div3).append(input3_2);
+		html = "<input type='radio' name='radio"+this.id+"' ";
+		if (disabled)
+			html += "disabled='disabled' ";
+		if ($(this.minViewMode_node).text()=='years')
+			html += "checked='true' ";
+		html += "value='years' > Years </input>";
+		var input3_3 = $(html);
+		$(input3_3).click(function (){
+			$(self.minViewMode_node).text($(this).val());
+			UIFactory["Calendar"].update(self,langcode);
+		});
+		$(div3).append(input3_3);
+		$(group3).append(div3);
+		$(form).append(group3);
+		}
+	//-----
+
+	return form;
 };
 
 //==================================

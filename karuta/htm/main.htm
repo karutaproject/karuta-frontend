@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Karuta Production</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=9">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
@@ -37,6 +38,7 @@
 		<script src="../../karuta/js/resources/Type_Dashboard.js"></script>
 		<script src="../../karuta/js/resources/Type_Color.js"></script>
 		<script src="../../karuta/js/resources/Type_Bubble.js"></script>
+		<script src="../../karuta/js/resources/Type_EuropassL.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../other/js/jquery-1.10.2.js"></script>
 		<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
@@ -47,6 +49,8 @@
 			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
 		<![endif]-->
 		<!--script src="../../other/js/bootstrap-wysihtml5.js"--></script>
+		<script src="../../other/js/spin.js"></script>
+		<script src="../../other/js/jquery.spin.js"></script>
 		<!-- =============================================================== -->
 		<link rel="stylesheet" type="text/css" href='../../other/wysihtml5/bootstrap3-wysihtml5.min.css'/>
 		<script src='../../other/wysihtml5/bootstrap3-wysihtml5.all.min.js'> </script>
@@ -81,6 +85,8 @@
 		<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.fr.js"></script>
 		<link rel="stylesheet" href="../../other/bootstrap-datepicker/datepicker.css" />
 		<!-- =============================================================== -->
+		<script src="../../other/js/js.cookie.js"></script>
+		<!-- =============================================================== -->
 		<script src="../../application/js/_init.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/version.js"></script>
@@ -92,27 +98,23 @@
 	</head>
 	<body>
 		<div id='main-body'>
-			<div id="wait-window">
-				<img src="../../karuta/img/ajax-loader.gif"/>
-			</div>
 		</div>
+		<!-- ==================== wait box ====================================== -->
+		<div id='wait-window' class='modal' style='height:100px;'>
+			<div id='wait-window-body' class='modal-body' style='text-align:center;'></div>
+			<div id="wait-spin"></div>
+		</div>
+		<!-- ==================================================================== -->
 		
 		<script>document.write(EditBox());</script>
 		<script>document.write(DeleteBox());</script>
+		<script>document.write(LangueBox());</script>
 		<script>document.write(savedBox());</script>
 		<script language='javascript'>
 			//------------------------------
 			var edit_str = getURLParameter('edit');
 			g_edit = (edit_str=='true')? true : false;
-			var lang = getURLParameter('lang');
-			if (lang!=null) {
-				LANG = lang;
-				for (var i=0; i<languages.length;i++){
-					if (languages[i]==lang)
-						LANGCODE = i;
-				}
-			}
-			//------------------------------
+			setLanguage();			//------------------------------
 			var portfolioid = getURLParameter('id');
 			var role = getURLParameter('role');
 			userrole = role;
@@ -120,7 +122,8 @@
 				userrole = "";
 			$(window).load(function() {
 				//---------------------------
-				$("#wait-window").show();
+				$("#wait-window").modal('show');
+				$("#wait-spin").spin();
 				$.ajaxSetup({async: false});
 				$.ajax({
 					type : "GET",
@@ -202,9 +205,10 @@
 									loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});
 									
 								//---------------------------
-								$("#wait-window").hide();
+								$("#wait-window").modal('hide');
 								$("#sidebar_"+UICom.rootid).click();
 								fillEditBoxBody();
+								UIFactory.Node.reloadUnit(UICom.rootid); // for IE9
 							}
 						});
 					},
@@ -219,7 +223,9 @@
 			        $('.popover').hide();
 			    }
 			});
+			$(".free-toolbar").css('visibility')=='hidden';
 
 		</script>
-	</body>
+			</body>
+		
 </html>

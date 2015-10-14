@@ -1,28 +1,61 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>KARUTA - Welcome</title>
-	<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
-		<!-- =========================================== -->
+		<meta http-equiv="X-UA-Compatible" content="IE=9">
+		<title>Karuta Welcome</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+		<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
+		<!-- =============================================================== -->
 		<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-wysihtml5.css" />
-	<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
-	<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
-	<!-- =========================================== -->
-	<link rel="stylesheet" href="../../application/css/specific.css" />
-	<!-- =========================================== -->
-	<script src="../../other/js/jquery-1.10.2.js"></script>
-	<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
-	<!-- =============================================================== -->
-	<script src="../../karuta/js/karuta.js"></script>
-	<script src="../../karuta/js/UICom.js"></script>
-	<!-- =========================================== -->
-	<script src="../../application/js/_init.js"></script>
-	<!-- =============================================================== -->
-	<script src="../../karuta/js/version.js"></script>
-	<!-- =============================================================== -->
+		<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
+		<!-- =========================================== -->
+		<link rel="stylesheet" href="../../application/css/specific.css" />
+		<!-- =============================================================== -->
+		<script src="../../other/js/jquery-1.10.2.js"></script>
+		<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
+		<script src="../../other/js/jquery.ui.touch-punch.min.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../other/js/jquery_hotkeys.js"></script>
+		<script src="../../other/js/JQueryRC4.js"></script>
+		<!-- =========================================== -->
+		<script src="../../other/colorpicker/js/evol.colorpicker.min.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/karuta.js"></script>
+		<script src="../../karuta/js/UICom.js"></script>
+		<script src="../../karuta/js/report.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/model/Type_Portfolio.js"></script>
+		<script src="../../karuta/js/model/Type_Node.js"></script>
+		<script src="../../karuta/js/model/Type_User.js"></script>
+		<!-- =============================================================== -->
+		<link type="text/css" href="../../other/lightbox/css/lightbox.css" rel="stylesheet" />
+		<script src="../../other/lightbox/js/lightbox-2.6.min.js"></script>
+		<!-- =============================================================== -->
+		<link type="text/css" href="../../other/jplayer/jplayer.blue.monday.css" rel="stylesheet" />
+		<script src="../../other/jplayer/jquery.jplayer.min.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../other/js/jquery.ui.widget.js"></script>
+		<script src="../../other/js/jquery.iframe-transport.js"></script>
+		<script src="../../other/js/jquery.fileupload.js"></script>
+		<!-- =============================================================== -->
+		<link rel="stylesheet" href="../../other/oembed/jquery.oembed.css"/>
+		<script src="../../other/oembed/jquery.oembed.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+		<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.fr.js"></script>
+		<link rel="stylesheet" href="../../other/bootstrap-datepicker/datepicker.css" />
+		<!-- =============================================================== -->
+		<script src="../../other/js/js.cookie.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../application/js/_init.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/version.js"></script>
 	<script language='javascript'>
 		//==============================
 		function callSubmit()
@@ -94,38 +127,31 @@
 		}
 
 		//------------------------------
-		var lang = getURLParameter('lang');
-		if (lang!=null) {
-			LANG = lang;
-			for (var i=0; i<languages.length;i++){
-				if (languages[i]==lang)
-					LANGCODE = i;
-			}
-		}
+		setLanguage();
 		//------------------------------
 	</script>
 </head>
 <body class="welcome">
-
-	<div id='navigation_bar'></div>
-	<div class="container">
-		<div class='row'>
-			<div class='col-md-4'>
-				<h2 id="welcome1">KARUTA</h2>
-				<h4 id="welcome2"></h4>
-				<div id="welcome3"></div>
-			</div>
-			<div class='col-md-7'>
-				<div class="form-signin" id="login"></div>
-				<div class="form-newpassword" id="newpassword"></div>
-				<div class="form-newaccount" id="newaccount"></div>
+	<div id='main-welcome'>
+		<div id='navigation_bar'></div>
+		<div id='main-container' class="container">
+			<div class='row'>
+				<div class='col-md-4'>
+					<h2 id="welcome1">KARUTA</h2>
+					<h4 id="welcome2"></h4>
+					<div id="welcome3"></div>
+				</div>
+				<div class='col-md-7'>
+					<div class="form-signin" id="login"></div>
+					<div class="form-newpassword" id="newpassword"></div>
+					<div class="form-newaccount" id="newaccount"></div>
+				</div>
 			</div>
 		</div>
 	</div>
-
 	<script language='javascript'>
 		//------------------------------
-		$(document).ready(function() {
+		$(window).load(function() {
 			if (typeof welcome1 != 'undefined') {
 				$("#welcome1").html(welcome1[LANG]);
 				$("#welcome2").html(welcome2[LANG]);

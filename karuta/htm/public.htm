@@ -79,6 +79,8 @@
 		<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.fr.js"></script>
 		<link rel="stylesheet" href="../../other/bootstrap-datepicker/datepicker.css" />
 		<!-- =============================================================== -->
+		<script src="../../other/js/js.cookie.js"></script>
+		<!-- =============================================================== -->
 		<script src="../../application/js/_init.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/version.js"></script>
@@ -100,14 +102,7 @@
 		<script language='javascript'>
 			//------------------------------
 			var iid = getURLParameter('i');
-			var lang = getURLParameter('lang');
-			if (lang!=null) {
-				LANG = lang;
-				for (var i=0; i<languages.length;i++){
-					if (languages[i]==lang)
-						LANGCODE = i;
-				}
-			}
+			setLanguage();
 			$(window).load(function() {
 				//---------------------------
 				$("#welcome").html(welcome1[LANG]);

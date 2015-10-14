@@ -133,7 +133,7 @@ UIFactory["Image"].update = function(data,uuid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+//	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -157,7 +157,7 @@ UIFactory["Image"].remove = function(uuid,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+//	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -181,21 +181,22 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+//	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var html ="";
 	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,null,langcode)+"</span> ";
 	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
-	html +=" <div id='divfileupload_"+this.id+"_"+langcode+"'>";
-	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
+	html +=" <div id='divfileupload_"+this.id+"_"+langcode+"' >";
+	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"' en>";
 	html += "</div>";
 	html +=" <div id='progress_"+this.id+"_"+langcode+"''><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
 	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
 	$('#fileupload_'+this.id+"_"+langcode).fileupload({
+		dataType: 'json',
 		progressall: function (e, data) {
 			$("#progress_"+this.id+"_"+langcode).css('border','1px solid lightgrey');
 			$("#divfileupload_"+this.id+"_"+langcode).html("<img src='../../karuta/img/ajax-loader.gif'> Transfert");

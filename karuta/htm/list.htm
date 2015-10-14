@@ -1,25 +1,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=9">
 		<title>Karuta Production</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
-		<!-- =========================================== -->
+		<!-- =============================================================== -->
 		<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
-		<link rel="stylesheet" type="text/css" href="../../other/css/blue/style.css">
-		<!-- =========================================== -->
+		<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
 		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
+		<!-- =========================================== -->
 		<link rel="stylesheet" href="../../application/css/specific.css" />
 		<!-- =========================================== -->
 		<script src="../../other/js/jquery-1.10.2.js"></script>
 		<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
+		<script src="../../other/js/jquery.ui.touch-punch.min.js"></script>
 		<script src="../../other/js/jquery.tablesorter.min.js"></script>
-		<!--[if lt IE 9]>
-			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
-		<![endif]-->
 		<script src="../../other/js/jquery_hotkeys.js"></script>
 		<script src="../../karuta/js/karuta.js"></script>
 		<script src="../../karuta/js/UICom.js"></script>
@@ -32,6 +33,8 @@
 		<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.js"></script>
 		<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.fr.js"></script>
 		<link rel="stylesheet" href="../../other/bootstrap-datepicker/datepicker.css" />
+		<!-- =============================================================== -->
+		<script src="../../other/js/js.cookie.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/model/Type_Portfolio.js"></script>
 		<script src="../../karuta/js/model/Type_User.js"></script>
@@ -81,16 +84,18 @@
 		</script>
 	</head>
 	<body>
-		<div id='navigation_bar'></div>
-		<div class="container">
-			<div class='row'>
-				<div class='col-md-3'>
-					<div id='start' style='visibility:hidden'>
+		<div id='main-body'>
+			<div id='navigation_bar'></div>
+			<div id='main-container' class="container">
+				<div class='row'>
+					<div class='col-md-3'>
+						<div id='start' style='visibility:hidden'>
+						</div>
 					</div>
-				</div>
-				<div class='col-md-9'>
-					<div id='menu'></div>
-					<div id='list'></div>
+					<div class='col-md-9'>
+						<div id='menu'></div>
+						<div id='list'></div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -100,8 +105,9 @@
 			</div>
 		</div>
 		<script>
+			setLanguage();
 			document.write(EditBox());
-			$(document).ready(function() {
+			$(window).load(function() {
 				//----------------
 				$.ajaxSetup({async: false});
 				// --- list of users to display name of owner
@@ -207,6 +213,8 @@
 					}
 				});
 				$.ajaxSetup({async: true});
+				var navbar_html = getNavBar('list',null);
+				$("#navigation_bar").html(navbar_html);
 				$('[data-toggle="tooltip"]').tooltip(); 
 			});
 		</script>
