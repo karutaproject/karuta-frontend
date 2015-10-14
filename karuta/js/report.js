@@ -469,6 +469,7 @@ function getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 {
 	var xml_model = "";
+	$("#wait-window").modal('show');
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -484,6 +485,7 @@ function getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 				success : function(data) {
 					g_dashboard_models[model_code] = data;
 					processPortfolio(0,data,destid,node,0);
+					$("#wait-window").modal('hide');
 				}
 			 });
 		}

@@ -360,17 +360,17 @@ UIFactory["Node"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Node"].duplicate = function(uuid)
+UIFactory["Node"].duplicate = function(uuid,callback)
 //==================================
 {
 	var destid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
 	$("#wait-window").modal('show');
-	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srceid="+uuid;
+	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?uuid="+uuid;
 	if (USER.admin || g_userrole=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
-			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srceid="+uuid;
+			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?uuid="+uuid;
 	}
 	$.ajax({
 		type : "POST",
@@ -1573,7 +1573,7 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		html += "<h4>"+karutaStr[LANG]['comments']+"</h4>";
 		html += "<div id='div_"+uuid+"'><textarea id='"+uuid+"_edit_comment' class='form-control' style='height:200px'>"+text+"</textarea></div>";
 		$("#"+destid).append($(html));
-		$("#"+uuid+"_edit_comment").wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
+		$("#"+uuid+"_edit_comment").wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments();},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
 	}
 };
 
@@ -1784,7 +1784,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		}
 		//------------- duplicate node buttons ---------------
 		if ( duplicateroles!='none' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicateNode('"+node.id+"')\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i></button>";
+			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i></button>";
 		}
 	}
 	//------------- node menus button ---------------
@@ -1982,6 +1982,7 @@ UIFactory['Node'].reloadStruct = function(uuid)
 				displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);
 			else
 				$("#sidebar_"+uuid).click();
+			$('#wait-window').modal('hide');
 		}
 	});
 	$.ajaxSetup({async: true});

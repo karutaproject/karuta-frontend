@@ -48,8 +48,8 @@ a.btn {
 #main-body .btn {
 	background-color:#FAFAFA;
 	border: 1px solid lightGrey;
-	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
-    background-repeat: repeat-x;
+/*	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
+    background-repeat: repeat-x;*/
 }
 
 .btn-danger {
@@ -1134,16 +1134,26 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .Y1 {color: #fff; background: red;}
 .Y2 {color: #fff; background: green;}
 
-.selSMILEY, .SMILEY {
-	background-image: url("../../karuta/img/smiley-icon.png");
+.selSMILEY-HAPPY, .SMILEY-HAPPY {
+	background-image: url("../../karuta/img/smiley-happy.png");
 	background-repeat: no-repeat;
 	background-position: 10px 3px;
 	display:inline-block;
 	height:34px;
 	width:90%;
 }
+
+.selSMILEY-NEUTRAL, .SMILEY-NEUTRAL {
+	background-image: url("../../karuta/img/smiley-neutral.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
 .selSMILEY-SAD, .SMILEY-SAD {
-	background-image: url("../../karuta/img/smiley-sad-icon.png");
+	background-image: url("../../karuta/img/smiley-sad.png");
 	background-repeat: no-repeat;
 	background-position: 10px 3px;
 	display:inline-block;
