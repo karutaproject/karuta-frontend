@@ -471,9 +471,11 @@ function toggleContent(uuid) {
 //==================================
 	var classname = $("#toggleContent_"+uuid).attr("class");
 	if (classname=="glyphicon glyphicon-triangle-bottom"){
+		UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','Y');
 		$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-right");
 		$("#content-"+uuid).hide();
 	} else {
+		UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','N');
 		$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-bottom");
 		$("#content-"+uuid).show();
 	}

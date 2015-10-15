@@ -474,6 +474,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	//----------------------------------------------
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
+	var collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
@@ -675,7 +676,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (root.children.length>0 && depth>0) {
 					html += "<div id='content-"+uuid+"' ";
 					style = "position:relative;";
-//					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',true);
@@ -696,6 +697,19 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				$("#standard_"+uuid).replaceWith($(html));
 			else
 				$("#"+dest).append($(html));
+			//------------------------------------------
+			//------------------------------------------
+			//--------------------collapsed------------------------------------------
+			if (collapsible=='Y') {
+				if (collapsed=='Y') {
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-right");
+					$("#content-"+uuid).hide();
+				}
+				else {
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-bottom");
+					$("#content-"+uuid).show();
+				}
+			}
 			//--------------------set editor------------------------------------------
 			if ($("#display_editor_"+uuid).length>0) {
 				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
@@ -1478,6 +1492,8 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				}
 			}
 			html += "</div><!-- name -->";
+			//------------------------------------------
+			//------------------------------------------
 			//------------------------------------------
 			$("#"+dest).append($(html));
 			//--------------------set editor------------------------------------------
