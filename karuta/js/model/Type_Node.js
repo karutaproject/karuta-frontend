@@ -388,12 +388,6 @@ UIFactory["Node"].duplicate = function(uuid,callback)
 	});
 };
 
-//==================================
-UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,depth,edit,menu)
-//==================================
-{
-	return UIFactory["Node"].buttons(this,type,langcode,inline,depth,edit,menu);
-};
 //-------------------------------------------------------
 //-------------------------------------------------------
 //-------------------------------------------------------
@@ -619,6 +613,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				if (name=='asmUnitStructure' && collapsible=='Y')
 					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" style='position:relative;top:20px;left:-20px;cursor:pointer'><span id='toggleContent_"+uuid+"' class='glyphicon glyphicon-triangle-bottom'></span></div>";
+
 				html += "<div class='row'>";
 	
 				//-------------- node -----------------------------
@@ -659,6 +654,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					if (!gotView)
 						html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
 				}				
+				//==============================================================================================
 				//-------------- context -------------------------
 				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
 				//-------------- metainfo -------------------------
@@ -1727,6 +1723,13 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved)
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 
+//==================================
+UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,depth,edit,menu)
+//==================================
+{
+	return UIFactory["Node"].buttons(this,type,langcode,inline,depth,edit,menu);
+};
+
 //==================================================
 UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4,freenode)
 //==================================================
@@ -1802,7 +1805,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" href='#'><span class='glyphicon glyphicon-random'></span></button>";
 		}
 		//------------- duplicate node buttons ---------------
-		if ( duplicateroles!='none' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
+		if ( duplicateroles!='none' && duplicateroles!='' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
 			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i></button>";
 		}
 	}

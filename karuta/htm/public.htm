@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Karuta Production</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=9">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
@@ -36,15 +37,20 @@
 		<script src="../../karuta/js/resources/Type_URL2Unit.js"></script>
 		<script src="../../karuta/js/resources/Type_Dashboard.js"></script>
 		<script src="../../karuta/js/resources/Type_Color.js"></script>
+		<script src="../../karuta/js/resources/Type_Bubble.js"></script>
+		<script src="../../karuta/js/resources/Type_EuropassL.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../other/js/jquery-1.10.2.js"></script>
 		<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
+		<script src="../../other/js/jquery.ui.touch-punch.min.js"></script>
 		<!--script src='../../other/wysihtml5/parser.js'> </script-->
 		<!--[if lt IE 9]>
 			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
 		<![endif]-->
 		<!--script src="../../other/js/bootstrap-wysihtml5.js"--></script>
+		<script src="../../other/js/spin.js"></script>
+		<script src="../../other/js/jquery.spin.js"></script>
 		<!-- =============================================================== -->
 		<link rel="stylesheet" type="text/css" href='../../other/wysihtml5/bootstrap3-wysihtml5.min.css'/>
 		<script src='../../other/wysihtml5/bootstrap3-wysihtml5.all.min.js'> </script>
@@ -87,6 +93,8 @@
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/dashboards/matrix_2dims/matrix_2dim.js"></script>
 		<!-- =============================================================== -->
+		<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css"> <!-- cursive font LAMP example -->
+		<!-- =============================================================== -->
 	</head>
 	<body>
 		<div id='main-container' class='container-fluid'>
@@ -98,9 +106,16 @@
 				<div class='col-md-9' id='contenu' style='margin-top:50px'></div>
 			</div>
 		</div>
+		<!-- ==================== wait box ====================================== -->
+		<div id='wait-window' class='modal' style='height:100px;'>
+			<div id='wait-window-body' class='modal-body' style='text-align:center;'></div>
+			<div id="wait-spin"></div>
+		</div>
+		<!-- ==================================================================== -->
 		
 		<script language='javascript'>
 			//------------------------------
+			var g_display_type = 'standard'; // default value
 			var iid = getURLParameter('i');
 			setLanguage();
 			$(window).load(function() {
