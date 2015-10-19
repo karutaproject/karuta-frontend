@@ -171,7 +171,8 @@ karutaStr['en']['list_groups']="Groups";
 //========== PORTFOLIOS ===================
 //=========================================
 
-karutaStr['en']['portfolios']="My Portfolios";
+karutaStr['en']['projects']="My Projects";
+karutaStr['en']['portfolios']="My Portfolios not in a Project";
 karutaStr['en']['bin']="My Bin";
 karutaStr['en']['nogroup']="No Group";
 karutaStr['en']['create_portfolio']="Create a Portfolio";

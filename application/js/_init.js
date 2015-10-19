@@ -1,32 +1,32 @@
 //----------------------------------
-var application_version = "1.x";
-var application_date = "2015-04-11";
+var application_version = "2.alpha";
+var application_date = "2015-10-10";
 //----------------------------------
-var appliname = 'karuta';
+var appliname = 'karuta-ux';
 var bckname = 'karuta';
-var demo = true;
+var demo = false;
+//----------------------------------
 //----------------------------------
 var languages = [];
 languages [0] = 'en';
 languages [1] = 'fr';
 //languages [2] = 'ja';
 //----------------------------------
+var navbar_icon_color = "#09bbd9";
 var navbar_title = {};
-	navbar_title["fr"] = "<img style='margin-bottom:4px;' src='../../karuta/img/logofonblanc140x50.jpg'/>";
-	navbar_title["en"] = "<img style='margin-bottom:4px;' src='../../karuta/img/logofonblanc140x50.jpg'/>";
-	navbar_title["ja"] = "<img style='margin-bottom:4px;' src='../../karuta/img/logofonblanc140x50.jpg'/>";
+navbar_title["fr"] = "<img style='margin-top:-4px;' src='../../karuta/img/karuta-navbar.jpg'/>";
+navbar_title["en"] = "<img style='margin-top:-4px;' src='../../karuta/img/karuta-navbar.jpg'/>";
+navbar_title["ja"] = "<img style='margin-top:-4px;' src='../../karuta/img/karuta-navbar.jpg'/>";
+//----------------------------------
 var welcome1 = {};// Welcome title
-	welcome1["fr"] = "<img class='img-responsive' style='width:300px;margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
-	welcome1["en"] = "<img class='img-responsive' style='width:300px;margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
-	welcome1["ja"] = "<img class='img-responsive' style='width:300px;margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
+	welcome1["fr"] = "<img class='img-responsive' src='../../karuta/img/logofonbleu.jpg'/>";
+	welcome1["en"] = "<img class='img-responsive' src='../../karuta/img/logofonbleu.jpg'/>";
 var welcome2 = {};       // Welcome sub-title
-	welcome2["fr"] = "<span style='color:lightgrey'>Version 1.1</span>";
-	welcome2["en"] = "<span style='color:lightgrey'>Version 1.1</span>";
-	welcome2["ja"] = "<span style='color:lightgrey'>Version 1.1</span>";
+	welcome2["fr"] = "<div style='color:black;text-align:center;font-size:14px;margin-bottom:15px;'>Version 2</div>";
+	welcome2["en"] = "<div style='color:black;text-align:center;font-size:14px;margin-bottom:15px;'>Version 2</div>";
 var welcome3 = {};       // Welcome paragraph
 	welcome3["fr"] = "";
 	welcome3["en"] = "";
-	welcome3["ja"] = "";
 	
 var listinfo = {};       // Welcome paragraph
 	listinfo["fr"]  = "";

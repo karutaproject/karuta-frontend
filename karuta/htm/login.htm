@@ -146,6 +146,7 @@
 	<script language='javascript'>
 		//------------------------------
 		$(window).load(function() {
+			changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 			$.ajaxSetup({async: false});
 			$.ajax({
 				type : "GET",

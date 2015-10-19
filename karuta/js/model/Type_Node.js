@@ -363,12 +363,12 @@ UIFactory["Node"].duplicate = function(uuid)
 {
 	var destid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
 	$("#wait-window").modal('show');
-	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srceid="+uuid;
+	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcuuid="+uuid;
 	if (USER.admin || g_userrole=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
-			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srceid="+uuid;
+			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcuuid="+uuid;
 	}
 	$.ajax({
 		type : "POST",
@@ -603,6 +603,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	//------------------metadata----------------------------
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
+	var collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
@@ -875,9 +876,17 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					else
 						changeCss("#node_"+uuid+" .button", "color:white;");
 			}
-			//-------------------- if collapsible we hide by default ------------------------------------------
-//			if (nodetype=='asmUnitStructure' && collapsible=='Y')
-//				$("#content-"+uuid).hide();
+			//--------------------collapsed------------------------------------------
+			if (collapsible=='Y') {
+				if (collapsed=='Y') {
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-plus");
+					$("#content-"+uuid).hide();
+				}
+				else {
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-minus");
+					$("#content-"+uuid).show();
+				}
+			}
 			//--------------------set editor------------------------------------------
 			if ($("#display_editor_"+uuid).length>0) {
 				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
@@ -993,364 +1002,6 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	} //---- end of private
 };
 
-//==================================================
-UIFactory["Node"].displayStandardOld = function(root,dest,depth,langcode,edit,inline,backgroundParent)
-//==================================================
-{
-	if (edit==null || edit==undefined)
-		edit = false;
-	if (inline==null || inline==undefined)
-		inline = false;
-	var menu = true;
-	//---------------------------------------
-	var data = root.node;
-	var name = $(data).prop("nodeName");
-	var uuid = $(data).attr("id");
-//	var proxy_target = false;
-
-	var node = UICom.structure["ui"][uuid];
-	// ---- store info to redisplay after change ---
-	node.display_node[dest] = {"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":"standard"};
-	//----------------------------------------------
-	var writenode = ($(node.node).attr('write')=='Y')? true:false;
-	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
-	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
-	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
-	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
-	var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
-	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
-	var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
-	if (inline_metadata=='Y')
-		inline = true;
-	var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
-	var contentfreenode = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
-	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-	//-------------------- test if visible
-	if ( (display=='N' && (g_userrole=='designer'  || USER.admin)) || (display=='Y' && ( seenoderoles.indexOf(g_userrole)>-1 || (showtoroles.indexOf(g_userrole)>-1 && !privatevalue) || !privatevalue || g_userrole=='designer')) ) {
-		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.indexOf(g_userrole)>-1) || (g_userrole=='designer'  || USER.admin)) {
-			var readnode = true; // if we got the node the node is readable
-			if (g_designerrole)
-				readnode = (g_userrole=='designer' || seenoderoles.indexOf(USER.username_node.text())>-1 || seenoderoles.indexOf(g_userrole)>-1 || (showtoroles.indexOf(g_userrole)>-1 && !privatevalue) || seenoderoles.indexOf('all')>-1)? true : false;
-			if( depth < 0 || !readnode) return;
-			//----------------edit control on proxy target ------------
-			if (proxies_edit[uuid]!=undefined) {
-					var parent = proxies_parent[uuid];
-					if (parent==dest.substring(8) || dest=='contenu') { // dest = content_{parentid}
-						proxy_target = true;
-						edit = menu = (proxies_edit[uuid].indexOf(g_userrole)>-1 || g_userrole=='designer');
-					}
-			}
-			//---------------------------------------------------------
-			var html = "<div id='node_"+uuid+"' class='"+name+" "+semtag+" ";
-			if(UICom.structure["ui"][uuid].resource!=null)
-				html += UICom.structure["ui"][uuid].resource.type;
-			html += "'";
-			//-------------- css attribute -----------
-			var metadataepm = $(node.metadataepm);
-	//		if (proxy_target)
-	//			metadataepm = UICom.structure["ui"][proxies_nodeid["proxy-"+semtag]].metadataepm;
-			var style = "";
-			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'padding-top',true);
-			if (style.length>0 && depth>0)
-				html += " style='"+style+"' ";
-			//----------------------------------
-			html += ">";
-			//------------------ ASMCONTEXT ----------
-			if (name == "asmContext"){
-				html += "<div class='row'>";
-				//-------------- node -----------------------------
-				html += "<div class='col-md-9' style='" + backgroundParent + "'>";
-				html += "<div class='row '>";
-				html += "<div id='std_node_"+uuid+"' class='col-md-3' ";
-				style = "style='";
-				style += UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
-				style +="'";
-				html += style;
-				html += ">";
-				html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
-				html += "</div><!-- col-md-3 label of resource -->";
-				//-------------- resource -------------------------
-				if (g_designerrole) {
-					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
-					if (!writenode)
-						writenode = (editresroles.indexOf(g_userrole)>-1)? true : false;
-				}
-				if (g_userrole=='designer') {
-					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
-					if (!writenode)
-						writenode = (editresroles.indexOf(g_userrole)>-1)? true : false;
-					if (!writenode)
-						writenode = (g_userrole=='designer')? true : false;
-				}
-				if (edit && inline && writenode && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL'){
-					html += "<div id='std_resource_"+uuid+"' class='col-md-9'>";
-					//-----------------------
-					if(UICom.structure["ui"][uuid].resource!=null) {
-						try {
-							var test = UICom.structure["ui"][uuid].resource.getEditor();
-							html += "<span id='get_editor_"+uuid+"'></span>";
-						}
-						catch(e) {
-							html += "<span id='display_editor_"+uuid+"'></span>";
-						}
-					} else {
-						html = UICom.structure["ui"][uuid].getEditor();
-						$("#edit-window-body-node").html($(html));
-					}
-					html += "</div><!-- col-md-9 resource -->";
-				} else {
-						if (g_display_type=='standard') {
-							html += "<div id='std_resource_"+uuid+"' class='resource col-md-9' ";
-							style = "style='";
-							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
-							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
-							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
-							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
-							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',true);
-							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
-							style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
-							style +="'";
-							html += style;
-							html += ">";
-						}
-						if (g_display_type=='header')
-							html += "<div id='std_resource_"+uuid+"' class='col-md-9'>";
-						if (node.resource.type!='Dashboard' || g_userrole=='designer')
-							html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
-						html += "</div><!-- col-md-9 resource -->";
-				}
-				html += "</div><!-- inner row -->";
-				//-------------- context -------------------------
-				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
-
-				//-------------- metainfo -------------------------
-				if (g_edit && (g_userrole=='designer' || USER.admin)) {
-					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
-				}
-				//--------------------------------------------------
-				html += "</div><!-- col-md-9 -->";
-				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='col-md-3'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
-				html += "</div><!-- col-md-3 buttons -->";
-				html += "</div><!-- outer row -->";
-				//--------------------------------------------------
-			}
-			else { // other than asmContext
-				//-------------------- NODE --------
-				if (name=='asmUnitStructure')
-					depth=100;	
-				style = "";
-				if (depth>0) {
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-weight',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-style',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'color',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'text-align',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
-				} else {
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-font-size',true);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-font-weight',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-font-style',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-color',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-text-align',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-background-color',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-othercss',false);
-				}
-				if (name=='asmUnitStructure' && collapsible=='Y')
-					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" style='position:relative;top:20px;left:-20px;cursor:pointer'><span id='toggleContent_"+uuid+"' class='glyphicon glyphicon-triangle-bottom'></span></div>";
-				html += "<div class='row'>";
-	
-				//-------------- node -----------------------------
-				if (depth!=1 && depth<10 && name=='asmStructure') {
-					if (g_display_type=='standard')
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
-					if (g_display_type=='header')
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
-						html += "<a href='#' onclick=\"displayPage('"+uuid+"',1,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>";
-					}
-				else if (depth!=1 && depth<10 && name=='asmUnit') {
-					if (g_display_type=='standard')
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9' style='"+style+"'>";
-					if (g_display_type=='header')
-						html += "<div id='prt_node_"+uuid+"' class='col-md-9'>";
-						html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
-					}
-				else {
-					if (g_display_type=='standard')
-						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
-					if (name=='asmUnitStructure' && collapsible=='Y')
-						html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
-					else
-						html += " style='"+style+"'>";
-					if (g_display_type=='header') {
-						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
-						if (g_userrole!='designer' && semtag=='header')
-							html += " style='visibility:hidden'";
-						if (semtag!='header')
-							html += " style='"+style+"'";
-						html += ">";
-					}
-					var gotView = false;
-					if (semtag=='bubble_level1'){
-						html += " "+UICom.structure["ui"][uuid].getBubbleView('std_node_'+uuid);
-						gotView = true;
-					}
-					if (!gotView)
-						html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
-				}				
-				//-------------- context -------------------------
-				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
-				//-------------- metainfo -------------------------
-				if (g_edit && (g_userrole=='designer' || USER.admin)) {
-					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
-				} else {
-					html += "<div id='metainfo_"+uuid+"' class='metainfo' style='visibility:hidden'></div><!-- metainfo -->";					
-				}
-				html += "</div><!-- col-md-9 -->";
-				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='col-md-3'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
-				//--------------------------------------------------
-				html += "</div><!-- row -->";
-				//--------------------------------------------------*/
-				if (root.children.length>0 && depth>0) {
-					html += "<div id='content-"+uuid+"' ";
-					style = "position:relative;";
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',true);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
-					html +=" style='"+style+"'";
-					html += ">";
-					//-----------------------------------------
-					var graphicers = $("metadata-wad[graphicerroles*="+g_userrole+"]",data);
-					if (contentfreenode=='Y' && (graphicers.length>0 || g_userrole=='designer'))
-						html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
-					//-----------------------------------------
-					html += "</div>";
-				}
-			}
-			html += "</div><!-- name -->";
-			//------------------------------------------
-			if ( $("#node_"+uuid).length>0 )
-				$("#node_"+uuid).replaceWith($(html));
-			else
-				$("#"+dest).append($(html));
-			//--------------------set editor------------------------------------------
-			if ($("#display_editor_"+uuid).length>0) {
-				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
-			}
-			if ($("#get_editor_"+uuid).length>0) {
-				$("#get_editor_"+uuid).append(UICom.structure["ui"][uuid].resource.getEditor());
-			}
-			//----------- Comments -----------
-			if (!inline)
-				UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
-			else
-				UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
-			//----------- help -----------
-			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
-				if (depth>0) {
-					var attr_help = $($("metadata-wad",data)[0]).attr('help');
-					var helps = attr_help.split("/"); // lang1/lang2/...
-					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
-						for (var j=0; j<helps.length; j++){
-							if (helps[j].indexOf(languages[langcode])>-1)
-								help_text = helps[j].substring(0,helps[j].indexOf("@"));
-						}
-					} else { // lang1/lang2/...
-						help_text = helps[langcode];  // lang1/lang2/...
-					}
-//					var help = " <a href='javascript://' data-toggle='popover' class='popinfo'><i class='icon-info-sign'></i></a> ";  //Bootstrap 2
-					var help = " <a href='javascript://' class='popinfo'><span class='glyphicon glyphicon-info-sign'></span></a> ";
-					$("#help_"+uuid).html(help);
-					$(".popinfo").popover({ 
-					    placement : 'right',
-					    container : 'body',
-					    title:karutaStr[LANG]['help-label'],
-					    html : true,
-					    trigger:'click hover',
-					    content: help_text
-					});
-				}
-			}
-			//----------------------------------------------
-			$("#free-toolbar-menu_"+uuid).click(function(){
-				if ($(".free-toolbar",$("#content-"+uuid)).css('visibility')=='hidden') {
-					$(".free-toolbar",$("#content-"+uuid)).css('visibility','visible');
-					g_free_toolbar_visibility = 'visible';
-				}
-				else {
-					$(".free-toolbar",$("#content-"+uuid)).css('visibility','hidden');
-					g_free_toolbar_visibility = 'hidden';
-				}
-			});
-			//---------- video ------------------
-			if (UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
-				UICom.structure["ui"][uuid].resource.setParameter();
-			// -------------- display metainfo
-			if (g_userrole=='designer' || USER.admin) {  
-				UIFactory["Node"].displayMetainfo("metainfo_"+uuid,data);
-			}
-			//------------ Dashboard -----------------
-			if (name == "asmContext" && node.resource.type=='Dashboard') {
-				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-10'></div></div>"));
-				var model_code = UICom.structure["ui"][uuid].resource.getView();
-				if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
-					processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,g_portfolio_current,0);
-				else
-					getModelAndPortfolio(model_code,g_portfolio_current,"dashboard_"+uuid,g_dashboard_models);
-			}
-			// ================================= For each child =====================
-			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
-			var gotDisplay = false;
-			if (semtag=="EuropassL"){
-				gotDisplay = true;
-				UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid);
-			}
-			if (!gotDisplay && semtag!='bubble_level1') {
-				for( var i=0; i<root.children.length; ++i ) {
-					// Recurse
-					var child = UICom.structure["tree"][root.children[i]];
-					var childnode = UICom.structure["ui"][root.children[i]];
-					var childsemtag = $(childnode.metadata).attr('semantictag');
-					var freenode = ($(childnode.metadatawad).attr('freenode')==undefined)?'':$(childnode.metadatawad).attr('freenode');
-					if (contentfreenode == 'Y' || freenode == 'Y')
-						UIFactory["Node"].displayFree(child, 'content-'+uuid, depth-1,langcode,edit,inline);
-					else
-						UIFactory["Node"].displayStandard(child, 'content-'+uuid, depth-1,langcode,edit,inline,backgroundParent);
-				}
-			}
-			//------------- javascript dashboard --------------------
-			if (depth>1 && $($("metadata",data)[0]).attr('semantictag')!=undefined) {
-				var semtag =  $($("metadata",data)[0]).attr('semantictag');
-				if (semtag.indexOf('dashboard')>-1){
-					var dashboard_function = $($("metadata",data)[0]).attr('semantictag').substring(10)+"(UICom.root.node,'content-'+uuid)";
-					$("#"+dest).append(eval(dashboard_function));
-					$(".popinfo").popover({ 
-					    placement : 'bottom',
-					    html : true
-					});
-				}
-			}
-			//----------------------------
-//			$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
-			$('a[data-toggle=tooltip]').tooltip({html:true});
-			$(".pickcolor").colorpicker();
-			//----------------------------
-			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
-			if (!multilingual_resource)
-				$("#embed"+uuid+NONMULTILANGCODE).oembed();
-			else
-				$("#embed"+uuid+langcode).oembed();
-			//----------------------------
-		}
-		if (g_userrole=='designer' && semtag=='welcome-unit') {
-			html = "<a href='#' class='glyphicon glyphicon-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)} else {g_welcome_edit=false;$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)}\"></a>";
-			$("#welcome-edit").html(html);
-		}
-	} //---- end of private
-};
 
 //========================================================
 UIFactory["Node"].updateIpadPosition = function (obj,top,left)
@@ -2329,8 +1980,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" href='#'></span>";
 		}
 		//------------- duplicate node buttons ---------------
-		if ( duplicateroles!='none' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicateNode('"+node.id+"')\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i></button>";
+		if ( duplicateroles!='none'  && duplicateroles!='' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
+			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"')\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i></button>";
 		}
 	}
 	//------------- node menus button ---------------

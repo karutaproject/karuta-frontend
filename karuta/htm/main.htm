@@ -123,6 +123,7 @@
 				//---------------------------
 				$("#wait-window").modal('show');
 				$("#wait-spin").spin();
+				changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 				$.ajaxSetup({async: false});
 				$.ajax({
 					type : "GET",
@@ -187,7 +188,7 @@
 								}
 								changeCss("#portfolio-navbar a", "color:"+portfolio_navbar_link_color+";");
 								//--------------------------------
-								var portfolio_sidebar_color = "#09bbd9"; // --- default value
+								var portfolio_sidebar_color = "#000000"; // --- default value
 								if ($("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).length>0) {
 									var portfolio_sidebar_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).attr("id");
 									portfolio_sidebar_color = UICom.structure["ui"][portfolio_sidebar_id].resource.getValue();
@@ -202,12 +203,12 @@
 								changeCss(".sidebar-link", "color:"+portfolio_sidebar_link_color+";padding:9px;");
 								changeCss(".sidebar-link a", "color:"+portfolio_sidebar_link_color+";");
 								//--------------------------------
-								var portfolio_sidebar_link_selected_color = "#000000"; // --- default value
+								var portfolio_sidebar_link_selected_color = "#09bbd9"; // --- default value
 								if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).length>0) {
 									var portfolio_sidebar_link_selected_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).attr("id");
 									portfolio_sidebar_link_selected_color = UICom.structure["ui"][portfolio_sidebar_link_selected_id].resource.getValue();								
 								}
-								changeCss(".selected", "border-right:4px solid #e0006d;padding-right:5px;");
+								changeCss(".selected", "border-right:4px solid "+portfolio_sidebar_link_selected_color+";padding-right:5px;");
 								changeCss(".selected a", "color:"+portfolio_sidebar_link_selected_color+";font-weight:bold;");
 								changeCss(".sidebar-link a:hover", "color:"+portfolio_sidebar_link_selected_color+";");
 								changeCss("a.sidebar-link:hover", "color:"+portfolio_sidebar_link_selected_color+";");
@@ -240,6 +241,28 @@
 									welcome_line_color = UICom.structure["ui"][welcome_line_color_id].resource.getValue();
 								}
 								changeCss(".welcome-line", "border-bottom:1px solid "+welcome_line_color+";width:25%;margin-left:auto;margin-right:auto;");
+								//--------------------------------
+								var page_title_background_color = "#e8e8e8"; // --- default value
+								if ($("asmContext:has(metadata[semantictag='page-title-background-color'])",data).length>0) {
+									var page_title_background_color_id = $("asmContext:has(metadata[semantictag='page-title-background-color'])",data).attr("id");
+									page_title_background_color = UICom.structure["ui"][page_title_background_color_id].resource.getValue();
+								}
+								changeCss(".welcome-line.row-node-asmRoot,.row-node-asmStructure,.row-node-asmUnit", "background-color:"+page_title_background_color+";");
+								//--------------------------------
+								var page_title_subline_color = "#09bbd9"; // --- default value
+								if ($("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).length>0) {
+									var page_title_subline_color_id = $("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).attr("id");
+									page_title_subline_color = UICom.structure["ui"][page_title_subline_color_id].resource.getValue();
+								}
+								changeCss(".row-node-asmRoot .title-subline,.row-node-asmStructure .title-subline,.row-node-asmUnit .title-subline", "border-bottom:1px solid "+page_title_subline_color+";");
+								//--------------------------------
+								var portfolio_buttons_color = "#09bbd9"; // --- default value
+								if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
+									var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
+									portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
+								}
+								changeCss(".dropdown-button", "border:1px solid "+portfolio_buttons_color+";");
+								changeCss(".toggle-content .glyphicon,.button", "color:"+portfolio_buttons_color+";");
 								// ========================================================================
 								if (g_display_type=="header")
 									loadLanguages(function(data) {UIFactory["Portfolio"].displayPortfolio('main-body','header',LANGCODE,g_edit);});

@@ -368,7 +368,7 @@ var UICom =
 	  UpdateNode: function( uuid, cb )
 	//=======================================================================
 	{
-		var treenode = UICom.structure["tree"][uuid];
+		var treenode = UICom.structure["ui"][uuid];
 		var resources = $(">asmResource",treenode.node);
 	
 		for( var i=0; i<resources.length; ++i )

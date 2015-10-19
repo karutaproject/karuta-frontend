@@ -829,16 +829,33 @@ function toggleZoom(uuid) {
 //==================================
 function toggleContent(uuid) {
 //==================================
-	if ($("#toggleContent_"+uuid).hasClass("glyphicon-expand")) {
-		$("#toggleContent_"+uuid).removeClass("glyphicon-expand")
-		$("#toggleContent_"+uuid).addClass("glyphicon-collapse-down")
+	if ($("#toggleContent_"+uuid).hasClass("glyphicon-plus")) {
+		UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','N');
+		$("#toggleContent_"+uuid).removeClass("glyphicon-plus")
+		$("#toggleContent_"+uuid).addClass("glyphicon-minus")
 		$("#content-"+uuid).show();
 	} else {
-		$("#toggleContent_"+uuid).removeClass("glyphicon-collapse-down")
-		$("#toggleContent_"+uuid).addClass("glyphicon-expand")
+		UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','Y');
+		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
+		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
 		$("#content-"+uuid).hide();
 	}
 }
+
+//==================================
+function toggleProject(uuid) {
+//==================================
+	if ($("#toggleContent_"+uuid).hasClass("glyphicon-plus")) {
+		$("#toggleContent_"+uuid).removeClass("glyphicon-plus")
+		$("#toggleContent_"+uuid).addClass("glyphicon-minus")
+		$("#content-"+uuid).show();
+	} else {
+		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
+		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
+		$("#content-"+uuid).hide();
+	}
+}
+
 
 //==================================
 function toggleSideBar() {
