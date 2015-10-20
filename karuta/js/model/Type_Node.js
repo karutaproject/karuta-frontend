@@ -1806,7 +1806,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		}
 		//------------- duplicate node buttons ---------------
 		if ( duplicateroles!='none' && duplicateroles!='' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i></button>";
+			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" href='#'><span class='glyphicon glyphicon-duplicate'></span></button>";
 		}
 	}
 	//------------- node menus button ---------------
