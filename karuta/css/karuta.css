@@ -222,7 +222,13 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 	border-bottom:0px solid white;
 }
 
-
+.button-border {
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px; 
+	border-top-left-radius: 3px;
+	border: 1px solid #09bbd9;
+}
 /* ====================== */
 /*      SIDEBAR            */
 /* ====================== */

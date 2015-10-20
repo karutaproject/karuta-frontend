@@ -1981,7 +1981,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		}
 		//------------- duplicate node buttons ---------------
 		if ( duplicateroles!='none'  && duplicateroles!='' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"')\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i></button>";
+			html+= "<span class='button glyphicon glyphicon-duplicate' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" href='#'></span>";
 		}
 	}
 	//------------- node menus button ---------------
@@ -2043,13 +2043,13 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
 		if ( submitted!='Y' && submitnode && ( submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer' || submitroles.indexOf($(USER.username_node).text())>-1)) {
-			html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
-			html += " ><div class='button'>"+karutaStr[languages[langcode]]['button-submit']+"</div></button>";
+			html += "<span id='submit-"+node.id+"' class='button button-border' onclick=\"javascript:submit('"+node.id+"')\" ";
+			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
 		} else {
 			if (submitted=='Y') {
 				if (USER.admin) {
-					html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:reset('"+node.id+"')\" ";
-					html += " ><div class='button'>"+karutaStr[languages[langcode]]['button-unsubmit']+"</div></button>";
+					html += "<span id='submit-"+node.id+"' class='button button-border' onclick=\"javascript:reset('"+node.id+"')\" ";
+					html += " >"+karutaStr[languages[langcode]]['button-unsubmit']+"</span>";
 				}
 				html += "<div class='btn btn-xs disabled alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+"</div>";
 			} 
