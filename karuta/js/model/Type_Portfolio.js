@@ -984,7 +984,7 @@ UIFactory["Portfolio"].callRename = function(portfolioid,langcode)
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	var self = portfolios_byid[portfolioid];
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['addshare']);
+	$("#edit-window-title").html(karutaStr[LANG]['rename']);
 	var div = $("<div></div>");
 	var htmlFormObj = $("<form class='form-horizontal'></form>");
 	$(div).append($(htmlFormObj));
