@@ -203,6 +203,7 @@ karutaStr['fr']['rename']="Renommer";
 karutaStr['fr']['create_batch']="Créer un modèle batch";
 karutaStr['fr']['create_report']="Créer un modèle de rapport";
 karutaStr['fr']['create_tree']="Créer un arbre vide";
+karutaStr['fr']['create_project']="Créer un projet";
 
 //=========================================
 //========== USERS ========================

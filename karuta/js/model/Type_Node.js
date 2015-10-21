@@ -363,12 +363,12 @@ UIFactory["Node"].duplicate = function(uuid)
 {
 	var destid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
 	$("#wait-window").modal('show');
-	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcuuid="+uuid;
+	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?uuid="+uuid;  // instance by default
 	if (USER.admin || g_userrole=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
-			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcuuid="+uuid;
+			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?uuid="+uuid;
 	}
 	$.ajax({
 		type : "POST",
@@ -376,12 +376,12 @@ UIFactory["Node"].duplicate = function(uuid)
 		url : urlS,
 		data : "",
 		success : function(data) {
-			if (callback!=null)
-				if (databack)
-					callback(data,param2,param3,param4,param5,param6,param7,param8);
-				else
-					callback(param2,param3,param4,param5,param6,param7,param8);
 			$("#wait-window").modal('hide');			
+			UIFactory.Node.reloadUnit();
+		},
+		error : function(jqxhr,textStatus) {
+			$("#wait-window").modal('hide');			
+			alert("Error in Node.duplicate "+textStatus+" : "+jqxhr.responseText);
 		}
 	});
 };
@@ -746,8 +746,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					html += "<div class='row'><div id='metainfo_"+uuid+"' class='col-md-offset-1 col-md-10 metainfo'></div><!-- metainfo --></div>";
 				}
 			}
+			//============================== NODE ===================================
 			else { // other than asmContext
-				//============================== NODE ===================================
 				if (nodetype=='asmUnitStructure')
 					depth=100;	
 				style = "";
@@ -1998,8 +1998,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 				var param2 = "'"+portfolioid+"'";
 				var param3 = null;
 				var param4 = null;
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','asmStructure','asmStructure',databack,callback,param2,param3,param4);
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','asmUnit','asmUnit',databack,callback,param2,param3,param4);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmStructure','asmStructure',databack,callback,param2,param3,param4);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnit','asmUnit',databack,callback,param2,param3,param4);
 			}
 			var databack = false;
 			var callback = "UIFactory['Node'].reloadUnit";
@@ -2009,32 +2009,32 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			var freenodevalue = ($(node.metadatawad).attr('freenode')==undefined)?'':$(node.metadatawad).attr('freenode');
 			var contentfreenodevalue = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
 			var freenode = ((freenodevalue=='Y')?true:false) || ((contentfreenodevalue=='Y')?true:false);
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','asmUnitStructure','asmUnitStructure',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnitStructure','asmUnitStructure',databack,callback,param2,param3,param4,freenode);
 			html += "<hr>";
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','TextField','TextField',databack,callback,param2,param3,param4,freenode);
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Field','Field',databack,callback,param2,param3,param4,freenode);
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Document','Document',databack,callback,param2,param3,param4,freenode);
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','URL','URL',databack,callback,param2,param3,param4,freenode);
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Calendar','Calendar',databack,callback,param2,param3,param4,freenode);
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Image','Image',databack,callback,param2,param3,param4,freenode);
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Video','Video',databack,callback,param2,param3,param4,freenode);
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Audio','Audio',databack,callback,param2,param3,param4,freenode);
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Oembed','Oembed',databack,callback,param2,param3,param4,freenode);
-			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Color','Color',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','TextField','TextField',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Field','Field',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Document','Document',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','URL','URL',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Calendar','Calendar',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Image','Image',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Video','Video',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Audio','Audio',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Oembed','Oembed',databack,callback,param2,param3,param4,freenode);
+			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Color','Color',databack,callback,param2,param3,param4,freenode);
 			if (!freenode) {
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','URL2Unit','URL2Unit',databack,callback,param2,param3,param4,freenode);
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Comments','Comments',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','URL2Unit','URL2Unit',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Comments','Comments',databack,callback,param2,param3,param4,freenode);
 				html += "<hr>";
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','bubble_level1','Bubble Map',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','bubble_level1','Bubble Map',databack,callback,param2,param3,param4,freenode);
 				html += "<hr>";
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Item','Item',databack,callback,param2,param3,param4,freenode);
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Get_Resource','Get_Resource',databack,callback,param2,param3,param4,freenode);
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Get_Get_Resource','Get_Get_Resource',databack,callback,param2,param3,param4,freenode);
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Get_Double_Resource','Get_Double_Resource',databack,callback,param2,param3,param4,freenode);
-				html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Proxy','Proxy',databack,callback,param2,param3,param4,freenode);
-	//			html += UIFactory["Node"].getItemMenu(node.id,'_karuta_resources_','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Item','Item',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Resource','Get_Resource',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Get_Resource','Get_Get_Resource',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Double_Resource','Get_Double_Resource',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4,freenode);
+	//			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4,freenode);
 			}
 			html += "</ul>"; // class='dropdown-menu'
 			html += "</span><!-- class='dropdown -->";

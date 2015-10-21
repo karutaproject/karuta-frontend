@@ -143,7 +143,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param3 = "'"+this.id+"'";
 			var param4 = "null";
 			var level_plus = this.level+1;
-			var js1 = "importBranch('"+this.id+"','_karuta_resources_','bubble_level"+level_plus+"',"+databack+","+callback+","+param2+","+param3+","+param4+")";
+			var js1 = "importBranch('"+this.id+"','karuta.karuta-resources','bubble_level"+level_plus+"',"+databack+","+callback+","+param2+","+param3+","+param4+")";
 			html = "<button class='btn btn-xs' onclick=\""+js1+";\">"+karutaStr[LANG]['bubble-add-bubble']+"'"+UICom.structure["ui"][this.id].getLabel('none')+"'</button>";
 
 			var children = $("asmUnitStructure:has(metadata[semantictag*='bubble_level"+level_plus+"'])",this.node);
@@ -170,7 +170,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param2 = "'"+destid+"'";
 			var param3 = "'"+this.id+"'";
 			var param4 = "null";
-			var js1 = "importBranch('"+this.id+"','_karuta_resources_','level"+this.level+"_url',"+databack+","+callback+","+param2+","+param3+","+param4+")";
+			var js1 = "importBranch('"+this.id+"','karuta.karuta-resources','level"+this.level+"_url',"+databack+","+callback+","+param2+","+param3+","+param4+")";
 			html = "<button class='editbutton btn btn-xs' onclick=\""+js1+";\">"+karutaStr[LANG]['bubble-add-link']+"</button>";
 			html += "<h4>"+karutaStr[LANG]['bubble-links']+"</h4>";
 

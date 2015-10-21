@@ -102,11 +102,13 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 		langcode = LANGCODE;
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
 	if (queryattr_value!=undefined && queryattr_value!='') {
-		var p1 = queryattr_value.indexOf('.');
-		var p2 = queryattr_value.indexOf('.',p1+1);
-		var code = queryattr_value.substring(0,p1);
-		var semtag = queryattr_value.substring(p1+1,p2);
-		var srce = queryattr_value.substring(p2+1);
+		//------------
+		var srce_indx = queryattr_value.lastIndexOf('.');
+		var srce = queryattr_value.substring(srce_indx+1);
+		var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');
+		var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
+		var code = queryattr_value.substring(0,semtag_indx);
+		//------------
 		var self = this;
 		if (code!='all') {
 			if (code=='self')
@@ -121,6 +123,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 			});
 		} else {  // code==all
 			// retrieve active portfolios
+			$("#wait-window").modal('show');
 			$.ajaxSetup({async: false});
 			$.ajax({
 				type : "GET",
@@ -146,9 +149,10 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 								if (nodes.length>0 && display) {									
 									var html = "";
 									html += "<div class='portfolio-proxy' style='margin-top:20px'>"+label+"</div>";
-									html += "<div id='"+code+"'></div>";
+									var placeid = code.replace(/\./g, '_'); 
+									html += "<div id='"+placeid+"'></div>";
 									$("#"+destid).append($(html));
-									UIFactory["Proxy"].parse(code,type,langcode,data,self,label,srce);
+									UIFactory["Proxy"].parse(placeid,type,langcode,data,self,label,srce);
 								}
 							}
 						});
@@ -156,9 +160,11 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 				},
 				error : function(jqxhr,textStatus) {
 					alert("Server Error UIFactory.Proxy.prototype.displayEditor: "+textStatus);
+					$("#wait-window").modal('hide');
 				}
 			});
 			$.ajaxSetup({async: true});
+			$("#wait-window").modal('hide');
 		}
 	}
 };

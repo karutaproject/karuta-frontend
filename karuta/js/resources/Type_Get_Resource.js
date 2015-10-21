@@ -158,13 +158,15 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		type = $("metadata-wad",this.node).attr('seltype');
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
 	if (queryattr_value!=undefined && queryattr_value!='') {
-		var p1 = queryattr_value.indexOf('.');
-		var p2 = queryattr_value.indexOf('.',p1+1);
-		var code = queryattr_value.substring(0,p1);
+		//------------
+		var srce_indx = queryattr_value.lastIndexOf('.');
+		var srce = queryattr_value.substring(srce_indx+1);
+		var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');
+		var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
+		var code = queryattr_value.substring(0,semtag_indx);
+		//------------
 		if (code=='self')
 			code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-		var semtag = queryattr_value.substring(p1+1,p2);
-		var srce = queryattr_value.substring(p2+1);
 		var self = this;
 		if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 			UIFactory["Get_Resource"].parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce);

@@ -124,23 +124,26 @@ UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,
 		type = $("metadata-wad",this.node).attr('seltype');
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
 	if (queryattr_value!=undefined && queryattr_value!='') {
-		var p1 = queryattr_value.indexOf('.');
-		var p2 = queryattr_value.indexOf('.',p1+1);
-		var p3 = queryattr_value.indexOf(';');
-		var p4 = queryattr_value.indexOf('.',p3);
-		var p5 = queryattr_value.indexOf('.',p4+1);
 		//------------------
-		var code1 = queryattr_value.substring(0,p1);
+		var separator_indx = queryattr_value.indexOf(';');
+		var part1 = queryattr_value.substring(0,separator_indx);
+		var part2 = queryattr_value.substring(separator_indx+1);
+		//------------------
+		var srce1_indx = part1.lastIndexOf('.');
+		var srce1 = part1.substring(srce1_indx+1);
+		var semtag1_indx = part1.substring(0,srce1_indx).lastIndexOf('.');
+		var semtag1 = part1.substring(semtag1_indx+1,srce1_indx);
+		var code1 = part1.substring(0,semtag1_indx);
 		if (code1=='self')
 			code1 = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();		
-		var semtag1 = queryattr_value.substring(p1+1,p2);
-		var srce1 = queryattr_value.substring(p2+1,p3);
 		//------------------
-		var code2 = queryattr_value.substring(p3+1,p4);
+		var srce2_indx = part2.lastIndexOf('.');
+		var srce2 = part2.substring(srce2_indx+2);
+		var semtag2_indx = part2.substring(0,srce2_indx).lastIndexOf('.');
+		var semtag2 = part2.substring(semtag2_indx+2,srce2_indx);
+		var code2 = part2.substring(0,semtag2_indx);
 		if (code2=='self')
 			code2 = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();		
-		var semtag2 = queryattr_value.substring(p4+1,p5);
-		var srce2 = queryattr_value.substring(p5+1);
 		//------------------
 		var self = this;
 		$.ajax({
@@ -158,6 +161,7 @@ UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,
 				});
 			}
 		});
+		//------------------
 	}
 };
 

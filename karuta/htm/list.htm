@@ -157,6 +157,7 @@
 						html += "<div class='dropdown dropdown-button'>";
 						html += "<span id='list-menu' class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span class='glyphicon glyphicon-menu-hamburger'></span>&nbsp;Menu</span>";
 						html += "<ul class='dropdown-menu' role='menu' aria-labelledby='list-menu'>";
+						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createProject()\" href='#'>"+karutaStr[LANG]['create_project']+"</a></li>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].create()\" href='#'>"+karutaStr[LANG]['create_tree']+"</a></li>";
 						html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createPortfolio()\" href='#'>"+karutaStr[LANG]['create_portfolio']+"</a></li>";
 						html += "<hr>";
@@ -193,7 +194,6 @@
 								var destid = $("div[id='portfolios']");
 								UIFactory["Portfolio"].parse(data);
 								UIFactory["Portfolio"].displayAll('portfolios','list');
-								$('[data-toggle=tooltip]').tooltip();
 							},
 							error : function(jqxhr,textStatus) {
 								alert("Server Error GET active: "+textStatus);
@@ -225,7 +225,6 @@
 				$.ajaxSetup({async: true});
 				var navbar_html = getNavBar('list',null);
 				$("#navigation_bar").html(navbar_html);
-				$('[data-toggle="tooltip"]').tooltip(); 
 			});
 		</script>
 	</body>

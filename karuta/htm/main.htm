@@ -119,8 +119,8 @@
 			userrole = role;
 			if (userrole=='undefined')
 				userrole = "";
+			//=====================================================
 			$(window).load(function() {
-				//---------------------------
 				$("#wait-window").modal('show');
 				$("#wait-spin").spin();
 				changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
@@ -288,8 +288,6 @@
 									loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));$("#portfolio-navbar").append(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit));});
 								if (g_display_type=="model")
 									loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);});
-								
-
 								if (g_display_type=="header")
 									$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));
 								//---------------------------
@@ -320,6 +318,7 @@
 					}
 				});
 			});
+			//=====================================================
 			$(document).click(function(e) {
 			    if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {
 			        $('.popover').hide();

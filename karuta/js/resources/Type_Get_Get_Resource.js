@@ -172,37 +172,32 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		try {
-			var portfoliocode = queryattr_value.substring(0,queryattr_value.indexOf('.'));
+			//------------------------------
+			var srce_indx = queryattr_value.lastIndexOf('.');
+			var srce = queryattr_value.substring(srce_indx+1);
+			var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');
+			var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
+			var semtag_parent_indx = queryattr_value.substring(0,semtag_indx).lastIndexOf('.');
+			var semtag_parent = queryattr_value.substring(semtag_parent_indx+1,semtag_indx);
+			var portfoliocode_end_indx = queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent');
+			var portfoliocode = queryattr_value.substring(0,portfoliocode_end_indx);
 			if (portfoliocode=='self')
 				portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-			var query = queryattr_value.substring(queryattr_value.indexOf('.')+1);
+			var query = queryattr_value.substring(portfoliocode_end_indx,semtag_parent_indx);
 			var parent = null;
 			var ref = null;
-			// ------- Test si query commence par sibling.
-			if (query.indexOf('sibling.')>-1) {
-				ref = query.substring(8);
+			// ------- search for parent ----
+			if (query.indexOf('sibling')>-1) {
 				parent = $(this.node).parent();
 			}
-			// ------- Test si query commence par parent.
-			if (query.indexOf('parent.parent.parent.')>-1) {
-				ref = query.substring(21);
+			if (query.indexOf('parent.parent.parent')>-1) {
 				parent = $(this.node).parent().parent().parent().parent();
-			} else	if (query.indexOf('parent.parent.')>-1) {
-				ref = query.substring(14);
+			} else	if (query.indexOf('parent.parent')>-1) {
 				parent = $(this.node).parent().parent().parent();
-			} else if (query.indexOf('parent.')>-1) {
-				ref = query.substring(7);
+			} else if (query.indexOf('parent')>-1) {
 				parent = $(this.node).parent().parent();
 			}
-			if (query.indexOf('#')==0)
-				ref = query.substring(1);
-			
-		//	alert('parentid'+$(parent).attr("id"));
-			var p1 = ref.indexOf('.');
-			var p2 = ref.indexOf('.',p1+1);
-			var semtag_parent = ref.substring(0,p1);
-			var semtag = ref.substring(p1+1,p2);
-			var srce = ref.substring(p2+1);
+//			alert('query'+query+'--parentid'+$(parent).attr("id"));
 			var code_parent = "";
 			if (query.indexOf('#')==0)
 				code_parent = semtag_parent;
@@ -213,7 +208,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				code_parent = decrypt(code_parent.substring(3),g_rc4key);
 			//----------------------
 			var portfoliocode_parent = $("portfoliocode",$("asmContext:has(metadata[semantictag='"+semtag_parent+"'])",parent)).text();
-	//		alert('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
+//			alert('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 			var url ="";
 			if (portfoliocode=='?'){
 				$(this.portfoliocode_node).text(code_parent);

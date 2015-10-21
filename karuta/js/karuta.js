@@ -431,12 +431,13 @@ function displayPage(uuid,depth,type,langcode,edit) {
 	if (name=='asmRoot' || name=='asmStructure')
 		depth = 1;
 	if (UICom.structure['tree'][uuid]!=null) {
-		if (type=='standard')
+		if (type=='standard') {
 			$("#welcome-edit").html("");
 			if (UICom.structure["ui"][uuid].semantictag=='welcome-unit' && !g_welcome_edit)
 				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 			else
 				UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 		if (type=='model')
