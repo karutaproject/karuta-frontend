@@ -258,6 +258,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	$("#main-container").html("");
 	if (type==null || type==undefined)
 		type = 'standard';
+	//----------------------------------
 	if (type=='standard'){
 		html += "<div id='navigation_bar'></div>";
 		html += "<div id='main-container' class='container "+portfolios_byid[portfolioid].code_node.text()+"'>";
@@ -270,6 +271,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#"+destid).append($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
+	//----------------------------------
 	if (type=='model'){
 		html += "<div id='navigation_bar'></div>";
 		html += "<div id='main-container' class='container'>";
@@ -279,6 +281,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
 	}
+	//----------------------------------
 	if (type=='translate'){
 		html += "	<div class='row'>";
 		html += "		<div class='col-md-3' id='sidebar'></div>";
@@ -287,6 +290,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#"+destid).append($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
+	//----------------------------------
 	if (type=='header'){
 		if ($("*:has(metadata[semantictag=header])",UICom.root.node).length==0)
 			alert("Error: header semantic tag is missing");
@@ -306,6 +310,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		UIFactory["Portfolio"].displayNodes('header',UICom.root.node,'header',LANGCODE,edit);
 		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,edit,UICom.root.node);
 	}
+	//----------------------------------
 	$('a[data-toggle=tooltip]').tooltip({html:true});
 };
 

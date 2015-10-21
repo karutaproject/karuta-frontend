@@ -121,9 +121,10 @@
 			if (userrole=='undefined')
 				userrole = "";
 			$(window).load(function() {
-				//---------------------------
+				//=====================================================
 				$("#wait-window").modal('show');
 				$("#wait-spin").spin();
+				//------------------
 				$.ajaxSetup({async: false});
 				$.ajax({
 					type : "GET",
@@ -177,7 +178,6 @@
 									UIFactory["Portfolio"].displayPortfolio('main-body','standard',LANGCODE,g_edit);
 								if (g_display_type=="model")
 									UIFactory["Portfolio"].displayPortfolio('main-body','model',LANGCODE,g_edit);
-								$('a[data-toggle=tooltip]').tooltip({html:true});
 								// --------------------------
 								$.ajax({
 									type : "GET",
@@ -196,14 +196,11 @@
 									loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));});
 								if (g_display_type=="model")
 									loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);});
-								
-
 								if (g_display_type=="header")
 									$("#navigation_bar").html(getNavBar('main',portfolioid,g_edit));
 								//---------------------------
 								if (g_encrypted)
 									loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});
-									
 								//---------------------------
 								$("#wait-window").modal('hide');
 								$("#sidebar_"+UICom.rootid).click();
@@ -217,12 +214,14 @@
 						window.location="login.htm?lang="+LANG;
 					}
 				});
+				//=====================================================
 			});
 			$(document).click(function(e) {
 			    if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {
 			        $('.popover').hide();
 			    }
 			});
+			$('a[data-toggle=tooltip]').tooltip({html:true});
 			$(".free-toolbar").css('visibility')=='hidden';
 
 		</script>

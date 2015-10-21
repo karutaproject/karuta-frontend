@@ -360,12 +360,12 @@ UIFactory["Node"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Node"].duplicate = function(uuid,callback)
+UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,param4,param5,param6,param7,param8)
 //==================================
 {
 	var destid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
 	$("#wait-window").modal('show');
-	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?uuid="+uuid;
+	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?uuid="+uuid;  // instance by default
 	if (USER.admin || g_userrole=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
@@ -378,12 +378,12 @@ UIFactory["Node"].duplicate = function(uuid,callback)
 		url : urlS,
 		data : "",
 		success : function(data) {
-			if (callback!=null)
-				if (databack)
-					callback(data,param2,param3,param4,param5,param6,param7,param8);
-				else
-					callback(param2,param3,param4,param5,param6,param7,param8);
 			$("#wait-window").modal('hide');			
+			UIFactory.Node.reloadUnit();
+		},
+		error : function(jqxhr,textStatus) {
+			$("#wait-window").modal('hide');			
+			alert("Error in Node.duplicate "+textStatus+" : "+jqxhr.responseText);
 		}
 	});
 };
@@ -463,7 +463,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 //	var proxy_target = false;
 
 	var node = UICom.structure["ui"][uuid];
-	// ---- store info to redisplay after change ---
+	// ---- we store info to redisplay after change ---
 	node.display_node[dest] = {"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":"standard"};
 	//----------------------------------------------
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
@@ -510,7 +510,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += " style='"+style+"' ";
 			//----------------------------------
 			html += ">";
-			//------------------ ASMCONTEXT ----------
+			//===================================== ASMCONTEXT ==================================
 			if (name == "asmContext"){
 				html += "<div class='row'>";
 				//-------------- node -----------------------------
@@ -590,8 +590,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += "</div><!-- outer row -->";
 				//--------------------------------------------------
 			}
-			else { // other than asmContext
-				//-------------------- NODE --------
+			//============================== NODE other than asmContext ==============================
+			else {
 				if (name=='asmUnitStructure')
 					depth=100;	
 				style = "";
@@ -653,8 +653,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					}
 					if (!gotView)
 						html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
-				}				
-				//==============================================================================================
+				}			
 				//-------------- context -------------------------
 				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
 				//-------------- metainfo -------------------------
@@ -687,6 +686,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					html += "</div>";
 				}
 			}
+			//==============================================================================================
 			html += "</div><!-- name -->";
 			//------------------------------------------
 			if ( $("#standard_"+uuid).length>0 )
@@ -1806,7 +1806,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		}
 		//------------- duplicate node buttons ---------------
 		if ( duplicateroles!='none' && duplicateroles!='' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" href='#'><span class='glyphicon glyphicon-duplicate'></span></button>";
+			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-duplicate'></span></button>";
 		}
 	}
 	//------------- node menus button ---------------
