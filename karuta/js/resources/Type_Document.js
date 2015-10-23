@@ -40,12 +40,6 @@ UIFactory["Document"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Document';
-//	this.fileid_node = $("fileid",$("asmResource[xsi_type='Document']",node));
-/*	if (this.fileid_node.length==0) {	//old version
-		var fileid = createXmlElement("fileid");
-		$("asmResource[xsi_type='Document']",node)[0].appendChild(fileid);
-		this.fileid_node = $("fileid",$("asmResource[xsi_type='Image']",node));
-	}*/
 	this.filename_node = [];
 	this.type_node = [];
 	this.size_node = [];
@@ -243,13 +237,19 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode)
 	$("#"+destid).append($(html));
 	$("#fileupload_"+this.id+langcode).fileupload({
 		dataType: 'json',
-		progressall: function (e, data) {
+		add: function (e, data) {
+			$("#wait-window").modal('show');
+	        data.submit();
+	    },
+	    progressall: function (e, data) {
+			$("#wait-window").modal('show');
 			$("#progress_"+this.id+langcode).css('border','1px solid lightgrey');
 			$("#divfileupload_"+this.id+langcode).html("<img src='../../karuta/img/ajax-loader.gif'>");
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+langcode+' .bar').css('width',progress + '%');
 		},
 		done: function (e, data) {
+			$("#wait-window").modal('hide');
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
 			UIFactory["Document"].update(data.result,uuid,langcode);
 			$("#divfileupload_"+this.id+"_"+langcode).html("Loaded");

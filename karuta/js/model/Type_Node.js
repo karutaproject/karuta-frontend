@@ -300,7 +300,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	if (editboxtitle!=undefined && editboxtitle!="")
 		title = editboxtitle;
 	$("#edit-window-title").html(title);
-	//------------- write resource type on the upper right corner ----------------
+	//------------- write resource type in the upper right corner ----------------
 	if (g_userrole=='designer' || USER.admin){
 		if (this.asmtype=='asmContext')
 			$("#edit-window-type").html(this.resource.type);
@@ -404,7 +404,6 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	/// Traverse tree
 	if (type=='standard') {
 		for( var i=0;i<root.children.length;i++ )
 		{
@@ -594,9 +593,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	var menu = true;
 	//---------------------------------------
 	var data = root.node;
-	var nodetype = $(data).prop("nodeName");
+	var nodetype = $(data).prop("nodeName"); // name of the xml tag
 	var uuid = $(data).attr("id");
-
 	var node = UICom.structure["ui"][uuid];
 	// ---- store info to redisplay after change ---
 	node.display_node[dest] = {"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":"standard"};
@@ -672,7 +670,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				if (edit && inline && writenode && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL'){
 					//------ edit inline ----------------
-					style = "style='";
+					style = UIFactory["Node"].getContentStyle(nodeid);
+/*					style = "style='";
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
@@ -680,7 +679,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',true);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
-					style +="'";
+					style +="'";*/
 					html += "<td  width='80%' class='resource";
 					html += "' ";
 					html += style;
@@ -702,11 +701,12 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						$("#edit-window-body-node").html($(html));
 					}
 					html += "</div><!-- inside-full-height -->";
-					html += "</div><!-- col-md-6 resource -->";
+					html += "</td>";
 				} else {
 					//--------- display ------------
 					if (g_display_type=='standard') {
-						style = "style='";
+						style = UIFactory["Node"].getContentStyle(nodeid);
+/*						style = "style='";
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
@@ -714,7 +714,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',true);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
-						style +="'";
+						style +="'";*/
 						html += "<td  width='80%' class='resource";
 						html += "' ";
 						html += style;
@@ -727,7 +727,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					if (node.resource.type!='Dashboard' || g_userrole=='designer')
 						html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 					html += "</div><!-- inside-full-height -->";
-					html += "</td><!-- col-md-6 resource -->";
+					html += "</td>";
 				}
 				//-------------- context -------------------------
 //				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
@@ -735,9 +735,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//-------------- buttons --------------------------
 				html += "<td id='buttons-"+uuid+"' class='buttons same-height'>";
 				html += "<div class='inside-full-height'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
-				html += "</td><!-- col-md-2  -->";
+				html += "</td>";
 				//--------------------------------------------------
-				html += "</tr></table><!-- inner row -->";
+				html += "</tr></table>";
 				html += "</div><!-- col-md-8  -->";
 				html += "<div class='col-md-1'>&nbsp;</div><!-- col-md-1  -->";
 				html += "</div><!-- inner row -->";

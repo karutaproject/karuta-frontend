@@ -323,7 +323,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	//---------------------------------------
 	if (type=='model'){
 		html += "<div id='navigation_bar'></div>";
-		html += "<div id='main-container' class='container'>";
+		html += "<div id='main-container' class='container-fluid'>";
 		html += "	<div id='contenu'>";
 		html += "	</div>";
 		html += "</div>";
@@ -749,6 +749,9 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 		success : function(data) {
 			var portfolio = $("portfolio", data);
 			result = $(portfolio).attr('id');
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error in getid_bycode : "+jqxhr.responseText);
 		}
 	});
 	$.ajaxSetup({async: true});
@@ -774,6 +777,9 @@ UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode,callb
 				uuid = data;
 				if (callback!=null)
 					callback(data);
+			},
+			error : function(jqxhr,textStatus) {
+				alert("Error in instantiate_bycode : "+jqxhr.responseText);
 			}
 	});
 	$.ajaxSetup({async: true});
@@ -798,6 +804,9 @@ UIFactory["Portfolio"].instantiate = function(templateid,targetcode,reload)
 				$("#wait-window").hide();
 				if (reload!=null && reload)
 					window.location.reload();
+			},
+			error : function(jqxhr,textStatus) {
+				alert("Error in instantiate : "+jqxhr.responseText);
 			}
 	});
 	$.ajaxSetup({async: true});
@@ -843,8 +852,8 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 //								if (reload!=null && reload)
 //									window.location.reload();
 							},
-							error : function(data) {
-								$("#log").append("<br>- ERROR in  rename tree - code:"+code);
+							error : function(jqxhr,textStatus) {
+								alert("Error in instentiate_rename : "+jqxhr.responseText);
 							}
 						});
 					}
@@ -873,6 +882,9 @@ UIFactory["Portfolio"].copy_bycode = function(sourcecode,targetcode,reload)
 				uuid = data;
 				if (reload!=null && reload)
 					window.location.reload();
+			},
+			error : function(jqxhr,textStatus) {
+				alert("Error in copy_bycode : "+jqxhr.responseText);
 			}
 	});
 	$.ajaxSetup({async: true});
@@ -897,6 +909,9 @@ UIFactory["Portfolio"].copy = function(templateid,targetcode,reload)
 				$("#wait-window").hide();
 				if (reload!=null && reload)
 					window.location.reload();
+			},
+			error : function(jqxhr,textStatus) {
+				alert("Error in copy : "+jqxhr.responseText);
 			}
 	});
 	$.ajaxSetup({async: true});
@@ -1003,9 +1018,10 @@ UIFactory["Portfolio"].remove = function(portfolioid)
 			}
 			UIFactory["Portfolio"].displayAll('portfolios','list');
 			UIFactory["Portfolio"].displayBin('bin','bin');
-//			$("#table_portfolio").tablesorter( {sortList: [[1,0], [2,0],[3,1]],headers : {0:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
-//			$("#table_bin").tablesorter( {sortList: [[1,0], [2,0]],headers : {0:{sorter:false},3:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
 			$('[data-toggle=tooltip]').tooltip();
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error in remove : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1024,6 +1040,9 @@ UIFactory["Portfolio"].restore = function(portfolioid)
 		success : function(data) {
 			$("#wait-window").hide();
 			window.location.reload();
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error in restore : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1051,6 +1070,9 @@ UIFactory["Portfolio"].del = function(portfolioid)
 //				$("#table_bin").tablesorter( {sortList: [[1,0], [2,0]],headers : {0:{sorter:false},3:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
 				$('[data-toggle=tooltip]').tooltip();
 			}
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error in del : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1077,25 +1099,19 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
 	var html ="";
-//	html += "			<ul class='nav'>";
-//	html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
-//	html += "					<ul class='dropdown-menu'>";
-	html += "						<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+bckname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
+	html += "<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+bckname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
 	if (USER.admin || portfolios_byid[portfolioid].owner=='Y') {
-		html += "						<li><a onclick=\"javascript:UIFactory['Portfolio'].callShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['addshare']+"</a></li>";
-		html += "						<li><a onclick=\"javascript:UIFactory['Portfolio'].callUnShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['unshare']+"</a></li>";
+		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['addshare']+"</a></li>";
+		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callUnShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['unshare']+"</a></li>";
 	}
-	html += "						<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a></li>";
+	html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a></li>";
 	if (USER.admin || g_userrole=='designer') {
-		html += "						<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a></li>";
-		html += "						<li><a href='#' onclick=\"$('.metainfo').css('visibility','hidden');g_visible='hidden'\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
-		html += "						<li><a href='#' onclick=\"$('.metainfo').css('visibility','visible');g_visible='visible'\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
+		html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a></li>";
+		html += "<li><a href='#' onclick=\"$('.metainfo').css('visibility','hidden');g_visible='hidden'\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
+		html += "<li><a href='#' onclick=\"$('.metainfo').css('visibility','visible');g_visible='visible'\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
 		if(languages.length>1)
-			html += "					<li><a href='#' onclick=\"UIFactory.Portfolio.displayPortfolio('main-container','translate')\">"+karutaStr[LANG]['translate']+"</a></li>";
+			html += "<li><a href='#' onclick=\"UIFactory.Portfolio.displayPortfolio('main-container','translate')\">"+karutaStr[LANG]['translate']+"</a></li>";
 	}
-//	html += "					</ul>";
-//	html += "				</li>";
-//	html += "			</ul>";
 	return html;
 };
 
@@ -1175,6 +1191,7 @@ UIFactory["Portfolio"].rename = function(itself,langcode)
 	var callback = function () {$("#portfolios_"+itself.id).html($(itself.getPortfolioView('portfolios_'+itself.id,'list')));};
 	UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
 };
+
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
 //-------------------------- SHARING - UNSHARING -----------------------------------
@@ -1235,6 +1252,9 @@ UIFactory["Portfolio"].callShare = function(portfolioid)
 				}
 			});
 			//--------------------------
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error in callShare 1 : "+jqxhr.responseText);
 		}
 	});
 	//------------------------------------
@@ -1246,6 +1266,9 @@ UIFactory["Portfolio"].callShare = function(portfolioid)
 			UIFactory["Portfolio"].displaySharingRoleEditor('sharing_roles',portfolioid,data);
 			$("#sharing").show();
 			$("#sharing_designer").show();
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error in callShare 2 : "+jqxhr.responseText);
 		}
 	});
 
@@ -1344,6 +1367,9 @@ UIFactory["Portfolio"].share = function(portfolioid)
 						url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 						success : function(data) {
 							UIFactory["Portfolio"].displayShared('shared',data);
+						},
+						error : function(jqxhr,textStatus) {
+							alert("Error in share : "+jqxhr.responseText);
 						}
 					});
 					//--------------------------
@@ -1386,6 +1412,9 @@ UIFactory["Portfolio"].shareUser = function(portfolioid,userid,role)
 			} else
 				alert("Error in shareUser");
 			//-----------------------------
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error in shareUser : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1422,6 +1451,9 @@ UIFactory["Portfolio"].unshareUser = function(portfolioid,userid,role)
 			} else
 				alert("Error in shareUser");
 			//-----------------------------
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error in unshareUser : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1451,6 +1483,9 @@ UIFactory["Portfolio"].callUnShare = function(portfolioid)
 			url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 			success : function(data) {
 				UIFactory["Portfolio"].displayUnSharing('shared',data);
+			},
+			error : function(jqxhr,textStatus) {
+				alert("Error in callUnshare 1 : "+jqxhr.responseText);
 			}
 		});
 		//--------------------------		
@@ -1471,6 +1506,9 @@ UIFactory["Portfolio"].callUnShare = function(portfolioid)
 					}
 				});				//--------------------------		
 				//--------------------------
+			},
+			error : function(jqxhr,textStatus) {
+				alert("Error in callunsShare 2 : "+jqxhr.responseText);
 			}
 		});
 	}
@@ -1534,6 +1572,9 @@ UIFactory["Portfolio"].unshare = function(portfolioid)
 					}
 				});
 				//--------------------------
+			},
+			error : function(jqxhr,textStatus) {
+				alert("Error in unshare : "+jqxhr.responseText);
 			}
 		});
 	}
