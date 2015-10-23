@@ -378,8 +378,47 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 		url : urlS,
 		data : "",
 		success : function(data) {
-			$("#wait-window").modal('hide');			
-			UIFactory.Node.reloadUnit();
+			uuid = data;
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/nodes/node/"+uuid,
+				success : function(data) {
+					//------------------------------
+					var code = $($("code",data)[0]).text();
+					var label = [];
+					for (var i=0; i<languages.length;i++){
+						label[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",data)[0]).text();
+						var lastspace_indx = label[i].lastIndexOf(' ');
+						var nb = label[i].substring(lastspace_indx);
+						if ($.isNumeric(nb)) {
+							nb++;
+							label[i] = label[i].substring(0,lastspace_indx)+' '+nb;
+						}
+					}
+					var xml = "<asmResource xsi_type='nodeRes'>";
+					xml += "<code>"+code+"</code>";
+					for (var i=0; i<languages.length;i++)
+						xml += "<label lang='"+languages[i]+"'>"+label[i]+"</label>";
+					xml += "</asmResource>";
+					$.ajax({
+						async:false,
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						url : "../../../"+serverBCK+"/nodes/node/" + uuid + "/noderesource",
+						success : function(data) {
+							$("#wait-window").modal('hide');			
+							UIFactory.Node.reloadUnit();
+						},
+						error : function(jqxhr,textStatus) {
+							alert("Error in duplicate rename : "+jqxhr.responseText);
+						}
+					});
+				}
+			});
 		},
 		error : function(jqxhr,textStatus) {
 			$("#wait-window").modal('hide');			
