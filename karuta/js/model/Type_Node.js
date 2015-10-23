@@ -468,7 +468,6 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	//----------------------------------------------
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
-	var collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
@@ -697,7 +696,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//------------------------------------------
 			//--------------------collapsed------------------------------------------
 			if (collapsible=='Y') {
-				if (collapsed=='Y') {
+				var collapsed = Cookies.get('karuta-'+uuid);
+				if (collapsed!=null && collapsed=='Y') {
 					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-right");
 					$("#content-"+uuid).hide();
 				}
