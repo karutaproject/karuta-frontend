@@ -18,10 +18,11 @@ var xmlDoc = null;
 var userid = null; // current user
 var aggregates = {};
 
-Selector = function(jquery,type)
+Selector = function(jquery,type,filter)
 {
 	this.jquery = jquery;
 	this.type = type;
+	this.filter = filter;
 };
 
 //==================================
@@ -32,12 +33,15 @@ function getSelector(select,test)
 		if (selects[0]=="")
 			selects[0] = "*";
 		var jquery = selects[0];
-		if (selects[1]!="")
+		var filter = "";
+		if (selects[1]!="") {
 			jquery +=":has(metadata[semantictag='"+selects[1]+"'])";
+			filter = function(){return $(this).children("metadata[semantictag='"+selects[1]+"']").length>0};
+		}
 		if (test!=null && test!='')
 			jquery +=":has("+test+")";
 		var type = selects[2];
-		var selector = new Selector(jquery,type);
+		var selector = new Selector(jquery,type,filter);
 		return selector;
 }
 
@@ -125,7 +129,7 @@ function processNode(no,xmlDoc,destid,data,line)
 	var test = $(xmlDoc).attr("test");
 	if (select!=undefined) {
 		var selector = getSelector(select,test);
-		var nodes = $(selector.jquery,data);
+		var nodes = $(selector.jquery,data).filter(selector.filter);
 		for (var i=0; i<nodes.length;i++){
 			//---------------------------
 			var ref_init = $(xmlDoc).attr("ref-init");
