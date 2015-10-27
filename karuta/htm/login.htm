@@ -72,7 +72,10 @@
 				url : "../../../"+serverBCK+"/credential/login",
 				data: data,
 				success : function(data) {
-					window.location="list.htm?lang="+LANG;
+					if (elgg_installed!=undefined && elgg_installed)
+						loginElgg(username,password,function (token){window.location="list.htm?lang="+LANG;});
+					else
+						window.location="list.htm?lang="+LANG;
 				},
 				error : function(jqxhr,textStatus) {
 					alert("Identification : "+jqxhr.responseText);

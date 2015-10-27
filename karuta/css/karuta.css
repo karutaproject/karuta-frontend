@@ -281,6 +281,7 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 }
 
 #welcome-image {
+	background: url("../../karuta/img/list-image.jpg") no-repeat;
 	padding-top:50px;
 	width: 100%;
     height: 250px;

@@ -87,7 +87,7 @@
 		<div id='main-body-list'>
 			<div id='navigation_bar'></div>
 			<div id='contenu' class="container-fluid page-list">
-				<div style="background: url('../../../karuta-backend/resources/resource/file/ae16b5f8-744c-11e5-a1ab-00215e6c3f32?lang=fr')" id="welcome-image">
+				<div id="welcome-image">
 					<div class="welcome-box">
 						<div class="welcome-subbox">
 							<div id="welcome-title" class="welcome-title">Bienvenue dans KARUTA</div>
@@ -105,9 +105,9 @@
 						<div id='menu'></div>
 						<div id='list'></div>
 					</div>
-				</div>
 					<div class='col-md-3'>
 					</div>
+				</div>
 			</div>
 		</div>
 		<div id='wait-window' class='modal hide'>
@@ -119,6 +119,8 @@
 			setLanguage();
 			document.write(EditBox());
 			$(window).load(function() {
+				if (elgg_installed!=undefined && elgg_installed)
+					$("#main-row").html("<div class='col-md-6' id='socialnetwork'></div><div class='col-md-6 projects'><div id='menu'></div><div id='list'></div></div>")
 				changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 				//----------------
 				$.ajaxSetup({async: false});

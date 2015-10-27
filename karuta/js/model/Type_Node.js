@@ -705,7 +705,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				} else {
 					//--------- display ------------
 					if (g_display_type=='standard') {
-						style = UIFactory["Node"].getContentStyle(nodeid);
+						style = UIFactory["Node"].getContentStyle(uuid);
 /*						style = "style='";
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
 						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);

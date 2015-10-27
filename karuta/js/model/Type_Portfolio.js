@@ -227,22 +227,25 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode)
 		langcode = LANGCODE;
 	//---------------------
 	var tree_type = "";
-	if (this.semantictag=='karuta-components')
-		tree_type='(components)';
-	if (this.semantictag=='karuta-model')
+	var semtag = "";
+	if (this.semantictag!=undefined)
+		semtag = this.semantictag;
+	if (semtag.indexOf('karuta-components')>-1)
+		tree_type='<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-model')>-1)
 		tree_type='(model)';
-	if (this.semantictag=='karuta-instance')
-		tree_type='(portfolio)';
-	if (this.semantictag=='karuta-report')
-		tree_type='(report)';
-	if (this.semantictag=='karuta-batch')
+	if (semtag.indexOf('karuta-instance')>-1)
+		tree_type='<span class="glyphicon glyphicon-book" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-report')>-1)
+		tree_type='<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-batch')>-1)
 		tree_type='(batch)';
-	if (this.semantictag=='karuta-project')
+	if (semtag.indexOf('karuta-project')>-1)
 		tree_type='(project)';
-	if (this.semantictag=='karuta-rubric')
+	if (semtag.indexOf('karuta-rubric')>-1)
 		tree_type='(rubric)';
-	if (this.semantictag=='karuta-dashboard')
-		tree_type='(dashboard)';
+	if (semtag.indexOf('karuta-dashboard')>-1)
+		tree_type='<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>';
 	//---------------------
 	var owner = (Users_byid[this.ownerid]==null) ? "??? "+this.ownerid:Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
 	//---------------------

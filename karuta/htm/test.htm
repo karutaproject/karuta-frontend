@@ -1,0 +1,2202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Karuta Production</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=9">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+		<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
+		<!-- =============================================================== -->
+		<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
+		<!-- =========================================== -->
+		<link rel="stylesheet" href="../../application/css/specific.css" />
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/resources/Type_Calendar.js"></script>
+		<script src="../../karuta/js/resources/Type_Comments.js"></script>
+		<script src="../../karuta/js/resources/Type_Document.js"></script>
+		<script src="../../karuta/js/resources/Type_Proxy.js"></script>
+		<script src="../../karuta/js/resources/Type_Get_Proxy.js"></script>
+		<script src="../../karuta/js/resources/Type_TextField.js"></script>
+		<script src="../../karuta/js/resources/Type_Field.js"></script>
+		<script src="../../karuta/js/resources/Type_Image.js"></script>
+		<script src="../../karuta/js/resources/Type_Get_Resource.js"></script>
+		<script src="../../karuta/js/resources/Type_Get_Double_Resource.js"></script>
+		<script src="../../karuta/js/resources/Type_Get_Get_Resource.js"></script>
+		<script src="../../karuta/js/resources/Type_URL.js"></script>
+		<script src="../../karuta/js/resources/Type_Item.js"></script>
+		<script src="../../karuta/js/resources/Type_Video.js"></script>
+		<script src="../../karuta/js/resources/Type_CompetencyEvaluation.js"></script>
+		<script src="../../karuta/js/resources/Type_Oembed.js"></script>
+		<script src="../../karuta/js/resources/Type_Audio.js"></script>
+		<script src="../../karuta/js/resources/Type_SendEmail.js"></script>
+		<script src="../../karuta/js/resources/Type_URL2Unit.js"></script>
+		<script src="../../karuta/js/resources/Type_Dashboard.js"></script>
+		<script src="../../karuta/js/resources/Type_Color.js"></script>
+		<script src="../../karuta/js/resources/Type_Bubble.js"></script>
+		<script src="../../karuta/js/resources/Type_EuropassL.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../other/js/jquery-1.10.2.js"></script>
+		<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
+		<script src="../../other/js/jquery.ui.touch-punch.min.js"></script>
+		<!--script src='../../other/wysihtml5/parser.js'> </script-->
+		<!--[if lt IE 9]>
+			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
+		<![endif]-->
+		<!--script src="../../other/js/bootstrap-wysihtml5.js"--></script>
+		<script src="../../other/js/spin.js"></script>
+		<script src="../../other/js/jquery.spin.js"></script>
+		<!-- =============================================================== -->
+		<link rel="stylesheet" type="text/css" href='../../other/wysihtml5/bootstrap3-wysihtml5.min.css'/>
+		<script src='../../other/wysihtml5/bootstrap3-wysihtml5.all.min.js'> </script>
+		<!-- =============================================================== -->
+		<script src="../../other/js/jquery_hotkeys.js"></script>
+		<script src="../../other/js/JQueryRC4.js"></script>
+		<!-- =========================================== -->
+		<script src="../../other/colorpicker/js/evol.colorpicker.min.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/karuta.js"></script>
+		<script src="../../karuta/js/UICom.js"></script>
+		<script src="../../karuta/js/report.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/model/Type_Portfolio.js"></script>
+		<script src="../../karuta/js/model/Type_Node.js"></script>
+		<script src="../../karuta/js/model/Type_User.js"></script>
+		<!-- =============================================================== -->
+		<link type="text/css" href="../../other/lightbox/css/lightbox.css" rel="stylesheet" />
+		<script src="../../other/lightbox/js/lightbox-2.6.min.js"></script>
+		<!-- =============================================================== -->
+		<link type="text/css" href="../../other/jplayer/jplayer.blue.monday.css" rel="stylesheet" />
+		<script src="../../other/jplayer/jquery.jplayer.min.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../other/js/jquery.ui.widget.js"></script>
+		<script src="../../other/js/jquery.iframe-transport.js"></script>
+		<script src="../../other/js/jquery.fileupload.js"></script>
+		<!-- =============================================================== -->
+		<link rel="stylesheet" href="../../other/oembed/jquery.oembed.css"/>
+		<script src="../../other/oembed/jquery.oembed.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+		<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.fr.js"></script>
+		<link rel="stylesheet" href="../../other/bootstrap-datepicker/datepicker.css" />
+		<!-- =============================================================== -->
+		<script src="../../other/js/js.cookie.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../application/js/_init.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/version.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../karuta/js/dashboards/matrix_2dims/matrix_2dim.js"></script>
+		<!-- =============================================================== -->
+		<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css"> <!-- cursive font LAMP example -->
+		<!-- =============================================================== -->
+	</head>
+	<body>
+<div class="asmnode asmUnit welcome-unit "
+	id="node_225a7363-65f4-11e5-82a3-00215e6c3f32">
+	<div class="row row-node">
+		<div style="" class="node-label col-md-offset-1 col-md-8  same-height"
+			id="std_node_225a7363-65f4-11e5-82a3-00215e6c3f32">
+			<div class="title">
+				Welcome Page<span class="ihelp"
+					id="help_225a7363-65f4-11e5-82a3-00215e6c3f32"></span>
+			</div>
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-9">
+					<div class="comments"
+						id="comments_225a7363-65f4-11e5-82a3-00215e6c3f32">
+						<div></div>
+					</div>
+					<!-- comments -->
+				</div>
+				<!-- col-md-7 -->
+				<div class="col-md-2"></div>
+			</div>
+			<!-- row -->
+			<div class="metainfo"
+				id="metainfo_225a7363-65f4-11e5-82a3-00215e6c3f32"
+				style="visibility: hidden;">
+				<span>asmUnit - </span><span>semantictag:welcome-unit| </span><span>seenoderoles:all|
+				</span><span>menuroles:self,welcome-block,Ajouter un bloc@fr/Add a
+					block@en,designer| </span>
+			</div>
+			<!-- metainfo -->
+		</div>
+		<!-- col-md-9 -->
+		<div class="col-md-2 buttons same-height"
+			id="buttons-225a7363-65f4-11e5-82a3-00215e6c3f32">
+			<div class="inside-full-height">
+				<div id="btn-225a7363-65f4-11e5-82a3-00215e6c3f32">
+					<div class="btn-group">
+						<span rel="tooltip" data-title="Éditer"
+							onclick="javascript:getEditBox('225a7363-65f4-11e5-82a3-00215e6c3f32')"
+							data-target="#edit-window" data-toggle="modal"
+							class="button glyphicon glyphicon-pencil"></span>
+						<!-- ==================== Delete Button ==================== -->
+						<span relx="tooltip" data-title="Delete"
+							onclick="confirmDel('225a7363-65f4-11e5-82a3-00215e6c3f32','asmUnit','undefined','undefined','UIFactory.Node.reloadStruct','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+							class="button glyphicon glyphicon-remove"
+							id="del-225a7363-65f4-11e5-82a3-00215e6c3f32"></span><span
+							href="#"
+							onclick="javascript:UIFactory.Node.upNode('225a7363-65f4-11e5-82a3-00215e6c3f32')"
+							class="button glyphicon glyphicon-arrow-up"></span><span href="#"
+							onclick="javascript:UIFactory.Node.selectNode('225a7363-65f4-11e5-82a3-00215e6c3f32',UICom.root)"
+							class="button glyphicon glyphicon-random"></span>
+						<button aria-expanded="false" aria-haspopup="true" type="button"
+							data-toggle="dropdown" class="btn btn-xs menu-xs">
+							<div class="btn-text">
+								Add <span class="caret"></span>
+							</div>
+						</button>
+						<ul class="dropdown-menu pull-right">
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','asmUnitStructure',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">asmUnitStructure</a></li>
+							<hr>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','TextField',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">TextField</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Field',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Field</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Document',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Document</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','URL',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">URL</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Calendar',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Calendar</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Image',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Image</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Video',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Video</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Audio',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Audio</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Oembed',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Oembed</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Color',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Color</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','URL2Unit',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">URL2Unit</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Comments',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Comments</a></li>
+							<hr>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','SendEmail',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">SendEmail</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Dashboard',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Dashboard</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','bubble_level1',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Bubble Map</a></li>
+							<hr>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Item',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Item</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Get_Resource</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Get_Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Get_Get_Resource</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Get_Double_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Get_Double_Resource</a></li>
+							<li><a
+								onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','_karuta_resources_','Proxy',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+								href="#xxx">Proxy</a></li>
+						</ul>
+						<div class="btn-group">
+							<button href="#" data-toggle="dropdown"
+								class="btn btn-xs menu-xs dropdown-toggle">
+								<div class="btn-text">
+									Menu <span class="caret"></span>
+								</div>
+							</button>
+							<ul class="dropdown-menu pull-right">
+								<li><a
+									onclick="javascript:importBranch('225a7363-65f4-11e5-82a3-00215e6c3f32','test_ui','welcome-block',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+									href="#xxx">Add a block</a></li>
+							</ul>
+						</div>
+						<!-- class='btn-group' for specific menu button -->
+					</div>
+					<!-- class='btn-group' -->
+				</div>
+				<!-- #btn-+node.id -->
+			</div>
+		</div>
+		<!-- col-md-2  -->
+	</div>
+	<!-- row -->
+	<div style="position: relative;" class="content"
+		id="content-225a7363-65f4-11e5-82a3-00215e6c3f32">
+		<div class="asmnode asmUnitStructure asmUnitStructure "
+			id="node_c87adbf9-690f-11e5-8fe3-00215e6c3f32">
+			<div class="row row-node">
+				<div style=""
+					class="node-label col-md-offset-1 col-md-8  same-height"
+					id="std_node_c87adbf9-690f-11e5-8fe3-00215e6c3f32">
+					<div class="title">
+						Portfolio Navigation Bar<span class="ihelp"
+							id="help_c87adbf9-690f-11e5-8fe3-00215e6c3f32"></span>
+					</div>
+					<div class="row">
+						<div class="col-md-3"></div>
+						<div class="col-md-9">
+							<div class="comments"
+								id="comments_c87adbf9-690f-11e5-8fe3-00215e6c3f32">
+								<div></div>
+							</div>
+							<!-- comments -->
+						</div>
+						<!-- col-md-7 -->
+						<div class="col-md-2"></div>
+					</div>
+					<!-- row -->
+					<div class="metainfo"
+						id="metainfo_c87adbf9-690f-11e5-8fe3-00215e6c3f32"
+						style="visibility: hidden;">
+						<span>asmUnitStructure - </span><span>semantictag:asmUnitStructure|
+						</span><span>seenoderoles:all| </span>
+					</div>
+					<!-- metainfo -->
+				</div>
+				<!-- col-md-9 -->
+				<div class="col-md-2 buttons same-height"
+					id="buttons-c87adbf9-690f-11e5-8fe3-00215e6c3f32">
+					<div class="inside-full-height">
+						<div id="btn-c87adbf9-690f-11e5-8fe3-00215e6c3f32">
+							<div class="btn-group">
+								<span rel="tooltip" data-title="Éditer"
+									onclick="javascript:getEditBox('c87adbf9-690f-11e5-8fe3-00215e6c3f32')"
+									data-target="#edit-window" data-toggle="modal"
+									class="button glyphicon glyphicon-pencil"></span>
+								<!-- ==================== Delete Button ==================== -->
+								<span relx="tooltip" data-title="Delete"
+									onclick="confirmDel('c87adbf9-690f-11e5-8fe3-00215e6c3f32','asmUnitStructure','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+									class="button glyphicon glyphicon-remove"
+									id="del-c87adbf9-690f-11e5-8fe3-00215e6c3f32"></span><span
+									href="#"
+									onclick="javascript:UIFactory.Node.upNode('c87adbf9-690f-11e5-8fe3-00215e6c3f32')"
+									class="button glyphicon glyphicon-arrow-up"></span><span
+									href="#"
+									onclick="javascript:UIFactory.Node.selectNode('c87adbf9-690f-11e5-8fe3-00215e6c3f32',UICom.root)"
+									class="button glyphicon glyphicon-random"></span>
+								<button aria-expanded="false" aria-haspopup="true" type="button"
+									data-toggle="dropdown" class="btn btn-xs menu-xs">
+									<div class="btn-text">
+										Add <span class="caret"></span>
+									</div>
+								</button>
+								<ul class="dropdown-menu pull-right">
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','asmUnitStructure',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">asmUnitStructure</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','TextField',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">TextField</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Field',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Field</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Document',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Document</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">URL</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Calendar',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Calendar</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Image',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Image</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Video',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Video</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Audio',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Audio</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Oembed',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Oembed</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Color',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Color</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL2Unit',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">URL2Unit</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Comments',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Comments</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','SendEmail',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">SendEmail</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Dashboard',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Dashboard</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','bubble_level1',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Bubble Map</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Item',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Item</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Get_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Double_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Double_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('c87adbf9-690f-11e5-8fe3-00215e6c3f32','_karuta_resources_','Proxy',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Proxy</a></li>
+								</ul>
+							</div>
+							<!-- class='btn-group' -->
+						</div>
+						<!-- #btn-+node.id -->
+					</div>
+				</div>
+				<!-- col-md-2  -->
+			</div>
+			<!-- row -->
+			<div style="position: relative; background-color: #dbe5f1;"
+				class="content" id="content-c87adbf9-690f-11e5-8fe3-00215e6c3f32">
+				<div class="asmnode asmContext portfolio-navbar Color"
+					id="node_f8b2a794-68a5-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_f8b2a794-68a5-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Portfolio NavBar Color<span class="ihelp"
+										id="help_f8b2a794-68a5-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="" class="col-md-6 resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Color"
+								id="std_resource_f8b2a794-68a5-11e5-8fe3-00215e6c3f32">
+								<span
+									style="display: inline-block; width: 1.5em; background-color: #e0006d">&nbsp;&nbsp;&nbsp;</span>&nbsp;#e0006d
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-f8b2a794-68a5-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-f8b2a794-68a5-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('f8b2a794-68a5-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('f8b2a794-68a5-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-f8b2a794-68a5-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('f8b2a794-68a5-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('f8b2a794-68a5-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+				<div class="asmnode asmContext portfolio-navbar-link Color"
+					id="node_92187383-690d-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_92187383-690d-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Portfolio NavBar Text Color<span class="ihelp"
+										id="help_92187383-690d-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="" class="col-md-6 resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Color"
+								id="std_resource_92187383-690d-11e5-8fe3-00215e6c3f32">
+								<span
+									style="display: inline-block; width: 1.5em; background-color: #ffffff">&nbsp;&nbsp;&nbsp;</span>&nbsp;#ffffff
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-92187383-690d-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-92187383-690d-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('92187383-690d-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('92187383-690d-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-92187383-690d-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('92187383-690d-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('92187383-690d-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+			</div>
+		</div>
+		<!-- nodetype -->
+		<!-- ============================================================================================================= -->
+		<div class="asmnode asmUnitStructure asmUnitStructure "
+			id="node_11bfdfa0-6910-11e5-8fe3-00215e6c3f32">
+			<div class="row row-node">
+				<div style=""
+					class="node-label col-md-offset-1 col-md-8  same-height"
+					id="std_node_11bfdfa0-6910-11e5-8fe3-00215e6c3f32">
+					<div class="title">
+						Portfolio Sidebar<span class="ihelp"
+							id="help_11bfdfa0-6910-11e5-8fe3-00215e6c3f32"></span>
+					</div>
+				</div>
+				<!-- col-md-9 -->
+				<div class="col-md-2 buttons same-height"
+					id="buttons-11bfdfa0-6910-11e5-8fe3-00215e6c3f32">
+					<div class="inside-full-height">
+						<div id="btn-11bfdfa0-6910-11e5-8fe3-00215e6c3f32">
+							<div class="btn-group">
+								<span rel="tooltip" data-title="Éditer"
+									onclick="javascript:getEditBox('11bfdfa0-6910-11e5-8fe3-00215e6c3f32')"
+									data-target="#edit-window" data-toggle="modal"
+									class="button glyphicon glyphicon-pencil"></span>
+								<!-- ==================== Delete Button ==================== -->
+								<span relx="tooltip" data-title="Delete"
+									onclick="confirmDel('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','asmUnitStructure','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+									class="button glyphicon glyphicon-remove"
+									id="del-11bfdfa0-6910-11e5-8fe3-00215e6c3f32"></span><span
+									href="#"
+									onclick="javascript:UIFactory.Node.upNode('11bfdfa0-6910-11e5-8fe3-00215e6c3f32')"
+									class="button glyphicon glyphicon-arrow-up"></span><span
+									href="#"
+									onclick="javascript:UIFactory.Node.selectNode('11bfdfa0-6910-11e5-8fe3-00215e6c3f32',UICom.root)"
+									class="button glyphicon glyphicon-random"></span>
+								<button aria-expanded="false" aria-haspopup="true" type="button"
+									data-toggle="dropdown" class="btn btn-xs menu-xs">
+									<div class="btn-text">
+										Add <span class="caret"></span>
+									</div>
+								</button>
+								<ul class="dropdown-menu pull-right">
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','asmUnitStructure',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">asmUnitStructure</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','TextField',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">TextField</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Field',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Field</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Document',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Document</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">URL</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Calendar',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Calendar</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Image',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Image</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Video',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Video</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Audio',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Audio</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Oembed',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Oembed</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Color',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Color</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL2Unit',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">URL2Unit</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Comments',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Comments</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','SendEmail',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">SendEmail</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Dashboard',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Dashboard</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','bubble_level1',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Bubble Map</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Item',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Item</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Get_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Double_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Double_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('11bfdfa0-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Proxy',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Proxy</a></li>
+								</ul>
+							</div>
+							<!-- class='btn-group' -->
+						</div>
+						<!-- #btn-+node.id -->
+					</div>
+				</div>
+				<!-- col-md-2  -->
+			</div>
+			<!-- row -->
+			<div style="position: relative;" class="content"
+				id="content-11bfdfa0-6910-11e5-8fe3-00215e6c3f32">
+				<div class="asmnode asmContext portfolio-sidebar Color"
+					id="node_54ad931d-68a6-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_54ad931d-68a6-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Portfolio Sidebar Color<span class="ihelp"
+										id="help_54ad931d-68a6-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+			 			</div>
+						<!-- col-md-3 -->
+<div class='col-md-9' >
+<table  style='width:90%;margin-left:5px;'><tr>
+						<td  class=" resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Color"
+								id="std_resource_54ad931d-68a6-11e5-8fe3-00215e6c3f32">
+								<span
+									style="display: inline-block; width: 1.5em; background-color: #09bbd9">&nbsp;&nbsp;&nbsp;</span>&nbsp;#09bbd9
+							</div>
+							<!-- inside-full-height -->
+						</td>
+						<!-- col-md-6 resource -->
+
+						<td class=" buttons same-height" style='width:200px;'>
+							<div class="inside-full-height">
+								<div id="btn-54ad931d-68a6-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('54ad931d-68a6-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('54ad931d-68a6-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-54ad931d-68a6-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('54ad931d-68a6-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('54ad931d-68a6-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</td>
+						<!-- col-md-2  -->
+</tr></table>
+</div>
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+				<div class="asmnode asmContext portfolio-sidebar-link Color"
+					id="node_2159904e-6914-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_2159904e-6914-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Portfolio Sidebar Text Color<span class="ihelp"
+										id="help_2159904e-6914-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="" class="col-md-6 resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Color"
+								id="std_resource_2159904e-6914-11e5-8fe3-00215e6c3f32">
+								<span
+									style="display: inline-block; width: 1.5em; background-color: #ffffff">&nbsp;&nbsp;&nbsp;</span>&nbsp;#ffffff
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-2159904e-6914-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-2159904e-6914-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('2159904e-6914-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('2159904e-6914-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-2159904e-6914-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('2159904e-6914-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('2159904e-6914-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+				<div
+					class="asmnode asmContext portfolio-sidebar-link-selected Color"
+					id="node_5217d0b6-6914-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_5217d0b6-6914-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Portfolio SideBar Selected Text Color<span class="ihelp"
+										id="help_5217d0b6-6914-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="" class="col-md-6 resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Color"
+								id="std_resource_5217d0b6-6914-11e5-8fe3-00215e6c3f32">
+								<span
+									style="display: inline-block; width: 1.5em; background-color: #000000">&nbsp;&nbsp;&nbsp;</span>&nbsp;#000000
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-5217d0b6-6914-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-5217d0b6-6914-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('5217d0b6-6914-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('5217d0b6-6914-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-5217d0b6-6914-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('5217d0b6-6914-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('5217d0b6-6914-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+				<div class="asmnode asmContext portfolio-sidebar-separator Color"
+					id="node_02e62457-6919-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_02e62457-6919-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Portfolio Sidebar Separator<span class="ihelp"
+										id="help_02e62457-6919-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="" class="col-md-6 resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Color"
+								id="std_resource_02e62457-6919-11e5-8fe3-00215e6c3f32">
+								<span
+									style="display: inline-block; width: 1.5em; background-color: #08a4bf;">&nbsp;&nbsp;&nbsp;</span>&nbsp;#08a4bf;
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-02e62457-6919-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-02e62457-6919-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('02e62457-6919-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('02e62457-6919-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-02e62457-6919-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('02e62457-6919-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('02e62457-6919-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+				<div
+					class="asmnode asmContext portfolio-sidebar-selected-border Color"
+					id="node_47cb2719-691d-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_47cb2719-691d-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Portfolio Sidebar Selected Right Border<span class="ihelp"
+										id="help_47cb2719-691d-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="" class="col-md-6 resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Color"
+								id="std_resource_47cb2719-691d-11e5-8fe3-00215e6c3f32">
+								<span
+									style="display: inline-block; width: 1.5em; background-color: #e0006d">&nbsp;&nbsp;&nbsp;</span>&nbsp;#e0006d
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-47cb2719-691d-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-47cb2719-691d-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('47cb2719-691d-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('47cb2719-691d-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-47cb2719-691d-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('47cb2719-691d-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('47cb2719-691d-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+			</div>
+		</div>
+		<!-- nodetype -->
+		<div class="asmnode asmUnitStructure asmUnitStructure "
+			id="node_7d5e5f52-6935-11e5-8fe3-00215e6c3f32">
+			<div class="row row-node">
+				<div style=""
+					class="node-label col-md-offset-1 col-md-8  same-height"
+					id="std_node_7d5e5f52-6935-11e5-8fe3-00215e6c3f32">
+					<div class="title">
+						Welcome Page Design<span class="ihelp"
+							id="help_7d5e5f52-6935-11e5-8fe3-00215e6c3f32"></span>
+					</div>
+					<div class="row">
+						<div class="col-md-3"></div>
+						<div class="col-md-9">
+							<div class="comments"
+								id="comments_7d5e5f52-6935-11e5-8fe3-00215e6c3f32">
+								<div></div>
+							</div>
+							<!-- comments -->
+						</div>
+						<!-- col-md-7 -->
+						<div class="col-md-2"></div>
+					</div>
+					<!-- row -->
+					<div class="metainfo"
+						id="metainfo_7d5e5f52-6935-11e5-8fe3-00215e6c3f32"
+						style="visibility: hidden;">
+						<span>asmUnitStructure - </span><span>semantictag:asmUnitStructure|
+						</span><span>seenoderoles:all| </span>
+					</div>
+					<!-- metainfo -->
+				</div>
+				<!-- col-md-9 -->
+				<div class="col-md-2 buttons same-height"
+					id="buttons-7d5e5f52-6935-11e5-8fe3-00215e6c3f32">
+					<div class="inside-full-height">
+						<div id="btn-7d5e5f52-6935-11e5-8fe3-00215e6c3f32">
+							<div class="btn-group">
+								<span rel="tooltip" data-title="Éditer"
+									onclick="javascript:getEditBox('7d5e5f52-6935-11e5-8fe3-00215e6c3f32')"
+									data-target="#edit-window" data-toggle="modal"
+									class="button glyphicon glyphicon-pencil"></span>
+								<!-- ==================== Delete Button ==================== -->
+								<span relx="tooltip" data-title="Delete"
+									onclick="confirmDel('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','asmUnitStructure','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+									class="button glyphicon glyphicon-remove"
+									id="del-7d5e5f52-6935-11e5-8fe3-00215e6c3f32"></span><span
+									href="#"
+									onclick="javascript:UIFactory.Node.upNode('7d5e5f52-6935-11e5-8fe3-00215e6c3f32')"
+									class="button glyphicon glyphicon-arrow-up"></span><span
+									href="#"
+									onclick="javascript:UIFactory.Node.selectNode('7d5e5f52-6935-11e5-8fe3-00215e6c3f32',UICom.root)"
+									class="button glyphicon glyphicon-random"></span>
+								<button aria-expanded="false" aria-haspopup="true" type="button"
+									data-toggle="dropdown" class="btn btn-xs menu-xs">
+									<div class="btn-text">
+										Add <span class="caret"></span>
+									</div>
+								</button>
+								<ul class="dropdown-menu pull-right">
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','asmUnitStructure',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">asmUnitStructure</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','TextField',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">TextField</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Field',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Field</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Document',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Document</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">URL</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Calendar',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Calendar</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Image',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Image</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Video',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Video</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Audio',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Audio</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Oembed',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Oembed</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Color',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Color</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL2Unit',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">URL2Unit</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Comments',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Comments</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','SendEmail',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">SendEmail</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Dashboard',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Dashboard</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','bubble_level1',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Bubble Map</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Item',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Item</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Get_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Double_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Double_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('7d5e5f52-6935-11e5-8fe3-00215e6c3f32','_karuta_resources_','Proxy',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Proxy</a></li>
+								</ul>
+							</div>
+							<!-- class='btn-group' -->
+						</div>
+						<!-- #btn-+node.id -->
+					</div>
+				</div>
+				<!-- col-md-2  -->
+			</div>
+			<!-- row -->
+			<div style="position: relative;" class="content"
+				id="content-7d5e5f52-6935-11e5-8fe3-00215e6c3f32">
+				<div class="asmnode asmContext welcome-title-color Color"
+					id="node_98625bb7-6935-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_98625bb7-6935-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Welcome Title Color<span class="ihelp"
+										id="help_98625bb7-6935-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="" class="col-md-6 resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Color"
+								id="std_resource_98625bb7-6935-11e5-8fe3-00215e6c3f32">
+								<span
+									style="display: inline-block; width: 1.5em; background-color: #ffffff">&nbsp;&nbsp;&nbsp;</span>&nbsp;#ffffff
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-98625bb7-6935-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-98625bb7-6935-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('98625bb7-6935-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('98625bb7-6935-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-98625bb7-6935-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('98625bb7-6935-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('98625bb7-6935-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+				<div class="asmnode asmContext welcome-line-color Color"
+					id="node_02bcc2a2-693a-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_02bcc2a2-693a-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Welcome Line Color<span class="ihelp"
+										id="help_02bcc2a2-693a-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="" class="col-md-6 resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Color"
+								id="std_resource_02bcc2a2-693a-11e5-8fe3-00215e6c3f32">
+								<span
+									style="display: inline-block; width: 1.5em; background-color: #b9da00;">&nbsp;&nbsp;&nbsp;</span>&nbsp;#b9da00;
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-02bcc2a2-693a-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-02bcc2a2-693a-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('02bcc2a2-693a-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('02bcc2a2-693a-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-02bcc2a2-693a-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('02bcc2a2-693a-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('02bcc2a2-693a-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+			</div>
+		</div>
+		<!-- nodetype -->
+		<div class="asmnode asmUnitStructure welcome-page "
+			id="node_5e8d4395-6910-11e5-8fe3-00215e6c3f32">
+			<div class="row row-node">
+				<div style=""
+					class="node-label col-md-offset-1 col-md-8  same-height"
+					id="std_node_5e8d4395-6910-11e5-8fe3-00215e6c3f32">
+					<div class="title">
+						Welcome Page Content<span class="ihelp"
+							id="help_5e8d4395-6910-11e5-8fe3-00215e6c3f32"></span>
+					</div>
+					<div class="row">
+						<div class="col-md-3"></div>
+						<div class="col-md-9">
+							<div class="comments"
+								id="comments_5e8d4395-6910-11e5-8fe3-00215e6c3f32">
+								<div></div>
+							</div>
+							<!-- comments -->
+						</div>
+						<!-- col-md-7 -->
+						<div class="col-md-2"></div>
+					</div>
+					<!-- row -->
+					<div class="metainfo"
+						id="metainfo_5e8d4395-6910-11e5-8fe3-00215e6c3f32"
+						style="visibility: hidden;">
+						<span>asmUnitStructure - </span><span>semantictag:welcome-page|
+						</span><span>seenoderoles:all| </span>
+					</div>
+					<!-- metainfo -->
+				</div>
+				<!-- col-md-9 -->
+				<div class="col-md-2 buttons same-height"
+					id="buttons-5e8d4395-6910-11e5-8fe3-00215e6c3f32">
+					<div class="inside-full-height">
+						<div id="btn-5e8d4395-6910-11e5-8fe3-00215e6c3f32">
+							<div class="btn-group">
+								<span rel="tooltip" data-title="Éditer"
+									onclick="javascript:getEditBox('5e8d4395-6910-11e5-8fe3-00215e6c3f32')"
+									data-target="#edit-window" data-toggle="modal"
+									class="button glyphicon glyphicon-pencil"></span>
+								<!-- ==================== Delete Button ==================== -->
+								<span relx="tooltip" data-title="Delete"
+									onclick="confirmDel('5e8d4395-6910-11e5-8fe3-00215e6c3f32','asmUnitStructure','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+									class="button glyphicon glyphicon-remove"
+									id="del-5e8d4395-6910-11e5-8fe3-00215e6c3f32"></span><span
+									href="#"
+									onclick="javascript:UIFactory.Node.upNode('5e8d4395-6910-11e5-8fe3-00215e6c3f32')"
+									class="button glyphicon glyphicon-arrow-up"></span><span
+									href="#"
+									onclick="javascript:UIFactory.Node.selectNode('5e8d4395-6910-11e5-8fe3-00215e6c3f32',UICom.root)"
+									class="button glyphicon glyphicon-random"></span>
+								<button aria-expanded="false" aria-haspopup="true" type="button"
+									data-toggle="dropdown" class="btn btn-xs menu-xs">
+									<div class="btn-text">
+										Add <span class="caret"></span>
+									</div>
+								</button>
+								<ul class="dropdown-menu pull-right">
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','asmUnitStructure',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">asmUnitStructure</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','TextField',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">TextField</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Field',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Field</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Document',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Document</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">URL</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Calendar',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Calendar</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Image',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Image</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Video',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Video</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Audio',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Audio</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Oembed',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Oembed</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Color',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Color</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL2Unit',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">URL2Unit</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Comments',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Comments</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','SendEmail',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">SendEmail</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Dashboard',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Dashboard</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','bubble_level1',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Bubble Map</a></li>
+									<hr>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Item',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Item</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Get_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Double_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Get_Double_Resource</a></li>
+									<li><a
+										onclick="javascript:importBranch('5e8d4395-6910-11e5-8fe3-00215e6c3f32','_karuta_resources_','Proxy',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+										href="#xxx">Proxy</a></li>
+								</ul>
+							</div>
+							<!-- class='btn-group' -->
+						</div>
+						<!-- #btn-+node.id -->
+					</div>
+				</div>
+				<!-- col-md-2  -->
+			</div>
+			<!-- row -->
+			<div style="position: relative;" class="content"
+				id="content-5e8d4395-6910-11e5-8fe3-00215e6c3f32">
+				<div class="asmnode asmContext welcome-main-image Image"
+					id="node_3bcd046c-65f4-11e5-82a3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_3bcd046c-65f4-11e5-82a3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Welcome Image<span class="ihelp"
+										id="help_3bcd046c-65f4-11e5-82a3-00215e6c3f32"> <a
+										class="popinfo" href="javascript://" data-original-title=""
+										title=""><span class="glyphicon glyphicon-info-sign"></span></a>
+									</span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="" class="col-md-6 resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Image"
+								id="std_resource_3bcd046c-65f4-11e5-82a3-00215e6c3f32">
+								<div uuid="img_3bcd046c-65f4-11e5-82a3-00215e6c3f32">
+									<a title=""
+										data-lightbox="image-3bcd046c-65f4-11e5-82a3-00215e6c3f32"
+										href="../../../karuta-backend/resources/resource/file/3bcd046c-65f4-11e5-82a3-00215e6c3f32?lang=en&amp;size=L&amp;timestamp=1444167693446"><img
+										height="100"
+										src="../../../karuta-backend/resources/resource/file/3bcd046c-65f4-11e5-82a3-00215e6c3f32?lang=en&amp;size=S&amp;timestamp=1444167693446"
+										id="image_3bcd046c-65f4-11e5-82a3-00215e6c3f32"></a>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-3bcd046c-65f4-11e5-82a3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-3bcd046c-65f4-11e5-82a3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('3bcd046c-65f4-11e5-82a3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('3bcd046c-65f4-11e5-82a3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-3bcd046c-65f4-11e5-82a3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('3bcd046c-65f4-11e5-82a3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('3bcd046c-65f4-11e5-82a3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+				<div class="asmnode asmContext welcome-title Field"
+					id="node_d0fa997e-6935-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_d0fa997e-6935-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div class="title">
+									Welcome Title<span class="ihelp"
+										id="help_d0fa997e-6935-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="" class="col-md-6 resource same-height ">
+							<div ''="" style="" class="inside-full-height resource-Field"
+								id="std_resource_d0fa997e-6935-11e5-8fe3-00215e6c3f32">Welcome
+								in Karuta Portfolio</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-d0fa997e-6935-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-d0fa997e-6935-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('d0fa997e-6935-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('d0fa997e-6935-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-d0fa997e-6935-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('d0fa997e-6935-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('d0fa997e-6935-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+				<div class="asmnode asmContext welcome-baseline TextField"
+					id="node_44a7d8bd-6610-11e5-8fe3-00215e6c3f32">
+					<div class="row row-resource">
+						<div class="col-md-offset-1 col-md-2 node-label same-height"
+							id="std_node_44a7d8bd-6610-11e5-8fe3-00215e6c3f32">
+							<div style="" class="inside-full-height">
+								<div style="text-align: left;" class="title">
+									Welcome Baseline<span class="ihelp"
+										id="help_44a7d8bd-6610-11e5-8fe3-00215e6c3f32"></span>
+								</div>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-3 -->
+						<div style="color: #18b8d6;; text-align: center;"
+							class="col-md-6 resource same-height ">
+							<div color:#18b8d6;;text-align:center;''="" style=""
+								class="inside-full-height resource-TextField"
+								id="std_resource_44a7d8bd-6610-11e5-8fe3-00215e6c3f32">
+								Un exemple de portfolio Karuta<br>
+							</div>
+							<!-- inside-full-height -->
+						</div>
+						<!-- col-md-6 resource -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-44a7d8bd-6610-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-44a7d8bd-6610-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('44a7d8bd-6610-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('44a7d8bd-6610-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-44a7d8bd-6610-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('44a7d8bd-6610-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('44a7d8bd-6610-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- inner row -->
+				</div>
+				<!-- nodetype -->
+				<div style="padding-top: 30px;"
+					class="asmnode asmUnitStructure welcome-block "
+					id="node_30b04fff-6610-11e5-8fe3-00215e6c3f32">
+					<div class="row row-node">
+						<div
+							style="font-size: 18px; color: #938953; text-align: right; background-color: #dbeef3;"
+							class="node-label col-md-offset-1 col-md-8  same-height"
+							id="std_node_30b04fff-6610-11e5-8fe3-00215e6c3f32">
+							<div
+								style="font-size: 18px; color: #938953; text-align: right; height: 100px"
+								class="title">
+								New Section - Main<span class="ihelp"
+									id="help_30b04fff-6610-11e5-8fe3-00215e6c3f32"></span>
+							</div>
+							<div class="row">
+								<div class="col-md-3"></div>
+								<div class="col-md-9">
+									<div class="comments"
+										id="comments_30b04fff-6610-11e5-8fe3-00215e6c3f32">
+										<div></div>
+									</div>
+									<!-- comments -->
+								</div>
+								<!-- col-md-7 -->
+								<div class="col-md-2"></div>
+							</div>
+							<!-- row -->
+							<div class="metainfo"
+								id="metainfo_30b04fff-6610-11e5-8fe3-00215e6c3f32"
+								style="visibility: hidden;">
+								<span>asmUnitStructure - </span><span>semantictag:welcome-block|
+								</span><span>seenoderoles:all| </span>
+							</div>
+							<!-- metainfo -->
+						</div>
+						<!-- col-md-9 -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-30b04fff-6610-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-30b04fff-6610-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('30b04fff-6610-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('30b04fff-6610-11e5-8fe3-00215e6c3f32','asmUnitStructure','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-30b04fff-6610-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('30b04fff-6610-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('30b04fff-6610-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+										<button aria-expanded="false" aria-haspopup="true"
+											type="button" data-toggle="dropdown"
+											class="btn btn-xs menu-xs">
+											<div class="btn-text">
+												Add <span class="caret"></span>
+											</div>
+										</button>
+										<ul class="dropdown-menu pull-right">
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','asmUnitStructure',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">asmUnitStructure</a></li>
+											<hr>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','TextField',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">TextField</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Field',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Field</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Document',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Document</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">URL</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Calendar',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Calendar</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Image',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Image</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Video',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Video</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Audio',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Audio</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Oembed',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Oembed</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Color',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Color</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL2Unit',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">URL2Unit</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Comments',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Comments</a></li>
+											<hr>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','SendEmail',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">SendEmail</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Dashboard',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Dashboard</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','bubble_level1',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Bubble Map</a></li>
+											<hr>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Item',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Item</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Get_Resource</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Get_Get_Resource</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Double_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Get_Double_Resource</a></li>
+											<li><a
+												onclick="javascript:importBranch('30b04fff-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Proxy',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Proxy</a></li>
+										</ul>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- row -->
+				</div>
+				<!-- nodetype -->
+				<div class="asmnode asmUnitStructure welcome-block "
+					id="node_5853c943-6610-11e5-8fe3-00215e6c3f32">
+					<div class="row row-node">
+						<div
+							style="color: #ff0000; text-align: center; background-color: #d7e3bc;"
+							class="node-label col-md-offset-1 col-md-8  same-height"
+							id="std_node_5853c943-6610-11e5-8fe3-00215e6c3f32">
+							<div style="color: #ff0000; text-align: center;" class="title">
+								Welcome Block<span class="ihelp"
+									id="help_5853c943-6610-11e5-8fe3-00215e6c3f32"></span>
+							</div>
+							<div class="row">
+								<div class="col-md-3"></div>
+								<div class="col-md-9">
+									<div class="comments"
+										id="comments_5853c943-6610-11e5-8fe3-00215e6c3f32">
+										<div></div>
+									</div>
+									<!-- comments -->
+								</div>
+								<!-- col-md-7 -->
+								<div class="col-md-2"></div>
+							</div>
+							<!-- row -->
+							<div class="metainfo"
+								id="metainfo_5853c943-6610-11e5-8fe3-00215e6c3f32"
+								style="visibility: hidden;">
+								<span>asmUnitStructure - </span><span>semantictag:welcome-block|
+								</span><span>seenoderoles:all| </span>
+							</div>
+							<!-- metainfo -->
+						</div>
+						<!-- col-md-9 -->
+						<div class="col-md-2 buttons same-height"
+							id="buttons-5853c943-6610-11e5-8fe3-00215e6c3f32">
+							<div class="inside-full-height">
+								<div id="btn-5853c943-6610-11e5-8fe3-00215e6c3f32">
+									<div class="btn-group">
+										<span rel="tooltip" data-title="Éditer"
+											onclick="javascript:getEditBox('5853c943-6610-11e5-8fe3-00215e6c3f32')"
+											data-target="#edit-window" data-toggle="modal"
+											class="button glyphicon glyphicon-pencil"></span>
+										<!-- ==================== Delete Button ==================== -->
+										<span relx="tooltip" data-title="Delete"
+											onclick="confirmDel('5853c943-6610-11e5-8fe3-00215e6c3f32','asmUnitStructure','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+											class="button glyphicon glyphicon-remove"
+											id="del-5853c943-6610-11e5-8fe3-00215e6c3f32"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.upNode('5853c943-6610-11e5-8fe3-00215e6c3f32')"
+											class="button glyphicon glyphicon-arrow-up"></span><span
+											href="#"
+											onclick="javascript:UIFactory.Node.selectNode('5853c943-6610-11e5-8fe3-00215e6c3f32',UICom.root)"
+											class="button glyphicon glyphicon-random"></span>
+										<button aria-expanded="false" aria-haspopup="true"
+											type="button" data-toggle="dropdown"
+											class="btn btn-xs menu-xs">
+											<div class="btn-text">
+												Add <span class="caret"></span>
+											</div>
+										</button>
+										<ul class="dropdown-menu pull-right">
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','asmUnitStructure',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">asmUnitStructure</a></li>
+											<hr>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','TextField',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">TextField</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Field',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Field</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Document',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Document</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">URL</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Calendar',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Calendar</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Image',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Image</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Video',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Video</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Audio',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Audio</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Oembed',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Oembed</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Color',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Color</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL2Unit',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">URL2Unit</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Comments',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Comments</a></li>
+											<hr>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','SendEmail',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">SendEmail</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Dashboard',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Dashboard</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','bubble_level1',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Bubble Map</a></li>
+											<hr>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Item',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Item</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Get_Resource</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Get_Get_Resource</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Double_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Get_Double_Resource</a></li>
+											<li><a
+												onclick="javascript:importBranch('5853c943-6610-11e5-8fe3-00215e6c3f32','_karuta_resources_','Proxy',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+												href="#xxx">Proxy</a></li>
+										</ul>
+									</div>
+									<!-- class='btn-group' -->
+								</div>
+								<!-- #btn-+node.id -->
+							</div>
+						</div>
+						<!-- col-md-2  -->
+					</div>
+					<!-- row -->
+					<div style="position: relative; background-color: #ccc1d9;"
+						class="content" id="content-5853c943-6610-11e5-8fe3-00215e6c3f32">
+						<div class="asmnode asmUnitStructure welcome-block "
+							id="node_9f8f0cfd-685d-11e5-8fe3-00215e6c3f32">
+							<div class="row row-node">
+								<div style=""
+									class="node-label col-md-offset-1 col-md-8  same-height"
+									id="std_node_9f8f0cfd-685d-11e5-8fe3-00215e6c3f32">
+									<div class="title">
+										New Section1<span class="ihelp"
+											id="help_9f8f0cfd-685d-11e5-8fe3-00215e6c3f32"></span>
+									</div>
+									<div class="row">
+										<div class="col-md-3"></div>
+										<div class="col-md-9">
+											<div class="comments"
+												id="comments_9f8f0cfd-685d-11e5-8fe3-00215e6c3f32">
+												<div></div>
+											</div>
+											<!-- comments -->
+										</div>
+										<!-- col-md-7 -->
+										<div class="col-md-2"></div>
+									</div>
+									<!-- row -->
+									<div class="metainfo"
+										id="metainfo_9f8f0cfd-685d-11e5-8fe3-00215e6c3f32"
+										style="visibility: hidden;">
+										<span>asmUnitStructure - </span><span>semantictag:welcome-block|
+										</span><span>seenoderoles:all| </span>
+									</div>
+									<!-- metainfo -->
+								</div>
+								<!-- col-md-9 -->
+								<div class="col-md-2 buttons same-height"
+									id="buttons-9f8f0cfd-685d-11e5-8fe3-00215e6c3f32">
+									<div class="inside-full-height">
+										<div id="btn-9f8f0cfd-685d-11e5-8fe3-00215e6c3f32">
+											<div class="btn-group">
+												<span rel="tooltip" data-title="Éditer"
+													onclick="javascript:getEditBox('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32')"
+													data-target="#edit-window" data-toggle="modal"
+													class="button glyphicon glyphicon-pencil"></span>
+												<!-- ==================== Delete Button ==================== -->
+												<span relx="tooltip" data-title="Delete"
+													onclick="confirmDel('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','asmUnitStructure','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+													class="button glyphicon glyphicon-remove"
+													id="del-9f8f0cfd-685d-11e5-8fe3-00215e6c3f32"></span><span
+													href="#"
+													onclick="javascript:UIFactory.Node.upNode('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32')"
+													class="button glyphicon glyphicon-arrow-up"></span><span
+													href="#"
+													onclick="javascript:UIFactory.Node.selectNode('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32',UICom.root)"
+													class="button glyphicon glyphicon-random"></span>
+												<button aria-expanded="false" aria-haspopup="true"
+													type="button" data-toggle="dropdown"
+													class="btn btn-xs menu-xs">
+													<div class="btn-text">
+														Add <span class="caret"></span>
+													</div>
+												</button>
+												<ul class="dropdown-menu pull-right">
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','asmUnitStructure',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">asmUnitStructure</a></li>
+													<hr>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','TextField',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">TextField</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Field',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Field</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Document',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Document</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">URL</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Calendar',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Calendar</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Image',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Image</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Video',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Video</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Audio',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Audio</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Oembed',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Oembed</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Color',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Color</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL2Unit',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">URL2Unit</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Comments',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Comments</a></li>
+													<hr>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','SendEmail',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">SendEmail</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Dashboard',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Dashboard</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','bubble_level1',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Bubble Map</a></li>
+													<hr>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Item',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Item</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Get_Resource</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Get_Get_Resource</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Double_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Get_Double_Resource</a></li>
+													<li><a
+														onclick="javascript:importBranch('9f8f0cfd-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Proxy',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Proxy</a></li>
+												</ul>
+											</div>
+											<!-- class='btn-group' -->
+										</div>
+										<!-- #btn-+node.id -->
+									</div>
+								</div>
+								<!-- col-md-2  -->
+							</div>
+							<!-- row -->
+							<div style="position: relative;" class="content"
+								id="content-9f8f0cfd-685d-11e5-8fe3-00215e6c3f32">
+								<div class="asmnode asmContext welcome-text TextField"
+									id="node_f548656d-6884-11e5-8fe3-00215e6c3f32">
+									<div class="row row-resource">
+										<div class="col-md-offset-1 col-md-2 node-label same-height"
+											id="std_node_f548656d-6884-11e5-8fe3-00215e6c3f32">
+											<div style="" class="inside-full-height">
+												<div class="title">
+													&nbsp;<span class="ihelp"
+														id="help_f548656d-6884-11e5-8fe3-00215e6c3f32"></span>
+												</div>
+											</div>
+											<!-- inside-full-height -->
+										</div>
+										<!-- col-md-3 -->
+										<div style="" class="col-md-6 resource same-height ">
+											<div ''="" style=""
+												class="inside-full-height resource-TextField"
+												id="std_resource_f548656d-6884-11e5-8fe3-00215e6c3f32">
+												Given a jQuery object that represents a set of DOM elements,
+												the
+												<code>.find()</code>
+												method allows us to search through the descendants of these
+												elements in the DOM tree and construct a new jQuery object
+												from the matching elements. The
+												<code>.find()</code>
+												and
+												<code>.children()</code>
+												methods are similar, except that the latter only travels a
+												single level down the DOM tree.&#65279;<br>
+											</div>
+											<!-- inside-full-height -->
+										</div>
+										<!-- col-md-6 resource -->
+										<div class="col-md-2 buttons same-height"
+											id="buttons-f548656d-6884-11e5-8fe3-00215e6c3f32">
+											<div class="inside-full-height">
+												<div id="btn-f548656d-6884-11e5-8fe3-00215e6c3f32">
+													<div class="btn-group">
+														<span rel="tooltip" data-title="Éditer"
+															onclick="javascript:getEditBox('f548656d-6884-11e5-8fe3-00215e6c3f32')"
+															data-target="#edit-window" data-toggle="modal"
+															class="button glyphicon glyphicon-pencil"></span>
+														<!-- ==================== Delete Button ==================== -->
+														<span relx="tooltip" data-title="Delete"
+															onclick="confirmDel('f548656d-6884-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+															class="button glyphicon glyphicon-remove"
+															id="del-f548656d-6884-11e5-8fe3-00215e6c3f32"></span><span
+															href="#"
+															onclick="javascript:UIFactory.Node.upNode('f548656d-6884-11e5-8fe3-00215e6c3f32')"
+															class="button glyphicon glyphicon-arrow-up"></span><span
+															href="#"
+															onclick="javascript:UIFactory.Node.selectNode('f548656d-6884-11e5-8fe3-00215e6c3f32',UICom.root)"
+															class="button glyphicon glyphicon-random"></span>
+													</div>
+													<!-- class='btn-group' -->
+												</div>
+												<!-- #btn-+node.id -->
+											</div>
+										</div>
+										<!-- col-md-2  -->
+									</div>
+									<!-- inner row -->
+								</div>
+								<!-- nodetype -->
+							</div>
+						</div>
+						<!-- nodetype -->
+						<div class="asmnode asmUnitStructure welcome-block "
+							id="node_a178802c-685d-11e5-8fe3-00215e6c3f32">
+							<div class="row row-node">
+								<div style=""
+									class="node-label col-md-offset-1 col-md-8  same-height"
+									id="std_node_a178802c-685d-11e5-8fe3-00215e6c3f32">
+									<div class="title">
+										New Section2<span class="ihelp"
+											id="help_a178802c-685d-11e5-8fe3-00215e6c3f32"></span>
+									</div>
+									<div class="row">
+										<div class="col-md-3"></div>
+										<div class="col-md-9">
+											<div class="comments"
+												id="comments_a178802c-685d-11e5-8fe3-00215e6c3f32">
+												<div></div>
+											</div>
+											<!-- comments -->
+										</div>
+										<!-- col-md-7 -->
+										<div class="col-md-2"></div>
+									</div>
+									<!-- row -->
+									<div class="metainfo"
+										id="metainfo_a178802c-685d-11e5-8fe3-00215e6c3f32"
+										style="visibility: hidden;">
+										<span>asmUnitStructure - </span><span>semantictag:welcome-block|
+										</span><span>seenoderoles:all| </span>
+									</div>
+									<!-- metainfo -->
+								</div>
+								<!-- col-md-9 -->
+								<div class="col-md-2 buttons same-height"
+									id="buttons-a178802c-685d-11e5-8fe3-00215e6c3f32">
+									<div class="inside-full-height">
+										<div id="btn-a178802c-685d-11e5-8fe3-00215e6c3f32">
+											<div class="btn-group">
+												<span rel="tooltip" data-title="Éditer"
+													onclick="javascript:getEditBox('a178802c-685d-11e5-8fe3-00215e6c3f32')"
+													data-target="#edit-window" data-toggle="modal"
+													class="button glyphicon glyphicon-pencil"></span>
+												<!-- ==================== Delete Button ==================== -->
+												<span relx="tooltip" data-title="Delete"
+													onclick="confirmDel('a178802c-685d-11e5-8fe3-00215e6c3f32','asmUnitStructure','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+													class="button glyphicon glyphicon-remove"
+													id="del-a178802c-685d-11e5-8fe3-00215e6c3f32"></span><span
+													href="#"
+													onclick="javascript:UIFactory.Node.upNode('a178802c-685d-11e5-8fe3-00215e6c3f32')"
+													class="button glyphicon glyphicon-arrow-up"></span><span
+													href="#"
+													onclick="javascript:UIFactory.Node.selectNode('a178802c-685d-11e5-8fe3-00215e6c3f32',UICom.root)"
+													class="button glyphicon glyphicon-random"></span>
+												<button aria-expanded="false" aria-haspopup="true"
+													type="button" data-toggle="dropdown"
+													class="btn btn-xs menu-xs">
+													<div class="btn-text">
+														Add <span class="caret"></span>
+													</div>
+												</button>
+												<ul class="dropdown-menu pull-right">
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','asmUnitStructure',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">asmUnitStructure</a></li>
+													<hr>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','TextField',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">TextField</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Field',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Field</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Document',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Document</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">URL</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Calendar',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Calendar</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Image',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Image</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Video',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Video</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Audio',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Audio</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Oembed',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Oembed</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Color',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Color</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','URL2Unit',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">URL2Unit</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Comments',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Comments</a></li>
+													<hr>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','SendEmail',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">SendEmail</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Dashboard',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Dashboard</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','bubble_level1',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Bubble Map</a></li>
+													<hr>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Item',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Item</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Get_Resource</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Get_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Get_Get_Resource</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Get_Double_Resource',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Get_Double_Resource</a></li>
+													<li><a
+														onclick="javascript:importBranch('a178802c-685d-11e5-8fe3-00215e6c3f32','_karuta_resources_','Proxy',false,UIFactory['Node'].reloadUnit,'2148a501-756d-4de2-973e-323ccd6e2956',null,null)"
+														href="#xxx">Proxy</a></li>
+												</ul>
+											</div>
+											<!-- class='btn-group' -->
+										</div>
+										<!-- #btn-+node.id -->
+									</div>
+								</div>
+								<!-- col-md-2  -->
+							</div>
+							<!-- row -->
+							<div style="position: relative;" class="content"
+								id="content-a178802c-685d-11e5-8fe3-00215e6c3f32">
+								<div class="asmnode asmContext welcome-image Image"
+									id="node_31a998a1-688c-11e5-8fe3-00215e6c3f32">
+									<div class="row row-resource">
+										<div class="col-md-offset-1 col-md-2 node-label same-height"
+											id="std_node_31a998a1-688c-11e5-8fe3-00215e6c3f32">
+											<div style="" class="inside-full-height">
+												<div class="title">
+													&nbsp;<span class="ihelp"
+														id="help_31a998a1-688c-11e5-8fe3-00215e6c3f32"></span>
+												</div>
+											</div>
+											<!-- inside-full-height -->
+										</div>
+										<!-- col-md-3 -->
+										<div style="" class="col-md-6 resource same-height ">
+											<div ''="" style="" class="inside-full-height resource-Image"
+												id="std_resource_31a998a1-688c-11e5-8fe3-00215e6c3f32">
+												<div uuid="img_31a998a1-688c-11e5-8fe3-00215e6c3f32">
+													<a title=""
+														data-lightbox="image-31a998a1-688c-11e5-8fe3-00215e6c3f32"
+														href="../../../karuta-backend/resources/resource/file/31a998a1-688c-11e5-8fe3-00215e6c3f32?lang=en&amp;size=L&amp;timestamp=1444167693562"><img
+														height="100"
+														src="../../../karuta-backend/resources/resource/file/31a998a1-688c-11e5-8fe3-00215e6c3f32?lang=en&amp;size=S&amp;timestamp=1444167693562"
+														id="image_31a998a1-688c-11e5-8fe3-00215e6c3f32"></a>
+												</div>
+											</div>
+											<!-- inside-full-height -->
+										</div>
+										<!-- col-md-6 resource -->
+										<div class="col-md-2 buttons same-height"
+											id="buttons-31a998a1-688c-11e5-8fe3-00215e6c3f32">
+											<div class="inside-full-height">
+												<div id="btn-31a998a1-688c-11e5-8fe3-00215e6c3f32">
+													<div class="btn-group">
+														<span rel="tooltip" data-title="Éditer"
+															onclick="javascript:getEditBox('31a998a1-688c-11e5-8fe3-00215e6c3f32')"
+															data-target="#edit-window" data-toggle="modal"
+															class="button glyphicon glyphicon-pencil"></span>
+														<!-- ==================== Delete Button ==================== -->
+														<span relx="tooltip" data-title="Delete"
+															onclick="confirmDel('31a998a1-688c-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+															class="button glyphicon glyphicon-remove"
+															id="del-31a998a1-688c-11e5-8fe3-00215e6c3f32"></span><span
+															href="#"
+															onclick="javascript:UIFactory.Node.upNode('31a998a1-688c-11e5-8fe3-00215e6c3f32')"
+															class="button glyphicon glyphicon-arrow-up"></span><span
+															href="#"
+															onclick="javascript:UIFactory.Node.selectNode('31a998a1-688c-11e5-8fe3-00215e6c3f32',UICom.root)"
+															class="button glyphicon glyphicon-random"></span>
+													</div>
+													<!-- class='btn-group' -->
+												</div>
+												<!-- #btn-+node.id -->
+											</div>
+										</div>
+										<!-- col-md-2  -->
+									</div>
+									<!-- inner row -->
+								</div>
+								<!-- nodetype -->
+								<div class="asmnode asmContext welcome-text TextField"
+									id="node_de284600-688c-11e5-8fe3-00215e6c3f32">
+									<div class="row row-resource">
+										<div class="col-md-offset-1 col-md-2 node-label same-height"
+											id="std_node_de284600-688c-11e5-8fe3-00215e6c3f32">
+											<div style="" class="inside-full-height">
+												<div class="title">
+													&nbsp;<span class="ihelp"
+														id="help_de284600-688c-11e5-8fe3-00215e6c3f32"></span>
+												</div>
+											</div>
+											<!-- inside-full-height -->
+										</div>
+										<!-- col-md-3 -->
+										<div style="" class="col-md-6 resource same-height ">
+											<div ''="" style=""
+												class="inside-full-height resource-TextField"
+												id="std_resource_de284600-688c-11e5-8fe3-00215e6c3f32">
+												exemple de text exemple de textenexemple de text exemple de
+												texte exemple de text exemple de texte exemple de text
+												exemple de texte <br>
+											</div>
+											<!-- inside-full-height -->
+										</div>
+										<!-- col-md-6 resource -->
+										<div class="col-md-2 buttons same-height"
+											id="buttons-de284600-688c-11e5-8fe3-00215e6c3f32">
+											<div class="inside-full-height">
+												<div id="btn-de284600-688c-11e5-8fe3-00215e6c3f32">
+													<div class="btn-group">
+														<span rel="tooltip" data-title="Éditer"
+															onclick="javascript:getEditBox('de284600-688c-11e5-8fe3-00215e6c3f32')"
+															data-target="#edit-window" data-toggle="modal"
+															class="button glyphicon glyphicon-pencil"></span>
+														<!-- ==================== Delete Button ==================== -->
+														<span relx="tooltip" data-title="Delete"
+															onclick="confirmDel('de284600-688c-11e5-8fe3-00215e6c3f32','asmContext','undefined','undefined','UIFactory.Node.reloadUnit','2148a501-756d-4de2-973e-323ccd6e2956','null')"
+															class="button glyphicon glyphicon-remove"
+															id="del-de284600-688c-11e5-8fe3-00215e6c3f32"></span><span
+															href="#"
+															onclick="javascript:UIFactory.Node.upNode('de284600-688c-11e5-8fe3-00215e6c3f32')"
+															class="button glyphicon glyphicon-arrow-up"></span><span
+															href="#"
+															onclick="javascript:UIFactory.Node.selectNode('de284600-688c-11e5-8fe3-00215e6c3f32',UICom.root)"
+															class="button glyphicon glyphicon-random"></span>
+													</div>
+													<!-- class='btn-group' -->
+												</div>
+												<!-- #btn-+node.id -->
+											</div>
+										</div>
+										<!-- col-md-2  -->
+									</div>
+									<!-- inner row -->
+								</div>
+								<!-- nodetype -->
+							</div>
+						</div>
+						<!-- nodetype -->
+					</div>
+				</div>
+				<!-- nodetype -->
+			</div>
+		</div>
+		<!-- nodetype -->
+	</div>
+</div>
+			</body>
+		
+</html>
