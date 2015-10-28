@@ -753,10 +753,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				$("#get_editor_"+uuid).append(UICom.structure["ui"][uuid].resource.getEditor());
 			}
 			//----------- Comments -----------
-			if (!inline)
-				UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
-			else
+			if (edit && inline && writenode)
 				UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+			else
+				UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				if (depth>0) {
