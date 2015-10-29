@@ -7,7 +7,7 @@ var bckname = 'karuta';
 var demo = false;
 //----------------------------------
 var elgg_url_base = 'elgg/';
-var elgg_instaled = true;
+var elgg_installed = true;
 //----------------------------------
 var languages = [];
 languages [0] = 'en';

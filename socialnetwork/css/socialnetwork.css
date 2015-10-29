@@ -1,0 +1,75 @@
+#socialnetwork {
+	padding:20px;
+	margin-left:-15px;
+	background-color:white;
+}
+
+#socialnetwork .hello {
+	font-size:20px;
+	text-align:center;
+	padding:10px;
+}
+
+#socialnetwork .welcome-line {
+    border-bottom: 1px solid #e0006d;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+}
+
+#main-row .col-md-6,
+#main-row .col-md-6 #socialnetwork {
+	height:100%;	
+}
+
+#socialnetwork .fa-users{
+	font-size:90px;
+}
+
+#socialnetwork .publish .col-md-4,
+#socialnetwork .publish .col-md-8 {
+	padding:20px;
+	text-align:center;
+}
+
+#socialnetwork textarea {
+	margin-bottom:10px;
+}
+
+#socialnetwork .publish-button {
+    background-color: #18b8d6;
+    color: white;
+    font-size: 14px;
+    padding: 4px 15px;
+    float:right;
+    cursor:pointer;
+}
+
+#socialnetwork .text-group {
+    font-size: 14px;
+    padding: 4px 15px;
+    float:right;
+}
+
+#socialnetwork .dropdown {
+    background-color: #18b8d6;
+    color: white;
+    font-size: 14px;
+    padding: 4px 15px;
+    float:right;
+}
+
+#socialnetwork .dropdown-button {
+	border-radius:0px;
+}
+
+#socialnetwork .dropdown-menu {
+	border-radius:0px;
+    background-color: #18b8d6;
+    color: white;
+    font-size: 14px;
+}
+
+.elgg_river_item {
+	border: 1px solid lightgrey;	
+}

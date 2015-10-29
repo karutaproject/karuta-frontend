@@ -52,7 +52,6 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 	font-size:16px;
 }
 
-
 .row-node-asmRoot .title-subline,
 .row-node-asmStructure .title-subline,
 .row-node-asmUnit .title-subline {
@@ -69,6 +68,7 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 .toggle-content .glyphicon {
 	font-size:12px;
 }
+
 /* ====================== */
 /*     PAGE LIST     */
 /* ====================== */

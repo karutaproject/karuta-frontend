@@ -528,19 +528,35 @@ function loadLanguages(callback)
 //=======================================================================
 {
 	for (var i=0; i<languages.length; i++){
-		if (i<languages.length-1)
+		if (i<languages.length-1) {
+			if (elgg_installed) {
+				$.ajax({
+					type : "GET",
+					dataType : "script",
+					url : "../../socialnetwork/js/languages/locale_"+languages[i]+".js"
+				});
+			}
 			$.ajax({
 				type : "GET",
 				dataType : "script",
 				url : "../../karuta/js/languages/locale_"+languages[i]+".js"
 			});
-		else
+		}
+		else { // last one so we callback
+			if (elgg_installed) {
+				$.ajax({
+					type : "GET",
+					dataType : "script",
+					url : "../../socialnetwork/js/languages/locale_"+languages[i]+".js"
+				});
+			}
 			$.ajax({
 				type : "GET",
 				dataType : "script",
 				url : "../../karuta/js/languages/locale_"+languages[i]+".js",
 				success : callback
 			});
+		}
 	}
 }
 
