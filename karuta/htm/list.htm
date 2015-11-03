@@ -148,7 +148,7 @@
 					data: "",
 					success : function(data) {
 						USER = new UIFactory["User"]($("user",data));
-						loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('list',null));displaySocialNetwork('socialnetwork');$("#list").html(getList());});
+						loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('list',null));if (elgg_installed!=undefined && elgg_installed) displaySocialNetwork('socialnetwork');$("#list").html(getList());});
 						$.ajax({
 							type : "GET",
 							dataType : "xml",

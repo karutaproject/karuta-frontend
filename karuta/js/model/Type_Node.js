@@ -670,7 +670,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				if (edit && inline && writenode && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL'){
 					//------ edit inline ----------------
-					style = UIFactory["Node"].getContentStyle(nodeid);
+					style = UIFactory["Node"].getContentStyle(uuid);
 /*					style = "style='";
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
@@ -1950,6 +1950,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
 	var duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
+	var incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
 	if (g_designerrole) {
 		deletenode = (delnoderoles.indexOf(g_userrole)>-1)? true : false;
 		writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
@@ -1961,7 +1962,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//-----------------------------------
 	if (edit) {
 		//------------ edit button ---------------------
-		if ((!inline && (writenode || USER.admin || g_userrole=='designer' )) || (inline && ((USER.admin || g_userrole=='designer') && (editnoderoles.indexOf(g_userrole)<0 && editresroles.indexOf(g_userrole)<0)))) {
+		if ((!inline && ( (writenode && incrementroles.indexOf(g_userrole)<0) || USER.admin || g_userrole=='designer' )) || (inline && ((USER.admin || g_userrole=='designer') && (editnoderoles.indexOf(g_userrole)<0 && editresroles.indexOf(g_userrole)<0)))) {
 			html += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+node.id+"')\" data-title='Éditer' rel='tooltip'>";
 			html += "</span>";
 		}
@@ -2423,6 +2424,8 @@ UIFactory["Node"].displayMetainfo = function(destid,data)
 	html += UIFactory["Node"].displayMetadataWad(data,'commentnoderoles');
 	html += UIFactory["Node"].displayMetadataWad(data,'submitroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'editnoderoles');
+	html += UIFactory["Node"].displayMetadataWad(data,'duplicateroles');
+	html += UIFactory["Node"].displayMetadataWad(data,'incrementroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'query');
 	html += UIFactory["Node"].displayMetadataWad(data,'display');
 	html += UIFactory["Node"].displayMetadataWad(data,'menuroles');
@@ -2432,7 +2435,6 @@ UIFactory["Node"].displayMetainfo = function(destid,data)
 	html += UIFactory["Node"].displayMetadataWad(data,'edittargetroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'showroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'showtoroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'duplicateroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'moveroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'inline');
 	$("#"+destid).html(html);
@@ -2480,6 +2482,8 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'commentnoderoles',$(node.metadatawad).attr('commentnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitroles',$(node.metadatawad).attr('submitroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editnoderoles',$(node.metadatawad).attr('editnoderoles'));
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'incrementroles',$(node.metadatawad).attr('incrementroles'));
 	if (node.resource_type=='Proxy')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'edittargetroles',$(node.metadatawad).attr('edittargetroles'));
 	if (name=='asmContext' && node.resource.type=='Image')
@@ -2491,7 +2495,6 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 //		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'private',$(node.metadatawad).attr('private'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showtoroles',$(node.metadatawad).attr('showtoroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'shareroles',$(node.metadatawad).attr('shareroles'));
-	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);

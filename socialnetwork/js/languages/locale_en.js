@@ -10,10 +10,16 @@ snStr['en']["hello"] = "Hello";
 
 snStr['en']["something_to_publish"] = "Something to publish?";
 snStr['en']["publish"] = "Publish";
-snStr['en']["publish_on"] = "on the wall of group";
+snStr['en']["publish_on"] = "on";
 snStr['en']["activities"] = "Activities";
 snStr['en']["public"] = "Public Wall";
 snStr['en']["groups"] = "Group Walls";
+snStr['en']["comment"] = "Comment";
+snStr['en']["empty-wall"] = "The Wall is Empty";
+
+snStr['en']["create_network_group"] = "Create a Network Group";
+snStr['en']["delete_network_group"] = "Delete the Network Group";
+snStr['en']["add_member"] = "Add a member";
 
 snStr['en']["river_user_default_profileiconupdate"] = "has a new avatar";
 snStr['en']["river_object_blog_create"] = "published a blog post";

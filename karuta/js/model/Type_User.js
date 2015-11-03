@@ -300,7 +300,7 @@ UIFactory["User"].prototype.getSelector = function(attr,value,name)
 	var firstname = this.firstname_node.text();
 	var lastname = this.lastname_node.text();
 	var username = this.username_node.text();
-	var html = "<input type='checkbox' name='"+name+"' value='"+userid+"'";
+	var html = "<input type='checkbox' name='"+name+"' username='"+username+"' value='"+userid+"'";
 	if (attr!=null && value!=null)
 		html += " "+attr+"='"+value+"'";
 	if (userid==1)

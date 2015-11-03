@@ -123,6 +123,7 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 	color:black;
 }
 
+
 #list .btn,
 #list input[type='checkbox'] {
 	background-color:black;
@@ -141,16 +142,6 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 	background-color:#bb0066;
 }
 
-.project-label {
-	font-size:15px;
-}
-
-.project-menu {
-	color:white;
-	background-color:black;
-	padding:0px 5px;;
-	font-size:14px;
-}
 
 .project-menu .dropdown-menu {
 	min-width:200px;
@@ -336,10 +327,10 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 /* ============================================== */
 
 
-/* --- buton are redefined to use with Ipas and solve size errors */
+/* --- buton are redefined to use with Ipad and solve size errors */
 .btn-xs [class*="icon-"] {
-	margin-top:3px;
-	margin-bottom:3px;
+	margin-top:auto;
+	margin-bottom:auto;
 }
 .btn-xs .icon-font {
 	margin-top:0px;
