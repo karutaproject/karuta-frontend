@@ -1581,9 +1581,10 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				}
 				//---------------------------
 				if (semtag=="ref" || semtag=="semtag" || semtag=="nodetype" || semtag=="todisplay" || semtag=="aggregatetype" || semtag=="aggregationselect" || semtag=="test") {
-//					if (semtag=="nodetype" && $($("metadata",$(data).parent())[0]).attr('semantictag')=='for-each-node')
-//						html += "<div class='row'>";						
-					html += "<div id='std_resource_"+uuid+"' class='col-md-2'>";
+					if (semtag=="test")
+						html += "<div id='std_resource_"+uuid+"' class='col-md-5'>";
+					else
+						html += "<div id='std_resource_"+uuid+"' class='col-md-2'>";
 					html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
 					//-----------------------
 					if(UICom.structure["ui"][uuid].resource!=null) {
@@ -1644,7 +1645,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 							html += "</div>";
 					}
 					//-------------- buttons --------------------------
-					html += "<div id='buttons-"+uuid+"' class='col-md-2'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
+					html += "<div id='buttons-"+uuid+"' class='col-md-2 visible-lg visible-md'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
 					//--------------------------------------------------
 					html += "</div><!-- row -->";
 					//--------------------------------------------------
@@ -1657,7 +1658,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				html += "<div>";
 				html += "<div class='model_row'>";	
 				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='model_button'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
+				html += "<div id='buttons-"+uuid+"' class='model_button  visible-lg visible-md'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
 				//-------------- node -----------------------------
 				html += "<div id='std_node_"+uuid+"'  class='model_node'>";
 				html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);

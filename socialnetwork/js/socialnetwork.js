@@ -174,10 +174,13 @@ function getComments(node)
 	html+= "	</div>";
 	html+= "	<div class='media-body'>";
 	html+= "		<h5 class='media-heading'>";
-	html+= "					<span class='glyphicon glyphicon-remove' onclick=\"deleteWire('"+node.guid+"')\"></span> ";
+	//----------------------------------
+	if (node.owner.guid==g_elgg_userid) // test if owner
+		html+= "					<i class='fa fa-times fa-lg' onclick=\"deleteWire('"+node.guid+"')\"></i> ";
 	if (node.num_likes!='0')
-		html += "				<span class='likes'>"+node.num_likes+"</span>";
-	html+= "					<span class='glyphicon glyphicon-thumbs-up' onclick=\"likeEntity('"+node.guid+"')\"></span> ";
+		html += "				<span class='likes'>&nbsp;"+node.num_likes+"</span>";
+	html+= "					<i class='fa fa-thumbs-o-up fa-lg' onclick=\"likeEntity('"+node.guid+"')\"></i> ";
+	//----------------------------------
 	html+= "			"+node.owner.name+" ";
 	html+= " 			<span class='elgg-river-timestamp'><acronym title='"+date.format('LLL')+"'>"+date.fromNow()+"</acronym></span>";
 	html+= "		</h5>";
@@ -408,9 +411,9 @@ function postWire()
 	var message = document.getElementById("wire-message").value;
 	var url = "../../../"+elgg_url_base+"services/api/rest/xml/?auth_token="+g_elgg_key+"&text="+message;
 	if (groupid==0)
-		url += "&method=wire.post";
+		url += "&method=thewire.post";
 	else
-		url += "&method=group.thewire.post&group_guid="+groupid;
+		url += "&method=group.wire.post&group_guid="+groupid;
 	$.ajax({
 		type : "POST",
 		dataType : "json",
