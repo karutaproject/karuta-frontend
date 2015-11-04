@@ -18,31 +18,34 @@ var xmlDoc = null;
 var userid = null; // current user
 var aggregates = {};
 
-Selector = function(jquery,type,filter)
+Selector = function(jquery,type,filter1,filter2)
 {
 	this.jquery = jquery;
 	this.type = type;
-	this.filter = filter;
+	this.filter1 = filter1;
+	this.filter2 = filter2;
 };
 
 //==================================
 function getSelector(select,test)
 //==================================
 {
+	if (test==null)
+	 test = "";
 	var selects = select.split("."); // nodetype.semtag.[node|resource] or .[node|resource]
-		if (selects[0]=="")
-			selects[0] = "*";
-		var jquery = selects[0];
-		var filter = "";
-		if (selects[1]!="") {
-			jquery +=":has(metadata[semantictag='"+selects[1]+"'])";
-			filter = function(){return $(this).children("metadata[semantictag='"+selects[1]+"']").length>0};
-		}
-		if (test!=null && test!='')
-			jquery +=":has("+test+")";
-		var type = selects[2];
-		var selector = new Selector(jquery,type,filter);
-		return selector;
+	if (selects[0]=="")
+		selects[0] = "*";
+	var jquery = selects[0];
+	var filter1 = null;
+	var filter2 = null;
+	if (selects[1]!="") {
+		jquery +=":has(metadata[semantictag='"+selects[1]+"'])";
+		filter1 = function(){return $(this).children("metadata[semantictag='"+selects[1]+"']").length>0};
+	}
+	var filter2 = test; // test = .has("metadata-wad[submitted='Y']").last()
+	var type = selects[2];
+	var selector = new Selector(jquery,type,filter1,filter2);
+	return selector;
 }
 
 //==================================
@@ -73,6 +76,7 @@ function processPortfolio(no,xmlReport,destid,data,line)
 function process(xmlDoc,json)
 //==================================
 {
+	$.ajaxSetup({async: false});
 	var children = $(":root",xmlDoc).children();
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
@@ -90,6 +94,7 @@ function process(xmlDoc,json)
 			processText(children[i],'content');
 	}
 	displayPDFButton();
+	$.ajaxSetup({async: true});
 }
 
 //==================================
@@ -129,7 +134,9 @@ function processNode(no,xmlDoc,destid,data,line)
 	var test = $(xmlDoc).attr("test");
 	if (select!=undefined) {
 		var selector = getSelector(select,test);
-		var nodes = $(selector.jquery,data).filter(selector.filter);
+		var nodes = $(selector.jquery,data).filter(selector.filter1);
+		nodes = eval("nodes"+selector.filter2);
+		
 		for (var i=0; i<nodes.length;i++){
 			//---------------------------
 			var ref_init = $(xmlDoc).attr("ref-init");
@@ -334,6 +341,7 @@ function processPortfolios(no,xmlDoc,destid,data,line)
 	var portfolioid = "";
 	for ( var j = 0; j < portfolios_list.length; j++) {
 		var code = portfolios_list[j].code_node.text();
+//		alert(j+"-"+code);
 		if (select.indexOf("code*=")>-1) {
 			value = select.substring(7,select.length-1);  // inside quote
 			condition = code.indexOf(value)>-1;
@@ -348,6 +356,7 @@ function processPortfolios(no,xmlDoc,destid,data,line)
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
+				j : j,
 				url : "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 				success : function(data) {
 					UICom.parseStructure(data,true);
@@ -355,17 +364,17 @@ function processPortfolios(no,xmlDoc,destid,data,line)
 					for (var i=0; i<children.length;i++){
 						var tagname = $(children[i])[0].tagName;
 						if (tagname=="table")
-							processTable(no+"_"+j+"_"+i,children[i],destid,data,line);
+							processTable(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
 						if (tagname=="row")
-							processRow(no+"_"+j+"_"+i,children[i],destid,data,line);
+							processRow(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
 						if (tagname=="cell")
-							processCell(no+"_"+j+"_"+i,children[i],destid,data,line);
+							processCell(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
 						if (tagname=="node_resource")
 							processNodeResource(children[i],destid,data,line);
 						if (tagname=="text")
 							processText(children[i],destid,data,line);
 						if (tagname=="for-each-node")
-							processNode(no+"_"+j+"_"+i,children[i],destid,data,line);
+							processNode(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
 					}
 				}
 			});

@@ -100,8 +100,9 @@ UIFactory["Field"].prototype.getEditor = function(type,langcode,disabled)
 	html += "<input type='text' class='form-control'";
 	if (disabled)
 		html += "disabled='disabled' ";
-	html += "value=\""+value+"\" >";
+	html += "value=''>";
 	var obj = $(html);
+	$(obj).attr('value',value);
 	var self = this;
 	$(obj).change(function (){
 		$(self.text_node[langcode]).text($(this).val());

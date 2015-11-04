@@ -110,8 +110,7 @@
 				</fo:flow>
 			</fo:page-sequence>
 		</xsl:if>
-		<xsl:apply-templates select="./asmStructure[not(metadata-wad/@displaytree='none')]"/>
-		<xsl:apply-templates select="./asmUnit[not(metadata-wad/@displaytree='none')]"/>
+		<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@displaytree='none')]"/>
 </xsl:template>
 
 <!-- =================================== -->
@@ -135,8 +134,7 @@
 				</fo:flow>
 			</fo:page-sequence>
 		</xsl:if>
-		<xsl:apply-templates select="./asmStructure[not(metadata-wad/@displaytree='none')]"/>
-		<xsl:apply-templates select="./asmUnit[not(metadata-wad/@displaytree='none')]"/>
+		<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@displaytree='none')]"/>
 </xsl:template>
 
 <!-- =================================== -->

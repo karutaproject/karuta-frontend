@@ -155,6 +155,7 @@ karutaStr['fr']['shareroles']="Rôles - Partager";
 karutaStr['fr']['submitted']="Soumis";
 karutaStr['fr']['notsubmitted']="Non soumis";
 karutaStr['fr']['collapsible']="Repliable";
+karutaStr['fr']['incrementroles']="Rôles - Incrémenter seulement";
 
 //=========================================
 //========== ADMIN ========================
