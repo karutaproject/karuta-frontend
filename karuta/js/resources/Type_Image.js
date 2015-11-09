@@ -78,6 +78,34 @@ UIFactory["Image"] = function( node )
 	this.display = {};
 };
 
+//==================================
+UIFactory["Image"].prototype.getAttributes = function(type,langcode)
+//==================================
+{
+	var result = {};
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
+	}
+	//---------------------
+	if (type==null)
+		type = 'default';
+	//---------------------
+	if (type=='default') {
+		result['restype'] = this.type;
+		result['type'] = this.type_node[langcode].text();
+		result['size'] = this.size_node[langcode].text();
+		result['filename'] = this.filename_node[langcode].text();
+		result['fileid'] = this.fileid_node[langcode].text();
+	}
+	return result;
+}
+
 /// Display
 //==================================
 UIFactory["Image"].prototype.getView = function(dest,type,langcode)

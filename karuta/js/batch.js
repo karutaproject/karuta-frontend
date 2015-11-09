@@ -22,6 +22,15 @@ var g_noline = 0;
 var g_create_users = null;
 var g_nb_createUser = new Array();
 //-----------------------
+var g_create_elgg_users = null;
+var g_nb_createElggUser = new Array();
+//-----------------------
+var g_create_elgg_members = null;
+var g_nb_createElggMember = new Array();
+//-----------------------
+var g_create_elgg_groups = null;
+var g_nb_createElggGroup = new Array();
+//-----------------------
 var g_create_trees = null;
 var g_nb_createTree = new Array();
 //-----------------------
@@ -68,7 +77,10 @@ function processAll()
 //=================================================
 {
 	$.ajaxSetup({async: false});
+	g_create_elgg_groups = $("create-elgg-group",g_xmlDoc);
 	g_create_users = $("create-user",g_xmlDoc);
+	g_create_elgg_users = $("create-elgg-user",g_xmlDoc);
+	g_create_elgg_members = $("create-elgg-member",g_xmlDoc);
 	g_create_trees = $("create-tree",g_xmlDoc);
 	g_select_trees = $("select-tree",g_xmlDoc);
 	g_copy_trees = $("copy-tree",g_xmlDoc);
@@ -82,7 +94,10 @@ function processAll()
 function processLine()
 //=================================================
 {
+	g_nb_createElggGroup[g_noline] = 0;
 	g_nb_createUser[g_noline] = 0;
+	g_nb_createElggUser[g_noline] = 0;
+	g_nb_createElggMember[g_noline] = 0;
 	g_nb_createTree[g_noline] = 0;
 	g_nb_selectTree[g_noline] = 0;
 	g_nb_copyTree[g_noline] = 0;
@@ -90,8 +105,47 @@ function processLine()
 	g_nb_shareTree[g_noline] = 0;
 	g_nb_deleteTree[g_noline] = 0;
 	$("#log").append("<br>================ LINE "+(g_noline+1)+" =========================================");
-	processUsers();
+	processElggGroups();
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//--------------------------- Elgg Group -------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function processElggGroups()
+//=================================================
+{
+	if (g_create_elgg_groups.length==0)
+		processUsers();
+	else {
+		$("#log").append("<br>---------------------create_elgg_groups-------------------------------");
+		for  (var j=0; j<g_create_elgg_groups.length; j++) {
+			createElggGroup(g_create_elgg_groups[j]);
+		}
+	}
+}
+
+//=================================================
+function createElggGroup(node)
+//=================================================
+{
+	var group = getTxtvals($("group",node));
+	var callback = function (param1){	g_nb_createElggMember[g_noline]++;
+		if (g_nb_createElggGroup[g_noline]==g_create_elgg_groups.length) {
+			processUsers();
+		}
+	};
+	createNetworkGroup(name,callback);
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------------ User -----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
 //=================================================
 function processUsers()
@@ -134,7 +188,7 @@ function createUser(node)
 			//===========================================================
 			g_nb_createUser[g_noline]++;
 			if (g_nb_createUser[g_noline]==g_create_users.length) {
-				processCreateTrees();
+				processElggUsers();
 			}
 			//===========================================================
 		},
@@ -168,7 +222,7 @@ function createUser(node)
 						//===========================================================
 						g_nb_createUser[g_noline]++;
 						if (g_nb_createUser[g_noline]>=g_create_users.length) {
-							processCreateTrees();
+							processElggUsers();
 						}
 						//===========================================================
 					},
@@ -181,13 +235,117 @@ function createUser(node)
 				//===========================================================
 				g_nb_createUser[g_noline]++;
 				if (g_nb_createUser[g_noline]>=g_create_users.length) {
-					processCreateTrees();
+					processElggUsers();
 				}
 				//===========================================================
 			}
 		}
 	});
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//--------------------------- Elgg User ---------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function processElggUsers()
+//=================================================
+{
+	if (g_create_elgg_users.length==0)
+		processCreateTrees();
+	else {
+		$("#log").append("<br>---------------------create_elgg_users-------------------------------");
+		for  (var j=0; j<g_create_elgg_users.length; j++) {
+			createElggUser(g_create_elgg_users[j]);
+		}
+	}
+}
+
+//=================================================
+function createElggUser(node)
+//=================================================
+{
+	var identifier = getTxtvals($("identifier",node));
+	var lastname = getTxtvals($("lastname",node));
+	var firstname = getTxtvals($("firstname",node));
+	var email = getTxtvals($("email",node));
+	var password = getTxtvals($("password",node));
+	//---- get userid ----------
+	var userid = "";
+	var url = "../../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=auth.getuser&username="+identifier;
+	$.ajax({
+		Accept: "json",
+		dataType : "json",
+		type : "GET",
+		url : url,
+		data, data,
+		success : function(data) {
+			elgg_userid = data.result.guid;
+			if (elgg_userid>0) {
+				$("#log").append("<br>- Elgg user already defined("+elgg_userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+				//===========================================================
+				g_nb_createElggUser[g_noline]++;
+				if (g_nb_createElggUser[g_noline]==g_create_elgg_users.length) {
+					processCreateTrees();
+				}
+				//===========================================================
+			} else {
+				var callback = function (param1){	g_nb_createElggUser[g_noline]++;
+													if (g_nb_createElggUser[g_noline]==g_create_elgg_users.length) {
+														processCreateTrees();
+													}
+				};
+				user_register(identifier, email, username, password,callback,param1)
+			}
+		},
+		error : function(jqxhr,textStatus) {
+			alert("createElggUser : Oups! "+jqxhr.responseText);
+		}
+	});
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//--------------------------- Elgg Member -------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function processElggGroupMembers()
+//=================================================
+{
+	if (g_create_elgg_members.length==0)
+		processCreateTrees();
+	else {
+		$("#log").append("<br>---------------------create_elgg_users-------------------------------");
+		for  (var j=0; j<g_create_elgg_members.length; j++) {
+			createElggGroupMember(g_create_elgg_members[j]);
+		}
+	}
+}
+
+//=================================================
+function createElggGroupMember(node)
+//=================================================
+{
+	var identifier = getTxtvals($("identifier",node));
+	var group = getTxtvals($("group",node));
+	var callback = function (param1){	g_nb_createElggMember[g_noline]++;
+		if (g_nb_createElggMemberr[g_noline]==g_create_elgg_members.length) {
+			processCreateTrees();
+		}
+	};
+	addGroupMember(groupid,username,callback);
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//-------------------------- Create Tree --------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
 //=================================================
 function processCreateTrees()
@@ -266,6 +424,12 @@ function createTree(node,treeref)
 	}
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//---------------------------Select Tree --------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
 //=================================================
 function processSelectTrees()
 //=================================================
@@ -309,6 +473,12 @@ function processCopyTrees()
 		}
 	}
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Copy Tree -----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
 //=================================================
 function copyTree(node)
@@ -372,6 +542,12 @@ function copyTree(node)
 	portfolio [1] = code;
 	return portfolio;
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Update Resource ------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
 //=================================================
 function processUpdateResources()
@@ -649,6 +825,12 @@ function updateResource(node)
 	//----------------------------------------------------
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Share Tree ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
 //=================================================
 function processShareTrees()
 //=================================================
@@ -750,6 +932,12 @@ function shareTree(node)
 	}
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Delete Tree ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
 //=================================================
 function processDeleteTrees()
 //=================================================
@@ -803,6 +991,12 @@ function processImportNodes()
 	}
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Impot Node ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
 //=================================================
 function importNode(node)
 //=================================================
@@ -817,6 +1011,12 @@ function importNode(node)
 		}
 	});
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ This is the End ------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
 //=================================================
 function processEnd()

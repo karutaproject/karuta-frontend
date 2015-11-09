@@ -6,8 +6,11 @@ var appliname = 'karuta-ux';
 var bckname = 'karuta';
 var demo = false;
 //----------------------------------
-var elgg_url_base = 'elgg/';
+var elgg_url_base = 'elgg112/';
+var elgg_url_absolute = '';
 var elgg_installed = true;
+var elgg_refreshing = 240000; // 240 seconds
+
 //----------------------------------
 var languages = [];
 languages [0] = 'en';

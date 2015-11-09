@@ -150,7 +150,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				html += "					<li><a onclick=\"UIFactory['Portfolio'].createBatch('"+portfoliocode+"')\" href='#'>"+karutaStr[LANG]['create_batch']+"</a></li>";
 				html += "					<li><a onclick=\"UIFactory['Portfolio'].createReport('"+portfoliocode+"')\" href='#'>"+karutaStr[LANG]['create_report']+"</a></li>";
 				if (elgg_installed)
-					html += getProjectNetworkMenu(portfoliocode);
+					html += getProjectNetworkMenu(portfoliocode,portfolio.id);
 				html += "				</ul>";
 				html += "			</div>";
 				html += "		</div>";

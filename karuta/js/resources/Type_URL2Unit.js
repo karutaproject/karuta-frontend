@@ -58,6 +58,33 @@ UIFactory["URL2Unit"] = function(node,condition)
 	this.display = {};
 };
 
+//==================================
+UIFactory["URL"].prototype.getAttributes = function(type,langcode)
+//==================================
+{
+	var result = {};
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
+	}
+	//---------------------
+	if (type==null)
+		type = 'default';
+	//---------------------
+	if (type=='default') {
+		result['restype'] = this.type;
+		result['uuid'] = this.uuid_node[langcode].text();
+		result['label'] = this.label_node[langcode].text();
+		result['local_label'] = this.local_label_node[langcode].text();
+	}
+	return result;
+}
+
 /// Display
 //==================================
 UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)

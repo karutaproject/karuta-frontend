@@ -58,7 +58,70 @@
 			</designer>
 		</create-user>
 	</xsl:template>
-	
+
+	<xsl:template match="*[metadata/@semantictag='create-elgg-user']">
+		<xsl:variable name="identifier">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="firstname">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='firstname']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="lastname">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='lastname']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="email">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='email']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="password">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='password']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<create-elgg-user>
+			<identifier>
+				<txtval select='{$identifier}'/>
+			</identifier>
+			<firstname>
+				<txtval select='{$firstname}'/>
+			</firstname>
+			<lastname>
+				<txtval select='{$lastname}'/>
+			</lastname>
+			<email>
+				<txtval select='{$email}'/>
+			</email>
+			<password>
+				<txtval select='{$password}'/>
+			</password>
+		</create-elgg-user>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='create-elgg-member']">
+		<xsl:variable name="identifier">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="group">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='group']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<create-elgg-member>
+			<identifier>
+				<txtval select='{$identifier}'/>
+			</identifier>
+			<group>
+				<txtval select='{group}'/>
+			</group>
+		</create-elgg-member>
+	</xsl:template>
+		
+	<xsl:template match="*[metadata/@semantictag='create-elgg-group']">
+		<xsl:variable name="group">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='group']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<create-elgg-group>
+			<group>
+				<txtval select='{group}'/>
+			</group>
+		</create-elgg-group>
+	</xsl:template>
+
 	<xsl:template name='txtval'>
 		<xsl:param name="semtag"/>
 		<xsl:for-each select=".//*[metadata/@semantictag=$semtag]/*[metadata/@semantictag='txtsel' or metadata/@semantictag='txtval']">

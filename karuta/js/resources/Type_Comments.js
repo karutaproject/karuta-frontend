@@ -49,11 +49,41 @@ UIFactory["Comments"] = function( node )
 	this.display = {};
 };
 
-function Comment(author,date,text) {
-	  this.author = author;
-	  this.date = date;
-	  this.text = text;
+//==================================
+function Comment(author,date,text)
+//==================================
+{
+	this.author = author;
+	this.date = date;
+	this.text = text;
+}
+
+//==================================
+UIFactory["Color"].prototype.getAttributes = function(type,langcode)
+//==================================
+{
+	var result = {};
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
 	}
+	//---------------------
+	if (type==null)
+		type = 'default';
+	//---------------------
+	if (type=='default') {
+		result['restype'] = this.type;
+		result['author'] = this.author_node[langcode].text();
+		result['date'] = this.date_node[langcode].text();
+		result['text'] = this.text_node[langcode].text();
+	}
+	return result;
+}
 
 //==================================
 UIFactory["Comments"].prototype.getValues = function(type,langcode)

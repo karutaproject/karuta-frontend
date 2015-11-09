@@ -62,6 +62,32 @@ UIFactory["URL"] = function( node )
 	this.display = {};
 };
 
+//==================================
+UIFactory["URL"].prototype.getAttributes = function(type,langcode)
+//==================================
+{
+	var result = {};
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
+	}
+	//---------------------
+	if (type==null)
+		type = 'default';
+	//---------------------
+	if (type=='default') {
+		result['restype'] = this.type;
+		result['label'] = this.label_node[langcode].text();
+		result['url'] = this.url_node[langcode].text();
+	}
+	return result;
+}
+
 /// Display
 //==================================
 UIFactory["URL"].prototype.getView = function(dest,type,langcode)

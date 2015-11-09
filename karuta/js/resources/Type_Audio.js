@@ -57,6 +57,34 @@ UIFactory["Audio"] = function( node )
 	this.display = {};
 };
 
+//==================================
+UIFactory["Audio"].prototype.getAttributes = function(type,langcode)
+//==================================
+{
+	var result = {};
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
+	}
+	//---------------------
+	if (type==null)
+		type = 'default';
+	//---------------------
+	if (type=='default') {
+		result['restype'] = this.type;
+		result['type'] = this.type_node[langcode].text();
+		result['size'] = this.size_node[langcode].text();
+		result['filename'] = this.filename_node[langcode].text();
+		result['fileid'] = this.fileid_node[langcode].text();
+	}
+	return result;
+}
+
 /// Display
 //==================================
 UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
@@ -71,52 +99,56 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest]=langcode;
 	}
+	//---------------------
 	if (type==null)
-		type='default';
-	var html ="";
-	html += "<div id='jquery_jplayer_"+this.id+"' class='jp-jplayer'></div>";
-	html += "<div id='jp_container_"+this.id+"' class='jp-audio'>";
-	html += "<div class='jp-type-single'>";	
-	html += "<div class='jp-gui jp-interface'>";
-	//html += "<div class='jp-audio-play'>";
-	//html += "<a href='javascript:;' class='jp-audio-play-icon' tabindex='1'>play</a>";
-	html += "<ul class='jp-controls'>";
-	html += "  <li><a href='javascript:;' class='jp-play' tabindex='1'>play</a></li>";
-	html += "  <li><a href='javascript:;' class='jp-pause' tabindex='1'>pause</a></li>";
-	html += "  <li><a href='javascript:;' class='jp-stop' tabindex='1'>stop</a></li>";
-	html += "  <li><a href='javascript:;' class='jp-mute' tabindex='1' title='mute'>mute</a></li>";
-	html += "  <li><a href='javascript:;' class='jp-unmute' tabindex='1' title='unmute'>unmute</a></li>";
-	html += "  <li><a href='javascript:;' class='jp-volume-max' tabindex='1' title='max volume'>max volume</a></li>";
-	html += "</ul>";
-	html += "<div class='jp-progress'>";
-	html += "<div class='jp-seek-bar'>";
-	html += "<div class='jp-play-bar'></div>";
-	html += "</div>";
-	html += "</div>";
-	html += "<div class='jp-volume-bar'>";
-	html += "  <div class='jp-volume-bar-value'></div>";
-	html += "</div>";
-	html += "  <div class='jp-time-holder'>";
-	//html += "<div class='jp-interface'>";	
-	html += "  <div class='jp-current-time'></div>";
-	html += "  <div class='jp-duration'></div>";	
-	html += "<ul class='jp-toggles'>";
-	html += "  <li><a href='javascript:;' class='jp-repeat' tabindex='1' title='repeat'>repeat</a></li>";
-	html += "  <li><a href='javascript:;' class='jp-repeat-off' tabindex='1' title='repeat off'>repeat off</a></li>";
-	html += "</ul>";
-	html += "</div>";
-	html += "</div>";
-	html += "  <div class='jp-title'>";
-	html += "<ul>";
-	html += "  <li>"+this.filename_node[langcode].text()+"</li>";
-	html += "</ul>";
-	html += "  </div>";
-	html += "  <div class='jp-no-solution'>";
-	html += "<span>Update Required</span>";
-	html += "To play the media you will need to either update your browser to a recent version or update your <a href='http://get.adobe.com/flashplayer/' target='_blank'>Flash plugin</a>.";
-	html += "  </div>";
-	html += "</div>";
-	html += "  </div>";
+		type = 'default';
+	//---------------------
+	if (type=='default') {
+		var html ="";
+		html += "<div id='jquery_jplayer_"+this.id+"' class='jp-jplayer'></div>";
+		html += "<div id='jp_container_"+this.id+"' class='jp-audio'>";
+		html += "<div class='jp-type-single'>";	
+		html += "<div class='jp-gui jp-interface'>";
+		//html += "<div class='jp-audio-play'>";
+		//html += "<a href='javascript:;' class='jp-audio-play-icon' tabindex='1'>play</a>";
+		html += "<ul class='jp-controls'>";
+		html += "  <li><a href='javascript:;' class='jp-play' tabindex='1'>play</a></li>";
+		html += "  <li><a href='javascript:;' class='jp-pause' tabindex='1'>pause</a></li>";
+		html += "  <li><a href='javascript:;' class='jp-stop' tabindex='1'>stop</a></li>";
+		html += "  <li><a href='javascript:;' class='jp-mute' tabindex='1' title='mute'>mute</a></li>";
+		html += "  <li><a href='javascript:;' class='jp-unmute' tabindex='1' title='unmute'>unmute</a></li>";
+		html += "  <li><a href='javascript:;' class='jp-volume-max' tabindex='1' title='max volume'>max volume</a></li>";
+		html += "</ul>";
+		html += "<div class='jp-progress'>";
+		html += "<div class='jp-seek-bar'>";
+		html += "<div class='jp-play-bar'></div>";
+		html += "</div>";
+		html += "</div>";
+		html += "<div class='jp-volume-bar'>";
+		html += "  <div class='jp-volume-bar-value'></div>";
+		html += "</div>";
+		html += "  <div class='jp-time-holder'>";
+		//html += "<div class='jp-interface'>";	
+		html += "  <div class='jp-current-time'></div>";
+		html += "  <div class='jp-duration'></div>";	
+		html += "<ul class='jp-toggles'>";
+		html += "  <li><a href='javascript:;' class='jp-repeat' tabindex='1' title='repeat'>repeat</a></li>";
+		html += "  <li><a href='javascript:;' class='jp-repeat-off' tabindex='1' title='repeat off'>repeat off</a></li>";
+		html += "</ul>";
+		html += "</div>";
+		html += "</div>";
+		html += "  <div class='jp-title'>";
+		html += "<ul>";
+		html += "  <li>"+this.filename_node[langcode].text()+"</li>";
+		html += "</ul>";
+		html += "  </div>";
+		html += "  <div class='jp-no-solution'>";
+		html += "<span>Update Required</span>";
+		html += "To play the media you will need to either update your browser to a recent version or update your <a href='http://get.adobe.com/flashplayer/' target='_blank'>Flash plugin</a>.";
+		html += "  </div>";
+		html += "</div>";
+		html += "  </div>";
+	}
 	return html;
 };
 

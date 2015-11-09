@@ -46,6 +46,31 @@ UIFactory["Oembed"] = function( node )
 	this.display = {};
 };
 
+//==================================
+UIFactory["Oembed"].prototype.getAttributes = function(type,langcode)
+//==================================
+{
+	var result = {};
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
+	}
+	//---------------------
+	if (type==null)
+		type = 'default';
+	//---------------------
+	if (type=='default') {
+		result['restype'] = this.type;
+		result['url'] = this.label_node[langcode].text();
+	}
+	return result;
+}
+
 /// Display
 //==================================
 UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)

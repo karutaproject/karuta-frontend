@@ -67,6 +67,37 @@ UIFactory["Get_Double_Resource"] = function(node,condition)
 	this.display = {};
 };
 
+//==================================
+UIFactory["Get_Double_Resource"].prototype.getAttributes = function(type,langcode)
+//==================================
+{
+	var result = {};
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
+	}
+	//---------------------
+	if (type==null)
+		type = 'default';
+	//---------------------
+	if (type=='default') {
+		result['restype'] = this.type;
+		result['value1'] = this.value1_node.text();
+		result['code1'] = this.code1_node.text();
+		result['label1'] = this.label1_node[langcode].text();
+		result['separator'] = this.separator_node[langcode].text();
+		result['value2'] = this.value2_node.text();
+		result['code2'] = this.code2_node.text();
+		result['label2'] = this.label2_node[langcode].text();
+	}
+	return result;
+}
+
 /// Display
 //==================================
 UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode)

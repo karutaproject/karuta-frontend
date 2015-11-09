@@ -17,44 +17,8 @@ var g_elgg_key = "";
 var g_elgg_userid = "";
 var g_elgg_user_groups = [];
 
-//==================================
-function loginElgg(username,password,callback)
-//==================================
-{
-	if (username=='root')
-		username = 'karuta_'+username;
-	var url = "../../../../"+elgg_url_base+"/services/api/rest/xml/?method=auth.gettoken&username="+username+"&password="+password;
-	$.ajax({
-		Accept: "json",
-		dataType : "json",
-		type : "POST",
-		url : url,
-		success : function(data) {
-			var g_elgg_key = data.result;
-			if (callback!=null)
-				callback(g_elgg_key);
-		}
-	});
-}
-
-//==================================
-function getElggUser()
-//==================================
-{
-	var url = "../../../../"+elgg_url_base+"/services/api/rest/xml/?method=auth.getuser";
-	$.ajax({
-		Accept: "json",
-		dataType : "json",
-		type : "GET",
-		url : url,
-		success : function(data) {
-			g_elgg_userid = data.result.guid;
-		}
-	});
-}
-
 //==============================
-function getProjectNetworkMenu(projectcode)
+function getProjectNetworkMenu(projectcode,portfolioid)
 //==============================
 {
 	var html = "";
@@ -63,12 +27,17 @@ function getProjectNetworkMenu(projectcode)
 	var owner_id = "";
 	for (var i=0; i<g_elgg_user_groups.length; i++) {
 		if (projectcode==g_elgg_user_groups[i].name) {
+			group_exists = true;
 			group_id = g_elgg_user_groups[i].guid;
 			owner_id = g_elgg_user_groups[i].owner_guid;
 		}
 	}
-	if (owner_id==g_elgg_userid)
-		html += "<li><a onclick=\"callAddGroupMembers('"+group_id+"')\" href='#'>"+snStr[LANG]['add_member']+"</a></li>";		
+	if (!group_exists && portfolios_byid[portfolioid].owner=='Y')
+		html += "<li><a onclick=\"createNetworkGroup('"+projectcode+"')\" href='#'>"+snStr[LANG]['create_network_group']+"</a></li>";		
+	if (owner_id==g_elgg_userid) {
+		html += "<li><a onclick=\"callAddGroupMembers('"+group_id+"')\" href='#'>"+snStr[LANG]['add_member']+"</a></li>";
+		html += "<li><a onclick=\"deleteNetworkGroup('"+group_id+"')\" href='#'>"+snStr[LANG]['delete_network_group']+"</a></li>";
+	}
 	if (html!="")
 		html = 	"<hr>" + html;
 	return html;
@@ -204,6 +173,9 @@ function likeEntity(objectid)
 			getRiverFeed('activities');
 			getWall('public');
 			displayGroupWalls('groups');
+		},
+		error : function(jqxhr,textStatus) {
+			alert("likeEntity : Oups! "+jqxhr.responseText);
 		}
 	});
 }
@@ -224,7 +196,14 @@ function toggleComments(id)
 
 }
 
-
+//==================================
+function transcodeText(text)
+//==================================
+{
+	var result1 = text.replace(/link\((.*?)\)/g,"<a target='_blank' href='$1'>$1</a> ");
+	var result2 = result1.replace(/image\((.*?)\) /g,"<img  src='$1'/> ");
+	return result2;
+}
 
 //=================================================================================================
 //=================================================================================================
@@ -236,13 +215,19 @@ function toggleComments(id)
 function getRiverFeed(destid)
 //==================================
 {
+	var url = "../../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=site.river_feed&limit=50";
 	$.ajax({
 		Accept: "json",
 		dataType : "json",
 		type : "GET",
-		url : "../../../"+elgg_url_base+"services/api/rest/xml/?auth_token="+g_elgg_key+"&method=site.river_feed&limit=50",
+		url : url,
+		data : data,
 		success : function(data) {
 			displayRiver("#"+destid,data);
+		},
+		error : function(jqxhr,textStatus) {
+			alert("getRiverFeed : Oups! "+jqxhr.responseText);
 		}
 	});
 	
@@ -424,6 +409,9 @@ function postWire()
 			getRiverFeed('activities');
 			getWall('public');
 			displayGroupWalls('groups');
+		},
+		error : function(jqxhr,textStatus) {
+			alert("postWire : Oups! "+jqxhr.responseText);
 		}
 	});
 }
@@ -443,6 +431,9 @@ function postComment(objectid)
 			getRiverFeed('activities');
 			getWall('public');
 			displayGroupWalls('groups');
+		},
+		error : function(jqxhr,textStatus) {
+			alert("postComment : Oups! "+jqxhr.responseText);
 		}
 	});
 }
@@ -451,15 +442,20 @@ function postComment(objectid)
 function deleteWire(objectid)
 //==================================
 {
+	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=wire.delete_post&entity_guid="+objectid;
 	$.ajax({
 		type : "POST",
 		dataType : "json",
-		url : "../../../"+elgg_url_base+"services/api/rest/xml",
-		data : "auth_token="+g_elgg_key+"&method=wire.delete_post&entity_guid="+objectid,
+		url : url,
+		data : data,
 		success : function(data) {
 			getRiverFeed('activities');
 			getWall('public');
 			displayGroupWalls('groups');
+		},
+		error : function(jqxhr,textStatus) {
+			alert("deleteWire : Oups! "+jqxhr.responseText);
 		}
 	});
 }
@@ -468,7 +464,8 @@ function deleteWire(objectid)
 function getWall(destid,groupid,tabid)
 //==================================
 {
-	var url = "../../../"+elgg_url_base+"services/api/rest/xml/?method=group.thewire.get_posts&auth_token="+g_elgg_key+"&limit=50";
+	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "method=group.thewire.get_posts&auth_token="+g_elgg_key+"&limit=50";
 	if (groupid!=null)
 		url += "&container_guid="+groupid;
 	if (tabid==null)
@@ -480,6 +477,9 @@ function getWall(destid,groupid,tabid)
 		url : url,
 		success : function(data) {
 				displayWall("#"+destid,data,tabid);
+		},
+		error : function(jqxhr,textStatus) {
+			alert("getWall : Oups! "+jqxhr.responseText);
 		}
 	});
 }
@@ -543,7 +543,7 @@ function display_post(dest,node,tabid)
 	html+= 						snStr[LANG]['river_object_status_create'];
 	html+= " 					<span class='elgg-river-timestamp'><acronym title='"+date.format('LLL')+"'>"+date.fromNow()+"</acronym></span>";
 	html+= "				</h5>";
-	html+= " 					<div>"+node.description+"</div>";
+	html+= "				<div>"+transcodeText(node.description)+"</div>";
 	if (node.object!=undefined && node.object.comments!=undefined) {
 		html+= "<div id='comments-"+tabid+node.guid+"' class='elgg-river-comments' style='display:none'>";
 		html+= "<ul class='elgg-list elgg-river-comments'>";
@@ -571,18 +571,70 @@ function display_post(dest,node,tabid)
 //=================================================================================================
 //=================================================================================================
 
+//==================================
+function loginElgg(username,password,callback)
+//==================================
+{
+	if (username=='root')
+		username = 'karuta_'+username;
+	var url = "../../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "method=auth.gettoken&username="+username+"&password="+password;
+	$.ajax({
+		Accept: "json",
+		dataType : "json",
+		type : "POST",
+		url : url,
+		data : data,
+		success : function(data) {
+			var g_elgg_key = data.result;
+			Cookies.set('elgg_token',g_elgg_key,{ expires: 1 });
+			if (callback!=null)
+				callback(g_elgg_key);
+		},
+		error : function(jqxhr,textStatus) {
+			alert("loginElgg : Oups! "+jqxhr.responseText);
+		}
+	});
+}
+
+//==================================
+function getElggUser()
+//==================================
+{
+	var url = "../../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=auth.getuser";
+	$.ajax({
+		Accept: "json",
+		dataType : "json",
+		type : "GET",
+		url : url,
+		data, data,
+		success : function(data) {
+			g_elgg_userid = data.result.guid;
+		},
+		error : function(jqxhr,textStatus) {
+			alert("getElggUser : Oups! "+jqxhr.responseText);
+		}
+	});
+}
+
 //=================================================
 function user_register(name, email, username, password,callback,param1)
 //=================================================
 {
+	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=user.register&name="+name+"&username="+username+"&password="+password+"&email="+email;
 	$.ajax({
 		type : "POST",
 		dataType : "json",
-		url : "../../../"+elgg_url_base+"services/api/rest/xml",
-		data: "auth_token="+g_elgg_key+"&method=user.register&name="+name+"&username="+username+"&password="+password+"&email="+email,
+		url : url,
+		data: data,
 		success : function(data) {
 			if (callback!=null)
 				callback(param1);
+		},
+		error : function(jqxhr,textStatus) {
+			alert("user_register : Oups! "+jqxhr.responseText);
 		}
 	});
 }
@@ -591,36 +643,41 @@ function user_register(name, email, username, password,callback,param1)
 function createNetworkGroup(name,callback,param1)
 //=================================================
 {
+	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=group.save&name="+name;
 	$.ajax({
 		type : "POST",
 		dataType : "json",
-		url : "../../../"+elgg_url_base+"services/api/rest/xml",
-		data: "auth_token="+g_elgg_key+"&method=group.save&name="+name,
+		url : url,
+		data: data,
 		success : function(data) {
 			if (callback!=null)
 				callback(param1);
+		},
+		error : function(jqxhr,textStatus) {
+			alert("createNetworkGroup : Oups! "+jqxhr.responseText);
 		}
 	});
 }
 
 //=================================================
-function deleteNetworkGroup(name,callback,param1)
+function deleteNetworkGroup(groupid,callback,param1)
 //=================================================
 {
-	var groupid = "";
-	for (var i=0; i<g_elgg_user_groups.length; i++) {
-		if (g_elgg_user_groups[i].name==name)
-			groupid = g_elgg_user_groups[i].guid;
-	}
+	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=group.delete&group_guid="+groupid;
 	if (groupid!="")
 		$.ajax({
 			type : "POST",
 			dataType : "json",
-			url : "../../../"+elgg_url_base+"services/api/rest/xml",
-			data: "auth_token="+g_elgg_key+"&method=group.delete&group_guid="+groupid,
+			url : url,
+			data: data,
 			success : function(data) {
 				if (callback!=null)
 					callback(param1);
+			},
+			error : function(jqxhr,textStatus) {
+				alert("deleteNetworkGroup : Oups! "+jqxhr.responseText);
 			}
 		});
 }
@@ -643,14 +700,20 @@ function setUserGroups(username,callback,param1)
 {
 	if (username=='root')
 		username = 'karuta_'+username;
+	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=group.get_groups";
 	$.ajax({
 		Accept: "json",
 		dataType : "json",
 		type : "GET",
-		url : "../../../../"+elgg_url_base+"/services/api/rest/xml/?auth_token="+g_elgg_key+"&method=group.get_groups",
+		url : url,
+		data : data,
 		success : function(data) {
 			if (data.status!=-1)
 				g_elgg_user_groups = data.result;
+		},
+		error : function(jqxhr,textStatus) {
+			alert("setUserGroups : Oups! "+jqxhr.responseText);
 		}
 	});
 }
@@ -659,16 +722,28 @@ function setUserGroups(username,callback,param1)
 function addGroupMember(groupid,username,callback,param1)
 //=================================================
 {
+	if (!$(groupid).isNumeric()) {
+		var groupname = groupid;
+		for (var i=0; i<g_elgg_user_groups.length; i++) {
+			if (g_elgg_user_groups[i].name==groupname)
+				groupid = g_elgg_user_groups[i].guid;
+		}
+	}
 	if (username=='root')
 		username = 'karuta_'+username;
+	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=group.join&group_guid="+groupid+"&username="+username;
 	$.ajax({
 		type : "POST",
 		dataType : "json",
-		url : "../../../"+elgg_url_base+"services/api/rest/xml",
-		data: "auth_token="+g_elgg_key+"&method=group.join&group_guid="+groupid+"&username="+username,
+		url : url,
+		data: data,
 		success : function(data) {
 			if (callback!=null)
 				callback(data,param1);
+		},
+		error : function(jqxhr,textStatus) {
+			alert("addGroupMember : Oups! "+jqxhr.responseText);
 		}
 	});
 }

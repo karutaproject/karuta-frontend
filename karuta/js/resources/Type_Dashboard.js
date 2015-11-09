@@ -40,6 +40,31 @@ UIFactory["Dashboard"] = function( node )
 	this.display = {};
 };
 
+//==================================
+UIFactory["Dashboard"].prototype.getAttributes = function(type,langcode)
+//==================================
+{
+	var result = {};
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
+	}
+	//---------------------
+	if (type==null)
+		type = 'default';
+	//---------------------
+	if (type=='default') {
+		result['restype'] = this.type;
+		result['text'] = this.text_node[langcode].text();
+	}
+	return result;
+}
+
 /// Display
 //==================================
 UIFactory["Dashboard"].prototype.getView = function(dest,langcode)

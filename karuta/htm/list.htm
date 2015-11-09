@@ -37,8 +37,8 @@
 		<script src='../../other/wysihtml5/bootstrap3-wysihtml5.all.min.js'> </script>
 		<!-- =============================================================== -->
 		<link rel="stylesheet" type="text/css" href='../../socialnetwork/css/elgg.css'/>
-		<link rel="stylesheet" type="text/css" href='../../socialnetwork/css/socialnetwork.css'/>
-		<script src="../../socialnetwork/js/socialnetwork.js"></script>
+		<link rel="stylesheet" type="text/css" href='../../socialnetwork/css/elggsocialnetwork.css'/>
+		<script src="../../socialnetwork/js/elggsocialnetwork.js"></script>
 		<script src="../../socialnetwork/js/socialnetwork_fr.js"></script>
 		<script src="../../socialnetwork/js/moment-with-locales.min.js"></script>
 		<!-- =============================================================== -->
@@ -122,7 +122,7 @@
 			</div>
 		</div>
 		<script>
-			g_elgg_key = getURLParameter('elgg_token');
+			g_elgg_key = Cookies.get('elgg_token');
 			setLanguage();
 			document.write(EditBox());
 			$(window).load(function() {

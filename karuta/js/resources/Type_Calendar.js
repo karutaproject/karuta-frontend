@@ -59,6 +59,33 @@ UIFactory["Calendar"] = function( node )
 	this.display = {};
 };
 
+//==================================
+UIFactory["Calendar"].prototype.getAttributes = function(type,langcode)
+//==================================
+{
+	var result = {};
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
+	}
+	//---------------------
+	if (type==null)
+		type = 'default';
+	//---------------------
+	if (type=='default') {
+		result['restype'] = this.type;
+		result['minViewMode'] = this.minViewMode_node[langcode].text();
+		result['text'] = this.text_node[langcode].text();
+		result['format'] = this.format_node[langcode].text();
+	}
+	return result;
+}
+
 /// Display
 //==================================
 UIFactory["Calendar"].prototype.getView = function(dest,langcode)

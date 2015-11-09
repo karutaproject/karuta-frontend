@@ -34,7 +34,7 @@
 	<script src="../../karuta/js/model/Type_Node.js"></script>
 	<script src="../../karuta/js/model/Type_User.js"></script>
 	<!-- =============================================================== -->
-	<script src="../../socialnetwork/js/socialnetwork.js"></script>
+	<script src="../../socialnetwork/js/elggsocialnetwork.js"></script>
 	<script src="../../socialnetwork/js/socialnetwork_fr.js"></script>
 	<script src="../../socialnetwork/js/moment-with-locales.min.js"></script>
 	<!-- =============================================================== -->
@@ -77,7 +77,7 @@
 				data: data,
 				success : function(data) {
 					if (elgg_installed!=undefined && elgg_installed)
-						loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (token){window.location="list.htm?lang="+LANG+"&elgg_token="+token;});
+						loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (token){});
 					else
 						window.location="list.htm?lang="+LANG;
 				},
