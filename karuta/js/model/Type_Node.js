@@ -720,7 +720,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					//-----------------------------------------
 					var graphicers = $("metadata-wad[graphicerroles*="+g_userrole+"]",data);
 					if (contentfreenode=='Y' && (graphicers.length>0 || g_userrole=='designer'))
-						html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
+						html += "<button class='btn btn-default btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
 					//-----------------------------------------
 					html += "</div>";
 				}
@@ -1716,8 +1716,8 @@ UIFactory["Node"].selectNode = function(nodeid,node)
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory.Node.moveNode('"+nodeid+"')";
 	var footer = "";
-	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['move']+"</button>";
-	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	footer += "<button class='btn btn-default' onclick=\""+js2+";\">"+karutaStr[LANG]['move']+"</button>";
+	footer += "<button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
 	// ------------------------------
 	/// Traverse tree
@@ -1830,7 +1830,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	if (edit) {
 		//------------ edit button ---------------------
 		if ((!inline && ( (writenode && incrementroles.indexOf(g_userrole)<0) || USER.admin || g_userrole=='designer' )) || (inline && ((USER.admin || g_userrole=='designer') && (editnoderoles.indexOf(g_userrole)<0 && editresroles.indexOf(g_userrole)<0)))) {
-			html += "<button class='btn btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+node.id+"')\" data-title='Éditer' rel='tooltip'>";
+			html += "<button class='btn btn-default btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+node.id+"')\" data-title='Éditer' rel='tooltip'>";
 			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
 			html += "</button>";
 		}
@@ -1844,19 +1844,19 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		}
 		//------------- move node buttons ---------------
 		if ((moveroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && node.asmtype != 'asmRoot') {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-arrow-up'></span></button>";
+			html+= "<button class='btn btn-default btn-xs' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-arrow-up'></span></button>";
 			if (USER.admin || g_userrole=='designer')
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" href='#'><span class='glyphicon glyphicon-random'></span></button>";
+			html+= "<button class='btn btn-default btn-xs' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" href='#'><span class='glyphicon glyphicon-random'></span></button>";
 		}
 		//------------- duplicate node buttons ---------------
 		if ( duplicateroles!='none' && duplicateroles!='' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-duplicate'></span></button>";
+			html+= "<button class='btn btn-default btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-duplicate'></span></button>";
 		}
 	}
 	//------------- node menus button ---------------
 	if (menu) {
 		if ((USER.admin || g_userrole=='designer') && (node.asmtype != 'asmContext' && (depth>0 || node.asmtype == 'asmUnitStructure'))) {
-			html += "<button class='btn btn-xs menu-xs' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' ";
+			html += "<button class='btn btn-default btn-xs menu-xs dropdown-toggle' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' ";
 /*			if (navigator.userAgent.indexOf('Firefox')>-1)
 				html += "style='height:23px;' ";
 			if (navigator.userAgent.indexOf('Chrome')>-1 || navigator.userAgent.indexOf('Safari')>-1)
@@ -1915,12 +1915,12 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
 		if ( submitted!='Y' && submitnode && ( submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer' || submitroles.indexOf($(USER.username_node).text())>-1)) {
-			html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
+			html += "<button id='submit-"+node.id+"' class='btn btn-default btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['button-submit']+"</div></button>";
 		} else {
 			if (submitted=='Y') {
 				if (USER.admin) {
-					html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:reset('"+node.id+"')\" ";
+					html += "<button id='submit-"+node.id+"' class='btn btn-default btn-xs menu-xs' onclick=\"javascript:reset('"+node.id+"')\" ";
 					html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['button-unsubmit']+"</div></button>";
 				}
 				html += "<div class='btn btn-xs disabled alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+"</div>";
@@ -1933,11 +1933,11 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- private button -------------------
 	if (submitted!='Y' && (showroles==g_userrole || USER.admin || g_userrole=='designer') && showroles!='none' && showroles!='') {
 		if (privatevalue) {
-			html += "<button class='btn btn-xs' onclick=\"javascript:show('"+node.id+"')\">";
+			html += "<button class='btn btn-default btn-xs' onclick=\"javascript:show('"+node.id+"')\">";
 			html += "<span class='glyphicon glyphicon-eye-close'></span>";
 			html += "</button>";
 		} else {
-			html += "<button class='btn btn-xs' onclick=\"javascript:hide('"+node.id+"')\">";
+			html += "<button class='btn btn-default btn-xs' onclick=\"javascript:hide('"+node.id+"')\">";
 			html += "<span class='glyphicon glyphicon-eye-open'></span>";
 			html += "</button>";				
 		}
@@ -1977,7 +1977,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					var param4 = null;
 					html += "<div class='btn-group'>";
 					//-----------------------
-					html += "<button class='btn btn-xs menu-xs dropdown-toggle'  data-toggle='dropdown' href='#' ";
+					html += "<button class='btn btn-default btn-xs menu-xs dropdown-toggle'  data-toggle='dropdown' href='#' ";
 					html += "><div class='btn-text'>Menu <span class='caret'></span></div></button>";
 					//-----------------------
 					html += "<ul class='dropdown-menu pull-right'>";
@@ -2014,7 +2014,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- share node button ---------------
 	if ((shareroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && shareroles!='none' && shareroles!='') {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
+			html+= "<button class='btn btn-default btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
 	}
 	html += "</div><!-- class='btn-group' -->";
 	//--------------------------------------------------

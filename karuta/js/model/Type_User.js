@@ -105,15 +105,15 @@ UIFactory["User"].prototype.getView = function(dest,type,lang)
 		html = "<td style='padding-left:4px;padding-right:4px'>"+this.firstname_node.text() + "</td><td style='padding-left:4px;padding-right:4px'>" + this.lastname_node.text()+ "</td><td style='padding-left:4px;padding-right:4px'> (" + this.username_node.text() + ")</td>";
 		if (USER.admin){
 			html += "<td><div class='btn-group'>";
-			html += " <button class='btn btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
+			html += " <button class='btn btn-default btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
 			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
 			html += "</button>";
 			if (this.username_node.text()!='root') {
-				html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<button class='btn btn-default btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 				html += "<span class='glyphicon glyphicon-remove'></span>";
 				html += "</button>";
 			} else {
-				html += "<button class='btn btn-xs' disabled='true' data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<button class='btn btn-default btn-xs' disabled='true' data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 				html += "<span class='glyphicon glyphicon-remove'></span>";
 				html += "</button>";
 			}
@@ -270,7 +270,7 @@ UIFactory["User"].callCreate = function()
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['User'].create()";
-	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	var footer = "<button class='btn btn-default' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['create_user']);
 	var html = "";
@@ -314,7 +314,7 @@ UIFactory["User"].edit = function(userid)
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['user']);
 	var html = "";
@@ -364,7 +364,7 @@ UIFactory["User"].confirmRemove = function(userid)
 //==================================
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	var buttons = "<button class='btn btn-default' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
 	buttons += "<button class='btn btn-danger' onclick=\"javascript:UIFactory['User'].remove('"+userid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
@@ -478,7 +478,7 @@ UIFactory["User"].callChangePassword = function()
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['User'].changePassword()";
-	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Change']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn btn-default' onclick=\""+js2+";\">"+karutaStr[LANG]['Change']+"</button><button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['change_password']);
 	var html = "";
