@@ -122,10 +122,11 @@
 				//---------------------------
 				$("#welcome").html(welcome1[LANG]);
 				$.ajaxSetup({async: false});
-				$.ajaxSetup({async: false});
 				//----------------
 				$.ajax({
 					type : "GET",
+					Accept: "text/html",
+					dataType : "text",
 					url : "../../../"+serverFIL+"/direct?i=" + iid,
 					success : function(data) {
 						g_uuid = data;

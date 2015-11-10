@@ -670,12 +670,13 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
 					}
 				else {
-					if (g_display_type=='standard')
+					if (g_display_type=='standard'){
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
-					if (name=='asmUnitStructure' && collapsible=='Y')
-						html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
-					else
-						html += " style='"+style+"'>";
+						if (name=='asmUnitStructure' && collapsible=='Y')
+							html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
+						else
+							html += " style='"+style+"'>";
+					}
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
 						if (g_userrole!='designer' && semtag=='header')
@@ -709,7 +710,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (root.children.length>0 && depth>0) {
 					html += "<div id='content-"+uuid+"' ";
 					style = "position:relative;";
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
+//					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',true);
@@ -1930,7 +1931,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		}
 	}
 	//------------- private button -------------------
-	if ((showroles==g_userrole || USER.admin || g_userrole=='designer') && showroles!='none' && showroles!='') {
+	if (submitted!='Y' && (showroles==g_userrole || USER.admin || g_userrole=='designer') && showroles!='none' && showroles!='') {
 		if (privatevalue) {
 			html += "<button class='btn btn-xs' onclick=\"javascript:show('"+node.id+"')\">";
 			html += "<span class='glyphicon glyphicon-eye-close'></span>";
@@ -1942,7 +1943,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		}
 	}
 	//------------- specific menu button ---------------
-	if (menu) {
+	if (menu && submitted!='Y') {
 		try {
 			if ((depth>0 || node.asmtype == 'asmUnitStructure') && menuroles != undefined && menuroles.length>10 && (menuroles.indexOf(userrole)>-1 || menuroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') ){
 				var menus = [];
