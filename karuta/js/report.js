@@ -69,6 +69,8 @@ function processPortfolio(no,xmlReport,destid,data,line)
 			processText(children[i],destid,data,line);
 		if (tagname=="for-each-node")
 			processNode(no+"_"+i,children[i],destid,data,line);
+		if (tagname=="for-each-portfolio")
+			getPortfolios(no+"_"+i,children[i],destid,data,line);
 	}
 }
 
