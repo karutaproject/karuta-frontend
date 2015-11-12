@@ -16,9 +16,9 @@ var navbar_title = {};
 	navbar_title["en"] = "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA";
 	navbar_title["ja"] = "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA";
 var welcome1 = {};// Welcome title
-	welcome1["fr"] = "<img class='img-responsive' style='width:300px;margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
-	welcome1["en"] = "<img class='img-responsive' style='width:300px;margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
-	welcome1["ja"] = "<img class='img-responsive' style='width:300px;margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
+	welcome1["fr"] = "<img class='img-responsive' style='margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
+	welcome1["en"] = "<img class='img-responsive' style='margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
+	welcome1["ja"] = "<img class='img-responsive' style='margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
 var welcome2 = {};       // Welcome sub-title
 	welcome2["fr"] = "<span style='color:lightgrey'>Version 1.1</span>";
 	welcome2["en"] = "<span style='color:lightgrey'>Version 1.1</span>";
