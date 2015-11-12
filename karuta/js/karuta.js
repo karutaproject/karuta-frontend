@@ -291,7 +291,7 @@ function getEditBox(uuid,js2) {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	if (js2!=null)
 		js1 += ";"+js2;
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
 	var html = "";
 	//--------------------------
@@ -343,7 +343,7 @@ function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
 {
 	var html = "";
 	html += "\n<!-- ==================== Delete Button ==================== -->";
-	html += "<button id='del-"+uuid+"' class='btn btn-xs' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+	html += "<button id='del-"+uuid+"' class='btn btn-default btn-xs' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 	html += "<span class='glyphicon glyphicon-remove'></span>";
 	html += "</button>";
 	return html;
@@ -415,7 +415,7 @@ function confirmDel(uuid,type,parentid,destid,callback,param1,param2)
 // =======================================================================
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	var buttons = "<button class='btn btn-default' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
 	buttons += "<button class='btn btn-danger' onclick=\"javascript:deleteandhidewindow('"+uuid+"','"+type+"','"+parentid+"','"+destid+"',"+callback+",'"+param1+"','"+param2+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
@@ -471,9 +471,13 @@ function toggleContent(uuid) {
 //==================================
 	var classname = $("#toggleContent_"+uuid).attr("class");
 	if (classname=="glyphicon glyphicon-triangle-bottom"){
+//		UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','Y');
+		Cookies.set('karuta-'+uuid,'Y',{ expires: 60 });
 		$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-right");
 		$("#content-"+uuid).hide();
 	} else {
+		Cookies.set('karuta-'+uuid,'N',{ expires: 60 });
+//		UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','N');
 		$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-bottom");
 		$("#content-"+uuid).show();
 	}
@@ -756,7 +760,7 @@ function getSendPublicURL(uuid,langcode)
 	fillEditBoxBody();
 	$("#edit-window-title").html(karutaStr[LANG]['share-URL']);
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
+	var send_button = "<button id='send_button' class='btn btn-default'>"+karutaStr[LANG]['button-send']+"</button>";
 	var obj = $(send_button);
 	$(obj).click(function (){
 		var email = $("#email").val();
@@ -765,7 +769,7 @@ function getSendPublicURL(uuid,langcode)
 		}
 	});
 	$("#edit-window-footer").append(obj);
-	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = " <button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").append($(footer));
 
 	var html = "<div class='form-horizontal'>";

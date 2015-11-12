@@ -360,12 +360,12 @@ UIFactory["Node"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Node"].duplicate = function(uuid,callback)
+UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,param4,param5,param6,param7,param8)
 //==================================
 {
 	var destid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
 	$("#wait-window").modal('show');
-	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?uuid="+uuid;
+	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?uuid="+uuid;  // instance by default
 	if (USER.admin || g_userrole=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
@@ -378,22 +378,55 @@ UIFactory["Node"].duplicate = function(uuid,callback)
 		url : urlS,
 		data : "",
 		success : function(data) {
-			if (callback!=null)
-				if (databack)
-					callback(data,param2,param3,param4,param5,param6,param7,param8);
-				else
-					callback(param2,param3,param4,param5,param6,param7,param8);
+			uuid = data;
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/nodes/node/"+uuid,
+				success : function(data) {
+					//------------------------------
+					var code = $($("code",data)[0]).text();
+					var label = [];
+					for (var i=0; i<languages.length;i++){
+						label[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",data)[0]).text();
+						var lastspace_indx = label[i].lastIndexOf(' ');
+						var nb = label[i].substring(lastspace_indx);
+						if ($.isNumeric(nb)) {
+							nb++;
+							label[i] = label[i].substring(0,lastspace_indx)+' '+nb;
+						}
+					}
+					var xml = "<asmResource xsi_type='nodeRes'>";
+					xml += "<code>"+code+"</code>";
+					for (var i=0; i<languages.length;i++)
+						xml += "<label lang='"+languages[i]+"'>"+label[i]+"</label>";
+					xml += "</asmResource>";
+					$.ajax({
+						async:false,
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						url : "../../../"+serverBCK+"/nodes/node/" + uuid + "/noderesource",
+						success : function(data) {
+							$("#wait-window").modal('hide');			
+							UIFactory.Node.reloadUnit();
+						},
+						error : function(jqxhr,textStatus) {
+							alert("Error in duplicate rename : "+jqxhr.responseText);
+						}
+					});
+				}
+			});
+		},
+		error : function(jqxhr,textStatus) {
 			$("#wait-window").modal('hide');			
+			alert("Error in Node.duplicate "+textStatus+" : "+jqxhr.responseText);
 		}
 	});
 };
 
-//==================================
-UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,depth,edit,menu)
-//==================================
-{
-	return UIFactory["Node"].buttons(this,type,langcode,inline,depth,edit,menu);
-};
 //-------------------------------------------------------
 //-------------------------------------------------------
 //-------------------------------------------------------
@@ -469,7 +502,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 //	var proxy_target = false;
 
 	var node = UICom.structure["ui"][uuid];
-	// ---- store info to redisplay after change ---
+	// ---- we store info to redisplay after change ---
 	node.display_node[dest] = {"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":"standard"};
 	//----------------------------------------------
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
@@ -515,7 +548,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += " style='"+style+"' ";
 			//----------------------------------
 			html += ">";
-			//------------------ ASMCONTEXT ----------
+			//===================================== ASMCONTEXT ==================================
 			if (name == "asmContext"){
 				html += "<div class='row'>";
 				//-------------- node -----------------------------
@@ -595,8 +628,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += "</div><!-- outer row -->";
 				//--------------------------------------------------
 			}
-			else { // other than asmContext
-				//-------------------- NODE --------
+			//============================== NODE other than asmContext ==============================
+			else {
 				if (name=='asmUnitStructure')
 					depth=100;	
 				style = "";
@@ -618,6 +651,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				if (name=='asmUnitStructure' && collapsible=='Y')
 					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" style='position:relative;top:20px;left:-20px;cursor:pointer'><span id='toggleContent_"+uuid+"' class='glyphicon glyphicon-triangle-bottom'></span></div>";
+
 				html += "<div class='row'>";
 	
 				//-------------- node -----------------------------
@@ -636,12 +670,13 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
 					}
 				else {
-					if (g_display_type=='standard')
+					if (g_display_type=='standard'){
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
-					if (name=='asmUnitStructure' && collapsible=='Y')
-						html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
-					else
-						html += " style='"+style+"'>";
+						if (name=='asmUnitStructure' && collapsible=='Y')
+							html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
+						else
+							html += " style='"+style+"'>";
+					}
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='col-md-9'";
 						if (g_userrole!='designer' && semtag=='header')
@@ -657,7 +692,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					}
 					if (!gotView)
 						html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
-				}				
+				}			
 				//-------------- context -------------------------
 				html += "<div class='row'><div class='col-md-3'></div><div class='col-md-9'><div id='comments_"+uuid+"' class='comments'></div><!-- comments --></div><!-- col-md-7 --><div class='col-md-2'></div></div><!-- row -->";
 				//-------------- metainfo -------------------------
@@ -685,17 +720,32 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					//-----------------------------------------
 					var graphicers = $("metadata-wad[graphicerroles*="+g_userrole+"]",data);
 					if (contentfreenode=='Y' && (graphicers.length>0 || g_userrole=='designer'))
-						html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
+						html += "<button class='btn btn-default btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
 					//-----------------------------------------
 					html += "</div>";
 				}
 			}
+			//==============================================================================================
 			html += "</div><!-- name -->";
 			//------------------------------------------
 			if ( $("#standard_"+uuid).length>0 )
 				$("#standard_"+uuid).replaceWith($(html));
 			else
 				$("#"+dest).append($(html));
+			//------------------------------------------
+			//------------------------------------------
+			//--------------------collapsed------------------------------------------
+			if (collapsible=='Y') {
+				var collapsed = Cookies.get('karuta-'+uuid);
+				if (collapsed!=null && collapsed=='Y') {
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-right");
+					$("#content-"+uuid).hide();
+				}
+				else {
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-triangle-bottom");
+					$("#content-"+uuid).show();
+				}
+			}
 			//--------------------set editor------------------------------------------
 			if ($("#display_editor_"+uuid).length>0) {
 				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
@@ -704,10 +754,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				$("#get_editor_"+uuid).append(UICom.structure["ui"][uuid].resource.getEditor());
 			}
 			//----------- Comments -----------
-			if (!inline)
-				UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
-			else
+			if (edit && inline && writenode)
 				UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+			else
+				UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				if (depth>0) {
@@ -1101,11 +1151,11 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			if ($("#get_editor_"+uuid).length>0) {
 				$("#get_editor_"+uuid).append(UICom.structure["ui"][uuid].resource.getEditor());
 			}
-			//----------- Context -----------
-			if (!inline)
-				UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
-			else
+			//----------- Comments -----------
+			if (edit && inline && writenode)
 				UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+			else
+				UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				var attr_help = $($("metadata-wad",data)[0]).attr('help');
@@ -1386,9 +1436,12 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				}
 				//---------------------------
 				if (semtag=="ref" || semtag=="semtag" || semtag=="nodetype" || semtag=="todisplay" || semtag=="aggregatetype" || semtag=="aggregationselect" || semtag=="test") {
-//					if (semtag=="nodetype" && $($("metadata",$(data).parent())[0]).attr('semantictag')=='for-each-node')
-//						html += "<div class='row'>";						
-					html += "<div id='std_resource_"+uuid+"' class='col-md-2'>";
+					if (semtag=="nodetype" || semtag=="todisplay" || semtag=="aggregatetype")
+						html += "<div id='std_resource_"+uuid+"' class='col-md-3 col-xs-6'>";
+					else if (semtag=="test")
+						html += "<div id='std_resource_"+uuid+"' class='col-md-5 col-xs-12'>";
+					else
+						html += "<div id='std_resource_"+uuid+"' class='col-md-2 col-xs-4'>";
 					html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
 					//-----------------------
 					if(UICom.structure["ui"][uuid].resource!=null) {
@@ -1478,6 +1531,8 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				}
 			}
 			html += "</div><!-- name -->";
+			//------------------------------------------
+			//------------------------------------------
 			//------------------------------------------
 			$("#"+dest).append($(html));
 			//--------------------set editor------------------------------------------
@@ -1661,8 +1716,8 @@ UIFactory["Node"].selectNode = function(nodeid,node)
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory.Node.moveNode('"+nodeid+"')";
 	var footer = "";
-	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['move']+"</button>";
-	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	footer += "<button class='btn btn-default' onclick=\""+js2+";\">"+karutaStr[LANG]['move']+"</button>";
+	footer += "<button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
 	// ------------------------------
 	/// Traverse tree
@@ -1711,6 +1766,13 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved)
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 
+//==================================
+UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,depth,edit,menu)
+//==================================
+{
+	return UIFactory["Node"].buttons(this,type,langcode,inline,depth,edit,menu);
+};
+
 //==================================================
 UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4,freenode)
 //==================================================
@@ -1755,6 +1817,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
 	var duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
+	var incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
 	if (g_designerrole) {
 		deletenode = (delnoderoles.indexOf(g_userrole)>-1)? true : false;
 		writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
@@ -1766,8 +1829,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//-----------------------------------
 	if (edit) {
 		//------------ edit button ---------------------
-		if ((!inline && (writenode || USER.admin || g_userrole=='designer' )) || (inline && ((USER.admin || g_userrole=='designer') && (editnoderoles.indexOf(g_userrole)<0 && editresroles.indexOf(g_userrole)<0)))) {
-			html += "<button class='btn btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+node.id+"')\" data-title='Éditer' rel='tooltip'>";
+		if ((!inline && ( (writenode && incrementroles.indexOf(g_userrole)<0) || USER.admin || g_userrole=='designer' )) || (inline && ((USER.admin || g_userrole=='designer') && (editnoderoles.indexOf(g_userrole)<0 && editresroles.indexOf(g_userrole)<0)))) {
+			html += "<button class='btn btn-default btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+node.id+"')\" data-title='Éditer' rel='tooltip'>";
 			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
 			html += "</button>";
 		}
@@ -1781,19 +1844,19 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		}
 		//------------- move node buttons ---------------
 		if ((moveroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && node.asmtype != 'asmRoot') {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-arrow-up'></span></button>";
+			html+= "<button class='btn btn-default btn-xs' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-arrow-up'></span></button>";
 			if (USER.admin || g_userrole=='designer')
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" href='#'><span class='glyphicon glyphicon-random'></span></button>";
+			html+= "<button class='btn btn-default btn-xs' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" href='#'><span class='glyphicon glyphicon-random'></span></button>";
 		}
 		//------------- duplicate node buttons ---------------
-		if ( duplicateroles!='none' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i></button>";
+		if ( duplicateroles!='none' && duplicateroles!='' && node.asmtype != 'asmRoot' && (duplicateroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')) {
+			html+= "<button class='btn btn-default btn-xs' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-duplicate'></span></button>";
 		}
 	}
 	//------------- node menus button ---------------
 	if (menu) {
 		if ((USER.admin || g_userrole=='designer') && (node.asmtype != 'asmContext' && (depth>0 || node.asmtype == 'asmUnitStructure'))) {
-			html += "<button class='btn btn-xs menu-xs' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' ";
+			html += "<button class='btn btn-default btn-xs menu-xs dropdown-toggle' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' ";
 /*			if (navigator.userAgent.indexOf('Firefox')>-1)
 				html += "style='height:23px;' ";
 			if (navigator.userAgent.indexOf('Chrome')>-1 || navigator.userAgent.indexOf('Safari')>-1)
@@ -1852,12 +1915,12 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
 		if ( submitted!='Y' && submitnode && ( submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer' || submitroles.indexOf($(USER.username_node).text())>-1)) {
-			html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
+			html += "<button id='submit-"+node.id+"' class='btn btn-default btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['button-submit']+"</div></button>";
 		} else {
 			if (submitted=='Y') {
 				if (USER.admin) {
-					html += "<button id='submit-"+node.id+"' class='btn btn-xs menu-xs' onclick=\"javascript:reset('"+node.id+"')\" ";
+					html += "<button id='submit-"+node.id+"' class='btn btn-default btn-xs menu-xs' onclick=\"javascript:reset('"+node.id+"')\" ";
 					html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['button-unsubmit']+"</div></button>";
 				}
 				html += "<div class='btn btn-xs disabled alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+"</div>";
@@ -1868,19 +1931,19 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		}
 	}
 	//------------- private button -------------------
-	if ((showroles==g_userrole || USER.admin || g_userrole=='designer') && showroles!='none' && showroles!='') {
+	if (submitted!='Y' && (showroles==g_userrole || USER.admin || g_userrole=='designer') && showroles!='none' && showroles!='') {
 		if (privatevalue) {
-			html += "<button class='btn btn-xs' onclick=\"javascript:show('"+node.id+"')\">";
+			html += "<button class='btn btn-default btn-xs' onclick=\"javascript:show('"+node.id+"')\">";
 			html += "<span class='glyphicon glyphicon-eye-close'></span>";
 			html += "</button>";
 		} else {
-			html += "<button class='btn btn-xs' onclick=\"javascript:hide('"+node.id+"')\">";
+			html += "<button class='btn btn-default btn-xs' onclick=\"javascript:hide('"+node.id+"')\">";
 			html += "<span class='glyphicon glyphicon-eye-open'></span>";
 			html += "</button>";				
 		}
 	}
 	//------------- specific menu button ---------------
-	if (menu) {
+	if (menu && submitted!='Y') {
 		try {
 			if ((depth>0 || node.asmtype == 'asmUnitStructure') && menuroles != undefined && menuroles.length>10 && (menuroles.indexOf(userrole)>-1 || menuroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') ){
 				var menus = [];
@@ -1914,7 +1977,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					var param4 = null;
 					html += "<div class='btn-group'>";
 					//-----------------------
-					html += "<button class='btn btn-xs menu-xs dropdown-toggle'  data-toggle='dropdown' href='#' ";
+					html += "<button class='btn btn-default btn-xs menu-xs dropdown-toggle'  data-toggle='dropdown' href='#' ";
 					html += "><div class='btn-text'>Menu <span class='caret'></span></div></button>";
 					//-----------------------
 					html += "<ul class='dropdown-menu pull-right'>";
@@ -1951,7 +2014,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- share node button ---------------
 	if ((shareroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && shareroles!='none' && shareroles!='') {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
+			html+= "<button class='btn btn-default btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
 	}
 	html += "</div><!-- class='btn-group' -->";
 	//--------------------------------------------------
@@ -2231,6 +2294,8 @@ UIFactory["Node"].displayMetainfo = function(destid,data)
 	html += UIFactory["Node"].displayMetadataWad(data,'commentnoderoles');
 	html += UIFactory["Node"].displayMetadataWad(data,'submitroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'editnoderoles');
+	html += UIFactory["Node"].displayMetadataWad(data,'duplicateroles');
+	html += UIFactory["Node"].displayMetadataWad(data,'incrementroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'query');
 	html += UIFactory["Node"].displayMetadataWad(data,'display');
 	html += UIFactory["Node"].displayMetadataWad(data,'menuroles');
@@ -2240,7 +2305,6 @@ UIFactory["Node"].displayMetainfo = function(destid,data)
 	html += UIFactory["Node"].displayMetadataWad(data,'edittargetroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'showroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'showtoroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'duplicateroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'moveroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'inline');
 	$("#"+destid).html(html);
@@ -2288,6 +2352,8 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'commentnoderoles',$(node.metadatawad).attr('commentnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitroles',$(node.metadatawad).attr('submitroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editnoderoles',$(node.metadatawad).attr('editnoderoles'));
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'incrementroles',$(node.metadatawad).attr('incrementroles'));
 	if (node.resource_type=='Proxy')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'edittargetroles',$(node.metadatawad).attr('edittargetroles'));
 	if (name=='asmContext' && node.resource.type=='Image')
@@ -2299,7 +2365,6 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 //		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'private',$(node.metadatawad).attr('private'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showtoroles',$(node.metadatawad).attr('showtoroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'shareroles',$(node.metadatawad).attr('shareroles'));
-	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);

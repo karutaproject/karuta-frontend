@@ -95,7 +95,7 @@ UIFactory["Portfolio"].displayAll = function(destid,type,lang)
 	$("#table_portfolio").tablesorter( {sortList: [[1,0], [2,0],[3,1]],headers : {0:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
 	$("#table_bin").tablesorter( {sortList: [[1,0], [2,0]],headers : {0:{sorter:false},3:{sorter:false},4:{sorter:false},5:{sorter:false}}} ); 
 	if (portfolios_list.length>0 && nb_del_list>0)
-		$("#"+destid).append($("<button class='btn btn-xs delete-portfolio' onclick='UIFactory.Portfolio.removeSelection()'>"+karutaStr[LANG]["remove-selection"]+"</button>"));
+		$("#"+destid).append($("<button class='btn btn-default btn-xs delete-portfolio' onclick='UIFactory.Portfolio.removeSelection()'>"+karutaStr[LANG]["remove-selection"]+"</button>"));
 };
 
 //==================================
@@ -144,7 +144,7 @@ UIFactory["Portfolio"].displayBin = function(destid,type,lang)
 		}
 	}
 	if (bin_list.length>0)
-		$("#"+destid).append($("<button class='btn btn-xs delete-portfolio' onclick='UIFactory.Portfolio.deleteSelection()'>"+karutaStr[LANG]["delete-selection"]+"</button>"));
+		$("#"+destid).append($("<button class='btn btn-default btn-xs delete-portfolio' onclick='UIFactory.Portfolio.deleteSelection()'>"+karutaStr[LANG]["delete-selection"]+"</button>"));
 };
 
 //==================================
@@ -204,7 +204,7 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 		if (USER.admin || this.owner=='Y') {
 //			html += "<td style='padding-left:5px'> ";
 //			html += "<div class='btn-group'>";
-			html += "<button href='#' data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
+			html += "<button href='#' data-toggle='dropdown' class='btn btn-default btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 			html += "<ul class='dropdown-menu  pull-right'>";
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callRename('"+this.id+"')\" href='#'><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a></li>";
 			html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].copy('"+this.id+"','"+this.code_node.text()+"-copy',true)\" href='#'><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i> "+karutaStr[LANG]["button-duplicate"]+"</a></li>";
@@ -218,7 +218,7 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 //			html += "</td>";
 			html += "</ul>";
 		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
-			html += "<button href='#' data-toggle='dropdown' class='btn  btn-xs dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
+			html += "<button href='#' data-toggle='dropdown' class='btn btn-default btn-xs dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 		}
 		html += "</div>";
 		html += "</td>";
@@ -239,7 +239,7 @@ UIFactory["Portfolio"].prototype.getView = function(dest,type,langcode)
 				html += "<td style='padding-left:4px;padding-right:4px'>"+this.ownerid+"</td>";
 			html += "<td style='padding-left:7px;padding-top:0px;'>";
 			html += "<div class='btn-group'>";
-			html += "<button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].restore('"+this.id+"')\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
+			html += "<button class='btn btn-default btn-xs' onclick=\"UIFactory['Portfolio'].restore('"+this.id+"')\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
 			html += "<span class='glyphicon glyphicon-arrow-up'></span>";
 			html += "</button>";
 //			html += " <button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].del('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
@@ -258,6 +258,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	$("#main-container").html("");
 	if (type==null || type==undefined)
 		type = 'standard';
+	//----------------------------------
 	if (type=='standard'){
 		html += "<div id='navigation_bar'></div>";
 		html += "<div id='main-container' class='container "+portfolios_byid[portfolioid].code_node.text()+"'>";
@@ -270,6 +271,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#"+destid).append($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
+	//----------------------------------
 	if (type=='model'){
 		html += "<div id='navigation_bar'></div>";
 		html += "<div id='main-container' class='container'>";
@@ -279,6 +281,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
 	}
+	//----------------------------------
 	if (type=='translate'){
 		html += "	<div class='row'>";
 		html += "		<div class='col-md-3' id='sidebar'></div>";
@@ -287,12 +290,13 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#"+destid).append($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
+	//----------------------------------
 	if (type=='header'){
 		if ($("*:has(metadata[semantictag=header])",UICom.root.node).length==0)
 			alert("Error: header semantic tag is missing");
 		if (g_userrole=='designer') {
 			html += "   <div id='rootnode' style='position:absolute;top:70px;left:10px;'>";
-			html += "<button class='btn btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+UICom.rootid+"')\"><div class='btn-text'>Root</div></button>";
+			html += "<button class='btn btn-default btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+UICom.rootid+"')\"><div class='btn-text'>Root</div></button>";
 			html += "</div>";
 		}
 		html += "<div id='navigation_bar'></div>";
@@ -306,6 +310,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		UIFactory["Portfolio"].displayNodes('header',UICom.root.node,'header',LANGCODE,edit);
 		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,edit,UICom.root.node);
 	}
+	//----------------------------------
 	$('a[data-toggle=tooltip]').tooltip({html:true});
 };
 
@@ -458,7 +463,7 @@ UIFactory["Portfolio"].create = function()
 	$("#edit-window-title").html(karutaStr[LANG]['create_portfolio']);
 	$("#edit-window-footer").html("");
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var create_button = "<button id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</button>";
+	var create_button = "<button id='create_button' class='btn btn-default'>"+karutaStr[LANG]['Create']+"</button>";
 	var obj = $(create_button);
 	$(obj).click(function (){
 		var code = $("#codetree").val();
@@ -494,7 +499,7 @@ UIFactory["Portfolio"].create = function()
 		}
 	});
 	$("#edit-window-footer").append(obj);
-	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	var footer = " <button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").append($(footer));
 	//--------------------------
 	var html = "<div class='form-horizontal'>";
@@ -523,7 +528,7 @@ UIFactory["Portfolio"].createBatch = function()
 	$("#edit-window-title").html(karutaStr[LANG]['create_batch']);
 	$("#edit-window-footer").html("");
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var create_button = "<button id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</button>";
+	var create_button = "<button id='create_button' class='btn btn-default'>"+karutaStr[LANG]['Create']+"</button>";
 	var obj = $(create_button);
 	$(obj).click(function (){
 		var code = $("#codetree").val();
@@ -534,7 +539,7 @@ UIFactory["Portfolio"].createBatch = function()
 		}
 	});
 	$("#edit-window-footer").append(obj);
-	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	var footer = " <button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").append($(footer));
 
 	var html = "<div class='form-horizontal'>";
@@ -563,7 +568,7 @@ UIFactory["Portfolio"].createReport = function()
 	$("#edit-window-title").html(karutaStr[LANG]['create_model']);
 	$("#edit-window-footer").html("");
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var create_button = "<span id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</span>";
+	var create_button = "<span id='create_button' class='btn btn-default'>"+karutaStr[LANG]['Create']+"</span>";
 	var obj = $(create_button);
 	$(obj).click(function (){
 		var code = $("#codetree").val();
@@ -573,7 +578,7 @@ UIFactory["Portfolio"].createReport = function()
 		}
 	});
 	$("#edit-window-footer").append(obj);
-	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	var footer = " <button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").append($(footer));
 
 	//--------------------------
@@ -771,7 +776,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
 	$("#edit-window-title").html("Import");
 	var html = "";
@@ -811,7 +816,7 @@ UIFactory["Portfolio"].importZip = function(instance)
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
 	var html = "";
 	$("#edit-window-body").html($(html));
@@ -981,10 +986,10 @@ UIFactory["Portfolio"].callRename = function(portfolioid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	var self = portfolios_byid[portfolioid];
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['addshare']);
+	$("#edit-window-title").html(karutaStr[LANG]['rename']);
 	var div = $("<div></div>");
 	var htmlFormObj = $("<form class='form-horizontal'></form>");
 	$(div).append($(htmlFormObj));
@@ -1054,7 +1059,7 @@ UIFactory["Portfolio"].callShare = function(portfolioid)
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['Portfolio'].share('"+portfolioid+"')";
-	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['addshare']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn btn-default' onclick=\""+js2+";\">"+karutaStr[LANG]['addshare']+"</button><button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['addshare']);
 	var html = "";
@@ -1071,7 +1076,7 @@ UIFactory["Portfolio"].callShare = function(portfolioid)
 	html += "<div id='sharing_roles'></div>";
 	html += "</div>";
 	html += "</div><!--row-->";
-	html += "<div class='row'>";
+	html += "<br><div class='row'>";
 	html += "<div class='col-md-3'><br>";
 	html += karutaStr[LANG]['select_users'];
 	html += "</div>";
@@ -1163,7 +1168,7 @@ UIFactory["Portfolio"].displayShared = function(destid,data)
 					if (Users_byid[userid]==undefined)
 						alert('error userid:'+userid);
 					else
-						html += "<div>"+Users_byid[userid].getView(null,"firstname-lastname")+"</div>";
+						html += "<div>"+Users_byid[userid].getView(null,"firstname-lastname-username")+"</div>";
 				}
 				html += "</div></div>";
 			}
@@ -1299,7 +1304,7 @@ UIFactory["Portfolio"].callUnShare = function(portfolioid)
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['Portfolio'].unshare('"+portfolioid+"')";
-	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['unshare']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn btn-default' onclick=\""+js2+";\">"+karutaStr[LANG]['unshare']+"</button><button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['unshare']);
 	var html = "";
