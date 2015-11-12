@@ -1076,7 +1076,7 @@ UIFactory["Portfolio"].callShare = function(portfolioid)
 	html += "<div id='sharing_roles'></div>";
 	html += "</div>";
 	html += "</div><!--row-->";
-	html += "<div class='row'>";
+	html += "<br><div class='row'>";
 	html += "<div class='col-md-3'><br>";
 	html += karutaStr[LANG]['select_users'];
 	html += "</div>";
@@ -1168,7 +1168,7 @@ UIFactory["Portfolio"].displayShared = function(destid,data)
 					if (Users_byid[userid]==undefined)
 						alert('error userid:'+userid);
 					else
-						html += "<div>"+Users_byid[userid].getView(null,"firstname-lastname")+"</div>";
+						html += "<div>"+Users_byid[userid].getView(null,"firstname-lastname-username")+"</div>";
 				}
 				html += "</div></div>";
 			}
