@@ -35,7 +35,6 @@ UIFactory["User"] = function( node )
 	this.node = node;
 	this.firstname = $("firstname",node).text();
 	this.lastname = $("lastname",node).text();
-	this.lastname_node = $("lastname",node);
 	this.username_node = $("username",node);
 	this.firstname_node = $("firstname",node);
 	this.lastname_node = $("lastname",node);
@@ -122,6 +121,9 @@ UIFactory["User"].prototype.getView = function(dest,type,lang)
 	}
 	if (type=='firstname-lastname') {
 		html = this.firstname_node.text() + " " + this.lastname_node.text();
+	}
+	if (type=='firstname-lastname-username') {
+		html = this.firstname_node.text() + " " + this.lastname_node.text()+ " (" + this.username_node.text()+")";
 	}
 	return html;
 };

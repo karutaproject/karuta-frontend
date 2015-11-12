@@ -59,7 +59,7 @@ function Comment(author,date,text)
 }
 
 //==================================
-UIFactory["Color"].prototype.getAttributes = function(type,langcode)
+UIFactory["Comments"].prototype.getAttributes = function(type,langcode)
 //==================================
 {
 	var result = {};

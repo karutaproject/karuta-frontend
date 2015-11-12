@@ -2,7 +2,9 @@
 	padding:20px;
 	margin-left:-15px;
 	background-color:white;
+	height:100%;
 }
+
 
 #socialnetwork .hello {
 	font-size:20px;
@@ -23,7 +25,7 @@
 }
 
 #socialnetwork .fa-users{
-	font-size:90px;
+	font-size:70px;
 }
 
 #socialnetwork .user {
@@ -47,12 +49,14 @@
 	float:right;
 }
 
-#socialnetwork .publish-button .action-button{
+#socialnetwork .publish-button,
+#socialnetwork .group-button {
     background-color: #18b8d6;
     color: white;
     font-size: 14px;
     padding: 4px 15px;
     cursor:pointer;
+    height:20px;
 }
 
 #socialnetwork .text-group {
@@ -60,12 +64,6 @@
     padding: 4px 15px;
 }
 
-#socialnetwork .dropdown {
-    background-color: #18b8d6;
-    color: white;
-    font-size: 14px;
-    padding: 4px 15px;
-}
 
 #socialnetwork .dropdown-button {
 	border-radius:0px;
@@ -76,6 +74,10 @@
     background-color: #18b8d6;
     color: white;
     font-size: 14px;
+}
+
+#socialnetwork .panels {
+	margin-top:10px;
 }
 
 .elgg-river-item {

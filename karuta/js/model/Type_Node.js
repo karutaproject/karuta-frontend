@@ -460,7 +460,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	var titleid = $(titles[0]).attr("id");
 	var html = "";
 	html += "<div class='page-welcome'>";
-	html += "<div id='welcome-image' style=\"background: url('../../../karuta-backend/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"')\">";
+	html += "<div id='welcome-image' style=\"background: url('../../../"+serverFIL+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"')\">";
 	html += "<div class='welcome-box'>";
 	html += "<div class='welcome-subbox'>";
 	html += "<div class='welcome-title' id='welcome-title'>";
@@ -771,9 +771,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += "<div class='row row-node row-node-"+nodetype+"'  style='"+style+"'>";
 				//-------------------- collapsible -------------------
 				if (collapsible=='Y')
-					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='col-md-1 toggle-content'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-expand'></span></div>";
+					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='col-md-1 collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-expand'></span></div>";
 				if (collapsible!='Y')
-					html += "<div class='col-md-1 toggle-content'>&nbsp;</div>";
+					html += "<div class='col-md-1'>&nbsp;</div>";
 	
 				//-------------- node -----------------------------
 				if (depth!=1 && depth<10 && nodetype=='asmStructure') {
@@ -1970,9 +1970,9 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		//------------ delete button ---------------------
 		if ((deletenode || USER.admin || g_userrole=='designer') && node.asmtype != 'asmRoot') {
 			if (node.asmtype == 'asmStructure' || node.asmtype == 'asmUnit') {
-				html += deleteButton(node.id,node.asmtype,undefined,undefined,"UIFactory.Node.reloadStruct",portfolioid,null);
+				html += deleteButton(node.id,node.asmtype,undefined,undefined,"UIFactory.Node.reloadStruct",g_portfolioid,null);
 			} else {
-				html += deleteButton(node.id,node.asmtype,undefined,undefined,"UIFactory.Node.reloadUnit",portfolioid,null);
+				html += deleteButton(node.id,node.asmtype,undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
 			}
 		}
 		//------------- move node buttons ---------------
@@ -1997,7 +1997,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			if (node.asmtype == 'asmRoot' || node.asmtype == 'asmStructure') {
 				var databack = false;
 				var callback = "UIFactory['Node'].reloadStruct";
-				var param2 = "'"+portfolioid+"'";
+				var param2 = "'"+g_portfolioid+"'";
 				var param3 = null;
 				var param4 = null;
 				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmStructure','asmStructure',databack,callback,param2,param3,param4);
@@ -2005,7 +2005,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			}
 			var databack = false;
 			var callback = "UIFactory['Node'].reloadUnit";
-			var param2 = "'"+portfolioid+"'";
+			var param2 = "'"+g_portfolioid+"'";
 			var param3 = null;
 			var param4 = null;
 			var freenodevalue = ($(node.metadatawad).attr('freenode')==undefined)?'':$(node.metadatawad).attr('freenode');
@@ -2102,7 +2102,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					var callback = "UIFactory['Node'].reloadUnit";
 					if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' )
 						callback = "UIFactory['Node'].reloadStruct";
-					var param2 = "'"+portfolioid+"'";
+					var param2 = "'"+g_portfolioid+"'";
 					var param3 = null;
 					var param4 = null;
 					html += "<span class='dropdown dropdown-menu-left dropdown-button'>";
@@ -2147,6 +2147,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	if ((shareroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && shareroles!='none' && shareroles!='') {
 			html+= "<button class='btn btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
 	}
+	if (html.length<50)
+		html+= "<span class='button glyphicon glyphicon-pencil' style='visibility:hidden'></span>"; // for setting height if empty;
 	html += "</div><!-- class='btn-group' -->";
 	//--------------------------------------------------
 	if (html!="")

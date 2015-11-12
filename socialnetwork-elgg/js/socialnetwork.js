@@ -70,9 +70,10 @@ function toggleReplyBox(objectid,tabid)
 
 
 //==================================
-function displaySocialNetwork(destid)
+function displaySocialNetwork()
 //==================================
 {
+	var destid = 'socialnetwork';
 	getElggUser();
 	setUserGroups($(USER.username_node).text());
 	var html = "";
@@ -92,7 +93,7 @@ function displaySocialNetwork(destid)
 	html += "				<td class='publish_on'>&nbsp;"+snStr[LANG]["publish_on"]+"&nbsp;</td> ";
 	html += "				<td class='group-button'>";
 	html += "					<span class='dropdown dropdown-button'>";
-	html += "						<span class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span id='publish-group' value='0'>Public</span>&nbsp;<span class='caret'></span></span>";
+	html += "						<span data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span id='publish-group' value='0'>Public</span>&nbsp;<span class='caret'></span></span>";
 	html += "						<ul id='select-group' class='dropdown-menu' role='menu' aria-labelledby='list-menu'>";
 	html += "						</ul>";
 	html += "					</span>";
@@ -101,7 +102,7 @@ function displaySocialNetwork(destid)
 	html += "		</div>";
 	html += "	</div>";
 	html += "</div>";
-	$("#"+destid+"-head").append($(html));
+	$("#"+destid+"-head").html(html);
 
 	html = "<div class='panels'>";
 
@@ -120,7 +121,7 @@ function displaySocialNetwork(destid)
 
 	html += "</div>";
 	display_select_group("select-group");
-	$("#"+destid+"-body").append($(html));
+	$("#"+destid+"-body").html(html);
 	//------------------------------
 	getRiverFeed('activities');
 	getWall('public');
@@ -398,7 +399,7 @@ function postWire()
 	if (groupid==0)
 		url += "&method=thewire.post";
 	else
-		url += "&method=group.wire.post&group_guid="+groupid;
+		url += "&method=group.thewire.post&group_guid="+groupid;
 	$.ajax({
 		type : "POST",
 		dataType : "json",
@@ -475,6 +476,7 @@ function getWall(destid,groupid,tabid)
 		dataType : "json",
 		type : "GET",
 		url : url,
+		data : data,
 		success : function(data) {
 				displayWall("#"+destid,data,tabid);
 		},
@@ -577,14 +579,12 @@ function loginElgg(username,password,callback)
 {
 	if (username=='root')
 		username = 'karuta_'+username;
-	var url = "../../../../"+elgg_url_base+"services/api/rest/xml";
+	var url = "../../../../"+elgg_url_base+"services/api/rest/xml?method=auth.gettoken&username="+username+"&password="+password;
 	var data = "method=auth.gettoken&username="+username+"&password="+password;
 	$.ajax({
-		Accept: "json",
 		dataType : "json",
 		type : "POST",
 		url : url,
-		data : data,
 		success : function(data) {
 			var g_elgg_key = data.result;
 			Cookies.set('elgg_token',g_elgg_key,{ expires: 1 });
@@ -604,7 +604,6 @@ function getElggUser()
 	var url = "../../../../"+elgg_url_base+"services/api/rest/xml";
 	var data = "auth_token="+g_elgg_key+"&method=auth.getuser";
 	$.ajax({
-		Accept: "json",
 		dataType : "json",
 		type : "GET",
 		url : url,
@@ -722,7 +721,7 @@ function setUserGroups(username,callback,param1)
 function addGroupMember(groupid,username,callback,param1)
 //=================================================
 {
-	if (!$(groupid).isNumeric()) {
+	if (!$.isNumeric(groupid)) {
 		var groupname = groupid;
 		for (var i=0; i<g_elgg_user_groups.length; i++) {
 			if (g_elgg_user_groups[i].name==groupname)
@@ -739,11 +738,10 @@ function addGroupMember(groupid,username,callback,param1)
 		url : url,
 		data: data,
 		success : function(data) {
+			if (data.status==-1)
+				alert("addGroupMember : Oups! "+data.message);
 			if (callback!=null)
 				callback(data,param1);
-		},
-		error : function(jqxhr,textStatus) {
-			alert("addGroupMember : Oups! "+jqxhr.responseText);
 		}
 	});
 }

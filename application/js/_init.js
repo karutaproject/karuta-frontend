@@ -1,21 +1,31 @@
 //----------------------------------
 var application_version = "2.alpha";
-var application_date = "2015-10-10";
+var application_date = "2015-11-12";
 //----------------------------------
+//var appliname = 'karuta';
+//var bckname = '';
 var appliname = 'karuta-ux';
-var bckname = 'karuta';
-var demo = false;
+var bckname = '-ux';
+var serverBCK = "karuta-backend"+bckname+"/rest/api";
+var serverFIL = "karuta-backend"+bckname;
+var serverVER = "karuta-backend"+bckname;
 //----------------------------------
 var elgg_url_base = 'elgg112/';
 var elgg_url_absolute = '';
 var elgg_installed = true;
 var elgg_refreshing = 240000; // 240 seconds
-
 //----------------------------------
 var languages = [];
 languages [0] = 'en';
 languages [1] = 'fr';
 //languages [2] = 'ja';
+//----------------------------------
+var NONMULTILANGCODE = 0;  // default language if non-multilingual
+var LANGCODE = 0; //default value
+var LANG = languages[LANGCODE]; //default value
+//----------------------------------
+var technical_support = "info.karuta@gmail.com";
+var demo = false;
 //----------------------------------
 var navbar_icon_color = "#09bbd9";
 var navbar_title = {};
@@ -92,15 +102,11 @@ var listinfo = {};       // Welcome paragraph
 	listinfo["ja"] += "<li>eCommerce Demo Portfolios</li>";
 	listinfo["ja"] += "</ul>";
 
-
-//----------------------------------
-var NONMULTILANGCODE = 0;  // default language if non-multilingual
-var LANGCODE = 0; //default value
-var LANG = languages[LANGCODE]; //default value
-//----------------------------------
-var serverBCK = bckname+"-backend/rest/api";
-var serverFIL = bckname+"-backend";
-var serverVER = bckname+"-backend";
-//----------------------------------
-var technical_support = "info.karuta@gmail.com";
+	//----------------------------------
+	var welcome4 = {};			// List Page Welcome title
+		welcome4["fr"] = "Bienvenue dans Karuta";
+		welcome4["en"] = "Welcome in Karuta";
+	var welcome5 = {}; 			// List Page Welcome sub-title
+		welcome5["fr"] = "OPEN SOURCE PORTFOLIO";
+		welcome5["en"] = "OPEN SOURCE PORTFOLIO";
 

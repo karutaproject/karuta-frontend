@@ -11,9 +11,9 @@ snStr['fr']["hello"] = "Bonjour";
 snStr['fr']["something_to_publish"] = "Quelque chose à publier sur le réseau social?";
 snStr['fr']["publish"] = "Publier";
 snStr['fr']["publish_on"] = "sur";
-snStr['fr']["activities"] = "Activités du réseau";
+snStr['fr']["activities"] = "Activités";
 snStr['fr']["public"] = "Tous les murs";
-snStr['fr']["groups"] = "Murs de mes groupes";
+snStr['fr']["groups"] = "Mes groupes";
 snStr['fr']["comment"] = "Commentaire";
 snStr['fr']["empty-wall"] = "Le mur est vide";
 

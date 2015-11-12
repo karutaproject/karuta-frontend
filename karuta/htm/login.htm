@@ -34,9 +34,8 @@
 	<script src="../../karuta/js/model/Type_Node.js"></script>
 	<script src="../../karuta/js/model/Type_User.js"></script>
 	<!-- =============================================================== -->
-	<script src="../../socialnetwork/js/elggsocialnetwork.js"></script>
-	<script src="../../socialnetwork/js/socialnetwork_fr.js"></script>
-	<script src="../../socialnetwork/js/moment-with-locales.min.js"></script>
+	<script src="../../socialnetwork-elgg/js/socialnetwork.js"></script>
+	<script src="../../socialnetwork-elgg/js/moment-with-locales.min.js"></script>
 	<!-- =============================================================== -->
 	<link type="text/css" href="../../other/lightbox/css/lightbox.css" rel="stylesheet" />
 	<script src="../../other/lightbox/js/lightbox-2.6.min.js"></script>
@@ -77,9 +76,9 @@
 				data: data,
 				success : function(data) {
 					if (elgg_installed!=undefined && elgg_installed)
-						loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (token){});
+						loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (){window.location="karuta.htm";});
 					else
-						window.location="list.htm?lang="+LANG;
+						window.location="karuta.htm";
 				},
 				error : function(jqxhr,textStatus) {
 					alert("Identification : "+jqxhr.responseText);
@@ -135,10 +134,6 @@
 			html += "<button id='form-send' onclick='javascript:callSend()'>"+karutaStr[LANG]['button-send']+"</button>";
 			return html;
 		}
-
-		//------------------------------
-		setLanguage();
-		//------------------------------
 	</script>
 </head>
 <body class="welcome">
@@ -153,6 +148,7 @@
 	<script language='javascript'>
 		//------------------------------
 		$(window).load(function() {
+			getLanguage();
 			changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 			$.ajaxSetup({async: false});
 			$.ajax({

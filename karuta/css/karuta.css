@@ -8,8 +8,12 @@
 }
 
 
-html, body, #main-body, #main-container, #main-row, #contenu {
+html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #contenu {
 	height:100%;	
+}
+
+#sidebar.col-md-3{
+	height:100%;
 }
 
 #contenu {
@@ -69,9 +73,58 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 	font-size:12px;
 }
 
+#toggleSocialNetwork {
+	margin:5px;
+	padding:3px;
+	border-radius:3px;
+	color:black;
+	cursor:pointer;
+}
+
+
 /* ====================== */
 /*     PAGE LIST     */
 /* ====================== */
+/*
+
+
+#main-container .row:first-of-type {
+	background-color:#e0006d;
+}
+
+#main-container .row-label {
+	background-color:initial;
+}
+*/
+
+#refresh {
+	float:right;
+	margin:5px 25px 5px 5px;
+	padding:3px;
+	border-radius:3px;
+	color:black;
+	cursor:pointer;
+	display:none;
+}
+
+#sub-bar .welcome-title {
+    color: #ffffff;
+    font-size: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+#sub-bar .welcome-line {
+    border-bottom: 1px solid #b9da00;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+}
+
+#sub-bar  .welcome-baseline, #sub-bar  .welcome-text{
+	padding:10px;
+	width:100%;
+}
 
 
 .page-list .welcome-title {
@@ -96,6 +149,8 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 #main-body-list {
 	background-color:#e0006d;
 }
+
+
 
 #list-menu {
 	color:white;
@@ -157,12 +212,14 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 
 #projects .row .col-md-5,
 #projects .row .col-md-3,
+#projects .row .col-md-2,
 #projects .row .col-md-1,
 #portfolios .row .col-md-5,
 #portfolios .row .col-md-3,
+#portfolios .row .col-md-2,
 #portfolios .row .col-md-1 {
 	min-height:26px;
-	padding:1px;
+
 }
 
 #projects .row .col-md-5,
@@ -181,6 +238,7 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 #projects .row:hover .col-md-5,
 #projects .row:hover .col-md-5 a,
 #projects .row:hover .col-md-3,
+#projects .row:hover .col-md-2,
 #projects .row:hover .col-md-1 {
 	background-color:#e0006d;
 /*	color:black; */
@@ -189,8 +247,9 @@ html, body, #main-body, #main-container, #main-row, #contenu {
 #projects .row-label:hover .col-md-5,
 #projects .row-label:hover .col-md-5 a,
 #projects .row-label:hover .col-md-3,
+#projects .row-label:hover .col-md-2,
 #projects .row-label:hover .col-md-1 {
-	background-color:#bb0066;
+	background-color:initial;
 /*	color:black; */
 }
 
@@ -768,12 +827,6 @@ hr {
 /* ----------------- ADMIN -------------------------- */
 /* -------------------------------------------------- */
 
-.portfolio, .user , .account ,.group {
-	min-height:30px;
-	border-top: 1px solid rgb(227, 227, 227);
-	margin-top: 0px;
-	padding-top: 8px;
-}
 
 #metadata .control-group {
 	margin-bottom:3px;
@@ -1390,6 +1443,7 @@ table.tablesorter th.restore {
 /* ====================
 	Free
    ====================*/
+   
 .free-toolbar{
 	height:24px;
 	z-index:10;
@@ -1415,6 +1469,13 @@ table.tablesorter th.restore {
 }
 .free-node {
 	padding:5px;
+}
+
+.free-context .resource-Field,
+.free-context .resource-TextField,
+.free-context .resource-Calendar,
+.free-context .resource-Oembed {
+	min-height:15px;
 }
 
 /* ====================

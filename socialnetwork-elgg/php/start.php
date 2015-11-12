@@ -52,99 +52,70 @@ function ws_init() {
 
 
 
+	elgg_register_plugin_hook_handler('unit_test', 'system', 'ws_unit_test');
+	
+	
+
 	// The authentication token api
 
 	elgg_ws_expose_function(
-
 		"auth.gettoken",
-
 		"auth_gettoken",
-
 		array(
-
 			'username' => array ('type' => 'string'),
-
 			'password' => array ('type' => 'string'),
-
 		),
-
 		elgg_echo('auth.gettoken'),
-
 		'POST',
-
 		false,
-
 		false
-
 	);
 
-
-
-	elgg_register_plugin_hook_handler('unit_test', 'system', 'ws_unit_test');
-
-
-
-	//--------------------- thewire ---------------------------
-
+	//=========================================================
+	//=========================================================
+	//====================== thewire ==========================
+	//=========================================================
+	//=========================================================
+	
+	//--------------- thewire.get_posts ------------------
     elgg_ws_expose_function("thewire.get_posts",
+		"wire_get_posts",
+		array("context" => array('type' => 'string')),
+		'Get Wire Posts',
+		'GET',
+		false,
+		 true
+		); 
 
-                "wire_get_posts",
+	//--------------- thewire.post ------------------
+    elgg_ws_expose_function("thewire.post",
+		"my_post_to_wire",
+		array("text" => array('type' => 'string')),
+		'Post to the wire. 140 characters or less',
+		'POST',
+		false,
+		true
+	);
 
-                 array("context" => array('type' => 'string')),
-
-                 'Get Wire Posts',
-
-                 'GET',
-
-                 false,
-
-                 true
-
-                ); 
-
-                 
-
-	elgg_ws_expose_function("thewire.post",
-
-                "my_post_to_wire",
-
-                 array("text" => array('type' => 'string')),
-
-                 'Post to the wire. 140 characters or less',
-
-                 'POST',
-
-                 false,
-
-                 true
-
-                );
-
-
-
-	//--------------------- user ---------------------------
-
-	elgg_ws_expose_function('user.register',
-
-               "user_register",
-
-               array('name' => array ('type' => 'string'),
-
-                       'email' => array ('type' => 'string'),
-
-                       'username' => array ('type' => 'string'),
-
-                       'password' => array ('type' => 'string'),
-
-                   ),
-
-               "Register user",
-
-               'GET',
-
-               false,
-
-               false);
+	//=========================================================
+	//=========================================================
+	//====================== user =============================
+	//=========================================================
+	//=========================================================
+    
+	//--------------- user.register ------------------
+    elgg_ws_expose_function('user.register',
+		"user_register",
+		array('name' => array ('type' => 'string'),
+			'email' => array ('type' => 'string'),
+			'username' => array ('type' => 'string'),
+			'password' => array ('type' => 'string'),
+		),
+		"Register user",
+		'GET',
+		false,
+		false
+	);
 
                
 
@@ -166,10 +137,12 @@ function ws_init() {
 
 	);
 
-
-
-	//--------------------- site ---------------------------
-
+	//=========================================================
+	//=========================================================
+	//====================== site =============================
+	//=========================================================
+	//=========================================================
+	
     expose_function('site.river_feed',
 
                "site_river_feed",
@@ -212,8 +185,12 @@ function ws_init() {
 
  
 
- 	//--------------------- group ---------------------------
-
+	//=========================================================
+	//=========================================================
+	//====================== group ============================
+	//=========================================================
+	//=========================================================
+   
 	expose_function('group.get_groups',
 
 		"group_get_groups",
@@ -366,32 +343,27 @@ function ws_init() {
 
                
 
-    expose_function('group.thewire.post',
-
-               "wire_save_post_group",
-
-               array(
-
-                       'text' => array ('type' => 'string', 'required' => true),
-
-                       'group_guid' => array ('type' => 'int', 'required' => true)
-
-                   ),
-
-               "Post a wire post",
-
-               'POST',
-
-               false,
-
-               false
-
-               );
+	//--------------- group.thewire.post ------------------
+	expose_function('group.thewire.post',
+		"wire_save_post_group",
+		array(
+			'text' => array ('type' => 'string', 'required' => true),
+			'group_guid' => array ('type' => 'int', 'required' => true)
+		),
+		"Post a wire post",
+		'POST',
+		false,
+		false
+	);
 
                
 
-	//--------------------- wire ---------------------------
-
+	//=========================================================
+	//=========================================================
+	//====================== wire =============================
+	//=========================================================
+	//=========================================================
+    
                
 
     expose_function('wire.save_comment',
@@ -1094,54 +1066,43 @@ function my_echo($string) {
 
 
 
-///////////////////// USER
+	//=========================================================
+	//=========================================================
+	//====================== user =============================
+	//=========================================================
+	//=========================================================
 
+	//--------- user_register -----------------------
+	function user_register($name, $email, $username, $password)
+	{
+		$user_loggued = get_loggedin_user();
+		if(!is_object($user_loggued)) 
+			throw new InvalidParameterException("Forbidden : not logged in (token ?) "); 
+		if(!$user_loggued->isadmin())
+		{
+			throw new InvalidParameterException('Forbidden : not admin');
+		}
+		$user = get_user_by_username($username);
+		if (!$user) {
+			$return['success'] = true;
+			$return['guid'] = register_user($username, $password, $name, $email);
+		} else {
+			$return['success'] = false;
+			$return['message'] = elgg_echo('registration:userexists');
+		}
+		return $return;
+	}
 
-
-
-
-function user_register($name, $email, $username, $password) {
-
-  
-
-  $user_loggued = get_loggedin_user();
-  
-  if(!is_object($user_loggued)) 
-	 throw new InvalidParameterException("Forbidden : not logged in (token ?) "); 
-
-  if(!$user_loggued->isadmin())
-
-  {
-
-    throw new InvalidParameterException('Forbidden : not admin');
-
-  }
-
-
-
-
-
-   $user = get_user_by_username($username);
-
-   if (!$user) {
-
-       $return['success'] = true;
-
-       $return['guid'] = register_user($username, $password, $name, $email);
-
-   } else {
-
-       $return['success'] = false;
-
-       $return['message'] = elgg_echo('registration:userexists');
-
-   }
-
-   return $return;
-
-}
-
-
+	//--------- auth_getuser -----------------------
+	function auth_getuser()
+	{
+		$user_loggued = get_loggedin_user();
+		if(!is_object($user_loggued))
+			throw new InvalidParameterException("Forbidden : not logged in (token ?) ");
+		return $user_loggued->toObject();
+	}
+	
+	
 
 ///////////////////// RIVER
 
@@ -2609,18 +2570,6 @@ if ($annotation_id) return $annotation_id;
 /////////////////////
 
 
-
-function auth_getuser()
-
-{
-
-  $user_loggued = get_loggedin_user();
-  if(!is_object($user_loggued)) 
-	 throw new InvalidParameterException("Forbidden : not logged in (token ?) ");
-	 
-  return $user_loggued->toObject();
-
-}
 
 
 

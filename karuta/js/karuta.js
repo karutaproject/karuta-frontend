@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2014 - ePortfolium - Licensed under the
+toggle	Copyright 2014 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -20,6 +20,7 @@ var portfolioid = null;
 
 // -------------------
 var g_userrole = "";
+var g_portfolioid = "";
 var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
@@ -34,6 +35,7 @@ var g_wysihtml5_autosave = 120000; // 120 seconds
 var redisplays = {};
 // -------------------------------------
 
+
 //==============================
 function setDesignerRole(role)
 //==============================
@@ -47,11 +49,11 @@ function setDesignerRole(role)
 	if (g_display_type=='standard'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
-		html += "	<div class='row'>";
+		html += "	<div id='main-row' class='row'>";
 		html += "		<div class='col-md-3' id='sidebar'></div>";
 		html += "		<div class='col-md-9' id='contenu'></div>";
 		html += "	</div>";
-		$("#main-container").html(html);
+		$("#main-page").html(html);
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,true,UICom.rootid);
 		$("#sidebar_"+uuid).click();
 	};
@@ -101,7 +103,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
 	if (type=='main'){
-		html += "			<li><a href='list.htm?lang="+LANG+"' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
+		html += "			<li><a href='#' onclick='display_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
 	}
 	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench'></span></a></li>";
 	html += "			</ul>";
@@ -111,18 +113,7 @@ function getNavBar(type,portfolioid,edit)
 		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' href='#'><img style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu'>";
 		for (var i=0; i<languages.length;i++) {
-			var url = "list.htm?lang="+languages[i];
-			if (type=='main')
-				url = "main.htm?id="+portfolioid+"&amp;lang="+languages[i]+"&amp;edit="+edit;
-			if (type=='users')
-				url = "listUsers.htm?lang="+languages[i];
-			if (type=='login')
-				url = "login.htm?lang="+languages[i];
-			if (type=='create_account')
-				url = "createAccount.htm?lang="+languages[i];
-			if (type=='batch')
-				url = "createBatchAccounts.htm?lang="+languages[i];
-			html += "			<li><a href='"+url+"'><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+			html += "			<li><a href='#' onclick=\"setLanguage('"+languages[i]+"');eval('display_"+type+"_page();displaySocialNetwork();setWelcomeTitles();')\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 		}
 		html += "					</ul>";
 		html += "				</li>";
@@ -170,6 +161,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "</nav>";
 	return html;
 }
+
 
 //==============================
 function EditBox()
@@ -533,7 +525,7 @@ function loadLanguages(callback)
 				$.ajax({
 					type : "GET",
 					dataType : "script",
-					url : "../../socialnetwork/js/languages/locale_"+languages[i]+".js"
+					url : "../../socialnetwork-elgg/js/languages/locale_"+languages[i]+".js"
 				});
 			}
 			$.ajax({
@@ -547,7 +539,7 @@ function loadLanguages(callback)
 				$.ajax({
 					type : "GET",
 					dataType : "script",
-					url : "../../socialnetwork/js/languages/locale_"+languages[i]+".js"
+					url : "../../socialnetwork-elgg/js/languages/locale_"+languages[i]+".js"
 				});
 			}
 			$.ajax({
@@ -816,15 +808,13 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 
 
 //==================================
-function setLanguage() {
+function getLanguage() {
 //==================================
 	var lang = Cookies.get('karuta-language');
-	var param_lang = getURLParameter('lang');
-	if (param_lang!= null && param_lang!=lang) {
-		lang = param_lang;
-		Cookies.set('karuta-language',lang,{ expires: 60 });
-	}
-	if (lang!=null) {
+	if (lang == null || lang==undefined || lang=='undefined') {
+		lang = languages[0];
+		setLanguage(lang);
+	} else {
 		LANG = lang;
 		for (var i=0; i<languages.length;i++){
 			if (languages[i]==lang)
@@ -832,6 +822,18 @@ function setLanguage() {
 		}
 	}
 }
+
+//==================================
+function setLanguage(lang) {
+//==================================
+	Cookies.set('karuta-language',lang,{ expires: 60 });
+	LANG = lang;
+	for (var i=0; i<languages.length;i++){
+		if (languages[i]==lang)
+			LANGCODE = i;
+	}
+}
+
 
 //==================================
 function toggleZoom(uuid) {
@@ -886,6 +888,21 @@ function toggleSideBar() {
 		$("#sidebar").show();
 	}
 	UIFactory['Node'].reloadUnit();
+}
+
+//==================================
+function toggleSocialNetwork() {
+//==================================
+	if ($("#socialnetwork").is(":visible"))
+	{
+		$("#socialnetwork").hide();
+		$("#toggleSocialNetwork").removeClass('fa-arrow-left').addClass('fa-users');
+		$("#main-page").removeClass().addClass('col-md-12');
+	} else {
+		$("#main-page").removeClass().addClass('col-md-8');
+		$("#socialnetwork").show();
+		$("#toggleSocialNetwork").removeClass('fa-users').addClass('fa-arrow-left');
+	}
 }
 
 //==================================
