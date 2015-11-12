@@ -140,6 +140,22 @@
 					data: "",
 					success : function(data) {
 						USER = new UIFactory["User"]($("user",data));
+						if (!USER.admin) {
+							$.ajax({ // get group-role for the user
+								Accept: "application/xml",
+								type : "GET",
+								dataType : "xml",
+								url : "../../../"+serverBCK+"/credential/group/" + portfolioid,
+								success : function(data) {
+									var usergroups = $("group",data);
+									g_userrole = $("role",usergroups[0]).text();
+									if (g_userrole=='designer')
+										g_designerrole = true;
+									if (g_userrole=='')
+										g_userrole='none';
+								}
+							});
+						}
 					}
 				});
 				//----------------
