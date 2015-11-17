@@ -40,6 +40,7 @@
 		<script src="../../karuta/js/resources/Type_Dashboard.js"></script>
 		<script src="../../karuta/js/resources/Type_Color.js"></script>
 		<script src="../../karuta/js/resources/Type_Bubble.js"></script>
+		<script src="../../karuta/js/resources/Type_Action.js"></script>
 		<script src="../../karuta/js/resources/Type_EuropassL.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../other/js/jquery-1.10.2.js"></script>
@@ -151,7 +152,7 @@
 							$("#main-container").html("<div id='global-row' class='row'><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-arrow-left fa-2x'></i><div id='socialnetwork' class='col-md-4'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div><div id='main-page' class='col-md-8'></div></div>");
 							displaySocialNetwork('socialnetwork');
 						} else {
-							
+							$("#main-container").html("<div id='global-row' class='row'><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><div id='main-page' class='col-md-12'></div></div>");
 						}
 						//-------------------------------
 						display_list_page();

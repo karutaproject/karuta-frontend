@@ -382,7 +382,9 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 /* ============================================== */
-
+#edit-window-body-resource .btn{
+	height:34px;
+}
 /* ============================================== */
 
 

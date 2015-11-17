@@ -104,6 +104,7 @@ karutaStr['en']['queryGet_Resource']="Search <br/><span style='font-size:smaller
 karutaStr['en']['queryURL2Unit']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
 karutaStr['en']['queryGet_Get_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code.<i>sibling</i>|<i>parent</i>[.<i>parent</i>].semantic_tag1.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
 karutaStr['en']['queryProxy']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
+karutaStr['en']['queryAction']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
 karutaStr['en']['queryGet_Double_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code1.semantic_tag1.<i>label;</i>portfolio_code2.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
 karutaStr['en']['shownoderoles']="Roles - Show";
 karutaStr['en']['showroles']="Roles - Show To";

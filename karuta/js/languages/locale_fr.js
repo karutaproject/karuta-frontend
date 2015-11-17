@@ -104,6 +104,7 @@ karutaStr['fr']['queryGet_Resource']="Recherche <br/><span style='font-size:smal
 karutaStr['fr']['queryURL2Unit']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
 karutaStr['fr']['queryGet_Get_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio.<i>sibling</i>|<i>parent</i>[.<i>parent</i>].tag_sémantique1.tag_sémantique2.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
 karutaStr['fr']['queryProxy']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mots réservés pour code_portfolio : <i>all</i> et <i>self</i></span>";
+karutaStr['fr']['queryAction']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mots réservés pour code_portfolio : <i>all</i> et <i>self</i></span>";
 karutaStr['fr']['queryGet_Double_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio1.tag_sémantique1.<i>label;</i>code_portfolio2.tag_sémantique2.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
 karutaStr['fr']['shownoderoles']="Rôles - Montrer";
 karutaStr['fr']['showroles']="Rôles - Montrer à";

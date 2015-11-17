@@ -2,17 +2,17 @@
 var application_version = "2.alpha";
 var application_date = "2015-11-12";
 //----------------------------------
-//var appliname = 'karuta';
-//var bckname = '';
-var appliname = 'karuta-ux';
-var bckname = '-ux';
+var appliname = 'karuta';
+var bckname = '';
+//var appliname = 'karuta-ux';
+//var bckname = '-ux';
 var serverBCK = "karuta-backend"+bckname+"/rest/api";
 var serverFIL = "karuta-backend"+bckname;
 var serverVER = "karuta-backend"+bckname;
 //----------------------------------
 var elgg_url_base = 'elgg112/';
 var elgg_url_absolute = '';
-var elgg_installed = true;
+var elgg_installed = false;
 var elgg_refreshing = 240000; // 240 seconds
 //----------------------------------
 var languages = [];

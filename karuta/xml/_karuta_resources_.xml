@@ -5,11 +5,11 @@
 	<asmRoot xsi_type="asmRoot">
 		<metadata-wad seenoderoles="all" />
 		<metadata-epm />
-		<metadata sharedNode="N" sharedNodeResource="N" />
+		<metadata semantictag="karuta-components" sharedNode="N" sharedNodeResource="N" />
 		<asmResource xsi_type="nodeRes">
 			<code>karuta.karuta-resources</code>
-			<label lang="fr">#karuta_resources_ v1.1.3 (2015/09/16)</label>
-			<label lang="en">#karuta_resources_ v1.1.3 (2015/09/16)</label>
+			<label lang="fr">KARUTA - Ressources (2015/11/17)</label>
+			<label lang="en">KARUTA - Resources (2015/11/17)</label>
 		</asmResource>
 		<asmResource xsi_type="context">
 			<text lang="fr" />
@@ -493,6 +493,30 @@
 			<asmResource xsi_type="Dashboard">
 				<text lang="fr"/>
 				<text lang="en"/>
+			</asmResource>
+		</asmContext>
+		//===================== Action =======================
+		<asmContext xsi_type="">
+			<metadata-wad seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="Action" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<code />
+				<label lang="fr">Action</label>
+				<label lang="en">Action</label>
+			</asmResource>
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
+			<asmResource xsi_type="Action">
+				<code />
+				<value />
+				<label lang="fr" />
+				<label lang="en" />
+				<role />
+				<action />
+				<action-query />
 			</asmResource>
 		</asmContext>
 		//------------------------------------------------------
