@@ -119,22 +119,15 @@ function ws_init() {
 
                
 
-	elgg_ws_expose_function("auth.getuser",
-
+	//--------------- user.getuser ------------------
+    elgg_ws_expose_function("auth.getuser",
 		"auth_getuser",
-
 		array(
-
 		),
-
 		elgg_echo('auth.getuser'),
-
 		'GET',
-
  		false,
-
 		false
-
 	);
 
 	//=========================================================

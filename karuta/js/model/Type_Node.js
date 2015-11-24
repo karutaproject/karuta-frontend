@@ -778,27 +778,27 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//-------------- node -----------------------------
 				if (depth!=1 && depth<10 && nodetype=='asmStructure') {
 					if (g_display_type=='standard')
-						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-8 same-height'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-7 same-height'>";
 					if (g_display_type=='header')
-						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-8 same-height'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-7 same-height'>";
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',1,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>";
 					}
 				else if (depth!=1 && depth<10 && nodetype=='asmUnit') {
 					if (g_display_type=='standard')
-						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-8 same-height' style='"+style+"'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-7 same-height' style='"+style+"'>";
 					if (g_display_type=='header')
-						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-8'>";
+						html += "<div id='prt_node_"+uuid+"' class='node-label col-md-7'>";
 						html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'standard','"+langcode+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('prt_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
 					}
 				else {
 					if (g_display_type=='standard')
-						html += "<div id='std_node_"+uuid+"' class='node-label col-md-8  same-height'";
+						html += "<div id='std_node_"+uuid+"' class='node-label col-md-7  same-height'";
 					if (nodetype=='asmUnitStructure' && collapsible=='Y')
 						html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
 					else
 						html += " style='"+style+"'>";
 					if (g_display_type=='header') {
-						html += "<div id='std_node_"+uuid+"' class='node-label col-md-offset-1 col-md-8  same-height'";
+						html += "<div id='std_node_"+uuid+"' class='node-label col-md-offset-1 col-md-7  same-height'";
 						if (g_userrole!='designer' && semtag=='header')
 							html += " style='visibility:hidden'";
 						if (semtag!='header')
@@ -827,7 +827,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//-----------------------------------------------
 				html += "</div><!-- col-md-8 -->";
 				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='col-md-3 buttons'>";
+				html += "<div id='buttons-"+uuid+"' class='col-md-4 buttons'>";
 				html += UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit);
 				html += "</div><!-- col-md-3  -->";
 				html += "</div><!-- row -->";

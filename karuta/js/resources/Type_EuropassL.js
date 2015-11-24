@@ -45,13 +45,9 @@ UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid)
 		var param2 = "'"+destid+"'";
 		var param3 = "'"+parentid+"'";
 		var param4 = edit;
-		if (edit) {
-			html += "<div class='col-md-offset-8 col-md-4'>";
-			html += "<button class='btn btn-xs' onclick=\"javascript:importBranch('"+parentid+"','_europass-languages','europass_language',"+databack+","+callback+","+param2+","+param3+","+param4+")\">";
-			html += karutaStr[LANG]['add-foreign-language'];
-			html += "</button>";
-			html += "</div>";
-		}
+		//----------------------------
+		html += "<div class='row'>";
+		html += "<div class='col-md-offset-1 col-md-4'>";
 		html += "<h5>"+karutaStr[LANG]['mother-tongue']+" : ";
 		html += "<span class='langue' id='mother_tongue'>"+UICom.structure["ui"][g_mother_tongueid].resource.getView("mother_tongue","span");
 		if (edit) {
@@ -61,16 +57,35 @@ UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid)
 		}
 		html +="</span>";
 		html +="</h5>";
+		html += "</div><!--col-->";
+		html += "</div><!--row-->";
+		//----------------------------
+		html += "<div class='row'>";
+		html += "<div class='col-md-offset-1 col-md-7'>";
 		html += "<h5>"+karutaStr[LANG]['foreign-languages']+"</h5>";
+		html += "</div><!--col-->";
+		if (edit) {
+			html += "<div class='col-md-4'>";
+			html += "<button class='btn btn-xs' onclick=\"javascript:importBranch('"+parentid+"','europass.parts','europass_language',"+databack+","+callback+","+param2+","+param3+","+param4+")\">";
+			html += karutaStr[LANG]['add-foreign-language'];
+			html += "</button>";
+			html += "</div><!--col-->";
+		}
+		html += "</div><!--row-->";
+		html += "<div class='row'>";
+		html += "<div class='col-md-offset-3 col-md-8'>";
 		html += "<table id='"+destid+"europass_table' class='europass_table'>";
-		html += "<tr class='en-tete'><td> </td><td class='bordure' colspan='2'>"+karutaStr[LANG]['understanding']+"</td><td class='bordure' colspan='2'>"+karutaStr[LANG]['speaking']+"</td><td class='bordure'>"+karutaStr[LANG]['writing']+"</td></tr>";
-		html += "<tr class='en-tete'><td> </td><td class='bordure'>"+karutaStr[LANG]['listening']+"</td><td class='bordure'>"+karutaStr[LANG]['reading']+"</td><td class='bordure'>"+karutaStr[LANG]['spoken-interaction']+"</td><td class='bordure'>"+karutaStr[LANG]['spoken-production']+"</td><td class='bordure'> </td></tr>";
+		html += "<tr class='en-tete'><td class='bordure' colspan='2'>"+karutaStr[LANG]['understanding']+"</td><td class='bordure' colspan='2'>"+karutaStr[LANG]['speaking']+"</td><td class='bordure'>"+karutaStr[LANG]['writing']+"</td></tr>";
+		html += "<tr class='en-tete'><td class='bordure'>"+karutaStr[LANG]['listening']+"</td><td class='bordure'>"+karutaStr[LANG]['reading']+"</td><td class='bordure'>"+karutaStr[LANG]['spoken-interaction']+"</td><td class='bordure'>"+karutaStr[LANG]['spoken-production']+"</td><td class='bordure'> </td></tr>";
 		html += "</table>";
 		$("#"+destid).html(html);
 		for ( var i = 0; i < langues_list.length; i++) {
 				$("#"+destid+"europass_table").append($("<tr id='"+destid+"_"+langues_list[i].id+"'></tr>"));			
 				langues_list[i].displayView(destid+"_"+langues_list[i].id,type,langcode,edit);
 		}
+		html += "</div><!--col-->";
+		html += "</div><!--row-->";
+		//----------------------------
 	}
 }
 

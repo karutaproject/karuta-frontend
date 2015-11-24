@@ -202,7 +202,7 @@ function transcodeText(text)
 //==================================
 {
 	var result1 = text.replace(/link\((.*?)\)/g,"<a target='_blank' href='$1'>$1</a> ");
-	var result2 = result1.replace(/image\((.*?)\) /g,"<img  src='$1'/> ");
+	var result2 = result1.replace(/image\((.*?)\)/g,"<img  src='$1'/> ");
 	return result2;
 }
 
@@ -541,6 +541,8 @@ function display_post(dest,node,tabid)
 		html += "				<span class='likes'>"+node.num_likes+"</span>";
 	html+= "					<span class='glyphicon glyphicon-thumbs-up' onclick=\"likeEntity('"+node.guid+"')\"></span> ";
 	html+= "					<span id='plus-"+tabid+node.guid+"' onclick=\"toggleComments('"+tabid+node.guid+"')\" class='glyphicon glyphicon-plus' style='display:none'></span> ";
+	html+= "					<span class='repondre' onclick=\"toggleReplyBox('"+node.guid+"','groups')\">Répondre</span> ";
+	//----------------------------------
 	html+= "					<span class='elgg-river-subject'>"+node.owner.name+"</span> ";
 	html+= 						snStr[LANG]['river_object_status_create'];
 	html+= " 					<span class='elgg-river-timestamp'><acronym title='"+date.format('LLL')+"'>"+date.fromNow()+"</acronym></span>";

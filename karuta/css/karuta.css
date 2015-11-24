@@ -197,6 +197,11 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	background-color:#bb0066;
 }
 
+.project-content {
+	margin-top:10px;
+	padding-top:10px;
+	border-top:1px solid #e0006d;
+}
 
 .project-menu .dropdown-menu {
 	min-width:200px;
@@ -211,6 +216,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 #projects .row .col-md-5,
+#projects .row .col-md-4,
 #projects .row .col-md-3,
 #projects .row .col-md-2,
 #projects .row .col-md-1,
@@ -228,6 +234,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 #projects .row .col-md-5,
+#projects .row .col-md-4,
 #projects .row .col-md-3,
 #portfolios .row .col-md-5,
 #portfolios .row .col-md-3 {
@@ -237,6 +244,8 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 
 #projects .row:hover .col-md-5,
 #projects .row:hover .col-md-5 a,
+#projects .row:hover .col-md-4,
+#projects .row:hover .col-md-4 a,
 #projects .row:hover .col-md-3,
 #projects .row:hover .col-md-2,
 #projects .row:hover .col-md-1 {
@@ -246,6 +255,8 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 
 #projects .row-label:hover .col-md-5,
 #projects .row-label:hover .col-md-5 a,
+#projects .row-label:hover .col-md-4,
+#projects .row-label:hover .col-md-4 a,
 #projects .row-label:hover .col-md-3,
 #projects .row-label:hover .col-md-2,
 #projects .row-label:hover .col-md-1 {
@@ -255,6 +266,8 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 
 #portfolios .row:hover .col-md-5,
 #portfolios .row:hover .col-md-5 a,
+#portfolios .row:hover .col-md-4,
+#portfolios .row:hover .col-md-4 a,
 #portfolios .row:hover .col-md-3,
 #portfolios .row:hover .col-md-1 {
 	background-color:#bb0066;

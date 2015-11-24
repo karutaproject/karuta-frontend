@@ -30,7 +30,7 @@ function getListSubBar()
 	html += "<div id='welcome-image'>";
 	html += "	<div class='welcome-box'>";
 	html += "		<div class='welcome-subbox'>";
-	html += "			<div id='welcome-title' class='welcome-title'>Bienvenue dans KARUTA</div>";
+	html += "			<div id='welcome-title' class='welcome-title'>KARUTA</div>";
 	html += "			<div class='welcome-line'></div>";
 	html += "			<div style='color:#18b8d6;text-align:center;' id='welcome-baseline' class='welcome-baseline'>";
 	html += "				OPEN SOURCE PORTFOLIO";
