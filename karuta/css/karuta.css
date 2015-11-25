@@ -1708,13 +1708,13 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 }
 
 .europass_table td {
-	width:150px;
+	width:12%;
 	height:40px;
 	text-align:center;
 }
 
 .europass_table select {
-	width:150px;
+	min-width:150px;
 }
 
 .europass_table tr.en-tete {
@@ -1735,7 +1735,7 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 
 
 .EuropassL .select-label {
-	min-width:100px;
+	min-width:50px;
 	padding: 1px;
 }
 
@@ -1743,6 +1743,17 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	padding: 1px 5px;
 }
 
+.europass_table .language_edit button{
+	height:30px;
+}
+
+.europass_table .language_edit{
+	width:20%;
+}
+
+.europass_table td.buttons {
+	width:50px;
+}
 /* ====================
 	BUBBLE
    ====================*/

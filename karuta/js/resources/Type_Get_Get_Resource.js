@@ -207,7 +207,9 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
 			var semtag_parent_indx = queryattr_value.substring(0,semtag_indx).lastIndexOf('.');
 			var semtag_parent = queryattr_value.substring(semtag_parent_indx+1,semtag_indx);
-			var portfoliocode_end_indx = queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent');
+			if (semtag_parent.indexOf('#')==0)
+				semtag_parent = semtag_parent.substring(1);
+			var portfoliocode_end_indx = queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent')+queryattr_value.indexOf('#')+1;
 			var portfoliocode = queryattr_value.substring(0,portfoliocode_end_indx);
 			if (portfoliocode=='self')
 				portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
@@ -227,7 +229,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			}
 //			alert('query'+query+'--parentid'+$(parent).attr("id"));
 			var code_parent = "";
-			if (query.indexOf('#')==0)
+			if (queryattr_value.indexOf('#')>0)
 				code_parent = semtag_parent;
 			else
 				code_parent = $("code",$("asmContext:has(metadata[semantictag='"+semtag_parent+"'])",parent)[0]).text();
@@ -249,7 +251,6 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				$(this.portfoliocode_node).text(portfoliocode);
 				url = "../../../"+serverBCK+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
 			}
-	
 			var self = this;
 			$.ajax({
 				type : "GET",
