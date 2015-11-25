@@ -8,6 +8,9 @@ function display_main_page(portfolioid,role)
 		g_portfolioid = portfolioid;
 	changeCss("body", "background-color:white;");
 	$("#main-page").html("");
+	$("#main-page").show();
+	$("#main-list").hide();
+	$("#main-user").hide();
 	$("#wait-window").modal('show');
 	$("#wait-spin").spin();
 	$("#refresh").show();
@@ -174,14 +177,14 @@ function display_main_page(portfolioid,role)
 			//---------------------------
 			$("#wait-window").modal('hide');
 			//---------------------------
-			if (g_display_type=="standard") {
-				var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-block'])",data);
-				if (welcomes.length>0){
-					var welcomeid = $(welcomes[0]).attr('id');
-					$("#sidebar_"+welcomeid).click();
-				} else {
-					$("#portfolio-navbar-brand").click();
-				}
+			var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-block'])",data);
+			if (welcomes.length>0){
+				var welcomeid = $(welcomes[0]).attr('id');
+				$("#sidebar_"+welcomeid).click();
+			} else {
+				var root = $("asmRoot",data);
+				var rootid = $(root[0]).attr('id');
+				$("#sidebar_"+rootid).click();
 			}
 			//---------------------------
 			fillEditBoxBody();

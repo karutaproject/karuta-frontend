@@ -76,7 +76,7 @@
 				return html;
 			}
 			//------------------------------
-			setLanguage();
+			getLanguage();
 			//------------------------------
 		</script>
 	</head>
@@ -92,6 +92,8 @@
 			$(document).ready(function() {
 				//----------------
 				$.ajaxSetup({async: false});
+				changeCss("body", "background-color:#e0006d;");
+				changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 				$.ajax({
 					type : "GET",
 					dataType : "xml",

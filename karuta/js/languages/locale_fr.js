@@ -176,7 +176,7 @@ karutaStr['fr']['projects']="Mes projets";
 karutaStr['fr']['portfolios']="Mes portfolios hors projet";
 karutaStr['fr']['bin']="Ma poubelle";
 karutaStr['fr']['nogroup']="Aucun groupe associé";
-karutaStr['fr']['create_portfolio']="Créer un portfolio";
+karutaStr['fr']['karuta.model']="Créer un modèle de portfolio";
 karutaStr['fr']['code_portfolio']="Code du portfolio";
 karutaStr['fr']['import_portfolio']="Importer un portfolio modèle.xml";
 karutaStr['fr']['import_zip']="Importer un portfolio .zip";
@@ -201,10 +201,12 @@ karutaStr['fr']['remove-selection']="Déplacer vers la poubelle";
 karutaStr['fr']['delete-selection']="Détruire";
 karutaStr['fr']['import_zip_instance']="Importer un portfolio instance .zip";
 karutaStr['fr']['rename']="Renommer";
-karutaStr['fr']['create_batch']="Créer un modèle batch";
-karutaStr['fr']['create_report']="Créer un modèle de rapport";
+karutaStr['fr']['karuta.batch']="Créer un modèle batch";
+karutaStr['fr']['karuta.report']="Créer un modèle de rapport";
 karutaStr['fr']['create_tree']="Créer un arbre vide";
 karutaStr['fr']['create_project']="Créer un projet";
+karutaStr['fr']['karuta.rubrics']="Créer Rubrics";
+karutaStr['fr']['karuta.parts']="Créer des composantes";
 
 //=========================================
 //========== USERS ========================

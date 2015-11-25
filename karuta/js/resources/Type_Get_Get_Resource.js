@@ -211,8 +211,14 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				semtag_parent = semtag_parent.substring(1);
 			var portfoliocode_end_indx = queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent')+queryattr_value.indexOf('#')+1;
 			var portfoliocode = queryattr_value.substring(0,portfoliocode_end_indx);
+			//------------
+			var portfoliocode = queryattr_value.substring(0,portfoliocode_end_indx);
+			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+			if (portfoliocode.indexOf('.')<0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
 			if (portfoliocode=='self')
-				portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+				portfoliocode = selfcode;
+			//------------
 			var query = queryattr_value.substring(portfoliocode_end_indx,semtag_parent_indx);
 			var parent = null;
 			var ref = null;

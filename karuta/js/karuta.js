@@ -103,7 +103,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
 	if (type=='main'){
-		html += "			<li><a href='#' onclick='display_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
+		html += "			<li><a href='#' onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
 	}
 	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench'></span></a></li>";
 	html += "			</ul>";
@@ -126,10 +126,13 @@ function getNavBar(type,portfolioid,edit)
 			html += "				<li>&nbsp;</li>";
 			html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
 			html += "					<ul class='dropdown-menu'>";
-			html += "						<li><a href='../../karuta/htm/list.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
-			html += "						<li><a href='../../karuta/htm/listUsers.htm?lang="+LANG+"'>"+karutaStr[LANG]['list_users']+"</a></li>";
-			html += "						<li><a href='../../karuta/htm/createBatch.htm?lang="+LANG+"'>"+karutaStr[LANG]['batch']+"</a></li>";
-			html += "						<li><a href='../../karuta/htm/createReport.htm?lang="+LANG+"'>"+karutaStr[LANG]['report']+"</a></li>";
+			html += "						<li><a href='#' onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</li>";
+			if ($("#main-user").html()!="")
+				html += "						<li><a href='#' onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</li>";
+			else
+				html += "						<li><a href='#' onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</li>";
+			html += "						<li><a href='../../karuta/htm/createBatch.htm'>"+karutaStr[LANG]['batch']+"</a></li>";
+			html += "						<li><a href='../../karuta/htm/createReport.htm'>"+karutaStr[LANG]['report']+"</a></li>";
 	//		html += "						<li><a href='../../karuta/htm/listRoles.htm'>"+karutaStr[LANG]['list_roles']+"</a></li>";
 	//		html += "						<li><a href='../../karuta/htm/listGroups.htm'>"+karutaStr[LANG]['list_groups']+"</a></li>";
 			html += "					</ul>";
@@ -899,8 +902,10 @@ function toggleSocialNetwork() {
 		$("#socialnetwork").hide();
 		$("#toggleSocialNetwork").removeClass('fa-arrow-left').addClass('fa-users');
 		$("#main-page").removeClass().addClass('col-md-12');
+		$("#main-list").removeClass().addClass('col-md-12');
 	} else {
 		$("#main-page").removeClass().addClass('col-md-8');
+		$("#main-list").removeClass().addClass('col-md-8');
 		$("#socialnetwork").show();
 		$("#toggleSocialNetwork").removeClass('fa-users').addClass('fa-arrow-left');
 	}

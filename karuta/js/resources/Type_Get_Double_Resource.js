@@ -159,22 +159,27 @@ UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,
 		var separator_indx = queryattr_value.indexOf(';');
 		var part1 = queryattr_value.substring(0,separator_indx);
 		var part2 = queryattr_value.substring(separator_indx+1);
+		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 		//------------------
 		var srce1_indx = part1.lastIndexOf('.');
 		var srce1 = part1.substring(srce1_indx+1);
 		var semtag1_indx = part1.substring(0,srce1_indx).lastIndexOf('.');
 		var semtag1 = part1.substring(semtag1_indx+1,srce1_indx);
 		var code1 = part1.substring(0,semtag1_indx);
+		if (code1.indexOf('.')<0 && code1!='self')  // There is no project, we add the project of the current portfolio
+			code1 = selfcode.substring(0,selfcode.indexOf('.')) + "." + code1;
 		if (code1=='self')
-			code1 = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();		
+			code1 = selfcode;
 		//------------------
 		var srce2_indx = part2.lastIndexOf('.');
 		var srce2 = part2.substring(srce2_indx+2);
 		var semtag2_indx = part2.substring(0,srce2_indx).lastIndexOf('.');
 		var semtag2 = part2.substring(semtag2_indx+2,srce2_indx);
 		var code2 = part2.substring(0,semtag2_indx);
+		if (code2.indexOf('.')<0 && code2!='self')  // There is no project, we add the project of the current portfolio
+			code2 = selfcode.substring(0,selfcode.indexOf('.')) + "." + code2;
 		if (code2=='self')
-			code2 = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();		
+			code2 = selfcode;
 		//------------------
 		var self = this;
 		$.ajax({

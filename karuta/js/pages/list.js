@@ -69,6 +69,24 @@ function setWelcomeTitles()
 }
 
 //==============================
+function show_list_page()
+//==============================
+{
+	
+	changeCss("body", "background-color:#e0006d;");
+	changeCss("#main-container .row .row", "background-color:initial;");
+	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
+	$("#sub-bar").html(getListSubBar());
+	var navbar_html = getNavBar('list',null);
+	$("#navigation-bar").html(navbar_html);
+	$("#refresh").attr("onclick","display_list_page()");
+	$("#refresh").show();
+	$("#main-page").hide();
+	$("#main-user").hide();
+	$("#main-list").show();
+}
+
+//==============================
 function display_list_page()
 //==============================
 {
@@ -79,14 +97,18 @@ function display_list_page()
 	$("#sub-bar").html(getListSubBar());
 	var navbar_html = getNavBar('list',null);
 	$("#navigation-bar").html(navbar_html);
-	$("#refresh").hide();
+	$("#refresh").attr("onclick","display_list_page()");
+	$("#refresh").show();
+	$("#main-page").hide();
+	$("#main-user").hide();
+	$("#main-list").show();
 	//-------------------------------------------
 	var html = "";
 	html += "<div class='projects'>";
 	html += "	<div id='menu'></div>";
 	html += "	<div id='list'></div>";
 	html += "</div>";
-	$("#main-page").html(html);
+	$("#main-list").html(html);
 	$("#list").html(getList());
 	// --- list of users to display name of owner
 	$.ajax({
@@ -102,11 +124,6 @@ function display_list_page()
 	html += "<span id='list-menu' class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span class='glyphicon glyphicon-menu-hamburger'></span>&nbsp;Menu</span>";
 	html += "<ul class='dropdown-menu' role='menu' aria-labelledby='list-menu'>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createProject()\" href='#'>"+karutaStr[LANG]['create_project']+"</a></li>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].create()\" href='#'>"+karutaStr[LANG]['create_tree']+"</a></li>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createPortfolio()\" href='#'>"+karutaStr[LANG]['create_portfolio']+"</a></li>";
-	html += "<hr>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createBatch()\" href='#'>"+karutaStr[LANG]['create_batch']+"</a></li>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createReport()\" href='#'>"+karutaStr[LANG]['create_report']+"</a></li>";
 	html += "<hr>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" href='#'>"+karutaStr[LANG]['import_instance']+"</a></li>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile()\" href='#'>"+karutaStr[LANG]['import_portfolio']+"</a></li>";

@@ -50,9 +50,9 @@ UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid)
 		var param4 = edit;
 		//----------------------------
 		html += "<div class='row'>";
-		html += "<div class='col-md-offset-1 col-md-4'>";
+		html += "<div class='col-md-offset-1 col-md-11'>";
 		html += "<h5>"+karutaStr[LANG]['mother-tongue']+" : ";
-		html += "<span class='langue' id='mother_tongue'>"+UICom.structure["ui"][g_mother_tongueid].resource.getView("mother_tongue","span");
+		html += "<span class='langue' id='mother_tongue'>"+UICom.structure["ui"][g_mother_tongueid].resource.getView(null,"span");
 		if (edit) {
 			html +="<div class='btn-group' style='margin-left:3px;'>";
 			html += "<span  onclick=\"UIFactory.Langue.editMothertongue('"+g_mother_tongueid+"','mother_tongue');\" class='button glyphicon glyphicon-pencil' aria-hidden='true'></span>";
@@ -260,9 +260,9 @@ UIFactory["Langue"].displayMothertongue = function(uuid,destid,edit)
 	$("#"+destid).html("");
 	var html = UICom.structure["ui"][uuid].resource.getView("mother_tongue","span");
 	if (edit) {
-		html += "&nbsp;<button class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editMothertongue('"+g_mother_tongueid+"','mother_tongue');\">";
-		html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
-		html += "</buton>";
+		html +="<div class='btn-group' style='margin-left:3px;'>";
+		html += "<span  onclick=\"UIFactory.Langue.editMothertongue('"+g_mother_tongueid+"','mother_tongue');\" class='button glyphicon glyphicon-pencil' aria-hidden='true'></span>";
+		html +="</div>";
 	}
 	$("#"+destid).html(html);
 };

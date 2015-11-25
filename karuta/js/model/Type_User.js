@@ -107,12 +107,12 @@ UIFactory["User"].prototype.getView = function(dest,type,lang)
 			html += " <button class='btn btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
 			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
 			html += "</button>";
-			if (this.username_node.text()!='root') {
+			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
 				html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 				html += "<span class='glyphicon glyphicon-remove'></span>";
 				html += "</button>";
 			} else {
-				html += "<button class='btn btn-xs' disabled='true' data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<button class='btn btn-xs' disabled='true'>";
 				html += "<span class='glyphicon glyphicon-remove'></span>";
 				html += "</button>";
 			}
@@ -332,6 +332,9 @@ UIFactory["User"].edit = function(userid)
 UIFactory["User"].parse = function(data) 
 //==================================
 {
+	Users_byid = {};
+	UsersActive_list = [];
+	UsersInactive_list = [];
 	var items = $("user",data);
 	var inactive = active = 0;
 	var tableau1 = new Array();

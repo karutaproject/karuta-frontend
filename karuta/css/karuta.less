@@ -1,3 +1,10 @@
+@list-user-background-color:#e0006d;
+@list-user-background-color-complement:#bb0066;
+@list-user-button-background-color:black;
+@list-user-button-color:white;
+
+
+
 #navigation_bar .navbar-default{
 	background-color:white;
 	border-color:white;
@@ -77,7 +84,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	margin:5px;
 	padding:3px;
 	border-radius:3px;
-	color:black;
+	color:@list-user-button-background-color;
 	cursor:pointer;
 }
 
@@ -85,13 +92,24 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 /* ====================== */
 /*     PAGE LIST     */
 /* ====================== */
+/*
+
+
+#main-container .row:first-of-type {
+	background-color:@list-user-background-color;
+}
+
+#main-container .row-label {
+	background-color:initial;
+}
+*/
 
 #refresh {
 	float:right;
 	margin:5px 25px 5px 5px;
 	padding:3px;
 	border-radius:3px;
-	color:black;
+	color:@list-user-button-background-color;
 	cursor:pointer;
 	display:none;
 }
@@ -136,15 +154,15 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 #main-body-list {
-	background-color:#e0006d;
+	background-color:@list-user-background-color;
 }
 
 
 
 #list-menu,
 #user-create {
-	color:white;
-	background-color:black;
+	color:@list-user-button-color;
+	background-color:@list-user-button-background-color;
 	margin-top:20px;
 	padding:4px 15px;;
 	font-size:14px;
@@ -152,51 +170,51 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 #main-user .item:hover {
-	background-color:#bb0066;
+	background-color:@list-user-background-color-complement;
 }
 
 #menu .dropdown-menu,
 #list .dropdown-menu {
-	color:white;
-	background-color:black;
+	color:@list-user-button-color;
+	background-color:@list-user-button-background-color;
 }
 
 #menu .dropdown-menu li a,
 #list .dropdown-menu li a {
-	background-color:black;
-	color:white;
+	background-color:@list-user-button-background-color;
+	color:@list-user-button-color;
 }
 
 #menu .dropdown-menu li a:hover,
 #list .dropdown-menu li a:hover {
 	background-color:lightgrey;
-	color:black;
+	color:@list-user-button-background-color
 }
 
 
 #main-user .btn,
 #main-list .btn,
 #list input[type='checkbox'] {
-	background-color:black;
-	color:white;
+	background-color:@list-user-button-background-color;
+	color:@list-user-button-color;
 }
 
 #projects a,
 #portfolios a,
 #bin a {
-	color:white;
+	color:@list-user-button-color;
 }
 
 .project {
 	margin-top:10px;
 	padding:7px;
-	background-color:#bb0066;
+	background-color:@list-user-background-color-complement;
 }
 
 .project-content {
 	margin-top:10px;
 	padding-top:10px;
-	border-top:1px solid #e0006d;
+	border-top:1px solid @list-user-background-color;
 }
 
 .project-menu .dropdown-menu {
@@ -208,7 +226,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #projects .row,
 #portfolios .row  {
 	margin-top:2px;
-	color:white;
+	color:@list-user-button-color;
 }
 
 #projects .row .col-md-5,
@@ -245,8 +263,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #projects .row:hover .col-md-3,
 #projects .row:hover .col-md-2,
 #projects .row:hover .col-md-1 {
-	background-color:#e0006d;
-/*	color:black; */
+	background-color:@list-user-background-color;
 }
 
 #projects .row-label:hover .col-md-5,
@@ -257,7 +274,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #projects .row-label:hover .col-md-2,
 #projects .row-label:hover .col-md-1 {
 	background-color:initial;
-/*	color:black; */
 }
 
 #portfolios .row:hover .col-md-5,
@@ -266,8 +282,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #portfolios .row:hover .col-md-4 a,
 #portfolios .row:hover .col-md-3,
 #portfolios .row:hover .col-md-1 {
-	background-color:#bb0066;
-/*	color:black; */
+	background-color:@list-user-background-color-complement;
 }
 
 

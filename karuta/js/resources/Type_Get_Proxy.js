@@ -177,13 +177,18 @@ UIFactory["Get_Proxy"].prototype.displayEditor = function(destid,type,lang)
 		var srce = queryattr_value.substring(srce_indx+1);
 		var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');
 		var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
-		var code = queryattr_value.substring(0,semtag_indx);
+		var portfoliocode = queryattr_value.substring(0,semtag_indx);
+		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+		if (portfoliocode.indexOf('.')<0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
+		if (portfoliocode=='self')
+			portfoliocode = selfcode;
 		//------------
 		var self = this;
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
+			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
 			success : function(data) {
 				UIFactory["Get_Proxy"].parse(destid,type,lang,data,self);
 			}

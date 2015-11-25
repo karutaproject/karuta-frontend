@@ -11,12 +11,15 @@
 		<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
-		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
+		<!--link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" /-->
+		<link rel="stylesheet/less" type="text/css" href="../../karuta/css/karuta.less">
+		<script src="../../other/js/less.min.js"></script>
 		<!-- =========================================== -->
 		<link rel="stylesheet" href="../../application/css/specific.css" />
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/pages/list.js"></script>
 		<script src="../../karuta/js/pages/main.js"></script>
+		<script src="../../karuta/js/pages/users.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/resources/Type_Calendar.js"></script>
 		<script src="../../karuta/js/resources/Type_Comments.js"></script>
@@ -149,10 +152,18 @@
 						//-------------------------------
 
 						if (elgg_installed!=undefined && elgg_installed) {
-							$("#main-container").html("<div id='global-row' class='row'><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-arrow-left fa-2x'></i><div id='socialnetwork' class='col-md-4'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div><div id='main-page' class='col-md-8'></div></div>");
+							var html = "";
+							html += "<div id='global-row' class='row'>";
+							html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-arrow-left fa-2x'></i>";
+							html += "	<div id='socialnetwork' class='col-md-4'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div>";
+							html += "	<div id='main-list' class='col-md-8'></div>";
+							html += "	<div id='main-page' class='col-md-8' style='display:none'></div>";
+							html += "	<div id='main-user' class='col-md-8' style='display:none'></div>";
+							html += "</div>";
+							$("#main-container").html(html);
 							displaySocialNetwork('socialnetwork');
 						} else {
-							$("#main-container").html("<div id='global-row' class='row'><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><div id='main-page' class='col-md-12'></div></div>");
+							$("#main-container").html("<div id='global-row' class='row'><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><div id='main-list' class='col-md-12'></div><div id='main-page' class='col-md-12' style='display:none'></div></div></div>");
 						}
 						//-------------------------------
 						display_list_page();
