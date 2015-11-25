@@ -129,6 +129,18 @@ function ws_init() {
  		false,
 		false
 	);
+    
+	elgg_ws_expose_function('auth.changepassword',
+		"user_change_password",
+		array(
+			'new_password' => array ('type' => 'string', 'required' => true),
+			'username' => array ('type' => 'string', 'required' => false),
+		),
+		"User change password",
+		'POST',
+		 false,
+		 false
+	);
 
 	//=========================================================
 	//=========================================================
@@ -136,47 +148,27 @@ function ws_init() {
 	//=========================================================
 	//=========================================================
 	
-    expose_function('site.river_feed',
+	expose_function('site.river_feed',
+		"site_river_feed",
+		array('limit' => array('type' => 'int', 'required' => false)),
+			"Get river feed",
+			'GET',
+			false,
+			false
+	);
 
-               "site_river_feed",
-
-               array('limit' => array('type' => 'int', 'required' => false)),
-
-               "Get river feed",
-
-               'GET',
-
-               false,
-
-               false);
-
- 
-
-   expose_function('thewire.post',
-
-				"thewire_post",
-
-				array(
-
-						'text' => array ('type' => 'string'),
-
-						'access' => array ('type' => 'string', 'required' => false),
-
-						'wireMethod' => array ('type' => 'string', 'required' => false),
-
-						'username' => array ('type' => 'string', 'required' => false),
-
-					),
-
-				"Post a wire post",
-
-				'POST',
-
-				false,
-
-				false);           
-
- 
+	expose_function('thewire.post',
+		"thewire_post",
+		array(
+			'text' => array ('type' => 'string'),
+			'access' => array ('type' => 'string', 'required' => false),
+			'wireMethod' => array ('type' => 'string', 'required' => false),
+			'username' => array ('type' => 'string', 'required' => false),
+		),
+		"Post a wire post",
+		'POST',
+		false,
+		false);           
 
 	//=========================================================
 	//=========================================================
@@ -1095,7 +1087,21 @@ function my_echo($string) {
 		return $user_loggued->toObject();
 	}
 	
-	
+	//--------- user_change_password -----------------------
+	function user_change_password($new_password,$username) {
+		$user_loggued = get_loggedin_user();
+		if(!$username){
+			$user = get_loggedin_user();
+		} else if($user_loggued->isadmin() || $user_loggued->username==$username) {
+			$user = get_user_by_username($username);
+		}
+		else
+		{
+			throw new InvalidParameterException("Forbidden : username param set but not admin or not loggued with this login");
+		}
+		$user_guid = $user->guid;
+		return force_user_password_reset($user_guid,$new_password);
+	}
 
 ///////////////////// RIVER
 

@@ -682,7 +682,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style +="'";*/
 					html += "<td  width='80%' class='resource";
 					html += "' ";
-					html += style;
+					html += " style='"+style+"' ";
 					html += ">";
 					html += "<div id='std_resource_"+uuid+"' class='inside-full-height ";
 					if (node.resource_type!=null)
@@ -717,7 +717,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						style +="'";*/
 						html += "<td  width='80%' class='resource";
 						html += "' ";
-						html += style;
+						html += " style='"+style+"' ";
 						html += ">";
 					}
 					html += "<div id='std_resource_"+uuid+"' class='inside-full-height ";

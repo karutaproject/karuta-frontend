@@ -370,7 +370,7 @@ UIFactory["User"].confirmRemove = function(userid)
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:UIFactory['User'].remove('"+userid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"UIFactory.User.remove('"+userid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 };
@@ -386,7 +386,7 @@ UIFactory["User"].remove = function(userid)
 		url : url,
 		data : "",
 		success : function(data) {
-			window.location.reload();
+			$("#refresh").click();
 		}
 	});
 };
@@ -434,12 +434,13 @@ UIFactory["User"].create = function()
 		url : url,
 		data : xml,
 		success : function(data) {
-			window.location.reload();
+			$("#refresh").click();
 		},
 		error : function(jqxhr,textStatus) {
 			alert("Error : "+jqxhr.responseText);
 		}
 	});
+	user_register($("#user_firstname").val()+" "+$("#user_lastname").val(), $("#user_email").val(), $("#user_username").val(), $("#user_password").val());
 };
 
 //==================================
@@ -447,8 +448,13 @@ UIFactory["User"].changePassword = function(userid,value)
 //==================================
 {
 	var value2 = null;
-	if (userid==null)
+	var username = ""
+	if (userid==null) {
 		userid = USER.id;
+		username = USER.username_node.text();
+	} else {
+		username = Users_byid[userid].username_node.text();
+	}
 	if (value==null){
 		value = $("#user_password-new").val();
 		value2 = $("#user_confirm-password").val();
@@ -460,6 +466,8 @@ UIFactory["User"].changePassword = function(userid,value)
 		xml +="	<password>"+value+"</password>";
 		xml +="</user>";
 		var url = "../../../"+serverBCK+"/users/user/" + userid;
+		if (elgg_installed)
+			user_change_password(value, username);
 		$.ajax({
 			type : "PUT",
 			contentType: "application/xml",
@@ -468,7 +476,6 @@ UIFactory["User"].changePassword = function(userid,value)
 			data : xml,
 			success : function(data) {
 				alert(karutaStr[LANG]['saved']);
-				window.location.reload();
 			}
 		});
 	} else {

@@ -626,7 +626,7 @@ function user_register(name, email, username, password,callback,param1)
 	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
 	var data = "auth_token="+g_elgg_key+"&method=user.register&name="+name+"&username="+username+"&password="+password+"&email="+email;
 	$.ajax({
-		type : "POST",
+		type : "GET",
 		dataType : "json",
 		url : url,
 		data: data,
@@ -636,6 +636,27 @@ function user_register(name, email, username, password,callback,param1)
 		},
 		error : function(jqxhr,textStatus) {
 			alert("user_register : Oups! "+jqxhr.responseText);
+		}
+	});
+}
+
+//=================================================
+function user_change_password(new_password, username)
+//=================================================
+{
+	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=auth.changepassword&new_password="+new_password+"&username="+username;
+	$.ajax({
+		type : "POST",
+		dataType : "json",
+		url : url,
+		data: data,
+		success : function(data) {
+			if (callback!=null)
+				callback(param1);
+		},
+		error : function(jqxhr,textStatus) {
+			alert("user_change_password : Oups! "+jqxhr.responseText);
 		}
 	});
 }
