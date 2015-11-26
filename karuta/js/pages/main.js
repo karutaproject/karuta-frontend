@@ -149,7 +149,7 @@ function display_main_page(portfolioid,role)
 				var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
 				portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
 			}
-			changeCss(".asmnode .dropdown-button", "border:1px solid "+portfolio_buttons_color+";");
+			changeCss(".asmnode .dropdown-button, .button-border", "border:1px solid "+portfolio_buttons_color+";");
 			changeCss(".collapsible .glyphicon,.btn-group .button", "color:"+portfolio_buttons_color+";");
 			// ========================================================================
 			if (g_display_type=="header")

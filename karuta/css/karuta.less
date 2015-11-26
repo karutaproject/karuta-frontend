@@ -1,13 +1,29 @@
+/* ========== pages list portfolios and list users ============ */
 @list-user-background-color:#e0006d;
 @list-user-background-color-complement:#bb0066;
 @list-user-button-background-color:black;
 @list-user-button-color:white;
 
+@welcome-title-color:white;
+@welcome-box-border-color:white;
+@welcome-line-border-color:#b9da00;
+@welcome-subbox-background-color:black;
 
+
+/* ========== navigation_bar =============== */
+@navigation_bar-background-color:white;
+@navigation_bar-border-color:white;
+
+/* ========== portfolio ========== to be moved to karuta.htm*/
+@row-node-border-color:lightgrey;
+ @row-resource-border-color:lightgrey;
+
+
+/* ============================================================ */
 
 #navigation_bar .navbar-default{
-	background-color:white;
-	border-color:white;
+	background-color:@navigation_bar-background-color;
+	border-color:@navigation_bar-border-color;
 }
 
 #navigation_bar .glyphicon{
@@ -115,14 +131,14 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 #sub-bar .welcome-title {
-    color: #ffffff;
+    color: @welcome-title-color;
     font-size: 30px;
     text-align: center;
     width: 100%;
 }
 
 #sub-bar .welcome-line {
-    border-bottom: 1px solid #b9da00;
+    border-bottom: 1px solid @welcome-line-border-color;
     margin-left: auto;
     margin-right: auto;
     width: 25%;
@@ -135,14 +151,14 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 
 
 .page-list .welcome-title {
-    color: #ffffff;
+    color: @welcome-title-color;
     font-size: 30px;
     text-align: center;
     width: 100%;
 }
 
 .page-list .welcome-line {
-    border-bottom: 1px solid #b9da00;
+    border-bottom: 1px solid @welcome-line-border-color;
     margin-left: auto;
     margin-right: auto;
     width: 25%;
@@ -312,13 +328,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	border-bottom:0px solid white;
 }
 
-.button-border {
-	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
-	border-bottom-left-radius: 3px; 
-	border-top-left-radius: 3px;
-	border: 1px solid #09bbd9;
-}
 /* ====================== */
 /*      SIDEBAR            */
 /* ====================== */
@@ -383,13 +392,13 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	width:50%;
 	min-width:200px;
 	padding:3px;
-	border:1px solid white;
+	border:1px solid @welcome-box-border-color;
 }
 
 .welcome-subbox {
 	width:100%;
 	height:100%;
-	background-color:black;
+	background-color:@welcome-subbox-background-color;
 	padding:10px;
 	opacity: 0.6;
 }
@@ -411,13 +420,18 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	
 }
 
-.page-welcome .welcome-baseline, .page-welcome .welcome-text{
+.page-welcome .welcome-baseline,
+.page-welcome .welcome-text{
 	padding:10px;
 	width:100%;
 }
 
 
-.welcome-block .col-md-6, .welcome-block .col-md-4, .welcome-block .col-md-3, .welcome-block .col-md-2, .welcome-block .col-md-1{
+.welcome-block .col-md-6,
+.welcome-block .col-md-4,
+.welcome-block .col-md-3,
+.welcome-block .col-md-2,
+.welcome-block .col-md-1 {
 	height:100%
 }
 
@@ -442,16 +456,6 @@ a.btn {
 	font-weight:normal;
 }
 
-/*
-#main-body .btn {
-	background-color:#FAFAFA;
-	border: 1px solid lightGrey;
-	background-image: linear-gradient(to bottom, #fff, #e6e6e6);
-    background-repeat: repeat-x;
-}
-
-*/
-
 .btn-danger {
 	background-color:#d9534f;
 	background-image: none;}
@@ -469,6 +473,8 @@ a.btn {
 	height: 18px;
 	background: green;
 }
+/* --------------------------*/
+
 #file-loader {
     border: 0 none;
     height: 80px;
@@ -480,12 +486,9 @@ hr {
 	margin-top: 5px;
 }
 
-.accordion-inner .title {
-	margin-left:7px;
-}
-.accordion-inner .accordion-inner .title {
-	margin-left:14px;
-}
+/* ====================== */
+/*     SECTION TITLES     */
+/* ====================== */
 
 .asmRoot .title {
 	font-size: 24px;
@@ -547,6 +550,7 @@ hr {
 	line-height: 16px;
 }
 
+/* ==================================================== */
 #contenu .row{
 	margin-left:0px;
 }
@@ -586,8 +590,7 @@ hr {
 
 .row-node{
 	padding-top:15px;
-	border-top:1px solid lightgrey;
-/*	border-bottom:1px solid lightgrey;*/
+	border-top:1px solid @row-node-border-color;
 }
 
 .asmStructure .row-node,
@@ -620,7 +623,7 @@ hr {
 	width:80%;
 	margin-right:0px;
 	background:white;
-	border: 1px solid lightgrey;
+	border: 1px solid @row-resource-border-color;
 	padding-left:0px;
 	padding-right:0px;
 	margin-left:0px;
@@ -863,9 +866,9 @@ hr {
 	line-height: 16px;
 }
 
-/* -------------------------------------------------- */
-/* ----------------- ADMIN -------------------------- */
-/* -------------------------------------------------- */
+/* ====================== */
+/*         ADMIN          */
+/* ====================== */
 
 
 #metadata .control-group {
@@ -878,7 +881,7 @@ hr {
 
 /* ====================== 
 				ARBRE
-    ====================== */
+    ======================
 
 .children {
 	margin-left:20px;
@@ -892,8 +895,11 @@ a, a:hover, a:active, a:focus {
 	text-decoration: none;
 }
 
+*/
+ 
+ 
 /* ====================== */
-/*        LOGIN          */
+/*         LOGIN          */
 /* ====================== */
 
 .login {
@@ -951,8 +957,9 @@ a, a:hover, a:active, a:focus {
 }
 
 /* ====================== */
-/*      SIDEBAR            */
-/* ====================== */
+/*      SIDEBAR           */
+
+/* ======================
 
 .selected,
 .selected a {
@@ -991,25 +998,13 @@ a.active:over{
 	color:black;
 }
 
+ ====================== */
+
 
 /* ====================== */
 /*      PAGE            */
 /* ====================== */
 
-/*
-.asmRoot,
-.asmStructure,
-.asmUnit {
-	display:none;
-	margin-top:15px;
-}
-*/
-
-.pageCode {
-	font-size:12px;
-	font-weight:normal;
-	margin-left:20px;
-}
 
 .asmRoot .node,
 .asmUnit .node,
@@ -1521,6 +1516,7 @@ table.tablesorter th.restore {
 /* ====================
 	DisplayType : header
    ====================*/
+   
 #main-header{
 	background-color:white;
 	margin-top:51px;
@@ -1553,6 +1549,7 @@ table.tablesorter th.restore {
 /* ====================
 	Document/Image/URL
    ====================*/
+   
 .free-context {
 	height:100%;
 }
@@ -1660,24 +1657,31 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	width:90%;
 }
 
-
 /* ====================
-	Other
+	Calendar
    ====================*/
 
-.rounded-border {
-	margin-top:10px;
-	margin-bottom:10px;
-	border-radius:4px;
-	padding-left:5px;
-	border: 1px solid lightGrey;
+.container .Calendar .form-group {
+	margin-bottom:0px;
 }
+
+.container .calendar-format {
+	display:none;
+}
+
+/* ====================
+	SendEmail
+   ====================*/
+
 
 .name_SendEmail {
 	font-weight:bold;
 }
 
-/* -- colorpicker --*/
+/* ====================
+	colorpicker
+   ====================*/
+
 .evo-colorind,
 .evo-colorind-ff {
 	height:14px;
@@ -1685,6 +1689,10 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	margin-top:7px;
 	float:left;
 }
+
+/* ====================
+	Start - Demo
+   ====================*/
 
 #start {
 	background-image: linear-gradient(#fff, #eee);
@@ -1695,13 +1703,6 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
     padding: 10px;
 }
 
-.container .Calendar .form-group {
-	margin-bottom:0px;
-}
-
-.container .calendar-format {
-	display:none;
-}
 
 /* ====================
 	Isabelle
@@ -1713,11 +1714,13 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	cursor:pointer;
 }
 
-/* no underline in sidebar */
+/* no underline in sidebar
 .well a:focus,
 .well a:hover {
 	text-decoration: none;
 }
+ */
+ 
 
 /* for submitted / not submitted alert */
 .alert {
