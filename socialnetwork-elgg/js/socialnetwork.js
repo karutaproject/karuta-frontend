@@ -123,9 +123,13 @@ function displaySocialNetwork()
 	display_select_group("select-group");
 	$("#"+destid+"-body").html(html);
 	//------------------------------
-	getRiverFeed('activities');
-	getWall('public');
-	displayGroupWalls('groups');
+	if (g_elgg_key!='undefined'){
+		getRiverFeed('activities');
+		getWall('public');
+		displayGroupWalls('groups');
+	} else {
+		$("#activities").html(snStr[LANG]["not-logged"]);
+	}
 }
 
 
@@ -611,10 +615,11 @@ function getElggUser()
 		url : url,
 		data, data,
 		success : function(data) {
-			g_elgg_userid = data.result.guid;
+			if (data.status!='-1')
+				g_elgg_userid = data.result.guid;
 		},
 		error : function(jqxhr,textStatus) {
-			alert("getElggUser : Oups! "+jqxhr.responseText);
+			alert(snStr[LANG]['login-error']);
 		}
 	});
 }
@@ -641,7 +646,7 @@ function user_register(name, email, username, password,callback,param1)
 }
 
 //=================================================
-function user_change_password(new_password, username)
+function user_change_password(new_password, username,callback,param1)
 //=================================================
 {
 	var url = "../../../"+elgg_url_base+"services/api/rest/xml";

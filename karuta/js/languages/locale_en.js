@@ -158,6 +158,7 @@ karutaStr['en']['shareroles']="Roles - Share";
 karutaStr['en']['submitted']="Submitted";
 karutaStr['en']['notsubmitted']="Not Submitted";
 karutaStr['en']['collapsible']="Collapsible";
+karutaStr['en']['incrementroles']="Rôles - Increment only";
 
 //=========================================
 //========== ADMIN ========================

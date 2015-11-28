@@ -333,7 +333,8 @@ function createElggGroupMember(node)
 {
 	var identifier = getTxtvals($("identifier",node));
 	var group = getTxtvals($("group",node));
-	var callback = function (param1){	g_nb_createElggMember[g_noline]++;
+	var callback = function (param1){
+		g_nb_createElggMember[g_noline]++;
 		if (g_nb_createElggMemberr[g_noline]==g_create_elgg_members.length) {
 			processCreateTrees();
 		}

@@ -7,6 +7,8 @@ if( snStr === undefined )
 snStr['fr'] = new Array();
 
 snStr['fr']["hello"] = "Bonjour";
+snStr['fr']["login-error"] = "Oups! Erreur de connexion au réseau social.";
+snStr['fr']["not-logged"] = "<div class='elgg-error'>Il y a eu un problème. Vous n'êtes pas connecté(e) au réseau social.</div>";
 
 snStr['fr']["something_to_publish"] = "Quelque chose à publier sur le réseau social?";
 snStr['fr']["publish"] = "Publier";
