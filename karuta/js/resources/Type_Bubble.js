@@ -89,9 +89,9 @@ UIFactory["Bubble"].bubble.prototype.displayView = function(destid,type,lang)
 		type='detail';
 	if (type=='detail') {
 		if ( (writenode && editnoderoles.indexOf(g_userrole)>-1) || g_userrole=='designer') {
-			html += "<button  class='editbutton btn btn-xs' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\" data-title='éditer' rel='tooltip'>";
-			html += karutaStr[LANG]['Update'];
-			html += "</button>";
+			html += "<div class='btn-group bubble-btn-group'>";
+			html += "<span class='button glyphicon glyphicon-pencil' onclick=\"Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\" data-title='Éditer' rel='tooltip'></span>";
+			html += "</div><!-- class='btn-group' -->";
 		}
 		html += "<div class='bubble_label'>"+UICom.structure["ui"][this.id].getView()+"</div>";
 		html += "<div class='bubble_decription'>"+UICom.structure["ui"][this.bubble_description_nodeid].resource.getView()+"</div>";
@@ -122,12 +122,21 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 		html = "<div><button  class='editbutton btn btn-xs' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayView('"+destid+"');\" data-title='éditer' rel='tooltip'>";
 		html += karutaStr[LANG]['quit-edit'];
 		html += "</button><h4>"+karutaStr[LANG]['bubble-information']+"</h4></div>";
+
+		html += "<div class='btn-group bubble-btn-group'>";
+		html += "<span class='button glyphicon glyphicon-pencil' onclick=\"Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\" data-title='Éditer' rel='tooltip'></span>";
+		html += "</div><!-- class='btn-group' -->";
+
 		$(form_horizontal).html(html);
 		//-------------------------
-		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>Libellé</label><div id='label_"+this.id+"' class='col-sm-9'></div></div>"));
-		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>Description</label><div id='description_"+this.id+"' class='col-sm-9'></div></div>"));
-		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>Pondération</label><div id='amount_"+this.id+"' class='col-sm-9'></div></div>"));
-		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>Couleur</label><div id='color_"+this.id+"' class='col-sm-9'></div></div>"));
+		var text_label = karutaStr[LANG]['label'];
+		var text_description = karutaStr[LANG]['bubble-description'];
+		var text_weight = karutaStr[LANG]['bubble-weight'];
+		var text_color = karutaStr[LANG]['bubble-color'];
+		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+text_label+"</label><div id='label_"+this.id+"' class='col-sm-9'></div></div>"));
+		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+text_description+"</label><div id='description_"+this.id+"' class='col-sm-9'></div></div>"));
+		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+text_weight+"</label><div id='amount_"+this.id+"' class='col-sm-9'></div></div>"));
+		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+text_color+"</label><div id='color_"+this.id+"' class='col-sm-9'></div></div>"));
 		$("#"+destid).append(form_horizontal);
 		$("#label_"+this.id).append(UICom.structure.ui[this.id].getNodeLabelEditor());
 		UICom.structure["ui"][this.bubble_description_nodeid].resource.displayEditor('description_'+this.id);

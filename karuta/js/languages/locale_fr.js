@@ -75,6 +75,7 @@ karutaStr['fr']['choose']="Choisir";
 karutaStr['fr']['quit']="Quitter";
 karutaStr['fr']['menu']="Menu";
 
+
 //=========================================
 //========== NODE =========================
 //=========================================
@@ -290,4 +291,8 @@ karutaStr['fr']['bubble-links']="Liens";
 karutaStr['fr']['bubble-information']="Information";
 karutaStr['fr']['bubble-add-link']="Ajouter un lien";
 karutaStr['fr']['bubble-add-bubble']="Ajouter une bulle à ";
+karutaStr['fr']['update-bubble']="Recharger la carte";
+karutaStr['fr']['bubble-description']="Description";
+karutaStr['fr']['bubble-weight']="Pondération";
+karutaStr['fr']['bubble-color']="Couleur";
 

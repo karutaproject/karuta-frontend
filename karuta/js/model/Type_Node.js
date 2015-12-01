@@ -1969,8 +1969,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	if (edit) {
 		//------------ edit button ---------------------
 		if ((!inline && ( (writenode && incrementroles.indexOf(g_userrole)<0) || USER.admin || g_userrole=='designer' )) || (inline && ((USER.admin || g_userrole=='designer') && (editnoderoles.indexOf(g_userrole)<0 && editresroles.indexOf(g_userrole)<0)))) {
-			html += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+node.id+"')\" data-title='Éditer' rel='tooltip'>";
-			html += "</span>";
+			html += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+node.id+"')\" data-title='Éditer' rel='tooltip'></span>";
 		}
 		//------------ delete button ---------------------
 		if ((deletenode || USER.admin || g_userrole=='designer') && node.asmtype != 'asmRoot') {
@@ -2151,10 +2150,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- share node button ---------------
 	if ((shareroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && shareroles!='none' && shareroles!='') {
-			html+= "<button class='btn btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
+			html += "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='Partager' rel='tooltip'></span>";
 	}
-	if (html.length<50)
-		html+= "<span class='button glyphicon glyphicon-pencil' style='visibility:hidden'></span>"; // for setting height if empty;
 	html += "</div><!-- class='btn-group' -->";
 	//--------------------------------------------------
 	if (html!="")

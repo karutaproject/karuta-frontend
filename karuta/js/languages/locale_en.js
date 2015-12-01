@@ -75,6 +75,7 @@ karutaStr['en']['choose']="Choose";
 karutaStr['en']['quit']="Quit";
 karutaStr['en']['menu']="Menu";
 
+
 //=========================================
 //========== NODE =====================
 //=========================================
@@ -290,4 +291,8 @@ karutaStr['en']['bubble-links']="Links";
 karutaStr['en']['bubble-information']="Information";
 karutaStr['en']['bubble-add-link']="Add a link";
 karutaStr['en']['bubble-add-bubble']="Add a bubble to ";
+karutaStr['en']['update-bubble']="Reload Map";
+karutaStr['en']['bubble-description']="Description";
+karutaStr['en']['bubble-weight']="Weight";
+karutaStr['en']['bubble-color']="Color";
 
