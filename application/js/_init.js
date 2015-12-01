@@ -103,8 +103,8 @@ var listinfo = {};       // Welcome paragraph
 	//----------------------------------
 	var welcome4 = {};			// List Page Welcome title
 		welcome4["fr"] = "Bienvenue dans Karuta";
-		welcome4["en"] = "Welcome in Karuta";
+		welcome4["en"] = "Welcome to Karuta";
 	var welcome5 = {}; 			// List Page Welcome sub-title
-		welcome5["fr"] = "OPEN SOURCE PORTFOLIO";
+		welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 		welcome5["en"] = "OPEN SOURCE PORTFOLIO";
 
