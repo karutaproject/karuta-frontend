@@ -746,7 +746,7 @@ function setUserGroups(username,callback,param1)
 }
 
 //=================================================
-function addGroupMember(groupid,username,callback,param1)
+function addGroupMember(groupid,username,callback,param1,batch)
 //=================================================
 {
 	if (!$.isNumeric(groupid)) {
@@ -765,9 +765,15 @@ function addGroupMember(groupid,username,callback,param1)
 		dataType : "json",
 		url : url,
 		data: data,
+		batch:batch,
 		success : function(data) {
-			if (data.status==-1)
-				alert("addGroupMember : Oups! "+data.message);
+			if (data.status==-1) {
+				if (this.batch==undefined || !this.batch)
+					alert("addGroupMember : Oups! "+data.message);
+				$("#log").append("<br><span style='color:red'>- elgg member error ("+groupid+") - username:"+username+"</span>");
+			} else {
+				$("#log").append("<br>- elgg member has joined ("+groupid+") - username:"+username);
+			}
 			if (callback!=null)
 				callback(data,param1);
 		}

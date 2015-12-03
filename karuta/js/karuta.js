@@ -815,6 +815,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 function getLanguage() {
 //==================================
 	var lang = Cookies.get('karuta-language');
+//	alert(lang);
 	if (lang == null || lang==undefined || lang=='undefined') {
 		lang = languages[0];
 		setLanguage(lang);

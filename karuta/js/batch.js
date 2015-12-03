@@ -25,8 +25,8 @@ var g_nb_createUser = new Array();
 var g_create_elgg_users = null;
 var g_nb_createElggUser = new Array();
 //-----------------------
-var g_create_elgg_members = null;
-var g_nb_createElggMember = new Array();
+var g_join_elgg_goups = null;
+var g_nb_joinElggGroup = new Array();
 //-----------------------
 var g_create_elgg_groups = null;
 var g_nb_createElggGroup = new Array();
@@ -80,7 +80,7 @@ function processAll()
 	g_create_elgg_groups = $("create-elgg-group",g_xmlDoc);
 	g_create_users = $("create-user",g_xmlDoc);
 	g_create_elgg_users = $("create-elgg-user",g_xmlDoc);
-	g_create_elgg_members = $("create-elgg-member",g_xmlDoc);
+	g_join_elgg_goups = $("join-elgg-group",g_xmlDoc);
 	g_create_trees = $("create-tree",g_xmlDoc);
 	g_select_trees = $("select-tree",g_xmlDoc);
 	g_copy_trees = $("copy-tree",g_xmlDoc);
@@ -97,7 +97,7 @@ function processLine()
 	g_nb_createElggGroup[g_noline] = 0;
 	g_nb_createUser[g_noline] = 0;
 	g_nb_createElggUser[g_noline] = 0;
-	g_nb_createElggMember[g_noline] = 0;
+	g_nb_joinElggGroup[g_noline] = 0;
 	g_nb_createTree[g_noline] = 0;
 	g_nb_selectTree[g_noline] = 0;
 	g_nb_copyTree[g_noline] = 0;
@@ -133,7 +133,7 @@ function createElggGroup(node)
 //=================================================
 {
 	var group = getTxtvals($("group",node));
-	var callback = function (param1){	g_nb_createElggMember[g_noline]++;
+	var callback = function (param1){	g_nb_joinElggGroup[g_noline]++;
 		if (g_nb_createElggGroup[g_noline]==g_create_elgg_groups.length) {
 			processUsers();
 		}
@@ -152,7 +152,7 @@ function processUsers()
 //=================================================
 {
 	if (g_create_users.length==0)
-		processCreateTrees();
+		processElggUsers();
 	else {
 		$("#log").append("<br>---------------------create_users-------------------------------");
 		for  (var j=0; j<g_create_users.length; j++) {
@@ -254,7 +254,7 @@ function processElggUsers()
 //=================================================
 {
 	if (g_create_elgg_users.length==0)
-		processCreateTrees();
+		processElggGroupMembers();
 	else {
 		$("#log").append("<br>---------------------create_elgg_users-------------------------------");
 		for  (var j=0; j<g_create_elgg_users.length; j++) {
@@ -289,7 +289,7 @@ function createElggUser(node)
 				//===========================================================
 				g_nb_createElggUser[g_noline]++;
 				if (g_nb_createElggUser[g_noline]==g_create_elgg_users.length) {
-					processCreateTrees();
+					processElggGroupMembers();
 				}
 				//===========================================================
 			} else {
@@ -317,12 +317,12 @@ function createElggUser(node)
 function processElggGroupMembers()
 //=================================================
 {
-	if (g_create_elgg_members.length==0)
+	if (g_join_elgg_goups.length==0)
 		processCreateTrees();
 	else {
-		$("#log").append("<br>---------------------create_elgg_users-------------------------------");
-		for  (var j=0; j<g_create_elgg_members.length; j++) {
-			createElggGroupMember(g_create_elgg_members[j]);
+		$("#log").append("<br>---------------------join_elgg_goups-------------------------------");
+		for  (var j=0; j<g_join_elgg_goups.length; j++) {
+			createElggGroupMember(g_join_elgg_goups[j]);
 		}
 	}
 }
@@ -334,12 +334,12 @@ function createElggGroupMember(node)
 	var identifier = getTxtvals($("identifier",node));
 	var group = getTxtvals($("group",node));
 	var callback = function (param1){
-		g_nb_createElggMember[g_noline]++;
-		if (g_nb_createElggMemberr[g_noline]==g_create_elgg_members.length) {
+		g_nb_joinElggGroup[g_noline]++;
+		if (g_nb_joinElggGroup[g_noline]==g_join_elgg_goups.length) {
 			processCreateTrees();
 		}
 	};
-	addGroupMember(groupid,username,callback);
+	addGroupMember(group,identifier,callback,null,true);
 }
 
 //-----------------------------------------------------------------------

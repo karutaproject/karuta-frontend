@@ -94,21 +94,20 @@
 		</create-elgg-user>
 	</xsl:template>
 
-	<xsl:template match="*[metadata/@semantictag='create-elgg-member']">
+	<xsl:template match="*[metadata/@semantictag='join-elgg-group']">
 		<xsl:variable name="identifier">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="group">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='group']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<create-elgg-member>
+		<join-elgg-group>
 			<identifier>
 				<txtval select='{$identifier}'/>
 			</identifier>
 			<group>
-				<txtval select='{group}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">group</xsl:with-param>
+				</xsl:call-template>
 			</group>
-		</create-elgg-member>
+		</join-elgg-group>
 	</xsl:template>
 		
 	<xsl:template match="*[metadata/@semantictag='create-elgg-group']">
