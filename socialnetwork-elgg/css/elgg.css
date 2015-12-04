@@ -1359,9 +1359,11 @@ ul.elgg-tags {
     margin: 0 0 5px;
     padding: 0 0 5px;
 }
+/*
 li {
     list-style: outside none none;
 }
+*/
 .elgg-foot {
     margin-top: 20px;
 }
