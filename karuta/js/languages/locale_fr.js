@@ -223,6 +223,7 @@ karutaStr['fr']['select_users']="Sélectionner des usagers";
 karutaStr['fr']['portfolios-admin']="Portfolios";
 karutaStr['fr']['bin-admin']="Poubelle";
 karutaStr['fr']['substitute']="Substitution";
+karutaStr['fr']['create-test-user']="Créer un utilisateur test";
 
 //=========================================
 //========== ROLES ========================

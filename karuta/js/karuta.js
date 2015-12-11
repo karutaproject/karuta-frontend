@@ -108,27 +108,29 @@ function getNavBar(type,portfolioid,edit)
 	//----------------------------------------------------------
 	if (languages.length>1) {
 		html += "			<ul class='nav navbar-nav'>";
-	html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+karutaStr[LANG]['language']+"<span class='caret'></span></a>";
-	html += "					<ul class='dropdown-menu'>";
-	for (var i=0; i<languages.length;i++) {
-		var url = "list.htm?lang="+languages[i];
-		if (type=='main')
-			url = "main.htm?id="+portfolioid+"&amp;lang="+languages[i]+"&amp;edit="+edit;
-		if (type=='users')
-			url = "listUsers.htm?lang="+languages[i];
-		if (type=='login')
-			url = "login.htm?lang="+languages[i];
-		if (type=='create_account')
-			url = "createAccount.htm?lang="+languages[i];
-		if (type=='batch')
-			url = "createBatch.htm?lang="+languages[i];
-		html += "			<li><a href='"+url+"'>"+karutaStr[languages[i]]['language']+"</a></li>";
-	}
-	html += "					</ul>";
-	html += "				</li>";
+		html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>"+karutaStr[LANG]['language']+"<span class='caret'></span></a>";
+		html += "					<ul class='dropdown-menu'>";
+		for (var i=0; i<languages.length;i++) {
+			var url = "list.htm?lang="+languages[i];
+			if (type=='main')
+				url = "main.htm?id="+portfolioid+"&amp;lang="+languages[i]+"&amp;edit="+edit;
+			if (type=='users')
+				url = "listUsers.htm?lang="+languages[i];
+			if (type=='login')
+				url = "login.htm?lang="+languages[i];
+			if (type=='create_account')
+				url = "createAccount.htm?lang="+languages[i];
+			if (type=='batch')
+				url = "createBatch.htm?lang="+languages[i];
+			html += "			<li><a href='"+url+"'>"+karutaStr[languages[i]]['language']+"</a></li>";
+		}
+		html += "					</ul>";
+		html += "				</li>";
+		html += "			</ul>";
 	}
 	//----------------------------------------------------------
 	if ((type!='login' && type!='create_account' && type!='list') || (type=='list' && USER.admin)) {
+		html += "			<ul class='nav navbar-nav'>";
 		html += "				<li>&nbsp;</li>";
 		html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
 		html += "					<ul class='dropdown-menu'>";

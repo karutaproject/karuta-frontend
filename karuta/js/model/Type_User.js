@@ -503,3 +503,62 @@ UIFactory["User"].getPasswordCreator = function()
 	html += UIFactory["User"].getAttributeCreator("confirm-password","",true);
 	return html;
 };
+
+//==================================
+UIFactory["User"].callCreateTestUser = function()
+//==================================
+{
+	var js1 = "$('#edit-window').modal('hide')";
+	var js2 = "UIFactory['User'].createTestUser()";
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['create-test-user']);
+	var html = "";
+	html += "<form id='metadata' class='form-horizontal'>";
+	html += UIFactory["User"].getAttributeCreator("firstname","");
+	html += UIFactory["User"].getAttributeCreator("lastname","");
+	html +="<hr/>";
+	html += UIFactory["User"].getAttributeCreator("username","");
+	html += UIFactory["User"].getAttributeCreator("password","",true);
+	html += "</form>";
+	$("#edit-window-body").html(html);
+	//--------------------------
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["User"].createTestUser = function()
+//==================================
+{
+
+	var xml = "";
+	xml +="<?xml version='1.0' encoding='UTF-8'?>";
+	xml +="<users>";
+	xml +="<user>";
+	xml +="	<username>"+$("#user_username").val()+"</username>";
+	xml +="	<lastname>"+$("#user_lastname").val()+"</lastname>";
+	xml +="	<firstname>"+$("#user_firstname").val()+"</firstname>";
+	xml +="	<email>"+USER.email_node.text()+"</email>";
+	xml +="	<password>"+$("#user_password").val()+"</password>";
+	xml +="	<active>1</active>";
+	xml +="	<admin>0</admin>";
+	xml +="	<designer>0</designer>";
+	xml +="	<substitute>0</substitute>";
+	xml +="</user>";
+	xml +="</users>";
+	var url = "../../../"+serverBCK+"/users";
+	$.ajax({
+		type : "POST",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : url,
+		data : xml,
+		success : function(data) {
+			$("#refresh").click();
+		},
+		error : function(jqxhr,textStatus) {
+			alert("Error : "+jqxhr.responseText);
+		}
+	});
+};
+

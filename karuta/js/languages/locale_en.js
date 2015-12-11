@@ -223,6 +223,7 @@ karutaStr['en']['select_users']="Select Users";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['substitute']="Substitution";
+karutaStr['en']['create-test-user']="Create a Test User";
 
 //=========================================
 //========== ROLES ========================

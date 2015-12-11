@@ -1,5 +1,5 @@
 //----------------------------------
-var application_version = "1.x";
+var application_version = "1.2";
 var application_date = "2015-04-11";
 //----------------------------------
 var appliname = 'karuta';
@@ -20,9 +20,9 @@ var welcome1 = {};// Welcome title
 	welcome1["en"] = "<img class='img-responsive' style='margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
 	welcome1["ja"] = "<img class='img-responsive' style='margin-bottom:4px;margin-top:30px;' src='../../karuta/img/logofonbleu.jpg'/>";
 var welcome2 = {};       // Welcome sub-title
-	welcome2["fr"] = "<span style='color:lightgrey'>Version 1.1</span>";
-	welcome2["en"] = "<span style='color:lightgrey'>Version 1.1</span>";
-	welcome2["ja"] = "<span style='color:lightgrey'>Version 1.1</span>";
+	welcome2["fr"] = "<span style='color:lightgrey'>Version 1.2</span>";
+	welcome2["en"] = "<span style='color:lightgrey'>Version 1.2</span>";
+	welcome2["ja"] = "<span style='color:lightgrey'>Version 1.2</span>";
 var welcome3 = {};       // Welcome paragraph
 	welcome3["fr"] = "";
 	welcome3["en"] = "";
