@@ -503,6 +503,9 @@ function getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 					$("#wait-window").modal('hide');
 				}
 			 });
+		},
+		error : function(jqxhr,textStatus) {
+			$("#wait-window").modal('hide');
 		}
 	});
 }
