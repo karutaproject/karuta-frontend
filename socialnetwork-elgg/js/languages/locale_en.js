@@ -30,3 +30,4 @@ snStr['en']["river_group_create"] = "created a group";
 snStr['en']["river_relationship_member_create"] = "joined the group";
 snStr['en']["river_object_thewire_create"] = "published on the wire";
 snStr['en']["river_object_status_create"] = "add a new status";
+snStr['en']["river_object_messageboard_create"] = "published a blog post";

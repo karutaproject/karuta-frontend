@@ -36,7 +36,8 @@
 	 			});
 	 			map.config.bubbleType = 'pie';
 	 			map.config.nodeClickCallback = parent.clickBubble;
-	 			$("#PageRefresh").html("Recharger la carte");
+				var text2 = karutaStr[LANG]['update-bubble'];
+	 			$("#PageRefresh").html(text2);
 	 		} else {
 	 			$(".bubbletree").html("");
 	 			parent.UIFactory["Bubble"].reloadparse();
@@ -46,7 +47,9 @@
 	 			});
 	 			map.config.bubbleType = 'pie';
 	 			map.config.nodeClickCallback = parent.clickBubble;
-	 			$("#PageRefresh").html("Recharger la carte");
+				var text2 = karutaStr[LANG]['update-bubble'];
+	 			$("#PageRefresh").html(text2);
+
 	 		}
 		});
 	</script>

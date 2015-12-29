@@ -7,7 +7,6 @@
 	<!-- =========================================== -->
 	<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
-	<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
 	<!-- =========================================== -->
 	<link rel="stylesheet" href="../../application/css/specific.css" />
 	<!-- =========================================== -->
@@ -51,6 +50,8 @@
 	<script src="../../other/js/jquery.iframe-transport.js"></script>
 	<script src="../../other/js/jquery.fileupload.js"></script>
 	<!-- =============================================================== -->
+		<script src="../../socialnetwork-elgg/js/socialnetwork.js"></script>
+	<!-- =============================================================== -->
 	<script language='javascript'>
 	//------------------------------
 	setLanguage();
@@ -78,8 +79,10 @@
 
 		//------------------------------
 		$(document).ready(function() {
+			getLanguage();
 			changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 			$.ajaxSetup({async:false});
+			g_elgg_key = Cookies.get('elgg_token');
 			//------------------------------
 			$.ajax({
 				async:false,

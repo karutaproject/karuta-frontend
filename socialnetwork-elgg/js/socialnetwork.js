@@ -70,10 +70,9 @@ function toggleReplyBox(objectid,tabid)
 
 
 //==================================
-function displaySocialNetwork()
+function displaySocialNetwork(destid,elgg_key)
 //==================================
 {
-	var destid = 'socialnetwork';
 	getElggUser();
 	setUserGroups($(USER.username_node).text());
 	var html = "";
@@ -123,13 +122,9 @@ function displaySocialNetwork()
 	display_select_group("select-group");
 	$("#"+destid+"-body").html(html);
 	//------------------------------
-	if (g_elgg_key!='undefined'){
-		getRiverFeed('activities');
-		getWall('public');
-		displayGroupWalls('groups');
-	} else {
-		$("#activities").html(snStr[LANG]["not-logged"]);
-	}
+	getRiverFeed('activities');
+	getWall('public');
+	displayGroupWalls('groups');
 }
 
 
@@ -545,8 +540,6 @@ function display_post(dest,node,tabid)
 		html += "				<span class='likes'>"+node.num_likes+"</span>";
 	html+= "					<span class='glyphicon glyphicon-thumbs-up' onclick=\"likeEntity('"+node.guid+"')\"></span> ";
 	html+= "					<span id='plus-"+tabid+node.guid+"' onclick=\"toggleComments('"+tabid+node.guid+"')\" class='glyphicon glyphicon-plus' style='display:none'></span> ";
-	html+= "					<span class='repondre' onclick=\"toggleReplyBox('"+node.guid+"','groups')\">Répondre</span> ";
-	//----------------------------------
 	html+= "					<span class='elgg-river-subject'>"+node.owner.name+"</span> ";
 	html+= 						snStr[LANG]['river_object_status_create'];
 	html+= " 					<span class='elgg-river-timestamp'><acronym title='"+date.format('LLL')+"'>"+date.fromNow()+"</acronym></span>";
@@ -580,6 +573,30 @@ function display_post(dest,node,tabid)
 //=================================================================================================
 
 //==================================
+function getElggToken()
+//==================================
+{
+	var url = "../../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "token=1&method=auth.cas";
+	$.ajax({
+		dataType : "json",
+		type : "GET",
+		url : url,
+		data, data,
+		success : function(data) {
+			g_elgg_key = data.result;
+			Cookies.set('elgg_token',g_elgg_key,{ expires: 1 });
+			displaySocialNetworkIUT2('socialnetwork');
+		},
+		error : function(jqxhr,textStatus) {
+			g_elgg_key = Cookies.get('elgg_token');
+			displaySocialNetworkIUT2('socialnetwork');
+		}
+	});
+}
+
+
+//==================================
 function loginElgg(username,password,callback)
 //==================================
 {
@@ -592,7 +609,7 @@ function loginElgg(username,password,callback)
 		type : "POST",
 		url : url,
 		success : function(data) {
-			var g_elgg_key = data.result;
+			g_elgg_key = data.result;
 			Cookies.set('elgg_token',g_elgg_key,{ expires: 1 });
 			if (callback!=null)
 				callback(g_elgg_key);
@@ -615,11 +632,10 @@ function getElggUser()
 		url : url,
 		data, data,
 		success : function(data) {
-			if (data.status!='-1')
-				g_elgg_userid = data.result.guid;
+			g_elgg_userid = data.result.guid;
 		},
 		error : function(jqxhr,textStatus) {
-			alert(snStr[LANG]['login-error']);
+//			alert("getElggUser : Oups! "+jqxhr.responseText);
 		}
 	});
 }
@@ -631,27 +647,6 @@ function user_register(name, email, username, password,callback,param1)
 	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
 	var data = "auth_token="+g_elgg_key+"&method=user.register&name="+name+"&username="+username+"&password="+password+"&email="+email;
 	$.ajax({
-		type : "GET",
-		dataType : "json",
-		url : url,
-		data: data,
-		success : function(data) {
-			if (callback!=null)
-				callback(param1);
-		},
-		error : function(jqxhr,textStatus) {
-			alert("user_register : Oups! "+jqxhr.responseText);
-		}
-	});
-}
-
-//=================================================
-function user_change_password(new_password, username,callback,param1)
-//=================================================
-{
-	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
-	var data = "auth_token="+g_elgg_key+"&method=auth.changepassword&new_password="+new_password+"&username="+username;
-	$.ajax({
 		type : "POST",
 		dataType : "json",
 		url : url,
@@ -661,7 +656,7 @@ function user_change_password(new_password, username,callback,param1)
 				callback(param1);
 		},
 		error : function(jqxhr,textStatus) {
-			alert("user_change_password : Oups! "+jqxhr.responseText);
+			alert("user_register : Oups! "+jqxhr.responseText);
 		}
 	});
 }

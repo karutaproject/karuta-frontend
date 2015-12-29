@@ -9,7 +9,6 @@ var serverFIL = "karuta-backend"+bckname;
 var serverVER = "karuta-backend"+bckname;
 //----------------------------------
 var elgg_url_base = 'elgg/';
-var elgg_url_absolute = '';
 var elgg_installed = true;
 var elgg_refreshing = 240000; // 240 seconds
 //----------------------------------
@@ -103,8 +102,8 @@ var listinfo = {};       // Welcome paragraph
 	//----------------------------------
 	var welcome4 = {};			// List Page Welcome title
 		welcome4["fr"] = "Bienvenue dans Karuta";
-		welcome4["en"] = "Welcome in Karuta";
+		welcome4["en"] = "Welcome to Karuta";
 	var welcome5 = {}; 			// List Page Welcome sub-title
-		welcome5["fr"] = "OPEN SOURCE PORTFOLIO";
+		welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 		welcome5["en"] = "OPEN SOURCE PORTFOLIO";
 
