@@ -436,9 +436,13 @@ UIFactory["User"].create = function()
 		data : xml,
 		success : function(data) {
 			$("#refresh").click();
+			//--------------------------
+			$('#edit-window').modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
 			alert("Error : "+jqxhr.responseText);
+			//--------------------------
+			$('#edit-window').modal('hide');
 		}
 	});
 	if (elgg_installed)

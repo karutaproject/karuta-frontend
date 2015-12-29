@@ -34,6 +34,7 @@ karutaStr["en"]["button-unsubmit"] = "Reset";
 karutaStr["en"]["button-send"] = "Send";
 karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
+karutaStr["en"]["button-up"] = "Up";
 karutaStr['en']['Add']="Add";
 karutaStr['en']['AddGroup']="Add a Group";
 karutaStr['en']['confirm-delete']="Do you want to delete? This action cannot be undone.";

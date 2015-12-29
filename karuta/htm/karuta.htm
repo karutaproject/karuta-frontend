@@ -163,7 +163,14 @@
 							$("#main-container").html(html);
 							displaySocialNetwork('socialnetwork');
 						} else {
-							$("#main-container").html("<div id='global-row' class='row'><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><div id='main-list' class='col-md-12'></div><div id='main-page' class='col-md-12' style='display:none'></div></div></div>");
+							var html = "";
+							html += "<div id='global-row' class='row'>";
+							html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
+							html += "	<div id='main-list' class='col-md-12'></div>";
+							html += "	<div id='main-page' class='col-md-12' style='display:none'></div>";
+							html += "	<div id='main-user' class='col-md-12' style='display:none'></div>";
+							html += "</div>";
+							$("#main-container").html(html);
 						}
 						//-------------------------------
 						display_list_page();

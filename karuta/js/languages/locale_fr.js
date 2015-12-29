@@ -34,6 +34,7 @@ karutaStr['fr']['button-unsubmit']="Réinitialiser";
 karutaStr["fr"]["button-send"] = "Envoyer";
 karutaStr["fr"]["button-show"] = "Montrer";
 karutaStr["fr"]["button-hide"] = "Cacher";
+karutaStr["fr"]["button-up"] = "Monter";
 karutaStr['fr']['Add']="Ajouter";
 karutaStr['fr']['AddGroup']="Ajouter un groupe";
 karutaStr['fr']['confirm-delete']="Voulez-vous vraiment supprimer ? Cette action est irréversible.";
