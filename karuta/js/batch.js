@@ -281,7 +281,7 @@ function createElggUser(node)
 		dataType : "json",
 		type : "GET",
 		url : url,
-		data, data,
+		data: data,
 		success : function(data) {
 			elgg_userid = data.result.guid;
 			if (elgg_userid>0) {
