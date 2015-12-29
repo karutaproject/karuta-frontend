@@ -28,6 +28,7 @@ UIFactory["Comments"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Comments';
+	this.lastModified = $("lastModified",$("asmResource[xsi_type='Comments']",node));
 	this.author_node = $("author",$("asmResource[xsi_type='Comments']",node));
 	this.date_node = $("date",$("asmResource[xsi_type='Comments']",node));
 	this.text_node = [];
@@ -146,7 +147,8 @@ UIFactory["Comments"].prototype.update = function(langcode)
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	var now = new Date().toLocaleDateString();
+	var now = new Date().toLocaleString();
+	$(itself.lastModified).text(now);
 	var author = USER.getView(null,'firstname-lastname');
 	this.date_node.text(now);
 	this.author_node.text(author);

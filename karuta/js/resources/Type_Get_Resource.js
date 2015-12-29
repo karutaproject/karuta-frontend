@@ -32,6 +32,7 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Get_Resource';
+	this.lastModified = $("lastModified",$("asmResource[xsi_type='Get_Resource']",node));
 	this.code_node = $("code",$("asmResource["+clause+"]",node));
 	this.value_node = $("value",$("asmResource[xsi_type='Get_Resource']",node));
 	this.label_node = [];

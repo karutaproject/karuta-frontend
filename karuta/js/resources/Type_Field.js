@@ -28,6 +28,7 @@ UIFactory["Field"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Field';
+	this.lastModified = $("lastModified",$("asmResource[xsi_type='Field']",node));
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Field']",node));
@@ -67,6 +68,7 @@ UIFactory["Field"].prototype.getAttributes = function(type,langcode)
 	//---------------------
 	if (type=='default') {
 		result['restype'] = this.type;
+		result['lastModified'] = this.lastModified.text();
 		result['text'] = this.text_node[langcode].text();
 	}
 	return result;
@@ -99,6 +101,8 @@ UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 UIFactory["Field"].update = function(itself,langcode)
 //==================================
 {
+	var now = new Date().toLocaleString();
+	$(itself.lastModified).text(now);
 	if (itself.encrypted)
 		$(itself.text_node[langcode]).text("rc4"+encrypt($(itself.text_node[langcode]).text(),g_rc4key));
 	itself.save();
