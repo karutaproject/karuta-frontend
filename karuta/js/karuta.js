@@ -572,6 +572,11 @@ function sleep(milliseconds)
 function submit(uuid)
 //=======================================================================
 {
+	//-----------------
+	var itself = UICom.structure["ui"][uuid];
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	itself.save();
+	//-----------------
 	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/submit';
 	$.ajax({
 		type : "POST",

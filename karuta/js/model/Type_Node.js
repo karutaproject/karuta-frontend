@@ -2936,7 +2936,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	}
 	html += karutaStr[languages[langcode]]['help3']+"</label>";
 	$("#metadata_texts").append($(html));
-	UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'help',$(node.metadatawad).attr('help'));
+	UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'help',$(node.metadatawad).attr('help'),'x100');
 };
 
 //==================================
