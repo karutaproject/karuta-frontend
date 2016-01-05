@@ -28,6 +28,13 @@ UIFactory["Image"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Image';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Image']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Image']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Image']",node));
+	//--------------------
 //	this.fileid_node = $("fileid",$("asmResource[xsi_type='Image']",node));
 /*	if (this.fileid_node.length==0) {	//old version
 		var fileid = createXmlElement("fileid");
@@ -157,6 +164,7 @@ UIFactory["Image"].update = function(data,uuid,langcode)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

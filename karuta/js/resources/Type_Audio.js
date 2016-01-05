@@ -14,6 +14,13 @@ UIFactory["Audio"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Audio';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Audio']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Audio']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Audio']",node));
+	//--------------------
 	this.filename_node = [];
 	this.type_node = [];
 	this.size_node = [];
@@ -191,6 +198,7 @@ UIFactory["Audio"].update = function(data,uuid,langcode)
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = 0;
 	//---------------------
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var filename = data.files[0].name;
 	var size = data.files[0].size;
 	var type = data.files[0].type;

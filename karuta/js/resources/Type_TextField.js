@@ -28,6 +28,13 @@ UIFactory["TextField"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'TextField';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='TextField']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='TextField']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='TextField']",node));
+	//--------------------
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='TextField']",node));
@@ -104,6 +111,7 @@ UIFactory["TextField"].prototype.getView = function(dest,type,langcode)
 UIFactory["TextField"].prototype.update = function(langcode)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

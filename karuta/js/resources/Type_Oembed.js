@@ -28,6 +28,13 @@ UIFactory["Oembed"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Oembed';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Oembed']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Oembed']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Oembed']",node));
+	//--------------------
 	this.url_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.url_node[i] = $("url[lang='"+languages[i]+"']",$("asmResource[xsi_type='Oembed']",node));
@@ -105,6 +112,7 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 UIFactory["Oembed"].update = function(obj,itself,type,langcode)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

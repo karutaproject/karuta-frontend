@@ -28,6 +28,13 @@ UIFactory["CompetencyEvaluation"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'CompetencyEvaluation';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='CompetencyEvaluation']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='CompetencyEvaluation']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='CompetencyEvaluation']",node));
+	//--------------------
 	this.code_node = $("code",$("asmResource[xsi_type='CompetencyEvaluation']",node));
 	this.value_node = $("value",$("asmResource[xsi_type='CompetencyEvaluation']",node));
 	this.label_node = [];
@@ -86,6 +93,7 @@ UIFactory["CompetencyEvaluation"].prototype.displayView = function(dest,type,lan
 UIFactory["CompetencyEvaluation"].update = function(obj,itself,lang,type,name)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var selected = "";
 	var value = "";
 	var code = "";

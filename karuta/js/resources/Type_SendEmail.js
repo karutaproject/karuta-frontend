@@ -28,6 +28,13 @@ UIFactory["SendEmail"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'SendEmail';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='SendEmail']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='SendEmail']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='SendEmail']",node));
+	//--------------------
 	this.firstname_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.firstname_node[i] = $("firstname[lang='"+languages[i]+"']",$("asmResource[xsi_type='SendEmail']",node));
@@ -117,6 +124,7 @@ UIFactory["SendEmail"].prototype.getView = function(dest,type,langcode)
 UIFactory["SendEmail"].update = function(obj,itself,langcode)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

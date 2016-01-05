@@ -28,7 +28,7 @@ UIFactory["Comments"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Comments';
-	this.lastModified = $("lastModified",$("asmResource[xsi_type='Comments']",node));
+	this.lastmodified_node = $("lastModified",$("asmResource[xsi_type='Comments']",node));
 	this.author_node = $("author",$("asmResource[xsi_type='Comments']",node));
 	this.date_node = $("date",$("asmResource[xsi_type='Comments']",node));
 	this.text_node = [];

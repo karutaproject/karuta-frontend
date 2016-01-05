@@ -26,6 +26,13 @@ UIFactory["Calendar"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Calendar';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Calendar']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Calendar']",node));
+	//--------------------
 	this.minViewMode_node = $("minViewMode",$("asmResource[xsi_type='Calendar']",node));
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
@@ -110,7 +117,8 @@ UIFactory["Calendar"].prototype.getView = function(dest,langcode)
 UIFactory["Calendar"].update = function(itself,langcode)
 //==================================
 {
-		itself.save();
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	itself.save();
 };
 
 //==================================

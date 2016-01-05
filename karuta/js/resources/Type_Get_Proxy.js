@@ -28,6 +28,13 @@ UIFactory["Get_Proxy"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Get_Proxy';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Get_Proxy']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Get_Proxy']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Get_Proxy']",node));
+	//--------------------
 	this.code_node = $("code",$("asmResource[xsi_type='Get_Proxy']",node));
 	this.value_node = $("value",$("asmResource[xsi_type='Get_Proxy']",node));
 	this.label_node = [];
@@ -118,6 +125,7 @@ UIFactory["Get_Proxy"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Get_Proxy"].update = function(select,itself,lang,type)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	if (lang==null)
 		lang = LANG;
 	if (type==undefined || type==null)
@@ -150,6 +158,7 @@ UIFactory["Get_Proxy"].update = function(select,itself,lang,type)
 UIFactory["Get_Proxy"].update2 = function(data,itself,lang,type)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var nodes = $("node",data);
 	var resource = null;
 	if ($("asmResource",nodes[0]).length==3)

@@ -40,6 +40,13 @@ UIFactory["Document"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Document';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Document']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Document']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Document']",node));
+	//--------------------
 	this.filename_node = [];
 	this.type_node = [];
 	this.size_node = [];
@@ -202,6 +209,7 @@ UIFactory["Document"].update = function(data,uuid,langcode)
 //	if(typeof data=='string')
 //		data = jQuery.parseJSON(data);
 	//---------------------
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var filename = data.files[0].name;
 	var size = data.files[0].size;
 	var type = data.files[0].type;

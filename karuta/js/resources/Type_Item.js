@@ -28,6 +28,13 @@ UIFactory["Item"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Item';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Item']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Item']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Item']",node));
+	//--------------------
 	this.code_node = $("code",$("asmResource[xsi_type='Item']",node));
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
@@ -122,6 +129,7 @@ UIFactory["Item"].update = function(obj,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var code = $("input[name='code_Item']",obj).val();
 	$(itself.code_node).text(code);
 	var label = $("input[name='label_Item']",obj).val();

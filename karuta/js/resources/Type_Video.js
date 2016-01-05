@@ -28,6 +28,13 @@ UIFactory["Video"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Video';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Video']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Video']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Video']",node));
+	//--------------------
 /*	this.fileid_node = $("fileid",$("asmResource[xsi_type='Video']",node));
 	if (this.fileid_node.length==0) {	//old version
 		var fileid = createXmlElement("fileid");
@@ -211,6 +218,7 @@ UIFactory["Video"].update = function(data,uuid,langcode)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

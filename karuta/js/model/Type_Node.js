@@ -30,7 +30,14 @@ UIFactory["Node"] = function( node )
 		this.userrole = $(node).attr('role');
 		if (this.userrole==undefined || this.userrole=='')
 			this.userrole = "norole";
-		//------------------------------
+		//--------------------
+		this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='nodeRes']",node)[0]);
+		if (this.lastmodified_node.length==0){  // for backward compatibility
+			var newelement = createXmlElement("lastmodified");
+			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
+		}
+		this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='nodeRes']",node));
+		//--------------------
 		this.label_node = [];
 		for (var i=0; i<languages.length;i++){
 			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
@@ -188,6 +195,7 @@ UIFactory["Node"].updateLabel = function(input,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
 	$(itself.label_node[langcode]).text(label);
 	itself.save();
@@ -206,6 +214,7 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var code = $.trim($("#code_"+itself.id).val());
 	$(itself.code_node).text(code);
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());

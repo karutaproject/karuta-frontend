@@ -32,7 +32,13 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Get_Resource';
-	this.lastModified = $("lastModified",$("asmResource[xsi_type='Get_Resource']",node));
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Get_Resource']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Get_Resource']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Get_Resource']",node));
+	//--------------------
 	this.code_node = $("code",$("asmResource["+clause+"]",node));
 	this.value_node = $("value",$("asmResource[xsi_type='Get_Resource']",node));
 	this.label_node = [];

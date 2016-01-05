@@ -26,6 +26,13 @@ UIFactory["Dashboard"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Dashboard';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Dashboard']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Dashboard']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Dashboard']",node));
+	//--------------------
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Dashboard']",node));
@@ -97,9 +104,10 @@ UIFactory["Dashboard"].update = function(input,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-		var value = $.trim($(input).val());
-		$(itself.text_node[langcode]).text(value);
-		itself.save();
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	var value = $.trim($(input).val());
+	$(itself.text_node[langcode]).text(value);
+	itself.save();
 };
 
 //==================================

@@ -28,6 +28,13 @@ UIFactory["Proxy"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Proxy';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Proxy']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Proxy']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Proxy']",node));
+	//--------------------
 	this.code_node = $("code",$("asmResource[xsi_type='Proxy']",node));
 	this.value_node = $("value",$("asmResource[xsi_type='Proxy']",node));
 	this.label_node = [];
@@ -119,6 +126,7 @@ UIFactory["Proxy"].prototype.displayView = function(dest,type,lang)
 UIFactory["Proxy"].update = function(itself,lang,type,portfolio_label)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	itself.save();
 };
 

@@ -16,7 +16,13 @@ UIFactory["Get_Double_Resource"] = function(node,condition)
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Get_Double_Resource';
-	//-----------------------
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Get_Double_Resource']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Get_Double_Resource']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Get_Double_Resource']",node));
+	//--------------------
 	this.value1_node = $("value1",$("asmResource[xsi_type='Get_Double_Resource']",node));
 	this.code1_node = $("code1",$("asmResource["+clause+"]",node));
 	this.label1_node = [];
@@ -136,6 +142,7 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 UIFactory["Get_Double_Resource"].update = function(itself,langcode,type)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	if (itself.encrypted) {
 		$(itself.label1_node).text("rc4"+encrypt($(itself.label1_node).text(),g_rc4key));
 		$(itself.code1_node).text("rc4"+encrypt($(itself.code1_node).text(),g_rc4key));

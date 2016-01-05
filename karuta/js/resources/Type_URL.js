@@ -30,6 +30,13 @@ UIFactory["URL"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'URL';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='URL']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='URL']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='URL']",node));
+	//--------------------
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL']",node));
@@ -150,6 +157,7 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 UIFactory["URL"].update = function(obj,itself,type,langcode)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

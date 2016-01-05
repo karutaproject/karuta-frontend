@@ -28,6 +28,13 @@ UIFactory["Action"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Action';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Action']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Action']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Action']",node));
+	//--------------------
 	this.role_node = $("role",$("asmResource[xsi_type='Action']",node));
 	this.action_node = $("action",$("asmResource[xsi_type='Action']",node));	
 	this.query_node = $("action-query",$("asmResource[xsi_type='Action']",node));	
@@ -126,6 +133,7 @@ UIFactory["Action"].prototype.displayView = function(dest,type,lang)
 UIFactory["Action"].update = function(itself,lang,type,portfolio_label)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	itself.save();
 };
 

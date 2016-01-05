@@ -31,6 +31,13 @@ UIFactory["URL2Unit"] = function(node,condition)
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'URL2Unit';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='URL2Unit']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='URL2Unit']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='URL2Unit']",node));
+	//--------------------
 	this.uuid_node = $("uuid",$("asmResource[xsi_type='URL2Unit']",node));
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
@@ -124,6 +131,7 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 UIFactory["URL2Unit"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var value = $(selected_item).attr('value');
 	//---------------------
 	if (itself.encrypted)

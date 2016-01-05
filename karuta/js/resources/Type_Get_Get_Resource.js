@@ -28,6 +28,13 @@ UIFactory["Get_Get_Resource"] = function( node )
 	this.type = "Get_Get_Resource";
 	this.id = $(node).attr('id');
 	this.type = 'Get_Get_Resource';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Get_Get_Resource']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Get_Get_Resource']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Get_Get_Resource']",node));
+	//--------------------
 	this.parentid = $(node).parent().attr("id");
 	this.node = node;
 	this.code_node = $("code",$("asmResource[xsi_type='Get_Get_Resource']",node));
@@ -170,6 +177,7 @@ UIFactory["Get_Get_Resource"].prototype.displayView = function(dest,type,langcod
 UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
 	//---------------------

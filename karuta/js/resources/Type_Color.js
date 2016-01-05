@@ -28,6 +28,13 @@ UIFactory["Color"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Color';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='Color']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='Color']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Color']",node));
+	//--------------------
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Color']",node));
@@ -123,6 +130,7 @@ UIFactory["Color"].prototype.getView = function(dest,type,langcode)
 UIFactory["Color"].update = function(itself,langcode)
 //==================================
 {
+	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	if (itself.encrypted)
 		$(itself.text_node[langcode]).text("rc4"+encrypt($(itself.text_node[langcode]).text(),g_rc4key));
 	itself.save();
