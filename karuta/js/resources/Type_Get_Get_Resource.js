@@ -293,6 +293,11 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 	if (!self.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
+	var self_code = $(self.code_node).text();
+	if (self.encrypted)
+		self_code = decrypt(self_code.substring(3),g_rc4key);
+	//---------------------
+	//---------------------
 	var self_value = $(self.value_node).text();
 	if (self.encrypted)
 		self_value = decrypt(self_value.substring(3),g_rc4key);
@@ -363,9 +368,12 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 				});
 				$(select_item).append($(select_item_a))
 				//-------------- update button -----
-				if (code!="" && self_value==code) {
-					selected_value = code;
-					$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
+				if (code!="" && self_code==$('code',resource).text()) {
+					if (($('code',resource).text()).indexOf("#")>-1)
+						$("#button_"+self.id).html(code+" "+$(srce+"[lang='"+languages[langcode]+"']",resource).text());
+					else
+						$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 				}
 			}
 			$(select).append($(select_item));

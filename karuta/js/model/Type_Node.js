@@ -30,14 +30,6 @@ UIFactory["Node"] = function( node )
 		this.userrole = $(node).attr('role');
 		if (this.userrole==undefined || this.userrole=='')
 			this.userrole = "norole";
-		//--------------------
-		this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='nodeRes']",node)[0]);
-		if (this.lastmodified_node.length==0){  // for backward compatibility
-			var newelement = createXmlElement("lastmodified");
-			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
-		}
-		this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='nodeRes']",node));
-		//--------------------
 		this.label_node = [];
 		for (var i=0; i<languages.length;i++){
 			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
@@ -195,7 +187,6 @@ UIFactory["Node"].updateLabel = function(input,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
 	$(itself.label_node[langcode]).text(label);
 	itself.save();
@@ -214,7 +205,6 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var code = $.trim($("#code_"+itself.id).val());
 	$(itself.code_node).text(code);
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
@@ -718,6 +708,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					if (node.resource.type!='Dashboard' || g_userrole=='designer')
 						html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 					html += "</div><!-- inside-full-height -->";
+					//-------------- context -------------------------
+					html += "<div id='comments_"+uuid+"' class='inside-full-height comments'></div><!-- comments -->";
 					html += "</td>";
 				}
 
@@ -1960,6 +1952,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'none':$(node.metadatawad).attr('delnoderoles');
 	var submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
 	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
+	var submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
 	var menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
 	var moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'none':$(node.metadatawad).attr('moveroles');
@@ -2068,7 +2061,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "<span id='submit-"+node.id+"' class='button button-border' onclick=\"javascript:reset('"+node.id+"')\" ";
 					html += " >"+karutaStr[languages[langcode]]['button-unsubmit']+"</span>";
 				}
-				html += "<div class='btn btn-xs disabled alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+"</div>";
+				html += "<div class='btn btn-xs disabled alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+submitteddate+"</div>";
 			} 
 			else {
 				html += "<div class='btn btn-xs disabled alert alert-danger'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			

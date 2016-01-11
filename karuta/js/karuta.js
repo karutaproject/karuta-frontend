@@ -1,5 +1,5 @@
 /* =======================================================
-toggle	Copyright 2014 - ePortfolium - Licensed under the
+	Copyright 2014 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -572,11 +572,6 @@ function sleep(milliseconds)
 function submit(uuid)
 //=======================================================================
 {
-	//-----------------
-	var itself = UICom.structure["ui"][uuid];
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
-	itself.save();
-	//-----------------
 	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/submit';
 	$.ajax({
 		type : "POST",

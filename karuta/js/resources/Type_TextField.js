@@ -111,7 +111,7 @@ UIFactory["TextField"].prototype.getView = function(dest,type,langcode)
 UIFactory["TextField"].prototype.update = function(langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(this.lastmodified_node).text(new Date().toLocaleString());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
