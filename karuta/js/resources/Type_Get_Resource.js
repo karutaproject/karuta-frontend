@@ -78,7 +78,6 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-//	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -90,9 +89,15 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode)
 		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
 	if (code.indexOf("@")>-1)
-		code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
-
-	return "<span class='"+code+"'>"+label+"</span>";
+		code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+	if (code.indexOf("#")>-1)
+		code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+	var html = "";
+	html += "<span class='"+code+"'>";
+	if (($(this.code_node).text()).indexOf("#")>-1)
+		html += code+ " ";
+	html += label+"</span>";
+	return html;
 };
 
 //==================================
@@ -115,10 +120,16 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
 	if (code.indexOf("@")>-1)
-		code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
-	label = "<span class='"+code+"'>"+label+"</span>";
+		code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+	if (code.indexOf("#")>-1)
+		code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+	var html = "";
+	html += "<span class='"+code+"'>";
+	if (($(this.code_node).text()).indexOf("#")>-1)
+		html += code+ " ";
+	html += label+"</span>";
 	$("#"+dest).html("");
-	$("#"+dest).append($(label));
+	$("#"+dest).append($(html));
 };
 
 
@@ -240,9 +251,12 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			var display_code = true;
 			if (code.indexOf("@")>-1) {
 				display_code = false;
-				code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+				code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
 			}
-			if (code.indexOf('-#')>-1) {
+			if (code.indexOf("#")>-1) {
+				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+			}
+			if (code.indexOf('----')>-1) {
 				html = "<li class='divider'></li><li></li>";
 			} else {
 				html = "<li></li>";
@@ -252,7 +266,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				html = "<a href='#'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
 				$(select_item).html(html);
 			} else {
-				html = "<a href='#' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' class='sel"+code+"' ";
+				html = "<a href='#' value='"+$(nodes[i]).attr('id')+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
@@ -316,7 +330,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				display_code = false;
 				code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
 			}
-			input += "<input type='radio' name='radio_"+self.id+"' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' ";
+			if (code.indexOf("#")>-1) {
+				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+			}
+			input += "<input type='radio' name='radio_"+self.id+"' value='"+$(nodes[i]).attr('id')+"' code='"+$('code',resource).text()+"' ";
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
@@ -373,7 +390,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				display_code = false;
 				code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
 			}
-			input += "<div name='click_"+self.id+"' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' class='click-item";
+			if (code.indexOf("#")>-1) {
+				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+			}
+			input += "<div name='click_"+self.id+"' value='"+$(nodes[i]).attr('id')+"' code='"+$('code',resource).text()+"' class='click-item";
 			if (self_code==code)
 				input += " clicked";
 			input += "' ";
