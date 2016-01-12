@@ -144,7 +144,7 @@ UIFactory["User"].update = function(userid,attribute,value)
 		url : url,
 		data : data,
 		success : function(data) {
-			alert("saved");
+			alertHTML("saved");
 			window.location.reload();
 		}
 	});
@@ -440,7 +440,7 @@ UIFactory["User"].create = function()
 			$('#edit-window').modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Error : "+jqxhr.responseText);
+			alertHTML("Error : "+jqxhr.responseText);
 			//--------------------------
 			$('#edit-window').modal('hide');
 		}
@@ -502,7 +502,7 @@ UIFactory["User"].createTestUser = function()
 			$("#refresh").click();
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Error : "+jqxhr.responseText);
+			alertHTML("Error : "+jqxhr.responseText);
 		}
 	});
 	if (elgg_installed)
@@ -542,11 +542,11 @@ UIFactory["User"].changePassword = function(userid,value)
 			url : url,
 			data : xml,
 			success : function(data) {
-				alert(karutaStr[LANG]['saved']);
+				alertHTML(karutaStr[LANG]['saved']);
 			}
 		});
 	} else {
-		alert(karutaStr[LANG]['password-mismatch']);
+		alertHTML(karutaStr[LANG]['password-mismatch']);
 		UIFactory["User"].callChangePassword();
 	}
 };

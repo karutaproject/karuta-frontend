@@ -208,8 +208,10 @@ karutaStr['fr']['karuta.batch']="Créer un modèle batch";
 karutaStr['fr']['karuta.report']="Créer un modèle de rapport";
 karutaStr['fr']['create_tree']="Créer un arbre vide";
 karutaStr['fr']['create_project']="Créer un projet";
-karutaStr['fr']['karuta.rubrics']="Créer Rubrics";
+karutaStr['fr']['karuta.rubrics']="Créer un référentiel";
 karutaStr['fr']['karuta.parts']="Créer des composantes";
+karutaStr['fr']['welcome-add']="Ajouter la page de bienvenue";
+karutaStr['fr']['welcome-added']="La page de bienvenue a été ajoutée à la fin du modèle de porfolio.<br>Montez la en première position.";
 
 //=========================================
 //========== USERS ========================

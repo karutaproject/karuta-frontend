@@ -124,8 +124,10 @@
 		<script>document.write(DeleteBox());</script>
 		<script>document.write(LangueBox());</script>
 		<script>document.write(savedBox());</script>
+		<script>document.write(alertBox());</script>
 		<script>
 			g_elgg_key = Cookies.get('elgg_token');
+			g_socialnetwork = Cookies.get('socialnetwork');
 			g_edit = true; // à vérifier
 			getLanguage();
 			$(window).load(function() {
@@ -155,14 +157,22 @@
 						if (elgg_installed!=undefined && elgg_installed) {
 							var html = "";
 							html += "<div id='global-row' class='row'>";
-							html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-arrow-left fa-2x'></i>";
-							html += "	<div id='socialnetwork' class='col-md-4'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div>";
-							html += "	<div id='main-list' class='col-md-8'></div>";
-							html += "	<div id='main-page' class='col-md-8' style='display:none'></div>";
-							html += "	<div id='main-user' class='col-md-8' style='display:none'></div>";
-							html += "</div>";
+							if (g_socialnetwork==undefined || g_socialnetwork=='shown'){
+								html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-arrow-left fa-2x'></i>";
+								html += "	<div id='socialnetwork' class='col-md-4'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div>";
+								html += "	<div id='main-list' class='col-md-8'></div>";
+								html += "	<div id='main-page' class='col-md-8' style='display:none'></div>";
+								html += "	<div id='main-user' class='col-md-8' style='display:none'></div>";
+							} else {
+								html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-users fa-2x'></i>";
+								html += "	<div id='socialnetwork' class='col-md-4' style='display:none'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div>";
+								html += "	<div id='main-list' class='col-md-12'></div>";
+								html += "	<div id='main-page' class='col-md-12' style='display:none'></div>";
+								html += "	<div id='main-user' class='col-md-12' style='display:none'></div>";
+							}
+							html += "</div>";								
 							$("#main-container").html(html);
-							displaySocialNetwork('socialnetwork');
+							displaySocialNetwork();
 						} else {
 							var html = "";
 							html += "<div id='global-row' class='row'>";
@@ -179,7 +189,7 @@
 						//-------------------------------
 					},
 					error : function(jqxhr,textStatus) {
-						alert(karutaStr[LANG]['not-logged']);
+						alertHTML(karutaStr[LANG]['not-logged']);
 						window.location="login.htm?lang="+LANG;
 					}
 				});

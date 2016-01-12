@@ -302,7 +302,7 @@ function createElggUser(node)
 			}
 		},
 		error : function(jqxhr,textStatus) {
-			alert("createElggUser : Oups! "+jqxhr.responseText);
+			alertHTML("createElggUser : Oups! "+jqxhr.responseText);
 		}
 	});
 }
@@ -666,7 +666,7 @@ function updateResource(node)
 								url : "../../../"+serverBCK+"/resources/resource/" + targetid,
 								success : function(data) {
 									g_nb_updateResource[g_noline]++;
-//									alert(g_nb_updateResource[g_noline]);
+//									alertHTML(g_nb_updateResource[g_noline]);
 									$("#log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
 									if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
 										processShareTrees();
@@ -801,7 +801,7 @@ function updateResource(node)
 							$("#log").append("<br>- resource Dashboard update("+this.nodeid+") - semtag="+this.semtag);
 							//===========================================================
 							g_nb_updateResource[g_noline]++;
-//							alert(g_nb_updateResource[g_noline]);
+//							alertHTML(g_nb_updateResource[g_noline]);
 							if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
 								processShareTrees();
 							}

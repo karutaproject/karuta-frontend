@@ -16,7 +16,7 @@
 var portfolios_byid = {};
 var portfolios_list = [];
 var bin_list = [];
-
+var displayProject = {};
 var number_of_projects = 0;
 var number_of_portfolios = 0;
 var number_of_bins = 0;
@@ -122,7 +122,10 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				number_of_projects ++;
 				html += "<div id='project_"+portfolio.id+"' class='project'>";
 				html += "	<div class='row row-label'>";
-				html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-plus'></span></div>";
+				if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
+					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-minus'></span></div>";
+				else
+					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-plus'></span></div>";
 				html += "		<div class='project-label col-md-2 col-xs-2'>"+portfolio.label_node[langcode].text()+"</div>";
 				html += "		<div class='project-label col-md-2 hidden-xs'>"+owner+"</div>";
 				html += "		<div id='comments_"+portfolio.id+"' class='col-md-4 col-xs-4 comments'></div><!-- comments -->";
@@ -161,7 +164,10 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				html += "			</div>";
 				html += "		</div>";
 				html += "	</div>";
-				html += "	<div class='project-content' id='content-"+portfolio.id+"' style='display:none'></div>";
+				if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
+					html += "	<div class='project-content' id='content-"+portfolio.id+"' style='display:block'></div>";
+				else
+					html += "	<div class='project-content' id='content-"+portfolio.id+"' style='display:none'></div>";
 				html += "</div><!-- class='project'-->"
 				$("#projects").append($(html));
 				UIFactory["Portfolio"].displayComments('comments_'+portfolio.id,portfolio);
@@ -358,7 +364,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	}
 	if (type=='header'){
 		if ($("*:has(metadata[semantictag=header])",UICom.root.node).length==0)
-			alert("Error: header semantic tag is missing");
+			alertHTML("Error: header semantic tag is missing");
 		if (g_userrole=='designer') {
 			html += "   <div id='rootnode' style='position:absolute;top:70px;left:10px;'>";
 			html += "<button class='btn btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+UICom.rootid+"')\"><div class='btn-text'>Root</div></button>";
@@ -378,70 +384,6 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	//---------------------------------------
 	$('a[data-toggle=tooltip]').tooltip({html:true});
 };
-
-//======================
-UIFactory["Portfolio"].displayPortfolioOld = function(destid,type,langcode,edit)
-//======================
-{	var html = "";
-	$("#main-container").html("");
-	if (type==null || type==undefined)
-		type = 'standard';
-	//---------------------------------------
-	if (type=='standard'){
-		html += "<div id='navigation_bar'></div>";
-		html += "<div id='portfolio-navbar'></div>";
-		html += "<div id='main-container' class='container-fluid'>";
-		html += "	<div id='main-row' class='row'>";
-		html += "		<div class='col-md-3' id='sidebar'></div>";
-		html += "		<div class='col-md-9' id='contenu'></div>";
-		html += "	</div>";
-		html += "</div>";
-		html += "<div id='footer'></div>";
-		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
-	}
-	//---------------------------------------
-	if (type=='model'){
-		html += "<div id='navigation_bar'></div>";
-		html += "<div id='main-container' class='container-fluid'>";
-		html += "	<div id='contenu'>";
-		html += "	</div>";
-		html += "</div>";
-		html += "<div id='footer'></div>";
-		$("#"+destid).append($(html));
-	}
-	//---------------------------------------
-	if (type=='translate'){
-		html += "	<div class='row'>";
-		html += "		<div class='col-md-3' id='sidebar'></div>";
-		html += "		<div class='col-md-9' id='contenu'></div>";
-		html += "	</div>";
-		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
-	}
-	if (type=='header'){
-		if ($("*:has(metadata[semantictag=header])",UICom.root.node).length==0)
-			alert("Error: header semantic tag is missing");
-		if (g_userrole=='designer') {
-			html += "   <div id='rootnode' style='position:absolute;top:70px;left:10px;'>";
-			html += "<button class='btn btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+UICom.rootid+"')\"><div class='btn-text'>Root</div></button>";
-			html += "</div>";
-		}
-		html += "<div id='navigation_bar'></div>";
-		html += "<div id='main-header' class='container navbar navbar-fixed-top'>";
-		html += "   <div id='header'></div>";
-		html += "   <div id='menu'></div>";
-		html += "</div>";
-		html += "<div id='contenu' class='container header-container'></div>";
-		html += "<div id='footer'></div>";
-		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displayNodes('header',UICom.root.node,'header',LANGCODE,edit);
-		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,edit,UICom.root.node);
-	}
-	//---------------------------------------
-	$('a[data-toggle=tooltip]').tooltip({html:true});
-};
-
 
 //======================
 UIFactory["Portfolio"].displaySidebar = function(root,destid,type,langcode,edit,rootid)
@@ -560,7 +502,7 @@ UIFactory["Portfolio"].parse = function(data)
 			portfolios_byid[uuid] = new UIFactory["Portfolio"](items[i]);
 			tableau1[i] = [portfolios_byid[uuid].code_node.text(),uuid];
 		} catch(e) {
-			alert("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
+			alertHTML("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
 		}
 	}
 	var newTableau1 = tableau1.sort(sortOn1);
@@ -580,7 +522,7 @@ UIFactory["Portfolio"].parseBin = function(data)
 			portfolioid = $(items[i]).attr('id');
 			bin_list[i] = new UIFactory["Portfolio"](items[i]);
 		} catch(e) {
-			alert("Error UIFactory.Portfolio.parseBin:"+portfolioid+" - "+e.message);
+			alertHTML("Error UIFactory.Portfolio.parseBin:"+portfolioid+" - "+e.message);
 		}
 	}
 };
@@ -623,7 +565,7 @@ UIFactory["Portfolio"].create = function(parentcode)
 					window.location.reload();
 				},
 				error : function(jqxhr,textStatus) {
-					alert("Error : "+jqxhr.responseText);
+					alertHTML("Error : "+jqxhr.responseText);
 				}
 			});
 		}
@@ -750,7 +692,7 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 			result = $(portfolio).attr('id');
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Error in getid_bycode : "+jqxhr.responseText);
+			alertHTML("Error in getid_bycode : "+jqxhr.responseText);
 		}
 	});
 	$.ajaxSetup({async: true});
@@ -778,7 +720,7 @@ UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode,callb
 					callback(data);
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in instantiate_bycode : "+jqxhr.responseText);
+				alertHTML("Error in instantiate_bycode : "+jqxhr.responseText);
 			}
 	});
 	$.ajaxSetup({async: true});
@@ -805,7 +747,7 @@ UIFactory["Portfolio"].instantiate = function(templateid,targetcode,reload)
 					window.location.reload();
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in instantiate : "+jqxhr.responseText);
+				alertHTML("Error in instantiate : "+jqxhr.responseText);
 			}
 	});
 	$.ajaxSetup({async: true});
@@ -852,7 +794,7 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 									window.location.reload();
 							},
 							error : function(jqxhr,textStatus) {
-								alert("Error in instantiate_rename : "+jqxhr.responseText);
+								alertHTML("Error in instantiate_rename : "+jqxhr.responseText);
 							}
 						});
 					}
@@ -883,7 +825,7 @@ UIFactory["Portfolio"].copy_bycode = function(sourcecode,targetcode,reload)
 					window.location.reload();
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in copy_bycode : "+jqxhr.responseText);
+				alertHTML("Error in copy_bycode : "+jqxhr.responseText);
 			}
 	});
 	$.ajaxSetup({async: true});
@@ -910,7 +852,7 @@ UIFactory["Portfolio"].copy = function(templateid,targetcode,reload)
 					window.location.reload();
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in copy : "+jqxhr.responseText);
+				alertHTML("Error in copy : "+jqxhr.responseText);
 			}
 	});
 	$.ajaxSetup({async: true});
@@ -953,11 +895,11 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 							url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
 							success : function(data) {
 								$("#wait-window").hide();
-								if (reload!=null && reload)
-									window.location.reload();
+								$('#edit-window').modal('hide');
+								display_list_page();
 							},
 							error : function(jqxhr,textStatus) {
-								alert("Error in copy_rename : "+jqxhr.responseText);
+								alertHTML("Error in copy_rename : "+jqxhr.responseText);
 							}
 						});
 					}
@@ -1001,7 +943,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 		},
 		error : function(jqxhr,textStatus) {
 			$("#wait-window").hide();
-			alert("Error : "+jqxhr.responseText);
+			alertHTML("Error : "+jqxhr.responseText);
 		}
     });
 	//--------------------------
@@ -1039,7 +981,7 @@ UIFactory["Portfolio"].importZip = function(instance)
 		},
 		error : function(jqxhr,textStatus) {
 			$("#wait-window").hide();
-			alert("Error : "+jqxhr.responseText);
+			alertHTML("Error : "+jqxhr.responseText);
 		}
     });
 	//--------------------------
@@ -1071,7 +1013,7 @@ UIFactory["Portfolio"].remove = function(portfolioid)
 			$('[data-toggle=tooltip]').tooltip();
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Error in remove : "+jqxhr.responseText);
+			alertHTML("Error in remove : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1092,7 +1034,7 @@ UIFactory["Portfolio"].restore = function(portfolioid)
 			window.location.reload();
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Error in restore : "+jqxhr.responseText);
+			alertHTML("Error in restore : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1121,7 +1063,7 @@ UIFactory["Portfolio"].del = function(portfolioid)
 			}
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Error in del : "+jqxhr.responseText);
+			alertHTML("Error in del : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1303,7 +1245,7 @@ UIFactory["Portfolio"].callShare = function(portfolioid)
 			//--------------------------
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Error in callShare 1 : "+jqxhr.responseText);
+			alertHTML("Error in callShare 1 : "+jqxhr.responseText);
 		}
 	});
 	//------------------------------------
@@ -1317,7 +1259,7 @@ UIFactory["Portfolio"].callShare = function(portfolioid)
 			$("#sharing_designer").show();
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Error in callShare 2 : "+jqxhr.responseText);
+			alertHTML("Error in callShare 2 : "+jqxhr.responseText);
 		}
 	});
 
@@ -1337,13 +1279,15 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 		for (var i=0; i<groups.length; i++) {
 			var groupid = $(groups[i]).attr('id');
 			var label = $("label",groups[i]).text();
-			if (!first)
-				$("#"+destid).append($("<br>"));
-			first = false;
-			var input = "<input type='radio' name='radio_group' value='"+groupid+"'";
-			input += "onclick=\"$('input:checkbox').removeAttr('checked')\" ";
-			input +="> "+label+" </input>";
-			$("#"+destid).append($(input));
+			if (label!="user") {
+				if (!first)
+					$("#"+destid).append($("<br>"));
+				first = false;
+				var input = "<input type='radio' name='radio_group' value='"+groupid+"'";
+				input += "onclick=\"$('input:checkbox').removeAttr('checked')\" ";
+				input +="> "+label+" </input>";
+				$("#"+destid).append($(input));
+			}
 		}
 	} else {
 		$("#"+destid).html(karutaStr[LANG]['nogroup']);
@@ -1366,7 +1310,7 @@ UIFactory["Portfolio"].displayShared = function(destid,data)
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
 					if (Users_byid[userid]==undefined)
-						alert('error userid:'+userid);
+						alertHTML('error userid:'+userid);
 					else
 						html += "<div>"+Users_byid[userid].getView(null,"firstname-lastname-username")+"</div>";
 				}
@@ -1418,7 +1362,7 @@ UIFactory["Portfolio"].share = function(portfolioid)
 							UIFactory["Portfolio"].displayShared('shared',data);
 						},
 						error : function(jqxhr,textStatus) {
-							alert("Error in share : "+jqxhr.responseText);
+							alertHTML("Error in share : "+jqxhr.responseText);
 						}
 					});
 					//--------------------------
@@ -1459,11 +1403,11 @@ UIFactory["Portfolio"].shareUser = function(portfolioid,userid,role)
 					data : xml
 				});
 			} else
-				alert("Error in shareUser");
+				alertHTML("Error in shareUser");
 			//-----------------------------
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Error in shareUser : "+jqxhr.responseText);
+			alertHTML("Error in shareUser : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1498,11 +1442,11 @@ UIFactory["Portfolio"].unshareUser = function(portfolioid,userid,role)
 					data : xml
 				});
 			} else
-				alert("Error in shareUser");
+				alertHTML("Error in shareUser");
 			//-----------------------------
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Error in unshareUser : "+jqxhr.responseText);
+			alertHTML("Error in unshareUser : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1534,7 +1478,7 @@ UIFactory["Portfolio"].callUnShare = function(portfolioid)
 				UIFactory["Portfolio"].displayUnSharing('shared',data);
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in callUnshare 1 : "+jqxhr.responseText);
+				alertHTML("Error in callUnshare 1 : "+jqxhr.responseText);
 			}
 		});
 		//--------------------------		
@@ -1557,7 +1501,7 @@ UIFactory["Portfolio"].callUnShare = function(portfolioid)
 				//--------------------------
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in callunsShare 2 : "+jqxhr.responseText);
+				alertHTML("Error in callunsShare 2 : "+jqxhr.responseText);
 			}
 		});
 	}
@@ -1582,7 +1526,7 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data)
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
 					if (Users_byid[userid]==undefined)
-						alert('error userid:'+userid);
+						alertHTML('error userid:'+userid);
 					else
 						html += "<div>"+Users_byid[userid].getSelector('group',groupid,'select_users')+"</div>";
 				}
@@ -1623,7 +1567,7 @@ UIFactory["Portfolio"].unshare = function(portfolioid)
 				//--------------------------
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in unshare : "+jqxhr.responseText);
+				alertHTML("Error in unshare : "+jqxhr.responseText);
 			}
 		});
 	}
@@ -1653,6 +1597,18 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "	<ul class='nav navbar-nav navbar-right'>";
 	//-------------------- WELCOME PAGE EDIT -----------
 	html += "		<li id='welcome-edit'></li>";
+	if (g_welcome_add){
+		html += "	<li id='welcome-add'>";
+		var databack = false;
+		var callback = "UIFactory['Node'].reloadStruct";
+		var param2 = "'"+g_portfolioid+"'";
+		var param3 = null;
+		var param4 = null;
+		html += "		<a href='#xxx' onclick=\"javascript:importBranch('"+rootid+"','karuta.model','welcome-unit',"+databack+","+callback+","+param2+","+param3+","+param4+");alertHTML('"+karutaStr[LANG]['welcome-added']+"')\">";
+		html += karutaStr[LANG]['welcome-add'];
+		html += "		</a>";
+		html += "	</li>";
+	}
 	//-------------------- ACTIONS----------------------
 	html += "		<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
 	html += "			<ul class='dropdown-menu'>";

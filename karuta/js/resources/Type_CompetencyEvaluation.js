@@ -51,7 +51,7 @@ UIFactory["CompetencyEvaluation"] = function( node )
 		this.query_eval = query.substring(query.indexOf(';')+1);
 	}
 	this.display = {};
-//	alert(this.id+"/"+this.value_eval_node.text());
+//	alertHTML(this.id+"/"+this.value_eval_node.text());
 };
 
 /// Display

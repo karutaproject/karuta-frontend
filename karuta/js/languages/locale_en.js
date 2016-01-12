@@ -179,7 +179,7 @@ karutaStr['en']['projects']="My Projects";
 karutaStr['en']['portfolios']="My Portfolios not in a Project";
 karutaStr['en']['bin']="My Bin";
 karutaStr['en']['nogroup']="No Group";
-karutaStr['en']['karuta.model']="Create a Portfolio";
+karutaStr['en']['karuta.model']="Create a Portfolio Model";
 karutaStr['en']['code_portfolio']="Portfolio Code";
 karutaStr['en']['import_portfolio']="Import a Portfolio Model .xml";
 karutaStr['en']['import_zip']="Import a Portfolio Model .zip";
@@ -210,6 +210,8 @@ karutaStr['en']['create_tree']="Create an Empty Tree";
 karutaStr['en']['create_project']="Create a Project";
 karutaStr['en']['karuta.rubrics']="Create Rubrics";
 karutaStr['en']['karuta.parts']="Create Components";
+karutaStr['en']['welcome-add']="Add the Welcome Page";
+karutaStr['en']['welcome-added']="The Welcome Page has been added at the end of the portfolio model.<br>Move it up to the first position.";
 
 //=========================================
 //========== USERS ========================

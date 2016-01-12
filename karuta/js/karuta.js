@@ -28,6 +28,8 @@ var g_display_type = "";
 var g_edit = false;
 var g_visible = 'hidden';
 var g_welcome_edit = false;
+var g_welcome_add = false;  // we don't display add a welcome page
+var g_display_sidebar = true;
 var g_free_toolbar_visibility = 'hidden';
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_wysihtml5_autosave = 120000; // 120 seconds
@@ -50,8 +52,13 @@ function setDesignerRole(role)
 		var uuid = $("#page").attr('uuid');
 		var html = "";
 		html += "	<div id='main-row' class='row'>";
-		html += "		<div class='col-md-3' id='sidebar'></div>";
-		html += "		<div class='col-md-9' id='contenu'></div>";
+		if (g_display_sidebar) {
+			html += "		<div class='col-md-3' id='sidebar'></div>";
+			html += "		<div class='col-md-9' id='contenu'></div>";
+		} else {
+			html += "		<div class='col-md-3' id='sidebar' style='display:none'></div>";
+			html += "		<div class='col-md-12' id='contenu'></div>";
+		}
 		html += "	</div>";
 		$("#main-page").html(html);
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,true,UICom.rootid);
@@ -313,7 +320,7 @@ function getEditBox(uuid,js2) {
 //==================================
 function getEditBoxOnCallback(data,param2,param3,param4) {
 //==================================
-	var uuid = $("node",data).attr('id');//alert(uuid);
+	var uuid = $("node",data).attr('id');//alertHTML(uuid);
 	param2(param3,param4);
 	getEditBox(uuid);
 }
@@ -337,18 +344,18 @@ function DeleteBox()
 	html += "\n<!-- ==================== Delete box ==================== -->";
 	html += "\n<div id='delete-window' class='modal fade'>";
 	html += "\n		<div class='modal-dialog'>";
-	html += "\n		<div class='modal-content'>";
-	html += "\n	<div class='modal-header'>";
-	html += "\n		<div id='edit-window-type' style='float:right'></div>";
-	html += "\n		<h3 id='edit-window-title' >Attention</h3>";
-	html += "\n	</div>";
-	html += "\n	<div id='delete-window-body' class='modal-body'>";
-	html += "\n		<div id='delete-window-body-content'>";
+	html += "\n			<div class='modal-content'>";
+	html += "\n				<div class='modal-header'>";
+	html += "\n					<div id='edit-window-type' style='float:right'></div>";
+	html += "\n					<h3 id='edit-window-title' >Attention</h3>";
+	html += "\n				</div>";
+	html += "\n				<div id='delete-window-body' class='modal-body'>";
+	html += "\n					<div id='delete-window-body-content'>";
+	html += "\n					</div>";
+	html += "\n				</div>";
+	html += "\n				<div class='modal-footer' id='delete-window-footer'></div>";
+	html += "\n			</div>";
 	html += "\n		</div>";
-	html += "\n	</div>";
-	html += "\n	<div class='modal-footer' id='delete-window-footer'></div>";
-	html += "\n</div>";
-	html += "\n</div>";
 	html += "\n</div>";
 	html += "\n<!-- ============================================== -->";
 	return html;
@@ -363,6 +370,29 @@ function savedBox()
 	html += "\n<!-- ==================== Saved box ==================== -->";
 	html += "\n<div id='saved-window' class='modal hide'>";
 	html += "\n	<div id='saved-window-body' class='modal-body' style='text-align:center'>Saved</div>";
+	html += "\n</div>";
+	html += "\n<!-- ============================================== -->";
+	return html;
+}
+
+//==============================
+function alertBox()
+//==============================
+{
+	var html = "";
+	html += "\n<!-- ==================== Alert box ==================== -->";
+	html += "\n<div id='alert-window' class='modal fade'>";
+	html += "\n		<div class='modal-dialog'>";
+	html += "\n			<div class='modal-content'>";
+	html += "\n				<div class='modal-header'>";
+	html += "\n					<h3 id='alert-window-title' >Attention</h3>";
+	html += "\n				</div>";
+	html += "\n				<div id='alert-window-body' class='modal-body'>";
+	html += "\n				</div>";
+	html += "\n				<div id='alert-window-footer' class='modal-footer' >";
+	html += "\n				</div>";
+	html += "\n			</div>";
+	html += "\n		</div>";
 	html += "\n</div>";
 	html += "\n<!-- ============================================== -->";
 	return html;
@@ -805,7 +835,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 		url : "../../../"+serverFIL+"/mail",
 		data: xml,
 		success : function(data) {
-			alert(karutaStr[LANG]['email-sent']);
+			alertHTML(karutaStr[LANG]['email-sent']);
 		}
 	});
 }
@@ -815,7 +845,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 function getLanguage() {
 //==================================
 	var lang = Cookies.get('karuta-language');
-//	alert(lang);
+//	alertHTML(lang);
 	if (lang == null || lang==undefined || lang=='undefined') {
 		lang = languages[0];
 		setLanguage(lang);
@@ -873,10 +903,12 @@ function toggleProject(uuid) {
 		$("#toggleContent_"+uuid).removeClass("glyphicon-plus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-minus")
 		$("#content-"+uuid).show();
+		displayProject[uuid] = 'open';
 	} else {
 		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
 		$("#content-"+uuid).hide();
+		displayProject[uuid] = 'closed';
 	}
 }
 
@@ -887,10 +919,12 @@ function toggleSideBar() {
 	if ($("#sidebar").is(":visible"))
 	{
 		$("#sidebar").hide();
+		g_display_sidebar = false;
 		$("#contenu").removeClass().addClass('col-md-12');
 	} else {
 		$("#contenu").removeClass().addClass('col-md-9');
 		$("#sidebar").show();
+		g_display_sidebar = true;
 	}
 	UIFactory['Node'].reloadUnit();
 }
@@ -904,11 +938,13 @@ function toggleSocialNetwork() {
 		$("#toggleSocialNetwork").removeClass('fa-arrow-left').addClass('fa-users');
 		$("#main-page").removeClass().addClass('col-md-12');
 		$("#main-list").removeClass().addClass('col-md-12');
+		Cookies.set('socialnetwork','hidden',{ expires: 60 });
 	} else {
 		$("#main-page").removeClass().addClass('col-md-8');
 		$("#main-list").removeClass().addClass('col-md-8');
 		$("#socialnetwork").show();
 		$("#toggleSocialNetwork").removeClass('fa-users').addClass('fa-arrow-left');
+		Cookies.set('socialnetwork','shown',{ expires: 60 });
 	}
 }
 
@@ -939,7 +975,7 @@ function changeCss(className, classValue)
     cssMainContainer.append(className + " {" + classValue + "}\n");
 }
 
-//==================================
+//================================== not used
 function equalize_column_height(uuid)
 //==================================
 {
@@ -953,8 +989,28 @@ function equalize_column_height(uuid)
 	$("#node_"+uuid).find(".same-height").height(maxHeight);
 }
 
+//==================================
 function rgb(red, green, blue)
+//==================================
 {
     var rgb = blue | (green << 8) | (red << 16);
     return '#' + (0x1000000 + rgb).toString(16).slice(1)
+}
+
+//==================================
+function alertHTML(message,header,footer)
+//==================================
+{
+	if (header!=null) {
+		document.getElementById('alert-window-header').innerHTML = header;
+	}
+	if (footer!=null) {
+		document.getElementById('alert-window-footer').innerHTML = footer;
+	} else {
+		var buttons = "<button class='btn' onclick=\"javascript:$('#alert-window').modal('hide');\">" + karutaStr[LANG]["Close"] + "</button>";
+		document.getElementById('alert-window-footer').innerHTML = buttons;
+	}
+	$('#alert-window-body').html(message);
+	$('#alert-window').modal('show');
+
 }

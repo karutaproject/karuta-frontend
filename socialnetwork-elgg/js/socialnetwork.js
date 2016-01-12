@@ -70,15 +70,16 @@ function toggleReplyBox(objectid,tabid)
 
 
 //==================================
-function displaySocialNetwork(destid,elgg_key)
+function displaySocialNetwork()
 //==================================
 {
 	getElggUser();
 	setUserGroups($(USER.username_node).text());
 	var html = "";
+	$("#socialnetwork-head").html($(html));
 	html += "<div class='hello'>"+snStr[LANG]['hello'] + " " + USER.firstname_node.text()+" "+USER.lastname_node.text()+"</div>";
-	$("#"+destid+"-head").append($(html));
-	$("#"+destid+"-head").append($("<div class='welcome-line'></div>"));
+	$("#socialnetwork-head").append($(html));
+	$("#socialnetwork-head").append($("<div class='welcome-line'></div>"));
 	html  = "<div class='row'>";
 	html += "	<div class='col-md-3 user'><i class='fa fa-users'></i></div>";
 	html += "	<div class='col-md-9 publish'>";
@@ -87,7 +88,7 @@ function displaySocialNetwork(destid,elgg_key)
 	html += "			<textarea class='form-control' rows='3' id='wire-message'></textarea>";
 	html += "			<table><tr>";
 	html += "				<td class='publish-button'>";
-	html += "					<span onclick=\"postWire('"+destid+"-body');\" class='action-button'>"+snStr[LANG]["publish"]+"</span>";
+	html += "					<span onclick=\"postWire('socialnetwork-body');\" class='action-button'>"+snStr[LANG]["publish"]+"</span>";
 	html += "				</td>";
 	html += "				<td class='publish_on'>&nbsp;"+snStr[LANG]["publish_on"]+"&nbsp;</td> ";
 	html += "				<td class='group-button'>";
@@ -101,7 +102,7 @@ function displaySocialNetwork(destid,elgg_key)
 	html += "		</div>";
 	html += "	</div>";
 	html += "</div>";
-	$("#"+destid+"-head").html(html);
+	$("#socialnetwork-head").append(html);
 
 	html = "<div class='panels'>";
 
@@ -120,7 +121,7 @@ function displaySocialNetwork(destid,elgg_key)
 
 	html += "</div>";
 	display_select_group("select-group");
-	$("#"+destid+"-body").html(html);
+	$("#socialnetwork-body").html(html);
 	//------------------------------
 	getRiverFeed('activities');
 	getWall('public');
