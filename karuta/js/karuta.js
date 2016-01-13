@@ -936,12 +936,10 @@ function toggleSocialNetwork() {
 	{
 		$("#socialnetwork").hide();
 		$("#toggleSocialNetwork").removeClass('fa-arrow-left').addClass('fa-users');
-		$("#main-page").removeClass().addClass('col-md-12');
-		$("#main-list").removeClass().addClass('col-md-12');
+		$("#main-content").removeClass().addClass('col-md-12');
 		Cookies.set('socialnetwork','hidden',{ expires: 60 });
 	} else {
-		$("#main-page").removeClass().addClass('col-md-8');
-		$("#main-list").removeClass().addClass('col-md-8');
+		$("#main-content").removeClass().addClass('col-md-8 col-md-push-4');
 		$("#socialnetwork").show();
 		$("#toggleSocialNetwork").removeClass('fa-users').addClass('fa-arrow-left');
 		Cookies.set('socialnetwork','shown',{ expires: 60 });

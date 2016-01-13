@@ -126,9 +126,9 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-minus'></span></div>";
 				else
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-plus'></span></div>";
-				html += "		<div class='project-label col-md-2 col-xs-2'>"+portfolio.label_node[langcode].text()+"</div>";
-				html += "		<div class='project-label col-md-2 hidden-xs'>"+owner+"</div>";
-				html += "		<div id='comments_"+portfolio.id+"' class='col-md-4 col-xs-4 comments'></div><!-- comments -->";
+				html += "		<div class='project-label col-md-2 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"</div>";
+				html += "		<div class='project-label col-md-2 col-sm-3 hidden-xs'>"+owner+"</div>";
+				html += "		<div id='comments_"+portfolio.id+"' class='col-md-4 col-sm3 col-xs-4 comments'></div><!-- comments -->";
 				html += "		<div class='col-md-1 col-xs-1'>";
 				//------------ buttons ---------------
 				html += "			<div class='btn-group'>";
@@ -282,12 +282,12 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	var html = "";
 	if (type=='list') {
 
-		html += "<div class='col-md-1 col-xs-1' onclick=\"display_main_page('"+this.id+"')\"></div>";
-		html += "<div class='col-md-4 col-sm-4 col-xs-7' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-label' href='#'>"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
-		html += "<div class='col-md-2 hidden-sm hidden-xs ' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-owner' href='#'>"+owner+"</a></div>";
+		html += "<div class='col-md-1 col-sm-1 hidden-xs' onclick=\"display_main_page('"+this.id+"')\"></div>";
+		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-label' href='#'>"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
+		html += "<div class='col-md-2 col-sm-2 hidden-xs ' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-owner' href='#'>"+owner+"</a></div>";
 		html += "<div class='col-md-2 col-sm-2 hidden-xs' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-code' href='#'>"+this.code_node.text()+"</a></div>";
-		html += "<div class='col-md-1 col-xs-2' onclick=\"display_main_page('"+this.id+"')\">"+this.date_modified.substring(0,10)+"</div>";
-		html += "<div class='col-md-1 col-xs-1'>";
+		html += "<div class='col-md-2 col-sm-2 hidden-xs' onclick=\"display_main_page('"+this.id+"')\">"+this.date_modified.substring(0,10)+"</div>";
+		html += "<div class='col-md-1 col-sm-1 col-xs-1'>";
 		html += "<div class='btn-group'>";
 		//------------ buttons ---------------
 		if (USER.admin || this.owner=='Y') {
@@ -305,7 +305,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		}
 		html += "</div><!-- class='btn-group' -->";
 		html += "</div><!-- class='col-md-1' -->";
-		html += "<div class='col-md-1 hidden-xs'></div>";
+		html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
 	}
 	if (type=='bin') {
 		if (USER.admin || USER.creator){

@@ -158,11 +158,13 @@
 							var html = "";
 							html += "<div id='global-row' class='row'>";
 							if (g_socialnetwork==undefined || g_socialnetwork=='shown'){
-								html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-arrow-left fa-2x'></i>";
-								html += "	<div id='socialnetwork' class='col-md-4'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div>";
-								html += "	<div id='main-list' class='col-md-8'></div>";
-								html += "	<div id='main-page' class='col-md-8' style='display:none'></div>";
-								html += "	<div id='main-user' class='col-md-8' style='display:none'></div>";
+								html += "	<div id='main-content' class='col-md-8 col-md-push-4'>";
+								html += "		<div><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-arrow-left fa-2x'></i></div>";
+								html += "		<div id='main-list'></div>";
+								html += "		<div id='main-page' style='display:none'></div>";
+								html += "		<div id='main-user' style='display:none'></div>";
+								html += "	</div>";
+								html += "	<div id='socialnetwork' class='col-md-4 col-md-pull-8'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div>";
 							} else {
 								html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-users fa-2x'></i>";
 								html += "	<div id='socialnetwork' class='col-md-4' style='display:none'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div>";
