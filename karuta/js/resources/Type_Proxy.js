@@ -201,7 +201,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 					}
 				},
 				error : function(jqxhr,textStatus) {
-					alert("Server Error UIFactory.Proxy.prototype.displayEditor: "+textStatus);
+					alertHTML("Server Error UIFactory.Proxy.prototype.displayEditor: "+textStatus);
 					$("#wait-window").modal('hide');
 				}
 			});

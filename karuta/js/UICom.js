@@ -43,7 +43,7 @@ var UICom =
 					callback(data);
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in UICom.query : "+jqxhr.responseText);
+				alertHTML("Error in UICom.query : "+jqxhr.responseText);
 			}
 		};
 		jQuery.ajax(set);
@@ -157,7 +157,7 @@ var UICom =
 								UICom.parseStructure(data,false,$(current).attr("id"));
 							},
 							error : function(jqxhr,textStatus) {
-								alert("Error in parseElement - Get_Proxy : "+jqxhr.responseText);
+								alertHTML("Error in parseElement - Get_Proxy : "+jqxhr.responseText);
 							}
 						});
 					}
@@ -228,7 +228,7 @@ var UICom =
 					//----------------------------
 				}
 			} catch(e) {
-				alert('Error role in :'+attribute+"  --"+e); 
+				alertHTML('Error role in :'+attribute+"  --"+e); 
 			}
 		}
 	},
@@ -274,8 +274,8 @@ var UICom =
 				UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
-			alert("Error in UpdateMeta : "+jqxhr.responseText);
-//				alert(karutaStr[LANG]['disconnected']);
+			alertHTML("Error in UpdateMeta : "+jqxhr.responseText);
+//				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
 			}
 		});
@@ -299,8 +299,8 @@ var UICom =
 				UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in UpdateMetaWad : "+jqxhr.responseText);
-//				alert(karutaStr[LANG]['disconnected']);
+				alertHTML("Error in UpdateMetaWad : "+jqxhr.responseText);
+//				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
 			}
 		});
@@ -325,7 +325,7 @@ var UICom =
 					UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in UpdateMetaEpm : "+jqxhr.responseText);
+				alertHTML("Error in UpdateMetaEpm : "+jqxhr.responseText);
 			}
 		});
 	},
@@ -356,8 +356,8 @@ var UICom =
 					cb2(uuid,data);
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in UpdateResource : "+jqxhr.responseText);
-//				alert(karutaStr[LANG]['disconnected']);
+				alertHTML("Error in UpdateResource : "+jqxhr.responseText);
+//				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
 			}
 		});
@@ -403,8 +403,8 @@ var UICom =
 							cb(uuid,data);
 					},
 					error : function(jqxhr,textStatus) {
-						alert("Error in UpdateNode : "+jqxhr.responseText);
-//						alert(karutaStr[LANG]['disconnected']);
+						alertHTML("Error in UpdateNode : "+jqxhr.responseText);
+//						alertHTML(karutaStr[LANG]['disconnected']);
 //						window.location = "login.htm";
 					}
 				});
@@ -429,8 +429,8 @@ var UICom =
 						eval(callback+"('"+param1+"','"+param2+"')");
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in DeleteNode : "+jqxhr.responseText);
-//				alert(karutaStr[LANG]['disconnected']);
+				alertHTML("Error in DeleteNode : "+jqxhr.responseText);
+//				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
 			}
 

@@ -67,7 +67,7 @@ function display_list_users()
 			//----------------
 		},
 		error : function(jqxhr,textStatus) {
-			loadLanguages(function(data) {alert(karutaStr[LANG]['not-logged']);});
+			loadLanguages(function(data) {alertHTML(karutaStr[LANG]['not-logged']);});
 			window.location="login.htm?lang="+LANG;
 		}
 	});

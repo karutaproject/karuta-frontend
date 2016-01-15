@@ -4,6 +4,7 @@
 function display_main_page(portfolioid,role)
 //==============================
 {
+	g_welcome_add = false;
 	if (portfolioid!=null)
 		g_portfolioid = portfolioid;
 	changeCss("body", "background-color:white;");
@@ -28,7 +29,7 @@ function display_main_page(portfolioid,role)
 			url : "../../../"+serverBCK+"/credential/group/" + g_portfolioid,
 			success : function(data) {
 				var usergroups = $("group",data);
-				g_userrole = $("role",usergroups[0]).text();
+				g_userrole = $("role",usergroups).text();
 				if (g_userrole=='designer')
 					g_designerrole = true;
 				if (g_userrole=='')
@@ -59,6 +60,9 @@ function display_main_page(portfolioid,role)
 			// --------------------------
 			UICom.parseStructure(data);
 			UIFactory["Portfolio"].parse(data);
+			if ($("asmUnit:has(metadata[semantictag='welcome-unit'])",data).length==0 && $("asmRoot:has(metadata[semantictag*='karuta-model'])",data).length>0) {
+				g_welcome_add = true;
+			}
 			// ================================= CSS Portfolio ========================
 			var portfolio_navbar_color = "#e0006d"; // --- default value
 			if ($("asmContext:has(metadata[semantictag='portfolio-navbar'])",data).length>0) {
@@ -88,7 +92,7 @@ function display_main_page(portfolioid,role)
 				var portfolio_sidebar_link_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).attr("id");
 				portfolio_sidebar_link_color = UICom.structure["ui"][portfolio_sidebar_link_id].resource.getValue();
 			}
-			changeCss(".sidebar-link", "color:"+portfolio_sidebar_link_color+";padding:9px;");
+			changeCss(".sidebar-link", "color:"+portfolio_sidebar_link_color+";padding-right:9px;");
 			changeCss(".sidebar-link a", "color:"+portfolio_sidebar_link_color+";");
 			//--------------------------------
 			var portfolio_sidebar_link_selected_color = "#09bbd9"; // --- default value

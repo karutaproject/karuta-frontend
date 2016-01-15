@@ -241,7 +241,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			} else if (query.indexOf('parent')>-1) {
 				parent = $(this.node).parent().parent();
 			}
-//			alert('query'+query+'--parentid'+$(parent).attr("id"));
+//			alertHTML('query'+query+'--parentid'+$(parent).attr("id"));
 			var code_parent = "";
 			if (queryattr_value.indexOf('#')>0)
 				code_parent = semtag_parent;
@@ -252,7 +252,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				code_parent = decrypt(code_parent.substring(3),g_rc4key);
 			//----------------------
 			var portfoliocode_parent = $("portfoliocode",$("asmContext:has(metadata[semantictag='"+semtag_parent+"'])",parent)).text();
-//			alert('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
+//			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 			var url ="";
 			if (portfoliocode=='?'){
 				$(this.portfoliocode_node).text(code_parent);
@@ -278,7 +278,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				}
 
 			});
-		} catch(e) { alert(e);
+		} catch(e) { alertHTML(e);
 			// do nothing - error in the search attribute
 		}
 	}
@@ -292,6 +292,11 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 		langcode = LANGCODE;
 	if (!self.multilingual)
 		langcode = NONMULTILANGCODE;
+	//---------------------
+	var self_code = $(self.code_node).text();
+	if (self.encrypted)
+		self_code = decrypt(self_code.substring(3),g_rc4key);
+	//---------------------
 	//---------------------
 	var self_value = $(self.value_node).text();
 	if (self.encrypted)
@@ -363,9 +368,12 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 				});
 				$(select_item).append($(select_item_a))
 				//-------------- update button -----
-				if (code!="" && self_value==code) {
-					selected_value = code;
-					$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
+				if (code!="" && self_code==$('code',resource).text()) {
+					if (($('code',resource).text()).indexOf("#")>-1)
+						$("#button_"+self.id).html(code+" "+$(srce+"[lang='"+languages[langcode]+"']",resource).text());
+					else
+						$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 				}
 			}
 			$(select).append($(select_item));

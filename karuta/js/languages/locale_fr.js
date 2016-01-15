@@ -157,7 +157,7 @@ karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPre
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
 karutaStr['fr']['seltype']="Présentation ";
 karutaStr['fr']['shareroles']="Rôles - Partager";
-karutaStr['fr']['submitted']="Soumis";
+karutaStr['fr']['submitted']="Soumis le ";
 karutaStr['fr']['notsubmitted']="Non soumis";
 karutaStr['fr']['collapsible']="Repliable";
 karutaStr['fr']['incrementroles']="Rôles - Incrémenter seulement";
@@ -208,8 +208,10 @@ karutaStr['fr']['karuta.batch']="Créer un modèle batch";
 karutaStr['fr']['karuta.report']="Créer un modèle de rapport";
 karutaStr['fr']['create_tree']="Créer un arbre vide";
 karutaStr['fr']['create_project']="Créer un projet";
-karutaStr['fr']['karuta.rubrics']="Créer Rubrics";
+karutaStr['fr']['karuta.rubrics']="Créer un référentiel";
 karutaStr['fr']['karuta.parts']="Créer des composantes";
+karutaStr['fr']['welcome-add']="Ajouter la page de bienvenue";
+karutaStr['fr']['welcome-added']="La page de bienvenue a été ajoutée à la fin du modèle de porfolio.<br>Montez la en première position.";
 
 //=========================================
 //========== USERS ========================

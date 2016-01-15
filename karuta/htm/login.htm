@@ -81,7 +81,7 @@
 						window.location="karuta.htm";
 				},
 				error : function(jqxhr,textStatus) {
-					alert("Identification : "+jqxhr.responseText);
+					alertHTML("Identification : "+jqxhr.responseText);
 				}
 			});
 		}
@@ -101,11 +101,11 @@
 				url : "../../../"+serverBCK+"/credential/forgot",
 				data: data,
 				success : function(data) {
-					alert(karutaStr[LANG]['password-sent']);
+					alertHTML(karutaStr[LANG]['password-sent']);
 					window.location="login.htm?lang="+LANG;
 				},
 				error : function(jqxhr,textStatus) {
-					alert("Identification : "+jqxhr.responseText);
+					alertHTML("Identification : "+jqxhr.responseText);
 				}
 			});
 		}

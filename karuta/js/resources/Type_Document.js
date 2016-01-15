@@ -159,7 +159,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		if ($(this.filename_node[langcode]).text()!="") {
 			var filename = $(this.filename_node[langcode]).text();
 			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-			//alert(extension);
+			//alertHTML(extension);
 			html = "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><div class='doc-up'><p style='text-align:center;'>"+$(this.filename_node[langcode]).text()+"</p></div><div class='doc-bottom'><span>Document</span></div></a>";
 		} else
 			html = "<div class='doc-up'><p style='text-align:center;'>"+karutaStr[LANG]['no-document']+"</p></div><div class='doc-bottom'><span>Document</span></div>";

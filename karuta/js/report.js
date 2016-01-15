@@ -343,7 +343,7 @@ function processPortfolios(no,xmlDoc,destid,data,line)
 	var portfolioid = "";
 	for ( var j = 0; j < portfolios_list.length; j++) {
 		var code = portfolios_list[j].code_node.text();
-//		alert(j+"-"+code);
+//		alertHTML(j+"-"+code);
 		if (select.indexOf("code*=")>-1) {
 			value = select.substring(7,select.length-1);  // inside quote
 			condition = code.indexOf(value)>-1;
@@ -499,7 +499,12 @@ function getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 				url : urlS,
 				success : function(data) {
 					g_dashboard_models[model_code] = data;
-					processPortfolio(0,data,destid,node,0);
+					try {
+						processPortfolio(0,data,destid,node,0);
+					}
+					catch(err) {
+						alertHTML("Error in Dashboard : " + err.message);
+					}
 					$("#wait-window").modal('hide');
 				}
 			 });

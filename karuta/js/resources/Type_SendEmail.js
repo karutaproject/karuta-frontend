@@ -269,7 +269,7 @@ UIFactory["SendEmail"].send = function(obj,itself,langcode)
 		url : "../../../"+serverFIL+"/mail",
 		data: xml,
 		success : function() {
-			alert(karutaStr[LANG]['email-sent']);
+			alertHTML(karutaStr[LANG]['email-sent']);
 			$("#edit-window").modal("hide");
 		}
 	});

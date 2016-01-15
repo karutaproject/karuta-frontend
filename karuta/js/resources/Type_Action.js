@@ -202,7 +202,7 @@ UIFactory["Action"].prototype.displayEditor = function(destid,type,langcode)
 					}
 				},
 				error : function(jqxhr,textStatus) {
-					alert("Server Error UIFactory.Action.prototype.displayEditor: "+textStatus);
+					alertHTML("Server Error UIFactory.Action.prototype.displayEditor: "+textStatus);
 					$("#wait-window").modal('hide');
 				}
 			});

@@ -437,7 +437,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 
 /* ============================================== */
 #edit-window-body-resource .btn{
-	height:34px;
+	min-height:34px;
 }
 /* ============================================== */
 
@@ -593,6 +593,7 @@ hr {
 	border-top:1px solid @row-node-border-color;
 }
 
+.asmUnitStructure .asmUnitStructure .row-node,
 .asmStructure .row-node,
 .asmRoot .row-node{
 	border-top:0px solid lightgrey;
@@ -1100,6 +1101,7 @@ a.active:over{
 
 button.select-label {
 	min-width:300px;
+	max-width:90%;
 	word-wrap: break-word;
 	white-space: normal;
 	text-align:left;

@@ -30,14 +30,6 @@ UIFactory["Node"] = function( node )
 		this.userrole = $(node).attr('role');
 		if (this.userrole==undefined || this.userrole=='')
 			this.userrole = "norole";
-		//--------------------
-		this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='nodeRes']",node)[0]);
-		if (this.lastmodified_node.length==0){  // for backward compatibility
-			var newelement = createXmlElement("lastmodified");
-			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
-		}
-		this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='nodeRes']",node));
-		//--------------------
 		this.label_node = [];
 		for (var i=0; i<languages.length;i++){
 			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
@@ -84,7 +76,7 @@ UIFactory["Node"] = function( node )
 		this.display_node = {}; // to refresh after changes (metadataepm)
 	}
 	catch(err) {
-		alert("UIFactory['Node']--"+err.message+"--"+this.id+"--"+this.resource_type);
+		alertHTML("UIFactory['Node']--"+err.message+"--"+this.id+"--"+this.resource_type);
 	}
 };
 
@@ -195,7 +187,6 @@ UIFactory["Node"].updateLabel = function(input,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
 	$(itself.label_node[langcode]).text(label);
 	itself.save();
@@ -214,7 +205,6 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var code = $.trim($("#code_"+itself.id).val());
 	$(itself.code_node).text(code);
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
@@ -390,7 +380,7 @@ UIFactory["Node"].duplicate = function(uuid)
 		},
 		error : function(jqxhr,textStatus) {
 			$("#wait-window").modal('hide');			
-			alert("Error in Node.duplicate "+textStatus+" : "+jqxhr.responseText);
+			alertHTML("Error in Node.duplicate "+textStatus+" : "+jqxhr.responseText);
 		}
 	});
 };
@@ -718,6 +708,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					if (node.resource.type!='Dashboard' || g_userrole=='designer')
 						html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 					html += "</div><!-- inside-full-height -->";
+					//-------------- context -------------------------
+					html += "<div id='comments_"+uuid+"' class='inside-full-height comments'></div><!-- comments -->";
 					html += "</td>";
 				}
 
@@ -935,10 +927,15 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
 				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-10'></div></div>"));
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
-				if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
-					processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,g_portfolio_current,0);
-				else
-					getModelAndPortfolio(model_code,g_portfolio_current,"dashboard_"+uuid,g_dashboard_models);
+				try {
+					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
+						processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,g_portfolio_current,0);
+					else
+						getModelAndPortfolio(model_code,g_portfolio_current,"dashboard_"+uuid,g_dashboard_models);
+				}
+				catch(err) {
+					alertHTML("Error in Dashboard : " + err.message);
+				}
 			}
 			// ================================= For each child =====================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
@@ -999,7 +996,7 @@ UIFactory["Node"].updateIpadPosition = function (obj,top,left)
 {
 	var nodeid = obj.getAttribute("uuid");
     var offset = $(obj).offset();
-    alert(top+"-"+left+"/"+offset.top+"-"+offset.left);
+    alertHTML(top+"-"+left+"/"+offset.top+"-"+offset.left);
 	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',top);
 	UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',left);
 };
@@ -1826,7 +1823,7 @@ UIFactory['Node'].upNode = function(nodeid)
 			$("#edit-window").modal('hide');	
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Move "+textStatus+" : "+jqxhr.responseText);
+			alertHTML("Move "+textStatus+" : "+jqxhr.responseText);
 		}
 	});
 };
@@ -1847,7 +1844,7 @@ UIFactory['Node'].moveNode = function(nodeid)
 				$("#edit-window").modal('hide');	
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Move "+textStatus+" : "+jqxhr.responseText);
+				alertHTML("Move "+textStatus+" : "+jqxhr.responseText);
 			}
 		});
 };
@@ -1902,11 +1899,15 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved)
 	for( var i=0;i<root.children.length;++i )
 	{
 		var uuid = root.children[i];
-		var label = UICom.structure["ui"][uuid].label_node[langcode].text();
-		var name = UICom.structure["ui"][uuid].asmtype;
-		if (name!='asmContext' && (typemoved != "asmUnit" || name != "asmUnit") && (uuid !=idmoved)){
-			html += "<option uuid = '"+uuid+"'>"+label+"</option>";
-			html += UIFactory["Node"].getSubNodes(UICom.structure["tree"][uuid], idmoved, typemoved);
+		var semantictag = UICom.structure["ui"][uuid].semantictag;
+		if (semantictag!="welcome-navbar" && semantictag!="welcome-sidebar" && semantictag!="welcome-colors") {
+			var label = UICom.structure["ui"][uuid].label_node[langcode].text();
+			var name = UICom.structure["ui"][uuid].asmtype;
+			if (name!='asmContext' && (typemoved != "asmUnit" || name != "asmUnit") && (uuid !=idmoved)){
+				if (semantictag!="welcome-unit")
+					html += "<option uuid = '"+uuid+"'>"+label+"</option>";
+				html += UIFactory["Node"].getSubNodes(UICom.structure["tree"][uuid], idmoved, typemoved);
+			}
 		}
 	}
 	return html;
@@ -1960,6 +1961,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'none':$(node.metadatawad).attr('delnoderoles');
 	var submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
 	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
+	var submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
 	var menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
 	var moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'none':$(node.metadatawad).attr('moveroles');
@@ -2057,24 +2059,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html += "</span><!-- class='dropdown -->";
 		}
 	}
-	//------------- submit  -------------------
-	if (submitroles!='none' && submitroles!='') {
-		if ( submitted!='Y' && submitnode && ( submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer' || submitroles.indexOf($(USER.username_node).text())>-1)) {
-			html += "<span id='submit-"+node.id+"' class='button button-border' onclick=\"javascript:submit('"+node.id+"')\" ";
-			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
-		} else {
-			if (submitted=='Y') {
-				if (USER.admin) {
-					html += "<span id='submit-"+node.id+"' class='button button-border' onclick=\"javascript:reset('"+node.id+"')\" ";
-					html += " >"+karutaStr[languages[langcode]]['button-unsubmit']+"</span>";
-				}
-				html += "<div class='btn btn-xs disabled alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+"</div>";
-			} 
-			else {
-				html += "<div class='btn btn-xs disabled alert alert-danger'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
-			}
-		}
-	}
 	//------------- private button -------------------
 	if ((showroles==g_userrole || USER.admin || g_userrole=='designer') && showroles!='none' && showroles!='') {
 		if (privatevalue) {
@@ -2155,7 +2139,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 				}
 			}
 		} catch(e){
-			alert('Menu Error: check the format: '+e);
+			alertHTML('Menu Error: check the format: '+e);
 		}
 	}
 	//------------- share node button ---------------
@@ -2163,6 +2147,24 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html += "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='Partager' rel='tooltip'></span>";
 	}
 	html += "</div><!-- class='btn-group' -->";
+	//------------- submit  -------------------
+	if (submitroles!='none' && submitroles!='') {
+		if ( submitted!='Y' && submitnode && ( submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer' || submitroles.indexOf($(USER.username_node).text())>-1)) {
+			html += "<span id='submit-"+node.id+"' class='button button-border' onclick=\"javascript:submit('"+node.id+"')\" ";
+			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
+		} else {
+			if (submitted=='Y') {
+				if (USER.admin) {
+					html += "<span id='submit-"+node.id+"' class='button button-border' onclick=\"javascript:reset('"+node.id+"')\" ";
+					html += " >"+karutaStr[languages[langcode]]['button-unsubmit']+"</span>";
+				}
+				html += "<div class='btn btn-xs disabled alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+submitteddate+"</div>";
+			} 
+			else {
+				html += "<div class='btn btn-xs disabled alert alert-danger'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
+			}
+		}
+	}
 	//--------------------------------------------------
 	if (html!="")
 		html = "<div id='btn-"+node.id+"'>" + html + "</div><!-- #btn-+node.id -->";
@@ -2936,7 +2938,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	}
 	html += karutaStr[languages[langcode]]['help3']+"</label>";
 	$("#metadata_texts").append($(html));
-	UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'help',$(node.metadatawad).attr('help'));
+	UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'help',$(node.metadatawad).attr('help'),'x100');
 };
 
 //==================================

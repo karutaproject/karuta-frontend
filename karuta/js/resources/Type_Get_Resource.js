@@ -32,13 +32,6 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Get_Resource';
-	//--------------------
-	if ($("lastmodified",$("asmResource[xsi_type='Get_Resource']",node)).length==0){  // for backward compatibility
-		var newelement = createXmlElement("lastmodified");
-		$("asmResource[xsi_type='Get_Resource']",node)[0].appendChild(newelement);
-	}
-	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Get_Resource']",node));
-	//--------------------
 	this.code_node = $("code",$("asmResource["+clause+"]",node));
 	this.value_node = $("value",$("asmResource[xsi_type='Get_Resource']",node));
 	this.label_node = [];
@@ -155,10 +148,16 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
 	if (code.indexOf("@")>-1)
-		code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
-	label = "<span class='"+code+"'>"+label+"</span>";
+		code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+	if (code.indexOf("#")>-1)
+		code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+	var html = "";
+	html += "<span class='"+code+"'>";
+	if (($(this.code_node).text()).indexOf("#")>-1)
+		html += code+ " ";
+	html += label+"</span>";
 	$("#"+dest).html("");
-	$("#"+dest).append($(label));
+	$("#"+dest).append($(html));
 };
 
 

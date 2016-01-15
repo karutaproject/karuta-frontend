@@ -77,6 +77,7 @@ function show_list_page()
 	changeCss("#main-container .row .row", "background-color:initial;");
 	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 	$("#sub-bar").html(getListSubBar());
+	setWelcomeTitles();
 	var navbar_html = getNavBar('list',null);
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","display_list_page()");
@@ -157,7 +158,7 @@ function display_list_page()
 			UIFactory["Portfolio"].displayAll('portfolios','list');
 		},
 		error : function(jqxhr,textStatus) {
-			alert("Server Error GET active: "+textStatus);
+			alertHTML("Server Error GET active: "+textStatus);
 		}
 	});
 	//----------------
@@ -172,7 +173,7 @@ function display_list_page()
 				UIFactory["Portfolio"].displayBin('bin','bin');
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Server Error GET bin: "+textStatus);
+				alertHTML("Server Error GET bin: "+textStatus);
 			}
 		});
 	}
