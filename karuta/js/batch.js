@@ -318,7 +318,7 @@ function processElggGroupMembers()
 //=================================================
 {
 	if (g_join_elgg_goups.length==0)
-		processCreateTrees();
+		processDeleteTrees();
 	else {
 		$("#log").append("<br>---------------------join_elgg_goups-------------------------------");
 		for  (var j=0; j<g_join_elgg_goups.length; j++) {
@@ -336,10 +336,69 @@ function createElggGroupMember(node)
 	var callback = function (param1){
 		g_nb_joinElggGroup[g_noline]++;
 		if (g_nb_joinElggGroup[g_noline]==g_join_elgg_goups.length) {
-			processCreateTrees();
+			processDeleteTrees();
 		}
 	};
 	addGroupMember(group,identifier,callback,null,true);
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Delete Tree ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function processDeleteTrees()
+//=================================================
+{
+	if (g_delete_trees.length==0)
+		processCreateTrees();
+	else {
+		$("#log").append("<br>---------------------delete_trees-------------------------------");
+		for  (var j=0; j<g_delete_trees.length; j++) {
+			deleteTree(g_delete_trees[j]);
+		}
+	}
+}
+
+//=================================================
+function deleteTree(node)
+//=================================================
+{
+	var code = getTxtvals($("code",node));
+	//----- get tree id -----
+	var portfolioid = UIFactory["Portfolio"].getid_bycode(code,false);
+	if (portfolioid!=undefined) {
+		var url = "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid;
+		$.ajax({
+			type : "DELETE",
+			contentType: "application/xml",
+			dataType : "xml",
+			url : url,
+			data : "",
+			success : function(data) {
+				$("#log").append("<br>- tree deleted - code:|"+code+"| portfolioid:"+portfolioid);
+				//===========================================================
+				g_nb_deleteTree[g_noline]++;
+				if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {
+					processCreateTrees();
+				}
+				//===========================================================
+			},
+			error : function(jqxhr,textStatus) {
+				alert("Error in del : "+jqxhr.responseText);
+			}
+		});
+	} else {
+		$("#log").append("<br>- tree deleted - code:|"+code+" ---- NOT FOUND ----");
+		//===========================================================
+		g_nb_deleteTree[g_noline]++;
+		if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {
+			processCreateTrees();
+		}
+		//===========================================================
+	}
 }
 
 //-----------------------------------------------------------------------
@@ -461,6 +520,12 @@ function selectTree(node)
 	return portfolio;
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Copy Tree -----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
 //=================================================
 function processCopyTrees()
 //=================================================
@@ -474,12 +539,6 @@ function processCopyTrees()
 		}
 	}
 }
-
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//------------------------- Copy Tree -----------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
 
 //=================================================
 function copyTree(node)
@@ -837,7 +896,7 @@ function processShareTrees()
 //=================================================
 {
 	if (g_share_trees.length==0)
-		processDeleteTrees();
+		processImportNodes();
 	else {
 		$("#log").append("<br>---------------------share_trees-------------------------------");
 		for (var j=0; j<g_share_trees.length; j++) {
@@ -902,7 +961,7 @@ function shareTree(node)
 									if (g_nb_shareTree[g_noline]==g_share_trees.length) {
 										g_noline++;
 										if (g_noline>=g_json.lines.length)
-											processDeleteTrees();
+											processImportNodes();
 										else
 											processLine();
 									}
@@ -925,53 +984,18 @@ function shareTree(node)
 		if (g_nb_shareTree[g_noline]==g_share_trees.length) {
 			g_noline++;
 			if (g_noline>=g_json.lines.length)
-				processDeleteTrees();
-			else
-				processLine();
+				processImportNodes();
 		}
 		//===========================================================
 	}
 }
 
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//------------------------ Delete Tree ----------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
 
-//=================================================
-function processDeleteTrees()
-//=================================================
-{
-	if (g_delete_trees.length==0)
-		processEnd();
-	else {
-		$("#log").append("<br>---------------------delete_trees-------------------------------");
-		for  (var j=0; j<g_delete_trees.length; j++) {
-			deleteTree(g_delete_trees[j]);
-		}
-		g_noline++;
-		if (g_noline==g_json.lines.length)
-			processEnd();
-		else
-			processLine();
-	}
-}
-
-//=================================================
-function deleteTree(node)
-//=================================================
-{
-	var code = getTxtvals($("code",node));
-	//----- get tree id -----
-	var portfolioid = UIFactory["Portfolio"].getid_bycode(code,false);
-	if (portfolioid!=undefined) {
-		UIFactory["Portfolio"].del(portfolioid);
-		$("#log").append("<br>- tree deleted - code:|"+code+"| portfolioid:"+portfolioid);
-	} else {
-		$("#log").append("<br>- tree deleted - code:|"+code+" ---- NOT FOUND ----");
-	}
-}
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Import Node ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
 //=================================================
 function processImportNodes()
@@ -991,12 +1015,6 @@ function processImportNodes()
 			processLine();
 	}
 }
-
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//------------------------- Impot Node ----------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
 
 //=================================================
 function importNode(node)

@@ -757,7 +757,6 @@ function getSendPublicURL(uuid,langcode)
 	html += "</div>";
 	$("#edit-window-body").html(html);
 	//--------------------------
-	$('#edit-window').modal('show');
 }
 
 //==================================
