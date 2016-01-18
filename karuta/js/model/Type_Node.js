@@ -481,7 +481,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	//----------------- WELCOME BLOCKS ------------------------
 	var welcome_blocks = $(data).find("asmUnitStructure:has(metadata[semantictag='welcome-page'])").children("asmUnitStructure:has(metadata[semantictag='welcome-block'])");
 	for (var i=0; i<welcome_blocks.length; i++) {
-		UIFactory["Node"].displayBlock(welcome_blocks[i],'welcome-blocks',depth,langcode,edit,inline,backgroundParent,1);
+		UIFactory["Node"].displayWelcomeBlock(welcome_blocks[i],'welcome-blocks',depth,langcode,edit,inline,backgroundParent,1);
 	}
 	//---------------------------------------
 	if (g_userrole=='designer') {
@@ -532,7 +532,7 @@ UIFactory["Node"].getContentStyle = function(uuid)
 
 
 //==================================================
-UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,backgroundParent)
+UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,inline,backgroundParent)
 //==================================================
 {
 	var html = "";
@@ -572,7 +572,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 	$("#"+dest).append(html);
 	for (var i=0; i<welcome_blocks.length; i++) {
 		var welcome_blockid = $(welcome_blocks[i]).attr("id");
-		UIFactory["Node"].displayBlock(welcome_blocks[i],'welcome_sub'+welcome_blockid,depth,langcode,edit,inline,backgroundParent);
+		UIFactory["Node"].displayWelcomeBlock(welcome_blocks[i],'welcome_sub'+welcome_blockid,depth,langcode,edit,inline,backgroundParent);
 	}
 	//-------------------------------------------------------
 }
@@ -939,22 +939,45 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			// ================================= For each child =====================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
-			var gotDisplay = false;
-			if (semtag=="EuropassL"){
-				gotDisplay = true;
-				UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid);
-			}
-			if (!gotDisplay && semtag!='bubble_level1') {
-				for( var i=0; i<root.children.length; ++i ) {
-					// Recurse
-					var child = UICom.structure["tree"][root.children[i]];
-					var childnode = UICom.structure["ui"][root.children[i]];
-					var childsemtag = $(childnode.metadata).attr('semantictag');
-					var freenode = ($(childnode.metadatawad).attr('freenode')==undefined)?'':$(childnode.metadatawad).attr('freenode');
-					if (contentfreenode == 'Y' || freenode == 'Y')
-						UIFactory["Node"].displayFree(child, 'content-'+uuid, depth-1,langcode,edit,inline);
-					else
-						UIFactory["Node"].displayStandard(child, 'content-'+uuid, depth-1,langcode,edit,inline,backgroundParent);
+			if (semtag.indexOf('asmColumns')>-1) {
+					//----------------- BLOCKS ------------------------
+					var blockid = $(root.node).attr("id");
+					style = UIFactory["Node"].getContentStyle(blockid);
+					html = "<div class='row asmColumn' style='"+style+"'>";
+					var blocks = $(root.node).children("asmUnitStructure:has(metadata[semantictag*='asmColumn'])");
+					var lgcolumn = Math.floor(12/blocks.length);
+					for (var i=0; i<blocks.length; i++) {
+						var blockid = $(blocks[i]).attr("id");
+						html += "<div id='column_"+blockid+"' class='col-md-"+lgcolumn+"' style='"+style+"'>";
+						html += "</div><!-- class='col-md' -->";
+					}
+					html += "</div><!-- class='row' -->";
+					$("#content-"+uuid).append(html);
+					for (var i=0; i<blocks.length; i++) {
+						var blockid = $(blocks[i]).attr("id");
+						var child = UICom.structure["tree"][blockid];
+						UIFactory["Node"].displayStandard(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent);
+					}
+					//---------------------------------------
+//				}				
+			} else {
+				var gotDisplay = false;
+				if (semtag=="EuropassL"){
+					gotDisplay = true;
+					UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid);
+				}
+				if (!gotDisplay && semtag!='bubble_level1') {
+					for( var i=0; i<root.children.length; ++i ) {
+						// Recurse
+						var child = UICom.structure["tree"][root.children[i]];
+						var childnode = UICom.structure["ui"][root.children[i]];
+						var childsemtag = $(childnode.metadata).attr('semantictag');
+						var freenode = ($(childnode.metadatawad).attr('freenode')==undefined)?'':$(childnode.metadatawad).attr('freenode');
+						if (contentfreenode == 'Y' || freenode == 'Y')
+							UIFactory["Node"].displayFree(child, 'content-'+uuid, depth-1,langcode,edit,inline);
+						else
+							UIFactory["Node"].displayStandard(child, 'content-'+uuid, depth-1,langcode,edit,inline,backgroundParent);
+					}
 				}
 			}
 			//------------- javascript dashboard --------------------
