@@ -1972,6 +1972,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		langcode = LANGCODE;
 	if (menu==null)
 		menu = true;
+	var semantictag = $(node.metadata).attr('semantictag');
 	var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var submitnode = ($(node.node).attr('submit')=='Y')? true:false;
@@ -2050,7 +2051,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			var freenodevalue = ($(node.metadatawad).attr('freenode')==undefined)?'':$(node.metadatawad).attr('freenode');
 			var contentfreenodevalue = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
 			var freenode = ((freenodevalue=='Y')?true:false) || ((contentfreenodevalue=='Y')?true:false);
-			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnitStructure','asmUnitStructure',databack,callback,param2,param3,param4,freenode);
+			if (semantictag.indexOf("asmColumns")>-1)
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmColumn','asmColumn',databack,callback,param2,param3,param4,freenode);
+			else
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnitStructure','asmUnitStructure',databack,callback,param2,param3,param4,freenode);
 			html += "<hr>";
 			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','TextField','TextField',databack,callback,param2,param3,param4,freenode);
 			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Field','Field',databack,callback,param2,param3,param4,freenode);
