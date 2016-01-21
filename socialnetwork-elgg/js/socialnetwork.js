@@ -603,8 +603,8 @@ function loginElgg(username,password,callback)
 {
 	if (username=='root')
 		username = 'karuta_'+username;
-	var url = "../../../../"+elgg_url_base+"services/api/rest/xml?method=auth.gettoken&username="+username+"&password="+password;
-	var data = "method=auth.gettoken&username="+username+"&password="+password;
+	var elggusername = username.replace('@', '_');
+	var url = "../../../../"+elgg_url_base+"services/api/rest/xml?method=auth.gettoken&username="+elggusername+"&password="+password;
 	$.ajax({
 		dataType : "json",
 		type : "POST",
@@ -645,8 +645,11 @@ function getElggUser()
 function user_register(name, email, username, password,callback,param1)
 //=================================================
 {
+	var elggusername = username.replace('@', '_');
+	if (elggusername.length<6)
+		elggusername += "_____";
 	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
-	var data = "auth_token="+g_elgg_key+"&method=user.register&name="+name+"&username="+username+"&password="+password+"&email="+email;
+	var data = "auth_token="+g_elgg_key+"&method=user.register&name="+name+"&username="+elggusername+"&password="+password+"&email="+email;
 	$.ajax({
 		type : "POST",
 		dataType : "json",

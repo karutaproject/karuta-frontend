@@ -49,6 +49,9 @@ var g_nb_shareTree = new Array();
 var g_delete_trees = null;
 var g_nb_deleteTree = new Array();
 //-----------------------
+var g_import_nodes = null;
+var g_nb_importNode = new Array();
+//-----------------------
 
 //==================================
 function getTxtvals(node)
@@ -87,6 +90,7 @@ function processAll()
 	g_update_resources = $("update-resource",g_xmlDoc);
 	g_share_trees = $("share-tree",g_xmlDoc);
 	g_delete_trees = $("delete-tree",g_xmlDoc);
+	g_import_nodes = $("import-node",g_xmlDoc);
 	processLine();
 }
 
@@ -104,6 +108,7 @@ function processLine()
 	g_nb_updateResource[g_noline] = 0;
 	g_nb_shareTree[g_noline] = 0;
 	g_nb_deleteTree[g_noline] = 0;
+	g_nb_importNode[g_noline] = 0;
 	$("#log").append("<br>================ LINE "+(g_noline+1)+" =========================================");
 	processElggGroups();
 }
@@ -427,54 +432,81 @@ function createTree(node,treeref)
 //=================================================
 {
 	var code = getTxtvals($("code",node));
-	var label = getTxtvals($("label",node));
-	var template = getTxtvals($("template",node));
-	//----- create tree from template -----
-	var portfolioid = "";
-	if (!trace)
-		portfolioid = UIFactory["Portfolio"].instantiate_bycode(template,code);
-	var portfolio = new Array();
-	portfolio [0] = portfolioid;
-	portfolio [1] = code;
-	g_trees[treeref] = portfolio;
-	//----- update tree label -----
-	if (code!="" && label!="" && !trace)
+	if (code!="") {
 		$.ajax({
 			async:false,
 			type : "GET",
 			dataType : "xml",
 			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag=root",
 			success : function(data) {
-				var nodeid = $("asmRoot",data).attr('id');
-				var xml = "<asmResource xsi_type='nodeRes'>";
-				xml += "<code>"+code+"</code>";
-				for (var lan=0; lan<languages.length;lan++)
-					xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
-				xml += "</asmResource>";
-				$.ajax({
-					async:false,
-					type : "PUT",
-					contentType: "application/xml",
-					dataType : "text",
-					data : xml,
-					url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
-					success : function(data) {
-						$("#log").append("<br>- tree created ("+portfolioid+") - code:"+code);
-						//===========================================================
-						g_nb_createTree[g_noline]++;
-						if (g_create_trees.length==g_nb_createTree[g_noline]) {
-							processSelectTrees();
+				$("#log").append("<br>- tree already created - code:"+code);
+				//===========================================================
+				g_nb_createTree[g_noline]++;
+				if (g_create_trees.length==g_nb_createTree[g_noline]) {
+					processSelectTrees();
+				}
+				//===========================================================
+			},
+			error : function(data) {
+				var label = getTxtvals($("label",node));
+				var template = getTxtvals($("template",node));
+				//----- create tree from template -----
+				var portfolioid = "";
+				if (!trace)
+					portfolioid = UIFactory["Portfolio"].instantiate_bycode(template,code);
+				var portfolio = new Array();
+				portfolio [0] = portfolioid;
+				portfolio [1] = code;
+				g_trees[treeref] = portfolio;
+				//----- update tree label -----
+				if (code!="" && label!="" && !trace) {
+					$.ajax({
+						async:false,
+						type : "GET",
+						dataType : "xml",
+						url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag=root",
+						success : function(data) {
+							var nodeid = $("asmRoot",data).attr('id');
+							var xml = "<asmResource xsi_type='nodeRes'>";
+							xml += "<code>"+code+"</code>";
+							for (var lan=0; lan<languages.length;lan++)
+								xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
+							xml += "</asmResource>";
+							$.ajax({
+								async:false,
+								type : "PUT",
+								contentType: "application/xml",
+								dataType : "text",
+								data : xml,
+								url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
+								success : function(data) {
+									$("#log").append("<br>- tree created ("+portfolioid+") - code:"+code);
+									//===========================================================
+									g_nb_createTree[g_noline]++;
+									if (g_create_trees.length==g_nb_createTree[g_noline]) {
+										processSelectTrees();
+									}	
+									//===========================================================
+								},
+								error : function(data) {
+									$("#log").append("<br>- ERROR in  create tree - code:"+code);
+								}
+							});
 						}
-						//===========================================================
-					},
-					error : function(data) {
-						$("#log").append("<br>- ERROR in  create tree - code:"+code);
+					});
+				} else {
+					$("#log").append("<br>-TRACE tree created - template:"+template+" - code:"+code+" - label:"+label);
+					//===========================================================
+					g_nb_createTree[g_noline]++;
+					if (g_create_trees.length==g_nb_createTree[g_noline]) {
+						processSelectTrees();
 					}
-				});
+					//===========================================================
+				}
 			}
 		});
-	else {
-		$("#log").append("<br>-TRACE tree created - template:"+template+" - code:"+code+" - label:"+label);
+	} else {
+		$("#log").append("<br>-ERROR in  create tree - code is empty");
 		//===========================================================
 		g_nb_createTree[g_noline]++;
 		if (g_create_trees.length==g_nb_createTree[g_noline]) {
@@ -482,6 +514,7 @@ function createTree(node,treeref)
 		}
 		//===========================================================
 	}
+
 }
 
 //-----------------------------------------------------------------------
@@ -1042,7 +1075,7 @@ function processEnd()
 //=================================================
 {
 	g_noline++;
-	if (g_noline>=g_json.lines.length) {
+	if (g_json==null || g_noline>=g_json.lines.length) {
 		$("#log").append("<br>================ END ========================================================");
 		if (demo)
 			window.location.reload();

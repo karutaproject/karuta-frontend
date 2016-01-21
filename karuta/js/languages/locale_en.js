@@ -170,6 +170,7 @@ karutaStr['en']['list_portfolios']="Portfolios";
 karutaStr['en']['list_users']="Users";
 karutaStr['en']['list_roles']="Roles";
 karutaStr['en']['list_groups']="Groups";
+karutaStr['en']['create-test-user']="Create a Test User";
 
 //=========================================
 //========== PORTFOLIOS ===================

@@ -1,22 +1,26 @@
 
 
 //==============================
-function display_main_page(portfolioid,role)
+function show_main_page(portfolioid,role)
 //==============================
 {
-	g_welcome_add = false;
-	if (portfolioid!=null)
-		g_portfolioid = portfolioid;
 	changeCss("body", "background-color:white;");
 	$("#main-page").html("");
 	$("#main-page").show();
 	$("#main-list").hide();
 	$("#main-user").hide();
-	$("#wait-window").modal('show');
-	$("#wait-spin").spin();
-	$("#refresh").show();
-	$("#refresh").attr("onclick","display_main_page('"+g_portfolioid+"')");
+	$("#main-exec-batch").hide();
+	$("#main-exec-report").hide();
 	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
+}
+
+//==============================
+function fill_main_page(portfolioid,role)
+//==============================
+{
+	g_welcome_add = false;
+	if (portfolioid!=null)
+		g_portfolioid = portfolioid;
 	//-------------------------------------------
 	userrole = role;
 	if (userrole=='undefined')
@@ -29,15 +33,16 @@ function display_main_page(portfolioid,role)
 			url : "../../../"+serverBCK+"/credential/group/" + g_portfolioid,
 			success : function(data) {
 				var usergroups = $("group",data);
-				g_userrole = $("role",usergroups).text();
-				if (g_userrole=='designer')
+				for (var i=0;i<usergroups.length;i++) {
+					g_userroles[i+1] = $("role",usergroups[i]).text();
+				}
+				g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
+				if (g_userroles[1]=='designer')
 					g_designerrole = true;
-				if (g_userrole=='')
-					g_userrole='none';
 			}
 		});
 	} else {
-		g_userrole='designer'
+		g_userroles[0] = g_userroles[1] ='designer';
 		g_designerrole = true;
 	}
 	$.ajax({
@@ -203,3 +208,16 @@ function display_main_page(portfolioid,role)
 	});
 	$(".free-toolbar").css('visibility')=='hidden';
 }
+
+//==============================
+function display_main_page(portfolioid,role)
+//==============================
+{
+	if($("#contenu").length) {
+		show_main_page(portfolioid,role);
+	} else{
+		fill_main_page(portfolioid,role);
+		show_main_page(portfolioid,role);		
+	}
+}
+

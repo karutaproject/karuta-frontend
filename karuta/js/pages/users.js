@@ -14,23 +14,14 @@ function show_list_users()
 	$("#main-list").hide();
 	$("#main-page").hide();
 	$("#main-user").show();
+	$("#main-exec-batch").hide();
+	$("#main-exec-report").hide();
 }
 
 //==============================
-function display_list_users()
+function fill_list_users()
 //==============================
 {
-	
-	changeCss("body", "background-color:#e0006d;");
-	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
-	var navbar_html = getNavBar('list',null);
-	$("#navigation-bar").html(navbar_html);
-	$("#refresh").attr("onclick","display_list_users()");
-	$("#refresh").show();
-	$("#main-list").hide();
-	$("#main-page").hide();
-	$("#main-user").show();
-
 	var html = "";
 	html += "<span id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
 	html += "<h3>"+karutaStr[LANG]['active_users']+"</h3>";
@@ -72,5 +63,16 @@ function display_list_users()
 		}
 	});
 	$.ajaxSetup({async: true});
+}
 
+//==============================
+function display_list_users()
+//==============================
+{
+	if ($("#user-create").length) {
+		show_list_users();
+	} else {
+		fill_list_users();
+		show_list_users();
+	}
 }

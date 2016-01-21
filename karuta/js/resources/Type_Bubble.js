@@ -88,7 +88,7 @@ UIFactory["Bubble"].bubble.prototype.displayView = function(destid,type,lang)
 	if (type==null)
 		type='detail';
 	if (type=='detail') {
-		if ( (writenode && editnoderoles.indexOf(g_userrole)>-1) || g_userrole=='designer') {
+		if ( (writenode && editnoderoles.indexOf(g_userrole)>-1) || g_userroles[0]=='designer') {
 			html += "<div class='btn-group bubble-btn-group'>";
 			html += "<span class='button glyphicon glyphicon-pencil' onclick=\"Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\" data-title='Éditer' rel='tooltip'></span>";
 			html += "</div><!-- class='btn-group' -->";

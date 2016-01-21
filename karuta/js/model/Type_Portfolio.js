@@ -365,7 +365,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	if (type=='header'){
 		if ($("*:has(metadata[semantictag=header])",UICom.root.node).length==0)
 			alertHTML("Error: header semantic tag is missing");
-		if (g_userrole=='designer') {
+		if (g_userroles[0]=='designer') {
 			html += "   <div id='rootnode' style='position:absolute;top:70px;left:10px;'>";
 			html += "<button class='btn btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+UICom.rootid+"')\"><div class='btn-text'>Root</div></button>";
 			html += "</div>";
@@ -515,6 +515,7 @@ UIFactory["Portfolio"].parse = function(data)
 UIFactory["Portfolio"].parseBin = function(data) 
 //==================================
 {
+	bin_list = [];
 	var portfolioid ="";
 	var items = $("portfolio",data);
 	for ( var i = 0; i < items.length; i++) {
@@ -896,7 +897,7 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 							success : function(data) {
 								$("#wait-window").hide();
 								$('#edit-window').modal('hide');
-								display_list_page();
+								fill_list_page();
 							},
 							error : function(jqxhr,textStatus) {
 								alertHTML("Error in copy_rename : "+jqxhr.responseText);
@@ -1030,8 +1031,7 @@ UIFactory["Portfolio"].restore = function(portfolioid)
 		url : url,
 		data : "",
 		success : function(data) {
-			$("#wait-window").hide();
-			window.location.reload();
+			display_list_page();
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in restore : "+jqxhr.responseText);
@@ -1096,7 +1096,7 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callUnShare('"+portfolioid+"')\" href='#'>"+karutaStr[LANG]['unshare']+"</a></li>";
 	}
 	html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a></li>";
-	if (USER.admin || g_userrole=='designer') {
+	if (USER.admin || g_userroles[0]=='designer') {
 		html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a></li>";
 		html += "<li><a href='#' onclick=\"$('.metainfo').css('visibility','hidden');g_visible='hidden'\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
 		html += "<li><a href='#' onclick=\"$('.metainfo').css('visibility','visible');g_visible='visible'\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
@@ -1190,14 +1190,18 @@ UIFactory["Portfolio"].rename = function(itself,langcode)
 //----------------------------------------------------------------------------------
 
 //==================================
-UIFactory["Portfolio"].callShare = function(portfolioid)
+UIFactory["Portfolio"].callShare = function(portfolioid,langcode)
 //==================================
 {
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['Portfolio'].share('"+portfolioid+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['addshare']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['addshare']);
+	$("#edit-window-title").html(karutaStr[LANG]['addshare']+' '+portfolios_byid[portfolioid].label_node[langcode].text());
 	var html = "";
 	html += "<h4>"+karutaStr[LANG]['shared']+"</h4>";
 	html += "<div id='shared'></div>";
@@ -1452,14 +1456,18 @@ UIFactory["Portfolio"].unshareUser = function(portfolioid,userid,role)
 };
 
 //==================================
-UIFactory["Portfolio"].callUnShare = function(portfolioid)
+UIFactory["Portfolio"].callUnShare = function(portfolioid,langcode)
 //==================================
 {
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['Portfolio'].unshare('"+portfolioid+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['unshare']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['unshare']);
+	$("#edit-window-title").html(karutaStr[LANG]['unshare']+' '+portfolios_byid[portfolioid].label_node[langcode].text());
 	var html = "";
 	html += "<h4>"+karutaStr[LANG]['shared']+"</h4>";
 	html += "<div id='shared'></div>";
@@ -1616,7 +1624,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "			</ul>";
 	html += "		</li>";
 	//-------------------- ROLES-------------------------
-	if (g_userrole=='designer') {
+	if (g_userroles[0]=='designer') {
 		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Role : <span id='userrole'>designer</span><span class='caret'></span></a>";
 		html += "	<ul class='dropdown-menu pull-right'>";
 		html += "		<li><a href='#' onclick=\"setDesignerRole('designer')\">designer</a></li>";

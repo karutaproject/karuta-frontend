@@ -64,6 +64,22 @@
 				<text lang="en" />
 			</asmResource>
 		</asmUnitStructure>
+		//===================== asmColumn =======================
+		<asmUnitStructure xsi_type="asmUnitStructure">
+			<metadata-wad seenoderoles="all" collapsible="Y"/>
+			<metadata-epm background-color="#f2f2f2"/>
+			<metadata multilingual-node="Y" semantictag ="asmColumn" sharedNode="N" sharedNodeResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<lastmodified />
+				<code />
+				<label lang="fr">Nouvelle colonne</label>
+				<label lang="en">New Column</label>
+			</asmResource>
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
+		</asmUnitStructure>
 		//===================== TextField =======================
 		<asmContext xsi_type="">
 			<metadata-wad seenoderoles="all" />

@@ -161,7 +161,7 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	$(group1).append(div1);
 	$(form).append(group1);
 	//------
-	if (g_userrole=='designer' || USER.admin){
+	if (g_userroles[0]=='designer' || USER.admin){
 		var group2 = $("<div class='form-group calendar-format'><label class='col-sm-3 control-label'>Diplay Format</label></div>");
 		var div2 = $("<div class='col-sm-9'></div>");
 		html = "<input type='text' class='form-control' style='width:150px;' ";

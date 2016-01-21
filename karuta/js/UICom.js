@@ -111,7 +111,7 @@ var UICom =
 	parseElement: function(currentNode)
 	//=======================================================================
 	{
-		if (g_userrole=='designer')
+		if (g_userroles[0]=='designer')
 			UICom.addRoles(currentNode.node);
 		var current = currentNode.node;
 		var children = $(current).children();
@@ -211,7 +211,7 @@ var UICom =
 							roles = subitems[3].split(" ");
 							//----------------------------
 							for (var j=0;j<roles.length;j++){
-								if (roles[j]!='all' && roles[j]!='' && roles[j]!='user')
+								if (roles[j]!='' && roles[j]!='user')
 									UICom.roles[roles[j]] = true;
 							}
 						}
@@ -222,7 +222,7 @@ var UICom =
 					roles = $("metadata-wad",node).attr(attribute).split(" ");
 					//----------------------------
 					for (var i=0;i<roles.length;i++){
-						if (roles[i]!='all' && roles[i]!='' && roles[j]!='user')
+						if (roles[i]!='' && roles[j]!='user')
 							UICom.roles[roles[i]] = true;
 					}
 					//----------------------------

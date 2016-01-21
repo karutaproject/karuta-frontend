@@ -161,7 +161,7 @@ UIFactory["SendEmail"].prototype.getEditor = function(type,langcode)
 	var htmlFormObj = $("<form class='form-horizontal'></form>");
 	//---------------------
 	if(type=='default')
-		if (g_userrole=='designer' || USER.admin) {
+		if (g_userroles[0]=='designer' || USER.admin) {
 			//------------------------
 			var htmlFirstGroupObj = $("<div class='form-group'></div>");
 			var htmlFirstLabelObj = $("<label for='firstname"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['firstname']+"</label>");

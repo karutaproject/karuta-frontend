@@ -20,6 +20,7 @@ var portfolioid = null;
 
 // -------------------
 var g_userrole = "";
+var g_userroles = [];
 var g_portfolioid = "";
 var g_designerrole = false;
 var g_rc4key = "";
@@ -45,7 +46,7 @@ function setDesignerRole(role)
 	USER.admin = false;
 	if (role=='')
 		role = 'designer';
-	g_userrole = role;
+	g_userroles[0] = role;
 	fillEditBoxBody();
 	$("#userrole").html(" ("+role+")");
 	if (g_display_type=='standard'){
@@ -68,7 +69,7 @@ function setDesignerRole(role)
 		displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);
 	}
 	if (g_display_type=='header'){
-		if (g_userrole!='designer')
+		if (g_userroles[0]!='designer')
 			$("#rootnode").hide();
 		else
 			$("#rootnode").show();
@@ -117,10 +118,10 @@ function getNavBar(type,portfolioid,edit)
 	//-------------------LANGUAGES---------------------------
 	if (languages.length>1) {
 		html += "			<ul class='nav navbar-nav'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' href='#'><img style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' href='#'><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu'>";
 		for (var i=0; i<languages.length;i++) {
-			html += "			<li><a href='#' onclick=\"setLanguage('"+languages[i]+"');eval('display_"+type+"_page();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();')\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+			html += "			<li><a href='#' onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 		}
 		html += "					</ul>";
 		html += "				</li>";
@@ -133,15 +134,13 @@ function getNavBar(type,portfolioid,edit)
 			html += "				<li>&nbsp;</li>";
 			html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
 			html += "					<ul class='dropdown-menu'>";
-			html += "						<li><a href='#' onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</li>";
-			if ($("#main-user").html()!="")
-				html += "						<li><a href='#' onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</li>";
+			html += "						<li><a href='#' onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
+			if ($("#main-user").length && $("#main-user").html()!="")
+				html += "						<li><a href='#' onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
 			else
-				html += "						<li><a href='#' onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</li>";
-			html += "						<li><a href='../../karuta/htm/createBatch.htm'>"+karutaStr[LANG]['batch']+"</a></li>";
-			html += "						<li><a href='../../karuta/htm/createReport.htm'>"+karutaStr[LANG]['report']+"</a></li>";
-	//		html += "						<li><a href='../../karuta/htm/listRoles.htm'>"+karutaStr[LANG]['list_roles']+"</a></li>";
-	//		html += "						<li><a href='../../karuta/htm/listGroups.htm'>"+karutaStr[LANG]['list_groups']+"</a></li>";
+				html += "						<li><a href='#' onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
+			html += "						<li><a href='#' onclick='display_exec_batch()'>"+karutaStr[LANG]['batch']+"</a></li>";
+			html += "						<li><a href='#' onclick='display_exec_report()'>"+karutaStr[LANG]['report']+"</a></li>";
 			html += "					</ul>";
 			html += "				</li>";
 			html += "			</ul>";
@@ -156,6 +155,8 @@ function getNavBar(type,portfolioid,edit)
 		html += " 					<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
+		if (USER.creator && !USER.admin)
+			html += "						<li><a href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a></li>";
 		html += "						<li class='divider'></li><li><a href='login.htm?lang="+LANG+"''>Logout</a></li>";
 		html += "					</ul>";
 		html += "				</li>";
@@ -201,7 +202,7 @@ function fillEditBoxBody()
 //==============================
 {
 	var html = "";
-	if (g_userrole=='designer' || USER.admin) {
+	if (g_userroles[0]=='designer' || USER.admin) {
 		html += "\n			<div role='tabpanel'>";
 		html += "\n				<ul class='nav nav-tabs' role='tablist'>";
 		html += "\n					<li role='presentation' class='active'><a href='#edit-window-body-main' aria-controls='edit-window-body-main' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
@@ -301,7 +302,7 @@ function getEditBox(uuid,js2) {
 		$("#edit-window-body-node").html($(html));
 	}
 	// ------------admin and designer----------
-	if (USER.admin || g_userrole=='designer') {
+	if (USER.admin || g_userroles[0]=='designer') {
 		var editHtml = UIFactory["Node"].getMetadataAttributesEditor(UICom.structure["ui"][uuid]);
 		$("#edit-window-body-metadata").html($(editHtml));
 		UIFactory["Node"].displayMetadataTextsEditor(UICom.structure["ui"][uuid]);
@@ -518,7 +519,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 {
 	$("#wait-window").modal('show');
 	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
-	if (USER.admin || g_userrole=='designer') {
+	if (USER.admin || g_userroles[0]=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
@@ -862,6 +863,7 @@ function setLanguage(lang) {
 //==================================
 	Cookies.set('karuta-language',lang,{ expires: 60 });
 	LANG = lang;
+	$("#flagimage").attr("src","../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
 			LANGCODE = i;
@@ -1010,4 +1012,21 @@ function alertHTML(message,header,footer)
 	$('#alert-window-body').html(message);
 	$('#alert-window').modal('show');
 
+}
+
+
+
+//==================================
+String.prototype.containsArrayElt = function (rolesarray) 
+//==================================
+	// usage : if (editnoderoles.containsArrayElt(g_userroles)) 
+{
+	var result = false;
+	for (var i=0;i<rolesarray.length;i++){
+		if (this.indexOf(rolesarray[i])>-1){
+			result = true;
+			i = rolesarray.length;
+		}
+	}
+	return result;
 }

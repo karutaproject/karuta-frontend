@@ -80,30 +80,19 @@ function show_list_page()
 	setWelcomeTitles();
 	var navbar_html = getNavBar('list',null);
 	$("#navigation-bar").html(navbar_html);
-	$("#refresh").attr("onclick","display_list_page()");
+	$("#refresh").attr("onclick","fill_list_page()");
 	$("#refresh").show();
 	$("#main-page").hide();
 	$("#main-user").hide();
 	$("#main-list").show();
+	$("#main-exec-batch").hide();
+	$("#main-exec-report").hide();
 }
 
 //==============================
-function display_list_page()
+function fill_list_page()
 //==============================
 {
-	
-	changeCss("body", "background-color:#e0006d;");
-	changeCss("#main-container .row .row", "background-color:initial;");
-	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
-	$("#sub-bar").html(getListSubBar());
-	var navbar_html = getNavBar('list',null);
-	$("#navigation-bar").html(navbar_html);
-	$("#refresh").attr("onclick","display_list_page()");
-	$("#refresh").show();
-	$("#main-page").hide();
-	$("#main-user").hide();
-	$("#main-list").show();
-	//-------------------------------------------
 	var html = "";
 	html += "<div class='projects'>";
 	html += "	<div id='menu'></div>";
@@ -176,5 +165,17 @@ function display_list_page()
 				alertHTML("Server Error GET bin: "+textStatus);
 			}
 		});
+	}
+}
+
+//==============================
+function display_list_page()
+//==============================
+{
+	if ($("#list-menu").length) {
+		show_list_page();
+	} else {
+		fill_list_page();
+		show_list_page();
 	}
 }
