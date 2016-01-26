@@ -12,12 +12,16 @@ function show_main_page(portfolioid,role)
 	$("#main-exec-batch").hide();
 	$("#main-exec-report").hide();
 	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
+	$("#refresh").attr("onclick","fill_main_page()");
+	$("#refresh").show();
 }
 
 //==============================
 function fill_main_page(portfolioid,role)
 //==============================
 {
+	var html = "";
+	$("#main-page").html(html);
 	g_welcome_add = false;
 	if (portfolioid!=null)
 		g_portfolioid = portfolioid;
@@ -167,16 +171,16 @@ function fill_main_page(portfolioid,role)
 				UIFactory["Portfolio"].displayPortfolio('main-page',g_display_type,LANGCODE,g_edit);
 			// --------------------------
 			$('a[data-toggle=tooltip]').tooltip({html:true});
-			// --------------------------			// --------------------------
-			if (g_display_type=="standard") {
+			// --------------------------
+			if (g_display_type=="standard" || g_display_type=="model" || g_display_type=="translate") {
 				$("#navigation-bar").html(getNavBar('main',g_portfolioid,g_edit));
 				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 			}
-			if (g_display_type=="model") {
-				$("#navigation-bar").html(getNavBar('main',g_portfolioid,g_edit));
-				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
+//			if (g_display_type=="model") {
+//				$("#navigation-bar").html(getNavBar('main',g_portfolioid,g_edit));
+//				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 //				loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',g_portfolioid,g_edit));displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);});
-			}
+//			}
 			if (g_display_type=="header")
 				$("#navigation_bar").html(getNavBar('main',g_portfolioid,g_edit));
 			//---------------------------
@@ -213,11 +217,7 @@ function fill_main_page(portfolioid,role)
 function display_main_page(portfolioid,role)
 //==============================
 {
-	if($("#contenu").length) {
-		show_main_page(portfolioid,role);
-	} else{
-		fill_main_page(portfolioid,role);
-		show_main_page(portfolioid,role);		
-	}
+	fill_main_page(portfolioid,role);
+	show_main_page(portfolioid,role);		
 }
 

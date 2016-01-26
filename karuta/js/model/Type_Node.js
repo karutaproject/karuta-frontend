@@ -403,7 +403,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (type=='standard') {
+	if (type=='standard' || type=='translate') {
 		for( var i=0;i<root.children.length;i++ )
 		{
 			var child = UICom.structure["tree"][root.children[i]].node;
@@ -1419,16 +1419,16 @@ UIFactory["Node"].displayTranslate = function(root,dest,depth)
 		if (name == "asmContext"){
 			html += "<div class='row'  style='padding-top:5px;padding-bottom:5px;border:1px dashed lightgrey'>";
 			//-------------- node -----------------------------
-			html += "<div id='trs_node_"+uuid+"' class='span4'>";
+			html += "<div id='trs_node_"+uuid+"' >";
 			if (multilingual_node)
 				for (var lang=0; lang<languages.length;lang++) {
-					html += "<div><label><span class='lang'>"+karutaStr[languages[lang]]['label']+"</span>&nbsp;";
-					html += " <span id='get_nodeeditor_"+uuid+languages[lang]+"'></span> </label>";
+					html += "<div><span class='lang'>"+karutaStr[languages[lang]]['label']+"</span>&nbsp;";
+					html += " <span id='get_nodeeditor_"+uuid+languages[lang]+"'></span>";
 					html += "</div>";
 				}
 			else {
-				html += "<div><label><span class='lang'>"+karutaStr[LANG]['label']+"</span>&nbsp;";
-				html += " <span id='get_nodeeditor_"+uuid+LANG+"'></span> </label>";
+				html += "<div><span class='lang'>"+karutaStr[LANG]['label']+"</span>&nbsp;";
+				html += " <span id='get_nodeeditor_"+uuid+LANG+"'></span>";
 				html += "</div>";
 			}
 				
@@ -1478,13 +1478,13 @@ UIFactory["Node"].displayTranslate = function(root,dest,depth)
 				html += "<div id='trs_node_"+uuid+"' class='span4'>";
 				if (multilingual_node)
 					for (var lang=0; lang<languages.length;lang++) {
-						html += "<div><label><span class='lang'>"+karutaStr[languages[lang]]['label']+"</span>&nbsp;";
-						html += " <span id='get_nodeeditor_"+uuid+languages[lang]+"'></span> </label>";
+						html += "<div><span class='lang'>"+karutaStr[languages[lang]]['label']+"</span>&nbsp;";
+						html += " <span id='get_nodeeditor_"+uuid+languages[lang]+"'></span>";
 						html += "</div>";
 					}
 				else {
-					html += "<div><label><span class='lang'>"+karutaStr[LANG]['label']+"</span>&nbsp;";
-					html += " <span id='get_nodeeditor_"+uuid+LANG+"'></span> </label>";
+					html += "<div><span class='lang'>"+karutaStr[LANG]['label']+"</span>&nbsp;";
+					html += " <span id='get_nodeeditor_"+uuid+LANG+"'></span>";
 					html += "</div>";
 				}
 					

@@ -334,6 +334,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 {	var html = "";
 	if (type==null || type==undefined)
 		type = 'standard';
+	g_display_type = type;
 	//---------------------------------------
 	if (type=='standard'){
 		html += "	<div id='main-row' class='row'>";
@@ -394,7 +395,7 @@ UIFactory["Portfolio"].displaySidebar = function(root,destid,type,langcode,edit,
 		type = 'standard';
 	if (type=='standard' || type=='translate' || type=='model'){
 		html += "<div id='sidebar-content'><div  class='panel-group' id='parent-"+rootid+"' role='tablist'></div></div>";
-		$("#"+destid).append($(html));
+		$("#"+destid).html($(html));
 		UIFactory["Node"].displaySidebar(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
 	}
 };
