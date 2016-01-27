@@ -36,6 +36,13 @@ UIFactory["Item"] = function( node )
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Item']",node));
 	//--------------------
 	this.code_node = $("code",$("asmResource[xsi_type='Item']",node));
+	//--------------------
+	if ($("value",$("asmResource[xsi_type='Item']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("value");
+		$("asmResource[xsi_type='Item']",node)[0].appendChild(newelement);
+	}
+	this.value_node = $("value",$("asmResource[xsi_type='Item']",node));
+	//--------------------
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='Item']",node));
@@ -112,28 +119,18 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 	}
 
 	html += "<span class='code_Item'>"+$(this.code_node).text()+" </span>";
+	if ($(this.value_node).text()!='')
+		html += " <span class='value_Item'>["+$(this.value_node).text()+"] </span>";
 	html +=  "<span class='label_Item "+code+"'> "+$(this.label_node[langcode]).text()+"</span>";
 	return html;
 };
 
 /// Editor
 //==================================
-UIFactory["Item"].update = function(obj,itself,langcode)
+UIFactory["Item"].update = function(itself,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!itself.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
-	var code = $("input[name='code_Item']",obj).val();
-	$(itself.code_node).text(code);
-	var label = $("input[name='label_Item']",obj).val();
-	$(itself.label_node[langcode]).text(label);
 	itself.save();
 };
 
@@ -155,28 +152,46 @@ UIFactory["Item"].prototype.getEditor = function(type,langcode)
 	var self = this;
 	var htmlFormObj = $("<form class='form-horizontal'></form>");
 	if(type=='default') {
+		//-----------------------------------------------------
 		var htmlCodeGroupObj = $("<div class='form-group'></div>")
-		var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Item - Code</label>");
+		var htmlCodeLabelObj = $("<label for='item_code_"+this.id+"' class='col-sm-3 control-label'>Item - Code</label>");
 		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCodeInputObj = $("<input id='item_code_"+this.id+"' type='text' class='form-control' name='code_Item' value=\""+this.code_node.text()+"\">");
 		$(htmlCodeInputObj).change(function (){
-			UIFactory["Item"].update(htmlFormObj,self,langcode);
+			$(self.code_node).text($(this).val());
+			UIFactory["Item"].update(self,langcode);
 		});
 		$(htmlCodeDivObj).append($(htmlCodeInputObj));
 		$(htmlCodeGroupObj).append($(htmlCodeLabelObj));
 		$(htmlCodeGroupObj).append($(htmlCodeDivObj));
 		$(htmlFormObj).append($(htmlCodeGroupObj));
+		//-----------------------------------------------------
 		var htmlLabelGroupObj = $("<div class='form-group'></div>")
-		var htmlLabelLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Item - "+karutaStr[LANG]['label']+"</label>");
+		var htmlLabelLabelObj = $("<label for='item_label_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>Item - "+karutaStr[LANG]['label']+"</label>");
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 		var htmlLabelInputObj = $("<input id='item_label_"+this.id+"_"+langcode+"' type='text' class='form-control' name='label_Item' value=\""+this.label_node[langcode].text()+"\">");
 		$(htmlLabelInputObj).change(function (){
-			UIFactory["Item"].update(htmlFormObj,self,langcode);
+			$(self.label_node[langcode]).text($(this).val());
+			UIFactory["Item"].update(self,langcode);
 		});
 		$(htmlLabelDivObj).append($(htmlLabelInputObj));
 		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
 		$(htmlLabelGroupObj).append($(htmlLabelDivObj));
 		$(htmlFormObj).append($(htmlLabelGroupObj));
+		//-----------------------------------------------------
+		var htmlValueGroupObj = $("<div class='form-group'></div>")
+		var htmlValueLabelObj = $("<label for='item_value_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>Item - "+karutaStr[LANG]['value']+"</label>");
+		var htmlValueDivObj = $("<div class='col-sm-9'></div>");
+		var htmlValueInputObj = $("<input id='item_value_"+this.id+"_"+langcode+"' type='text' class='form-control' name='value_Item' value=\""+this.value_node.text()+"\">");
+		$(htmlValueInputObj).change(function (){
+			$(self.value_node).text($(this).val());
+			UIFactory["Item"].update(self,langcode);
+		});
+		$(htmlValueDivObj).append($(htmlValueInputObj));
+		$(htmlValueGroupObj).append($(htmlValueLabelObj));
+		$(htmlValueGroupObj).append($(htmlValueDivObj));
+		$(htmlFormObj).append($(htmlValueGroupObj));
+		//-----------------------------------------------------
 	}
 	//------------------------
 	return htmlFormObj;

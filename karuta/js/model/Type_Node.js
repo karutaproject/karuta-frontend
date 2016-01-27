@@ -1417,54 +1417,45 @@ UIFactory["Node"].displayTranslate = function(root,dest,depth)
 		var html = "<div class='translate "+name+"'>";
 		//----------------------------
 		if (name == "asmContext"){
-			html += "<div class='row'  style='padding-top:5px;padding-bottom:5px;border:1px dashed lightgrey'>";
-			//-------------- node -----------------------------
-			html += "<div id='trs_node_"+uuid+"' >";
-			if (multilingual_node)
+			html += "<div class='row'  style='margin-left:5px;margin-top:5px;padding-top:5px;padding-bottom:5px;border-top:3px solid black'>";
+			if (multilingual_node) {
 				for (var lang=0; lang<languages.length;lang++) {
-					html += "<div><span class='lang'>"+karutaStr[languages[lang]]['label']+"</span>&nbsp;";
-					html += " <span id='get_nodeeditor_"+uuid+languages[lang]+"'></span>";
-					html += "</div>";
-				}
-			else {
-				html += "<div><span class='lang'>"+karutaStr[LANG]['label']+"</span>&nbsp;";
-				html += " <span id='get_nodeeditor_"+uuid+LANG+"'></span>";
-				html += "</div>";
-			}
-				
-			html += "</div>";
-			//-------------- resource -------------------------
-			html += "<div id='trs_resource_"+uuid+"' class='span4' >";
-			//-----------------------
-			if(UICom.structure["ui"][uuid].resource!=null) {
-				if (multilingual_resource)
-					for (var lang=0; lang<languages.length;lang++) {
-						html += "<div><span class='lang'>"+karutaStr[languages[lang]]['language']+"</span>";
-						try {
-							var test = UICom.structure["ui"][uuid].resource.getEditor(null,lang);
-							html += " <span id='get_editor_"+uuid+languages[lang]+"'></span>";
+					var lgcolumn = Math.floor(12/languages.length);
+					html += "<div id='trs_node_"+uuid+"' class='col-md-"+lgcolumn+"'>";
+					//-------------- node -----------------------------
+					html += "<div class='lang'>"+languages[lang]+" - "+karutaStr[languages[lang]]['label']+"</div>";
+					html += "<div id='get_nodeeditor_"+uuid+languages[lang]+"'></div>";
+					//-------------- resource -------------------------
+					if(UICom.structure["ui"][uuid].resource!=null) {
+						html += "<hr>";
+						if (multilingual_resource) {
+							try {
+								var test = UICom.structure["ui"][uuid].resource.getEditor(null,lang);
+								html += " <div id='get_editor_"+uuid+languages[lang]+"'></div>";
+							}
+							catch(e) {
+								html += " <div id='display_editor_"+uuid+languages[lang]+"'></div>";
+							}
+						} else {
+							try {
+								var test = UICom.structure["ui"][uuid].resource.getEditor();
+								html += " <div id='get_editor_"+uuid+LANG+"'></div>";
+							}
+							catch(e) {
+								html += " <div id='display_editor_"+uuid+LANG+"'></div>";
+							}
 						}
-						catch(e) {
-							html += " <span id='display_editor_"+uuid+languages[lang]+"'></span>";
-						}
-						html += "</div>";
-					}
-				else{
-					try {
-						var test = UICom.structure["ui"][uuid].resource.getEditor();
-						html += " <span id='get_editor_"+uuid+LANG+"'></span>";
-					}
-					catch(e) {
-						html += " <span id='display_editor_"+uuid+LANG+"'></span>";
 					}
 					html += "</div>";
+					//-------------------------------------------------
 				}
+			} else {
+				html += "<div class='lang'>"+karutaStr[LANG]['label']+"</div>";
+				html += "<div id='get_nodeeditor_"+uuid+LANG+"'></div>";
 			}
-			html += "</div>";
 			html += "</div><!-- row -->";
 		}
 		else { // other than asmContext
-			html += "<div class='row'  style='padding-top:5px;padding-bottom:5px;border:1px dashed lightgrey'>";
 			//-------------- node -----------------------------
 			if (depth!=1 && depth<10 && name=='asmStructure') {
 				html += "<div id='trs_node_"+uuid+"' class='col-md-7'>";
@@ -1475,23 +1466,23 @@ UIFactory["Node"].displayTranslate = function(root,dest,depth)
 				html += "<a href='#' onclick=\"displayPage('"+uuid+"',100,'translate','"+LANGCODE+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('trs_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
 				html += "</div>";
 			} else {
-				html += "<div id='trs_node_"+uuid+"' class='span4'>";
-				if (multilingual_node)
+				html += "<div class='row'  style='margin-left:5px;margin-top:5px;padding-top:5px;padding-bottom:5px;border-top:3px solid black'>";
+				if (multilingual_node) {
 					for (var lang=0; lang<languages.length;lang++) {
-						html += "<div><span class='lang'>"+karutaStr[languages[lang]]['label']+"</span>&nbsp;";
-						html += " <span id='get_nodeeditor_"+uuid+languages[lang]+"'></span>";
+						var lgcolumn = Math.floor(12/languages.length);
+						html += "<div id='trs_node_"+uuid+"' class='col-md-"+lgcolumn+"'>";
+						//-------------- node -----------------------------
+						html += "<div class='lang'>"+languages[lang]+" - "+karutaStr[languages[lang]]['label']+"</div>";
+						html += "<div id='get_nodeeditor_"+uuid+languages[lang]+"'></div>";
 						html += "</div>";
+						//-------------------------------------------------
 					}
-				else {
-					html += "<div><span class='lang'>"+karutaStr[LANG]['label']+"</span>&nbsp;";
-					html += " <span id='get_nodeeditor_"+uuid+LANG+"'></span>";
-					html += "</div>";
+				} else {
+					html += "<div class='lang'>"+languages[lang]+" - "+karutaStr[LANG]['label']+"</div>";
+					html += "<div id='get_nodeeditor_"+uuid+LANG+"'></div>";
 				}
-					
-				html += "</div>";
+				html += "</div><!-- row -->";
 			}
-			//----------------------------
-			html += "</div><!-- row -->";
 			//--------------------------------------------------*/
 			html += "<div id='content-"+uuid+"'style='position:relative'></div>";
 		}

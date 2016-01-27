@@ -480,6 +480,7 @@
 			<asmResource xsi_type="Item">
 				<lastmodified />
 				<code />
+				<value />
 				<label lang="fr" />
 				<label lang="en" />
 			</asmResource>

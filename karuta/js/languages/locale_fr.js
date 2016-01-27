@@ -82,6 +82,7 @@ karutaStr['fr']['menu']="Menu";
 //=========================================
 
 karutaStr['fr']['label']="Libellé";
+karutaStr['fr']['value']="Valeur";
 karutaStr['fr']['edit']="Édition";
 karutaStr['fr']['comments']="Information complémentaire";
 karutaStr['fr']['help-label']="Information";
