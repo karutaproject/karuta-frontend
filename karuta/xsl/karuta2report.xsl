@@ -76,6 +76,23 @@
 		</node_resource>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='url2unit']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<url2unit>
+			<xsl:if test="not($semtag='')">
+				<xsl:attribute name="semtag"><xsl:value-of select="$semtag"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+		</url2unit>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='for-each-person']">
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>

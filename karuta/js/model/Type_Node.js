@@ -27,9 +27,17 @@ UIFactory["Node"] = function( node )
 		this.node = node;
 		this.asmtype = $(node).prop("nodeName");
 		this.code_node = $($("code",node)[0]);
+		//--------------------
+		if ($("value",$("asmResource[xsi_type='nodeRes']",node)).length==0){  // for backward compatibility
+			var newelement = createXmlElement("value");
+			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
+		}
+		this.value_node = $("value",$("asmResource[xsi_type='nodeRes']",node));
+		//------------------------------
 		this.userrole = $(node).attr('role');
 		if (this.userrole==undefined || this.userrole=='')
 			this.userrole = "norole";
+		//------------------------------
 		this.label_node = [];
 		for (var i=0; i<languages.length;i++){
 			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
@@ -411,10 +419,9 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			var uuid = $(child).attr("id");
 			var text = UICom.structure["ui"][uuid].getLabel('sidebar_'+uuid,'span');
 			var node = UICom.structure["ui"][uuid];
-			var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
-			var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+			var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
-			if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && ((showroles==g_userrole && privatevalue) || !privatevalue || g_userroles[0]=='designer'))) {
+			if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
 				if(name == "asmUnit") // Click on Unit
 				{
 					var html = "";
@@ -577,13 +584,13 @@ UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,i
 	//-------------------------------------------------------
 }
 
-//==================================================
-//==================================================
-//==================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inline,backgroundParent)
-//==================================================
-//==================================================
-//==================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 {
 	if (edit==null || edit==undefined)
 		edit = false;
@@ -613,7 +620,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	var contentfreenode = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	//-------------------- test if visible
-	if ( (display=='N' && (g_userroles[0]=='designer'  || USER.admin)) || (display=='Y' && ( seenoderoles.containsArrayElt(g_userroles) || (showtoroles.containsArrayElt(g_userroles) && !privatevalue) || !privatevalue || g_userroles[0]=='designer')) ) {
+	if ( (display=='N' && (g_userroles[0]=='designer'  || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || (showtoroles.containsArrayElt(g_userroles) && !privatevalue) || g_userroles[0]=='designer')) ) {
 		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.containsArrayElt(g_userroles)) || (g_userroles[0]=='designer'  || USER.admin)) {
 			var readnode = true; // if we got the node the node is readable
 			if (g_designerrole)
@@ -705,8 +712,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					if (node.resource_type!=null)
 						html+= "resource-"+node.resource_type;
 					html+= "' >";
-					if (node.resource.type!='Dashboard' || g_userroles[0]=='designer')
-						html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
+					html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 					html += "</div><!-- inside-full-height -->";
 					//-------------- context -------------------------
 					html += "<div id='comments_"+uuid+"' class='inside-full-height comments'></div><!-- comments -->";
@@ -780,7 +786,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						html += " style='"+style+"'>";
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='node-label col-md-offset-1 col-md-7  same-height'";
-						if (g_userrole!='designer' && semtag=='header')
+						if (g_userroles[0]!='designer' && semtag=='header')
 							html += " style='visibility:hidden'";
 						if (semtag!='header')
 							html += " style='"+style+"'";
@@ -824,7 +830,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					html +=" style='"+style+"'";
 					html += ">";
 					//-----------------------------------------
-					var graphicers = $("metadata-wad[graphicerroles*="+g_userrole+"]",data);
+					var graphicers = $("metadata-wad[graphicerroles*="+g_userroles[0]+"]",data);
 					if (contentfreenode=='Y' && (graphicers.length>0 || g_userroles[0]=='designer'))
 						html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
 					//-----------------------------------------
@@ -936,6 +942,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				catch(err) {
 					alertHTML("Error in Dashboard : " + err.message);
 				}
+				if (g_userroles[0]!='designer')
+					$("#node_"+uuid).hide();
 			}
 			// ================================= For each child =====================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
@@ -1061,9 +1069,13 @@ UIFactory["Node"].updateSize = function (obj)
 };
 
 
-//==================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
-//==================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 {
 	if (edit==null || edit==undefined)
 		edit = false;
@@ -1397,9 +1409,13 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 	} //---- end of private - no display
 };
 
-//==================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 UIFactory["Node"].displayTranslate = function(root,dest,depth)
-//==================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 {
 	//---------------------
 	// Base info
@@ -1520,9 +1536,13 @@ UIFactory["Node"].displayTranslate = function(root,dest,depth)
 		});
 };
 
-//==================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
-//==================================================
+//==============================================================================
+//==============================================================================
+//==============================================================================
 {
 	if (edit==null || edit==undefined)
 		edit = false;
@@ -1693,7 +1713,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				html += "</div><!-- row -->";
 				//--------------------------------------------------*/
 				if (root.children.length>0 && depth>0) {
-					if (semtag=="asmNop" || semtag=="node_resource" || semtag=="aggregate")
+					if (semtag=="asmNop" || semtag=="node_resource" || semtag=="aggregate" || semtag=="url2unit")
 						html += "<div id='content-"+uuid+"' class='row'></div>";
 					else
 						html += "<div id='content-"+uuid+"' class='model-content'></div>";

@@ -115,10 +115,11 @@ function fill_list_page()
 	html += "<ul class='dropdown-menu' role='menu' aria-labelledby='list-menu'>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createProject()\" href='#'>"+karutaStr[LANG]['create_project']+"</a></li>";
 	html += "<hr>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" href='#'>"+karutaStr[LANG]['import_instance']+"</a></li>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile()\" href='#'>"+karutaStr[LANG]['import_portfolio']+"</a></li>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" href='#'>"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip()\" href='#'>"+karutaStr[LANG]['import_zip']+"</a></li>";
+	html += "<hr>";
+	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" href='#'>"+karutaStr[LANG]['import_instance']+"</a></li>";
+	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" href='#'>"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
 	html += "<hr>";
 	html += "<li><a onclick=\"share_karuta_documentation()\" href='#'>"+karutaStr[LANG]['demo-documentation']+"</a></li>";
 	if (demo) {

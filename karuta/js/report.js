@@ -67,6 +67,8 @@ function processPortfolio(no,xmlReport,destid,data,line)
 			processNodeResource(children[i],destid,data,line);
 		if (tagname=="text")
 			processText(children[i],destid,data,line);
+		if (tagname=="url2unit")
+			processURL2Unit(children[i],destid,data,line);
 		if (tagname=="for-each-node")
 			processNode(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="for-each-portfolio")
@@ -94,6 +96,8 @@ function process(xmlDoc,json)
 			processAggregate(children[i],'content');
 		if (tagname=="text")
 			processText(children[i],'content');
+		if (tagname=="url2unit")
+			processUTL2Unit(children[i],'content');
 	}
 	displayPDFButton();
 	$.ajaxSetup({async: true});
@@ -165,6 +169,8 @@ function processNode(no,xmlDoc,destid,data,line)
 					processNodeResource(children[i],destid,nodes[i],i);
 				if (tagname=="text")
 					processText(children[i],destid,nodes[i],i);
+				if (tagname=="url2unit")
+					processURL2Unit(children[i],destid,nodes[i],i);
 				if (tagname=="aggregate")
 					processAggregate(children[i],destid,nodes[i],i);
 			}
@@ -239,6 +245,8 @@ function processCell(no,xmlDoc,destid,data,line)
 			processNodeResource(children[i],'td_'+no,data,line);
 		if (tagname=="text")
 			processText(children[i],'td_'+no,data,line);
+		if (tagname=="url2unit")
+			processURL2Unit(children[i],'td_'+no,data,line);
 		if (tagname=="aggregate")
 			processAggregate(children[i],'td_'+no,data,line);
 		if (tagname=="for-each-node")
@@ -406,9 +414,13 @@ function processNodeResource(xmlDoc,destid,data)
 			if (selector.type=='resource')
 				text = UICom.structure["ui"][nodeid].resource.getView();
 			if (selector.type=='resource code')
+				text = UICom.structure["ui"][nodeid].resource.getCode();
+			if (selector.type=='resource value')
 				text = UICom.structure["ui"][nodeid].resource.getValue();
 			if (selector.type=='node label')
 				text = UICom.structure["ui"][nodeid].getLabel();
+			if (selector.type=='node value')
+				text = UICom.structure["ui"][nodeid].getValue();
 		}
 		if (ref!=undefined && ref!="") {
 			if (aggregates[ref]==undefined)
@@ -435,6 +447,17 @@ function processText(xmlDoc,destid,data)
 }
 
 //==================================
+function processURL2Unit(xmlDoc,destid,data)
+//==================================
+{
+	var text = $(xmlDoc).text();
+	var style = $(xmlDoc).attr("style");
+	text = "<span>"+text+"</span>";
+	$("#"+destid).attr("style",style);
+	$("#"+destid).append($(text));
+}
+
+//==================================
 function processAggregate(aggregate,destid)
 //==================================
 {
@@ -443,14 +466,14 @@ function processAggregate(aggregate,destid)
 	var type = $(aggregate).attr("type");
 	var select = $(aggregate).attr("select");
 	var text = "";
-	if (type=="sum"){
+	if (type=="sum" && aggregates[select]!=undefined){
 		var sum = 0;
 		for (var i=0;i<aggregates[select].length;i++){
 			sum += parseInt(aggregates[select][i]);
 		}
 		text = sum;
 	}
-	if (type=="avg"){
+	if (type=="avg" && aggregates[select]!=undefined){
 		var sum = 0;
 		for (var i=0;i<aggregates[select].length;i++){
 			sum += parseInt(aggregates[select][i]);
@@ -462,6 +485,8 @@ function processAggregate(aggregate,destid)
 			aggregates[ref] = new Array();
 		aggregates[ref][aggregates[ref].length] = text;
 	}
+	if (!$.isNumeric(text))
+		text="";
 	text = "<span>"+text+"</span>";
 	$("#"+destid).attr("style",style);
 	$("#"+destid).append($(text));

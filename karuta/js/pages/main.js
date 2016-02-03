@@ -176,11 +176,6 @@ function fill_main_page(portfolioid,role)
 				$("#navigation-bar").html(getNavBar('main',g_portfolioid,g_edit));
 				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 			}
-//			if (g_display_type=="model") {
-//				$("#navigation-bar").html(getNavBar('main',g_portfolioid,g_edit));
-//				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
-//				loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('main',g_portfolioid,g_edit));displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);});
-//			}
 			if (g_display_type=="header")
 				$("#navigation_bar").html(getNavBar('main',g_portfolioid,g_edit));
 			//---------------------------

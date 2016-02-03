@@ -124,14 +124,39 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 	var label1 = this.label1_node[langcode].text();
 	if (this.encrypted)
 		label1 = decrypt(label1.substring(3),g_rc4key);
+	var code1 = $(this.code1_node).text();
+	if (code1.indexOf("@")>-1)
+		code1 = code1.substring(0,code1.indexOf("@"))+code1.substring(code1.indexOf("@")+1);
+	if (code1.indexOf("#")>-1)
+		code1 = code1.substring(0,code1.indexOf("#"))+code1.substring(code1.indexOf("#")+1);
+	if (code1.indexOf("&")>-1)
+		code1 = code1.substring(0,code1.indexOf("&"))+code1.substring(code1.indexOf("&")+1);
+
 	var label2 = this.label2_node[langcode].text();
 	if (this.encrypted)
 		label2 = decrypt(label2.substring(3),g_rc4key);
+	var code = $(this.code_node).text();
+	if (code2.indexOf("@")>-1)
+		code2 = code2.substring(0,code2.indexOf("@"))+code2.substring(code2.indexOf("@")+1);
+	if (code2.indexOf("#")>-1)
+		code2 = code2.substring(0,code2.indexOf("#"))+code2.substring(code2.indexOf("#")+1);
+	if (code2.indexOf("&")>-1)
+		code2 = code2.substring(0,code2.indexOf("&"))+code2.substring(code2.indexOf("&")+1);
 	//---------------------	
-	 var html = "";
-	 html += "<span class='Item1'>"+label1+" </span>";
-	 html += this.separator_node[langcode].text();
-	 html +=  "<span class='Item2'> "+label2+"</span>";
+	var html = "";
+	html += "<span class='Item1 "+code1+"'>";
+	if (($(this.code1_node).text()).indexOf("#")>-1)
+		html += code1+ " ";
+	if (($(this.code1_node).text()).indexOf("&")>-1)
+		html += "["+$(this.value1_node).text()+ "] ";
+	html += label1+" </span>";
+	html += this.separator_node[langcode].text();
+	html += "<span class='Item2 "+code2+"'>";
+	if (($(this.code2_node).text()).indexOf("#")>-1)
+		html += code2+ " ";
+	if (($(this.code2_node).text()).indexOf("&")>-1)
+		html += "["+$(this.value2_node).text()+ "] ";
+	 html += label2+" </span>";
 	 return html;
 };
 
@@ -315,7 +340,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		}
 		//--------------------------------------------------------------
 		{
-			if (g_userrole!='designer'){
+			if (g_userroles[0]!='designer'){
 				$(formobj).append($("<span>"+separator+"</span>"));			
 			} else {
 //				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='margin-top:20px;width:200px;' ";
@@ -475,7 +500,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		}
 		//--------------------------------------------------------------
 		{
-			if (g_userrole!='designer'){
+			if (g_userroles[0]!='designer'){
 				$(formobj).append($("<span>"+separator+"</span>"));			
 			} else {
 				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='width:200px;' ";
@@ -618,7 +643,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 		}
 		//--------------------------------------------------------------
 		{
-			if (g_userrole!='designer'){
+			if (g_userroles[0]!='designer'){
 				$(formobj).append($("<span>"+separator+"</span>"));			
 			} else {
 				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='width:200px;' ";

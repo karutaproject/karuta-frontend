@@ -676,7 +676,7 @@ hr {
 .asmStructure .asmUnit .row-node,
 .asmRoot .asmUnit .row-node,
 .asmUnit .content .row-node{
-	min-height:0px;
+	min-height:50px;
 }
 
 
@@ -1279,7 +1279,7 @@ table.tablesorter th.restore {
 }
 
 /* ====================
-	Report
+	Report Model
    ====================*/
 .report .asmUnitStructure{
 	padding:10px;
@@ -1323,6 +1323,7 @@ table.tablesorter th.restore {
 
 .report .node_resource,
 .report .text,
+.report .url2unit,
 .report .aggregate{
 	margin-top:7px;
 	border:1px dashed lightgrey;
@@ -1340,6 +1341,18 @@ table.tablesorter th.restore {
 
 .report .model_button {
 	float:right
+}
+.report button.select-label {
+	padding-left:5px;
+	min-width:120px;
+}
+
+/* ====================
+	Report Dashboard
+   ====================*/
+   
+.createreport {
+	margin-top:20px;
 }
 
 .createreport table {
@@ -1371,10 +1384,6 @@ table.tablesorter th.restore {
 	margin-left: -30px;
 }
 
-.report button.select-label {
-	padding-left:5px;
-	min-width:120px;
-}
 /* ====================
 	Batch Model
    ====================*/

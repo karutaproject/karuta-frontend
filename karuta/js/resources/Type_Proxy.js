@@ -152,9 +152,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 			portfoliocode = selfcode;
 		//------------
 		var self = this;
-		if (code!='all') {
-			if (code=='self')
-				code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+		if (portfoliocode!='all') {
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
