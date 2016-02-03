@@ -256,7 +256,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	var editnoderoles = $(this.metadatawad).attr('editnoderoles');
 	if (editnoderoles==undefined)
 		editnoderoles="";
-	if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
+	if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1 || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
 		if (g_userrole=='designer' || USER.admin) {
 			var htmlCodeGroupObj = $("<div class='form-group'></div>")
@@ -271,7 +271,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			$(htmlCodeGroupObj).append($(htmlCodeDivObj));
 			$(htmlFormObj).append($(htmlCodeGroupObj));
 		}
-		if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
+		if (g_userrole=='designer' || USER.admin || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1 || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 			var htmlLabelGroupObj = $("<div class='form-group'></div>")
 			var htmlLabelLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
 			var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
@@ -544,7 +544,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	//			metadataepm = UICom.structure["ui"][proxies_nodeid["proxy-"+semtag]].metadataepm;
 			var style = "";
 			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'padding-top',true);
-			if (style.length>0 && depth>0)
+//			if (style.length>0 && depth>0)
+			if (style.length>0)
 				html += " style='"+style+"' ";
 			//----------------------------------
 			html += ">";
@@ -564,12 +565,12 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += "</div><!-- col-md-3 label of resource -->";
 				//-------------- resource -------------------------
 				if (g_designerrole) {
-					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
+					writenode = (editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1)? true : false;
 					if (!writenode)
 						writenode = (editresroles.indexOf(g_userrole)>-1)? true : false;
 				}
 				if (g_userrole=='designer') {
-					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
+					writenode = (editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1)? true : false;
 					if (!writenode)
 						writenode = (editresroles.indexOf(g_userrole)>-1)? true : false;
 					if (!writenode)
@@ -1008,14 +1009,14 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				html += "<div id='free-content_"+uuid+"' uuid='"+uuid+"' style='"+style_size+style_background+"'>";
 				//-------------- resource -------------------------
 				if (g_designerrole) {
-					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
+					writenode = (editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1)? true : false;
 					if (!writenode)
-						writenode = (editresroles.indexOf(g_userrole)>-1)? true : false;
+						writenode = (editresroles.indexOf(g_userrole)>-1 || editresroles.indexOf(g_userrole1)>-1)? true : false;
 				}
 				if (g_userrole=='designer') {
-					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
+					writenode = (editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1)? true : false;
 					if (!writenode)
-						writenode = (editresroles.indexOf(g_userrole)>-1)? true : false;
+						writenode = (editresroles.indexOf(g_userrole)>-1 || editresroles.indexOf(g_userrole1)>-1)? true : false;
 					if (!writenode)
 						writenode = (g_userrole=='designer')? true : false;
 				}
@@ -1197,7 +1198,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 					}
 					);
 			}
-			if (edit &&  (USER.admin || g_userrole=='designer' || graphicerroles.indexOf(g_userrole)>-1 || delnoderoles.indexOf(g_userrole)>-1 || editresroles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole)>-1 || delnoderoles.indexOf(this.userrole)>-1 || editresroles.indexOf(this.userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1)) {
+			if (edit &&  (USER.admin || g_userrole=='designer' || graphicerroles.indexOf(g_userrole)>-1 || delnoderoles.indexOf(g_userrole)>-1 || editresroles.indexOf(g_userrole)>-1 || editresroles.indexOf(g_userrole1)>-1 || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1 || delnoderoles.indexOf(this.userrole)>-1 || editresroles.indexOf(this.userrole)>-1 || editnoderoles.indexOf(this.userrole)>-1)) {
 				//-------------------------------
 				if (!inline) {
 					if ($("#std_resource_"+uuid).attr('style')!=null && $("#std_resource_"+uuid).attr('style').indexOf('border')<0)
@@ -1402,7 +1403,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	//-------------------- test if visible
 	if ((display=='N' && g_userrole=='designer') || (display=='Y' && (((seenoderoles.indexOf(g_userrole)>-1 || showtoroles.indexOf(g_userrole)>-1) && privatevalue) || !privatevalue || g_userrole=='designer'))) {
-		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.indexOf(g_userrole)>-1) || g_userrole=='designer') {
+		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.indexOf(g_userrole)>-1 || editresroles.indexOf(g_userrole1)>-1) || g_userrole=='designer') {
 			var readnode = true; // if we got the node the node is readable
 			if (g_designerrole)
 				readnode = (g_userrole=='designer' || seenoderoles.indexOf(USER.username_node.text())>-1 || seenoderoles.indexOf(g_userrole)>-1 || seenoderoles.indexOf('all')>-1)? true : false;
@@ -1423,14 +1424,14 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 			//----------------------------
 			if (name == "asmContext"){
 				if (g_designerrole) {
-					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
+					writenode = (editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1)? true : false;
 					if (!writenode)
-						writenode = (editresroles.indexOf(g_userrole)>-1)? true : false;
+						writenode = (editresroles.indexOf(g_userrole)>-1 || editresroles.indexOf(g_userrole1)>-1)? true : false;
 				}
 				if (g_userrole=='designer' || USER.admin) {
-					writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
+					writenode = (editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1)? true : false;
 					if (!writenode)
-						writenode = (editresroles.indexOf(g_userrole)>-1)? true : false;
+						writenode = (editresroles.indexOf(g_userrole)>-1 || editresroles.indexOf(g_userrole1)>-1)? true : false;
 					if (!writenode)
 						writenode = (g_userrole=='designer')? true : false;
 				}
@@ -1821,9 +1822,9 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
 	if (g_designerrole) {
 		deletenode = (delnoderoles.indexOf(g_userrole)>-1)? true : false;
-		writenode = (editnoderoles.indexOf(g_userrole)>-1)? true : false;
+		writenode = (editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1)? true : false;
 		if (!writenode)
-			writenode = (editresroles.indexOf(g_userrole)>-1)? true : false;
+			writenode = (editresroles.indexOf(g_userrole)>-1 || editresroles.indexOf(g_userrole1)>-1)? true : false;
 	}
 	//-----------------------------------
 	var html = "<div class='btn-group'>";
@@ -1915,7 +1916,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
-		if ( submitted!='Y' && submitnode && ( submitroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer' || submitroles.indexOf($(USER.username_node).text())>-1)) {
+		if ( submitted!='Y' && submitnode && ( submitroles.indexOf(g_userrole)>-1 ||  submitroles.indexOf(g_userrole1)>-1 || USER.admin || g_userrole=='designer' || submitroles.indexOf($(USER.username_node).text())>-1)) {
 			html += "<button id='submit-"+node.id+"' class='btn btn-default btn-xs menu-xs' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " ><div class='btn-text'>"+karutaStr[languages[langcode]]['button-submit']+"</div></button>";
 		} else {
@@ -1946,7 +1947,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- specific menu button ---------------
 	if (menu && submitted!='Y') {
 		try {
-			if ((depth>0 || node.asmtype == 'asmUnitStructure') && menuroles != undefined && menuroles.length>10 && (menuroles.indexOf(userrole)>-1 || menuroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') ){
+			if ((depth>0 || node.asmtype == 'asmUnitStructure') && menuroles != undefined && menuroles.length>10 && (menuroles.indexOf(userrole)>-1 || menuroles.indexOf(g_userrole)>-1 || menuroles.indexOf(g_userrole1)>-1 || USER.admin || g_userrole=='designer') ){
 				var menus = [];
 				var displayMenu = false;
 				var items = menuroles.split(";");
@@ -1965,7 +1966,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 						menus[i][2] = subitems[2]; // label
 						menus[i][3] = subitems[3]; // roles
 					}
-					if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')
+					if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].indexOf(g_userrole)>-1 || menus[i][3].indexOf(g_userrole1)>-1 || USER.admin || g_userrole=='designer')
 						displayMenu = true;  // userrole may be included in semantictag
 				}
 				if (displayMenu) {
@@ -2001,7 +2002,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 							} catch(e){
 								title = menus[i][2];
 							}
-							if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer')
+							if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].indexOf(g_userrole)>-1 || menus[i][3].indexOf(g_userrole1)>-1 || USER.admin || g_userrole=='designer')
 								html += UIFactory["Node"].getItemMenu(node.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
 						}
 					}
@@ -2014,7 +2015,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		}
 	}
 	//------------- share node button ---------------
-	if ((shareroles.indexOf(g_userrole)>-1 || USER.admin || g_userrole=='designer') && shareroles!='none' && shareroles!='') {
+	if ((shareroles.indexOf(g_userrole)>-1 || shareroles.indexOf(g_userrole1)>-1 || USER.admin || g_userrole=='designer') && shareroles!='none' && shareroles!='') {
 			html+= "<button class='btn btn-default btn-xs' onclick=\"javascript:getSendPublicURL('"+node.id+"')\" href='#'><span class='glyphicon glyphicon-share'></span></button>";
 	}
 	html += "</div><!-- class='btn-group' -->";
@@ -2404,7 +2405,7 @@ UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 //		html += "<hr><h4>CSS - Styles</h4>";
 		html += "<form id='metadata' class='form-horizontal'>";
 		//----------------------------------
-		if (USER.admin || g_userrole=='designer' || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(userrole)>-1) {
+		if (USER.admin || g_userrole=='designer' || editnoderoles.indexOf(g_userrole)>-1 || editnoderoles.indexOf(g_userrole1)>-1 || editnoderoles.indexOf(userrole)>-1) {
 			html += "<h4>"+karutaStr[languages[langcode]]['label']+"</h4>";
 //			html += "<h5>"+karutaStr[languages[langcode]]['label']+"</h5>";
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'font-weight',$(node.metadataepm).attr('font-weight'));

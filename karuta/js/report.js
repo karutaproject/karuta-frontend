@@ -406,7 +406,7 @@ function processNodeResource(xmlDoc,destid,data)
 			if (selector.type=='resource')
 				text = UICom.structure["ui"][nodeid].resource.getView();
 			if (selector.type=='resource code')
-				text = UICom.structure["ui"][nodeid].resource.getValue();
+				text = UICom.structure["ui"][nodeid].resource.getCode();
 			if (selector.type=='node label')
 				text = UICom.structure["ui"][nodeid].getLabel();
 		}
@@ -443,25 +443,27 @@ function processAggregate(aggregate,destid)
 	var type = $(aggregate).attr("type");
 	var select = $(aggregate).attr("select");
 	var text = "";
-	if (type=="sum"){
+	if (type=="sum" && aggregates[select]!=undefined){
 		var sum = 0;
 		for (var i=0;i<aggregates[select].length;i++){
 			sum += parseInt(aggregates[select][i]);
 		}
 		text = sum;
 	}
-	if (type=="avg"){
+	if (type=="avg" && aggregates[select]!=undefined){
 		var sum = 0;
 		for (var i=0;i<aggregates[select].length;i++){
 			sum += parseInt(aggregates[select][i]);
 		}
-		text = sum/aggregates[select].length;
+		text = Math.round(100*sum/aggregates[select].length)/100;
 	}
 	if (ref!=undefined && ref!="") {
 		if (aggregates[ref]==undefined)
 			aggregates[ref] = new Array();
 		aggregates[ref][aggregates[ref].length] = text;
 	}
+	if (!$.isNumeric(text))
+		text="";
 	text = "<span>"+text+"</span>";
 	$("#"+destid).attr("style",style);
 	$("#"+destid).append($(text));

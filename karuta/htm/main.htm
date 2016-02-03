@@ -142,10 +142,13 @@
 								success : function(data) {
 									var usergroups = $("group",data);
 									g_userrole = $("role",usergroups[0]).text();
+									g_userrole1 = $("role",usergroups[1]).text();
 									if (g_userrole=='designer')
 										g_designerrole = true;
 									if (g_userrole=='')
 										g_userrole='none';
+									if (g_userrole1=='')
+										g_userrole1='none';
 								}
 							});
 						} else {

@@ -20,6 +20,7 @@ var portfolioid = null;
 
 // -------------------
 var g_userrole = "";
+var g_userrole1 = "";
 var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;

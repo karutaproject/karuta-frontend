@@ -4,7 +4,7 @@ var application_date = "2015-04-11";
 //----------------------------------
 var appliname = 'karuta';
 var bckname = 'karuta';
-var demo = true;
+var demo = false;
 //----------------------------------
 var languages = [];
 languages [0] = 'en';
