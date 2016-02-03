@@ -88,6 +88,14 @@ UIFactory["Node"] = function( node )
 	}
 };
 
+
+//==================================
+UIFactory["Node"].prototype.getUuid = function()
+//==================================
+{
+	return this.id;
+};
+
 //==================================
 UIFactory["Node"].prototype.getCode = function()
 //==================================
@@ -2083,8 +2091,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
-					if (semantictag.indexOf("bubbleContainer")>-1)
+					if (semantictag.indexOf("bubbleContainer")>-1) {
+//						var interval = setInterval(function(){alert(node.id)},30000);
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-bubbles','bubble_level1','Bubble Map',databack,callback,param2,param3,param4,freenode);
+					}
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Item','Item',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Resource','Get_Resource',databack,callback,param2,param3,param4,freenode);

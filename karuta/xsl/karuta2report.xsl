@@ -83,9 +83,10 @@
 		<xsl:variable name="semtag">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="select">asmUnit.<xsl:value-of select="$semtag"/></xsl:variable>
 		<url2unit>
-			<xsl:if test="not($semtag='')">
-				<xsl:attribute name="semtag"><xsl:value-of select="$semtag"/></xsl:attribute>
+			<xsl:if test="not($select='..')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($style='..')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>

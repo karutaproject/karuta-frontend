@@ -39,11 +39,13 @@ function getSelector(select,test)
 	var filter1 = null;
 	var filter2 = null;
 	if (selects[1]!="") {
-		jquery +=":has(metadata[semantictag='"+selects[1]+"'])";
-		filter1 = function(){return $(this).children("metadata[semantictag='"+selects[1]+"']").length>0};
+		jquery +=":has(metadata[semantictag*='"+selects[1]+"'])";
+		filter1 = function(){return $(this).children("metadata[semantictag*='"+selects[1]+"']").length>0};
 	}
 	var filter2 = test; // test = .has("metadata-wad[submitted='Y']").last()
-	var type = selects[2];
+	var type = "";
+	if (selects.length>2)
+		type = selects[2];
 	var selector = new Selector(jquery,type,filter1,filter2);
 	return selector;
 }
@@ -450,9 +452,22 @@ function processText(xmlDoc,destid,data)
 function processURL2Unit(xmlDoc,destid,data)
 //==================================
 {
-	var text = $(xmlDoc).text();
+	var targetid = "";
+	var text = "";
 	var style = $(xmlDoc).attr("style");
-	text = "<span>"+text+"</span>";
+	var select = $(xmlDoc).attr("select");
+	var selector = getSelector(select);
+	var node = $(selector.jquery,data);
+	if (node.length==0) // try the node itself
+		node = $(selector.jquery,data).addBack();
+	if (select.substring(0,2)=="..") // node itself
+		node = data;
+	if (node.length>0 || select.substring(0,1)=="."){
+		var nodeid = $(node).attr("id");
+		targetid = UICom.structure["ui"][nodeid].getUuid();
+		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
+	}
+	text = "<span class='report-url2unit' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
 	$("#"+destid).attr("style",style);
 	$("#"+destid).append($(text));
 }

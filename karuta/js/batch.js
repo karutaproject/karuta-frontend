@@ -109,7 +109,7 @@ function processLine()
 	g_nb_shareTree[g_noline] = 0;
 	g_nb_deleteTree[g_noline] = 0;
 	g_nb_importNode[g_noline] = 0;
-	$("#log").append("<br>================ LINE "+(g_noline+1)+" =========================================");
+	$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =========================================");
 	processElggGroups();
 }
 
@@ -126,7 +126,7 @@ function processElggGroups()
 	if (g_create_elgg_groups.length==0)
 		processUsers();
 	else {
-		$("#log").append("<br>---------------------create_elgg_groups-------------------------------");
+		$("#batch-log").append("<br>---------------------create_elgg_groups-------------------------------");
 		for  (var j=0; j<g_create_elgg_groups.length; j++) {
 			createElggGroup(g_create_elgg_groups[j]);
 		}
@@ -159,7 +159,7 @@ function processUsers()
 	if (g_create_users.length==0)
 		processElggUsers();
 	else {
-		$("#log").append("<br>---------------------create_users-------------------------------");
+		$("#batch-log").append("<br>---------------------create_users-------------------------------");
 		for  (var j=0; j<g_create_users.length; j++) {
 			createUser(g_create_users[j]);
 		}
@@ -189,7 +189,7 @@ function createUser(node)
 		url : url,
 		success : function(data) {
 			userid = data;
-			$("#log").append("<br>- user already defined("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+			$("#batch-log").append("<br>- user already defined("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 			//===========================================================
 			g_nb_createUser[g_noline]++;
 			if (g_nb_createUser[g_noline]==g_create_users.length) {
@@ -223,7 +223,7 @@ function createUser(node)
 					data : xml,
 					success : function(data) {
 						userid = data;
-						$("#log").append("<br>- user created("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+						$("#batch-log").append("<br>- user created("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 						//===========================================================
 						g_nb_createUser[g_noline]++;
 						if (g_nb_createUser[g_noline]>=g_create_users.length) {
@@ -232,11 +232,11 @@ function createUser(node)
 						//===========================================================
 					},
 					error : function(data) {
-						$("#log").append("<br>- ERROR in create-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+						$("#batch-log").append("<br>- ERROR in create-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
 					}
 				});
 			else {
-				$("#log").append("<br>-TRACE user created() - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+				$("#batch-log").append("<br>-TRACE user created() - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 				//===========================================================
 				g_nb_createUser[g_noline]++;
 				if (g_nb_createUser[g_noline]>=g_create_users.length) {
@@ -261,7 +261,7 @@ function processElggUsers()
 	if (g_create_elgg_users.length==0)
 		processElggGroupMembers();
 	else {
-		$("#log").append("<br>---------------------create_elgg_users-------------------------------");
+		$("#batch-log").append("<br>---------------------create_elgg_users-------------------------------");
 		for  (var j=0; j<g_create_elgg_users.length; j++) {
 			createElggUser(g_create_elgg_users[j]);
 		}
@@ -290,7 +290,7 @@ function createElggUser(node)
 		success : function(data) {
 			elgg_userid = data.result.guid;
 			if (elgg_userid>0) {
-				$("#log").append("<br>- Elgg user already defined("+elgg_userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+				$("#batch-log").append("<br>- Elgg user already defined("+elgg_userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 				//===========================================================
 				g_nb_createElggUser[g_noline]++;
 				if (g_nb_createElggUser[g_noline]==g_create_elgg_users.length) {
@@ -325,7 +325,7 @@ function processElggGroupMembers()
 	if (g_join_elgg_goups.length==0)
 		processDeleteTrees();
 	else {
-		$("#log").append("<br>---------------------join_elgg_goups-------------------------------");
+		$("#batch-log").append("<br>---------------------join_elgg_goups-------------------------------");
 		for  (var j=0; j<g_join_elgg_goups.length; j++) {
 			createElggGroupMember(g_join_elgg_goups[j]);
 		}
@@ -360,7 +360,7 @@ function processDeleteTrees()
 	if (g_delete_trees.length==0)
 		processCreateTrees();
 	else {
-		$("#log").append("<br>---------------------delete_trees-------------------------------");
+		$("#batch-log").append("<br>---------------------delete_trees-------------------------------");
 		for  (var j=0; j<g_delete_trees.length; j++) {
 			deleteTree(g_delete_trees[j]);
 		}
@@ -383,7 +383,7 @@ function deleteTree(node)
 			url : url,
 			data : "",
 			success : function(data) {
-				$("#log").append("<br>- tree deleted - code:|"+code+"| portfolioid:"+portfolioid);
+				$("#batch-log").append("<br>- tree deleted - code:|"+code+"| portfolioid:"+portfolioid);
 				//===========================================================
 				g_nb_deleteTree[g_noline]++;
 				if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {
@@ -396,7 +396,7 @@ function deleteTree(node)
 			}
 		});
 	} else {
-		$("#log").append("<br>- tree deleted - code:|"+code+" ---- NOT FOUND ----");
+		$("#batch-log").append("<br>- tree deleted - code:|"+code+" ---- NOT FOUND ----");
 		//===========================================================
 		g_nb_deleteTree[g_noline]++;
 		if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {
@@ -419,7 +419,7 @@ function processCreateTrees()
 	if (g_create_trees.length==0)
 		processSelectTrees();
 	else {
-		$("#log").append("<br>---------------------create_trees-------------------------------");
+		$("#batch-log").append("<br>---------------------create_trees-------------------------------");
 		for  (var j=0; j<g_create_trees.length; j++) {
 			var treeref = $(g_create_trees[j]).attr('id');
 			createTree(g_create_trees[j],treeref);
@@ -433,13 +433,21 @@ function createTree(node,treeref)
 {
 	var code = getTxtvals($("code",node));
 	if (code!="") {
+		var url = "../../../"+serverBCK+"/portfolios/portfolio/code/" + code;
 		$.ajax({
 			async:false,
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag=root",
+			url : url,
+			code : code,
 			success : function(data) {
-				$("#log").append("<br>- tree already created - code:"+code);
+				$("#batch-log").append("<br>- tree already created - code:"+code);
+				var result = $("portfolio", data);
+				portfolioid = $(result).attr('id');
+				var portfolio = new Array();
+				portfolio [0] = portfolioid;
+				portfolio [1] = code;
+				g_trees[treeref] = portfolio;
 				//===========================================================
 				g_nb_createTree[g_noline]++;
 				if (g_create_trees.length==g_nb_createTree[g_noline]) {
@@ -480,7 +488,7 @@ function createTree(node,treeref)
 								data : xml,
 								url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
 								success : function(data) {
-									$("#log").append("<br>- tree created ("+portfolioid+") - code:"+code);
+									$("#batch-log").append("<br>- tree created ("+portfolioid+") - code:"+code);
 									//===========================================================
 									g_nb_createTree[g_noline]++;
 									if (g_create_trees.length==g_nb_createTree[g_noline]) {
@@ -489,13 +497,13 @@ function createTree(node,treeref)
 									//===========================================================
 								},
 								error : function(data) {
-									$("#log").append("<br>- ERROR in  create tree - code:"+code);
+									$("#batch-log").append("<br>- ERROR in  create tree - code:"+code);
 								}
 							});
 						}
 					});
 				} else {
-					$("#log").append("<br>-TRACE tree created - template:"+template+" - code:"+code+" - label:"+label);
+					$("#batch-log").append("<br>-TRACE tree created - template:"+template+" - code:"+code+" - label:"+label);
 					//===========================================================
 					g_nb_createTree[g_noline]++;
 					if (g_create_trees.length==g_nb_createTree[g_noline]) {
@@ -506,7 +514,7 @@ function createTree(node,treeref)
 			}
 		});
 	} else {
-		$("#log").append("<br>-ERROR in  create tree - code is empty");
+		$("#batch-log").append("<br>-ERROR in  create tree - code is empty");
 		//===========================================================
 		g_nb_createTree[g_noline]++;
 		if (g_create_trees.length==g_nb_createTree[g_noline]) {
@@ -530,7 +538,7 @@ function processSelectTrees()
 	if (g_select_trees.length==0)
 		processCopyTrees();
 	else {
-		$("#log").append("<br>---------------------select_trees-------------------------------");
+		$("#batch-log").append("<br>---------------------select_trees-------------------------------");
 		for  (var j=0; j<g_select_trees.length; j++) {
 			var treeref = $(g_select_trees[j]).attr('id');
 			g_trees[treeref] = selectTree(g_select_trees[j]);
@@ -549,7 +557,7 @@ function selectTree(node)
 	var portfolio = new Array();
 	portfolio [0] = portfolioid;
 	portfolio [1] = code;
-	$("#log").append("<br>- tree selected -  - code:"+code+"portfolioid:"+portfolioid);
+	$("#batch-log").append("<br>- tree selected -  - code:"+code+"portfolioid:"+portfolioid);
 	return portfolio;
 }
 
@@ -566,7 +574,7 @@ function processCopyTrees()
 	if (g_copy_trees.length==0)
 		processUpdateResources();
 	else {
-		$("#log").append("<br>---------------------copy_trees-------------------------------");
+		$("#batch-log").append("<br>---------------------copy_trees-------------------------------");
 		for (var j=0; j<g_copy_trees.length; j++) {
 			copyTree(g_copy_trees[j]);
 		}
@@ -580,7 +588,7 @@ function copyTree(node)
 	var code = getTxtvals($("code",node));
 	var label = getTxtvals($("label",node));
 	var template = getTxtvals($("template",node));
-	$("#log").append("<br>copy-tree template:|"+template+"| code:|"+code+"| label:|"+label+"|");
+	$("#batch-log").append("<br>copy-tree template:|"+template+"| code:|"+code+"| label:|"+label+"|");
 	//----- create tree from template -----
 	var portfolioid = "";
 	if (!trace)
@@ -607,7 +615,7 @@ function copyTree(node)
 					url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
 					success : function(data) {
 						treeid = data;
-						$("#log").append("<br>- tree created ("+treeid+") - code:"+code);
+						$("#batch-log").append("<br>- tree created ("+treeid+") - code:"+code);
 						//===========================================================
 						g_nb_copyTree[g_noline]++;
 						if (g_copy_trees.length==g_nb_copyTree[g_noline]) {
@@ -616,13 +624,13 @@ function copyTree(node)
 						//===========================================================
 					},
 					error : function(data) {
-						$("#log").append("<br>- ERROR in  create tree - code:"+code);
+						$("#batch-log").append("<br>- ERROR in  create tree - code:"+code);
 					}
 				});
 			}
 		});
 	else {
-		$("#log").append("<br>-TRACE tree created - code:"+code+" - label:"+label);
+		$("#batch-log").append("<br>-TRACE tree created - code:"+code+" - label:"+label);
 		//===========================================================
 		g_nb_copyTree[g_noline]++;
 		if (g_copy_trees.length==g_nb_copyTree[g_noline]) {
@@ -649,7 +657,7 @@ function processUpdateResources()
 	if (g_update_resources.length==0)
 		processShareTrees();
 	else {
-		$("#log").append("<br>---------------------update_resources-------------------------------");
+		$("#batch-log").append("<br>---------------------update_resources-------------------------------");
 		for (var j=0; j<g_update_resources.length; j++) {
 			updateResource(g_update_resources[j]);
 		}
@@ -694,7 +702,7 @@ function updateResource(node)
 						data : xml,
 						url : "../../../"+serverBCK+"/resources/resource/" + nodeid,
 						success : function(data) {
-							$("#log").append("<br>- resource updated ("+nodeid+") - semtag="+semtag);
+							$("#batch-log").append("<br>- resource updated ("+nodeid+") - semtag="+semtag);
 							//===========================================================
 							g_nb_updateResource[g_noline]++;
 							if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
@@ -703,13 +711,13 @@ function updateResource(node)
 							//===========================================================
 						},
 						error : function(data) {
-							$("#log").append("<br>- ERROR in update resource("+nodeid+") - semtag="+semtag);
+							$("#batch-log").append("<br>- ERROR in update resource("+nodeid+") - semtag="+semtag);
 						}
 					});
 				}
 			});
 		else {
-			$("#log").append("<br>-TRACE resource FIELD updated - semtag="+semtag);
+			$("#batch-log").append("<br>-TRACE resource FIELD updated - semtag="+semtag);
 			//===========================================================
 			g_nb_updateResource[g_noline]++;
 			if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
@@ -759,14 +767,14 @@ function updateResource(node)
 								success : function(data) {
 									g_nb_updateResource[g_noline]++;
 //									alertHTML(g_nb_updateResource[g_noline]);
-									$("#log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
+									$("#batch-log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
 									if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
 										processShareTrees();
 									}
 									//===========================================================
 								},
 								error : function(data) {
-									$("#log").append("<br>- ERROR in update resource("+targetid+") - semtag="+semtag);
+									$("#batch-log").append("<br>- ERROR in update resource("+targetid+") - semtag="+semtag);
 								}
 							});
 						}
@@ -774,7 +782,7 @@ function updateResource(node)
 				}
 			});
 		else {
-			$("#log").append("<br>-TRACE resource PROXY updated - semtag="+semtag);
+			$("#batch-log").append("<br>-TRACE resource PROXY updated - semtag="+semtag);
 			//===========================================================
 			g_nb_updateResource[g_noline]++;
 			if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
@@ -831,7 +839,7 @@ function updateResource(node)
 							idx : i,
 							nb : nb-1,
 							success : function(data) {
-								$("#log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semtag+" "+this.idx+" "+this.nb+" - "+(this.idx==this.nb));
+								$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semtag+" "+this.idx+" "+this.nb+" - "+(this.idx==this.nb));
 								//===========================================================
 								if (this.idx==this.nb) {
 									g_nb_updateResource[g_noline]++;
@@ -842,14 +850,14 @@ function updateResource(node)
 								//===========================================================
 							},
 							error : function(data,nodeid,semtag) {
-								$("#log").append("<br>- ERROR in update metadatawad("+this.nodeid+") - semtag="+this.semtag);
+								$("#batch-log").append("<br>- ERROR in update metadatawad("+this.nodeid+") - semtag="+this.semtag);
 							}
 						});
 						}
 				}
 			});
 		else {
-			$("#log").append("<br>-TRACE resource metadatawad updated - semtag="+semtag);
+			$("#batch-log").append("<br>-TRACE resource metadatawad updated - semtag="+semtag);
 			//===========================================================
 			g_nb_updateResource[g_noline]++;
 			if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
@@ -890,7 +898,7 @@ function updateResource(node)
 						semtag : semtag,
 						url : "../../../"+serverBCK+"/resources/resource/" + nodeid,
 						success : function(data) {
-							$("#log").append("<br>- resource Dashboard update("+this.nodeid+") - semtag="+this.semtag);
+							$("#batch-log").append("<br>- resource Dashboard update("+this.nodeid+") - semtag="+this.semtag);
 							//===========================================================
 							g_nb_updateResource[g_noline]++;
 //							alertHTML(g_nb_updateResource[g_noline]);
@@ -900,13 +908,13 @@ function updateResource(node)
 							//===========================================================
 						},
 						error : function(data) {
-							$("#log").append("<br>- ERROR in update Dashboard("+nodeid+") - semtag="+semtag);
+							$("#batch-log").append("<br>- ERROR in update Dashboard("+nodeid+") - semtag="+semtag);
 						}
 					});
 				}
 			});
 		else {
-			$("#log").append("<br>-TRACE resource Dashboard updated - semtag="+semtag);
+			$("#batch-log").append("<br>-TRACE resource Dashboard updated - semtag="+semtag);
 			//===========================================================
 			g_nb_updateResource[g_noline]++;
 			if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
@@ -931,7 +939,7 @@ function processShareTrees()
 	if (g_share_trees.length==0)
 		processImportNodes();
 	else {
-		$("#log").append("<br>---------------------share_trees-------------------------------");
+		$("#batch-log").append("<br>---------------------share_trees-------------------------------");
 		for (var j=0; j<g_share_trees.length; j++) {
 			shareTree(g_share_trees[j]);
 		}
@@ -945,11 +953,12 @@ function shareTree(node)
 	var role = "";
 	var user = "";
 	var treeref = $(node).attr("select");
-	var select_node = $("role>txtval",node).attr("select");
-	if (typeof(select_node)== 'undefined')
-		role = $("role>txtval",node).text();
-	else
-		role = eval("g_json.lines["+g_noline+"]."+select_node);
+	var role = getTxtvals($("role",node));
+//	var select_node = $("role>txtval",node).attr("select");
+//	if (typeof(select_node)== 'undefined')
+//		role = $("role>txtval",node).text();
+//	else
+//		role = eval("g_json.lines["+g_noline+"]."+select_node);
 	var select_user = $("user>txtval",node).attr("select");
 	if(typeof(select_user)=='undefined')
 		user = $("user>txtval",node).text();
@@ -988,7 +997,7 @@ function shareTree(node)
 								url : url,
 								data : xml,
 								success : function(data) {
-									$("#log").append("<br>- tree shared ("+g_trees[treeref][0]+") - user:"+user_id+" - role:"+role);
+									$("#batch-log").append("<br>- tree shared ("+g_trees[treeref][0]+") - user:"+user_id+" - role:"+role);
 									//===========================================================
 									g_nb_shareTree[g_noline]++;
 									if (g_nb_shareTree[g_noline]==g_share_trees.length) {
@@ -1001,17 +1010,17 @@ function shareTree(node)
 									//===========================================================
 								},
 								error : function(data) {
-									$("#log").append("<br>- ERROR in share tree ("+g_trees[treeref][0]+") - role:"+role);
+									$("#batch-log").append("<br>- ERROR in share tree ("+g_trees[treeref][0]+") - role:"+role);
 								}
 							});
 						else
-							$("#log").append("<br>TRACE - tree shared ("+g_trees[treeref][0]+") - user:"+user+" - role:"+role);
+							$("#batch-log").append("<br>TRACE - tree shared ("+g_trees[treeref][0]+") - user:"+user+" - role:"+role);
 					}
 				});
 			}
 		});
 	else {
-		$("#log").append("<br>TRACE tree shared ("+g_trees[treeref][0]+") - user:"+user+" - role:"+role);
+		$("#batch-log").append("<br>TRACE tree shared ("+g_trees[treeref][0]+") - user:"+user+" - role:"+role);
 		//===========================================================
 		g_nb_shareTree[g_noline]++;
 		if (g_nb_shareTree[g_noline]==g_share_trees.length) {
@@ -1037,7 +1046,7 @@ function processImportNodes()
 	if (g_import_nodes.length==0)
 		processEnd();
 	else {
-		$("#log").append("<br>---------------------import_nodes-------------------------------");
+		$("#batch-log").append("<br>---------------------import_nodes-------------------------------");
 		for  (var j=0; j<g_import_nodes.length; j++) {
 			importNode(g_import_nodes[j]);
 		}
@@ -1076,7 +1085,7 @@ function processEnd()
 {
 	g_noline++;
 	if (g_json==null || g_noline>=g_json.lines.length) {
-		$("#log").append("<br>================ END ========================================================");
+		$("#batch-log").append("<br>================ END ========================================================");
 		if (demo)
 			window.location.reload();
 	}

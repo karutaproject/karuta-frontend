@@ -7,7 +7,7 @@ function show_exec_batch()
 	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 	var navbar_html = getNavBar('list',null);
 	$("#navigation-bar").html(navbar_html);
-	$("#refresh").attr("onclick","display_list_users()");
+	$("#refresh").attr("onclick","fill_exec_batch()");
 	$("#refresh").show();
 	$("#main-list").hide();
 	$("#main-page").hide();
