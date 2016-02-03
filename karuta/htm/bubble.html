@@ -19,7 +19,8 @@
 	<script src="../../other/js/js.cookie.js"></script>
 	<script type="text/javascript">     
 		var map = null;
-		setLanguage();
+		var LANG = null;
+		getLanguage();
 	</script>
 </head>
 <body>
@@ -36,7 +37,7 @@
 	 			});
 	 			map.config.bubbleType = 'pie';
 	 			map.config.nodeClickCallback = parent.clickBubble;
-				var text2 = karutaStr[LANG]['update-bubble'];
+				var text2 = parent.karutaStr[LANG]['update-bubble'];
 	 			$("#PageRefresh").html(text2);
 	 		} else {
 	 			$(".bubbletree").html("");
