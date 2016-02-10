@@ -148,7 +148,7 @@ UIFactory["Comments"].prototype.update = function(langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var now = new Date().toLocaleString();
-	$(itself.lastModified).text(now);
+	$(this.lastModified).text(now);
 	var author = USER.getView(null,'firstname-lastname');
 	this.date_node.text(now);
 	this.author_node.text(author);

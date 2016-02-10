@@ -43,7 +43,7 @@ var UICom =
 					callback(data);
 			},
 			error : function(jqxhr,textStatus) {
-				alertHTML("Error in UICom.query : "+jqxhr.responseText);
+//				alertHTML("Error in UICom.query : "+jqxhr.responseText);
 			}
 		};
 		jQuery.ajax(set);

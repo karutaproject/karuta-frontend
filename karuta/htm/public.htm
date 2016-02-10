@@ -10,8 +10,9 @@
 		<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
-		<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
-		<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
+		<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css" />
+		<link rel="stylesheet/less" type="text/css" href="../../karuta/css/karuta.less">
+		<script src="../../other/js/less.min.js"></script>
 		<!-- =========================================== -->
 		<link rel="stylesheet" href="../../application/css/specific.css" />
 		<!-- =============================================================== -->
@@ -102,7 +103,6 @@
 		<script language='javascript'>
 			//------------------------------
 			var iid = getURLParameter('i');
-			setLanguage();
 			$(window).load(function() {
 				//---------------------------
 				$("#welcome").html(welcome1[LANG]);
@@ -138,6 +138,7 @@
 						if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 							depth = 1;
 						loadLanguages(function(data) {
+							getLanguage();
 							if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 								UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
 							UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE);

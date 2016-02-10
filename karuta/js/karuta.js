@@ -469,7 +469,6 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		if (type=='model')
 			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 	}
-	$('.metainfo').css('visibility',g_visible);
 	$("#wait-window").modal('hide');			
 }
 
@@ -777,6 +776,7 @@ function getSendPublicURL(uuid,langcode)
 	var obj = $(send_button);
 	$(obj).click(function (){
 		var email = $("#email").val();
+		var role = "all"
 		if (email!='') {
 			getPublicURL(uuid,email,role,langcode)
 		}
@@ -862,7 +862,8 @@ function getLanguage() {
 			if (languages[i]==lang)
 				LANGCODE = i;
 		}
-		moment.locale(lang);
+		if (USER!=null && USER.id!="2") // not public Account
+			moment.locale(lang);  // for elgg
 	}
 }
 
@@ -876,7 +877,8 @@ function setLanguage(lang) {
 		if (languages[i]==lang)
 			LANGCODE = i;
 	}
-	moment.locale(lang);
+	if (USER.id!="2") // not public Account
+		moment.locale(lang);
 }
 
 
@@ -928,14 +930,13 @@ function toggleProject(uuid) {
 function toggleMetadata(state) {
 //==================================
 	if (state=='hidden') {
-		$('.metainfo').css('visibility','hidden');
+		changeCss(".metainfo", "display:none;");
 		g_visible = 'hidden';
-		Cookies.set('metadata','hidden',{ expires: 60 });
 	} else {
-		$('.metainfo').css('visibility','visible');
-		Cookies.set('metadata','visible',{ expires: 60 });
+		changeCss(".metainfo", "display:block;");
 		g_visible = 'visible';
 	}
+	Cookies.set('metadata',g_visible,{ expires: 60 });
 }
 
 

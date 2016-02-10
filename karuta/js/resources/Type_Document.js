@@ -202,7 +202,7 @@ UIFactory["Document"].update = function(data,uuid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-//	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//--------------------- if IE the file server returns a string --------
@@ -232,7 +232,7 @@ UIFactory["Document"].remove = function(uuid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------

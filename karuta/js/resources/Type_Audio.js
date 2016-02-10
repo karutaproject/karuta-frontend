@@ -194,7 +194,7 @@ UIFactory["Audio"].update = function(data,uuid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = 0;
 	//---------------------
@@ -220,7 +220,7 @@ UIFactory["Audio"].remove = function(uuid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = 0;
 	//---------------------

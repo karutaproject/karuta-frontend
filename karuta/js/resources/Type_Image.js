@@ -169,7 +169,7 @@ UIFactory["Image"].update = function(data,uuid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-//	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -193,7 +193,7 @@ UIFactory["Image"].remove = function(uuid,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-//	itself.resource.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------

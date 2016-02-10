@@ -43,11 +43,17 @@ function fill_main_page(portfolioid,role)
 				g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
 				if (g_userroles[1]=='designer')
 					g_designerrole = true;
+				if (g_designerrole) {
+					g_visible = Cookies.get('metadata');
+					toggleMetadata(g_visible);
+				}
 			}
 		});
 	} else {
 		g_userroles[0] = g_userroles[1] ='designer';
 		g_designerrole = true;
+		g_visible = Cookies.get('metadata');
+		toggleMetadata(g_visible);
 	}
 	$.ajax({
 		type : "GET",
@@ -196,6 +202,7 @@ function fill_main_page(portfolioid,role)
 			}
 			//---------------------------
 			fillEditBoxBody();
+
 //								UIFactory.Node.reloadUnit(UICom.rootid); // for IE9
 		}
 	});

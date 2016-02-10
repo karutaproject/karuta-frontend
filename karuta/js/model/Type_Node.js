@@ -373,13 +373,13 @@ UIFactory["Node"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Node"].duplicate = function(uuid)
+UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,param4,param5,param6,param7,param8)
 //==================================
 {
 	var destid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
 	$("#wait-window").modal('show');
 	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?uuid="+uuid;  // instance by default
-	if (USER.admin || g_userroles[0]=='designer') {
+	if (USER.admin || g_userrole=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
@@ -391,12 +391,51 @@ UIFactory["Node"].duplicate = function(uuid)
 		url : urlS,
 		data : "",
 		success : function(data) {
-			$("#wait-window").modal('hide');			
-			UIFactory.Node.reloadUnit();
+			uuid = data;
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/nodes/node/"+uuid,
+				success : function(data) {
+					//------------------------------
+					var code = $($("code",data)[0]).text();
+					var label = [];
+					for (var i=0; i<languages.length;i++){
+						label[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",data)[0]).text();
+						var lastspace_indx = label[i].lastIndexOf(' ');
+						var nb = label[i].substring(lastspace_indx);
+						if ($.isNumeric(nb)) {
+							nb++;
+							label[i] = label[i].substring(0,lastspace_indx)+' '+nb;
+						}
+					}
+					var xml = "<asmResource xsi_type='nodeRes'>";
+					xml += "<code>"+code+"</code>";
+					for (var i=0; i<languages.length;i++)
+						xml += "<label lang='"+languages[i]+"'>"+label[i]+"</label>";
+					xml += "</asmResource>";
+					$.ajax({
+						async:false,
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						url : "../../../"+serverBCK+"/nodes/node/" + uuid + "/noderesource",
+						success : function(data) {
+							$("#wait-window").modal('hide');			
+							UIFactory.Node.reloadUnit();
+						},
+						error : function(jqxhr,textStatus) {
+							alert("Error in duplicate rename : "+jqxhr.responseText);
+						}
+					});
+				}
+			});
 		},
 		error : function(jqxhr,textStatus) {
 			$("#wait-window").modal('hide');			
-			alertHTML("Error in Node.duplicate "+textStatus+" : "+jqxhr.responseText);
+			alert("Error in Node.duplicate "+textStatus+" : "+jqxhr.responseText);
 		}
 	});
 };
@@ -738,7 +777,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += "</div><!-- inner row -->";
 				//-------------- metainfo -------------------------
 				if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
-					html += "<div class='row'><div id='metainfo_"+uuid+"' class='col-md-offset-1 col-md-10 metainfo' style='visibility:"+g_visible+"'></div><!-- metainfo --></div>";
+					html += "<div class='row'><div id='metainfo_"+uuid+"' class='col-md-offset-1 col-md-10 metainfo'></div><!-- metainfo --></div>";
 				}
 			}
 			//============================== NODE ===================================
@@ -815,9 +854,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 				//-------------- metainfo -------------------------
 				if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
-					html += "<div id='metainfo_"+uuid+"' class='metainfo' style='visibility:"+g_visible+"'></div><!-- metainfo -->";
+					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
 				} else {
-					html += "<div id='metainfo_"+uuid+"' class='metainfo' style='visibility:hidden'></div><!-- metainfo -->";					
+					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";					
 				}
 				//-----------------------------------------------
 				html += "</div><!-- col-md-8 -->";
