@@ -518,6 +518,13 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 //=======================================================================
 {
 	$("#wait-window").modal('show');
+	//------------
+	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	if (srcecode.indexOf('.')<0 && srcecode!='self')  // There is no project, we add the project of the current portfolio
+		srcecode = selfcode.substring(0,selfcode.indexOf('.')) + "." + srcecode;
+	if (srcecode=='self')
+		srcecode = selfcode;
+	//------------
 	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	if (USER.admin || g_userroles[0]=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
@@ -855,6 +862,7 @@ function getLanguage() {
 			if (languages[i]==lang)
 				LANGCODE = i;
 		}
+		moment.locale(lang);
 	}
 }
 
@@ -868,6 +876,7 @@ function setLanguage(lang) {
 		if (languages[i]==lang)
 			LANGCODE = i;
 	}
+	moment.locale(lang);
 }
 
 
@@ -905,11 +914,27 @@ function toggleProject(uuid) {
 		$("#toggleContent_"+uuid).addClass("glyphicon-minus")
 		$("#content-"+uuid).show();
 		displayProject[uuid] = 'open';
+		Cookies.set('dp'+uuid,'open',{ expires: 60 });
 	} else {
 		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
 		$("#content-"+uuid).hide();
 		displayProject[uuid] = 'closed';
+		Cookies.set('dp'+uuid,'closed',{ expires: 60 });
+	}
+}
+
+//==================================
+function toggleMetadata(state) {
+//==================================
+	if (state=='hidden') {
+		$('.metainfo').css('visibility','hidden');
+		g_visible = 'hidden';
+		Cookies.set('metadata','hidden',{ expires: 60 });
+	} else {
+		$('.metainfo').css('visibility','visible');
+		Cookies.set('metadata','visible',{ expires: 60 });
+		g_visible = 'visible';
 	}
 }
 

@@ -34,8 +34,8 @@ var welcome1 = {};// Welcome title
 	welcome1["fr"] = "<img class='img-responsive' src='../../karuta/img/logofonbleu.jpg'/>";
 	welcome1["en"] = "<img class='img-responsive' src='../../karuta/img/logofonbleu.jpg'/>";
 var welcome2 = {};       // Welcome sub-title
-	welcome2["fr"] = "<div style='color:black;text-align:center;font-size:14px;margin-bottom:15px;'>Version 2</div>";
-	welcome2["en"] = "<div style='color:black;text-align:center;font-size:14px;margin-bottom:15px;'>Version 2</div>";
+	welcome2["fr"] = "";
+	welcome2["en"] = "";
 var welcome3 = {};       // Welcome paragraph
 	welcome3["fr"] = "";
 	welcome3["en"] = "";

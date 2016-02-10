@@ -119,6 +119,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 			var owner = (Users_byid[portfolio.ownerid]==null) ? "??? "+portfolio.ownerid:Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
 			if (portfolio.semantictag=='karuta-project' && portfoliocode!='karuta.project'){
 				//-------------------- PROJECT ----------------------
+				displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
 				number_of_projects ++;
 				html += "<div id='project_"+portfolio.id+"' class='project'>";
 				html += "	<div class='row row-label'>";
@@ -1097,8 +1098,8 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a></li>";
 	if (USER.admin || g_userroles[0]=='designer') {
 		html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a></li>";
-		html += "<li><a href='#' onclick=\"$('.metainfo').css('visibility','hidden');g_visible='hidden'\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
-		html += "<li><a href='#' onclick=\"$('.metainfo').css('visibility','visible');g_visible='visible'\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
+		html += "<li><a href='#' onclick=\"toggleMetadata('hidden')\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
+		html += "<li><a href='#' onclick=\"toggleMetadata('visible')\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
 		if(languages.length>1)
 			html += "<li><a href='#' onclick=\"UIFactory.Portfolio.displayPortfolio('main-container','translate')\">"+karutaStr[LANG]['translate']+"</a></li>";
 	}
@@ -1638,8 +1639,8 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 		}
 		html += "	</ul><!-- class='nav navbar-nav navbar-right' -->";
 	}
-	else
-		html += " Role : <span id='userrole'></span><span class='caret'></span></a>";
+//	else
+//		html += " Role : <span id='userrole'></span><span class='caret'></span></a>";
 
 	html += "	</ul>";
 	//------------------------------------------------

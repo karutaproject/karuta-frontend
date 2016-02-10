@@ -117,6 +117,7 @@
 		{
 			var html = "";
 			html += "<div id='welcome1'></div>";
+			html += "<div id='welcome-version'></div>";
 			html += "<div id='welcome2'></div>";
 			html += "<div id='welcome3'></div>";
 			html += "<input id='useridentifier' class='form-control' placeholder='"+karutaStr[LANG]['username']+"' type='text'>";
@@ -179,6 +180,8 @@
 			});
 			if (typeof welcome1 != 'undefined') {
 				$("#welcome1").html(welcome1[LANG]);
+				var version_html = "<div style='color:black;text-align:center;font-size:14px;margin-bottom:15px;'>Version "+karuta_version+"</div>";
+				$("#welcome-version").html(version_html);
 				$("#welcome2").html(welcome2[LANG]);
 				$("#welcome3").html(welcome3[LANG]);
 			}

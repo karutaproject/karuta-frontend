@@ -277,7 +277,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce);
 				},
 				error : function(jqxhr,textStatus) {
-					$("#"+dest).html("No result");
+					$("#"+destid).html("No result");
 				}
 
 			});

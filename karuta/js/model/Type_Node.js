@@ -2041,7 +2041,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
-		if ( duplicateroles!='none'  && duplicateroles!='' && node.asmtype != 'asmRoot' && (duplicateroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')) {
+		if ( duplicateroles!='none'  && duplicateroles!='' && node.asmtype != 'asmRoot' && ((duplicateroles.containsArrayElt(g_userroles) && !"designer".containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer')) {
 			html+= "<span class='button glyphicon glyphicon-duplicate' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 	}
@@ -2143,7 +2143,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 						menus[i][2] = subitems[2]; // label
 						menus[i][3] = subitems[3]; // roles
 					}
-					if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+					if (menus[i][3].indexOf(userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && !"designer".containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer')
 						displayMenu = true;  // userrole may be included in semantictag
 				}
 				if (displayMenu) {
