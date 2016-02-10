@@ -18,7 +18,10 @@ var Bubble_bubbles_list = [];
 var dataBubble = ''; 
 
 g_current_mapid = "";
-
+var g_bubble_id = null;
+var g_bubble_destid = null;
+var g_current_mapid_bubble_node = null;
+var g_bubble_put = true;
 //==================================
 UIFactory["Bubble"] = function(node,no)
 //==================================
@@ -63,9 +66,10 @@ UIFactory["Bubble"].bubble = function(node,level)
 	if (level==3)
 		this.url_nodes = [];
 		
-	this.data = { id:'', label: '',amount:'',color:'',children:''};
+	this.data = { id:'', label: '',amount:'',color:'',children:'', token:''};
 	this.data.id = this.id;
-	this.data.label = UICom.structure["ui"][this.id].getLabel();
+	this.data.token = this.id;
+	this.data.label = UICom.structure["ui"][this.id].getLabel(null,"none");
 	if (UICom.structure["ui"][this.bubble_color_nodeid].resource.type=="Color")
 		this.data.color = UICom.structure["ui"][this.bubble_color_nodeid].resource.getValue();
 	else
@@ -74,12 +78,12 @@ UIFactory["Bubble"].bubble = function(node,level)
 	this.data.children = new Array();
 };
 
-
-
 //==================================
 UIFactory["Bubble"].bubble.prototype.displayView = function(destid,type,lang)
 //==================================
 {
+	g_bubble_id = this.id;
+	g_bubble_destid = destid;
 	var node = UICom.structure["ui"][this.id];
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
@@ -111,6 +115,8 @@ UIFactory["Bubble"].bubble.prototype.displayView = function(destid,type,lang)
 //==================================
 UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) {
 //==================================
+	isbubbleput(true);
+
 	var html = "";
 	$("#"+destid).html(html);  // on vide html
 	if (type==null)
@@ -119,7 +125,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 		//-------------------------
 		html = "<div class='form-horizontal'></div>";
 		var form_horizontal = $(html)
-		html = "<div><button  class='editbutton btn btn-xs' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayView('"+destid+"');\" data-title='éditer' rel='tooltip'>";
+		html = "<div><button  class='editbutton btn btn-xs' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayView('"+destid+"');updateBubbleTreeMap();\" data-title='éditer' rel='tooltip'>";
 		html += karutaStr[LANG]['quit-edit'];
 		html += "</button><h4>"+karutaStr[LANG]['bubble-information']+"</h4></div>";
 
@@ -152,7 +158,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param3 = "'"+this.id+"'";
 			var param4 = "null";
 			var level_plus = this.level+1;
-			var js1 = "importBranch('"+this.id+"','karuta.karuta-resources','bubble_level"+level_plus+"',"+databack+","+callback+","+param2+","+param3+","+param4+")";
+			var js1 = "importBranch('"+this.id+"','karuta.karuta-bubbles','bubble_level"+level_plus+"',"+databack+","+callback+","+param2+","+param3+","+param4+");";
 			html = "<button class='btn btn-xs' onclick=\""+js1+";\">"+karutaStr[LANG]['bubble-add-bubble']+"'"+UICom.structure["ui"][this.id].getLabel('none')+"'</button>";
 
 			var children = $("asmUnitStructure:has(metadata[semantictag*='bubble_level"+level_plus+"'])",this.node);
@@ -179,7 +185,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param2 = "'"+destid+"'";
 			var param3 = "'"+this.id+"'";
 			var param4 = "null";
-			var js1 = "importBranch('"+this.id+"','karuta.karuta-resources','level"+this.level+"_url',"+databack+","+callback+","+param2+","+param3+","+param4+")";
+			var js1 = "importBranch('"+this.id+"','karuta.karuta-bubbles','level"+this.level+"_url',"+databack+","+callback+","+param2+","+param3+","+param4+")";
 			html = "<button class='editbutton btn btn-xs' onclick=\""+js1+";\">"+karutaStr[LANG]['bubble-add-link']+"</button>";
 			html += "<h4>"+karutaStr[LANG]['bubble-links']+"</h4>";
 
@@ -248,7 +254,7 @@ UIFactory["Bubble"].reloadparse = function(param2,param3)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+		url : "../../../"+serverBCK+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data);
 			//------ cartes ----------
@@ -260,7 +266,9 @@ UIFactory["Bubble"].reloadparse = function(param2,param3)
 			//-----------------------
 			if (param2!=null) {
 				Bubble_bubbles_byid[param3].displayEditor(param2);
-				$("#bubble_iframe_"+g_current_mapid).contents().find("#PageRefresh").click();
+				isbubbleput(false);
+				updateBubbleTreeMap();
+				isbubbleput(true);
 			}
 			$('#wait-window').modal('hide');
 		}
@@ -273,6 +281,24 @@ function clickBubble(node)
 //====================================
 {
 	Bubble_bubbles_byid[node.id].displayView("bubble_display_"+g_current_mapid);
+	g_current_mapid_bubble_node = node;
 }
 
+//====================================
+function isbubbleput(v)
+//====================================
+{
+	g_bubble_put=v;
+}
 
+//====================================
+function updateBubbleTreeMap()
+//====================================
+{
+	var el = document.getElementById("bubble_iframe_"+g_current_mapid);
+	if(el.contentWindow){
+	   el.contentWindow.displayBubbleTreeMap(g_current_mapid);
+	}else if(el.contentDocument){
+	   el.contentDocument.displayBubbleTreeMap(g_current_mapid);
+	}
+}

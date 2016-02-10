@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="../../application/css/specific.css" />
 	<script type="text/javascript" src="../../karuta/js/bubbleKaruta.js"></script>	
 	<script type="text/javascript" src="../../karuta/js/karuta.js"></script>	
-	<script type="text/javascript" src="../../karuta/js/resources/Type_Bubble.js"></script>	
+	<!--script type="text/javascript" src="../../karuta/js/resources/Type_Bubble.js"></script-->	
 		<!-- =============================================================== -->
 		<script src="../../application/js/_init.js"></script>
 		<!-- =============================================================== -->
@@ -21,47 +21,19 @@
 		var map = null;
 		var LANG = null;
 		getLanguage();
+		var callCpt=0;
 	</script>
 </head>
 <body>
-	<button id="PageRefresh">Afficher la carte</button>
- 
-	<script type="text/javascript">
-		var uuid = getURLParameter('uuid');
-		parent.g_current_mapid = uuid;
-		$('#PageRefresh').click(function() {
-	 		if (map == null) {
-	 			map = new BubbleTree({
-	 				data: parent.Bubble_byid[uuid].data,
-	 				container: '.bubbletree'
-	 			});
-	 			map.config.bubbleType = 'pie';
-	 			map.config.nodeClickCallback = parent.clickBubble;
-				var text2 = parent.karutaStr[LANG]['update-bubble'];
-	 			$("#PageRefresh").html(text2);
-	 		} else {
-	 			$(".bubbletree").html("");
-	 			parent.UIFactory["Bubble"].reloadparse();
-	 			map = new BubbleTree({
-	 				data: parent.Bubble_byid[uuid].data,
-	 				container: '.bubbletree'
-	 			});
-	 			map.config.bubbleType = 'pie';
-	 			map.config.nodeClickCallback = parent.clickBubble;
-				var text2 = karutaStr[LANG]['update-bubble'];
-	 			$("#PageRefresh").html(text2);
-
-	 		}
-		});
-	</script>
 	<div class="bubbletree-wrapper">
 		<div class="bubbletree"></div>
 	</div>
 	<script>
-		$(window).load(function() {
-			//------------ display bubbles -------------------
-			$("#PageRefresh").click();
-		});	
+	var uuid = getURLParameter('uuid');
+	parent.g_current_mapid = uuid;
+	$(document).ready(function(){
+		displayBubbleTreeMap(uuid);
+	});
 	</script>
 </body>
 </html>

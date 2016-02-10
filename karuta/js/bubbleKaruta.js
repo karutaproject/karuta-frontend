@@ -194,7 +194,63 @@ BubbleTree.Bubbles.Pies = function(node, bubblechart, origin, radius, angle, col
 		$(me.label).click(me.onclick.bind(me));
 	};
 	
+	me.update = function(bubble_id) {
+		var me = this;
+		if (!me.node.shortLabel) me.node.shortLabel = me.node.label.length > me.bc.config.cutLabelsAt+3 ? me.node.label.substr(0, me.bc.config.cutLabelsAt)+'...' : me.node.label;
+		$('div[class="label2 '+bubble_id+'] > span:first-child').html(me.node.shortLabel); 
+		$('div[class="label '+bubble_id+'] > span:first-child').html(me.node.shortLabel); 
+//		me.label2 = $('<div class="label2 '+me.node.id+'"><span>'+me.node.shortLabel+'</span></div>');
+//		me.label = $('<div class="label '+me.node.id+'"><div class="desc">'+me.node.shortLabel+'</div></div>');
+	};
+	
 	me.init();
 };
 /*jshint undef: true, browser:true, jquery: true, devel: true, smarttabs: true */
 /*global Raphael, TWEEN, BubbleTree, vis4 */
+
+//====================================
+function getMapBubbleNodeById(map, id)
+//====================================
+{
+	var obj = map.nodeList.filter(function ( obj ) {
+	    return obj.id === id;
+	})[0];
+	node = map.nodesByUrlToken[obj.urlToken];
+	return node;
+}
+
+//====================================
+function displayBubbleTreeMap(uuid)
+//====================================
+{
+	if (map != null) {
+		$(".bubbletree").html("");
+		if (parent.g_bubble_put) {
+			parent.UIFactory["Bubble"].parse(parent.UICom.structure["ui"][uuid].node);
+			map = new BubbleTree({
+				data: parent.Bubble_byid[uuid].data,
+				container: '.bubbletree',
+				bubbleType: 'pie',
+				nodeClickCallback: parent.clickBubble
+			});
+			return map;
+		} else {
+			parent.UIFactory["Bubble"].reloadparse();
+			map = new BubbleTree({
+				data: parent.Bubble_byid[uuid].data,
+				container: '.bubbletree',
+				bubbleType: 'pie',
+				nodeClickCallback: parent.clickBubble
+			});
+			return map;
+		}
+	} else {
+		map = new BubbleTree({
+			data: parent.Bubble_byid[uuid].data,
+			container: '.bubbletree',
+			bubbleType: 'pie',
+			nodeClickCallback: parent.clickBubble
+		});
+		return map;
+	}
+}

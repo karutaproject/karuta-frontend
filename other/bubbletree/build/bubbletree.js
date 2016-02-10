@@ -190,6 +190,7 @@ var BubbleTree = function(config, onHover, onUnHover) {
 				if (node.right == node.left) node.right = undefined;
 			}
 		}
+		/*
 		if (node.label !== undefined && node.label !== "") {
 			urlTokenSource = node.label;
 		} else if (node.token !== undefined && node.token !== "") {
@@ -197,7 +198,7 @@ var BubbleTree = function(config, onHover, onUnHover) {
 		} else {
 			urlTokenSource = ''+me.globalNodeCounter;
 		}
-
+		 */urlTokenSource = node.token; // modif by Lan Anh
 		me.globalNodeCounter++;
 
 		node.urlToken = urlTokenSource.toLowerCase().replace(/\W/g, "-");
