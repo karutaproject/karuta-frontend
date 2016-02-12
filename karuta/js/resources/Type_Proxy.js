@@ -237,7 +237,7 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 		//----------------- null value to erase
 		html = "<li></li>";
 		var select_item = $(html);
-		html = "<a href='#' value='' code='' ";
+		html = "<a  value='' code='' ";
 		for (var j=0; j<languages.length;j++) {
 			html += "label_"+languages[j]+"='&nbsp;' ";
 		}
@@ -260,7 +260,7 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 				var value = $(nodes[i]).attr('id');
 				var html = "<li></li>";
 				var select_item = $(html);
-				html = "<a href='#' value='"+value+"' code='"+value+"' ";
+				html = "<a  value='"+value+"' code='"+value+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}

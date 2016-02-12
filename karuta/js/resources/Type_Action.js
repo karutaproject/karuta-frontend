@@ -264,7 +264,7 @@ UIFactory["Action"].parse = function(destid,type,langcode,data,self,portfolio_la
 	for ( var i = 0; i < $(actions).length; i++) {
 		var html = "<li></li>";
 		var select_item = $(html);
-		html = "<a href='#' action='"+actions[i]+"' >" + actions[i] + "</a>";
+		html = "<a  action='"+actions[i]+"' >" + actions[i] + "</a>";
 		var select_item_a = $(html);
 		$(select_item_a).click(function (ev){
 			$("#action_"+self.id).html($(this).attr("action"));
@@ -300,7 +300,7 @@ UIFactory["Action"].parse = function(destid,type,langcode,data,self,portfolio_la
 		//----------------- null value to erase
 		html = "<li></li>";
 		var select_item = $(html);
-		html = "<a href='#' value='' code='' ";
+		html = "<a  value='' code='' ";
 		for (var j=0; j<languages.length;j++) {
 			html += "label_"+languages[j]+"='&nbsp;' ";
 		}
@@ -323,7 +323,7 @@ UIFactory["Action"].parse = function(destid,type,langcode,data,self,portfolio_la
 				var value = $(nodes[i]).attr('id');
 				var html = "<li></li>";
 				var select_item = $(html);
-				html = "<a href='#' value='"+value+"' code='"+value+"' ";
+				html = "<a  value='"+value+"' code='"+value+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}

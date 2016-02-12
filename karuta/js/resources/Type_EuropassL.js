@@ -121,13 +121,13 @@ UIFactory["Langue"].prototype.displayView = function(destid,type,langcode,edit)
 	$("#"+destid).html(html);  // on vide html
 	if (type==null || type=='short') {
 		html += "<i class='fa fa-angle-right fa-lg'></i>&nbsp;";
-		html += "<a href='#' onclick=\"javascript:$('#tabs_histo li:eq(5) a').tab('show')\">";
+		html += "<a  onclick=\"javascript:$('#tabs_histo li:eq(5) a').tab('show')\">";
 		html += "<span id='"+destid+"_short_label'>"+UICom.structure["ui"][this.language_nodeid].resource.getView(destid+"_short_label","span")+"</span>";
 		html += "</a>";
 	}
 	if (type=='comp-short') {
 		html += "<i class='fa fa-angle-right fa-lg'></i>&nbsp;";
-		html += "<a href='#' onclick=\"javascript:$('#tabs_comp li:eq(4) a').tab('show')\">";
+		html += "<a  onclick=\"javascript:$('#tabs_comp li:eq(4) a').tab('show')\">";
 		html += "<span id='"+destid+"_short_label'>"+UICom.structure["ui"][this.language_nodeid].resource.getView(destid+"_short_label","span")+"</span>";
 		html += "</a>";
 	}

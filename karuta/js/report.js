@@ -404,6 +404,7 @@ function processNodeResource(xmlDoc,destid,data)
 	try {
 		var select = $(xmlDoc).attr("select");
 		var ref = $(xmlDoc).attr("ref");
+		var editresroles = $(xmlDoc).attr("editresroles");
 		style = $(xmlDoc).attr("style");
 		var selector = getSelector(select);
 		var node = $(selector.jquery,data);
@@ -413,8 +414,19 @@ function processNodeResource(xmlDoc,destid,data)
 			node = data;
 		if (node.length>0 || select.substring(0,1)=="."){
 			var nodeid = $(node).attr("id");
+			//----------------------------
+			var node = UICom.structure["ui"][nodeid];
+			var writenode = ($(node.node).attr('write')=='Y')? true:false;
+			if (g_designerrole) {
+				writenode = (editresroles.containsArrayElt(g_userroles))? true : false;
+			}
+			var inline = false;
+			var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
+			if (inline_metadata=='Y')
+				inline = true;
+			//----------------------------
 			if (selector.type=='resource')
-				text = UICom.structure["ui"][nodeid].resource.getView();
+				text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid);
 			if (selector.type=='resource code')
 				text = UICom.structure["ui"][nodeid].resource.getCode();
 			if (selector.type=='resource value')
@@ -432,26 +444,38 @@ function processNodeResource(xmlDoc,destid,data)
 	} catch(e){
 		text = "&mdash;";
 	}
-	text = "<span>"+text+"</span>";
-	$("#"+destid).attr("style",style);
+	text = "<span id='dashboard_"+nodeid+"'>"+text+"</span>";
+	//------------ edit button ---------------------
+	if (!inline && writenode) {
+		text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
+	}
 	$("#"+destid).append($(text));
+	$("#dashboard_"+nodeid).attr("style",style);
 }
 
 //==================================
 function processText(xmlDoc,destid,data)
 //==================================
 {
+	var nodeid = $(data).attr("id");
 	var text = $(xmlDoc).text();
 	var style = $(xmlDoc).attr("style");
-	text = "<span>"+text+"</span>";
-	$("#"+destid).attr("style",style);
+	var ref = $(xmlDoc).attr("ref");
+	if (ref!=undefined && ref!="") {
+		if (aggregates[ref]==undefined)
+			aggregates[ref] = new Array();
+		aggregates[ref][aggregates[ref].length] = text;
+	}
+	text = "<span id='"+nodeid+"'>"+text+"</span>";
 	$("#"+destid).append($(text));
+	$("#"+nodeid).attr("style",style);
 }
 
 //==================================
 function processURL2Unit(xmlDoc,destid,data)
 //==================================
 {
+	var nodeid = $(data).attr("id");
 	var targetid = "";
 	var text = "";
 	var style = $(xmlDoc).attr("style");
@@ -467,9 +491,9 @@ function processURL2Unit(xmlDoc,destid,data)
 		targetid = UICom.structure["ui"][nodeid].getUuid();
 		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
 	}
-	text = "<span class='report-url2unit' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
-	$("#"+destid).attr("style",style);
+	text = "<span id='"+nodeid+"' class='report-url2unit' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
 	$("#"+destid).append($(text));
+	$("#"+nodeid).attr("style",style);
 }
 
 //==================================
@@ -503,8 +527,8 @@ function processAggregate(aggregate,destid)
 	if (!$.isNumeric(text))
 		text="";
 	text = "<span>"+text+"</span>";
-	$("#"+destid).attr("style",style);
 	$("#"+destid).append($(text));
+	$("#"+destid).attr("style",style);
 }
 //===============================================================
 //===============================================================

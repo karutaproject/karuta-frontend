@@ -95,9 +95,9 @@ function getNavBar(type,portfolioid,edit)
 	html += "		</button>";
 	html += "		<div class='navbar-brand'>";
 	if (typeof navbar_title != 'undefined')
-		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' href='#'>"+navbar_title[LANG]+"</a>";
+		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' >"+navbar_title[LANG]+"</a>";
 	else
-		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' href='#'><img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA </a>";
+		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' ><img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA </a>";
 	html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
 	html += "				<li><b>Versions</b></li>";
 	html += "				<li>Application : "+application_version+" (" +application_date+")</li>";
@@ -111,17 +111,17 @@ function getNavBar(type,portfolioid,edit)
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
 	if (type=='main'){
-		html += "			<li><a href='#' onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
+		html += "			<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
 	}
 	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench'></span></a></li>";
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------
 	if (languages.length>1) {
 		html += "			<ul class='nav navbar-nav'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' href='#'><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu'>";
 		for (var i=0; i<languages.length;i++) {
-			html += "			<li><a href='#' onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+			html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 		}
 		html += "					</ul>";
 		html += "				</li>";
@@ -132,15 +132,15 @@ function getNavBar(type,portfolioid,edit)
 		if (USER.admin) {
 			html += "			<ul class='nav navbar-nav'>";
 			html += "				<li>&nbsp;</li>";
-			html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' href='#'>Actions<span class='caret'></span></a>";
+			html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' >Actions<span class='caret'></span></a>";
 			html += "					<ul class='dropdown-menu'>";
-			html += "						<li><a href='#' onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
+			html += "						<li><a  onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
 			if ($("#main-user").length && $("#main-user").html()!="")
-				html += "						<li><a href='#' onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
+				html += "						<li><a  onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
 			else
-				html += "						<li><a href='#' onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
-			html += "						<li><a href='#' onclick='display_exec_batch()'>"+karutaStr[LANG]['batch']+"</a></li>";
-			html += "						<li><a href='#' onclick='display_exec_report()'>"+karutaStr[LANG]['report']+"</a></li>";
+				html += "						<li><a  onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
+			html += "						<li><a  onclick='display_exec_batch()'>"+karutaStr[LANG]['batch']+"</a></li>";
+			html += "						<li><a  onclick='display_exec_report()'>"+karutaStr[LANG]['report']+"</a></li>";
 			html += "					</ul>";
 			html += "				</li>";
 			html += "			</ul>";
@@ -151,7 +151,7 @@ function getNavBar(type,portfolioid,edit)
 		html += "			</ul>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' href='#'><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname_node.text()+" "+USER.lastname_node.text();
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname_node.text()+" "+USER.lastname_node.text();
 		html += " 					<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";

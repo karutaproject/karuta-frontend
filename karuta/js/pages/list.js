@@ -113,20 +113,20 @@ function fill_list_page()
 	html  = "<div class='dropdown dropdown-button'>";
 	html += "<span id='list-menu' class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span class='glyphicon glyphicon-menu-hamburger'></span>&nbsp;Menu</span>";
 	html += "<ul class='dropdown-menu' role='menu' aria-labelledby='list-menu'>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createProject()\" href='#'>"+karutaStr[LANG]['create_project']+"</a></li>";
+	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createProject()\" >"+karutaStr[LANG]['create_project']+"</a></li>";
 	html += "<hr>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile()\" href='#'>"+karutaStr[LANG]['import_portfolio']+"</a></li>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip()\" href='#'>"+karutaStr[LANG]['import_zip']+"</a></li>";
+	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile()\" >"+karutaStr[LANG]['import_portfolio']+"</a></li>";
+	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip()\" >"+karutaStr[LANG]['import_zip']+"</a></li>";
 	html += "<hr>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" href='#'>"+karutaStr[LANG]['import_instance']+"</a></li>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" href='#'>"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
+	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" >"+karutaStr[LANG]['import_instance']+"</a></li>";
+	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
 	html += "<hr>";
-	html += "<li><a onclick=\"share_karuta_documentation()\" href='#'>"+karutaStr[LANG]['demo-documentation']+"</a></li>";
+	html += "<li><a onclick=\"share_karuta_documentation()\" >"+karutaStr[LANG]['demo-documentation']+"</a></li>";
 	if (demo) {
 		html += "<hr>";
-		html += "<li><a onclick=\"create_karuta_demo_aacu('"+USER.username_node.text()+"')\" href='#'>"+karutaStr[LANG]['demo-aacu']+"</a></li>";
-		html += "<li><a onclick=\"create_karuta_demo_video('"+USER.username_node.text()+"')\" href='#'>"+karutaStr[LANG]['demo-video']+"</a></li>";
-		html += "<li><a onclick=\"create_karuta_demo_ecommerce('"+USER.username_node.text()+"')\" href='#'>"+karutaStr[LANG]['demo-ecommerce']+"</a></li>";
+		html += "<li><a onclick=\"create_karuta_demo_aacu('"+USER.username_node.text()+"')\" >"+karutaStr[LANG]['demo-aacu']+"</a></li>";
+		html += "<li><a onclick=\"create_karuta_demo_video('"+USER.username_node.text()+"')\" >"+karutaStr[LANG]['demo-video']+"</a></li>";
+		html += "<li><a onclick=\"create_karuta_demo_ecommerce('"+USER.username_node.text()+"')\" >"+karutaStr[LANG]['demo-ecommerce']+"</a></li>";
 	}
 	html += "</ul>";
 	html += "</div>";

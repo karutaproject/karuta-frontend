@@ -249,12 +249,12 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (queryattr_value.indexOf('#')>0)
 				code_parent = semtag_parent;
 			else
-				code_parent = $("code",$("asmContext:has(metadata[semantictag='"+semtag_parent+"'])",parent)[0]).text();
+				code_parent = $("code",$("asmContext:has(metadata[semantictag*='"+semtag_parent+"'])",parent)[0]).text();
 			//----------------------
-			if ($("asmContext:has(metadata[semantictag='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
+			if ($("asmContext:has(metadata[semantictag*='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
 				code_parent = decrypt(code_parent.substring(3),g_rc4key);
 			//----------------------
-			var portfoliocode_parent = $("portfoliocode",$("asmContext:has(metadata[semantictag='"+semtag_parent+"'])",parent)).text();
+			var portfoliocode_parent = $("portfoliocode",$("asmContext:has(metadata[semantictag*='"+semtag_parent+"'])",parent)).text();
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 			var url ="";
 			if (portfoliocode=='?'){
@@ -322,7 +322,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 		//----------------- null value to erase
 		html = "<li></li>";
 		var select_item = $(html);
-		html = "<a href='#' value='' code='' ";
+		html = "<a  value='' code='' ";
 		for (var j=0; j<languages.length;j++) {
 			html += "label_"+languages[j]+"='&nbsp;' ";
 		}
@@ -352,10 +352,10 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			}
 			var select_item = $(html);
 			if (code.indexOf('-#')>-1) {
-				html = "<a href='#'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
+				html = "<a>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
 				$(select_item).html(html);
 			} else {
-				html = "<a href='#' code='"+code+"' value='"+$(nodes[i]).attr('id')+"' ";
+				html = "<a code='"+code+"' value='"+$(nodes[i]).attr('id')+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
@@ -614,7 +614,7 @@ UIFactory["Get_Get_Resource"].reparse = function(destid,type,langcode,data,self,
 		//----------------- null value to erase
 		var html = "<li></li>";
 		var select_item = $(html);
-		html = "<a href='#' value='' code='' ";
+		html = "<a  value='' code='' ";
 		for (var j=0; j<languages.length;j++) {
 			html += "label_"+languages[j]+"='&nbsp;' ";
 		}
@@ -645,10 +645,10 @@ UIFactory["Get_Get_Resource"].reparse = function(destid,type,langcode,data,self,
 			}
 			var select_item = $(html);
 			if (code.indexOf('-#')>-1) {
-				html = "<a href='#'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
+				html = "<a >" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
 				$(select_item).html(html);
 			} else {
-				html = "<a href='#' code='"+code+"' value='"+$(nodes[i]).attr('id')+"' ";
+				html = "<a  code='"+code+"' value='"+$(nodes[i]).attr('id')+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}

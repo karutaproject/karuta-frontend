@@ -118,8 +118,8 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 		label = "---";
 	var html ="";
 	if (this.query.indexOf('self.')>-1)
-		html = "<a href='#' class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+this.uuid_node.text()+"').click()\">"+label+"</a>";
-//		html = "<a href='#' class='URL2Unit-link' onclick=\"javascript:displayPage('"+this.uuid_node.text()+"',100,'standard','0',true)\">"+label+"</a>";
+		html = "<a  class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+this.uuid_node.text()+"').click()\">"+label+"</a>";
+//		html = "<a  class='URL2Unit-link' onclick=\"javascript:displayPage('"+this.uuid_node.text()+"',100,'standard','0',true)\">"+label+"</a>";
 	else
 		html = "<a href='page.htm?id="+this.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>"+label+"</a>";
 	return html;
@@ -221,7 +221,7 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 		//----------------- null value to erase
 		html = "<li></li>";
 		var select_item = $(html);
-		html = "<a href='#' value='' code='' ";
+		html = "<a  value='' code='' ";
 		for (var j=0; j<languages.length;j++) {
 			html += "label_"+languages[j]+"='&nbsp;' ";
 		}
@@ -255,10 +255,10 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 			}
 			var select_item = $(html);
 			if (code.indexOf('-#')>-1) {
-				html = "<a href='#'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
+				html = "<a >" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
 				$(select_item).html(html);
 			} else {
-				html = "<a href='#' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' class='sel"+code+"' ";
+				html = "<a  value='"+$(nodes[i]).attr('id')+"' code='"+code+"' class='sel"+code+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}

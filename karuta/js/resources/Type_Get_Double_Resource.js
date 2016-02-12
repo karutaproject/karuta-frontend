@@ -272,7 +272,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			//----------------- null value to erase
 			html = "<li></li>";
 			var select_item = $(html);
-			html = "<a href='#' value='' code='' ";
+			html = "<a  value='' code='' ";
 			for (var j=0; j<languages.length;j++) {
 				html += "label_"+languages[j]+"='&nbsp;' ";
 			}
@@ -306,10 +306,10 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 				}
 				var select_item = $(html);
 				if (code.indexOf('-#')>-1) {
-					html = "<a href='#'>" + $(srce1+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
+					html = "<a >" + $(srce1+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
 					$(select_item).html(html);
 				} else {
-					html = "<a href='#' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' ";
+					html = "<a  value='"+$(nodes[i]).attr('id')+"' code='"+code+"' ";
 					for (var j=0; j<languages.length;j++){
 						html += "label_"+languages[j]+"=\""+$(srce1+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 					}
@@ -369,7 +369,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			//----------------- null value to erase
 			html = "<li></li>";
 			var select_item = $(html);
-			html = "<a href='#' value='' code='' ";
+			html = "<a  value='' code='' ";
 			for (var j=0; j<languages.length;j++) {
 				html += "label_"+languages[j]+"='&nbsp;' ";
 			}
@@ -403,10 +403,10 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 				}
 				var select_item = $(html);
 				if (code.indexOf('-#')>-1) {
-					html = "<a href='#'>" + $(srce2+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
+					html = "<a >" + $(srce2+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
 					$(select_item).html(html);
 				} else {
-					html = "<a href='#' value='"+$(nodes[i]).attr('id')+"' code='"+code+"' ";
+					html = "<a  value='"+$(nodes[i]).attr('id')+"' code='"+code+"' ";
 					for (var j=0; j<languages.length;j++){
 						html += "label_"+languages[j]+"=\""+$(srce2+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 					}

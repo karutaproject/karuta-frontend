@@ -60,6 +60,7 @@ function fill_main_page(portfolioid,role)
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
 		success : function(data) {
+			UICom.roles = {};
 			g_portfolio_current = data;
 			// --------Display Type------------------
 			g_display_type = $("metadata[display-type]",data).attr('display-type');

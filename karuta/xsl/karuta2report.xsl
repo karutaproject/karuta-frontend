@@ -38,7 +38,13 @@
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
 		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<text>
+			<xsl:if test="not($ref='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
 			<xsl:if test="not($style='..')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
 			</xsl:if>
@@ -47,6 +53,9 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='node_resource']">
+		<xsl:variable name="editresroles">
+			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
 		</xsl:variable>
@@ -64,6 +73,9 @@
 		</xsl:variable>
 		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
 		<node_resource>
+			<xsl:if test="not(editresroles='')">
+				<xsl:attribute name="editresroles"><xsl:value-of select="$editresroles"/></xsl:attribute>
+			</xsl:if>
 			<xsl:if test="not($ref='')">
 				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
 			</xsl:if>
@@ -186,30 +198,33 @@
 		</aggregate>
 	</xsl:template>
 
+	<xsl:template match="*">
+	</xsl:template>
+	
 	<xsl:template name="style">
 		<xsl:variable name="padding-top">
-			<xsl:value-of select=".//metadata-epm/@node-padding-top"/>
+			<xsl:value-of select="metadata-epm/@node-padding-top"/>
 		</xsl:variable>
 		<xsl:variable name="text-align">
-			<xsl:value-of select=".//metadata-epm/@node-text-align"/>
+			<xsl:value-of select="metadata-epm/@node-text-align"/>
 		</xsl:variable>
 		<xsl:variable name="font-style">
-			<xsl:value-of select=".//metadata-epm/@node-font-style"/>
+			<xsl:value-of select="metadata-epm/@node-font-style"/>
 		</xsl:variable>
 		<xsl:variable name="font-weight">
-			<xsl:value-of select=".//metadata-epm/@node-font-weight"/>
+			<xsl:value-of select="metadata-epm/@node-font-weight"/>
 		</xsl:variable>
 		<xsl:variable name="font-size">
-			<xsl:value-of select=".//metadata-epm/@node-font-size"/>
+			<xsl:value-of select="metadata-epm/@node-font-size"/>
 		</xsl:variable>
 		<xsl:variable name="background-color">
-			<xsl:value-of select=".//metadata-epm/@node-background-color"/>
+			<xsl:value-of select="metadata-epm/@node-background-color"/>
 		</xsl:variable>
 		<xsl:variable name="color">
-			<xsl:value-of select=".//metadata-epm/@node-color"/>
+			<xsl:value-of select="metadata-epm/@node-color"/>
 		</xsl:variable>
 		<xsl:variable name="othercss">
-			<xsl:value-of select=".//metadata-epm/@node-othercss"/>
+			<xsl:value-of select="metadata-epm/@node-othercss"/>
 		</xsl:variable>
 		<xsl:if test="not(padding-top='')">padding-top:<xsl:value-of select="$padding-top"/>;</xsl:if>
 		<xsl:if test="not(text-align='')">text-align:<xsl:value-of select="$text-align"/>;</xsl:if>
