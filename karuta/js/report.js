@@ -232,7 +232,9 @@ function processRow(no,xmlDoc,destid,data,line)
 function processCell(no,xmlDoc,destid,data,line)
 //==================================
 {
-	var html = "<td id='td_"+no+"'></td>";
+	var style = $(xmlDoc).attr("style");
+	var html = "<td id='td_"+no+"' style='"+style+"'></td>";
+	var style = $(xmlDoc).attr("style");
 	$("#"+destid).append($(html));
 	var children = $(">*",xmlDoc);
 	for (var i=0; i<children.length;i++){
@@ -425,16 +427,32 @@ function processNodeResource(xmlDoc,destid,data)
 			if (inline_metadata=='Y')
 				inline = true;
 			//----------------------------
-			if (selector.type=='resource')
-				text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid);
-			if (selector.type=='resource code')
-				text = UICom.structure["ui"][nodeid].resource.getCode();
-			if (selector.type=='resource value')
-				text = UICom.structure["ui"][nodeid].resource.getValue();
-			if (selector.type=='node label')
-				text = UICom.structure["ui"][nodeid].getLabel();
-			if (selector.type=='node value')
-				text = UICom.structure["ui"][nodeid].getValue();
+			if (inline & writenode) {
+				//-----------------------
+				if(UICom.structure["ui"][nodeid].resource!=null) {
+					try {
+						var test = UICom.structure["ui"][nodeid].resource.getEditor();
+						text += "<span id='report_get_editor_"+nodeid+"'></span>";
+					}
+					catch(e) {
+						text += "<span id='report_display_editor_"+nodeid+"'></span>";
+					}
+				}
+			} else {
+				if (selector.type=='resource')
+					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid);
+				if (selector.type=='resource code')
+					text = UICom.structure["ui"][nodeid].resource.getCode();
+				if (selector.type=='resource value')
+					text = UICom.structure["ui"][nodeid].resource.getValue();
+				if (selector.type=='node label')
+					text = UICom.structure["ui"][nodeid].getLabel();
+				if (selector.type=='node value')
+					text = UICom.structure["ui"][nodeid].getValue();
+				if (writenode) {
+					text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
+				}
+			}
 		}
 		if (ref!=undefined && ref!="") {
 			if (aggregates[ref]==undefined)
@@ -446,11 +464,15 @@ function processNodeResource(xmlDoc,destid,data)
 	}
 	text = "<span id='dashboard_"+nodeid+"'>"+text+"</span>";
 	//------------ edit button ---------------------
-	if (!inline && writenode) {
-		text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
-	}
 	$("#"+destid).append($(text));
 	$("#dashboard_"+nodeid).attr("style",style);
+	//--------------------set editor------------------------------------------
+	if ($("#report_display_editor_"+nodeid).length>0) {
+		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
+	}
+	if ($("#report_get_editor_"+nodeid).length>0) {
+		$("#report_get_editor_"+nodeid).append(UICom.structure["ui"][nodeid].resource.getEditor());
+	}
 }
 
 //==================================

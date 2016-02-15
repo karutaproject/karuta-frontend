@@ -978,7 +978,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			//------------ Dashboard -----------------
 			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
-				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-10'></div></div>"));
+				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div></div>"));
 				var root_node = g_portfolio_current;
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
 				if (model_code.indexOf("@local")>-1){
@@ -2162,13 +2162,9 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- private button -------------------
 	if ((showroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && showroles!='none' && showroles!='') {
 		if (privatevalue) {
-			html += "<button class='btn btn-xs' onclick=\"javascript:show('"+node.id+"')\">";
-			html += "<span class='glyphicon glyphicon-eye-close'></span>";
-			html += "</button>";
+			html += "<span class='button glyphicon glyphicon-eye-close' onclick=\"javascript:show('"+node.id+"')\"></span>";
 		} else {
-			html += "<button class='btn btn-xs' onclick=\"javascript:hide('"+node.id+"')\">";
-			html += "<span class='glyphicon glyphicon-eye-open'></span>";
-			html += "</button>";				
+			html += "<span class='button glyphicon glyphicon-eye-open' onclick=\"javascript:hide('"+node.id+"')\"></span>";
 		}
 	}
 	//------------- specific menu button ---------------
