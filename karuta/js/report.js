@@ -419,7 +419,7 @@ function processNodeResource(xmlDoc,destid,data)
 			//----------------------------
 			var node = UICom.structure["ui"][nodeid];
 			var writenode = ($(node.node).attr('write')=='Y')? true:false;
-			if (g_designerrole) {
+			if (g_designerrole || writenode) {
 				writenode = (editresroles.containsArrayElt(g_userroles))? true : false;
 			}
 			var inline = false;
@@ -452,6 +452,7 @@ function processNodeResource(xmlDoc,destid,data)
 				if (writenode) {
 					text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
 				}
+				text = "<span id='dashboard_"+nodeid+"'>"+text+"</span>";
 			}
 		}
 		if (ref!=undefined && ref!="") {
@@ -460,9 +461,8 @@ function processNodeResource(xmlDoc,destid,data)
 			aggregates[ref][aggregates[ref].length] = text;
 		}
 	} catch(e){
-		text = "&mdash;";
+		text = "<span id='dashboard_"+nodeid+"'>&mdash;</span>";
 	}
-	text = "<span id='dashboard_"+nodeid+"'>"+text+"</span>";
 	//------------ edit button ---------------------
 	$("#"+destid).append($(text));
 	$("#dashboard_"+nodeid).attr("style",style);

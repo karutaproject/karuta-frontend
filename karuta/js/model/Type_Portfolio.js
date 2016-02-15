@@ -285,7 +285,8 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
 		html += "<div class='col-md-2 col-sm-2 hidden-xs ' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-owner' >"+owner+"</a></div>";
 		html += "<div class='col-md-2 col-sm-2 hidden-xs' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-code' >"+this.code_node.text()+"</a></div>";
-		html += "<div class='col-md-2 col-sm-2 hidden-xs' onclick=\"display_main_page('"+this.id+"')\">"+this.date_modified.substring(0,10)+"</div>";
+		if (this.date_modified!=null)
+			html += "<div class='col-md-2 col-sm-2 hidden-xs' onclick=\"display_main_page('"+this.id+"')\">"+this.date_modified.substring(0,10)+"</div>";
 		html += "<div class='col-md-1 col-sm-1 col-xs-1'>";
 		html += "<div class='btn-group'>";
 		//------------ buttons ---------------
