@@ -355,7 +355,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 				html = "<a>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
 				$(select_item).html(html);
 			} else {
-				html = "<a code='"+code+"' value='"+$(nodes[i]).attr('id')+"' ";
+				html = "<a code='"+code+"' value='"+$('value',resource).text()+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
@@ -416,13 +416,13 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
 			var code = $('code',resource).text();
 			first = false;
-			input += "<input type='radio' name='radio_"+self.id+"' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' ";
+			input += "<input type='radio' name='radio_"+self.id+"' code='"+code+"' value='"+$('value',resource).text()+"' ";
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
 				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
-			if (code!="" && self_value==code)
+			if (code!="" && self_code==code)
 				input += " checked ";
 			input += ">";
 			if (code.indexOf("@")<0)
@@ -466,14 +466,14 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			else
 				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
 			var code = $('code',resource).text();
-			input += "<div name='click_"+self.id+"' code='"+$(nodes[i]).attr('id')+"' value='"+code+"' class='click-item";
-			if (self_value==code)
+			input += "<div name='click_"+self.id+"' code='"+code+"' value='"+$('value',resource).text()+"' class='click-item";
+			if (self_code==code)
 				input += " clicked";
 			input += "' ";
 			for (var j=0; j<languages.length;j++){
 				input += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
-			if (self_value==code)
+			if (self_code==code)
 				input += " clicked";
 			input += "> ";
 			if (code.indexOf("@")<0)

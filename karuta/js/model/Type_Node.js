@@ -1008,7 +1008,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					var lgcolumn = Math.floor(12/blocks.length);
 					for (var i=0; i<blocks.length; i++) {
 						var blockid = $(blocks[i]).attr("id");
-						html += "<div id='column_"+blockid+"' class='col-md-"+lgcolumn+"' style='"+style+"'>";
+						html += "<div id='column_"+blockid+"' class='col-md-"+lgcolumn+"' style='height:100%;"+style+"'>";
 						html += "</div><!-- class='col-md' -->";
 					}
 					html += "</div><!-- class='row' -->";
