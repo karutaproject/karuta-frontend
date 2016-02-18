@@ -155,7 +155,8 @@ function fill_main_page(portfolioid,role)
 				var page_title_background_color_id = $("asmContext:has(metadata[semantictag='page-title-background-color'])",data).attr("id");
 				page_title_background_color = UICom.structure["ui"][page_title_background_color_id].resource.getValue();
 			}
-			changeCss(".welcome-line.row-node-asmRoot,.row-node-asmStructure,.row-node-asmUnit", "background-color:"+page_title_background_color+";");
+			changeCss(".welcome-line,.row-node-asmRoot,.row-node-asmStructure,.row-node-asmUnit", "background-color:"+page_title_background_color+";");
+			changeCss(".row-node", "border-top:1px solid "+page_title_background_color+";");
 			//--------------------------------
 			var page_title_subline_color = "#09bbd9"; // --- default value
 			if ($("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).length>0) {
@@ -171,6 +172,28 @@ function fill_main_page(portfolioid,role)
 			}
 			changeCss(".asmnode .dropdown-button, .button-border", "border:1px solid "+portfolio_buttons_color+";");
 			changeCss(".collapsible .glyphicon,.btn-group .button", "color:"+portfolio_buttons_color+";");
+			//--------------------------------
+			var portfolio_buttons_background_color = "#d8d8d8"; // --- default value
+			if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
+				var portfolio_buttons_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).attr("id");
+				portfolio_buttons_background_color = UICom.structure["ui"][portfolio_buttons_background_color_id].resource.getValue();
+			}
+			changeCss(".row-resource td.buttons", "border:1px solid "+portfolio_buttons_background_color+";");
+			changeCss(".row-resource td.buttons", "background:"+portfolio_buttons_background_color+";");
+			//--------------------------------
+			var portfolio_link_color = "#337ab7"; // --- default value
+			if ($("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).length>0) {
+				var portfolio_link_color_id = $("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).attr("id");
+				portfolio_link_color = UICom.structure["ui"][portfolio_link_color_id].resource.getValue();
+			}
+			changeCss("a", "color:"+portfolio_link_color+";");
+			//--------------------------------
+			var portfolio_section_title_background_color = "#f2f2f2"; // --- default value
+			if ($("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).length>0) {
+				var portfolio_section_title_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).attr("id");
+				portfolio_buttons_background_color = UICom.structure["ui"][portfolio_section_title_background_color_id].resource.getValue();
+			}
+			changeCss(".row-node-asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
 			// ========================================================================
 			if (g_display_type=="header")
 				loadLanguages(function(data) {UIFactory["Portfolio"].displayPortfolio('main-page','header',LANGCODE,g_edit);});

@@ -449,21 +449,21 @@ function processNodeResource(xmlDoc,destid,data)
 					text = UICom.structure["ui"][nodeid].getLabel();
 				if (selector.type=='node value')
 					text = UICom.structure["ui"][nodeid].getValue();
+				if (ref!=undefined && ref!="") {
+					if (aggregates[ref]==undefined)
+						aggregates[ref] = new Array();
+					aggregates[ref][aggregates[ref].length] = text;
+				}
 				if (writenode) {
 					text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
 				}
 				text = "<span id='dashboard_"+nodeid+"'>"+text+"</span>";
 			}
 		}
-		if (ref!=undefined && ref!="") {
-			if (aggregates[ref]==undefined)
-				aggregates[ref] = new Array();
-			aggregates[ref][aggregates[ref].length] = text;
-		}
 	} catch(e){
 		text = "<span id='dashboard_"+nodeid+"'>&mdash;</span>";
 	}
-	//------------ edit button ---------------------
+	//------------------------------
 	$("#"+destid).append($(text));
 	$("#dashboard_"+nodeid).attr("style",style);
 	//--------------------set editor------------------------------------------

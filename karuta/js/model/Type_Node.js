@@ -367,7 +367,10 @@ UIFactory["Node"].prototype.refresh = function()
 			UIFactory["Node"].displayFree(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline);
 		}
 		if (this.display_node[dest3].display=="standard"){
-			UIFactory["Node"].displayStandard(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent);
+			UIFactory["Node"].displayStandard(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent,null,false);
+		}
+		if (this.display_node[dest3].display=="block"){
+			UIFactory["Node"].displayStandard(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent,null,true);
 		}
 	};
 };
@@ -699,14 +702,23 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//============================== ASMCONTEXT =============================
 			if (nodetype == "asmContext"){
 				html += "<div class='row row-resource'>";
+				var parent_semtag = "";
+				if (parent!=null)
+					parent_semtag = $($("metadata",parent.node)[0]).attr('semantictag');
 				//-------------- node -----------------------------
-				html += "<div id='std_node_"+uuid+"' class='col-md-offset-1 col-md-2 node-label same-height'>";
+				html += "<div id='std_node_"+uuid+"' class='";
+				if (parent_semtag.indexOf('asm-block')<0)
+					html += "col-md-offset-1 ";
+				html += "col-md-2 node-label inside-full-height'>";
 				style = UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
 				html += "<div class='inside-full-height' style='"+style+"'>";
 				html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
 				html += "</div><!-- inside-full-height -->";
 				html += "</div><!-- col-md-2 -->";
-				html += "<div class='col-md-8' >";
+				if (parent_semtag.indexOf('asm-block')<0)
+					html += "<div class='col-md-8' >";
+				else
+					html += "<div class='col-md-10' >";
 				html += "<table><tr>";
 				//-------------- resource -------------------------
 				if (g_designerrole) {
@@ -762,7 +774,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 					html += "</div><!-- inside-full-height -->";
 					//-------------- context -------------------------
-					html += "<div id='comments_"+uuid+"' class='inside-full-height comments'></div><!-- comments -->";
+					html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 					html += "</td>";
 				}
 
@@ -773,7 +785,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//--------------------------------------------------
 				html += "</tr></table>";
 				html += "</div><!-- col-md-8  -->";
-				html += "<div class='col-md-1'>&nbsp;</div><!-- col-md-1  -->";
+				if (parent_semtag.indexOf('asm-block')<0)
+					html += "<div class='col-md-1'>&nbsp;</div><!-- col-md-1  -->";
 				html += "</div><!-- inner row -->";
 				//-------------- metainfo -------------------------
 				if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
@@ -853,16 +866,15 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//-------------- context -------------------------
 				html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 				//-------------- metainfo -------------------------
-				if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
-					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
-				} else {
-					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";					
-				}
+				html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
 				//-----------------------------------------------
 				html += "</div><!-- col-md-8 -->";
 				//-------------- buttons --------------------------
+				var menu = true;
+				if (semtag.indexOf("bubble_level1")>-1)
+					menu = false;
 				html += "<div id='buttons-"+uuid+"' class='col-md-4 buttons'>";
-				html += UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit);
+				html += UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu);
 				html += "</div><!-- col-md-3  -->";
 				html += "</div><!-- row -->";
 				//--------------------------------------------------*/
@@ -985,6 +997,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					root_node = parent.node;
 					model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
 				}
+				var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+				if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
+					model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
 				try {
 					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
 						processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0);
@@ -1000,7 +1015,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			// ================================= For each child ==========================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 			if (semtag.indexOf('asmColumns')>-1) {
-					//----------------- BLOCKS ------------------------
+					//----------------- COLUMNS ------------------------
 					var blockid = $(root.node).attr("id");
 					style = UIFactory["Node"].getContentStyle(blockid);
 					html = "<div class='row asmColumn' style='"+style+"'>";
@@ -1019,6 +1034,42 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						UIFactory["Node"].displayStandard(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root);
 					}
 					//---------------------------------------
+			} else if (semtag.indexOf('asm-block')>-1) {
+				//----------------- BLOCKS ------------------------
+				var blockid = $(root.node).attr("id");
+				var max = semtag.substring(semtag.indexOf('asm-block')+10,semtag.indexOf('asm-block')+12);
+				if (max>12)
+					max=12;
+				var lgcolumn = Math.floor(12/max);
+				var blocks = $(root.node).children("asmUnitStructure,asmContext");
+				html = "<div class='row asmBlockContainer'>";
+				for (var i=0; i<blocks.length; i++) {
+					if (i!=0 && i%max==0) {
+						html += "</div><!-- class='row' -->";
+						html += "<div class='row asmBlockContainer'>";
+					}
+					var blockid = $(blocks[i]).attr("id");
+					var blockstyle = UIFactory["Node"].getContentStyle(blockid);
+					html += "<div class='col-md-"+lgcolumn+" inside-full-height'>";
+					html += "<div id='column_"+blockid+"' class='block inside-full-height' style='"+blockstyle+"'>";
+					html += "</div><!-- class='block' -->";
+					html += "</div><!-- class='col-md' -->";
+				}
+				html += "</div><!-- class='row' -->";
+				$("#content-"+uuid).append(html);
+				for (var i=0; i<blocks.length; i++) {
+					var blockid = $(blocks[i]).attr("id");
+					var child = UICom.structure["tree"][blockid];
+					var nodename = $(child.node).prop("nodeName"); // name of the xml tag
+					var childnode = UICom.structure["ui"][blockid];
+					var childsemtag = $(childnode.metadata).attr('semantictag');
+					var block = false;
+					if (nodename == "asmContext" || childsemtag.indexOf('no-title')>-1)
+						UIFactory["Node"].displayBlock(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root);
+					else
+						UIFactory["Node"].displayStandard(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root);
+				}
+				//---------------------------------------
 			} else {
 				var gotDisplay = false;
 				if (semtag=="EuropassL"){
@@ -1045,7 +1096,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			// ==============================================================================
 			//------------- javascript dashboard --------------------
-			if (depth>1 && $($("metadata",data)[0]).attr('semantictag')!=undefined) {
+/*			if (depth>1 && $($("metadata",data)[0]).attr('semantictag')!=undefined) {
 				var semtag =  $($("metadata",data)[0]).attr('semantictag');
 				if (semtag.indexOf('dashboard')>-1){
 					var dashboard_function = $($("metadata",data)[0]).attr('semantictag').substring(10)+"(UICom.root.node,'content-'+uuid)";
@@ -1055,7 +1106,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					    html : true
 					});
 				}
-			}
+			}*/
 			//-------------------------------------------------------
 //			$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
 			$('a[data-toggle=tooltip]').tooltip({html:true});
@@ -1076,7 +1127,371 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	} //---- end of private
 };
 
-
+//==============================================================================
+//==============================================================================
+//==============================================================================
+UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,backgroundParent,parent)
+//==============================================================================
+//==============================================================================
+//==============================================================================
+{
+	if (edit==null || edit==undefined)
+		edit = false;
+	if (inline==null || inline==undefined)
+		inline = false;
+	var menu = true;
+	//---------------------------------------
+	var data = root.node;
+	var nodetype = $(data).prop("nodeName"); // name of the xml tag
+	var uuid = $(data).attr("id");
+	var node = UICom.structure["ui"][uuid];
+	// ---- store info to redisplay after change ---
+	node.display_node[dest] = {"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":"block"};
+	//------------------metadata----------------------------
+	var writenode = ($(node.node).attr('write')=='Y')? true:false;
+	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
+	var collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
+	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
+	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
+	var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
+	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
+	var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
+	if (inline_metadata=='Y')
+		inline = true;
+	var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
+	var contentfreenode = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
+	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+	var metadataepm = $(node.metadataepm);
+	//-------------------- test if visible
+	if ( (display=='N' && (g_userroles[0]=='designer'  || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || (showtoroles.containsArrayElt(g_userroles) && !privatevalue) || g_userroles[0]=='designer')) ) {
+		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.containsArrayElt(g_userroles)) || (g_userroles[0]=='designer'  || USER.admin)) {
+			var readnode = true; // if we got the node the node is readable
+			if (g_designerrole)
+				readnode = (g_userroles[0]=='designer' || seenoderoles.indexOf(USER.username_node.text())>-1 || seenoderoles.containsArrayElt(g_userroles) || (showtoroles.containsArrayElt(g_userroles) && !privatevalue) || seenoderoles.indexOf('all')>-1)? true : false;
+			if( depth < 0 || !readnode) return;
+			//----------------edit control on proxy target ------------
+			if (proxies_edit[uuid]!=undefined) {
+					var parent = proxies_parent[uuid];
+					if (parent==dest.substring(8) || dest=='contenu') { // dest = content_{parentid}
+						proxy_target = true;
+						edit = menu = (proxies_edit[uuid].containsArrayElt(g_userroles) || g_userroles[0]=='designer');
+					}
+			}
+			//================================================================================================
+			var html = "<div id='node_"+uuid+"' class='asmnode "+nodetype+" "+semtag+" ";
+			if(UICom.structure["ui"][uuid].resource!=null)
+				html += UICom.structure["ui"][uuid].resource.type;
+			html += "'>";
+			//============================== ASMCONTEXT =============================
+			if (nodetype == "asmContext"){
+				if (UICom.structure["ui"][uuid].getView()!=""){
+					style = UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
+					html += "<div class='inside-full-height' style='"+style+"'>";
+					html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
+					html += "</div><!-- inside-full-height -->";
+				}
+				if (edit && inline && writenode && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL'){
+					//------ edit inline ----------------
+					style = UIFactory["Node"].getContentStyle(uuid);
+					html += "<div id='std_resource_"+uuid+"' class='inside-full-height ";
+					if (node.resource_type!=null)
+						html+= "resource-"+node.resource_type;
+					html+= "' >";
+					if(UICom.structure["ui"][uuid].resource!=null) {
+						try {
+							var test = UICom.structure["ui"][uuid].resource.getEditor();
+							html += "<span id='get_editor_"+uuid+"'></span>";
+						}
+						catch(e) {
+							html += "<span id='display_editor_"+uuid+"'></span>";
+						}
+					} else {
+						html = UICom.structure["ui"][uuid].getEditor();
+						$("#edit-window-body-node").html($(html));
+					}
+					html += "</div><!-- inside-full-height -->";
+				} else {
+					//--------- display ------------
+					if (g_display_type=='standard') {
+						style = UIFactory["Node"].getContentStyle(uuid);
+					}
+					html += "<div id='std_resource_"+uuid+"' class='inside-full-height ";
+					if (node.resource_type!=null)
+						html+= "resource-"+node.resource_type;
+					html+= "' >";
+					html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
+					html += "</div><!-- inside-full-height -->";
+					//-------------- context -------------------------
+					html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
+				}
+				//-------------- buttons --------------------------
+				html += "<div class='inside-full-height'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
+				//--------------------------------------------------
+				//-------------- metainfo -------------------------
+				if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
+					html += "<div id='metainfo_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
+				}
+			}
+			//============================== NODE ===================================
+			else { // other than asmContext
+				if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
+					html += "<div class='row row-node'>";
+					//-------------- buttons --------------------------
+					var menu = true;
+					html += "	<div id='buttons-"+uuid+"' class='buttons'>";
+					html += UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu);
+					html += "	</div><!-- buttons -->";
+					//--------------------------------------------------*/
+					html += "</div><!-- row -->";
+				}
+				//--------------------------------------------------*/
+				if (root.children.length>0 && depth>0) {
+					html += "<div id='content-"+uuid+"' class='content' ";
+					style = "position:relative;";
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',true);
+					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
+					html +=" style='"+style+"'";
+					html += ">";
+					//-----------------------------------------
+					var graphicers = $("metadata-wad[graphicerroles*="+g_userroles[0]+"]",data);
+					if (contentfreenode=='Y' && (graphicers.length>0 || g_userroles[0]=='designer'))
+						html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
+					//-----------------------------------------
+					html += "</div>";
+				}
+				
+			}
+			html += "</div><!-- nodetype -->";
+			//==============================fin NODE ===================================
+			if ( $("#node_"+uuid).length>0 )
+				$("#node_"+uuid).replaceWith($(html));
+			else
+				$("#"+dest).append($(html));
+			//---------------------------- BUTTONS AND BACKGROUND COLOR ---------------------------------------------
+			var buttons_color = eval($(".button").css("color"));
+			var buttons_background_style = UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
+			if (buttons_background_style!="") {
+				var buttons_background_color = buttons_background_style.substring(buttons_background_style.indexOf(":")+1,buttons_background_style.indexOf(";"))
+				if (buttons_background_color==buttons_color)
+					if (buttons_color!="#000000")
+						changeCss("#node_"+uuid+" .button", "color:black;");
+					else
+						changeCss("#node_"+uuid+" .button", "color:white;");
+			}
+			var buttons_node_background_style = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
+			if (buttons_node_background_style!="") {
+				var buttons_node_background_color = buttons_node_background_style.substring(buttons_node_background_style.indexOf(":")+1,buttons_node_background_style.indexOf(";"))
+				if (buttons_background_color==buttons_color)
+					if (buttons_color!="#000000")
+						changeCss("#node_"+uuid+" .button", "color:black;");
+					else
+						changeCss("#node_"+uuid+" .button", "color:white;");
+			}
+			//--------------------collapsed------------------------------------------
+			if (collapsible=='Y') {
+				if (collapsed=='Y') {
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-plus");
+					$("#content-"+uuid).hide();
+				}
+				else {
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-minus");
+					$("#content-"+uuid).show();
+				}
+			}
+			//--------------------set editor------------------------------------------
+			if ($("#display_editor_"+uuid).length>0) {
+				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
+			}
+			if ($("#get_editor_"+uuid).length>0) {
+				$("#get_editor_"+uuid).append(UICom.structure["ui"][uuid].resource.getEditor());
+			}
+			//----------- Comments -----------
+			if (edit && inline && writenode)
+				UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+			else
+				UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+			//----------- help -----------
+			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
+				if (depth>0) {
+					var attr_help = $($("metadata-wad",data)[0]).attr('help');
+					var helps = attr_help.split("/"); // lang1/lang2/...
+					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
+						for (var j=0; j<helps.length; j++){
+							if (helps[j].indexOf(languages[langcode])>-1)
+								help_text = helps[j].substring(0,helps[j].indexOf("@"));
+						}
+					} else { // lang1/lang2/...
+						help_text = helps[langcode];  // lang1/lang2/...
+					}
+					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+					$("#help_"+uuid).html(help);
+					$(".popinfo").popover({ 
+					    placement : 'right',
+					    container : 'body',
+					    title:karutaStr[LANG]['help-label'],
+					    html : true,
+					    trigger:'click hover',
+					    content: help_text
+					});
+				}
+			}
+			//----------------------------------------------
+			$("#free-toolbar-menu_"+uuid).click(function(){
+				if ($(".free-toolbar",$("#content-"+uuid)).css('visibility')=='hidden') {
+					$(".free-toolbar",$("#content-"+uuid)).css('visibility','visible');
+					g_free_toolbar_visibility = 'visible';
+				}
+				else {
+					$(".free-toolbar",$("#content-"+uuid)).css('visibility','hidden');
+					g_free_toolbar_visibility = 'hidden';
+				}
+			});
+			//---------- video ------------------
+			if (UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
+				UICom.structure["ui"][uuid].resource.setParameter();
+			// -------------- display metainfo
+			if (g_userroles[0]=='designer' || USER.admin) {  
+				UIFactory["Node"].displayMetainfo("metainfo_"+uuid,data);
+			}
+			//------------ Dashboard -----------------
+			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
+				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div></div>"));
+				var root_node = g_portfolio_current;
+				var model_code = UICom.structure["ui"][uuid].resource.getView();
+				if (model_code.indexOf("@local")>-1){
+					root_node = parent.node;
+					model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
+				}
+				var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+				if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
+					model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
+				try {
+					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
+						processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0);
+					else
+						getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models);
+				}
+				catch(err) {
+					alertHTML("Error in Dashboard : " + err.message);
+				}
+				if (g_userroles[0]!='designer')
+					$("#node_"+uuid).hide();
+			}
+			// ================================= For each child ==========================
+			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
+			if (semtag.indexOf('asmColumns')>-1) {
+					//----------------- COLUMNS ------------------------
+					var blockid = $(root.node).attr("id");
+					style = UIFactory["Node"].getContentStyle(blockid);
+					html = "<div class='row asmColumn' style='"+style+"'>";
+					var blocks = $(root.node).children("asmUnitStructure:has(metadata[semantictag*='asmColumn'])");
+					var lgcolumn = Math.floor(12/blocks.length);
+					for (var i=0; i<blocks.length; i++) {
+						var blockid = $(blocks[i]).attr("id");
+						html += "<div id='column_"+blockid+"' class='col-md-"+lgcolumn+"' style='height:100%;"+style+"'>";
+						html += "</div><!-- class='col-md' -->";
+					}
+					html += "</div><!-- class='row' -->";
+					$("#content-"+uuid).append(html);
+					for (var i=0; i<blocks.length; i++) {
+						var blockid = $(blocks[i]).attr("id");
+						var child = UICom.structure["tree"][blockid];
+						UIFactory["Node"].displayStandard(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root);
+					}
+					//---------------------------------------
+			} else if (semtag.indexOf('asmBlockContainer')>-1) {
+				//----------------- BLOCKS ------------------------
+				var blockid = $(root.node).attr("id");
+				var max = semtag.substring(semtag.indexOf('asm-block')+10,semtag.indexOf('asm-block')+12);
+				if (max>12)
+					max=12;
+				var lgcolumn = Math.floor(12/max);
+				var blocks = $(root.node).children("asmUnitStructure,asmContext");
+				html = "<div class='row asmBlockContainer'>";
+				for (var i=0; i<blocks.length; i++) {
+					var blockid = $(blocks[i]).attr("id");
+					if (i!=0 && i%max==0) {
+						html += "</div><!-- class='row' -->";
+						html += "<div class='row asmBlockContainer'>";
+					}
+					var blockid = $(blocks[i]).attr("id");
+					var blockstyle = UIFactory["Node"].getContentStyle(blockid);
+					html += "<div class='col-md-"+lgcolumn+" inside-full-height'>";
+					html += "<div id='column_"+blockid+"' class='block inside-full-height' style='"+blockstyle+"'>";
+					html += "</div><!-- class='block' -->";
+					html += "</div><!-- class='col-md' -->";
+				}
+				html += "</div><!-- class='row' -->";
+				$("#content-"+uuid).append(html);
+				for (var i=0; i<blocks.length; i++) {
+					var blockid = $(blocks[i]).attr("id");
+					var child = UICom.structure["tree"][blockid];
+					var nodename = $(child.node).prop("nodeName"); // name of the xml tag
+					var childnode = UICom.structure["ui"][blockid];
+					var childsemtag = $(childnode.metadata).attr('semantictag');
+					var block = false;
+					if (nodename == "asmContext" || childsemtag.indexOf('no-title')>-1)
+						UIFactory["Node"].displayBlock(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root);
+					else
+						UIFactory["Node"].displayStandard(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root);
+				}
+				//---------------------------------------
+			} else {
+				var gotDisplay = false;
+				if (semtag=="EuropassL"){
+					gotDisplay = true;
+					UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid);
+				}
+				if (semtag.indexOf('TableABC')>-1) {
+					gotDisplay = true;
+					UIFactory["TableABC"].displayView('content-'+uuid,langcode,'detail',uuid);
+				}
+				if (!gotDisplay && semtag!='bubble_level1') {
+					for( var i=0; i<root.children.length; ++i ) {
+						// Recurse
+						var child = UICom.structure["tree"][root.children[i]];
+						var childnode = UICom.structure["ui"][root.children[i]];
+						var childsemtag = $(childnode.metadata).attr('semantictag');
+						var freenode = ($(childnode.metadatawad).attr('freenode')==undefined)?'':$(childnode.metadatawad).attr('freenode');
+						if (contentfreenode == 'Y' || freenode == 'Y')
+							UIFactory["Node"].displayFree(child, 'content-'+uuid, depth-1,langcode,edit,inline);
+						else
+							UIFactory["Node"].displayStandard(child, 'content-'+uuid, depth-1,langcode,edit,inline,backgroundParent,root);
+					}
+				}
+			}
+			// ==============================================================================
+			//------------- javascript dashboard --------------------
+/*			if (depth>1 && $($("metadata",data)[0]).attr('semantictag')!=undefined) {
+				var semtag =  $($("metadata",data)[0]).attr('semantictag');
+				if (semtag.indexOf('dashboard')>-1){
+					var dashboard_function = $($("metadata",data)[0]).attr('semantictag').substring(10)+"(UICom.root.node,'content-'+uuid)";
+					$("#"+dest).append(eval(dashboard_function));
+					$(".popinfo").popover({ 
+					    placement : 'bottom',
+					    html : true
+					});
+				}
+			}*/
+			//-------------------------------------------------------
+//			$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
+			$('a[data-toggle=tooltip]').tooltip({html:true});
+			$('[data-tooltip="true"]').tooltip();
+			$(".pickcolor").colorpicker();
+			//----------------------------
+			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
+			if (!multilingual_resource)
+				$("#embed"+uuid+NONMULTILANGCODE).oembed();
+			else
+				$("#embed"+uuid+langcode).oembed();
+			//----------------------------
+		}
+	} //---- end of private
+};
 //========================================================
 UIFactory["Node"].updateIpadPosition = function (obj,top,left)
 //========================================================
@@ -1769,6 +2184,8 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				html += "</div>";
 				//--------------------------------------------------
 				html += "</div><!-- row -->";
+				//-------------- metainfo -------------------------
+				html += "<div id='metaepm_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
 				//--------------------------------------------------*/
 				if (root.children.length>0 && depth>0) {
 					if (semtag=="asmNop" || semtag=="node_resource" || semtag=="text" || semtag=="aggregate" || semtag=="url2unit")
@@ -1786,6 +2203,10 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 			}
 			if ($("#get_editor_"+uuid).length>0) {
 				$("#get_editor_"+uuid).append(UICom.structure["ui"][uuid].resource.getEditor());
+			}
+			// -------------- display metainfo
+			if (g_userroles[0]=='designer' || USER.admin) {  
+				UIFactory["Node"].displayMetaEpmInfos("metaepm_"+uuid,data);
 			}
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
@@ -2170,7 +2591,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- specific menu button ---------------
 	if (menu) {
 		try {
-			if ((depth>0 || node.asmtype == 'asmUnitStructure') && menuroles != undefined && menuroles.length>10 && (menuroles.indexOf(userrole)>-1 || menuroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') ){
+			if ((depth>0 || node.asmtype == 'asmUnitStructure') && menuroles != undefined && menuroles.length>10 && (menuroles.indexOf(userrole)>-1 || (menuroles.containsArrayElt(g_userroles) && menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
 				var menus = [];
 				var displayMenu = false;
 				var items = menuroles.split(";");
@@ -2531,7 +2952,6 @@ UIFactory["Node"].displayMetainfo = function(destid,data)
 	html += "<span>"+name+" - </span>";
 	if ($("metadata",data).attr('semantictag')!=undefined && $("metadata",data).attr('semantictag')!="")
 		html += "<span>semantictag:"+$("metadata",data).attr('semantictag')+"| </span>";
-//	html += UIFactory["Node"].displayMetadata(data,'public');
 	html += UIFactory["Node"].displayMetadataWad(data,'seenoderoles');
 	html += UIFactory["Node"].displayMetadataWad(data,'editresroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'delnoderoles');
@@ -2630,6 +3050,33 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 };
 
 //==================================================
+UIFactory["Node"].displayMetadataEpmInfo = function(data,attribute)
+//==================================================
+{
+	var html = "";
+	if ($("metadata-epm",data).attr(attribute)!=undefined && $("metadata-epm",data).attr(attribute)!="")
+		html += "<span>"+attribute+":"+$("metadata-epm",data).attr(attribute)+"| </span>";
+	return html;
+};
+
+//==================================================
+UIFactory["Node"].displayMetaEpmInfos = function(destid,data)
+//==================================================
+{
+	var html = "";
+	html += UIFactory["Node"].displayMetadataEpmInfo(data,'node-font-weight');
+	html += UIFactory["Node"].displayMetadataEpmInfo(data,'node-font-style');
+	html += UIFactory["Node"].displayMetadataEpmInfo(data,'node-text-align');
+	html += UIFactory["Node"].displayMetadataEpmInfo(data,'node-font-size');
+	html += UIFactory["Node"].displayMetadataEpmInfo(data,'node-font-weight');
+	html += UIFactory["Node"].displayMetadataEpmInfo(data,'node-color');
+	html += UIFactory["Node"].displayMetadataEpmInfo(data,'node-padding-top');
+	html += UIFactory["Node"].displayMetadataEpmInfo(data,'node-background-color');
+	html += UIFactory["Node"].displayMetadataEpmInfo(data,'node-othercss');
+	$("#"+destid).html(html);
+};
+
+//==================================================
 UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 //==================================================
 {
@@ -2711,7 +3158,9 @@ UIFactory["Node"].updateMetadataAttribute = function(nodeid,attribute,value,chec
 		value = "N";
 	$($("metadata",node)[0]).attr(attribute,value);
 	UICom.UpdateMetadata(nodeid);
-	UIFactory["Node"].displayMetainfo('metainfo_'+nodeid,node);
+	if (g_userroles[0]=='designer' || USER.admin) {  
+		UIFactory["Node"].displayMetainfo("metainfo_"+nodeid,node);
+	}
 };
 
 //==================================================
@@ -2730,7 +3179,9 @@ UIFactory["Node"].updateMetadataWadAttribute = function(nodeid,attribute,value,c
 			$($("metadata-wad",node)[0]).attr('private','N');
 	//-----------------------------------
 	UICom.UpdateMetaWad(nodeid);
-	UIFactory["Node"].displayMetainfo('metainfo_'+nodeid,node);
+	if (g_userroles[0]=='designer' || USER.admin) {  
+		UIFactory["Node"].displayMetainfo("metainfo_"+nodeid,node);
+	}
 };
 
 //==================================================
@@ -2745,6 +3196,10 @@ UIFactory["Node"].updateMetadataEpmAttribute = function(nodeid,attribute,value,c
 	if (attribute=="top" || attribute=="left")
 		refresh = false;
 	UICom.UpdateMetaEpm(nodeid,refresh);
+	if (g_userroles[0]=='designer' || USER.admin) {  
+		UIFactory["Node"].displayMetaEpmInfos("metaepm_"+nodeid,node);
+	}
+
 };
 
 //==================================================
@@ -2812,7 +3267,9 @@ UIFactory["Node"].updateMetadataDisplayTypeAttribute = function(nodeid,attribute
 	var node = UICom.structure["ui"][nodeid].node;
 	$($("metadata",node)[0]).attr(attribute,value);
 	UICom.UpdateMetadata(nodeid);
-//	UIFactory["Node"].displayMetainfo('metainfo_'+nodeid,node);
+	if (g_userroles[0]=='designer' || USER.admin) {  
+		UIFactory["Node"].displayMetainfo("metainfo_"+nodeid,node);
+	}
 };
 
 

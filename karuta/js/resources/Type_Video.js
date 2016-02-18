@@ -176,13 +176,13 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 	html += "  </div>";
 	html += "</div>";
 	html += "  </div>";
-	/*
+/*	
 	html = "";
 	html += "<video width='320' height='240' controls>";
-	var srce = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
+	var srce = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp4";
 	html += "<source src='"+srce+"' type='video/mp4'/>";
-	html += "</video>";
-	*/
+	html += "</video>";*/
+	
 	return html;
 };
 
@@ -208,7 +208,11 @@ UIFactory["Video"].prototype.setParameter = function(langcode)
 		},
 		swfPath: "../../other/jplayer",
 		solution:"flash,html",
-		supplied: "m4v"
+		supplied: "m4v",
+		size: {
+			width:"100%",
+			height:"240px"
+		}
 	});
 };
 

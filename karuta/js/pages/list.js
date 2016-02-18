@@ -74,7 +74,7 @@ function show_list_page()
 {
 	
 	changeCss("body", "background-color:#e0006d;");
-	changeCss("#main-container .row .row", "background-color:initial;");
+	changeCss("#projects .row .row", "background-color:initial;");
 	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 	$("#sub-bar").html(getListSubBar());
 	setWelcomeTitles();

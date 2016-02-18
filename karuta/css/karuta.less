@@ -436,8 +436,13 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 /* ============================================== */
-#edit-window-body-resource .btn {
+#edit-window-body-resource .btn,
+.resource .btn {
 	min-height:34px;
+}
+
+#edit-window-body-resource .wysihtml5-toolbar .btn {
+	min-height:0px;
 }
 /* ============================================== */
 
@@ -652,10 +657,6 @@ hr {
 
 .drop-down-menu{
 	border:1px solid gray;
-}
-.resource-Image{
-	padding:0px;	
-	overflow:hidden;
 }
 
 .text-editor {
@@ -1070,11 +1071,11 @@ a.active:over{
 	font-size:14px;
 	margin-top:5px;
 }
-
+/*
 .get-radio:first-of-type{
 	margin-top:20px;
 }
-
+*/
 .click-item{
 	padding-left:5px;
 	font-size:14px;
@@ -1614,6 +1615,8 @@ table.tablesorter th.restore {
 	display:inline-block;
 	min-height:25px;
 	min-width:50px;
+	padding:0px;	
+	overflow:hidden;
 }
 
 .doc-up,
@@ -1878,3 +1881,31 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .asmColumn {
 	height:100%;
 }
+
+/* ====================
+	BLOCK
+   ====================*/
+.block {
+	min-height:200px;
+	border: 1px lightgrey solid;
+	margin-top:10px;
+}
+
+    /* jplayer */
+    .jp-video video, .jp-audio, .jp-controls-holder {
+        width: 100% !important;
+    }
+
+   .jp-video, .jp-video > div, .jp-video img {
+       height: auto !important;
+       width: 100% !important;
+   }
+
+   .jp-video-360p {
+       max-width: 570px !important;
+   }
+
+   .jp-video-270p {
+       max-width: 480px !important;
+   }
+
