@@ -543,6 +543,7 @@ UIFactory["User"].changePassword = function(userid,value)
 			data : xml,
 			success : function(data) {
 				alertHTML(karutaStr[LANG]['saved']);
+				$('#edit-window').modal('hide');
 			}
 		});
 	} else {

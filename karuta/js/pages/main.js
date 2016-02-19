@@ -76,7 +76,7 @@ function fill_main_page(portfolioid,role)
 			// --------------------------
 			UICom.parseStructure(data);
 			UIFactory["Portfolio"].parse(data);
-			if ($("asmUnit:has(metadata[semantictag='welcome-unit'])",data).length==0 && $("asmRoot:has(metadata[semantictag*='karuta-model'])",data).length>0) {
+			if ($("asmUnit:has(metadata[semantictag*='welcome-unit'])",data).length==0 && $("asmRoot:has(metadata[semantictag*='karuta-model'])",data).length>0) {
 				g_welcome_add = true;
 			}
 			// ================================= CSS Portfolio ========================

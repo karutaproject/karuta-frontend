@@ -116,17 +116,28 @@ function getNavBar(type,portfolioid,edit)
 	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench'></span></a></li>";
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------
-	if (languages.length>1) {
-		html += "			<ul class='nav navbar-nav'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
-		html += "					<ul class='dropdown-menu'>";
-		for (var i=0; i<languages.length;i++) {
-			html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+	if (languages.length>1) 
+		if(type!="create_account") {
+			html += "			<ul class='nav navbar-nav'>";
+			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+			html += "					<ul class='dropdown-menu'>";
+			for (var i=0; i<languages.length;i++) {
+				html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+			}
+			html += "					</ul>";
+			html += "				</li>";
+			html += "			</ul>";
+		} else { // -- create_account --
+			html += "			<ul class='nav navbar-nav'>";
+			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+			html += "					<ul class='dropdown-menu'>";
+			for (var i=0; i<languages.length;i++) {
+				html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getInputs());\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+			}
+			html += "					</ul>";
+			html += "				</li>";
+			html += "			</ul>";
 		}
-		html += "					</ul>";
-		html += "				</li>";
-		html += "			</ul>";
-	}
 	//-----------------ACTIONS-------------------------------
 	if (type!='login' && USER!=undefined) {
 		if (USER.admin) {
@@ -459,7 +470,7 @@ function displayPage(uuid,depth,type,langcode,edit) {
 	if (UICom.structure['tree'][uuid]!=null) {
 		if (type=='standard') {
 			$("#welcome-edit").html("");
-			if (UICom.structure["ui"][uuid].semantictag=='welcome-unit' && !g_welcome_edit)
+			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit)
 				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 			else
 				UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
@@ -877,7 +888,7 @@ function setLanguage(lang) {
 		if (languages[i]==lang)
 			LANGCODE = i;
 	}
-	if (USER.id!="2") // not public Account
+	if (USER!=undefined && USER.id!="2") // not public Account
 		moment.locale(lang);
 }
 

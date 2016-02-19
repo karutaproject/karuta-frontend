@@ -608,6 +608,8 @@ function loginElgg(username,password,callback)
 	if (username=='root')
 		username = 'karuta_'+username;
 	var elggusername = username.replace('@', '_');
+	if (elggusername.length<6)
+		elggusername += "_____";
 	var url = "../../../../"+elgg_url_base+"services/api/rest/xml?method=auth.gettoken&username="+elggusername+"&password="+password;
 	$.ajax({
 		dataType : "json",
@@ -658,7 +660,7 @@ function user_register(name, email, username, password,callback,param1)
 	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
 	var data = "auth_token="+g_elgg_key+"&method=user.register&name="+name+"&username="+elggusername+"&password="+password+"&email="+email;
 	$.ajax({
-		type : "POST",
+		type : "GET",
 		dataType : "json",
 		url : url,
 		data: data,
@@ -668,6 +670,30 @@ function user_register(name, email, username, password,callback,param1)
 		},
 		error : function(jqxhr,textStatus) {
 			alert("user_register : Oups! "+jqxhr.responseText);
+		}
+	});
+}
+
+//=================================================
+function user_change_password(password,username,callback,param1)
+//=================================================
+{
+	var elggusername = username.replace('@', '_');
+	if (elggusername.length<6)
+		elggusername += "_____";
+	var url = "../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=auth.changepassword&username="+elggusername+"&new_password="+password;
+	$.ajax({
+		type : "POST",
+		dataType : "json",
+		url : url,
+		data: data,
+		success : function(data) {
+			if (callback!=null)
+				callback(param1);
+		},
+		error : function(jqxhr,textStatus) {
+			alert("user_change_password : Oups! "+jqxhr.responseText);
 		}
 	});
 }
