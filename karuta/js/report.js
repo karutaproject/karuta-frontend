@@ -79,7 +79,7 @@ function processPortfolio(no,xmlReport,destid,data,line)
 }
 
 //==================================
-function process(xmlDoc,json)
+function report_process(xmlDoc,json)
 //==================================
 {
 	$.ajaxSetup({async: false});
@@ -87,21 +87,22 @@ function process(xmlDoc,json)
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
 		if (tagname=="for-each-line")
-			processLine(i,children[i],'content');
+			processLine(i,children[i],'report-content');
 		if (tagname=="for-each-person")
-			getUsers(i,children[i],'content');
+			getUsers(i,children[i],'report-content');
 		if (tagname=="for-each-portfolio")
-			getPortfolios(i,children[i],'content');
+			getPortfolios(i,children[i],'report-content');
 		if (tagname=="table")
-			processTable(i,children[i],'content');
+			processTable(i,children[i],'report-content');
 		if (tagname=="aggregate")
-			processAggregate(children[i],'content');
+			processAggregate(children[i],'report-content');
 		if (tagname=="text")
-			processText(children[i],'content');
+			processText(children[i],'report-content');
 		if (tagname=="url2unit")
-			processUTL2Unit(children[i],'content');
+			processURL2Unit(children[i],'report-content');
 	}
 	displayPDFButton();
+	displayCSVButton();
 	$.ajaxSetup({async: true});
 }
 
@@ -558,15 +559,15 @@ function processAggregate(aggregate,destid)
 //===============================================================
 
 //==================================
-function processCode()
+function report_processCode()
 //==================================
 {
-	var model_code = $("#model_code").val();
-	getModelAndProcess(model_code);
+	var model_code = $("#report-model_code").val();
+	report_getModelAndProcess(model_code);
 }
 
 //==================================
-function getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
+function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 {
 	var xml_model = "";
@@ -599,7 +600,7 @@ function getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 }
 
 //==================================
-function getModelAndProcess(model_code,json)
+function report_getModelAndProcess(model_code,json)
 //==================================
 {
 	$.ajax({
@@ -615,7 +616,7 @@ function getModelAndProcess(model_code,json)
 				dataType : "xml",
 				url : urlS,
 				success : function(data) {
-					process(data,json);
+					report_process(data,json);
 				}
 			 });
 		}
@@ -623,11 +624,12 @@ function getModelAndProcess(model_code,json)
 }
 
 //==================================
-function xml2PDF()
+function xml2PDF(content)
 //==================================
 {
-	var data = $('#content').html();
+	var data = $('#'+content).html();
 	data = data.replace('&nbsp;', ' ');
+	data = "<div>" + data + "</div>";
 	var url =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&format=application/pdf";
 	postAndDownload(url,data);
 }
@@ -636,6 +638,25 @@ function xml2PDF()
 function displayPDFButton()
 //==================================
 {
-	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick='javascript:xml2PDF()''>pdf</button>";
-	$("#pdf").html(html);
+	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2PDF('report-pdf')\">PDF</button>";
+	$("#report-pdf").html(html);
+}
+
+//==================================
+function xml2CSV(content)
+//==================================
+{
+	var data = $('#'+content).html();
+	data = data.replace('&nbsp;', ' ');
+	data = "<div>" + data + "</div>";
+	var url =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&format=application/csv";
+	postAndDownload(url,data);
+}
+
+//==================================
+function displayCSVButton()
+//==================================
+{
+	var html = "<h4 class='line'><span class='badge'>4</span></h4><button onclick=\"javascript:xml2CSV('report-content')\">CSV</button>";
+	$("#report-csv").html(html);
 }

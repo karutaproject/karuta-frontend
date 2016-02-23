@@ -873,7 +873,7 @@ function getLanguage() {
 			if (languages[i]==lang)
 				LANGCODE = i;
 		}
-		if (USER!=null && USER.id!="2") // not public Account
+		if (USER!=undefined && $(USER.username_node).text()!="public") // not public Account
 			moment.locale(lang);  // for elgg
 	}
 }
@@ -888,7 +888,7 @@ function setLanguage(lang) {
 		if (languages[i]==lang)
 			LANGCODE = i;
 	}
-	if (USER!=undefined && USER.id!="2") // not public Account
+	if (USER!=undefined && $(USER.username_node).text()!="public") // not public Account
 		moment.locale(lang);
 }
 

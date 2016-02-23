@@ -138,8 +138,8 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	var html = "<form class='form-horizontal' role='form'></form>";
 	var form = $(html);
 	//------
-	var group1 = $("<div class='form-group'></div>");
-	var div1 = $("<div class='col-sm-9'></div>"); 
+//	var group1 = $("<div class='form-group'></div>");
+//	var div1 = $("<div class='col-sm-9'></div>"); 
 	html = "<input type='text' name='datepicker' class='datepicker form-control' style='width:150px;' ";
 	if (disabled)
 		html += "disabled='disabled' ";
@@ -157,9 +157,9 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	if (minViewMode.length==0)
 		minViewMode = "days";
 	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
-	$(div1).append(input1);
-	$(group1).append(div1);
-	$(form).append(group1);
+//	$(div1).append(input1);
+//	$(group1).append(div1);
+	$(form).append(input1);
 	//------
 	if (g_userroles[0]=='designer' || USER.admin){
 		var group2 = $("<div class='form-group calendar-format'><label class='col-sm-3 control-label'>Diplay Format</label></div>");

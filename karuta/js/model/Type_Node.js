@@ -486,9 +486,9 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					var depth = 1;
 					var html = "";
 					html += "<div class='sidebar-item' id='parent-"+uuid+"' role='tablist'>";
-					html += "  <div  class='sidebar-link'>";
-					html += "  <small style='cursor:pointer' data-toggle='collapse' data-parent='#parent-"+parentid+"' href='#collapse"+uuid+"' onclick=\"togglePlusMinus('"+uuid+"');\"><span  id='toggle_"+uuid+"' class='glyphicon glyphicon-plus ' style='float:right;margin-right:5px;'></span></small>";
-					html += "  <a id='sidebar_"+uuid+"' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\">"+text+"</a>";
+					html += "  <div  class='sidebar-link' style='cursor:pointer' data-toggle='collapse' data-parent='#parent-"+parentid+"' href='#collapse"+uuid+"' onclick=\"togglePlusMinus('"+uuid+"');;displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\">";
+					html += "  <small ><span  id='toggle_"+uuid+"' class='glyphicon glyphicon-plus ' style='float:right;margin-right:5px;'></span></small>";
+					html += "  <a id='sidebar_"+uuid+"'>"+text+"</a>";
 					html += "  </div>"
 					html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 					html += "<div id='panel-body"+uuid+"' class='panel-body'></div><!-- panel-body -->";
@@ -543,9 +543,10 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	//---------------------------------------
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
-		html = "<a  class='glyphicon glyphicon-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)} else {g_welcome_edit=false;$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)}\"></a>";
+		html = "<a  class='glyphicon glyphicon-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)} else {g_welcome_edit=false;$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)}\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-tooltip='true' data-placement='bottom'></a>";
 		$("#welcome-edit").html(html);
 	}
+	$('[data-tooltip="true"]').tooltip();
 }
 
 //==================================================
@@ -686,7 +687,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					}
 			}
 			//================================================================================================
-			var html = "<div id='node_"+uuid+"' class='asmnode "+nodetype+" "+semtag+" ";
+			var html = "<div id='node_"+uuid+"' class='standard asmnode "+nodetype+" "+semtag+" ";
 			if(UICom.structure["ui"][uuid].resource!=null)
 				html += UICom.structure["ui"][uuid].resource.type;
 			html += "'";
@@ -926,11 +927,11 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//--------------------collapsed------------------------------------------
 			if (collapsible=='Y') {
 				if (collapsed=='Y') {
-					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-plus");
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-plus collapsible");
 					$("#content-"+uuid).hide();
 				}
 				else {
-					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-minus");
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-minus collapsible");
 					$("#content-"+uuid).show();
 				}
 			}
@@ -1005,13 +1006,20 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
 						processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0);
 					else
-						getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models);
+						report_getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models);
 				}
 				catch(err) {
 					alertHTML("Error in Dashboard : " + err.message);
 				}
 				if (g_userroles[0]!='designer')
 					$("#node_"+uuid).hide();
+				if (semtag.indexOf("-csv")) {
+					$("#"+dest).append($("<button onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</button>"));				
+				}
+				if (semtag.indexOf("-pdf")) {
+					$("#"+dest).append($("<button onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</button>"));				
+				}
+					
 			}
 			// ================================= For each child ==========================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
@@ -1122,9 +1130,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//----------------------------
 		}
 		if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
-			html = "<a  class='glyphicon glyphicon-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)} else {g_welcome_edit=false;$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)}\"></a>";
+			html = "<a  class='glyphicon glyphicon-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)} else {g_welcome_edit=false;$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)}\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-tooltip='true' data-placement='bottom'></a>";
 			$("#welcome-edit").html(html);
 		}
+		$('[data-tooltip="true"]').tooltip();
 	} //---- end of private
 };
 
@@ -1374,7 +1383,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
 						processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0);
 					else
-						getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models);
+						report_getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models);
 				}
 				catch(err) {
 					alertHTML("Error in Dashboard : " + err.message);

@@ -20,6 +20,10 @@
 
 
 /* ============================================================ */
+a, .collapsible {
+	cursor:pointer;
+}
+
 
 #navigation_bar .navbar-default{
 	background-color:@navigation_bar-background-color;
@@ -42,6 +46,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #contenu {
 	padding-left:0px;
 	padding-right:0px;
+	padding-bottom:50px;
 }
 
 #contenu .page {
@@ -433,6 +438,11 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 .welcome-block .col-md-2,
 .welcome-block .col-md-1 {
 	height:100%
+}
+
+/* =========== PORTFOLIO-WELCOME EDIT MODE ================= */
+.standard .welcome-block {
+	margin-left:20px;
 }
 
 /* ============================================== */
@@ -1599,12 +1609,12 @@ table.tablesorter th.restore {
 
 
 .resource-Video:hover,
-.resource-Field:hover,
-.resource-TextField:hover,
+/* .resource-Field:hover,
+.resource-TextField:hover,*/
 .resource-Image:hover,
 .resource-Document:hover,
 .resource-URL:hover {
-	opacity:0.5;
+	opacity:0.8;
 }
 
 .resource-Document a,
@@ -1705,6 +1715,9 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 /* ====================
 	Calendar
    ====================*/
+.calendar-format {
+	margin-top:10px;
+}
 
 .container .Calendar .form-group {
 	margin-bottom:0px;

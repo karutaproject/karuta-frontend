@@ -127,8 +127,8 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-minus'></span></div>";
 				else
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-plus'></span></div>";
-				html += "		<div class='project-label col-md-2 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"</div>";
-				html += "		<div class='project-label col-md-2 col-sm-3 hidden-xs'>"+owner+"</div>";
+				html += "		<div class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"</div>";
+				html += "		<div class='project-label col-md-2 col-sm-2 hidden-xs'>"+owner+"</div>";
 				html += "		<div id='comments_"+portfolio.id+"' class='col-md-4 col-sm3 col-xs-4 comments'></div><!-- comments -->";
 				html += "		<div class='col-md-1 col-xs-1'>";
 				//------------ buttons ---------------
@@ -1043,7 +1043,16 @@ UIFactory["Portfolio"].restore = function(portfolioid)
 		url : url,
 		data : "",
 		success : function(data) {
-			display_list_page();
+			for (var i=0;i<bin_list.length;i++){
+				if (bin_list[i]!=null && bin_list[i].id==portfolioid) {
+					portfolios_list[bin_list.length] = bin_list[i];
+					bin_list[i] = null;
+					break;
+				}
+			}
+			UIFactory["Portfolio"].displayAll('portfolios','list');
+			UIFactory["Portfolio"].displayBin('bin','bin');
+			$('[data-toggle=tooltip]').tooltip();
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in restore : "+jqxhr.responseText);

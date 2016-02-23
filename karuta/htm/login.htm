@@ -165,7 +165,7 @@
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 				}
 			});
-			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('login',null));$("#login").html(getLogin());$("#newpassword").html(getNew());$("#newaccount").html(karutaStr[LANG]['new-account']);});
+			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('login',null));$("#login").html(getLogin());$("#useridentifier").focus();$("#newpassword").html(getNew());$("#newaccount").html(karutaStr[LANG]['new-account']);});
 			$.ajax({
 				type : "POST",
 				dataType : "xml",

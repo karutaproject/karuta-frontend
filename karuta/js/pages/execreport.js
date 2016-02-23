@@ -24,7 +24,7 @@ function fill_exec_report()
 	html += "<h2 id='report' class='line'>KARUTA - <span id='report-title-page'></span></h2>";
 	html += "<h4 class='line'><span class='badge'>1</span> <span id='report-title-1'></span></h4>";
 	html += "<div id='report-csv_file_upload' style='margin-left:20px'></div>";
-	html += "<div style='margin-left:20px'> <span id='report-title-3'></span>&nbsp;<input  id='report-model_code' type='text'></input>&nbsp;<button onclick='javascript:processCode()'>ok</button></div>";
+	html += "<div style='margin-left:20px'> <span id='report-title-3'></span>&nbsp;<input  id='report-model_code' type='text'></input>&nbsp;<button onclick='javascript:report_processCode()'>ok</button></div>";
 	html += "<div id='report-model_description' style='margin-left:20px'></div>";
 	html += "<div id='report-csv_file_upload2' style='margin-left:20px'></div>";
 	html += "<h4 class='line'><span class='badge'>2</span> <span id='report-title-2'></span></h4>";
@@ -32,6 +32,7 @@ function fill_exec_report()
 	html += "<div id='report-log' style='margin-left:20px;margin-top:20px'></div>";
 	html += "<div id='report-content' class='createreport'></div>";
 	html += "<div id='report-pdf'></div>";
+	html += "<div id='report-csv'></div>";
 	$("#main-exec-report").html(html);
 	//------------------------------
 	var model_code = "";
@@ -54,7 +55,7 @@ function fill_exec_report()
 			$("#report-divfileupload").html("Loaded");
 			json = data.result;
 			model_code =json.model_code;
-			getModelAndProcess(model_code,json);
+			report_getModelAndProcess(model_code,json);
 		}
     });
 	//------------------------------
