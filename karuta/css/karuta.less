@@ -585,6 +585,10 @@ hr {
 	padding-top:10px;
 }
 
+.content .block .asmContext:first-child {
+	padding-top:0px;
+}
+
 
 .asmRoot,
 .asmStructure,
@@ -1899,11 +1903,76 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 /* ====================
 	BLOCK
    ====================*/
+.asmBlockContainer .col-md-12 {
+	padding-left:0px;
+	padding-right:0px;
+}  
+ 
+.asmBlockContainer .col-md-6:first-child,
+.asmBlockContainer .col-md-4:first-child,
+.asmBlockContainer .col-md-3:first-child {
+	padding-left:0px;
+}
+
+.asmBlockContainer .col-md-3,
+.asmBlockContainer .col-md-4,
+.asmBlockContainer .col-md-6 {
+	padding-right:0px;
+}   
+
 .block {
 	min-height:200px;
 	border: 1px lightgrey solid;
 	margin-top:10px;
+	max-height:220px;
 }
+
+.block .asmnode {
+	margin-top:0px;
+}
+
+.DocumentBlock a,
+.URLBlock a {
+	color: inherit;
+}
+
+.block .DocumentBlock,
+.block .URLBlock{
+	height:200px;
+	text-align:center;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+}
+
+.block .btn-group{
+	font-size:12px;
+}
+
+.block img{
+	display: inline-block;
+	overflow:hidden;
+	height:200px;
+	text-align:center;
+}
+
+.block .docblock-title{
+	width:100%;
+	position:absolute;
+	top:50%;
+}
+
+.block .no-document .docblock-title{
+	width:100%;
+	position:absolute;
+}
+
+.block .resource-TextField{
+	padding:7px;
+	overflow:hidden;
+	height:200px;
+}
+ 
 
     /* jplayer */
     .jp-video video, .jp-audio, .jp-controls-holder {

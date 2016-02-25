@@ -135,7 +135,7 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 	var label2 = this.label2_node[langcode].text();
 	if (this.encrypted)
 		label2 = decrypt(label2.substring(3),g_rc4key);
-	var code = $(this.code_node).text();
+	var code2 = $(this.code_node).text();
 	if (code2.indexOf("@")>-1)
 		code2 = code2.substring(0,code2.indexOf("@"))+code2.substring(code2.indexOf("@")+1);
 	if (code2.indexOf("#")>-1)

@@ -309,8 +309,14 @@ function getEditBox(uuid,js2) {
 			$("#edit-window-body-node").html($(html));
 		}
 	} else {
-		html = UICom.structure["ui"][uuid].getEditor();
-		$("#edit-window-body-node").html($(html));
+		if(UICom.structure["ui"][uuid].structured_resource!=null) {
+				UICom.structure["ui"][uuid].structured_resource.displayEditor("edit-window-body-resource");
+				html = UICom.structure["ui"][uuid].getEditor();
+				$("#edit-window-body-node").html($(html));
+		} else {
+			html = UICom.structure["ui"][uuid].getEditor();
+			$("#edit-window-body-node").html($(html));
+		}
 	}
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
@@ -1067,3 +1073,4 @@ String.prototype.containsArrayElt = function (rolesarray)
 	}
 	return result;
 }
+

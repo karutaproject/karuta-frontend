@@ -216,6 +216,10 @@
 		</aggregate>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='asmNop']">
+	</xsl:template>
+
+
 	<xsl:template match="*">
 	</xsl:template>
 	
