@@ -416,6 +416,25 @@ function alertBox()
 	return html;
 }
 
+//==============================
+function messageBox()
+//==============================
+{
+	var html = "";
+	html += "\n<!-- ==================== Message box ==================== -->";
+	html += "\n<div id='message-window' class='modal fade'>";
+	html += "\n		<div class='modal-dialog'>";
+	html += "\n			<div class='modal-content'>";
+	html += "\n				<div id='message-window-body' class='modal-body'>";
+	html += "\n				</div>";
+	html += "\n				<div id='message-window-footer' class='modal-footer' >";
+	html += "\n				</div>";
+	html += "\n			</div>";
+	html += "\n		</div>";
+	html += "\n</div>";
+	html += "\n<!-- ============================================== -->";
+	return html;
+}
 
 //=======================================================================
 function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2) 
@@ -1057,6 +1076,16 @@ function alertHTML(message,header,footer)
 
 }
 
+//==================================
+function messageHTML(message)
+//==================================
+{
+	var buttons = "<button class='btn' onclick=\"javascript:$('#message-window').modal('hide');\">" + karutaStr[LANG]["Close"] + "</button>";
+	document.getElementById('message-window-footer').innerHTML = buttons;
+	$('#message-window-body').html(message);
+	$('#message-window').modal('show');
+
+}
 
 
 //==================================

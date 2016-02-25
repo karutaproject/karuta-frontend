@@ -61,7 +61,7 @@
 			//===================== Image =======================
 			<asmContext xsi_type="">
 				<metadata-wad seenoderoles="all" />
-				<metadata-epm width="100"/>
+				<metadata-epm/>
 				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="image" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
 					<lastmodified />

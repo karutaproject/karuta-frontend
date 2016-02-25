@@ -1245,11 +1245,13 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					if (g_display_type=='standard') {
 						style = UIFactory["Node"].getContentStyle(uuid);
 					}
+					html += "<div class='block-resource'>";
 					html += "<div id='std_resource_"+uuid+"' class='";
 					if (node.resource_type!=null)
 						html+= "resource-"+node.resource_type;
 					html+= "' >";
 					html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
+					html += "</div>";
 					html += "</div>";
 					//-------------- context -------------------------
 					html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
@@ -1303,10 +1305,11 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			//-------------------------
 			if ($("#title_"+uuid).outerHeight()>0)
 				$("#std_resource_"+uuid).outerHeight(200-$("#title_"+uuid).outerHeight()); 
-//			var h1 = $("#std_resource_"+uuid)[0].scrollWidth;
-//			if (h1>200) {
-//	           alert(UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid));
-//			}
+			var h1 = $("#std_resource_"+uuid)[0].scrollHeight;
+			if (h1>200-$("#title_"+uuid).outerHeight()){
+				$("#std_resource_"+uuid).outerHeight(200-$("#title_"+uuid).outerHeight()-20);
+				$("#std_resource_"+uuid).parent().append($("<div onclick='messageHTML(\""+UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid)+"\")' style='text-align:right;cursor:pointer'>&nbsp;&nbsp; ... &nbsp;&nbsp;</div>"));
+			}
 			//---------------------------- BUTTONS AND BACKGROUND COLOR ---------------------------------------------
 			var buttons_color = eval($(".button").css("color"));
 			var buttons_background_style = UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
