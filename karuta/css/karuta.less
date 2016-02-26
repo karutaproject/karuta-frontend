@@ -1903,11 +1903,27 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 /* ====================
 	BLOCK
    ====================*/
+
+@block-height:220px;
+@block-img-height:218px;
+
+.oembedall-closehide{
+	display:none;
+}
+
+.block .buttons-menus{
+	float:left;
+}
+
+div.oembedall-container {
+	margin-top:-10px;
+}
+  
 .asmBlockContainer .col-md-12 {
 	padding-left:0px;
 	padding-right:0px;
 }  
- 
+/* 
 .asmBlockContainer .col-md-6:first-child,
 .asmBlockContainer .col-md-4:first-child,
 .asmBlockContainer .col-md-3:first-child {
@@ -1919,12 +1935,12 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .asmBlockContainer .col-md-6 {
 	padding-right:0px;
 }   
+*/
 
 .block {
-	min-height:200px;
+	height:@block-height;
 	border: 1px lightgrey solid;
 	margin-top:10px;
-	max-height:220px;
 }
 
 .block .asmnode {
@@ -1936,9 +1952,12 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	color: inherit;
 }
 
+.block .Oembed .btn-group{
+	margin-top:7px;
+}
 .block .DocumentBlock,
 .block .URLBlock{
-	height:200px;
+	height:@block-height;
 	text-align:center;
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -1952,7 +1971,7 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .block img{
 	display: inline-block;
 	overflow:hidden;
-	height:200px;
+	height:@block-img-height;
 	text-align:center;
 }
 
@@ -1967,6 +1986,10 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	position:absolute;
 }
 
+.block .asmUnitStructure{
+	height:@block-height;
+}
+
 .block .resource-Image{
 	text-align:center;
 	width:100%;
@@ -1975,9 +1998,12 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .block .resource-TextField{
 	padding:7px;
 	overflow:hidden;
-	height:200px;
+	height:@block-height;
 }
- 
+
+.block .oembedall-container div:last-child {
+	display:none;
+}
 
     /* jplayer */
     .jp-video video, .jp-audio, .jp-controls-holder {

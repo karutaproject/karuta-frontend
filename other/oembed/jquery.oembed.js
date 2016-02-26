@@ -111,8 +111,8 @@
 
     // Plugin defaults
     $.fn.oembed.defaults = {
-        maxWidth: null,
-        maxHeight: null,
+        maxWidth: 360,
+        maxHeight: 200,
 		includeHandle: true,
         embedMethod: 'auto',
         // "auto", "append", "fill"		

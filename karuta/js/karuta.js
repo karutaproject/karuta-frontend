@@ -34,6 +34,7 @@ var g_display_sidebar = true;
 var g_free_toolbar_visibility = 'hidden';
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_wysihtml5_autosave = 120000; // 120 seconds
+var g_block_height = 220; // block height in pixels
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------

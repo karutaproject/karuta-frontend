@@ -541,9 +541,16 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	html += "</div><!-- id='welcome-page' -->";
 	$("#"+dest).append(html);
 	//----------------- WELCOME BLOCKS ------------------------
-	var welcome_blocks = $(data).find("asmUnitStructure:has(metadata[semantictag='welcome-page'])").children("asmUnitStructure:has(metadata[semantictag='welcome-block'])");
+	var welcome_blocks = $(data).find("asmUnitStructure:has(metadata[semantictag='welcome-page'])").children("asmUnitStructure:has(metadata[semantictag='welcome-block']),asmUnitStructure:has(metadata[semantictag*='asm-block'])");
 	for (var i=0; i<welcome_blocks.length; i++) {
-		UIFactory["Node"].displayWelcomeBlock(welcome_blocks[i],'welcome-blocks',depth,langcode,edit,inline,backgroundParent,1);
+		var semtag = $($("metadata",welcome_blocks[i])[0]).attr('semantictag');
+		if (semtag=='welcome-block')
+			UIFactory["Node"].displayWelcomeBlock(welcome_blocks[i],'welcome-blocks',depth,langcode,edit,inline,backgroundParent,1);
+		else {
+			var uuid = $(welcome_blocks[i]).attr("id");
+			var child = UICom.structure["tree"][uuid];
+			UIFactory["Node"].displayStandard(child,'welcome-blocks',depth,langcode,edit,inline,backgroundParent,1);
+		}
 	}
 	//---------------------------------------
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
@@ -1257,7 +1264,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 				}
 				//-------------- buttons --------------------------
-				html += "<div>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
+				html += UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit);
 				//--------------------------------------------------
 				//-------------- metainfo -------------------------
 				if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
@@ -1304,10 +1311,10 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				$("#"+dest).append($(html));
 			//-------------------------
 			if ($("#title_"+uuid).outerHeight()>0)
-				$("#std_resource_"+uuid).outerHeight(200-$("#title_"+uuid).outerHeight()); 
+				$("#std_resource_"+uuid).outerHeight(g_block_height-$("#title_"+uuid).outerHeight()); 
 			var h1 = $("#std_resource_"+uuid)[0].scrollHeight;
-			if (h1>200-$("#title_"+uuid).outerHeight()){
-				$("#std_resource_"+uuid).outerHeight(200-$("#title_"+uuid).outerHeight()-20);
+			if (h1>g_block_height-$("#title_"+uuid).outerHeight()){
+				$("#std_resource_"+uuid).outerHeight(g_block_height-$("#title_"+uuid).outerHeight()-20);
 				$("#std_resource_"+uuid).parent().append($("<div onclick='messageHTML(\""+UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid)+"\")' style='text-align:right;cursor:pointer'>&nbsp;&nbsp; ... &nbsp;&nbsp;</div>"));
 			}
 			//---------------------------- BUTTONS AND BACKGROUND COLOR ---------------------------------------------
@@ -2715,7 +2722,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//--------------------------------------------------
 	if (html!="")
-		html = "<div id='btn-"+node.id+"'>" + html + "</div><!-- #btn-+node.id -->";
+		html = "<div class='buttons-menus' id='btn-"+node.id+"'>" + html + "</div><!-- #btn-+node.id -->";
 	return html;
 };
 
