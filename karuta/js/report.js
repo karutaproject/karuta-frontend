@@ -185,12 +185,14 @@ function processNode(no,xmlDoc,destid,data,line)
 function processTable(no,xmlDoc,destid,data,line)
 //==================================
 {
+	//---------------------------
 	var ref_init = $(xmlDoc).attr("ref-init");
 	if (ref_init!=undefined) {
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
-		for (var i=0;i<ref_inits.length;i++)
-			aggregates[ref_inits[i]] = new Array();
+		for (var k=0;k<ref_inits.length;k++)
+			aggregates[ref_inits[k]] = new Array();
 	}
+	//---------------------------
 	var html = "<table id='table_"+no+"'></table>";
 	$("#"+destid).append($(html));
 	var children = $(">*",xmlDoc);
@@ -213,6 +215,14 @@ function processTable(no,xmlDoc,destid,data,line)
 function processRow(no,xmlDoc,destid,data,line)
 //==================================
 {
+	//---------------------------
+	var ref_init = $(xmlDoc).attr("ref-init");
+	if (ref_init!=undefined) {
+		var ref_inits = ref_init.split("/"); // ref1/ref2/...
+		for (var k=0;k<ref_inits.length;k++)
+			aggregates[ref_inits[k]] = new Array();
+	}
+	//---------------------------
 	var html = "<tr id='tr_"+no+"'></tr>";
 	$("#"+destid).append($(html));
 	var children = $(">*",xmlDoc);

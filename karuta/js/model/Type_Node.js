@@ -1099,7 +1099,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 							}
 							$('#column_'+blockid).append($(html));
 							if (g_userroles[0]=='designer' || USER.admin) {  
-								UIFactory["Node"].displayMetainfo("metainfo_"+blockid,data);
+								UIFactory["Node"].displayMetainfo("metainfo_"+blockid,childnode.node);
 							}
 					} else
 							UIFactory["Node"].displayStandard(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root,menu);

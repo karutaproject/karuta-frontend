@@ -11,7 +11,7 @@
 			<xsl:apply-templates select='//asmRoot/asmUnitStructure'/>
 		</model>
 	</xsl:template>
-
+	<!-- ================ table ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-table']">
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
@@ -29,7 +29,11 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</table>
 	</xsl:template>
+	<!-- ================ row ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-row']">
+		<xsl:variable name="ref-init">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
 		</xsl:variable>
@@ -37,9 +41,13 @@
 			<xsl:if test="not($style='..')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
 			</xsl:if>
+			<xsl:if test="not($ref-init='')">
+				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</row>
 	</xsl:template>
+	<!-- ================ cell ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-cell']">
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
@@ -51,7 +59,7 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</cell>
 	</xsl:template>
-	
+	<!-- ================ text ============================ -->
 	<xsl:template match="*[metadata/@semantictag='text']">
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
@@ -69,7 +77,7 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</text>
 	</xsl:template>
-
+	<!-- ================ node-resource ============================ -->
 	<xsl:template match="*[metadata/@semantictag='node_resource']">
 		<xsl:variable name="editresroles">
 			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
@@ -105,7 +113,7 @@
 			</xsl:if>
 		</node_resource>
 	</xsl:template>
-
+	<!-- ================ url2unit ============================ -->
 	<xsl:template match="*[metadata/@semantictag='url2unit']">
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
