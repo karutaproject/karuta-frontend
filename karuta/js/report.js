@@ -18,6 +18,11 @@ var xmlDoc = null;
 var userid = null; // current user
 var aggregates = {};
 
+
+var jquerySpecificFunctions = {};
+jquerySpecificFunctions['.sort'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
+jquerySpecificFunctions['.filemane_not_empty'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"filename:not(:empty)\")";
+//.has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']").has("filename:not(:empty)")
 Selector = function(jquery,type,filter1,filter2)
 {
 	this.jquery = jquery;
@@ -43,6 +48,8 @@ function getSelector(select,test)
 		filter1 = function(){return $(this).children("metadata[semantictag*='"+selects[1]+"']").length>0};
 	}
 	var filter2 = test; // test = .has("metadata-wad[submitted='Y']").last()
+	if (jquerySpecificFunctions[test]!=undefined)
+		filter2 = jquerySpecificFunctions[test];
 	var type = "";
 	if (selects.length>2)
 		type = selects[2];
@@ -642,6 +649,7 @@ function xml2PDF(content)
 	data = "<div>" + data + "</div>";
 	var url =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&format=application/pdf";
 	postAndDownload(url,data);
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 }
 
 //==================================
@@ -661,6 +669,7 @@ function xml2CSV(content)
 	data = "<div>" + data + "</div>";
 	var url =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&format=application/csv";
 	postAndDownload(url,data);
+	$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});
 }
 
 //==================================
@@ -670,3 +679,5 @@ function displayCSVButton()
 	var html = "<h4 class='line'><span class='badge'>4</span></h4><button onclick=\"javascript:xml2CSV('report-content')\">CSV</button>";
 	$("#report-csv").html(html);
 }
+
+

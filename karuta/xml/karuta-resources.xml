@@ -519,7 +519,7 @@
 				<lastmodified />
 				<code />
 				<label lang="fr">Allez à</label>
-				<label lang="en">Go to</label>>
+				<label lang="en">Go to</label>
 			</asmResource>
 			<asmResource xsi_type="context">
 				<text lang="fr" />
@@ -553,6 +553,8 @@
 				<lastmodified />
 				<text lang="fr"/>
 				<text lang="en"/>
+				<csv>no</csv>
+				<pdf>yes</pdf>
 			</asmResource>
 		</asmContext>
 		//===================== Action =======================

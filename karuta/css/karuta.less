@@ -1467,8 +1467,8 @@ table.tablesorter th.restore {
 	border-top:1px solid lightgrey;
 }
 
-.model_row .specific-menu {
-	width:250px;
+.specific-menu {
+	width:200px;
 }
 
 .batch .create-tree{
@@ -1950,6 +1950,7 @@ div.oembedall-container {
 .DocumentBlock a,
 .URLBlock a {
 	color: inherit;
+	text-align:center;
 }
 
 .block .Oembed .btn-group{
@@ -1975,15 +1976,17 @@ div.oembedall-container {
 	text-align:center;
 }
 
-.block .docblock-title{
-	width:100%;
-	position:absolute;
-	top:50%;
-}
-
+.block .docblock-title,
 .block .no-document .docblock-title{
-	width:100%;
-	position:absolute;
+	display: inline-block;
+	margin-top:100px;
+	padding-left:10px;
+	padding-right:10px;
+	background-color:white;
+	opacity: 0.8;
+	-moz-box-shadow: 10px 10px 5px #888;
+	-webkit-box-shadow: 10px 10px 5px #888;
+	box-shadow: 10px 10px 5px #888;
 }
 
 .block .asmUnitStructure{

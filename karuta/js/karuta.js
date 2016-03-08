@@ -681,7 +681,7 @@ function postAndDownload(url,data)
 //=======================================================================
 {
 	var html = "<form id='form-data' action='"+url+"' method='post' enctype='multipart/form-data' ><input id='input-data' type='hidden' name='data'></form>";
-	$("body").append($(html));
+	$("#post-form").html($(html));
 	$("#input-data").val(data);
 	$("#form-data").submit();
 }

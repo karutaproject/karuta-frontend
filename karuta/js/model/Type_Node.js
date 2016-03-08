@@ -962,7 +962,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
-				if (depth>0) {
+				if (depth>0 || nodetype == "asmContext") {
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
 					var helps = attr_help.split("/"); // lang1/lang2/...
 					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
@@ -1005,7 +1005,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			//------------ Dashboard -----------------
 			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
-				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div></div>"));
+				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='dashboard_buttons_"+uuid+"' class='col-md-offset-1 col-md-11'></div></div>"));
 				var root_node = g_portfolio_current;
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
 				if (model_code.indexOf("@local")>-1){
@@ -1072,7 +1072,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					}
 					var blockid = $(blocks[i]).attr("id");
 					var blockstyle = UIFactory["Node"].getContentStyle(blockid);
-					html += "<div class='col-md-"+lgcolumn+"'>";
+					html += "<div class='col-md-"+lgcolumn+" col-sm-"+lgcolumn+"'>";
 					html += "<div id='column_"+blockid+"' class='block' style='"+blockstyle+"'>";
 					html += "</div><!-- class='block' -->";
 					html += "</div><!-- class='col-md' -->";
@@ -1469,7 +1469,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					}
 					var blockid = $(blocks[i]).attr("id");
 					var blockstyle = UIFactory["Node"].getContentStyle(blockid);
-					html += "<div class='col-md-"+lgcolumn+"'>";
+					html += "<div class='col-md-"+lgcolumn+" col-sm-"+lgcolumn+"'>";
 					html += "<div id='column_"+blockid+"' class='block' style='"+blockstyle+"'>";
 					html += "</div><!-- class='block' -->";
 					html += "</div><!-- class='col-md' -->";
@@ -1832,20 +1832,28 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
-				var attr_help = $($("metadata-wad",data)[0]).attr('help');
-				var helps = attr_help.split("/"); // lang1/lang2/...
-				var help_text = helps[langcode];  
-				var help =  " <a   data-toggle='popover' class='popinfo'><i class='icon-info-sign'></i></a> ";
-				$("#help_"+uuid).html(help);
-				$(".popinfo").popover({ 
-				    placement : 'right',
-				    container : 'body',
-				    title:karutaStr[LANG]['help-label'],
-				    html : true,
-				    content: help_text
-				    })
-				    .click(function(e) {
-				});
+				if (depth>0 || nodetype == "asmContext") {
+					var attr_help = $($("metadata-wad",data)[0]).attr('help');
+					var helps = attr_help.split("/"); // lang1/lang2/...
+					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
+						for (var j=0; j<helps.length; j++){
+							if (helps[j].indexOf(languages[langcode])>-1)
+								help_text = helps[j].substring(0,helps[j].indexOf("@"));
+						}
+					} else { // lang1/lang2/...
+						help_text = helps[langcode];  // lang1/lang2/...
+					}
+					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+					$("#help_"+uuid).html(help);
+					$(".popinfo").popover({ 
+					    placement : 'right',
+					    container : 'body',
+					    title:karutaStr[LANG]['help-label'],
+					    html : true,
+					    trigger:'click hover',
+					    content: help_text
+					});
+				}
 			}
 			//-----------------------------
 			if (USER.admin || g_userroles[0]=='designer' || graphicerroles.containsArrayElt(g_userroles) || graphicerroles.indexOf(this.userrole)>-1) {
@@ -2246,22 +2254,29 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 			}
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
-				var attr_help = $($("metadata-wad",data)[0]).attr('help');
-				var helps = attr_help.split("/"); // lang1/lang2/...
-				var help_text = helps[langcode];  
-				var help =  " <a href='javascript://'  data-toggle='popover' class='popinfo'><i class='icon-info-sign'></i></a> ";
-				$("#help_"+uuid).html(help);
-				$(".popinfo").popover({ 
-				    placement : 'right',
-				    container : 'body',
-				    title:karutaStr[LANG]['help-label'],
-				    html : true,
-				    content: help_text
-				    })
-				    .click(function(e) {
-				});
+				if (depth>0 || nodetype == "asmContext") {
+					var attr_help = $($("metadata-wad",data)[0]).attr('help');
+					var helps = attr_help.split("/"); // lang1/lang2/...
+					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
+						for (var j=0; j<helps.length; j++){
+							if (helps[j].indexOf(languages[langcode])>-1)
+								help_text = helps[j].substring(0,helps[j].indexOf("@"));
+						}
+					} else { // lang1/lang2/...
+						help_text = helps[langcode];  // lang1/lang2/...
+					}
+					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+					$("#help_"+uuid).html(help);
+					$(".popinfo").popover({ 
+					    placement : 'right',
+					    container : 'body',
+					    title:karutaStr[LANG]['help-label'],
+					    html : true,
+					    trigger:'click hover',
+					    content: help_text
+					});
+				}
 			}
-			
 				for( var i=0; i<root.children.length; ++i ) {
 					// Recurse
 					var child = UICom.structure["tree"][root.children[i]];

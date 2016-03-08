@@ -140,7 +140,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 			html += "</a>";
 		}
 		else
-			html += "<img src='../img/image-icon.png' width='25px'>"+karutaStr[LANG]['no-image'];
+			html += "<img src='../img/image-icon.png' height='25px'>"+karutaStr[LANG]['no-image'];
 		html += "</div>";
 	}
 	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {

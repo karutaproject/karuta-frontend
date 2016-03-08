@@ -130,6 +130,9 @@
 			<div id='wait-window-body' class='modal-body' style='text-align:center;'></div>
 			<div id="wait-spin"></div>
 		</div>
+		<!-- ==================== post form ====================================== -->
+		<div id='post-form' style='display:none'>
+		</div>
 		<!-- ==================================================================== -->
 		<script>document.write(EditBox());</script>
 		<script>document.write(DeleteBox());</script>
@@ -138,6 +141,8 @@
 		<script>document.write(alertBox());</script>
 		<script>document.write(messageBox());</script>
 		<script>
+			var target = document.getElementById('wait-spin');
+			var spinner = new Spinner().spin(target);
 			g_elgg_key = Cookies.get('elgg_token');
 			g_socialnetwork = Cookies.get('socialnetwork');
 			g_edit = true; // à vérifier
