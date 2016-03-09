@@ -31,6 +31,7 @@ UIFactory["URLBlock"] = function( node )
 	//--------------------
 	this.image_nodeid = $("asmContext:has(metadata[semantictag='image'])",node).attr('id');
 	//--------------------
+	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
 };
 
@@ -46,7 +47,6 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -92,7 +92,6 @@ UIFactory["URLBlock"].prototype.displayEditor = function(destid,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------

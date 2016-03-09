@@ -20,8 +20,8 @@ var aggregates = {};
 
 
 var jquerySpecificFunctions = {};
-jquerySpecificFunctions['.sort'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
-jquerySpecificFunctions['.filemane_not_empty'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"filename:not(:empty)\")";
+jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
+jquerySpecificFunctions['.filemane_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"filename:not(:empty)\")";
 //.has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']").has("filename:not(:empty)")
 Selector = function(jquery,type,filter1,filter2)
 {
@@ -48,8 +48,10 @@ function getSelector(select,test)
 		filter1 = function(){return $(this).children("metadata[semantictag*='"+selects[1]+"']").length>0};
 	}
 	var filter2 = test; // test = .has("metadata-wad[submitted='Y']").last()
-	if (jquerySpecificFunctions[test]!=undefined)
-		filter2 = jquerySpecificFunctions[test];
+	for (fct in jquerySpecificFunctions) {
+		if (test.indexOf(fct)>-1)
+			filter2 = filter2.replace(fct,jquerySpecificFunctions[fct]);
+	}
 	var type = "";
 	if (selects.length>2)
 		type = selects[2];
@@ -108,8 +110,6 @@ function report_process(xmlDoc,json)
 		if (tagname=="url2unit")
 			processURL2Unit(children[i],'report-content');
 	}
-	displayPDFButton();
-	displayCSVButton();
 	$.ajaxSetup({async: true});
 }
 

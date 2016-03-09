@@ -35,12 +35,6 @@ UIFactory["Image"] = function( node )
 	}
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Image']",node));
 	//--------------------
-//	this.fileid_node = $("fileid",$("asmResource[xsi_type='Image']",node));
-/*	if (this.fileid_node.length==0) {	//old version
-		var fileid = createXmlElement("fileid");
-		$("asmResource[xsi_type='Image']",node)[0].appendChild(fileid);
-		this.fileid_node = $("fileid",$("asmResource[xsi_type='Image']",node));
-	}*/
 	this.filename_node = [];
 	this.type_node = [];
 	this.size_node = [];
@@ -131,12 +125,21 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	}
 	if (type==null)
 		type='default';
+	//------------------------
+	var image_size = "";
+	if ($("metadata-epm",this.node).attr('width')!=undefined && $("metadata-epm",this.node).attr('width')!='') // backward compatibility
+		image_size = "width='"+$("metadata-epm",this.node).attr('width')+"' "; 
+	if ($("metadata-epm",this.node).attr('height')!=undefined && $("metadata-epm",this.node).attr('height')!='')
+		image_size += "height='"+$("metadata-epm",this.node).attr('height')+"' "; 
+	if (image_size=="")
+		image_size = "class='image img-responsive'";
+	//------------------------
 	var html ="";
 	if (type=='default') {
 		html +="<div uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
 			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' >";
+			html += "<img id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
 			html += "</a>";
 		}
 		else
@@ -144,16 +147,20 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		html += "</div>";
 	}
 	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image img-responsive'>";
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
 	}
 	if (type=='withfilename'  && $(this.filename_node[langcode]).text()!=""){
 		html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image img-responsive'>";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";		
 		html += "</a>";
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='withfilename-withoutlightbox'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' width='"+$("metadata-epm",this.node).attr('width')+"' class='image img-responsive'>";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";		
+		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
+	}
+	if (type=='editor'  && $(this.filename_node[langcode]).text()!=""){
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100'>";		
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	return html;
@@ -222,7 +229,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var html ="";
-	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,null,langcode)+"</span> ";
+	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,'editor',langcode)+"</span> ";
 	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html +=" <div id='divfileupload_"+this.id+"_"+langcode+"' >";
 	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"' en>";
