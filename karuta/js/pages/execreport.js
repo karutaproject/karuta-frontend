@@ -12,6 +12,7 @@ function show_exec_report()
 	$("#main-list").hide();
 	$("#main-page").hide();
 	$("#main-user").hide();
+	$("#main-usersgroup").hide();
 	$("#main-exec-batch").hide();
 	$("#main-exec-report").show();
 }

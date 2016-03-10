@@ -184,3 +184,11 @@ karutaStr['ja']['batch']="Create Batch Accounts";
 karutaStr['ja']['upload_csv']="Upload a CSV File";
 karutaStr['ja']['process_csv']="Process";
 
+//=========================================
+//========== GROUPS =======================
+//=========================================
+
+karutaStr['ja']['select_usersgroups']="ユーザーのグループの選択";
+karutaStr['ja']['create_group']="グループを追加";
+karutaStr['ja']['list_usersgroups']="ユーザーのグループ";
+

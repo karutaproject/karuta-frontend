@@ -302,3 +302,11 @@ karutaStr['en']['bubble-description']="Description";
 karutaStr['en']['bubble-weight']="Weight";
 karutaStr['en']['bubble-color']="Color";
 
+//=========================================
+//========== GROUPS =======================
+//=========================================
+
+karutaStr['en']['select_usersgroups']="Select Groups of Users";
+karutaStr['en']['create_group']="Add a Group";
+karutaStr['en']['list_usersgroups']="Groups of Users";
+

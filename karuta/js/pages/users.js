@@ -14,6 +14,7 @@ function show_list_users()
 	$("#main-list").hide();
 	$("#main-page").hide();
 	$("#main-user").show();
+	$("#main-usersgroup").hide();
 	$("#main-exec-batch").hide();
 	$("#main-exec-report").hide();
 }
