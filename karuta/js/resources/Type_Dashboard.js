@@ -33,7 +33,16 @@ UIFactory["Dashboard"] = function( node )
 	}
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Dashboard']",node));
 	//--------------------
+	if ($("csv",$("asmResource[xsi_type='Dashboard']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("csv");
+		$("asmResource[xsi_type='Dashboard']",node)[0].appendChild(newelement);
+	}
 	this.csv_node = $("csv",$("asmResource[xsi_type='Dashboard']",node));
+	//--------------------
+	if ($("pdf",$("asmResource[xsi_type='Dashboard']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("pdf");
+		$("asmResource[xsi_type='Dashboard']",node)[0].appendChild(newelement);
+	}
 	this.pdf_node = $("pdf",$("asmResource[xsi_type='Dashboard']",node));
 	//--------------------
 	this.text_node = [];
@@ -97,7 +106,7 @@ UIFactory["Dashboard"].prototype.getView = function(dest,langcode)
 
 /// Editor
 //==================================
-UIFactory["Dashboard"].update = function(input,itself,langcode)
+UIFactory["Dashboard"].update = function(itself,langcode)
 //==================================
 {
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
@@ -125,9 +134,9 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 	if(type=='default') {
 		//-----------------------------------------------------
 		var htmlTextGroupObj = $("<div class='form-group'></div>")
-		var htmlTextLabelObj = $("<label for='text_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['csv']+"</label>");
+		var htmlTextLabelObj = $("<label for='text_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['dashboard-code']+"</label>");
 		var htmlTextDivObj = $("<div class='col-sm-9'></div>");
-		var htmlTextInputObj = $("<input id='text_"+this.id+"_"+langcode+"' type='text' class='form-control' name='label_Item' value=\""+this.text_node[langcode].text()+"\">");
+		var htmlTextInputObj = $("<input id='text_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.text_node[langcode].text()+"\">");
 		$(htmlTextInputObj).change(function (){
 			$(self.text_node[langcode]).text($(this).val());
 			UIFactory["Dashboard"].update(self,langcode);
@@ -138,27 +147,55 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlFormObj).append($(htmlTextGroupObj));
 		//-----------------------------------------------------
 		var htmlCsvGroupObj = $("<div class='form-group'></div>")
-		var htmlCsvLabelObj = $("<label for='csv_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['dashboard-code']+"</label>");
-		var htmlCsvDivObj = $("<div class='col-sm-9'></div>");
-		var htmlCsvInputObj = $("<input type='text' for='csv_"+this.id+"' class='form-control' value=\""+this.csv_node.text()+"\">");
-		$(htmlCsvInputObj).change(function (){
+		var htmlCsvLabelObj = $("<label class='col-sm-3 control-label'>"+karutaStr[LANG]['csv']+"</label>");
+		var htmlCsvDivObj = $("<div class='col-sm-9' style='padding-top:6px'></div>");
+		var htmlCsvInput1 = "<input type='radio' name='csv' value='1'";
+		if (this.csv_node.text()=='1')
+			htmlCsvInput1 += " checked='true' "
+		htmlCsvInput1 += ">&nbsp;"+karutaStr[LANG]['yes']+"&nbsp;&nbsp;</input>";
+		var htmlCsvInputObj1 = $(htmlCsvInput1);
+		$(htmlCsvInputObj1).change(function (){
 			$(self.csv_node).text($(this).val());
 			UIFactory["Dashboard"].update(self,langcode);
 		});
-		$(htmlCsvDivObj).append($(htmlCsvInputObj));
+		var htmlCsvInput0 = "<input type='radio' name='csv' value='0' ";
+		if (this.csv_node.text()=='0')
+			htmlCsvInput0 += " checked='true' "
+		htmlCsvInput0 += ">&nbsp;"+karutaStr[LANG]['no']+"</input>";
+		var htmlCsvInputObj0 = $(htmlCsvInput0);
+		$(htmlCsvInputObj0).change(function (){
+			$(self.csv_node).text($(this).val());
+			UIFactory["Dashboard"].update(self,langcode);
+		});
+		$(htmlCsvDivObj).append($(htmlCsvInputObj1));
+		$(htmlCsvDivObj).append($(htmlCsvInputObj0));
 		$(htmlCsvGroupObj).append($(htmlCsvLabelObj));
 		$(htmlCsvGroupObj).append($(htmlCsvDivObj));
 		$(htmlFormObj).append($(htmlCsvGroupObj));
 		//-----------------------------------------------------
 		var htmlpdfGroupObj = $("<div class='form-group'></div>")
-		var htmlpdfLabelObj = $("<label for='pdf_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['dashboard-code']+"</label>");
-		var htmlpdfDivObj = $("<div class='col-sm-9'></div>");
-		var htmlpdfInputObj = $("<input type='text' for='pdf_"+this.id+"' class='form-control' value=\""+this.pdf_node.text()+"\">");
-		$(htmlpdfInputObj).change(function (){
+		var htmlpdfLabelObj = $("<label class='col-sm-3 control-label'>"+karutaStr[LANG]['pdf']+"</label>");
+		var htmlpdfDivObj = $("<div class='col-sm-9' style='padding-top:6px'></div>");
+		var htmlpdfInput1 = "<input type='radio' name='pdf' value='1'";
+		if (this.pdf_node.text()=='1')
+			htmlpdfInput1 += " checked='true' "
+		htmlpdfInput1 += ">&nbsp;"+karutaStr[LANG]['yes']+"&nbsp;&nbsp;</input>";
+		var htmlpdfInputObj1 = $(htmlpdfInput1);
+		$(htmlpdfInputObj1).change(function (){
 			$(self.pdf_node).text($(this).val());
 			UIFactory["Dashboard"].update(self,langcode);
 		});
-		$(htmlpdfDivObj).append($(htmlpdfInputObj));
+		var htmlpdfInput0 = "<input type='radio' name='pdf' value='0' ";
+		if (this.pdf_node.text()=='0')
+			htmlpdfInput0 += " checked='true' "
+		htmlpdfInput0 += ">&nbsp;"+karutaStr[LANG]['no']+"</input>";
+		var htmlpdfInputObj0 = $(htmlpdfInput0);
+		$(htmlpdfInputObj0).change(function (){
+			$(self.pdf_node).text($(this).val());
+			UIFactory["Dashboard"].update(self,langcode);
+		});
+		$(htmlpdfDivObj).append($(htmlpdfInputObj1));
+		$(htmlpdfDivObj).append($(htmlpdfInputObj0));
 		$(htmlpdfGroupObj).append($(htmlpdfLabelObj));
 		$(htmlpdfGroupObj).append($(htmlpdfDivObj));
 		$(htmlFormObj).append($(htmlpdfGroupObj));

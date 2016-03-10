@@ -307,8 +307,10 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		if (resizeroles==undefined)
 			resizeroles="";
 		if ((g_userroles[0]=='designer' || USER.admin || resizeroles.containsArrayElt(g_userroles) || resizeroles.indexOf(this.userrole)>-1) && this.resource!=undefined && this.resource.type=='Image') {
-			var htmlSize = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'width',$(this.metadataepm).attr('width'));
-			$(htmlFormObj).append($(htmlSize));
+			var htmlHeight = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'height',$(this.metadataepm).attr('height'));
+			$(htmlFormObj).append($(htmlHeight));
+			var htmlWidth = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'width',$(this.metadataepm).attr('width'));
+			$(htmlFormObj).append($(htmlWidth));
 		}
 		$(div).append($(htmlFormObj));
 	}
@@ -694,8 +696,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			if( depth < 0 || !readnode) return;
 			//----------------edit control on proxy target ------------
 			if (proxies_edit[uuid]!=undefined) {
-					var parent = proxies_parent[uuid];
-					if (parent==dest.substring(8) || dest=='contenu') { // dest = content_{parentid}
+					var proxy_parent = proxies_parent[uuid];
+					if (proxy_parent==dest.substring(8) || dest=='contenu') { // dest = content_{parentid}
 						proxy_target = true;
 						edit = menu = (proxies_edit[uuid].containsArrayElt(g_userroles) || g_userroles[0]=='designer');
 					}
@@ -1005,7 +1007,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			//------------ Dashboard -----------------
 			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
-				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='dashboard_buttons_"+uuid+"' class='col-md-offset-1 col-md-11'></div></div>"));
+				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='dashboard_buttons_"+uuid+"' class='col-md-offset-1 col-md-11 btn-group'></div></div>"));
 				var root_node = g_portfolio_current;
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
 				if (model_code.indexOf("@local")>-1){
@@ -1026,11 +1028,13 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				if (g_userroles[0]!='designer')
 					$("#node_"+uuid).hide();
-				if (semtag.indexOf("-csv")) {
-					$("#"+dest).append($("<button onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</button>"));				
+				//---------- display csv or pdf -------
+				var html_csv_pdf = ""
+				if ($(UICom.structure["ui"][uuid].resource.csv_node).text()=='1') {
+					$("#dashboard_buttons_"+uuid).append($("<span class='button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">format CSV</span>"));				
 				}
-				if (semtag.indexOf("-pdf")) {
-					$("#"+dest).append($("<button onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</button>"));				
+				if ($(UICom.structure["ui"][uuid].resource.pdf_node).text()=='1') {
+					$("#dashboard_buttons_"+uuid).append($("<span class='button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">&nbsp;&nbsp;format PDF</span>"));				
 				}
 					
 			}
@@ -1090,7 +1094,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						UIFactory["Node"].displayBlock(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root,menu);
 					else {
 						if (childnode.structured_resource!=null) {
-							var html = childnode.structured_resource.getView('column_'+blockid);
+							var html = childnode.structured_resource.getView('column_'+blockid,null,langcode);
 							var menu = false;
 							html += "<div>"+ UICom.structure["ui"][blockid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
 							//-------------- metainfo -------------------------
@@ -1111,10 +1115,6 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (semtag=="EuropassL"){
 					gotDisplay = true;
 					UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid);
-				}
-				if (semtag.indexOf('TableABC')>-1) {
-					gotDisplay = true;
-					UIFactory["TableABC"].displayView('content-'+uuid,langcode,'detail',uuid);
 				}
 				if (!gotDisplay && semtag!='bubble_level1') {
 					for( var i=0; i<root.children.length; ++i ) {
@@ -1225,7 +1225,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				if (UICom.structure["ui"][uuid].getLabel(null,'none')!=""){ // test if not empty label
 					style = UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
 					html += "<div  id='title_"+uuid+"' style='"+style+"'>";
-					html += UICom.structure["ui"][uuid].getView('std_node_'+uuid);
+					html += UICom.structure["ui"][uuid].getView('std_node_'+uuid,null,langcode);
 					html += "</div>";
 				}
 				if (edit && inline && writenode && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL'){
@@ -1487,7 +1487,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 						UIFactory["Node"].displayBlock(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root);
 					else {
 						if (childnode.structured_resource!=null) {
-							var html = childnode.structured_resource.getView(dest);
+							var html = childnode.structured_resource.getView(dest,null,langcode);
 							$('column_'+blockid).append($(html));
 						} else
 							UIFactory["Node"].displayStandard(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root);
@@ -2617,6 +2617,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 						html += "<hr>";
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4,freenode);
+						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ProxyBlock','ProxyBlock',databack,callback,param2,param3,param4,freenode);
 					}
 					if (semantictag.indexOf("bubbleContainer")>-1) {
 //						var interval = setInterval(function(){alert(node.id)},30000);

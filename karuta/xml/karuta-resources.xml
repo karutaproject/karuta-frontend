@@ -553,8 +553,8 @@
 				<lastmodified />
 				<text lang="fr"/>
 				<text lang="en"/>
-				<csv>no</csv>
-				<pdf>yes</pdf>
+				<csv>0</csv>
+				<pdf>0</pdf>
 			</asmResource>
 		</asmContext>
 		//===================== Action =======================

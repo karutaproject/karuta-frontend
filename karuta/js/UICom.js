@@ -166,10 +166,6 @@ var UICom =
 				if (semtag=='EuropassL'){
 					UIFactory["EuropassL"].parse(child);
 				}
-				if (semtag.indexOf('TableABC')>-1){
-					UIFactory["TableABC"].parse(child);
-				}
-
 				// recurse
 				UICom.parseElement(childTree);
 			}
