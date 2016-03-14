@@ -1108,3 +1108,13 @@ String.prototype.containsArrayElt = function (rolesarray)
 	return result;
 }
 
+//==================================
+Array.prototype.contains = function(elt)
+//==================================
+	// usage : if (arr.contains(elt)) 
+{
+	for (var i in this){
+		if (this[i] == elt) return true;
+	}
+	return false;
+}

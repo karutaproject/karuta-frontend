@@ -284,3 +284,85 @@ UIFactory["UsersGroup"].create = function()
 		}
 	});
 };
+
+//==================================
+UIFactory["UsersGroup"].editGroupsByUser = function(userid)
+//==================================
+{
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['list_groups']);
+	var html = "";
+	html += "<div id='user_list_groups'>";
+	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
+	html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
+	html += "</div>";
+	$("#edit-window-body").html(html);
+	//--------------------------
+	$('#edit-window').modal('show');
+
+	$.ajaxSetup({async: false});
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/usersgroups?user="+userid,
+		data: "",
+		success : function(data) {
+			var user_groupids = UIFactory["UsersGroup"].parseList(data);
+			if (!($("#main-usersgroup").length && $("#main-usersgroup").html()!="")) {
+				fill_list_usersgroups();
+			}
+			UIFactory["UsersGroup"].displayManageMultipleGroups('user_list_groups','user',userid,user_groupids,'updateGroup_User');
+			//----------------
+		}
+	});
+	$.ajaxSetup({async: true});
+
+};
+
+//==================================
+UIFactory["UsersGroup"].parseList = function(data) 
+//==================================
+{
+	var groupids = [];
+	var items = $("group",data);
+	for ( var i = 0; i < items.length; i++) {
+		groupids[i] = $(items[i]).attr('id');
+	}
+	return groupids;
+};
+
+//==================================
+UIFactory["UsersGroup"].displayManageMultipleGroups = function(destid,attr,value,selectedlist,callFunction) 
+//==================================
+{
+	$("#"+destid).html("");
+	if (UsersGroups_list.length>0){
+		for ( var i = 0; i < UsersGroups_list.length; i++) {
+			var checked = selectedlist.contains(UsersGroups_list[i].id);
+			var input = UsersGroups_list[i].getSelectorWithFunction(attr,value,'select_usersgroups_'+i,checked,callFunction);
+			$("#"+destid).append($(input));
+			$("#"+destid).append($("<br>"));
+		}		
+	} else {
+		$("#"+destid).append($(karutaStr[LANG]['no_group']));		
+	}
+};
+
+//==================================
+UIFactory["UsersGroup"].prototype.getSelectorWithFunction = function(attr,value,name,checked,callFunction)
+//==================================
+{
+	var gid = this.id;
+	var label = this.label_node.text();
+	var html = "<input type='checkbox' name='"+name+"' value='"+gid+"'";
+	if (attr!=null && value!=null)
+		html += " "+attr+"='"+value+"'";
+	if (checked)
+		html += " checked='true' ";
+	html += " onchange=\"javascript:"+callFunction+"(this)\" ";
+	html += "> "+label+" </input>";
+	return html;
+};
+

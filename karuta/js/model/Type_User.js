@@ -116,6 +116,14 @@ UIFactory["User"].prototype.getView = function(dest,type,lang)
 				html += "<span class='glyphicon glyphicon-remove'></span>";
 				html += "</button>";
 			}
+			html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
+			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
+				html += ">";
+			} else {
+				html += " disabled='true'>";
+			}
+			html += "<i class='fa fa-users fa-lg' ></i>";
+			html += "</button>";
 			html += "</div></td>";
 		}
 	}

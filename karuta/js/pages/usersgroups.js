@@ -61,3 +61,26 @@ function display_list_usersgroups()
 		show_list_usersgroups();
 	}
 }
+
+//==============================
+function updateGroup_User(elt)
+//==============================
+{
+	var type = 'DELETE';
+	if(elt.checked) type='PUT';
+	var userid = $(elt).attr("user");
+	var url = "../../../"+serverBCK+"/usersgroups?group=" + elt.value + "&user="+userid;
+	$.ajax({
+		type : type,
+		dataType : "text",
+		url : url,
+		data : "",
+		success : function(data) {
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+			if(type=='DELETE') 
+				$(elt).prop('checked', true);
+		}
+	});
+}

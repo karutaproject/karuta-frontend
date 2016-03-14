@@ -191,4 +191,5 @@ karutaStr['ja']['process_csv']="Process";
 karutaStr['ja']['select_usersgroups']="ユーザーのグループの選択";
 karutaStr['ja']['create_group']="グループを追加";
 karutaStr['ja']['list_usersgroups']="ユーザーのグループ";
+karutaStr['ja']['no_group']="何のグループはありません";
 

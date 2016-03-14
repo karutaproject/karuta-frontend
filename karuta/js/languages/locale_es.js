@@ -189,3 +189,4 @@ karutaStr['es']['process_csv']="Éxécuter";
 karutaStr['es']['select_usersgroups']="Sélectionner des groupes d'usagers";
 karutaStr['es']['create_group']="Ajouter un groupe";
 karutaStr['es']['list_usersgroups']="Groupes d'usagers";
+karutaStr['es']['no_group']="Aucun group";

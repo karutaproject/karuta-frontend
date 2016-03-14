@@ -312,4 +312,5 @@ karutaStr['en']['bubble-color']="Color";
 karutaStr['en']['select_usersgroups']="Select Groups of Users";
 karutaStr['en']['create_group']="Add a Group";
 karutaStr['en']['list_usersgroups']="Groups of Users";
+karutaStr['en']['no_group']="No group";
 
