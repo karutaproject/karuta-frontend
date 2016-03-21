@@ -192,4 +192,7 @@ karutaStr['ja']['select_usersgroups']="ユーザーのグループの選択";
 karutaStr['ja']['create_group']="グループを追加";
 karutaStr['ja']['list_usersgroups']="ユーザーのグループ";
 karutaStr['ja']['no_group']="何のグループはありません";
+karutaStr['ja']['addshare-portfoliosgroups']="Share Groups of Portfolios";
+karutaStr['ja']['confirm-remove-user-group']="Do you want to remove this user from the group? This action cannot be undone.";
+karutaStr['ja']['empty-group']="Empty groupe";
 

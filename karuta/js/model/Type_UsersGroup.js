@@ -15,6 +15,9 @@
 
 var UsersGroups_byid = {};
 var UsersGroups_list = [];
+var displayGroup = {};
+displayGroup['UsersGroup'] = {};
+displayGroup['PortfoliosGroup'] = {};
 
 /// Check namespace existence
 if( UIFactory === undefined )
@@ -45,19 +48,31 @@ UIFactory["UsersGroup"] = function( node )
 UIFactory["UsersGroup"].displayGroups = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<table id='table_usersgroups' class='tablesorter'><thead><th>"+karutaStr[LANG]["label"]+"</th><th></th></thead><tbody id='list_usersgroups'></tbody></table>");
-	$("#list_usersgroups").append($("<tr><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+	$("#"+destid).html("");
 	for ( var i = 0; i < UsersGroups_list.length; i++) {
-		var itemid = destid+"_"+UsersGroups_list[i].id;
-		$("#list_usersgroups").append($("<tr class='item' id='"+itemid+"'></tr>"));
-		$("#"+itemid).html(UsersGroups_list[i].getView(destid,type,lang));
+		var itemid = "usersgroup_"+UsersGroups_list[i].id;
+		var html = "";
+		html += "<div id='"+itemid+"' class='usersgroup'></div><!-- class='usersgroup'-->";
+		$("#"+destid).append($(html));
+		$("#"+itemid).html(UsersGroups_list[i].displayView(destid,type,lang));
+	}
+	if (type=='list') {
+		var group_type = "UsersGroup";
+		for ( var i = 0; i < UsersGroups_list.length; i++) {
+			var gid = UsersGroups_list[i].id;
+			displayGroup[group_type][gid] = Cookies.get('dg_'+group_type+"-"+gid);
+			if (displayGroup[group_type][gid]!=undefined && displayGroup[group_type][gid]=='open'){
+				UIFactory["UsersGroup"].displayUsers(gid,"content-"+group_type+"-"+gid,type,lang);				
+			}
+		}		
 	}
 };
 
 //==================================
-UIFactory["UsersGroup"].prototype.getView = function(dest,type,lang)
+UIFactory["UsersGroup"].prototype.displayView = function(dest,type,lang)
 //==================================
 {
+	var group_type = "UsersGroup";
 	if (dest!=null) {
 		this.display[dest]=true;
 	}
@@ -67,21 +82,96 @@ UIFactory["UsersGroup"].prototype.getView = function(dest,type,lang)
 		type = 'list';
 	var html = "";
 	if (type=='list') {
-		html = "<td style='padding-left:4px;padding-right:4px'>"+this.label_node.text() + "</td>";
-		if (USER.admin){
-			html += "<td><div class='btn-group'>";
+		displayGroup[group_type][this.id] = Cookies.get('dg_'+group_type+"-"+this.id);
+		html += "	<div class='row row-label'>";
+		if (displayGroup[group_type][this.id]!=undefined && displayGroup[group_type][this.id]=='open')
+			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.UsersGroup.displayUsers','list','"+lang+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button glyphicon glyphicon-minus'></span></div>";
+		else
+			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.UsersGroup.displayUsers','list','"+lang+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button glyphicon glyphicon-plus'></span></div>";
+		html += "		<div class='usersgroup-label col-md-5 col-sm-4 col-xs-5'>"+this.label_node.text()+"</div>";
+		html += "		<div class='col-md-5 col-xs-5'>";
+		//------------ buttons ---------------
+		html += "			<div class='btn-group'>";
+		if (USER.admin) {
 			html += " <button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
 			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
 			html += "</button>";
 			html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"',null)\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 			html += "<span class='glyphicon glyphicon-remove'></span>";
 			html += "</button>";
-			html += "</div></td>";
+			html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].callSharePortfoliosGroups('"+this.id+"')\" data-title='"+karutaStr[LANG]["addshare-portfoliosgroups"]+"' relx='tooltip'>";
+			html += "<i class='fa fa-share-square-o'></i>";
+			html += "</button>";
+			/*
+			html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
+			html += "			<ul class='dropdown-menu  pull-right'>";
+			html += "				<li><a onclick=\"UIFactory['UsersGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
+			html += "				<li><a onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
+//			html += "				<li><a onclick=\"UIFactory['UsersGroup'].callSharePortfolios('"+this.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-portfolios"]+"</a></li>";
+			html += "				<li><a onclick=\"UIFactory['UsersGroup'].callSharePortfoliosGroups('"+this.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-portfoliosgroups"]+"</a></li>";
+			html += "			</ul>";
+			*/
+		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
+//			html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 		}
+		html += "			</div><!-- class='btn-group' -->";
+		//---------------------------------------
+		html += "		</div><!-- class='col-md-1' -->";
+		html += "	</div>";
+		if (displayGroup[group_type][this.id]!=undefined && displayGroup[group_type][this.id]=='open')
+			html += "	<div class='usersgroup-content' id='content-"+group_type+"-"+this.id+"' style='display:block'></div>";
+		else
+			html += "	<div class='usersgroup-content' id='content-"+group_type+"-"+this.id+"' style='display:none'></div>";
 	}
 	return html;
 };
 
+//==================================
+UIFactory["UsersGroup"].displayUsers = function(gid,destid,type,lang)
+//==================================
+{
+	if (type==null)
+		type = 'list';
+	var destid_group = "users-group_"+gid;
+	var html = "";
+	html += "<div class='usersgroup-users' id='"+destid_group+"'>";
+	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
+	html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
+	html += "</div>";
+	$("#"+destid).html(html);
+	//--------------------------
+	$.ajaxSetup({async: false});
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+		data: "",
+		success : function(data) {
+			var users_ids = parseList("user",data);
+			if (!($("#main-user").length && $("#main-user").html()!="")) {
+				fill_list_users();
+			}
+			$("#"+destid_group).html("<table id='"+destid_group+"-table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='"+destid_group+"-list_users'></tbody></table>");
+			destid_group +="-list_users";
+			$("#"+destid_group).append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+			for ( var i = 0; i < users_ids.length; i++) {
+				var itemid = destid_group+"_"+users_ids[i];
+				$("#"+destid_group).append($("<tr class='item' id='"+itemid+"'></tr>"));
+				if (Users_byid[users_ids[i]]!=null && Users_byid[users_ids[i]]!=undefined) {
+					$("#"+itemid).html(Users_byid[users_ids[i]].getView(itemid,type,lang,gid));
+				}
+			}
+			var items = $("tr[class='item']",$("#"+destid_group));
+			if (items.length==0)
+				$("#users-group_"+gid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
+			//----------------
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+		}
+	});
+	$.ajaxSetup({async: true});
+};
 
 //==================================
 UIFactory["UsersGroup"].update = function(gid,attribute,value)
@@ -98,8 +188,9 @@ UIFactory["UsersGroup"].update = function(gid,attribute,value)
 		url : url,
 		data : "",
 		success : function(data) {
-			alertHTML("saved");
-			window.location.reload();
+//			alertHTML("saved");
+//			window.location.reload();
+			$("#refresh").click();
 		}
 	});
 
@@ -221,7 +312,11 @@ UIFactory["UsersGroup"].parse = function(data)
 UIFactory["UsersGroup"].confirmRemove = function(gid,uid) 
 //==================================
 {
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var str = karutaStr[LANG]["confirm-delete"];
+	if (uid!=null && uid!='null') {
+		str = karutaStr[LANG]["confirm-remove-user-group"];
+	}
+	document.getElementById('delete-window-body').innerHTML = str;
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
 	buttons += "<button class='btn btn-danger' onclick=\"UIFactory.UsersGroup.remove('"+gid+"','"+uid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
@@ -242,7 +337,13 @@ UIFactory["UsersGroup"].remove = function(gid,uid)
 		url : url,
 		data : "",
 		success : function(data) {
-			$("#refresh").click();
+			if (uid!=null && uid!='null') {
+				$("#users-group_"+gid+"-list_users_"+uid).remove();
+				var items = $("tr[class='item']",$("#users-group_"+gid+"-list_users"));
+				if (items.length==0)
+					$("#users-group_"+gid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
+			} else
+				$("#refresh").click();
 		}
 	});
 };
@@ -289,11 +390,12 @@ UIFactory["UsersGroup"].create = function()
 UIFactory["UsersGroup"].editGroupsByUser = function(userid)
 //==================================
 {
-	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var nameinput = "user_"+userid+"-list_groups-form-update";
+	var js1 = "javascript:updateDisplay_usersgroups('"+nameinput+"');$('#edit-window').modal('hide');$('#edit-window-body').html('')";
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['list_groups']);
-	var html = "";
+	var html = "<input type='hidden' name='"+nameinput+"' id='"+nameinput+"' value='0'>";
 	html += "<div id='user_list_groups'>";
 	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
 	html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
@@ -309,7 +411,7 @@ UIFactory["UsersGroup"].editGroupsByUser = function(userid)
 		url : "../../../"+serverBCK+"/usersgroups?user="+userid,
 		data: "",
 		success : function(data) {
-			var user_groupids = UIFactory["UsersGroup"].parseList(data);
+			var user_groupids = parseList("group",data);
 			if (!($("#main-usersgroup").length && $("#main-usersgroup").html()!="")) {
 				fill_list_usersgroups();
 			}

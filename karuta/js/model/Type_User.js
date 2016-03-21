@@ -89,7 +89,7 @@ UIFactory["User"].displayInactive = function(destid,type,lang)
 };
 
 //==================================
-UIFactory["User"].prototype.getView = function(dest,type,lang)
+UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 //==================================
 {
 	if (dest!=null) {
@@ -109,11 +109,11 @@ UIFactory["User"].prototype.getView = function(dest,type,lang)
 			html += "</button>";
 			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
 				html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-				html += "<span class='glyphicon glyphicon-remove'></span>";
+				html += "<i class='fa fa-trash-o'></i>";
 				html += "</button>";
 			} else {
 				html += "<button class='btn btn-xs' disabled='true'>";
-				html += "<span class='glyphicon glyphicon-remove'></span>";
+				html += "<i class='fa fa-trash-o'></i>";
 				html += "</button>";
 			}
 			html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
@@ -124,6 +124,11 @@ UIFactory["User"].prototype.getView = function(dest,type,lang)
 			}
 			html += "<i class='fa fa-users fa-lg' ></i>";
 			html += "</button>";
+			if (gid!=null) {
+				html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<span class='glyphicon glyphicon-remove'></span>";
+				html += "</button>";
+			}
 			html += "</div></td>";
 		}
 	}
@@ -152,8 +157,10 @@ UIFactory["User"].update = function(userid,attribute,value)
 		url : url,
 		data : data,
 		success : function(data) {
-			alertHTML("saved");
-			window.location.reload();
+			alertHTML(karutaStr[LANG]['saved']);
+//			$("#refresh").click();
+//			window.location.reload();
+			fill_list_users();
 		}
 	});
 
@@ -374,18 +381,21 @@ UIFactory["User"].parse = function(data)
 };
 
 //==================================
-UIFactory["User"].confirmRemove = function(userid) 
+UIFactory["User"].confirmRemove = function(userid,from_page) 
 //==================================
 {
+	var js_remove = "UIFactory.User.remove('"+userid+"')";
+	if (from_page!=null)
+		js_remove = "UIFactory.User.remove('"+userid+"','"+from_page+"')";	
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"UIFactory.User.remove('"+userid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:"+js_remove+";$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 };
 
 //==================================
-UIFactory["User"].remove = function(userid) 
+UIFactory["User"].remove = function(userid,from_page) 
 //==================================
 {
 	var url = "../../../"+serverBCK+"/users/user/" + userid;
@@ -395,7 +405,14 @@ UIFactory["User"].remove = function(userid)
 		url : url,
 		data : "",
 		success : function(data) {
-			$("#refresh").click();
+			if (from_page==null){
+				$("#refresh").click();
+				fill_list_usersgroups();
+			}
+			else if (from_page=="UsersGroup"){
+				fill_list_users();
+				$("#refresh").click();
+			}
 		}
 	});
 };

@@ -313,4 +313,6 @@ karutaStr['en']['select_usersgroups']="Select Groups of Users";
 karutaStr['en']['create_group']="Add a Group";
 karutaStr['en']['list_usersgroups']="Groups of Users";
 karutaStr['en']['no_group']="No group";
-
+karutaStr['en']['addshare-portfoliosgroups']="Share Groups of Portfolios";
+karutaStr['en']['confirm-remove-user-group']="Do you want to remove this user from the group? This action cannot be undone.";
+karutaStr['en']['empty-group']="Empty groupe";

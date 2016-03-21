@@ -76,6 +76,7 @@ function updateGroup_User(elt)
 		url : url,
 		data : "",
 		success : function(data) {
+			$("#user_"+userid+"-list_groups-form-update").prop('value', '1');
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error : "+jqxhr.responseText);
@@ -83,4 +84,14 @@ function updateGroup_User(elt)
 				$(elt).prop('checked', true);
 		}
 	});
+}
+
+//==============================
+function updateDisplay_usersgroups(elt)
+//==============================
+{
+	var val = $("#"+elt).attr("value");
+	if (val=='1') {
+		fill_list_usersgroups();
+	}
 }

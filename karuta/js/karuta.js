@@ -1118,3 +1118,39 @@ Array.prototype.contains = function(elt)
 	}
 	return false;
 }
+
+//==================================
+function toggleGroup(group_type,uuid,callback,type,lang) {
+//==================================
+	if ($("#toggleContent_"+group_type+"-"+uuid).hasClass("glyphicon-plus")) {
+		$("#toggleContent_"+group_type+"-"+uuid).removeClass("glyphicon-plus");
+		$("#toggleContent_"+group_type+"-"+uuid).addClass("glyphicon-minus");
+		if (callback!=null){
+			if (jQuery.isFunction(callback))
+				callback(uuid,"content-"+group_type+"-"+uuid,type,lang);
+			else
+				eval(callback+"('"+uuid+"','content-"+group_type+"-"+uuid+"','"+type+"','"+lang+"')");
+		}
+		$("#content-"+group_type+"-"+uuid).show();
+		displayGroup[group_type][uuid] = 'open';
+		Cookies.set('dg_'+group_type+"-"+uuid,'open',{ expires: 60 });
+	} else {
+		$("#toggleContent_"+group_type+"-"+uuid).removeClass("glyphicon-minus");
+		$("#toggleContent_"+group_type+"-"+uuid).addClass("glyphicon-plus");
+		$("#content-"+group_type+"-"+uuid).hide();
+		displayGroup[group_type][uuid] = 'closed';
+		Cookies.set('dg_'+group_type+"-"+uuid,'closed',{ expires: 60 });
+	}
+}
+
+//==================================
+function parseList(tag,xml) {
+//==================================
+	var ids = [];
+	var items = $(tag,xml);
+	for ( var i = 0; i < items.length; i++) {
+		ids[i] = $(items[i]).attr('id');
+	}
+	return ids;
+}
+
