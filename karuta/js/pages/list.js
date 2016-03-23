@@ -86,6 +86,7 @@ function show_list_page()
 	$("#main-user").hide();
 	$("#main-usersgroup").hide();
 	$("#main-list").show();
+	$("#main-portfoliosgroup").hide();
 	$("#main-exec-batch").hide();
 	$("#main-exec-report").hide();
 }

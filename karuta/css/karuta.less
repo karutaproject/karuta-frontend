@@ -181,6 +181,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 
 
 #list-menu,
+#portfoliosgroup-create,
 #usersgroup-create,
 #user-create {
 	color:@list-user-button-color;
@@ -192,23 +193,30 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	cursor:pointer;
 }
 
+#main-portfoliosgroup .item:hover,
 #main-usersgroup .item:hover,
 #main-user .item:hover {
 	background-color:@list-user-background-color-complement;
 }
 
+#main-portfoliosgroup .dropdown-menu,
+#main-usersgroup .dropdown-menu,
 #menu .dropdown-menu,
 #list .dropdown-menu {
 	color:@list-user-button-color;
 	background-color:@list-user-button-background-color;
 }
 
+#main-portfoliosgroup .dropdown-menu li a,
+#main-usersgroup .dropdown-menu li a,
 #menu .dropdown-menu li a,
 #list .dropdown-menu li a {
 	background-color:@list-user-button-background-color;
 	color:@list-user-button-color;
 }
 
+#main-portfoliosgroup .dropdown-menu li a:hover,
+#main-usersgroup .dropdown-menu li a:hover,
 #menu .dropdown-menu li a:hover,
 #list .dropdown-menu li a:hover {
 	background-color:lightgrey;
@@ -216,6 +224,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 
+#main-portfoliosgroup .btn,
 #main-usersgroup .btn,
 #main-user .btn,
 #main-list .btn,
@@ -230,6 +239,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	color:@list-user-button-color;
 }
 
+#portfoliosgroups .portfoliosgroup-items,
 #usersgroups .usersgroup-users,
 .usersgroup,
 .project {
@@ -238,6 +248,11 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	background-color:@list-user-background-color-complement;
 }
 
+.usersgroup-users .inactive {
+	text-decoration: line-through;
+}
+
+.portfoliosgroup-content,
 .usersgroup-content,
 .project-content {
 	margin-top:10px;
@@ -245,12 +260,15 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	border-top:1px solid @list-user-background-color;
 }
 
+#main-portfoliosgroup .dropdown-menu,
+#main-usersgroup .dropdown-menu,
 .project-menu .dropdown-menu {
 	min-width:250px;
 	margin-right:-10px;
 }
 
 
+#portfoliosgroups .row,
 #usersgroups .row,
 #projects .row,
 #portfolios .row,

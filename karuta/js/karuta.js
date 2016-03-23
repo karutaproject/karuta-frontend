@@ -147,6 +147,10 @@ function getNavBar(type,portfolioid,edit)
 			html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' >Actions<span class='caret'></span></a>";
 			html += "					<ul class='dropdown-menu'>";
 			html += "						<li><a  onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
+			if ($("#main-portfoliosgroup").length && $("#main-portfoliosgroup").html()!="")
+				html += "						<li><a  onclick='show_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a></li>";
+			else
+				html += "						<li><a  onclick='display_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a></li>";
 			if ($("#main-user").length && $("#main-user").html()!="")
 				html += "						<li><a  onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
 			else
@@ -1154,3 +1158,17 @@ function parseList(tag,xml) {
 	return ids;
 }
 
+//==============================
+function updateDisplay_page(elt,callback)
+//==============================
+{
+	var val = $("#"+elt).attr("value");
+	if (val=='1') {
+		if (callback!=null){
+			if (jQuery.isFunction(callback))
+				callback();
+			else
+				eval(callback+"()");
+		}
+	}
+}

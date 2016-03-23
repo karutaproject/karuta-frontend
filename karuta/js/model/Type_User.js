@@ -104,17 +104,23 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		html = "<td style='padding-left:4px;padding-right:4px'>"+this.firstname_node.text() + "</td><td style='padding-left:4px;padding-right:4px'>" + this.lastname_node.text()+ "</td><td style='padding-left:4px;padding-right:4px'> (" + this.username_node.text() + ")</td>";
 		if (USER.admin){
 			html += "<td><div class='btn-group'>";
-			html += " <button class='btn btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
-			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
-			html += "</button>";
-			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
-				html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-				html += "<i class='fa fa-trash-o'></i>";
+			if (gid==null) {
+				html += " <button class='btn btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
+				html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
 				html += "</button>";
+				if (this.username_node.text()!='root' && this.username_node.text()!='public') {
+					html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+					html += "<i class='fa fa-trash-o'></i>";
+					html += "</button>";
+				} else {
+					html += "<button class='btn btn-xs' disabled='true'>";
+					html += "<i class='fa fa-trash-o'></i>";
+					html += "</button>";
+				}
 			} else {
-				html += "<button class='btn btn-xs' disabled='true'>";
-				html += "<i class='fa fa-trash-o'></i>";
-				html += "</button>";
+				html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<span class='glyphicon glyphicon-remove'></span>";
+				html += "</button>";				
 			}
 			html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
 			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
@@ -124,11 +130,6 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 			}
 			html += "<i class='fa fa-users fa-lg' ></i>";
 			html += "</button>";
-			if (gid!=null) {
-				html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-				html += "<span class='glyphicon glyphicon-remove'></span>";
-				html += "</button>";
-			}
 			html += "</div></td>";
 		}
 	}
@@ -429,8 +430,20 @@ UIFactory["User"].displaySelectMultipleActive = function(destid,type,lang)
 	}
 };
 
-
-
+//==================================
+UIFactory["User"].displaySelectMultipleActive2 = function(selectedlist,destid,type,lang)
+//==================================
+{
+	$("#"+destid).html("");
+	for ( var i = 0; i < UsersActive_list.length; i++) {
+		var checked = selectedlist.contains(UsersActive_list[i].id);
+		if (!checked) {
+			var input = UsersActive_list[i].getSelector(null,null,'select_users');
+			$("#"+destid).append($(input));
+			$("#"+destid).append($("<br>"));			
+		}
+	}
+};
 
 //==================================
 UIFactory["User"].create = function()
