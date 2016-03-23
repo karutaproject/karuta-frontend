@@ -176,7 +176,8 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				UIFactory["Portfolio"].displayTree(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
 			} else {
 				//-------------------- PORTFOLIO ----------------------
-				if (parentcode!= null && portfoliocode.indexOf(parentcode+".")==0)
+				var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
+				if (parentcode!= null && portfolio_parentcode==parentcode)
 					$("#"+dest).append($("<div class='row'   id='portfolio_"+portfolio.id+"' onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+portfolio.code_node.text()+"<br>"+owner+"\"></div>"));
 				else {
 					number_of_portfolios++;

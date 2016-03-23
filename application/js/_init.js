@@ -24,7 +24,8 @@ var LANG = languages[LANGCODE]; //default value
 var technical_support = "info.karuta@gmail.com";
 var demo = false;
 //----------------------------------
-var navbar_icon_color = "#09bbd9";
+//var navbar_icon_color = "#09bbd9";
+var navbar_icon_color = "#848484";
 var navbar_title = {};
 navbar_title["fr"] = "<img style='margin-top:-4px;' src='../../karuta/img/karuta-navbar.jpg'/>";
 navbar_title["en"] = "<img style='margin-top:-4px;' src='../../karuta/img/karuta-navbar.jpg'/>";
