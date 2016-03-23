@@ -1,36 +1,18 @@
 /* ========== pages list portfolios and list users ============ */
-/* 
-@list-user-background-color:#45bbf8;
-@list-user-background-color-complement:#bb0066;
-@list-user-button-background-color:black;
-@list-user-button-color:white;
 
 
-@list-user-background-color:lightgrey;
-@list-user-background-color-complement:#073765;
-@list-user-button-background-color:black;
-@list-user-button-color:white;
-*/
-
-@list-user-background-color:lightgrey;
-@list-user-background-color-complement:#BDBDBD;
-@list-user-button-background-color:#848484;
-@list-user-button-color:black;
-
-@welcome-title-color:white;
-@welcome-box-border-color:white;
-@welcome-line-border-color:#b9da00;
-@welcome-subbox-background-color:black;
+@import "../../application/css/specific.less";
 
 
-/* ========== navigation_bar =============== */
-@navigation_bar-background-color:white;
-@navigation_bar-border-color:white;
+/* ============================================================ */
 
-/* ========== portfolio ========== to be moved to karuta.htm*/
-@row-node-border-color:lightgrey;
- @row-resource-border-color:lightgrey;
+.list-page{
+	background-color:@list-background-color;
+}
 
+.main-page{
+	background-color:@main-background-color;
+}
 
 /* ============================================================ */
 a, .collapsible {
@@ -117,7 +99,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	margin:5px;
 	padding:3px;
 	border-radius:3px;
-	color:@list-user-button-background-color;
+	color:@list-icon-section-color;
 	cursor:pointer;
 }
 
@@ -125,24 +107,34 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 /* ====================== */
 /*     PAGE LIST     */
 /* ====================== */
-/*
+#usersgroups .row,
+#projects .row,
+#portfolios .row,
+#bin .row,
+#main-user  {
+	margin-top:2px;
+	color:@list-button-color;
+}
 
-
-#main-container .row:first-of-type {
-	background-color:@list-user-background-color;
+#projects-label,
+#portfolios-label,
+#bin-label,
+#active-users,
+#inactive-users {
+	color:@list-icon-section-color;
 }
 
 #main-container .row-label {
 	background-color:initial;
 }
-*/
+
 
 #refresh {
 	float:right;
 	margin:5px 25px 5px 5px;
 	padding:3px;
 	border-radius:3px;
-	color:@list-user-button-background-color;
+	color:@list-icon-section-color;
 	cursor:pointer;
 	display:none;
 }
@@ -187,7 +179,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 #main-body-list {
-	background-color:@list-user-background-color;
+	background-color:@list-background-color;
 }
 
 
@@ -195,8 +187,8 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #list-menu,
 #usersgroup-create,
 #user-create {
-	color:@list-user-button-color;
-	background-color:@list-user-button-background-color;
+	color:@list-button-color;
+	background-color:@list-button-background-color;
 	margin-top:20px;
 	padding:4px 15px;
 	font-size:14px;
@@ -207,25 +199,25 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 
 #main-usersgroup .item:hover,
 #main-user .item:hover {
-	background-color:@list-user-background-color-complement;
+	background-color:@list-background-color-complement;
 }
 
 #menu .dropdown-menu,
 #list .dropdown-menu {
-	color:@list-user-button-color;
-	background-color:@list-user-button-background-color;
+	color:@list-button-color;
+	background-color:@list-button-background-color;
 }
 
 #menu .dropdown-menu li a,
 #list .dropdown-menu li a {
-	background-color:@list-user-button-background-color;
-	color:@list-user-button-color;
+	background-color:@list-button-background-color;
+	color:@list-button-color;
 }
 
 #menu .dropdown-menu li a:hover,
 #list .dropdown-menu li a:hover {
 	background-color:lightgrey;
-	color:@list-user-button-background-color
+	color:@list-button-background-color
 }
 
 
@@ -233,14 +225,14 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #main-user .btn,
 #main-list .btn,
 #list input[type='checkbox'] {
-	background-color:@list-user-button-background-color;
-	color:@list-user-button-color;
+	background-color:@list-button-background-color;
+	color:@list-button-color;
 }
 
 #projects a,
 #portfolios a,
 #bin a {
-	color:@list-user-button-color;
+	color:@list-button-color;
 }
 
 #usersgroups .usersgroup-users,
@@ -248,14 +240,14 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 .project {
 	margin-top:10px;
 	padding:7px;
-	background-color:@list-user-background-color-complement;
+	background-color:@list-background-color-complement;
 }
 
 .usersgroup-content,
 .project-content {
 	margin-top:10px;
 	padding-top:10px;
-	border-top:1px solid @list-user-background-color;
+	border-top:1px solid @list-background-color;
 }
 
 .project-menu .dropdown-menu {
@@ -263,14 +255,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	margin-right:-10px;
 }
 
-
-#usersgroups .row,
-#projects .row,
-#portfolios .row,
-#bin .row  {
-	margin-top:2px;
-	color:@list-user-button-color;
-}
 
 #projects .row .col-md-5,
 #projects .row .col-md-4,
@@ -312,7 +296,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #projects .row:hover .col-md-3,
 #projects .row:hover .col-md-2,
 #projects .row:hover .col-md-1 {
-	background-color:@list-user-background-color;
+	background-color:@list-background-color;
 }
 
 #projects .row-label:hover .col-md-5,
@@ -339,7 +323,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #bin .row:hover .col-md-3,
 #bin .row:hover .col-md-2,
 #bin .row:hover .col-md-1 {
-	background-color:@list-user-background-color-complement;
+	background-color:@list-background-color-complement;
 }
 
 
@@ -2052,4 +2036,17 @@ div.oembedall-container {
    .jp-video-270p {
        max-width: 480px !important;
    }
+
+/* ===========================
+	DASHBOARD CSV PDF BUTTONS
+   ===========================*/
+
+.csv-button,
+.pdf-button {
+	float:left;
+	height:34px;
+	text-align:center;
+	padding-top:7px;
+	display:in-line;
+}
 

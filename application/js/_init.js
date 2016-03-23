@@ -23,9 +23,10 @@ var LANG = languages[LANGCODE]; //default value
 //----------------------------------
 var technical_support = "info.karuta@gmail.com";
 var demo = false;
-//----------------------------------
+//------ Default colors -----------------
 //var navbar_icon_color = "#09bbd9";
 var navbar_icon_color = "#848484";
+//--------- Navbar content ------------------
 var navbar_title = {};
 navbar_title["fr"] = "<img style='margin-top:-4px;' src='../../karuta/img/karuta-navbar.jpg'/>";
 navbar_title["en"] = "<img style='margin-top:-4px;' src='../../karuta/img/karuta-navbar.jpg'/>";
@@ -102,8 +103,10 @@ var listinfo = {};       // Welcome paragraph
 
 	//----------------------------------
 	var welcome4 = {};			// List Page Welcome title
+//		welcome4["fr"] = "Bienvenue dans Karuta";
+//		welcome4["en"] = "Welcome to Karuta";
 		welcome4["fr"] = "Bienvenue dans Karuta";
-		welcome4["en"] = "Welcome to Karuta";
+		welcome4["en"] = "WELCOME TO NEW KARUTA COLORS";
 	var welcome5 = {}; 			// List Page Welcome sub-title
 		welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 		welcome5["en"] = "OPEN SOURCE PORTFOLIO";

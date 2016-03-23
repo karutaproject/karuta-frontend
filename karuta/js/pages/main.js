@@ -4,7 +4,8 @@
 function show_main_page(portfolioid,role)
 //==============================
 {
-	changeCss("body", "background-color:white;");
+	$("body").removeClass();
+	$("body").addClass("main-page")
 	$("#main-page").html("");
 	$("#main-page").show();
 	$("#main-list").hide();
@@ -179,8 +180,8 @@ function fill_main_page(portfolioid,role)
 				var portfolio_buttons_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).attr("id");
 				portfolio_buttons_background_color = UICom.structure["ui"][portfolio_buttons_background_color_id].resource.getValue();
 			}
-			changeCss(".row-resource td.buttons", "border:1px solid "+portfolio_buttons_background_color+";");
-			changeCss(".row-resource td.buttons", "background:"+portfolio_buttons_background_color+";");
+			changeCss(".row-resource td.buttons,.csv-button,.pdf-button", "border:1px solid "+portfolio_buttons_background_color+";");
+			changeCss(".row-resource td.buttons,.csv-button,.pdf-button", "background:"+portfolio_buttons_background_color+";");
 			//--------------------------------
 			var portfolio_link_color = "#337ab7"; // --- default value
 			if ($("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).length>0) {
@@ -216,7 +217,7 @@ function fill_main_page(portfolioid,role)
 			//---------------------------
 			$("#wait-window").modal('hide');
 			//---------------------------
-			var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-block'])",data);
+			var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
 			if (welcomes.length>0){
 				var welcomeid = $(welcomes[0]).attr('id');
 				$("#sidebar_"+welcomeid).click();

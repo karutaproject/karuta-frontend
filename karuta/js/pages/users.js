@@ -4,9 +4,8 @@
 function show_list_users()
 //==============================
 {
-	
-	changeCss("body", "background-color:#e0006d;");
-	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
+	$("body").removeClass();
+	$("body").addClass("list-page")
 	var navbar_html = getNavBar('list',null);
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_list_users()");
@@ -25,12 +24,12 @@ function fill_list_users()
 {
 	var html = "";
 	html += "<span id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
-	html += "<h3>"+karutaStr[LANG]['active_users']+"</h3>";
+	html += "<h3 id='active-users'>"+karutaStr[LANG]['active_users']+"</h3>";
 	html += "<div  id='active'>";
 	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
 	html += "	<h4>"+karutaStr[LANG]['loading']+"</h4>";
 	html += "</div>";
-	html += "<h3>"+karutaStr[LANG]['inactive_users']+"</h3>";
+	html += "<h3 id='inactive-users'>"+karutaStr[LANG]['inactive_users']+"</h3>";
 	html += "<div  id='inactive'>";
 	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
 	html += "	<h4>"+karutaStr[LANG]['loading']+"</h4>";

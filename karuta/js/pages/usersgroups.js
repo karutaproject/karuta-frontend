@@ -4,9 +4,8 @@
 function show_list_usersgroups()
 //==============================
 {
-	
-	changeCss("body", "background-color:#e0006d;");
-	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
+	$("body").removeClass();
+	$("body").addClass("list-page")
 	var navbar_html = getNavBar('list',null);
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_list_usersgroups()");

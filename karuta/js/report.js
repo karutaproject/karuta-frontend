@@ -588,7 +588,6 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 {
 	var xml_model = "";
-	$("#wait-window").modal('show');
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -620,6 +619,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 function report_getModelAndProcess(model_code,json)
 //==================================
 {
+	$('#wait-window').show();
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -644,12 +644,12 @@ function report_getModelAndProcess(model_code,json)
 function xml2PDF(content)
 //==================================
 {
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 	var data = $('#'+content).html();
 	data = data.replace('&nbsp;', ' ');
 	data = "<div>" + data + "</div>";
 	var url =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&format=application/pdf";
 	postAndDownload(url,data);
-	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 }
 
 //==================================
@@ -664,12 +664,12 @@ function displayPDFButton()
 function xml2CSV(content)
 //==================================
 {
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 	var data = $('#'+content).html();
 	data = data.replace('&nbsp;', ' ');
 	data = "<div>" + data + "</div>";
 	var url =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&format=application/csv";
 	postAndDownload(url,data);
-	$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});
 }
 
 //==================================

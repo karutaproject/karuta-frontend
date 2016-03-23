@@ -477,8 +477,9 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			var text = UICom.structure["ui"][uuid].getLabel('sidebar_'+uuid,'span');
 			var node = UICom.structure["ui"][uuid];
 			var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
+			var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
-			if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
+			if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
 				if(name == "asmUnit") // Click on Unit
 				{
 					var html = "";
@@ -1007,7 +1008,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			//------------ Dashboard -----------------
 			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
-				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='dashboard_buttons_"+uuid+"' class='col-md-offset-1 col-md-11 btn-group'></div></div>"));
+				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
 				var root_node = g_portfolio_current;
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
 				if (model_code.indexOf("@local")>-1){
@@ -1030,13 +1031,15 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					$("#node_"+uuid).hide();
 				//---------- display csv or pdf -------
 				var html_csv_pdf = ""
-				if ($(UICom.structure["ui"][uuid].resource.csv_node).text()=='1') {
-					$("#dashboard_buttons_"+uuid).append($("<span class='button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">format CSV</span>"));				
+				var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
+				if (csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+					$("#csv_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
 				}
-				if ($(UICom.structure["ui"][uuid].resource.pdf_node).text()=='1') {
-					$("#dashboard_buttons_"+uuid).append($("<span class='button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">&nbsp;&nbsp;format PDF</span>"));				
+				var pdf_roles = $(UICom.structure["ui"][uuid].resource.pdf_node).text();
+				if (pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+					$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div>"));				
 				}
-					
+				$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});					
 			}
 			// ================================= For each child ==========================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
@@ -2613,12 +2616,12 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
-					if (semantictag.indexOf("asm-block")>-1) {
-						html += "<hr>";
-						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
-						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4,freenode);
-						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ProxyBlock','ProxyBlock',databack,callback,param2,param3,param4,freenode);
-					}
+//					if (semantictag.indexOf("asm-block")>-1) {
+//						html += "<hr>";
+//						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
+//						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4,freenode);
+//						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ProxyBlock','ProxyBlock',databack,callback,param2,param3,param4,freenode);
+//					}
 					if (semantictag.indexOf("bubbleContainer")>-1) {
 //						var interval = setInterval(function(){alert(node.id)},30000);
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-bubbles','bubble_level1','Bubble Map',databack,callback,param2,param3,param4,freenode);
@@ -3066,7 +3069,8 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += "<hr>";
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seenoderoles',$(node.metadatawad).attr('seenoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'delnoderoles',$(node.metadatawad).attr('delnoderoles'));
-	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && node.structured_resource==null)	{
+//	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && node.structured_resource==null)	{
+	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0)	{
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editresroles',$(node.metadatawad).attr('editresroles'),false,true);
 	}
 	else
