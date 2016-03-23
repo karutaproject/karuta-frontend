@@ -11,6 +11,7 @@ function show_list_usersgroups()
 	$("#refresh").attr("onclick","fill_list_usersgroups()");
 	$("#refresh").show();
 	$("#main-list").hide();
+	$("#main-portfoliosgroup").hide();
 	$("#main-page").hide();
 	$("#main-user").hide();
 	$("#main-usersgroup").show();
@@ -83,14 +84,4 @@ function updateGroup_User(elt)
 				$(elt).prop('checked', true);
 		}
 	});
-}
-
-//==============================
-function updateDisplay_usersgroups(elt)
-//==============================
-{
-	var val = $("#"+elt).attr("value");
-	if (val=='1') {
-		fill_list_usersgroups();
-	}
 }

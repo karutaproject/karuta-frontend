@@ -10,6 +10,7 @@ function show_exec_batch()
 	$("#refresh").attr("onclick","fill_exec_batch()");
 	$("#refresh").show();
 	$("#main-list").hide();
+	$("#main-portfoliosgroup").hide();
 	$("#main-page").hide();
 	$("#main-user").hide();
 	$("#main-usersgroup").hide();

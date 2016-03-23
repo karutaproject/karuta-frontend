@@ -11,6 +11,7 @@ function show_list_users()
 	$("#refresh").attr("onclick","fill_list_users()");
 	$("#refresh").show();
 	$("#main-list").hide();
+	$("#main-portfoliosgroup").hide();
 	$("#main-page").hide();
 	$("#main-user").show();
 	$("#main-usersgroup").hide();

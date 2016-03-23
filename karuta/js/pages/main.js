@@ -9,6 +9,7 @@ function show_main_page(portfolioid,role)
 	$("#main-page").html("");
 	$("#main-page").show();
 	$("#main-list").hide();
+	$("#main-portfoliosgroup").hide();
 	$("#main-user").hide();
 	$("#main-usersgroup").hide();
 	$("#main-exec-batch").hide();
