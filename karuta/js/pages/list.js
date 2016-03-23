@@ -86,6 +86,7 @@ function show_list_page()
 	$("#refresh").show();
 	$("#main-page").hide();
 	$("#main-user").hide();
+	$("#main-usersgroup").hide();
 	$("#main-list").show();
 	$("#main-exec-batch").hide();
 	$("#main-exec-report").hide();

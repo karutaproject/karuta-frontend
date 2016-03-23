@@ -181,3 +181,15 @@ karutaStr['es']['select_role']="Sélectionner un rôle";
 karutaStr['es']['batch']="Créer des comptes/portfolios";
 karutaStr['es']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['es']['process_csv']="Éxécuter";
+
+//=========================================
+//========== GROUPS =======================
+//=========================================
+
+karutaStr['es']['select_usersgroups']="Sélectionner des groupes d'usagers";
+karutaStr['es']['create_group']="Ajouter un groupe";
+karutaStr['es']['list_usersgroups']="Groupes d'usagers";
+karutaStr['es']['no_group']="Aucun group";
+karutaStr['es']['addshare-portfoliosgroups']="Partager des Groupes de Portfolios";
+karutaStr['es']['confirm-remove-user-group']="Voulez-vous vraiment retirer cet usager du group ? Cette action est irréversible.";
+karutaStr['es']['empty-group']="Groupe vide";

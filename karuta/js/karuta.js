@@ -151,6 +151,10 @@ function getNavBar(type,portfolioid,edit)
 				html += "						<li><a  onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
 			else
 				html += "						<li><a  onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
+			if ($("#main-usersgroup").length && $("#main-usersgroup").html()!="")
+				html += "						<li><a  onclick='show_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a></li>";
+			else
+				html += "						<li><a  onclick='display_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a></li>";
 			html += "						<li><a  onclick='display_exec_batch()'>"+karutaStr[LANG]['batch']+"</a></li>";
 			html += "						<li><a  onclick='display_exec_report()'>"+karutaStr[LANG]['report']+"</a></li>";
 			html += "					</ul>";
@@ -1102,5 +1106,51 @@ String.prototype.containsArrayElt = function (rolesarray)
 		}
 	}
 	return result;
+}
+
+//==================================
+Array.prototype.contains = function(elt)
+//==================================
+	// usage : if (arr.contains(elt)) 
+{
+	for (var i in this){
+		if (this[i] == elt) return true;
+	}
+	return false;
+}
+
+//==================================
+function toggleGroup(group_type,uuid,callback,type,lang) {
+//==================================
+	if ($("#toggleContent_"+group_type+"-"+uuid).hasClass("glyphicon-plus")) {
+		$("#toggleContent_"+group_type+"-"+uuid).removeClass("glyphicon-plus");
+		$("#toggleContent_"+group_type+"-"+uuid).addClass("glyphicon-minus");
+		if (callback!=null){
+			if (jQuery.isFunction(callback))
+				callback(uuid,"content-"+group_type+"-"+uuid,type,lang);
+			else
+				eval(callback+"('"+uuid+"','content-"+group_type+"-"+uuid+"','"+type+"','"+lang+"')");
+		}
+		$("#content-"+group_type+"-"+uuid).show();
+		displayGroup[group_type][uuid] = 'open';
+		Cookies.set('dg_'+group_type+"-"+uuid,'open',{ expires: 60 });
+	} else {
+		$("#toggleContent_"+group_type+"-"+uuid).removeClass("glyphicon-minus");
+		$("#toggleContent_"+group_type+"-"+uuid).addClass("glyphicon-plus");
+		$("#content-"+group_type+"-"+uuid).hide();
+		displayGroup[group_type][uuid] = 'closed';
+		Cookies.set('dg_'+group_type+"-"+uuid,'closed',{ expires: 60 });
+	}
+}
+
+//==================================
+function parseList(tag,xml) {
+//==================================
+	var ids = [];
+	var items = $(tag,xml);
+	for ( var i = 0; i < items.length; i++) {
+		ids[i] = $(items[i]).attr('id');
+	}
+	return ids;
 }
 

@@ -9,6 +9,7 @@ function show_main_page(portfolioid,role)
 	$("#main-page").show();
 	$("#main-list").hide();
 	$("#main-user").hide();
+	$("#main-usersgroup").hide();
 	$("#main-exec-batch").hide();
 	$("#main-exec-report").hide();
 	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
