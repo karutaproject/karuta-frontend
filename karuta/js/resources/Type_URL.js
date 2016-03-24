@@ -154,7 +154,7 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 
 /// Editor
 //==================================
-UIFactory["URL"].update = function(obj,itself,type,langcode)
+UIFactory["URL"].update = function(obj,itself,type,langcode,parent)
 //==================================
 {
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
@@ -172,11 +172,11 @@ UIFactory["URL"].update = function(obj,itself,type,langcode)
 		label = url;
 	$(itself.label_node[langcode]).text(label);
 	$(itself.url_node[langcode]).text(url);
-	itself.save();
+	itself.save(parent);
 };
 
 //==================================
-UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
+UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled,parent)
 //==================================
 {
 	//---------------------
@@ -198,7 +198,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		$(obj).append($("<span> URL (http://)</span>"));
 		var input_url = $("<input type='text' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type,langcode);
+			UIFactory["URL"].update(obj,self,type,langcode,parent);
 		});
 		$(obj).append(input_url);
 	}
@@ -207,7 +207,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		obj = $("<div class='control-group'><label class='control-label'> URL (http://)</label></div>");
 		var input_url = $("<div class='controls'><input type='text' name='url' value=\""+$(this.url_node[langcode]).text()+"\"></div>");
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type,langcode);
+			UIFactory["URL"].update(obj,self,type,langcode,parent);
 		});
 		$(obj).append(input_url);
 	}
@@ -215,14 +215,14 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		$(obj).append($("<span> "+karutaStr[LANG]['label']+" : </span>"));
 		var input_label = $("<input class='form-control' type='text' name='label'  value='"+$(this.label_node[langcode]).text()+"'>");
 		$(input_label).change(function (){
-			UIFactory["URL"].update(obj,self,type,langcode);
+			UIFactory["URL"].update(obj,self,type,langcode,parent);
 		});
 		$(obj).append(input_label);
 		//------------------------
 		$(obj).append($("<span> URL (http://) : </span>"));
 		var input_url = $("<input class='form-control' type='text' name='url' value='"+$(this.url_node[langcode]).text()+"'>");
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type,langcode);
+			UIFactory["URL"].update(obj,self,type,langcode,parent);
 		});
 		$(obj).append(input_url);
 	}
@@ -230,7 +230,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		$(obj).append($("<span> URL (http://) : </span>"));
 		var input_url = $("<input type='text' name='url' value='"+$(this.url_node[langcode]).text()+"'>");
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type,langcode);
+			UIFactory["URL"].update(obj,self,type,langcode,parent);
 		});
 		$(obj).append(input_url);
 	}
@@ -241,7 +241,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		html += ">";
 		var input_url = $(html);
 		$(input_url).change(function (){
-			UIFactory["URL"].update(obj,self,type,langcode);
+			UIFactory["URL"].update(obj,self,type,langcode,parent);
 		});
 		$(obj).append(input_url);
 	}
@@ -254,7 +254,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 		var htmlLabelInputObj = $("<input id='label_"+this.id+"' type='text' class='form-control' name='label' value=\""+$(this.label_node[langcode]).text()+"\">");
 		$(htmlLabelInputObj).change(function (){
-			UIFactory["URL"].update(obj,self,type,langcode);
+			UIFactory["URL"].update(obj,self,type,langcode,parent);
 		});
 		$(htmlLabelDivObj).append($(htmlLabelInputObj));
 		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
@@ -266,7 +266,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 		var htmlUrlDivObj = $("<div class='col-sm-9'></div>");
 		var htmlUrlInputObj = $("<input id='url_"+this.id+"' type='text' class='form-control' name='url' value=\""+$(this.url_node[langcode]).text()+"\">");
 		$(htmlUrlInputObj).change(function (){
-			UIFactory["URL"].update(obj,self,type,langcode);
+			UIFactory["URL"].update(obj,self,type,langcode,parent);
 		});
 		$(htmlUrlDivObj).append($(htmlUrlInputObj));
 		$(htmlUrlGroupObj).append($(htmlUrlLabelObj));
@@ -277,11 +277,13 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled)
 };
 
 //==================================
-UIFactory["URL"].prototype.save = function()
+UIFactory["URL"].prototype.save = function(parent)
 //==================================
 {
 	UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
+	if (parent!=null) // --- structured resource
+		parent.refresh();
 };
 
 //==================================

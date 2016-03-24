@@ -984,6 +984,16 @@ function toggleMetadata(state) {
 	Cookies.set('metadata',g_visible,{ expires: 60 });
 }
 
+//==================================
+function toggleButton(state) {
+//==================================
+	if (state=='hidden') {
+		changeCss(".btn-group", "visibility:hidden;");
+	} else {
+		changeCss(".btn-group", "visibility:visible;");
+	}
+}
+
 
 //==================================
 function toggleSideBar() {

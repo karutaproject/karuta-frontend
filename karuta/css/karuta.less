@@ -1990,7 +1990,7 @@ div.oembedall-container {
 .block .ProxyBlock,
 .block .DocumentBlock,
 .block .URLBlock{
-	height:@block-height;
+	height:@block-img-height;
 	text-align:center;
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -2001,7 +2001,7 @@ div.oembedall-container {
 	font-size:12px;
 }
 
-.block img{
+.block .resource-Image{
 	display: inline-block;
 	overflow:hidden;
 	height:@block-img-height;
@@ -2011,7 +2011,9 @@ div.oembedall-container {
 .block .docblock-title,
 .block .no-document .docblock-title{
 	display: inline-block;
-	margin-top:100px;
+	margin-top:90px;
+	margin-left:10px;
+	margin-right:10px;
 	padding-left:10px;
 	padding-right:10px;
 	background-color:white;
@@ -2019,6 +2021,7 @@ div.oembedall-container {
 	-moz-box-shadow: 10px 10px 5px #888;
 	-webkit-box-shadow: 10px 10px 5px #888;
 	box-shadow: 10px 10px 5px #888;
+	font-size:16px;
 }
 
 .block .asmUnitStructure{

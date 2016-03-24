@@ -1127,6 +1127,8 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
 	var html ="";
 	html += "<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+bckname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
+	html += "<li><a  onclick=\"toggleButton('hidden')\">"+karutaStr[LANG]['hide-button']+"</a></li>";
+	html += "<li><a  onclick=\"toggleButton('visible')\">"+karutaStr[LANG]['show-button']+"</a></li>";
 	if (USER.admin || portfolios_byid[portfolioid].owner=='Y') {
 		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callShare('"+portfolioid+"')\" >"+karutaStr[LANG]['addshare']+"</a></li>";
 		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callUnShare('"+portfolioid+"')\" >"+karutaStr[LANG]['unshare']+"</a></li>";

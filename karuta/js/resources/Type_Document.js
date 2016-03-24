@@ -194,7 +194,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 
 /// Editor
 //==================================
-UIFactory["Document"].update = function(data,uuid,langcode)
+UIFactory["Document"].update = function(data,uuid,langcode,parent)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
@@ -220,7 +220,7 @@ UIFactory["Document"].update = function(data,uuid,langcode)
 	itself.resource.filename_node[langcode].text(filename);
 	itself.resource.size_node[langcode].text(size);
 	itself.resource.type_node[langcode].text(type);
-	itself.resource.save();
+	itself.resource.save(parent);
 };
 
 //==================================
@@ -250,7 +250,7 @@ UIFactory["Document"].remove = function(uuid,langcode)
 };
 
 //==================================
-UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode)
+UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,parent)
 //==================================
 {
 	//---------------------
@@ -286,18 +286,20 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode)
 		done: function (e, data) {
 			$("#wait-window").modal('hide');
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
-			UIFactory["Document"].update(data.result,uuid,langcode);
+			UIFactory["Document"].update(data.result,uuid,langcode,parent);
 			$("#divfileupload_"+this.id+"_"+langcode).html("Loaded");
 		}
     });
 };
 
 //==================================
-UIFactory["Document"].prototype.save = function()
+UIFactory["Document"].prototype.save = function(parent)
 //==================================
 {
 	UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
+	if (parent!=null) // --- structured resource
+		parent.refresh();
 };
 
 

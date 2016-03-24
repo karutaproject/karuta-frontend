@@ -96,10 +96,10 @@ UIFactory["URLBlock"].prototype.displayEditor = function(destid,type,langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	$("#"+destid).append($("<h4>URL</h4>"));
-	$("#"+destid).append($(url_element.resource.getEditor()));
+	$("#"+destid).append($(url_element.resource.getEditor(null,null,null,this)));
 	//---------------------
 	$("#"+destid).append($("<h4>Image</h4>"));
-	image.resource.displayEditor(destid,type,langcode);
+	image.resource.displayEditor(destid,type,langcode,this);
 }
 
 

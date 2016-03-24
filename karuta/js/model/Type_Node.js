@@ -1097,9 +1097,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						UIFactory["Node"].displayBlock(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root,menu);
 					else {
 						if (childnode.structured_resource!=null) {
-							var html = childnode.structured_resource.getView('column_'+blockid,null,langcode);
+							var html = "<div id='structured_resource_"+blockid+"'>"+childnode.structured_resource.getView('structured_resource_'+blockid,null,langcode)+"</div>";
 							var menu = false;
-							html += "<div>"+ UICom.structure["ui"][blockid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
+							html += UICom.structure["ui"][blockid].getButtons(null,null,null,inline,depth,edit,menu);
 							//-------------- metainfo -------------------------
 							if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
 								html += "<div id='metainfo_"+blockid+"' class='metainfo'></div><!-- metainfo -->";

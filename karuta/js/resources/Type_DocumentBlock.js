@@ -26,19 +26,6 @@ UIFactory["DocumentBlock"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'DocumentBlock';
-	//------------------------------
-	this.label_node = [];
-	for (var i=0; i<languages.length;i++){
-		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
-		if (this.label_node[i].length==0) {
-			var newElement = createXmlElement("label");
-			$(newElement).attr('lang', languages[i]);
-			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newElement);
-			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
-		}
-		if (this.label_node[i].text()=="" && (this.asmtype=="asmRoot" || this.asmtype=="asmStructure" || this.asmtype=="asmUnit" ))
-			this.label_node[i].text("&nbsp;"); // to be able to edit it
-	}
 	//--------------------
 	this.document_nodeid = $("asmContext:has(metadata[semantictag='document'])",node).attr('id');
 	//--------------------
@@ -76,7 +63,10 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 		if (filename!="") {
 			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+document.id+"?lang="+languages[langcode]+"'>";
 			html += "<div class='DocumentBlock' style=\"background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
-			html += "<div class='docblock-title'>"+filename+"</div>";
+			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='')
+			html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+			else
+				html += "<div class='docblock-title'>"+filename+"</div>";
 			html += "</div>";
 			html += "</a>";
 		} else {
@@ -103,10 +93,10 @@ UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langco
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	$("#"+destid).append($("<h4>Document</h4>"));
-	document.resource.displayEditor(destid,type,langcode);
+	document.resource.displayEditor(destid,type,langcode,this);
 	//---------------------
 	$("#"+destid).append($("<h4>Image</h4>"));
-	image.resource.displayEditor(destid,type,langcode);
+	image.resource.displayEditor(destid,type,langcode,this);
 }
 
 

@@ -162,6 +162,8 @@ karutaStr['fr']['submitted']="Soumis le ";
 karutaStr['fr']['notsubmitted']="Non soumis";
 karutaStr['fr']['collapsible']="Repliable";
 karutaStr['fr']['incrementroles']="Rôles - Incrémenter seulement";
+karutaStr['fr']['hide-button']="Cacher édition";
+karutaStr['fr']['show-button']="Monter édition";
 
 //=========================================
 //========== ADMIN ========================
