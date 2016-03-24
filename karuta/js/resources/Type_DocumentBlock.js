@@ -76,7 +76,6 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 		if (filename!="") {
 			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+document.id+"?lang="+languages[langcode]+"'>";
 			html += "<div class='DocumentBlock' style=\"background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
-			if ()
 			html += "<div class='docblock-title'>"+filename+"</div>";
 			html += "</div>";
 			html += "</a>";
