@@ -194,9 +194,13 @@ karutaStr['ja']['list_usersgroups']="ユーザーのグループ";
 karutaStr['ja']['no_group']="何のグループはありません";
 karutaStr['ja']['addshare-portfoliosgroups']="Share Groups of Portfolios";
 karutaStr['ja']['addshare-portfolios']="Share Portfolios";
+karutaStr['ja']['addshare-usersgroups']="Share with groups of users";
+karutaStr['ja']['addshare-users']="Share with users";
 karutaStr['ja']['confirm-remove-user-group']="Do you want to remove this user from the group? This action cannot be undone.";
 karutaStr['ja']['empty-group']="Empty groupe";
 karutaStr['ja']['list_portfoliosgroups']="Portfolio Groups";
 karutaStr['ja']['confirm-remove-item-group']="Do you want to remove this element from the group? This action cannot be undone.";
 karutaStr['ja']['add_users']="Add users";
+karutaStr['ja']['add_portfolios']="Add Portfolios";
+karutaStr['ja']['select_groups']="Select Groups";
 
