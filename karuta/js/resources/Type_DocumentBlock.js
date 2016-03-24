@@ -26,6 +26,19 @@ UIFactory["DocumentBlock"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'DocumentBlock';
+	//------------------------------
+	this.label_node = [];
+	for (var i=0; i<languages.length;i++){
+		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
+		if (this.label_node[i].length==0) {
+			var newElement = createXmlElement("label");
+			$(newElement).attr('lang', languages[i]);
+			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newElement);
+			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
+		}
+		if (this.label_node[i].text()=="" && (this.asmtype=="asmRoot" || this.asmtype=="asmStructure" || this.asmtype=="asmUnit" ))
+			this.label_node[i].text("&nbsp;"); // to be able to edit it
+	}
 	//--------------------
 	this.document_nodeid = $("asmContext:has(metadata[semantictag='document'])",node).attr('id');
 	//--------------------
@@ -59,10 +72,12 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	var html = "";
 	if (type=='standard'){
-		if ($(document.resource.filename_node[langcode]).text()!="") {
+		var filename = $(document.resource.filename_node[langcode]).text();
+		if (filename!="") {
 			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+document.id+"?lang="+languages[langcode]+"'>";
 			html += "<div class='DocumentBlock' style=\"background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
-			html += "<div class='docblock-title'>"+$(document.resource.filename_node[langcode]).text()+"</div>";
+			if ()
+			html += "<div class='docblock-title'>"+filename+"</div>";
 			html += "</div>";
 			html += "</a>";
 		} else {
