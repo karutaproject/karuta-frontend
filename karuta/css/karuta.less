@@ -376,6 +376,32 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 /*      SIDEBAR            */
 /* ====================== */
 
+#social-button {
+	position:fixed;
+	top:50%;
+	left:-10px;
+	z-index:10000;
+	height:40px;
+	width:20px;
+	background-color:@list-icon-section-color;
+	border-top-right-radius:3px;
+	border-bottom-right-radius:3px;
+}
+
+#social-button:hover {
+	left:0px;
+}
+
+#toggleSocialNetwork{
+	position:relative;
+	top:6px;
+	color:@list-button-color;
+}
+
+/* ====================== */
+/*      SIDEBAR            */
+/* ====================== */
+
 
 .panel-default > .panel-heading {
 	background-color:transparent;
@@ -1135,6 +1161,16 @@ a.active:over{
 	font-size:14px;
 	margin-top:5px;
 }
+
+/* ====================
+	Submit button
+   ====================*/
+   
+.button-border{
+	border-radius:3px;
+	color:@portfolio_buttons_color;
+}
+
 /* ====================
 	Select Drop Down
    ====================*/

@@ -121,7 +121,7 @@ karutaStr['en']['menuroles']="Menus<br/><span style='font-size:smaller'> portfol
 karutaStr['en']['menuroles2']="label";
 karutaStr['en']['menuroles3']=",roles[;other menu]</span>";
 karutaStr['en']['help']="Information <br/><span style='font-size:smaller'>";
-karutaStr['en']['help2']="Text in English";
+karutaStr['en']['help2']="Text in English@en";
 karutaStr['en']['help3']="</span>";
 karutaStr['en']['font-size']="Font Size (in pixels)";
 karutaStr['en']['font-weight']="Font Weight";

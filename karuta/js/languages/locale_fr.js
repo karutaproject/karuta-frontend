@@ -121,7 +121,7 @@ karutaStr['fr']['menuroles']="Menus<br/><span style='font-size:smaller'> code_po
 karutaStr['fr']['menuroles2']="libellé";
 karutaStr['fr']['menuroles3']=",rôles[;autre menu]</span>";
 karutaStr['fr']['help']="Information <br/><span style='font-size:smaller'>";
-karutaStr['fr']['help2']="texte en français";
+karutaStr['fr']['help2']="texte en français@fr";
 karutaStr['fr']['help3']="</span>";
 karutaStr['fr']['font-size']="Taille police (en pixels)";
 karutaStr['fr']['font-weight']="Poids de la police";

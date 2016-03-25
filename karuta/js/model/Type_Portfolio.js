@@ -282,10 +282,10 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	var html = "";
 	if (type=='list') {
 
-		html += "<div class='col-md-1 col-sm-1 hidden-xs' onclick=\"display_main_page('"+this.id+"')\"></div>";
+		html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
 		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
-		html += "<div class='col-md-2 col-sm-2 hidden-xs ' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-owner' >"+owner+"</a></div>";
-		html += "<div class='col-md-2 col-sm-2 hidden-xs' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-code' >"+this.code_node.text()+"</a></div>";
+		html += "<div class='col-md-2 col-sm-2 hidden-xs'><a class='portfolio-owner' >"+owner+"</a></div>";
+		html += "<div class='col-md-2 col-sm-2 hidden-xs'><a class='portfolio-code' >"+this.code_node.text()+"</a></div>";
 		if (this.date_modified!=null)
 			html += "<div class='col-md-2 col-sm-2 hidden-xs' onclick=\"display_main_page('"+this.id+"')\">"+this.date_modified.substring(0,10)+"</div>";
 		html += "<div class='col-md-1 col-sm-1 col-xs-1'>";
@@ -344,7 +344,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 			html += "<button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].restore('"+this.id+"')\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
 			html += "<span class='glyphicon glyphicon-arrow-up'></span>";
 			html += "</button>";
-			html += " <button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].del('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
+			html += " <button class='btn btn-xs' onclick=\"confirmDelPortfolio('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
 			html += "<i class='fa fa-times'></i>";
 			html += "</button>";
 			html += "</div>";
@@ -1639,8 +1639,10 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "		</button>";
 	html += "		<div class='navbar-brand' >";
 	html += "			<a id='sidebar_"+rootid+"' class='sidebar'  onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+edit+")\">";
-	html += UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid)+"</a>";
-	html += "		 	<a  onclick='toggleSideBar()' class='btn-lg'><span class='glyphicon glyphicon-menu-hamburger'></span></a>";
+	html += UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
+	html += "</a>";
+	if (type=='standard')
+		html += "		 	<a  onclick='toggleSideBar()' class='btn-lg'><span class='glyphicon glyphicon-menu-hamburger'></span></a>";
 	html += "		</div><!-- class='navbar-brand' -->";
 	html += "	</div><!-- class='nav-bar-header' -->";
 	html += "</div><!-- class='navbar-inner' -->";
@@ -1669,18 +1671,19 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	//-------------------- ROLES-------------------------
 	if (g_userroles[0]=='designer') {
 		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >Role : <span id='userrole'>designer</span><span class='caret'></span></a>";
-		html += "	<ul class='dropdown-menu pull-right'>";
-		html += "		<li><a  onclick=\"setDesignerRole('designer')\">designer</a></li>";
+		html += "		<ul class='dropdown-menu pull-right'>";
+		html += "			<li><a  onclick=\"setDesignerRole('designer')\">designer</a></li>";
 		for (role in UICom.roles) {
 			if (role!="designer")
 				html += "	<li><a  onclick=\"setDesignerRole('"+role+"')\">"+role+"</a></li>";
 		}
-		html += "	</ul><!-- class='nav navbar-nav navbar-right' -->";
+		html += "		</ul><!-- class='nav navbar-nav navbar-right' -->";
 	}
 //	else
 //		html += " Role : <span id='userrole'></span><span class='caret'></span></a>";
 
-	html += "	</ul>";
+	html += "	</li>";
+	html += "	<li><a id='refresh-portfolio' onclick='fill_main_page()' class='glyphicon glyphicon-refresh'></a></li>";
 	//------------------------------------------------
 	html += "</div><!-- class='collapse navbar-collapse' -->";
 	html += "</div><!-- class='container-fluid' -->";

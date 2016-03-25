@@ -129,6 +129,7 @@
 			<div id='main-container' class="container-fluid"></div>
 			<div id='var-list' class="container-fluid"></div>
 		</div>
+		<div id='social-button' onclick='toggleSocialNetwork()'></div>
 		<!-- ==================== wait box ====================================== -->
 		<div id='wait-window' class='modal' style='height:100px;'>
 			<div id='wait-window-body' class='modal-body' style='text-align:center;'></div>
@@ -180,7 +181,7 @@
 							html += "<div id='global-row' class='row'>";
 							if (g_socialnetwork==undefined || g_socialnetwork=='shown'){
 								html += "	<div id='main-content' class='col-md-8 col-md-push-4'>";
-								html += "		<div><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-arrow-left fa-2x'></i></div>";
+								html += "		<div><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i></div>";
 								html += "		<div id='main-list'></div>";
 								html += "		<div id='main-portfoliosgroup' style='display:none'></div>";
 								html += "		<div id='main-page' style='display:none'></div>";
@@ -192,7 +193,7 @@
 								html += "	<div id='socialnetwork' class='col-md-4 col-md-pull-8'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div>";
 							} else {
 								html += "	<div id='main-content' class='col-md-12'>";
-								html += "		<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i><i onclick='toggleSocialNetwork()' id='toggleSocialNetwork' class='fa fa-users fa-2x'></i>";
+								html += "		<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
 								html += "		<div id='main-list' class='col-md-12'></div>";
 								html += "		<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
 								html += "		<div id='main-page' class='col-md-12' style='display:none'></div>";
@@ -220,6 +221,10 @@
 							html += "</div>";
 							$("#main-container").html(html);
 						}
+						if (g_socialnetwork==undefined || g_socialnetwork=='shown')
+							$("#social-button").html("<i id='toggleSocialNetwork' class='fa fa-arrow-left'></i>");
+						else
+							$("#social-button").html("<i id='toggleSocialNetwork' class='fa fa-arrow-right'></i>");
 						//-------------------------------
 						display_list_page();
 						setWelcomeTitles();

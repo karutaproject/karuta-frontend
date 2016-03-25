@@ -15,8 +15,7 @@ function show_main_page(portfolioid,role)
 	$("#main-exec-batch").hide();
 	$("#main-exec-report").hide();
 //	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
-	$("#refresh").attr("onclick","fill_main_page()");
-	$("#refresh").show();
+	$("#refresh").hide();
 }
 
 //==============================
@@ -166,13 +165,12 @@ function fill_main_page(portfolioid,role)
 			}
 			changeCss(".row-node-asmRoot .title-subline,.row-node-asmStructure .title-subline,.row-node-asmUnit .title-subline", "border-bottom:1px solid "+page_title_subline_color+";");
 			//--------------------------------
-			var portfolio_buttons_color = "#09bbd9"; // --- default value
 			if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 				var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
-				portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
+				var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
+				changeCss(".asmnode .dropdown-button, .button-border", "border:1px solid "+portfolio_buttons_color+";");
+				changeCss(".collapsible .glyphicon,.btn-group .button", "color:"+portfolio_buttons_color+";");
 			}
-			changeCss(".asmnode .dropdown-button, .button-border", "border:1px solid "+portfolio_buttons_color+";");
-			changeCss(".collapsible .glyphicon,.btn-group .button", "color:"+portfolio_buttons_color+";");
 			//--------------------------------
 			var portfolio_buttons_background_color = "#d8d8d8"; // --- default value
 			if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
