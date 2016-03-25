@@ -31,6 +31,8 @@ UIFactory["URLBlock"] = function( node )
 	//--------------------
 	this.image_nodeid = $("asmContext:has(metadata[semantictag='image'])",node).attr('id');
 	//--------------------
+	this.cover_nodeid = $("asmContext:has(metadata[semantictag='cover'])",node).attr('id');
+	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
 };
@@ -43,6 +45,7 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 {
 	var url_element = UICom.structure["ui"][this.url_nodeid];
 	var image = UICom.structure["ui"][this.image_nodeid];
+	var cover = UICom.structure["ui"][this.cover_nodeid];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -68,7 +71,10 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 
 		if (url!="") {
 			html =  "<a style='text-decoration:none;color:inherit' id='url_"+url_element.id+"' href='"+url+"' target='_blank'>";
-			html += "<div class='URLBlock' style=\"background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
+			var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"');";
+			if (cover.resource.getValue()=='1')
+				style += "background-size:cover;";
+			html += "<div class='URLBlock' style=\""+style+"\">";
 			html += "<div class='docblock-title'>"+label+"</div>";
 			html += "</div>";
 			html += "</a>";
@@ -88,6 +94,7 @@ UIFactory["URLBlock"].prototype.displayEditor = function(destid,type,langcode)
 {
 	var url_element = UICom.structure["ui"][this.url_nodeid];
 	var image = UICom.structure["ui"][this.image_nodeid];
+	var cover = UICom.structure["ui"][this.cover_nodeid];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -100,6 +107,9 @@ UIFactory["URLBlock"].prototype.displayEditor = function(destid,type,langcode)
 	//---------------------
 	$("#"+destid).append($("<h4>Image</h4>"));
 	image.resource.displayEditor(destid,type,langcode,this);
+	//---------------------
+	$("#"+destid).append($("<h4>Coverage</h4>"));
+	cover.resource.displayEditor(destid,type,langcode,this);
 }
 
 

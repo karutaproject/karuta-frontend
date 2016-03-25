@@ -31,6 +31,8 @@ UIFactory["DocumentBlock"] = function( node )
 	//--------------------
 	this.image_nodeid = $("asmContext:has(metadata[semantictag='image'])",node).attr('id');
 	//--------------------
+	this.cover_nodeid = $("asmContext:has(metadata[semantictag='cover'])",node).attr('id');
+	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
 };
@@ -43,6 +45,7 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 {
 	var document = UICom.structure["ui"][this.document_nodeid];
 	var image = UICom.structure["ui"][this.image_nodeid];
+	var cover = UICom.structure["ui"][this.cover_nodeid];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -62,9 +65,12 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 		var filename = $(document.resource.filename_node[langcode]).text();
 		if (filename!="") {
 			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+document.id+"?lang="+languages[langcode]+"'>";
-			html += "<div class='DocumentBlock' style=\"background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
+			var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"');";
+			if (cover.resource.getValue()=='1')
+				style += "background-size:cover;";
+			html += "<div class='DocumentBlock' style=\""+style+"\">";
 			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='')
-			html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
 			else
 				html += "<div class='docblock-title'>"+filename+"</div>";
 			html += "</div>";
@@ -85,6 +91,7 @@ UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langco
 {
 	var document = UICom.structure["ui"][this.document_nodeid];
 	var image = UICom.structure["ui"][this.image_nodeid];
+	var cover = UICom.structure["ui"][this.cover_nodeid];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -97,6 +104,9 @@ UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langco
 	//---------------------
 	$("#"+destid).append($("<h4>Image</h4>"));
 	image.resource.displayEditor(destid,type,langcode,this);
+	//---------------------
+	$("#"+destid).append($("<h4>Coverage</h4>"));
+	cover.resource.displayEditor(destid,type,langcode,this);
 }
 
 

@@ -9,8 +9,8 @@
 		<asmResource xsi_type="nodeRes">
 			<lastmodified />
 			<code>karuta.karuta-resources</code>
-			<label lang="fr">KARUTA - Ressources (2016/02/24)</label>
-			<label lang="en">KARUTA - Resources (2016/02/24)</label>
+			<label lang="fr">KARUTA - Ressources (2016/03/24)</label>
+			<label lang="en">KARUTA - Resources (2016/03/24)</label>
 		</asmResource>
 		<asmResource xsi_type="context">
 			<text lang="fr" />
@@ -35,7 +35,7 @@
 		//===================== asmUnit =======================
 		<asmUnit xsi_type="asmUnit">
 			<metadata-wad seenoderoles="all" />
-			<metadata-epm background-color="#d8d8d8"/>
+			<metadata-epm/>
 			<metadata multilingual-node="Y" semantictag ="asmUnit" sharedNode="N" sharedNodeResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<lastmodified />
@@ -51,7 +51,7 @@
 		//===================== asmUnitStructure =======================
 		<asmUnitStructure xsi_type="asmUnitStructure">
 			<metadata-wad seenoderoles="all" collapsible="Y"/>
-			<metadata-epm background-color="#f2f2f2"/>
+			<metadata-epm/>
 			<metadata multilingual-node="Y" semantictag ="asmUnitStructure" sharedNode="N" sharedNodeResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<lastmodified />
@@ -67,7 +67,7 @@
 		//===================== asmColumn =======================
 		<asmUnitStructure xsi_type="asmUnitStructure">
 			<metadata-wad seenoderoles="all" collapsible="Y"/>
-			<metadata-epm background-color="#f2f2f2"/>
+			<metadata-epm/>
 			<metadata multilingual-node="Y" semantictag ="asmColumn" sharedNode="N" sharedNodeResource="N" />
 			<asmResource xsi_type="nodeRes">
 				<lastmodified />

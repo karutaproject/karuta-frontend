@@ -35,6 +35,8 @@ var g_free_toolbar_visibility = 'hidden';
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_wysihtml5_autosave = 120000; // 120 seconds
 var g_block_height = 220; // block height in pixels
+var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
+var g_portfolio_rootid = "";
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------
@@ -63,7 +65,7 @@ function setDesignerRole(role)
 		}
 		html += "	</div>";
 		$("#main-page").html(html);
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,true,UICom.rootid);
+		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,true,g_portfolio_rootid);
 		$("#sidebar_"+uuid).click();
 	};
 	if (g_display_type=='model'){

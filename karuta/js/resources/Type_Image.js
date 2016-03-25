@@ -139,7 +139,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		html +="<div uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
 			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
+			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
 			html += "</a>";
 		}
 		else
@@ -163,6 +163,18 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100'>";		
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
+	if (type=='block') {
+		html +="<div uuid='img_"+this.id+"'>";
+		if ($(this.filename_node[langcode]).text()!="") {
+			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+			html += "<img inblock='true' style='display:inline;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
+			html += "</a>";
+		}
+		else
+			html += "<img src='../img/image-icon.png' height='25px'>"+karutaStr[LANG]['no-image'];
+		html += "</div>";
+	}
+
 	return html;
 };
 

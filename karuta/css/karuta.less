@@ -19,9 +19,13 @@ a, .collapsible {
 	cursor:pointer;
 }
 
-#navigation_bar .navbar-default{
+.navbar-default{
 	background-color:@navigation_bar-background-color;
 	border-color:@navigation_bar-border-color;
+}
+
+.navbar-default .navbar-nav > li > a {
+	color:@navigation_bar-color;
 }
 
 #navigation_bar .glyphicon{
@@ -147,10 +151,15 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 #sub-bar .welcome-line {
-    border-bottom: 1px solid @welcome-line-border-color;
+    border-bottom: 1px solid @welcome-line-color;
     margin-left: auto;
     margin-right: auto;
     width: 25%;
+}
+
+#welcome-baseline{
+	color:@welcome-subtitle-color;
+	text-align:center;
 }
 
 #sub-bar  .welcome-baseline, #sub-bar  .welcome-text{
@@ -167,7 +176,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 .page-list .welcome-line {
-    border-bottom: 1px solid @welcome-line-border-color;
+    border-bottom: 1px solid @welcome-line-color;
     margin-left: auto;
     margin-right: auto;
     width: 25%;
@@ -1994,7 +2003,7 @@ div.oembedall-container {
 	text-align:center;
 	background-repeat: no-repeat;
 	background-position: center center;
-	background-size: cover;
+//	background-size: cover;
 }
 
 .block .btn-group{
@@ -2006,7 +2015,10 @@ div.oembedall-container {
 	overflow:hidden;
 	height:@block-img-height;
 	text-align:center;
+	width:100%;
+	position:relative;
 }
+
 
 .block .docblock-title,
 .block .no-document .docblock-title{
@@ -2026,11 +2038,6 @@ div.oembedall-container {
 
 .block .asmUnitStructure{
 	height:@block-height;
-}
-
-.block .resource-Image{
-	text-align:center;
-	width:100%;
 }
 
 .block .resource-TextField{
@@ -2077,5 +2084,20 @@ div.oembedall-container {
 	text-align:center;
 	padding-top:7px;
 	display:in-line;
+}
+/* ===========================
+	PORTFOLIO
+   ===========================*/
+
+#sub-bar .navbar-default,
+#sub-bar .dropdown-menu,
+#sub-bar .open > a {
+	background-color:@portfolio_navbar_color;
+	border-color:@portfolio_navbar_color;
+}
+
+#sidebar .selected{
+	border-right:4px solid @portfolio_sidebar_selected_border_color;
+	padding-right:5px;
 }
 

@@ -32,7 +32,7 @@ function getListSubBar()
 	html += "		<div class='welcome-subbox'>";
 	html += "			<div id='welcome-title' class='welcome-title'>KARUTA</div>";
 	html += "			<div class='welcome-line'></div>";
-	html += "			<div style='color:#18b8d6;text-align:center;' id='welcome-baseline' class='welcome-baseline'>";
+	html += "			<div id='welcome-baseline' class='welcome-baseline'>";
 	html += "				OPEN SOURCE PORTFOLIO";
 	html += "			</div><!-- id='welcome-baseline' -->";
 	html += "		</div><!--  class='welcome-subbox' -->";
@@ -40,7 +40,7 @@ function getListSubBar()
 	html += "</div>";
 	return html;
 }
-
+/*
 //==============================
 function getListMainContainerHtml()
 //==============================
@@ -59,7 +59,7 @@ function getListMainContainerHtml()
 	html += "</div>";
 	return html;
 }
-
+*/
 //==============================
 function setWelcomeTitles()
 //==============================

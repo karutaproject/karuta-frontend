@@ -13,7 +13,6 @@
 	permissions and limitations under the License.
    ======================================================= */
 
-var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
 var proxies_parent = {};
 var proxies_edit = {};
 var proxies_nodeid = {};
