@@ -164,14 +164,18 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='block') {
-		html +="<div uuid='img_"+this.id+"'>";
+		html +="<div uuid='img_"+this.id+"' style='height:100%'>";
 		if ($(this.filename_node[langcode]).text()!="") {
+			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
 			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img inblock='true' style='display:inline;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
+			html += "<img style='display:inline;max-height:218px;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
 			html += "</a>";
+			html += "</td></tr></table>";
+		} else {
+			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
+			html += "<img src='../img/image-icon.png' height='150px'>"+karutaStr[LANG]['no-image'];
+			html += "</td></tr></table>";
 		}
-		else
-			html += "<img src='../img/image-icon.png' height='25px'>"+karutaStr[LANG]['no-image'];
 		html += "</div>";
 	}
 
@@ -241,7 +245,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var html ="";
-	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,'editor',langcode)+"</span> ";
+	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,null,langcode)+"</span> ";
 	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html +=" <div id='divfileupload_"+this.id+"_"+langcode+"' >";
 	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"' en>";
