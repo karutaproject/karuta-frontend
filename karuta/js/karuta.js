@@ -1182,3 +1182,19 @@ function updateDisplay_page(elt,callback)
 		}
 	}
 }
+
+//==================================
+function toggleProject2Select(uuid) {
+//==================================
+	if ($("#toggleContent2Select_"+uuid).hasClass("glyphicon-plus")) {
+		$("#toggleContent2Select_"+uuid).removeClass("glyphicon-plus")
+		$("#toggleContent2Select_"+uuid).addClass("glyphicon-minus")
+		$("#selectform-content-"+uuid).show();
+	} else {
+		$("#toggleContent2Select_"+uuid).removeClass("glyphicon-minus")
+		$("#toggleContent2Select_"+uuid).addClass("glyphicon-plus")
+		$("#selectform-content-"+uuid).hide();
+	}
+}
+
+

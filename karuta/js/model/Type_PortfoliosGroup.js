@@ -471,7 +471,7 @@ UIFactory["PortfoliosGroup"].callAddPortfolios = function(gid)
 			if (!($("#list-menu").length && $("#list-menu").html()!="")) {
 				fill_list_page();
 			}
-			UIFactory["Portfolio"].displaySelectMultiple(items,'adding_portfolios');
+			UIFactory["Portfolio"].displaySelectPortfolios(items,'adding_portfolios');
 			//----------------
 		}
 	});
@@ -484,7 +484,7 @@ UIFactory["PortfoliosGroup"].callAddPortfolios = function(gid)
 UIFactory["PortfoliosGroup"].addPortfolios = function(gid)
 //==================================
 {
-	var items = $("input[name='select_portfolios']").filter(':checked');
+	var items = $("input[name='select_portfolios']:not(:disabled)").filter(':checked');
 	var url = "../../../"+serverBCK+"/portfoliogroups?group=" + gid + "&uuid=";
 	for (var i=0; i<items.length; i++){
 		var itemid = $(items[i]).attr('value');

@@ -26,7 +26,7 @@ function fill_list_portfoliosgroups()
 {
 	var html = "";
 	html += "<span id='portfoliosgroup-create' onclick=\"UIFactory['PortfoliosGroup'].callCreate()\" >"+karutaStr[LANG]['create_group']+"</span>";
-	html += "<h3>"+karutaStr[LANG]['list_portfoliosgroups']+"</h3>";
+	html += "<h3 id='portfoliosgroups-label'>"+karutaStr[LANG]['list_portfoliosgroups']+"</h3>";
 	html += "<div  id='portfoliosgroups'>";
 	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
 	html += "	<h4>"+karutaStr[LANG]['loading']+"</h4>";
