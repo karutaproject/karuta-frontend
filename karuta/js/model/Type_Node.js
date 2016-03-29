@@ -655,7 +655,7 @@ UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,i
 //==============================================================================
 //==============================================================================
 //==============================================================================
-UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inline,backgroundParent,parent,menu)
+UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock)
 //==============================================================================
 //==============================================================================
 //==============================================================================
@@ -666,6 +666,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 		inline = false;
 	if (menu==null || menu==undefined)
 		menu = true;
+	if (inblock==null || inblock==undefined)
+		inblock = false;
 	//---------------------------------------
 	var data = root.node;
 	var nodetype = $(data).prop("nodeName"); // name of the xml tag
@@ -838,7 +840,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//-------------------- collapsible -------------------
 				if (collapsible=='Y')
 					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='col-md-1 collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-expand'></span></div>";
-				if (collapsible!='Y')
+				else
 					html += "<div class='col-md-1'>&nbsp;</div>";
 	
 				//-------------- node -----------------------------
@@ -859,9 +861,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				else {
 					if (g_display_type=='standard')
 						html += "<div id='std_node_"+uuid+"' class='node-label col-md-7  same-height'";
-					if (nodetype=='asmUnitStructure' && collapsible=='Y')
-						html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
-					else
+//					if (nodetype=='asmUnitStructure' && collapsible=='Y')
+//						html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
+//					else
 						html += " style='"+style+"'>";
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='node-label col-md-offset-1 col-md-7  same-height'";
@@ -1109,7 +1111,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 								UIFactory["Node"].displayMetainfo("metainfo_"+blockid,childnode.node);
 							}
 					} else
-							UIFactory["Node"].displayStandard(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root,menu);
+							UIFactory["Node"].displayStandard(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root,menu,true);
 					}
 				}
 				//---------------------------------------
@@ -1261,7 +1263,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					if (node.resource_type!=null)
 						html+= "resource-"+node.resource_type;
 					html+= "' >";
-					html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
+					html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid,'block');
 					html += "</div>";
 					html += "</div>";
 					//-------------- context -------------------------
@@ -2570,6 +2572,14 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			html+= "<span class='button glyphicon glyphicon-duplicate' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 	}
+	//------------- private button -------------------
+	if ((showroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && showroles!='none' && showroles!='') {
+		if (privatevalue) {
+			html += "<span class='button glyphicon glyphicon-eye-close' onclick=\"javascript:show('"+node.id+"')\"></span>";
+		} else {
+			html += "<span class='button glyphicon glyphicon-eye-open' onclick=\"javascript:hide('"+node.id+"')\"></span>";
+		}
+	}
 	//------------- node menus button ---------------
 	if (menu) {
 		if ((USER.admin || g_userroles[0]=='designer') && (node.asmtype != 'asmContext' && (depth>0 || node.asmtype == 'asmUnitStructure'))) {
@@ -2638,14 +2648,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			}
 			html += "</ul>"; // class='dropdown-menu'
 			html += "</span><!-- class='dropdown -->";
-		}
-	}
-	//------------- private button -------------------
-	if ((showroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && showroles!='none' && showroles!='') {
-		if (privatevalue) {
-			html += "<span class='button glyphicon glyphicon-eye-close' onclick=\"javascript:show('"+node.id+"')\"></span>";
-		} else {
-			html += "<span class='button glyphicon glyphicon-eye-open' onclick=\"javascript:hide('"+node.id+"')\"></span>";
 		}
 	}
 	//------------- specific menu button ---------------
@@ -2726,19 +2728,19 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	html += "</div><!-- class='btn-group' -->";
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
-		if ( submitted!='Y' && submitnode && ( submitroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer' || submitroles.indexOf($(USER.username_node).text())>-1)) {
-			html += "<span id='submit-"+node.id+"' class='button button-border' onclick=\"javascript:submit('"+node.id+"')\" ";
+		if ( submitted!='Y' && ((submitnode && ( submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer')) {
+			html += "<span id='submit-"+node.id+"' class='button button-border ' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
 		} else {
 			if (submitted=='Y') {
-				if (USER.admin) {
+				if (USER.admin || g_userroles[0]=='administrator') {
 					html += "<span id='submit-"+node.id+"' class='button button-border' onclick=\"javascript:reset('"+node.id+"')\" ";
 					html += " >"+karutaStr[languages[langcode]]['button-unsubmit']+"</span>";
 				}
-				html += "<div class='btn btn-xs disabled alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+submitteddate+"</div>";
+				html += "<div class='alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+submitteddate+"</div>";
 			} 
 			else {
-				html += "<div class='btn btn-xs disabled alert alert-danger'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
+				html += "<div class='alert alert-danger'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
 			}
 		}
 	}

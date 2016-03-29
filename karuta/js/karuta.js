@@ -35,6 +35,8 @@ var g_free_toolbar_visibility = 'hidden';
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_wysihtml5_autosave = 120000; // 120 seconds
 var g_block_height = 220; // block height in pixels
+var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
+var g_portfolio_rootid = "";
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------
@@ -63,7 +65,7 @@ function setDesignerRole(role)
 		}
 		html += "	</div>";
 		$("#main-page").html(html);
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,true,UICom.rootid);
+		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,true,g_portfolio_rootid);
 		$("#sidebar_"+uuid).click();
 	};
 	if (g_display_type=='model'){
@@ -177,7 +179,7 @@ function getNavBar(type,portfolioid,edit)
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
 		if (USER.creator && !USER.admin)
 			html += "						<li><a href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a></li>";
-		html += "						<li class='divider'></li><li><a href='login.htm?lang="+LANG+"''>Logout</a></li>";
+//		html += "						<li class='divider'></li><li><a href='login.htm?lang="+LANG+"''>Logout</a></li>";
 		html += "					</ul>";
 		html += "				</li>";
 		html += "			</ul>";
@@ -477,6 +479,17 @@ function confirmDel(uuid,type,parentid,destid,callback,param1,param2)
 	$('#delete-window').modal('show');
 }
 
+//=======================================================================
+function confirmDelPortfolio(uuid) 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:UIFactory.Portfolio.del('"+uuid+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
 //==================================
 function getURLParameter(sParam) {
 //==================================
@@ -493,6 +506,7 @@ function getURLParameter(sParam) {
 //==================================
 function displayPage(uuid,depth,type,langcode,edit) {
 //==================================
+	$(window).scrollTop(0);
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
@@ -1017,13 +1031,13 @@ function toggleSocialNetwork() {
 	if ($("#socialnetwork").is(":visible"))
 	{
 		$("#socialnetwork").hide();
-		$("#toggleSocialNetwork").removeClass('fa-arrow-left').addClass('fa-users');
+		$("#toggleSocialNetwork").removeClass('fa-arrow-left').addClass('fa-arrow-right');
 		$("#main-content").removeClass().addClass('col-md-12');
 		Cookies.set('socialnetwork','hidden',{ expires: 60 });
 	} else {
+		$("#toggleSocialNetwork").removeClass('fa-arrow-right').addClass('fa-arrow-left');
 		$("#main-content").removeClass().addClass('col-md-8 col-md-push-4');
 		$("#socialnetwork").show();
-		$("#toggleSocialNetwork").removeClass('fa-users').addClass('fa-arrow-left');
 		Cookies.set('socialnetwork','shown',{ expires: 60 });
 	}
 }
