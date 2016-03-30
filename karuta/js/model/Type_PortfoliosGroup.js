@@ -138,18 +138,16 @@ UIFactory["PortfoliosGroup"].displayPortfolios = function(gid,destid,type,lang)
 		data: "",
 		success : function(data) {
 			var portfolios_ids = parseList("portfolio",data);
-			$("#"+destid_group).html("<table id='"+destid_group+"-table_portfolios' class='tablesorter'><tbody id='"+destid_group+"-list_items'></tbody></table>");
+			$("#"+destid_group).html("<div id='"+destid_group+"-list_items' class='portfoliosgroup-item'></div>");
 			destid_group +="-list_items";
-//			$("#"+destid_group).append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 			for ( var i = 0; i < portfolios_ids.length; i++) {
 				var itemid = destid_group+"_"+portfolios_ids[i];
-				$("#"+destid_group).append($("<tr class='item' id='"+itemid+"'></tr>"));
+				$("#"+destid_group).append($("<div class='row' id='"+itemid+"'></div>"));
 				if (portfolios_byid[portfolios_ids[i]]!=null && portfolios_byid[portfolios_ids[i]]!=undefined) {
-//					$("#"+itemid).html(portfolios_byid[portfolios_ids[i]].getPortfolioView(itemid,type,lang,gid));
 					$("#"+itemid).html(portfolios_byid[portfolios_ids[i]].getPortfolioView(itemid,type,null,null,null,gid));
 				}
 			}
-			var items = $("tr[class='item']",$("#"+destid_group));
+			var items = $("div[class='row']",$("#"+destid_group));
 			if (items.length==0)
 				$("#portfolios-group_"+gid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
 			//----------------
@@ -396,7 +394,7 @@ UIFactory["PortfoliosGroup"].editGroupsByUuid = function(uuid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfoliogroups?portfolioid="+uuid,
+		url : "../../../"+serverBCK+"/portfoliogroups?uuid="+uuid,
 		data: "",
 		success : function(data) {
 			var uuid_groupids = parseList("group",data);
