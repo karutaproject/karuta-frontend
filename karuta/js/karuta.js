@@ -485,7 +485,7 @@ function confirmDelPortfolio(uuid)
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:UIFactory.Portfolio.del('"+uuid+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.del('"+uuid+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
@@ -857,11 +857,13 @@ function getSendPublicURL(uuid,langcode)
 }
 
 //==================================
-function getPublicURL(uuid,email,role,langcode) {
+function getPublicURL(uuid,email,role,langcode,level,duration) {
 //==================================
-	//post /directlink?uuid=&user=&role=
+	//post /directlink?uuid=&user=&role= duration in hours
+	if (l==null)
+		l = 4; //public
 	role = "all";
-	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role;
+	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'d='+duration;
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -869,6 +871,49 @@ function getPublicURL(uuid,email,role,langcode) {
 		url : urlS,
 		success : function (data){
 			sendEmailPublicURL(data,email,langcode);
+		}
+	});
+}
+
+//==================================
+function getEmail(role) {
+//==================================
+	var email = "";
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/users",
+		success : function(data) {
+			UIFactory["User"].parse(data);
+			//--------------------------
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+				success : function(data) {
+					var groups = $("rrg",data);
+					if (groups.length>0) {
+						for (var i=0; i<groups.length; i++) {
+							var label = $("label",groups[i]).text();
+							var users = $("user",groups[i]);
+							if (users.length>0){
+								for (var j=0; j<users.length; j++){
+									var userid = $(users[j]).attr('id');
+									if (Users_byid[userid]==undefined)
+										alertHTML('error undefined userid:'+userid);
+									else
+										email = Users_byid[userid].getEmail();
+								}
+							}
+						}
+					}
+					return email;
+				}
+			});
+			//--------------------------
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in getEmail : "+jqxhr.responseText);
 		}
 	});
 }

@@ -2725,11 +2725,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	if ((shareroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && shareroles!='none' && shareroles!='') {
 			html += "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='Partager' rel='tooltip'></span>";
 	}
-	html += "</div><!-- class='btn-group' -->";
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
 		if ( submitted!='Y' && ((submitnode && ( submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer')) {
-			html += "<span id='submit-"+node.id+"' class='button button-border ' onclick=\"javascript:submit('"+node.id+"')\" ";
+			html += "<span id='submit-"+node.id+"' class='button submit-button ' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
 		} else {
 			if (submitted=='Y') {
@@ -2744,6 +2743,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			}
 		}
 	}
+	html += "</div><!-- class='btn-group' -->";
 	//--------------------------------------------------
 	if (html!="")
 		html = "<div class='buttons-menus' id='btn-"+node.id+"'>" + html + "</div><!-- #btn-+node.id -->";

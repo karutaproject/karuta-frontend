@@ -89,6 +89,13 @@ UIFactory["User"].displayInactive = function(destid,type,lang)
 };
 
 //==================================
+UIFactory["User"].prototype.getEmail = function()
+//==================================
+{
+	return this.email_node.text()
+}
+
+//==================================
 UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 //==================================
 {

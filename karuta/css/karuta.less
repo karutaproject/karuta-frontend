@@ -372,6 +372,15 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	border-bottom:0px solid white;
 }
 
+.collapsible .glyphicon,
+.btn-group .button {
+	color:@portfolio_buttons_color;
+}
+
+.asmnode .dropdown-button, .submit-button {
+	border:1px solid @portfolio_buttons_color;
+	}
+
 /* ====================== */
 /*      SIDEBAR            */
 /* ====================== */
@@ -728,7 +737,7 @@ hr {
 
 .button{
 	font-size: 12px;
-	line-height: 1.5;
+//	line-height: 1.5;
 	padding: 1px 5px;
 	cursor:pointer;
 	display: inline-block;
@@ -1166,9 +1175,10 @@ a.active:over{
 	Submit button
    ====================*/
    
-.button-border{
+.submit-button{
 	border-radius:3px;
-	color:@portfolio_buttons_color;
+	height:20px;
+	margin-left:3px;
 }
 
 /* ====================
