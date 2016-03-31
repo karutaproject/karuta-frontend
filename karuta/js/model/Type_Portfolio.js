@@ -138,8 +138,10 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					html += "			<ul class='dropdown-menu  pull-right'>";
 					html += "				<li><a onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
 					html += "				<li><a onclick=\"UIFactory['Portfolio'].remove('"+portfolio.id+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
-					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShare('"+portfolio.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare"]+"</a></li>";
-					html += "				<li><a onclick=\"UIFactory['Portfolio'].callUnShare('"+portfolio.id+"')\" ><i class='fa fa-times'></i><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["unshare"]+"</a></li>";
+//					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShare('"+portfolio.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare"]+"</a></li>";
+//					html += "				<li><a onclick=\"UIFactory['Portfolio'].callUnShare('"+portfolio.id+"')\" ><i class='fa fa-times'></i><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["unshare"]+"</a></li>";
+					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolio.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
+					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShareGroups('"+portfolio.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 	//				html += "				<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
 	//				html += "				<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&files=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-with-files"]+"</a></li>";
 					html += "			</ul>";
@@ -300,14 +302,18 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 				if (semtag.indexOf('karuta-model')>-1)
 					html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].instantiate('"+this.id+"','"+this.code_node.text()+"-instance',true)\" ><i class='fa fa-file-o'></i><i class='fa fa-file'></i> "+karutaStr[LANG]["button-instantiate"]+"</a></li>";
 				html += "<li><a onclick=\"UIFactory['Portfolio'].remove('"+this.id+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
-				html += "<li><a onclick=\"UIFactory['Portfolio'].callShare('"+this.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare"]+"</a></li>";
-				html += "<li><a onclick=\"UIFactory['Portfolio'].callUnShare('"+this.id+"')\" ><i class='fa fa-times'></i><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["unshare"]+"</a></li>";
+//				html += "<li><a onclick=\"UIFactory['Portfolio'].callShare('"+this.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare"]+"</a></li>";
+//				html += "<li><a onclick=\"UIFactory['Portfolio'].callUnShare('"+this.id+"')\" ><i class='fa fa-times'></i><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["unshare"]+"</a></li>";
 				html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
 				html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&files=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-with-files"]+"</a></li>";
 			} else {
-				html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+gid+"','"+this.id+"')\" ><span class='glyphicon glyphicon-remove'></span> "+karutaStr[LANG]["button-delete"]+"</a></li>";
+				if (USER.admin){
+					html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+gid+"','"+this.id+"')\" ><span class='glyphicon glyphicon-remove'></span> "+karutaStr[LANG]["button-delete"]+"</a></li>";
+				}
 			}
-			html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].editGroupsByUuid('"+this.id+"')\" > "+karutaStr[LANG]["select_groups"]+"</a></li>";
+			if (USER.admin){
+				html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].editGroupsByUuid('"+this.id+"')\" > "+karutaStr[LANG]["select_groups"]+"</a></li>";
+			}
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+this.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callShareGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 			html += "</ul>";
@@ -321,9 +327,9 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 				html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
 				html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&files=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-with-files"]+"</a></li>";
 			} else {
-				html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+gid+"','"+this.id+"')\" ><span class='glyphicon glyphicon-remove'></span> "+karutaStr[LANG]["button-delete"]+"</a></li>";
+//				html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+gid+"','"+this.id+"')\" ><span class='glyphicon glyphicon-remove'></span> "+karutaStr[LANG]["button-delete"]+"</a></li>";
 			}
-			html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].editGroupsByUuid('"+this.id+"')\" > "+karutaStr[LANG]["select_groups"]+"</a></li>";
+//			html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].editGroupsByUuid('"+this.id+"')\" > "+karutaStr[LANG]["select_groups"]+"</a></li>";
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+this.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callShareGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 			html += "</ul>";			
@@ -1140,8 +1146,10 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	html += "<li><a  onclick=\"toggleButton('hidden')\">"+karutaStr[LANG]['hide-button']+"</a></li>";
 	html += "<li><a  onclick=\"toggleButton('visible')\">"+karutaStr[LANG]['show-button']+"</a></li>";
 	if (USER.admin || portfolios_byid[portfolioid].owner=='Y') {
-		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callShare('"+portfolioid+"')\" >"+karutaStr[LANG]['addshare']+"</a></li>";
-		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callUnShare('"+portfolioid+"')\" >"+karutaStr[LANG]['unshare']+"</a></li>";
+//		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callShare('"+portfolioid+"')\" >"+karutaStr[LANG]['addshare']+"</a></li>";
+//		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callUnShare('"+portfolioid+"')\" >"+karutaStr[LANG]['unshare']+"</a></li>";
+		html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolioid+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
+		html += "<li><a onclick=\"UIFactory['Portfolio'].callShareGroups('"+portfolioid+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 	}
 	html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a></li>";
 	if (USER.admin || g_userroles[0]=='designer') {
@@ -1861,7 +1869,7 @@ UIFactory["Portfolio"].prototype.getPortfolioSelector = function(attr,value,name
 	if (attr!=null && value!=null)
 		html += " "+attr+"='"+value+"'";
 	if (checked) {
-		html += " disabled='true'> </input>";
+		html += " checked='true' disabled='true'> </input>";
 	} else {
 		html += "> </input>";
 	}
@@ -2017,7 +2025,7 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 				UIFactory["Portfolio"].displayUnSharing('shared',data);
 			},
 			error : function(jqxhr,textStatus) {
-				alertHTML("Error in callUnshare 1 : "+jqxhr.responseText);
+				alertHTML("Error in callShareUsers 1 : "+jqxhr.responseText);
 			}
 		});
 		//--------------------------		
@@ -2041,7 +2049,7 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 				//--------------------------
 			},
 			error : function(jqxhr,textStatus) {
-				alertHTML("Error in callunsShare 2 : "+jqxhr.responseText);
+				alertHTML("Error in callShareUsers 2 : "+jqxhr.responseText);
 			}
 		});
 	}
@@ -2056,11 +2064,147 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 			$("#sharing_designer").show();
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Error in callShare 2 : "+jqxhr.responseText);
+			alertHTML("Error in callShareUsers 3 : "+jqxhr.responseText);
 		}
 	});
 	
 	//----------------------------------------------------------------
 	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].callShareGroups = function(portfolioid,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var js2 = "javascript:UIFactory['Portfolio'].shareGroups('"+portfolioid+"','unshare')";
+	var js3 = "javascript:UIFactory['Portfolio'].shareGroups('"+portfolioid+"','share')";
+	var footer = "<button class='btn' onclick=\""+js3+";\">"+karutaStr[LANG]['addshare']+"</button>";
+	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['unshare']+"</button>";
+	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+portfolios_byid[portfolioid].label_node[langcode].text());
+	var html = "";
+	html += "<div id='sharing' style='display:none'>";
+	html += "<div class='row'>";
+	html += "<div class='col-md-3'>";
+	html += karutaStr[LANG]['select_role'];
+	html += "</div>";
+	html += "<div class='col-md-9'>";
+	html += "<div id='sharing_roles'></div>";
+	html += "</div>";
+	html += "</div><!--row-->";
+	html += "<br><div class='row'>";
+	html += "<div class='col-md-3'><br>";
+	html += karutaStr[LANG]['select_usersgroups'];
+	html += "</div>";
+	html += "<div class='col-md-9'>";
+	html += "<div id='sharing_usersgroups'></div>";
+	html += "</div>";
+	html += "</div><!--row-->";
+	html += "</div><!--sharing-->";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	//----------------------------------------------------------------
+	if (UsersGroups_byid.length>0) { // users groups loaded
+		UIFactory["UsersGroup"].displaySelectMultiple('sharing_usersgroups');
+		//--------------------------		
+	} else {
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/usersgroups",
+			success : function(data) {
+				UIFactory["UsersGroup"].parse(data);
+				UIFactory["UsersGroup"].displaySelectMultiple('sharing_usersgroups');
+				//--------------------------
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error in callShareGroups 1 : "+jqxhr.responseText);
+			}
+		});
+	}
+	//----------------------------------------------------------------
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/rolerightsgroups?portfolio="+portfolioid,
+		success : function(data) {
+			UIFactory["Portfolio"].displaySharingRoleEditor('sharing_roles',portfolioid,data);
+			$("#sharing").show();
+			$("#sharing_designer").show();
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in callShareGroups 2 : "+jqxhr.responseText);
+		}
+	});
+	
+	//----------------------------------------------------------------
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].shareGroups = function(portfolioid,type)
+//==================================
+{
+	var usersgroups = $("input[name='select_usersgroups']").filter(':checked');
+	var groups = $("input[name='radio_group']");
+	var groupid = null;
+	if (groups.length>0){
+		var group = $("input[name='radio_group']").filter(':checked');
+		groupid = $(group).attr('value');
+	}
+	if (groupid!=null) {
+		var urlS = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+		var urlU = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/";
+		for (var i=0; i<usersgroups.length; i++){
+			var gid = $(usersgroups[i]).attr('value');
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+				success : function(data) {
+					if (type=='share'){
+						var xml = $($("group",data)[0]).html();
+						$.ajax({
+							type : "POST",
+							contentType: "application/xml",
+							dataType : "xml",
+							url : urlS,
+							data : xml,
+							success : function(data) {
+							}
+						});
+					} else if (type=='unshare'){
+						var users = $("user",data);
+						for (var j=0; j<users.length; j++){
+							var userid = $(users[j]).attr('id');
+							$.ajax({
+								type : "DELETE",
+								contentType: "application/xml",
+								dataType : "xml",
+								url : urlU+userid,
+								data : "",
+								success : function(data) {
+								}
+							});
+						}
+					}
+
+					//--------------------------
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error in shareGroups : "+"group-"+gid+":"+jqxhr.responseText);
+				}
+			});
+		}
+	}
+	//------------------------------------------------------------
 };
 

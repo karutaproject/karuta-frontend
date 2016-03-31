@@ -4,7 +4,6 @@
 function show_list_portfoliosgroups()
 //==============================
 {
-	
 	changeCss("body", "background-color:#e0006d;");
 	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 	var navbar_html = getNavBar('list',null);
@@ -86,4 +85,13 @@ function updateGroup_Portfolio(elt)
 				$(elt).prop('checked', true);
 		}
 	});
+}
+
+//==============================
+function testGroup_Empty(destid,gid)
+//==============================
+{
+	var items = $("div[class='row']",$("#"+destid+gid+'-list_items'));
+	if (items.length==0)
+		$("#"+destid+gid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
 }

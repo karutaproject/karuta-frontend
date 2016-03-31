@@ -147,9 +147,7 @@ UIFactory["PortfoliosGroup"].displayPortfolios = function(gid,destid,type,lang)
 					$("#"+itemid).html(portfolios_byid[portfolios_ids[i]].getPortfolioView(itemid,type,null,null,null,gid));
 				}
 			}
-			var items = $("div[class='row']",$("#"+destid_group));
-			if (items.length==0)
-				$("#portfolios-group_"+gid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
+			testGroup_Empty("portfolios-group_",gid);
 			//----------------
 		},
 		error : function(jqxhr,textStatus) {
@@ -325,9 +323,7 @@ UIFactory["PortfoliosGroup"].remove = function(gid,uid)
 		success : function(data) {
 			if (uid!=null && uid!='null') {
 				$("#portfolios-group_"+gid+"-list_items_"+uid).remove();
-				var items = $("tr[class='item']",$("#portfolios-group_"+gid+"-list_items"));
-				if (items.length==0)
-					$("#portfolios-group_"+gid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
+				testGroup_Empty("portfolios-group_",gid);
 			} else
 				$("#refresh").click();
 		}
@@ -390,7 +386,7 @@ UIFactory["PortfoliosGroup"].editGroupsByUuid = function(uuid)
 	//--------------------------
 	$('#edit-window').modal('show');
 
-	$.ajaxSetup({async: false});
+//	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -398,14 +394,32 @@ UIFactory["PortfoliosGroup"].editGroupsByUuid = function(uuid)
 		data: "",
 		success : function(data) {
 			var uuid_groupids = parseList("group",data);
-			if (!($("#main-portfoliosgroup").length && $("#main-portfoliosgroup").html()!="")) {
-				fill_list_PortfoliosGroups();
+			if (PortfoliosGroups_byid.length>0) { // portfolios groups loaded
+				UIFactory["PortfoliosGroup"].displayManageMultipleGroups('portfolio_list_groups','uuid',uuid,uuid_groupids,'updateGroup_Portfolio');
+				//--------------------------		
+			} else {
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : "../../../"+serverBCK+"/portfoliogroups",
+					success : function(data) {
+						UIFactory["PortfoliosGroup"].parse(data);
+						UIFactory["PortfoliosGroup"].displayManageMultipleGroups('portfolio_list_groups','uuid',uuid,uuid_groupids,'updateGroup_Portfolio');
+						//--------------------------
+					},
+					error : function(jqxhr,textStatus) {
+						alertHTML("Error in editGroupsByUuid 1 : "+jqxhr.responseText);
+					}
+				});
 			}
-			UIFactory["PortfoliosGroup"].displayManageMultipleGroups('portfolio_list_groups','uuid',uuid,uuid_groupids,'updateGroup_Portfolio');
 			//----------------
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in editGroupsByUuid 2 : "+jqxhr.responseText);
 		}
+	
 	});
-	$.ajaxSetup({async: true});
+//	$.ajaxSetup({async: true});
 
 };
 
