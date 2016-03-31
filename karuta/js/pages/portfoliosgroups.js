@@ -4,7 +4,6 @@
 function show_list_portfoliosgroups()
 //==============================
 {
-	
 	changeCss("body", "background-color:#e0006d;");
 	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 	var navbar_html = getNavBar('list',null);
@@ -26,7 +25,7 @@ function fill_list_portfoliosgroups()
 {
 	var html = "";
 	html += "<span id='portfoliosgroup-create' onclick=\"UIFactory['PortfoliosGroup'].callCreate()\" >"+karutaStr[LANG]['create_group']+"</span>";
-	html += "<h3>"+karutaStr[LANG]['list_portfoliosgroups']+"</h3>";
+	html += "<h3 id='portfoliosgroups-label'>"+karutaStr[LANG]['list_portfoliosgroups']+"</h3>";
 	html += "<div  id='portfoliosgroups'>";
 	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
 	html += "	<h4>"+karutaStr[LANG]['loading']+"</h4>";
@@ -86,4 +85,13 @@ function updateGroup_Portfolio(elt)
 				$(elt).prop('checked', true);
 		}
 	});
+}
+
+//==============================
+function testGroup_Empty(destid,gid)
+//==============================
+{
+	var items = $("div[class='row']",$("#"+destid+gid+'-list_items'));
+	if (items.length==0)
+		$("#"+destid+gid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
 }
