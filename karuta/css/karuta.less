@@ -4,7 +4,24 @@
 @import "../../application/css/specific.less";
 
 
-/* ============================================================ */
+/* ====================== */
+/*     DEFAULT COLORS     */
+/* ====================== */
+
+.asmRoot .row-node-asmStructure .title-subline,
+.asmStructure .asmStructure .row-node-asmStructure .title-subline,
+.asmStructure .row-node-asmUnit  .title-subline{
+	border-bottom:0px solid white;
+}
+
+.collapsible .glyphicon,
+.btn-group .button {
+	color:@portfolio-buttons-color;
+}
+
+.asmnode .dropdown-button, .submit-button {
+	border:1px solid @portfolio-buttons-color;
+	}
 
 .list-page{
 	background-color:@list-background-color;
@@ -14,19 +31,100 @@
 	background-color:@main-background-color;
 }
 
+#sub-bar a {
+	color:@portfolio-navbar-link-color;
+}
+
+.sidebar-link {
+	color:@portfolio-sidebar-link-color;
+}
+.sidebar-link a {
+	color:@portfolio-sidebar-link-color;
+	}
+
+#sidebar {
+	background-color:@portfolio-sidebar-color;
+}
+
+.selected a,
+.sidebar-link a:hover,
+a.sidebar-link:hover {
+	color:@portfolio-sidebar-link-selected-color;
+}
+
+.sidebar-item,
+.sidebar-item .sidebar-item {
+	border-bottom:1px solid @portfolio-sidebar-separator-color;
+}
+
+.page-welcome .welcome-title {
+	color:@welcome-title-color;
+}
+
+.navbar-default{
+	background-color:@navigation-bar-background-color;
+	border-color:@navigation-bar-border-color;
+}
+
+.navbar-default .navbar-nav > li > a {
+	color:@navigation-bar-color;
+}
+
+#sub-bar .navbar-default,
+#sub-bar .dropdown-menu,
+#sub-bar .open > a {
+	background-color:@portfolio-navbar-color;
+	border-color:@portfolio-navbar-color;
+}
+
+#sidebar .selected{
+	border-right:4px solid @portfolio-sidebar-selected-border-color;
+}
+
+.welcome-line {
+	border-bottom:1px solid @welcome-line-color;
+}
+
+.welcome-line,
+.row-node-asmRoot,
+.row-node-asmStructure,
+.row-node-asmUnit {
+	background-color:@page-title-background-color;
+}
+
+.row-node {
+	border-top:1px solid @page-title-background-color;
+}
+
+.row-node-asmRoot .title-subline,
+.row-node-asmStructure .title-subline,
+.row-node-asmUnit .title-subline {
+	border-bottom:1px solid @page-title-subline-color;
+}
+
+.row-resource td.buttons,
+.csv-button,.pdf-button {
+	border:1px solid @portfolio-buttons-background-color;
+}
+
+.row-resource td.buttons,
+.csv-button,.pdf-button {
+	background:@portfolio-buttons-background-color;
+}
+
+a {
+	color:@portfolio-link-color;
+}
+
+.row-node-asmUnitStructure {
+	background:@portfolio-section-title-background-color;
+}
+
 /* ============================================================ */
 a, .collapsible {
 	cursor:pointer;
 }
 
-.navbar-default{
-	background-color:@navigation_bar-background-color;
-	border-color:@navigation_bar-border-color;
-}
-
-.navbar-default .navbar-nav > li > a {
-	color:@navigation_bar-color;
-}
 
 #navigation_bar .glyphicon{
 	font-size:16px;
@@ -191,6 +289,12 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	background-color:@list-background-color;
 }
 
+.welcome-line {
+	width:25%;
+	margin-left:auto;
+	margin-right:auto;
+}
+
 
 
 #list-menu,
@@ -281,6 +385,10 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	margin-right:-10px;
 }
 
+.project-menu .glyphicon-menu-hamburger {
+	width:13px;
+	margin-left:2px;
+}
 
 #portfoliosgroups .row,
 #usersgroups .row,
@@ -362,24 +470,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 
-/* ====================== */
-/*     DEFAULT COLORS     */
-/* ====================== */
-
-.asmRoot .row-node-asmStructure .title-subline,
-.asmStructure .asmStructure .row-node-asmStructure .title-subline,
-.asmStructure .row-node-asmUnit  .title-subline{
-	border-bottom:0px solid white;
-}
-
-.collapsible .glyphicon,
-.btn-group .button {
-	color:@portfolio_buttons_color;
-}
-
-.asmnode .dropdown-button, .submit-button {
-	border:1px solid @portfolio_buttons_color;
-	}
 
 /* ====================== */
 /*      SIDEBAR            */
@@ -450,6 +540,27 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 .sidebar-item a {
 	width:100%;
 }
+
+.selected a {
+	font-weight:bold;
+}
+
+.sidebar-item {
+	padding-left:15px;
+	padding-top:8px;
+	padding-bottom:8px;
+}
+.sidebar-item .sidebar-item {
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.page-welcome .welcome-title {
+	text-align:center;
+	width:100%;
+	font-size:30px;
+}
+
 
 /* =========== PORTFOLIO-WELCOME ================= */
 
@@ -530,6 +641,13 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 /* ============================================== */
 
+.sidebar-link {
+	padding-right:9px;
+}
+
+#sidebar {
+	height:100%;
+}
 
 /* --- buton are redefined to use with Ipad and solve size errors */
 .btn-xs [class*="icon-"] {
@@ -2135,15 +2253,8 @@ div.oembedall-container {
 	PORTFOLIO
    ===========================*/
 
-#sub-bar .navbar-default,
-#sub-bar .dropdown-menu,
-#sub-bar .open > a {
-	background-color:@portfolio_navbar_color;
-	border-color:@portfolio_navbar_color;
-}
 
 #sidebar .selected{
-	border-right:4px solid @portfolio_sidebar_selected_border_color;
 	padding-right:5px;
 }
 
