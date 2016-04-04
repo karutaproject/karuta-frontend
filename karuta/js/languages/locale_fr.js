@@ -164,6 +164,13 @@ karutaStr['fr']['collapsible']="Repliable";
 karutaStr['fr']['incrementroles']="Rôles - Incrémenter seulement";
 karutaStr['fr']['hide-button']="Cacher édition";
 karutaStr['fr']['show-button']="Monter édition";
+karutaStr['fr']['share']="Partage";
+karutaStr['fr']['sharetoroles']="Rôles - Partager avec";
+karutaStr['fr']['sharetoemail']="Email - Partager";
+karutaStr['fr']['sharelabel']="Libelle du bouton";
+karutaStr['fr']['sharelevel']="Niveau de partage 0-4";
+karutaStr['fr']['shareduration']="Validité du lien (en heures)";
+karutaStr['fr']['sharewithrole']="Rôle - destinataire";
 
 //=========================================
 //========== ADMIN ========================

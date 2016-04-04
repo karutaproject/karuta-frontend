@@ -860,8 +860,27 @@ function getSendPublicURL(uuid,langcode)
 function getPublicURL(uuid,email,role,langcode,level,duration) {
 //==================================
 	//post /directlink?uuid=&user=&role= duration in hours
-	if (l==null)
-		l = 4; //public
+	if (level==null)
+		level = 4; //public
+	role = "all";
+	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'d='+duration;
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		success : function (data){
+			sendEmailPublicURL(data,email,langcode);
+		}
+	});
+}
+
+//==================================
+function getSharingURL(uuid,emails,roles,langcode,level,duration) {
+//==================================
+	//post /directlink?uuid=&user=&role= duration in hours
+	if (level==null)
+		level = 0; //must be logged
 	role = "all";
 	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'d='+duration;
 	$.ajax({
@@ -1009,6 +1028,20 @@ function toggleContent(uuid) {
 		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
 		$("#content-"+uuid).hide();
+	}
+}
+
+//==================================
+function toggleSharing(uuid) {
+//==================================
+	if ($("#toggleSharing_"+uuid).hasClass("glyphicon-plus")) {
+		$("#toggleSharing_"+uuid).removeClass("glyphicon-plus")
+		$("#toggleSharing_"+uuid).addClass("glyphicon-minus")
+		$("#sharing-content-"+uuid).show();
+	} else {
+		$("#toggleSharing_"+uuid).removeClass("glyphicon-minus")
+		$("#toggleSharing_"+uuid).addClass("glyphicon-plus")
+		$("#sharing-content-"+uuid).hide();
 	}
 }
 

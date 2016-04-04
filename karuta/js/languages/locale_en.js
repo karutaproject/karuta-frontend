@@ -164,6 +164,13 @@ karutaStr['en']['collapsible']="Collapsible";
 karutaStr['en']['incrementroles']="Rôles - Increment only";
 karutaStr['en']['hide-button']="Hide Edit Buttons";
 karutaStr['en']['show-button']="Show Edit Buttons";
+karutaStr['en']['share']="Share";
+karutaStr['en']['sharetoroles']="Roles - Send to";
+karutaStr['en']['sharetoemail']="Email - Send to";
+karutaStr['en']['sharelabel']="Button Label";
+karutaStr['en']['sharelevel']="Sharing Level 0--4";
+karutaStr['en']['shareduration']="Link Validity (in hours)";
+karutaStr['en']['sharewithrole']="Role - Recepient";
 
 //=========================================
 //========== ADMIN ========================

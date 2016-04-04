@@ -2535,10 +2535,13 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
 	var moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'none':$(node.metadatawad).attr('moveroles');
-	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
+	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
 	var duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
 	var incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
+	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
+	var sharetoroles = ($(node.metadatawad).attr('sharetoroles')==undefined)?'none':$(node.metadatawad).attr('sharetoroles');
+	var shareemail = ($(node.metadatawad).attr('shareemail')==undefined)?'none':$(node.metadatawad).attr('shareemail');
+	var sharelabel = ($(node.metadatawad).attr('sharelabel')==undefined)?'none':$(node.metadatawad).attr('sharelabel');
 	if (g_designerrole) {
 		deletenode = (delnoderoles.containsArrayElt(g_userroles))? true : false;
 		writenode = (editnoderoles.containsArrayElt(g_userroles))? true : false;
@@ -2723,6 +2726,18 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- share node button ---------------
 	if ((shareroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && shareroles!='none' && shareroles!='') {
+		if ((sharetoroles!='' && sharetoroles!='none') || (sharetoemail!='' &&  sharetoemail!='none'))
+			if (sharelabel!='' && sharelabel!='none') {
+				var label = "";
+				var labels = sharelabel.split("/");
+				for (var j=0; j<labels.length; j++){
+					if (labels[j].indexOf(languages[langcode])>-1)
+						label = labels[j].substring(0,labels[j].indexOf("@"));
+				}
+				html += " <span class='button share-button' onclick=\"\"> "+label+"</span>";
+			} else
+				html += " <span class='button share-button'>"+karutaStr[languages[langcode]]['send']+"</span>";
+		else
 			html += "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='Partager' rel='tooltip'></span>";
 	}
 	//------------- submit  -------------------
@@ -3040,6 +3055,10 @@ UIFactory["Node"].displayMetainfo = function(destid,data)
 UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 //==================================================
 {
+	if (type==null)
+		type = 'default';
+	if (langcode==null)
+		langcode = LANGCODE;
 	var name = node.asmtype;
 	var semtag =  ($("metadata",node.node)[0]==undefined)?'': $($("metadata",node.node)[0]).attr('semantictag');
 	var html = "<div><br>";
@@ -3091,8 +3110,20 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 //	if ($(node.metadatawad).attr('showroles')!='')
 //		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'private',$(node.metadatawad).attr('private'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showtoroles',$(node.metadatawad).attr('showtoroles'));
-	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'shareroles',$(node.metadatawad).attr('shareroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
+	//------------------------------------
+	html += "<div style='font-weight:bold' class='collapsible' onclick=\"javascript:toggleSharing('"+node.id+"')\"><span class='glyphicon glyphicon-plus collapsible' id='toggleSharing_"+node.id+"'></span> "+karutaStr[languages[langcode]]['share']+"</div>";
+	html += "<div id='sharing-content-"+node.id+"' style='display:none'>";
+	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'shareroles',$(node.metadatawad).attr('shareroles'));
+	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharewithrole',$(node.metadatawad).attr('sharewithrole'));	
+	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharetoroles',$(node.metadatawad).attr('sharetoroles'));	
+	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharetoemail',$(node.metadatawad).attr('sharetoemail'));	
+	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharelabel',$(node.metadatawad).attr('sharelabel'));	
+	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharelevel',$(node.metadatawad).attr('sharelevel'));	
+	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'shareduration',$(node.metadatawad).attr('shareduration'));	
+	html += "</div>";
+	html += "<hr/>";
+	//------------------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
 	if (name!='asmRoot')
@@ -3371,7 +3402,7 @@ UIFactory["Node"].getMetadataWadAttributeEditor = function(nodeid,attribute,valu
 		html +="> Click";
 		html += "</div>";
 	} else {
-		html += "  <div class='col-sm-9'><input type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+value+"'";
+		html += "  <div class='col-sm-9'><input type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
 		if(disabled!=null && disabled)
 			html+= " disabled='disabled' ";			
 		html += "></div>";
