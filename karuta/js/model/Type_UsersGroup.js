@@ -38,7 +38,7 @@ UIFactory["UsersGroup"] = function( node )
 	this.attributes = {};
 	this.attributes["label"] = this.label_node;
 	this.display = {};
-	this.membres = [];
+	this.members = [];
 };
 
 
