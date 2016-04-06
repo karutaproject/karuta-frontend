@@ -70,7 +70,8 @@ function updateGroup_Portfolio(elt)
 	var type = 'DELETE';
 	if(elt.checked) type='PUT';
 	var uuid = $(elt).attr("uuid");
-	var url = "../../../"+serverBCK+"/portfoliogroups?group=" + elt.value + "&uuid="+uuid;
+	var gid = elt.value;
+	var url = "../../../"+serverBCK+"/portfoliogroups?group="+gid+"&uuid="+uuid;
 	$.ajax({
 		type : type,
 		dataType : "text",
@@ -78,6 +79,7 @@ function updateGroup_Portfolio(elt)
 		data : "",
 		success : function(data) {
 			$("#uuid_"+uuid+"-list_groups-form-update").prop('value', '1');
+			PortfoliosGroups_byid[gid].members = [];
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error : "+jqxhr.responseText);
@@ -95,3 +97,97 @@ function testGroup_Empty(destid,gid)
 	if (items.length==0)
 		$("#"+destid+gid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
 }
+
+//==============================
+function updateRRGroup_UsersGroups(groupid,usersgroups,type)
+//==============================
+{
+	if (groupid!=null) {
+		var urlS = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+		var urlU = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/";
+		for (var i=0; i<usersgroups.length; i++){
+			var gid = $(usersgroups[i]).attr('value');
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+				success : function(data) {
+					if (type=='share'){
+						var xml = $($("group",data)[0]).html();
+						$.ajax({
+							type : "POST",
+							contentType: "application/xml",
+							dataType : "xml",
+							url : urlS,
+							data : xml,
+							success : function(data) {
+							}
+						});
+					} else if (type=='unshare'){
+						var users = $("user",data);
+						for (var j=0; j<users.length; j++){
+							var userid = $(users[j]).attr('id');
+							$.ajax({
+								type : "DELETE",
+								contentType: "application/xml",
+								dataType : "xml",
+								url : urlU+userid,
+								data : "",
+								success : function(data) {
+								}
+							});
+						}
+					}
+
+					//--------------------------
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error in updateRRGroup_UsersGroups : "+"group-"+gid+":"+jqxhr.responseText);
+				}
+			});
+		}
+	}
+}
+
+//==============================
+function updateRRGroup_Users(groupid,users,type)
+//==============================
+{
+	if (groupid!=null) {
+		if (type=='share'){
+			var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+			var xml = "<users>";
+			for (var i=0; i<users.length; i++){
+				var userid = $(users[i]).attr('value');
+				xml += "<user id='"+userid+"'/>";
+			}
+			xml += "</users>";
+			if (xml.length>20) {
+				$.ajax({
+					type : "POST",
+					contentType: "application/xml",
+					dataType : "xml",
+					url : url,
+					data : xml,
+					success : function(data) {
+					}
+				});
+			}
+		} else if (type=='unshare'){
+			var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/";
+			for (var i=0; i<users.length; i++){
+				var userid = $(users[i]).attr('value');
+				$.ajax({
+					type : "DELETE",
+					contentType: "application/xml",
+					dataType : "xml",
+					url : url+userid,
+					data : "",
+					success : function(data) {
+					}
+				});
+			}
+		}
+	}
+}
+
