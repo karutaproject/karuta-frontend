@@ -75,7 +75,7 @@ karutaStr['fr']['quit-edit']="Quitter le mode édition";
 karutaStr['fr']['choose']="Choisir";
 karutaStr['fr']['quit']="Quitter";
 karutaStr['fr']['menu']="Menu";
-
+karutaStr['fr']['block-image-size']="Taille recommandée : 500 x 200 pixels";
 
 //=========================================
 //========== NODE =========================

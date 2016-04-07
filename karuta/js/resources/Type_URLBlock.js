@@ -72,7 +72,7 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 		if (url!="") {
 			html =  "<a style='text-decoration:none;color:inherit' id='url_"+url_element.id+"' href='"+url+"' target='_blank'>";
 			var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"');";
-			if (cover.resource.getValue()=='1')
+			if (cover!=undefined && cover.resource.getValue()=='1')
 				style += "background-size:cover;";
 			html += "<div class='URLBlock' style=\""+style+"\">";
 			html += "<div class='docblock-title'>"+label+"</div>";
@@ -106,10 +106,13 @@ UIFactory["URLBlock"].prototype.displayEditor = function(destid,type,langcode)
 	$("#"+destid).append($(url_element.resource.getEditor(null,null,null,this)));
 	//---------------------
 	$("#"+destid).append($("<h4>Image</h4>"));
+	$("#"+destid).append($("<div>"+karutaStr[LANG]['block-image-size']+"</div>"));
 	image.resource.displayEditor(destid,type,langcode,this);
 	//---------------------
-	$("#"+destid).append($("<h4>Coverage</h4>"));
-	cover.resource.displayEditor(destid,type,langcode,this);
+	if (cover!=undefined) {
+		$("#"+destid).append($("<h4>Coverage</h4>"));
+		cover.resource.displayEditor(destid,type,langcode,this);
+	}
 }
 
 

@@ -26,7 +26,7 @@ function fill_exec_report()
 	html += "<h2 id='report' class='line'>KARUTA - <span id='report-title-page'></span></h2>";
 	html += "<h4 class='line'><span class='badge'>1</span> <span id='report-title-1'></span></h4>";
 	html += "<div id='report-csv_file_upload' style='margin-left:20px'></div>";
-	html += "<div style='margin-left:20px'> <span id='report-title-3'></span>&nbsp;<input  id='report-model_code' type='text'></input>&nbsp;<button onclick='javascript:report_processCode()'>ok</button></div>";
+	html += "<div style='margin-left:20px'> <span id='report-title-3'></span>&nbsp;<input  id='report-model_code' type='text'></input>&nbsp;<span class='button' onclick='javascript:report_processCode()'>ok</span></div>";
 	html += "<div id='report-model_description' style='margin-left:20px'></div>";
 	html += "<div id='report-csv_file_upload2' style='margin-left:20px'></div>";
 	html += "<h4 class='line'><span class='badge'>2</span> <span id='report-title-2'></span></h4>";
@@ -65,7 +65,7 @@ function fill_exec_report()
 	$("#report-title-page").html(karutaStr[LANG]['report']);
 	$("#report-title-1").html(karutaStr[LANG]['upload_csv_or_code']);
 	$("#report-title-2").html(karutaStr[LANG]['process_csv']);
-	$("report-#title-3").html(karutaStr[LANG]['model_code']);
+	$("#report-title-3").html(karutaStr[LANG]['model_code']);
 	//------------------------------
 }
 

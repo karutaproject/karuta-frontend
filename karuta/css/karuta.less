@@ -222,6 +222,8 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #portfolios-label,
 #bin-label,
 #active-users,
+#portfoliosgroups-label,
+#usersgroups-label,
 #inactive-users {
 	color:@list-icon-section-color;
 }
@@ -311,8 +313,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	border-radius:3px;
 }
 
-#main-portfoliosgroup .item:hover,
-#main-usersgroup .item:hover,
 #main-user .item:hover {
 	background-color:@list-background-color-complement;
 }
@@ -351,16 +351,18 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	color:@list-button-color;
 }
 
+#portfoliosgroups a,
+#usersgroups a,
 #projects a,
 #portfolios a,
 #bin a {
 	color:@list-button-color;
 }
 
-#portfoliosgroups .portfoliosgroup-items,
 #usersgroups .usersgroup-users,
 .usersgroup,
-.project {
+.project,
+.portfoliosgroup {
 	margin-top:10px;
 	padding:7px;
 	background-color:@list-background-color-complement;
@@ -469,8 +471,32 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	background-color:@list-background-color-complement;
 }
 
+#portfoliosgroups .row:hover {
+	background-color:@list-background-color;
+}
 
+#portfoliosgroups .row-label:hover {
+	background-color:initial;
+}
 
+#usersgroups .item:hover {
+	background-color:@list-background-color;
+}
+#usersgroups table {
+	color:@list-button-color;
+}
+
+#main-exec-batch,
+#main-exec-report {
+		color:@list-icon-section-color;
+}
+
+#main-exec-batch .button,
+#main-exec-report .button {
+	border: 1px solid @list-icon-section-color;
+	border-radius:3px;
+	margin-left:5px;
+}
 /* ====================== */
 /*      SIDEBAR            */
 /* ====================== */

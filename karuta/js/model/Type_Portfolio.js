@@ -180,10 +180,10 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				//-------------------- PORTFOLIO ----------------------
 				var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
 				if (parentcode!= null && portfolio_parentcode==parentcode)
-					$("#"+dest).append($("<div class='row'   id='portfolio_"+portfolio.id+"' onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+portfolio.code_node.text()+"<br>"+owner+"\"></div>"));
+					$("#"+dest).append($("<div class='row'   id='portfolio_"+portfolio.id+"'></div>"));
 				else {
 					number_of_portfolios++;
-					$("#portfolios").append($("<div class='row' id='portfolio_"+portfolio.id+"'  onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+portfolio.code_node.text()+"<br>"+owner+"\"></div>"));
+					$("#portfolios").append($("<div class='row' id='portfolio_"+portfolio.id+"'></div>"));
 				}
 				$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type,langcode,parentcode,owner));
 				nb++;
@@ -285,9 +285,11 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	if (type=='list') {
 
 		html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
-		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.id+"')\"><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
-		html += "<div class='col-md-2 col-sm-2 hidden-xs'><a class='portfolio-owner' >"+owner+"</a></div>";
-		html += "<div class='col-md-2 col-sm-2 hidden-xs'><a class='portfolio-code' >"+this.code_node.text()+"</a></div>";
+		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.id+"')\" onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+this.code_node.text()+"\"><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
+		if (USER.creator) {
+			html += "<div class='col-md-2 col-sm-2 hidden-xs'><a class='portfolio-owner' >"+owner+"</a></div>";
+			html += "<div class='col-md-2 col-sm-2 hidden-xs'><a class='portfolio-code' >"+this.code_node.text()+"</a></div>";
+		}
 		if (this.date_modified!=null)
 			html += "<div class='col-md-2 col-sm-2 hidden-xs' onclick=\"display_main_page('"+this.id+"')\">"+this.date_modified.substring(0,10)+"</div>";
 		html += "<div class='col-md-1 col-sm-1 col-xs-1'>";
