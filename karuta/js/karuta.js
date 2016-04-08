@@ -905,24 +905,61 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 	}
 	if (sharetorole!=null && sharetorole!='') {
 		var roles = sharetorole.split(" "); // role1 role2 ..
+		var groups = null;
+		$.ajaxSetup({async: false});
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/users",
+			success : function(data) {
+				UIFactory["User"].parse(data);
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error in getEmail : "+jqxhr.responseText);
+			}
+		});
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
+			success : function(data) {
+				groups = $("rrg",data);
+			}
+		});
+		$.ajaxSetup({async: true});
 		for (var i=0;i<roles.length;i++) {
 			if (roles[i].length>0) {
-				var emails = [];
-				getEmail(roles[i],emails);
-				for (var j=0;j<emails.length;j++) {
-					if (emails[i].length>4)
-						var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+emails[j]+'&role='+sharewithrole+'&l='+level+'d='+duration;
-						$.ajax({
-							type : "POST",
-							email : emails[j],
-							dataType : "text",
-							contentType: "application/xml",
-							url : urlS,
-							success : function (data){
-								sendEmailPublicURL(data,this.email,langcode);
+				if (groups.length>0) {
+					for (var j=0; j<groups.length; j++) {
+						var label = $("label",groups[j]).text();
+						var users = $("user",groups[j]);
+						if (label==roles[i] && users.length>0){
+							for (var k=0; k<users.length; k++){
+								var userid = $(users[k]).attr('id');
+								if (Users_byid[userid]==undefined)
+									alertHTML('error undefined userid:'+userid);
+								else {
+									var email = Users_byid[userid].getEmail();
+									if (email.length>4) {
+										var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+roles[i]+'&l='+level+'&d='+duration;
+										$.ajax({
+											type : "POST",
+											email : email,
+											dataType : "text",
+											contentType: "application/xml",
+											url : urlS,
+											success : function (data){
+												sendEmailPublicURL(data,this.email,langcode);
+											}
+										});
+									}
+								}
+
 							}
-						});
+						}
+					}
 				}
+				//--------------------------
 			}
 		}
 	}
@@ -996,16 +1033,15 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	xml +="<subject>"+USER.firstname+" "+USER.lastname+" "+karutaStr[LANG]['want-sharing']+"</subject>";
 	xml +="<message>"+message+"</message>";
 	xml +="</node>";
-	alert(xml);
-/*	$.ajax({
+	$.ajax({
 		type : "POST",
 		dataType : "xml",
 		url : "../../../"+serverFIL+"/mail",
 		data: xml,
 		success : function(data) {
-			alertHTML(karutaStr[LANG]['email-sent']);
+			alertHTML(karutaStr[LANG]['email-sent']+USER.firstname+" "+USER.lastname);
 		}
-	});*/
+	});
 }
 
 

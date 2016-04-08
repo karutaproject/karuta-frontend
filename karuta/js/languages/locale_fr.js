@@ -75,7 +75,7 @@ karutaStr['fr']['quit-edit']="Quitter le mode édition";
 karutaStr['fr']['choose']="Choisir";
 karutaStr['fr']['quit']="Quitter";
 karutaStr['fr']['menu']="Menu";
-karutaStr['fr']['block-image-size']="Taille recommandée : 500 x 200 pixels";
+karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - Hauteur : 200<br>&nbsp; - Largeur : 800 divisé par le nombre de colonnes<br>&nbsp;";
 
 //=========================================
 //========== NODE =========================
@@ -281,7 +281,7 @@ karutaStr['fr']['no-document']="Aucun document";
 karutaStr['fr']['no-URL']="Aucun hyperlien";
 karutaStr['fr']['subject']="Objet";
 karutaStr['fr']['message']="Message";
-karutaStr['fr']['email-sent']="Le message a été envoyé.";
+karutaStr['fr']['email-sent']="Le message a été envoyé à ";
 karutaStr['fr']['alternative-label']="Libellé alternatif";
 karutaStr['fr']['sent-by']="Envoyé par";
 karutaStr['fr']['dashboard-code']="Code du rapport";

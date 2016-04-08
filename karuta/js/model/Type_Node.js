@@ -2797,7 +2797,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 							var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"')";
 							html_toadd = " <span class='button share-button' onclick=\""+js+"\"> "+label+"</span>";
 						} else {
-							html_toadd = " <span class='button share-button'>"+karutaStr[languages[langcode]]['send']+"</span>";
+							html_toadd = " <span class='button share-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
 						}
 					} else {
 						html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='Partager' rel='tooltip'></span>";
