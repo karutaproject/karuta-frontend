@@ -75,7 +75,7 @@ karutaStr['en']['quit-edit']="Quit Edit Mode";
 karutaStr['en']['choose']="Choose";
 karutaStr['en']['quit']="Quit";
 karutaStr['en']['menu']="Menu";
-
+karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Height : 200<br>&nbsp; - Width : 800 divided by number of columns<br>&nbsp;";
 
 //=========================================
 //========== NODE =====================
@@ -118,7 +118,7 @@ karutaStr['en']['freenode']="Free Positioning";
 karutaStr['en']['display']="Visible";
 karutaStr['en']['veriffunction']="Check Function";
 karutaStr['en']['menuroles']="Menus<br/><span style='font-size:smaller'> portfolio_code,semantic_tag,";
-karutaStr['en']['menuroles2']="label";
+karutaStr['en']['menuroles2']="label@en";
 karutaStr['en']['menuroles3']=",roles[;other menu]</span>";
 karutaStr['en']['help']="Information <br/><span style='font-size:smaller'>";
 karutaStr['en']['help2']="Text in English@en";
@@ -157,7 +157,9 @@ karutaStr['en']['encrypted']="Encrypt Ressource";
 karutaStr['en']['get_rc4key']="Parts of this document are encrypted.\nFist Visit: Choose a key sentence.\nReturning Visits: Type your key sentence. ";
 karutaStr['en']['error_rc4key']="Error in key sentence.";
 karutaStr['en']['seltype']="Display";
-karutaStr['en']['shareroles']="Roles - Share";
+karutaStr['en']['shareroles']="Share<br/><span style='font-size:smaller'> role qui partage[,role destinataire,roles et/ou emails,niveau,durée de vie du lien,";
+karutaStr['en']['shareroles2']="button label@fr;";
+karutaStr['en']['shareroles3']="];[autre partage]";
 karutaStr['en']['submitted']="Submitted on ";
 karutaStr['en']['notsubmitted']="Not Submitted";
 karutaStr['en']['collapsible']="Collapsible";
@@ -279,7 +281,7 @@ karutaStr['en']['no-document']="No Document";
 karutaStr['en']['no-URL']="No URL";
 karutaStr['en']['subject']="Subject";
 karutaStr['en']['message']="Message";
-karutaStr['en']['email-sent']="The message has been sent.";
+karutaStr['en']['email-sent']="The message has been sent to ";
 karutaStr['en']['alternative-label']="Alternative Label";
 karutaStr['en']['sent-by']="Sent by";
 karutaStr['en']['dashboard-code']="Dashboard Code";

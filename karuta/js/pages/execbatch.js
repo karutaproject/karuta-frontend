@@ -26,7 +26,7 @@ function fill_exec_batch()
 	html += "<h2 id='batch' class='line'>KARUTA - <span id='batch-title-page'></span></h2>";
 	html += "<h4 class='line'><span class='badge'>1</span> <span id='batch-title-1'></span></h4>";
 	html += "<div id='batch-csv_file_upload' style='margin-left:20px'></div>";
-	html += "<div style='margin-left:20px'> <span id='batch-title-3'></span>&nbsp;<input  id='batch-model_code' type='text'></input>&nbsp;<button onclick='javascript:processCode()'>ok</button></div>";
+	html += "<div style='margin-left:20px'> <span id='batch-title-3'></span>&nbsp;<input  id='batch-model_code' type='text'></input>&nbsp;<span class='button' onclick='javascript:processCode()'>ok</span></div>";
 	html += "<div id='batch-model_description' style='margin-left:20px'></div>";
 	html += "<div id='batch-csv_file_upload2' style='margin-left:20px'></div>";
 	html += "<h4 class='line'><span class='badge'>2</span> <span id='batch-title-2'></span></h4>";

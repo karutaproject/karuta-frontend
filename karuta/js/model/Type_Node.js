@@ -2539,9 +2539,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
 	var incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
 	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
-	var sharetoroles = ($(node.metadatawad).attr('sharetoroles')==undefined)?'none':$(node.metadatawad).attr('sharetoroles');
-	var shareemail = ($(node.metadatawad).attr('shareemail')==undefined)?'none':$(node.metadatawad).attr('shareemail');
-	var sharelabel = ($(node.metadatawad).attr('sharelabel')==undefined)?'none':$(node.metadatawad).attr('sharelabel');
 	if (g_designerrole) {
 		deletenode = (delnoderoles.containsArrayElt(g_userroles))? true : false;
 		writenode = (editnoderoles.containsArrayElt(g_userroles))? true : false;
@@ -2629,12 +2626,12 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
-//					if (semantictag.indexOf("asm-block")>-1) {
-//						html += "<hr>";
-//						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
-//						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4,freenode);
-//						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ProxyBlock','ProxyBlock',databack,callback,param2,param3,param4,freenode);
-//					}
+					if (semantictag.indexOf("asm-block")>-1) {
+						html += "<hr>";
+						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
+						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4,freenode);
+						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ProxyBlock','ProxyBlock',databack,callback,param2,param3,param4,freenode);
+					}
 					if (semantictag.indexOf("bubbleContainer")>-1) {
 //						var interval = setInterval(function(){alert(node.id)},30000);
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-bubbles','bubble_level1','Bubble Map',databack,callback,param2,param3,param4,freenode);
@@ -2724,22 +2721,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			alertHTML('Menu Error: check the format: '+e);
 		}
 	}
-	//------------- share node button ---------------
-	if ((shareroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && shareroles!='none' && shareroles!='') {
-		if ((sharetoroles!='' && sharetoroles!='none') || (sharetoemail!='' &&  sharetoemail!='none'))
-			if (sharelabel!='' && sharelabel!='none') {
-				var label = "";
-				var labels = sharelabel.split("/");
-				for (var j=0; j<labels.length; j++){
-					if (labels[j].indexOf(languages[langcode])>-1)
-						label = labels[j].substring(0,labels[j].indexOf("@"));
-				}
-				html += " <span class='button share-button' onclick=\"\"> "+label+"</span>";
-			} else
-				html += " <span class='button share-button'>"+karutaStr[languages[langcode]]['send']+"</span>";
-		else
-			html += "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='Partager' rel='tooltip'></span>";
-	}
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
 		if ( submitted!='Y' && ((submitnode && ( submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer')) {
@@ -2758,8 +2739,79 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			}
 		}
 	}
-	html += "</div><!-- class='btn-group' -->";
+	//------------- share node button ---------------
+	if (shareroles!='none' && shareroles!='') {
+		try {
+			var shares = [];
+			var displayShare = [];
+			var items = shareroles.split(";");
+			for (var i=0; i<items.length; i++){
+				var subitems = items[i].split(",");
+				shares[i] = [];
+				shares[i][0] = subitems[0]; // sharing role
+				if (subitems.length>1) {
+					shares[i][1] = subitems[1]; // recepient role
+					shares[i][2] = subitems[2]; // roles or emails
+					shares[i][3] = subitems[3]; // level
+					shares[i][4] = subitems[4]; // duration
+					shares[i][5] = subitems[5]; // labels
+				} else {
+					shares[i][1] = ""; // recepient role
+					shares[i][2] = ""; // roles or emails
+					shares[i][3] = ""; // level
+					shares[i][4] = ""; // duration
+					shares[i][5] = ""; // labels
+				}
+				if (subitems.length>6)
+					shares[i][6] = subitems[6]; // condition
+				if (shares[i][0].indexOf(userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+					displayShare[i] = true;
+				else
+					displayShare[i] = false;
+			}
+			for (var i=0; i<shares.length; i++){
+				if (displayShare[i]) {
+					var html_toadd = "";
+					var sharewithrole = shares[i][1];
+					var shareto = shares[i][2];
+					var sharelevel = shares[i][3];
+					var shareduration = shares[i][4];
+					var sharelabel = shares[i][5];
+					if (shareto!='') {
+						var sharetoemail = "";
+						var sharetoroles = "";
+						var sharetos = shareto.split(" ");
+						for (var k=0;k<sharetos.length;k++) {
+							if (sharetos[k].indexOf("@")>0)
+								sharetoemail += sharetos[k]+" ";
+							else
+								sharetoroles += sharetos[k]+" ";
+						}
+						if (sharelabel!='') {
+							var label = "";
+							var labels = sharelabel.split("/");
+							for (var j=0; j<labels.length; j++){
+								if (labels[j].indexOf(languages[langcode])>-1)
+									label = labels[j].substring(0,labels[j].indexOf("@"));
+							}
+							var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"')";
+							html_toadd = " <span class='button share-button' onclick=\""+js+"\"> "+label+"</span>";
+						} else {
+							html_toadd = " <span class='button share-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
+						}
+					} else {
+						html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='Partager' rel='tooltip'></span>";
+					}
+					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))
+						html += html_toadd;
+				}
+			}
+		} catch(e){
+			alertHTML('Share Error: check the format: '+e);
+		}
+	}
 	//--------------------------------------------------
+	html += "</div><!-- class='btn-group' -->";
 	if (html!="")
 		html = "<div class='buttons-menus' id='btn-"+node.id+"'>" + html + "</div><!-- #btn-+node.id -->";
 	return html;
@@ -3112,8 +3164,15 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showtoroles',$(node.metadatawad).attr('showtoroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
 	//------------------------------------
-	html += "<div style='font-weight:bold' class='collapsible' onclick=\"javascript:toggleSharing('"+node.id+"')\"><span class='glyphicon glyphicon-plus collapsible' id='toggleSharing_"+node.id+"'></span> "+karutaStr[languages[langcode]]['share']+"</div>";
-	html += "<div id='sharing-content-"+node.id+"' style='display:none'>";
+/*
+	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
+	if (shareroles=='none' || shareroles=='') {
+		html += "<div style='font-weight:bold' class='collapsible' onclick=\"javascript:toggleSharing('"+node.id+"')\"><span class='glyphicon glyphicon-plus collapsible' id='toggleSharing_"+node.id+"'></span> "+karutaStr[languages[langcode]]['share']+"</div>";
+		html += "<div id='sharing-content-"+node.id+"' style='display:none'>";
+	} else {
+		html += "<div style='font-weight:bold' class='collapsible' onclick=\"javascript:toggleSharing('"+node.id+"')\"><span class='glyphicon glyphicon-minus collapsible' id='toggleSharing_"+node.id+"'></span> "+karutaStr[languages[langcode]]['share']+"</div>";
+		html += "<div id='sharing-content-"+node.id+"' style='display:block'>";
+	}
 	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'shareroles',$(node.metadatawad).attr('shareroles'));
 	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharewithrole',$(node.metadatawad).attr('sharewithrole'));	
 	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharetoroles',$(node.metadatawad).attr('sharetoroles'));	
@@ -3123,6 +3182,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'shareduration',$(node.metadatawad).attr('shareduration'));	
 	html += "</div>";
 	html += "<hr/>";
+*/
 	//------------------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
@@ -3553,6 +3613,24 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Get_Double_Resource') {
 		html = UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seltype',$(node.metadatawad).attr('seltype'));
 		$("#metadata_texts").append($(html));
+	}
+	//----------------------Share----------------------------
+	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
+		html  = "<hr><label>"+karutaStr[languages[langcode]]['shareroles'];
+		if (languages.length>1){
+			var first = true;
+			for (var i=0; i<languages.length;i++){
+				if (!first)
+					html += "/";
+				html += karutaStr[languages[i]]['shareroles2'];
+				first = false;
+			}
+		} else {
+			html += karutaStr[languages[langcode]]['shareroles2'];
+		}
+		html += karutaStr[languages[langcode]]['shareroles3']+"</label>";
+		$("#metadata_texts").append($(html));
+		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'shareroles',$(node.metadatawad).attr('shareroles'));
 	}
 	//----------------------Menu----------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {

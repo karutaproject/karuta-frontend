@@ -9,13 +9,58 @@
 		<asmResource xsi_type="nodeRes">
 			<lastmodified />
 			<code>karuta.karuta-structured-resources</code>
-			<label lang="fr">KARUTA - Ressources structurées(2016/03/09)</label>
-			<label lang="en">KARUTA - Structured Resources (2016/03/09)</label>
+			<label lang="fr">KARUTA - Ressources structurées(2016/04/07)</label>
+			<label lang="en">KARUTA - Structured Resources (2016/04/07)</label>
 		</asmResource>
 		<asmResource xsi_type="context">
 			<text lang="fr" />
 			<text lang="en" />
 		</asmResource>
+		//===================== Coverage =======================
+		<asmContext xsi_type="">
+			<metadata-wad seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="coverage" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<lastmodified />
+				<code />
+				<label lang="fr" />
+				<label lang="en" />
+			</asmResource>
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
+			<asmResource xsi_type="Item">
+				<lastmodified />
+				<code>@0</code>
+				<value>0</value>
+				<label lang="fr">normal</label>
+				<label lang="en">Normal</label>
+			</asmResource>
+		</asmContext>
+		<asmContext xsi_type="">
+			<metadata-wad seenoderoles="all" />
+			<metadata-epm />
+			<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="coverage" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+			<asmResource xsi_type="nodeRes">
+				<lastmodified />
+				<code />
+				<label lang="fr" />
+				<label lang="en" />
+			</asmResource>
+			<asmResource xsi_type="context">
+				<text lang="fr" />
+				<text lang="en" />
+			</asmResource>
+			<asmResource xsi_type="Item">
+				<lastmodified />
+				<code>@1</code>
+				<value>1</value>
+				<label lang="fr">étendu</label>
+				<label lang="en">Cover</label>
+			</asmResource>
+		</asmContext>
 		//===================== DocumentBlock =======================
 		<asmUnitStructure xsi_type="DocumentBlock">
 			<metadata-wad seenoderoles="all" collapsible="Y"/>
@@ -85,6 +130,29 @@
 					<fileid lang="en" />
 				</asmResource>
 			</asmContext>
+			//===================== Coverage =======================
+			<asmContext xsi_type="">
+				<metadata-wad seenoderoles="all" query="karuta.karuta-structured-resources.coverage.label"/>
+				<metadata-epm />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="cover" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<asmResource xsi_type="nodeRes">
+					<lastmodified />
+					<code />
+					<label lang="fr" />
+					<label lang="en" />
+				</asmResource>
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
+				<asmResource xsi_type="Get_Resource">
+					<lastmodified />
+					<code>@1</code>
+					<value>1</value>
+					<label lang="fr">étendu</label>
+					<label lang="en">cover</label>
+				</asmResource>
+			</asmContext>
 		</asmUnitStructure>
 		//===================== URLBlock =======================
 		<asmUnitStructure xsi_type="URLBlock">
@@ -149,6 +217,29 @@
 					<size lang="en" />
 					<type lang="en" />
 					<fileid lang="en" />
+				</asmResource>
+			</asmContext>
+			//===================== Coverage =======================
+			<asmContext xsi_type="">
+				<metadata-wad seenoderoles="all" query="karuta.karuta-structured-resources.coverage.label"/>
+				<metadata-epm />
+				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="cover" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
+				<asmResource xsi_type="nodeRes">
+					<lastmodified />
+					<code />
+					<label lang="fr" />
+					<label lang="en" />
+				</asmResource>
+				<asmResource xsi_type="context">
+					<text lang="fr" />
+					<text lang="en" />
+				</asmResource>
+				<asmResource xsi_type="Get_Resource">
+					<lastmodified />
+					<code>@1</code>
+					<value>1</value>
+					<label lang="fr">étendu</label>
+					<label lang="en">cover</label>
 				</asmResource>
 			</asmContext>
 		</asmUnitStructure>

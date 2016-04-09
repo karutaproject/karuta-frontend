@@ -876,28 +876,99 @@ function getPublicURL(uuid,email,role,langcode,level,duration) {
 }
 
 //==================================
-function getSharingURL(uuid,emails,roles,langcode,level,duration) {
+function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,duration) {
 //==================================
 	//post /directlink?uuid=&user=&role= duration in hours
 	if (level==null)
 		level = 0; //must be logged
-	role = "all";
-	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'d='+duration;
-	$.ajax({
-		type : "POST",
-		dataType : "text",
-		contentType: "application/xml",
-		url : urlS,
-		success : function (data){
-			sendEmailPublicURL(data,email,langcode);
+	if (sharewithrole==null)
+		sharewithrole = "all";
+	if (duration==null)
+		duration = "24";
+	//---------------------
+	if (email!=null && email!='') {
+		var emails = email.split(" "); // email1 email2 ..
+		for (var i=0;i<emails.length;i++) {
+			if (emails[i].length>4)
+				var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'d='+duration;
+				$.ajax({
+					type : "POST",
+					email : emails[i],
+					dataType : "text",
+					contentType: "application/xml",
+					url : urlS,
+					success : function (data){
+						sendEmailPublicURL(data,this.email,langcode);
+					}
+				});
 		}
-	});
+	}
+	if (sharetorole!=null && sharetorole!='') {
+		var roles = sharetorole.split(" "); // role1 role2 ..
+		var groups = null;
+		$.ajaxSetup({async: false});
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/users",
+			success : function(data) {
+				UIFactory["User"].parse(data);
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error in getEmail : "+jqxhr.responseText);
+			}
+		});
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
+			success : function(data) {
+				groups = $("rrg",data);
+			}
+		});
+		$.ajaxSetup({async: true});
+		for (var i=0;i<roles.length;i++) {
+			if (roles[i].length>0) {
+				if (groups.length>0) {
+					for (var j=0; j<groups.length; j++) {
+						var label = $("label",groups[j]).text();
+						var users = $("user",groups[j]);
+						if (label==roles[i] && users.length>0){
+							for (var k=0; k<users.length; k++){
+								var userid = $(users[k]).attr('id');
+								if (Users_byid[userid]==undefined)
+									alertHTML('error undefined userid:'+userid);
+								else {
+									var email = Users_byid[userid].getEmail();
+									if (email.length>4) {
+										var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+roles[i]+'&l='+level+'&d='+duration;
+										$.ajax({
+											type : "POST",
+											email : email,
+											dataType : "text",
+											contentType: "application/xml",
+											url : urlS,
+											success : function (data){
+												sendEmailPublicURL(data,this.email,langcode);
+											}
+										});
+									}
+								}
+
+							}
+						}
+					}
+				}
+				//--------------------------
+			}
+		}
+	}
+
 }
 
 //==================================
-function getEmail(role) {
+function getEmail(role,emails) {
 //==================================
-	var email = "";
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -908,25 +979,28 @@ function getEmail(role) {
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+				url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
 				success : function(data) {
 					var groups = $("rrg",data);
 					if (groups.length>0) {
 						for (var i=0; i<groups.length; i++) {
 							var label = $("label",groups[i]).text();
 							var users = $("user",groups[i]);
-							if (users.length>0){
+							if (label==role && users.length>0){
 								for (var j=0; j<users.length; j++){
 									var userid = $(users[j]).attr('id');
 									if (Users_byid[userid]==undefined)
 										alertHTML('error undefined userid:'+userid);
 									else
-										email = Users_byid[userid].getEmail();
+										emails[j] = Users_byid[userid].getEmail();
 								}
 							}
 						}
 					}
-					return email;
+					return emails;
+				},
+				error : function(jqxhr,textStatus) {
+					return emails;
 				}
 			});
 			//--------------------------
@@ -965,7 +1039,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 		url : "../../../"+serverFIL+"/mail",
 		data: xml,
 		success : function(data) {
-			alertHTML(karutaStr[LANG]['email-sent']);
+			alertHTML(karutaStr[LANG]['email-sent']+USER.firstname+" "+USER.lastname);
 		}
 	});
 }

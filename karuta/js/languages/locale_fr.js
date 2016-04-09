@@ -75,7 +75,7 @@ karutaStr['fr']['quit-edit']="Quitter le mode édition";
 karutaStr['fr']['choose']="Choisir";
 karutaStr['fr']['quit']="Quitter";
 karutaStr['fr']['menu']="Menu";
-
+karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - Hauteur : 200<br>&nbsp; - Largeur : 800 divisé par le nombre de colonnes<br>&nbsp;";
 
 //=========================================
 //========== NODE =========================
@@ -118,7 +118,7 @@ karutaStr['fr']['freenode']="Placement libre";
 karutaStr['fr']['display']="Visible";
 karutaStr['fr']['veriffunction']="Fonction de vérification";
 karutaStr['fr']['menuroles']="Menus<br/><span style='font-size:smaller'> code_portfolio,tag_sémantique,";
-karutaStr['fr']['menuroles2']="libellé";
+karutaStr['fr']['menuroles2']="libellé@fr";
 karutaStr['fr']['menuroles3']=",rôles[;autre menu]</span>";
 karutaStr['fr']['help']="Information <br/><span style='font-size:smaller'>";
 karutaStr['fr']['help2']="texte en français@fr";
@@ -157,7 +157,9 @@ karutaStr['fr']['encrypted']="Encrypter la ressource";
 karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
 karutaStr['fr']['seltype']="Présentation ";
-karutaStr['fr']['shareroles']="Rôles - Partager";
+karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> role qui partage[,role destinataire,roles et/ou emails,niveau (0-4),durée de vie du lien (en heures),";
+karutaStr['fr']['shareroles2']="libellé du bouton@fr;";
+karutaStr['fr']['shareroles3']="[,condition]][;autre partage]";
 karutaStr['fr']['submitted']="Soumis le ";
 karutaStr['fr']['notsubmitted']="Non soumis";
 karutaStr['fr']['collapsible']="Repliable";
@@ -279,7 +281,7 @@ karutaStr['fr']['no-document']="Aucun document";
 karutaStr['fr']['no-URL']="Aucun hyperlien";
 karutaStr['fr']['subject']="Objet";
 karutaStr['fr']['message']="Message";
-karutaStr['fr']['email-sent']="Le message a été envoyé.";
+karutaStr['fr']['email-sent']="Le message a été envoyé à ";
 karutaStr['fr']['alternative-label']="Libellé alternatif";
 karutaStr['fr']['sent-by']="Envoyé par";
 karutaStr['fr']['dashboard-code']="Code du rapport";
