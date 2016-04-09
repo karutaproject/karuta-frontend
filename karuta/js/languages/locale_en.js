@@ -319,7 +319,7 @@ karutaStr['en']['bubble-color']="Color";
 //=========================================
 
 karutaStr['en']['select_usersgroups']="Select Users Groups";
-karutaStr['en']['create_group']="Create a Group";
+karutaStr['en']['create_usersgroup']="Create a Users Group";
 karutaStr['en']['list_usersgroups']="Users Groups";
 karutaStr['en']['no_group']="No Group";
 karutaStr['en']['addshare-portfoliosgroups']="Share Portfolios Groups";
@@ -333,3 +333,5 @@ karutaStr['en']['confirm-remove-item-group']="Do you want to remove this element
 karutaStr['en']['add_users']="Add Users";
 karutaStr['en']['add_portfolios']="Add Portfolios";
 karutaStr['en']['select_groups']="Select Groups";
+karutaStr['en']['select_portfoliosgroups']="Select Portfolios Groups";
+karutaStr['en']['create_portfoliosgroup']="Create a Portfolios Group";

@@ -187,7 +187,7 @@ karutaStr['es']['process_csv']="Éxécuter";
 //=========================================
 
 karutaStr['es']['select_usersgroups']="Sélectionner des groupes d'usagers";
-karutaStr['es']['create_group']="Créer un groupe";
+karutaStr['es']['create_usersgroup']="Créer un groupe d'usagers";
 karutaStr['es']['list_usersgroups']="Groupes d'usagers";
 karutaStr['es']['no_group']="Aucun group";
 karutaStr['es']['addshare-portfoliosgroups']="Partager des Groupes de Portfolios";
@@ -201,3 +201,5 @@ karutaStr['es']['confirm-remove-item-group']="Voulez-vous vraiment retirer cet �
 karutaStr['es']['add_users']="Ajouter des usagers";
 karutaStr['es']['add_portfolios']="Ajouter des portfolios";
 karutaStr['es']['select_groups']="Sélectionner des groupes";
+karutaStr['es']['select_portfoliosgroups']="Sélectionner des groupes de portfolios";
+karutaStr['es']['create_portfoliosgroup']="Créer un groupe de portfolios";

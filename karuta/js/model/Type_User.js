@@ -319,7 +319,7 @@ UIFactory["User"].callCreate = function()
 };
 
 //==================================
-UIFactory["User"].prototype.getSelector = function(attr,value,name)
+UIFactory["User"].prototype.getSelector = function(attr,value,name,checked,disabled)
 //==================================
 {
 	var userid = this.id;
@@ -329,8 +329,10 @@ UIFactory["User"].prototype.getSelector = function(attr,value,name)
 	var html = "<input type='checkbox' name='"+name+"' username='"+username+"' value='"+userid+"'";
 	if (attr!=null && value!=null)
 		html += " "+attr+"='"+value+"'";
-	if (userid==1)
+	if ((userid==1)||disabled)
 		html+= " disabled='disabled' ";			
+	if (checked)
+		html += " checked='true' ";
 	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
 	return html;
 };

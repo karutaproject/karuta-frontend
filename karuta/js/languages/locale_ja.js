@@ -189,7 +189,7 @@ karutaStr['ja']['process_csv']="Process";
 //=========================================
 
 karutaStr['ja']['select_usersgroups']="ユーザーのグループの選択";
-karutaStr['ja']['create_group']="グループを追加";
+karutaStr['ja']['create_usersgroup']="Create a Users Group";
 karutaStr['ja']['list_usersgroups']="ユーザーのグループ";
 karutaStr['ja']['no_group']="何のグループはありません";
 karutaStr['ja']['addshare-portfoliosgroups']="Share Portfolios Groups";
@@ -203,4 +203,6 @@ karutaStr['ja']['confirm-remove-item-group']="Do you want to remove this element
 karutaStr['ja']['add_users']="Add users";
 karutaStr['ja']['add_portfolios']="Add Portfolios";
 karutaStr['ja']['select_groups']="Select Groups";
+karutaStr['ja']['select_portfoliosgroups']="Select Portfolios Groups";
+karutaStr['ja']['create_portfoliosgroup']="Create a Portfolios Group";
 

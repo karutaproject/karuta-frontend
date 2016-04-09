@@ -319,10 +319,10 @@ karutaStr['fr']['bubble-color']="Couleur";
 //=========================================
 
 karutaStr['fr']['select_usersgroups']="Sélectionner des groupes d'usagers";
-karutaStr['fr']['create_group']="Créer un groupe";
+karutaStr['fr']['create_usersgroup']="Créer un groupe d'usagers";
 karutaStr['fr']['list_usersgroups']="Groupes d'usagers";
 karutaStr['fr']['no_group']="Aucun group";
-karutaStr['fr']['addshare-portfoliosgroups']="Partager des Groupes de Portfolios";
+karutaStr['fr']['addshare-portfoliosgroups']="Partager des groupes de portfolios";
 karutaStr['fr']['addshare-portfolios']="Partager des Portfolios";
 karutaStr['fr']['addshare-usersgroups']="Partager avec des groupes d'usagers";
 karutaStr['fr']['addshare-users']="Partager avec des usagers";
@@ -333,4 +333,6 @@ karutaStr['fr']['confirm-remove-item-group']="Voulez-vous vraiment retirer cet �
 karutaStr['fr']['add_users']="Ajouter des usagers";
 karutaStr['fr']['add_portfolios']="Ajouter des portfolios";
 karutaStr['fr']['select_groups']="Sélectionner des groupes";
+karutaStr['fr']['select_portfoliosgroups']="Sélectionner des groupes de portfolios";
+karutaStr['fr']['create_portfoliosgroup']="Créer un groupe de portfolios";
 

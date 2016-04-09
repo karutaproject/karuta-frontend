@@ -152,13 +152,13 @@ UIFactory["PortfoliosGroup"].displayPortfolios = function(gid,destid,type,lang)
 				}
 				PortfoliosGroups_byid[gid].members = portfolios_ids;
 				testGroup_Empty("portfolios-group_",gid);
+				PortfoliosGroups_byid[gid].roles = [];
 				//----------------
 			},
 			error : function(jqxhr,textStatus) {
 				alertHTML("Error : "+jqxhr.responseText);
 			}
 		});
-		PortfoliosGroups_byid[gid].roles = {};
 	}
 };
 
@@ -235,7 +235,7 @@ UIFactory["PortfoliosGroup"].callCreate = function()
 	var js2 = "javascript:UIFactory['PortfoliosGroup'].create()";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['create_group']);
+	$("#edit-window-title").html(karutaStr[LANG]['create_portfoliosgroup']);
 	var html = "";
 	html += "<form id='portfoliosgroup' class='form-horizontal'>";
 	html += UIFactory["PortfoliosGroup"].getAttributeCreator("label","");
@@ -528,7 +528,6 @@ UIFactory["PortfoliosGroup"].addPortfolios = function(gid)
 UIFactory["PortfoliosGroup"].prototype.fillSharingRoles = function()
 //==================================
 {
-	this.roles = [];
 	this.rrg = {};
 	var rrg = this.rrg;
 	var roles = this.roles;
@@ -570,7 +569,9 @@ UIFactory["PortfoliosGroup"].prototype.fillSharingRoles = function()
 UIFactory["PortfoliosGroup"].prototype.getSharingRoleEditor = function(destid)
 //==================================
 {
-	this.fillSharingRoles();
+	if (this.roles.length==0) {
+		this.fillSharingRoles();
+	}
 	//--------------------------
 	if (this.roles.length>0) {
 		var first = true;
@@ -600,6 +601,7 @@ UIFactory["PortfoliosGroup"].displaySharingRoleEditor = function(destid,gid)
 			data: "",
 			success : function(data) {
 				PortfoliosGroups_byid[gid].members = parseList("portfolio",data);
+				PortfoliosGroups_byid[gid].roles = [];
 				PortfoliosGroups_byid[gid].getSharingRoleEditor(destid);
 				//----------------
 			},
@@ -620,13 +622,22 @@ UIFactory["PortfoliosGroup"].callShareUsers = function(gid)
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['PortfoliosGroup'].shareUsers('"+gid+"','unshare')";
 	var js3 = "javascript:UIFactory['PortfoliosGroup'].shareUsers('"+gid+"','share')";
-	var footer = "<button class='btn' onclick=\""+js3+";\">"+karutaStr[LANG]['addshare']+"</button>";
-	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['unshare']+"</button>";
-	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+PortfoliosGroups_byid[gid].label);
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";
+	html += "<div class='row'>";
+	html += "<div class='col-md-8'>";
+	html += "<h4>"+karutaStr[LANG]['sharing']+"</h4>";
+	html += "</div>";
+	html += "<div class='col-md-2'>";
+	html += "<button class='btn' onclick=\""+js3+";\">"+karutaStr[LANG]['addshare']+"</button>";
+	html += "</div>";
+	html += "<div class='col-md-2'>";
+	html += " <button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['unshare']+"</button>";
+	html += "</div>";
+	html += "</div><!--row-->";
 	html += "<div class='row'>";
 	html += "<div class='col-md-3'>";
 	html += karutaStr[LANG]['select_role'];
@@ -681,13 +692,22 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['PortfoliosGroup'].shareGroups('"+gid+"','unshare')";
 	var js3 = "javascript:UIFactory['PortfoliosGroup'].shareGroups('"+gid+"','share')";
-	var footer = "<button class='btn' onclick=\""+js3+";\">"+karutaStr[LANG]['addshare']+"</button>";
-	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['unshare']+"</button>";
-	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+PortfoliosGroups_byid[gid].label);
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";
+	html += "<div class='row'>";
+	html += "<div class='col-md-8'>";
+	html += "<h4>"+karutaStr[LANG]['sharing']+"</h4>";
+	html += "</div>";
+	html += "<div class='col-md-2'>";
+	html += "<button class='btn' onclick=\""+js3+";\">"+karutaStr[LANG]['addshare']+"</button>";
+	html += "</div>";
+	html += "<div class='col-md-2'>";
+	html += " <button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['unshare']+"</button>";
+	html += "</div>";
+	html += "</div><!--row-->";
 	html += "<div class='row'>";
 	html += "<div class='col-md-3'>";
 	html += karutaStr[LANG]['select_role'];
@@ -711,7 +731,7 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
 	if (UsersGroups_byid.length>0) { // users groups loaded
-		UIFactory["UsersGroup"].displaySelectMultiple('sharing_usersgroups');
+		UIFactory["UsersGroup"].displaySelectMultipleWithUsersList('sharing_usersgroups');
 		//--------------------------		
 	} else {
 		$.ajax({
@@ -720,7 +740,7 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 			url : "../../../"+serverBCK+"/usersgroups",
 			success : function(data) {
 				UIFactory["UsersGroup"].parse(data);
-				UIFactory["UsersGroup"].displaySelectMultiple('sharing_usersgroups');
+				UIFactory["UsersGroup"].displaySelectMultipleWithUsersList('sharing_usersgroups');
 				//--------------------------
 			},
 			error : function(jqxhr,textStatus) {

@@ -24,7 +24,7 @@ function fill_list_portfoliosgroups()
 //==============================
 {
 	var html = "";
-	html += "<span id='portfoliosgroup-create' onclick=\"UIFactory['PortfoliosGroup'].callCreate()\" >"+karutaStr[LANG]['create_group']+"</span>";
+	html += "<span id='portfoliosgroup-create' onclick=\"UIFactory['PortfoliosGroup'].callCreate()\" >"+karutaStr[LANG]['create_portfoliosgroup']+"</span>";
 	html += "<h3 id='portfoliosgroups-label'>"+karutaStr[LANG]['list_portfoliosgroups']+"</h3>";
 	html += "<div  id='portfoliosgroups'>";
 	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
@@ -99,7 +99,7 @@ function testGroup_Empty(destid,gid)
 }
 
 //==============================
-function updateRRGroup_UsersGroups(groupid,usersgroups,type)
+function updateRRGroup_UsersGroups(groupid,usersgroups,type,portfolioid)
 //==============================
 {
 	if (groupid!=null) {
@@ -121,6 +121,19 @@ function updateRRGroup_UsersGroups(groupid,usersgroups,type)
 							url : urlS,
 							data : xml,
 							success : function(data) {
+								if (portfolioid!=null) {
+									$.ajax({
+										type : "GET",
+										dataType : "xml",
+										url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+										success : function(data) {
+											UIFactory["Portfolio"].displayUnSharing('shared',data);
+										},
+										error : function(jqxhr,textStatus) {
+											alertHTML("Error in updateRRGroup_UsersGroups : "+jqxhr.responseText);
+										}
+									});
+								}
 							}
 						});
 					} else if (type=='unshare'){
@@ -134,6 +147,19 @@ function updateRRGroup_UsersGroups(groupid,usersgroups,type)
 								url : urlU+userid,
 								data : "",
 								success : function(data) {
+									if (portfolioid!=null) {
+										$.ajax({
+											type : "GET",
+											dataType : "xml",
+											url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+											success : function(data) {
+												UIFactory["Portfolio"].displayUnSharing('shared',data);
+											},
+											error : function(jqxhr,textStatus) {
+												alertHTML("Error in updateRRGroup_UsersGroups : "+jqxhr.responseText);
+											}
+										});
+									}
 								}
 							});
 						}

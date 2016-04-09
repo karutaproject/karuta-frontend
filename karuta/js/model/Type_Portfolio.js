@@ -1735,8 +1735,6 @@ UIFactory["Portfolio"].displaySelectMultiple = function(selectedlist,destid,type
 		var checked = selectedlist.contains(portfolios_list[i].id);
 		if (!checked) {
 			var input = portfolios_list[i].getSelector(null,null,'select_portfolios',false);
-//			var input = portfolios_list[i].getPortfolioView(destid,'select',null,null,null));
-
 			$("#"+destid).append($(input));
 			$("#"+destid).append($("<br>"));			
 		}
@@ -2083,13 +2081,33 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['Portfolio'].shareGroups('"+portfolioid+"','unshare')";
 	var js3 = "javascript:UIFactory['Portfolio'].shareGroups('"+portfolioid+"','share')";
-	var footer = "<button class='btn' onclick=\""+js3+";\">"+karutaStr[LANG]['addshare']+"</button>";
-	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['unshare']+"</button>";
-	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var js4 = "javascript:UIFactory['Portfolio'].unshareUsers('"+portfolioid+"')";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+portfolios_byid[portfolioid].label_node[langcode].text());
 	var html = "";
+	html += "<div class='row'>";
+	html += "<div class='col-md-9'>";
+	html += "<h4>"+karutaStr[LANG]['shared']+"</h4>";
+	html += "</div>";
+	html += "<div class='col-md-3'>";
+	html += "<button class='btn' onclick=\""+js4+";\">"+karutaStr[LANG]['unshare']+"</button>";
+	html += "</div>";
+	html += "</div><!--row-->";
+	html += "<div id='shared'></div>";
 	html += "<div id='sharing' style='display:none'>";
+	html += "<hr/>";
+	html += "<div class='row'>";
+	html += "<div class='col-md-8'>";
+	html += "<h4>"+karutaStr[LANG]['sharing']+"</h4>";
+	html += "</div>";
+	html += "<div class='col-md-2'>";
+	html += "<button class='btn' onclick=\""+js3+";\">"+karutaStr[LANG]['addshare']+"</button>";
+	html += "</div>";
+	html += "<div class='col-md-2'>";
+	html += " <button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['unshare']+"</button>";
+	html += "</div>";
+	html += "</div><!--row-->";
 	html += "<div class='row'>";
 	html += "<div class='col-md-3'>";
 	html += karutaStr[LANG]['select_role'];
@@ -2113,7 +2131,18 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
 	if (UsersGroups_byid.length>0) { // users groups loaded
-		UIFactory["UsersGroup"].displaySelectMultiple('sharing_usersgroups');
+		UIFactory["UsersGroup"].displaySelectMultipleWithUsersList('sharing_usersgroups');
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+			success : function(data) {
+				UIFactory["Portfolio"].displayUnSharing('shared',data);
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error in callShareUsersGroups 1 : "+jqxhr.responseText);
+			}
+		});
 		//--------------------------		
 	} else {
 		$.ajax({
@@ -2122,7 +2151,18 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 			url : "../../../"+serverBCK+"/usersgroups",
 			success : function(data) {
 				UIFactory["UsersGroup"].parse(data);
-				UIFactory["UsersGroup"].displaySelectMultiple('sharing_usersgroups');
+				UIFactory["UsersGroup"].displaySelectMultipleWithUsersList('sharing_usersgroups');
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+					success : function(data) {
+						UIFactory["Portfolio"].displayUnSharing('shared',data);
+					},
+					error : function(jqxhr,textStatus) {
+						alertHTML("Error in callShareUsersGroups 1 : "+jqxhr.responseText);
+					}
+				});
 				//--------------------------
 			},
 			error : function(jqxhr,textStatus) {
@@ -2160,6 +2200,6 @@ UIFactory["Portfolio"].shareGroups = function(portfolioid,type)
 		var group = $("input[name='radio_group']").filter(':checked');
 		groupid = $(group).attr('value');
 	}
-	updateRRGroup_UsersGroups(groupid,usersgroups,type);
+	updateRRGroup_UsersGroups(groupid,usersgroups,type,portfolioid);
 };
 

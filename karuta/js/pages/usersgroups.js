@@ -24,7 +24,7 @@ function fill_list_usersgroups()
 //==============================
 {
 	var html = "";
-	html += "<span id='usersgroup-create' onclick=\"UIFactory['UsersGroup'].callCreate()\" >"+karutaStr[LANG]['create_group']+"</span>";
+	html += "<span id='usersgroup-create' onclick=\"UIFactory['UsersGroup'].callCreate()\" >"+karutaStr[LANG]['create_usersgroup']+"</span>";
 	html += "<h3 id='usersgroups-label'>"+karutaStr[LANG]['list_usersgroups']+"</h3>";
 	html += "<div id='usersgroups'>";
 	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";

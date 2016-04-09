@@ -100,17 +100,12 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type,lang)
 			html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"',null)\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 			html += "<span class='glyphicon glyphicon-remove'></span>";
 			html += "</button>";
-			html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].callSharePortfoliosGroups('"+this.id+"')\" data-title='"+karutaStr[LANG]["addshare-portfoliosgroups"]+"' relx='tooltip'>";
-			html += "<i class='fa fa-share-square-o'></i>";
-			html += "</button>";
 			*/
 			html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 			html += "			<ul class='dropdown-menu  pull-right'>";
 			html += "				<li><a onclick=\"UIFactory['UsersGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
 			html += "				<li><a onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
 			html += "				<li><a onclick=\"UIFactory['UsersGroup'].callAddUsers('"+this.id+"')\" ><i class='fa fa-user-plus'></i> "+karutaStr[LANG]["add_users"]+"</a></li>";
-			html += "				<li><a onclick=\"UIFactory['UsersGroup'].callSharePortfolios('"+this.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-portfolios"]+"</a></li>";
-			html += "				<li><a onclick=\"UIFactory['UsersGroup'].callSharePortfoliosGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-portfoliosgroups"]+"</a></li>";
 			html += "			</ul>";
 		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
 			html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
@@ -250,7 +245,7 @@ UIFactory["UsersGroup"].callCreate = function()
 	var js2 = "javascript:UIFactory['UsersGroup'].create()";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['create_group']);
+	$("#edit-window-title").html(karutaStr[LANG]['create_usersgroup']);
 	var html = "";
 	html += "<form id='usersgroup' class='form-horizontal'>";
 	html += UIFactory["UsersGroup"].getAttributeCreator("label","");
@@ -361,6 +356,67 @@ UIFactory["UsersGroup"].displaySelectMultiple = function(destid,type,lang)
 		var input = UsersGroups_list[i].getSelector(null,null,'select_usersgroups');
 		$("#"+destid).append($(input));
 		$("#"+destid).append($("<br>"));
+	}
+};
+
+//==================================
+UIFactory["UsersGroup"].displaySelectMultipleWithUsersList = function(destid,type,lang)
+//==================================
+{
+	$("#"+destid).html("");
+	for ( var i = 0; i < UsersGroups_list.length; i++) {
+		var gid = UsersGroups_list[i].id;
+		var label = UsersGroups_list[i].label_node.text();
+		var html = "<input type='checkbox' name='select_usersgroups' value='"+gid+"'";
+		html += " onclick=\"javascript:UIFactory['UsersGroup'].toggleUsersList('"+gid+"','"+destid+"-group-"+gid+"', this.checked)\" ";
+		html += "> "+label+" </input>";
+		html += "<br/><div class='usersgroup-users' id='"+destid+"-group-"+gid+"' style='display:none'></div>";
+		$("#"+destid).append($(html));
+	}
+};
+
+//==================================
+UIFactory["UsersGroup"].toggleUsersList = function(gid,destid,checked)
+//==================================
+{
+	if (checked) {
+		var html = "";
+		html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
+		html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
+		$("#"+destid).html(html);
+		$("#"+destid).show();
+		//--------------------------
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+			data: "",
+			success : function(data) {
+				$("#"+destid).html("");
+				var users_ids = parseList("user",data);
+				for ( var i = 0; i < users_ids.length; i++) {
+					if (Users_byid[users_ids[i]]!=null && Users_byid[users_ids[i]]!=undefined) {
+						var itemid = destid+"_"+users_ids[i];
+						if (Users_byid[users_ids[i]].active_node.text()=='1') {
+							$("#"+destid).append($("<div class='item' id='"+itemid+"'></div>"));
+						} else
+							$("#"+destid).append($("<div class='item inactive' id='"+itemid+"'></div>"));
+						html = "<div>"+Users_byid[users_ids[i]].getView(null,"firstname-lastname-username")+"</div>";
+						$("#"+itemid).html(html);
+					}
+				}
+				var items = $("div[class='item']",$("#"+destid));
+				if (items.length==0)
+					$("#"+destid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
+				//----------------
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error : "+jqxhr.responseText);
+			}
+		});		
+	} else {
+		$("#"+destid).html("");
+		$("#"+destid).hide();
 	}
 };
 
@@ -517,77 +573,5 @@ UIFactory["UsersGroup"].addUsers = function(gid)
 			}
 		});
 	}
-};
-
-//==================================
-UIFactory["UsersGroup"].callSharePortfolios = function(gid)
-//==================================
-{
-	var nameinput = "user_"+userid+"-list_groups-form-update";
-	var js1 = "javascript:updateDisplay_page('"+nameinput+"','fill_list_usersgroups');$('#edit-window').modal('hide');$('#edit-window-body').html('')";
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['list_groups']);
-	var html = "<input type='hidden' name='"+nameinput+"' id='"+nameinput+"' value='0'>";
-	html += "<div id='user_list_groups'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
-	html += "</div>";
-	$("#edit-window-body").html(html);
-	//--------------------------
-	$('#edit-window').modal('show');
-
-	$.ajaxSetup({async: false});
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?user="+userid,
-		data: "",
-		success : function(data) {
-			var user_groupids = parseList("group",data);
-			if (!($("#main-usersgroup").length && $("#main-usersgroup").html()!="")) {
-				fill_list_usersgroups();
-			}
-			UIFactory["UsersGroup"].displayManageMultipleGroups('user_list_groups','user',userid,user_groupids,'updateGroup_User');
-			//----------------
-		}
-	});
-	$.ajaxSetup({async: true});
-};
-
-//==================================
-UIFactory["UsersGroup"].callSharePortfoliosGroups = function(gid)
-//==================================
-{
-	var nameinput = "user_"+userid+"-list_groups-form-update";
-	var js1 = "javascript:updateDisplay_page('"+nameinput+"','fill_list_usersgroups');$('#edit-window').modal('hide');$('#edit-window-body').html('')";
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['list_groups']);
-	var html = "<input type='hidden' name='"+nameinput+"' id='"+nameinput+"' value='0'>";
-	html += "<div id='user_list_groups'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
-	html += "</div>";
-	$("#edit-window-body").html(html);
-	//--------------------------
-	$('#edit-window').modal('show');
-
-	$.ajaxSetup({async: false});
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?user="+userid,
-		data: "",
-		success : function(data) {
-			var user_groupids = parseList("group",data);
-			if (!($("#main-usersgroup").length && $("#main-usersgroup").html()!="")) {
-				fill_list_usersgroups();
-			}
-			UIFactory["UsersGroup"].displayManageMultipleGroups('user_list_groups','user',userid,user_groupids,'updateGroup_User');
-			//----------------
-		}
-	});
-	$.ajaxSetup({async: true});
 };
 
