@@ -566,7 +566,7 @@ UIFactory["PortfoliosGroup"].prototype.fillSharingRoles = function()
 };
 
 //==================================
-UIFactory["PortfoliosGroup"].prototype.getSharingRoleEditor = function(destid)
+UIFactory["PortfoliosGroup"].prototype.getSharingRoleEditor = function(destid,callFunction)
 //==================================
 {
 	if (this.roles.length==0) {
@@ -574,11 +574,16 @@ UIFactory["PortfoliosGroup"].prototype.getSharingRoleEditor = function(destid)
 	}
 	//--------------------------
 	if (this.roles.length>0) {
+		var js = "javascript:";
+		if (callFunction!=null) {
+			js += callFunction+";";
+		}
+		js += "$('input:checkbox').removeAttr('checked')";
 		var first = true;
 		for (var i=0; i<this.roles.length; i++) {
 			if (this.roles[i]!="user") {
 				var input = "<input type='radio' name='radio_group' value='"+this.roles[i]+"'";
-				input += "onclick=\"$('input:checkbox').removeAttr('checked')\" ";
+				input += "onclick=\""+js+"\" ";
 				input +="> "+this.roles[i]+" </input><br/>";
 				$("#"+destid).append($(input));
 			}
@@ -589,7 +594,7 @@ UIFactory["PortfoliosGroup"].prototype.getSharingRoleEditor = function(destid)
 };
 
 //==================================
-UIFactory["PortfoliosGroup"].displaySharingRoleEditor = function(destid,gid)
+UIFactory["PortfoliosGroup"].displaySharingRoleEditor = function(destid,gid,callFunction)
 //==================================
 {
 	if (PortfoliosGroups_byid[gid].members.length==0) { // to load members of portfolios groups
@@ -602,7 +607,7 @@ UIFactory["PortfoliosGroup"].displaySharingRoleEditor = function(destid,gid)
 			success : function(data) {
 				PortfoliosGroups_byid[gid].members = parseList("portfolio",data);
 				PortfoliosGroups_byid[gid].roles = [];
-				PortfoliosGroups_byid[gid].getSharingRoleEditor(destid);
+				PortfoliosGroups_byid[gid].getSharingRoleEditor(destid,callFunction);
 				//----------------
 			},
 			error : function(jqxhr,textStatus) {
@@ -611,7 +616,7 @@ UIFactory["PortfoliosGroup"].displaySharingRoleEditor = function(destid,gid)
 		});
 		$.ajaxSetup({async: true});
 	} else {
-		PortfoliosGroups_byid[gid].getSharingRoleEditor(destid);
+		PortfoliosGroups_byid[gid].getSharingRoleEditor(destid,callFunction);
 	}
 };
 
@@ -748,7 +753,7 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 			}
 		});
 	}
-	UIFactory["PortfoliosGroup"].displaySharingRoleEditor('sharing_roles',gid);
+	UIFactory["PortfoliosGroup"].displaySharingRoleEditor('sharing_roles',gid,"UIFactory['UsersGroup'].hideUsersList('sharing_usersgroups-group-')");
 	$("#sharing").show();
 	
 	//----------------------------------------------------------------
@@ -767,9 +772,11 @@ UIFactory["PortfoliosGroup"].shareGroups = function(gid,type)
 		grouplabel = $(group).attr('value');
 	}
 	if (grouplabel!=null) {
+		var xml = get_usersxml_from_groups(usersgroups);
+		var users = $("user",xml);
 		for (var i=0; i<PortfoliosGroups_byid[gid].rrg[grouplabel].length; i++) {
 			var groupid = PortfoliosGroups_byid[gid].rrg[grouplabel][i];
-			updateRRGroup_UsersGroups(groupid,usersgroups,type);
+			updateRRGroup_Users(groupid,users,xml,type,'id');
 		}		
 	}
 };
@@ -786,9 +793,15 @@ UIFactory["PortfoliosGroup"].shareUsers = function(gid,type)
 		grouplabel = $(group).attr('value');
 	}
 	if (grouplabel!=null) {
+		var xml = "<users>";
+		for (var i=0; i<users.length; i++){
+			var userid = $(users[i]).attr('value');
+			xml += "<user id='"+userid+"'/>";
+		}
+		xml += "</users>";
 		for (var i=0; i<PortfoliosGroups_byid[gid].rrg[grouplabel].length; i++) {
 			var groupid = PortfoliosGroups_byid[gid].rrg[grouplabel][i];
-			updateRRGroup_Users(groupid,users,type);
+			updateRRGroup_Users(groupid,users,xml,type,'value');
 		}		
 	}
 };

@@ -368,10 +368,20 @@ UIFactory["UsersGroup"].displaySelectMultipleWithUsersList = function(destid,typ
 		var gid = UsersGroups_list[i].id;
 		var label = UsersGroups_list[i].label_node.text();
 		var html = "<input type='checkbox' name='select_usersgroups' value='"+gid+"'";
-		html += " onclick=\"javascript:UIFactory['UsersGroup'].toggleUsersList('"+gid+"','"+destid+"-group-"+gid+"', this.checked)\" ";
+		html += " onchange=\"javascript:UIFactory['UsersGroup'].toggleUsersList('"+gid+"','"+destid+"-group-"+gid+"', this.checked)\" ";
 		html += "> "+label+" </input>";
 		html += "<br/><div class='usersgroup-users' id='"+destid+"-group-"+gid+"' style='display:none'></div>";
 		$("#"+destid).append($(html));
+	}
+};
+
+//==================================
+UIFactory["UsersGroup"].hideUsersList = function(destid)
+//==================================
+{
+	for ( var i = 0; i < UsersGroups_list.length; i++) {
+		var gid = UsersGroups_list[i].id;
+		$("#"+destid+gid).html("");
 	}
 };
 
@@ -401,7 +411,8 @@ UIFactory["UsersGroup"].toggleUsersList = function(gid,destid,checked)
 							$("#"+destid).append($("<div class='item' id='"+itemid+"'></div>"));
 						} else
 							$("#"+destid).append($("<div class='item inactive' id='"+itemid+"'></div>"));
-						html = "<div>"+Users_byid[users_ids[i]].getView(null,"firstname-lastname-username")+"</div>";
+//						html = "<div>"+Users_byid[users_ids[i]].getView(null,"firstname-lastname-username")+"</div>";
+						html = "<div>"+Users_byid[users_ids[i]].getSelector(null,null,"users-in-group",true,true)+"</div>";
 						$("#"+itemid).html(html);
 					}
 				}

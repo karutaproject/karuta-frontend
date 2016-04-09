@@ -85,3 +85,29 @@ function updateGroup_User(elt)
 		}
 	});
 }
+
+//==============================
+function get_usersxml_from_groups(usersgroups)
+//==============================
+{
+	var xml = "<users>";
+	$.ajaxSetup({async: false});
+	for (var i=0; i<usersgroups.length; i++){
+		var gid = $(usersgroups[i]).attr('value');
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+			success : function(data) {
+				xml += $($("users",data)[0]).html();
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error in get_usersxml_from_groups : "+"group-"+gid+":"+jqxhr.responseText);
+			}
+		});
+	}
+	$.ajaxSetup({async: true});
+	xml += "</users>";
+	return xml;
+}
+

@@ -99,95 +99,12 @@ function testGroup_Empty(destid,gid)
 }
 
 //==============================
-function updateRRGroup_UsersGroups(groupid,usersgroups,type,portfolioid)
-//==============================
-{
-	if (groupid!=null) {
-		var urlS = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
-		var urlU = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/";
-		for (var i=0; i<usersgroups.length; i++){
-			var gid = $(usersgroups[i]).attr('value');
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : "../../../"+serverBCK+"/usersgroups?group="+gid,
-				success : function(data) {
-					if (type=='share'){
-						var xml = $($("group",data)[0]).html();
-						$.ajax({
-							type : "POST",
-							contentType: "application/xml",
-							dataType : "xml",
-							url : urlS,
-							data : xml,
-							success : function(data) {
-								if (portfolioid!=null) {
-									$.ajax({
-										type : "GET",
-										dataType : "xml",
-										url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
-										success : function(data) {
-											UIFactory["Portfolio"].displayUnSharing('shared',data);
-										},
-										error : function(jqxhr,textStatus) {
-											alertHTML("Error in updateRRGroup_UsersGroups : "+jqxhr.responseText);
-										}
-									});
-								}
-							}
-						});
-					} else if (type=='unshare'){
-						var users = $("user",data);
-						for (var j=0; j<users.length; j++){
-							var userid = $(users[j]).attr('id');
-							$.ajax({
-								type : "DELETE",
-								contentType: "application/xml",
-								dataType : "xml",
-								url : urlU+userid,
-								data : "",
-								success : function(data) {
-									if (portfolioid!=null) {
-										$.ajax({
-											type : "GET",
-											dataType : "xml",
-											url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
-											success : function(data) {
-												UIFactory["Portfolio"].displayUnSharing('shared',data);
-											},
-											error : function(jqxhr,textStatus) {
-												alertHTML("Error in updateRRGroup_UsersGroups : "+jqxhr.responseText);
-											}
-										});
-									}
-								}
-							});
-						}
-					}
-
-					//--------------------------
-				},
-				error : function(jqxhr,textStatus) {
-					alertHTML("Error in updateRRGroup_UsersGroups : "+"group-"+gid+":"+jqxhr.responseText);
-				}
-			});
-		}
-	}
-}
-
-//==============================
-function updateRRGroup_Users(groupid,users,type)
+function updateRRGroup_Users(groupid,users,xml,type,attribute,portfolioid)
 //==============================
 {
 	if (groupid!=null) {
 		if (type=='share'){
 			var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
-			var xml = "<users>";
-			for (var i=0; i<users.length; i++){
-				var userid = $(users[i]).attr('value');
-				xml += "<user id='"+userid+"'/>";
-			}
-			xml += "</users>";
 			if (xml.length>20) {
 				$.ajax({
 					type : "POST",
@@ -196,13 +113,26 @@ function updateRRGroup_Users(groupid,users,type)
 					url : url,
 					data : xml,
 					success : function(data) {
+						if (portfolioid!=null) {
+							$.ajax({
+								type : "GET",
+								dataType : "xml",
+								url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+								success : function(data) {
+									UIFactory["Portfolio"].displayUnSharing('shared',data);
+								},
+								error : function(jqxhr,textStatus) {
+									alertHTML("Error in updateRRGroup_Users : "+jqxhr.responseText);
+								}
+							});
+						}
 					}
 				});
 			}
 		} else if (type=='unshare'){
 			var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/";
 			for (var i=0; i<users.length; i++){
-				var userid = $(users[i]).attr('value');
+				var userid = $(users[i]).attr(attribute);
 				$.ajax({
 					type : "DELETE",
 					contentType: "application/xml",
@@ -210,6 +140,19 @@ function updateRRGroup_Users(groupid,users,type)
 					url : url+userid,
 					data : "",
 					success : function(data) {
+						if (portfolioid!=null) {
+							$.ajax({
+								type : "GET",
+								dataType : "xml",
+								url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+								success : function(data) {
+									UIFactory["Portfolio"].displayUnSharing('shared',data);
+								},
+								error : function(jqxhr,textStatus) {
+									alertHTML("Error in updateRRGroup_Users : "+jqxhr.responseText);
+								}
+							});
+						}
 					}
 				});
 			}

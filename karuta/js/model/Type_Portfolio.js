@@ -1331,12 +1331,17 @@ UIFactory["Portfolio"].callShare = function(portfolioid,langcode)
 };
 
 //==================================
-UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,data)
+UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,data,callFunction)
 //==================================
 {
 	//--------------------------
 	var groups = $("rolerightsgroup",data);
 	if (groups.length>0) {
+		var js = "javascript:";
+		if (callFunction!=null) {
+			js += callFunction+";";
+		}
+		js += "$('input:checkbox').removeAttr('checked')";
 		var first = true;
 		for (var i=0; i<groups.length; i++) {
 			var groupid = $(groups[i]).attr('id');
@@ -1346,7 +1351,7 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 					$("#"+destid).append($("<br>"));
 				first = false;
 				var input = "<input type='radio' name='radio_group' value='"+groupid+"'";
-				input += "onclick=\"$('input:checkbox').removeAttr('checked')\" ";
+				input += "onclick=\""+js+"\" ";
 				input +="> "+label+" </input>";
 				$("#"+destid).append($(input));
 			}
@@ -2178,7 +2183,7 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/rolerightsgroups?portfolio="+portfolioid,
 		success : function(data) {
-			UIFactory["Portfolio"].displaySharingRoleEditor('sharing_roles',portfolioid,data);
+			UIFactory["Portfolio"].displaySharingRoleEditor('sharing_roles',portfolioid,data,"UIFactory['UsersGroup'].hideUsersList('sharing_usersgroups-group-')");
 			$("#sharing").show();
 			$("#sharing_designer").show();
 		},
@@ -2201,7 +2206,9 @@ UIFactory["Portfolio"].shareGroups = function(portfolioid,type)
 	if (groups.length>0){
 		var group = $("input[name='radio_group']").filter(':checked');
 		groupid = $(group).attr('value');
+		var xml = get_usersxml_from_groups(usersgroups);
+		var users = $("user",xml);
+		updateRRGroup_Users(groupid,users,xml,type,'id',portfolioid);
 	}
-	updateRRGroup_UsersGroups(groupid,usersgroups,type,portfolioid);
 };
 
