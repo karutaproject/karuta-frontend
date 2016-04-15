@@ -1334,26 +1334,34 @@ UIFactory["Portfolio"].callShare = function(portfolioid,langcode)
 UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,data,callFunction)
 //==================================
 {
-	//--------------------------
 	var groups = $("rolerightsgroup",data);
 	if (groups.length>0) {
+		//--------------------------
+		$("#"+destid).append("<div id='special-roles'></div>")
+		$("#"+destid).append("<div id='other-roles' style='margin-top:5px;'></div>")
+		//--------------------------
 		var js = "javascript:";
 		if (callFunction!=null) {
 			js += callFunction+";";
 		}
 		js += "$('input:checkbox').removeAttr('checked')";
 		var first = true;
+		var dest = "";
 		for (var i=0; i<groups.length; i++) {
 			var groupid = $(groups[i]).attr('id');
 			var label = $("label",groups[i]).text();
+			if (label=='all' || label=='designer' || label=='administrator')
+				dest = "#special-roles";
+			else
+				dest = "#other-roles";
 			if (label!="user") {
 				if (!first)
-					$("#"+destid).append($("<br>"));
+					$(dest).append($("<br>"));
 				first = false;
 				var input = "<input type='radio' name='radio_group' value='"+groupid+"'";
 				input += "onclick=\""+js+"\" ";
 				input +="> "+label+" </input>";
-				$("#"+destid).append($(input));
+				$(dest).append($(input));
 			}
 		}
 	} else {

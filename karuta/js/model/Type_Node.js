@@ -494,11 +494,17 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					var depth = 1;
 					var html = "";
 					html += "<div class='sidebar-item' id='parent-"+uuid+"' role='tablist'>";
-					html += "  <div  class='sidebar-link' style='cursor:pointer' data-toggle='collapse' data-parent='#parent-"+parentid+"' href='#collapse"+uuid+"' onclick=\"togglePlusMinus('"+uuid+"');;displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\">";
-					html += "  <small ><span  id='toggle_"+uuid+"' class='glyphicon glyphicon-plus ' style='float:right;margin-right:5px;'></span></small>";
+					html += "  <div  class='sidebar-link' style='cursor:pointer' data-toggle='collapse' data-parent='#parent-"+parentid+"' href='#collapse"+uuid+"' redisplay=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" onclick=\"toggleSidebarPlusMinus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\">";
+					if (g_toggle_sidebar[uuid]!=undefined && g_toggle_sidebar[uuid]=='open')
+						html += "  <small ><span  id='toggle_"+uuid+"' class='glyphicon glyphicon-minus' style='float:right;margin-right:5px;'></span></small>";
+					else
+						html += "  <small ><span  id='toggle_"+uuid+"' class='glyphicon glyphicon-plus' style='float:right;margin-right:5px;'></span></small>";
 					html += "  <a id='sidebar_"+uuid+"'>"+text+"</a>";
 					html += "  </div>"
-					html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
+					if (g_toggle_sidebar[uuid]!=undefined && g_toggle_sidebar[uuid]=='open')
+						html += "<div id='collapse"+uuid+"' class='panel-collapse collapse in' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
+					else
+						html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 					html += "<div id='panel-body"+uuid+"' class='panel-body'></div><!-- panel-body -->";
 					html += "</div><!-- panel-collapse -->";
 					html += "</div><!-- panel -->";
@@ -2839,9 +2845,9 @@ UIFactory['Node'].reloadStruct = function(uuid)
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
 			var uuid = $("#page").attr('uuid');
 			if (g_display_type=='model')
-				displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);
+				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
 			else
-				$("#sidebar_"+uuid).click();
+				displayPage(uuid,1,g_display_type,LANGCODE,g_edit);
 			$('#wait-window').modal('hide');
 		}
 	});
@@ -2863,9 +2869,9 @@ UIFactory['Node'].reloadUnit = function()
 			UICom.parseStructure(data,false,parentid);
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
 			if (g_display_type=='model')
-				displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);
+				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
 			else
-				$("#sidebar_"+uuid).click();
+				displayPage(uuid,1,g_display_type,LANGCODE,g_edit);
 			if ($("#window-page").length>0) {
 				var window_uuid = $("#window-page").attr('uuid');
 				eval(redisplays[window_uuid]);

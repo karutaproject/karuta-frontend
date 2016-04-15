@@ -37,6 +37,7 @@ var g_wysihtml5_autosave = 120000; // 120 seconds
 var g_block_height = 220; // block height in pixels
 var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
 var g_portfolio_rootid = "";
+var g_toggle_sidebar = [];
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------
@@ -1195,13 +1196,15 @@ function toggleSocialNetwork() {
 }
 
 //==================================
-function togglePlusMinus(uuid) {
+function toggleSidebarPlusMinus(uuid) {
 //==================================
 	if ($("#toggle_"+uuid).hasClass("glyphicon-plus"))
 	{
+		g_toggle_sidebar [uuid] = 'open';
 		$("#toggle_"+uuid).removeClass("glyphicon-plus")
 		$("#toggle_"+uuid).addClass("glyphicon-minus")
 	} else {
+		g_toggle_sidebar [uuid] = 'closed';
 		$("#toggle_"+uuid).removeClass("glyphicon-minus")
 		$("#toggle_"+uuid).addClass("glyphicon-plus")
 	}

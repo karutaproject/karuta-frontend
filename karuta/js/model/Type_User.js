@@ -368,25 +368,26 @@ UIFactory["User"].parse = function(data)
 	for ( var i = 0; i < items.length; i++) {
 		var userid = $(items[i]).attr('id');
 		Users_byid[userid] = new UIFactory["User"](items[i]);
-		var lastname = Users_byid[userid].lastname_node.text();
+		var lastname = Users_byid[userid].lastname;
+		if (lastname=="")
+			lastname = " ";
+		var firstname = Users_byid[userid].firstname;
 		if ($("active",$(items[i])).text() == "1") {  // active user
-			tableau1[active] = [lastname,userid];
-//			UsersActive_list[active] = Users_byid[userid];
+			tableau1[active] = [lastname,firstname,userid];
 			active++;
 		}
 		else { // inactive user
-			tableau2[inactive] = [lastname,userid];
-//			UsersInactive_list[inactive] = Users_byid[userid];
+			tableau2[inactive] = [lastname,firstname,userid];
 			inactive++;
 		}
 	}
-	var newTableau1 = tableau1.sort(sortOn1);
+	var newTableau1 = tableau1.sort(sortOn1_2);
 	for (var i=0; i<newTableau1.length; i++){
-		UsersActive_list[i] = Users_byid[newTableau1[i][1]];
+		UsersActive_list[i] = Users_byid[newTableau1[i][2]];
 	}
 	var newTableau2 = tableau2.sort(sortOn1);
 	for (var i=0; i<newTableau2.length; i++){
-		UsersInactive_list[i] = Users_byid[newTableau2[i][1]];
+		UsersInactive_list[i] = Users_byid[newTableau2[i][2]];
 	}
 };
 

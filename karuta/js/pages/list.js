@@ -121,7 +121,7 @@ function fill_list_page()
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" >"+karutaStr[LANG]['import_instance']+"</a></li>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
 	html += "<hr>";
-	html += "<li><a onclick=\"share_karuta_documentation()\" >"+karutaStr[LANG]['demo-documentation']+"</a></li>";
+//	html += "<li><a onclick=\"share_karuta_documentation()\" >"+karutaStr[LANG]['demo-documentation']+"</a></li>";
 	if (demo) {
 		html += "<hr>";
 		html += "<li><a onclick=\"create_karuta_demo_aacu('"+USER.username_node.text()+"')\" >"+karutaStr[LANG]['demo-aacu']+"</a></li>";
