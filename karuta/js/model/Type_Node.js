@@ -319,8 +319,22 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	if (this.label_node[langcode].text()!='')
 		title = this.label_node[langcode].text();
 	var editboxtitle =$(this.metadatawad).attr('editboxtitle');
-	if (editboxtitle!=undefined && editboxtitle!="")
-		title = editboxtitle;
+	if (editboxtitle!=undefined && editboxtitle!="") {
+		var titles = [];
+		try {
+			titles = editboxtitle.split("/");
+			if (editboxtitle.indexOf("@")>-1) { // lang@fr/lang@en/...
+				for (var j=0; j<titles.length; j++){
+					if (titles[j].indexOf(languages[langcode])>-1)
+						title = titles[j].substring(0,titles[j].indexOf("@"));
+				}
+			} else { // lang1/lang2/...
+				title = editboxtitle;
+			}
+		} catch(e){
+			title = editboxtitle;
+		}
+	}
 	$("#edit-window-title").html(title);
 	//------------- write resource type in the upper right corner ----------------
 	if (g_userroles[0]=='designer' || USER.admin){
@@ -2729,7 +2743,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
-		if ( submitted!='Y' && ((submitnode && ( submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer')) {
+		if ( submitted!='Y' && ((submitnode && ( submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer' || submitroles.indexOf(userrole)>-1)) {
 			html += "<span id='submit-"+node.id+"' class='button submit-button ' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
 		} else {
@@ -2801,9 +2815,9 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 									label = labels[j].substring(0,labels[j].indexOf("@"));
 							}
 							var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"')";
-							html_toadd = " <span class='button share-button' onclick=\""+js+"\"> "+label+"</span>";
+							html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
 						} else {
-							html_toadd = " <span class='button share-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
+							html_toadd = " <span class='button sharing-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
 						}
 					} else {
 						html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='Partager' rel='tooltip'></span>";

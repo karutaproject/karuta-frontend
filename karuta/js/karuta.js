@@ -32,7 +32,10 @@ var g_welcome_edit = false;
 var g_welcome_add = false;  // we don't display add a welcome page
 var g_display_sidebar = true;
 var g_free_toolbar_visibility = 'hidden';
+//---- caches -----
 var g_dashboard_models = {}; // cache for dashboard_models
+var g_Get_Resource_caches = {};
+//------------------
 var g_wysihtml5_autosave = 120000; // 120 seconds
 var g_block_height = 220; // block height in pixels
 var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
@@ -860,11 +863,12 @@ function getSendPublicURL(uuid,langcode)
 //==================================
 function getPublicURL(uuid,email,role,langcode,level,duration) {
 //==================================
-	//post /directlink?uuid=&user=&role= duration in hours
 	if (level==null)
 		level = 4; //public
+	if (duration==null)
+		duration = 720;  //-- max 720h
 	role = "all";
-	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'d='+duration;
+	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration;
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -1040,7 +1044,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 		url : "../../../"+serverFIL+"/mail",
 		data: xml,
 		success : function(data) {
-			alertHTML(karutaStr[LANG]['email-sent']+USER.firstname+" "+USER.lastname);
+			alertHTML(karutaStr[LANG]['email-sent']);
 		}
 	});
 }
@@ -1075,7 +1079,7 @@ function setLanguage(lang) {
 		if (languages[i]==lang)
 			LANGCODE = i;
 	}
-	if (USER!=undefined && $(USER.username_node).text()!="public") // not public Account
+	if (elgg_installed && USER!=undefined && $(USER.username_node).text()!="public") // not public Account
 		moment.locale(lang);
 }
 

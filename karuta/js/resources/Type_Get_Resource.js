@@ -19,7 +19,7 @@ if( UIFactory === undefined )
   var UIFactory = {};
 }
 
-var g_Get_Resource_caches = {};
+
 
 /// Define our type
 //==================================
