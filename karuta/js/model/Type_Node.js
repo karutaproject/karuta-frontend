@@ -2354,7 +2354,7 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 	var commentnoderoles = $(node.metadatawad).attr('commentnoderoles');
 	if (commentnoderoles==undefined)
 		commentnoderoles = "";
-	if (commentnoderoles!="" && (USER.admin || g_userroles[0]=='designer' || commentnoderoles.containsArrayElt(g_userroles) || commentnoderoles.indexOf(this.userrole)>-1)) {
+	if (commentnoderoles!="" && (USER.admin || (USER.creator && commentnoderoles=='designer') || g_userroles[0]=='designer' || commentnoderoles.containsArrayElt(g_userroles) || commentnoderoles.indexOf(this.userrole)>-1)) {
 		//---------------------
 		if (langcode==null)
 			langcode = LANGCODE;
@@ -2650,7 +2650,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 						html += "<hr>";
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4,freenode);
-						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ProxyBlock','ProxyBlock',databack,callback,param2,param3,param4,freenode);
+						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ImageBlock','ImageBlock',databack,callback,param2,param3,param4,freenode);
+//						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ProxyBlock','ProxyBlock',databack,callback,param2,param3,param4,freenode);
 					}
 					if (semantictag.indexOf("bubbleContainer")>-1) {
 //						var interval = setInterval(function(){alert(node.id)},30000);

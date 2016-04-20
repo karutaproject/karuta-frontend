@@ -124,17 +124,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------
 	if (languages.length>1) 
-		if(type!="create_account") {
-			html += "			<ul class='nav navbar-nav'>";
-			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
-			html += "					<ul class='dropdown-menu'>";
-			for (var i=0; i<languages.length;i++) {
-				html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
-			}
-			html += "					</ul>";
-			html += "				</li>";
-			html += "			</ul>";
-		} else { // -- create_account --
+		if(type=="create_account") {
 			html += "			<ul class='nav navbar-nav'>";
 			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 			html += "					<ul class='dropdown-menu'>";
@@ -144,7 +134,28 @@ function getNavBar(type,portfolioid,edit)
 			html += "					</ul>";
 			html += "				</li>";
 			html += "			</ul>";
-		}
+		} else
+			if(type=="login") {
+				html += "			<ul class='nav navbar-nav'>";
+				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+				html += "					<ul class='dropdown-menu'>";
+				for (var i=0; i<languages.length;i++) {
+					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getLogin());$('#useridentifier').focus();$('#newpassword').html(getNew());$('#newaccount').html(karutaStr[LANG]['new-account']);\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+				}
+				html += "					</ul>";
+				html += "				</li>";
+				html += "			</ul>";
+			} else {
+				html += "			<ul class='nav navbar-nav'>";
+				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+				html += "					<ul class='dropdown-menu'>";
+				for (var i=0; i<languages.length;i++) {
+					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+				}
+				html += "					</ul>";
+				html += "				</li>";
+				html += "			</ul>";
+			}		
 	//-----------------ACTIONS-------------------------------
 	if (type!='login' && USER!=undefined) {
 		if (USER.admin) {
@@ -1044,6 +1055,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 		url : "../../../"+serverFIL+"/mail",
 		data: xml,
 		success : function(data) {
+			$('#edit-window').modal('hide');
 			alertHTML(karutaStr[LANG]['email-sent']);
 		}
 	});
