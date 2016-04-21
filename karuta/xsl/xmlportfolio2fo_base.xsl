@@ -8,18 +8,18 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 <xsl:include href="html2fo_base.xsl"/>
-
+<xsl:variable name="portfolio_code"><xsl:value-of select="//portfolio[1]/asmRoot/asmResource[@xsi_type='nodeRes']/code"/></xsl:variable>
 <!-- =================================== -->
 <xsl:template name="tree">
 <!-- =================================== -->
 	<fo:page-sequence master-reference="default-sequence">
 		<fo:static-content flow-name="Footer" font-size="9pt">
-			<fo:block><xsl:value-of select="/portfolio/asmRoot/asmResource[@xsi_type='nodeRes']/code"/></fo:block>
+			<fo:block><xsl:value-of select="$portfolio_code"/></fo:block>
 			<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 		</fo:static-content>
 		<fo:flow flow-name="Content" font-size="10pt">
 			<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="0pt" text-align="center">
-				<xsl:value-of select="/portfolio/asmRoot/asmResource[@xsi_type='nodeRes']/code"/>
+				<xsl:value-of select="$portfolio_code"/>
 			</fo:block>
 			<xsl:for-each select="/portfolio/asmRoot/asmStructure[not(metadata-wad/@displaytree='none')]">
 					<fo:block font-size="11pt" font-weight="bold" space-before="24pt" space-after="0pt" background-color="lightgrey">
@@ -97,7 +97,7 @@
 		<xsl:if test="asmUnitStructure | asmContext">
 			<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
 				<fo:static-content flow-name="Footer" font-size="9pt">
-					<fo:block><xsl:value-of select="/portfolio/asmRoot/asmResource[@xsi_type='nodeRes']/code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
+					<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
 					<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 				</fo:static-content>
 				<fo:flow flow-name="Content" font-size="10pt">
@@ -121,7 +121,7 @@
 		<xsl:if test="asmUnitStructure | asmContext">
 			<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
 				<fo:static-content flow-name="Footer" font-size="9pt">
-					<fo:block><xsl:value-of select="/portfolio/asmRoot/asmResource[@xsi_type='nodeRes']/code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
+					<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
 					<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 				</fo:static-content>
 				<fo:flow flow-name="Content" font-size="10pt">
@@ -144,7 +144,7 @@
 		<xsl:variable name="asmNode_label"><xsl:value-of select="../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
 		<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
 			<fo:static-content flow-name="Footer" font-size="9pt">
-				<fo:block><xsl:value-of select="/portfolio/asmRoot/asmResource[@xsi_type='nodeRes']/code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
+				<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
 				<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 			</fo:static-content>
 			<fo:flow flow-name="Content" font-size="10pt">
@@ -295,7 +295,7 @@
 <xsl:template match="asmResource[@xsi_type='Document']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
-
+<!--
 	<xsl:variable name='file'>
 		<xsl:call-template name="lastIndexOf">
 			 <xsl:with-param name="string" select="identifier"/>
@@ -339,6 +339,18 @@
 			<xsl:apply-templates select="../asmResource[@xsi_type='context']/comment/node()"/>
 		</fo:block>
 	</xsl:if>
+	-->
+	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
+		<fo:inline padding-left="3pt">
+			<xsl:call-template name="link2file">
+				<xsl:with-param name="url0"><xsl:value-of select="$url"/>/resources/resource/file</xsl:with-param>
+				<xsl:with-param name="fpath"><xsl:value-of select="./@contextid"/>?lang=<xsl:value-of select="$lang"/></xsl:with-param>
+				<xsl:with-param name="str"><xsl:value-of select="filename[@lang=$lang]"/></xsl:with-param>
+			</xsl:call-template>
+		</fo:inline>
+	</fo:block>
+
 </xsl:template>
 
 <!-- ============= asmResource_Image ============ -->
@@ -346,7 +358,7 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"/>
 	<xsl:param name="width-print"/>
-
+<!--
 	<xsl:variable name='src'>
 		<xsl:value-of select="$url"/>/resources/resource/file/<xsl:value-of select="../@id"/>?lang=<xsl:value-of select="$lang"/>&amp;size=L
 	</xsl:variable>
@@ -369,6 +381,7 @@
 			<xsl:apply-templates select="../asmResource[@xsi_type='context']/comment/node()"/>
 		</fo:block>
 	</xsl:if>
+	-->
 </xsl:template>
 
 
@@ -397,7 +410,7 @@
 			<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		</xsl:if>
 		<fo:inline padding-left="3pt">
-			<xsl:apply-templates select="text/node()"/>
+			<xsl:apply-templates select="text[@lang=$lang]/node()"/>
 		</fo:inline>
 	</fo:block>
 </xsl:template>
@@ -424,8 +437,8 @@
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		<fo:inline padding-left="3pt">
 			<xsl:call-template name="linkpdf">
-				<xsl:with-param name="href"><xsl:value-of select="url"/></xsl:with-param>
-				<xsl:with-param name="str"><xsl:value-of select="label"/></xsl:with-param>
+				<xsl:with-param name="href"><xsl:value-of select="url[@lang=$lang]"/></xsl:with-param>
+				<xsl:with-param name="str"><xsl:value-of select="label[@lang=$lang]"/></xsl:with-param>
 			</xsl:call-template>
 		</fo:inline>
 	</fo:block>
