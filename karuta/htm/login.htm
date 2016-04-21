@@ -113,10 +113,6 @@
 		//==============================
 		{
 			var html = "";
-			html += "<div id='welcome1'></div>";
-			html += "<div id='welcome-version'></div>";
-			html += "<div id='welcome2'></div>";
-			html += "<div id='welcome3'></div>";
 			html += "<input id='useridentifier' class='form-control' placeholder='"+karutaStr[LANG]['username']+"' type='text'>";
 			html += "<input id='password' class='form-control' placeholder='"+karutaStr[LANG]['password']+"' type='password'>";
 			html += "<button class='button-login' onclick='javascript:callSubmit()'>"+karutaStr[LANG]['login']+"</button>";
@@ -139,9 +135,15 @@
 	<div id='main-welcome'>
 		<div id='navigation_bar'></div>
 		<div id='main-container' class="container">
-			<div class="form-signin" id="login"></div>
+			<div class="form-signin">
+				<div id='welcome1'></div>
+				<div id='welcome-version'></div>
+				<div id='welcome2'></div>
+				<div id='welcome3'></div>
+				<div id='login'></div>
+			</div>
 			<div class="form-newpassword" id="newpassword"></div>
-			<div class="form-newaccount" id="newaccount" style="display:none"></div>
+			<div class="form-newaccount" id="newaccount"></div>
 		</div>
 	</div>
 	<script>document.write(alertBox());</script>

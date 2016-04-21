@@ -69,7 +69,7 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 			if (cover!=undefined && cover.resource.getValue()=='1')
 				style += "background-size:cover;";
 			html += "<div class='DocumentBlock' style=\""+style+"\">";
-			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='')
+			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='DocumentBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
 				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
 			else
 				html += "<div class='docblock-title'>"+filename+"</div>";

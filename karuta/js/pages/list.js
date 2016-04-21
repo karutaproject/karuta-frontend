@@ -120,7 +120,6 @@ function fill_list_page()
 	html += "<hr>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" >"+karutaStr[LANG]['import_instance']+"</a></li>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
-	html += "<hr>";
 //	html += "<li><a onclick=\"share_karuta_documentation()\" >"+karutaStr[LANG]['demo-documentation']+"</a></li>";
 	if (demo) {
 		html += "<hr>";
@@ -146,8 +145,11 @@ function fill_list_page()
 			var destid = $("div[id='portfolios']");
 			UIFactory["Portfolio"].parse(data);
 			UIFactory["Portfolio"].displayAll('portfolios','list');
-		},
-		error : function(jqxhr,textStatus) {
+			if ($("#projects").html()=="") {
+				$("#projects-label").hide();
+				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
+			}
+		},		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
 		}
 	});

@@ -75,7 +75,7 @@ karutaStr['en']['quit-edit']="Quit Edit Mode";
 karutaStr['en']['choose']="Choose";
 karutaStr['en']['quit']="Quit";
 karutaStr['en']['menu']="Menu";
-karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Height : 200<br>&nbsp; - Width : 800 divided by number of columns<br>&nbsp;";
+karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Height : 220<br>&nbsp; - Width : 800 divided by number of columns<br>&nbsp;";
 
 //=========================================
 //========== NODE =====================
@@ -158,8 +158,8 @@ karutaStr['en']['get_rc4key']="Parts of this document are encrypted.\nFist Visit
 karutaStr['en']['error_rc4key']="Error in key sentence.";
 karutaStr['en']['seltype']="Display";
 karutaStr['en']['shareroles']="Share<br/><span style='font-size:smaller'> role who shares[,recipient role,roles and/or emails,level (0-4),link validity (in hours),";
-karutaStr['en']['shareroles2']="button label@en;";
-karutaStr['en']['shareroles3']="];[other sharing]";
+karutaStr['en']['shareroles2']="button label@en";
+karutaStr['en']['shareroles3']="[,condition]][;other sharing]";
 karutaStr['en']['submitted']="Submitted on ";
 karutaStr['en']['notsubmitted']="Not Submitted";
 karutaStr['en']['collapsible']="Collapsible";
@@ -206,6 +206,7 @@ karutaStr['en']['sharing']="Sharing";
 karutaStr['en']['sharing_with_designers']="Share with Designers";
 karutaStr['en']['unsharing']="Unsharing";
 karutaStr['en']['export']="Export";
+karutaStr['en']['export-project']="Export Project";
 karutaStr['en']['export-with-files']="Export with Files";
 karutaStr['en']['button-duplicate']="Duplicate";
 karutaStr['en']['getPDF']="Create PDF";
@@ -281,7 +282,7 @@ karutaStr['en']['no-document']="No Document";
 karutaStr['en']['no-URL']="No URL";
 karutaStr['en']['subject']="Subject";
 karutaStr['en']['message']="Message";
-karutaStr['en']['email-sent']="The message has been sent to ";
+karutaStr['en']['email-sent']="The message has been sent.";
 karutaStr['en']['alternative-label']="Alternative Label";
 karutaStr['en']['sent-by']="Sent by";
 karutaStr['en']['dashboard-code']="Dashboard Code";

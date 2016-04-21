@@ -32,7 +32,10 @@ var g_welcome_edit = false;
 var g_welcome_add = false;  // we don't display add a welcome page
 var g_display_sidebar = true;
 var g_free_toolbar_visibility = 'hidden';
+//---- caches -----
 var g_dashboard_models = {}; // cache for dashboard_models
+var g_Get_Resource_caches = {};
+//------------------
 var g_wysihtml5_autosave = 120000; // 120 seconds
 var g_block_height = 220; // block height in pixels
 var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
@@ -121,17 +124,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------
 	if (languages.length>1) 
-		if(type!="create_account") {
-			html += "			<ul class='nav navbar-nav'>";
-			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
-			html += "					<ul class='dropdown-menu'>";
-			for (var i=0; i<languages.length;i++) {
-				html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
-			}
-			html += "					</ul>";
-			html += "				</li>";
-			html += "			</ul>";
-		} else { // -- create_account --
+		if(type=="create_account") {
 			html += "			<ul class='nav navbar-nav'>";
 			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 			html += "					<ul class='dropdown-menu'>";
@@ -141,7 +134,28 @@ function getNavBar(type,portfolioid,edit)
 			html += "					</ul>";
 			html += "				</li>";
 			html += "			</ul>";
-		}
+		} else
+			if(type=="login") {
+				html += "			<ul class='nav navbar-nav'>";
+				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+				html += "					<ul class='dropdown-menu'>";
+				for (var i=0; i<languages.length;i++) {
+					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getLogin());$('#useridentifier').focus();$('#newpassword').html(getNew());$('#newaccount').html(karutaStr[LANG]['new-account']);\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+				}
+				html += "					</ul>";
+				html += "				</li>";
+				html += "			</ul>";
+			} else {
+				html += "			<ul class='nav navbar-nav'>";
+				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+				html += "					<ul class='dropdown-menu'>";
+				for (var i=0; i<languages.length;i++) {
+					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+				}
+				html += "					</ul>";
+				html += "				</li>";
+				html += "			</ul>";
+			}		
 	//-----------------ACTIONS-------------------------------
 	if (type!='login' && USER!=undefined) {
 		if (USER.admin) {
@@ -860,11 +874,12 @@ function getSendPublicURL(uuid,langcode)
 //==================================
 function getPublicURL(uuid,email,role,langcode,level,duration) {
 //==================================
-	//post /directlink?uuid=&user=&role= duration in hours
 	if (level==null)
 		level = 4; //public
+	if (duration==null)
+		duration = 720;  //-- max 720h
 	role = "all";
-	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'d='+duration;
+	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration;
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -1040,7 +1055,8 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 		url : "../../../"+serverFIL+"/mail",
 		data: xml,
 		success : function(data) {
-			alertHTML(karutaStr[LANG]['email-sent']+USER.firstname+" "+USER.lastname);
+			$('#edit-window').modal('hide');
+			alertHTML(karutaStr[LANG]['email-sent']);
 		}
 	});
 }
@@ -1075,7 +1091,7 @@ function setLanguage(lang) {
 		if (languages[i]==lang)
 			LANGCODE = i;
 	}
-	if (USER!=undefined && $(USER.username_node).text()!="public") // not public Account
+	if (elgg_installed && USER!=undefined && $(USER.username_node).text()!="public") // not public Account
 		moment.locale(lang);
 }
 

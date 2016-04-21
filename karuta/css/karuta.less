@@ -19,7 +19,7 @@
 	color:@portfolio-buttons-color;
 }
 
-.asmnode .dropdown-button, .submit-button, .share-button {
+.asmnode .dropdown-button, .submit-button, .sharing-button {
 	border:1px solid @portfolio-buttons-color;
 	}
 
@@ -1319,7 +1319,7 @@ a.active:over{
 	Share button
    ====================*/
    
-.share-button{
+.sharing-button{
 	border-radius:3px;
 	height:20px;
 	margin-left:3px;
@@ -2153,13 +2153,17 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 }
 
 .block .buttons-menus{
-	float:left;
+	float:right;
+	margin-top:2px;
 }
 
 div.oembedall-container {
 	margin-top:-10px;
 }
-  
+
+.asmBlockContainer:first-of-type {
+	margin-top:20px;
+}
 .asmBlockContainer .col-md-12 {
 	padding-left:0px;
 	padding-right:0px;
@@ -2181,7 +2185,7 @@ div.oembedall-container {
 .block {
 	height:@block-height;
 	border: 1px lightgrey solid;
-	margin-top:10px;
+	margin-bottom:20px;
 }
 
 .block .asmnode {
@@ -2195,10 +2199,8 @@ div.oembedall-container {
 	text-align:center;
 }
 
-.block .Oembed .btn-group{
-	margin-top:7px;
-}
 .block .ProxyBlock,
+.block .ImageBlock,
 .block .DocumentBlock,
 .block .URLBlock{
 	height:@block-img-height;
@@ -2245,11 +2247,11 @@ div.oembedall-container {
 .block .resource-TextField{
 	padding:7px;
 	overflow:hidden;
-	height:@block-height;
+	height:@block-img-height;
 }
 
 .block .resource-Oembed{
-	height:@block-height;
+	height:@block-img-height;
 }
 
 

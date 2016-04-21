@@ -22,6 +22,8 @@ function show_main_page(portfolioid,role)
 function fill_main_page(portfolioid,role)
 //==============================
 {
+	g_dashboard_models = {};
+	g_Get_Resource_caches = {};
 	var html = "";
 	$("#main-page").html(html);
 	g_welcome_add = false;

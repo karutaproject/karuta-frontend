@@ -14,7 +14,7 @@
 		<link rel="stylesheet/less" type="text/css" href="../../karuta/css/karuta.less">
 		<script src="../../other/js/less.min.js"></script>
 		<!-- =========================================== -->
-		<link rel="stylesheet" href="../../application/css/specific.css" />
+		<link rel="stylesheet" href="../../application/css/specific.less" />
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/resources/Type_Calendar.js"></script>
 		<script src="../../karuta/js/resources/Type_Comments.js"></script>
@@ -100,9 +100,14 @@
 			</div>
 		</div>
 		
+		<script>document.write(EditBox());</script>
+		<script>document.write(DeleteBox());</script>
+		<script>document.write(savedBox());</script>
+		<script>document.write(alertBox());</script>
+		<script>document.write(messageBox());</script>
 		<script language='javascript'>
-			//------------------------------
 			var iid = getURLParameter('i');
+			var lang = getURLParameter('lang');
 			$(window).load(function() {
 				//---------------------------
 				$("#welcome").html(welcome1[LANG]);
@@ -126,6 +131,19 @@
 						USER = new UIFactory["User"]($("user",data));
 					}
 				});
+				$.ajax({ // get group-role for the user
+					Accept: "application/xml",
+					type : "GET",
+					dataType : "xml",
+					url : "../../../"+serverBCK+"/credential/group/" + g_uuid,
+					success : function(data) {
+						var usergroups = $("group",data);
+						for (var i=0;i<usergroups.length;i++) {
+							g_userroles[i+1] = $("role",usergroups[i]).text();
+						}
+						g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
+					}
+				});
 				//----------------
 				$.ajax({
 					type : "GET",
@@ -138,10 +156,10 @@
 						if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 							depth = 1;
 						loadLanguages(function(data) {
-							getLanguage();
+							setLanguage(lang);
 							if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 								UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
-							UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE);
+							UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
 						});
 					}
 				});
