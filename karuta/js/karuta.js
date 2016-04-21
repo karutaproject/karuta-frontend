@@ -268,19 +268,6 @@ function fillEditBoxBody()
 }
 
 //==============================
-function MessageBox()
-//==============================
-{
-	var html = "";
-	html += "\n<!-- ==================== MessageBox ==================== -->";
-	html += "\n<div id='message-window' class='modal' style='padding:10px;width:200px;margin-left:0px;background-color:lightgrey;position:fixed;top:65px;left:40%;'>";
-	html += "\n	<div id='message-body' class='message-body'></div>";
-	html += "\n</div>";
-	html += "\n<!-- ============================================== -->";
-	return html;
-}
-
-//==============================
 function setMessageBox(html)
 //==============================
 {
@@ -457,6 +444,24 @@ function messageBox()
 	html += "\n				</div>";
 	html += "\n			</div>";
 	html += "\n		</div>";
+	html += "\n</div>";
+	html += "\n<!-- ============================================== -->";
+	return html;
+}
+
+//==============================
+function imageBox()
+//==============================
+{
+	var html = "";
+	html += "\n<!-- ==================== image box ==================== -->";
+	html += "\n<div id='image-window' class='modal fade'>";
+	html += "\n			<div class='modal-content'>";
+	html += "\n				<div id='image-window-body' class='modal-body'>";
+	html += "\n				</div>";
+	html += "\n				<div id='image-window-footer' class='modal-footer' >";
+	html += "\n				</div>";
+	html += "\n			</div>";
 	html += "\n</div>";
 	html += "\n<!-- ============================================== -->";
 	return html;
@@ -1302,6 +1307,16 @@ function messageHTML(message)
 	document.getElementById('message-window-footer').innerHTML = buttons;
 	$('#message-window-body').html(message);
 	$('#message-window').modal('show');
+}
+
+//==================================
+function imageHTML(image)
+//==================================
+{
+	var buttons = "<button class='btn' onclick=\"javascript:$('#image-window').modal('hide');\">" + karutaStr[LANG]["Close"] + "</button>";
+	document.getElementById('image-window-footer').innerHTML = buttons;
+	$('#image-window-body').html(image);
+	$('#image-window').modal('show');
 
 }
 

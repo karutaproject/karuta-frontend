@@ -966,6 +966,13 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					else
 						changeCss("#node_"+uuid+" .button", "color:white;");
 			}
+			//-----------------------------------------------------------------------
+			if (nodetype == "asmContext" && node.resource.type=='Image') {
+				$("#image_"+uuid).click(function(){
+					imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"'>");
+				});
+			}
+
 			//--------------------collapsed------------------------------------------
 			if (collapsible=='Y') {
 				if (collapsed=='Y') {
@@ -1339,14 +1346,14 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				$("#node_"+uuid).replaceWith($(html));
 			else
 				$("#"+dest).append($(html));
-			//-------------------------
+			//-------Calcul taille TextField ------------------
 			if ($("#title_"+uuid).outerHeight()>0)
 				$("#std_resource_"+uuid).outerHeight(g_block_height-$("#title_"+uuid).outerHeight()); 
 			var h1 = $("#std_resource_"+uuid)[0].scrollHeight;
 			if (h1>g_block_height-$("#title_"+uuid).outerHeight()){
 				$("#std_resource_"+uuid).outerHeight(g_block_height-$("#title_"+uuid).outerHeight()-20);
 				$("#std_resource_"+uuid).parent().append($("<div id='plus_"+uuid+"' style='text-align:right;cursor:pointer'>&nbsp;&nbsp; ... &nbsp;&nbsp;</div>"));
-				$("#plus_"+uuid).click(function(){
+				$("#std_resource_"+uuid).click(function(){
 					messageHTML(UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid));
 				});
 			}

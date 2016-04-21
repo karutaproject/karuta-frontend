@@ -138,9 +138,9 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	if (type=='default') {
 		html +="<div uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
-			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+//			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
 			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
-			html += "</a>";
+//			html += "</a>";
 		}
 		else
 			html += "<img src='../img/image-icon.png' height='25px'>"+karutaStr[LANG]['no-image'];
