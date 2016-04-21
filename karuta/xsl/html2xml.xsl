@@ -27,6 +27,27 @@
 
 	</xsl:template>
 	
+	<xsl:template match="asmResource[@xsi_type='Comments']/text">
+		<xsl:variable name="text1">
+			<xsl:call-template name="string-replace-all">
+				<xsl:with-param name="text" select="." />
+				<xsl:with-param name="replace" select="'&lt;br&gt;'" />
+				<xsl:with-param name="by" select="'&lt;br&gt;&lt;/br&gt;'" />
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="text">
+			&lt;text lang='<xsl:value-of select="@lang"/>'&gt;
+			<xsl:call-template name="string-replace-all">
+				<xsl:with-param name="text" select="$text1" />
+				<xsl:with-param name="replace" select="'&amp;nbsp;'" />
+				<xsl:with-param name="by" select="' '" />
+			</xsl:call-template>
+			&lt;/text&gt;
+		</xsl:variable>
+		<xsl:value-of disable-output-escaping="yes" select="$text" />
+
+	</xsl:template>
+	
 	<xsl:template match="@*|node()">
 		<xsl:copy>
 			<xsl:apply-templates select="@*|node()" />

@@ -12,8 +12,8 @@
 <xsl:param name="publish">0</xsl:param>
 <xsl:param name="url"/>
 <xsl:param name="ppath"/>
+<xsl:param name="url-appli"/>
 
-<xsl:include href="commonFunctions.xsl"/>
 <xsl:include href="xmlportfolio2fo_base.xsl"/>
 
   <xsl:template match="/">
