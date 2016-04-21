@@ -19,8 +19,13 @@
 	color:@portfolio-buttons-color;
 }
 
+
+.button:hover {
+	box-shadow: 0px 0px 1px @portfolio-buttons-color inset;
+}
+
 .asmnode .dropdown-button, .submit-button, .sharing-button {
-	border:1px solid @portfolio-buttons-color;
+/* 	border:1px solid @portfolio-buttons-color;*/
 	}
 
 .list-page{
@@ -213,6 +218,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #projects .row,
 #portfolios .row,
 #bin .row,
+#selectform-projects .row,
 #main-user  {
 	margin-top:2px;
 	color:@list-button-color;
@@ -380,11 +386,22 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	border-top:1px solid @list-background-color;
 }
 
+.dropdown-menu {
+  	z-index: 10000;	
+}
+
 #main-portfoliosgroup .dropdown-menu,
 #main-usersgroup .dropdown-menu,
+#list .dropdown-menu,
 .project-menu .dropdown-menu {
 	min-width:250px;
 	margin-right:-10px;
+}
+
+#list .dropdown-menu,
+#navigation-bar .dropdown-menu,
+.project-menu .dropdown-menu {
+	min-width:200px;
 }
 
 .project-menu .glyphicon-menu-hamburger {
@@ -719,6 +736,8 @@ hr {
 	margin-top: 5px;
 }
 
+
+
 /* ====================== */
 /*     SECTION TITLES     */
 /* ====================== */
@@ -881,8 +900,7 @@ hr {
 
 .button{
 	font-size: 12px;
-//	line-height: 1.5;
-	padding: 1px 5px;
+	padding: 5px;
 	cursor:pointer;
 	display: inline-block;
 	white-space:nowrap;
@@ -1315,24 +1333,8 @@ a.active:over{
 	margin-top:5px;
 }
 
-/* ====================
-	Share button
-   ====================*/
-   
-.sharing-button{
-	border-radius:3px;
-	height:20px;
-	margin-left:3px;
-}
-
-/* ====================
-	Submit button
-   ====================*/
-   
-.submit-button{
-	border-radius:3px;
-	height:20px;
-	margin-left:3px;
+.text-button {
+	font-weight:500;
 }
 
 /* ====================
@@ -1340,18 +1342,7 @@ a.active:over{
    ====================*/
 
 .dropdown-button{
-	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
-	border-bottom-left-radius: 3px; 
-	border-top-left-radius: 3px;
-	margin-left:2px;
 	font-size:10pt;
-	padding:1px;
-}
-
-.dropdown-button .button{
-	padding-left:1px;
-	padding-right:1px;
 }
 
 
@@ -1835,9 +1826,6 @@ table.tablesorter th.restore {
 /*	margin-top:10px; */
 }
 
-.dropdown-menu {
-  	z-index: 10000;	
-}
 /*
 #header .row {
 	height:44px;

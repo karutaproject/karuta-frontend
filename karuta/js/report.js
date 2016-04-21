@@ -21,8 +21,12 @@ var aggregates = {};
 
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
-jquerySpecificFunctions['.filemane_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"filename:not(:empty)\")";
-//.has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']").has("filename:not(:empty)")
+jquerySpecificFunctions['.filename_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"filename:not(:empty)\")";
+jquerySpecificFunctions['.url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"url:not(:empty)\")";
+jquerySpecificFunctions['.text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"text:not(:empty)\")";
+jquerySpecificFunctions['.filename_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"url:not(:empty),filename:not(:empty)\")";
+jquerySpecificFunctions['.filename_url_text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"text:not(:empty),url:not(:empty),filename:not(:empty)\")";
+
 Selector = function(jquery,type,filter1,filter2)
 {
 	this.jquery = jquery;

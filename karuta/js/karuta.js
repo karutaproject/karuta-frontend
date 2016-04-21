@@ -505,6 +505,16 @@ function confirmDelPortfolio(uuid)
 	$('#delete-window').modal('show');
 }
 
+//=======================================================================
+function confirmDelProject(uuid,projectcode) 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.delProject('"+uuid+"','"+projectcode+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
 //==================================
 function getURLParameter(sParam) {
 //==================================
@@ -521,6 +531,10 @@ function getURLParameter(sParam) {
 //==================================
 function displayPage(uuid,depth,type,langcode,edit) {
 //==================================
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
 	$(window).scrollTop(0);
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');

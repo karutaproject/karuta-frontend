@@ -32,6 +32,7 @@ karutaStr["en"]["button-restore"] = "Restore";
 karutaStr["en"]["button-submit"] = "Submit";
 karutaStr["en"]["button-unsubmit"] = "Reset";
 karutaStr["en"]["button-send"] = "Send";
+karutaStr["en"]["button-share"] = "Share";
 karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
 karutaStr["en"]["button-up"] = "Up";
@@ -261,7 +262,7 @@ karutaStr['en']['select_role']="Select a Role";
 //========== BATCH ========================
 //=========================================
 
-karutaStr['en']['batch']="Execute Batch script";
+karutaStr['en']['batch']="Execute Batch Script";
 karutaStr['en']['upload_csv']="Upload a CSV File";
 karutaStr['en']['process_csv']="Process";
 
@@ -321,13 +322,13 @@ karutaStr['en']['bubble-color']="Color";
 //========== GROUPS =======================
 //=========================================
 
-karutaStr['en']['select_usersgroups']="Select Users Groups";
-karutaStr['en']['create_usersgroup']="Create a Users Group";
+karutaStr['en']['select_usersgroups']="Select User Groups";
+karutaStr['en']['create_usersgroup']="Create a User Group";
 karutaStr['en']['list_usersgroups']="Users Groups";
 karutaStr['en']['no_group']="No Group";
-karutaStr['en']['addshare-portfoliosgroups']="Share Portfolios Groups";
+karutaStr['en']['addshare-portfoliosgroups']="Share Portfolio Groups";
 karutaStr['en']['addshare-portfolios']="Share Portfolios";
-karutaStr['en']['addshare-usersgroups']="Share with Users Groups";
+karutaStr['en']['addshare-usersgroups']="Share with User Groups";
 karutaStr['en']['addshare-users']="Share with Users";
 karutaStr['en']['confirm-remove-user-group']="Do you want to remove this user from the group? This action cannot be undone.";
 karutaStr['en']['empty-group']="Empty Group";
@@ -336,5 +337,5 @@ karutaStr['en']['confirm-remove-item-group']="Do you want to remove this element
 karutaStr['en']['add_users']="Add Users";
 karutaStr['en']['add_portfolios']="Add Portfolios";
 karutaStr['en']['select_groups']="Select Groups";
-karutaStr['en']['select_portfoliosgroups']="Select Portfolios Groups";
-karutaStr['en']['create_portfoliosgroup']="Create a Portfolios Group";
+karutaStr['en']['select_portfoliosgroups']="Select Portfolio Groups";
+karutaStr['en']['create_portfoliosgroup']="Create a Portfolio Group";

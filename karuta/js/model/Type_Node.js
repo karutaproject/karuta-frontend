@@ -533,6 +533,10 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,inline,backgroundParent)
 //==================================================
 {
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
 	var style = null;
 	var metadataepm = null;
 	var node = null;
@@ -579,7 +583,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	//---------------------------------------
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
-		html = "<a  class='glyphicon glyphicon-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-tooltip='true' data-placement='bottom'></a>";
+		html = "<a  class='glyphicon glyphicon-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-tooltip='true' data-placement='bottom'></a>";
 		$("#welcome-edit").html(html);
 	}
 	$('[data-tooltip="true"]').tooltip();
@@ -988,6 +992,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				if (depth>0 || nodetype == "asmContext") {
+					var help_text = "";
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
 					var helps = attr_help.split("/"); // lang1/lang2/...
 					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
@@ -2604,8 +2609,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	if (menu) {
 		if ((USER.admin || g_userroles[0]=='designer') && (node.asmtype != 'asmContext' && (depth>0 || node.asmtype == 'asmUnitStructure'))) {
 			html += "<span class='dropdown dropdown-button'>";
-			html += "<span class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' id='add_"+node.id+"'>";
-			html += " <span class='button'><span class='glyphicon glyphicon-menu-hamburger'></span> "+karutaStr[languages[langcode]]['Add']+"</span>";
+			html += "<span  data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' id='add_"+node.id+"'>";
+			html += " <span class='button text-button'>"+karutaStr[languages[langcode]]['Add']+"<span class='caret'></span> </span>";
 			html += "</span>";
 			html += "<ul class='dropdown-menu dropdown-menu-right' aria-labelledby='add_"+node.id+"'>";
 			if (node.asmtype == 'asmRoot' || node.asmtype == 'asmStructure') {
@@ -2614,8 +2619,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 				var param2 = "'"+g_portfolioid+"'";
 				var param3 = null;
 				var param4 = null;
-				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmStructure','asmStructure',databack,callback,param2,param3,param4);
-				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnit','asmUnit',databack,callback,param2,param3,param4);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmStructure','Section',databack,callback,param2,param3,param4);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnit','Page',databack,callback,param2,param3,param4);
 			}
 			var databack = false;
 			var callback = "UIFactory['Node'].reloadUnit";
@@ -2628,7 +2633,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			if (semantictag.indexOf("asmColumns")>-1)
 				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmColumn','asmColumn',databack,callback,param2,param3,param4,freenode);
 			else {
-				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnitStructure','asmUnitStructure',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnitStructure','SubSection',databack,callback,param2,param3,param4,freenode);
 				html += "<hr>";
 				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','TextField','TextField',databack,callback,param2,param3,param4,freenode);
 				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Field','Field',databack,callback,param2,param3,param4,freenode);
@@ -2659,9 +2664,9 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					}
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Item','Item',databack,callback,param2,param3,param4,freenode);
-					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Resource','Get_Resource',databack,callback,param2,param3,param4,freenode);
-					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Get_Resource','Get_Get_Resource',databack,callback,param2,param3,param4,freenode);
-					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Double_Resource','Get_Double_Resource',databack,callback,param2,param3,param4,freenode);
+					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Resource','GetResource',databack,callback,param2,param3,param4,freenode);
+					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Get_Resource','GetGetResource',databack,callback,param2,param3,param4,freenode);
+					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Double_Resource','GetDoubleResource',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4,freenode);
 		//			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Action','Action',databack,callback,param2,param3,param4,freenode);
 		//			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4,freenode);
@@ -2707,7 +2712,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "<span class='dropdown dropdown-menu-left dropdown-button'>";
 					//-----------------------
 					html += "<span class='dropdown-toggle'  data-toggle='dropdown' id='specific_"+node.id+"'> ";
-					html += " <span class='button'><span class='glyphicon glyphicon-menu-hamburger'></span> "+karutaStr[languages[langcode]]['menu']+"</span>";
+					html += " <span class='button text-button'>"+karutaStr[languages[langcode]]['menu']+"<span class='caret'></span> </span>";
 					html += "</span>";
 					//-----------------------
 					html += "<ul class='dropdown-menu dropdown-menu-right specific-menu' aria-labelledby='specific_"+node.id+"'>";
@@ -2745,12 +2750,12 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
 		if ( submitted!='Y' && ((submitnode && ( submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer' || submitroles.indexOf(userrole)>-1)) {
-			html += "<span id='submit-"+node.id+"' class='button submit-button ' onclick=\"javascript:submit('"+node.id+"')\" ";
+			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
 		} else {
 			if (submitted=='Y') {
 				if (USER.admin || g_userroles[0]=='administrator') {
-					html += "<span id='submit-"+node.id+"' class='button button-border' onclick=\"javascript:reset('"+node.id+"')\" ";
+					html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:reset('"+node.id+"')\" ";
 					html += " >"+karutaStr[languages[langcode]]['button-unsubmit']+"</span>";
 				}
 				html += "<div class='alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+submitteddate+"</div>";
@@ -2821,7 +2826,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 							html_toadd = " <span class='button sharing-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
 						}
 					} else {
-						html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='Partager' rel='tooltip'></span>";
+						html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
 					}
 					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))
 						html += html_toadd;

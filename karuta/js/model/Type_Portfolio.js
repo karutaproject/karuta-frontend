@@ -16,6 +16,7 @@
 var portfolios_byid = {};
 var portfolios_list = [];
 var projects_list = [];
+var bin_byid = {};
 var bin_list = [];
 var displayProject = {};
 var number_of_projects = 0;
@@ -141,9 +142,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 					html += "			<ul class='dropdown-menu  pull-right'>";
 					html += "				<li><a onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
-					html += "				<li><a onclick=\"UIFactory['Portfolio'].remove('"+portfolio.id+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
-//					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShare('"+portfolio.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare"]+"</a></li>";
-//					html += "				<li><a onclick=\"UIFactory['Portfolio'].callUnShare('"+portfolio.id+"')\" ><i class='fa fa-times'></i><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["unshare"]+"</a></li>";
+					html += "				<li><a onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
 					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolio.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
 					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolio.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 					html += "				<li><a id='export-"+portfolio.id+"' href=''><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a></li>";
@@ -209,48 +208,94 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 }
 
 //==================================
-UIFactory["Portfolio"].removeSelection = function()
+UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcode)
 //==================================
 {
-	var removes = $("input[name=delete-remove]:checked");
-	for (var i=0; i<removes.length;i++)
-		UIFactory["Portfolio"].remove($(removes[i]).val());
-};
-
-//==================================
-UIFactory["Portfolio"].deleteSelection = function()
-//==================================
-{
-	var removes = $("input[name=delete-remove]:checked");
-	for (var i=0; i<removes.length;i++)
-		UIFactory["Portfolio"].del($(removes[i]).val());
-	UIFactory["Portfolio"].displayAll('portfolios','list');
-};
-
-//==================================
-UIFactory["Portfolio"].toggleDelBin = function(destid,self)
-//==================================
-{
-	if ($(self).prop("checked"))
-		$('input:checkbox',$("#"+destid)).attr('checked',true);
-	else
-		$('input:checkbox',$("#"+destid)).attr('checked',false);
-};
-	
-//==================================
-UIFactory["Portfolio"].displayBin = function(destid,type,lang)
-//==================================
-{
-	var html = "<div id='list_bin'></div>";
-	$("#"+destid).html(html);
-	for ( var i = 0; i < bin_list.length; i++) {
-		if (bin_list[i]!=null) { // not delete
-			var itemid = destid+"_"+bin_list[i].id;
-			$("#list_bin").append($("<div class='row' id='"+itemid+"'></div>"));
-			$("#"+itemid).html(bin_list[i].getPortfolioView(destid,type,lang));
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (nb<bin_list.length) {
+		if (bin_list[nb]==null) { // has been removed
+			nb++;
+			UIFactory["Portfolio"].displayBinTree(nb,dest,type,langcode,parentcode);
+		} else {
+			var portfolio = bin_list[nb];
+			if (dest!=null) {
+				portfolio.display[dest] = langcode;
+			}
+			//---------------------
+			var html = "";
+			var portfoliocode = portfolio.code_node.text();
+			var owner = (Users_byid[portfolio.ownerid]==null) ? "??? "+portfolio.ownerid:Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
+			if (portfolio.semantictag=='karuta-project' && portfoliocode!='karuta.project'){
+				//-------------------- PROJECT ----------------------
+				displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
+				number_of_bins ++;
+				html += "<div id='project_"+portfolio.id+"' class='project'>";
+				html += "	<div class='row row-label'>";
+				if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
+					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-minus'></span></div>";
+				else
+					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-plus'></span></div>";
+				html += "		<div class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"</div>";
+				html += "		<div class='project-label col-md-2 col-sm-2 hidden-xs'>"+owner+"</div>";
+				html += "		<div id='comments_"+portfolio.id+"' class='col-md-4 col-sm3 col-xs-4 comments'></div><!-- comments -->";
+				html += "		<div class='col-md-1 col-xs-1'>";
+				//------------ buttons ---------------
+				html += "<div class='btn-group'>";
+				html += "<button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].restoreProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
+				html += "<span class='glyphicon glyphicon-arrow-up'></span>";
+				html += "</button>";
+				html += " <button class='btn btn-xs' onclick=\"confirmDelProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
+				html += "<i class='fa fa-times'></i>";
+				html += "</button>";
+				html += "</div><!-- class='btn-group' -->";
+				//---------------------------------------
+				html += "		</div><!-- class='col-md-1' -->";
+				html += "	</div>";
+				if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
+					html += "	<div class='project-content' id='content-"+portfolio.id+"' style='display:block'></div>";
+				else
+					html += "	<div class='project-content' id='content-"+portfolio.id+"' style='display:none'></div>";
+				html += "</div><!-- class='project'-->"
+				$("#bin").append($(html));
+				UIFactory["Portfolio"].displayComments('comments_'+portfolio.id,portfolio);
+				nb++;
+				UIFactory["Portfolio"].displayBinTree(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
+			} else {
+				//-------------------- PORTFOLIO ----------------------
+				var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
+				if (parentcode!= null && portfolio_parentcode==parentcode) {
+					if (projects_list[number_of_projects-1].portfolios!="")
+						projects_list[number_of_projects-1].portfolios += ","+portfolio.id;
+					else
+						projects_list[number_of_projects-1].portfolios += portfolio.id;
+					$("#"+dest).append($("<div class='row'   id='portfolio_"+portfolio.id+"'></div>"));
+				}
+				else {
+					number_of_bins++;
+					$("#bin").append($("<div class='row' id='portfolio_"+portfolio.id+"'></div>"));
+				}
+				$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type,langcode,parentcode,owner));
+				nb++;
+				if (nb<bin_list.length)
+					UIFactory["Portfolio"].displayBinTree(nb,dest,type,langcode,parentcode);
+				else {
+					if (number_of_bins==0)
+						$("#bin-label").hide();
+				}
+			}
 		}
 	}
-	if (bin_list.length==0)
+}
+	
+//==================================
+UIFactory["Portfolio"].displayBin = function(destid,type,langcode)
+//==================================
+{
+	$("#bin").html("");
+	UIFactory["Portfolio"].displayBinTree(0,null,type,langcode);
+	if (bin_list.length==0 || number_of_bins==0)
 		$("#bin-label").hide();
 	else
 		$("#bin-label").show();
@@ -352,12 +397,13 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	}
 	if (type=='bin') {
 		if (USER.admin || USER.creator){
-			html += "<div class='col-md-1 col-xs-1'></div>";
-			html += "<div class='col-md-4 col-sm-5 col-xs-7'><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
-			html += "<div class='col-md-2 hidden-sm hidden-xs '><a class='portfolio-owner' >"+owner+"</a></div>";
+			html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
+			html += "<div class='col-md-3 col-sm-3 col-xs-9'><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
+			html += "<div class='col-md-2 col-sm-2 hidden-xs '><a class='portfolio-owner' >"+owner+"</a></div>";
 			html += "<div class='col-md-2 col-sm-2 hidden-xs' >"+this.code_node.text()+"</a></div>";
-			html += "<div class='col-md-1 col-xs-2'>"+this.date_modified.substring(0,10)+"</div>";
-			html += "<div class='col-md-2 col-xs-2'>";
+			if (this.date_modified!=null)
+				html += "<div class='col-md-2 col-sm-2 hidden-xs'>"+this.date_modified.substring(0,10)+"</div>";
+			html += "<div class='col-md-2 col-sm-2 col-xs-3'>";
 			html += "<div class='btn-group'>";
 			html += "<button class='btn btn-xs' onclick=\"UIFactory['Portfolio'].restore('"+this.id+"')\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
 			html += "<span class='glyphicon glyphicon-arrow-up'></span>";
@@ -547,6 +593,7 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 UIFactory["Portfolio"].parse = function(data) 
 //==================================
 {
+	portfolios_list = [];
 	var tableau1 = new Array();
 	var uuid = "";
 	var items = $("portfolio",data);
@@ -570,15 +617,21 @@ UIFactory["Portfolio"].parseBin = function(data)
 //==================================
 {
 	bin_list = [];
-	var portfolioid ="";
+	var tableau1 = new Array();
+	var uuid ="";
 	var items = $("portfolio",data);
 	for ( var i = 0; i < items.length; i++) {
 		try {
-			portfolioid = $(items[i]).attr('id');
-			bin_list[i] = new UIFactory["Portfolio"](items[i]);
+			uuid = $(items[i]).attr('id');
+			bin_byid[uuid] = new UIFactory["Portfolio"](items[i]);
+			tableau1[i] = [bin_byid[uuid].code_node.text(),uuid];			
 		} catch(e) {
 			alertHTML("Error UIFactory.Portfolio.parseBin:"+portfolioid+" - "+e.message);
 		}
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
+	for (var i=0; i<newTableau1.length; i++){
+		bin_list[i] = bin_byid[newTableau1[i][1]]
 	}
 };
 
@@ -1128,13 +1181,28 @@ UIFactory["Portfolio"].restore = function(portfolioid)
 		success : function(data) {
 			for (var i=0;i<bin_list.length;i++){
 				if (bin_list[i]!=null && bin_list[i].id==portfolioid) {
-					portfolios_list[bin_list.length] = bin_list[i];
+					portfolios_list[portfolios_list.length] = bin_list[i];
 					bin_list[i] = null;
+					//---- sort portfolios_list ---
+					var tableau1 = new Array();
+					var j = 0;
+					for (var i=0; i<portfolios_list.length; i++){
+						if (portfolios_list[i]!=null){
+						tableau1[j] = [portfolios_list[i].code_node.text(),portfolios_list[i].id];
+						j++;
+						}
+					}
+					var newTableau1 = tableau1.sort(sortOn1);
+					portfolios_list = [];
+					for (var i=0; i<newTableau1.length; i++){
+						portfolios_list[i] = portfolios_byid[newTableau1[i][1]]
+					}
+					//-----------------------------
 					break;
 				}
 			}
-			UIFactory["Portfolio"].displayAll('portfolios','list');
 			UIFactory["Portfolio"].displayBin('bin','bin');
+			UIFactory["Portfolio"].displayAll('portfolios','list');
 			$('[data-toggle=tooltip]').tooltip();
 		},
 		error : function(jqxhr,textStatus) {
@@ -1142,6 +1210,187 @@ UIFactory["Portfolio"].restore = function(portfolioid)
 		}
 	});
 };
+
+//==================================
+UIFactory["Portfolio"].removeProject = function(projectid,projectcode) 
+//==================================
+{
+	//----------------
+	$.ajaxSetup({async: false});
+	for (var i=0;i<portfolios_list.length;i++){
+		var portfoliocode = portfolios_list[i].code_node.text();
+		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
+		if (projectcode==prefix || projectcode==portfoliocode) {
+			var uuid = portfolios_list[i].id;
+			var url = "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "?active=false";
+			$.ajax({
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				url : url,
+				data : "",
+				success : function(data) {
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error in restore : "+jqxhr.responseText);
+				}
+			});
+		}
+	}
+	$.ajaxSetup({async: true});
+	//----------------
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/portfolios?active=1",
+		success : function(data) {
+			var destid = $("div[id='portfolios']");
+			UIFactory["Portfolio"].parse(data);
+			UIFactory["Portfolio"].displayAll('portfolios','list');
+			if ($("#projects").html()=="") {
+				$("#projects-label").hide();
+				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
+			}
+		},		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active: "+textStatus);
+		}
+	});
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/portfolios?active=false",
+		success : function(data) {
+			var destid = $("div[id='bin']");
+			UIFactory["Portfolio"].parseBin(data);
+			UIFactory["Portfolio"].displayBin('bin','bin');
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET bin: "+textStatus);
+		}
+	});
+	//----------------
+}
+
+//==================================
+UIFactory["Portfolio"].restoreProject = function(projectid,projectcode) 
+//==================================
+{
+	//----------------
+	$.ajaxSetup({async: false});
+	for (var i=0;i<bin_list.length;i++){
+		var portfoliocode = bin_list[i].code_node.text();
+		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
+		if (projectcode==prefix || projectcode==portfoliocode) {
+			var uuid = bin_list[i].id;
+			var url = "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "?active=true";
+			$.ajax({
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				url : url,
+				data : "",
+				success : function(data) {
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error in restore : "+jqxhr.responseText);
+				}
+			});
+		}
+	}
+	$.ajaxSetup({async: true});
+	//----------------
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/portfolios?active=1",
+		success : function(data) {
+			var destid = $("div[id='portfolios']");
+			UIFactory["Portfolio"].parse(data);
+			UIFactory["Portfolio"].displayAll('portfolios','list');
+			if ($("#projects").html()=="") {
+				$("#projects-label").hide();
+				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
+			}
+		},		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active: "+textStatus);
+		}
+	});
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/portfolios?active=false",
+		success : function(data) {
+			var destid = $("div[id='bin']");
+			UIFactory["Portfolio"].parseBin(data);
+			UIFactory["Portfolio"].displayBin('bin','bin');
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET bin: "+textStatus);
+		}
+	});
+	//----------------
+}
+
+//==================================
+UIFactory["Portfolio"].delProject = function(projectid,projectcode) 
+//==================================
+{
+	//----------------
+	$.ajaxSetup({async: false});
+	for (var i=0;i<bin_list.length;i++){
+		var portfoliocode = bin_list[i].code_node.text();
+		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
+		if (projectcode==prefix || projectcode==portfoliocode) {
+			var uuid = bin_list[i].id;
+			var url = "../../../"+serverBCK+"/portfolios/portfolio/" + uuid;
+			$.ajax({
+				type : "DELETE",
+				contentType: "application/xml",
+				dataType : "xml",
+				url : url,
+				data : "",
+				success : function(data) {
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error in del : "+jqxhr.responseText);
+				}
+			});
+		}
+	}
+	$.ajaxSetup({async: true});
+	//----------------
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/portfolios?active=1",
+		success : function(data) {
+			var destid = $("div[id='portfolios']");
+			UIFactory["Portfolio"].parse(data);
+			UIFactory["Portfolio"].displayAll('portfolios','list');
+			if ($("#projects").html()=="") {
+				$("#projects-label").hide();
+				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
+			}
+		},		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active: "+textStatus);
+		}
+	});
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/portfolios?active=false",
+		success : function(data) {
+			var destid = $("div[id='bin']");
+			UIFactory["Portfolio"].parseBin(data);
+			UIFactory["Portfolio"].displayBin('bin','bin');
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET bin: "+textStatus);
+		}
+	});
+	//----------------
+}
+
 
 //==================================
 UIFactory["Portfolio"].del = function(portfolioid) 
@@ -1390,6 +1639,12 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 		$("#"+destid).append("<div id='special-roles'></div>")
 		$("#"+destid).append("<div id='other-roles' style='margin-top:5px;'></div>")
 		//--------------------------
+		var group_labels = [];
+		for (var i=0; i<groups.length; i++) {
+			group_labels[i] = [$("label",groups[i]).text(),$(groups[i]).attr('id')];
+		}
+		var sorted_groups = group_labels.sort(sortOn1);
+		//--------------------------
 		var js = "javascript:";
 		if (callFunction!=null) {
 			js += callFunction+";";
@@ -1397,9 +1652,9 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 		js += "$('input:checkbox').removeAttr('checked')";
 		var first = true;
 		var dest = "";
-		for (var i=0; i<groups.length; i++) {
-			var groupid = $(groups[i]).attr('id');
-			var label = $("label",groups[i]).text();
+		for (var i=0; i<sorted_groups.length; i++) {
+			var label = sorted_groups[i][0];
+			var groupid = sorted_groups[i][1];
 			if (label=='all' || label=='designer' || label=='administrator')
 				dest = "#special-roles";
 			else
@@ -1427,9 +1682,16 @@ UIFactory["Portfolio"].displayShared = function(destid,data)
 	$("#"+destid).html(html);
 	var groups = $("rrg",data);
 	if (groups.length>0) {
+		//--------------------------
+		var group_labels = [];
 		for (var i=0; i<groups.length; i++) {
-			var label = $("label",groups[i]).text();
-			var users = $("user",groups[i]);
+			group_labels[i] = [$("label",groups[i]).text(),$("user",groups[i])];
+		}
+		var sorted_groups = group_labels.sort(sortOn1);
+		//--------------------------
+		for (var i=0; i<sorted_groups.length; i++) {
+			var label = sorted_groups[i][0];
+			var users = sorted_groups[i][1];
 			if (users.length>0){
 				html += "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
@@ -1447,7 +1709,6 @@ UIFactory["Portfolio"].displayShared = function(destid,data)
 		$("#"+destid).html(karutaStr[LANG]['noshared']);
 	}
 	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');
-//	$('#edit-window-body').scrollTop(0);
 };
 
 //==================================
@@ -1646,12 +1907,26 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data)
 	$("#"+destid).html(html);
 	var groups = $("rrg",data);
 	if (groups.length>0) {
-	for (var i=0; i<groups.length; i++) {
-		var groupid = $(groups[i]).attr('id');
-		var label = $("label",groups[i]).text();
-			var users = $("user",groups[i]);
+		//--------------------------
+		$("#"+destid).append("<div id='special-roles'></div>")
+		$("#"+destid).append("<div id='other-roles' style='margin-top:5px;'></div>")
+		//--------------------------
+		var group_labels = [];
+		for (var i=0; i<groups.length; i++) {
+			group_labels[i] = [$("label",groups[i]).text(),$(groups[i]).attr('id'),$("user",groups[i])];
+		}
+		var sorted_groups = group_labels.sort(sortOn1);
+		//--------------------------
+		for (var i=0; i<sorted_groups.length; i++) {
+			var label = sorted_groups[i][0];
+			var groupid = sorted_groups[i][1];
+			var users = sorted_groups[i][2];
 			if (users.length>0){
-				html += "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
+				if (label=='all' || label=='designer' || label=='administrator')
+					dest = "#special-roles";
+				else
+					dest = "#other-roles";
+				html = "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
 					if (Users_byid[userid]==undefined)
@@ -1660,9 +1935,9 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data)
 						html += "<div>"+Users_byid[userid].getSelector('group',groupid,'select_users2unshare')+"</div>";
 				}
 				html += "</div></div>";
+				$(dest).append($(html));
 			}
 		}
-		$("#"+destid).append($(html));
 	} else {
 		$("#"+destid).append($(karutaStr[LANG]['noshared']));
 	}
@@ -1872,13 +2147,9 @@ UIFactory["Portfolio"].displayTreeSelectMultiple = function(selectedlist,nb,dest
 				html += "<div id='selectform-project_"+portfolio.id+"' class='project'>";
 				html += "	<div class='row row-label'>";
 				html += "		<div onclick=\"javascript:toggleProject2Select('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent2Select_"+portfolio.id+"' class='button glyphicon glyphicon-plus'></span></div>";
-				html += "		<div class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"</div>";
-				html += "		<div class='project-label col-md-2 col-sm-2 hidden-xs'>"+owner+"</div>";
-				html += "		<div id='selectform-comments_"+portfolio.id+"' class='col-md-4 col-sm3 col-xs-4 comments'></div><!-- comments -->";
-				html += "		<div class='col-md-1 col-xs-1'>";
-				html += "		</div><!-- class='col-md-1' -->";
-				html += "		<div class='col-md-1 col-xs-1'>";
-				html += "		</div>";
+				html += "		<div class='project-label col-md-4 col-sm-4 col-xs-3'>"+portfolio.label_node[langcode].text()+"</div>";
+				html += "		<div class='project-label col-md-3 col-sm-3 hidden-xs'>"+owner+"</div>";
+				html += "		<div id='selectform-comments_"+portfolio.id+"' class='col-md-4 col-sm4 col-xs-4 comments'></div><!-- comments -->";
 				html += "	</div>";
 				html += "	<div class='project-content' id='selectform-content-"+portfolio.id+"' style='display:none'></div>";
 				html += "</div><!-- class='project'-->"
@@ -1937,10 +2208,8 @@ UIFactory["Portfolio"].prototype.getPortfolioSelector = function(attr,value,name
 		html += "> </input>";
 	}
 	html += "</div>";
-	html += "<div class='col-md-3 col-sm-5 col-xs-7'><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
-	html += "<div class='col-md-3 hidden-sm hidden-xs '><a class='portfolio-owner' >"+owner+"</a></div>";
-	html += "<div class='col-md-3 col-sm-2 hidden-xs' >"+this.code_node.text()+"</a></div>";
-	html += "<div class='col-md-1 col-xs-2'>"+this.date_modified.substring(0,10)+"</div>";
+	html += "<div class='col-md-5 col-sm-5 col-xs-10'><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
+	html += "<div class='col-md-6 col-sm-6 hidden-xs' >"+this.code_node.text()+"</a></div>";
 	return html;
 };
 
