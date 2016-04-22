@@ -62,7 +62,7 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 		var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"');";
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";
-		html += "<div class='ImageBlock' style=\""+style+"\">";
+		html += "<div id='image_"+this.id+"' class='ImageBlock' style=\""+style+"\">";
 		if (UICom.structure["ui"][this.id].getLabel(null,'none').indexOf('ImageBlock')<0 && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
 			html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
 		html += "</div>";

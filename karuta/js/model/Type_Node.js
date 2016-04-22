@@ -972,7 +972,6 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"'>");
 				});
 			}
-
 			//--------------------collapsed------------------------------------------
 			if (collapsible=='Y') {
 				if (collapsed=='Y') {
@@ -1141,6 +1140,12 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 							$('#column_'+blockid).append($(html));
 							if (g_userroles[0]=='designer' || USER.admin) {  
 								UIFactory["Node"].displayMetainfo("metainfo_"+blockid,childnode.node);
+							}
+							//-----------------------------------------------------------------------------
+							if (childnode.structured_resource.type="ImageBlock") {
+								$("#image_"+blockid).click(function(){
+									imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' src='../../../"+serverFIL+"/resources/resource/file/"+childnode.structured_resource.image_nodeid+"?lang="+languages[langcode]+"'>");
+								});
 							}
 					} else
 							UIFactory["Node"].displayStandard(child,'column_'+blockid,depth-1,langcode,edit,inline,backgroundParent,root,menu,true);
@@ -1355,6 +1360,12 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				$("#std_resource_"+uuid).parent().append($("<div id='plus_"+uuid+"' style='text-align:right;cursor:pointer'>&nbsp;&nbsp; ... &nbsp;&nbsp;</div>"));
 				$("#std_resource_"+uuid).click(function(){
 					messageHTML(UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid));
+				});
+			}
+			//-----------------------------------------------------------------------------
+			if (nodetype == "asmContext" && node.resource.type=='Image') {
+				$("#image_"+uuid).click(function(){
+					imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"'>");
 				});
 			}
 			//---------------------------- BUTTONS AND BACKGROUND COLOR ---------------------------------------------
