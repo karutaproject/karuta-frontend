@@ -25,7 +25,7 @@
 				<lastmodified />
 				<code />
 				<label lang="fr">Nouvelle structure</label>
-				<label lang="en">New Structure</label>
+				<label lang="en">New Section</label>
 			</asmResource>
 			<asmResource xsi_type="context">
 				<text lang="fr" />
@@ -41,7 +41,7 @@
 				<lastmodified />
 				<code />
 				<label lang="fr">Nouvelle Unité</label>
-				<label lang="en">New Unit</label>
+				<label lang="en">New Page</label>
 			</asmResource>
 			<asmResource xsi_type="context">
 				<text lang="fr" />
@@ -57,7 +57,7 @@
 				<lastmodified />
 				<code />
 				<label lang="fr">Nouvelle section</label>
-				<label lang="en">New Section</label>
+				<label lang="en">New Subsection</label>
 			</asmResource>
 			<asmResource xsi_type="context">
 				<text lang="fr" />

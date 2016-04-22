@@ -1042,19 +1042,21 @@ UIFactory["Portfolio"].importFile = function(instance)
 	html +="    <li><a href='#'>&nbsp;</a></li>";
 	for (var i=0;i<projects_list.length;i++) {
 		var js = "";
-		if (instance)
-			js = "$('#fileupload').attr('data-url','"+url+"?instance=true&project="+projects_list[i].portfoliocode+"')";
+		if (instance) 
+			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','true')";
 		else
-			js = "$('#fileupload').attr('data-url','"+url+"?project="+projects_list[i].portfoliocode+"')";
+			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','false')";
 		js += ";$('#dropdownMenu1').html('"+projects_list[i].portfoliolabel+"')";
 		html += "<li><a onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a></li>";
 	}
 	html +="  </ul>";
 	html +="</div><br>";
 	//--------------------------
-	html +=" <div id='divfileupload'>";
-	html +=" <input id='fileupload' type='file' name='uploadfile' data-url='"+url+"'>";
-	html += "</div>";
+	html +=" <form id='fileupload' action='"+url+"'>";
+	html += " <input type='hidden' id='project' name='project' value=''>";
+	html += " <input type='hidden' id='project' name='instance' value='false'>";
+	html += " <input type='file' name='uploadfile'>";
+	html += "</form>";
 	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
 	$("#edit-window-body").append($(html));
 	$("#loading").hide();
