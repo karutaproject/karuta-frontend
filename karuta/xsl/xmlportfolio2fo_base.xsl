@@ -151,9 +151,39 @@
 				<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="5pt" background-color="lightgrey">
 					<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
 				</fo:block>
+				<!--
 				<xsl:apply-templates select="asmUnitStructure | asmContext">
 					<xsl:with-param name="size">12pt</xsl:with-param>
 				</xsl:apply-templates>
+				-->
+				<xsl:for-each select="asmUnit|asmUnitStructure|asmContext">
+					<xsl:choose>
+						<xsl:when test="local-name()='asmUnit'">
+							<fo:block font-size="12pt" font-style="italic" font-weight="bold" space-before="20pt" space-after="5pt" background-color="lightgrey">
+								<xsl:value-of select="./asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
+							</fo:block>
+							<fo:block space-before="0pt" space-after="15pt">
+								<xsl:apply-templates select="./*">
+									<xsl:with-param name="size">12pt</xsl:with-param>
+								</xsl:apply-templates>
+							</fo:block>
+						</xsl:when>
+						<xsl:when test="local-name()='asmUnitStructure'">
+							<fo:block>
+								<xsl:apply-templates select=".">
+									<xsl:with-param name="size">12pt</xsl:with-param>
+								</xsl:apply-templates>
+							</fo:block>
+						</xsl:when>
+						<xsl:when test="local-name()='asmContext'">
+							<xsl:apply-templates select=".">
+								<xsl:with-param name="size">12pt</xsl:with-param>
+							</xsl:apply-templates>
+						</xsl:when>
+						<xsl:otherwise>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:for-each>
 			</fo:flow>
 		</fo:page-sequence>
 </xsl:template>
@@ -175,8 +205,19 @@
 				<xsl:value-of select="$label"/>
 			</fo:block>
 		</xsl:if>
-		<xsl:for-each select="asmUnitStructure|asmContext">
+		<xsl:for-each select="asmUnit|asmUnitStructure|asmContext">
 			<xsl:choose>
+				<xsl:when test="local-name()='asmUnit'">
+					<fo:block font-size="12pt" font-style="italic" font-weight="bold" space-before="15pt" space-after="5pt" background-color="lightgrey">
+						<xsl:value-of select="./asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
+					</fo:block>
+					<fo:block space-before="0pt" space-after="15pt">
+						<xsl:apply-templates select="./*">
+							<xsl:with-param name="size">12pt</xsl:with-param>
+							<xsl:with-param name="space-before"><xsl:value-of select="$space-before"/></xsl:with-param>
+						</xsl:apply-templates>
+					</fo:block>
+				</xsl:when>
 				<xsl:when test="local-name()='asmUnitStructure'">
 					<fo:block>
 						<xsl:attribute name='margin-left'><xsl:value-of select="$margin-left"/></xsl:attribute>
@@ -217,7 +258,8 @@
 	<xsl:param name="nodeLabel"></xsl:param>
 
 	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
-			<fo:inline>PROXY</fo:inline>
+		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
+		<fo:inline padding-left="15pt">PROXY</fo:inline>
 	</fo:block>
 </xsl:template>
 
@@ -283,7 +325,8 @@
 	<xsl:param name="nodeLabel"/>
 
 	<fo:block font-size="10pt" space-before="10pt" space-after="5pt">
-		<fo:inline><xsl:value-of select="author"/></fo:inline>
+		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
+		<fo:inline padding-left="15pt"><xsl:value-of select="author"/></fo:inline>
 		<fo:inline padding-left="15pt"><xsl:value-of select="date"/></fo:inline>
 	</fo:block>
 	<fo:block margin-left="15pt">
@@ -292,7 +335,9 @@
 </xsl:template>
 
 <!-- ============= asmResource_Document ========= -->
-<xsl:template match="asmResource[@xsi_type='Document']">
+<!-- ============= asmResource_Audio ========= -->
+<!-- ============= asmResource_Video ========= -->
+<xsl:template match="asmResource[@xsi_type='Document' or @xsi_type='Audio' or @xsi_type='Video']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
