@@ -1101,8 +1101,10 @@ function getLanguage() {
 }
 
 //==================================
-function setLanguage(lang) {
+function setLanguage(lang,caller) {
 //==================================
+	if (caller==null)
+		caller="";
 	Cookies.set('karuta-language',lang,{ expires: 60 });
 	LANG = lang;
 	$("#flagimage").attr("src","../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
@@ -1110,7 +1112,7 @@ function setLanguage(lang) {
 		if (languages[i]==lang)
 			LANGCODE = i;
 	}
-	if (elgg_installed && USER!=undefined && $(USER.username_node).text()!="public") // not public Account
+	if (caller=="" &&elgg_installed && USER!=undefined && $(USER.username_node).text()!="public") // not public Account
 		moment.locale(lang);
 }
 

@@ -157,7 +157,7 @@
 						if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 							depth = 1;
 						loadLanguages(function(data) {
-							setLanguage(lang);
+							setLanguage(lang,'publichtm');
 							if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 								UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
 							UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
