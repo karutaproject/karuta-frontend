@@ -132,7 +132,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-minus'></span></div>";
 				else
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-plus'></span></div>";
-				html += "		<div class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"</div>";
+				html += "		<div id='portfoliolabel_"+portfolio.id+"' class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"</div>";
 				html += "		<div class='project-label col-md-2 col-sm-2 hidden-xs'>"+owner+"</div>";
 				html += "		<div id='comments_"+portfolio.id+"' class='col-md-4 col-sm3 col-xs-4 comments'></div><!-- comments -->";
 				html += "		<div class='col-md-1 col-xs-1'>";
@@ -141,7 +141,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				if (USER.admin || portfolio.owner=='Y') {
 					html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 					html += "			<ul class='dropdown-menu  pull-right'>";
-					html += "				<li><a onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
+					html += "				<li><a onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
 					html += "				<li><a onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
 					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolio.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
 					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolio.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
@@ -1468,12 +1468,16 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 
 
 //==================================
-UIFactory["Portfolio"].callRename = function(portfolioid,langcode)
+UIFactory["Portfolio"].callRename = function(portfolioid,langcode,project)
 //==================================
 {
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	//---------------------
+	if (project==null)
+		project = false;
+	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	var self = portfolios_byid[portfolioid];
@@ -1487,9 +1491,14 @@ UIFactory["Portfolio"].callRename = function(portfolioid,langcode)
 		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code</label>");
 		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCodeInputObj = $("<input id='code_"+portfolioid+"' type='text' class='form-control' name='input_code' value=\""+self.code_node.text()+"\">");
-		$(htmlCodeInputObj).change(function (){
-			UIFactory["Portfolio"].rename(self,langcode);
-		});
+		if (project)
+			$(htmlCodeInputObj).change(function (){
+					UIFactory["Portfolio"].renameProject(self,langcode);
+			});
+		else
+			$(htmlCodeInputObj).change(function (){
+					UIFactory["Portfolio"].rename(self,langcode);
+			});
 		$(htmlCodeDivObj).append($(htmlCodeInputObj));
 		$(htmlCodeGroupObj).append($(htmlCodeLabelObj));
 		$(htmlCodeGroupObj).append($(htmlCodeDivObj));
@@ -1500,9 +1509,14 @@ UIFactory["Portfolio"].callRename = function(portfolioid,langcode)
 		var htmlLabelLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 		var htmlLabelInputObj = $("<input id='label_"+portfolioid+"_"+langcode+"' type='text' class='form-control' value=\""+self.label_node[langcode].text()+"\">");
-		$(htmlLabelInputObj).change(function (){
-			UIFactory["Portfolio"].rename(self,langcode);
-		});
+		if (project)
+			$(htmlLabelInputObj).change(function (){
+					UIFactory["Portfolio"].renameProject(self,langcode);
+			});
+		else
+			$(htmlLabelInputObj).change(function (){
+					UIFactory["Portfolio"].rename(self,langcode);
+			});
 		$(htmlLabelDivObj).append($(htmlLabelInputObj));
 		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
 		$(htmlLabelGroupObj).append($(htmlLabelDivObj));
@@ -1542,6 +1556,59 @@ UIFactory["Portfolio"].rename = function(itself,langcode)
 	var callback = function () {$("#portfolio_"+itself.id).html($(itself.getPortfolioView('portfolio_'+itself.id,'list')));};
 	UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
 };
+
+//==================================
+UIFactory["Portfolio"].renameProject = function(itself,langcode) 
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var oldprojectcode = $(itself.code_node).text();
+	var newprojectcode = $.trim($("#code_"+itself.id).val());
+	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
+	$(itself.label_node[langcode]).text(label);
+	if (newprojectcode!=oldprojectcode) {
+		for (var i=0;i<portfolios_list.length;i++){
+			var newportfoliocode = "";
+			var portfoliocode = portfolios_list[i].code_node.text();
+			var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
+			if (oldprojectcode==prefix || oldprojectcode==portfoliocode) {
+				if (prefix=="")
+					newportfoliocode = newprojectcode;
+				else
+					newportfoliocode = newprojectcode + portfoliocode.substring(portfoliocode.indexOf('.'));
+				var xml = "";
+				xml +="		<asmResource xsi_type='nodeRes'>";
+				xml +="			<code>"+newportfoliocode+"</code>";
+				if (prefix=="")
+					for (var j=0; j<languages.length;j++){
+						xml +="			<label lang='"+languages[j]+"'>"+$(itself.label_node[j]).text()+"</label>";	
+					}
+				else // label not changed
+					for (var j=0; j<languages.length;j++){
+						xml +="			<label lang='"+languages[j]+"'>"+$(portfolios_list[i].label_node[j]).text()+"</label>";	
+					}
+				xml +="		</asmResource>";
+				strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+				var callback = function () {$("#portfolio_"+portfolios_list[i].id).html($(portfolios_list[i].getPortfolioView('portfolio_'+portfolios_list[i].id,'list')));};
+				UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+portfolios_list[i].rootid+'/noderesource',callback,"text",strippeddata);
+			}
+		}
+	} else {
+		var xml = "";
+		xml +="		<asmResource xsi_type='nodeRes'>";
+		xml +="			<code>"+oldprojectcode+"</code>";
+		for (var j=0; j<languages.length;j++){
+			xml +="			<label lang='"+languages[j]+"'>"+$(itself.label_node[j]).text()+"</label>";	
+		}
+		xml +="		</asmResource>";
+		strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+		var callback = function () {$("#portfoliolabel_"+itself.id).html($(itself.label_node[langcode]).text());};
+		UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
+	}
+}
 
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
