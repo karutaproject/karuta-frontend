@@ -26,7 +26,7 @@ var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
 var g_display_type = "standard"; // default value
-var g_edit = false;
+var g_edit = true;
 var g_visible = 'hidden';
 var g_welcome_edit = false;
 var g_welcome_add = false;  // we don't display add a welcome page
@@ -924,7 +924,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 	if (email!=null && email!='') {
 		var emails = email.split(" "); // email1 email2 ..
 		for (var i=0;i<emails.length;i++) {
-			if (emails[i].length>4)
+			if (emails[i].length>4) {
 				var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'d='+duration;
 				$.ajax({
 					type : "POST",
@@ -936,6 +936,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 						sendEmailPublicURL(data,this.email,langcode);
 					}
 				});
+			}
 		}
 	}
 	if (sharetorole!=null && sharetorole!='') {

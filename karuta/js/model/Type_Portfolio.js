@@ -1579,6 +1579,7 @@ UIFactory["Portfolio"].renameProject = function(itself,langcode)
 					newportfoliocode = newprojectcode;
 				else
 					newportfoliocode = newprojectcode + portfoliocode.substring(portfoliocode.indexOf('.'));
+				portfolios_list[i].code_node.text(newportfoliocode); // update local code
 				var xml = "";
 				xml +="		<asmResource xsi_type='nodeRes'>";
 				xml +="			<code>"+newportfoliocode+"</code>";
@@ -1592,8 +1593,8 @@ UIFactory["Portfolio"].renameProject = function(itself,langcode)
 					}
 				xml +="		</asmResource>";
 				strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-				var callback = function () {$("#portfolio_"+portfolios_list[i].id).html($(portfolios_list[i].getPortfolioView('portfolio_'+portfolios_list[i].id,'list')));};
-				UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+portfolios_list[i].rootid+'/noderesource',callback,"text",strippeddata);
+				$("#portfolio_"+portfolios_list[i].id).html($(portfolios_list[i].getPortfolioView('portfolio_'+portfolios_list[i].id,'list')));
+				UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+portfolios_list[i].rootid+'/noderesource',null,"text",strippeddata);
 			}
 		}
 	} else {
@@ -1605,8 +1606,8 @@ UIFactory["Portfolio"].renameProject = function(itself,langcode)
 		}
 		xml +="		</asmResource>";
 		strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-		var callback = function () {$("#portfoliolabel_"+itself.id).html($(itself.label_node[langcode]).text());};
-		UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
+		$("#portfoliolabel_"+itself.id).html($(itself.label_node[langcode]).text());
+		UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',null,"text",strippeddata);
 	}
 }
 
