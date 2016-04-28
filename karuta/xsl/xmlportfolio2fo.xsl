@@ -8,7 +8,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 <xsl:param name="lang">fr</xsl:param>
-<xsl:param name="tree">0</xsl:param>
+<xsl:param name="tree">1</xsl:param>
 <xsl:param name="publish">0</xsl:param>
 <xsl:param name="url"/>
 <xsl:param name="ppath"/>

@@ -13,7 +13,7 @@
 <xsl:template name="tree">
 <!-- =================================== -->
 	<fo:page-sequence master-reference="default-sequence">
-		<fo:static-content flow-name="Footer" font-size="9pt">
+		<fo:static-content flow-name="Footer" font-size="8pt">
 			<fo:block><xsl:value-of select="$portfolio_code"/></fo:block>
 			<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 		</fo:static-content>
@@ -21,7 +21,7 @@
 			<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="0pt" text-align="center">
 				<xsl:value-of select="$portfolio_code"/>
 			</fo:block>
-			<xsl:for-each select="/portfolio/asmRoot/asmStructure[not(metadata-wad/@displaytree='none')]">
+			<xsl:for-each select="//portfolio/asmRoot/asmStructure[not(metadata-wad/@displaytree='none')]">
 					<fo:block font-size="11pt" font-weight="bold" space-before="24pt" space-after="0pt">
 						<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
 					</fo:block>
@@ -47,7 +47,7 @@
 <!-- =================================== -->
 <xsl:template name="node_asmStructure">
 <!-- =================================== -->
-	<fo:block font-size="11pt" font-style="italic" space-before="5pt" space-after="5pt">
+	<fo:block font-size="10pt" font-style="italic" space-before="5pt" space-after="5pt">
 		<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
 	</fo:block>
 	<fo:block margin-left="10pt">
@@ -96,7 +96,7 @@
 		<xsl:variable name="asmNode_label"><xsl:value-of select="../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
 		<xsl:if test="asmUnitStructure | asmContext">
 			<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
-				<fo:static-content flow-name="Footer" font-size="9pt">
+				<fo:static-content flow-name="Footer" font-size="8pt">
 					<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
 					<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 				</fo:static-content>
@@ -120,7 +120,7 @@
 		<xsl:variable name="asmNode_label"><xsl:value-of select="../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
 		<xsl:if test="asmUnitStructure | asmContext">
 			<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
-				<fo:static-content flow-name="Footer" font-size="9pt">
+				<fo:static-content flow-name="Footer" font-size="8pt">
 					<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
 					<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 				</fo:static-content>
@@ -143,7 +143,7 @@
 <xsl:template match="asmUnit">
 		<xsl:variable name="asmNode_label"><xsl:value-of select="../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
 		<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
-			<fo:static-content flow-name="Footer" font-size="9pt">
+			<fo:static-content flow-name="Footer" font-size="8pt">
 				<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
 				<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 			</fo:static-content>
@@ -194,11 +194,11 @@
 <xsl:template match="asmUnitStructure">
 	<xsl:param name="size">10pt</xsl:param>
 	<xsl:param name="label_style">italic</xsl:param>
-	<xsl:param name="space-before">15pt</xsl:param>
+	<xsl:param name="space-before">20pt</xsl:param>
 	<xsl:param name="margin-left">10pt</xsl:param>
 	<xsl:variable name="label"><xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
 		<xsl:if test="$label !=''">
-			<fo:block font-weight="bold" space-after="0pt">
+			<fo:block font-weight="bold" space-after="5pt">
 				<xsl:attribute name="font-size"><xsl:value-of select="$size"/></xsl:attribute>
 				<xsl:attribute name="font-style"><xsl:value-of select="$label_style"/></xsl:attribute>
 				<xsl:attribute name="space-before"><xsl:value-of select="$space-before"/></xsl:attribute>
@@ -208,7 +208,7 @@
 		<xsl:for-each select="asmUnit|asmUnitStructure|asmContext">
 			<xsl:choose>
 				<xsl:when test="local-name()='asmUnit'">
-					<fo:block font-size="12pt" font-style="italic" font-weight="bold" space-before="15pt" space-after="5pt">
+					<fo:block font-size="12pt" font-style="italic" font-weight="bold" space-before="20pt" space-after="5pt">
 						<xsl:value-of select="./asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
 					</fo:block>
 					<fo:block space-before="0pt" space-after="15pt">
@@ -257,7 +257,7 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		<fo:inline padding-left="15pt">PROXY</fo:inline>
 	</fo:block>
@@ -268,7 +268,7 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		<fo:inline padding-left="15pt">Dashboard</fo:inline>
 	</fo:block>
@@ -279,7 +279,7 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		<fo:inline padding-left="10pt"><xsl:value-of select="firstname[@lang=$lang]"/></fo:inline>
 		<fo:inline padding-left="3pt"><xsl:value-of select="lastname[@lang=$lang]"/></fo:inline>
@@ -299,10 +299,8 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
-		<fo:inline padding-left="10pt"><xsl:value-of select="firstname[@lang=$lang]"/></fo:inline>
-		<fo:inline padding-left="3pt"><xsl:value-of select="lastname[@lang=$lang]"/></fo:inline>
 		<xsl:if test="url[@lang=$lang]!=''">
 			<fo:inline padding-left="10pt">
 		      <fo:basic-link color="blue">
@@ -319,7 +317,7 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<xsl:if test="code!='' and code !='[object HTMLCollection]'">
 			<fo:inline>
 				<xsl:value-of select="code"/>
@@ -335,62 +333,55 @@
 </xsl:template>
 
 <!-- ============= asmResource_GET_xxx ============= -->
-<xsl:template match="asmResource[@xsi_type='Get_Resource']">
+<xsl:template match="asmResource[@xsi_type='Get_Resource' or @xsi_type='Get_Get_Resource']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<xsl:if test="$nodeLabel!=''">
 			<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		</xsl:if>
-		<fo:inline>
-			<xsl:if test="code!=''">
-				<xsl:if test="contains(code,'#')">
-					<fo:inline padding-left="3pt"><xsl:value-of select="code"/></fo:inline>
-				</xsl:if>
-				<xsl:if test="value!='' and contains(code,'&amp;#38;')">
-					<fo:inline padding-left="3pt">[<xsl:value-of select="value"/>]</fo:inline>
-				</xsl:if>
-				<fo:inline padding-left="3pt">
-					<xsl:choose>
-					   <xsl:when test="label/@lang">
-								<xsl:apply-templates select="label[@lang=$lang]/node()"/>
-					   </xsl:when>
-					   <xsl:otherwise>
-								<xsl:apply-templates select="label/node()"/>
-					   </xsl:otherwise>
-					</xsl:choose>
-				</fo:inline>
-			</xsl:if>
+		<fo:inline padding-left="5pt">
+			<xsl:choose>
+			   <xsl:when test="label/@lang">
+						<xsl:apply-templates select="label[@lang=$lang]/node()"/>
+			   </xsl:when>
+			   <xsl:otherwise>
+						<xsl:apply-templates select="label/node()"/>
+			   </xsl:otherwise>
+			</xsl:choose>
 		</fo:inline>
 	</fo:block>
 </xsl:template>
 
 <!-- ============= asmResource_GET_xxx ============= -->
-<xsl:template match="asmResource[@xsi_type='Get_Get_Resource']">
+<xsl:template match="asmResource[@xsi_type='Get_Double_Resource']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<xsl:if test="$nodeLabel!=''">
 			<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		</xsl:if>
-		<fo:inline>
-			<xsl:if test="code!=''">
-				<xsl:if test="value!='' and value !='undefined' and not(contains(value,'@'))">
-					<fo:inline padding-left="3pt"><xsl:value-of select="value"/></fo:inline>
-				</xsl:if>
-				<fo:inline padding-left="3pt">
-					<xsl:choose>
-					   <xsl:when test="label/@lang">
-								<xsl:apply-templates select="label[@lang=$lang]/node()"/>
-					   </xsl:when>
-					   <xsl:otherwise>
-								<xsl:apply-templates select="label/node()"/>
-					   </xsl:otherwise>
-					</xsl:choose>
-				</fo:inline>
-			</xsl:if>
+		<fo:inline padding-left="5pt">
+			<xsl:choose>
+			   <xsl:when test="label1/@lang">
+						<xsl:apply-templates select="label1[@lang=$lang]/node()"/>
+			   </xsl:when>
+			   <xsl:otherwise>
+						<xsl:apply-templates select="label1/node()"/>
+			   </xsl:otherwise>
+			</xsl:choose>
+		</fo:inline>
+		<fo:inline padding-left="5pt">
+			<xsl:choose>
+			   <xsl:when test="label2/@lang">
+						<xsl:apply-templates select="label2[@lang=$lang]/node()"/>
+			   </xsl:when>
+			   <xsl:otherwise>
+						<xsl:apply-templates select="label2/node()"/>
+			   </xsl:otherwise>
+			</xsl:choose>
 		</fo:inline>
 	</fo:block>
 </xsl:template>
@@ -400,7 +391,7 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"/>
 
-	<fo:block font-size="10pt" space-before="10pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="10pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		<fo:inline padding-left="15pt"><xsl:value-of select="author"/></fo:inline>
 		<fo:inline padding-left="15pt"><xsl:value-of select="date"/></fo:inline>
@@ -417,9 +408,9 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
-		<fo:inline padding-left="3pt">
+		<fo:inline padding-left="5pt">
 			<xsl:call-template name="link2file">
 				<xsl:with-param name="url0"><xsl:value-of select="$url"/>/resources/resource/file</xsl:with-param>
 				<xsl:with-param name="fpath"><xsl:value-of select="./@contextid"/>?lang=<xsl:value-of select="$lang"/></xsl:with-param>
@@ -442,7 +433,7 @@
 	<xsl:variable name='width'>
 		<xsl:choose>
 			<xsl:when test="width-print!=''"><xsl:value-of select="$width-print"/></xsl:when>
-			<xsl:when test="width/text() and width!=''"><xsl:value-of select="width"/></xsl:when>
+			<xsl:when test="../metadata-epm/@width/text() and ../metadata-epm/@width!=''"><xsl:value-of select="../metadata-epm/@width"/></xsl:when>
 			<xsl:otherwise>100</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
@@ -450,7 +441,7 @@
 	<fo:external-graphic vertical-align="middle" padding-left="5pt" content-width="scale-to-fit" content-height="100%" width="100%" scaling="uniform">
 		<xsl:attribute name="src"><xsl:value-of select="$src"/></xsl:attribute>
 	</fo:external-graphic>
-	<fo:block font-size="10pt" space-before="0pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="3pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		<fo:inline padding-left="5pt"><xsl:value-of select="filename[@lang=$lang]"/></fo:inline>
 	</fo:block>
@@ -462,15 +453,15 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		<fo:inline padding-left="5pt"><xsl:value-of select="text[@lang=$lang]"/></fo:inline>
 		<fo:inline padding-left="5pt">
 			<fo:instream-foreign-object xmlns:svg="http://www.w3.org/2000/svg">
-				<svg:svg width="20" height="20">
+				<svg:svg width="15" height="15">
 				<svg:g>
 					<xsl:attribute name="style">fill:<xsl:value-of select="text[@lang=$lang]"/>; stroke:#000000</xsl:attribute>
-					<svg:rect x="0" y="5" width="15" height="15"/>
+					<svg:rect x="0" y="5" width="10" height="10"/>
 				</svg:g>
 				</svg:svg>
 			</fo:instream-foreign-object>
@@ -483,9 +474,9 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
-		<fo:inline padding-left="3pt">
+		<fo:inline padding-left="5pt">
 			<xsl:call-template name="link2file">
 				<xsl:with-param name="url0"><xsl:value-of select="$url-appli"/></xsl:with-param>
 				<xsl:with-param name="fpath">karuta/htm/page.htm?id=<xsl:value-of select="uuid"/>&amp;type=standard&amp;lang=<xsl:value-of select="$lang"/></xsl:with-param>
@@ -501,11 +492,11 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="0pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="0pt" space-after="5pt">
 		<xsl:if test="$nodeLabel!=''">
 			<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		</xsl:if>
-		<fo:inline padding-left="3pt">
+		<fo:inline padding-left="5pt">
 			<xsl:apply-templates select="text/node()"/>
 		</fo:inline>
 	</fo:block>
@@ -516,11 +507,11 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="0pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="0pt" space-after="5pt">
 		<xsl:if test="$nodeLabel!=''">
 			<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		</xsl:if>
-		<fo:inline padding-left="3pt">
+		<fo:inline padding-left="5pt">
 			<xsl:apply-templates select="text[@lang=$lang]/node()"/>
 		</fo:inline>
 	</fo:block>
@@ -531,7 +522,7 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" font-weight="bold" space-before="0pt" space-after="5pt">
+	<fo:block font-size="9pt" font-weight="bold" space-before="0pt" space-after="5pt">
 		<xsl:value-of select="$nodeLabel"/>
 	</fo:block>
 	<fo:block>
@@ -544,9 +535,9 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="10pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="10pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
-		<fo:inline padding-left="3pt">
+		<fo:inline padding-left="5pt">
 			<xsl:call-template name="linkpdf">
 				<xsl:with-param name="href"><xsl:value-of select="url[@lang=$lang]"/></xsl:with-param>
 				<xsl:with-param name="str"><xsl:value-of select="label[@lang=$lang]"/></xsl:with-param>
@@ -574,7 +565,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-	<fo:block font-size="10pt" space-before="10pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="10pt" space-after="5pt">
 		<xsl:if test="$nodeLabel!=''">
 			<fo:inline><xsl:value-of select="$nodeLabel"/> </fo:inline>
 		</xsl:if>
@@ -585,12 +576,12 @@
 <xsl:template match="asmResource[@xsi_type='FormTextarea' or @gm_type='FormTextarea']">
 	<xsl:param name="nodeLabel"></xsl:param>
 
-	<fo:block font-size="10pt" space-before="10pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="10pt" space-after="5pt">
 		<xsl:if test="$nodeLabel!=''">
 			<fo:inline><xsl:value-of select="$nodeLabel"/> </fo:inline>
 		</xsl:if>
 	</fo:block>
-	<fo:block font-size="10pt" space-before="0pt" space-after="5pt" margin-left="15pt">
+	<fo:block font-size="9pt" space-before="0pt" space-after="5pt" margin-left="15pt">
 		<xsl:apply-templates select="../instance/data/*[position()=1]/node()"/>
 	</fo:block>
 </xsl:template>
@@ -599,7 +590,7 @@
 	<xsl:param name="nodeLabel"></xsl:param>
 
 		<xsl:variable name="checkedVal"><xsl:value-of select="../instance/data/*[position()=1]"/></xsl:variable>
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="*[position()=1]/label"/> </fo:inline>
 		<xsl:for-each select=".//item">
 			<xsl:if test="contains($checkedVal, value)">
@@ -613,7 +604,7 @@
 	<xsl:param name="nodeLabel"></xsl:param>
 
 		<xsl:variable name="checkedVal"><xsl:value-of select="../instance/data/*[position()=1]"/></xsl:variable>
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="*[position()=1]/label"/> </fo:inline>
 		<xsl:for-each select=".//item[contains($checkedVal, value)]">
 			<xsl:if test="position()&gt;=2">
@@ -628,7 +619,7 @@
 	<xsl:param name="nodeLabel"></xsl:param>
 
 		<xsl:variable name="checkedVal"><xsl:value-of select="../instance/data/*[position()=1]"/></xsl:variable>
-	<fo:block font-size="10pt" space-before="5pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="*[position()=1]/label"/> </fo:inline>
 		<xsl:for-each select=".//item[contains($checkedVal, value)]">
 			<xsl:if test="position()&gt;=2">
@@ -643,7 +634,7 @@
   <xsl:template match="asmResource[@xsi_type='XForm' or @gm_type='XForm']">
 	<xsl:param name="nodeLabel"></xsl:param>
 
-		<fo:block font-size="10pt" space-before="10pt" space-after="5pt">
+		<fo:block font-size="9pt" space-before="10pt" space-after="5pt">
 	    <xsl:apply-templates select="xforms/inputs/*"/>
 		</fo:block>
 </xsl:template>
@@ -652,7 +643,7 @@
   <xsl:variable name="ref"><xsl:value-of select="@ref"/></xsl:variable>
   <xsl:variable name="value"><xsl:for-each select="../../../..//*"><xsl:if test="local-name(.)=$ref"><xsl:value-of select="."/></xsl:if></xsl:for-each></xsl:variable>
 
-	<fo:block font-size="10pt" space-before="0pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="0pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="label"/> </fo:inline>
 		<fo:inline padding-left="3pt"><xsl:value-of select="$value"/></fo:inline>
 	</fo:block>
@@ -661,10 +652,10 @@
 <xsl:template match="textarea">
   <xsl:variable name="ref"><xsl:value-of select="@ref"/></xsl:variable>
   
-	<fo:block font-size="10pt" space-before="0pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="0pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="label"/> </fo:inline>
 	</fo:block>
-	<fo:block font-size="10pt" space-before="0pt" space-after="5pt" margin-left="15pt">
+	<fo:block font-size="9pt" space-before="0pt" space-after="5pt" margin-left="15pt">
 		<xsl:for-each select="../../../..//*">
 			<xsl:if test="local-name(.)=$ref">
 				<xsl:apply-templates select="./node()"/>
@@ -685,12 +676,12 @@
 			</xsl:choose>
 	</xsl:variable>
 
-	<fo:block font-size="10pt" space-before="0pt" space-after="5pt">
+	<fo:block font-size="9pt" space-before="0pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="label"/> </fo:inline>
 	</fo:block>
 	<xsl:for-each select=".//item">
 		<xsl:variable name="val"><xsl:value-of select="value"/></xsl:variable>
-		<fo:block font-size="10pt" space-before="0pt" space-after="5pt" margin-left="15pt">
+		<fo:block font-size="9pt" space-before="0pt" space-after="5pt" margin-left="15pt">
 			<xsl:choose>
 				<xsl:when test="contains($checkedVal, $val)">
 					<fo:external-graphic content-height="8pt" vertical-align="middle" padding-left="5pt">
