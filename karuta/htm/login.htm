@@ -76,12 +76,12 @@
 				lang :lang,
 				success : function(data) {
 					if (elgg_installed!=undefined && elgg_installed)
-						if (i!=null)
+						if (i!="")
 							loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (){window.location="public.htm?i="+self.i+"&lang="+self.lang;});
 						else
 							loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (){window.location="karuta.htm";});
 					else 
-						if (i!=null)
+						if (i!="")
 							window.location="karuta.htm";
 						else
 							window.location="public.htm?i="+self.i+"&lang="+self.lang
@@ -159,6 +159,10 @@
 		//------------------------------
 		var i = getURLParameter('i');
 		var lang = getURLParameter('lang');
+		if (i==null || i==undefined)
+			i = "" ;
+		if (lang==null || i==lang)
+			lang = "" ;
 		$(window).load(function() {
 			getLanguage();
 			changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");

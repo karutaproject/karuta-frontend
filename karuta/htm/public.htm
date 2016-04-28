@@ -120,6 +120,42 @@
 					url : "../../../"+serverFIL+"/direct?i=" + iid,
 					success : function(data) {
 						g_uuid = data;
+						$.ajax({ // get group-role for the user
+							Accept: "application/xml",
+							type : "GET",
+							dataType : "xml",
+							url : "../../../"+serverBCK+"/credential/group/" + g_uuid,
+							success : function(data) {
+								var usergroups = $("group",data);
+								for (var i=0;i<usergroups.length;i++) {
+									g_userroles[i+1] = $("role",usergroups[i]).text();
+								}
+								g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
+							}
+						});
+						//----------------
+						$.ajax({
+							type : "GET",
+							dataType : "xml",
+							url : "../../../"+serverBCK+"/nodes/node/" + g_uuid,
+							success : function(data) {
+								UICom.parseStructure(data);
+								var depth = 99;
+								var rootnode = UICom.structure['ui'][g_uuid];
+								if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
+									depth = 1;
+								loadLanguages(function(data) {
+									setLanguage(lang,'publichtm');
+									if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
+										UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
+									$("#contenu").html("<div id='page' uuid='"+g_uuid+"'></div>");
+									UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
+								});
+							}
+						});
+					},
+					error : function( jqXHR, textStatus, errorThrown ) {
+						alert("Get portfolio: "+jqXHR.status + " "+errorThrown)
 					}
 				});
 				//----------------
@@ -135,39 +171,6 @@
 						if (jqXHR.status=="401") {
 							window.location = "login.htm?i="+iid+"&lang="+lang;
 						}						
-					}
-				});
-				$.ajax({ // get group-role for the user
-					Accept: "application/xml",
-					type : "GET",
-					dataType : "xml",
-					url : "../../../"+serverBCK+"/credential/group/" + g_uuid,
-					success : function(data) {
-						var usergroups = $("group",data);
-						for (var i=0;i<usergroups.length;i++) {
-							g_userroles[i+1] = $("role",usergroups[i]).text();
-						}
-						g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
-					}
-				});
-				//----------------
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : "../../../"+serverBCK+"/nodes/node/" + g_uuid,
-					success : function(data) {
-						UICom.parseStructure(data);
-						var depth = 99;
-						var rootnode = UICom.structure['ui'][g_uuid];
-						if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
-							depth = 1;
-						loadLanguages(function(data) {
-							setLanguage(lang,'publichtm');
-							if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
-								UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
-							$("#contenu").html("<div id='page' uuid='"+g_uuid+"'></div>");
-							UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
-						});
 					}
 				});
 				$(document).click(function(e) {
