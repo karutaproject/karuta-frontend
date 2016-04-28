@@ -17,7 +17,7 @@
 			<fo:block><xsl:value-of select="$portfolio_code"/></fo:block>
 			<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 		</fo:static-content>
-		<fo:flow flow-name="Content" font-size="10pt">
+		<fo:flow flow-name="Content" font-size="9pt">
 			<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="0pt" text-align="center">
 				<xsl:value-of select="$portfolio_code"/>
 			</fo:block>
@@ -100,7 +100,7 @@
 					<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
 					<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 				</fo:static-content>
-				<fo:flow flow-name="Content" font-size="10pt">
+				<fo:flow flow-name="Content" font-size="9pt">
 					<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="5pt">
 						<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
 					</fo:block>
@@ -147,7 +147,7 @@
 				<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
 				<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 			</fo:static-content>
-			<fo:flow flow-name="Content" font-size="10pt">
+			<fo:flow flow-name="Content" font-size="9pt">
 				<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="5pt">
 					<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
 				</fo:block>
@@ -192,7 +192,7 @@
 <!-- ========== asmUnitStructure ======= -->
 <!-- =================================== -->
 <xsl:template match="asmUnitStructure">
-	<xsl:param name="size">10pt</xsl:param>
+	<xsl:param name="size">9pt</xsl:param>
 	<xsl:param name="label_style">italic</xsl:param>
 	<xsl:param name="space-before">20pt</xsl:param>
 	<xsl:param name="margin-left">10pt</xsl:param>
