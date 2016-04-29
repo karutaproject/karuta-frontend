@@ -115,7 +115,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 				html += " <button class='btn btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
 				html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
 				html += "</button>";
-				if (this.username_node.text()!='root' && this.username_node.text()!='public') {
+				if (this.username_node.text()!='root' && this.username_node.text()!='public' && this.username_node.text()!='sys_public') {
 					html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 					html += "<i class='fa fa-trash-o'></i>";
 					html += "</button>";

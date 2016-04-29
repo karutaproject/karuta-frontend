@@ -143,8 +143,6 @@ function fill_list_page()
 		url : "../../../"+serverBCK+"/portfolios?active=1",
 		success : function(data) {
 			var destid = $("div[id='portfolios']");
-			portfolios_byid = {};
-			portfolios_list = [];
 			UIFactory["Portfolio"].parse(data);
 			UIFactory["Portfolio"].displayAll('portfolios','list');
 			if ($("#projects").html()=="") {

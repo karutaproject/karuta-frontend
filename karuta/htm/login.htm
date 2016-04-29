@@ -159,9 +159,9 @@
 		//------------------------------
 		var encrypt_url = getURLParameter('i');
 		var lang = getURLParameter('lang');
-		if (encrypt_url==null || encrypt_url==undefined)
+		if (encrypt_url==null)
 			encrypt_url = "" ;
-		if (lang==null || i==lang)
+		if (lang==null)
 			lang = "" ;
 		$(window).load(function() {
 			getLanguage();

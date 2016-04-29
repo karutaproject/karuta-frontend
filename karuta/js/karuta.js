@@ -925,7 +925,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 		var emails = email.split(" "); // email1 email2 ..
 		for (var i=0;i<emails.length;i++) {
 			if (emails[i].length>4) {
-				var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'d='+duration;
+				var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'&d='+duration;
 				$.ajax({
 					type : "POST",
 					email : emails[i],

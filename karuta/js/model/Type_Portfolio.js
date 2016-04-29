@@ -92,6 +92,10 @@ UIFactory["Portfolio"] = function( node )
 UIFactory["Portfolio"].displayAll = function(dest,type,langcode)
 //==================================
 {
+	projects_list = [];
+	number_of_projects = 0;
+	number_of_portfolios = 0;
+	number_of_bins = 0;
 	$("#projects").html($(""));
 	$("#portfolios").html($(""));
 	UIFactory["Portfolio"].displayTree(0,null,type,langcode);
@@ -125,6 +129,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				//-------------------- PROJECT ----------------------
 				projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio.label_node[langcode].text(),"portfolios":""};
 				displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
+				projects_list[number_of_projects].portfolios += portfolio.id;
 				number_of_projects ++;
 				html += "<div id='project_"+portfolio.id+"' class='project'>";
 				html += "	<div class='row row-label'>";
@@ -182,10 +187,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				//-------------------- PORTFOLIO ----------------------
 				var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
 				if (parentcode!= null && portfolio_parentcode==parentcode) {
-					if (projects_list[number_of_projects-1].portfolios!="")
-						projects_list[number_of_projects-1].portfolios += ","+portfolio.id;
-					else
-						projects_list[number_of_projects-1].portfolios += portfolio.id;
+					projects_list[number_of_projects-1].portfolios += ","+portfolio.id;
 					$("#"+dest).append($("<div class='row'   id='portfolio_"+portfolio.id+"'></div>"));
 				}
 				else {
@@ -593,6 +595,7 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 UIFactory["Portfolio"].parse = function(data) 
 //==================================
 {
+	portfolios_byid = {};
 	portfolios_list = [];
 	var tableau1 = new Array();
 	var uuid = "";
@@ -1054,7 +1057,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 	//--------------------------
 	html +=" <form id='fileupload' action='"+url+"'>";
 	html += " <input type='hidden' id='project' name='project' value=''>";
-	html += " <input type='hidden' id='project' name='instance' value='false'>";
+	html += " <input type='hidden' name='instance' value='false'>";
 	html += " <input type='file' name='uploadfile'>";
 	html += "</form>";
 	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
@@ -1093,8 +1096,6 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	//--------------------------
 	var url = "../../../"+serverBCK+"/portfolios/zip";
 	//--------------------------
-	var url = "../../../"+serverBCK+"/portfolios";
-	//--------------------------
 	var project = "";
 	html +="<div class='dropdown'>";
 	html +="  <button class='btn btn-default dropdown-toggle' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>";
@@ -1105,19 +1106,21 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	html +="    <li><a href='#'>&nbsp;</a></li>";
 	for (var i=0;i<projects_list.length;i++) {
 		var js = "";
-		if (instance)
-			js = "$('#fileupload').attr('data-url','"+url+"?instance=true&project="+projects_list[i].portfoliocode+"')";
+		if (instance) 
+			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','true')";
 		else
-			js = "$('#fileupload').attr('data-url','"+url+"?project="+projects_list[i].portfoliocode+"')";
+			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','false')";
 		js += ";$('#dropdownMenu1').html('"+projects_list[i].portfoliolabel+"')";
 		html += "<li><a onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a></li>";
 	}
 	html +="  </ul>";
 	html +="</div><br>";
 	//--------------------------
-	html +=" <div id='divfileupload'>";
-	html +=" <input id='fileupload' type='file' name='uploadfile' data-url='"+url+"'>";
-	html += "</div>";
+	html +=" <form id='fileupload' action='"+url+"'>";
+	html += " <input type='hidden' id='project' name='project' value=''>";
+	html += " <input type='hidden'  name='instance' value='false'>";
+	html += " <input type='file' name='uploadfile'>";
+	html += "</form>";
 	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
 	$("#edit-window-body").append($(html));
 	$("#fileupload").fileupload({
@@ -1541,20 +1544,33 @@ UIFactory["Portfolio"].rename = function(itself,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	var oldprojectcode = $(itself.code_node).text();
 	var code = $.trim($("#code_"+itself.id).val());
-	$(itself.code_node).text(code);
-	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
-	$(itself.label_node[langcode]).text(label);
-	var xml = "";
-	xml +="		<asmResource xsi_type='nodeRes'>";
-	xml +="			<code>"+code+"</code>";
-	for (var i=0; i<languages.length;i++){
-		xml +="			<label lang='"+languages[i]+"'>"+$(itself.label_node[i]).text()+"</label>";	
+	//---------- test if new code already exists
+	var exist = false;
+	for (var i=0;i<portfolios_list.length;i++) {
+		if (oldprojectcode!=code && code==portfolios_list[i].code_node.text())
+			exist = true;
 	}
-	xml +="		</asmResource>";
-	strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-	var callback = function () {$("#portfolio_"+itself.id).html($(itself.getPortfolioView('portfolio_'+itself.id,'list')));};
-	UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
+	//-----------------------
+	if (!exist) {
+		$(itself.code_node).text(code);
+		var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
+		$(itself.label_node[langcode]).text(label);
+		var xml = "";
+		xml +="		<asmResource xsi_type='nodeRes'>";
+		xml +="			<code>"+code+"</code>";
+		for (var i=0; i<languages.length;i++){
+			xml +="			<label lang='"+languages[i]+"'>"+$(itself.label_node[i]).text()+"</label>";	
+		}
+		xml +="		</asmResource>";
+		strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+		var callback = function () {$("#portfolio_"+itself.id).html($(itself.getPortfolioView('portfolio_'+itself.id,'list')));};
+		UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
+	} else {
+		alertHTML(karutaStr[LANG]['existing-code']);
+		$("#code_"+itself.id).val(oldprojectcode);
+	}
 };
 
 //==================================
@@ -1567,47 +1583,59 @@ UIFactory["Portfolio"].renameProject = function(itself,langcode)
 	//---------------------
 	var oldprojectcode = $(itself.code_node).text();
 	var newprojectcode = $.trim($("#code_"+itself.id).val());
-	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
-	$(itself.label_node[langcode]).text(label);
-	if (newprojectcode!=oldprojectcode) {
-		for (var i=0;i<portfolios_list.length;i++){
-			var newportfoliocode = "";
-			var portfoliocode = portfolios_list[i].code_node.text();
-			var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
-			if (oldprojectcode==prefix || oldprojectcode==portfoliocode) {
-				if (prefix=="")
-					newportfoliocode = newprojectcode;
-				else
-					newportfoliocode = newprojectcode + portfoliocode.substring(portfoliocode.indexOf('.'));
-				portfolios_list[i].code_node.text(newportfoliocode); // update local code
-				var xml = "";
-				xml +="		<asmResource xsi_type='nodeRes'>";
-				xml +="			<code>"+newportfoliocode+"</code>";
-				if (prefix=="")
-					for (var j=0; j<languages.length;j++){
-						xml +="			<label lang='"+languages[j]+"'>"+$(itself.label_node[j]).text()+"</label>";	
-					}
-				else // label not changed
-					for (var j=0; j<languages.length;j++){
-						xml +="			<label lang='"+languages[j]+"'>"+$(portfolios_list[i].label_node[j]).text()+"</label>";	
-					}
-				xml +="		</asmResource>";
-				strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-				$("#portfolio_"+portfolios_list[i].id).html($(portfolios_list[i].getPortfolioView('portfolio_'+portfolios_list[i].id,'list')));
-				UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+portfolios_list[i].rootid+'/noderesource',null,"text",strippeddata);
+	//---------- test if new code already exists
+	var exist = false;
+	for (var i=0;i<portfolios_list.length;i++) {
+		if (oldprojectcode!=newprojectcode && newprojectcode==portfolios_list[i].code_node.text())
+			exist = true;
+	}
+	//-----------------------
+	if (!exist) {
+		var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
+		$(itself.label_node[langcode]).text(label);
+		if (newprojectcode!=oldprojectcode) {
+			for (var i=0;i<portfolios_list.length;i++){
+				var newportfoliocode = "";
+				var portfoliocode = portfolios_list[i].code_node.text();
+				var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
+				if (oldprojectcode==prefix || oldprojectcode==portfoliocode) {
+					if (prefix=="")
+						newportfoliocode = newprojectcode;
+					else
+						newportfoliocode = newprojectcode + portfoliocode.substring(portfoliocode.indexOf('.'));
+					portfolios_list[i].code_node.text(newportfoliocode); // update local code
+					var xml = "";
+					xml +="		<asmResource xsi_type='nodeRes'>";
+					xml +="			<code>"+newportfoliocode+"</code>";
+					if (prefix=="")
+						for (var j=0; j<languages.length;j++){
+							xml +="			<label lang='"+languages[j]+"'>"+$(itself.label_node[j]).text()+"</label>";	
+						}
+					else // label not changed
+						for (var j=0; j<languages.length;j++){
+							xml +="			<label lang='"+languages[j]+"'>"+$(portfolios_list[i].label_node[j]).text()+"</label>";	
+						}
+					xml +="		</asmResource>";
+					strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+					$("#portfolio_"+portfolios_list[i].id).html($(portfolios_list[i].getPortfolioView('portfolio_'+portfolios_list[i].id,'list')));
+					UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+portfolios_list[i].rootid+'/noderesource',null,"text",strippeddata);
+				}
 			}
+		} else {
+			var xml = "";
+			xml +="		<asmResource xsi_type='nodeRes'>";
+			xml +="			<code>"+oldprojectcode+"</code>";
+			for (var j=0; j<languages.length;j++){
+				xml +="			<label lang='"+languages[j]+"'>"+$(itself.label_node[j]).text()+"</label>";	
+			}
+			xml +="		</asmResource>";
+			strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			$("#portfoliolabel_"+itself.id).html($(itself.label_node[langcode]).text());
+			UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',null,"text",strippeddata);
 		}
 	} else {
-		var xml = "";
-		xml +="		<asmResource xsi_type='nodeRes'>";
-		xml +="			<code>"+oldprojectcode+"</code>";
-		for (var j=0; j<languages.length;j++){
-			xml +="			<label lang='"+languages[j]+"'>"+$(itself.label_node[j]).text()+"</label>";	
-		}
-		xml +="		</asmResource>";
-		strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-		$("#portfoliolabel_"+itself.id).html($(itself.label_node[langcode]).text());
-		UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',null,"text",strippeddata);
+		alertHTML(karutaStr[LANG]['existing-code']);
+		$("#code_"+itself.id).val(oldprojectcode);
 	}
 }
 
@@ -1767,9 +1795,7 @@ UIFactory["Portfolio"].displayShared = function(destid,data)
 				html += "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
-					if (Users_byid[userid]==undefined)
-						alertHTML('error userid:'+userid);
-					else
+					if (Users_byid[userid]!=undefined)
 						html += "<div>"+Users_byid[userid].getView(null,"firstname-lastname-username")+"</div>";
 				}
 				html += "</div></div>";
@@ -2000,9 +2026,7 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data)
 				html = "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
-					if (Users_byid[userid]==undefined)
-						alertHTML('error userid:'+userid);
-					else
+					if (Users_byid[userid]!=undefined)
 						html += "<div>"+Users_byid[userid].getSelector('group',groupid,'select_users2unshare')+"</div>";
 				}
 				html += "</div></div>";

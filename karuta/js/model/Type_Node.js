@@ -1003,7 +1003,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					var helps = attr_help.split("/"); // lang1/lang2/...
 					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
 						for (var j=0; j<helps.length; j++){
-							if (helps[j].indexOf(languages[langcode])>-1)
+							if (helps[j].indexOf("@"+languages[langcode])>-1)
 								help_text = helps[j].substring(0,helps[j].indexOf("@"));
 						}
 					} else { // lang1/lang2/...
@@ -1418,7 +1418,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					var helps = attr_help.split("/"); // lang1/lang2/...
 					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
 						for (var j=0; j<helps.length; j++){
-							if (helps[j].indexOf(languages[langcode])>-1)
+							if (helps[j].indexOf("@"+languages[langcode])>-1)
 								help_text = helps[j].substring(0,helps[j].indexOf("@"));
 						}
 					} else { // lang1/lang2/...
@@ -1885,7 +1885,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 					var helps = attr_help.split("/"); // lang1/lang2/...
 					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
 						for (var j=0; j<helps.length; j++){
-							if (helps[j].indexOf(languages[langcode])>-1)
+							if (helps[j].indexOf("@"+languages[langcode])>-1)
 								help_text = helps[j].substring(0,helps[j].indexOf("@"));
 						}
 					} else { // lang1/lang2/...
@@ -2303,11 +2303,12 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				if (depth>0 || nodetype == "asmContext") {
+					var help_text = "";
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
 					var helps = attr_help.split("/"); // lang1/lang2/...
 					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
 						for (var j=0; j<helps.length; j++){
-							if (helps[j].indexOf(languages[langcode])>-1)
+							if (helps[j].indexOf("@"+languages[langcode])>-1)
 								help_text = helps[j].substring(0,helps[j].indexOf("@"));
 						}
 					} else { // lang1/lang2/...
@@ -2325,6 +2326,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 					});
 				}
 			}
+
 				for( var i=0; i<root.children.length; ++i ) {
 					// Recurse
 					var child = UICom.structure["tree"][root.children[i]];

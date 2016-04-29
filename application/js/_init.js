@@ -1,6 +1,6 @@
 //----------------------------------
-var application_version = "2.alpha";
-var application_date = "2015-11-12";
+var application_version = "2.0";
+var application_date = "2016-04-29";
 //----------------------------------
 var appliname = 'karuta-ux';
 var bckname = '-ux';
