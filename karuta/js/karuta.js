@@ -618,7 +618,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 		srcecode = selfcode;
 	//------------
 	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
-	if (USER.admin || g_userroles[0]=='designer') {
+	if (USER.admin || g_userroles[1]=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
