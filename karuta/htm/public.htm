@@ -137,6 +137,26 @@
 						$.ajax({
 							type : "GET",
 							dataType : "xml",
+							url : "../../../"+serverBCK+"/credential",
+							data: "",
+							success : function(data) {
+								USER = new UIFactory["User"]($("user",data));
+							},
+							error : function( jqXHR, textStatus, errorThrown ) {
+								if (jqXHR.status=="401") {
+									window.location = "login.htm?i="+iid+"&lang="+lang;
+								}						
+							}
+						});
+						$(document).click(function(e) {
+						    if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {
+						        $('.popover').hide();
+						    }
+						});
+						//----------------
+						$.ajax({
+							type : "GET",
+							dataType : "xml",
 							url : "../../../"+serverBCK+"/nodes/node/" + g_uuid,
 							success : function(data) {
 								UICom.parseStructure(data);
@@ -157,26 +177,6 @@
 					error : function( jqXHR, textStatus, errorThrown ) {
 						alert("Get portfolio: "+jqXHR.status + " "+errorThrown)
 					}
-				});
-				//----------------
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : "../../../"+serverBCK+"/credential",
-					data: "",
-					success : function(data) {
-						USER = new UIFactory["User"]($("user",data));
-					},
-					error : function( jqXHR, textStatus, errorThrown ) {
-						if (jqXHR.status=="401") {
-							window.location = "login.htm?i="+iid+"&lang="+lang;
-						}						
-					}
-				});
-				$(document).click(function(e) {
-				    if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {
-				        $('.popover').hide();
-				    }
 				});
 				$.ajaxSetup({async: true});
 			});

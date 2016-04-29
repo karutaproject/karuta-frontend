@@ -59,7 +59,7 @@
 
 	<script language='javascript'>
 		//==============================
-		function callSubmit(i,lang)
+		function callSubmit(encrypt_url,lang)
 		//==============================
 		{
 			var data = "<credential><login>"+document.getElementById("useridentifier").value+"</login><password>"+document.getElementById("password").value+"</password></credential>";
@@ -72,19 +72,19 @@
 				dataType : "text",
 				url : "../../../"+serverBCK+"/credential/login",
 				data: data,
-				i : i,
+				i : encrypt_url,
 				lang :lang,
 				success : function(data) {
 					if (elgg_installed!=undefined && elgg_installed)
-						if (i!="")
-							loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (){window.location="public.htm?i="+self.i+"&lang="+self.lang;});
+						if (self.encrypt_url!="")
+							loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (){window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang;});
 						else
 							loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (){window.location="karuta.htm";});
 					else 
-						if (i!="")
+						if (encrypt_url!="")
 							window.location="karuta.htm";
 						else
-							window.location="public.htm?i="+self.i+"&lang="+self.lang
+							window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang
 				},
 				error : function(jqxhr,textStatus) {
 					alertHTML("Identification : "+jqxhr.responseText);
@@ -117,13 +117,13 @@
 		}
 
 		//==============================
-		function getLogin(i,lang)
+		function getLogin(encrypt_url,lang)
 		//==============================
 		{
 			var html = "";
 			html += "<input id='useridentifier' class='form-control' placeholder='"+karutaStr[LANG]['username']+"' type='text'>";
 			html += "<input id='password' class='form-control' placeholder='"+karutaStr[LANG]['password']+"' type='password'>";
-			html += "<button class='button-login' onclick=\"javascript:callSubmit('"+i+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
+			html += "<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
 			return html;
 		}
 
@@ -157,10 +157,10 @@
 	<script>document.write(alertBox());</script>
 	<script language='javascript'>
 		//------------------------------
-		var i = getURLParameter('i');
+		var encrypt_url = getURLParameter('i');
 		var lang = getURLParameter('lang');
-		if (i==null || i==undefined)
-			i = "" ;
+		if (encrypt_url==null || encrypt_url==undefined)
+			encrypt_url = "" ;
 		if (lang==null || i==lang)
 			lang = "" ;
 		$(window).load(function() {
@@ -179,7 +179,7 @@
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 				}
 			});
-			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('login',null));$("#login").html(getLogin(i,lang));$("#useridentifier").focus();$("#newpassword").html(getNew());$("#newaccount").html(karutaStr[LANG]['new-account']);});
+			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('login',null));$("#login").html(getLogin(encrypt_url,lang));$("#useridentifier").focus();$("#newpassword").html(getNew());$("#newaccount").html(karutaStr[LANG]['new-account']);});
 			$.ajax({
 				type : "POST",
 				dataType : "xml",
