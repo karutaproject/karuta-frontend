@@ -24,7 +24,7 @@
 			<asmResource xsi_type="nodeRes">
 				<lastmodified />
 				<code />
-				<label lang="fr">Nouvelle structure</label>
+				<label lang="fr">Nouvelle Section</label>
 				<label lang="en">New Section</label>
 			</asmResource>
 			<asmResource xsi_type="context">
@@ -40,7 +40,7 @@
 			<asmResource xsi_type="nodeRes">
 				<lastmodified />
 				<code />
-				<label lang="fr">Nouvelle Unité</label>
+				<label lang="fr">Nouvelle Page</label>
 				<label lang="en">New Page</label>
 			</asmResource>
 			<asmResource xsi_type="context">
@@ -56,7 +56,7 @@
 			<asmResource xsi_type="nodeRes">
 				<lastmodified />
 				<code />
-				<label lang="fr">Nouvelle section</label>
+				<label lang="fr">Nouvelle Sous-section</label>
 				<label lang="en">New Subsection</label>
 			</asmResource>
 			<asmResource xsi_type="context">
