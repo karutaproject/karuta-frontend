@@ -547,7 +547,7 @@ UIFactory["User"].createTestUser = function()
 		url : url,
 		data : xml,
 		success : function(data) {
-			$("#refresh").click();
+			$("#edit-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error : "+jqxhr.responseText);

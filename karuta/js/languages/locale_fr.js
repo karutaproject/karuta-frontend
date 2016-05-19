@@ -166,7 +166,7 @@ karutaStr['fr']['notsubmitted']="Non soumis";
 karutaStr['fr']['collapsible']="Repliable";
 karutaStr['fr']['incrementroles']="Rôles - Incrémenter seulement";
 karutaStr['fr']['hide-button']="Cacher édition";
-karutaStr['fr']['show-button']="Monter édition";
+karutaStr['fr']['show-button']="Montrer édition";
 karutaStr['fr']['share']="Partage";
 karutaStr['fr']['sharetoroles']="Rôles - Partager avec";
 karutaStr['fr']['sharetoemail']="Email - Partager";
@@ -304,7 +304,7 @@ karutaStr['fr']['listening']="Écouter";
 karutaStr['fr']['reading']="Lire";
 karutaStr['fr']['speaking']="PARLER";
 karutaStr['fr']['spoken-interaction']="Prendre part à une conversation";
-karutaStr['fr']['spoken-production']="S'exprimer oralement en continu";
+karutaStr['fr']['spoken-production']="S exprimer oralement en continu";
 karutaStr['fr']['writing']="ÉCRIRE";
 
 //=========================================

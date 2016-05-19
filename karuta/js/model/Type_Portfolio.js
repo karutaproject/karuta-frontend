@@ -604,6 +604,9 @@ UIFactory["Portfolio"].parse = function(data)
 		try {
 			uuid = $(items[i]).attr('id');
 			portfolios_byid[uuid] = new UIFactory["Portfolio"](items[i]);
+			var code = portfolios_byid[uuid].code_node.text();
+			if (code.indexOf(".")<0)
+				code += ".";
 			tableau1[i] = [portfolios_byid[uuid].code_node.text(),uuid];
 		} catch(e) {
 			alertHTML("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
@@ -979,44 +982,50 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 	var url = "../../../"+serverBCK+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";
 	$.ajaxSetup({async: false});
 	$.ajax({
-			type : "POST",
-			contentType: "application/xml",
-			dataType : "text",
-			url : url,
-			data : "",
-			success : function(data) {
-				uuid = data;
-				$.ajax({
-					async:false,
-					type : "GET",
-					dataType : "xml",
-					url : "../../../"+serverBCK+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
-					success : function(data) {
-						var nodeid = $("asmRoot",data).attr('id');
-						var xml = "<asmResource xsi_type='nodeRes'>";
-						xml += "<code>"+targetcode+"</code>";
-						for (var lan=0; lan<languages.length;lan++)
-							xml += "<label lang='"+languages[lan]+"'>"+targetlabel+"</label>";
-						xml += "</asmResource>";
-						$.ajax({
-							async:false,
-							type : "PUT",
-							contentType: "application/xml",
-							dataType : "text",
-							data : xml,
-							url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
-							success : function(data) {
-								$("#wait-window").hide();
-								$('#edit-window').modal('hide');
-								fill_list_page();
-							},
-							error : function(jqxhr,textStatus) {
-								alertHTML("Error in copy_rename : "+jqxhr.responseText);
-							}
-						});
-					}
-				});
-			}
+		type : "POST",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : "",
+		success : function(data) {
+			uuid = data;
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
+				success : function(data) {
+					var nodeid = $("asmRoot",data).attr('id');
+					var xml = "<asmResource xsi_type='nodeRes'>";
+					xml += "<code>"+targetcode+"</code>";
+					for (var lan=0; lan<languages.length;lan++)
+						xml += "<label lang='"+languages[lan]+"'>"+targetlabel+"</label>";
+					xml += "</asmResource>";
+					$.ajax({
+						async:false,
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
+						success : function(data) {
+							$("#wait-window").hide();
+							$('#edit-window').modal('hide');
+							fill_list_page();
+						},
+						error : function(jqxhr,textStatus) {
+							alertHTML("Error : "+jqxhr.responseText);
+						}
+					});
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error : "+jqxhr.responseText);
+				}
+			});
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+		}
 	});
 	$.ajaxSetup({async: true});
 	return uuid;

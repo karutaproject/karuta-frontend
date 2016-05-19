@@ -229,7 +229,8 @@ UIFactory["Image"].remove = function(uuid,langcode)
 	itself.resource.filename_node[langcode].text(filename);
 	itself.resource.size_node[langcode].text(size);
 	itself.resource.type_node[langcode].text(type);
-	itself.resource.save();
+	var delfile = true;
+	itself.resource.save(null,delfile);
 };
 
 //==================================
@@ -271,10 +272,13 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 };
 
 //==================================
-UIFactory["Image"].prototype.save = function(parent)
+UIFactory["Image"].prototype.save = function(parent,delfile)
 //==================================
 {
-	UICom.UpdateResource(this.id,writeSaved);
+	if (delfile!=null && delfile)
+		UICom.UpdateResource(this.id,writeSaved,null,delfile);
+	else
+		UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
 	if (parent!=null) // --- structured resource
 		parent.refresh();

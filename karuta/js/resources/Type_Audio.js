@@ -233,7 +233,8 @@ UIFactory["Audio"].remove = function(uuid,langcode)
 	itself.resource.filename_node[langcode].text(filename);
 	itself.resource.size_node[langcode].text(size);
 	itself.resource.type_node[langcode].text(type);
-	itself.resource.save();
+	var delfile = true;
+	itself.resource.save(null,delfile);
 };
 
 //==================================
@@ -274,10 +275,13 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 };
 
 //==================================
-UIFactory["Audio"].prototype.save = function()
+UIFactory["Audio"].prototype.save = function(delfile)
 //==================================
 {
-	UICom.UpdateNode(this.id,writeSaved);
+	if (delfile!=null && delfile)
+		UICom.UpdateResource(this.id,writeSaved,null,delfile);
+	else
+		UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
 	UICom.structure["ui"][this.id].resource.setParameter();
 };

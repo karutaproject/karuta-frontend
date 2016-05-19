@@ -134,11 +134,11 @@ UIFactory["Langue"].prototype.displayView = function(destid,type,langcode,edit)
 	if (type=='detail' || type=='cv' || type=='comp') {
 		//---------------------------------------------------------
 		html +="<td class='langue' id='"+type+"_language_"+this.id+"'>"+UICom.structure["ui"][this.language_nodeid].resource.getView(type+"_language_"+this.id,"span")+"</td>";
-		html +="<td class='bordure' id='"+type+"_listening_"+this.id+"'>"+UICom.structure["ui"][this.listening_nodeid].resource.getValue(type+"_listening_"+this.id)+"</td>";
-		html +="<td class='bordure' id='"+type+"_reading_"+this.id+"'>"+UICom.structure["ui"][this.reading_nodeid].resource.getValue(type+"_reading_"+this.id)+"</td>";
-		html +="<td class='bordure' id='"+type+"_spokenInteraction_"+this.id+"'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getValue(type+"_spokenInteraction_"+this.id)+"</td>";
-		html +="<td class='bordure' id='"+type+"_spokenProduction_"+this.id+"'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getValue(type+"_spokenProduction_"+this.id)+"</td>";
-		html +="<td class='bordure' id='"+type+"_writing_"+this.id+"'>"+UICom.structure["ui"][this.writing_nodeid].resource.getValue(type+"_writing_"+this.id)+"</td>";
+		html +="<td class='bordure' id='"+type+"_listening_"+this.id+"'>"+UICom.structure["ui"][this.listening_nodeid].resource.getCode(type+"_listening_"+this.id)+"</td>";
+		html +="<td class='bordure' id='"+type+"_reading_"+this.id+"'>"+UICom.structure["ui"][this.reading_nodeid].resource.getCode(type+"_reading_"+this.id)+"</td>";
+		html +="<td class='bordure' id='"+type+"_spokenInteraction_"+this.id+"'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getCode(type+"_spokenInteraction_"+this.id)+"</td>";
+		html +="<td class='bordure' id='"+type+"_spokenProduction_"+this.id+"'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getCode(type+"_spokenProduction_"+this.id)+"</td>";
+		html +="<td class='bordure' id='"+type+"_writing_"+this.id+"'>"+UICom.structure["ui"][this.writing_nodeid].resource.getCode(type+"_writing_"+this.id)+"</td>";
 		if (edit && type=='detail') {
 			html +="<td class='buttons' style='text-align:left'>";
 			html +="	<div class='btn-group' style='margin-left:3px;'>";
@@ -160,27 +160,27 @@ UIFactory["Langue"].prototype.displayEditor = function(destid,type,lang)
 	$("#"+destid).html(html);  // on vide html
 		//---------------------------------------------------------
 		html +="<td id='language_edit_"+this.id+"' class='language_edit' width='150px'></td>";
-		html +="<td class='bordure'><span id='listening_"+this.id+"_edit'>"+UICom.structure["ui"][this.listening_nodeid].resource.getValue("listening_"+this.id+"_edit")+"</span>";
+		html +="<td class='bordure'><span id='listening_"+this.id+"_edit'>"+UICom.structure["ui"][this.listening_nodeid].resource.getCode("listening_"+this.id+"_edit")+"</span>";
 		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('listening_edit','"+this.listening_nodeid+"','"+karutaStr[LANG]['listening']+"')\" data-title='�diter' rel='tooltip'>";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
-		html +="<td class='bordure'><span id='reading_"+this.id+"_edit'>"+UICom.structure["ui"][this.reading_nodeid].resource.getValue("reading_"+this.id+"_edit")+"</span>";
+		html +="<td class='bordure'><span id='reading_"+this.id+"_edit'>"+UICom.structure["ui"][this.reading_nodeid].resource.getCode("reading_"+this.id+"_edit")+"</span>";
 		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('reading_edit','"+this.reading_nodeid+"','"+karutaStr[LANG]['reading']+"')\" data-title='�diter' rel='tooltip'>";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
-		html +="<td class='bordure'><span id='spokenInteraction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getValue("spokenInteraction_"+this.id+"_edit")+"</span>";
+		html +="<td class='bordure'><span id='spokenInteraction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getCode("spokenInteraction_"+this.id+"_edit")+"</span>";
 		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenInteraction_edit','"+this.spokenInteraction_nodeid+"','"+karutaStr[LANG]['spoken-interaction']+"')\" data-title='�diter' rel='tooltip'>";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
-		html +="<td class='bordure'><span id='spokenProduction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getValue("spokenProduction_"+this.id+"_edit")+"</span>";
+		html +="<td class='bordure'><span id='spokenProduction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getCode("spokenProduction_"+this.id+"_edit")+"</span>";
 		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenProduction_edit','"+this.spokenProduction_nodeid+"','"+karutaStr[LANG]['spoken-production']+"')\" data-title='�diter' rel='tooltip'>";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
-		html +="<td class='bordure'><span id='writing_"+this.id+"_edit'>"+UICom.structure["ui"][this.writing_nodeid].resource.getValue("writing_"+this.id+"_edit")+"</span>";
+		html +="<td class='bordure'><span id='writing_"+this.id+"_edit'>"+UICom.structure["ui"][this.writing_nodeid].resource.getCode("writing_"+this.id+"_edit")+"</span>";
 		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('writing_edit','"+this.writing_nodeid+"','"+karutaStr[LANG]['writing']+"')\" data-title='�diter' rel='tooltip'>";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";

@@ -1174,7 +1174,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			// ==============================================================================
 			//------------- javascript dashboard --------------------
-/*			if (depth>1 && $($("metadata",data)[0]).attr('semantictag')!=undefined) {
+			if (depth>1 && $($("metadata",data)[0]).attr('semantictag')!=undefined) {
 				var semtag =  $($("metadata",data)[0]).attr('semantictag');
 				if (semtag.indexOf('dashboard')>-1){
 					var dashboard_function = $($("metadata",data)[0]).attr('semantictag').substring(10)+"(UICom.root.node,'content-'+uuid)";
@@ -1184,7 +1184,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					    html : true
 					});
 				}
-			}*/
+			}
 			//-------------------------------------------------------
 //			$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
 			$('a[data-toggle=tooltip]').tooltip({html:true});

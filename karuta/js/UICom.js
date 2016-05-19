@@ -329,7 +329,7 @@ var UICom =
 	},
 	
 	//=======================================================================
-	  UpdateResource: function(uuid, cb1, cb2 )
+	  UpdateResource: function(uuid, cb1, cb2, delfile )
 	//=======================================================================
 	{
 		var treenode = UICom.structure["tree"][uuid];
@@ -341,6 +341,8 @@ var UICom =
 		$(resource).removeAttr("modified");
 		var data = xml2string(resource);
 		var urlS = "../../../"+serverBCK+'/resources/resource/'+uuid;
+		if (delfile!=null && delfile)
+			urlS += "?delfile=true";
 		$.ajax({
 			type : "PUT",
 			dataType : "text",

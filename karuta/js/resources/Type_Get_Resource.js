@@ -52,6 +52,8 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.inline = ($("metadata",node).attr('inline')=='Y') ? true : false;
 	this.display = {};
+	this.displayCode = {};
+	this.displayValue = {};
 };
 
 //==================================
@@ -85,16 +87,22 @@ UIFactory["Get_Resource"].prototype.getAttributes = function(type,langcode)
 /// Display
 
 //==================================
-UIFactory["Get_Resource"].prototype.getCode = function()
+UIFactory["Get_Resource"].prototype.getCode = function(dest)
 //==================================
 {
+	if (dest!=null) {
+		this.displayCode[dest] = true;
+	}
 	return this.code_node.text();
 };
 
 //==================================
-UIFactory["Get_Resource"].prototype.getValue = function()
+UIFactory["Get_Resource"].prototype.getValue = function(dest)
 //==================================
 {
+	if (dest!=null) {
+		this.displayValue[dest] = true;
+	}
 	return this.value_node.text();
 };
 
@@ -196,7 +204,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 };
 
 //==================================
-UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable)
+UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable,resettable)
 //==================================
 {
 	if (cachable==undefined || cachable==null)
@@ -213,7 +221,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		//------------
 		var portfoliocode = queryattr_value.substring(0,semtag_indx);
 		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-		if (portfoliocode.indexOf('.')<0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+		if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
 			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
 		if (portfoliocode=='self')
 			portfoliocode = selfcode;
@@ -229,7 +237,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				success : function(data) {
 					if (cachable)
 						g_Get_Resource_caches[queryattr_value] = data;
-					UIFactory["Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce);
+					UIFactory["Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,resettable);
 				}
 			});
 	}
@@ -237,7 +245,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 
 
 //==================================
-UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce) {
+UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,resettable) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -246,6 +254,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
+	if (resettable==null)
+		resettable = true;
 	//---------------------
 	var self_code = $(self.code_node).text();
 	if (self.encrypted)
@@ -258,14 +268,16 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 	if (type=='select') {
 		var html = "<div class='btn-group choice-group'>";		
 		html += "<button type='button' class='btn btn-default select select-label' id='button_"+self.id+"'>&nbsp;</button>";
-		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
 		var btn_group = $(html);
 		$("#"+destid).append($(btn_group));
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
-		//----------------- null value to erase
-		html = "<li></li>";
+		if (resettable) //----------------- null value to erase
+			html = "<li></li>";
+		else
+			html ="";
 		var select_item = $(html);
 		html = "<a  value='' code='' ";
 		for (var j=0; j<languages.length;j++) {
@@ -323,7 +335,14 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 						$("#button_"+self.id).html(code+" "+$(this).attr("label_"+languages[langcode]));
 					else
 						$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
-					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+$(this).attr("code"));
+					var code = $(this).attr("code");
+					if (code.indexOf("@")>-1) {
+						code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+					}
+					if (code.indexOf("#")>-1) {
+						code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+					}
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
 				$(select_item).append($(select_item_a))
@@ -344,28 +363,30 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 	//------------------------------------------------------------
 	if (type.indexOf('radio')>-1) {
 		//----------------- null value to erase
-		var radio_obj = $("<div class='get-radio'></div>");
-		var input = "";
-		input += "<input type='radio' name='radio_"+self.id+"' value='' code='' ";
-		if (disabled)
-			input +="disabled='disabled' ";
-		for (var j=0; j<languages.length;j++){
-			input += "label_"+languages[j]+"='&nbsp;'";
+		if (resettable) {
+			var radio_obj = $("<div class='get-radio "+type+"'></div>");
+			var input = "";
+			input += "<input type='radio' name='radio_"+self.id+"' value='' code='' ";
+			if (disabled)
+				input +="disabled='disabled' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"='&nbsp;'";
+			}
+			if (self_code=='')
+				input += " checked ";
+			input += ">&nbsp;&nbsp;";
+			input += "</input>";
+			var obj = $(input);
+			$(obj).click(function (){
+				UIFactory["Get_Resource"].update(this,self,langcode,type);
+			});
+			$(radio_obj).append(obj);
+			$("#"+destid).append(radio_obj);
 		}
-		if (self_code=='')
-			input += " checked ";
-		input += ">&nbsp;&nbsp;";
-		input += "</input>";
-		var obj = $(input);
-		$(obj).click(function (){
-			UIFactory["Get_Resource"].update(this,self,langcode,type);
-		});
-		$(radio_obj).append(obj);
-		$("#"+destid).append(radio_obj);
 		//-------------------
 		var nodes = $("node",data);
 		for ( var i = 0; i < $(nodes).length; i++) {
-			var radio_obj = $("<div class='get-radio'></div>");
+			var radio_obj = $("<div class='get-radio "+type+"'></div>");
 			var input = "";
 			var resource = null;
 			if ($("asmResource",nodes[i]).length==3)
@@ -406,23 +427,25 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		var inputs = "<div class='click'></div>";
 		var inputs_obj = $(inputs);
 		//----------------- null value to erase
-		var input = "";
-		input += "<div name='click_"+self.id+"' value='' code='' class='click-item";
-		if (self_code==code)
-			input += " clicked";
-		input += "' ";
-		for (var j=0; j<languages.length;j++){
-			input += "label_"+languages[j]+"='&nbsp;' ";
+		if (resettable){
+			var input = "";
+			input += "<div name='click_"+self.id+"' value='' code='' class='click-item";
+			if (self_code==code)
+				input += " clicked";
+			input += "' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"='&nbsp;' ";
+			}
+			input += "> ";
+			input +="<span  class='"+code+"'>&nbsp;</span></div>";
+			var input_obj = $(input);
+			$(input_obj).click(function (){
+				$('.clicked',inputs_obj).removeClass('clicked');
+				$(this).addClass('clicked');
+				UIFactory["Get_Resource"].update(this,self,langcode,type);
+			});
+			$(inputs_obj).append(input_obj);
 		}
-		input += "> ";
-		input +="<span  class='"+code+"'>&nbsp;</span></div>";
-		var input_obj = $(input);
-		$(input_obj).click(function (){
-			$('.clicked',inputs_obj).removeClass('clicked');
-			$(this).addClass('clicked');
-			UIFactory["Get_Resource"].update(this,self,langcode,type);
-		});
-		$(inputs_obj).append(input_obj);
 		//-----------------------
 		var nodes = $("node",data);
 		for ( var i = 0; i < $(nodes).length; ++i) {
@@ -482,5 +505,10 @@ UIFactory["Get_Resource"].prototype.refresh = function()
 	for (dest in this.display) {
 		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
-
+	for (dest in this.displayCode) {
+		$("#"+dest).html(this.getCode());
+	};
+	for (dest in this.displayValue) {
+		$("#"+dest).html(this.getValue());
+	};
 };

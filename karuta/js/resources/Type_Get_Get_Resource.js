@@ -58,6 +58,7 @@ UIFactory["Get_Get_Resource"] = function( node )
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
 	this.displayValue = {};
+	this.displayCode = {};
 };
 
 //==================================
@@ -96,9 +97,12 @@ UIFactory["Get_Get_Resource"].prototype.getType = function()
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].prototype.getCode = function()
+UIFactory["Get_Get_Resource"].prototype.getCode = function(dest)
 //==================================
 {
+	if (dest!=null) {
+		this.displayCode[dest]=true;
+	}
 	var code = $(this.code_node).text();
 	if (this.encrypted)
 		code = decrypt(code.substring(3),g_rc4key);
@@ -800,6 +804,9 @@ UIFactory["Get_Get_Resource"].prototype.refresh = function()
 	};
 	for (dest in this.displayValue) {
 		$("#"+dest).html(this.getValue());
+	};
+	for (dest in this.displayCode) {
+		$("#"+dest).html(this.getCode());
 	};
 
 };

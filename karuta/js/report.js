@@ -651,7 +651,7 @@ function xml2PDF(content)
 	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 	var data = $('#'+content).html();
 	data = data.replace('&nbsp;', ' ');
-	data = "<div>" + data + "</div>";
+	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&format=application/pdf";
 	postAndDownload(url,data);
 }

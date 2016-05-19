@@ -573,19 +573,19 @@ function displayControlGroup_getEditor(destid,label,controlsid,nodeid) {
 }
 
 //==================================
-function displayControlGroup_displayEditor(destid,label,controlsid,nodeid,type,classitem) {
+function displayControlGroup_displayEditor(destid,label,controlsid,nodeid,type,classitem,lang,resettable) {
 //==================================
 	if (classitem==null)
 		classitem="";
 	$("#"+destid).append($("<div class='control-group'><label class='control-label "+classitem+"'>"+label+"</label><div id='"+controlsid+"' class='controls'></div></div>"));
-	UICom.structure["ui"][nodeid].resource.displayEditor(controlsid,type);
+	UICom.structure["ui"][nodeid].resource.displayEditor(controlsid,type,lang,null,null,resettable);
 }
 
 //==================================
-function displayControlGroup_getView(destid,label,controlsid,nodeid) {
+function displayControlGroup_getView(destid,label,controlsid,nodeid,type,classitem,lang) {
 //==================================
-	$("#"+destid).append($("<div class='control-group'><label class='control-label'>"+label+"</label><div id='"+controlsid+"' class='controls'></div></div>"));
-	$("#"+controlsid).append(UICom.structure["ui"][nodeid].resource.getView());
+	$("#"+destid).append($("<div class='control-group'><label class='control-label "+classitem+"'>"+label+"</label><div id='"+controlsid+"' class='controls'></div></div>"));
+	$("#"+controlsid).append(UICom.structure["ui"][nodeid].resource.getView(null,type,lang));
 }
 
 //==================================
