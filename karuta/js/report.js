@@ -652,8 +652,10 @@ function xml2PDF(content)
 	var data = $('#'+content).html();
 	data = data.replace('&nbsp;', ' ');
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
-	var url =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&format=application/pdf";
-	postAndDownload(url,data);
+	var url = window.location.href;
+	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var urlS =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
+	postAndDownload(urlS,data);
 }
 
 //==================================
@@ -671,8 +673,8 @@ function xml2CSV(content)
 	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 	var data = $('#'+content).html();
 	data = data.replace('&nbsp;', ' ');
-	data = "<div>" + data + "</div>";
-	var url =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&format=application/csv";
+	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
+	var url =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
 	postAndDownload(url,data);
 }
 
