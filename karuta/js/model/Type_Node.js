@@ -548,7 +548,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	var titleid = $(titles[0]).attr("id");
 	var html = "";
 	html += "<div class='page-welcome'>";
-	html += "<div id='welcome-image' style=\"background: url('../../../"+serverFIL+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"')\">";
+	html += "<div id='welcome-image' style=\"background: url('../../../"+serverFIL+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
 	html += "<div class='welcome-box'>";
 	html += "<div class='welcome-subbox'>";
 	html += "<div class='welcome-title' id='welcome-title'>";
@@ -781,7 +781,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (edit && inline && writenode && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL'){
 					//------ edit inline ----------------
 					style = UIFactory["Node"].getContentStyle(uuid);
-					html += "<td  width='80%' class='resource";
+					html += "<td  width='80%' class='resource edit-inline";
 					html += "' ";
 					html += " style='"+style+"' ";
 					html += ">";
@@ -1199,7 +1199,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//----------------------------
 		}
 		if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
-			html = "<a  class='glyphicon glyphicon-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','0',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-tooltip='true' data-placement='bottom'></a>";
+			html = "<a  class='glyphicon glyphicon-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-tooltip='true' data-placement='bottom'></a>";
 			$("#welcome-edit").html(html);
 		}
 		$('[data-tooltip="true"]').tooltip();
@@ -1644,6 +1644,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 	var proxy_target = false;
 
 	var node = UICom.structure["ui"][uuid];
+	var nodetype = $(data).prop("nodeName"); // name of the xml tag
 	// ---- store info to redisplay after change ---
 	node.display_node[dest] = {"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"display":"free"};
 	//----------------------------------------------
@@ -2116,7 +2117,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 	var name = $(data).prop("nodeName");
 	var uuid = $(data).attr("id");
 //	var proxy_target = false;
-
+	var nodetype = $(data).prop("nodeName"); // name of the xml tag
 	var node = UICom.structure["ui"][uuid];
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');

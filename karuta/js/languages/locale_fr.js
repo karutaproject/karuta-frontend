@@ -79,6 +79,13 @@ karutaStr['fr']['menu']="Menu";
 karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - Hauteur : 220<br>&nbsp; - Largeur : 800 divisé par le nombre de colonnes<br>&nbsp;";
 
 //=========================================
+//========== ERRORS =======================
+//=========================================
+
+karutaStr['fr']['error-existing-code']="ERREUR - Le code existe déjà. Veuillez en choisir un autre.";
+karutaStr['fr']['error-existing-login']="ERREUR - Le login existe déjà ou une entrée est invalide. Veuillez choisir un autre login ou vérifiez les champs.";
+
+//=========================================
 //========== NODE =========================
 //=========================================
 

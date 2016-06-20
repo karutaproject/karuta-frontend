@@ -344,8 +344,8 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
 		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.id+"')\" onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+this.code_node.text()+"\"><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
 		if (USER.creator) {
-			html += "<div class='col-md-2 col-sm-2 hidden-xs'><a class='portfolio-owner' >"+owner+"</a></div>";
-			html += "<div class='col-md-2 col-sm-2 hidden-xs'><a class='portfolio-code' >"+this.code_node.text()+"</a></div>";
+			html += "<div class='col-md-2 col-sm-2 hidden-xs'><span class='portfolio-owner' >"+owner+"</span></div>";
+			html += "<div class='col-md-2 col-sm-2 hidden-xs'><span class='portfolio-code' >"+this.code_node.text()+"</span></div>";
 		}
 		if (this.date_modified!=null)
 			html += "<div class='col-md-2 col-sm-2 hidden-xs' onclick=\"display_main_page('"+this.id+"')\">"+this.date_modified.substring(0,10)+"</div>";
@@ -463,6 +463,9 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		html += "	</div>";
 		$("#"+destid).append($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
+		var uuid = $("#page").attr('uuid');
+		$("#sidebar_"+uuid).click();
+
 	}
 	if (type=='header'){
 		if ($("*:has(metadata[semantictag=header])",UICom.root.node).length==0)
@@ -1024,7 +1027,10 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 			});
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Error : "+jqxhr.responseText);
+			if (jqxhr.responseText.indexOf('code exist')>-1)
+				alertHTML(karutaStr[LANG]['error-existing-code']);
+			else
+				alertHTML("Error : "+jqxhr.responseText);
 		}
 	});
 	$.ajaxSetup({async: true});
@@ -1066,7 +1072,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 	//--------------------------
 	html +=" <form id='fileupload' action='"+url+"'>";
 	html += " <input type='hidden' id='project' name='project' value=''>";
-	html += " <input type='hidden' name='instance' value='false'>";
+	html += " <input type='hidden' id='instance' name='instance' value='false'>";
 	html += " <input type='file' name='uploadfile'>";
 	html += "</form>";
 	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
@@ -1127,7 +1133,7 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	//--------------------------
 	html +=" <form id='fileupload' action='"+url+"'>";
 	html += " <input type='hidden' id='project' name='project' value=''>";
-	html += " <input type='hidden'  name='instance' value='false'>";
+	html += " <input type='hidden' id='instance' name='instance' value='false'>";
 	html += " <input type='file' name='uploadfile'>";
 	html += "</form>";
 	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
@@ -1457,12 +1463,9 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
 	var html ="";
-//	html += "<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
 	html += "<li><a  onclick=\"toggleButton('hidden')\">"+karutaStr[LANG]['hide-button']+"</a></li>";
 	html += "<li><a  onclick=\"toggleButton('visible')\">"+karutaStr[LANG]['show-button']+"</a></li>";
 	if (USER.admin || portfolios_byid[portfolioid].owner=='Y') {
-//		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callShare('"+portfolioid+"')\" >"+karutaStr[LANG]['addshare']+"</a></li>";
-//		html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].callUnShare('"+portfolioid+"')\" >"+karutaStr[LANG]['unshare']+"</a></li>";
 		html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolioid+"')\" >"+karutaStr[LANG]["addshare-users"]+"</a></li>";
 		html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolioid+"')\" >"+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 	}
@@ -1556,9 +1559,15 @@ UIFactory["Portfolio"].rename = function(itself,langcode)
 	var code = $.trim($("#code_"+itself.id).val());
 	//---------- test if new code already exists
 	var exist = false;
-	for (var i=0;i<portfolios_list.length;i++) {
-		if (oldprojectcode!=code && code==portfolios_list[i].code_node.text())
-			exist = true;
+	if (oldprojectcode!=code) {
+		for (var i=0;i<portfolios_list.length;i++) {
+			if (portfolios_list[i]!=null && code==portfolios_list[i].code_node.text())
+				exist = true;
+		}
+		for (var i=0;i<bin_list.length;i++) {
+			if (bin_list[i]!=null && code==bin_list[i].code_node.text())
+				exist = true;
+		}
 	}
 	//-----------------------
 	if (!exist) {

@@ -392,7 +392,7 @@ function deleteTree(node)
 				//===========================================================
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in del : "+jqxhr.responseText);
+				alert("Error in deleTree : "+jqxhr.responseText);
 			}
 		});
 	} else {
@@ -1105,7 +1105,7 @@ function processEnd()
 function processCode()
 //=================================================
 {
-	var model_code = $("#model_code").val();
+	var model_code = $("#batch-model_code").val();
 	getModelAndProcess(model_code);
 }
 

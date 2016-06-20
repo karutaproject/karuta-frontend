@@ -99,7 +99,7 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,type,lang)
 			html += "			<ul class='dropdown-menu  pull-right'>";
 			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
 			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
-			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].callAddPortfolios('"+this.id+"')\" ><i class='fa fa-plus-square'></i> "+karutaStr[LANG]["add_portfolios"]+"</a></li>";
+			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].callAddPortfolios('"+this.id+"','"+this.label_node.text()+"')\" ><i class='fa fa-plus-square'></i> "+karutaStr[LANG]["add_portfolios"]+"</a></li>";
 			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].callShareUsers('"+this.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
 			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].callShareUsersGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 			html += "			</ul>";
@@ -463,14 +463,14 @@ UIFactory["PortfoliosGroup"].prototype.getSelectorWithFunction = function(attr,v
 };
 
 //==================================
-UIFactory["PortfoliosGroup"].callAddPortfolios = function(gid)
+UIFactory["PortfoliosGroup"].callAddPortfolios = function(gid,portfolioLabel)
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['PortfoliosGroup'].addPortfolios('"+gid+"');$('#edit-window').modal('hide')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['add_portfolios']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['list_portfolios']);
+	$("#edit-window-title").html(portfolioLabel);
 	var html = "";
 	html += "<div id='adding_portfolios' class='div_scroll'>";
 	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";

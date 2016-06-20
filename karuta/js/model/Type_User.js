@@ -550,7 +550,10 @@ UIFactory["User"].createTestUser = function()
 			$("#edit-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Error : "+jqxhr.responseText);
+			if (jqxhr.responseText.indexOf('Existing user or invalid input')>-1)
+				alertHTML(karutaStr[LANG]['error-existing-login']);
+			else
+				alertHTML("Error : "+jqxhr.responseText);
 		}
 	});
 	if (elgg_installed)
