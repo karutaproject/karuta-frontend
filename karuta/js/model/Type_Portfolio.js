@@ -2544,7 +2544,7 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 	html += "<div id='sharing' style='display:none'>";
 	html += "<hr/>";
 	html += "<div class='row'>";
-	html += "<div class='col-md-8'>";
+	html += "<div class='col-md-7'>";
 	html += "<h4>"+karutaStr[LANG]['sharing']+"</h4>";
 	html += "</div>";
 	html += "<div class='col-md-2'>";

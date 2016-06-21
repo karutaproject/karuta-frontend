@@ -218,17 +218,20 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		var srce = queryattr_value.substring(srce_indx+1);
 		var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');
 		var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
+		var target = queryattr_value.substring(srce_indx+1); // label or text
 		//------------
 		var portfoliocode = queryattr_value.substring(0,semtag_indx);
 		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 		if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
 			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
-		if (portfoliocode=='self')
+		if (portfoliocode=='self') {
 			portfoliocode = selfcode;
+			cachable = false;
+		}
 		//------------
 		var self = this;
 		if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
-			UIFactory["Get_Resource"].parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce);
+			UIFactory["Get_Resource"].parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,resettable,target);
 		else
 			$.ajax({
 				type : "GET",
@@ -237,7 +240,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				success : function(data) {
 					if (cachable)
 						g_Get_Resource_caches[queryattr_value] = data;
-					UIFactory["Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,resettable);
+					UIFactory["Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,resettable,target);
 				}
 			});
 	}
@@ -245,7 +248,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 
 
 //==================================
-UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,resettable) {
+UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,resettable,target) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -295,39 +298,35 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		$(select).append($(select_item));
 		//--------------------
 		var nodes = $("node",data);
-		for ( var i = 0; i < $(nodes).length; i++) {
-			var resource = null;
-			if ($("asmResource",nodes[i]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-			else
-				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-			var code = $('code',resource).text();
-			var display_code = true;
-			if (code.indexOf("@")>-1) {
-				display_code = false;
-				code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
-			}
-			if (code.indexOf("#")>-1) {
-				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
-			}
-			if (code.indexOf('----')>-1) {
-				html = "<li class='divider'></li><li></li>";
-			} else {
-				html = "<li></li>";
-			}
-			var select_item = $(html);
-			if (code.indexOf('----')>-1) {
-				html = "<a >" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
-				$(select_item).html(html);
-			} else {
+		//---------------------
+		if (target=='label') {
+			for ( var i = 0; i < $(nodes).length; i++) {
+				var resource = null;
+				if ($("asmResource",nodes[i]).length==3)
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+				else
+					resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+				var code = $('code',resource).text();
+				var display_code = true;
+				if (code.indexOf("@")>-1) {
+					display_code = false;
+					code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+				}
+				if (code.indexOf("#")>-1) {
+					code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+				}
+				if (code.indexOf('----')>-1) {
+					html = "<li class='divider'></li><li></li>";
+				} else {
+					html = "<li></li>";
+				}
+				var select_item = $(html);
 				html = "<a  value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
 				html += ">";
 				
-				if (display_code)
-					html += code + " ";
 				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
@@ -354,9 +353,33 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 						$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 				}
+				$(select).append($(select_item));
 			}
-			$(select).append($(select_item));
 		}
+		//---------------------
+		if (target=='text') {
+			for ( var i = 0; i < $(nodes).length; i++) {
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+				html = "<li></li>";
+				var select_item = $(html);
+				html = "<a  value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+				for (var j=0; j<languages.length;j++){
+					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+				}
+				html += ">";
+				
+				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
+				var select_item_a = $(html);
+				$(select_item_a).click(function (ev){
+					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					UIFactory["Get_Resource"].update(this,self,langcode);
+				});
+				$(select_item).append($(select_item_a))
+				$(select).append($(select_item));
+			}
+		}
+		//---------------------
 		$(btn_group).append($(select));
 		
 	}

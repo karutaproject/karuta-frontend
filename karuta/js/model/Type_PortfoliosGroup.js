@@ -633,7 +633,7 @@ UIFactory["PortfoliosGroup"].callShareUsers = function(gid)
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";
 	html += "<div class='row'>";
-	html += "<div class='col-md-8'>";
+	html += "<div class='col-md8'>";
 	html += "<h4>"+karutaStr[LANG]['sharing']+"</h4>";
 	html += "</div>";
 	html += "<div class='col-md-2'>";
