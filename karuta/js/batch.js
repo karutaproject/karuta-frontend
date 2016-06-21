@@ -54,6 +54,50 @@ var g_nb_importNode = new Array();
 //-----------------------
 
 //==================================
+function initBatchVars()
+//==================================
+{
+	g_xmlDoc = null;
+	g_json = null;
+	g_trees = {};
+	g_noline = 0;
+	//-----------------------
+	g_create_users = null;
+	g_nb_createUser = new Array();
+	//-----------------------
+	g_create_elgg_users = null;
+	g_nb_createElggUser = new Array();
+	//-----------------------
+	g_join_elgg_goups = null;
+	g_nb_joinElggGroup = new Array();
+	//-----------------------
+	g_create_elgg_groups = null;
+	g_nb_createElggGroup = new Array();
+	//-----------------------
+	g_create_trees = null;
+	g_nb_createTree = new Array();
+	//-----------------------
+	g_select_trees = null;
+	g_nb_selectTree = new Array();
+	//-----------------------
+	g_copy_trees = null;
+	g_nb_copyTree = new Array();
+	//-----------------------
+	g_update_resources = null;
+	g_nb_updateResource = new Array();
+	//-----------------------
+	g_share_trees = null;
+	g_nb_shareTree = new Array();
+	//-----------------------
+	g_delete_trees = null;
+	g_nb_deleteTree = new Array();
+	//-----------------------
+	g_import_nodes = null;
+	g_nb_importNode = new Array();
+	//-----------------------
+}
+
+//==================================
 function getTxtvals(node)
 //==================================
 {
@@ -1086,6 +1130,8 @@ function processEnd()
 	g_noline++;
 	if (g_json==null || g_noline>=g_json.lines.length) {
 		$("#batch-log").append("<br>================ END ========================================================");
+		fill_list_page();
+		fill_list_users()
 		if (demo)
 			window.location.reload();
 	}

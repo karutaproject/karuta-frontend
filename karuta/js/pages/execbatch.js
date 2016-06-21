@@ -16,6 +16,7 @@ function show_exec_batch()
 	$("#main-usersgroup").hide();
 	$("#main-exec-batch").show();
 	$("#main-exec-report").hide();
+	initBatchVars();
 }
 
 //==============================

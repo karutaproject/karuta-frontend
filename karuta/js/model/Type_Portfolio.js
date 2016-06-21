@@ -2320,7 +2320,7 @@ UIFactory["Portfolio"].prototype.getPortfolioSelector = function(attr,value,name
 		html += "> </input>";
 	}
 	html += "</div>";
-	html += "<div class='col-md-5 col-sm-5 col-xs-10'><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
+	html += "<div class='col-md-5 col-sm-5 col-xs-10'><span class='portfolio-label' >"+this.label_node[langcode].text()+"</span> "+tree_type+"</div>";
 	html += "<div class='col-md-6 col-sm-6 hidden-xs' >"+this.code_node.text()+"</a></div>";
 	return html;
 };
