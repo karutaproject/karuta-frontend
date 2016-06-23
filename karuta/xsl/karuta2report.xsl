@@ -256,10 +256,10 @@
 		<xsl:variable name="othercss">
 			<xsl:value-of select="metadata-epm/@node-othercss"/>
 		</xsl:variable>
-		<xsl:if test="not(padding-top='')">padding-top:<xsl:value-of select="$padding-top"/>;</xsl:if>
-		<xsl:if test="not(text-align='')">text-align:<xsl:value-of select="$text-align"/>;</xsl:if>
-		<xsl:if test="not(font-style='')">font-style:<xsl:value-of select="$font-style"/>;</xsl:if>
-		<xsl:if test="not(font-weight='')">font-weight:<xsl:value-of select="$font-weight"/>;</xsl:if>
+		<xsl:if test="not($padding-top='')">padding-top:<xsl:value-of select="$padding-top"/>;</xsl:if>
+		<xsl:if test="not($text-align='')">text-align:<xsl:value-of select="$text-align"/>;</xsl:if>
+		<xsl:if test="not($font-style='')">font-style:<xsl:value-of select="$font-style"/>;</xsl:if>
+		<xsl:if test="not($font-weight='')">font-weight:<xsl:value-of select="$font-weight"/>;</xsl:if>
 		<xsl:if test="not($font-size='')">font-size:<xsl:value-of select="$font-size"/>;</xsl:if>
 		<xsl:if test="not($background-color='')">background-color:<xsl:value-of select="$background-color"/>;</xsl:if>
 		<xsl:if test="not($color='')">color:<xsl:value-of select="$color"/>;</xsl:if>

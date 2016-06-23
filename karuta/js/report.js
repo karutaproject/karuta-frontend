@@ -21,6 +21,7 @@ var aggregates = {};
 
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
+jquerySpecificFunctions['.invsort()'] = ".sortElements(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
 jquerySpecificFunctions['.filename_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"filename:not(:empty)\")";
 jquerySpecificFunctions['.url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"url:not(:empty)\")";
 jquerySpecificFunctions['.text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"text:not(:empty)\")";
@@ -178,15 +179,15 @@ function processNode(no,xmlDoc,destid,data,line)
 				if (tagname=="cell")
 					processCell(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="aggregate")
-					processAggregate(children[i],destid,nodes[i],i);
+					processAggregate(children[j],destid,nodes[i],i);
 				if (tagname=="node_resource")
-					processNodeResource(children[i],destid,nodes[i],i);
+					processNodeResource(children[j],destid,nodes[i],i);
 				if (tagname=="text")
-					processText(children[i],destid,nodes[i],i);
+					processText(children[j],destid,nodes[i],i);
 				if (tagname=="url2unit")
-					processURL2Unit(children[i],destid,nodes[i],i);
+					processURL2Unit(children[j],destid,nodes[i],i);
 				if (tagname=="aggregate")
-					processAggregate(children[i],destid,nodes[i],i);
+					processAggregate(children[j],destid,nodes[i],i);
 			}
 		};
 	}
@@ -204,7 +205,8 @@ function processTable(no,xmlDoc,destid,data,line)
 			aggregates[ref_inits[k]] = new Array();
 	}
 	//---------------------------
-	var html = "<table id='table_"+no+"'></table>";
+	var style = $(xmlDoc).attr("style");
+	var html = "<table id='table_"+no+"' style='"+style+"'></table>";
 	$("#"+destid).append($(html));
 	var children = $(">*",xmlDoc);
 	for (var i=0; i<children.length;i++){
@@ -234,7 +236,8 @@ function processRow(no,xmlDoc,destid,data,line)
 			aggregates[ref_inits[k]] = new Array();
 	}
 	//---------------------------
-	var html = "<tr id='tr_"+no+"'></tr>";
+	var style = $(xmlDoc).attr("style");
+	var html = "<tr id='tr_"+no+"' style='"+style+"'></tr>";
 	$("#"+destid).append($(html));
 	var children = $(">*",xmlDoc);
 	for (var i=0; i<children.length;i++){
@@ -256,7 +259,6 @@ function processCell(no,xmlDoc,destid,data,line)
 {
 	var style = $(xmlDoc).attr("style");
 	var html = "<td id='td_"+no+"' style='"+style+"'></td>";
-	var style = $(xmlDoc).attr("style");
 	$("#"+destid).append($(html));
 	var children = $(">*",xmlDoc);
 	for (var i=0; i<children.length;i++){
@@ -650,7 +652,8 @@ function xml2PDF(content)
 {
 	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 	var data = $('#'+content).html();
-	data = data.replace('&nbsp;', ' ');
+	data = data.replace(/&nbsp;/g, ' ');
+	data = data.replace(/<br>/g, '<br/>');
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);

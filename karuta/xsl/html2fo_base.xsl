@@ -16,14 +16,17 @@
 <xsl:template match="span">
 <!-- =====================================-->
 	<xsl:variable name='style'><xsl:value-of select="@style"/></xsl:variable>
+		<xsl:variable name="font-weight">
+			<xsl:call-template name="lastIndexOfAB">
+				 <xsl:with-param name="string" select="$style" />
+				 <xsl:with-param name="a">font-weight: </xsl:with-param>
+				 <xsl:with-param name="b">;</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
 	<fo:inline>
 		<xsl:if test="contains($style, 'font-weight')">
 			<xsl:attribute name="font-weight">
-				<xsl:call-template name="lastIndexOfAB">
-					 <xsl:with-param name="string" select="$style" />
-					 <xsl:with-param name="a">font-weight: </xsl:with-param>
-					 <xsl:with-param name="b">;</xsl:with-param>
-				</xsl:call-template>
+				<xsl:value-of select="substring-after($font-weight,'font-weight:')"/>
 			</xsl:attribute>
 		</xsl:if>
 		<xsl:if test="contains($style, 'text-decoration')">
@@ -308,7 +311,45 @@
 <!-- =====================================-->
 <xsl:template match="td">
 <!-- =====================================-->
-	<fo:table-cell border="1px solid gray" padding="2px">
+	<fo:table-cell padding="2px">
+		<xsl:if test="contains(@style,'text-align:center')">
+			<xsl:attribute name="text-align">center</xsl:attribute>
+		</xsl:if>
+		<xsl:if test="contains(@style,'text-align:right')">
+			<xsl:attribute name="text-align">right</xsl:attribute>
+		</xsl:if>
+		<xsl:if test="contains(@style,'text-align:left')">
+			<xsl:attribute name="text-align">left</xsl:attribute>
+		</xsl:if>
+		<xsl:if test="contains(@style,'font-weight:bold')">
+			<xsl:attribute name="font-weight">bold</xsl:attribute>
+		</xsl:if>
+		<xsl:if test="contains(@style,'font-size:')">
+			<xsl:attribute name="font-size"><xsl:value-of select="substring-before(substring-after(@style,'font-size:'),'pt')"/>pt</xsl:attribute>
+		</xsl:if>
+		<xsl:choose>
+			<xsl:when test="contains(@style,'border:0px') or contains(@style,'border: 0px')">
+				<xsl:if test="contains(@style,'border-bottom')">
+					<xsl:attribute name="border-bottom">1px solid gray</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="contains(@style,'border-top')">
+					<xsl:attribute name="border-top">1px solid gray</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="contains(@style,'border-left')">
+					<xsl:attribute name="border-left">1px solid gray</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="contains(@style,'border-right')">
+					<xsl:attribute name="border-right">1px solid gray</xsl:attribute>
+				</xsl:if>
+			</xsl:when>
+			<xsl:when test="contains(@style,'border-bottom')">
+					<xsl:attribute name="border-bottom">1px solid gray</xsl:attribute>
+			</xsl:when>
+	         <xsl:otherwise>
+					<xsl:attribute name="border">1px solid gray</xsl:attribute>
+			</xsl:otherwise>	
+		</xsl:choose>
+
 		<fo:block>
 			<xsl:apply-templates select="*[not(contains(@style,'display:none'))]"/>
 		</fo:block>

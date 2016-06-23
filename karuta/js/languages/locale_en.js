@@ -295,8 +295,8 @@ karutaStr['en']['email-sent']="The message has been sent.";
 karutaStr['en']['alternative-label']="Alternative Label";
 karutaStr['en']['sent-by']="Sent by";
 karutaStr['en']['dashboard-code']="Dashboard Code";
-karutaStr['en']['csv']="Display CSV";
-karutaStr['en']['pdf']="Display PDF";
+karutaStr['en']['csv']="Roles - Display CSV";
+karutaStr['en']['pdf']="Roles - Display PDF";
 
 //=========================================
 //========== EUROPASS =====================

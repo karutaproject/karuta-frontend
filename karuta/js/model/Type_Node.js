@@ -1041,6 +1041,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			//------------ Dashboard -----------------
 			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
+				var spinning = true;
 				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
 				var root_node = g_portfolio_current;
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
@@ -1048,14 +1049,18 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					root_node = parent.node;
 					model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
 				}
+				if (model_code.indexOf("@nospinning")>-1){
+					spinning = false;
+					model_code = model_code.substring(0,model_code.indexOf("@nospinning"))+model_code.substring(model_code.indexOf("@nospinning")+11);
+				}
 				var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 				if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
 					model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
 				try {
 					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
-						processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0);
+						processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0,spinning);
 					else
-						report_getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models);
+						report_getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models,spinning);
 				}
 				catch(err) {
 					alertHTML("Error in Dashboard : " + err.message);
@@ -1072,7 +1077,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 					$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div>"));				
 				}
-				$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});					
+				if (spinning)
+					$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});					
 			}
 			// ================================= For each child ==========================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
@@ -1464,7 +1470,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
 				}
 				var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-				if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
+				if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // if there is no project, we add the project of the current portfolio
 					model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
 				try {
 					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
@@ -2564,7 +2570,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		langcode = LANGCODE;
 	if (menu==null)
 		menu = true;
-	var semantictag = $(node.metadata).attr('semantictag');
+	//------------------------
 	var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var submitnode = ($(node.node).attr('submit')=='Y')? true:false;
@@ -2572,6 +2578,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	if (userrole==undefined || userrole=='')
 		userrole = "norole";
 	//------------------------
+	var semantictag = $(node.metadata).attr('semantictag');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'none':$(node.metadatawad).attr('editnoderoles');
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'none':$(node.metadatawad).attr('editresroles');
 	var delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'none':$(node.metadatawad).attr('delnoderoles');
@@ -2770,7 +2777,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
-		if ( submitted!='Y' && ((submitnode && ( submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer' || submitroles.indexOf(userrole)>-1)) {
+		if ( submitted!='Y' && ((submitnode && ( submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer' || ( g_userroles[1]=='designer' && submitroles.indexOf($(g_userroles[0]).text())>-1) || submitroles.indexOf(userrole)>-1)) {
 			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:submit('"+node.id+"')\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
 		} else {
