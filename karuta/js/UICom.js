@@ -49,9 +49,12 @@ var UICom =
 	},
 
 	//=======================================================================
-	parseStructure: function( data, treeroot, parentid, treerootname )
+	parseStructure: function( data, treeroot, parentid, treerootname,report )
 	//=======================================================================
 	{
+		if (report==null) {
+			report = false;
+		}
 		if (treeroot==null || treeroot) {
 			treeroot = true;
 		}
@@ -81,7 +84,7 @@ var UICom =
 		var id = $(root).attr("id");
 		var r = new UICom.Tree(root[0]);
 		//---------------------
-		if (treeroot) {
+		if (treeroot && !report) {
 			UICom.root = r;
 			UICom.rootid = id;
 			if (treerootname!=null && treerootname!=undefined){

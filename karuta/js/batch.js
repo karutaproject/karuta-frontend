@@ -1106,15 +1106,53 @@ function processImportNodes()
 function importNode(node)
 //=================================================
 {
-	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
-	$.ajax({
-		type : "POST",
-		dataType : "text",
-		url : urlS,
-		data : "",
-		success : function(data) {
+	var select = $(node).attr("select");
+	var idx = select.indexOf(".");
+	var treeref = select.substring(0,idx);
+	var semtag = select.substring(idx+1);
+	var source = $(node).attr("source");
+	var idx_source = source.indexOf(".");
+	var srcecode = source.substring(0,idx_source);
+	var srcetag = source.substring(idx_source+1);
+	if (!trace)
+		$.ajax({
+			async:false,
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			success : function(data) {
+				var destid = $("node",data).attr('id');				
+				var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+				$.ajax({
+					type : "POST",
+					dataType : "text",
+					url : urlS,
+					data : "",
+					success : function(data) {
+						$("#batch-log").append("<br>- node added at ("+destid+") - semtag="+semtag+ " source="+source);
+						//===========================================================
+						g_nb_importNode[g_noline]++;
+						if (g_import_nodes.length<=g_nb_importNode[g_noline]) {
+							processEnd();
+						}
+						//===========================================================
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- ERROR in update resource("+nodeid+") - semtag="+semtag);
+					}
+				});
+			}
+		});
+	else {
+		$("#batch-log").append("<br>-TRACE node added - semtag="+semtag+ "source="+source);
+		//===========================================================
+		g_nb_importNode[g_noline]++;
+		if (g_import_nodes.length<=g_nb_importNode[g_noline]) {
+			processEnd();
 		}
-	});
+		//===========================================================
+	}
+	//----------------------------------------------------
 }
 
 //-----------------------------------------------------------------------

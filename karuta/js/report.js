@@ -397,7 +397,7 @@ function processPortfolios(no,xmlDoc,destid,data,line)
 				j : j,
 				url : "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 				success : function(data) {
-					UICom.parseStructure(data,true);
+					UICom.parseStructure(data,true, null, null,true);
 					var children = $(">*",xmlDoc);
 					for (var i=0; i<children.length;i++){
 						var tagname = $(children[i])[0].tagName;

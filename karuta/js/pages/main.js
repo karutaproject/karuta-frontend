@@ -14,7 +14,7 @@ function show_main_page(portfolioid,role)
 	$("#main-usersgroup").hide();
 	$("#main-exec-batch").hide();
 	$("#main-exec-report").hide();
-	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
+//	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 	$("#refresh").hide();
 }
 
