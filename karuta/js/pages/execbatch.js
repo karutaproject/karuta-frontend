@@ -23,6 +23,7 @@ function show_exec_batch()
 function fill_exec_batch()
 //==============================
 {
+	initBatchVars();
 	var html = "";
 	html += "<h2 id='batch' class='line'>KARUTA - <span id='batch-title-page'></span></h2>";
 	html += "<h4 class='line'><span class='badge'>1</span> <span id='batch-title-1'></span></h4>";

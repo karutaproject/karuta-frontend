@@ -2421,6 +2421,11 @@ UIFactory["Node"].prototype.updateComments = function(langcode)
 	var value = $.trim($("#"+this.id+"_edit_comment").val());
 	$(this.context_text_node[langcode]).text(value);
 	this.save();
+	//----------------
+	if ($("#project-comments_"+this.id)) {
+		$("#project-comments_"+this.id).html(value);
+	}
+	//----------------
 	writeSaved(this.id);
 };
 

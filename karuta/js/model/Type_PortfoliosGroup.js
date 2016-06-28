@@ -633,7 +633,7 @@ UIFactory["PortfoliosGroup"].callShareUsers = function(gid)
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";
 	html += "<div class='row'>";
-	html += "<div class='col-md8'>";
+	html += "<div class='col-md-7'>";
 	html += "<h4>"+karutaStr[LANG]['sharing']+"</h4>";
 	html += "</div>";
 	html += "<div class='col-md-2'>";
@@ -703,7 +703,7 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";
 	html += "<div class='row'>";
-	html += "<div class='col-md-8'>";
+	html += "<div class='col-md-7'>";
 	html += "<h4>"+karutaStr[LANG]['sharing']+"</h4>";
 	html += "</div>";
 	html += "<div class='col-md-2'>";
@@ -777,7 +777,42 @@ UIFactory["PortfoliosGroup"].shareGroups = function(gid,type)
 		for (var i=0; i<PortfoliosGroups_byid[gid].rrg[grouplabel].length; i++) {
 			var groupid = PortfoliosGroups_byid[gid].rrg[grouplabel][i];
 			updateRRGroup_Users(groupid,users,xml,type,'id');
-		}		
+		}
+		//-----------------------------
+		var html = "";
+		for (var i=0; i<usersgroups.length; i++){
+			var usergroupid = $(usersgroups[i]).attr('value');
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/usersgroups?group="+usergroupid,
+				data: "",
+				success : function(data) {
+					var users_ids = parseList("user",data);
+					for ( var i = 0; i < users_ids.length; i++) {
+						if (Users_byid[users_ids[i]]!=null && Users_byid[users_ids[i]]!=undefined) {
+							if (Users_byid[users_ids[i]].active_node.text()=='1') {
+								html += "<div class='item' >"+Users_byid[users_ids[i]].getView(null,"firstname-lastname-username")+"</div>";
+							} else
+								$("#"+destid).append($("<div class='item inactive'>"+Users_byid[users_ids[i]].getView(null,"firstname-lastname-username")+"</div>"));
+						}
+					}
+					if (html.length==0)
+						html += "<h5>"+karutaStr[LANG]['empty-group']+"</h5>";
+					//----------------
+					var header = "";
+					if (type=="share")
+						header = karutaStr[LANG]['shared'];
+					else
+						header = karutaStr[LANG]['unshared'];
+					alertHTML("<h5>"+karutaStr[LANG]['role']+": "+grouplabel+"</h5><h5>"+karutaStr[LANG]['users']+": </h5>"+html,header);
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error : "+jqxhr.responseText);
+				}
+			});	
+		}
+		//-----------------------------
 	}
 };
 
@@ -795,13 +830,30 @@ UIFactory["PortfoliosGroup"].shareUsers = function(gid,type)
 	if (grouplabel!=null) {
 		var xml = "<users>";
 		for (var i=0; i<users.length; i++){
-			var userid = $(users[i]).attr('value');
 			xml += "<user id='"+userid+"'/>";
 		}
 		xml += "</users>";
 		for (var i=0; i<PortfoliosGroups_byid[gid].rrg[grouplabel].length; i++) {
 			var groupid = PortfoliosGroups_byid[gid].rrg[grouplabel][i];
 			updateRRGroup_Users(groupid,users,xml,type,'value');
-		}		
+		}
+		var html = "";
+		//-----------------------------
+		for ( var i = 0; i < users.length; i++) {
+			var userid = $(users[i]).attr('value');
+			if (Users_byid[userid]!=null && Users_byid[userid]!=undefined) {
+				if (Users_byid[userid].active_node.text()=='1') {
+					html += "<div class='item' >"+Users_byid[userid].getView(null,"firstname-lastname-username")+"</div>";
+				} else
+					$("#"+destid).append($("<div class='item inactive'>"+Users_byid[userid].getView(null,"firstname-lastname-username")+"</div>"));
+			}
+		}
+		var header = "";
+		if (type=="share")
+			header = karutaStr[LANG]['shared'];
+		else
+			header = karutaStr[LANG]['unshared'];
+		alertHTML("<h5>"+karutaStr[LANG]['role']+": "+grouplabel+"</h5><h5>"+karutaStr[LANG]['users']+": </h5>"+html,header);
+		//-----------------------------
 	}
 };

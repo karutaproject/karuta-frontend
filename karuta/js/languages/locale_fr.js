@@ -209,6 +209,7 @@ karutaStr['fr']['button-instantiate']="Instancier";
 karutaStr['fr']['unshare']="Départager";
 karutaStr['fr']['addshare']="Partager";
 karutaStr['fr']['shared']="Partages";
+karutaStr['fr']['unshared']="Départages";
 karutaStr['fr']['noshared']="Aucun Partage";
 karutaStr['fr']['sharing']="Partager";
 karutaStr['fr']['sharing_with_designers']="Partager avec des designers";
@@ -347,4 +348,4 @@ karutaStr['fr']['add_portfolios']="Ajouter des portfolios";
 karutaStr['fr']['select_groups']="Sélectionner des groupes";
 karutaStr['fr']['select_portfoliosgroups']="Sélectionner des groupes de portfolios";
 karutaStr['fr']['create_portfoliosgroup']="Créer un groupe de portfolios";
-
+karutaStr['fr']['button-remove-from-group']="Retirer de ce groupe";

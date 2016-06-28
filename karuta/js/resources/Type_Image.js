@@ -249,7 +249,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,null,langcode)+"</span> ";
 	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html +=" <div id='divfileupload_"+this.id+"_"+langcode+"' >";
-	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"' en>";
+	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">";
 	html += "</div>";
 	html +=" <div id='progress_"+this.id+"_"+langcode+"''><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";

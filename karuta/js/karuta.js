@@ -416,7 +416,7 @@ function alertBox()
 	html += "\n		<div class='modal-dialog'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div class='modal-header'>";
-	html += "\n					<h3 id='alert-window-title' >Attention</h3>";
+	html += "\n					<h3 id='alert-window-header' >Attention</h3>";
 	html += "\n				</div>";
 	html += "\n				<div id='alert-window-body' class='modal-body'>";
 	html += "\n				</div>";
