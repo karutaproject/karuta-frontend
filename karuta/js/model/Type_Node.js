@@ -2603,6 +2603,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		if (!writenode)
 			writenode = (editresroles.containsArrayElt(g_userroles))? true : false;
 	}
+	var parentsubmitted = $(node.node).parent().has("metadata-wad[submitted='Y']").length;
 	//-----------------------------------
 	var html = "<div class='btn-group'>";
 	//-----------------------------------
@@ -2620,7 +2621,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			}
 		}
 		//------------- move node buttons ---------------
-		if ((moveroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && node.asmtype != 'asmRoot') {
+		if (!parentsubmitted && submitted!='Y' && (moveroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && node.asmtype != 'asmRoot') {
 			html+= "<span class='button glyphicon glyphicon-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-tooltip='true' data-placement='bottom'></span>";
 			if (USER.admin || g_userroles[0]=='designer')
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";

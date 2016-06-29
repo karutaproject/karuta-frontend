@@ -29,6 +29,7 @@ karutaStr['en']['edit']="Edit";
 karutaStr["en"]["button-edit"] = "Edit";
 karutaStr["en"]["button-delete"] = "Delete";
 karutaStr["en"]["button-restore"] = "Restore";
+karutaStr["en"]["button-remove"] = "Remove";
 karutaStr["en"]["button-submit"] = "Submit";
 karutaStr["en"]["button-unsubmit"] = "Reset";
 karutaStr["en"]["button-send"] = "Send";
