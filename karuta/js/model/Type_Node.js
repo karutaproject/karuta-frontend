@@ -78,6 +78,8 @@ UIFactory["Node"] = function( node )
 		this.metadatawad = $("metadata-wad",node);
 		this.metadataepm = $("metadata-epm",node);
 		this.semantictag = $("metadata",node).attr('semantictag');
+		if (this.semantictag==undefined) // for backward compatibility - node without semantictag attribute
+			this.semantictag='';
 		this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 		//------------------------------
 		this.display = {}; // to refresh after changes
@@ -115,6 +117,33 @@ UIFactory["Node"].prototype.getValue = function()
 {
 	return this.value_node.text();
 };
+
+//==================================
+UIFactory["Node"].prototype.getContext = function(type,langcode)
+//==================================
+{
+	//---------------------
+	if (type==null)
+		type = 'span';
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-node')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	var html = "";
+	var text = this.context_text_node[langcode].text();
+	if (type=="div")
+		html =   "<div>"+text+"</div>";
+	if (type=="span")
+		html =   "<span>"+text+"</span>";
+	if (type=="none")
+		html = text;
+	return html;
+};
+
+
 
 //==================================
 UIFactory["Node"].prototype.getLabel = function(dest,type,langcode)
@@ -701,7 +730,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	node.display_node[dest] = {"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":"standard"};
 	//------------------metadata----------------------------
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
-	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
+	var semtag =  ($("metadata",data)[0]==undefined || $($("metadata",data)[0]).attr('semantictag')==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	var collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
@@ -749,7 +778,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += "<div class='row row-resource'>";
 				var parent_semtag = "";
 				if (parent!=null)
-					parent_semtag = $($("metadata",parent.node)[0]).attr('semantictag');
+					parent_semtag =  ($("metadata",parent.node)[0]==undefined || $($("metadata",parent.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",parent.node)[0]).attr('semantictag');
 				//-------------- node -----------------------------
 				html += "<div id='std_node_"+uuid+"' class='";
 				if (parent_semtag.indexOf('asm-block')<0)
@@ -2583,7 +2612,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	if (userrole==undefined || userrole=='')
 		userrole = "norole";
 	//------------------------
-	var semantictag = $(node.metadata).attr('semantictag');
+	var semantictag =  ($(node.metadata)==undefined || $(node.metadata).attr('semantictag')==undefined)?'': $(node.metadata).attr('semantictag');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'none':$(node.metadatawad).attr('editnoderoles');
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'none':$(node.metadatawad).attr('editresroles');
 	var delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'none':$(node.metadatawad).attr('delnoderoles');

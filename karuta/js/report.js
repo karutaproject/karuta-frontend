@@ -473,6 +473,8 @@ function processNodeResource(xmlDoc,destid,data)
 					text = UICom.structure["ui"][nodeid].getLabel();
 				if (selector.type=='node value')
 					text = UICom.structure["ui"][nodeid].getValue();
+				if (selector.type=='node context')
+					text = UICom.structure["ui"][nodeid].getContext();
 				if (ref!=undefined && ref!="") {
 					if (aggregates[ref]==undefined)
 						aggregates[ref] = new Array();
