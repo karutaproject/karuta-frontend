@@ -201,6 +201,8 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				else {
 					if (number_of_projects>0)
 						$("#export-"+projects_list[number_of_projects-1].uuid).attr("href","../../../"+serverBCK+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
+					else
+						$("#portfolios-label").html(karutaStr[LANG]['portfolios']);
 					if (number_of_portfolios==0)
 						$("#portfolios-label").hide();
 				}

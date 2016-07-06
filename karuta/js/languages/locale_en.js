@@ -182,6 +182,9 @@ karutaStr['en']['sharelabel']="Button Label";
 karutaStr['en']['sharelevel']="Sharing Level 0--4";
 karutaStr['en']['shareduration']="Link Validity (in hours)";
 karutaStr['en']['sharewithrole']="Role - Recepient";
+karutaStr['en']['maxchar']="Chars - Max Number";
+karutaStr['en']['maxword']="Words - Max number";
+karutaStr['en']['maxword-alert']="You exceeded the limit of number of words. Extra wors will not be saved."
 
 //=========================================
 //========== ADMIN ========================
@@ -198,7 +201,8 @@ karutaStr['en']['create-test-user']="Create a Test User";
 //=========================================
 
 karutaStr['en']['projects']="My Projects";
-karutaStr['en']['portfolios']="My Portfolios not in a Project";
+karutaStr['en']['portfolios-not-in-project']="My Portfolios not in a Project";
+karutaStr['en']['portfolios']="My Portfolios";
 karutaStr['en']['bin']="My Bin";
 karutaStr['en']['nogroup']="No Group";
 karutaStr['en']['karuta.model']="Create a Portfolio Model";

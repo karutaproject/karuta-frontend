@@ -1414,4 +1414,16 @@ function toggleProject2Select(uuid) {
 	}
 }
 
+//==================================
+function countWords(text) {
+//==================================
+	return text.replace(/(&lt;([^&gt;]+)&gt;)/ig,"").replace( /[^\w ]/g, "" ).trim().split( /\s+/ ).length;
+}
+
+//==================================
+function getFirstWords(text,nb) {
+//==================================
+	var tableOfWords = text.replace(/(&lt;([^&gt;]+)&gt;)/ig,"").replace( /[^\w ]/g, "" ).trim().split( /\s+/ ).slice(0,nb);
+	return text.substring(0,text.indexOf(tableOfWords[tableOfWords.length-1])+tableOfWords[tableOfWords.length-1].length);
+}
 

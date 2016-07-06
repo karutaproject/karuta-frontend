@@ -51,6 +51,9 @@ UIFactory["TextField"] = function( node )
 	}
 	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	this.maxword = $("metadata-wad",node).attr('maxword');
+	if (this.maxword==undefined)
+		this.maxword = 0;
 	this.display = {};
 };
 
@@ -123,9 +126,32 @@ UIFactory["TextField"].prototype.update = function(langcode)
 	var value = $.trim($("#"+this.id+"_edit_"+langcode).val());
 	if (this.encrypted)
 		value = "rc4"+encrypt(value,g_rc4key);
+	var words = $.trim(value).split(' ');
+	if (this.maxwordcountWords>0 && countWords(value)>this.maxword) {
+		alertHTML(karutaStr[languages[langcode]]['maxword-alert']);
+		value = getFirstWords(value,this.maxword);
+	}
 	$(this.text_node[langcode]).text(value);//	$(this.text_node[langcode]).html($.parseHTML(value));
 	this.save();
 };
+
+//==================================
+UIFactory["TextField"].prototype.updateCounterWords = function(langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.maxword>0) {
+		var value = $.trim($("#"+this.id+"_edit_"+langcode).val());
+		$("#counter_"+this.id).html(countWords(value)+"/"+this.maxword);
+		if (countWords(value)>this.maxword){
+			$("#counter_"+this.id).addClass('danger');
+		}
+		else
+			$("#counter_"+this.id).removeClass('danger');
+	}
+}
 
 var editor =  [];
 var currentTexfieldUuid = "";
@@ -154,12 +180,12 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 		text = decrypt(cipher,g_rc4key);
 	}
 	else
-		text = xml2string($(this.text_node[langcode])[0]);
+		text = $($(this.text_node[langcode])[0]).html();
 	//---------------------
 	var uuid = this.id;
 	var html = "";
 	if (type=='default') {
-		html += "<div id='div_"+this.id+"'><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' style='height:200px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
+		html += "<div id='div_"+this.id+"'><span id='counter_"+this.id+"' style='float:right'></span><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' style='height:200px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
 		if (disabled)
 			html += "disabled='disabled' ";
 		html += ">"+text+"</textarea></div>";
@@ -173,8 +199,10 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 		html += ">"+text+"</textarea></div>";
 	}
 	$("#"+destid).append($(html));
-	$("#"+uuid+"_edit_"+langcode).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
-	
+	if (this.maxword>0) {
+		$("#counter_"+uuid).html(countWords(text)+"/"+this.maxword);
+	}
+	$("#"+uuid+"_edit_"+langcode).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'load': function(){$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][currentTexfieldUuid].resource.updateCounterWords(langcode);});},'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
 	//------------------------------------------------
 };
 

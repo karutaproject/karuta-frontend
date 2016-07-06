@@ -4,7 +4,7 @@ function getList()
 {
 	var html = "";
 	var text1 = karutaStr[LANG]['projects'];
-	var text2 = karutaStr[LANG]['portfolios'];
+	var text2 = karutaStr[LANG]['portfolios-not-in-project'];
 	if (USER.admin)
 		text1 = karutaStr[LANG]['portfolios-admin'];
 	html += "<h3 id='projects-label'>"+text1+"</h3>";

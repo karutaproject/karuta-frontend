@@ -2,8 +2,8 @@
 var application_version = "1.0";
 var application_date = "2016-04-29";
 //----------------------------------
-var appliname = 'karuta-ux';
-var bckname = '-ux';
+var appliname = 'karuta';
+var bckname = '';
 var serverBCK = "karuta-backend"+bckname+"/rest/api";
 var serverFIL = "karuta-backend"+bckname;
 var serverVER = "karuta-backend"+bckname;
@@ -47,11 +47,11 @@ var listinfo = {};       // Welcome paragraph
 	listinfo["en"] = "";
 	listinfo["ja"] = "";
 
-	//----------------------------------
-	var welcome4 = {};			// List Page Welcome title
-		welcome4["fr"] = "BIENVENUE DANS KARUTA 2.0";
-		welcome4["en"] = "WELCOME TO KARUTA 2.0";
-	var welcome5 = {}; 			// List Page Welcome sub-title
-		welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
-		welcome5["en"] = "OPEN SOURCE PORTFOLIO";
+//----------------------------------
+var welcome4 = {};			// List Page Welcome title
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.0";
+	welcome4["en"] = "WELCOME TO KARUTA 2.0";
+var welcome5 = {}; 			// List Page Welcome sub-title
+	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
+	welcome5["en"] = "OPEN SOURCE PORTFOLIO";
 
