@@ -5,7 +5,7 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<xsl:output method="xml" />
-	<xsl:param name="lang">fr</xsl:param>
+	<xsl:param name="lang">en</xsl:param>
 	<xsl:template match="/">
 		<model>
 			<xsl:apply-templates select='//asmRoot/asmUnitStructure'/>
@@ -160,6 +160,29 @@
 				</xsl:call-template>
 			</label>
 		</create-tree>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-tree-root']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-tree-root id="{$id}">
+			<oldcode>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">tree-oldcode</xsl:with-param>
+				</xsl:call-template>
+			</oldcode>
+			<newcode>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">tree-newcode</xsl:with-param>
+				</xsl:call-template>
+			</newcode>
+			<label>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">tree-label</xsl:with-param>
+				</xsl:call-template>
+			</label>
+		</update-tree-root>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='select-tree']">

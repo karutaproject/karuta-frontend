@@ -43,6 +43,9 @@ var g_nb_copyTree = new Array();
 var g_update_resources = null;
 var g_nb_updateResource = new Array();
 //-----------------------
+var g_update_tree_roots = null;
+var g_nb_updateTreeRoot = new Array();
+//-----------------------
 var g_share_trees = null;
 var g_nb_shareTree = new Array();
 //-----------------------
@@ -135,6 +138,7 @@ function processAll()
 	g_share_trees = $("share-tree",g_xmlDoc);
 	g_delete_trees = $("delete-tree",g_xmlDoc);
 	g_import_nodes = $("import-node",g_xmlDoc);
+	g_update_tree_roots = $("update-tree-root",g_xmlDoc);
 	processLine();
 }
 
@@ -616,7 +620,7 @@ function processCopyTrees()
 //=================================================
 {
 	if (g_copy_trees.length==0)
-		processUpdateResources();
+		processUpdateTreeRoot();
 	else {
 		$("#batch-log").append("<br>---------------------copy_trees-------------------------------");
 		for (var j=0; j<g_copy_trees.length; j++) {
@@ -663,7 +667,7 @@ function copyTree(node)
 						//===========================================================
 						g_nb_copyTree[g_noline]++;
 						if (g_copy_trees.length==g_nb_copyTree[g_noline]) {
-							processUpdateResources();
+							processUpdateTreeRoot();
 						}
 						//===========================================================
 					},
@@ -678,7 +682,7 @@ function copyTree(node)
 		//===========================================================
 		g_nb_copyTree[g_noline]++;
 		if (g_copy_trees.length==g_nb_copyTree[g_noline]) {
-			processUpdateResources();
+			processUpdateTreeRoot();
 		}
 		//===========================================================
 	}
@@ -687,6 +691,84 @@ function copyTree(node)
 	portfolio [1] = code;
 	return portfolio;
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Update Tree Code -----------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function processUpdateTreeRoot()
+//=================================================
+{
+	if (g_update_tree_roots.length==0)
+		processUpdateResources();
+	else {
+		$("#batch-log").append("<br>---------------------update tree code-------------------------------");
+		for  (var j=0; j<g_update_tree_roots.length; j++) {
+			updateTreeRoot(g_update_tree_roots[j]);
+		}
+	}
+}
+
+//=================================================
+function updateTreeRoot(node)
+//=================================================
+{
+	var oldcode = getTxtvals($("oldcode",node));
+	var newcode = getTxtvals($("newcode",node));
+	var label = getTxtvals($("label",node));
+	if (oldcode!="" && newcode!="") {
+		$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + oldcode + "&semtag=root",
+				success : function(data) {
+					var nodeid = $("asmRoot",data).attr('id');
+					var xml = "<asmResource xsi_type='nodeRes'>";
+					xml += "<code>"+newcode+"</code>";
+					for (var lan=0; lan<languages.length;lan++)
+						if (lan==LANG && label!="")
+							xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
+						else
+							xml += "<label lang='"+languages[lan]+"'>"+$("label[lang='"+languages[lan]+"']",$("asmResource[xsi_type='nodeRes']",data)).text()+"</label>";
+					xml += "</asmResource>";
+					$.ajax({
+						async:false,
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
+						success : function(data) {
+							$("#batch-log").append("<br>- tree root updated ("+portfolioid+") - newcode:"+newcode);
+							//===========================================================
+							g_nb_updateTreeRoot[g_noline]++;
+							if (g_update_tree_roots.length==g_update_tree_roots[g_noline]) {
+								processUpdateResources();
+							}	
+							//===========================================================
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ERROR in  create tree - code:"+code);
+						}
+					});
+				}
+		});
+	} else {
+		$("#batch-log").append("<br>-ERROR in  update tree - oldcode or newcode is empty");
+		//===========================================================
+		g_nb_updateTreeRoot[g_noline]++;
+		if (g_update_tree_roots.length==g_nb_updateTreeRoots[g_noline]) {
+			processUpdateResources();
+		}	
+		//===========================================================
+	}
+
+}
+
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
