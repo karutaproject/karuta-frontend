@@ -880,6 +880,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'text-align',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
+					if (g_userroles[0]!='designer')
+						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'othercss',false);
 				} else {
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-font-size',true);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-font-weight',false);
@@ -922,7 +924,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						html += "<div id='std_node_"+uuid+"' class='node-label col-md-offset-1 col-md-7  same-height'";
 						if (g_userroles[0]!='designer' && semtag=='header')
 							html += " style='visibility:hidden'";
-						if (semtag!='header')
+					if (semtag!='header')
 							html += " style='"+style+"'";
 						html += ">";
 					}
@@ -958,7 +960,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',true);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
+					if (g_userroles[0]!='designer')
+						style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
 					html +=" style='"+style+"'";
 					html += ">";
 					//-----------------------------------------
@@ -3104,6 +3107,8 @@ UIFactory["Node"].displayMetadataEpm = function(data,attribute,number)
 			html += attribute.substring(17) + value;
 		else if (attribute.indexOf("node-othercss")>-1)
 			html += attribute.substring(13) + value;
+		else if (attribute.indexOf("othercss")>-1)
+			html += attribute.substring(8) + value;
 		else if (attribute.indexOf("node-")>-1)
 			html += attribute.substring(5) + ":" + value;
 		else if (attribute.indexOf("inparent-")>-1)
