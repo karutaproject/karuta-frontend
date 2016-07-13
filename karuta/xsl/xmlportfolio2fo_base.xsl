@@ -428,7 +428,7 @@
 	<xsl:param name="width-print"/>
 
 	<xsl:variable name='src'>
-		<xsl:value-of select="$url"/>/resources/resource/file/<xsl:value-of select="./@contextid"/>?lang=<xsl:value-of select="$lang"/>&amp;size=L
+		<xsl:value-of select="$urlimage"/>/resources/resource/file/<xsl:value-of select="./@contextid"/>?lang=<xsl:value-of select="$lang"/>&amp;size=L
 	</xsl:variable>
 	<xsl:variable name='width'>
 		<xsl:choose>

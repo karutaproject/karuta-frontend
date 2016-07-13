@@ -13,6 +13,7 @@
 <xsl:param name="url"/>
 <xsl:param name="ppath"/>
 <xsl:param name="url-appli"/>
+<xsl:param name="urlimage"/>
 
 <xsl:include href="xmlportfolio2fo_base.xsl"/>
 
