@@ -10,7 +10,7 @@ var serverVER = "karuta-backend"+bckname;
 var serverREG = "karuta-backend"+bckname;
 //----------------------------------
 var elgg_url_base = 'elgg/';
-var elgg_installed = true;
+var elgg_installed = false;
 var elgg_refreshing = 240000; // 240 seconds
 //----------------------------------
 var languages = [];

@@ -29,7 +29,7 @@
 					<fo:repeatable-page-master-reference master-reference="all-pages" />
 				</fo:page-sequence-master>
 			</fo:layout-master-set>
-			<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
+			<fo:page-sequence master-reference="default-sequence">
 				<fo:flow flow-name="Content" font-size="8pt">
 					<xsl:apply-templates select="*"/>
 				</fo:flow>

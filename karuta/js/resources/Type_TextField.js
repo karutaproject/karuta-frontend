@@ -127,9 +127,9 @@ UIFactory["TextField"].prototype.update = function(langcode)
 	if (this.encrypted)
 		value = "rc4"+encrypt(value,g_rc4key);
 	var words = $.trim(value).split(' ');
-	if (this.maxwordcountWords>0 && countWords(value)>this.maxword) {
-		alertHTML(karutaStr[languages[langcode]]['maxword-alert']);
+	if (this.maxword>0 && countWords(value)>this.maxword) {
 		value = getFirstWords(value,this.maxword);
+		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+value);
 	}
 	$(this.text_node[langcode]).text(value);//	$(this.text_node[langcode]).html($.parseHTML(value));
 	this.save();

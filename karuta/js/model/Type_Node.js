@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2015 - ePortfolium - Licensed under the
+	Copyright 2017 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -1107,7 +1107,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				var pdf_roles = $(UICom.structure["ui"][uuid].resource.pdf_node).text();
 				if (pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
-					$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div>"));				
+					$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div><div class='pdf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF</div>"));				
 				}
 				if (spinning)
 					$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});					
@@ -2589,8 +2589,13 @@ UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callba
 //		tag += '_free';
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-
-	var html = "<li><a href='#xxx' onclick=\"javascript:importBranch('"+parentid+"','"+srce+"','"+tag+"',"+databack+","+callback+","+param2+","+param3+","+param4+")\">";
+	var html = "<li><a href='#xxx' onclick=\"";
+	var semtags = tag.split(" ");
+	for (var i=0;i<semtags.length;i++){
+		if (semtags[i].length>0)
+		html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+	}
+	html += "\">";
 	html += title;
 	html += "</a></li>";
 	return html;

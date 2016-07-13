@@ -672,6 +672,30 @@ function displayPDFButton()
 }
 
 //==================================
+function xml2RTF(content)
+//==================================
+{
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
+	var data = $('#'+content).html();
+	data = data.replace(/&nbsp;/g, ' ');
+	data = data.replace(/<br>/g, '<br/>');
+	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
+	var url = window.location.href;
+	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var urlS =  "../../../"+serverFIL+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
+	postAndDownload(urlS,data);
+}
+
+//==================================
+function displayRTFButton()
+//==================================
+{
+	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2RTF('report-pdf')\">RTF</button>";
+	$("#report-pdf").html(html);
+}
+
+
+//==================================
 function xml2CSV(content)
 //==================================
 {
