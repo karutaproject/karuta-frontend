@@ -32,7 +32,7 @@
 
 
 <!-- =====================================-->
-<xsl:template match="tr"><xsl:apply-templates select="td[not(contains(@style,'display:none'))]"/>;
+<xsl:template match="tr"><xsl:apply-templates select="td[not(contains(@style,'none'))]"/>;
 </xsl:template>
 <!-- =====================================-->
 			
