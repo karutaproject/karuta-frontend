@@ -2762,15 +2762,24 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 						menus[i][1] = ""; // semantic tag
 						menus[i][2] = ""; // label
 						menus[i][3] = ""; // roles
+						menus[i][4] = ""; // condition
 						
 					} else {
 						menus[i][0] = subitems[0]; // portfolio code
 						menus[i][1] = subitems[1]; // semantic tag
 						menus[i][2] = subitems[2]; // label
 						menus[i][3] = subitems[3]; // roles
+						if (subitems.length>4)
+							menus[i][4] = subitems[4]; // condition
+						else
+							menus[i][4] = ""; // condition
 					}
-					if (menus[i][3].indexOf(userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
-						displayMenu = true;  // userrole may be included in semantictag
+					if (menus[i][3].indexOf(userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
+						if (menus[i][4]=="")
+							displayMenu = true;  // userrole may be included in semantictag
+						else if(eval(menus[i][4]))
+							displayMenu = true;
+					}
 				}
 				if (displayMenu) {
 					var databack = false;

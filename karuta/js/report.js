@@ -456,10 +456,10 @@ function processNodeResource(xmlDoc,destid,data)
 				if(UICom.structure["ui"][nodeid].resource!=null) {
 					try {
 						var test = UICom.structure["ui"][nodeid].resource.getEditor();
-						text += "<span id='report_get_editor_"+nodeid+"'></span>";
+						text += "<span id='report_get_editor_"+nodeid+"' style='"+style+"'></span>";
 					}
 					catch(e) {
-						text += "<span id='report_display_editor_"+nodeid+"'></span>";
+						text += "<span id='report_display_editor_"+nodeid+"' style='"+style+"'></span>";
 					}
 				}
 			} else {
@@ -483,7 +483,7 @@ function processNodeResource(xmlDoc,destid,data)
 				if (writenode) {
 					text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
 				}
-				text = "<span id='dashboard_"+nodeid+"'>"+text+"</span>";
+				text = "<span id='dashboard_"+nodeid+"' style='"+style+"'>"+text+"</span>";
 			}
 		}
 	} catch(e){
@@ -491,7 +491,6 @@ function processNodeResource(xmlDoc,destid,data)
 	}
 	//------------------------------
 	$("#"+destid).append($(text));
-	$("#dashboard_"+nodeid).attr("style",style);
 	//--------------------set editor------------------------------------------
 	if ($("#report_display_editor_"+nodeid).length>0) {
 		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
