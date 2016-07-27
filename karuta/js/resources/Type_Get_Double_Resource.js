@@ -197,18 +197,21 @@ UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,
 		var srce1 = part1.substring(srce1_indx+1);
 		var semtag1_indx = part1.substring(0,srce1_indx).lastIndexOf('.');
 		var semtag1 = part1.substring(semtag1_indx+1,srce1_indx);
+		var target1 = part1.substring(srce1_indx+1); // label or text
+		
 		var code1 = part1.substring(0,semtag1_indx);
-		if (code1.indexOf('.')<0 && code1!='self')  // There is no project, we add the project of the current portfolio
+		if (code1.indexOf('.')<0 && selfcode.indexOf('.')>0 && code1!='self')  // There is no project, we add the project of the current portfolio
 			code1 = selfcode.substring(0,selfcode.indexOf('.')) + "." + code1;
 		if (code1=='self')
 			code1 = selfcode;
 		//------------------
 		var srce2_indx = part2.lastIndexOf('.');
-		var srce2 = part2.substring(srce2_indx+2);
+		var srce2 = part2.substring(srce2_indx+1);
 		var semtag2_indx = part2.substring(0,srce2_indx).lastIndexOf('.');
-		var semtag2 = part2.substring(semtag2_indx+2,srce2_indx);
+		var semtag2 = part2.substring(semtag2_indx+1,srce2_indx);
+		var target2 = part2.substring(srce2_indx+1); // label or text
 		var code2 = part2.substring(0,semtag2_indx);
-		if (code2.indexOf('.')<0 && code2!='self')  // There is no project, we add the project of the current portfolio
+		if (code2.indexOf('.')<0  && selfcode.indexOf('.')>0 && code2!='self')  // There is no project, we add the project of the current portfolio
 			code2 = selfcode.substring(0,selfcode.indexOf('.')) + "." + code2;
 		if (code2=='self')
 			code2 = selfcode;
@@ -343,7 +346,6 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			if (g_userroles[0]!='designer'){
 				$(formobj).append($("<span>"+separator+"</span>"));			
 			} else {
-//				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='margin-top:20px;width:200px;' ";
 				var html = "<input type='text' class='form-control' id='separator_"+self.id+"' style='margin-top:5px; margin-bottom:5px; width:200px;' ";
 				if (disabled)
 					html += "disabled='disabled' ";
