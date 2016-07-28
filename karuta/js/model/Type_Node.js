@@ -85,6 +85,7 @@ UIFactory["Node"] = function( node )
 		this.display = {}; // to refresh after changes
 		this.display_label = {}; // to refresh after changes
 		this.display_node = {}; // to refresh after changes (metadataepm)
+		this.display_context = {}; // to refresh after changes (metadataepm)
 		//------------------------------
 		this.structured_resource = null;
 		if (this.xsi_type!=undefined && this.xsi_type!='' && this.xsi_type != this.asmtype) { // structured resource
@@ -119,9 +120,12 @@ UIFactory["Node"].prototype.getValue = function()
 };
 
 //==================================
-UIFactory["Node"].prototype.getContext = function(type,langcode)
+UIFactory["Node"].prototype.getContext = function(dest,type,langcode)
 //==================================
 {
+	if (dest!=null) {
+		this.display_context[dest] = true;
+	}
 	//---------------------
 	if (type==null)
 		type = 'span';
@@ -423,6 +427,10 @@ UIFactory["Node"].prototype.refresh = function()
 			UIFactory["Node"].displayBlock(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent);
 		}
 	};
+	for (dest4 in this.display_context) {
+		$("#"+dest4).html(this.getContext());
+	};
+
 };
 
 //==================================

@@ -463,27 +463,36 @@ function processNodeResource(xmlDoc,destid,data)
 					}
 				}
 			} else {
-				if (selector.type=='resource')
+				var prefix_id = "";
+				if (selector.type=='resource') {
 					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid);
-				if (selector.type=='resource code')
+				}
+				if (selector.type=='resource code') {
 					text = UICom.structure["ui"][nodeid].resource.getCode();
-				if (selector.type=='resource value')
-					text = UICom.structure["ui"][nodeid].resource.getValue();
-				if (selector.type=='node label')
+				}
+				if (selector.type=='resource value') {
+					text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+					prefix_id += "value_";
+				}
+				if (selector.type=='node label') {
 					text = UICom.structure["ui"][nodeid].getLabel();
-				if (selector.type=='node value')
+				}
+				if (selector.type=='node value') {
 					text = UICom.structure["ui"][nodeid].getValue();
-				if (selector.type=='node context')
-					text = UICom.structure["ui"][nodeid].getContext();
+				}
+				if (selector.type=='node context') {
+					text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+					prefix_id += "context_";
+				}
 				if (ref!=undefined && ref!="") {
 					if (aggregates[ref]==undefined)
 						aggregates[ref] = new Array();
 					aggregates[ref][aggregates[ref].length] = text;
 				}
+				text = "<span id='dashboard_"+prefix_id+nodeid+"' style='"+style+"'>"+text+"</span>";
 				if (writenode) {
 					text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
 				}
-				text = "<span id='dashboard_"+nodeid+"' style='"+style+"'>"+text+"</span>";
 			}
 		}
 	} catch(e){
@@ -555,14 +564,16 @@ function processAggregate(aggregate,destid)
 	if (type=="sum" && aggregates[select]!=undefined){
 		var sum = 0;
 		for (var i=0;i<aggregates[select].length;i++){
-			sum += parseInt(aggregates[select][i]);
+			if ($.isNumeric(aggregates[select][i]))
+				sum += parseFloat(aggregates[select][i]);
 		}
 		text = sum;
 	}
 	if (type=="avg" && aggregates[select]!=undefined){
 		var sum = 0;
 		for (var i=0;i<aggregates[select].length;i++){
-			sum += parseInt(aggregates[select][i]);
+			if ($.isNumeric(aggregates[select][i]))
+				sum += parseFloat(aggregates[select][i]);
 		}
 		text = sum/aggregates[select].length;
 	}
