@@ -101,8 +101,7 @@ UIFactory["ImageBlock"].prototype.displayEditor = function(destid,type,langcode)
 UIFactory["ImageBlock"].prototype.refresh = function()
 //==================================
 {
-	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,this.display[dest].type,this.display[dest].langcode));
-	};
-
+		for (dest in this.display) {
+			$("#"+dest).html(this.getView(null,this.display[dest].type,this.display[dest].langcode));
+		};		
 };

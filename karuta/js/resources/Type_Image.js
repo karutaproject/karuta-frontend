@@ -139,7 +139,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		html +="<div uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
 //			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
+			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" >";
 //			html += "</a>";
 		}
 		else
@@ -249,7 +249,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,null,langcode)+"</span> ";
 	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html +=" <div id='divfileupload_"+this.id+"_"+langcode+"' >";
-	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">";
+	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</div>";
 	html +=" <div id='progress_"+this.id+"_"+langcode+"''><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
@@ -279,9 +279,9 @@ UIFactory["Image"].prototype.save = function(parent,delfile)
 		UICom.UpdateResource(this.id,writeSaved,null,delfile);
 	else
 		UICom.UpdateResource(this.id,writeSaved);
-	this.refresh();
+	window.setTimeout(this.refresh(),1000 );
 	if (parent!=null) // --- structured resource
-		parent.refresh();
+		window.setTimeout(parent.refresh(),2000 );
 };
 
 //==================================
@@ -290,6 +290,5 @@ UIFactory["Image"].prototype.refresh = function()
 {
 	for (dest in this.display) {
 		$("#"+dest).html(this.getView(null,null,this.display[dest]));
-	};
-
+	};		
 };
