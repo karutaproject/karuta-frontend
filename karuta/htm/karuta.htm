@@ -11,8 +11,21 @@
 		<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
 		<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
-		<link rel="stylesheet/less" type="text/css" href="../../karuta/css/karuta.less">
 		<!-- =============================================================== -->
+		<script>
+			//-------------------------------
+			var host = window.location.host;
+			var pathname = window.location.pathname.substring(1);
+			var appli = pathname.substring(0,pathname.indexOf('/'));
+			//-------------------------------
+			var karuta_config = "../../../"+appli+"-config/application/css/specific.less";
+			less = {
+				    globalVars: {
+				    	'KARUTA-CONFIG': "'"+karuta_config+"'"
+				    }
+				  };
+		</script>
+		<link rel="stylesheet/less" type="text/css" href="../../karuta/css/karuta.less">
 		<script src="../../other/js/less.min.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/karuta.js"></script>
@@ -107,8 +120,6 @@
 		<script src="../../other/js/js.cookie.js"></script>
 		<script src="../../other/js/jquery.sortElements.js"></script>
 		<!-- =============================================================== -->
-		<script src="../../application/js/_init.js"></script>
-		<!-- =============================================================== -->
 		<script src="../../karuta/js/version.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/dashboards/matrix_2dims/matrix_2dim.js"></script>
@@ -153,8 +164,13 @@
 			g_elgg_key = Cookies.get('elgg_token');
 			g_socialnetwork = Cookies.get('socialnetwork');
 			g_edit = true; // à vérifier
-			getLanguage();
+			//-------------------------------
+			$('<script>')
+			  .appendTo('head')
+			  .attr('src', '../../../'+appli+'-config/application/js/_init.js');
+			//-------------------------------
 			$(window).load(function() {
+				getLanguage();
 				$.ajaxSetup({async: false});
 				loadLanguages();
 				$.ajax({
@@ -241,5 +257,6 @@
 				$.ajaxSetup({async: true});
 			});
 		</script>
+		
 	</body>
 </html>

@@ -2,12 +2,14 @@
 var application_version = "1.0";
 var application_date = "2016-04-29";
 //----------------------------------
-var appliname = 'karuta';
-var bckname = '';
+var appliname = 'karuta-frontend';
+var bckname = '-ux';
 var serverBCK = "karuta-backend"+bckname+"/rest/api";
 var serverFIL = "karuta-backend"+bckname;
 var serverVER = "karuta-backend"+bckname;
 var serverREG = "karuta-backend"+bckname;
+//----------------------------------
+var login_background_url = "../../karuta/img/login-background.jpg";
 //----------------------------------
 var elgg_url_base = 'elgg/';
 var elgg_installed = false;

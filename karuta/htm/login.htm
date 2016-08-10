@@ -11,7 +11,8 @@
 	<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
 	<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
 	<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
-	<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
+	<!-- =============================================================== -->
+	<script src="../../other/js/less.min.js"></script>
 	<!-- =============================================================== -->
 	<script src="../../other/js/jquery-1.10.2.js"></script>
 	<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
@@ -25,7 +26,6 @@
 	<!-- =============================================================== -->
 	<script src="../../karuta/js/karuta.js"></script>
 	<script src="../../karuta/js/UICom.js"></script>
-	<script src="../../karuta/js/report.js"></script>
 	<!-- =============================================================== -->
 	<script src="../../karuta/js/model/Type_Portfolio.js"></script>
 	<script src="../../karuta/js/model/Type_Node.js"></script>
@@ -52,8 +52,6 @@
 	<link rel="stylesheet" href="../../other/bootstrap-datepicker/datepicker.css" />
 	<!-- =============================================================== -->
 	<script src="../../other/js/js.cookie.js"></script>
-	<!-- =============================================================== -->
-	<script src="../../application/js/_init.js"></script>
 	<!-- =============================================================== -->
 	<script src="../../karuta/js/version.js"></script>
 
@@ -158,12 +156,26 @@
 	<script language='javascript'>
 		//------------------------------
 		var encrypt_url = getURLParameter('i');
-		var lang = getURLParameter('lang');
 		if (encrypt_url==null)
 			encrypt_url = "" ;
+		//------------------------------
+		var lang = getURLParameter('lang');
 		if (lang==null)
 			lang = "" ;
+		//-------------------------------
+		var host = window.location.host;
+		var pathname = window.location.pathname.substring(1);
+		var appli = pathname.substring(0,pathname.indexOf('/'));
+		$('<link>')
+		  .appendTo('head')
+		  .attr({type : 'text/css', rel : 'stylesheet'})
+		  .attr('href', '../../../'+appli+'-config/application/css/welcome.css');
+		$('<script>')
+		  .appendTo('head')
+		  .attr('src', '../../../'+appli+'-config/application/js/_init.js');
+		//------------------------------
 		$(window).load(function() {
+			$('body').attr('style','background: url('+login_background_url+') no-repeat');
 			getLanguage();
 			changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 			$.ajaxSetup({async: false});
@@ -194,7 +206,7 @@
 			if (typeof welcome1 != 'undefined') {
 				$("#welcome1").html(welcome1[LANG]);
 				var version_html = "<div style='color:black;text-align:center;font-size:14px;margin-bottom:15px;'>Version "+karuta_version+"</div>";
-				$("#welcome-version").html(version_html);
+//				$("#welcome-version").html(version_html);
 				$("#welcome2").html(welcome2[LANG]);
 				$("#welcome3").html(welcome3[LANG]);
 			}
