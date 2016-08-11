@@ -126,10 +126,10 @@ function getNavBar(type,portfolioid,edit)
 	if (languages.length>1) 
 		if(type=="create_account") {
 			html += "			<ul class='nav navbar-nav'>";
-			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 			html += "					<ul class='dropdown-menu'>";
 			for (var i=0; i<languages.length;i++) {
-				html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getInputs());\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+				html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getInputs());\"><img width='20px;' src='"+karuta_url+"./karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 			}
 			html += "					</ul>";
 			html += "				</li>";
@@ -137,20 +137,20 @@ function getNavBar(type,portfolioid,edit)
 		} else
 			if(type=="login") {
 				html += "			<ul class='nav navbar-nav'>";
-				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 				html += "					<ul class='dropdown-menu'>";
 				for (var i=0; i<languages.length;i++) {
-					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getLogin());$('#useridentifier').focus();$('#newpassword').html(getNew());$('#newaccount').html(karutaStr[LANG]['new-account']);\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getLogin());$('#useridentifier').focus();$('#newpassword').html(getNew());$('#newaccount').html(karutaStr[LANG]['new-account']);\"><img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 				}
 				html += "					</ul>";
 				html += "				</li>";
 				html += "			</ul>";
 			} else {
 				html += "			<ul class='nav navbar-nav'>";
-				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
+				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 				html += "					<ul class='dropdown-menu'>";
 				for (var i=0; i<languages.length;i++) {
-					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 				}
 				html += "					</ul>";
 				html += "				</li>";
@@ -659,13 +659,13 @@ function loadLanguages(callback)
 				$.ajax({
 					type : "GET",
 					dataType : "script",
-					url : "../../socialnetwork-elgg/js/languages/locale_"+languages[i]+".js"
+					url : karuta_url+"/socialnetwork-elgg/js/languages/locale_"+languages[i]+".js"
 				});
 			}
 			$.ajax({
 				type : "GET",
 				dataType : "script",
-				url : "../../karuta/js/languages/locale_"+languages[i]+".js"
+				url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js"
 			});
 		}
 		else { // last one so we callback
@@ -673,13 +673,13 @@ function loadLanguages(callback)
 				$.ajax({
 					type : "GET",
 					dataType : "script",
-					url : "../../socialnetwork-elgg/js/languages/locale_"+languages[i]+".js"
+					url : karuta_url+"/socialnetwork-elgg/js/languages/locale_"+languages[i]+".js"
 				});
 			}
 			$.ajax({
 				type : "GET",
 				dataType : "script",
-				url : "../../karuta/js/languages/locale_"+languages[i]+".js",
+				url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js",
 				success : callback
 			});
 		}
@@ -1108,7 +1108,7 @@ function setLanguage(lang,caller) {
 		caller="";
 	Cookies.set('karuta-language',lang,{ expires: 60 });
 	LANG = lang;
-	$("#flagimage").attr("src","../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
+	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
 			LANGCODE = i;
