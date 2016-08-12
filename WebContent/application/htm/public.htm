@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Karuta</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=9">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+		<link rel="icon" type="image/png" href="../../application/img/favicon.png" />
+		<script src="../js/_init.js"></script>
+		<!--[if lt IE 9]>
+			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
+		<![endif]-->
+		<!-- =============================================================== -->
+		<script>
+			document.write("<script src='"+karuta_url+"/karuta/js/pages/public.js'><\/script>");
+			document.write("<script>loadPublic(karuta_url);<\/script>");
+		</script>
+		<link rel='stylesheet' type='text/css' href='../css/specific.css'/>
+		<!-- =============================================================== -->
+		<style>
+			.block div.oembedall-container {
+				 margin-top : -10px; 
+				 text-align: center;
+			}
+			.datepicker{z-index:1200 !important;}
+		</style>
+	</head>
+	<body>
+		<script>
+			$(window).load(function() {
+				displayPublicPage()
+			});
+		</script>
+	</body>
+</html>

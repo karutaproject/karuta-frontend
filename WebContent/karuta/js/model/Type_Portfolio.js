@@ -231,7 +231,7 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 			var html = "";
 			var portfoliocode = portfolio.code_node.text();
 			var owner = (Users_byid[portfolio.ownerid]==null) ? "??? "+portfolio.ownerid:Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
-			if (portfolio.semantictag=='karuta-project' && portfoliocode!='karuta.project'){
+			if (portfolio.semantictag!= undefined && portfolio.semantictag.indexOf('karuta-project')>-1 && portfoliocode!='karuta.project'){
 				//-------------------- PROJECT ----------------------
 				displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
 				number_of_bins ++;
@@ -1202,20 +1202,21 @@ UIFactory["Portfolio"].restore = function(portfolioid)
 			for (var i=0;i<bin_list.length;i++){
 				if (bin_list[i]!=null && bin_list[i].id==portfolioid) {
 					portfolios_list[portfolios_list.length] = bin_list[i];
+					portfolios_byid[portfolioid] = bin_list[i];
 					bin_list[i] = null;
 					//---- sort portfolios_list ---
 					var tableau1 = new Array();
 					var j = 0;
-					for (var i=0; i<portfolios_list.length; i++){
-						if (portfolios_list[i]!=null){
-						tableau1[j] = [portfolios_list[i].code_node.text(),portfolios_list[i].id];
+					for (var k=0; k<portfolios_list.length; k++){
+						if (portfolios_list[k]!=null){
+						tableau1[j] = [portfolios_list[k].code_node.text(),portfolios_list[k].id];
 						j++;
 						}
 					}
 					var newTableau1 = tableau1.sort(sortOn1);
 					portfolios_list = [];
-					for (var i=0; i<newTableau1.length; i++){
-						portfolios_list[i] = portfolios_byid[newTableau1[i][1]]
+					for (var l=0; l<newTableau1.length; l++){
+						portfolios_list[l] = portfolios_byid[newTableau1[l][1]]
 					}
 					//-----------------------------
 					break;
@@ -1257,7 +1258,6 @@ UIFactory["Portfolio"].removeProject = function(projectid,projectcode)
 			});
 		}
 	}
-	$.ajaxSetup({async: true});
 	//----------------
 	$.ajax({
 		type : "GET",
@@ -1288,6 +1288,7 @@ UIFactory["Portfolio"].removeProject = function(projectid,projectcode)
 			alertHTML("Server Error GET bin: "+textStatus);
 		}
 	});
+	$.ajaxSetup({async: true});
 	//----------------
 }
 
@@ -1295,8 +1296,8 @@ UIFactory["Portfolio"].removeProject = function(projectid,projectcode)
 UIFactory["Portfolio"].restoreProject = function(projectid,projectcode) 
 //==================================
 {
-	//----------------
 	$.ajaxSetup({async: false});
+	//----------------
 	for (var i=0;i<bin_list.length;i++){
 		var portfoliocode = bin_list[i].code_node.text();
 		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
@@ -1317,7 +1318,6 @@ UIFactory["Portfolio"].restoreProject = function(projectid,projectcode)
 			});
 		}
 	}
-	$.ajaxSetup({async: true});
 	//----------------
 	$.ajax({
 		type : "GET",
@@ -1335,6 +1335,7 @@ UIFactory["Portfolio"].restoreProject = function(projectid,projectcode)
 			alertHTML("Server Error GET active: "+textStatus);
 		}
 	});
+	//----------------
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -1349,14 +1350,15 @@ UIFactory["Portfolio"].restoreProject = function(projectid,projectcode)
 		}
 	});
 	//----------------
+	$.ajaxSetup({async: true});
 }
 
 //==================================
 UIFactory["Portfolio"].delProject = function(projectid,projectcode) 
 //==================================
 {
-	//----------------
 	$.ajaxSetup({async: false});
+	//----------------
 	for (var i=0;i<bin_list.length;i++){
 		var portfoliocode = bin_list[i].code_node.text();
 		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
@@ -1377,7 +1379,6 @@ UIFactory["Portfolio"].delProject = function(projectid,projectcode)
 			});
 		}
 	}
-	$.ajaxSetup({async: true});
 	//----------------
 	$.ajax({
 		type : "GET",
@@ -1409,6 +1410,7 @@ UIFactory["Portfolio"].delProject = function(projectid,projectcode)
 		}
 	});
 	//----------------
+	$.ajaxSetup({async: true});
 }
 
 

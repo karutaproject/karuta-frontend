@@ -41,6 +41,7 @@ var g_block_height = 220; // block height in pixels
 var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
 var g_portfolio_rootid = "";
 var g_toggle_sidebar = [];
+var g_current_page = "";
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------
@@ -540,7 +541,10 @@ function displayPage(uuid,depth,type,langcode,edit) {
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	$(window).scrollTop(0);
+	if (g_current_page!=uuid) {
+		$(window).scrollTop(0);
+		g_current_page = uuid;
+	}
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');

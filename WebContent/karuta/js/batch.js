@@ -440,11 +440,17 @@ function deleteTree(node)
 				//===========================================================
 			},
 			error : function(jqxhr,textStatus) {
-				alert("Error in deleTree : "+jqxhr.responseText);
+				$("#batch-log").append("<br>- delete tree ERROR - code:|"+code+" ---- NOT FOUND ----");
+				//===========================================================
+				g_nb_deleteTree[g_noline]++;
+				if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {
+					processCreateTrees();
+				}
+				//===========================================================
 			}
 		});
 	} else {
-		$("#batch-log").append("<br>- tree deleted - code:|"+code+" ---- NOT FOUND ----");
+		$("#batch-log").append("<br>- delete tree ERROR - code:|"+code+" ---- NOT FOUND ----");
 		//===========================================================
 		g_nb_deleteTree[g_noline]++;
 		if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {

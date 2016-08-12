@@ -250,7 +250,7 @@ UIFactory["URL"].prototype.getEditor = function(type,langcode,disabled,parent)
 		$(obj).append($(htmlFormObj));
 		//------------------------
 		var htmlLabelGroupObj = $("<div class='form-group'></div>")
-		var htmlLabelLabelObj = $("<label for='label_"+this.id+"' class='col-sm-3 control-label'> "+karutaStr[LANG]['label']+"</label>");
+		var htmlLabelLabelObj = $("<label for='label_"+this.id+"' class='col-sm-3 control-label'> URL "+karutaStr[LANG]['label']+"</label>");
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 		var htmlLabelInputObj = $("<input id='label_"+this.id+"' type='text' class='form-control' name='label' value=\""+$(this.label_node[langcode]).text()+"\">");
 		$(htmlLabelInputObj).change(function (){

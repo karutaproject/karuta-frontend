@@ -3,8 +3,6 @@
 function show_exec_report()
 //==============================
 {
-	changeCss("body", "background-color:whitesmoke;");
-	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 	var navbar_html = getNavBar('list',null);
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_exec_report()");

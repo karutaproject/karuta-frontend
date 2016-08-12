@@ -3,8 +3,6 @@
 function show_exec_batch()
 //==============================
 {
-	changeCss("body", "background-color:whitesmoke;");
-	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 	var navbar_html = getNavBar('list',null);
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_exec_batch()");
@@ -44,6 +42,15 @@ function fill_exec_batch()
 	html += "</div>";
 	html +=" <div id='batch-progress'><div class='bar' style='width: 0%;'></div></div>";
 	$("#batch-csv_file_upload").append($(html));
+	//------------------------------
+	$('#batch-fileupload').change(function() {
+	    var filename = $(this).val();
+	    var lastIndex = filename.lastIndexOf("\\");
+	    if (lastIndex >= 0) {
+	        filename = filename.substring(lastIndex + 1);
+	    }
+		$("#batch-log").append("<br> CSV FILENAME: "+filename+"<br>-------------------------");
+	});
 	//------------------------------
 	$("#batch-fileupload").fileupload({
 		progressall: function (e, data) {

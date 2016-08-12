@@ -262,6 +262,7 @@ karutaStr['en']['admin']="Admin";
 karutaStr['en']['designer']="Creator";
 karutaStr['en']['active']="Active";
 karutaStr['en']['select_users']="Select Users";
+karutaStr['en']['projects-admin']="Projects";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['substitute']="Substitution";
