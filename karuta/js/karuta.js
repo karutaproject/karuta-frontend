@@ -489,6 +489,17 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 }
 
 //=======================================================================
+function confirmSubmit(uuid) 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"')\">" + karutaStr[LANG]["button-submit"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
+//=======================================================================
 function confirmDel(uuid,type,parentid,destid,callback,param1,param2) 
 // =======================================================================
 {

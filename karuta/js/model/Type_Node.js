@@ -2590,6 +2590,24 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved)
 //----------------------------------------------------------------------------------------------------------------------------
 
 //==================================================
+UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4)
+//==================================================
+{	// note: #xxx is to avoid to scroll to the top of the page
+	if (srce=="self")
+		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	var html = "<a class='button text-button' href='#xxx' onclick=\"";
+	var semtags = tag.split(" ");
+	for (var i=0;i<semtags.length;i++){
+		if (semtags[i].length>0)
+		html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+	}
+	html += "\">";
+	html += title;
+	html += "</a>";
+	return html;
+};
+
+//==================================================
 UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4,freenode)
 //==================================================
 {	// note: #xxx is to avoid to scroll to the top of the page
@@ -2790,7 +2808,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 							displayMenu = true;
 					}
 				}
-				if (displayMenu) {
+				if (displayMenu && menus.length>1) {
 					var databack = false;
 					var callback = "UIFactory['Node'].reloadUnit";
 					if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' )
@@ -2831,6 +2849,35 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "</ul>"; // class='dropdown-menu'
 					html += "</span><!-- class='dropdown -->";
 				}
+				if (displayMenu && menus.length==1) {
+					var databack = false;
+					var callback = "UIFactory['Node'].reloadUnit";
+					if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' )
+						callback = "UIFactory['Node'].reloadStruct";
+					var param2 = "'"+g_portfolioid+"'";
+					var param3 = null;
+					var param4 = null;
+					var i=0;
+					//-------------------
+					var titles = [];
+					var title = "";
+					try {
+						titles = menus[i][2].split("/");
+						if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
+							for (var j=0; j<titles.length; j++){
+								if (titles[j].indexOf(languages[langcode])>-1)
+									title = titles[j].substring(0,titles[j].indexOf("@"));
+							}
+						} else { // lang1/lang2/...
+							title = titles[langcode];  // lang1/lang2/...
+						}
+					} catch(e){
+						title = menus[i][2];
+					}
+					if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+						html += UIFactory["Node"].getSingleMenu(node.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
+					//------------------
+				}
 			}
 		} catch(e){
 			alertHTML('Menu Error: check the format: '+e);
@@ -2839,7 +2886,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
 		if ( submitted!='Y' && ((submitnode && ( submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer' || ( g_userroles[1]=='designer' && submitroles.indexOf($(g_userroles[0]).text())>-1) || submitroles.indexOf(userrole)>-1)) {
-			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:submit('"+node.id+"')\" ";
+			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"')\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
 		} else {
 			if (submitted=='Y') {
