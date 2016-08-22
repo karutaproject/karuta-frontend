@@ -1447,7 +1447,7 @@ UIFactory["Portfolio"].del = function(portfolioid)
 UIFactory["Portfolio"].getPDF = function(portfolioid) 
 //=======================================================================
 {
-	var urlS = "../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:fr;pers:mimi&format=application/pdf";
+	var urlS = "../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:fr;pers:mimi&format=application/pdf";
 	$.ajax({
 		type : "GET",
 		headers: {
@@ -1462,8 +1462,8 @@ UIFactory["Portfolio"].getPDF = function(portfolioid)
 UIFactory["Portfolio"].getActions = function(portfolioid) 
 //==================================
 {
-	var url = window.location.href;
-	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+//	var url = window.location.href;
+//	var serverURL = url.substring(0,url.indexOf(appliname)-1);
 	var html ="";
 	html += "<li><a  onclick=\"toggleButton('hidden')\">"+karutaStr[LANG]['hide-button']+"</a></li>";
 	html += "<li><a  onclick=\"toggleButton('visible')\">"+karutaStr[LANG]['show-button']+"</a></li>";

@@ -226,6 +226,24 @@
 		</share-tree>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='unshare-tree']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<unshare-tree select="{$id}">
+			<user>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">person</xsl:with-param>
+				</xsl:call-template>
+			</user>
+			<role>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">role</xsl:with-param>
+				</xsl:call-template>
+			</role>
+		</unshare-tree>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-field']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -323,6 +341,22 @@
 		<import-node select="{$dest}" source="{$srce}">
 		</import-node>
 	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='join-usergroup']">
+		<join-usergroup>
+			<user>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">person</xsl:with-param>
+				</xsl:call-template>
+			</user>
+			<usergroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">usergroup</xsl:with-param>
+				</xsl:call-template>
+			</usergroup>
+		</join-usergroup>
+	</xsl:template>
+	
 
 </xsl:stylesheet>
 

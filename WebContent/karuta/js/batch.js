@@ -49,11 +49,17 @@ var g_nb_updateTreeRoot = new Array();
 var g_share_trees = null;
 var g_nb_shareTree = new Array();
 //-----------------------
+var g_unshare_trees = null;
+var g_nb_unshareTree = new Array();
+//-----------------------
 var g_delete_trees = null;
 var g_nb_deleteTree = new Array();
 //-----------------------
 var g_import_nodes = null;
 var g_nb_importNode = new Array();
+//-----------------------
+var g_join_usergroups = null;
+var g_nb_joinUserGroup = new Array();
 //-----------------------
 
 //==================================
@@ -92,13 +98,22 @@ function initBatchVars()
 	g_share_trees = null;
 	g_nb_shareTree = new Array();
 	//-----------------------
+	g_ushare_trees = null;
+	g_nb_unshareTree = new Array();
+	//-----------------------
 	g_delete_trees = null;
 	g_nb_deleteTree = new Array();
 	//-----------------------
 	g_import_nodes = null;
 	g_nb_importNode = new Array();
 	//-----------------------
+	g_join_usergroups = null;
+	g_nb_joinUserGroup = new Array();
+	//-----------------------
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
 //==================================
 function getTxtvals(node)
@@ -122,6 +137,9 @@ function getTxtvals(node)
 	return str;
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
 //=================================================
 function processAll()
 //=================================================
@@ -136,9 +154,11 @@ function processAll()
 	g_copy_trees = $("copy-tree",g_xmlDoc);
 	g_update_resources = $("update-resource",g_xmlDoc);
 	g_share_trees = $("share-tree",g_xmlDoc);
+	g_unshare_trees = $("unshare-tree",g_xmlDoc);
 	g_delete_trees = $("delete-tree",g_xmlDoc);
 	g_import_nodes = $("import-node",g_xmlDoc);
 	g_update_tree_roots = $("update-tree-root",g_xmlDoc);
+	g_join_usergroups = $("join-usergroup",g_xmlDoc);
 	processLine();
 }
 
@@ -155,8 +175,10 @@ function processLine()
 	g_nb_copyTree[g_noline] = 0;
 	g_nb_updateResource[g_noline] = 0;
 	g_nb_shareTree[g_noline] = 0;
+	g_nb_unshareTree[g_noline] = 0;
 	g_nb_deleteTree[g_noline] = 0;
 	g_nb_importNode[g_noline] = 0;
+	g_nb_joinUserGroup[g_noline] = 0;
 	$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =========================================");
 	processElggGroups();
 }
@@ -205,7 +227,7 @@ function processUsers()
 //=================================================
 {
 	if (g_create_users.length==0)
-		processElggUsers();
+		processJoinUserGroups();
 	else {
 		$("#batch-log").append("<br>---------------------create_users-------------------------------");
 		for  (var j=0; j<g_create_users.length; j++) {
@@ -241,7 +263,7 @@ function createUser(node)
 			//===========================================================
 			g_nb_createUser[g_noline]++;
 			if (g_nb_createUser[g_noline]==g_create_users.length) {
-				processElggUsers();
+				processJoinUserGroups();
 			}
 			//===========================================================
 		},
@@ -275,7 +297,7 @@ function createUser(node)
 						//===========================================================
 						g_nb_createUser[g_noline]++;
 						if (g_nb_createUser[g_noline]>=g_create_users.length) {
-							processElggUsers();
+							processJoinUserGroups();
 						}
 						//===========================================================
 					},
@@ -288,12 +310,125 @@ function createUser(node)
 				//===========================================================
 				g_nb_createUser[g_noline]++;
 				if (g_nb_createUser[g_noline]>=g_create_users.length) {
-					processElggUsers();
+					processJoinUserGroups();
 				}
 				//===========================================================
 			}
 		}
 	});
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//--------------------------- Join User Group ---------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function processJoinUserGroups()
+//=================================================
+{
+	if (g_join_usergroups.length==0)
+		processElggGroupMembers();
+	else {
+		$("#batch-log").append("<br>---------------------Join User Groups-------------------------------");
+		for  (var j=0; j<g_join_usergroups.length; j++) {
+			JoinUserGroup(g_join_usergroups[j]);
+		}
+	}
+}
+
+//=================================================
+function JoinUserGroup(node)
+//=================================================
+{
+	var role = "";
+	var user = "";
+	var usergroup = getTxtvals($("usergroup",node));
+	var select_user = $("user>txtval",node).attr("select");
+	if(typeof(select_user)=='undefined')
+		user = $("user>txtval",node).text();
+	else
+		user = eval("g_json.lines["+g_noline+"]."+select_user);
+	//---- get userid ----------
+	var url = "../../../"+serverBCK+"/users/user/username/"+user;
+	if (!trace)
+		$.ajax({
+			async:false,
+			type : "GET",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			success : function(data) {
+				var user_id = data;
+				var xml = "<users><user id='"+data+"'/></users>";
+				//---- get usergroupid ----------
+				var groupid = "";
+				var url = "../../../"+serverBCK+"/usersgroups";
+				$.ajax({
+					async:false,
+					type : "GET",
+					contentType: "text/html",
+					dataType : "text",
+					url : url,
+					success : function(data) {
+						var groups = $("group",data);
+						for (var k=0;k<groups.length;k++){
+							if ($('label',groups[k]).text()==usergroup)
+								groupid = $(groups[k]).attr("id");
+						}
+						if (groupid=="")
+							$("#batch-log").append("<br>- ERROR in JoinUserGroup - usergroup:"+usergroup+" NOT FOUND - user:"+user);
+						else {
+							//---- join group --------------
+							if (!trace)
+								$.ajax({
+									type : 'PUT',
+									dataType : "text",
+									url : "../../../"+serverBCK+"/usersgroups?group=" + groupid + "&user=" + user_id,
+									data : "",
+									success : function(data) {
+										$("#batch-log").append("<br>- JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
+										//===========================================================
+										g_nb_joinUserGroup[g_noline]++;
+										if (g_nb_joinUserGroup[g_noline]==g_join_usergroups.length) {
+											g_noline++;
+											if (g_noline>=g_json.lines.length)
+												processElggUsers();
+											else
+												processLine();
+										}
+										//===========================================================
+									},
+									error : function(data) {
+										$("#batch-log").append("<br>- ERROR in JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
+									}
+								});
+							else
+								$("#batch-log").append("<br>TRACE - JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
+						}
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- ERROR in JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
+					}
+				});
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ERROR in JoinUserGroup - usergroup:"+usergroup+" - user:"+user+" NOT FOUND");
+			}
+		});
+	else {
+		$("#batch-log").append("<br>TRACE JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
+		//===========================================================
+		g_nb_joinUserGroup[g_noline]++;
+		if (g_nb_joinUserGroup[g_noline]==g_join_usergroups.length) {
+			g_noline++;
+			if (g_noline>=g_json.lines.length)
+				processElggUsers();
+		}
+		//===========================================================
+	}
+
 }
 
 //-----------------------------------------------------------------------
@@ -1069,7 +1204,7 @@ function processShareTrees()
 //=================================================
 {
 	if (g_share_trees.length==0)
-		processImportNodes();
+		processUnshareTrees();
 	else {
 		$("#batch-log").append("<br>---------------------share_trees-------------------------------");
 		for (var j=0; j<g_share_trees.length; j++) {
@@ -1135,7 +1270,7 @@ function shareTree(node)
 									if (g_nb_shareTree[g_noline]==g_share_trees.length) {
 										g_noline++;
 										if (g_noline>=g_json.lines.length)
-											processImportNodes();
+											processUnshareTrees();
 										else
 											processLine();
 									}
@@ -1158,12 +1293,111 @@ function shareTree(node)
 		if (g_nb_shareTree[g_noline]==g_share_trees.length) {
 			g_noline++;
 			if (g_noline>=g_json.lines.length)
-				processImportNodes();
+				processUnshareTrees();
 		}
 		//===========================================================
 	}
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Unshare Tree ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function processUnshareTrees()
+//=================================================
+{
+	if (g_unshare_trees.length==0)
+		processImportNodes();
+	else {
+		$("#batch-log").append("<br>---------------------unshare_trees-------------------------------");
+		for (var j=0; j<g_unshare_trees.length; j++) {
+			unshareTree(g_unshare_trees[j]);
+		}
+	}
+}
+
+//=================================================
+function unshareTree(node)
+//=================================================
+{
+	var role = "";
+	var user = "";
+	var treeref = $(node).attr("select");
+	var role = getTxtvals($("role",node));
+	var select_user = $("user>txtval",node).attr("select");
+	if(typeof(select_user)=='undefined')
+		user = $("user>txtval",node).text();
+	else
+		user = eval("g_json.lines["+g_noline+"]."+select_user);
+	//---- get userid ----------
+	var url = "../../../"+serverBCK+"/users/user/username/"+user;
+	if (!trace)
+		$.ajax({
+			async:false,
+			type : "GET",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			success : function(data) {
+				var user_id = data;
+				//---- get role groupid ----------
+				var groupid = "";
+				var url = "../../../"+serverBCK+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
+				$.ajax({
+					async:false,
+					type : "GET",
+					contentType: "text/html",
+					dataType : "text",
+					url : url,
+					success : function(data) {
+						groupid = data;
+						//---- share tree --------------
+						var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+user_id;
+						if (!trace)
+							$.ajax({
+								type : "DELETE",
+								contentType: "application/xml",
+								dataType : "xml",
+								url : url,
+								data : "",
+								success : function(data) {
+									$("#batch-log").append("<br>- tree unshared ("+g_trees[treeref][0]+") - user:"+user_id+" - role:"+role);
+									//===========================================================
+									g_nb_unshareTree[g_noline]++;
+									if (g_nb_unshareTree[g_noline]==g_unshare_trees.length) {
+										g_noline++;
+										if (g_noline>=g_json.lines.length)
+											processImportNodes();
+										else
+											processLine();
+									}
+									//===========================================================
+								},
+								error : function(data) {
+									$("#batch-log").append("<br>- ERROR in unshare tree ("+g_trees[treeref][0]+") - role:"+role);
+								}
+							});
+						else
+							$("#batch-log").append("<br>TRACE - tree unshared ("+g_trees[treeref][0]+") - user:"+user+" - role:"+role);
+					}
+				});
+			}
+		});
+	else {
+		$("#batch-log").append("<br>TRACE tree unshared ("+g_trees[treeref][0]+") - user:"+user+" - role:"+role);
+		//===========================================================
+		g_nb_unshareTree[g_noline]++;
+		if (g_nb_unshareTree[g_noline]==g_unshare_trees.length) {
+			g_noline++;
+			if (g_noline>=g_json.lines.length)
+				processImportNodes();
+		}
+		//===========================================================
+	}
+}
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -1292,7 +1526,7 @@ function getModelAndProcess(model_code)
 		success : function(data) {
 			var nodeid = $("asmRoot",data).attr("id");
 			// ---- transform karuta portfolio to batch model
-			var urlS = "../../../"+serverBCK+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2batch.xsl&lang="+LANG;
+			var urlS = "../../../"+serverBCK+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2batch.xsl&lang="+LANG;
 			$.ajax({
 				type : "GET",
 				dataType : "xml",

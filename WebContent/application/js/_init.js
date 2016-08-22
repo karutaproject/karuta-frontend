@@ -2,9 +2,10 @@
 var application_version = "1.0";
 var application_date = "2016-04-29";
 //----------------------------------
-var appliname = 'karuta-frontend';
-var karuta_url = '../../../karuta-core'
-var bckname = '';
+var appliname = 'karuta2.2';
+var karutaname = 'karuta-core'
+var karuta_url = '../../../' + karutaname;
+var bckname = '-ux';
 var serverBCK = "karuta-backend"+bckname+"/rest/api";
 var serverFIL = "karuta-backend"+bckname;
 var serverVER = "karuta-backend"+bckname;
@@ -25,7 +26,7 @@ var LANG = languages[LANGCODE]; //default value
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;
-var karuta_create_account = false;
+var karuta_create_account = true;
 //--------- NAVBAR BRAND ------------------
 var navbar_title = {};
 navbar_title["fr"] = "<img style='margin-top:-4px;' src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
@@ -51,4 +52,5 @@ var welcome5 = {}; 			//  Welcome sub-title
 	var listinfo = {};       // Welcome text
 	listinfo["fr"] = "";
 	listinfo["en"] = "";
-
+//--------- EMAIL LOGO -------------------------
+var sendEmailPublicURL_logo = karuta_url+"/karuta/img/logofonbleu.jpg";

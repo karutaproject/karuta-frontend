@@ -141,7 +141,7 @@ function getNavBar(type,portfolioid,edit)
 				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 				html += "					<ul class='dropdown-menu'>";
 				for (var i=0; i<languages.length;i++) {
-					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getLogin());$('#useridentifier').focus();$('#newpassword').html(getNew());$('#newaccount').html(karutaStr[LANG]['new-account']);\"><img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getLogin());$('#useridentifier').focus();$('#newpassword').html(getNew());$('#newaccount').html(getNewAccount());\"><img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 				}
 				html += "					</ul>";
 				html += "				</li>";
@@ -487,6 +487,17 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 	// ----------------------------------
 	UICom.structure['tree'][uuid] = null;
 	// ----------------------------------
+}
+
+//=======================================================================
+function confirmSubmit(uuid) 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"')\">" + karutaStr[LANG]["button-submit"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
 }
 
 //=======================================================================
@@ -1056,8 +1067,8 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	url = serverURL+"/"+appliname+"/karuta/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
-	var message ="&lt;img src='"+serverURL+"/"+appliname+"/karuta/img/logofonbleu.jpg' style='width:300px;margin-bottom:4px;margin-top:30px;'&gt;";
+	url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
+	var message ="&lt;img src='"+sendEmailPublicURL_logo+"' style='width:300px;margin-bottom:4px;margin-top:30px;'&gt;";
 	message +=  "&lt;div style='margin:30px;border-radius:4px;padding:10px;border: 1px solid lightGrey;box-shadow: 3px 3px 3px #CCC'&gt;";
 	message += "&lt;br/&gt;"+USER.firstname+" "+USER.lastname+karutaStr[LANG]['want-sharing'];
 	message += "&lt;div style='font-weight:bold;font-size:14pt;margin:30px;width:150px;'&gt;";
@@ -1076,7 +1087,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	$.ajax({
 		type : "POST",
 		dataType : "xml",
-		url : "../../../"+serverFIL+"/mail",
+		url : "../../../"+serverBCK+"/mail",
 		data: xml,
 		success : function(data) {
 			$('#edit-window').modal('hide');

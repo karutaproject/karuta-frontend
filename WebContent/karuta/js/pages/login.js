@@ -11,14 +11,6 @@ function getURLParameter(sParam) {
 	}
 }
 
-//------------------------------
-var iid = getURLParameter('i');
-//------------------------------
-var lang = getURLParameter('lang');
-if (lang==null)
-	lang = "" ;
-//-------------------------------
-
 //==============================
 function loadCSS(url)
 //==============================
@@ -65,6 +57,11 @@ function loadLoginPage(url)
 	loadJS(url+"/other/js/jquery-ui-1.10.3.custom.min.js");
 	loadJS(url+"/other/bootstrap/js/bootstrap.min.js");
 	loadJS(url+"/other/js/jquery.ui.touch-punch.min.js");
+	//--------------------------------------------------------------
+	if (elgg_installed) {
+		loadJS(url+"/socialnetwork-elgg/js/socialnetwork.js");
+		loadJS(url+"/socialnetwork-elgg/js/moment-with-locales.min.js");		
+	}
 	//--------------------------------------------------------------
 	loadJS(url+"/karuta/js/model/Type_Portfolio.js");
 	loadJS(url+"/karuta/js/model/Type_Node.js");
@@ -157,6 +154,16 @@ function getNew()
 }
 
 //==============================
+function getNewAccount()
+//==============================
+{
+	var html = "";
+	html += "<p>"+karutaStr[LANG]['new-account']+"</p>";
+	html += "<a class='btn btn-account' href='createAccount.htm?lang=en'>"+karutaStr[LANG]['sign-up']+"</a>";
+	return html;
+}
+
+//==============================
 function displayKarutaLogin()
 //==============================
 {
@@ -195,9 +202,10 @@ function displayKarutaLogin()
 	loadLanguages(function(data) {
 		$("#navigation_bar").html(getNavBar('login',null));
 		$("#login").html(getLogin(encrypt_url,lang));
-		$("#useridentifier").focus();$("#newpassword").html(getNew());
+		$("#useridentifier").focus();
+		$("#newpassword").html(getNew());
 		if(karuta_create_account)
-			$("#newaccount").html(karutaStr[LANG]['new-account']);
+			$("#newaccount").html(getNewAccount());
 		});
 	$.ajax({
 		type : "POST",
@@ -220,4 +228,15 @@ function displayKarutaLogin()
 	$.ajaxSetup({async: true});
 }
 
+//------------------------------
+//------------------------------
+//------------------------------
+var encrypt_url = getURLParameter('i');
+if (encrypt_url==null)
+	encrypt_url = "" ;
+//------------------------------
+var lang = getURLParameter('lang');
+if (lang==null)
+	lang = "" ;
+//-------------------------------
 
