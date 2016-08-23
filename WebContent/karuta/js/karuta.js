@@ -344,6 +344,7 @@ function getEditBox(uuid,js2) {
 	var editHtml = UIFactory["Node"].getMetadataEpmAttributesEditor(UICom.structure["ui"][uuid]);
 	$("#edit-window-body-metadata-epm").html($(editHtml));
 	// ------------------------------
+	$(".modal-dialog").css('width','600px');
 	$(".pickcolor").colorpicker();
 	// ------------------------------
 	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');}

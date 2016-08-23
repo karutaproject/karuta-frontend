@@ -203,7 +203,6 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (this.maxword>0) {
 		$("#counter_"+uuid).html(countWords(text)+"/"+this.maxword);
 	}
-	$(".modal-dialog").css('width','600px');
 	$("#"+uuid+"_edit_"+langcode).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'load': function(){$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][currentTexfieldUuid].resource.updateCounterWords(langcode);});},'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
 	//------------------------------------------------
 };
