@@ -141,7 +141,7 @@ function getNavBar(type,portfolioid,edit)
 				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 				html += "					<ul class='dropdown-menu'>";
 				for (var i=0; i<languages.length;i++) {
-					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getLogin());$('#useridentifier').focus();$('#newpassword').html(getNew());$('#newaccount').html(getNewAccount());\"><img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');displayKarutaLogin();\"><img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 				}
 				html += "					</ul>";
 				html += "				</li>";

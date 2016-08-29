@@ -2122,7 +2122,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "	<ul class='nav navbar-nav navbar-right'>";
 	//-------------------- WELCOME PAGE EDIT -----------
 	html += "		<li id='welcome-edit'></li>";
-	if (g_welcome_add){
+	if (g_welcome_add && g_designerrole){
 		html += "	<li id='welcome-add'>";
 		var databack = false;
 		var callback = "UIFactory['Node'].reloadStruct";

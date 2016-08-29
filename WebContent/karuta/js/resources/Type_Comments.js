@@ -153,6 +153,10 @@ UIFactory["Comments"].prototype.update = function(langcode)
 	this.date_node.text(now);
 	this.author_node.text(author);
 	var value = $.trim($("#"+this.id+"_edit_"+langcode).val());
+	if (value==''){ // we erase date and author if comments are deleted
+		this.date_node.text('');
+		this.author_node.text('');
+	}
 	$(this.text_node[langcode]).text(value);//	$(this.text_node[langcode]).html($.parseHTML(value));
 	this.save();
 };
