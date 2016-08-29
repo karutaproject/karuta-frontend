@@ -1040,7 +1040,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (depth>0 || nodetype == "asmContext") {
 					var help_text = "";
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
-					var helps = attr_help.split("/"); // lang1/lang2/...
+					var helps = attr_help.split("//"); // lang1/lang2/...
 					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
 						for (var j=0; j<helps.length; j++){
 							if (helps[j].indexOf("@"+languages[langcode])>-1)
@@ -3831,7 +3831,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 		var first = true;
 		for (var i=0; i<languages.length;i++){
 			if (!first)
-				html += "/";
+				html += "//";
 			html += karutaStr[languages[i]]['help2'];
 			first = false;
 		}
