@@ -42,6 +42,7 @@ var g_portfolio_current = ""; // XML jQuery Object - must be set after loading x
 var g_portfolio_rootid = "";
 var g_toggle_sidebar = [];
 var g_current_page = "";
+var g_nb_trees = 0;
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------

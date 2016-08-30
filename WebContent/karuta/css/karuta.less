@@ -214,8 +214,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 /*     PAGE LIST     */
 /* ====================== */
 #usersgroups .row,
-#projects .row,
-#portfolios .row,
+#list .row,
 #bin .row,
 #selectform-projects .row,
 #main-user  {
@@ -224,7 +223,9 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 #projects-label,
+#projects-nb,
 #portfolios-label,
+#portfolios-nb,
 #bin-label,
 #active-users,
 #portfoliosgroups-label,
@@ -364,9 +365,16 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	color:@list-button-color;
 }
 
+.portfolios-not-in-project{
+	margin-left:0px;
+	margin-right:0px;
+}
+
+
 #usersgroups .usersgroup-users,
 .usersgroup,
 .project,
+.portfolios-not-in-project,
 .portfoliosgroup {
 	margin-top:10px;
 	padding:7px;

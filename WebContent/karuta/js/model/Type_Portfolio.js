@@ -20,6 +20,7 @@ var bin_byid = {};
 var bin_list = [];
 var displayProject = {};
 var number_of_projects = 0;
+var number_of_projects_portfolios = 0;
 var number_of_portfolios = 0;
 var number_of_bins = 0;
 
@@ -101,6 +102,12 @@ UIFactory["Portfolio"].displayAll = function(dest,type,langcode)
 	UIFactory["Portfolio"].displayTree(0,null,type,langcode);
 	if (number_of_portfolios==0)
 		$("#portfolios-label").hide();
+	else
+		$("#portfolios-nb").html("("+number_of_portfolios+")");
+	if (number_of_projects==0)
+		$("#projects-label").hide();
+	else
+		$("#projects-nb").html("("+number_of_projects+")");
 };
 
 //==================================
@@ -124,20 +131,23 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 			var portfoliocode = portfolio.code_node.text();
 			var owner = (Users_byid[portfolio.ownerid]==null) ? "??? "+portfolio.ownerid:Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
 			if (portfolio.semantictag!= undefined && portfolio.semantictag.indexOf('karuta-project')>-1 && portfoliocode!='karuta.project'){
-				if (number_of_projects>0)
+				if (number_of_projects>0) {
 					$("#export-"+projects_list[number_of_projects-1].uuid).attr("href","../../../"+serverBCK+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
+					$("#number_of_projects_portfolios_"+projects_list[number_of_projects-1].uuid).html("("+number_of_projects_portfolios+")");
+				}
 				//-------------------- PROJECT ----------------------
 				projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio.label_node[langcode].text(),"portfolios":""};
 				displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
 				projects_list[number_of_projects].portfolios += portfolio.id;
 				number_of_projects ++;
+				number_of_projects_portfolios = 0;
 				html += "<div id='project_"+portfolio.id+"' class='project'>";
 				html += "	<div class='row row-label'>";
 				if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-minus'></span></div>";
 				else
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-plus'></span></div>";
-				html += "		<div id='portfoliolabel_"+portfolio.id+"' class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"</div>";
+				html += "		<div id='portfoliolabel_"+portfolio.id+"' class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"&nbsp;<span id='number_of_projects_portfolios_"+portfolio.id+"'></span></div>";
 				html += "		<div class='project-label col-md-2 col-sm-2 hidden-xs'>"+owner+"</div>";
 				html += "		<div id='project-comments_"+$(portfolios_byid[portfolio.id].root).attr("id")+"' class='col-md-4 col-sm3 col-xs-4 comments'></div><!-- comments -->";
 				html += "		<div class='col-md-1 col-xs-1'>";
@@ -187,6 +197,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				//-------------------- PORTFOLIO ----------------------
 				var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
 				if (parentcode!= null && portfolio_parentcode==parentcode) {
+					number_of_projects_portfolios++;
 					projects_list[number_of_projects-1].portfolios += ","+portfolio.id;
 					$("#"+dest).append($("<div class='row'   id='portfolio_"+portfolio.id+"'></div>"));
 				}
@@ -199,8 +210,10 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 				if (nb<portfolios_list.length)
 					UIFactory["Portfolio"].displayTree(nb,dest,type,langcode,parentcode);
 				else {
-					if (number_of_projects>0)
+					if (number_of_projects>0) {
 						$("#export-"+projects_list[number_of_projects-1].uuid).attr("href","../../../"+serverBCK+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
+						$("#number_of_projects_portfolios_"+projects_list[number_of_projects-1].uuid).html("("+number_of_projects_portfolios+")");
+					}
 					else
 						$("#portfolios-label").html(karutaStr[LANG]['portfolios']);
 					if (number_of_portfolios==0)
@@ -611,6 +624,32 @@ UIFactory["Portfolio"].parse = function(data)
 			if (code.indexOf(".")<0)
 				code += ".";
 			tableau1[i] = [portfolios_byid[uuid].code_node.text(),uuid];
+		} catch(e) {
+			alertHTML("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
+		}
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
+	for (var i=0; i<newTableau1.length; i++){
+		portfolios_list[i] = portfolios_byid[newTableau1[i][1]]
+	}
+};
+
+//==================================
+UIFactory["Portfolio"].parse_add = function(data) 
+//==================================
+{
+	var tableau1 = portfolios_list;
+	portfolios_list = [];
+	var uuid = "";
+	var items = $("portfolio",data);
+	for ( var i = 0; i < items.length; i++) {
+		try {
+			uuid = $(items[i]).attr('id');
+			portfolios_byid[uuid] = new UIFactory["Portfolio"](items[i]);
+			var code = portfolios_byid[uuid].code_node.text();
+			if (code.indexOf(".")<0)
+				code += ".";
+			tableau1[tableau1.length] = [portfolios_byid[uuid].code_node.text(),uuid];
 		} catch(e) {
 			alertHTML("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
 		}
