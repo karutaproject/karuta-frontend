@@ -1070,16 +1070,14 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
 	url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
-	var message ="&lt;img src='"+sendEmailPublicURL_logo+"' style='width:300px;margin-bottom:4px;margin-top:30px;'&gt;";
-	message +=  "&lt;div style='margin:30px;border-radius:4px;padding:10px;border: 1px solid lightGrey;box-shadow: 3px 3px 3px #CCC'&gt;";
-	message += "&lt;br/&gt;"+USER.firstname+" "+USER.lastname+karutaStr[LANG]['want-sharing'];
-	message += "&lt;div style='font-weight:bold;font-size:14pt;margin:30px;width:150px;'&gt;";
-	message +="&lt;a href='"+url+"' style='text-decoration: none;color:black;padding:10px;padding-left:40px;padding-right:40px;border-radius:4px;background-color:lightgrey'&gt;";
-	message += karutaStr[LANG]['see'];
-	message +="&lt;/a&gt;";
-	message +="&lt;/div&gt;";
-	message += "Karuta Team";
-	message +="&lt;/div&gt;";
+	//------------------------------
+	var message = "";
+	message = g_sendEmailPublicURL_message.replace("#firstname#",USER.firstname);
+	message = message.replace("#lastname#",USER.lastname);
+	message = message.replace("#want-sharing#",karutaStr[LANG]['want-sharing']);
+	message = message.replace("#see#",karutaStr[LANG]['see']);
+	message = message.replace("#do not edit this#",url);
+	//------------------------------
 	var xml ="<node>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
 	xml +="<recipient>"+email+"</recipient>";
@@ -1089,7 +1087,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	$.ajax({
 		type : "POST",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/mail",
+		url : "../../../"+serverREG+"/mail",
 		data: xml,
 		success : function(data) {
 			$('#edit-window').modal('hide');
@@ -1444,3 +1442,108 @@ function getFirstWords(text,nb) {
 	return text.substring(0,text.indexOf(tableOfWords[tableOfWords.length-1])+tableOfWords[tableOfWords.length-1].length);
 }
 
+//==================================
+function setCSSportfolio(data)
+//==================================
+{
+	// ================================= CSS Portfolio ========================
+	if ($("asmContext:has(metadata[semantictag='portfolio-navbar'])",data).length>0) {
+		var portfolio_navbar_id = $("asmContext:has(metadata[semantictag='portfolio-navbar'])",data).attr("id");
+		var portfolio_navbar_color = UICom.structure["ui"][portfolio_navbar_id].resource.getValue();
+		changeCss("#sub-bar .navbar-default", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
+		changeCss("#sub-bar .dropdown-menu", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
+		changeCss("#sub-bar .open > a", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
+	}
+	//--------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).length>0) {
+		var portfolio_navbar_link_id = $("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).attr("id");
+		var portfolio_navbar_link_color = UICom.structure["ui"][portfolio_navbar_link_id].resource.getValue();
+		changeCss("#sub-bar a", "color:"+portfolio_navbar_link_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).length>0) {
+		var portfolio_sidebar_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).attr("id");
+		var portfolio_sidebar_color = UICom.structure["ui"][portfolio_sidebar_id].resource.getValue();
+		changeCss("#sidebar", "background-color:"+portfolio_sidebar_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).length>0) {
+		var portfolio_sidebar_link_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).attr("id");
+		var portfolio_sidebar_link_color = UICom.structure["ui"][portfolio_sidebar_link_id].resource.getValue();
+		changeCss(".sidebar-link", "color:"+portfolio_sidebar_link_color+";padding-right:9px;");
+		changeCss(".sidebar-link a", "color:"+portfolio_sidebar_link_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).length>0) {
+		var portfolio_sidebar_link_selected_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).attr("id");
+		var portfolio_sidebar_link_selected_color = UICom.structure["ui"][portfolio_sidebar_link_selected_id].resource.getValue();								
+		changeCss(".selected a", "color:"+portfolio_sidebar_link_selected_color+";font-weight:bold;");
+		changeCss(".sidebar-link a:hover", "color:"+portfolio_sidebar_link_selected_color+";");
+		changeCss("a.sidebar-link:hover", "color:"+portfolio_sidebar_link_selected_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-selected-border'])",data).length>0) {
+		var portfolio_sidebar_selected_border_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-selected-border'])",data).attr("id");
+		portfolio_sidebar_selected_border_color = UICom.structure["ui"][portfolio_sidebar_selected_border_id].resource.getValue();
+		changeCss("#sidebar .selected", "border-right:4px solid "+portfolio_sidebar_selected_border_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).length>0) {
+		var portfolio_sidebar_separator_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).attr("id");
+		var portfolio_sidebar_separator_color = UICom.structure["ui"][portfolio_sidebar_separator_id].resource.getValue();								
+		changeCss(".sidebar-item", "border-bottom:1px solid "+portfolio_sidebar_separator_color+";");
+		changeCss(".sidebar-item .sidebar-item", "border-bottom:0px solid "+portfolio_sidebar_separator_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='welcome-title-color'])",data).length>0) {
+		var welcome_title_color_id = $("asmContext:has(metadata[semantictag='welcome-title-color'])",data).attr("id");
+		var welcome_title_color = UICom.structure["ui"][welcome_title_color_id].resource.getValue();
+		changeCss(".page-welcome .welcome-title", "color:"+welcome_title_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='welcome-line-color'])",data).length>0) {
+		var welcome_line_color_id = $("asmContext:has(metadata[semantictag='welcome-line-color'])",data).attr("id");
+		var welcome_line_color = UICom.structure["ui"][welcome_line_color_id].resource.getValue();
+		changeCss(".welcome-line", "border-bottom:1px solid "+welcome_line_color+";width:25%;margin-left:auto;margin-right:auto;");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='page-title-background-color'])",data).length>0) {
+		var page_title_background_color_id = $("asmContext:has(metadata[semantictag='page-title-background-color'])",data).attr("id");
+		var page_title_background_color = UICom.structure["ui"][page_title_background_color_id].resource.getValue();
+		changeCss(".welcome-line,.row-node-asmRoot,.row-node-asmStructure,.row-node-asmUnit", "background-color:"+page_title_background_color+";");
+		changeCss(".row-node", "border-top:1px solid "+page_title_background_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).length>0) {
+		var page_title_subline_color_id = $("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).attr("id");
+		var page_title_subline_color = UICom.structure["ui"][page_title_subline_color_id].resource.getValue();
+		changeCss(".row-node-asmRoot .title-subline,.row-node-asmStructure .title-subline,.row-node-asmUnit .title-subline", "border-bottom:1px solid "+page_title_subline_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
+		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
+		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
+	//	changeCss(".asmnode .dropdown-button, .submit-button", "border:1px solid "+portfolio_buttons_color+";");
+		changeCss(".collapsible .glyphicon,.btn-group .button", "color:"+portfolio_buttons_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
+		var portfolio_buttons_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).attr("id");
+		var portfolio_buttons_background_color = UICom.structure["ui"][portfolio_buttons_background_color_id].resource.getValue();
+		changeCss(".row-resource td.buttons,.csv-button,.pdf-button", "border:1px solid "+portfolio_buttons_background_color+";");
+		changeCss(".row-resource td.buttons,.csv-button,.pdf-button", "background:"+portfolio_buttons_background_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).length>0) {
+		var portfolio_link_color_id = $("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).attr("id");
+		var portfolio_link_color = UICom.structure["ui"][portfolio_link_color_id].resource.getValue();
+		changeCss("a", "color:"+portfolio_link_color+";");
+	}
+	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).length>0) {
+		var portfolio_section_title_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).attr("id");
+		var portfolio_section_title_background_color = UICom.structure["ui"][portfolio_section_title_background_color_id].resource.getValue();
+		changeCss(".row-node-asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
+	}
+	// ========================================================================
+}

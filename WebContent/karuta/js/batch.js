@@ -556,35 +556,45 @@ function deleteTree(node)
 {
 	var code = getTxtvals($("code",node));
 	//----- get tree id -----
-	var portfolioid = UIFactory["Portfolio"].getid_bycode(code,false);
-	if (portfolioid!=undefined) {
-		var url = "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid;
-		$.ajax({
-			type : "DELETE",
-			contentType: "application/xml",
-			dataType : "xml",
-			url : url,
-			data : "",
-			success : function(data) {
-				$("#batch-log").append("<br>- tree deleted - code:|"+code+"| portfolioid:"+portfolioid);
-				//===========================================================
-				g_nb_deleteTree[g_noline]++;
-				if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {
-					processCreateTrees();
+	try {
+		var portfolioid = UIFactory["Portfolio"].getid_bycode(code,false);
+		if (portfolioid!=undefined) {
+			var url = "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid;
+			$.ajax({
+				type : "DELETE",
+				contentType: "application/xml",
+				dataType : "xml",
+				url : url,
+				data : "",
+				success : function(data) {
+					$("#batch-log").append("<br>- tree deleted - code:|"+code+"| portfolioid:"+portfolioid);
+					//===========================================================
+					g_nb_deleteTree[g_noline]++;
+					if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {
+						processCreateTrees();
+					}
+					//===========================================================
+				},
+				error : function(jqxhr,textStatus) {
+					$("#batch-log").append("<br>- delete tree ERROR - code:|"+code+" ---- NOT FOUND ----");
+					//===========================================================
+					g_nb_deleteTree[g_noline]++;
+					if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {
+						processCreateTrees();
+					}
+					//===========================================================
 				}
-				//===========================================================
-			},
-			error : function(jqxhr,textStatus) {
-				$("#batch-log").append("<br>- delete tree ERROR - code:|"+code+" ---- NOT FOUND ----");
-				//===========================================================
-				g_nb_deleteTree[g_noline]++;
-				if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {
-					processCreateTrees();
-				}
-				//===========================================================
+			});
+		} else {
+			$("#batch-log").append("<br>- delete tree ERROR - code:|"+code+" ---- NOT FOUND ----");
+			//===========================================================
+			g_nb_deleteTree[g_noline]++;
+			if (g_delete_trees.length==g_nb_deleteTree[g_noline]) {
+				processCreateTrees();
 			}
-		});
-	} else {
+			//===========================================================
+		}	}
+	catch(err) {
 		$("#batch-log").append("<br>- delete tree ERROR - code:|"+code+" ---- NOT FOUND ----");
 		//===========================================================
 		g_nb_deleteTree[g_noline]++;
@@ -593,6 +603,7 @@ function deleteTree(node)
 		}
 		//===========================================================
 	}
+
 }
 
 //-----------------------------------------------------------------------

@@ -141,7 +141,7 @@ function displayKarutaPublic()
 {
 	var html = "";
 	html += "<div id='main-container' class='container-fluid public-container'>";
-	html += "<div class='row'>";
+	html += "<div class='row public-row'>";
 	html += "	<div class='col-md-3'>";
 	html += "		<div id='welcome'></div>";
 	html += "		<div id='sidebar'></div>";
@@ -159,7 +159,7 @@ function displayKarutaPublic()
 	$('body').append(imageBox());
 
 	//---------------------------
-	$("#welcome").html(welcome1[LANG]);
+	$("#welcome").html(welcome[LANG]);
 	$.ajaxSetup({async: false});
 	//----------------
 	$.ajax({
@@ -212,6 +212,7 @@ function displayKarutaPublic()
 					var rootnode = UICom.structure['ui'][g_uuid];
 					if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 						depth = 1;
+					setCSSportfolio(data);
 					loadLanguages(function(data) {
 						setLanguage(lang,'publichtm');
 						if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
@@ -219,6 +220,15 @@ function displayKarutaPublic()
 						$("#contenu").html("<div id='page' uuid='"+g_uuid+"'></div>");
 						UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
 					});
+					var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
+					if (welcomes.length>0){
+						var welcomeid = $(welcomes[0]).attr('id');
+						$("#sidebar_"+welcomeid).click();
+					} else {
+						var root = $("asmRoot",data);
+						var rootid = $(root[0]).attr('id');
+						$("#sidebar_"+rootid).click();
+					}
 				}
 			});
 		},

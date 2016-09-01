@@ -847,9 +847,6 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 		success : function(data) {
 			var portfolio = $("portfolio", data);
 			result = $(portfolio).attr('id');
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Error in getid_bycode : "+jqxhr.responseText);
 		}
 	});
 	$.ajaxSetup({async: true});

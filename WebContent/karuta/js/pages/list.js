@@ -185,6 +185,19 @@ function fill_list_page()
 						if ($("#projects").html()=="") {
 							$("#projects-label").hide();
 							$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
+						} else {
+							// for each project get number of portfolios inside the project
+							for (var i=0;i<portfolios_list;i++){
+								$.ajax({
+									type : "GET",
+									dataType : "xml",
+									url : "../../../"+serverBCK+"/portfolios?active=1&project="+portfolios_list[i].id+"&count",
+									success : function(data) {
+										g_nb_trees = $('portfolios',data).attr('count');
+										$("#number_of_projects_portfolios_"+portfolios_list[i].id).html("("+g_nb_trees+")");
+									}
+								});
+							}
 						}
 						$.ajax({
 							type : "GET",
