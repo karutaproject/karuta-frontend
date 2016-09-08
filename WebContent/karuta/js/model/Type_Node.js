@@ -1098,7 +1098,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
 				try {
 					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
-						processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0,spinning);
+						r_processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0,spinning);
 					else
 						report_getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models,spinning);
 				}
@@ -1514,7 +1514,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
 				try {
 					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
-						processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0);
+						r_processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0);
 					else
 						report_getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models);
 				}
@@ -2887,16 +2887,15 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
 		if ( submitted!='Y' && (
-				(submitnode && ( submitroles.indexOf($(g_userroles[0]).text())>-1 || submitroles.indexOf($(USER.username_node).text())>-1) )
+				(submitnode && ( submitroles.indexOf(g_userroles[0])>-1 || submitroles.indexOf($(USER.username_node).text())>-1) )
 				|| USER.admin
 				|| g_userroles[0]=='designer'
-				|| ( g_userroles[1]=='designer' && submitroles.indexOf($(g_userroles[0]).text())>-1)
-				|| submitroles.indexOf(userrole)>-1))
+				|| ( g_userroles[1]=='designer' && submitroles.indexOf(g_userroles[0]))>-1)
+				|| submitroles.indexOf(userrole)>-1 )
 		{
 			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"')\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
-		} else
-		{
+		} else {
 			if (submitted=='Y') {
 				if (USER.admin || g_userroles[0]=='administrator') {
 					html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:reset('"+node.id+"')\" ";

@@ -243,6 +243,7 @@ karutaStr['en']['welcome-add']="Add the Welcome Page";
 karutaStr['en']['welcome-added']="The Welcome Page has been added at the end of the portfolio model.<br>Move it up to the first position.";
 karutaStr['en']['button-welcome-edit']="Toggle Welcome Page Edition";
 karutaStr['en']['existing-code']="This code already exists.";
+karutaStr['en']['search-label']="Type a code or a part of a code";
 
 //=========================================
 //========== USERS ========================

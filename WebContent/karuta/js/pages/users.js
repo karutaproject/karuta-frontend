@@ -9,6 +9,7 @@ function show_list_users()
 	var navbar_html = getNavBar('list',null);
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_list_users()");
+	$("#search-div").hide();
 	$("#refresh").show();
 	$("#main-list").hide();
 	$("#main-portfoliosgroup").hide();

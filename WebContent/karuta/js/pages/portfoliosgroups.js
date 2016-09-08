@@ -8,6 +8,7 @@ function show_list_portfoliosgroups()
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_list_portfoliosgroups()");
 	$("#refresh").show();
+	$("#search-div").hide();
 	$("#main-list").hide();
 	$("#main-portfoliosgroup").show();
 	$("#main-page").hide();

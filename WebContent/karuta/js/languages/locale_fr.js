@@ -243,6 +243,7 @@ karutaStr['fr']['welcome-add']="Ajouter la page de bienvenue";
 karutaStr['fr']['welcome-added']="La page de bienvenue a été ajoutée à la fin du modèle de porfolio.<br>Montez la en première position.";
 karutaStr['fr']['button-welcome-edit']="Éditer la page de bienvenue";
 karutaStr['fr']['existing-code']="Ce code existe déjà.";
+karutaStr['fr']['search-label']="Saissisez un code ou une partie du code";
 
 //=========================================
 //========== USERS ========================

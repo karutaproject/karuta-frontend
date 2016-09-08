@@ -9,6 +9,7 @@ function show_main_page(portfolioid,role)
 	$("#main-page").html("");
 	$("#main-page").show();
 	$("#main-list").hide();
+	$("#search-div").hide();
 	$("#main-portfoliosgroup").hide();
 	$("#main-user").hide();
 	$("#main-usersgroup").hide();
@@ -59,6 +60,7 @@ function fill_main_page(portfolioid,role)
 		g_visible = Cookies.get('metadata');
 		toggleMetadata(g_visible);
 	}
+	$.ajaxSetup({async: true});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -79,8 +81,7 @@ function fill_main_page(portfolioid,role)
 				$('<link/>', { rel: 'stylesheet', type: 'text/css', href: '../../application/css/'+cssfile}).appendTo('head');
 			}
 			// --------------------------
-			UICom.parseStructure(data);
-			UIFactory["Portfolio"].parse(data);
+			UICom.parseStructure(data,true);
 			if ($("asmUnit:has(metadata[semantictag*='welcome-unit'])",data).length==0 && $("asmRoot:has(metadata[semantictag*='karuta-model'])",data).length>0) {
 				g_welcome_add = true;
 			}
@@ -120,6 +121,7 @@ function fill_main_page(portfolioid,role)
 //								UIFactory.Node.reloadUnit(UICom.rootid); // for IE9
 		}
 	});
+	$.ajaxSetup({async: false});
 	//=====================================================
 	$(document).click(function(e) {
 	    if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {

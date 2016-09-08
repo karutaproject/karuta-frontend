@@ -69,7 +69,10 @@ function displayKarutaPage()
 				html += "<div id='global-row' class='row'>";
 				if (g_socialnetwork==undefined || g_socialnetwork=='shown'){
 					html += "	<div id='main-content' class='col-md-8 col-md-push-4'>";
-					html += "		<div><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i></div>";
+					html += "	 <i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
+					html += "	<div id='search-div' class='search' style='display:none'>";
+					html += getSearch();
+					html += "	</div>";
 					html += "		<div id='main-list'></div>";
 					html += "		<div id='main-portfoliosgroup' style='display:none'></div>";
 					html += "		<div id='main-page' style='display:none'></div>";
@@ -82,6 +85,9 @@ function displayKarutaPage()
 				} else {
 					html += "	<div id='main-content' class='col-md-12'>";
 					html += "		<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
+					html += "	<div id='search-div' class='search' style='display:none'>";
+					html += getSearch();
+					html += "	</div>";
 					html += "		<div id='main-list' class='col-md-12'></div>";
 					html += "		<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
 					html += "		<div id='main-page' class='col-md-12' style='display:none'></div>";
@@ -103,6 +109,9 @@ function displayKarutaPage()
 				var html = "";
 				html += "<div id='global-row' class='row'>";
 				html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
+				html += "	<div id='search-div' class='search' style='display:none'>";
+				html += getSearch();
+				html += "	</div>";
 				html += "	<div id='main-list' class='col-md-12'></div>";
 				html += "	<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
 				html += "	<div id='main-page' class='col-md-12' style='display:none'></div>";
@@ -114,10 +123,15 @@ function displayKarutaPage()
 				$("#main-container").html(html);
 				$("#social-button").hide();
 			}
+
 			//-------------------------------
 			display_list_page();
-			setWelcomeTitles();
 			//-------------------------------
+			$("#search-input").keypress(function(f) {
+				var code= (f.keyCode ? f.keyCode : f.which);
+				if (code == 13)
+					searchPortfolio();
+			});
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML(karutaStr[LANG]['not-logged']);
@@ -125,4 +139,16 @@ function displayKarutaPage()
 		}
 	});
 	$.ajaxSetup({async: true});
+}
+
+//==============================
+function getSearch()
+//==============================
+{
+	var html = "";
+	html += "<div id='search' class='input-group'>";
+	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"'>";
+	html += "	<span class='input-group-btn'><button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><span class='glyphicon glyphicon-search'></span></button></span>";
+	html += "</div>";
+	return html;
 }

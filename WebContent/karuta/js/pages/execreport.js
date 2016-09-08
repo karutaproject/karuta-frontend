@@ -7,6 +7,7 @@ function show_exec_report()
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_exec_report()");
 	$("#refresh").show();
+	$("#search-div").hide();
 	$("#main-list").hide();
 	$("#main-portfoliosgroup").hide();
 	$("#main-page").hide();

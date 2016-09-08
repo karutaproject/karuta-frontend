@@ -131,7 +131,18 @@
 			</xsl:if>
 		</url2unit>
 	</xsl:template>
-
+	<!-- ================ JSFunction ============================ -->
+	<xsl:template match="*[metadata/@semantictag='jsfunction']">
+		<xsl:variable name="function">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='function']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<jsfunction>
+			<xsl:if test="not($function='..')">
+				<xsl:attribute name="function"><xsl:value-of select="$function"/></xsl:attribute>
+			</xsl:if>
+		</jsfunction>
+	</xsl:template>
+	<!-- ================ for-each-person ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-person']">
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -146,7 +157,7 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-person>
 	</xsl:template>
-	
+	<!-- ================ for-each-portfolio ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-portfolio']">
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -161,7 +172,7 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-portfolio>
 	</xsl:template>
-
+	<!-- ================ for-each-line ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-line']">
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -173,7 +184,7 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-line>
 	</xsl:template>
-
+	<!-- ================ for-each-node ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-node']">
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -197,7 +208,7 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-node>
 	</xsl:template>
-
+	<!-- ================ aggregate ============================ -->
 	<xsl:template match="*[metadata/@semantictag='aggregate']">
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
@@ -223,14 +234,21 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</aggregate>
 	</xsl:template>
-
+	<!-- ================ asmNop ============================ -->
 	<xsl:template match="*[metadata/@semantictag='asmNop']">
 	</xsl:template>
 
+	<!-- ==================================================== -->
+	<!-- ==================================================== -->
+	<!-- ==================================================== -->
 
 	<xsl:template match="*">
 	</xsl:template>
 	
+	<!-- ==================================================== -->
+	<!-- ==================================================== -->
+	<!-- ==================================================== -->
+
 	<xsl:template name="style">
 		<xsl:variable name="padding-top">
 			<xsl:value-of select="metadata-epm/@node-padding-top"/>

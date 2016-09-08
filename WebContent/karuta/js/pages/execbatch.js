@@ -7,6 +7,7 @@ function show_exec_batch()
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_exec_batch()");
 	$("#refresh").show();
+	$("#search-div").hide();
 	$("#main-list").hide();
 	$("#main-portfoliosgroup").hide();
 	$("#main-page").hide();

@@ -11,18 +11,24 @@ function getList()
 	}
 	html += "<h3><span id='projects-label'>"+text1+"</span>&nbsp<span id='projects-nb'></span></h3>";
 	html += "<div id='projects'></div>";
+	html += "<div id='portfolios-div'>";
 	html += "<h3 id='portfolios-not-in-project'><span id='portfolios-label'>"+text2+"</span>&nbsp<span id='portfolios-nb'></span></h3>";
-	html += "	<div class='row portfolios-not-in-project'>";
-	displayProject['portfolios-not-in-project'] = Cookies.get('dpportfolios-not-in-project');
-	if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
-		html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button glyphicon glyphicon-minus'></span></div>";
-	else
-		html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button glyphicon glyphicon-plus'></span></div>";
-	if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
-		html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:block'><div id='portfolios'></div></div>";
-	else
-		html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:none'><div id='portfolios'></div></div>";
-	html += "</div>";
+	if (USER.creator) {
+		html += "	<div class='row portfolios-not-in-project'>";
+		displayProject['portfolios-not-in-project'] = Cookies.get('dpportfolios-not-in-project');
+		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
+			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button glyphicon glyphicon-minus'></span></div>";
+		else
+			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button glyphicon glyphicon-plus'></span></div>";
+		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
+			html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:block'><div id='portfolios'></div></div>";
+		else
+			html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:none'><div id='portfolios'></div></div>";
+	} else {
+		html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:block'><div id='portfolios'></div></div>";		
+		html += "</div>";  // <div class='row portfolios-not-in-project'>
+	}
+	html += "</div>"; // <div id='portfolios-div'>
 	if (USER.admin || USER.creator) {
 		var text2 = karutaStr[LANG]['bin'];
 		if (USER.admin)
@@ -92,6 +98,7 @@ function show_list_page()
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_list_page()");
 	$("#refresh").show();
+	$("#search-div").show();
 	$("#main-page").hide();
 	$("#main-user").hide();
 	$("#main-usersgroup").hide();
@@ -102,9 +109,14 @@ function show_list_page()
 }
 
 //==============================
-function fill_list_page()
+function fill_list_page(code)
 //==============================
 {
+	$("#wait-window").show();
+	if (code==null) { // we don't search
+		code="";
+		$("#search-div").html(getSearch()); // we erase code if any
+	}
 	var html = "";
 	html += "<div class='projects'>";
 	html += "	<div id='menu'></div>";
@@ -149,32 +161,41 @@ function fill_list_page()
 		}
 	}
 	//----------------
+	var url1 =  "../../../"+serverBCK+"/portfolios?active=1&count";
+	if (code!="")
+		url1 += "&search="+code;
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1&project=all&count",
+		url : url1,
 		success : function(data) {
 			g_nb_trees = $('portfolios',data).attr('count');
-			if (g_nb_trees==null || g_nb_trees<100)
+			if (g_nb_trees==null || g_nb_trees<100 || code!="") {
 				//--------we load all the portfolios-----------------------
+				var url0 = "../../../"+serverBCK+"/portfolios?active=1";
+				if (code!="")
+					url0 += "&search="+code;
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/portfolios?active=1",
+					url : url0,
 					success : function(data) {
 						UIFactory["Portfolio"].parse(data);
+						$("#projects-nb").html("");
+						$("#portfolios-nb").html("");
 						UIFactory["Portfolio"].displayAll('portfolios','list');
 						if ($("#projects").html()=="") {
 							$("#projects-label").hide();
 							$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
 						}
+						$("#wait-window").hide();
 					},
 					error : function(jqxhr,textStatus) {
 						alertHTML("Server Error GET active: "+textStatus);
 					}
 				});
 				//---------------------------------------------------
-			else
+			} else {
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
@@ -184,20 +205,20 @@ function fill_list_page()
 						UIFactory["Portfolio"].displayAll('portfolios','list');
 						if ($("#projects").html()=="") {
 							$("#projects-label").hide();
-							$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
+//							$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
 						} else {
 							// for each project get number of portfolios inside the project
-							for (var i=0;i<portfolios_list;i++){
+/*							for (var i=0;i<portfolios_list.length;i++){
 								$.ajax({
 									type : "GET",
 									dataType : "xml",
-									url : "../../../"+serverBCK+"/portfolios?active=1&project="+portfolios_list[i].id+"&count",
+									url : "../../../"+serverBCK+"/portfolios?active=1&project="+$(portfolios_list[i].code_node).text()+"&count",
+									i : i,
 									success : function(data) {
-										g_nb_trees = $('portfolios',data).attr('count');
-										$("#number_of_projects_portfolios_"+portfolios_list[i].id).html("("+g_nb_trees+")");
+										$("#number_of_projects_portfolios_"+portfolios_list[this.i].id).html("("+$('portfolios',data).attr('count')+")");
 									}
 								});
-							}
+							}*/
 						}
 						$.ajax({
 							type : "GET",
@@ -211,54 +232,44 @@ function fill_list_page()
 									$.ajax({
 										type : "GET",
 										dataType : "xml",
-										url : "../../../"+serverBCK+"/portfolios?active=1&project=false",
+										url : "../../../"+serverBCK+"/portfolios?active=1&project=false"+(code=="")?"":"&search="+code,
 										success : function(data) {
 											UIFactory["Portfolio"].parse_add(data);
 											UIFactory["Portfolio"].displayAll('portfolios','list');
-											if ($("#projects").html()=="") {
-												$("#projects-label").hide();
-												$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
-											}
+											$("#wait-window").hide();
 										},
 										error : function(jqxhr,textStatus) {
 											alertHTML("Server Error GET active: "+textStatus);
+											$("#wait-window").hide();
 										}
 									});
+								else {
+									$("#portfolios-nb").html("("+nb+")");
+									$("#wait-window").hide();
+								}
 							},
 							error : function(jqxhr,textStatus) {
 								alertHTML("Server Error GET active: "+textStatus);
+								$("#wait-window").hide();
 							}
 						});
 					},
 					error : function(jqxhr,textStatus) {
 						alertHTML("Server Error GET active: "+textStatus);
+						$("#wait-window").hide();
 					}
 				});
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active-count: "+textStatus);
-		}
-	});
-	//----------------
-/*	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1",
-		success : function(data) {
-			var destid = $("div[id='portfolios']");
-			UIFactory["Portfolio"].parse(data);
-			UIFactory["Portfolio"].displayAll('portfolios','list');
-			if ($("#projects").html()=="") {
-				$("#projects-label").hide();
-				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
 			}
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
+			alertHTML("Server Error GET active-count: "+textStatus);
+			$("#wait-window").hide();
 		}
-	});*/
-	//----------------
+	});
 	if (USER.admin || USER.creator) {
+		var url = "../../../"+serverBCK+"/portfolios?active=false";
+		if (code!="")
+			url += "&search="+code;
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
@@ -273,6 +284,11 @@ function fill_list_page()
 			}
 		});
 	}
+	$("#search-input").keypress(function(f) {
+		var code= (f.keyCode ? f.keyCode : f.which);
+		if (code == 13)
+			searchPortfolio();
+	});
 }
 
 //==============================
@@ -282,7 +298,69 @@ function display_list_page()
 	if ($("#list-menu").length) {
 		show_list_page();
 	} else {
-		fill_list_page();
 		show_list_page();
+		fill_list_page();
 	}
 }
+
+//==============================
+function loadAndDisplayProjectPortfolios(code)
+//==============================
+{
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/portfolios?active=1&project="+code,
+		success : function(data) {
+			UIFactory["Portfolio"].parse_add(data);
+			UIFactory["Portfolio"].displayAll('portfolios','list');
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active: "+textStatus);
+		}
+	});
+}
+
+//==============================
+function loadProjectPortfolios(code)
+//==============================
+{
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/portfolios?active=1&project="+code,
+		success : function(data) {
+			UIFactory["Portfolio"].parse_add(data);
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active: "+textStatus);
+		}
+	});
+}
+
+
+//==============================
+function countProjectPortfolios(uuid)
+//==============================
+{
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+"&count",
+		uuid: uuid,
+		success : function(data) {
+			var nb = parseInt($('portfolios',data).attr('count'))-1;
+			$("#number_of_projects_portfolios_"+this.uuid).html("("+nb+")");
+		}
+	});
+}
+
+//==================================
+function searchPortfolio()
+//==================================
+{
+	var code = $("#search-input").val();
+	fill_list_page(code);
+}
+
+

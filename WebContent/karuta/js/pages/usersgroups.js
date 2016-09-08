@@ -10,6 +10,7 @@ function show_list_usersgroups()
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_list_usersgroups()");
 	$("#refresh").show();
+	$("#search-div").hide();
 	$("#main-list").hide();
 	$("#main-portfoliosgroup").hide();
 	$("#main-page").hide();

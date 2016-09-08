@@ -37,7 +37,7 @@ Selector = function(jquery,type,filter1,filter2)
 };
 
 //==================================
-function getSelector(select,test)
+function r_getSelector(select,test)
 //==================================
 {
 	if (test==null)
@@ -65,7 +65,7 @@ function getSelector(select,test)
 }
 
 //==================================
-function processPortfolio(no,xmlReport,destid,data,line)
+function r_processPortfolio(no,xmlReport,destid,data,line)
 //==================================
 {
 	var children = $(":root",xmlReport).children();
@@ -74,26 +74,28 @@ function processPortfolio(no,xmlReport,destid,data,line)
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
 		if (tagname=="table")
-			processTable(no+"_"+i,children[i],destid,data,line);
+			r_processTable(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="row")
-			processRow(no+"_"+i,children[i],destid,data,line);
+			r_processRow(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="cell")
-			processCell(no+"_"+i,children[i],destid,data,line);
+			r_processCell(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="node_resource")
-			processNodeResource(children[i],destid,data,line);
+			r_processNodeResource(children[i],destid,data,line);
 		if (tagname=="text")
-			processText(children[i],destid,data,line);
+			r_processText(children[i],destid,data,line);
 		if (tagname=="url2unit")
-			processURL2Unit(children[i],destid,data,line);
+			r_processURL2Unit(children[i],destid,data,line);
+		if (tagname=="jsfunction")
+			r_processJSFunction(children[i],destid,data,line);
 		if (tagname=="for-each-node")
-			processNode(no+"_"+i,children[i],destid,data,line);
+			r_processNode(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="for-each-portfolio")
-			getPortfolios(no+"_"+i,children[i],destid,data,line);
+			r_getPortfolios(no+"_"+i,children[i],destid,data,line);
 	}
 }
 
 //==================================
-function report_process(xmlDoc,json)
+function r_report_process(xmlDoc,json)
 //==================================
 {
 	$.ajaxSetup({async: false});
@@ -101,25 +103,27 @@ function report_process(xmlDoc,json)
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
 		if (tagname=="for-each-line")
-			processLine(i,children[i],'report-content');
+			r_processLine(i,children[i],'report-content');
 		if (tagname=="for-each-person")
-			getUsers(i,children[i],'report-content');
+			r_getUsers(i,children[i],'report-content');
 		if (tagname=="for-each-portfolio")
-			getPortfolios(i,children[i],'report-content');
+			r_getPortfolios(i,children[i],'report-content');
 		if (tagname=="table")
-			processTable(i,children[i],'report-content');
+			r_processTable(i,children[i],'report-content');
 		if (tagname=="aggregate")
-			processAggregate(children[i],'report-content');
+			r_processAggregate(children[i],'report-content');
 		if (tagname=="text")
-			processText(children[i],'report-content');
+			r_processText(children[i],'report-content');
 		if (tagname=="url2unit")
-			processURL2Unit(children[i],'report-content');
+			r_processURL2Unit(children[i],'report-content');
+		if (tagname=="jsfunction")
+			r_processJSFunction(children[i],'report-content');
 	}
 	$.ajaxSetup({async: true});
 }
 
 //==================================
-function processLine(no,xmlDoc,destid,data,line)
+function r_processLine(no,xmlDoc,destid,data,line)
 //==================================
 {
 	var ref_init = $(xmlDoc).attr("ref-init");
@@ -134,27 +138,27 @@ function processLine(no,xmlDoc,destid,data,line)
 		for (var j=0; j<children.length;j++){
 			var tagname = $(children[j])[0].tagName;
 			if (tagname=="for-each-person")
-				getUsers(no+"_"+i,children[j],destid,data,i);
+				r_getUsers(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="for-each-portfolio")
-				getPortfolios(no+"_"+i,children[j],destid,data,i);
+				r_getPortfolios(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="table")
-				processTable(no+"_"+i,children[j],destid,data,i);
+				r_processTable(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="row")
-				processRow(no+"_"+i,children[j],destid,data,i);
+				r_processRow(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="aggregate")
-				processAggregate(children[i],destid,data,i);
+				r_processAggregate(children[i],destid,data,i);
 		}
 	}
 }
 
 //==================================
-function processNode(no,xmlDoc,destid,data,line)
+function r_processNode(no,xmlDoc,destid,data,line)
 //==================================
 {
 	var select = $(xmlDoc).attr("select");
 	var test = $(xmlDoc).attr("test");
 	if (select!=undefined) {
-		var selector = getSelector(select,test);
+		var selector = r_getSelector(select,test);
 		var nodes = $(selector.jquery,data).filter(selector.filter1);
 		nodes = eval("nodes"+selector.filter2);
 		
@@ -171,30 +175,32 @@ function processNode(no,xmlDoc,destid,data,line)
 			for (var j=0; j<children.length;j++){
 				var tagname = $(children[j])[0].tagName;
 				if (tagname=="for-each-node")
-					processNode(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
+					r_processNode(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="table")
-					processTable(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
+					r_processTable(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="row")
-					processRow(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
+					r_processRow(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="cell")
-					processCell(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
+					r_processCell(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="aggregate")
-					processAggregate(children[j],destid,nodes[i],i);
+					r_processAggregate(children[j],destid,nodes[i],i);
 				if (tagname=="node_resource")
-					processNodeResource(children[j],destid,nodes[i],i);
+					r_processNodeResource(children[j],destid,nodes[i],i);
 				if (tagname=="text")
-					processText(children[j],destid,nodes[i],i);
+					r_processText(children[j],destid,nodes[i],i);
 				if (tagname=="url2unit")
-					processURL2Unit(children[j],destid,nodes[i],i);
+					r_processURL2Unit(children[j],destid,nodes[i],i);
+				if (tagname=="jsfunction")
+					r_processJSFunction(children[j],destid,nodes[i],i);
 				if (tagname=="aggregate")
-					processAggregate(children[j],destid,nodes[i],i);
+					r_processAggregate(children[j],destid,nodes[i],i);
 			}
 		};
 	}
 }
 
 //==================================
-function processTable(no,xmlDoc,destid,data,line)
+function r_processTable(no,xmlDoc,destid,data,line)
 //==================================
 {
 	//---------------------------
@@ -212,20 +218,20 @@ function processTable(no,xmlDoc,destid,data,line)
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
 		if (tagname=="for-each-line")
-			processLine(no+"_"+i,xmlDoc,'table_'+no,data,'table_'+no);
+			r_processLine(no+"_"+i,xmlDoc,'table_'+no,data,'table_'+no);
 		if (tagname=="for-each-person")
-			getUsers(no+"_"+i,children[i],'table_'+no,data,line);
+			r_getUsers(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="for-each-portfolio")
-			getPortfolios(no+"_"+i,children[i],'table_'+no,data,line);
+			r_getPortfolios(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="row")
-			processRow(no+"_"+i,children[i],'table_'+no,data,line);
+			r_processRow(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="for-each-node")
-			processNode(no+"_"+i,children[i],'table_'+no,data,line);
+			r_processNode(no+"_"+i,children[i],'table_'+no,data,line);
 	};
 }
 
 //==================================
-function processRow(no,xmlDoc,destid,data,line)
+function r_processRow(no,xmlDoc,destid,data,line)
 //==================================
 {
 	//---------------------------
@@ -243,18 +249,18 @@ function processRow(no,xmlDoc,destid,data,line)
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
 		if (tagname=="for-each-person")
-			getUsers(no,children[i],'tr_'+no,data,line);
+			r_getUsers(no,children[i],'tr_'+no,data,line);
 		if (tagname=="for-each-portfolio")
-			getPortfolios(no,children[i],'tr_'+no,data,line);
+			r_getPortfolios(no,children[i],'tr_'+no,data,line);
 		if (tagname=="cell")
-			processCell(no+"_"+i,children[i],'tr_'+no,data,line);
+			r_processCell(no+"_"+i,children[i],'tr_'+no,data,line);
 		if (tagname=="for-each-node")
-			processNode(no+"_"+i,children[i],'tr_'+no,data,line);
+			r_processNode(no+"_"+i,children[i],'tr_'+no,data,line);
 	}
 }
 
 //==================================
-function processCell(no,xmlDoc,destid,data,line)
+function r_processCell(no,xmlDoc,destid,data,line)
 //==================================
 {
 	var style = $(xmlDoc).attr("style");
@@ -264,26 +270,28 @@ function processCell(no,xmlDoc,destid,data,line)
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
 		if (tagname=="for-each-person")
-			getUsers(no,children[i],'td_'+no,data,line);
+			r_getUsers(no,children[i],'td_'+no,data,line);
 		if (tagname=="for-each-portfolio")
-			getPortfolios(no,children[i],'td_'+no,data,line);
+			r_getPortfolios(no,children[i],'td_'+no,data,line);
 		if (tagname=="table")
-			processTable(no,children[i],'td_'+no,data,line);
+			r_processTable(no,children[i],'td_'+no,data,line);
 		if (tagname=="node_resource")
-			processNodeResource(children[i],'td_'+no,data,line);
+			r_processNodeResource(children[i],'td_'+no,data,line);
 		if (tagname=="text")
-			processText(children[i],'td_'+no,data,line);
+			r_processText(children[i],'td_'+no,data,line);
 		if (tagname=="url2unit")
-			processURL2Unit(children[i],'td_'+no,data,line);
+			r_processURL2Unit(children[i],'td_'+no,data,line);
+		if (tagname=="jsfunction")
+			r_processJSFunction(children[i],'td_'+no,data,line);
 		if (tagname=="aggregate")
-			processAggregate(children[i],'td_'+no,data,line);
+			r_processAggregate(children[i],'td_'+no,data,line);
 		if (tagname=="for-each-node")
-			processNode(no,children[i],'td_'+no,data,line);
+			r_processNode(no,children[i],'td_'+no,data,line);
 	}
 }
 
 //==================================
-function getUsers(no,xmlDoc,destid,data,line)
+function r_getUsers(no,xmlDoc,destid,data,line)
 //==================================
 {
 	var ref_init = $(xmlDoc).attr("ref-init");
@@ -297,13 +305,13 @@ function getUsers(no,xmlDoc,destid,data,line)
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/users",
 		success : function(data) {
-			processUsers(no,xmlDoc,destid,data,line);
+			r_processUsers(no,xmlDoc,destid,data,line);
 		}
 	});
 }
 
 //==================================
-function processUsers(no,xmlDoc,destid,data,line)
+function r_processUsers(no,xmlDoc,destid,data,line)
 //==================================
 {
 	UIFactory["User"].parse(data);
@@ -327,19 +335,21 @@ function processUsers(no,xmlDoc,destid,data,line)
 			for (var i=0; i<children.length;i++){
 				var tagname = $(children[i])[0].tagName;
 				if (tagname=="for-each-portfolio")
-					getPortfolios(no+"_"+j,children[i],destid,data,line);
+					r_getPortfolios(no+"_"+j,children[i],destid,data,line);
 				if (tagname=="table")
-					processTable(no+"_"+j,children[i],destid,data,line);
+					r_processTable(no+"_"+j,children[i],destid,data,line);
 				if (tagname=="row")
-					processRow(no+"_"+j,children[i],destid,data,line);
+					r_processRow(no+"_"+j,children[i],destid,data,line);
 				if (tagname=="cell")
-					processCell(no+"_"+j,children[i],destid,data,line);
+					r_processCell(no+"_"+j,children[i],destid,data,line);
 				if (tagname=="node_resource")
-					processNodeResource(children[i],destid,data,line);
+					r_processNodeResource(children[i],destid,data,line);
+				if (tagname=="jsfunction")
+					r_processJSFunction(children[i],destid,data,line);
 				if (tagname=="text")
-					processText(children[i],destid,data,line);
+					r_processText(children[i],destid,data,line);
 				if (tagname=="for-each-node")
-					processNode(no+"_"+j,children[i],destid,data,line);
+					r_processNode(no+"_"+j,children[i],destid,data,line);
 			}
 		}
 			//------------------------------------
@@ -347,7 +357,7 @@ function processUsers(no,xmlDoc,destid,data,line)
 }
 
 //==================================
-function getPortfolios(no,xmlDoc,destid,data,line)
+function r_getPortfolios(no,xmlDoc,destid,data,line)
 //==================================
 {
 	var ref_init = $(xmlDoc).attr("ref-init");
@@ -363,13 +373,13 @@ function getPortfolios(no,xmlDoc,destid,data,line)
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/portfolios?active=1&user="+userid,
 		success : function(data) {
-			processPortfolios(no,xmlDoc,destid,data,line);
+			r_processPortfolios(no,xmlDoc,destid,data,line);
 		}
 	});
 }
 
 //==================================
-function processPortfolios(no,xmlDoc,destid,data,line)
+function r_processPortfolios(no,xmlDoc,destid,data,line)
 //==================================
 {
 	UIFactory["Portfolio"].parse(data);
@@ -402,17 +412,19 @@ function processPortfolios(no,xmlDoc,destid,data,line)
 					for (var i=0; i<children.length;i++){
 						var tagname = $(children[i])[0].tagName;
 						if (tagname=="table")
-							processTable(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+							r_processTable(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
 						if (tagname=="row")
-							processRow(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+							r_processRow(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
 						if (tagname=="cell")
-							processCell(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+							r_processCell(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
 						if (tagname=="node_resource")
-							processNodeResource(children[i],destid,data,line);
+							r_processNodeResource(children[i],destid,data,line);
+						if (tagname=="jsfunction")
+							r_processJSFunction(children[i],destid,data,line);
 						if (tagname=="text")
-							processText(children[i],destid,data,line);
+							r_processText(children[i],destid,data,line);
 						if (tagname=="for-each-node")
-							processNode(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+							r_processNode(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
 					}
 				}
 			});
@@ -422,7 +434,7 @@ function processPortfolios(no,xmlDoc,destid,data,line)
 }
 
 //==================================
-function processNodeResource(xmlDoc,destid,data)
+function r_processNodeResource(xmlDoc,destid,data)
 //==================================
 {
 	var text = "";
@@ -432,7 +444,7 @@ function processNodeResource(xmlDoc,destid,data)
 		var ref = $(xmlDoc).attr("ref");
 		var editresroles = $(xmlDoc).attr("editresroles");
 		style = $(xmlDoc).attr("style");
-		var selector = getSelector(select);
+		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
 		if (node.length==0) // try the node itself
 			node = $(selector.jquery,data).addBack();
@@ -510,7 +522,7 @@ function processNodeResource(xmlDoc,destid,data)
 }
 
 //==================================
-function processText(xmlDoc,destid,data)
+function r_processText(xmlDoc,destid,data)
 //==================================
 {
 	var nodeid = $(data).attr("id");
@@ -528,7 +540,15 @@ function processText(xmlDoc,destid,data)
 }
 
 //==================================
-function processURL2Unit(xmlDoc,destid,data)
+function r_processJSFunction(xmlDoc,destid,data)
+//==================================
+{
+	var jsfunction = $(xmlDoc).attr("function");
+	eval (jsfunction);
+}
+
+//==================================
+function r_processURL2Unit(xmlDoc,destid,data)
 //==================================
 {
 	var nodeid = $(data).attr("id");
@@ -536,7 +556,7 @@ function processURL2Unit(xmlDoc,destid,data)
 	var text = "";
 	var style = $(xmlDoc).attr("style");
 	var select = $(xmlDoc).attr("select");
-	var selector = getSelector(select);
+	var selector = r_getSelector(select);
 	var node = $(selector.jquery,data);
 	if (node.length==0) // try the node itself
 		node = $(selector.jquery,data).addBack();
@@ -553,7 +573,7 @@ function processURL2Unit(xmlDoc,destid,data)
 }
 
 //==================================
-function processAggregate(aggregate,destid)
+function r_processAggregate(aggregate,destid)
 //==================================
 {
 	var style = $(xmlDoc).attr("style");
@@ -594,7 +614,7 @@ function processAggregate(aggregate,destid)
 //===============================================================
 
 //==================================
-function report_processCode()
+function r_report_processCode()
 //==================================
 {
 	var model_code = $("#report-model_code").val();
@@ -621,7 +641,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 				success : function(data) {
 					g_dashboard_models[model_code] = data;
 					try {
-						processPortfolio(0,data,destid,node,0);
+						r_processPortfolio(0,data,destid,node,0);
 					}
 					catch(err) {
 						alertHTML("Error in Dashboard : " + err.message);
@@ -651,7 +671,7 @@ function report_getModelAndProcess(model_code,json)
 				dataType : "xml",
 				url : urlS,
 				success : function(data) {
-					report_process(data,json);
+					r_report_process(data,json);
 				}
 			 });
 		}
