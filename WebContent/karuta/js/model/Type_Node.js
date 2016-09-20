@@ -2523,6 +2523,7 @@ UIFactory["Node"].selectNode = function(nodeid,node)
 	var langcode = LANGCODE;
 	//---------------------
 	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	$("#edit-window-title").html("&nbsp;");

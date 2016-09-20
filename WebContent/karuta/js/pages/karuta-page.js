@@ -127,11 +127,6 @@ function displayKarutaPage()
 			//-------------------------------
 			display_list_page();
 			//-------------------------------
-			$("#search-input").keypress(function(f) {
-				var code= (f.keyCode ? f.keyCode : f.which);
-				if (code == 13)
-					searchPortfolio();
-			});
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML(karutaStr[LANG]['not-logged']);

@@ -357,3 +357,10 @@ karutaStr['en']['select_groups']="Select Groups";
 karutaStr['en']['select_portfoliosgroups']="Select Portfolio Groups";
 karutaStr['en']['create_portfoliosgroup']="Create a Portfolio Group";
 karutaStr['en']['button-remove-from-group']="Remove from the Group";
+
+//=========================================
+//========== ERRORS =======================
+//=========================================
+
+karutaStr['en']['code-not-null']="Code cannot be null";
+karutaStr['en']['label-not-null']="Label cannot be null";

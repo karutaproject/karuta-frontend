@@ -662,6 +662,7 @@ UIFactory["PortfoliosGroup"].callShareUsers = function(gid)
 	html += "</div><!--sharing-->";
 	$("#edit-window-body").html(html);
 	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
@@ -732,6 +733,7 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 	html += "</div><!--sharing-->";
 	$("#edit-window-body").html(html);
 	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------

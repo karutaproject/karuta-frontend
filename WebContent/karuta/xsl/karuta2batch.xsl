@@ -356,6 +356,21 @@
 			</usergroup>
 		</join-usergroup>
 	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='leave-usergroup']">
+		<leave-usergroup>
+			<user>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">person</xsl:with-param>
+				</xsl:call-template>
+			</user>
+			<usergroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">usergroup</xsl:with-param>
+				</xsl:call-template>
+			</usergroup>
+		</leave-usergroup>
+	</xsl:template>
 	
 
 </xsl:stylesheet>

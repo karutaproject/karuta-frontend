@@ -5,22 +5,20 @@
 	<title>Karuta Welcome</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-	<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
-	<script src="../js/_init.js"></script>
+	<link rel="icon" type="image/png" href="../../application/img/faviconK.png" />
+	<script src="../js/_init.js" ></script>
 	<!-- =============================================================== -->
-	<script>
-		document.write("<script src='"+karuta_url+"/karuta/js/pages/login.js'><\/script>");
-		document.write("<script>loadLoginPage(karuta_url);<\/script>");
-	</script>
+	<script src="../../../karuta-core/karuta/js/pages/login.js"></script>
+	<script>loadLoginPage(karuta_url);</script>
+	<!-- =============================================================== -->
 	<link rel='stylesheet' type='text/css' href='../css/specific.css'/>
 </head>
 <body class="welcome">
 	<script>document.write(alertBox());</script>
-	<script language='javascript'>
+	<script>
 		$(window).load(function() {
 			displayKarutaLogin();
 		});
-		//------------------------------
 	</script>
 
 

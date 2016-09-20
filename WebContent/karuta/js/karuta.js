@@ -43,6 +43,7 @@ var g_portfolio_rootid = "";
 var g_toggle_sidebar = [];
 var g_current_page = "";
 var g_nb_trees = 0;
+var g_sum_trees = 0;
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------
@@ -57,7 +58,7 @@ function setDesignerRole(role)
 		role = 'designer';
 	g_userroles[0] = role;
 	fillEditBoxBody();
-	$("#userrole").html(" ("+role+")");
+	$("#userrole").html(role);
 	if (g_display_type=='standard'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
@@ -1170,39 +1171,6 @@ function toggleSharing(uuid) {
 		$("#toggleSharing_"+uuid).removeClass("glyphicon-minus")
 		$("#toggleSharing_"+uuid).addClass("glyphicon-plus")
 		$("#sharing-content-"+uuid).hide();
-	}
-}
-
-//==================================
-function toggleProject(uuid) {
-//==================================
-	if ($("#toggleContent_"+uuid).hasClass("glyphicon-plus")) {
-		$("#toggleContent_"+uuid).removeClass("glyphicon-plus");
-		$("#toggleContent_"+uuid).addClass("glyphicon-minus");
-		if (uuid=="portfolios-not-in-project") {
-			if ($("#portfolios").html()=="") {
-				$("#content-"+uuid).show();
-				loadAndDisplayProjectPortfolios("false");
-			} else {
-				$("#content-"+uuid).show();
-				displayProject[uuid] = 'open';
-			}
-		} else {
-			if ($("#content-"+uuid).html()=="" || $(portfolios_byid[uuid].code_node).text()=='karuta' )
-				loadAndDisplayProjectPortfolios($("#content-"+uuid).attr("code"));
-			else {
-				$("#content-"+uuid).show();
-				displayProject[uuid] = 'open';
-			}
-			Cookies.set('dp'+uuid,'open',{ expires: 60 });
-		}
-	} else {
-		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
-		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
-		$("#content-"+uuid).hide();
-		displayProject[uuid] = 'closed';
-		if (uuid!="portfolios-not-in-project")
-			Cookies.set('dp'+uuid,'closed',{ expires: 60 });
 	}
 }
 

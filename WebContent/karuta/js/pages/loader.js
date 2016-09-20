@@ -27,7 +27,7 @@ function loadKarutaPage(url)
 	loadCSS(url+"/other/bootstrap/css/bootstrap.min.css");
 	loadCSS(url+"/other/css/jquery-ui.css");
 	loadCSS(url+"/other/css/font-awesome/css/font-awesome.min.css");
-//	loadCSS(url+"/other/css/colorpicker/css/evol.colorpicker.css");
+	loadCSS(url+"/other/colorpicker/css/evol.colorpicker.min.css");
 	//--------------------------------------------------------------
 	var karuta_config = "../../../"+appliname+"/application/css/color.less";
 	less = {

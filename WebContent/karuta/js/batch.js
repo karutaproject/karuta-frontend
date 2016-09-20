@@ -61,6 +61,9 @@ var g_nb_importNode = new Array();
 var g_join_usergroups = null;
 var g_nb_joinUserGroup = new Array();
 //-----------------------
+var g_leave_usergroups = null;
+var g_nb_leaveUserGroup = new Array();
+//-----------------------
 
 //==================================
 function initBatchVars()
@@ -110,6 +113,8 @@ function initBatchVars()
 	g_join_usergroups = null;
 	g_nb_joinUserGroup = new Array();
 	//-----------------------
+	g_leave_usergroups = null;
+	g_nb_leaveUserGroup = new Array();
 }
 
 //-----------------------------------------------------------------------
@@ -159,6 +164,7 @@ function processAll()
 	g_import_nodes = $("import-node",g_xmlDoc);
 	g_update_tree_roots = $("update-tree-root",g_xmlDoc);
 	g_join_usergroups = $("join-usergroup",g_xmlDoc);
+	g_leave_usergroups = $("leave-usergroup",g_xmlDoc);
 	processLine();
 }
 
@@ -329,7 +335,7 @@ function processJoinUserGroups()
 //=================================================
 {
 	if (g_join_usergroups.length==0)
-		processElggGroupMembers();
+		processLeaveUserGroups();
 	else {
 		$("#batch-log").append("<br>---------------------Join User Groups-------------------------------");
 		for  (var j=0; j<g_join_usergroups.length; j++) {
@@ -394,7 +400,7 @@ function JoinUserGroup(node)
 										if (g_nb_joinUserGroup[g_noline]==g_join_usergroups.length) {
 											g_noline++;
 											if (g_noline>=g_json.lines.length)
-												processElggUsers();
+												processLeaveUserGroups();
 											else
 												processLine();
 										}
@@ -422,6 +428,119 @@ function JoinUserGroup(node)
 		//===========================================================
 		g_nb_joinUserGroup[g_noline]++;
 		if (g_nb_joinUserGroup[g_noline]==g_join_usergroups.length) {
+			g_noline++;
+			if (g_noline>=g_json.lines.length)
+				processLeaveUserGroups();
+		}
+		//===========================================================
+	}
+
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//--------------------------- Leave User Group ---------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function processLeaveUserGroups()
+//=================================================
+{
+	if (g_leave_usergroups.length==0)
+		processElggGroupMembers();
+	else {
+		$("#batch-log").append("<br>---------------------Leave User Groups-------------------------------");
+		for  (var j=0; j<g_leave_usergroups.length; j++) {
+			LeaveUserGroup(g_leave_usergroups[j]);
+		}
+	}
+}
+
+//=================================================
+function LeaveUserGroup(node)
+//=================================================
+{
+	var role = "";
+	var user = "";
+	var usergroup = getTxtvals($("usergroup",node));
+	var select_user = $("user>txtval",node).attr("select");
+	if(typeof(select_user)=='undefined')
+		user = $("user>txtval",node).text();
+	else
+		user = eval("g_json.lines["+g_noline+"]."+select_user);
+	//---- get userid ----------
+	var url = "../../../"+serverBCK+"/users/user/username/"+user;
+	if (!trace)
+		$.ajax({
+			async:false,
+			type : "GET",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			success : function(data) {
+				var user_id = data;
+				var xml = "<users><user id='"+data+"'/></users>";
+				//---- get usergroupid ----------
+				var groupid = "";
+				var url = "../../../"+serverBCK+"/usersgroups";
+				$.ajax({
+					async:false,
+					type : "GET",
+					contentType: "text/html",
+					dataType : "text",
+					url : url,
+					success : function(data) {
+						var groups = $("group",data);
+						for (var k=0;k<groups.length;k++){
+							if ($('label',groups[k]).text()==usergroup)
+								groupid = $(groups[k]).attr("id");
+						}
+						if (groupid=="")
+							$("#batch-log").append("<br>- ERROR in LeaveUserGroup - usergroup:"+usergroup+" NOT FOUND - user:"+user);
+						else {
+							//---- leave group --------------
+							if (!trace)
+								$.ajax({
+									type : 'DELETE',
+									dataType : "text",
+									url : "../../../"+serverBCK+"/usersgroups?group=" + groupid + "&user=" + user_id,
+									data : "",
+									success : function(data) {
+										$("#batch-log").append("<br>- LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
+										//===========================================================
+										g_nb_leaveUserGroup[g_noline]++;
+										if (g_nb_leaveUserGroup[g_noline]==g_leave_usergroups.length) {
+											g_noline++;
+											if (g_noline>=g_json.lines.length)
+												processElggUsers();
+											else
+												processLine();
+										}
+										//===========================================================
+									},
+									error : function(data) {
+										$("#batch-log").append("<br>- ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
+									}
+								});
+							else
+								$("#batch-log").append("<br>TRACE - LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
+						}
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
+					}
+				});
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user+" NOT FOUND");
+			}
+		});
+	else {
+		$("#batch-log").append("<br>TRACE LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
+		//===========================================================
+		g_nb_leaveUserGroup[g_noline]++;
+		if (g_nb_leaveUserGroup[g_noline]==g_leave_usergroups.length) {
 			g_noline++;
 			if (g_noline>=g_json.lines.length)
 				processElggUsers();

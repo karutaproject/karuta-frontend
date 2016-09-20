@@ -357,3 +357,10 @@ karutaStr['fr']['select_groups']="Sélectionner des groupes";
 karutaStr['fr']['select_portfoliosgroups']="Sélectionner des groupes de portfolios";
 karutaStr['fr']['create_portfoliosgroup']="Créer un groupe de portfolios";
 karutaStr['fr']['button-remove-from-group']="Retirer de ce groupe";
+
+//=========================================
+//========== ERRORS =======================
+//=========================================
+
+karutaStr['fr']['code-not-null']="Le code ne peut pas être vide";
+karutaStr['fr']['label-not-null']="Le libellé ne peut pas être vide";
