@@ -93,7 +93,6 @@ function show_list_page()
 function fill_list_page()
 //==============================
 {
-	g_sum_trees = 0;
 	$("#wait-window").show();
 	$("#search-div").html(getSearch()); // we erase code if any
 	$("#search-input").keypress(function(f) {
@@ -145,6 +144,7 @@ function fill_list_page()
 	}
 	//----------------
 	var url1 =  "../../../"+serverBCK+"/portfolios?active=1&count=true";
+	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -161,15 +161,7 @@ function fill_list_page()
 					success : function(data) {
 						UIFactory["Portfolio"].parse(data);
 						$("#list").html(getList());
-						$("#projects-nb").html("");
-						$("#portfolios-nb").html("");
 						UIFactory["Portfolio"].displayAll('portfolios','list');
-						if ($("#projects").html()=="") {
-							$("#projects-label").hide();
-							$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
-						}
-						if ($("#portfolios-nb").html()=="0")
-							$("#portfolios-div").hide();
 						if (USER.admin || USER.creator) {
 							$.ajax({
 								type : "GET",
@@ -200,10 +192,8 @@ function fill_list_page()
 					success : function(data) {
 						var nb_projects = parseInt($('portfolios',data).attr('count'));
 						UIFactory["Portfolio"].parse(data);
-						$.ajaxSetup({async: false});
 						$("#list").html(getList());
 						UIFactory["Portfolio"].displayAll('portfolios','list');
-						$.ajaxSetup({async: true});
 						$("#wait-window").hide();
 						if (USER.admin || USER.creator) {
 							$.ajax({
@@ -234,6 +224,7 @@ function fill_list_page()
 			$("#wait-window").hide();
 		}
 	});
+	$.ajaxSetup({async: true});
 }
 
 //==============================
@@ -288,14 +279,12 @@ function fill_search_page(code)
 			var nb = parseInt($('portfolios',data).attr('count'));
 			UIFactory["Portfolio"].parse(data);
 			$("#list").html(getList());
-			$("#projects-nb").html("");
-			$("#portfolios-nb").html("");
 			UIFactory["Portfolio"].displayAll('portfolios','list');
 			if ($("#projects").html()=="") {
 				$("#projects-label").hide();
 				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
 			}
-			if ($("#portfolios-nb").html()=="0" || $("#portfolios-nb").html()=="")
+			if ($("#portfolios").html()=="")
 				$("#portfolios-div").hide();
 			if (USER.admin || USER.creator) {
 				$.ajax({
@@ -381,7 +370,7 @@ function countProjectPortfolios(uuid)
 		url : "../../../"+serverBCK+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+"&count=true",
 		uuid: uuid,
 		success : function(data) {
-			var nb = parseInt($('portfolios',data).attr('count'));
+			var nb = parseInt($('portfolios',data).attr('count'))-1;
 			$("#number_of_projects_portfolios_"+this.uuid).html(nb);
 		}
 	});

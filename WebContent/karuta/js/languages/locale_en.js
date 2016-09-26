@@ -58,7 +58,7 @@ karutaStr['en']['enter-text']="Enter something...";
 karutaStr['en']['not-logged']="You are not connected.";
 karutaStr['en']['translate']="Translate";
 karutaStr['en']['submit']="Submit";
-karutaStr['en']['newpassword']="Forgot Password? Send your login:";
+karutaStr['en']['newpassword']="Forgot password? Send your login:";
 karutaStr['en']['confirm-password']="Confirm password";
 karutaStr['en']['password-mismatch']="The two passwords do not match.";
 karutaStr['en']['saved']="Saved";
@@ -364,3 +364,44 @@ karutaStr['en']['button-remove-from-group']="Remove from the Group";
 
 karutaStr['en']['code-not-null']="Code cannot be null";
 karutaStr['en']['label-not-null']="Label cannot be null";
+
+//=========================================
+//========== RESOURCES =======================
+//=========================================
+
+karutaStr['en']['asmStructure']="Section";
+karutaStr['en']['asmUnit']="Page";
+karutaStr['en']['asmUnitStructure']="Subsection";
+
+karutaStr['en']['TextField']="TextField";
+karutaStr['en']['Field']="Field";
+karutaStr['en']['Document']="Document";
+karutaStr['en']['URL']="URL";
+karutaStr['en']['Calendar']="Calendar";
+karutaStr['en']['Image']="Image";
+karutaStr['en']['Video']="Video";
+karutaStr['en']['Audio']="Audio";
+karutaStr['en']['Oembed']="Oembed";
+karutaStr['en']['Color']="Color";
+karutaStr['en']['URL2Unit']="URL2Unit";
+karutaStr['en']['Comments']="Comments";
+
+karutaStr['en']['SendEmail']="SendEmail";
+karutaStr['en']['Dashboard']="Dashboard";
+
+karutaStr['en']['DocumentBlock']="DocumentBlock";
+karutaStr['en']['URLBlock']="URLBlock";
+karutaStr['en']['ImageBlock']="ImageBlock";
+
+karutaStr['en']['Item']="Item";
+karutaStr['en']['GetResource']="GetResource";
+karutaStr['en']['GetGetResource']="GetGetResource";
+karutaStr['en']['GetDoubleResource']="GetDoubleResource";
+karutaStr['en']['Proxy']="Proxy";
+
+karutaStr['en']['BubbleMap']="Bubble Map";
+karutaStr['en']['asmColumn']="asmColumn";
+
+
+
+

@@ -97,19 +97,24 @@ UIFactory["Portfolio"].displayAll = function(dest,type,langcode)
 	number_of_projects = 0;
 	number_of_portfolios = 0;
 	number_of_bins = 0;
+	g_sum_trees = 0;
 	$("#projects").html($(""));
 	$("#portfolios").html($(""));
 	UIFactory["Portfolio"].displayTree(0,null,type,langcode,null);
-	if(number_of_projects>0)
-		countProjectPortfolios(projects_list[number_of_projects-1].uuid); // count last project
-	if ($("#portfolios-nb").html()=="0")
-		$("#portfolios-div").hide();
-//	if ($("#portfolios-nb").html()=="")
-//		$("#portfolios-nb").html(number_of_portfolios);
-	if (number_of_projects==0)
+	//--------------------------------------
+	if (number_of_projects==0) {
 		$("#projects-label").hide();
-	else
+	} else {
 		$("#projects-nb").html(number_of_projects);
+		for (var i=0;i<number_of_projects;i++){
+			g_sum_trees += parseInt($("#number_of_projects_portfolios_"+projects_list[i].uuid).html())+1;
+		}
+		$("#portfolios-nb").html(g_nb_trees-g_sum_trees);
+	}
+	//--------------------------------------
+	if ($("#portfolios").html()=="")
+		$("#portfolios-div").hide();
+	//--------------------------------------
 	if (!USER.creator)
 		$("#portfolios-nb").hide();
 	$('[data-toggle=tooltip]').tooltip();
@@ -139,14 +144,11 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 			if (portfolio.semantictag!= undefined && portfolio.semantictag.indexOf('karuta-project')>-1 && portfoliocode!='karuta.project'){
 					if (number_of_projects>0) {
 						$("#export-"+projects_list[number_of_projects-1].uuid).attr("href","../../../"+serverBCK+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
-						if ($("#number_of_projects_portfolios_"+projects_list[number_of_projects-1].uuid).html()=="")
-							countProjectPortfolios(projects_list[number_of_projects-1].uuid);
 					}
 					//-------------------- PROJECT ----------------------
 					projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio.label_node[langcode].text(),"portfolios":""};
 					displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
 					projects_list[number_of_projects].portfolios += portfolio.id;
-					number_of_projects ++;
 					number_of_projects_portfolios = 0;
 					html += "<div id='project_"+portfolio.id+"' class='project'>";
 					html += "	<div class='row row-label'>";
@@ -197,9 +199,11 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						html += "	<div class='project-content' id='content-"+portfolio.id+"' code='"+portfolio.code_node.text()+"' style='display:none'></div>";
 					html += "</div><!-- class='project'-->"
 					$("#projects").append($(html));
+					countProjectPortfolios(projects_list[number_of_projects].uuid);
 					if (g_nb_trees>100 && displayProject[portfolio.id]=='open') 
 						loadProjectPortfolios($("#content-"+portfolio.id).attr("code"));
 					UIFactory["Portfolio"].displayComments('project-comments_'+$(portfolios_byid[portfolio.id].root).attr("id"),portfolio);
+					number_of_projects ++;
 					nb++;
 					if (nb<portfolios_list.length)
 						UIFactory["Portfolio"].displayTree(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
@@ -258,7 +262,6 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 							});
 							*/
 							$("#export-"+projects_list[number_of_projects-1].uuid).attr("href","../../../"+serverBCK+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
-							countProjectPortfolios(projects_list[number_of_projects-1].uuid); // count last project
 						}
 						else
 							$("#portfolios-label").html(karutaStr[LANG]['portfolios']);
@@ -2113,8 +2116,8 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data)
 	var groups = $("rrg",data);
 	if (groups.length>0) {
 		//--------------------------
-		$("#"+destid).append("<div id='special-roles'></div>")
-		$("#"+destid).append("<div id='other-roles' style='margin-top:5px;'></div>")
+		$("#"+destid).append("<div id='unshare-special-roles'></div>")
+		$("#"+destid).append("<div id='unshare-other-roles' style='margin-top:5px;'></div>")
 		//--------------------------
 		var group_labels = [];
 		for (var i=0; i<groups.length; i++) {
@@ -2128,9 +2131,9 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data)
 			var users = sorted_groups[i][2];
 			if (users.length>0){
 				if (label=='all' || label=='designer' || label=='administrator')
-					dest = "#special-roles";
+					dest = "#unshare-special-roles";
 				else
-					dest = "#other-roles";
+					dest = "#unshare-other-roles";
 				html = "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');

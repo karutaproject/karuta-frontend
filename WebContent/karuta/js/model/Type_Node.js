@@ -751,6 +751,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 	var contentfreenode = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
+	if (submitted=='Y')
+		menu = false;
 	//-------------------- test if visible
 	if ( (display=='N' && (g_userroles[0]=='designer'  || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || (showtoroles.indexOf("all")>-1 && !privatevalue) || (showtoroles.containsArrayElt(g_userroles) && !privatevalue) || g_userroles[0]=='designer')) ) {
 		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.containsArrayElt(g_userroles)) || (g_userroles[0]=='designer'  || USER.admin)) {
@@ -2623,7 +2626,7 @@ UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callba
 		html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
 	}
 	html += "\">";
-	html += title;
+	html += karutaStr[LANG][title];
 	html += "</a></li>";
 	return html;
 };
@@ -2669,7 +2672,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		if (!writenode)
 			writenode = (editresroles.containsArrayElt(g_userroles))? true : false;
 	}
-	var parentsubmitted = $(node.node).parent().has("metadata-wad[submitted='Y']").length;
 	//-----------------------------------
 	var html = "<div class='btn-group'>";
 	//-----------------------------------
@@ -2687,7 +2689,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			}
 		}
 		//------------- move node buttons ---------------
-		if (!parentsubmitted && submitted!='Y' && (moveroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && node.asmtype != 'asmRoot') {
+		if (writenode && (moveroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && node.asmtype != 'asmRoot') {
 			html+= "<span class='button glyphicon glyphicon-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-tooltip='true' data-placement='bottom'></span>";
 			if (USER.admin || g_userroles[0]=='designer')
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
@@ -2719,8 +2721,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 				var param2 = "'"+g_portfolioid+"'";
 				var param3 = null;
 				var param4 = null;
-				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmStructure','Section',databack,callback,param2,param3,param4);
-				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnit','Page',databack,callback,param2,param3,param4);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmStructure','asmStructure',databack,callback,param2,param3,param4);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnit','asmUnit',databack,callback,param2,param3,param4);
 			}
 			var databack = false;
 			var callback = "UIFactory['Node'].reloadUnit";
@@ -2733,7 +2735,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			if (semantictag.indexOf("asmColumns")>-1)
 				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmColumn','asmColumn',databack,callback,param2,param3,param4,freenode);
 			else {
-				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnitStructure','Subsection',databack,callback,param2,param3,param4,freenode);
+				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','asmUnitStructure','asmUnitStructure',databack,callback,param2,param3,param4,freenode);
 				html += "<hr>";
 				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','TextField','TextField',databack,callback,param2,param3,param4,freenode);
 				html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Field','Field',databack,callback,param2,param3,param4,freenode);
@@ -2760,7 +2762,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					}
 					if (semantictag.indexOf("bubbleContainer")>-1) {
 //						var interval = setInterval(function(){alert(node.id)},30000);
-						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-bubbles','bubble_level1','Bubble Map',databack,callback,param2,param3,param4,freenode);
+						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-bubbles','bubble_level1','BubbleMap',databack,callback,param2,param3,param4,freenode);
 					}
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Item','Item',databack,callback,param2,param3,param4,freenode);
@@ -2845,7 +2847,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 								title = menus[i][2];
 							}
 							if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
-								html += UIFactory["Node"].getItemMenu(node.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
+								html += UIFactory["Node"].getSingleMenu(node.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
 						}
 					}
 					html += "</ul>"; // class='dropdown-menu'
@@ -2888,11 +2890,11 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
 		if ( submitted!='Y' && (
-				(submitnode && ( submitroles.indexOf(g_userroles[0])>-1 || submitroles.indexOf($(USER.username_node).text())>-1) )
+				(submitnode && ( submitroles.indexOf(g_userroles[0])>-1 || submitroles.indexOf($(USER.username_node).text())>-1)
 				|| USER.admin
 				|| g_userroles[0]=='designer'
 				|| ( g_userroles[1]=='designer' && submitroles.indexOf(g_userroles[0]))>-1)
-				|| submitroles.indexOf(userrole)>-1 )
+				|| submitroles.indexOf(userrole)>-1 ))
 		{
 			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"')\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";

@@ -15,22 +15,33 @@ function getURLParameter(sParam) {
 function loadCSS(url)
 //==============================
 {
-	document.write("<link rel='stylesheet' type='text/css' href='"+url+"'></link>");
-};
+//	document.write("<link rel='stylesheet' type='text/css' href='"+url+"'></link>");
+	var link = document.createElement('link');
+	link.href = url;
+	link.rel = 'stylesheet';
+	document.getElementsByTagName('head')[0].appendChild(link);
+}
 
 //==============================
 function loadLESS(url)
 //==============================
 {
-	document.write("<link rel='stylesheet/less' type='text/css' href='"+url+"'></link>");
-};
+//	document.write("<link rel='stylesheet/less' type='text/css' href='"+url+"'></link>");
+	var link = document.createElement('link');
+	link.href = url;
+	link.rel = 'stylesheet/less';
+	document.getElementsByTagName('head')[0].appendChild(link);
+}
 
 //==============================
 function loadJS(url)
 //==============================
 {
 	document.write("<script src='"+url+"'></script>");
-};
+//	var script = document.createElement('script');
+//	script.src = url;
+//	document.getElementsByTagName('head')[0].appendChild(script);
+}
 
 //==============================
 function loadLoginPage(url)

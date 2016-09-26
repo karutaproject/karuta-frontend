@@ -364,3 +364,41 @@ karutaStr['fr']['button-remove-from-group']="Retirer de ce groupe";
 
 karutaStr['fr']['code-not-null']="Le code ne peut pas être vide";
 karutaStr['fr']['label-not-null']="Le libellé ne peut pas être vide";
+
+//=========================================
+//========== RESOURCES =======================
+//=========================================
+
+karutaStr['fr']['asmStructure']="Section";
+karutaStr['fr']['asmUnit']="Page";
+karutaStr['fr']['asmUnitStructure']="Sous-section";
+
+karutaStr['fr']['TextField']="Champ texte";
+karutaStr['fr']['Field']="Champ simple";
+karutaStr['fr']['URL']="URL";
+karutaStr['fr']['Document']="Document";
+karutaStr['fr']['Calendar']="Calendrier";
+karutaStr['fr']['Image']="Image";
+karutaStr['fr']['Video']="Vidéo";
+karutaStr['fr']['Audio']="Audio";
+karutaStr['fr']['Oembed']="Oembed";
+karutaStr['fr']['Color']="Coleur";
+karutaStr['fr']['URL2Unit']="URL2Unit";
+karutaStr['fr']['Comments']="Commentaires";
+
+karutaStr['fr']['SendEmail']="Envoi courriel";
+karutaStr['fr']['Dashboard']="Tableau de bord";
+
+karutaStr['fr']['DocumentBlock']="DocumentBlock";
+karutaStr['fr']['URLBlock']="URLBlock";
+karutaStr['fr']['ImageBlock']="ImageBlock";
+
+karutaStr['fr']['Item']="Item";
+karutaStr['fr']['GetResource']="GetResource";
+karutaStr['fr']['GetGetResource']="GetGetResource";
+karutaStr['fr']['GetDoubleResource']="GetDoubleResource";
+karutaStr['fr']['Proxy']="Proxy";
+
+karutaStr['fr']['BubbleMap']="Bubble Map";
+karutaStr['fr']['asmColumn']="asmColumn";
+
