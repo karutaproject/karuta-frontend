@@ -196,7 +196,6 @@ function displayKarutaLogin()
 	$('body').html(html);
 	$('body').append(alertBox());
 
-	getLanguage();
 	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
@@ -211,6 +210,7 @@ function displayKarutaLogin()
 		}
 	});
 	loadLanguages(function(data) {
+		getLanguage();
 		$("#navigation_bar").html(getNavBar('login',null));
 		$("#login").html(getLogin(encrypt_url,lang));
 		$("#useridentifier").focus();

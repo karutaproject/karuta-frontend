@@ -151,7 +151,7 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 		html += "["+$(this.value1_node).text()+ "] ";
 	html += label1+" </span>";
 	html += this.separator_node[langcode].text();
-	html += "<span class='Item2 "+code2+"'>";
+	html += " <span class='Item2 "+code2+"'>";
 	if (($(this.code2_node).text()).indexOf("#")>-1)
 		html += code2+ " ";
 	if (($(this.code2_node).text()).indexOf("&")>-1)

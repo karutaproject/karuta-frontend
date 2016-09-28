@@ -135,8 +135,9 @@ a, .collapsible {
 }
 
 
-html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #contenu {
-	height:100%;	
+html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
+	height:100%;
+	min-height:110%;
 }
 
 #sidebar.col-md-3{
@@ -600,7 +601,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 
 #sidebar-content {
 	padding-top:15px;
-	height: 100%;
+	min-height: 100%;
 	padding-left:0px;
 	padding-right:0px
   }
@@ -2387,4 +2388,8 @@ div.oembedall-container {
 .portfolios-nb,
 .projects-nb {
 	background-color:@list-background-color-complement;
+}
+
+.free-selected {
+	border:1px dashed red;
 }

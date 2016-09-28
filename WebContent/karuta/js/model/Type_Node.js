@@ -743,6 +743,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
+	var commentnoderoles = ($(node.metadatawad).attr('commentnoderoles')==undefined)?'':$(node.metadatawad).attr('commentnoderoles');
 	var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
 	var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
@@ -1012,7 +1013,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//-----------------------------------------------------------------------
 			if (nodetype == "asmContext" && node.resource.type=='Image') {
 				$("#image_"+uuid).click(function(){
-					imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"'>");
+					imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>");
 				});
 			}
 			//--------------------collapsed------------------------------------------
@@ -1956,6 +1957,11 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			//-----------------------------
 			if (USER.admin || g_userroles[0]=='designer' || graphicerroles.containsArrayElt(g_userroles) || graphicerroles.indexOf(this.userrole)>-1) {
 				//-------------------------------
+				$("#free_"+uuid).click(function(){
+			        $('div.free-selected').removeClass('free-selected');
+			        $(this).addClass('free-selected');
+
+			    });
 				$("#free_"+uuid).draggable({
 					stop: function(){UIFactory["Node"].updatePosition(this);}
 				}
@@ -2417,7 +2423,12 @@ UIFactory["Node"].displayComments = function(destid,node,type,langcode)
 		var uuid = node.id;
 		var text = $(UICom.structure['ui'][uuid].context_text_node[langcode]).text();
 		html += "<div>"+text+"</div>";
-		$("#"+destid).append($(html));
+		if (text.length)
+			$("#"+destid).append($(html));
+		else
+			$("#"+destid).hide();
+	} else {
+		$("#"+destid).hide();
 	}
 };
 
@@ -2446,6 +2457,8 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		html += "<div id='div_"+uuid+"'><textarea id='"+uuid+"_edit_comment' class='form-control' style='height:200px'>"+text+"</textarea></div>";
 		$("#"+destid).append($(html));
 		$("#"+uuid+"_edit_comment").wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments();},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
+	} else {
+		$("#"+destid).hide();
 	}
 };
 
@@ -2689,7 +2702,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 			}
 		}
 		//------------- move node buttons ---------------
-		if (writenode && (moveroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && node.asmtype != 'asmRoot') {
+		if (((writenode && moveroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer') && node.asmtype != 'asmRoot') {
 			html+= "<span class='button glyphicon glyphicon-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-tooltip='true' data-placement='bottom'></span>";
 			if (USER.admin || g_userroles[0]=='designer')
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";

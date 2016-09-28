@@ -180,7 +180,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 		text = decrypt(cipher,g_rc4key);
 	}
 	else
-		text = $($(this.text_node[langcode])[0]).html();
+		text = $(this.text_node[langcode]).text();
 	//---------------------
 	var uuid = this.id;
 	var html = "";

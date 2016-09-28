@@ -364,6 +364,7 @@ karutaStr['fr']['button-remove-from-group']="Retirer de ce groupe";
 
 karutaStr['fr']['code-not-null']="Le code ne peut pas être vide";
 karutaStr['fr']['label-not-null']="Le libellé ne peut pas être vide";
+karutaStr['fr']['inexistent-selection']="Sélection inexistante";
 
 //=========================================
 //========== RESOURCES =======================
@@ -382,7 +383,7 @@ karutaStr['fr']['Image']="Image";
 karutaStr['fr']['Video']="Vidéo";
 karutaStr['fr']['Audio']="Audio";
 karutaStr['fr']['Oembed']="Oembed";
-karutaStr['fr']['Color']="Coleur";
+karutaStr['fr']['Color']="Couleur";
 karutaStr['fr']['URL2Unit']="URL2Unit";
 karutaStr['fr']['Comments']="Commentaires";
 
