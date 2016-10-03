@@ -123,7 +123,7 @@ function getNavBar(type,portfolioid,edit)
 	if (type=='main'){
 		html += "			<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
 	}
-	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench'></span></a></li>";
+	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------
 	if (languages.length>1) 

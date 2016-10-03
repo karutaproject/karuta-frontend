@@ -24,7 +24,7 @@ var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------
-var technical_support = ""; // email of technical support
+var technical_support = "technical-support@yourinstitution.com"; // email of technical support
 var demo = false;
 var karuta_create_account = true;
 //--------- NAVBAR BRAND ------------------

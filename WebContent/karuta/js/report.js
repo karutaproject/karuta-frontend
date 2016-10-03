@@ -689,7 +689,7 @@ function xml2PDF(content)
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
+	var urlS =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
 	postAndDownload(urlS,data);
 }
 
@@ -712,7 +712,7 @@ function xml2RTF(content)
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
+	var urlS =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
 	postAndDownload(urlS,data);
 }
 
@@ -733,7 +733,7 @@ function xml2CSV(content)
 	var data = $('#'+content).html();
 	data = data.replace('&nbsp;', ' ');
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
-	var url =  "../../../"+serverBCK+"/xsl?xsl="+karutaname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
+	var url =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
 	postAndDownload(url,data);
 }
 

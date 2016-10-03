@@ -2625,6 +2625,24 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 };
 
 //==================================================
+UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4)
+//==================================================
+{	// note: #xxx is to avoid to scroll to the top of the page
+	if (srce=="self")
+		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	var html = "<li><a class='button text-button' href='#xxx' onclick=\"";
+	var semtags = tag.split(" ");
+	for (var i=0;i<semtags.length;i++){
+		if (semtags[i].length>0)
+		html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+	}
+	html += "\">";
+	html += title;
+	html += "</a></li>";
+	return html;
+};
+
+//==================================================
 UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4,freenode)
 //==================================================
 {	// note: #xxx is to avoid to scroll to the top of the page
@@ -2860,7 +2878,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 								title = menus[i][2];
 							}
 							if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
-								html += UIFactory["Node"].getSingleMenu(node.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
+								html += UIFactory["Node"].getSpecificMenu(node.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
 						}
 					}
 					html += "</ul>"; // class='dropdown-menu'

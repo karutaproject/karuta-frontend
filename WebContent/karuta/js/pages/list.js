@@ -79,7 +79,8 @@ function show_list_page()
 	$("#navigation-bar").html(navbar_html);
 	$("#refresh").attr("onclick","fill_list_page()");
 	$("#refresh").show();
-	$("#search-div").show();
+	if (USER.creator)
+		$("#search-div").show();
 	$("#main-page").hide();
 	$("#main-user").hide();
 	$("#main-usersgroup").hide();
@@ -87,6 +88,7 @@ function show_list_page()
 	$("#main-portfoliosgroup").hide();
 	$("#main-exec-batch").hide();
 	$("#main-exec-report").hide();
+	$('[data-tooltip="true"]').tooltip();
 }
 
 //==============================
