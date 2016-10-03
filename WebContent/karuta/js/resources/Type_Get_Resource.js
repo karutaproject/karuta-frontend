@@ -326,8 +326,11 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
 				html += ">";
+				if (display_code)
+					html += code+" "+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
+				else
+					html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
 				
-				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
 					if (($('code',resource).text()).indexOf("#")>-1)

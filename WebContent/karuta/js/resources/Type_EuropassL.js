@@ -53,12 +53,12 @@ UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid)
 		html += "<div class='col-md-offset-1 col-md-11'>";
 		html += "<h5>"+karutaStr[LANG]['mother-tongue']+" : ";
 		html += "<span class='langue' id='mother_tongue'>"+UICom.structure["ui"][g_mother_tongueid].resource.getView(null,"span");
+		html +="</span>";
 		if (edit) {
-			html +="<div class='btn-group' style='margin-left:3px;'>";
+			html +="<div id='mother_tongue_button' class='btn-group' style='margin-left:3px;'>";
 			html += "<span  onclick=\"UIFactory.Langue.editMothertongue('"+g_mother_tongueid+"','mother_tongue');\" class='button glyphicon glyphicon-pencil' aria-hidden='true'></span>";
 			html +="</div>";
 		}
-		html +="</span>";
 		html +="</h5>";
 		html += "</div><!--col-->";
 		html += "</div><!--row-->";
@@ -80,8 +80,8 @@ UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid)
 		html += "<div class='row row-resource'>";
 		html += "<div class='col-md-offset-1 col-md-10'>";
 		html += "<table id='"+destid+"europass_table' class='europass_table'>";
-		html += "<tr class='en-tete'><td class='language_edit'></td><td class='bordure' colspan='2'>"+karutaStr[LANG]['understanding']+"</td><td class='bordure' colspan='2'>"+karutaStr[LANG]['speaking']+"</td><td class='bordure'>"+karutaStr[LANG]['writing']+"</td></tr>";
-		html += "<tr class='en-tete'><td></td><td class='bordure'>"+karutaStr[LANG]['listening']+"</td><td class='bordure'>"+karutaStr[LANG]['reading']+"</td><td class='bordure'>"+karutaStr[LANG]['spoken-interaction']+"</td><td class='bordure'>"+karutaStr[LANG]['spoken-production']+"</td><td class='bordure'> </td></tr>";
+		html += "<tr class='en-tete'><td class='language_edit'></td><td class='bordure' colspan='2'> "+karutaStr[LANG]['understanding']+" </td><td class='bordure' colspan='2'> "+karutaStr[LANG]['speaking']+" </td><td class='bordure'> "+karutaStr[LANG]['writing']+" </td></tr>";
+		html += "<tr class='en-tete'><td></td><td class='bordure'> "+karutaStr[LANG]['listening']+" </td><td class='bordure'> "+karutaStr[LANG]['reading']+" </td><td class='bordure'> "+karutaStr[LANG]['spoken-interaction']+" </td><td class='bordure'> "+karutaStr[LANG]['spoken-production']+" </td><td class='bordure'> </td></tr>";
 		html += "</table>";
 		$("#"+destid).html(html);
 		for ( var i = 0; i < langues_list.length; i++) {
@@ -161,27 +161,27 @@ UIFactory["Langue"].prototype.displayEditor = function(destid,type,lang)
 		//---------------------------------------------------------
 		html +="<td id='language_edit_"+this.id+"' class='language_edit' width='150px'></td>";
 		html +="<td class='bordure'><span id='listening_"+this.id+"_edit'>"+UICom.structure["ui"][this.listening_nodeid].resource.getCode("listening_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('listening_edit','"+this.listening_nodeid+"','"+karutaStr[LANG]['listening']+"')\" data-title='�diter' rel='tooltip'>";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('listening_edit','"+this.listening_nodeid+"','"+karutaStr[LANG]['listening']+"')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='reading_"+this.id+"_edit'>"+UICom.structure["ui"][this.reading_nodeid].resource.getCode("reading_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('reading_edit','"+this.reading_nodeid+"','"+karutaStr[LANG]['reading']+"')\" data-title='�diter' rel='tooltip'>";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('reading_edit','"+this.reading_nodeid+"','"+karutaStr[LANG]['reading']+"')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='spokenInteraction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getCode("spokenInteraction_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenInteraction_edit','"+this.spokenInteraction_nodeid+"','"+karutaStr[LANG]['spoken-interaction']+"')\" data-title='�diter' rel='tooltip'>";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenInteraction_edit','"+this.spokenInteraction_nodeid+"','"+karutaStr[LANG]['spoken-interaction']+"')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='spokenProduction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getCode("spokenProduction_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenProduction_edit','"+this.spokenProduction_nodeid+"','"+karutaStr[LANG]['spoken-production']+"')\" data-title='�diter' rel='tooltip'>";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenProduction_edit','"+this.spokenProduction_nodeid+"','"+karutaStr[LANG]['spoken-production']+"')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='writing_"+this.id+"_edit'>"+UICom.structure["ui"][this.writing_nodeid].resource.getCode("writing_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('writing_edit','"+this.writing_nodeid+"','"+karutaStr[LANG]['writing']+"')\" data-title='�diter' rel='tooltip'>";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('writing_edit','"+this.writing_nodeid+"','"+karutaStr[LANG]['writing']+"')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
@@ -257,14 +257,10 @@ UIFactory["Langue"].displayMothertongue = function(uuid,destid,edit)
 //==================================
 {
 	
-	$("#"+destid).html("");
 	var html = UICom.structure["ui"][uuid].resource.getView("mother_tongue","span");
-	if (edit) {
-		html +="<div class='btn-group' style='margin-left:3px;'>";
-		html += "<span  onclick=\"UIFactory.Langue.editMothertongue('"+g_mother_tongueid+"','mother_tongue');\" class='button glyphicon glyphicon-pencil' aria-hidden='true'></span>";
-		html +="</div>";
-	}
 	$("#"+destid).html(html);
+	html = "<span  onclick=\"UIFactory.Langue.editMothertongue('"+g_mother_tongueid+"','mother_tongue');\" class='button glyphicon glyphicon-pencil' aria-hidden='true'></span>";
+	$("#"+destid+"_button").html($(html));
 };
 
 //==================================
@@ -273,10 +269,11 @@ UIFactory["Langue"].editMothertongue = function(uuid,destid)
 {
 	$("#"+destid).html("");
 	UICom.structure["ui"][uuid].resource.displayEditor("mother_tongue");
+	$("#"+destid).append($(html));
 	var html = "<a  class='btn btn-xs' style='margin-left:5px' onclick=\"UIFactory.Langue.displayMothertongue('"+uuid+"','"+destid+"',true);\">";
 	html += karutaStr[LANG]['quit'];
 	html += "</a>";
-	$("#"+destid).append($(html));
+	$("#"+destid+"_button").append($(html));
 };
 
 //==============================
