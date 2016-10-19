@@ -280,7 +280,6 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 	    progressall: function (e, data) {
 			$("#wait-window").modal('show');
 			$("#progress_"+this.id+langcode).css('border','1px solid lightgrey');
-			$("#divfileupload_"+this.id+langcode).html("<img src='../../karuta/img/ajax-loader.gif'>");
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+langcode+' .bar').css('width',progress + '%');
 		},

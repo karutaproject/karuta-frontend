@@ -92,6 +92,29 @@ function setDesignerRole(role)
 
 
 //==============================
+function getLanguageMenu(js)
+//==============================
+{
+	var html = "";
+	for (var i=0; i<languages.length;i++) {
+		html += "			<li><a  id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');if (elgg_installed) displaySocialNetwork();setWelcomeTitles();"+js+"\">";
+		html += "<img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+	}
+	return html;
+}
+
+
+//==============================
+function setLanguageMenu(js)
+//==============================
+{
+	for (var i=0; i<languages.length;i++) {
+		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');if (elgg_installed) displaySocialNetwork();setWelcomeTitles();"+js);
+	}
+}
+
+
+//==============================
 function getNavBar(type,portfolioid,edit)
 //==============================
 {
@@ -120,9 +143,7 @@ function getNavBar(type,portfolioid,edit)
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
-	if (type=='main'){
-		html += "			<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
-	}
+	html += "			<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
 	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------
@@ -152,9 +173,8 @@ function getNavBar(type,portfolioid,edit)
 				html += "			<ul class='nav navbar-nav'>";
 				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 				html += "					<ul class='dropdown-menu'>";
-				for (var i=0; i<languages.length;i++) {
-					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');fill_list_page();fill_main_page();$('#search-div').html(getSearch());fill_list_users();fill_exec_batch();fill_exec_report();if (elgg_installed) displaySocialNetwork();setWelcomeTitles();\"><img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
-				}
+//				html += getLanguageMenu("fill_list_page();fill_main_page();$('#search-div').html(getSearch());fill_list_users();fill_exec_batch();fill_exec_report();");
+				html += getLanguageMenu("fill_list_page();$('#search-div').html(getSearch());");
 				html += "					</ul>";
 				html += "				</li>";
 				html += "			</ul>";
@@ -326,9 +346,15 @@ function getEditBox(uuid,js2) {
 		}
 	} else {
 		if(UICom.structure["ui"][uuid].structured_resource!=null) {
+			try {
 				UICom.structure["ui"][uuid].structured_resource.displayEditor("edit-window-body-resource");
 				html = UICom.structure["ui"][uuid].getEditor();
 				$("#edit-window-body-node").html($(html));
+			}
+			catch(e) {
+				html = UICom.structure["ui"][uuid].getEditor();
+				$("#edit-window-body-node").html($(html));
+			}
 		} else {
 			html = UICom.structure["ui"][uuid].getEditor();
 			$("#edit-window-body-node").html($(html));
@@ -1132,7 +1158,7 @@ function setLanguage(lang,caller) {
 		if (languages[i]==lang)
 			LANGCODE = i;
 	}
-	if (caller=="" &&elgg_installed && USER!=undefined && $(USER.username_node).text()!="public") // not public Account
+	if (caller=="" && elgg_installed && USER!=undefined && $(USER.username_node).text()!="public") // not public Account
 		moment.locale(lang);
 }
 

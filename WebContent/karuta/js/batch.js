@@ -185,6 +185,7 @@ function processLine()
 	g_nb_deleteTree[g_noline] = 0;
 	g_nb_importNode[g_noline] = 0;
 	g_nb_joinUserGroup[g_noline] = 0;
+	g_nb_leaveUserGroup[g_noline] = 0;
 	$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =========================================");
 	processElggGroups();
 }
@@ -398,11 +399,7 @@ function JoinUserGroup(node)
 										//===========================================================
 										g_nb_joinUserGroup[g_noline]++;
 										if (g_nb_joinUserGroup[g_noline]==g_join_usergroups.length) {
-											g_noline++;
-											if (g_noline>=g_json.lines.length)
 												processLeaveUserGroups();
-											else
-												processLine();
 										}
 										//===========================================================
 									},
@@ -511,11 +508,7 @@ function LeaveUserGroup(node)
 										//===========================================================
 										g_nb_leaveUserGroup[g_noline]++;
 										if (g_nb_leaveUserGroup[g_noline]==g_leave_usergroups.length) {
-											g_noline++;
-											if (g_noline>=g_json.lines.length)
 												processElggUsers();
-											else
-												processLine();
 										}
 										//===========================================================
 									},

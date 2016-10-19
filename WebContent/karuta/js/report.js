@@ -87,6 +87,10 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 			r_processURL2Unit(children[i],destid,data,line);
 		if (tagname=="jsfunction")
 			r_processJSFunction(children[i],destid,data,line);
+		if (tagname=="draw-web-axis")
+			r_processWebAxis(children[i],destid,nodes[i],i);
+		if (tagname=="draw-web-line")
+			r_processWebLine(children[i],destid,nodes[i],i);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="for-each-portfolio")
@@ -192,10 +196,34 @@ function r_processNode(no,xmlDoc,destid,data,line)
 					r_processURL2Unit(children[j],destid,nodes[i],i);
 				if (tagname=="jsfunction")
 					r_processJSFunction(children[j],destid,nodes[i],i);
+				if (tagname=="draw-web-axis")
+					r_processWebAxis(children[j],destid,nodes[i],i);
+				if (tagname=="draw-web-line")
+					r_processWebLine(children[j],destid,nodes[i],i);
 				if (tagname=="aggregate")
 					r_processAggregate(children[j],destid,nodes[i],i);
 			}
 		};
+	}
+}
+
+//==================================
+function r_processSVG(no,xmlDoc,destid,data,line)
+//==================================
+{
+	var html = "<svg id='svg_"+no+"' width='100%' height='100%' viewbox='0 0 1000 1000'></svg>";
+	$("#"+destid).append($(html));
+	var children = $(">*",xmlDoc);
+	for (var i=0; i<children.length;i++){
+		var tagname = $(children[i])[0].tagName;
+		if (tagname=="draw-web-title")
+			r_processWebTitle(children[i],'svg_'+no,data);
+		if (tagname=="draw-web-axis")
+			r_processWebAxis(children[i],'svg_'+no,data);
+		if (tagname=="draw-web-line")
+			r_processWebLine(children[i],'svg_'+no,data);
+		if (tagname=="for-each-node")
+			r_processNode(no+"_"+i,children[i],'svg_'+no,data,line);
 	}
 }
 
@@ -283,12 +311,19 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			r_processURL2Unit(children[i],'td_'+no,data,line);
 		if (tagname=="jsfunction")
 			r_processJSFunction(children[i],'td_'+no,data,line);
+		if (tagname=="draw-web-axis")
+			r_processWebAxis(children[i],'td_'+no,data,line);
+		if (tagname=="draw-web-line")
+			r_processWebLine(children[i],'td_'+no,data,line);
 		if (tagname=="aggregate")
 			r_processAggregate(children[i],'td_'+no,data,line);
+		if (tagname=="svg")
+			r_processSVG(no,children[i],'td_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no,children[i],'td_'+no,data,line);
 	}
 }
+
 
 //==================================
 function r_getUsers(no,xmlDoc,destid,data,line)
@@ -346,6 +381,10 @@ function r_processUsers(no,xmlDoc,destid,data,line)
 					r_processNodeResource(children[i],destid,data,line);
 				if (tagname=="jsfunction")
 					r_processJSFunction(children[i],destid,data,line);
+				if (tagname=="draw-web-axis")
+					r_processWebAxis(children[i],destid,data,line);
+				if (tagname=="draw-web-line")
+					r_processWebLine(children[i],destid,data,line);
 				if (tagname=="text")
 					r_processText(children[i],destid,data,line);
 				if (tagname=="for-each-node")
@@ -425,6 +464,10 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 							r_processText(children[i],destid,data,line);
 						if (tagname=="for-each-node")
 							r_processNode(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+						if (tagname=="draw-web-axis")
+							r_processWebAxis(children[i],destid,data,line);
+						if (tagname=="draw-web-line")
+							r_processWebLine(children[i],destid,data,line);
 					}
 				}
 			});
@@ -745,4 +788,248 @@ function displayCSVButton()
 	$("#report-csv").html(html);
 }
 
+//=========================================================================
+//=========================================================================
+//======================= SVG =============================================
+//=========================================================================
+//=========================================================================
 
+var svgfontname = 'Arial';
+var svgfontsize = 16;
+var svgcenter = {'x':500,'y':500};
+var svgaxislength = 500;
+
+function makeSVG(tag, attrs,val) {
+	var elt= document.createElementNS('http://www.w3.org/2000/svg', tag);
+	for (var k in attrs)
+		elt.setAttribute(k, attrs[k]);
+	if (val !=null) {
+		var textNode = document.createTextNode(val);
+		elt.appendChild(textNode);
+	}
+	return elt;
+}
+
+function svgrotate(center, x, y, angle) {
+	var radians = (Math.PI / 180) * (0-angle),
+	cos = Math.cos(radians),
+	sin = Math.sin(radians),
+	nx = (cos * (x - center.x)) + (sin * (y - center.y)) + center.x,
+	ny = (cos * (y - center.y)) - (sin * (x - center.x)) + center.y;
+	return {'x':nx,'y':ny};
+}
+
+function getWidthOfText(txt, fontname, fontsize){
+	  var c=document.createElement('canvas');
+	  var ctx=c.getContext('2d');
+	  ctx.font = fontsize + 'px' + fontname;
+	  var length = ctx.measureText(txt).width;
+	  return length;
+	}
+	
+function drawAxis(destid,label,fontname,fontsize,angle,center,axislength){
+	//-----------------
+	var line = makeSVG('line',{'x1':center.x,'y1':center.y,'x2':center.x-axislength,'y2':center.y,'transform':"rotate("+angle+" "+center.x+" "+center.y+")",'stroke':'black','stroke-width': 2});
+	document.getElementById(destid).appendChild(line);
+	//-----------------
+	var x = center.x-axislength;
+	var y = center.y - (fontsize/2);
+	if (angle>90 && angle<=270) {
+		var l =  getWidthOfText(label, fontname, fontsize);
+		x=center.x+axislength-l*1.6;
+		angle = angle-180;
+	}
+	var text = makeSVG('text',{'x':x,'y':y,'transform':"rotate("+angle+" "+center.x+" "+center.y+")",'font-size':fontsize,'font-family':fontname},label);
+	document.getElementById(destid).appendChild(text);
+	//-----------------
+}
+
+function drawValue(destid,value,angle,center,cssclass){
+	var point = svgrotate(center, svgaxislength-value, center.y, angle);
+	var line = makeSVG('line',{'x1':point.x,'y1':point.y,'x2':point.x,'y2':point.y,'class':cssclass});
+	document.getElementById(destid).appendChild(line);
+}
+
+function drawGraduationLine(destid,no,max,angle,center,cssclass){
+	var x = svgaxislength-(svgaxislength/max*no);
+	var line = makeSVG('line',{'x1':x,'y1':center.y-5,'x2':x,'y2':center.y+5,'transform':"rotate("+angle+" "+center.x+" "+center.y+")",'stroke':'black','stroke-width': 1});
+	document.getElementById(destid).appendChild(line);
+}
+
+function drawGraduationLabel(destid,no,max,angle,center,cssclass){
+	var x = svgaxislength-(svgaxislength/max*no);
+	var point = svgrotate(center, x, center.y+20, angle);
+	var text = makeSVG('text',{'x':point.x-5,'y':point.y,'font-size':svgfontsize,'font-family':svgfontname},no);
+	document.getElementById(destid).appendChild(text);
+}
+
+
+function drawLine(destid,value1,angle1,value2,angle2,center,cssclass){
+	var point1 = svgrotate(center, svgaxislength-value1, center.y, angle1);
+	var point2 = svgrotate(center, svgaxislength-value2, center.y, angle2);
+	var line = makeSVG('line',{'x1':point1.x,'y1':point1.y,'x2':point2.x,'y2':point2.y,'class':cssclass});
+	document.getElementById(destid).appendChild(line);
+}
+
+//==================================
+function r_processWebTitle(xmlDoc,destid,data)
+//==================================
+{
+	var select = $(xmlDoc).attr("select");
+	if (select!=undefined) {
+		var selector = r_getSelector(select,null);
+		var nodes = $(selector.jquery,data).addBack(selector.jquery).filter(selector.filter1);
+		nodes = eval("nodes"+selector.filter2);
+		var text = 'Title';
+		for (var i=0; i<nodes.length;i++){
+			//---------------------------
+			var nodeid = $(nodes[i]).attr("id");
+			if (selector.type=='resource') {
+				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+			}
+			if (selector.type=='resource code') {
+				text = UICom.structure["ui"][nodeid].resource.getCode();
+			}
+			if (selector.type=='resource value') {
+				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+			}
+			if (selector.type=='node label') {
+				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+			}
+			if (selector.type=='node value') {
+				text = UICom.structure["ui"][nodeid].getValue();
+			}
+			if (selector.type=='node context') {
+				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
+			}
+		};
+		var l = getWidthOfText(text, svgfontname, svgfontsize*2);
+		var x = svgaxislength*2-l*3.2;
+		var svgtext = makeSVG('text',{'x':x,'y':50,'font-size':svgfontsize*2,'font-family':svgfontname},text);
+		document.getElementById(destid).appendChild(svgtext);
+	}
+}
+//==================================
+function r_processWebAxis(xmlDoc,destid,data)
+//==================================
+{
+	var select = $(xmlDoc).attr("select");
+	if (select!=undefined) {
+		var selector = r_getSelector(select,null);
+		var nodes = $(selector.jquery,data).filter(selector.filter1);
+		nodes = eval("nodes"+selector.filter2);
+		var angle = 360 / nodes.length;
+		for (var i=0; i<nodes.length;i++){
+			//---------------------------
+			var nodeid = $(nodes[i]).attr("id");
+			if (selector.type=='resource') {
+				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+			}
+			if (selector.type=='resource code') {
+				text = UICom.structure["ui"][nodeid].resource.getCode();
+			}
+			if (selector.type=='resource value') {
+				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+			}
+			if (selector.type=='node label') {
+				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+			}
+			if (selector.type=='node value') {
+				text = UICom.structure["ui"][nodeid].getValue();
+			}
+			if (selector.type=='node context') {
+				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
+			}
+			drawAxis(destid,text,svgfontname,svgfontsize,angle*i,svgcenter,svgaxislength);
+		};
+	}
+}
+
+//==================================
+function r_processWebLine(xmlDoc,destid,data,no)
+//==================================
+{
+	var select = $(xmlDoc).attr("select");
+	var legendselect = $(xmlDoc).attr("legendselect");
+	var test = $(xmlDoc).attr("test");
+	var min = $(xmlDoc).attr("min");
+	var max = $(xmlDoc).attr("max");
+	var html = "";
+	if (select!=undefined) {
+		var selector = r_getSelector(select,null);
+		var nodes = $(selector.jquery,data).filter(selector.filter1);
+		nodes = eval("nodes"+selector.filter2);
+		var angle = 360 / nodes.length;
+		var points = [];
+		for (var i=0; i<nodes.length;i++){
+			//---------------------------
+			var nodeid = $(nodes[i]).attr("id");
+			if (selector.type=='resource') {
+				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+			}
+			if (selector.type=='resource code') {
+				text = UICom.structure["ui"][nodeid].resource.getCode();
+			}
+			if (selector.type=='resource value') {
+				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+			}
+			if (selector.type=='node label') {
+				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+			}
+			if (selector.type=='node value') {
+				text = UICom.structure["ui"][nodeid].getValue();
+			}
+			if (selector.type=='node context') {
+				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
+			}
+			points[points.length] = {'value': ((text - min)/(max-min))*svgaxislength, 'angle':angle*i};
+		};
+		for (var i=0; i<nodes.length;i++){
+			drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+no);
+			if (no==0){
+				for (var j=1;j<max;j++) {
+					drawGraduationLine(destid,j,max,angle*i,svgcenter,'svg-web-line'+no);
+					if (i==0)
+						drawGraduationLabel(destid,j,max,angle*i,svgcenter,'svg-web-line'+no);
+				}
+			}
+			if (i>0)
+				drawLine(destid,points[i-1].value,points[i-1].angle,points[i].value,points[i].angle,svgcenter,'svg-web-line'+no);
+		}
+		drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+no);
+		// draw legend
+		if (legendselect!=undefined) {
+			var selector = r_getSelector(legendselect,null);
+			var nodes = $(selector.jquery,data).filter(selector.filter1);
+			nodes = eval("nodes"+selector.filter2);
+			var text = 'legend';
+			for (var i=0; i<nodes.length;i++){
+				//---------------------------
+				var nodeid = $(nodes[i]).attr("id");
+				if (selector.type=='resource') {
+					text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+				}
+				if (selector.type=='resource code') {
+					text = UICom.structure["ui"][nodeid].resource.getCode();
+				}
+				if (selector.type=='resource value') {
+					text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+				}
+				if (selector.type=='node label') {
+					text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+				}
+				if (selector.type=='node value') {
+					text = UICom.structure["ui"][nodeid].getValue();
+				}
+				if (selector.type=='node context') {
+					text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
+				}
+			};
+			var line = makeSVG('line',{'x1':10,'y1':25+20*no,'x2':10,'y2':25+20*no,'class':'svg-web-value'+no});
+			document.getElementById(destid).appendChild(line);
+			var svgtext = makeSVG('text',{'x':20,'y':30+20*no,'font-size':svgfontsize,'font-family':svgfontname},text);
+			document.getElementById(destid).appendChild(svgtext);
+		}
+
+	}
+}

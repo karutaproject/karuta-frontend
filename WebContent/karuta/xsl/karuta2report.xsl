@@ -142,6 +142,12 @@
 			</xsl:if>
 		</jsfunction>
 	</xsl:template>
+	<!-- ================ SVG ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-svg']">
+		<svg>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</svg>
+	</xsl:template>
 	<!-- ================ for-each-person ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-person']">
 		<xsl:variable name="ref-init">
@@ -234,6 +240,142 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</aggregate>
 	</xsl:template>
+	
+	<!-- ================ draw-web-axis ============================ -->
+	<xsl:template match="*[metadata/@semantictag='draw-web-title']">
+		<xsl:variable name="editresroles">
+			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="nodetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="todisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
+		<draw-web-title>
+			<xsl:if test="not(editresroles='')">
+				<xsl:attribute name="editresroles"><xsl:value-of select="$editresroles"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ref='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($select='..')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+		</draw-web-title>
+	</xsl:template>
+	
+	<!-- ================ draw-web-axis ============================ -->
+	<xsl:template match="*[metadata/@semantictag='draw-web-axis']">
+		<xsl:variable name="editresroles">
+			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="nodetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="todisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
+		<draw-web-axis>
+			<xsl:if test="not(editresroles='')">
+				<xsl:attribute name="editresroles"><xsl:value-of select="$editresroles"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ref='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($select='..')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+		</draw-web-axis>
+	</xsl:template>
+		<!-- ================ draw-web-line ============================ -->
+	<xsl:template match="*[metadata/@semantictag='draw-web-line']">
+		<xsl:variable name="editresroles">
+			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="nodetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="todisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="min">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-min']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="max">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-max']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="legendtype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='legendtype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="legendsemantictag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='legendsemantictag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="legenddisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='legenddisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
+		<xsl:variable name="legendselect"><xsl:value-of select="$legendtype"/>.<xsl:value-of select="$legendsemantictag"/>.<xsl:value-of select="$legenddisplay"/></xsl:variable>
+		<draw-web-line>
+			<xsl:if test="not(editresroles='')">
+				<xsl:attribute name="editresroles"><xsl:value-of select="$editresroles"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ref='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($select='..')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($legendselect='..')">
+				<xsl:attribute name="legendselect"><xsl:value-of select="$legendselect"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($min='..')">
+				<xsl:attribute name="min"><xsl:value-of select="$min"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($max='..')">
+				<xsl:attribute name="max"><xsl:value-of select="$max"/></xsl:attribute>
+			</xsl:if>
+		</draw-web-line>
+	</xsl:template>
+
 	<!-- ================ asmNop ============================ -->
 	<xsl:template match="*[metadata/@semantictag='asmNop']">
 	</xsl:template>

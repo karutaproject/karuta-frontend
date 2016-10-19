@@ -259,7 +259,6 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 		dataType: 'json',
 		progressall: function (e, data) {
 			$("#progress_"+this.id+"_"+langcode).css('border','1px solid lightgrey');
-			$("#divfileupload_"+this.id+"_"+langcode).html("<img src='../../karuta/img/ajax-loader.gif'> Transfert");
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+"_"+langcode+' .bar').css('width',progress + '%');
 		},

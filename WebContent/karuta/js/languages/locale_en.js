@@ -244,6 +244,7 @@ karutaStr['en']['welcome-added']="The Welcome Page has been added at the end of 
 karutaStr['en']['button-welcome-edit']="Toggle Welcome Page Edition";
 karutaStr['en']['existing-code']="This code already exists.";
 karutaStr['en']['search-label']="Type a code or a part of a code";
+karutaStr['en']['no-portfolio']="Sorry, you have no portfolio.";
 
 //=========================================
 //========== USERS ========================
@@ -310,11 +311,6 @@ karutaStr['en']['pdf']="Roles - Display PDF";
 //=========================================
 //========== EUROPASS =====================
 //=========================================
-
-karutaStr['en']['mother-tongue']="Mother Tongue";
-karutaStr['en']['foreign-languages']="Foreign Languages";
-karutaStr['en']['add-foreign-language']="Add a Foreign Language";
-
 karutaStr['en']['understanding']="UNDERSTANDING";
 karutaStr['en']['listening']="Listening";
 karutaStr['en']['reading']="Reading";
@@ -341,7 +337,7 @@ karutaStr['en']['bubble-color']="Color";
 
 karutaStr['en']['select_usersgroups']="Select User Groups";
 karutaStr['en']['create_usersgroup']="Create a User Group";
-karutaStr['en']['list_usersgroups']="Users Groups";
+karutaStr['en']['list_usersgroups']="User Groups";
 karutaStr['en']['no_group']="No Group";
 karutaStr['en']['addshare-portfoliosgroups']="Share Portfolio Groups";
 karutaStr['en']['addshare-portfolios']="Share Portfolios";

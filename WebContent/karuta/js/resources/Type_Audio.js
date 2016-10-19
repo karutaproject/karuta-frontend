@@ -108,10 +108,19 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 	}
 	//---------------------
 	if (type==null)
-		type = 'default';
+		if (typeof audiovideohtml5 != "undefined" && audiovideohtml5)
+			type = "html5";
+		else
+			type = 'default';
 	//---------------------
+	var html ="";
+	if (type=='html5') {
+		html += "<audio controls>";
+		var srce = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp3";
+		html += "<source src='"+srce+"' type='audio/mpeg'/>";
+		html += "</audio>";		
+	}
 	if (type=='default') {
-		var html ="";
 		html += "<div id='jquery_jplayer_"+this.id+"' class='jp-jplayer'></div>";
 		html += "<div id='jp_container_"+this.id+"' class='jp-audio'>";
 		html += "<div class='jp-type-single'>";	
@@ -248,6 +257,7 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 		langcode = 0;
 	//---------------------
 	var html ="";
+	html += "<div class='audio-video-format'>Format: mp3</div>"
 	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html +=" <div id='div_f_"+this.id+"_"+langcode+"'>";
 	html +=" <input id='f_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
@@ -258,7 +268,6 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 	$("#"+destid).append($(html));
 	$("#f_"+this.id+"_"+langcode).fileupload({
 		progressall: function (e, data) {
-			$("#div_"+this.id).html("<img src='../../karuta/img/ajax-loader.gif'>");
 			$("#progress_"+this.id).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+' .bar').css('width',progress + '%');

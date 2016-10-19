@@ -231,7 +231,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		//------------
 		var self = this;
 		if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
-			UIFactory["Get_Resource"].parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,resettable,target);
+			UIFactory["Get_Resource"].parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,resettable,target,semtag);
 		else
 			$.ajax({
 				type : "GET",
@@ -240,7 +240,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				success : function(data) {
 					if (cachable)
 						g_Get_Resource_caches[queryattr_value] = data;
-					UIFactory["Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,resettable,target);
+					UIFactory["Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag);
 				}
 			});
 	}
@@ -248,7 +248,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 
 
 //==================================
-UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,resettable,target) {
+UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -269,7 +269,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 
 	//------------------------------------------------------------
 	if (type=='select') {
-		var html = "<div class='btn-group choice-group'>";		
+		var html = "<div class='btn-group choice-group select-"+semtag+"'>";		
 		html += "<button type='button' class='btn btn-default select select-label' id='button_"+self.id+"'>&nbsp;</button>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
@@ -327,9 +327,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				}
 				html += ">";
 				if (display_code)
-					html += code+" "+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
+					html += "<div class='li-code'>"+code+"</div> <span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></a>";
 				else
-					html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
+					html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></a>";
 				
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){

@@ -18,7 +18,8 @@ var elgg_refreshing = 240000; // 240 seconds
 var languages = [];
 languages [0] = 'en';
 languages [1] = 'fr';
-//languages [2] = 'ja';
+//----------------------------------
+var audiovideohtml5 = false;
 //----------------------------------
 var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value

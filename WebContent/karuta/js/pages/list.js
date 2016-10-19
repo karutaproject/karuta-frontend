@@ -75,8 +75,7 @@ function show_list_page()
 	$("body").addClass("list-page")
 	$("#sub-bar").html(getListSubBar());
 	setWelcomeTitles();
-	var navbar_html = getNavBar('list',null);
-	$("#navigation-bar").html(navbar_html);
+	setLanguageMenu("fill_list_page()");
 	$("#refresh").attr("onclick","fill_list_page()");
 	$("#refresh").show();
 	if (USER.creator)
@@ -128,13 +127,6 @@ function fill_list_page()
 	html += "<hr>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" >"+karutaStr[LANG]['import_instance']+"</a></li>";
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
-//	html += "<li><a onclick=\"share_karuta_documentation()\" >"+karutaStr[LANG]['demo-documentation']+"</a></li>";
-//	if (demo) {
-//		html += "<hr>";
-//		html += "<li><a onclick=\"create_karuta_demo_aacu('"+USER.username_node.text()+"')\" >"+karutaStr[LANG]['demo-aacu']+"</a></li>";
-//		html += "<li><a onclick=\"create_karuta_demo_video('"+USER.username_node.text()+"')\" >"+karutaStr[LANG]['demo-video']+"</a></li>";
-//		html += "<li><a onclick=\"create_karuta_demo_ecommerce('"+USER.username_node.text()+"')\" >"+karutaStr[LANG]['demo-ecommerce']+"</a></li>";
-//	}
 	html += "</ul>";
 	html += "</div>";
 	if (USER.admin || USER.creator){
@@ -153,7 +145,12 @@ function fill_list_page()
 		url : url1,
 		success : function(data) {
 			g_nb_trees = parseInt($('portfolios',data).attr('count'));
-			if (g_nb_trees==null || g_nb_trees<100) {
+			if (g_nb_trees==0) {
+				var html = "<h3 id='portfolios-label'>"+karutaStr[LANG]['no-portfolio']+"</h3>";
+				$("#list").html(html);
+				$("#wait-window").hide();
+			} else 
+				if (g_nb_trees==null || g_nb_trees<100) {
 				//--------we load all the portfolios-----------------------
 				var url0 = "../../../"+serverBCK+"/portfolios?active=1";
 				$.ajax({
@@ -162,27 +159,33 @@ function fill_list_page()
 					url : url0,
 					success : function(data) {
 						UIFactory["Portfolio"].parse(data);
-						$("#list").html(getList());
-						UIFactory["Portfolio"].displayAll('portfolios','list');
-						if (USER.admin || USER.creator) {
-							$.ajax({
-								type : "GET",
-								dataType : "xml",
-								url : "../../../"+serverBCK+"/portfolios?active=false",
-								success : function(data) {
-									var destid = $("div[id='bin']");
-									UIFactory["Portfolio"].parseBin(data);
-									UIFactory["Portfolio"].displayBin('bin','bin');
-								},
-								error : function(jqxhr,textStatus) {
-									alertHTML("Server Error GET bin: "+textStatus);
-								}
-							});
+						if (g_nb_trees==1) {
+							display_main_page(portfolios_list[0].id);
+							$("#wait-window").hide();
 						}
-						$("#wait-window").hide();
+						else {
+							$("#list").html(getList());
+							UIFactory["Portfolio"].displayAll('portfolios','list');
+							if (USER.admin || USER.creator) {
+								$.ajax({
+									type : "GET",
+									dataType : "xml",
+									url : "../../../"+serverBCK+"/portfolios?active=false",
+									success : function(data) {
+										var destid = $("div[id='bin']");
+										UIFactory["Portfolio"].parseBin(data);
+										UIFactory["Portfolio"].displayBin('bin','bin');
+									},
+									error : function(jqxhr,textStatus) {
+										alertHTML("Server Error GET active=false: "+textStatus);
+									}
+								});
+							}
+							$("#wait-window").hide();
+						}
 					},
 					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET active: "+textStatus);
+						alertHTML("Server Error GET active=1: "+textStatus);
 					}
 				});
 				//---------------------------------------------------
@@ -208,17 +211,32 @@ function fill_list_page()
 									UIFactory["Portfolio"].displayBin('bin','bin');
 								},
 								error : function(jqxhr,textStatus) {
-									alertHTML("Server Error GET bin: "+textStatus);
+									alertHTML("Server Error GET active=false: "+textStatus);
 								}
 							});
 						}
 					},
 					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET active: "+textStatus);
+						alertHTML("Server Error GET active=1&project=true: "+textStatus);
 						$("#wait-window").hide();
 					}
 				});
-				
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : "../../../"+serverBCK+"/portfolios?active=1&project=false&count=true",
+					success : function(data) {
+						var nb_portfolios = parseInt($('portfolios',data).attr('count'));
+						$("#portfolios-nb").html(nb_portfolios);
+						if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
+							$("#portfolios-div").hide();
+					},
+					error : function(jqxhr,textStatus) {
+						alertHTML("Server Error GET active=1&project=false: "+textStatus);
+						$("#wait-window").hide();
+					}
+				});
+
 			}
 		},
 		error : function(jqxhr,textStatus) {
@@ -401,7 +419,7 @@ function toggleProject(uuid) {
 				displayProject[uuid] = 'open';
 			}
 		} else {
-			if ($("#content-"+uuid).html()=="" || $(portfolios_byid[uuid].code_node).text()=='karuta' )
+			if ($("#content-"+uuid).html()=="" || (portfolios_byid[uuid]!= undefined && $(portfolios_byid[uuid].code_node).text()=='karuta') )
 				loadAndDisplayProjectPortfolios($("#content-"+uuid).attr("code"));
 			else {
 				$("#content-"+uuid).show();

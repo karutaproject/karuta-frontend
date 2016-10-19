@@ -131,6 +131,9 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	if (type==null)
+		type = "default";
+	//---------------------
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -148,12 +151,22 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 	if (code.indexOf("&")>-1)
 		code = code.substring(0,code.indexOf("&"))+code.substring(code.indexOf("&")+1);
 	var html = "";
-	html += "<span class='"+code+"'>";
-	if (($(this.code_node).text()).indexOf("#")>-1)
-		html += code+ " ";
-	if (($(this.code_node).text()).indexOf("&")>-1)
-		html += "["+$(this.value_node).text()+ "] ";
-	html += label+"</span>";
+	if (type=='default'){
+		html += "<span class='"+code+"'>";
+		if (($(this.code_node).text()).indexOf("#")>-1)
+			html += code+ " ";
+		if (($(this.code_node).text()).indexOf("&")>-1)
+			html += "["+$(this.value_node).text()+ "] ";
+		html += label+"</span>";
+	}
+	if (type=='none'){
+		if (($(this.code_node).text()).indexOf("#")>-1)
+			html += code+ " ";
+		if (($(this.code_node).text()).indexOf("&")>-1)
+			html += "["+$(this.value_node).text()+ "] ";
+		html += label;
+	}
+
 	return html;
 };
 

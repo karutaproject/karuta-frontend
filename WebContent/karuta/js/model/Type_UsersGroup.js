@@ -131,8 +131,6 @@ UIFactory["UsersGroup"].displayUsers = function(gid,destid,type,lang)
 	var destid_group = "users-group_"+gid;
 	var html = "";
 	html += "<div class='usersgroup-users' id='"+destid_group+"'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
 	html += "</div>";
 	$("#"+destid).html(html);
 	//--------------------------
@@ -391,8 +389,6 @@ UIFactory["UsersGroup"].toggleUsersList = function(gid,destid,checked)
 {
 	if (checked) {
 		var html = "";
-		html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-		html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
 		$("#"+destid).html(html);
 		$("#"+destid).show();
 		//--------------------------
@@ -467,10 +463,9 @@ UIFactory["UsersGroup"].editGroupsByUser = function(userid)
 	$("#edit-window-title").html(karutaStr[LANG]['list_groups']);
 	var html = "<input type='hidden' name='"+nameinput+"' id='"+nameinput+"' value='0'>";
 	html += "<div id='user_list_groups'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
 	html += "</div>";
 	$("#edit-window-body").html(html);
+	$("#edit-window-type").html("");
 	//--------------------------
 	$('#edit-window').modal('show');
 
@@ -536,10 +531,9 @@ UIFactory["UsersGroup"].callAddUsers = function(gid)
 	$("#edit-window-title").html(karutaStr[LANG]['select_users']);
 	var html = "";
 	html += "<div id='adding_users' class='div_scroll'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
 	html += "</div>";
 	$("#edit-window-body").html(html);
+	$("#edit-window-type").html("");
 	//--------------------------
 	$.ajaxSetup({async: false});
 	$.ajax({

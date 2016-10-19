@@ -3,8 +3,10 @@
 function show_exec_report()
 //==============================
 {
-	var navbar_html = getNavBar('list',null);
-	$("#navigation-bar").html(navbar_html);
+	$("body").removeClass();
+	$("body").addClass("exec_report")
+	$("#sub-bar").html("");
+	setLanguageMenu("fill_exec_report()");
 	$("#refresh").attr("onclick","fill_exec_report()");
 	$("#refresh").show();
 	$("#search-div").hide();
@@ -48,7 +50,6 @@ function fill_exec_report()
 	$("#report-fileupload").fileupload({
 		progressall: function (e, data) {
 			$("#report-progress").css('border','1px solid lightgrey');
-			$("#report-divfileupload").html("<img src='../../karuta/img/ajax-loader.gif'>");
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#report-progress .bar').css('width',progress + '%');
 		},

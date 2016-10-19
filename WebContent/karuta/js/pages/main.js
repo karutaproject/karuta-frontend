@@ -4,6 +4,8 @@
 function show_main_page(portfolioid,role)
 //==============================
 {
+	setLanguageMenu("fill_main_page()");
+	$("#refresh").attr("onclick","fill_main_page()");
 	$("body").removeClass();
 	$("body").addClass("main-page")
 	$("#main-page").html("");
@@ -94,11 +96,10 @@ function fill_main_page(portfolioid,role)
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			// --------------------------
 			if (g_display_type=="standard" || g_display_type=="model" || g_display_type=="translate") {
-				$("#navigation-bar").html(getNavBar('main',g_portfolioid,g_edit));
 				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 			}
 			if (g_display_type=="header")
-				$("#navigation_bar").html(getNavBar('main',g_portfolioid,g_edit));
+				$("#navigation-bar").html(getNavBar('main',g_portfolioid,g_edit));
 			//---------------------------
 			if (g_encrypted)
 				loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});
@@ -130,41 +131,43 @@ function fill_main_page(portfolioid,role)
 	});
 	$(document).keyup(function(e){
 		var div = $('div.free-selected');
-		var nodeid = $(div).attr('id').substring(5);
-		console.log(nodeid);
-		var pos = $(div).position();
-		var divtop = pos.top;
-		var divleft = pos.left;
-		switch (e.which) {
-			case 37:
-				$(div).stop().animate({
-					left: '-=1'
-				}); //left arrow key
-				divleft -= 1;
-				UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',divleft);
-				break;
-			case 38:
-				$(div).stop().animate({
-				top: '-=1'
-				}); //up arrow key
-				divtop -= 1;
-				UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',divright);
-				break;
-			case 39:
-				$(div).stop().animate({
-				left: '+=1'
-				}); //right arrow key
-				divleft += 1;
-				UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',divleft);
-				break;
-			case 40:
-				$(div).stop().animate({
-				top: '+=1'
-				}); //bottom arrow key
-				divtop += 1;
-				UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',divright);
-				break;
-		};
+		if (div.length>0) {
+			var nodeid = $(div).attr('id').substring(5);
+			console.log(nodeid);
+			var pos = $(div).position();
+			var divtop = pos.top;
+			var divleft = pos.left;
+			switch (e.which) {
+				case 37:
+					$(div).stop().animate({
+						left: '-=1'
+					}); //left arrow key
+					divleft -= 1;
+					UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',divleft);
+					break;
+				case 38:
+					$(div).stop().animate({
+					top: '-=1'
+					}); //up arrow key
+					divtop -= 1;
+					UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',divright);
+					break;
+				case 39:
+					$(div).stop().animate({
+					left: '+=1'
+					}); //right arrow key
+					divleft += 1;
+					UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',divleft);
+					break;
+				case 40:
+					$(div).stop().animate({
+					top: '+=1'
+					}); //bottom arrow key
+					divtop += 1;
+					UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',divright);
+					break;
+			};
+		}
 });
 	$(".free-toolbar").css('visibility')=='hidden';
 }

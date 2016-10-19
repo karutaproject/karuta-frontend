@@ -1,13 +1,12 @@
 
-
 //==============================
 function show_list_users()
 //==============================
 {
 	$("body").removeClass();
-	$("body").addClass("list-page")
-	var navbar_html = getNavBar('list',null);
-	$("#navigation-bar").html(navbar_html);
+	$("body").addClass("list-users")
+	$("#sub-bar").html("");
+	setLanguageMenu("fill_list_users()");
 	$("#refresh").attr("onclick","fill_list_users()");
 	$("#search-div").hide();
 	$("#refresh").show();
@@ -28,13 +27,9 @@ function fill_list_users()
 	html += "<span id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
 	html += "<h3 id='active-users'>"+karutaStr[LANG]['active_users']+"</h3>";
 	html += "<div  id='active'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h4>"+karutaStr[LANG]['loading']+"</h4>";
 	html += "</div>";
 	html += "<h3 id='inactive-users'>"+karutaStr[LANG]['inactive_users']+"</h3>";
 	html += "<div  id='inactive'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h4>"+karutaStr[LANG]['loading']+"</h4>";
 	html += "</div>";
 	$("#main-user").html(html);
 	$.ajaxSetup({async: false});

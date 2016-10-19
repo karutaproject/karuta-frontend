@@ -1,11 +1,12 @@
 
-
 //==============================
 function show_list_portfoliosgroups()
 //==============================
 {
-	var navbar_html = getNavBar('list',null);
-	$("#navigation-bar").html(navbar_html);
+	$("body").removeClass();
+	$("body").addClass("list-portfoliosgroups")
+	$("#sub-bar").html("");
+	setLanguageMenu("fill_list_portfoliosgroups()");
 	$("#refresh").attr("onclick","fill_list_portfoliosgroups()");
 	$("#refresh").show();
 	$("#search-div").hide();
@@ -16,18 +17,18 @@ function show_list_portfoliosgroups()
 	$("#main-usersgroup").hide();
 	$("#main-exec-batch").hide();
 	$("#main-exec-report").hide();
+	
 }
 
 //==============================
 function fill_list_portfoliosgroups()
 //==============================
 {
+	$("#wait-window").show();
 	var html = "";
 	html += "<span id='portfoliosgroup-create' onclick=\"UIFactory['PortfoliosGroup'].callCreate()\" >"+karutaStr[LANG]['create_portfoliosgroup']+"</span>";
 	html += "<h3 id='portfoliosgroups-label'>"+karutaStr[LANG]['list_portfoliosgroups']+"</h3>";
 	html += "<div  id='portfoliosgroups'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h4>"+karutaStr[LANG]['loading']+"</h4>";
 	html += "</div>";
 	$("#main-portfoliosgroup").html(html);
 	$.ajaxSetup({async: false});
@@ -39,6 +40,7 @@ function fill_list_portfoliosgroups()
 		success : function(data) {
 			UIFactory["PortfoliosGroup"].parse(data);
 			UIFactory["PortfoliosGroup"].displayGroups('portfoliosgroups','list');
+			$("#wait-window").hide();
 			//----------------
 		},
 		error : function(jqxhr,textStatus) {

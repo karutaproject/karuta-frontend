@@ -123,7 +123,9 @@ function displayKarutaPage()
 				$("#main-container").html(html);
 				$("#social-button").hide();
 			}
-
+			//-------------------------------
+			var navbar_html = getNavBar('list',null);
+			$("#navigation-bar").html(navbar_html);
 			//-------------------------------
 			display_list_page();
 			//-------------------------------

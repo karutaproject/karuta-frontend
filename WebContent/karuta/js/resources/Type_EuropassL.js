@@ -15,24 +15,19 @@ UIFactory["EuropassL"] = function( node )
 {
 	this.id = $(node).attr('id');
 	this.node = node;
-};
-
-//==================================
-UIFactory["EuropassL"].parse = function(data) 
-//==================================
-{
-	g_mother_tongueid = $("asmContext:has(metadata[semantictag='MotherTongue'])", data).attr('id');
-	langues_byid = {};
-	langues_list = [];
-	var items = $("asmUnitStructure:has(metadata[semantictag='europass-language'])",data);
+	this.mother_tongueid = $("asmContext:has(metadata[semantictag='MotherTongue'])", node).attr('id');
+	this.foreignid = $("asmUnitStructure:has(metadata[semantictag='foreign-languages'])", node).attr('id');
+	this.langues_byid = {};
+	this.langues_list = [];
+	var items = $("asmUnitStructure:has(metadata[semantictag='europass-language'])",$("asmUnitStructure:has(metadata[semantictag='foreign-languages'])",node));
 	for ( var i = 0; i < items.length; i++) {
-		langues_byid[$(items[i]).attr('id')] = new UIFactory["Langue"](items[i]);
-		langues_list[i] = langues_byid[$(items[i]).attr('id')];
+		this.langues_byid[$(items[i]).attr('id')] = new UIFactory["Langue"](items[i]);
+		this.langues_list[i] = this.langues_byid[$(items[i]).attr('id')];
 	}
 };
 
 //==================================
-UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid)
+UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,parentid,menu)
 //==================================
 {
 	if (langcode==null)
@@ -41,39 +36,40 @@ UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid)
 	$("#"+destid).html("");
 	var html ="";
 	if (type=='detail') {
-		var edit =  ($(UICom.structure["ui"][g_mother_tongueid].node).attr('write')=='Y')? true:false;
+		var writenode =  ($(UICom.structure["ui"][this.mother_tongueid].node).attr('write')=='Y')? true:false;
+		var editresroles = ($(UICom.structure["ui"][this.mother_tongueid].metadatawad).attr('editresroles')==undefined)?'none':$(UICom.structure["ui"][this.mother_tongueid].metadatawad).attr('editresroles');
+		if (g_designerrole) {
+			writenode = (editresroles.containsArrayElt(g_userroles))? true : false;
+			if (writenode)
+				writenode = menu; //if submitted menu==false
+		}
+		var edit =  ($(UICom.structure["ui"][this.mother_tongueid].node).attr('write')=='Y')? true:false;
 		//  if databack is true callback(data,param2,param3,param4) else callback(param2,param3,param4)
 		var databack = false;
-		var callback = "UIFactory['Langue'].reloadparse";
+		var callback = "UIFactory['EuropassL'].reloadparse";
 		var param2 = "'"+destid+"'";
 		var param3 = "'"+parentid+"'";
-		var param4 = edit;
+		var param4 = writenode;
 		//----------------------------
 		html += "<div class='row'>";
 		html += "<div class='col-md-offset-1 col-md-11'>";
-		html += "<h5>"+karutaStr[LANG]['mother-tongue']+" : ";
-		html += "<span class='langue' id='mother_tongue'>"+UICom.structure["ui"][g_mother_tongueid].resource.getView(null,"span");
+		html += "<h5>"+UICom.structure["ui"][this.mother_tongueid].getLabel('std_node_'+parentid,"none")+" ";
+		html += "<span class='langue' id='mother_tongue_"+parentid+"'>"+UICom.structure["ui"][this.mother_tongueid].resource.getView('mother_tongue_'+parentid,"span");
 		html +="</span>";
-		if (edit) {
-			html +="<div id='mother_tongue_button' class='btn-group' style='margin-left:3px;'>";
-			html += "<span  onclick=\"UIFactory.Langue.editMothertongue('"+g_mother_tongueid+"','mother_tongue');\" class='button glyphicon glyphicon-pencil' aria-hidden='true'></span>";
-			html +="</div>";
-		}
+		html +="<div id='mother_tongue_button' class='btn-group' style='margin-left:3px;'>";
+		html += UICom.structure["ui"][this.mother_tongueid].getButtons(null,null,null,false,0,true,menu);
+		html +="</div>";
 		html +="</h5>";
 		html += "</div><!--col-->";
 		html += "</div><!--row-->";
 		//----------------------------
 		html += "<div class='row'>";
 		html += "<div class='col-md-offset-1 col-md-7'>";
-		html += "<h5>"+karutaStr[LANG]['foreign-languages']+"</h5>";
+		html += "<h5>"+UICom.structure["ui"][this.foreignid].getLabel('std_node_'+parentid,"none")+"</h5>";
 		html += "</div><!--col-->";
-		if (edit) {
+		if (writenode || g_userroles[0]=='designer') {
 			html += "<div class='col-md-4'>";
-			html +="<div class='btn-group'>";
-			html += "<span class='button' onclick=\"javascript:importBranch('"+parentid+"','europass.parts','europass-language',"+databack+","+callback+","+param2+","+param3+","+param4+")\">";
-			html += karutaStr[LANG]['add-foreign-language'];
-			html += "</span>";
-			html += "</div><!--btn-group-->";
+			html += UICom.structure["ui"][this.foreignid].getButtons(null,null,null,false,0,true,menu);
 			html += "</div><!--col-->";
 		}
 		html += "</div><!--row-->";
@@ -84,15 +80,19 @@ UIFactory["EuropassL"].displayView = function(destid,langcode,type,parentid)
 		html += "<tr class='en-tete'><td></td><td class='bordure'> "+karutaStr[LANG]['listening']+" </td><td class='bordure'> "+karutaStr[LANG]['reading']+" </td><td class='bordure'> "+karutaStr[LANG]['spoken-interaction']+" </td><td class='bordure'> "+karutaStr[LANG]['spoken-production']+" </td><td class='bordure'> </td></tr>";
 		html += "</table>";
 		$("#"+destid).html(html);
-		for ( var i = 0; i < langues_list.length; i++) {
-				$("#"+destid+"europass_table").append($("<tr id='"+destid+"_"+langues_list[i].id+"'></tr>"));			
-				langues_list[i].displayView(destid+"_"+langues_list[i].id,type,langcode,edit);
+		for ( var i = 0; i < this.langues_list.length; i++) {
+				$("#"+destid+"europass_table").append($("<tr id='"+destid+"_"+this.langues_list[i].id+"'></tr>"));			
+				this.langues_list[i].displayView(destid+"_"+this.langues_list[i].id,type,langcode,writenode || g_userroles[0]=='designer');
 		}
 		html += "</div><!--col-->";
 		html += "</div><!--row-->";
 		//----------------------------
 	}
 }
+
+//=====================================================
+//=====================================================
+//=====================================================
 
 
 //==================================
@@ -101,6 +101,7 @@ UIFactory["Langue"] = function( node )
 {
 	this.id = $(node).attr('id');
 	this.node = node;
+	this.parentid = $(node).parent().parent().attr("id");
 	this.semantictag = $("metadata",node).attr('semantictag');
 	this.language_nodeid = $("asmContext:has(metadata[semantictag='ForeignLanguage'])",node).attr('id');
 	this.listening_nodeid = $("asmContext:has(metadata[semantictag='Listening'])",node).attr('id');
@@ -142,8 +143,8 @@ UIFactory["Langue"].prototype.displayView = function(destid,type,langcode,edit)
 		if (edit && type=='detail') {
 			html +="<td class='buttons' style='text-align:left'>";
 			html +="	<div class='btn-group' style='margin-left:3px;'>";
-			html += "		<span onclick=\"langues_byid['"+this.id+"'].displayEditor('"+destid+"');\" class='button glyphicon glyphicon-pencil' aria-hidden='true'></span>";
-			html += "		<span onclick=\"confirmDel('"+this.id+"','Langue','"+destid+"','"+type+"',"+edit+")\" class='button glyphicon glyphicon-remove' aria-hidden='true'></span>";
+			html += "		<span onclick=\"UICom.structure.ui['"+this.parentid+"'].structured_resource.langues_byid['"+this.id+"'].displayEditor('"+destid+"');\" class='button glyphicon glyphicon-pencil' aria-hidden='true'></span>";
+			html += "		<span onclick=\"confirmDel('"+this.id+"','Langue')\" class='button glyphicon glyphicon-remove' aria-hidden='true'></span>";
 			html +="	</div>";
 			html +="</td>";
 		}
@@ -152,6 +153,7 @@ UIFactory["Langue"].prototype.displayView = function(destid,type,langcode,edit)
 	var obj = $(html);
 	$("#"+destid).append(obj);
 };
+
 //==================================
 UIFactory["Langue"].prototype.displayEditor = function(destid,type,lang)
 //==================================
@@ -186,7 +188,7 @@ UIFactory["Langue"].prototype.displayEditor = function(destid,type,lang)
 		html += "</a>";
 		html +="</td>";
 		html +="<td style='text-align:left'>";
-		html += "&nbsp;<a  class='btn btn-xs editbutton' onclick=\"javascript:langues_byid['"+this.id+"'].displayView('"+destid+"','detail',lang,true);$('#collapse"+this.id+"').collapse('show');toggleZoom('"+this.id+"')\" data-title='éditer' rel='tooltip'>";
+		html += "&nbsp;<a  class='btn btn-xs editbutton' onclick=\"javascript:UICom.structure.ui['"+this.parentid+"'].structured_resource.langues_byid['"+this.id+"'].displayView('"+destid+"','detail',lang,true);$('#collapse"+this.id+"').collapse('show');toggleZoom('"+this.id+"')\" data-title='éditer' rel='tooltip'>";
 		html += karutaStr[LANG]['quit'];
 		html += "</a>";
 		html +="</td>";
@@ -211,22 +213,6 @@ UIFactory["Langue"].editSkill = function(destid,uuid,title)
 };
 
 //==================================
-UIFactory["Langue"].reloadparse = function(destid,parentid,writenode) 
-//==================================
-{
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes/node/" + parentid + "?resources=true",
-		success : function(data) {
-			UICom.parseStructure(data);
-			UIFactory["EuropassL"].parse($(":root",data));
-			UIFactory["EuropassL"].displayView(destid,null,'detail',parentid,writenode);
-		}
-	});
-};
-
-//==================================
 UIFactory["Langue"].refresh = function(parentid,destid) 
 //==================================
 {
@@ -241,14 +227,11 @@ UIFactory["Langue"].refresh = function(parentid,destid)
 
 
 //==================================
-UIFactory["Langue"].remove = function(uuid,destid,parentid,type,edit)
+UIFactory["Langue"].remove = function(uuid)
 //==================================
 {
 	UICom.DeleteNode(uuid);
-	$("#"+uuid,g_portfolio_current).remove();
-	UIFactory["EuropassL"].parse(g_portfolio_current);
-	var parentid = $("asmUnit:has(metadata[semantictag='EuropassL'])", g_portfolio_current).attr('id');
-	UIFactory["EuropassL"].displayView(destid,null,type,parentid,edit);
+	UIFactory.Node.reloadUnit();
 	$("#wait-window").modal('hide');
 };
 

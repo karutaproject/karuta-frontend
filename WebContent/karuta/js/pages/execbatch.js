@@ -3,8 +3,10 @@
 function show_exec_batch()
 //==============================
 {
-	var navbar_html = getNavBar('list',null);
-	$("#navigation-bar").html(navbar_html);
+	$("body").removeClass();
+	$("body").addClass("exec_batch")
+	$("#sub-bar").html("");
+	setLanguageMenu("fill_exec_batch()");
 	$("#refresh").attr("onclick","fill_exec_batch()");
 	$("#refresh").show();
 	$("#search-div").hide();
@@ -56,7 +58,6 @@ function fill_exec_batch()
 	$("#batch-fileupload").fileupload({
 		progressall: function (e, data) {
 			$("#batch-progress").css('border','1px solid lightgrey');
-			$("#batch-divfileupload").html("<img src='../../karuta/img/ajax-loader.gif'>");
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#batch-progress .bar').css('width',progress + '%');
 		},

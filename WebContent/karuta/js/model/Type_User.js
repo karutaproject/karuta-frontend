@@ -299,6 +299,7 @@ UIFactory["User"].callCreate = function()
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['create_user']);
+	$("#edit-window-type").html("");
 	var html = "";
 	html += "<form id='metadata' class='form-horizontal'>";
 	html += UIFactory["User"].getAttributeCreator("lastname","");
@@ -345,6 +346,7 @@ UIFactory["User"].edit = function(userid)
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['user']);
+	$("#edit-window-type").html("");
 	var html = "";
 	$("#edit-window-body").html(html);
 	//--------------------------
@@ -506,6 +508,7 @@ UIFactory["User"].callCreateTestUser = function()
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['create-test-user']);
+	$("#edit-window-type").html("");
 	var html = "";
 	html += "<form id='metadata' class='form-horizontal'>";
 	html += UIFactory["User"].getAttributeCreator("lastname","");
@@ -612,6 +615,7 @@ UIFactory["User"].callChangePassword = function()
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Change']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['change_password']);
+	$("#edit-window-type").html("");
 	var html = "";
 	html += "<form id='metadata' class='form-horizontal'>";
 	html += UIFactory["User"].getPasswordCreator();

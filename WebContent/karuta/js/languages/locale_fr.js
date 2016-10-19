@@ -244,6 +244,7 @@ karutaStr['fr']['welcome-added']="La page de bienvenue a été ajoutée à la fi
 karutaStr['fr']['button-welcome-edit']="Éditer la page de bienvenue";
 karutaStr['fr']['existing-code']="Ce code existe déjà.";
 karutaStr['fr']['search-label']="Saissisez un code ou une partie du code";
+karutaStr['fr']['no-portfolio']="Désolé, vous n'avez pas de pôrtfolio.";
 
 //=========================================
 //========== USERS ========================
@@ -310,11 +311,6 @@ karutaStr['fr']['pdf']="Rôles - Afficher PDF";
 //=========================================
 //========== EUROPASS =====================
 //=========================================
-
-karutaStr['fr']['mother-tongue']="Langue maternelle";
-karutaStr['fr']['foreign-languages']="Langues étrangères";
-karutaStr['fr']['add-foreign-language']="Ajouter une langue étrangère";
-
 karutaStr['fr']['understanding']="COMPRENDRE";
 karutaStr['fr']['listening']="Écouter";
 karutaStr['fr']['reading']="Lire";
@@ -374,8 +370,8 @@ karutaStr['fr']['asmStructure']="Section";
 karutaStr['fr']['asmUnit']="Page";
 karutaStr['fr']['asmUnitStructure']="Sous-section";
 
-karutaStr['fr']['TextField']="Champ texte";
-karutaStr['fr']['Field']="Champ simple";
+karutaStr['fr']['TextField']="Texte long";
+karutaStr['fr']['Field']="Texte court";
 karutaStr['fr']['URL']="URL";
 karutaStr['fr']['Document']="Document";
 karutaStr['fr']['Calendar']="Calendrier";

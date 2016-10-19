@@ -129,8 +129,6 @@ UIFactory["PortfoliosGroup"].displayPortfolios = function(gid,destid,type,lang)
 		var destid_group = "portfolios-group_"+gid;
 		var html = "";
 		html += "<div class='portfoliosgroup-items' id='"+destid_group+"'>";
-		html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-		html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
 		html += "</div>";
 		$("#"+destid).html(html);
 		//--------------------------
@@ -385,10 +383,9 @@ UIFactory["PortfoliosGroup"].editGroupsByUuid = function(uuid)
 	$("#edit-window-title").html(karutaStr[LANG]['list_groups']);
 	var html = "<input type='hidden' name='"+nameinput+"' id='"+nameinput+"' value='0'>";
 	html += "<div id='portfolio_list_groups'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
 	html += "</div>";
 	$("#edit-window-body").html(html);
+	$("#edit-window-type").html("");
 	//--------------------------
 	$('#edit-window').modal('show');
 
@@ -473,10 +470,9 @@ UIFactory["PortfoliosGroup"].callAddPortfolios = function(gid,portfolioLabel)
 	$("#edit-window-title").html(portfolioLabel);
 	var html = "";
 	html += "<div id='adding_portfolios' class='div_scroll'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h5>"+karutaStr[LANG]['loading']+"</h5>";
 	html += "</div>";
 	$("#edit-window-body").html(html);
+	$("#edit-window-type").html("");
 	//--------------------------
 	$.ajaxSetup({async: false});
 	$.ajax({
@@ -630,6 +626,7 @@ UIFactory["PortfoliosGroup"].callShareUsers = function(gid)
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+PortfoliosGroups_byid[gid].label);
+	$("#edit-window-type").html("");
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";
 	html += "<div class='row'>";
@@ -701,6 +698,7 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+PortfoliosGroups_byid[gid].label);
+	$("#edit-window-type").html("");
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";
 	html += "<div class='row'>";

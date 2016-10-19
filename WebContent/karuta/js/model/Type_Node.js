@@ -753,8 +753,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	var contentfreenode = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
-	if (submitted=='Y')
+	if (submitted=='Y') {
 		menu = false;
+	}
 	//-------------------- test if visible
 	if ( (display=='N' && (g_userroles[0]=='designer'  || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || (showtoroles.indexOf("all")>-1 && !privatevalue) || (showtoroles.containsArrayElt(g_userroles) && !privatevalue) || g_userroles[0]=='designer')) ) {
 		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.containsArrayElt(g_userroles)) || (g_userroles[0]=='designer'  || USER.admin)) {
@@ -866,7 +867,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 
 				//-------------- buttons --------------------------
 				html += "<td id='buttons-"+uuid+"' class='buttons same-height'>";
-				html += "<div class='inside-full-height'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
+				html += "<div class='inside-full-height'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
 				html += "</td>";
 				//--------------------------------------------------
 				html += "</tr></table>";
@@ -1206,7 +1207,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				var gotDisplay = false;
 				if (semtag=="EuropassL"){
 					gotDisplay = true;
-					UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid);
+					node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,menu);
+//					UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid,menu);
 				}
 				if (!gotDisplay && semtag!='bubble_level1') {
 					for( var i=0; i<root.children.length; ++i ) {
@@ -1719,7 +1721,6 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				readnode = (g_userroles[0]=='designer' || seenoderoles.indexOf(USER.username_node.text())>-1 || seenoderoles.containsArrayElt(g_userroles) || seenoderoles.indexOf('all')>-1)? true : false;
 			if( depth < 0 || !readnode) return;
 			//----------------edit control on proxy target ------------
-			//----------------edit control on proxy target ------------
 			if (proxies_edit[uuid]!=undefined) {
 					var parent = proxies_parent[uuid];
 					if (parent==dest.substring(8) || dest=='contenu') { // dest = content_{parentid}
@@ -2220,7 +2221,10 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 						writenode = (g_userroles[0]=='designer')? true : false;
 				}
 				//---------------------------
-				if (semtag=="ref" || semtag=="semtag" || semtag=="text-value" || semtag=="nodetype" || semtag=="todisplay" || semtag=="aggregatetype" || semtag=="aggregationselect" || semtag=="test") {
+				if (semtag=="ref" || semtag=="semtag" || semtag=="text-value" || semtag=="nodetype" || semtag=="todisplay"
+					|| semtag=="aggregatetype" || semtag=="aggregationselect" || semtag=="test" || semtag=="value-min"
+						|| semtag=="value-max" || semtag=="legendtype" || semtag=="legendsemantictag" || semtag=="legenddisplay"
+						|| semtag=="titletype" || semtag=="titlesemantictag" || semtag=="titledisplay") {
 					if (semtag=="test")
 						html += "<div id='std_resource_"+uuid+"' class='col-md-4'>";
 					else if (semtag=="text-value")
@@ -2336,7 +2340,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				html += "<div id='metaepm_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
 				//--------------------------------------------------*/
 				if (root.children.length>0 && depth>0) {
-					if (semtag=="asmNop" || semtag=="node_resource" || semtag=="text" || semtag=="aggregate" || semtag=="url2unit")
+					if (semtag=="asmNop" || semtag=="node_resource" || semtag=="draw-web-axis" || semtag=="draw-web-line" || semtag=="text" || semtag=="aggregate" || semtag=="url2unit")
 						html += "<div id='content-"+uuid+"' class='row'></div>";
 					else
 						html += "<div id='content-"+uuid+"' class='model-content'></div>";
@@ -2699,9 +2703,14 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
 	if (g_designerrole) {
 		deletenode = (delnoderoles.containsArrayElt(g_userroles))? true : false;
+		if (deletenode)
+			deletenode = menu; //if submitted menu==false
 		writenode = (editnoderoles.containsArrayElt(g_userroles))? true : false;
-		if (!writenode)
+		if (!writenode) {
 			writenode = (editresroles.containsArrayElt(g_userroles))? true : false;
+			if (writenode)
+				writenode = menu; //if submitted menu==false
+		}
 	}
 	//-----------------------------------
 	var html = "<div class='btn-group'>";
@@ -2924,8 +2933,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 				(submitnode && ( submitroles.indexOf(g_userroles[0])>-1 || submitroles.indexOf($(USER.username_node).text())>-1)
 				|| USER.admin
 				|| g_userroles[0]=='designer'
-				|| ( g_userroles[1]=='designer' && submitroles.indexOf(g_userroles[0]))>-1)
-				|| submitroles.indexOf(userrole)>-1 ))
+				|| ( g_userroles[1]=='designer' && submitroles.indexOf(g_userroles[0])>-1)
+				|| submitroles.indexOf(userrole)>-1 )))
 		{
 			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"')\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";

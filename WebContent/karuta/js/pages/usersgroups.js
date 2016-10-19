@@ -1,13 +1,12 @@
 
-
 //==============================
 function show_list_usersgroups()
 //==============================
 {
 	$("body").removeClass();
-	$("body").addClass("list-page")
-	var navbar_html = getNavBar('list',null);
-	$("#navigation-bar").html(navbar_html);
+	$("body").addClass("list-usersgroups")
+	$("#sub-bar").html("");
+	setLanguageMenu("fill_list_usersgroups()");
 	$("#refresh").attr("onclick","fill_list_usersgroups()");
 	$("#refresh").show();
 	$("#search-div").hide();
@@ -28,8 +27,6 @@ function fill_list_usersgroups()
 	html += "<span id='usersgroup-create' onclick=\"UIFactory['UsersGroup'].callCreate()\" >"+karutaStr[LANG]['create_usersgroup']+"</span>";
 	html += "<h3 id='usersgroups-label'>"+karutaStr[LANG]['list_usersgroups']+"</h3>";
 	html += "<div id='usersgroups'>";
-	html += "	<img src='../../karuta/img/ajax-loader.gif'><br>";
-	html += "	<h4>"+karutaStr[LANG]['loading']+"</h4>";
 	html += "</div>";
 	$("#main-usersgroup").html(html);
 	$.ajaxSetup({async: false});
