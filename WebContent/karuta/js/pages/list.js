@@ -159,11 +159,13 @@ function fill_list_page()
 					url : url0,
 					success : function(data) {
 						UIFactory["Portfolio"].parse(data);
-						if (g_nb_trees==1) {
+/*
+						if (g_nb_trees==1 && !USER.creator) {
 							display_main_page(portfolios_list[0].id);
 							$("#wait-window").hide();
 						}
 						else {
+*/
 							$("#list").html(getList());
 							UIFactory["Portfolio"].displayAll('portfolios','list');
 							if (USER.admin || USER.creator) {
@@ -181,8 +183,12 @@ function fill_list_page()
 									}
 								});
 							}
+							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
+								$("#portfolios-div").hide();
 							$("#wait-window").hide();
+/*
 						}
+*/
 					},
 					error : function(jqxhr,textStatus) {
 						alertHTML("Server Error GET active=1: "+textStatus);

@@ -162,6 +162,8 @@ karutaStr['fr']['cssfile']="Fichier CSS";
 karutaStr['fr']['display-type']="Type de présentation";
 karutaStr['fr']['node']="Contenu du noeud";
 karutaStr['fr']['resource']="Ressource";
+karutaStr['fr']['metadata']="Métadonnées";
+karutaStr['fr']['css-styles']="Styles CSS";
 karutaStr['fr']['inparent']="Dans le parent";
 karutaStr['fr']['encrypted']="Encrypter la ressource";
 karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
@@ -244,7 +246,7 @@ karutaStr['fr']['welcome-added']="La page de bienvenue a été ajoutée à la fi
 karutaStr['fr']['button-welcome-edit']="Éditer la page de bienvenue";
 karutaStr['fr']['existing-code']="Ce code existe déjà.";
 karutaStr['fr']['search-label']="Saissisez un code ou une partie du code";
-karutaStr['fr']['no-portfolio']="Désolé, vous n'avez pas de pôrtfolio.";
+karutaStr['fr']['no-portfolio']="";
 
 //=========================================
 //========== USERS ========================

@@ -664,7 +664,7 @@ UIFactory["Portfolio"].parse = function(data)
 			var code = portfolios_byid[uuid].code_node.text();
 			if (code.indexOf(".")<0)
 				code += ".";
-			tableau1[i] = [portfolios_byid[uuid].code_node.text(),uuid];
+			tableau1[i] = [code,uuid];
 		} catch(e) {
 			alertHTML("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
 		}

@@ -205,7 +205,8 @@ UIFactory["Comments"].prototype.save = function()
 //==================================
 {
 	UICom.UpdateResource(this.id,writeSaved);
-	this.refresh();
+	if (!this.inline)
+		this.refresh();
 };
 
 //==================================

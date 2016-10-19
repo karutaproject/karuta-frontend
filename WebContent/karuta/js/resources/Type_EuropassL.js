@@ -53,13 +53,12 @@ UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,par
 		//----------------------------
 		html += "<div class='row'>";
 		html += "<div class='col-md-offset-1 col-md-11'>";
-		html += "<h5>"+UICom.structure["ui"][this.mother_tongueid].getLabel('std_node_'+parentid,"none")+" ";
-		html += "<span class='langue' id='mother_tongue_"+parentid+"'>"+UICom.structure["ui"][this.mother_tongueid].resource.getView('mother_tongue_'+parentid,"span");
+		html += "<span class='mothertongue-label'>"+UICom.structure["ui"][this.mother_tongueid].getLabel('std_node_'+parentid,"none")+"</span>";
+		html += "<span class='mothertongue-value' id='mother_tongue_"+parentid+"'>"+UICom.structure["ui"][this.mother_tongueid].resource.getView('mother_tongue_'+parentid,"span");
 		html +="</span>";
 		html +="<div id='mother_tongue_button' class='btn-group' style='margin-left:3px;'>";
 		html += UICom.structure["ui"][this.mother_tongueid].getButtons(null,null,null,false,0,true,menu);
 		html +="</div>";
-		html +="</h5>";
 		html += "</div><!--col-->";
 		html += "</div><!--row-->";
 		//----------------------------
