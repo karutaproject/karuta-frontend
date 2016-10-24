@@ -1442,16 +1442,24 @@ function toggleProject2Select(uuid) {
 }
 
 //==================================
-function countWords(text) {
+function countWords(html) {
 //==================================
-	return text.replace(/(&lt;([^&gt;]+)&gt;)/ig,"").replace( /[^\w ]/g, "" ).trim().split( /\s+/ ).length;
+	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	return text.trim().split( /\s+/ ).length;
 }
 
 //==================================
-function getFirstWords(text,nb) {
+function getFirstWords(html,nb) {
 //==================================
-	var tableOfWords = text.replace(/(&lt;([^&gt;]+)&gt;)/ig,"").replace( /[^\w ]/g, "" ).trim().split( /\s+/ ).slice(0,nb);
-	return text.substring(0,text.indexOf(tableOfWords[tableOfWords.length-1])+tableOfWords[tableOfWords.length-1].length);
+	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
+	var tableIndex = [];
+	var end = 0;
+	for (var i=0;i<tableOfWords.length;i++){
+		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
+		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
+	}
+	return html.substring(0,tableIndex[tableOfWords.length-1].end);
 }
 
 //==================================

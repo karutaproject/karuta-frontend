@@ -130,9 +130,12 @@ UIFactory["TextField"].prototype.update = function(langcode)
 	if (this.maxword>0 && countWords(value)>this.maxword) {
 		value = getFirstWords(value,this.maxword);
 		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+value);
+//		$("#"+this.id+"_edit_"+langcode).data("wysihtml5").editor.setValue(value);
+		$("#"+this.id+"_edit_"+langcode).val(value);
 	}
 	$(this.text_node[langcode]).text(value);//	$(this.text_node[langcode]).html($.parseHTML(value));
 	this.save();
+	this.updateCounterWords(langcode);
 };
 
 //==================================
@@ -144,8 +147,9 @@ UIFactory["TextField"].prototype.updateCounterWords = function(langcode)
 		langcode = LANGCODE;
 	if (this.maxword>0) {
 		var value = $.trim($("#"+this.id+"_edit_"+langcode).val());
-		$("#counter_"+this.id).html(countWords(value)+"/"+this.maxword);
-		if (countWords(value)>this.maxword){
+		var nbWords = countWords(value);
+		$("#counter_"+this.id).html(nbWords+"/"+this.maxword);
+		if (nbWords>this.maxword){
 			$("#counter_"+this.id).addClass('danger');
 		}
 		else
@@ -186,7 +190,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	var html = "";
 	if (type=='default') {
 		html += "<button id='button_"+this.id+"' class='glyphicon glyphicon-resize-full' style='height:24px;float:right;' onclick=\"UIFactory.TextField.toggleExpand('"+this.id+"','"+langcode+"')\"></button>";
-		html += "<div id='div_"+this.id+"'><span id='counter_"+this.id+"' style='float:right'></span><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' expand='false' style='height:300px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
+		html += "<div id='div_"+this.id+"'><span id='counter_"+this.id+"' class='word-counter' style='float:right'></span><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' expand='false' style='height:300px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
 		if (disabled)
 			html += "disabled='disabled' ";
 		html += ">"+text+"</textarea></div>";
