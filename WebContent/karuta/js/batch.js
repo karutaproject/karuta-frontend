@@ -98,6 +98,9 @@ function initBatchVars()
 	g_update_resources = null;
 	g_nb_updateResource = new Array();
 	//-----------------------
+	g_update_tree_roots = null;
+	g_nb_updateTreeRoot = new Array();
+	//-----------------------
 	g_share_trees = null;
 	g_nb_shareTree = new Array();
 	//-----------------------
@@ -180,6 +183,7 @@ function processLine()
 	g_nb_selectTree[g_noline] = 0;
 	g_nb_copyTree[g_noline] = 0;
 	g_nb_updateResource[g_noline] = 0;
+	g_nb_updateTreeRoot[g_noline] = 0;
 	g_nb_shareTree[g_noline] = 0;
 	g_nb_unshareTree[g_noline] = 0;
 	g_nb_deleteTree[g_noline] = 0;
@@ -1007,18 +1011,33 @@ function updateTreeRoot(node)
 						data : xml,
 						url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
 						success : function(data) {
-							$("#batch-log").append("<br>- tree root updated ("+portfolioid+") - newcode:"+newcode);
+							$("#batch-log").append("<br>- tree root updated ("+oldcode+") - newcode:"+newcode);
 							//===========================================================
 							g_nb_updateTreeRoot[g_noline]++;
-							if (g_update_tree_roots.length==g_update_tree_roots[g_noline]) {
+							if (g_update_tree_roots.length==g_nb_updateTreeRoot[g_noline]) {
 								processUpdateResources();
 							}	
 							//===========================================================
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ERROR in  create tree - code:"+code);
+							$("#batch-log").append("<br>- ERROR in  updateTreeRoot - code:"+oldcode+" not found");
+							//===========================================================
+							g_nb_updateTreeRoot[g_noline]++;
+							if (g_update_tree_roots.length==g_nb_updateTreeRoot[g_noline]) {
+								processUpdateResources();
+							}	
+							//===========================================================
 						}
 					});
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ERROR in  updateTreeRoot - code:"+oldcode);
+					//===========================================================
+					g_nb_updateTreeRoot[g_noline]++;
+					if (g_update_tree_roots.length==g_nb_updateTreeRoot[g_noline]) {
+						processUpdateResources();
+					}	
+					//===========================================================
 				}
 		});
 	} else {
@@ -1349,11 +1368,12 @@ function shareTree(node)
 //		role = $("role>txtval",node).text();
 //	else
 //		role = eval("g_json.lines["+g_noline+"]."+select_node);
-	var select_user = $("user>txtval",node).attr("select");
-	if(typeof(select_user)=='undefined')
-		user = $("user>txtval",node).text();
-	else
-		user = eval("g_json.lines["+g_noline+"]."+select_user);
+	var user = getTxtvals($("user",node));
+//	var select_user = $("user>txtval",node).attr("select");
+//	if(typeof(select_user)=='undefined')
+//		user = $("user>txtval",node).text();
+//	else
+//		user = eval("g_json.lines["+g_noline+"]."+select_user);
 	//---- get userid ----------
 	var url = "../../../"+serverBCK+"/users/user/username/"+user;
 	if (!trace)

@@ -165,7 +165,10 @@ function r_processNode(no,xmlDoc,destid,data,line)
 		var selector = r_getSelector(select,test);
 		var nodes = $(selector.jquery,data).filter(selector.filter1);
 		nodes = eval("nodes"+selector.filter2);
-		
+		if (nodes.length==0) { // try the node itself
+			var nodes = $(selector.jquery,data).addBack().filter(selector.filter1);
+			nodes = eval("nodes"+selector.filter2);
+		}
 		for (var i=0; i<nodes.length;i++){
 			//---------------------------
 			var ref_init = $(xmlDoc).attr("ref-init");

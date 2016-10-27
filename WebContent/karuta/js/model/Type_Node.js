@@ -3327,6 +3327,8 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 		langcode = LANGCODE;
 	var name = node.asmtype;
 	var semtag =  ($("metadata",node.node)[0]==undefined)?'': $($("metadata",node.node)[0]).attr('semantictag');
+	if (semtag==undefined) // for backward compatibility - node without semantic tag
+		semtag = '';
 	var html = "<div><br>";
 	html += "<form id='metadata' class='form-horizontal'>";
 	if (name=='asmContext' && node.resource.type=='Proxy')
