@@ -830,6 +830,7 @@ UIFactory["PortfoliosGroup"].shareUsers = function(gid,type)
 	if (grouplabel!=null) {
 		var xml = "<users>";
 		for (var i=0; i<users.length; i++){
+			var userid = $(users[i]).attr('value');
 			xml += "<user id='"+userid+"'/>";
 		}
 		xml += "</users>";

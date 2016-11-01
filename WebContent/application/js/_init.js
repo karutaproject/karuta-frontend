@@ -55,8 +55,8 @@ var welcome5 = {}; 			//  Welcome sub-title
 	listinfo["en"] = "";
 //-----------PUBLIC PAGE -----------------------
 var welcome = {};// Welcome title
-	welcome["fr"] = "<img class='img-responsive' src='../img/HEC_Montreal_blanc_Web_800.png'/>";
-	welcome["en"] = "<img class='img-responsive' src='../img/HEC_Montreal_blanc_Web_800.png'/>";
+	welcome["fr"] = "<img class='img-responsive' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
+	welcome["en"] = "<img class='img-responsive' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
 //--------- PUBLIC EMAIL LOGO - MESSAGE -------
 var url = window.location.href;
 var serverURL = url.substring(0,url.indexOf(appliname)-1);

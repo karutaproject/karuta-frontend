@@ -1128,8 +1128,10 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 
 
 //==================================
-function getLanguage() {
+function getLanguage(setElggLocale) {
 //==================================
+	if (setElggLocale==null)
+		setElggLocale = true;
 	var lang = Cookies.get('karuta-language');
 //	alertHTML(lang);
 	if (lang == null || lang==undefined || lang=='undefined') {
@@ -1141,7 +1143,7 @@ function getLanguage() {
 			if (languages[i]==lang)
 				LANGCODE = i;
 		}
-		if (USER!=undefined && $(USER.username_node).text()!="public") // not public Account
+		if (setElggLocale && USER!=undefined && elgg_installed && $(USER.username_node).text()!="public") // not public Account
 			moment.locale(lang);  // for elgg
 	}
 }

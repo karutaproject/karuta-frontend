@@ -16,7 +16,7 @@ var iid = getURLParameter('i');
 //------------------------------
 var lang = getURLParameter('lang');
 if (lang==null)
-	lang = "" ;
+	lang = LANG ;
 //-------------------------------
 
 //==============================
@@ -61,6 +61,7 @@ function loadPublic(url)
 	//--------------------------------------------------------------
 	loadJS(url+"/karuta/js/karuta.js");
 	loadJS(url+"/karuta/js/UICom.js");
+	loadJS(url+"/karuta/js/report.js");
 	//--------------------------------------------------------------
 	loadJS(url+"/karuta/js/pages/karuta-page.js");
 	loadJS(url+"/karuta/js/pages/main.js");
