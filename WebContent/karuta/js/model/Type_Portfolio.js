@@ -2154,17 +2154,28 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/rolerightsgroups?portfolio="+portfolioid,
+		url : "../../../"+serverBCK+"/nodes/node/" + portfolios_byid[portfolioid].rootid+"/rights",
 		success : function(data) {
-			UIFactory["Portfolio"].displaySharingRoleEditor('sharing_roles',portfolioid,data,"UIFactory['UsersGroup'].hideUsersList('sharing_usersgroups-group-')");
-			$("#sharing").show();
-			$("#sharing_designer").show();
+			var instance = $("role",data).length;
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : "../../../"+serverBCK+"/rolerightsgroups?portfolio="+portfolioid,
+				success : function(data) {
+					UIFactory["Portfolio"].displaySharingRoleEditor('sharing_roles',portfolioid,data,"UIFactory['UsersGroup'].hideUsersList('sharing_usersgroups-group-')",instance);
+					$("#sharing").show();
+					$("#sharing_designer").show();
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error in Portfolio.callShareUsersGroups 2 : "+jqxhr.responseText);
+				}
+			});
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Error in Portfolio.callShareUsersGroups 2 : "+jqxhr.responseText);
+			alertHTML("Error in callShareUsers 3 : "+jqxhr.responseText);
 		}
 	});
-	
+		
 	//----------------------------------------------------------------
 	$('#edit-window').modal('show');
 };
