@@ -3,12 +3,6 @@
 function show_exec_batch()
 //==============================
 {
-	$("body").removeClass();
-	$("body").addClass("exec_batch")
-	$("#sub-bar").html("");
-	setLanguageMenu("fill_exec_batch()");
-	$("#refresh").attr("onclick","fill_exec_batch()");
-	$("#refresh").show();
 	$("#search-div").hide();
 	$("#main-list").hide();
 	$("#main-portfoliosgroup").hide();
@@ -17,6 +11,16 @@ function show_exec_batch()
 	$("#main-usersgroup").hide();
 	$("#main-exec-batch").show();
 	$("#main-exec-report").hide();
+	$("#main-exec-batch").hide();
+
+	$("body").removeClass();
+	$("body").addClass("exec_batch")
+	$("#sub-bar").html("");
+	setLanguageMenu("fill_exec_batch()");
+	$("#refresh").attr("onclick","fill_exec_batch()");
+	$("#refresh").show();
+	$("#main-exec-batch").show();
+
 	initBatchVars();
 }
 
