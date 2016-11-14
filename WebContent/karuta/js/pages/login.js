@@ -218,12 +218,6 @@ function displayKarutaLogin()
 		if(karuta_create_account)
 			$("#newaccount").html(getNewAccount());
 		});
-	$.ajax({
-		type : "POST",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/credential/logout",
-		data: ""
-	});
 	$('#password').keypress(function(e) {
 		var code= (e.keyCode ? e.keyCode : e.which);
 		if (code == 13)

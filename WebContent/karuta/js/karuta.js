@@ -207,7 +207,7 @@ function getNavBar(type,portfolioid,edit)
 		}
 		//-----------------LOGOUT-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "						<li><a href='login.htm?lang="+LANG+"'' class='navbar-icon'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+		html += "						<li><a onclick='logout()' class='navbar-icon'><span class='glyphicon glyphicon-log-out'></span></a></li>";
 		html += "			</ul>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
@@ -217,7 +217,6 @@ function getNavBar(type,portfolioid,edit)
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
 		if (USER.creator && !USER.admin)
 			html += "						<li><a href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a></li>";
-//		html += "						<li class='divider'></li><li><a href='login.htm?lang="+LANG+"''>Logout</a></li>";
 		html += "					</ul>";
 		html += "				</li>";
 		html += "			</ul>";
@@ -1570,4 +1569,18 @@ function setCSSportfolio(data)
 		changeCss(".row-node-asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
 	}
 	// ========================================================================
+}
+
+
+//==============================
+function logout()
+//==============================
+{
+	$.ajax({
+		type : "POST",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/credential/logout",
+		data: ""
+	});
+	window.location="login.htm?lang="+LANG;
 }
