@@ -1270,10 +1270,12 @@ function toggleSidebarPlusMinus(uuid) {
 		g_toggle_sidebar [uuid] = 'open';
 		$("#toggle_"+uuid).removeClass("glyphicon-plus")
 		$("#toggle_"+uuid).addClass("glyphicon-minus")
+		$("#collapse"+uuid).collapse("show")
 	} else {
 		g_toggle_sidebar [uuid] = 'closed';
 		$("#toggle_"+uuid).removeClass("glyphicon-minus")
 		$("#toggle_"+uuid).addClass("glyphicon-plus")
+		$("#collapse"+uuid).collapse("hide")
 	}
 }
 
