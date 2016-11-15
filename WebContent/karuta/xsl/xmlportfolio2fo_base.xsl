@@ -94,6 +94,7 @@
 <!-- =================================== -->
 <xsl:template match="asmRoot">
 		<xsl:variable name="asmNode_label"><xsl:value-of select="../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
+		<xsl:call-template name="welcome_page"/>
 		<xsl:if test="asmUnitStructure | asmContext">
 			<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
 				<fo:static-content flow-name="Footer" font-size="8pt">
@@ -110,82 +111,83 @@
 				</fo:flow>
 			</fo:page-sequence>
 		</xsl:if>
-		<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@displaytree='none')]"/>
+		<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@displaytree='none' or contains(.//metadata/@semantictag, 'welcome-unit'))]"/>
 </xsl:template>
 
 <!-- =================================== -->
 <!-- ========== asmStructure =========== -->
 <!-- =================================== -->
 <xsl:template match="asmStructure">
-		<xsl:variable name="asmNode_label"><xsl:value-of select="../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
-		<xsl:if test="asmUnitStructure | asmContext">
-			<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
-				<fo:static-content flow-name="Footer" font-size="8pt">
-					<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
-					<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
-				</fo:static-content>
-				<fo:flow flow-name="Content" font-size="10pt">
-					<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="5pt">
-						<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
-					</fo:block>
-					<xsl:apply-templates select="asmUnitStructure | asmContext">
-						<xsl:with-param name="size">12pt</xsl:with-param>
-					</xsl:apply-templates>
-				</fo:flow>
-			</fo:page-sequence>
-		</xsl:if>
-		<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@displaytree='none')]"/>
+	<xsl:variable name="asmNode_label"><xsl:value-of select="../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
+	<xsl:if test="asmUnitStructure | asmContext">
+		<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
+			<fo:static-content flow-name="Footer" font-size="8pt">
+				<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
+				<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
+			</fo:static-content>
+			<fo:flow flow-name="Content" font-size="10pt">
+				<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="5pt">
+					<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
+				</fo:block>
+				<xsl:apply-templates select="asmUnitStructure | asmContext">
+					<xsl:with-param name="size">12pt</xsl:with-param>
+				</xsl:apply-templates>
+			</fo:flow>
+		</fo:page-sequence>
+	</xsl:if>
+	<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@displaytree='none')]"/>
 </xsl:template>
 
 <!-- =================================== -->
 <!-- ========== asmUnit ================ -->
 <!-- =================================== -->
 <xsl:template match="asmUnit">
-		<xsl:variable name="asmNode_label"><xsl:value-of select="../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
-		<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
-			<fo:static-content flow-name="Footer" font-size="8pt">
-				<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
-				<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
-			</fo:static-content>
-			<fo:flow flow-name="Content" font-size="9pt">
-				<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="5pt">
-					<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
-				</fo:block>
-				<!--
-				<xsl:apply-templates select="asmUnitStructure | asmContext">
-					<xsl:with-param name="size">12pt</xsl:with-param>
-				</xsl:apply-templates>
-				-->
-				<xsl:for-each select="asmUnit|asmUnitStructure|asmContext">
-					<xsl:choose>
-						<xsl:when test="local-name()='asmUnit'">
-							<fo:block font-size="12pt" font-style="italic" font-weight="bold" space-before="20pt" space-after="5pt">
-								<xsl:value-of select="./asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
-							</fo:block>
-							<fo:block space-before="0pt" space-after="15pt">
-								<xsl:apply-templates select="./*">
-									<xsl:with-param name="size">12pt</xsl:with-param>
-								</xsl:apply-templates>
-							</fo:block>
-						</xsl:when>
-						<xsl:when test="local-name()='asmUnitStructure'">
-							<fo:block>
+	<xsl:variable name="asmNode_label"><xsl:value-of select="../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
+	<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
+		<fo:static-content flow-name="Footer" font-size="8pt">
+			<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
+			<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
+		</fo:static-content>
+		<fo:flow flow-name="Content" font-size="9pt">
+			<xsl:choose>
+				<xsl:when test="contains(metadata/@semantictag, 'welcome-unit')">
+					<xsl:call-template name="welcomeUnit"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="5pt">
+						<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
+					</fo:block>
+					<!--
+					<xsl:apply-templates select="asmUnitStructure | asmContext">
+						<xsl:with-param name="size">12pt</xsl:with-param>
+					</xsl:apply-templates>
+					-->
+					<xsl:for-each select="asmUnit|asmUnitStructure|asmContext">
+						<xsl:choose>
+							<xsl:when test="local-name()='asmUnit'">
+								<xsl:call-template name="processUnit">
+								</xsl:call-template>
+							</xsl:when>
+							<xsl:when test="local-name()='asmUnitStructure'">
+								<fo:block>
+									<xsl:apply-templates select=".">
+										<xsl:with-param name="size">12pt</xsl:with-param>
+									</xsl:apply-templates>
+								</fo:block>
+							</xsl:when>
+							<xsl:when test="local-name()='asmContext'">
 								<xsl:apply-templates select=".">
 									<xsl:with-param name="size">12pt</xsl:with-param>
 								</xsl:apply-templates>
-							</fo:block>
-						</xsl:when>
-						<xsl:when test="local-name()='asmContext'">
-							<xsl:apply-templates select=".">
-								<xsl:with-param name="size">12pt</xsl:with-param>
-							</xsl:apply-templates>
-						</xsl:when>
-						<xsl:otherwise>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:for-each>
-			</fo:flow>
-		</fo:page-sequence>
+							</xsl:when>
+							<xsl:otherwise>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>
+				</xsl:otherwise>
+			</xsl:choose>
+		</fo:flow>
+	</fo:page-sequence>
 </xsl:template>
 
 <!-- =================================== -->
@@ -196,6 +198,7 @@
 	<xsl:param name="label_style">italic</xsl:param>
 	<xsl:param name="space-before">20pt</xsl:param>
 	<xsl:param name="margin-left">10pt</xsl:param>
+	<xsl:param name="display-type"/>
 	<xsl:variable name="label"><xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
 		<xsl:if test="$label !=''">
 			<fo:block font-weight="bold" space-after="5pt">
@@ -208,15 +211,9 @@
 		<xsl:for-each select="asmUnit|asmUnitStructure|asmContext">
 			<xsl:choose>
 				<xsl:when test="local-name()='asmUnit'">
-					<fo:block font-size="12pt" font-style="italic" font-weight="bold" space-before="20pt" space-after="5pt">
-						<xsl:value-of select="./asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
-					</fo:block>
-					<fo:block space-before="0pt" space-after="15pt">
-						<xsl:apply-templates select="./*">
-							<xsl:with-param name="size">12pt</xsl:with-param>
-							<xsl:with-param name="space-before"><xsl:value-of select="$space-before"/></xsl:with-param>
-						</xsl:apply-templates>
-					</fo:block>
+					<xsl:call-template name="processUnit">
+						<xsl:with-param name="space-before"><xsl:value-of select="$space-before"/></xsl:with-param>
+					</xsl:call-template>
 				</xsl:when>
 				<xsl:when test="local-name()='asmUnitStructure'">
 					<fo:block>
@@ -244,10 +241,12 @@
 
 <xsl:template match="asmContext">
 	<xsl:param name="margin-left">10pt</xsl:param>
+	<xsl:param name="display-type"/>
 		<fo:block>
 			<xsl:attribute name='margin-left'><xsl:value-of select="$margin-left"/></xsl:attribute>
 			<xsl:apply-templates select="asmResource[@xsi_type!='nodeRes' and @xsi_type!='context']">
 				<xsl:with-param name="nodeLabel"><xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:with-param>
+				<xsl:with-param name="display-type"><xsl:value-of select="$display-type"/></xsl:with-param>
 			</xsl:apply-templates>
 		</fo:block>
 </xsl:template>
@@ -256,6 +255,7 @@
 <xsl:template match="asmResource[@xsi_type='Proxy']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
+	<xsl:param name="display-type"/>
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
@@ -267,6 +267,7 @@
 <xsl:template match="asmResource[@xsi_type='Dashboard']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
+	<xsl:param name="display-type"/>
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
@@ -278,6 +279,7 @@
 <xsl:template match="asmResource[@xsi_type='SendEmail']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
+	<xsl:param name="display-type"/>
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
@@ -298,6 +300,7 @@
 <xsl:template match="asmResource[@xsi_type='Oembed']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
+	<xsl:param name="display-type"/>
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
@@ -407,6 +410,7 @@
 <xsl:template match="asmResource[@xsi_type='Document' or @xsi_type='Audio' or @xsi_type='Video']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
+	<xsl:param name="display-type"/>
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
@@ -426,6 +430,7 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"/>
 	<xsl:param name="width-print"/>
+	<xsl:param name="display-type"/>
 
 	<xsl:variable name='src'>
 		<xsl:value-of select="$urlimage"/>/resources/resource/file/<xsl:value-of select="./@contextid"/>?lang=<xsl:value-of select="$lang"/>&amp;size=L
@@ -438,14 +443,24 @@
 		</xsl:choose>
 	</xsl:variable>
 	
-	<fo:external-graphic vertical-align="middle" padding-left="5pt" content-width="scale-to-fit" content-height="100%" width="100%" scaling="uniform">
-		<xsl:attribute name="src"><xsl:value-of select="$src"/></xsl:attribute>
-	</fo:external-graphic>
-	<fo:block font-size="9pt" space-before="3pt" space-after="5pt">
-		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
-		<fo:inline padding-left="5pt"><xsl:value-of select="filename[@lang=$lang]"/></fo:inline>
-	</fo:block>
-
+	<xsl:choose>
+		<xsl:when test="$display-type='welcome'">
+			<fo:block text-align="center">
+			<fo:external-graphic vertical-align="middle" padding-left="5pt" content-width="scale-to-fit" content-height="100%" width="100%" scaling="uniform">
+				<xsl:attribute name="src"><xsl:value-of select="$src"/></xsl:attribute>
+			</fo:external-graphic>
+			</fo:block>
+		</xsl:when>
+		<xsl:otherwise>
+			<fo:external-graphic vertical-align="middle" padding-left="5pt" content-width="scale-to-fit" content-height="100%" width="100%" scaling="uniform">
+				<xsl:attribute name="src"><xsl:value-of select="$src"/></xsl:attribute>
+			</fo:external-graphic>
+			<fo:block font-size="9pt" space-before="3pt" space-after="5pt">
+				<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
+				<fo:inline padding-left="5pt"><xsl:value-of select="filename[@lang=$lang]"/></fo:inline>
+			</fo:block>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 <!-- ============= asmResource_Color ============= -->
@@ -497,7 +512,7 @@
 			<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
 		</xsl:if>
 		<fo:inline padding-left="5pt">
-			<xsl:apply-templates select="text/node()"/>
+			<xsl:apply-templates select="text[@lang=$lang]/node()"/>
 		</fo:inline>
 	</fo:block>
 </xsl:template>
@@ -761,6 +776,202 @@
       </xsl:when>
       <xsl:otherwise><xsl:value-of select="$url0"/>/<xsl:value-of select="$fpath"/></xsl:otherwise>
    </xsl:choose>
+</xsl:template>
+
+<!-- =================================== -->
+<xsl:template name="welcome_page">
+<!-- =================================== -->
+	<xsl:apply-templates name="asmUnit[contains(metadata/@semantictag,'welcome-unit')]"/>
+</xsl:template>
+
+<!-- =================================== -->
+<xsl:template name="processUnit">
+<!-- =================================== -->
+	<xsl:param name="space-before">0pt</xsl:param>
+	<xsl:choose>
+		<xsl:when test="contains(metadata/@semantictag,'welcome-unit')">
+			<xsl:call-template name="welcomeUnit"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<fo:block font-size="12pt" font-style="italic" font-weight="bold" space-before="20pt" space-after="5pt">
+				<xsl:value-of select="./asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
+			</fo:block>
+			<fo:block space-before="0pt" space-after="15pt">
+				<xsl:apply-templates select="./*">
+					<xsl:with-param name="size">12pt</xsl:with-param>
+					<xsl:with-param name="space-before"><xsl:value-of select="$space-before"/></xsl:with-param>
+				</xsl:apply-templates>
+			</fo:block>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:template>
+
+<!-- =================================== -->
+<xsl:template name="welcomeUnit">
+	<xsl:param name="space-before">0pt</xsl:param>
+<!-- =================================== -->
+	<xsl:if test="./asmUnitStructure[metadata/@semantictag='welcome-page']">
+		<xsl:variable name='wnode' select="(./asmUnitStructure[metadata/@semantictag='welcome-page'])"/>
+		<xsl:if test="$wnode/asmContext[metadata/@semantictag='welcome-main-image']">
+			<xsl:variable name='inode' select="($wnode/asmContext[metadata/@semantictag='welcome-main-image'])"/>
+			<xsl:variable name='src'>
+				<xsl:value-of select="$urlimage"/>/resources/resource/file/<xsl:value-of select="$inode/asmResource[@xsi_type='Image']/@contextid"/>?lang=<xsl:value-of select="$lang"/>&amp;size=L
+			</xsl:variable>
+			<xsl:variable name='width'>
+				<xsl:choose>
+					<xsl:when test="$inode/metadata-epm/@width/text() and $inode/metadata-epm/@width!=''"><xsl:value-of select="$inode/metadata-epm/@width"/></xsl:when>
+					<xsl:otherwise>100%</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:variable name='height'>
+				<xsl:choose>
+					<xsl:when test="$inode/metadata-epm/@width/text() and $inode/metadata-epm/@width!=''"><xsl:value-of select="$inode/metadata-epm/@width"/></xsl:when>
+					<xsl:otherwise>250px</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:variable name='tnode' select="($wnode/asmContext[metadata/@semantictag='welcome-title'])"/>
+			<xsl:variable name='bnode' select="($wnode/asmContext[metadata/@semantictag='welcome-baseline'])"/>
+			
+			<fo:block-container text-align="center" space-before="5pt" space-after="5pt" background-repeat="repeat" background-position="center" content-width="scale-to-fit" scaling="uniform">
+				<xsl:attribute name="background-image"><xsl:value-of select="$src"/></xsl:attribute>
+				<xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute>
+				<xsl:attribute name="content-height"><xsl:value-of select="$height"/></xsl:attribute>
+				<xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute>
+				<fo:block-container display-align="center" border-color="black" border-style="solid" border-width="0pt" background-color="transparent" width="100%" height="100%">
+				<fo:block border-color="#ffffff" border-style="solid" border-width="0pt" background-color="transparent" text-align="center" font-weight="bold" font-size="20pt" space-before="5pt" space-after="5pt" width="60%">
+					<fo:block background-color="transparent" color="gray"><xsl:value-of select="$tnode/asmResource[@xsi_type!='nodeRes' and @xsi_type!='context']/text[@lang=$lang]"/></fo:block>
+					<fo:leader color="gray" leader-pattern="rule" leader-length="50%" rule-style="solid" rule-thickness="2pt"/>
+					<fo:block color="black" font-size="15pt" space-before="5pt" space-after="5pt">
+						<fo:inline><xsl:value-of select="$bnode/asmResource[@xsi_type!='nodeRes' and @xsi_type!='context']/text[@lang=$lang]"/></fo:inline>
+					</fo:block>
+				</fo:block>
+				</fo:block-container>
+			</fo:block-container>
+		</xsl:if>
+
+		<xsl:for-each select="$wnode/asmUnitStructure[metadata/@semantictag='welcome-block' or contains(metadata/@semantictag,'asm-block')]">
+			<xsl:choose>
+				<xsl:when test="metadata/@semantictag='welcome-block'">
+					<xsl:call-template name="welcome_block">
+						<xsl:with-param name="space-before"><xsl:value-of select="$space-before"/></xsl:with-param>
+					</xsl:call-template>
+				</xsl:when>
+				<xsl:otherwise>
+					<fo:block>
+						<xsl:apply-templates select=".">
+							<xsl:with-param name="size">12pt</xsl:with-param>
+						</xsl:apply-templates>
+					</fo:block>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:for-each>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template name="welcome_block">
+	<xsl:param name="space-before">0pt</xsl:param>
+	<xsl:param name="label-align">center</xsl:param>
+<!-- ============================================ -->
+	<xsl:variable name="label"><xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
+	<xsl:if test="$label !=''">
+		<xsl:variable name='size'>
+			<xsl:choose>
+				<xsl:when test="metadata-epm/@font-size/text() and metadata-epm/@font-size!=''"><xsl:value-of select="metadata-epm/@font-size"/></xsl:when>
+				<xsl:otherwise>12pt</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name='font-weight'>
+			<xsl:choose>
+				<xsl:when test="metadata-epm/@font-weight/text() and metadata-epm/@font-weight!=''"><xsl:value-of select="metadata-epm/@font-weight"/></xsl:when>
+				<xsl:otherwise>normal</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name='font-style'>
+			<xsl:choose>
+				<xsl:when test="metadata-epm/@font-style/text() and metadata-epm/@font-style!=''"><xsl:value-of select="metadata-epm/@font-style"/></xsl:when>
+				<xsl:otherwise></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name='text-align'>
+			<xsl:choose>
+				<xsl:when test="metadata-epm/@text-align/text() and metadata-epm/@text-align!=''"><xsl:value-of select="metadata-epm/@text-align"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="$label-align"/></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<fo:block space-after="5pt">
+			<xsl:attribute name="font-size"><xsl:value-of select="$size"/></xsl:attribute>
+			<xsl:attribute name="font-weight"><xsl:value-of select="$font-weight"/></xsl:attribute>
+			<xsl:attribute name="font-style"><xsl:value-of select="$font-style"/></xsl:attribute>
+			<xsl:attribute name="text-align"><xsl:value-of select="$text-align"/></xsl:attribute>
+			<xsl:attribute name="space-before"><xsl:value-of select="$space-before"/></xsl:attribute>
+			<xsl:value-of select="$label"/>
+		</fo:block>
+	</xsl:if>
+	<xsl:for-each select="asmContext[contains(metadata/@semantictag,'welcome')]">
+		<xsl:apply-templates select=".">
+			<xsl:with-param name="size">12pt</xsl:with-param>
+			<xsl:with-param name="display-type">welcome</xsl:with-param>
+		</xsl:apply-templates>
+	</xsl:for-each>
+	<xsl:variable name='nb_blocks' select="count(./asmUnitStructure[metadata/@semantictag='welcome-block'])"/>
+	<xsl:if test="$nb_blocks &gt; 0">
+		<fo:table font-size="10pt" >
+            <fo:table-body>
+		        <fo:table-row>
+			 	<xsl:for-each select="asmUnitStructure[metadata/@semantictag='welcome-block']">
+			        <fo:table-cell border="solid black 0px" padding="2px">
+			            <fo:block>
+						<xsl:call-template name="welcome_block">
+							<xsl:with-param name="space-before"><xsl:value-of select="$space-before"/></xsl:with-param>
+						</xsl:call-template>
+						</fo:block>
+			        </fo:table-cell>
+				</xsl:for-each>
+		        </fo:table-row>
+            </fo:table-body>
+        </fo:table>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template name="welcome_image">
+<!-- ============================================ -->
+	<xsl:if test="./asmUnitStructure[metadata/@semantictag='welcome-page']/asmContext[metadata/@semantictag='welcome-main-image']">
+		<xsl:variable name='inode' select="(./asmUnitStructure[metadata/@semantictag='welcome-page']/asmContext[metadata/@semantictag='welcome-main-image'])"/>
+		<xsl:variable name='src'>
+			<xsl:value-of select="$urlimage"/>/resources/resource/file/<xsl:value-of select="$inode/asmResource[@xsi_type='Image']/@contextid"/>?lang=<xsl:value-of select="$lang"/>&amp;size=L
+		</xsl:variable>
+		<xsl:variable name='width'>
+			<xsl:choose>
+				<xsl:when test="$inode/metadata-epm/@width/text() and $inode/metadata-epm/@width!=''"><xsl:value-of select="$inode/metadata-epm/@width"/></xsl:when>
+				<xsl:otherwise>100%</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name='height'>
+			<xsl:choose>
+				<xsl:when test="$inode/metadata-epm/@width/text() and $inode/metadata-epm/@width!=''"><xsl:value-of select="$inode/metadata-epm/@width"/></xsl:when>
+				<xsl:otherwise>250px</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name='tnode' select="(./asmUnitStructure[metadata/@semantictag='welcome-page']/asmContext[metadata/@semantictag='welcome-title'])"/>
+		<xsl:variable name='bnode' select="(./asmUnitStructure[metadata/@semantictag='welcome-page']/asmContext[metadata/@semantictag='welcome-baseline'])"/>
+		
+		<fo:block-container text-align="center" space-before="5pt" space-after="5pt" background-repeat="repeat" background-position="center" content-width="scale-to-fit" scaling="uniform">
+			<xsl:attribute name="background-image"><xsl:value-of select="$src"/></xsl:attribute>
+			<xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute>
+			<xsl:attribute name="content-height"><xsl:value-of select="$height"/></xsl:attribute>
+			<xsl:attribute name="height"><xsl:value-of select="$height"/></xsl:attribute>
+			<fo:block-container display-align="center" border-color="black" border-style="solid" border-width="0pt" background-color="transparent" width="100%" height="100%">
+			<fo:block border-color="#ffffff" border-style="solid" border-width="0pt" background-color="transparent" text-align="center" font-weight="bold" font-size="20pt" space-before="5pt" space-after="5pt" width="60%">
+				<fo:block background-color="transparent" color="gray"><xsl:value-of select="$tnode/asmResource[@xsi_type!='nodeRes' and @xsi_type!='context']/text[@lang=$lang]"/></fo:block>
+				<fo:leader color="gray" leader-pattern="rule" leader-length="50%" rule-style="solid" rule-thickness="2pt"/>
+				<fo:block color="black" font-size="15pt" space-before="5pt" space-after="5pt">
+					<fo:inline><xsl:value-of select="$bnode/asmResource[@xsi_type!='nodeRes' and @xsi_type!='context']/text[@lang=$lang]"/></fo:inline>
+				</fo:block>
+			</fo:block>
+			</fo:block-container>
+		</fo:block-container>
+	</xsl:if>
+
 </xsl:template>
 	
 </xsl:stylesheet>
