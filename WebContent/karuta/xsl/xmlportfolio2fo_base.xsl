@@ -198,6 +198,7 @@
 	<xsl:param name="label_style">italic</xsl:param>
 	<xsl:param name="space-before">20pt</xsl:param>
 	<xsl:param name="margin-left">10pt</xsl:param>
+	<xsl:param name="display-type"/>
 	<xsl:variable name="label"><xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
 		<xsl:if test="$label !=''">
 			<fo:block font-weight="bold" space-after="5pt">
@@ -240,7 +241,7 @@
 
 <xsl:template match="asmContext">
 	<xsl:param name="margin-left">10pt</xsl:param>
-	<xsl:param name="display-type"></xsl:param>
+	<xsl:param name="display-type"/>
 		<fo:block>
 			<xsl:attribute name='margin-left'><xsl:value-of select="$margin-left"/></xsl:attribute>
 			<xsl:apply-templates select="asmResource[@xsi_type!='nodeRes' and @xsi_type!='context']">
@@ -254,6 +255,7 @@
 <xsl:template match="asmResource[@xsi_type='Proxy']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
+	<xsl:param name="display-type"/>
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
@@ -265,6 +267,7 @@
 <xsl:template match="asmResource[@xsi_type='Dashboard']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
+	<xsl:param name="display-type"/>
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
@@ -276,6 +279,7 @@
 <xsl:template match="asmResource[@xsi_type='SendEmail']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
+	<xsl:param name="display-type"/>
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
@@ -296,6 +300,7 @@
 <xsl:template match="asmResource[@xsi_type='Oembed']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
+	<xsl:param name="display-type"/>
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
@@ -405,6 +410,7 @@
 <xsl:template match="asmResource[@xsi_type='Document' or @xsi_type='Audio' or @xsi_type='Video']">
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"></xsl:param>
+	<xsl:param name="display-type"/>
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
@@ -424,6 +430,7 @@
 <!-- ============================================ -->
 	<xsl:param name="nodeLabel"/>
 	<xsl:param name="width-print"/>
+	<xsl:param name="display-type"/>
 
 	<xsl:variable name='src'>
 		<xsl:value-of select="$urlimage"/>/resources/resource/file/<xsl:value-of select="./@contextid"/>?lang=<xsl:value-of select="$lang"/>&amp;size=L
@@ -436,13 +443,24 @@
 		</xsl:choose>
 	</xsl:variable>
 	
-	<fo:external-graphic vertical-align="middle" padding-left="5pt" content-width="scale-to-fit" content-height="100%" width="100%" scaling="uniform">
-		<xsl:attribute name="src"><xsl:value-of select="$src"/></xsl:attribute>
-	</fo:external-graphic>
-	<fo:block font-size="9pt" space-before="3pt" space-after="5pt">
-		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
-		<fo:inline padding-left="5pt"><xsl:value-of select="filename[@lang=$lang]"/></fo:inline>
-	</fo:block>
+	<xsl:choose>
+		<xsl:when test="$display-type='welcome'">
+			<fo:block text-align="center">
+			<fo:external-graphic vertical-align="middle" padding-left="5pt" content-width="scale-to-fit" content-height="100%" width="100%" scaling="uniform">
+				<xsl:attribute name="src"><xsl:value-of select="$src"/></xsl:attribute>
+			</fo:external-graphic>
+			</fo:block>
+		</xsl:when>
+		<xsl:otherwise>
+			<fo:external-graphic vertical-align="middle" padding-left="5pt" content-width="scale-to-fit" content-height="100%" width="100%" scaling="uniform">
+				<xsl:attribute name="src"><xsl:value-of select="$src"/></xsl:attribute>
+			</fo:external-graphic>
+			<fo:block font-size="9pt" space-before="3pt" space-after="5pt">
+				<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
+				<fo:inline padding-left="5pt"><xsl:value-of select="filename[@lang=$lang]"/></fo:inline>
+			</fo:block>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 <!-- ============= asmResource_Color ============= -->
