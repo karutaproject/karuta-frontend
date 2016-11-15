@@ -214,7 +214,9 @@ function r_processNode(no,xmlDoc,destid,data,line)
 function r_processSVG(no,xmlDoc,destid,data,line)
 //==================================
 {
-	var html = "<svg id='svg_"+no+"' width='100%' height='100%' viewbox='0 0 1000 1000'></svg>";
+	var min_height = $(xmlDoc).attr("min-height");
+	var min_width = $(xmlDoc).attr("min-width");
+	var html = "<svg id='svg_"+no+"' min-width='"+min_width+"' min-height='"+min_height+"' viewbox='0 0 1000 1000'></svg>";
 	$("#"+destid).append($(html));
 	var children = $(">*",xmlDoc);
 	for (var i=0; i<children.length;i++){
@@ -906,9 +908,10 @@ function r_processWebTitle(xmlDoc,destid,data)
 				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
 			}
 		};
-		var l = getWidthOfText(text, svgfontname, svgfontsize*2);
-		var x = svgaxislength*2-l*3.2;
-		var svgtext = makeSVG('text',{'x':x,'y':50,'font-size':svgfontsize*2,'font-family':svgfontname},text);
+//		var l = getWidthOfText(text, svgfontname, svgfontsize*2);
+//		var x = svgaxislength*2-l*3.2;
+		var x = 10;
+		var svgtext = makeSVG('text',{'x':x,'y':40,'font-size':svgfontsize*2,'font-family':svgfontname},text);
 		document.getElementById(destid).appendChild(svgtext);
 	}
 }
@@ -1028,9 +1031,11 @@ function r_processWebLine(xmlDoc,destid,data,no)
 					text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
 				}
 			};
-			var line = makeSVG('line',{'x1':10,'y1':25+20*no,'x2':10,'y2':25+20*no,'class':'svg-web-value'+no});
+			var line = makeSVG('line',{'x1':10,'y1':975-20*no,'x2':10,'y2':975-20*no,'class':'svg-web-value'+no});
+//			var line = makeSVG('line',{'x1':10,'y1':25+20*no,'x2':10,'y2':25+20*no,'class':'svg-web-value'+no});
 			document.getElementById(destid).appendChild(line);
-			var svgtext = makeSVG('text',{'x':20,'y':30+20*no,'font-size':svgfontsize,'font-family':svgfontname},text);
+			var svgtext = makeSVG('text',{'x':20,'y':980-20*no,'font-size':svgfontsize,'font-family':svgfontname},text);
+//			var svgtext = makeSVG('text',{'x':20,'y':30+20*no,'font-size':svgfontsize,'font-family':svgfontname},text);
 			document.getElementById(destid).appendChild(svgtext);
 		}
 

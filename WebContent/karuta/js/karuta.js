@@ -937,13 +937,52 @@ function getSendPublicURL(uuid,langcode)
 }
 
 //==================================
+function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	$("#edit-window-footer").html("");
+	fillEditBoxBody();
+	$("#edit-window-title").html(karutaStr[LANG]['share-URL']);
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
+	var obj = $(send_button);
+	$(obj).click(function (){
+		var email = $("#email").val();
+		var role = "all"
+		if (email!='') {
+			getPublicURL(uuid,email,sharewithrole,langcode,sharelevel,shareduration)
+		}
+	});
+	$("#edit-window-footer").append(obj);
+	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").append($(footer));
+
+	var html = "<div class='form-horizontal'>";
+	html += "<div class='form-group'>";
+	html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='email' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "</div>";
+	$("#edit-window-body").html(html);
+	//--------------------------
+}
+
+
+//==================================
 function getPublicURL(uuid,email,role,langcode,level,duration) {
 //==================================
 	if (level==null)
 		level = 4; //public
 	if (duration==null)
 		duration = 720;  //-- max 720h
-	role = "all";
+	if (role==null)
+		role = "all";
 	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration;
 	$.ajax({
 		type : "POST",
@@ -959,7 +998,6 @@ function getPublicURL(uuid,email,role,langcode,level,duration) {
 //==================================
 function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,duration) {
 //==================================
-	//post /directlink?uuid=&user=&role= duration in hours
 	if (level==null)
 		level = 0; //must be logged
 	if (sharewithrole==null)

@@ -2990,26 +2990,41 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					var shareduration = shares[i][4];
 					var sharelabel = shares[i][5];
 					if (shareto!='') {
-						var sharetoemail = "";
-						var sharetoroles = "";
-						var sharetos = shareto.split(" ");
-						for (var k=0;k<sharetos.length;k++) {
-							if (sharetos[k].indexOf("@")>0)
-								sharetoemail += sharetos[k]+" ";
-							else
-								sharetoroles += sharetos[k]+" ";
-						}
-						if (sharelabel!='') {
-							var label = "";
-							var labels = sharelabel.split("/");
-							for (var j=0; j<labels.length; j++){
-								if (labels[j].indexOf(languages[langcode])>-1)
-									label = labels[j].substring(0,labels[j].indexOf("@"));
+						if (shareto!='?') {
+							var sharetoemail = "";
+							var sharetoroles = "";
+							var sharetos = shareto.split(" ");
+							for (var k=0;k<sharetos.length;k++) {
+								if (sharetos[k].indexOf("@")>0)
+									sharetoemail += sharetos[k]+" ";
+								else
+									sharetoroles += sharetos[k]+" ";
 							}
-							var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"')";
-							html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
-						} else {
-							html_toadd = " <span class='button sharing-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
+							if (sharelabel!='') {
+								var label = "";
+								var labels = sharelabel.split("/");
+								for (var j=0; j<labels.length; j++){
+									if (labels[j].indexOf(languages[langcode])>-1)
+										label = labels[j].substring(0,labels[j].indexOf("@"));
+								}
+								var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"')";
+								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
+							} else {
+								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
+							}
+						} else{
+							if (sharelabel!='') {
+								var label = "";
+								var labels = sharelabel.split("/");
+								for (var j=0; j<labels.length; j++){
+									if (labels[j].indexOf(languages[langcode])>-1)
+										label = labels[j].substring(0,labels[j].indexOf("@"));
+								}
+								var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"')";
+								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\"> "+label+"</span>";
+							} else {
+								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
+							}
 						}
 					} else {
 						html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";

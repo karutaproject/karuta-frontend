@@ -496,8 +496,8 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	//---------------------------------------
 	if (type=='standard'){
 		html += "	<div id='main-row' class='row'>";
-		html += "		<div class='col-md-3' id='sidebar'></div>";
-		html += "		<div class='col-md-9' id='contenu'></div>";
+		html += "		<div class='col-sm-3 col-md-3' id='sidebar'></div>";
+		html += "		<div class='col-sm-9 col-md-9' id='contenu'></div>";
 		html += "	</div>";
 		$("#"+destid).append($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);

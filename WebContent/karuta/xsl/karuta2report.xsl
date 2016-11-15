@@ -144,7 +144,13 @@
 	</xsl:template>
 	<!-- ================ SVG ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-svg']">
-		<svg>
+		<xsl:variable name="min-height">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='min-height']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="min-width">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='min-width']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<svg min-width='{$min-width}' min-height='{min-height}'>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</svg>
 	</xsl:template>
