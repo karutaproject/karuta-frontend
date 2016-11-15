@@ -168,6 +168,8 @@ UIFactory["URL"].update = function(obj,itself,type,langcode,parent)
 	//---------------------
 	var label = $("input[name='label']",obj).val();
 	var url = $("input[name='url']",obj).val();
+	if (url!="" && url.indexOf("http")<0)
+		url = "http://"+url;
 	if(type!=null && type=='same')
 		label = url;
 	$(itself.label_node[langcode]).text(label);
