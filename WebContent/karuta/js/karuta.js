@@ -1177,8 +1177,10 @@ function getLanguage(setElggLocale) {
 	} else {
 		LANG = lang;
 		for (var i=0; i<languages.length;i++){
-			if (languages[i]==lang)
+			if (languages[i]==lang) {
 				LANGCODE = i;
+				LANG = lang;
+			}
 		}
 		if (setElggLocale && USER!=undefined && elgg_installed && $(USER.username_node).text()!="public") // not public Account
 			moment.locale(lang);  // for elgg

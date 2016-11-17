@@ -390,7 +390,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 	if (type.indexOf('radio')>-1) {
 		//----------------- null value to erase
 		if (resettable) {
-			var radio_obj = $("<div class='get-radio "+type+"'></div>");
+			var radio_obj = $("<div class='get-radio'></div>");
 			var input = "";
 			input += "<input type='radio' name='radio_"+self.id+"' value='' code='' ";
 			if (disabled)
@@ -412,7 +412,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		//-------------------
 		var nodes = $("node",data);
 		for ( var i = 0; i < $(nodes).length; i++) {
-			var radio_obj = $("<div class='get-radio "+type+"'></div>");
+			var radio_obj = $("<div class='get-radio'></div>");
 			var input = "";
 			var resource = null;
 			if ($("asmResource",nodes[i]).length==3)
