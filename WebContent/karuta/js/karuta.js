@@ -181,24 +181,30 @@ function getNavBar(type,portfolioid,edit)
 			}		
 	//-----------------ACTIONS-------------------------------
 	if (type!='login' && USER!=undefined) {
-		if (USER.admin) {
+		if (USER.admin || USER.creator) {
 			html += "			<ul class='nav navbar-nav'>";
 			html += "				<li>&nbsp;</li>";
 			html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' >Actions<span class='caret'></span></a>";
 			html += "					<ul class='dropdown-menu'>";
 			html += "						<li><a  onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
-			if ($("#main-portfoliosgroup").length && $("#main-portfoliosgroup").html()!="")
-				html += "						<li><a  onclick='show_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a></li>";
-			else
-				html += "						<li><a  onclick='display_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a></li>";
-			if ($("#main-user").length && $("#main-user").html()!="")
-				html += "						<li><a  onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
-			else
-				html += "						<li><a  onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
-			if ($("#main-usersgroup").length && $("#main-usersgroup").html()!="")
-				html += "						<li><a  onclick='show_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a></li>";
-			else
-				html += "						<li><a  onclick='display_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a></li>";
+			//-----------------
+			if (USER.admin) {
+				if ($("#main-portfoliosgroup").length && $("#main-portfoliosgroup").html()!="")
+					html += "						<li><a  onclick='show_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a></li>";
+				else
+					html += "						<li><a  onclick='display_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a></li>";
+				//-----------------
+				if ($("#main-user").length && $("#main-user").html()!="")
+					html += "						<li><a  onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
+				else
+					html += "						<li><a  onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
+				//-----------------
+				if ($("#main-usersgroup").length && $("#main-usersgroup").html()!="")
+					html += "						<li><a  onclick='show_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a></li>";
+				else
+					html += "						<li><a  onclick='display_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a></li>";
+			}
+			//-----------------
 			html += "						<li><a  onclick='display_exec_batch()'>"+karutaStr[LANG]['batch']+"</a></li>";
 			html += "						<li><a  onclick='display_exec_report()'>"+karutaStr[LANG]['report']+"</a></li>";
 			html += "					</ul>";

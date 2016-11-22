@@ -429,9 +429,7 @@ function JoinUserGroup(node)
 		//===========================================================
 		g_nb_joinUserGroup[g_noline]++;
 		if (g_nb_joinUserGroup[g_noline]==g_join_usergroups.length) {
-			g_noline++;
-			if (g_noline>=g_json.lines.length)
-				processLeaveUserGroups();
+			processLeaveUserGroups();
 		}
 		//===========================================================
 	}
@@ -538,9 +536,7 @@ function LeaveUserGroup(node)
 		//===========================================================
 		g_nb_leaveUserGroup[g_noline]++;
 		if (g_nb_leaveUserGroup[g_noline]==g_leave_usergroups.length) {
-			g_noline++;
-			if (g_noline>=g_json.lines.length)
-				processElggUsers();
+			processElggUsers();
 		}
 		//===========================================================
 	}
@@ -873,7 +869,7 @@ function selectTree(node)
 	var portfolio = new Array();
 	portfolio [0] = portfolioid;
 	portfolio [1] = code;
-	$("#batch-log").append("<br>- tree selected -  - code:"+code+"portfolioid:"+portfolioid);
+	$("#batch-log").append("<br>- tree selected -  - code:"+code+" - portfolioid:"+portfolioid);
 	return portfolio;
 }
 
@@ -1175,7 +1171,6 @@ function updateResource(node)
 								url : "../../../"+serverBCK+"/resources/resource/" + targetid,
 								success : function(data) {
 									g_nb_updateResource[g_noline]++;
-//									alertHTML(g_nb_updateResource[g_noline]);
 									$("#batch-log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
 									if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
 										processShareTrees();
@@ -1310,7 +1305,6 @@ function updateResource(node)
 							$("#batch-log").append("<br>- resource Dashboard update("+this.nodeid+") - semtag="+this.semtag);
 							//===========================================================
 							g_nb_updateResource[g_noline]++;
-//							alertHTML(g_nb_updateResource[g_noline]);
 							if (g_update_resources.length<=g_nb_updateResource[g_noline]) {
 								processShareTrees();
 							}
@@ -1411,11 +1405,7 @@ function shareTree(node)
 									//===========================================================
 									g_nb_shareTree[g_noline]++;
 									if (g_nb_shareTree[g_noline]==g_share_trees.length) {
-										g_noline++;
-										if (g_noline>=g_json.lines.length)
-											processUnshareTrees();
-										else
-											processLine();
+										processUnshareTrees();
 									}
 									//===========================================================
 								},
@@ -1434,9 +1424,7 @@ function shareTree(node)
 		//===========================================================
 		g_nb_shareTree[g_noline]++;
 		if (g_nb_shareTree[g_noline]==g_share_trees.length) {
-			g_noline++;
-			if (g_noline>=g_json.lines.length)
-				processUnshareTrees();
+			processUnshareTrees();
 		}
 		//===========================================================
 	}
@@ -1511,11 +1499,7 @@ function unshareTree(node)
 									//===========================================================
 									g_nb_unshareTree[g_noline]++;
 									if (g_nb_unshareTree[g_noline]==g_unshare_trees.length) {
-										g_noline++;
-										if (g_noline>=g_json.lines.length)
 											processImportNodes();
-										else
-											processLine();
 									}
 									//===========================================================
 								},
@@ -1534,9 +1518,7 @@ function unshareTree(node)
 		//===========================================================
 		g_nb_unshareTree[g_noline]++;
 		if (g_nb_unshareTree[g_noline]==g_unshare_trees.length) {
-			g_noline++;
-			if (g_noline>=g_json.lines.length)
-				processImportNodes();
+			processImportNodes();
 		}
 		//===========================================================
 	}
@@ -1559,11 +1541,6 @@ function processImportNodes()
 		for  (var j=0; j<g_import_nodes.length; j++) {
 			importNode(g_import_nodes[j]);
 		}
-		g_noline++;
-		if (g_noline==g_json.lines.length)
-			processEnd();
-		else
-			processLine();
 	}
 }
 
@@ -1572,11 +1549,11 @@ function importNode(node)
 //=================================================
 {
 	var select = $(node).attr("select");
-	var idx = select.indexOf(".");
+	var idx = select.lastIndexOf(".");
 	var treeref = select.substring(0,idx);
 	var semtag = select.substring(idx+1);
 	var source = $(node).attr("source");
-	var idx_source = source.indexOf(".");
+	var idx_source = source.lastIndexOf(".");
 	var srcecode = source.substring(0,idx_source);
 	var srcetag = source.substring(idx_source+1);
 	if (!trace)
