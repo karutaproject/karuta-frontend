@@ -430,6 +430,7 @@ function toggleProject(uuid) {
 			else {
 				$("#content-"+uuid).show();
 				$("#export-"+uuid).show();
+				$("#remove-"+uuid).show();
 				displayProject[uuid] = 'open';
 			}
 			Cookies.set('dp'+uuid,'open',{ expires: 60 });
@@ -439,6 +440,7 @@ function toggleProject(uuid) {
 		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
 		$("#content-"+uuid).hide();
 		$("#export-"+uuid).hide();
+		$("#remove-"+uuid).hide();
 		displayProject[uuid] = 'closed';
 		if (uuid!="portfolios-not-in-project")
 			Cookies.set('dp'+uuid,'closed',{ expires: 60 });

@@ -597,7 +597,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 		$("#report_get_editor_"+nodeid).append(UICom.structure["ui"][nodeid].resource.getEditor());
 	}
 	//--------------------help------------------------------------------
-	if (attr_help!=undefined && attr_help!="") {
+/*	if (attr_help!=undefined && attr_help!="") {
 		var help_text = "";
 		var helps = attr_help.split("//"); // lang1/lang2/...
 		if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
@@ -618,7 +618,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 		    trigger:'click hover',
 		    content: help_text
 		});
-	}
+	} */
 }
 
 //==================================

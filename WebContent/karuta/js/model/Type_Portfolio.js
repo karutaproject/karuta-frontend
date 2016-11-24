@@ -161,13 +161,16 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 						html += "			<ul class='dropdown-menu  pull-right'>";
 						html += "				<li><a onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
-						html += "				<li><a onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
+						if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
+							html += "			<li><a id='remove-"+portfolio.id+"' href='' style='display:block' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
+						else
+							html += "			<li><a id='remove-"+portfolio.id+"' href='' style='display:none' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
 						html += "				<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolio.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
 						html += "				<li><a onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolio.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 						if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
-							html += "				<li><a id='export-"+portfolio.id+"' href='' style='display:block'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a></li>";
+							html += "			<li><a id='export-"+portfolio.id+"' href='' style='display:block'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a></li>";
 						else
-							html += "				<li><a id='export-"+portfolio.id+"' href='' style='display:none'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a></li>";
+							html += "			<li><a id='export-"+portfolio.id+"' href='' style='display:none'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a></li>";
 						html += "			</ul>";
 					} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
 						html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
@@ -1347,7 +1350,10 @@ UIFactory["Portfolio"].removeProject = function(projectid,projectcode)
 			});
 		}
 	}
-	//----------------
+	fill_list_page();
+	$.ajaxSetup({async: true});
+
+/*	//----------------
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -1376,8 +1382,7 @@ UIFactory["Portfolio"].removeProject = function(projectid,projectcode)
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET bin: "+textStatus);
 		}
-	});
-	$.ajaxSetup({async: true});
+	});*/
 	//----------------
 }
 
@@ -1407,8 +1412,10 @@ UIFactory["Portfolio"].restoreProject = function(projectid,projectcode)
 			});
 		}
 	}
+	fill_list_page();
+	$.ajaxSetup({async: true});
 	//----------------
-	$.ajax({
+/*	$.ajax({
 		type : "GET",
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/portfolios?active=1",
@@ -1437,9 +1444,8 @@ UIFactory["Portfolio"].restoreProject = function(projectid,projectcode)
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET bin: "+textStatus);
 		}
-	});
+	});*/
 	//----------------
-	$.ajaxSetup({async: true});
 }
 
 //==================================
