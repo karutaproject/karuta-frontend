@@ -50,6 +50,7 @@ UIFactory["Portfolio"] = function( node )
 	this.date_modified = $(node).attr('modified');
 	this.semantictag = $("metadata",node).attr('semantictag');
 	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
+	this.notvisible = ($("metadata",node).attr('list-novisible')=='Y') ? true : false;
 	//------------------------------
 	this.seerootnoderoles = $("metadata-wad",$("asmRoot",node)).attr('seenoderoles');
 	this.commentnoderoles = $("metadata-wad",$("asmRoot",node)).attr('commentnoderoles');
@@ -216,7 +217,8 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						number_of_portfolios++;
 						$("#portfolios").append($("<div class='row' id='portfolio_"+portfolio.id+"'></div>"));
 					}
-					$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type,langcode,parentcode,owner));
+					if (!portfolio.notvisible || USER.creator)
+						$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type,langcode,parentcode,owner));
 					nb++;
 					if (nb<portfolios_list.length)
 						UIFactory["Portfolio"].displayTree(nb,dest,type,langcode,parentcode);

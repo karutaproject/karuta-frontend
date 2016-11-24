@@ -688,6 +688,10 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 				else
 					callback(param2,param3,param4,param5,param6,param7,param8);
 			$("#wait-window").modal('hide');			
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML(karutaStr[languages[LANGCODE]]['inexistent-selection']);
+			$("#wait-window").modal('hide');			
 		}
 	});
 }
@@ -1175,22 +1179,17 @@ function getLanguage(setElggLocale) {
 //==================================
 	if (setElggLocale==null)
 		setElggLocale = true;
-	var lang = Cookies.get('karuta-language');
-//	alertHTML(lang);
-	if (lang == null || lang==undefined || lang=='undefined') {
-		lang = languages[0];
-		setLanguage(lang);
-	} else {
-		LANG = lang;
-		for (var i=0; i<languages.length;i++){
-			if (languages[i]==lang) {
-				LANGCODE = i;
-				LANG = lang;
-			}
+	var lang = languages[0];
+	var cookielang = Cookies.get('karuta-language');
+	for (var i=0; i<languages.length;i++){
+		if (languages[i]==cookielang) {
+			LANGCODE = i;
+			LANG = cookielang;
 		}
-		if (setElggLocale && USER!=undefined && elgg_installed && $(USER.username_node).text()!="public") // not public Account
-			moment.locale(lang);  // for elgg
 	}
+	setLanguage(LANG);
+	if (setElggLocale && USER!=undefined && elgg_installed && $(USER.username_node).text()!="public") // not public Account
+		moment.locale(lang);  // for elgg
 }
 
 //==================================
@@ -1308,7 +1307,7 @@ function toggleSocialNetwork() {
 }
 
 //==================================
-function toggleSidebarPlusMinus(uuid) {
+function toggleSidebarPlusMinus(uuid) { // click on PlusMinus
 //==================================
 	if ($("#toggle_"+uuid).hasClass("glyphicon-plus"))
 	{
@@ -1321,6 +1320,18 @@ function toggleSidebarPlusMinus(uuid) {
 		$("#toggle_"+uuid).removeClass("glyphicon-minus")
 		$("#toggle_"+uuid).addClass("glyphicon-plus")
 		$("#collapse"+uuid).collapse("hide")
+	}
+}
+
+//==================================
+function toggleSidebarPlus(uuid) { // click on label
+//==================================
+	if ($("#toggle_"+uuid).hasClass("glyphicon-plus"))
+	{
+		g_toggle_sidebar [uuid] = 'open';
+		$("#toggle_"+uuid).removeClass("glyphicon-plus")
+		$("#toggle_"+uuid).addClass("glyphicon-minus")
+		$("#collapse"+uuid).collapse("show");
 	}
 }
 
