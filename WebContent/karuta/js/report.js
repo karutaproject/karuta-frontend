@@ -297,8 +297,32 @@ function r_processCell(no,xmlDoc,destid,data,line)
 //==================================
 {
 	var style = $(xmlDoc).attr("style");
-	var html = "<td id='td_"+no+"' style='"+style+"'></td>";
+	var attr_help = $(xmlDoc).attr("help");
+
+	var html = "<td id='td_"+no+"' style='"+style+"'><span id='help_"+no+"' class='ihelp'></span></td>";
 	$("#"+destid).append($(html));
+	if (attr_help!=undefined && attr_help!="") {
+		var help_text = "";
+		var helps = attr_help.split("//"); // lang1/lang2/...
+		if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
+			for (var j=0; j<helps.length; j++){
+				if (helps[j].indexOf("@"+languages[LANGCODE])>-1)
+					help_text = helps[j].substring(0,helps[j].indexOf("@"));
+			}
+		} else { // lang1/lang2/...
+			help_text = helps[langcode];  // lang1/lang2/...
+		}
+		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+		$("#help_"+no).html(help);
+		$(".popinfo").popover({ 
+		    placement : 'right',
+		    container : 'body',
+		    title:karutaStr[LANG]['help-label'],
+		    html : true,
+		    trigger:'click hover',
+		    content: help_text
+		});
+	}
 	var children = $(">*",xmlDoc);
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
@@ -487,6 +511,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 {
 	var text = "";
 	var style = "";
+	var attr_help = "";
 	try {
 		var select = $(xmlDoc).attr("select");
 		var ref = $(xmlDoc).attr("ref");
@@ -554,11 +579,15 @@ function r_processNodeResource(xmlDoc,destid,data)
 					text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
 				}
 			}
+			if ($(node.metadatawad).attr('help')!=undefined && $(node.metadatawad).attr('help')!=""){
+				attr_help = $(node.metadatawad).attr('help');
+			}
 		}
 	} catch(e){
 		text = "<span id='dashboard_"+nodeid+"'>&mdash;</span>";
 	}
 	//------------------------------
+	text += "<span id='reshelp_"+nodeid+"'></span>"
 	$("#"+destid).append($(text));
 	//--------------------set editor------------------------------------------
 	if ($("#report_display_editor_"+nodeid).length>0) {
@@ -567,6 +596,29 @@ function r_processNodeResource(xmlDoc,destid,data)
 	if ($("#report_get_editor_"+nodeid).length>0) {
 		$("#report_get_editor_"+nodeid).append(UICom.structure["ui"][nodeid].resource.getEditor());
 	}
+	//--------------------help------------------------------------------
+/*	if (attr_help!=undefined && attr_help!="") {
+		var help_text = "";
+		var helps = attr_help.split("//"); // lang1/lang2/...
+		if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
+			for (var j=0; j<helps.length; j++){
+				if (helps[j].indexOf("@"+languages[LANGCODE])>-1)
+					help_text = helps[j].substring(0,helps[j].indexOf("@"));
+			}
+		} else { // lang1/lang2/...
+			help_text = helps[langcode];  // lang1/lang2/...
+		}
+		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+		$("#reshelp_"+nodeid).html(help);
+		$(".popinfo").popover({ 
+		    placement : 'right',
+		    container : 'body',
+		    title:karutaStr[LANG]['help-label'],
+		    html : true,
+		    trigger:'click hover',
+		    content: help_text
+		});
+	} */
 }
 
 //==================================

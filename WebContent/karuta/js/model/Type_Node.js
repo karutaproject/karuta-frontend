@@ -545,12 +545,12 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					var depth = 1;
 					var html = "";
 					html += "<div class='sidebar-item' id='parent-"+uuid+"' role='tablist'>";
-					html += "  <div  class='sidebar-link' style='cursor:pointer' xxx-toggle='collapse' xxx-parent='#parent-"+parentid+"' href='#collapse"+uuid+"' redisplay=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >";
+					html += "  <div  class='sidebar-link' style='cursor:pointer' redisplay=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >";
 					if (g_toggle_sidebar[uuid]!=undefined && g_toggle_sidebar[uuid]=='open')
 						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='glyphicon glyphicon-minus' style='float:right;margin-right:5px;'></span></small>";
 					else
 						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='glyphicon glyphicon-plus' style='float:right;margin-right:5px;'></span></small>";
-					html += "  <a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+					html += "  <a onclick=\"toggleSidebarPlus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
 					html += "  </div>"
 					if (g_toggle_sidebar[uuid]!=undefined && g_toggle_sidebar[uuid]=='open')
 						html += "<div id='collapse"+uuid+"' class='panel-collapse collapse in' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
@@ -3366,6 +3366,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	if (name=='asmRoot') {
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'cssfile',$(node.metadata).attr('cssfile'));
 		html += UIFactory["Node"].getMetadataDisplayTypeAttributeEditor(node.id,'display-type',$(node.metadata).attr('display-type'));
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'list-novisible',$(node.metadata).attr('list-novisible'),true);
 	}
 	html += "<hr><h4>"+karutaStr[LANG]['metadata']+"</h4>";
 	if (USER.admin)

@@ -79,6 +79,7 @@ karutaStr['en']['choose']="Choose";
 karutaStr['en']['quit']="Quit";
 karutaStr['en']['menu']="Menu";
 karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Height : 220<br>&nbsp; - Width : 800 divided by number of columns<br>&nbsp;";
+karutaStr['en']['list-novisible']="Not Visible";
 
 //=========================================
 //========== ERRORS =======================

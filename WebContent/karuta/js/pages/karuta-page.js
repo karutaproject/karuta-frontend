@@ -41,9 +41,10 @@ function initKarutaPage()
 function displayKarutaPage()
 //==============================
 {
-	getLanguage();
 	$.ajaxSetup({async: false});
-	loadLanguages();
+	loadLanguages(function(data) {
+		getLanguage();
+	});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
