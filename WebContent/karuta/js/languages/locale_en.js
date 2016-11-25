@@ -285,6 +285,7 @@ karutaStr['en']['select_role']="Select a Role";
 karutaStr['en']['batch']="Execute Batch Script";
 karutaStr['en']['upload_csv']="Upload a CSV File";
 karutaStr['en']['process_csv']="Process";
+karutaStr['en']['create_user_portfolios']="Create an user and his portfolios";
 
 //=========================================
 //========== REPORT ========================

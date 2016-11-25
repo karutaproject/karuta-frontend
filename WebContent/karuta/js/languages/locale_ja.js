@@ -183,6 +183,7 @@ karutaStr['ja']['select_role']="ロールを選択";
 karutaStr['ja']['batch']="Create Batch Accounts";
 karutaStr['ja']['upload_csv']="Upload a CSV File";
 karutaStr['ja']['process_csv']="Process";
+karutaStr['ja']['create_user_portfolios']="Create an user and his portfolios";
 
 //=========================================
 //========== GROUPS =======================

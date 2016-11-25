@@ -181,6 +181,7 @@ karutaStr['es']['select_role']="Sélectionner un rôle";
 karutaStr['es']['batch']="Créer des comptes/portfolios";
 karutaStr['es']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['es']['process_csv']="Éxécuter";
+karutaStr['es']['create_user_portfolios']="Créer un usager et ses portfolios";
 
 //=========================================
 //========== GROUPS =======================
