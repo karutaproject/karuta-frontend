@@ -122,6 +122,8 @@ karutaStr['es']['list_portfolios']="Portfolios";
 karutaStr['es']['list_users']="Usagers";
 karutaStr['es']['list_roles']="Rôles";
 karutaStr['es']['list_groups']="Groupes";
+karutaStr['es']['metadata-portfolios']="Portfolios";
+karutaStr['es']['supervisor']="Superviseur";
 
 //=========================================
 //========== PORTFOLIOS ===================

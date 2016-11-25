@@ -9,7 +9,6 @@ function show_exec_batch()
 	$("#main-page").hide();
 	$("#main-user").hide();
 	$("#main-usersgroup").hide();
-	$("#main-exec-batch").show();
 	$("#main-exec-report").hide();
 	$("#main-exec-batch").hide();
 

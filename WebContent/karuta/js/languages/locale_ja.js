@@ -124,6 +124,8 @@ karutaStr['ja']['list_portfolios']="ポートフォリオ";
 karutaStr['ja']['list_users']="ユーザ";
 karutaStr['ja']['list_roles']="ロール";
 karutaStr['ja']['list_groups']="グループ";
+karutaStr['ja']['metadata-portfolios']="Portfolios";
+karutaStr['ja']['supervisor']="Supervisor";
 
 //=========================================
 //========== PORTFOLIOS ===================
