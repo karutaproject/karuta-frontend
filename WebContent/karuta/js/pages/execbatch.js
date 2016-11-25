@@ -3,15 +3,8 @@
 function show_exec_batch()
 //==============================
 {
-	$("#search-div").hide();
-	$("#main-list").hide();
-	$("#main-portfoliosgroup").hide();
-	$("#main-page").hide();
-	$("#main-user").hide();
-	$("#main-usersgroup").hide();
-	$("#main-exec-report").hide();
-	$("#main-exec-batch").hide();
-
+	hideAllPages();
+	
 	$("body").removeClass();
 	$("body").addClass("exec_batch")
 	$("#sub-bar").html("");

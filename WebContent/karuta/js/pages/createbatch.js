@@ -3,14 +3,7 @@
 function show_exec_batch_user_portfolios()
 //==============================
 {
-	$("#search-div").hide();
-	$("#main-list").hide();
-	$("#main-portfoliosgroup").hide();
-	$("#main-page").hide();
-	$("#main-user").hide();
-	$("#main-usersgroup").hide();
-	$("#main-exec-report").hide();
-	$("#main-exec-batch").hide();
+	hideAllPages();
 
 	$("body").removeClass();
 	$("body").addClass("exec_batch")
@@ -57,7 +50,6 @@ function display_exec_batch_user_portfolios()
 }
 
 //==============================
-//==============================
 function call_create_batch_user_portfolios()
 //==============================
 {
@@ -68,9 +60,6 @@ function call_create_batch_user_portfolios()
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['create_user_portfolios']);
 	$("#edit-window-type").html("");
-//	g_json = {"batch":"","portfolio_code":"IUT2portfolios.IUT2-portfolio","﻿model_code":"IUT2batch.IUT2_batch_creer_dans_projet","specialite_code":"GEA","diploma_end":"2018","lines":[{"superviseur_lastname":"GEAG","etudiant_role":"etudiant","superviseur_firstname":"Tuteurla","etudiant_firstname":"LA","superviseur_email":"eportfoliogea@gmail.com","etudiant_lastname":"Dinh","superviseur_pwd":"karuta","etudiant_id":"etudiantla","superviseur_role":"superviseur","superviseur_id":"tuteurgeagla","etudiant_email":"tlanh.dinh@gmail.com","etudiant_pwd":"karuta"}],"personnalite_code":"IUT2portfolios.IUT2-TraitsPersonnalite","diploma_begin":"2016","cv_code":"IUT2portfolios.IUT2-cv","profile_code":"IUT2portfolios.IUT2-profile","projet_code":"IUT2portfolios.IUT2-projet"};
-//	g_json = '{"batch":"","portfolio_code":"IUT2portfolios.IUT2-portfolio","﻿model_code":"IUT2batch.IUT2_batch_creer_dans_projet","specialite_code":"GEA","diploma_end":"2018","lines":[{"superviseur_lastname":"GEAG","etudiant_role":"etudiant","superviseur_firstname":"Tuteurla","etudiant_firstname":"LA","superviseur_email":"eportfoliogea@gmail.com","etudiant_lastname":"Dinh","superviseur_pwd":"karuta","etudiant_id":"etudiantla","superviseur_role":"superviseur","superviseur_id":"tuteurgeagla","etudiant_email":"tlanh.dinh@gmail.com","etudiant_pwd":"karuta"}],"personnalite_code":"IUT2portfolios.IUT2-TraitsPersonnalite","diploma_begin":"2016","cv_code":"IUT2portfolios.IUT2-cv","profile_code":"IUT2portfolios.IUT2-profile","projet_code":"IUT2portfolios.IUT2-projet"}';
-//	g_json = {﻿model_code:"",portfolio_code:"IUT2portfolios.IUT2-portfolio",specialite_code:"GEA",diploma_end:"2018",lines:[{superviseur_lastname:"GEAG",etudiant_role:"etudiant",superviseur_firstname:"Tuteurla2",etudiant_firstname:"LA",superviseur_email:"eportfoliogea@gmail.com",etudiant_lastname:"Dinh",superviseur_pwd:"karuta",etudiant_id:"etudiantla2",superviseur_role:"superviseur",superviseur_id:"tuteurgeagla",etudiant_email:"tlanh.dinh@gmail.com",etudiant_pwd:"karuta"}],personnalite_code:"IUT2portfolios.IUT2-TraitsPersonnalite",diploma_begin:"2016",cv_code:"IUT2portfolios.IUT2-cv",profile_code:"IUT2portfolios.IUT2-profile",projet_code:"IUT2portfolios.IUT2-projet"};
 	g_json = {﻿model_code:"IUT2batch.IUT2_batch_creer_dans_projet",portfolio_code:"IUT2portfolios.IUT2-portfolio",specialite_code:"GEA",diploma_end:"2018",lines:[{superviseur_lastname:"GEAG",etudiant_role:"etudiant",superviseur_firstname:"Tuteur",etudiant_firstname:"",superviseur_email:"eportfoliogea@gmail.com",etudiant_lastname:"",superviseur_pwd:"karuta",etudiant_id:"",superviseur_role:"superviseur",superviseur_id:"tuteurgeag",etudiant_email:"",etudiant_pwd:"karuta"}],personnalite_code:"IUT2portfolios.IUT2-TraitsPersonnalite",diploma_begin:"2016",cv_code:"IUT2portfolios.IUT2-cv",profile_code:"IUT2portfolios.IUT2-profile",projet_code:"IUT2portfolios.IUT2-projet"};
 	//--------------------------
 	var attributes = new Array();

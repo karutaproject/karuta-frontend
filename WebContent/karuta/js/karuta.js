@@ -1629,7 +1629,6 @@ function setCSSportfolio(data)
 	// ========================================================================
 }
 
-
 //==============================
 function logout()
 //==============================
@@ -1641,4 +1640,18 @@ function logout()
 		data: ""
 	});
 	window.location="login.htm?lang="+LANG;
+}
+
+//==============================
+function hideAllPages()
+//==============================
+{
+	$("#search-div").hide();
+	$("#main-list").hide();
+	$("#main-portfoliosgroup").hide();
+	$("#main-page").hide();
+	$("#main-user").hide();
+	$("#main-usersgroup").hide();
+	$("#main-exec-report").hide();
+	$("#main-exec-batch").hide();
 }

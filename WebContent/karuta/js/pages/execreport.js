@@ -3,19 +3,14 @@
 function show_exec_report()
 //==============================
 {
+	hideAllPages();
+
 	$("body").removeClass();
 	$("body").addClass("exec_report")
 	$("#sub-bar").html("");
 	setLanguageMenu("fill_exec_report()");
 	$("#refresh").attr("onclick","fill_exec_report()");
 	$("#refresh").show();
-	$("#search-div").hide();
-	$("#main-list").hide();
-	$("#main-portfoliosgroup").hide();
-	$("#main-page").hide();
-	$("#main-user").hide();
-	$("#main-usersgroup").hide();
-	$("#main-exec-batch").hide();
 	$("#main-exec-report").show();
 }
 

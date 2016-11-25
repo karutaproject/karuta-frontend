@@ -3,20 +3,15 @@
 function show_list_users()
 //==============================
 {
+	hideAllPages();
+
 	$("body").removeClass();
 	$("body").addClass("list-users")
 	$("#sub-bar").html("");
 	setLanguageMenu("fill_list_users()");
 	$("#refresh").attr("onclick","fill_list_users()");
-	$("#search-div").hide();
 	$("#refresh").show();
-	$("#main-list").hide();
-	$("#main-portfoliosgroup").hide();
-	$("#main-page").hide();
 	$("#main-user").show();
-	$("#main-usersgroup").hide();
-	$("#main-exec-batch").hide();
-	$("#main-exec-report").hide();
 }
 
 //==============================

@@ -3,20 +3,15 @@
 function show_list_portfoliosgroups()
 //==============================
 {
+	hideAllPages();
+
 	$("body").removeClass();
 	$("body").addClass("list-portfoliosgroups")
 	$("#sub-bar").html("");
 	setLanguageMenu("fill_list_portfoliosgroups()");
 	$("#refresh").attr("onclick","fill_list_portfoliosgroups()");
 	$("#refresh").show();
-	$("#search-div").hide();
-	$("#main-list").hide();
 	$("#main-portfoliosgroup").show();
-	$("#main-page").hide();
-	$("#main-user").hide();
-	$("#main-usersgroup").hide();
-	$("#main-exec-batch").hide();
-	$("#main-exec-report").hide();
 	
 }
 

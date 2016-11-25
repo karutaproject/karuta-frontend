@@ -71,6 +71,8 @@ function setWelcomeTitles()
 function show_list_page()
 //==============================
 {
+	hideAllPages();
+
 	$("body").removeClass();
 	$("body").addClass("list-page")
 	$("#sub-bar").html(getListSubBar());
@@ -80,13 +82,7 @@ function show_list_page()
 	$("#refresh").show();
 	if (USER.creator)
 		$("#search-div").show();
-	$("#main-page").hide();
-	$("#main-user").hide();
-	$("#main-usersgroup").hide();
 	$("#main-list").show();
-	$("#main-portfoliosgroup").hide();
-	$("#main-exec-batch").hide();
-	$("#main-exec-report").hide();
 	$('[data-tooltip="true"]').tooltip();
 }
 
