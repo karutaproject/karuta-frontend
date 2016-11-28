@@ -244,6 +244,42 @@
 		</unshare-tree>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='share-usergroup']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<share-usergroup select="{$id}">
+			<groupname>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">groupname</xsl:with-param>
+				</xsl:call-template>
+			</groupname>
+			<role>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">role</xsl:with-param>
+				</xsl:call-template>
+			</role>
+		</share-usergroup>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='unshare-usergroup']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<unshare-usergroup select="{$id}">
+			<groupname>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">groupname</xsl:with-param>
+				</xsl:call-template>
+			</groupname>
+			<role>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">role</xsl:with-param>
+				</xsl:call-template>
+			</role>
+		</unshare-usergroup>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-field']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>

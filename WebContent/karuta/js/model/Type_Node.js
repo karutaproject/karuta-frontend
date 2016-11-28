@@ -1054,7 +1054,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					} else { // lang1/lang2/...
 						help_text = helps[langcode];  // lang1/lang2/...
 					}
-					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
 					$("#help_"+uuid).html(help);
 					$(".popinfo").popover({ 
 					    placement : 'right',
@@ -1476,7 +1476,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					} else { // lang1/lang2/...
 						help_text = helps[langcode];  // lang1/lang2/...
 					}
-					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
 					$("#help_"+uuid).html(help);
 					$(".popinfo").popover({ 
 					    placement : 'right',
@@ -1943,7 +1943,7 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 					} else { // lang1/lang2/...
 						help_text = helps[langcode];  // lang1/lang2/...
 					}
-					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
 					$("#help_"+uuid).html(help);
 					$(".popinfo").popover({ 
 					    placement : 'right',
@@ -2374,7 +2374,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 					} else { // lang1/lang2/...
 						help_text = helps[langcode];  // lang1/lang2/...
 					}
-					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
 					$("#help_"+uuid).html(help);
 					$(".popinfo").popover({ 
 					    placement : 'right',

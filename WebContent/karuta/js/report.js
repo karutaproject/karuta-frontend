@@ -312,7 +312,7 @@ function r_processCell(no,xmlDoc,destid,data,line)
 		} else { // lang1/lang2/...
 			help_text = helps[langcode];  // lang1/lang2/...
 		}
-		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
 		$("#help_"+no).html(help);
 		$(".popinfo").popover({ 
 		    placement : 'right',
@@ -608,7 +608,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 		} else { // lang1/lang2/...
 			help_text = helps[langcode];  // lang1/lang2/...
 		}
-		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-info-sign'></span></a> ";
+		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
 		$("#reshelp_"+nodeid).html(help);
 		$(".popinfo").popover({ 
 		    placement : 'right',
