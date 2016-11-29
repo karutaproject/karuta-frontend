@@ -50,7 +50,6 @@ function loadKarutaPage(url)
 	//--------------------------------------------------------------
 	loadJS(url+"/karuta/js/pages/usersgroups.js");
 	loadJS(url+"/karuta/js/pages/portfoliosgroups.js");
-	loadJS(url+"/karuta/js/pages/createbatch.js");
 	loadJS(url+"/karuta/js/pages/execbatch.js");
 	loadJS(url+"/karuta/js/pages/execreport.js");
 	//--------------------------------------------------------------

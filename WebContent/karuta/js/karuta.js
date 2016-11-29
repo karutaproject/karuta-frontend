@@ -203,9 +203,10 @@ function getNavBar(type,portfolioid,edit)
 					html += "						<li><a  onclick='show_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a></li>";
 				else
 					html += "						<li><a  onclick='display_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a></li>";
+				if (createuserportfolios!=null &&  createuserportfolios)
+					html += "						<li><a  onclick='call_create_batch_user_portfolios()'>"+karutaStr[LANG]['create_user_portfolios']+"</a></li>";
 			}
 			//-----------------
-			html += "						<li><a  onclick='call_create_batch_user_portfolios()'>"+karutaStr[LANG]['create_user_portfolios']+"</a></li>";
 			html += "						<li><a  onclick='display_exec_batch()'>"+karutaStr[LANG]['batch']+"</a></li>";
 			html += "						<li><a  onclick='display_exec_report()'>"+karutaStr[LANG]['report']+"</a></li>";
 			html += "					</ul>";
