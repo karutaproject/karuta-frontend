@@ -199,8 +199,6 @@ karutaStr['en']['list_users']="Users";
 karutaStr['en']['list_roles']="Roles";
 karutaStr['en']['list_groups']="Groups";
 karutaStr['en']['create-test-user']="Create a Test User";
-karutaStr['en']['metadata-portfolios']="Portfolios";
-karutaStr['en']['supervisor']="Supervisor";
 
 //=========================================
 //========== PORTFOLIOS ===================

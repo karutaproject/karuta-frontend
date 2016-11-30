@@ -1125,6 +1125,23 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (spinning)
 					$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});					
 			}
+			//------------ Public URL -----------------
+			if ($("#2world-"+uuid).length){
+				var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&role=all&lang=fr&l=4&d=500';
+				$.ajax({
+					type : "POST",
+					dataType : "text",
+					contentType: "application/xml",
+					url : urlS,
+					success : function (data){
+						var url = window.location.href;
+						var serverURL = url.substring(0,url.indexOf(appliname)-1);
+						url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
+						$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe' target='_blank' href='"+url+"'></a> ");
+					}
+				});
+
+			}
 			// ================================= For each child ==========================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 			if (semtag.indexOf('asmColumns')>-1) {
@@ -3027,7 +3044,11 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 							}
 						}
 					} else {
-						html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
+						if (shareroles.indexOf('2world')>-1) {
+							html_toadd = "<span id='2world-"+node.id+"'></span>";
+						} else {
+							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
+						}
 					}
 					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))
 						html += html_toadd;

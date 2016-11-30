@@ -72,4 +72,4 @@ g_sendEmailPublicURL_message +="&lt;/div&gt;";
 g_sendEmailPublicURL_message += "Karuta Team";
 g_sendEmailPublicURL_message +="&lt;/div&gt;";
 //----------------------------------------------
-
+var specificmenus = false;
