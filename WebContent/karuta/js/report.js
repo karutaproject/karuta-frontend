@@ -133,8 +133,11 @@ function r_processLine(no,xmlDoc,destid,data,line)
 	var ref_init = $(xmlDoc).attr("ref-init");
 	//---------------------
 	var children = $(">*",xmlDoc);
+	$("#line-number").html('0');
+	$("#number_lines").html(json.lines.length);
 	for (var i=0; i<json.lines.length; i++){
 		if (ref_init!=undefined) {
+			$("#line-number").html(i+1);
 			var ref_inits = ref_init.split("/"); // ref1/ref2/...
 			for (var k=0;k<ref_inits.length;k++)
 				aggregates[ref_inits[k]] = new Array();

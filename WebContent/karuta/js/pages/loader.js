@@ -134,8 +134,5 @@ function loadKarutaPage(url)
 	loadJS(url+"/karuta/js/version.js");
 	//--------------------------------------------------------------
 	loadJS(url+"/karuta/js/dashboards/matrix_2dims/matrix_2dim.js");
-	//--------------------------------------------------------------
-	if (typeof createuserportfolios!='undefined' &&  createuserportfolios)
-		loadJS(url+"/karuta/js/createuserportfolios.js");
-		
+	//--------------------------------------------------------------		
 }

@@ -6,10 +6,6 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<link rel="icon" type="image/png" href="../../application/img/faviconK.png" />
 		<script src="../js/_init.js"></script>
-		<!--[if lt IE 9]>
-			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
-		<![endif]-->
-		<!-- =============================================================== -->
 		<script src="../../../karuta-core/karuta/js/pages/loader.js"></script>
 		<script>loadKarutaPage(karuta_url);</script>
 		<link rel='stylesheet' type='text/css' href='../css/specific.css'/>
@@ -24,6 +20,8 @@
 	</head>
 	<body>
 		<script>
+			if (typeof createuserportfolios!='undefined' &&  createuserportfolios)
+				loadJS("../js/createuserportfolios.js");
 			initKarutaPage();
 			$(window).load(function() {
 				displayKarutaPage()
