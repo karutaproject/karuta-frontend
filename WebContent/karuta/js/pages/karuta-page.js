@@ -71,8 +71,11 @@ function displayKarutaPage()
 				if (g_socialnetwork==undefined || g_socialnetwork=='shown'){
 					html += "	<div id='main-content' class='col-md-8 col-md-push-4'>";
 					html += "	 <i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
-					html += "	<div id='search-div' class='search' style='display:none'>";
+					html += "	<div id='search-portfolio-div' class='search' style='display:none'>";
 					html += getSearch();
+					html += "	</div>";
+					html += "	<div id='search-user-div' class='search' style='display:none'>";
+					html += getSearchUser();
 					html += "	</div>";
 					html += "		<div id='main-list'></div>";
 					html += "		<div id='main-portfoliosgroup' style='display:none'></div>";
@@ -86,8 +89,11 @@ function displayKarutaPage()
 				} else {
 					html += "	<div id='main-content' class='col-md-12'>";
 					html += "		<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
-					html += "	<div id='search-div' class='search' style='display:none'>";
+					html += "	<div id='search-portfolio-div' class='search' style='display:none'>";
 					html += getSearch();
+					html += "	</div>";
+					html += "	<div id='search-user-div' class='search' style='display:none'>";
+					html += getSearchUser();
 					html += "	</div>";
 					html += "		<div id='main-list' class='col-md-12'></div>";
 					html += "		<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
@@ -110,8 +116,11 @@ function displayKarutaPage()
 				var html = "";
 				html += "<div id='global-row' class='row'>";
 				html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
-				html += "	<div id='search-div' class='search' style='display:none'>";
+				html += "	<div id='search-portfolio-div' class='search' style='display:none'>";
 				html += getSearch();
+				html += "	</div>";
+				html += "	<div id='search-user-div' class='search' style='display:none'>";
+				html += getSearchUser();
 				html += "	</div>";
 				html += "	<div id='main-list' class='col-md-12'></div>";
 				html += "	<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";

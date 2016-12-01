@@ -1217,9 +1217,9 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	for (var i=0;i<projects_list.length;i++) {
 		var js = "";
 		if (instance) 
-			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','true')";
+			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');";
 		else
-			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','false')";
+			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');";
 		js += ";$('#dropdownMenu1').html('"+projects_list[i].portfoliolabel+"')";
 		html += "<li><a onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a></li>";
 	}
@@ -1228,7 +1228,10 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	//--------------------------
 	html +=" <form id='fileupload' action='"+url+"'>";
 	html += " <input type='hidden' id='project' name='project' value=''>";
-	html += " <input type='hidden' id='instance' name='instance' value='false'>";
+	if (instance) 
+		html += " <input type='hidden' id='instance' name='instance' value='true'>";
+	else
+		html += " <input type='hidden' id='instance' name='instance' value='false'>";
 	html += " <input type='file' name='uploadfile'>";
 	html += "</form>";
 	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
@@ -1792,7 +1795,7 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 				dest = "#special-roles";
 			else
 				dest = "#other-roles";
-			if ((label!="user" && instance && label!="") || (!instance && label=="designer")) {
+			if ((label!="user" && instance && label!="") || (!instance && (label=="designer" || label=='all'))) {
 				if (!first)
 					$(dest).append($("<br>"));
 				first = false;

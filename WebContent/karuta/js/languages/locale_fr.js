@@ -248,6 +248,12 @@ karutaStr['fr']['button-welcome-edit']="Éditer la page de bienvenue";
 karutaStr['fr']['existing-code']="Ce code existe déjà.";
 karutaStr['fr']['search-label']="Saissisez un code ou une partie du code";
 karutaStr['fr']['no-portfolio']="";
+karutaStr['fr']['search-username-label']="Saissisez un login ou une partie du login";
+karutaStr['fr']['search-firstname-label']="Saissisez un prénom ou une partie du prénom";
+karutaStr['fr']['search-lastname-label']="Saissisez un nom ou une partie du nom";
+karutaStr['fr']['username-label']="Login";
+karutaStr['fr']['firstname-label']="Prénom";
+karutaStr['fr']['lastname-label']="Nom";
 
 //=========================================
 //========== USERS ========================

@@ -81,7 +81,7 @@ function show_list_page()
 	$("#refresh").attr("onclick","fill_list_page()");
 	$("#refresh").show();
 	if (USER.creator)
-		$("#search-div").show();
+		$("#search-portfolio-div").show();
 	$("#main-list").show();
 	$('[data-tooltip="true"]').tooltip();
 }
@@ -91,7 +91,7 @@ function fill_list_page()
 //==============================
 {
 	$("#wait-window").show();
-	$("#search-div").html(getSearch()); // we erase code if any
+	$("#search-portfolio-div").html(getSearch()); // we erase code if any
 	$("#search-input").keypress(function(f) {
 		var code= (f.keyCode ? f.keyCode : f.which);
 		if (code == 13)

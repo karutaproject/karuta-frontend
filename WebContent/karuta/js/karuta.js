@@ -173,8 +173,7 @@ function getNavBar(type,portfolioid,edit)
 				html += "			<ul class='nav navbar-nav'>";
 				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 				html += "					<ul class='dropdown-menu'>";
-//				html += getLanguageMenu("fill_list_page();fill_main_page();$('#search-div').html(getSearch());fill_list_users();fill_exec_batch();fill_exec_report();");
-				html += getLanguageMenu("fill_list_page();$('#search-div').html(getSearch());");
+				html += getLanguageMenu("fill_list_page();$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
 				html += "					</ul>";
 				html += "				</li>";
 				html += "			</ul>";
@@ -1647,7 +1646,8 @@ function logout()
 function hideAllPages()
 //==============================
 {
-	$("#search-div").hide();
+	$("#search-portfolio-div").hide();
+	$("#search-user-div").hide();
 	$("#main-list").hide();
 	$("#main-portfoliosgroup").hide();
 	$("#main-page").hide();
