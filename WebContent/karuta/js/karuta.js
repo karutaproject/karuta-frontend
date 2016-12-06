@@ -364,6 +364,10 @@ function getEditBox(uuid,js2) {
 		} else {
 			html = UICom.structure["ui"][uuid].getEditor();
 			$("#edit-window-body-node").html($(html));
+			if ($("#get-resource-node").length){
+				var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
+				getResource.displayEditor("get-resource-node");
+			}
 		}
 	}
 	// ------------admin and designer----------

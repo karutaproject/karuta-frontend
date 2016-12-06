@@ -33,18 +33,18 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.node = node;
 	this.type = 'Get_Resource';
 	this.code_node = $("code",$("asmResource["+clause+"]",node));
-	this.value_node = $("value",$("asmResource[xsi_type='Get_Resource']",node));
+	this.value_node = $("value",$("asmResource["+condition+"]",node));
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
-		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='Get_Resource']",node));
+		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+condition+"]",node));
 		if (this.label_node[i].length==0) {
-			if (i==0 && $("label",$("asmResource[xsi_type='Get_Resource']",node)).length==1) { // for WAD6 imported portfolio
-				this.label_node[i] = $("text",$("asmResource[xsi_type='Get_Resource']",node));
+			if (i==0 && $("label",$("asmResource["+condition+"]",node)).length==1) { // for WAD6 imported portfolio
+				this.label_node[i] = $("text",$("asmResource["+condition+"]",node));
 			} else {
 				var newelement = createXmlElement("label");
 				$(newelement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='Get_Resource']",node)[0].appendChild(newelement);
-				this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='Get_Resource']",node));
+				this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+condition+"]",node));
 			}
 		}
 	}

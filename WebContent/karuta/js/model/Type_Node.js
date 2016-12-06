@@ -309,32 +309,39 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		editnoderoles="";
 	if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
-		if (g_userroles[0]=='designer' || USER.admin) {
-			var htmlCodeGroupObj = $("<div class='form-group'></div>")
-			var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
-			var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
-			var htmlCodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' name='input_code' value=\""+this.code_node.text()+"\">");
-			$(htmlCodeInputObj).change(function (){
-				UIFactory["Node"].update(htmlCodeInputObj,self,langcode);
-			});
-			$(htmlCodeDivObj).append($(htmlCodeInputObj));
-			$(htmlCodeGroupObj).append($(htmlCodeLabelObj));
-			$(htmlCodeGroupObj).append($(htmlCodeDivObj));
-			$(htmlFormObj).append($(htmlCodeGroupObj));
+		var query = $(this.metadatawad).attr('query');
+		if (query==undefined || query==''){
+			if (g_userroles[0]=='designer' || USER.admin) {
+				var htmlCodeGroupObj = $("<div class='form-group'></div>")
+				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
+				var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
+				var htmlCodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' name='input_code' value=\""+this.code_node.text()+"\">");
+				$(htmlCodeInputObj).change(function (){
+					UIFactory["Node"].update(htmlCodeInputObj,self,langcode);
+				});
+				$(htmlCodeDivObj).append($(htmlCodeInputObj));
+				$(htmlCodeGroupObj).append($(htmlCodeLabelObj));
+				$(htmlCodeGroupObj).append($(htmlCodeDivObj));
+				$(htmlFormObj).append($(htmlCodeGroupObj));
+			}
+			if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
+				var htmlLabelGroupObj = $("<div class='form-group'></div>")
+				var htmlLabelLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
+				var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
+				var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.label_node[langcode].text()+"\">");
+				$(htmlLabelInputObj).change(function (){
+					UIFactory["Node"].update(htmlLabelInputObj,self,langcode);
+				});
+				$(htmlLabelDivObj).append($(htmlLabelInputObj));
+				$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
+				$(htmlLabelGroupObj).append($(htmlLabelDivObj));
+				$(htmlFormObj).append($(htmlLabelGroupObj));
+			}
+		} else {
+			var htmlGetResource = $("<div id='get-resource-node'></div>")
+			$(htmlFormObj).append($(htmlGetResource));
 		}
-		if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
-			var htmlLabelGroupObj = $("<div class='form-group'></div>")
-			var htmlLabelLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
-			var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
-			var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.label_node[langcode].text()+"\">");
-			$(htmlLabelInputObj).change(function (){
-				UIFactory["Node"].update(htmlLabelInputObj,self,langcode);
-			});
-			$(htmlLabelDivObj).append($(htmlLabelInputObj));
-			$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
-			$(htmlLabelGroupObj).append($(htmlLabelDivObj));
-			$(htmlFormObj).append($(htmlLabelGroupObj));
-		}
+
 		//-----------------------------
 		var resizeroles = $(this.metadatawad).attr('resizeroles');
 		if (resizeroles==undefined)
@@ -3813,7 +3820,7 @@ UIFactory["Node"].updateMetadatawWadTextAttribute = function(nodeid,attribute)
 {
 	var node = UICom.structure["ui"][nodeid].node;
 	var value = $.trim($("#"+nodeid+"_"+attribute).val());
-	if (attribute=='query' && UICom.structure["ui"][nodeid].resource.type=='Proxy' && value!=undefined && value!='') {
+	if (attribute=='query' && UICom.structure["ui"][nodeid].resource!=undefined && UICom.structure["ui"][nodeid].resource.type=='Proxy' && value!=undefined && value!='') {
 		var p1 = value.indexOf('.');
 		var p2 = value.indexOf('.',p1+1);
 		var semtag = value.substring(p1+1,p2);
@@ -3861,7 +3868,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	if (node.resource!=null)
 		resource_type = node.resource.type;
 	//----------------------Search----------------------------
-	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit') {
+	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure') {
 		html  = "<hr><label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
 		$("#metadata_texts").append($(html));
 		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'query',$(node.metadatawad).attr('query'));
