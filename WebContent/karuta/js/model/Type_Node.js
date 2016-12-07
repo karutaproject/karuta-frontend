@@ -310,7 +310,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
 		var query = $(this.metadatawad).attr('query');
-		if (query==undefined || query==''){
+		if (query==undefined || query=='' || this.asmtype=='asmContext'){
 			if (g_userroles[0]=='designer' || USER.admin) {
 				var htmlCodeGroupObj = $("<div class='form-group'></div>")
 				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
