@@ -26,30 +26,33 @@ if( UIFactory === undefined )
 UIFactory["Get_Resource"] = function(node,condition)
 //==================================
 {
-	var clause = "xsi_type='Get_Resource'";
+	this.clause = "xsi_type='Get_Resource'";
 	if (condition!=null)
-		clause = condition;
+		this.clause = condition;
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Get_Resource';
-	this.code_node = $("code",$("asmResource["+clause+"]",node));
-	this.value_node = $("value",$("asmResource["+condition+"]",node));
+	this.code_node = $("code",$("asmResource["+this.clause+"]",node));
+	this.value_node = $("value",$("asmResource["+this.clause+"]",node));
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
-		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+condition+"]",node));
+		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
 		if (this.label_node[i].length==0) {
-			if (i==0 && $("label",$("asmResource["+condition+"]",node)).length==1) { // for WAD6 imported portfolio
-				this.label_node[i] = $("text",$("asmResource["+condition+"]",node));
+			if (i==0 && $("label",$("asmResource["+this.clause+"]",node)).length==1) { // for WAD6 imported portfolio
+				this.label_node[i] = $("text",$("asmResource["+this.clause+"]",node));
 			} else {
 				var newelement = createXmlElement("label");
 				$(newelement).attr('lang', languages[i]);
-				$("asmResource[xsi_type='Get_Resource']",node)[0].appendChild(newelement);
-				this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+condition+"]",node));
+				$("asmResource["+this.clause+"]",node)[0].appendChild(newelement);
+				this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
 			}
 		}
 	}
 	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
-	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (this.clause=="xsi_type='Get_Resource'")
+		this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	else // asmUnitStructure - Get_Resource
+		this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.inline = ($("metadata",node).attr('inline')=='Y') ? true : false;
 	this.display = {};
 	this.displayCode = {};
@@ -190,15 +193,15 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 	if (itself.encrypted)
 		code = "rc4"+encrypt(code,g_rc4key);
 	//---------------------
-	$(itself.value_node).text(value);
-	$(itself.code_node).text(code);
+	$(itself.value_node[0]).text(value);
+	$(itself.code_node[0]).text(code);
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);
 		//---------------------
 		if (itself.encrypted)
 			label = "rc4"+encrypt(label,g_rc4key);
 		//---------------------
-		$(itself.label_node[i]).text(label);
+		$(itself.label_node[i][0]).text(label);
 	}
 	itself.save();
 };
@@ -519,9 +522,15 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 UIFactory["Get_Resource"].prototype.save = function()
 //==================================
 {
-	UICom.UpdateResource(this.id,writeSaved);
-	if (!this.inline)
-		this.refresh();
+	if (this.clause=="xsi_type='Get_Resource'") {
+		UICom.UpdateResource(this.id,writeSaved);
+		if (!this.inline)
+			this.refresh();
+	}
+	else {// Node - Get_Resource {
+		UICom.UpdateNode(this.id);
+		UICom.structure.ui[this.id].refresh()
+	}	
 };
 
 //==================================

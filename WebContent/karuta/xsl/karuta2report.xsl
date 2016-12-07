@@ -253,7 +253,7 @@
 		</aggregate>
 	</xsl:template>
 	
-	<!-- ================ draw-web-axis ============================ -->
+	<!-- ================ draw-web-title ============================ -->
 	<xsl:template match="*[metadata/@semantictag='draw-web-title']">
 		<xsl:variable name="editresroles">
 			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
@@ -352,6 +352,9 @@
 		<xsl:variable name="max">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-max']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="pos">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='position']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="legendtype">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='legendtype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
@@ -381,6 +384,9 @@
 			</xsl:if>
 			<xsl:if test="not($min='..')">
 				<xsl:attribute name="min"><xsl:value-of select="$min"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($pos='..')">
+				<xsl:attribute name="pos"><xsl:value-of select="$pos"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($max='..')">
 				<xsl:attribute name="max"><xsl:value-of select="$max"/></xsl:attribute>

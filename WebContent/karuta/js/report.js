@@ -1015,6 +1015,11 @@ function r_processWebLine(xmlDoc,destid,data,no)
 	var test = $(xmlDoc).attr("test");
 	var min = $(xmlDoc).attr("min");
 	var max = $(xmlDoc).attr("max");
+	var pos = $(xmlDoc).attr("pos");
+	if (pos==undefined)
+		pos = 0;
+	if (pos > no)
+		no = pos;
 	var html = "";
 	if (select!=undefined) {
 		var selector = r_getSelector(select,null);
@@ -1047,7 +1052,7 @@ function r_processWebLine(xmlDoc,destid,data,no)
 		};
 		for (var i=0; i<nodes.length;i++){
 			drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+no);
-			if (no==0){
+			if (no==0 && pos==0){
 				for (var j=1;j<max;j++) {
 					drawGraduationLine(destid,j,max,angle*i,svgcenter,'svg-web-line'+no);
 					if (i==0)
