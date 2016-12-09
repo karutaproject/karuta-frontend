@@ -301,6 +301,7 @@ function fill_search_page(code)
 		type : "GET",
 		dataType : "xml",
 		url : url1,
+		code : code,
 		success : function(data) {
 			var nb = parseInt($('portfolios',data).attr('count'));
 			UIFactory["Portfolio"].parse(data);
@@ -310,12 +311,14 @@ function fill_search_page(code)
 				$("#projects-label").hide();
 				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
 			}
-			if ($("#portfolios").html()==""){
-				hideArchiveSearch();
-				$("#portfolios-div").hide();				
+			if (this.code!=""){
+				showArchiveSearch();
+				if ($("#portfolios").html()=="")
+					$("#portfolios-div").hide();
 			}
 			else {
-				showArchiveSearch();
+				hideArchiveSearch();
+				$("#portfolios-div").hide();				
 			}
 			if (USER.admin || USER.creator) {
 				$.ajax({

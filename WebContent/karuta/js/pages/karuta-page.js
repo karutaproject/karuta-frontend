@@ -155,10 +155,10 @@ function getSearch()
 	var html = "";
 	html += "<div id='search' class='input-group'>";
 	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"' onchange='javascript:hideArchiveSearch()'>";
-	html += "	<span class='input-group-btn'><button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><span class='glyphicon glyphicon-search'></span></button></span>";
-	html += "	<span id='search-archive' class='input-group-btn' style='visibility:hidden'>";
-	html += "	<span class='input-group-btn'><a id='archive-button' href='' class='btn'><i class='fa fa-archive'></i></a></span>";
-	html += "	<span class='input-group-btn'><button id='remove-button' type='button' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fa fa-trash-o'></i></button></span>";
+	html += "	<span class='input-group-btn'>";
+	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><span class='glyphicon glyphicon-search'></span></button>";
+	html += "		<a id='archive-button' href='' class='btn' disabled='true'><i style='margin-top:4px' class='fa fa-download'></i></a>";
+	html += "		<button id='remove-button' type='button' disabled='true' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fa fa-trash-o'></i></button>";
 	html += "	</span>";
 	html += "</div>";
 	return html;
@@ -173,7 +173,8 @@ function showArchiveSearch()
 		archive_href += ","+portfolios_list[i].id;
 	}
 	$("#archive-button").attr("href",archive_href);
-	$("#search-archive").css('visibility','visible');
+	$("#archive-button").attr('disabled',false);
+	$("#remove-button").prop('disabled', false);
 }
 
 //==============================
@@ -181,5 +182,6 @@ function hideArchiveSearch()
 //==============================
 {
 	$("#archive-button").attr("href","");
-	$("#search-archive").css('visibility','hidden');
+	$("#archive-button").attr('disabled', true);
+	$("#remove-button").prop('disabled', true);
 }

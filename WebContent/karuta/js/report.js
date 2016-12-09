@@ -823,7 +823,7 @@ function xml2RTF(content)
 function displayRTFButton()
 //==================================
 {
-	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2RTF('report-pdf')\">RTF</button>";
+	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2RTF('report-pdf')\">RTF/Word</button>";
 	$("#report-pdf").html(html);
 }
 
