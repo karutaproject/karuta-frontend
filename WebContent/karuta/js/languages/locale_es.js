@@ -47,6 +47,7 @@ karutaStr['es']['userofgroup']="Usagers dans le groupe";
 karutaStr['es']['group']="Groupe";
 karutaStr['es']['move']="Déplacer vers";
 karutaStr['es']['enter-text']="Tapez votre texte ...";
+karutaStr['es']['empty-bin']="Vider la poubelle";
 
 //=========================================
 //========== NODE =====================

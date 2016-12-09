@@ -154,8 +154,55 @@ function getSearch()
 {
 	var html = "";
 	html += "<div id='search' class='input-group'>";
-	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"'>";
+	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"' onchange='javascript:hideArchiveSearch()'>";
+//	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"'>";
 	html += "	<span class='input-group-btn'><button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><span class='glyphicon glyphicon-search'></span></button></span>";
+	html += "	<span id='search-archive' class='input-group-btn' style='visibility:hidden'>";
+//	html += "	<span class='input-group-btn'><button id='archive-button' type='button' onclick='archivePortfolio()' class='btn' style='visibility:hidden'><i class='fa fa-archive' aria-hidden='true'></i></button></span>";
+//	html += "	<span class='input-group-btn'><button id='remove-button' type='button' onclick='removePortfolio()' class='btn' style='visibility:hidden'><i class='fa fa-trash-o' aria-hidden='true'></i></button></span>";
+//	html += "	<span class='input-group-btn'><button id='archive-button' type='button' onclick=\"UIFactory['Portfolio'].archivePortfolios()' class='btn'><i class='fa fa-archive'></i></button></span>";
+	html += "	<span class='input-group-btn'><a id='archive-button' href='' class='btn'><i class='fa fa-archive'></i></a></span>";
+	html += "	<span class='input-group-btn'><button id='remove-button' type='button' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fa fa-trash-o'></i></button></span>";
+	html += "	</span>";
 	html += "</div>";
 	return html;
+}
+
+//==============================
+function showArchiveSearch()
+//==============================
+{
+	var archive_href = "../../../"+serverBCK+"/portfolios/zip?portfolios="+portfolios_list[0].id;
+	for (var i = 1; i < portfolios_list.length; i++) {
+		archive_href += ","+portfolios_list[i].id;
+	}
+	$("#archive-button").attr("href",archive_href);
+	$("#search-archive").css('visibility','visible');
+//	$("#archive-button").css('visibility','visible');
+//	$("#remove-button").css('visibility','visible');
+}
+
+//==============================
+function hideArchiveSearch()
+//==============================
+{
+	$("#archive-button").attr("href","");
+	$("#search-archive").css('visibility','hidden');
+//	$("#archive-button").css('visibility','hidden');
+//	$("#remove-button").css('visibility','hidden');
+//	alertHTML("search changed");
+}
+
+//==============================
+function archivePortfolio()
+//==============================
+{
+	  alert( "Handler for archivePortfolio called." );
+}
+
+//==============================
+function removePortfolio()
+//==============================
+{
+	  alert( "Handler for removePortfolio called." );
 }

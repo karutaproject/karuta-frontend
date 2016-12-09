@@ -49,6 +49,7 @@ karutaStr['ja']['move']="次に移動";
 karutaStr['ja']['enter-text']="何かを入力してください ...";
 karutaStr['ja']['not-logged']="Vous are not connected.";
 karutaStr['ja']['translate']="Translate";
+karutaStr['ja']['empty-bin']="Empty bin";
 
 //=========================================
 //========== NODE =====================

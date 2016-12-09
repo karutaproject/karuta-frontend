@@ -33,7 +33,11 @@ function getList()
 		var text2 = karutaStr[LANG]['bin'];
 		if (USER.admin)
 			text2 = karutaStr[LANG]['bin-admin'];
-		html += "<h3 id='bin-label'>"+text2+"</h3>";
+		html += "<h3 id='bin-label'>"+text2;
+		html += "&nbsp<button class='btn btn-xs' onclick=\"confirmDelPortfolios_EmptyBin()\">";
+		html += karutaStr[LANG]["empty-bin"];
+		html += "</button>";
+		html += "</h3>";
 		html += "<div  id='bin'>";
 	}
 	html += "</div>";
@@ -306,8 +310,13 @@ function fill_search_page(code)
 				$("#projects-label").hide();
 				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
 			}
-			if ($("#portfolios").html()=="")
-				$("#portfolios-div").hide();
+			if ($("#portfolios").html()==""){
+				hideArchiveSearch();
+				$("#portfolios-div").hide();				
+			}
+			else {
+				showArchiveSearch();
+			}
 			if (USER.admin || USER.creator) {
 				$.ajax({
 					type : "GET",

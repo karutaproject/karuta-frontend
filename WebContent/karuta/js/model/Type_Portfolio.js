@@ -2476,4 +2476,50 @@ UIFactory["Portfolio"].prototype.getTreeType = function()
 	return tree_type;
 };
 
+//==================================
+UIFactory["Portfolio"].removePortfolios = function() 
+//==================================
+{
+	$("#wait-window").show();
+	//----------------
+	$.ajaxSetup({async: false});
+	for (var i=0;i<portfolios_list.length;i++){
+		var uuid = portfolios_list[i].id;
+		var url = "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "?active=false";
+		$.ajax({
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			data : "",
+			success : function(data) {
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error in removePortfolios : "+jqxhr.responseText);
+			}
+		});
+	}
+	searchPortfolio();
+	$("#wait-window").hide();
+	$.ajaxSetup({async: true});
+	//----------------
+}
+
+//==================================
+UIFactory["Portfolio"].emptyBin = function() 
+//==================================
+{
+	$("#wait-window").show();
+	//----------------
+	$.ajaxSetup({async: false});
+	for (var i=0;i<bin_list.length;i++){
+		if (bin_list[i]!=null) {
+			UIFactory.Portfolio.del(bin_list[i].id);
+		}
+	}
+	searchPortfolio();
+	$("#wait-window").hide();
+	$.ajaxSetup({async: true});
+	//----------------
+}
 
