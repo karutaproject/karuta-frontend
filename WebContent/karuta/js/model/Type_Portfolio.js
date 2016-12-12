@@ -332,10 +332,10 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 				//-------------------- PORTFOLIO ----------------------
 				var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
 				if (parentcode!= null && portfolio_parentcode==parentcode) {
-					if (projects_list[number_of_projects-1].portfolios!="")
-						projects_list[number_of_projects-1].portfolios += ","+portfolio.id;
-					else
-						projects_list[number_of_projects-1].portfolios += portfolio.id;
+//					if (projects_list[number_of_bins-1].portfolios!="")
+//						projects_list[number_of_bins-1].portfolios += ","+portfolio.id;
+//					else
+//						projects_list[number_of_projects-1].portfolios += portfolio.id;
 					$("#"+dest).append($("<div class='row'   id='portfolio_"+portfolio.id+"'></div>"));
 				}
 				else {

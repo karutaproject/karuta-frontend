@@ -168,8 +168,8 @@ function getSearch()
 function showArchiveSearch()
 //==============================
 {
-	var archive_href = "../../../"+serverBCK+"/portfolios/zip?portfolios="+portfolios_list[0].id;
-	for (var i = 1; i < portfolios_list.length; i++) {
+	var archive_href = "../../../"+serverBCK+"/portfolios/zip?portfolios=";
+	for (var i = 0; i < portfolios_list.length; i++) {
 		archive_href += ","+portfolios_list[i].id;
 	}
 	$("#archive-button").attr("href",archive_href);
