@@ -170,7 +170,9 @@ function showArchiveSearch()
 {
 	var archive_href = "../../../"+serverBCK+"/portfolios/zip?portfolios=";
 	for (var i = 0; i < portfolios_list.length; i++) {
-		archive_href += ","+portfolios_list[i].id;
+		if (i>0)
+			archive_href += ","
+		archive_href += portfolios_list[i].id;
 	}
 	$("#archive-button").attr("href",archive_href);
 	$("#archive-button").attr('disabled',false);
