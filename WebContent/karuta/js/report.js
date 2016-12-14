@@ -999,7 +999,7 @@ function r_processWebAxis(xmlDoc,destid,data)
 				text = UICom.structure["ui"][nodeid].getValue();
 			}
 			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
+				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
 			}
 			drawAxis(destid,text,svgfontname,svgfontsize,angle*i,svgcenter,svgaxislength);
 		};
@@ -1046,7 +1046,7 @@ function r_processWebLine(xmlDoc,destid,data,no)
 				text = UICom.structure["ui"][nodeid].getValue();
 			}
 			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
+				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
 			}
 			points[points.length] = {'value': ((text - min)/(max-min))*svgaxislength, 'angle':angle*i};
 		};
@@ -1088,7 +1088,7 @@ function r_processWebLine(xmlDoc,destid,data,no)
 					text = UICom.structure["ui"][nodeid].getValue();
 				}
 				if (selector.type=='node context') {
-					text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
+					text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
 				}
 			};
 			var line = makeSVG('line',{'x1':10,'y1':975-20*no,'x2':10,'y2':975-20*no,'class':'svg-web-value'+no});
