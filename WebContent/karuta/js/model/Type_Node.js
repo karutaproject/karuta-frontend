@@ -2823,6 +2823,24 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 };
 
 //==================================================
+UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4)
+//==================================================
+{	// note: #xxx is to avoid to scroll to the top of the page
+	if (srce=="self")
+		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	var html = "<a class='button text-button' href='#xxx' onclick=\"";
+	var semtags = tag.split(" ");
+	for (var i=0;i<semtags.length;i++){
+		if (semtags[i].length>0)
+		html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+	}
+	html += "\">";
+	html += title;
+	html += "</a>";
+	return html;
+};
+
+//==================================================
 UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4,freenode)
 //==================================================
 {	// note: #xxx is to avoid to scroll to the top of the page
@@ -3204,6 +3222,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- submit  -------------------
 	if (submitroles!='none' && submitroles!='') {
+<<<<<<< HEAD:WebContent/karuta/js/model/Type_Node.js
 		if ( submitted!='Y' && (
 				(submitnode && ( submitroles.indexOf(g_userroles[0])>-1 || submitroles.indexOf($(USER.username_node).text())>-1)
 				|| USER.admin
@@ -3211,6 +3230,9 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 				|| ( g_userroles[1]=='designer' && submitroles.indexOf(g_userroles[0])>-1)
 				|| submitroles.indexOf(userrole)>-1 )))
 		{
+=======
+		if ( submitted!='Y' && ((submitnode && ( submitroles.containsArrayElt(g_userroles) || submitroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer' || ( g_userroles[1]=='designer' && submitroles.indexOf($(g_userroles[0]).text())>-1) || submitroles.indexOf(userrole)>-1)) {
+>>>>>>> origin/master:karuta/js/model/Type_Node.js
 			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"')\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
 		} else {
