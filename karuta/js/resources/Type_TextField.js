@@ -185,7 +185,8 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	var uuid = this.id;
 	var html = "";
 	if (type=='default') {
-		html += "<div id='div_"+this.id+"'><span id='counter_"+this.id+"' style='float:right'></span><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' style='height:200px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
+		html += "<button id='button_"+this.id+"' class='glyphicon glyphicon-resize-full' style='height:24px;float:right;' onclick=\"UIFactory.TextField.toggleExpand('"+this.id+"','"+langcode+"')\"></button>";
+		html += "<div id='div_"+this.id+"'><span id='counter_"+this.id+"' style='float:right'></span><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' expand='false' style='height:300px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
 		if (disabled)
 			html += "disabled='disabled' ";
 		html += ">"+text+"</textarea></div>";
@@ -202,8 +203,26 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (this.maxword>0) {
 		$("#counter_"+uuid).html(countWords(text)+"/"+this.maxword);
 	}
+	$(".modal-dialog").css('width','600px');
 	$("#"+uuid+"_edit_"+langcode).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'load': function(){$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][currentTexfieldUuid].resource.updateCounterWords(langcode);});},'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
 	//------------------------------------------------
+};
+
+//==================================
+UIFactory["TextField"].toggleExpand = function(uuid,langcode)
+//==================================
+{
+	if ($("#"+uuid+"_edit_"+langcode).attr('expand')=='false') {
+		$("#button_"+uuid).removeClass('glyphicon-resize-full').addClass('glyphicon-resize-small');
+		$("#"+uuid+"_edit_"+langcode).attr('expand','true');
+		$(".wysihtml5-sandbox").css('height','600px');
+		$(".modal-dialog").css('width','90%');
+	} else {
+		$("#button_"+uuid).removeClass('glyphicon-resize-small').addClass('glyphicon-resize-full');
+		$("#"+uuid+"_edit_"+langcode).attr('expand','false');
+		$(".wysihtml5-sandbox").css('height','300px');
+		$(".modal-dialog").css('width','600px');
+	}
 };
 
 //==================================

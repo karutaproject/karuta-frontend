@@ -1,7 +1,7 @@
 /* ========== pages list portfolios and list users ============ */
 
 
-@import "../../application/css/specific.less";
+@import "@{KARUTA-CONFIG}";
 
 
 /* ====================== */
@@ -19,6 +19,9 @@
 	color:@portfolio-buttons-color;
 }
 
+#contenu {
+	background-color: white;
+}
 
 .button:hover {
 	box-shadow: 0px 0px 1px @portfolio-buttons-color inset;
@@ -28,7 +31,12 @@
 /* 	border:1px solid @portfolio-buttons-color;*/
 	}
 
-.list-page{
+.list-page,
+.list-portfoliosgroups,
+.list-usersgroups,
+.list-users,
+.exec_report,
+.exec_batch{
 	background-color:@list-background-color;
 }
 
@@ -135,12 +143,13 @@ a, .collapsible {
 }
 
 
-html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #contenu {
-	height:100%;	
+html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
+	height:100%;
+	min-height:110%;
 }
 
-#sidebar.col-md-3{
-	height:100%;
+#main-container blockquote {
+	font-size: 12px;
 }
 
 #contenu {
@@ -209,13 +218,16 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	cursor:pointer;
 }
 
+.word-counter {
+	margin-right:10px;
+	margin-top:5px;
+}
 
 /* ====================== */
 /*     PAGE LIST     */
 /* ====================== */
 #usersgroups .row,
-#projects .row,
-#portfolios .row,
+#list .row,
 #bin .row,
 #selectform-projects .row,
 #main-user  {
@@ -224,7 +236,9 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 #projects-label,
+#projects-nb,
 #portfolios-label,
+#portfolios-nb,
 #bin-label,
 #active-users,
 #portfoliosgroups-label,
@@ -364,9 +378,16 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 	color:@list-button-color;
 }
 
+.portfolios-not-in-project{
+	margin-left:0px;
+	margin-right:0px;
+}
+
+
 #usersgroups .usersgroup-users,
 .usersgroup,
 .project,
+.portfolios-not-in-project,
 .portfoliosgroup {
 	margin-top:10px;
 	padding:7px;
@@ -484,7 +505,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 #bin .row:hover .col-md-3,
 #bin .row:hover .col-md-2,
 #bin .row:hover .col-md-1 {
-	background-color:@list-background-color-complement;
+	background-color:@list-background-color;
 }
 
 #portfoliosgroups .row:hover {
@@ -592,7 +613,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 
 #sidebar-content {
 	padding-top:15px;
-	height: 100%;
+	min-height: 100%;
 	padding-left:0px;
 	padding-right:0px
   }
@@ -691,6 +712,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 }
 
 /* ============================================== */
+#edit-window-body-node .btn,
 #edit-window-body-resource .btn,
 .resource .btn {
 	min-height:34px;
@@ -703,10 +725,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page, #co
 
 .sidebar-link {
 	padding-right:9px;
-}
-
-#sidebar {
-	height:100%;
 }
 
 /* --- buton are redefined to use with Ipad and solve size errors */
@@ -861,7 +879,6 @@ hr {
 
 .inside-full-height {
 	padding:7px;
-	height: 100%;
 	margin-top: 0;
 	margin-bottom: 0;
 	min-height: 34px;
@@ -1346,9 +1363,6 @@ a.active:over{
 .edit-inline .get-radio {
 	margin-left:20px;
 }
-.get-radio:first-of-type{
-	margin-top:20px;
-}
 
 .click-item{
 	padding-left:5px;
@@ -1363,6 +1377,11 @@ a.active:over{
 /* ====================
 	Select Drop Down
    ====================*/
+
+.li-code {
+	float:left;
+	padding-right:10px;
+}
 
 .dropdown-button{
 	font-size:10pt;
@@ -1450,6 +1469,7 @@ button.select-label {
 	font-style:italic;
 	font-size:11px;
 	font-weight:normal;
+	padding:7px;
 }
 
 .evo-palette {
@@ -1597,6 +1617,9 @@ table.tablesorter th.restore {
 	border:2px solid Crimson;
 }
 
+.report .draw-web-title,
+.report .draw-web-line,
+.report .draw-web-axis,
 .report .node_resource,
 .report .text,
 .report .url2unit,
@@ -1605,6 +1628,12 @@ table.tablesorter th.restore {
 	border:1px dashed lightgrey;
 	margin-bottom:5px;
 }
+
+.report .draw-web-title,
+.report .draw-web-axis{
+	min-height:100px;
+}
+
 .report .select{
 	padding-left:0px;
 	border-left:0px solid lightgrey;
@@ -1632,13 +1661,18 @@ table.tablesorter th.restore {
 }
 
 .createreport table {
-	margin-bottom:5px;
+	margin-bottom:0px;
 }
 
 .createreport td {
 	padding:5px;
 	border:1px solid lightgrey;
 }
+
+.createreport ul {
+	margin-bottom:0px;
+}
+
 
 .aggregatetype select,
 .nodetype select,
@@ -1673,6 +1707,10 @@ table.tablesorter th.restore {
 	padding:5px;
 	border-top:1px solid #C0C0C0;
 	border-bottom:1px solid #C0C0C0;
+}
+
+.model-content {
+	font-size:14px;
 }
 
 .model-content .asmContext{
@@ -1735,6 +1773,11 @@ table.tablesorter th.restore {
 	border:1px solid lightGreen ;
 }
 
+.batch .unshare-tree{
+	margin-top:7px;
+	border:1px solid #ACFA58 ;
+}
+
 .batch .select-tree{
 	margin-top:7px;
 	border:1px solid GreenYellow ;
@@ -1743,6 +1786,16 @@ table.tablesorter th.restore {
 .batch .delete-tree{
 	margin-top:7px;
 	border:1px solid Aquamarine ;
+}
+
+.batch .share-usergroup{
+	margin-top:7px;
+	border:1px solid #46C7C7 ;
+}
+
+.batch .unshare-usergroup{
+	margin-top:7px;
+	border:1px solid #46C7C7 ;
 }
 
 
@@ -1780,6 +1833,17 @@ table.tablesorter th.restore {
 	margin-top:7px;
 	border:1px solid Pink ;
 }
+
+.batch .join-usergroup {
+	margin-top:7px;
+	border:1px solid Yellow ;
+}
+
+.batch .leave-usergroup {
+	margin-top:7px;
+	border:1px solid Orange ;
+}
+
 
 .batch .update-tree-root {
 	margin-top:7px;
@@ -1945,6 +2009,18 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .Y1 {color: #fff; background: red;}
 .Y2 {color: #fff; background: green;}
 
+.BDG { color: black; background: lightgrey; padding:4px;border-radius:4px;}
+
+.selGREEN {color: black; background: #66cc00;}
+.selORANGE {color: black; background: orange;}
+.selYELLOW {color: black; background: yellow;}
+.selBLUE {color: black; background: yellow;}
+.selRED {color: black; background: #ff3333;}
+.GREEN {color: black; background: #66cc00;}
+.RED {color: black; background: #ff3333;}
+.ORANGE {color: black; background: orange;}
+.YELLOW {color: black; background: yellow;}
+.BLUE {color: black; background: #0080ff;}
 
 .selSMILEY-HAPPY, .SMILEY-HAPPY {
 	background-image: url("../../karuta/img/smiley-happy.png");
@@ -2102,6 +2178,21 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .europass_table td.buttons {
 	width:50px;
 }
+
+.select-language .li-code{
+	width:30px;
+	font-family:Monaco, Consolas, monospace;
+}
+
+.mothertongue-label {
+	font-size:14px;
+	font-weight: 500;
+}
+
+.mothertongue-value {
+	margin-left:20px;
+}
+
 /* ====================
 	BUBBLE
    ====================*/
@@ -2142,16 +2233,23 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 /* ====================
 	PUBLIC SHARED PAGE
    ====================*/
-   
-.public-container #contenu{
-	padding:10px;
-	background-color:white;
+.public-container .public-row,
+.public-container .col-md-3,   
+.public-container #sidebar{
+	height:100%;
 }
 
+<<<<<<< HEAD:WebContent/karuta/css/karuta.less
+.public-container .col-md-3{
+	padding-left:0px;
+	padding-right:0px;
+=======
 .public-container #sidebar{
 	padding:10px;
 	background-color:@portfolio-sidebar-color;
+>>>>>>> origin/master:karuta/css/karuta.less
 }
+
 
 .asmColumn {
 	height:100%;
@@ -2305,12 +2403,221 @@ div.oembedall-container {
 	padding-top:7px;
 	display:in-line;
 }
+
 /* ===========================
 	PORTFOLIO
    ===========================*/
-
 
 #sidebar .selected{
 	padding-right:5px;
 }
 
+/* ===========================
+	SEARCH PORTFOLIO
+   ===========================*/
+
+.search {
+	height:35px;
+}
+
+#search {
+	float:right;
+	margin-top:5px;
+	width:330px;
+	margin-right:20px;
+}
+
+
+#archive-button,
+#remove-button,
+#search-button {
+	height:34px;
+	background-color:@list-button-background-color;
+	color:@list-button-color;
+}
+
+#search-label {
+	float:right;
+	color:@list-icon-section-color;
+	line-height:34px;
+	height:34px;
+	margin-top:5px;
+}
+
+#list {
+	padding-bottom:10px;
+}
+
+.number_of_projects_portfolios {
+	margin-left:5px;
+	color: @list-icon-section-color;
+	background-color:@list-background-color;
+}
+
+.portfolios-nb,
+.projects-nb {
+	background-color:@list-background-color-complement;
+}
+
+.free-selected {
+	border:1px dashed red;
+}
+
+/* ===========================
+	SEARCH USER
+   ===========================*/
+
+
+#search-user {
+	float:right;
+	margin-top:5px;
+	width:460px;
+	margin-right:20px;
+}
+
+#search-choice {
+	width:100px;
+}
+
+#search-button-username,
+#search-button-firstname,
+#search-button-lastname
+{
+	height:34px;
+	background-color:@list-button-background-color;
+	color:@list-button-color;
+}
+
+/* ===========================
+	SVG
+   ===========================*/
+*[class*='svg-web-line'] {
+	stroke:black;
+	stroke-width:1;
+}
+
+*[class*='svg-web-value'] {
+	stroke:black;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+
+.svg-web-line0 {
+	stroke:@svg-web0-color;
+	stroke-width:1;
+}
+
+.svg-web-value0 {
+	stroke:@svg-web0-color;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+
+.svg-web-line1 {
+	stroke:@svg-web1-color;
+	stroke-width:1;
+}
+
+.svg-web-value1 {
+	stroke:@svg-web1-color;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+
+.svg-web-line2 {
+	stroke:@svg-web1-color;
+	stroke-width:1;
+}
+
+.svg-web-value2 {
+	stroke:@svg-web1-color;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+
+.svg-web-line3 {
+	stroke:@svg-web1-color;
+	stroke-width:1;
+}
+
+.svg-web-value3 {
+	stroke:@svg-web1-color;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+
+.svg-web-line4 {
+	stroke:@svg-web1-color;
+	stroke-width:1;
+}
+
+.svg-web-value4 {
+	stroke:@svg-web1-color;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+
+.svg-web-line5 {
+	stroke:@svg-web1-color;
+	stroke-width:1;
+}
+
+.svg-web-value5 {
+	stroke:@svg-web1-color;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+
+.svg-web-line6 {
+	stroke:@svg-web1-color;
+	stroke-width:1;
+}
+
+.svg-web-value6 {
+	stroke:@svg-web1-color;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+
+.svg-web-line7 {
+	stroke:@svg-web1-color;
+	stroke-width:1;
+}
+
+.svg-web-value7 {
+	stroke:@svg-web1-color;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+.svg-web-line8 {
+	stroke:@svg-web1-color;
+	stroke-width:1;
+}
+
+.svg-web-value8 {
+	stroke:@svg-web1-color;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+.svg-web-line9 {
+	stroke:@svg-web1-color;
+	stroke-width:1;
+}
+
+.svg-web-value9 {
+	stroke:@svg-web1-color;
+	stroke-width:7;
+	stroke-linecap:round;
+}
+
+/* ===========================
+	ZEBRA-TABLE
+   ===========================*/
+
+.zebra-table tr:nth-child(even) {
+	background-color: #d8d8d8;
+}
+
+.zebra-table td {
+	border: 0px solid white; padding: 10px;
+}

@@ -115,9 +115,9 @@ function displaySocialNetwork()
 	
 		  <!-- Tab panes -->
 		html += "	<div class='tab-content'>";
-		html += "		<div role='tabpanel' class='tab-pane active' id='activities'></div>";
-		html += "		<div role='tabpanel' class='tab-pane' id='public'>...</div>";
-		html += "		<div role='tabpanel' class='tab-pane' id='groups'>...</div>";
+		html += "		<ul style='list-style:none;' role='tabpanel' class='tab-pane active' id='activities'></ul>";
+		html += "		<ul style='list-style:none;' role='tabpanel' class='tab-pane' id='public'>...</ul>";
+		html += "		<ul style='list-style:none;' role='tabpanel' class='tab-pane' id='groups'>...</ul>";
 		html += "	</div>";
 	
 		html += "</div>";

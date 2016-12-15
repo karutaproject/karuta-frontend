@@ -130,7 +130,7 @@
 			<div id='main-container' class="container-fluid"></div>
 			<div id='var-list' class="container-fluid"></div>
 		</div>
-		<div id='social-button' onclick='toggleSocialNetwork()'></div>
+		<div id='scial-button' onclick='toggleSocialNetwork()'>AAAA</div>
 		<!-- ==================== wait box ====================================== -->
 		<div id='wait-window' class='modal' style='height:100px;'>
 			<div id='wait-window-body' class='modal-body' style='text-align:center;'></div>
@@ -181,7 +181,7 @@
 						if (elgg_installed!=undefined && elgg_installed) {
 							var html = "";
 							html += "<div id='global-row' class='row'>";
-							if (g_socialnetwork==undefined || g_socialnetwork=='shown'){
+							if (g_socialnetwork=='shown'){
 								html += "	<div id='main-content' class='col-md-8 col-md-push-4'>";
 								html += "		<div><i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i></div>";
 								html += "		<div id='main-list'></div>";
@@ -209,10 +209,10 @@
 							html += "</div>";								
 							$("#main-container").html(html);
 							displaySocialNetwork();
-							if (g_socialnetwork==undefined || g_socialnetwork=='shown')
-								$("#social-button").html("<i id='toggleSocialNetwork' class='fa fa-arrow-left'></i>");
+							if (g_socialnetwork=='shown')
+								$("#scial-button").html("<i id='toggleSocialNetwork' class='fa fa-arrow-left'></i>");
 							else
-								$("#social-button").html("<i id='toggleSocialNetwork' class='fa fa-arrow-right'></i>");
+								$("#scial-button").html("<i id='toggleSocialNetwork' class='fa fa-arrow-right'></i>");
 						} else {
 							var html = "";
 							html += "<div id='global-row' class='row'>";
@@ -226,7 +226,7 @@
 							html += "	<div id='main-exec-report' class='col-md-12' style='display:none'></div>";
 							html += "</div>";
 							$("#main-container").html(html);
-							$("#social-button").hide();
+							$("#scial-button").hide();
 						}
 						//-------------------------------
 						display_list_page();

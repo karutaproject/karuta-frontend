@@ -26,7 +26,7 @@
 						<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
 					</fo:block>
 					<fo:block margin-left="10pt">
-						<xsl:for-each select="asmStructure[not(metadata-wad/@displaytree='none')]|asmUnit[not(metadata-wad/@displaytree='none')]">
+						<xsl:for-each select="asmStructure[not(metadata-wad/@displaytree='none')]|asmUnit[not(metadata-wad/@displaytree='none')][not(metadata/@semantictag='welcome-unit')]">
 								<xsl:choose>
 								<xsl:when test="local-name()='asmStructure'">
 									<xsl:call-template name="node_asmStructure"/>
