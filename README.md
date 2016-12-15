@@ -4,7 +4,7 @@ Karuta
 **Karuta** is a very flexible environment to design, test and deploy simple and sophisticated learning and evaluation portfolios. Karuta exploits and enriches the hierarchical structure of web pages with a comprehensive set of specialized resources and semantic tags. The objects (trees, nodes, leafs), which are manipulated through a rich-client approach based on jQuery javascript library, are displayed with CSS from the Twitter Bootstrap library and saved with a comprehensive set of REST APIs implemented in Java and MySQL (Oracle forthcoming). With Karuta,  a designer can quickly construct very sophisticated workflows where different users (students, instructors, etc.) are assigned to a wide range of actions (reflect, upload files, comment, evaluate, grade with rubrics, etc.) without the help of a developer.  Karuta integrates the Responsive Design approach and can thus be displayed on various mobile devices.  Karuta has built-in import and export functionalities. 
 Download Karuta
 -------
-To download executable files go to [ePortfolium website](http://www.eportfolium.com/karuta_download_en.htm)
+To download executable files go to [ePortfolium website](http://www.eportfolium.com/site/karuta_download_en.htm)
 Installing Karuta Source Code
 -------
 Tomcat 7 is recommended.

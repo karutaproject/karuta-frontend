@@ -1,0 +1,129 @@
+#socialnetwork {
+	padding:20px;
+	margin-left:-15px;
+	background-color:white;
+	height:100%;
+}
+
+#socialnetwork .elgg-error {
+	margin-top:20px;
+	font-size:20px;
+	text-align:center;
+	padding:10px;
+	border:1px solid lightgrey;
+}
+
+
+#socialnetwork .hello {
+	font-size:20px;
+	text-align:center;
+	padding:10px;
+}
+
+#socialnetwork .welcome-line {
+    border-bottom: 1px solid #e0006d;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+}
+
+#main-row .col-md-6,
+#main-row .col-md-6 #socialnetwork {
+	height:100%;	
+}
+
+#socialnetwork .fa-users{
+	font-size:70px;
+}
+
+#socialnetwork .user {
+	padding:20px;
+	text-align:center;
+}
+
+#socialnetwork .publish_on {
+	text-align:center;
+}
+
+#socialnetwork textarea {
+	margin-bottom:10px;
+}
+
+#socialnetwork .publish {
+	margin-top:15px;
+}
+
+#socialnetwork .publish table{
+	float:right;
+}
+
+#socialnetwork .publish-button,
+#socialnetwork .group-button {
+    background-color: #18b8d6;
+    color: white;
+    font-size: 14px;
+    padding: 4px 15px;
+    cursor:pointer;
+    height:20px;
+}
+
+#socialnetwork .text-group {
+    font-size: 14px;
+    padding: 4px 15px;
+}
+
+
+#socialnetwork .dropdown-button {
+	border-radius:0px;
+}
+
+#socialnetwork .dropdown-menu {
+	border-radius:0px;
+    background-color: #18b8d6;
+    color: white;
+    font-size: 14px;
+}
+
+#socialnetwork .panels {
+	margin-top:10px;
+}
+
+.elgg-river-item {
+	border-bottom: 1px solid lightgrey;	
+}
+
+#socialnetwork .media-heading .glyphicon {
+	margin-left:10px;
+	color: #18b8d6;
+	float:right;
+	cursor:pointer;
+}
+
+#socialnetwork .likes {
+	color: #18b8d6;
+	float:right;
+}
+
+
+.reply-button{
+	background-color: #18b8d6;
+    color: white;
+    font-size: 14px;
+	padding-left:8px;
+	padding-right:8px;
+	padding-top:2px;
+	padding-bottom:8px;
+	cursor:pointer;
+}
+
+#socialnetwork .group-label {
+	margin-top:20px;
+	font-size:20px;
+	border-bottom: 1px solid #e0006d;
+	width:25%;
+}
+
+
+
+
+
