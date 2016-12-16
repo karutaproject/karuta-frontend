@@ -17,7 +17,6 @@ karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['loading']="Loading... ";
 karutaStr['en']['create_pdf']="Create PDF";
 karutaStr['en']['create_pdf_toc']="Create PDF with TOC";
-karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['Update']="Update";
 karutaStr['en']['Create']="Create";
 karutaStr['en']['Change']="Change";
@@ -64,7 +63,6 @@ karutaStr['en']['password-mismatch']="The two passwords do not match.";
 karutaStr['en']['saved']="Saved";
 karutaStr['en']['password-sent']="A new password has been sent by email.";
 karutaStr['en']['new-account']="You don't have an account?";
-karutaStr['en']['sign-up']="Sign Up!";
 karutaStr['en']['disconnected']="Oups! You have accidentally been disconnected!";
 karutaStr['en']['demo-documentation']="Import Karuta Documentation";
 karutaStr['en']['demo-ecommerce']="Import eCommerce Demo Portfolios";
@@ -79,6 +77,8 @@ karutaStr['en']['choose']="Choose";
 karutaStr['en']['quit']="Quit";
 karutaStr['en']['menu']="Menu";
 karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Height : 220<br>&nbsp; - Width : 800 divided by number of columns<br>&nbsp;";
+karutaStr['en']['sign-up']="Sign Up!";
+karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['list-novisible']="Not Visible";
 karutaStr['en']['empty-bin']="Empty bin";
 
@@ -172,19 +172,14 @@ karutaStr['en']['encrypted']="Encrypt Ressource";
 karutaStr['en']['get_rc4key']="Parts of this document are encrypted.\nFist Visit: Choose a key sentence.\nReturning Visits: Type your key sentence. ";
 karutaStr['en']['error_rc4key']="Error in key sentence.";
 karutaStr['en']['seltype']="Display";
-<<<<<<< HEAD:karuta/js/languages/locale_en.js
 karutaStr['en']['shareroles']="Roles - Share";
-=======
 karutaStr['en']['shareroles']="Share<br/><span style='font-size:smaller'> role who shares[,recipient role,roles and/or emails,level (0-3),link validity (in hours),";
 karutaStr['en']['shareroles2']="button label@en";
 karutaStr['en']['shareroles3']="[,condition]][;other sharing]";
->>>>>>> devel:WebContent/karuta/js/languages/locale_en.js
 karutaStr['en']['submitted']="Submitted on ";
 karutaStr['en']['notsubmitted']="Not Submitted";
 karutaStr['en']['collapsible']="Collapsible";
 karutaStr['en']['incrementroles']="Rôles - Increment only";
-<<<<<<< HEAD:karuta/js/languages/locale_en.js
-=======
 karutaStr['en']['hide-button']="Hide Edit Buttons";
 karutaStr['en']['show-button']="Show Edit Buttons";
 karutaStr['en']['share']="Share";
@@ -197,7 +192,6 @@ karutaStr['en']['sharewithrole']="Role - Recepient";
 karutaStr['en']['maxchar']="Chars - Max Number";
 karutaStr['en']['maxword']="Words - Max number";
 karutaStr['en']['maxword-alert']="You exceeded the limit of number of words. Extra wors will not be saved."
->>>>>>> devel:WebContent/karuta/js/languages/locale_en.js
 
 //=========================================
 //========== ADMIN ========================

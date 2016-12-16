@@ -17,7 +17,6 @@ karutaStr['fr']['technical_support']="Soutien technique";
 karutaStr['fr']['loading']="Chargement ... ";
 karutaStr['fr']['create_pdf']="Créer PDF";
 karutaStr['fr']['create_pdf_toc']="Créer PDF avec TdM";
-karutaStr['fr']['technical_support']="Soutien technique";
 karutaStr['fr']['Update']="Éditer";
 karutaStr['fr']['Create']="Créer";
 karutaStr['fr']['Change']="Changer";
@@ -64,7 +63,6 @@ karutaStr['fr']['password-mismatch']="Les deux mots de passe ne correspondent pa
 karutaStr['fr']['saved']="Enregistré";
 karutaStr['fr']['password-sent']="Un nouveau mot de passe a été envoyé par courriel.";
 karutaStr['fr']['new-account']="Vous n'avez pas de compte?";
-karutaStr['fr']['sign-up']="Inscrivez-vous!";
 karutaStr['fr']['disconnected']="Oups! Vous avez été accidentellement déconnecté!";
 karutaStr['fr']['demo-documentation']="Importer la documentation Karuta";
 karutaStr['fr']['demo-ecommerce']="Importer les portfolios démo eCommerce";
@@ -79,6 +77,8 @@ karutaStr['fr']['choose']="Choisir";
 karutaStr['fr']['quit']="Quitter";
 karutaStr['fr']['menu']="Menu";
 karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - Hauteur : 220<br>&nbsp; - Largeur : 800 divisé par le nombre de colonnes<br>&nbsp;";
+karutaStr['fr']['sign-up']="Inscrivez-vous!";
+karutaStr['fr']['technical_support']="Soutien technique";
 karutaStr['fr']['list-novisible']="Non visible";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
 
@@ -172,19 +172,14 @@ karutaStr['fr']['encrypted']="Encrypter la ressource";
 karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
 karutaStr['fr']['seltype']="Présentation ";
-<<<<<<< HEAD:karuta/js/languages/locale_fr.js
 karutaStr['fr']['shareroles']="Rôles - Partager";
-=======
 karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> rôle qui partage[,rôle destinataire,rôles et/ou courriels,niveau (0-3),durée de vie du lien (en heures),";
 karutaStr['fr']['shareroles2']="libellé du bouton@fr";
 karutaStr['fr']['shareroles3']="[,condition]][;autre partage]";
->>>>>>> devel:WebContent/karuta/js/languages/locale_fr.js
 karutaStr['fr']['submitted']="Soumis le ";
 karutaStr['fr']['notsubmitted']="Non soumis";
 karutaStr['fr']['collapsible']="Repliable";
 karutaStr['fr']['incrementroles']="Rôles - Incrémenter seulement";
-<<<<<<< HEAD:karuta/js/languages/locale_fr.js
-=======
 karutaStr['fr']['hide-button']="Cacher édition";
 karutaStr['fr']['show-button']="Montrer édition";
 karutaStr['fr']['share']="Partage";
@@ -197,7 +192,6 @@ karutaStr['fr']['sharewithrole']="Rôle - destinataire";
 karutaStr['fr']['maxchar']="Caractères - Max";
 karutaStr['fr']['maxword']="Mots - Max";
 karutaStr['fr']['maxword-alert'] = "Vous avez atteint la limite de mots autorisés. Les mots supplémentaires ne seront pas sauvés."
->>>>>>> devel:WebContent/karuta/js/languages/locale_fr.js
 
 //=========================================
 //========== ADMIN ========================
