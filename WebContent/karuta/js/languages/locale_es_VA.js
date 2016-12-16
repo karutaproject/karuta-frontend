@@ -1,4 +1,4 @@
-
+// Contribution by Beatriz Rabanal Momán and David Roldan Martinez
 
 karutaStr['es_VA'] = new Array();
 //----------------------------------------------------

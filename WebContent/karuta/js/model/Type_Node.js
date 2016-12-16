@@ -1151,7 +1151,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (depth>0 || nodetype == "asmContext") {
 					var help_text = "";
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
-					var helps = attr_help.split("//"); // lang1/lang2/...
+					var helps = attr_help.split("/"); // lang1/lang2/...
 					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
 						for (var j=0; j<helps.length; j++){
 							if (helps[j].indexOf("@"+languages[langcode])>-1)
@@ -1243,7 +1243,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						var url = window.location.href;
 						var serverURL = url.substring(0,url.indexOf(appliname)-1);
 						url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
-						$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe' target='_blank' href='"+url+"'></a> ");
+						$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe button' target='_blank' href='"+url+"'></a> ");
 					}
 				});
 
@@ -2387,8 +2387,10 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				if (semtag=="ref" || semtag=="semtag" || semtag=="text-value" || semtag=="nodetype" || semtag=="todisplay"
 					|| semtag=="aggregatetype" || semtag=="aggregationselect" || semtag=="test" || semtag=="value-min"
 						|| semtag=="value-max" || semtag=="legendtype" || semtag=="legendsemantictag" || semtag=="legenddisplay"
-						|| semtag=="titletype" || semtag=="titlesemantictag" || semtag=="titledisplay") {
-					if (semtag=="test")
+						|| semtag=="titletype" || semtag=="titlesemantictag" || semtag=="titledisplay" || semtag=="position") {
+					if (semtag=="value-min" || semtag=="value-max")
+						html += "<div id='std_resource_"+uuid+"' class='col-md-2'>";
+					else if (semtag=="test")
 						html += "<div id='std_resource_"+uuid+"' class='col-md-4'>";
 					else if (semtag=="text-value")
 						html += "<div id='std_resource_"+uuid+"' class='col-md-5'>";						
@@ -2529,7 +2531,6 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				if (depth>0 || nodetype == "asmContext") {
-					var help_text = "";
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
 					var helps = attr_help.split("/"); // lang1/lang2/...
 					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
@@ -4209,7 +4210,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 		var first = true;
 		for (var i=0; i<languages.length;i++){
 			if (!first)
-				html += "//";
+				html += "/";
 			html += karutaStr[languages[i]]['help2'];
 			first = false;
 		}
