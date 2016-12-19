@@ -191,15 +191,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	var html = "";
 	if (type=='default') {
 		html += "<button id='button_"+this.id+"' class='glyphicon glyphicon-resize-full' style='height:24px;float:right;' onclick=\"UIFactory.TextField.toggleExpand('"+this.id+"','"+langcode+"')\"></button>";
-<<<<<<< HEAD:WebContent/karuta/js/resources/Type_TextField.js
-<<<<<<< HEAD:WebContent/karuta/js/resources/Type_TextField.js
 		html += "<div id='div_"+this.id+"'><span id='counter_"+this.id+"' class='word-counter' style='float:right'></span><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' expand='false' style='height:300px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
-=======
-		html += "<div id='div_"+this.id+"'><span id='counter_"+this.id+"' style='float:right'></span><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' expand='false' style='height:300px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
->>>>>>> origin/master:karuta/js/resources/Type_TextField.js
-=======
-		html += "<div id='div_"+this.id+"'><span id='counter_"+this.id+"' style='float:right'></span><textarea id='"+this.id+"_edit_"+langcode+"' class='form-control' expand='false' style='height:300px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
->>>>>>> origin/master:karuta/js/resources/Type_TextField.js
 		if (disabled)
 			html += "disabled='disabled' ";
 		html += ">"+text+"</textarea></div>";
@@ -216,15 +208,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (this.maxword>0) {
 		$("#counter_"+uuid).html(countWords(text)+"/"+this.maxword);
 	}
-<<<<<<< HEAD:WebContent/karuta/js/resources/Type_TextField.js
-<<<<<<< HEAD:WebContent/karuta/js/resources/Type_TextField.js
 	$("#"+uuid+"_edit_"+langcode).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": true},"uuid":uuid,"locale":LANG,'events': {'load': function(){$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][currentTexfieldUuid].resource.updateCounterWords(langcode);});},'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
-=======
-=======
->>>>>>> origin/master:karuta/js/resources/Type_TextField.js
-	$(".modal-dialog").css('width','600px');
-	$("#"+uuid+"_edit_"+langcode).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'load': function(){$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][currentTexfieldUuid].resource.updateCounterWords(langcode);});},'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
->>>>>>> origin/master:karuta/js/resources/Type_TextField.js
 	//------------------------------------------------
 };
 
@@ -244,14 +228,6 @@ UIFactory["TextField"].toggleExpand = function(uuid,langcode)
 		$(".modal-dialog").css('width','600px');
 	}
 };
-<<<<<<< HEAD:WebContent/karuta/js/resources/Type_TextField.js
-<<<<<<< HEAD:WebContent/karuta/js/resources/Type_TextField.js
-=======
-
->>>>>>> origin/master:karuta/js/resources/Type_TextField.js
-=======
-
->>>>>>> origin/master:karuta/js/resources/Type_TextField.js
 //==================================
 UIFactory["TextField"].prototype.save = function()
 //==================================

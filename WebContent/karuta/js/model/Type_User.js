@@ -111,18 +111,9 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		html = "<td style='padding-left:4px;padding-right:4px'>"+this.firstname_node.text() + "</td><td style='padding-left:4px;padding-right:4px'>" + this.lastname_node.text()+ "</td><td style='padding-left:4px;padding-right:4px'> (" + this.username_node.text() + ")</td>";
 		if (USER.admin){
 			html += "<td><div class='btn-group'>";
-<<<<<<< HEAD:karuta/js/model/Type_User.js
-			html += " <button class='btn btn-default btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
-			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
-			html += "</button>";
-			if (this.username_node.text()!='root') {
-				html += "<button class='btn btn-default btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-				html += "<span class='glyphicon glyphicon-remove'></span>";
-=======
 			if (gid==null) {
 				html += " <button class='btn btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
 				html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
->>>>>>> devel:WebContent/karuta/js/model/Type_User.js
 				html += "</button>";
 				if (this.username_node.text()!='root' && this.username_node.text()!='public' && this.username_node.text()!='sys_public') {
 					html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
@@ -134,11 +125,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 					html += "</button>";
 				}
 			} else {
-<<<<<<< HEAD:karuta/js/model/Type_User.js
-				html += "<button class='btn btn-default btn-xs' disabled='true' data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-=======
 				html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
->>>>>>> devel:WebContent/karuta/js/model/Type_User.js
 				html += "<span class='glyphicon glyphicon-remove'></span>";
 				html += "</button>";				
 			}
@@ -309,7 +296,7 @@ UIFactory["User"].callCreate = function()
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['User'].create()";
-	var footer = "<button class='btn btn-default' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['create_user']);
 	$("#edit-window-type").html("");
@@ -356,7 +343,7 @@ UIFactory["User"].edit = function(userid)
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var footer = "<button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['user']);
 	$("#edit-window-type").html("");
@@ -414,13 +401,8 @@ UIFactory["User"].confirmRemove = function(userid,from_page)
 	if (from_page!=null)
 		js_remove = "UIFactory.User.remove('"+userid+"','"+from_page+"')";	
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-<<<<<<< HEAD:karuta/js/model/Type_User.js
-	var buttons = "<button class='btn btn-default' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:UIFactory['User'].remove('"+userid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
-=======
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
 	buttons += "<button class='btn btn-danger' onclick=\"javascript:"+js_remove+";$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
->>>>>>> devel:WebContent/karuta/js/model/Type_User.js
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 };
@@ -630,7 +612,7 @@ UIFactory["User"].callChangePassword = function()
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory['User'].changePassword()";
-	var footer = "<button class='btn btn-default' onclick=\""+js2+";\">"+karutaStr[LANG]['Change']+"</button><button class='btn btn-default' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Change']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['change_password']);
 	$("#edit-window-type").html("");
@@ -653,62 +635,3 @@ UIFactory["User"].getPasswordCreator = function()
 	html += UIFactory["User"].getAttributeCreator("confirm-password","",true);
 	return html;
 };
-
-//==================================
-UIFactory["User"].callCreateTestUser = function()
-//==================================
-{
-	var js1 = "$('#edit-window').modal('hide')";
-	var js2 = "UIFactory['User'].createTestUser()";
-	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
-	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['create-test-user']);
-	var html = "";
-	html += "<form id='metadata' class='form-horizontal'>";
-	html += UIFactory["User"].getAttributeCreator("firstname","");
-	html += UIFactory["User"].getAttributeCreator("lastname","");
-	html +="<hr/>";
-	html += UIFactory["User"].getAttributeCreator("username","");
-	html += UIFactory["User"].getAttributeCreator("password","",true);
-	html += "</form>";
-	$("#edit-window-body").html(html);
-	//--------------------------
-	$('#edit-window').modal('show');
-};
-
-//==================================
-UIFactory["User"].createTestUser = function()
-//==================================
-{
-
-	var xml = "";
-	xml +="<?xml version='1.0' encoding='UTF-8'?>";
-	xml +="<users>";
-	xml +="<user>";
-	xml +="	<username>"+$("#user_username").val()+"</username>";
-	xml +="	<lastname>"+$("#user_lastname").val()+"</lastname>";
-	xml +="	<firstname>"+$("#user_firstname").val()+"</firstname>";
-	xml +="	<email>"+USER.email_node.text()+"</email>";
-	xml +="	<password>"+$("#user_password").val()+"</password>";
-	xml +="	<active>1</active>";
-	xml +="	<admin>0</admin>";
-	xml +="	<designer>0</designer>";
-	xml +="	<substitute>0</substitute>";
-	xml +="</user>";
-	xml +="</users>";
-	var url = "../../../"+serverBCK+"/users";
-	$.ajax({
-		type : "POST",
-		contentType: "application/xml",
-		dataType : "xml",
-		url : url,
-		data : xml,
-		success : function(data) {
-			$("#refresh").click();
-		},
-		error : function(jqxhr,textStatus) {
-			alert("Error : "+jqxhr.responseText);
-		}
-	});
-};
-

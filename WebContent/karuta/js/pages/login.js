@@ -51,6 +51,8 @@ function loadLoginPage(url)
 	loadCSS(url+"/other/bootstrap/css/bootstrap.min.css");
 	loadCSS(url+"/other/css/jquery-ui.css");
 	loadCSS(url+"/other/css/font-awesome/css/font-awesome.min.css");
+	loadCSS(url+"/other/colorpicker/css/evol.colorpicker.css");
+	loadCSS(url+"/karuta/css/welcome.css");
 	//--------------------------------------------------------------
 	var karuta_config = "../../../"+appliname+"/application/css/color.less";
 	less = {
@@ -61,26 +63,44 @@ function loadLoginPage(url)
 	loadLESS(url+"/karuta/css/welcome.less");
 	loadJS(url+"/other/js/less.min.js")
 	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/karuta.js");
-	loadJS(url+"/karuta/js/UICom.js");
-	//--------------------------------------------------------------
 	loadJS(url+"/other/js/jquery-1.10.2.js");
 	loadJS(url+"/other/js/jquery-ui-1.10.3.custom.min.js");
 	loadJS(url+"/other/bootstrap/js/bootstrap.min.js");
 	loadJS(url+"/other/js/jquery.ui.touch-punch.min.js");
+	//--------------------------------------------------------------
+	loadJS(url+"/other/js/jquery_hotkeys.js");
+	loadJS(url+"/other/js/JQueryRC4.js");
+	//--------------------------------------------------------------
+	loadJS(url+"/other/colorpicker/js/evol.colorpicker.min.js");
+	//--------------------------------------------------------------
+//	loadJS(url+"/karuta/js/karuta.js");
+	loadJS(url+"/karuta/js/UICom.js");
+	loadJS(url+"/karuta/js/report.js");
+	//--------------------------------------------------------------
+	loadJS(url+"/karuta/js/model/Type_Portfolio.js");
+	loadJS(url+"/karuta/js/model/Type_Node.js");
+	loadJS(url+"/karuta/js/model/Type_User.js");
 	//--------------------------------------------------------------
 	if (elgg_installed) {
 		loadJS(url+"/socialnetwork-elgg/js/socialnetwork.js");
 		loadJS(url+"/socialnetwork-elgg/js/moment-with-locales.min.js");		
 	}
 	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/model/Type_Portfolio.js");
-	loadJS(url+"/karuta/js/model/Type_Node.js");
-	loadJS(url+"/karuta/js/model/Type_User.js");
+	loadJS(url+"/other/lightbox/js/lightbox-2.6.min.js");
+	loadCSS(url+"/other/lightbox/css/lightbox.css");
 	//--------------------------------------------------------------
-	loadJS(url+"/other/js/js.cookie.js");
+	loadJS(url+"/other/jplayer/jquery.jplayer.min.js");
+	loadCSS(url+"/other/jplayer/jplayer.blue.monday.css");
 	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/version.js");
+	loadJS(url+"/other/js/jquery.ui.widget.js");
+	loadJS(url+"/other/js/jquery.iframe-transport.js");
+	loadJS(url+"/other/js/jquery.fileupload.js");
+	//--------------------------------------------------------------
+	loadCSS(url+"/other/oembed/jquery.oembed.css");
+	loadJS(url+"/other/oembed/jquery.oembed.js");
+	//--------------------------------------------------------------
+	loadCSS(url+"/other/bootstrap-datepicker/datepicker.css");
+	loadJS(url+"/other/bootstrap-datepicker/bootstrap-datepicker.js");
 	//--------------------------------------------------------------
 }
 

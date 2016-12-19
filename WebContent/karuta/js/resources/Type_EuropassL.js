@@ -15,24 +15,11 @@ UIFactory["EuropassL"] = function( node )
 {
 	this.id = $(node).attr('id');
 	this.node = node;
-<<<<<<< HEAD:karuta/js/resources/Type_EuropassL.js
-};
-
-//==================================
-UIFactory["EuropassL"].parse = function(data) 
-//==================================
-{
-	g_mother_tongueid = $("asmContext:has(metadata[semantictag='MotherTongue'])", data).attr('id');
-	langues_byid = {};
-	langues_list = [];
-	var items = $("asmUnitStructure:has(metadata[semantictag='europass-language'])",data);
-=======
 	this.mother_tongueid = $("asmContext:has(metadata[semantictag='MotherTongue'])", node).attr('id');
 	this.foreignid = $("asmUnitStructure:has(metadata[semantictag='foreign-languages'])", node).attr('id');
 	this.langues_byid = {};
 	this.langues_list = [];
 	var items = $("asmUnitStructure:has(metadata[semantictag='europass-language'])",$("asmUnitStructure:has(metadata[semantictag='foreign-languages'])",node));
->>>>>>> devel:WebContent/karuta/js/resources/Type_EuropassL.js
 	for ( var i = 0; i < items.length; i++) {
 		this.langues_byid[$(items[i]).attr('id')] = new UIFactory["Langue"](items[i]);
 		this.langues_list[i] = this.langues_byid[$(items[i]).attr('id')];
@@ -62,30 +49,12 @@ UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,par
 		var callback = "UIFactory['EuropassL'].reloadparse";
 		var param2 = "'"+destid+"'";
 		var param3 = "'"+parentid+"'";
-<<<<<<< HEAD:karuta/js/resources/Type_EuropassL.js
-		var param4 = edit;
-		if (edit) {
-			html += "<div class='col-md-offset-8 col-md-4'>";
-			html += "<button class='btn btn-xs' onclick=\"javascript:importBranch('"+parentid+"','europass-parts','europass-language',"+databack+","+callback+","+param2+","+param3+","+param4+")\">";
-			html += karutaStr[LANG]['add-foreign-language'];
-			html += "</button>";
-			html += "</div>";
-		}
-		html += "<h5>"+karutaStr[LANG]['mother-tongue']+" : ";
-		html += "<span class='langue' id='mother_tongue'>"+UICom.structure["ui"][g_mother_tongueid].resource.getView("mother_tongue","span");
-		if (edit) {
-			html += "&nbsp;<button class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editMothertongue('"+g_mother_tongueid+"','mother_tongue');\">";
-			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
-			html += "</buton>";
-		}
-=======
 		var param4 = writenode;
 		//----------------------------
 		html += "<div class='row'>";
 		html += "<div class='col-md-offset-1 col-md-11'>";
 		html += "<span class='mothertongue-label'>"+UICom.structure["ui"][this.mother_tongueid].getLabel('std_node_'+parentid,"none")+"</span>";
 		html += "<span class='mothertongue-value' id='mother_tongue_"+parentid+"'>"+UICom.structure["ui"][this.mother_tongueid].resource.getView('mother_tongue_'+parentid,"span");
->>>>>>> devel:WebContent/karuta/js/resources/Type_EuropassL.js
 		html +="</span>";
 		html +="<div id='mother_tongue_button' class='btn-group' style='margin-left:3px;'>";
 		html += UICom.structure["ui"][this.mother_tongueid].getButtons(null,null,null,false,0,true,menu);
@@ -191,49 +160,28 @@ UIFactory["Langue"].prototype.displayEditor = function(destid,type,lang)
 	var html = "";
 	$("#"+destid).html(html);  // on vide html
 		//---------------------------------------------------------
-<<<<<<< HEAD:karuta/js/resources/Type_EuropassL.js
-		html +="<td id='language_edit'></td>";
-		html +="<td class='bordure'><span id='listening_"+this.id+"_edit'>"+UICom.structure["ui"][this.listening_nodeid].resource.getValue("listening_"+this.id+"_edit")+"</span>";
-=======
 		html +="<td id='language_edit_"+this.id+"' class='language_edit' width='150px'></td>";
 		html +="<td class='bordure'><span id='listening_"+this.id+"_edit'>"+UICom.structure["ui"][this.listening_nodeid].resource.getCode("listening_"+this.id+"_edit")+"</span>";
->>>>>>> devel:WebContent/karuta/js/resources/Type_EuropassL.js
 		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('listening_edit','"+this.listening_nodeid+"','"+karutaStr[LANG]['listening']+"')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
-<<<<<<< HEAD:karuta/js/resources/Type_EuropassL.js
-		html +="<td class='bordure'><span id='reading_"+this.id+"_edit'>"+UICom.structure["ui"][this.reading_nodeid].resource.getValue("reading_"+this.id+"_edit")+"</span>";
-=======
 		html +="<td class='bordure'><span id='reading_"+this.id+"_edit'>"+UICom.structure["ui"][this.reading_nodeid].resource.getCode("reading_"+this.id+"_edit")+"</span>";
->>>>>>> devel:WebContent/karuta/js/resources/Type_EuropassL.js
 		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('reading_edit','"+this.reading_nodeid+"','"+karutaStr[LANG]['reading']+"')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
-<<<<<<< HEAD:karuta/js/resources/Type_EuropassL.js
-		html +="<td class='bordure'><span id='spokenInteraction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getValue("spokenInteraction_"+this.id+"_edit")+"</span>";
-=======
 		html +="<td class='bordure'><span id='spokenInteraction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getCode("spokenInteraction_"+this.id+"_edit")+"</span>";
->>>>>>> devel:WebContent/karuta/js/resources/Type_EuropassL.js
 		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenInteraction_edit','"+this.spokenInteraction_nodeid+"','"+karutaStr[LANG]['spoken-interaction']+"')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
-<<<<<<< HEAD:karuta/js/resources/Type_EuropassL.js
-		html +="<td class='bordure'><span id='spokenProduction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getValue("spokenProduction_"+this.id+"_edit")+"</span>";
-=======
 		html +="<td class='bordure'><span id='spokenProduction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getCode("spokenProduction_"+this.id+"_edit")+"</span>";
->>>>>>> devel:WebContent/karuta/js/resources/Type_EuropassL.js
 		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenProduction_edit','"+this.spokenProduction_nodeid+"','"+karutaStr[LANG]['spoken-production']+"')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
-<<<<<<< HEAD:karuta/js/resources/Type_EuropassL.js
-		html +="<td class='bordure'><span id='writing_"+this.id+"_edit'>"+UICom.structure["ui"][this.writing_nodeid].resource.getValue("writing_"+this.id+"_edit")+"</span>";
-=======
 		html +="<td class='bordure'><span id='writing_"+this.id+"_edit'>"+UICom.structure["ui"][this.writing_nodeid].resource.getCode("writing_"+this.id+"_edit")+"</span>";
->>>>>>> devel:WebContent/karuta/js/resources/Type_EuropassL.js
 		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('writing_edit','"+this.writing_nodeid+"','"+karutaStr[LANG]['writing']+"')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
@@ -264,25 +212,6 @@ UIFactory["Langue"].editSkill = function(destid,uuid,title)
 };
 
 //==================================
-<<<<<<< HEAD:karuta/js/resources/Type_EuropassL.js
-UIFactory["Langue"].reloadparse = function(destid,parentid,writenode) 
-//==================================
-{
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes/node/" + parentid + "?resources=true",
-		success : function(data) {
-			UICom.parseStructure(data);
-			UIFactory["EuropassL"].parse($(":root",data));
-			UIFactory["EuropassL"].displayView(destid,null,'detail',parentid,writenode);
-		}
-	});
-};
-
-//==================================
-=======
->>>>>>> devel:WebContent/karuta/js/resources/Type_EuropassL.js
 UIFactory["Langue"].refresh = function(parentid,destid) 
 //==================================
 {

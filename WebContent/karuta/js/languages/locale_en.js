@@ -172,19 +172,13 @@ karutaStr['en']['encrypted']="Encrypt Ressource";
 karutaStr['en']['get_rc4key']="Parts of this document are encrypted.\nFist Visit: Choose a key sentence.\nReturning Visits: Type your key sentence. ";
 karutaStr['en']['error_rc4key']="Error in key sentence.";
 karutaStr['en']['seltype']="Display";
-<<<<<<< HEAD:karuta/js/languages/locale_en.js
-karutaStr['en']['shareroles']="Roles - Share";
-=======
 karutaStr['en']['shareroles']="Share<br/><span style='font-size:smaller'> role who shares[,recipient role,roles and/or emails,level (0-3),link validity (in hours),";
 karutaStr['en']['shareroles2']="button label@en";
 karutaStr['en']['shareroles3']="[,condition]][;other sharing]";
->>>>>>> devel:WebContent/karuta/js/languages/locale_en.js
 karutaStr['en']['submitted']="Submitted on ";
 karutaStr['en']['notsubmitted']="Not Submitted";
 karutaStr['en']['collapsible']="Collapsible";
 karutaStr['en']['incrementroles']="Rôles - Increment only";
-<<<<<<< HEAD:karuta/js/languages/locale_en.js
-=======
 karutaStr['en']['hide-button']="Hide Edit Buttons";
 karutaStr['en']['show-button']="Show Edit Buttons";
 karutaStr['en']['share']="Share";
@@ -197,7 +191,6 @@ karutaStr['en']['sharewithrole']="Role - Recepient";
 karutaStr['en']['maxchar']="Chars - Max Number";
 karutaStr['en']['maxword']="Words - Max number";
 karutaStr['en']['maxword-alert']="You exceeded the limit of number of words. Extra wors will not be saved."
->>>>>>> devel:WebContent/karuta/js/languages/locale_en.js
 
 //=========================================
 //========== ADMIN ========================
@@ -287,7 +280,6 @@ karutaStr['en']['projects-admin']="Projects";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['substitute']="Substitution";
-karutaStr['en']['create-test-user']="Create a Test User";
 
 //=========================================
 //========== ROLES ========================

@@ -172,19 +172,13 @@ karutaStr['fr']['encrypted']="Encrypter la ressource";
 karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
 karutaStr['fr']['seltype']="Présentation ";
-<<<<<<< HEAD:karuta/js/languages/locale_fr.js
-karutaStr['fr']['shareroles']="Rôles - Partager";
-=======
 karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> rôle qui partage[,rôle destinataire,rôles et/ou courriels,niveau (0-3),durée de vie du lien (en heures),";
 karutaStr['fr']['shareroles2']="libellé du bouton@fr";
 karutaStr['fr']['shareroles3']="[,condition]][;autre partage]";
->>>>>>> devel:WebContent/karuta/js/languages/locale_fr.js
 karutaStr['fr']['submitted']="Soumis le ";
 karutaStr['fr']['notsubmitted']="Non soumis";
 karutaStr['fr']['collapsible']="Repliable";
 karutaStr['fr']['incrementroles']="Rôles - Incrémenter seulement";
-<<<<<<< HEAD:karuta/js/languages/locale_fr.js
-=======
 karutaStr['fr']['hide-button']="Cacher édition";
 karutaStr['fr']['show-button']="Montrer édition";
 karutaStr['fr']['share']="Partage";
@@ -197,7 +191,6 @@ karutaStr['fr']['sharewithrole']="Rôle - destinataire";
 karutaStr['fr']['maxchar']="Caractères - Max";
 karutaStr['fr']['maxword']="Mots - Max";
 karutaStr['fr']['maxword-alert'] = "Vous avez atteint la limite de mots autorisés. Les mots supplémentaires ne seront pas sauvés."
->>>>>>> devel:WebContent/karuta/js/languages/locale_fr.js
 
 //=========================================
 //========== ADMIN ========================
@@ -287,7 +280,6 @@ karutaStr['fr']['projects-admin']="Projets";
 karutaStr['fr']['portfolios-admin']="Portfolios";
 karutaStr['fr']['bin-admin']="Poubelle";
 karutaStr['fr']['substitute']="Substitution";
-karutaStr['fr']['create-test-user']="Créer un utilisateur test";
 
 //=========================================
 //========== ROLES ========================
@@ -336,7 +328,7 @@ karutaStr['fr']['listening']="Écouter";
 karutaStr['fr']['reading']="Lire";
 karutaStr['fr']['speaking']="PARLER";
 karutaStr['fr']['spoken-interaction']="Prendre part à une conversation";
-karutaStr['fr']['spoken-production']="S&rsquo;exprimer oralement en continu";
+karutaStr['fr']['spoken-production']="S'exprimer oralement en continu";
 karutaStr['fr']['writing']="ÉCRIRE";
 
 //=========================================

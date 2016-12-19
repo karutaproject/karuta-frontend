@@ -2,10 +2,14 @@
 var application_version = "1.0";
 var application_date = "2016-04-29";
 //----------------------------------
-var appliname = 'karuta2.2';
-var karutaname = 'karuta-core'
+//var appliname = 'karuta2.2';
+var appliname = 'karuta-frontend';
+//var karutaname = 'karuta-core'
+var karutaname = 'karuta-frontend'
+//var karuta_url = '../../../' + karutaname;
 var karuta_url = '../../../' + karutaname;
-var bckname = '-ux';
+//var bckname = '-ux';
+var bckname = '';
 var serverBCK = "karuta-backend"+bckname+"/rest/api";
 var serverFIL = "karuta-backend"+bckname;
 var serverVER = "karuta-backend"+bckname;

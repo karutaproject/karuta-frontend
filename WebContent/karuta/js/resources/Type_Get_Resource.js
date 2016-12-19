@@ -131,20 +131,14 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode)
 		code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
 	if (code.indexOf("#")>-1)
 		code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
-<<<<<<< HEAD:karuta/js/resources/Type_Get_Resource.js
-=======
 	if (code.indexOf("&")>-1)
 		code = code.substring(0,code.indexOf("&"))+code.substring(code.indexOf("&")+1);
->>>>>>> devel:WebContent/karuta/js/resources/Type_Get_Resource.js
 	var html = "";
 	html += "<span class='"+code+"'>";
 	if (($(this.code_node).text()).indexOf("#")>-1)
 		html += code+ " ";
-<<<<<<< HEAD:karuta/js/resources/Type_Get_Resource.js
-=======
 	if (($(this.code_node).text()).indexOf("&")>-1)
 		html += "["+$(this.value_node).text()+ "] ";
->>>>>>> devel:WebContent/karuta/js/resources/Type_Get_Resource.js
 	html += label+"</span>";
 	return html;
 };
@@ -172,20 +166,14 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 		code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
 	if (code.indexOf("#")>-1)
 		code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
-<<<<<<< HEAD:karuta/js/resources/Type_Get_Resource.js
-=======
 	if (code.indexOf("&")>-1)
 		code = code.substring(0,code.indexOf("&"))+code.substring(code.indexOf("&")+1);
->>>>>>> devel:WebContent/karuta/js/resources/Type_Get_Resource.js
 	var html = "";
 	html += "<span class='"+code+"'>";
 	if (($(this.code_node).text()).indexOf("#")>-1)
 		html += code+ " ";
-<<<<<<< HEAD:karuta/js/resources/Type_Get_Resource.js
-=======
 	if (($(this.code_node).text()).indexOf("&")>-1)
 		html += "["+$(this.value_node).text()+ "] ";
->>>>>>> devel:WebContent/karuta/js/resources/Type_Get_Resource.js
 	html += label+"</span>";
 	$("#"+dest).html("");
 	$("#"+dest).append($(html));
@@ -313,34 +301,6 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		$(select).append($(select_item));
 		//--------------------
 		var nodes = $("node",data);
-<<<<<<< HEAD:karuta/js/resources/Type_Get_Resource.js
-		for ( var i = 0; i < $(nodes).length; i++) {
-			var resource = null;
-			if ($("asmResource",nodes[i]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-			else
-				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-			var code = $('code',resource).text();
-			var display_code = true;
-			if (code.indexOf("@")>-1) {
-				display_code = false;
-				code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
-			}
-			if (code.indexOf("#")>-1) {
-				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
-			}
-			if (code.indexOf('----')>-1) {
-				html = "<li class='divider'></li><li></li>";
-			} else {
-				html = "<li></li>";
-			}
-			var select_item = $(html);
-			if (code.indexOf('-#')>-1) {
-				html = "<a href='#'>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
-				$(select_item).html(html);
-			} else {
-				html = "<a href='#' value='"+$(nodes[i]).attr('id')+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
-=======
 		//---------------------
 		if (target=='label') {
 			for ( var i = 0; i < $(nodes).length; i++) {
@@ -409,7 +369,6 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				html = "<li></li>";
 				var select_item = $(html);
 				html = "<a  value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
->>>>>>> devel:WebContent/karuta/js/resources/Type_Get_Resource.js
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
@@ -472,11 +431,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (code.indexOf("#")>-1) {
 				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 			}
-<<<<<<< HEAD:karuta/js/resources/Type_Get_Resource.js
-			input += "<input type='radio' name='radio_"+self.id+"' value='"+$(nodes[i]).attr('id')+"' code='"+$('code',resource).text()+"' ";
-=======
 			input += "<input type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
->>>>>>> devel:WebContent/karuta/js/resources/Type_Get_Resource.js
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
@@ -538,13 +493,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (code.indexOf("#")>-1) {
 				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 			}
-<<<<<<< HEAD:karuta/js/resources/Type_Get_Resource.js
-			input += "<div name='click_"+self.id+"' value='"+$(nodes[i]).attr('id')+"' code='"+$('code',resource).text()+"' class='click-item";
-			if (self_code==code)
-=======
 			input += "<div name='click_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='click-item";
 			if (self_code==$('code',resource).text())
->>>>>>> devel:WebContent/karuta/js/resources/Type_Get_Resource.js
 				input += " clicked";
 			input += "' ";
 			for (var j=0; j<languages.length;j++){
