@@ -2,8 +2,8 @@
 var application_version = "1.0";
 var application_date = "2016-04-29";
 //----------------------------------
-var appliname = 'karuta2.2';
-var karutaname = 'karuta-core'
+var appliname = 'karuta-beta';
+var karutaname = 'karuta-beta'; // to share the same karuta-core with multiple front-end
 var karuta_url = '../../../' + karutaname;
 var bckname = '-ux';
 var serverBCK = "karuta-backend"+bckname+"/rest/api";
@@ -73,3 +73,11 @@ g_sendEmailPublicURL_message += "Karuta Team";
 g_sendEmailPublicURL_message +="&lt;/div&gt;";
 //----------------------------------------------
 var specificmenus = false;
+
+
+//==============================
+function loadJS(url)
+//==============================
+{
+	document.write("<script src='"+url+"'></script>");
+};
