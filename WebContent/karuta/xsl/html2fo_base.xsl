@@ -311,7 +311,8 @@
 <!-- =====================================-->
 <xsl:template match="td">
 <!-- =====================================-->
-	<fo:table-cell padding="2px">
+	<!--fo:table-cell padding="2px"-->
+	<fo:table-cell>
 		<xsl:if test="contains(@style,'text-align:center')">
 			<xsl:attribute name="text-align">center</xsl:attribute>
 		</xsl:if>
