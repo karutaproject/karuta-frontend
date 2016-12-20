@@ -7,8 +7,10 @@
 	<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
 	<script src="../js/_init.js"></script>
 	<!-- =============================================================== -->
-	<script>loadJS("../../../"+karutaname+"/karuta/js/pages/createaccount.js");</script>
-	<script>loadCreateAccountPage(karuta_url);</script>
+	<script>
+		document.write("<script src='"+karuta_url+"/karuta/js/pages/createaccount.js'><\/script>");
+		document.write("<script>loadCreateAccountPage(karuta_url);<\/script>");
+	</script>
 	<!-- =============================================================== -->
 	<link rel='stylesheet' type='text/css' href='../css/specific.css'/>
 </head>

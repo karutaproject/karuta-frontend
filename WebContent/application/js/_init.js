@@ -2,10 +2,10 @@
 var application_version = "1.0";
 var application_date = "2016-04-29";
 //----------------------------------
-var appliname = 'karuta-beta';
-var karutaname = 'karuta-beta'; // to share the same karuta-core with multiple front-end
+var appliname = 'karuta';
+var karutaname = 'karuta'; // to share the same karuta-core with multiple front-end
 var karuta_url = '../../../' + karutaname;
-var bckname = '-ux';
+var bckname = '';
 var serverBCK = "karuta-backend"+bckname+"/rest/api";
 var serverFIL = "karuta-backend"+bckname;
 var serverVER = "karuta-backend"+bckname;
