@@ -38,13 +38,13 @@ UIFactory["CompetencyEvaluation"] = function( node )
 	this.code_node = $("code",$("asmResource[xsi_type='CompetencyEvaluation']",node));
 	this.value_node = $("value",$("asmResource[xsi_type='CompetencyEvaluation']",node));
 	this.label_node = [];
-	this.label_node['fr'] = $("label[lang='fr']",$("asmResource[xsi_type='CompetencyEvaluation']",node));
-	this.label_node['en'] = $("label[lang='en']",$("asmResource[xsi_type='CompetencyEvaluation']",node));
+	for (var lan=0; lan<languages.length;lan++)
+		this.label_node[languages[lan]] = $("label[lang='" + languages[lan] + "']",$("asmResource[xsi_type='CompetencyEvaluation']",node));
 	this.code_eval_node = $("code_eval",$("asmResource[xsi_type='CompetencyEvaluation']",node));
 	this.value_eval_node = $("value_eval",$("asmResource[xsi_type='CompetencyEvaluation']",node));
 	this.label_eval_node = [];
-	this.label_eval_node['fr'] = $("label_eval[lang='fr']",$("asmResource[xsi_type='CompetencyEvaluation']",node));
-	this.label_eval_node['en'] = $("label_eval[lang='en']",$("asmResource[xsi_type='CompetencyEvaluation']",node));
+	for (var lan=0; lan<languages.length;lan++)
+		this.label_eval_node[languages[lan]] = $("label_eval[lang='" + languages[lan] + "']",$("asmResource[xsi_type='CompetencyEvaluation']",node));
 	var query = $("metadata-wad",node).attr('query');
 	if (query!=null) {
 		this.query_com = query.substring(0,query.indexOf(';'));
@@ -103,27 +103,27 @@ UIFactory["CompetencyEvaluation"].update = function(obj,itself,lang,type,name)
 		selected = $(obj).find("option:selected");
 		value = $(selected).attr('value');
 		code = $(selected).attr('code');
-		label_fr = $(selected).attr('label_fr');
-		label_en = $(selected).attr('label_en');
+		for (var lan=0; lan<languages.length;lan++)
+			label_locale[languages[lan]] = $(selected).attr('label_' + languages[lan]);
 	}
 	if(type=='radio') {
 		selected = $('input[name='+name+']:checked',obj);
 		value = $(selected).attr('value');
 		code = $(selected).attr('code');
-		label_fr = $(selected).attr('label_fr');
-		label_en = $(selected).attr('label_en');
+		for (var lan=0; lan<languages.length;lan++)
+			label_locale[languages[lan]] = $(selected).attr('label_' + languages[lan]);
 	}
 	if(name=='comp') {
 		$(itself.value_node).text(value);
 		$(itself.code_node).text(code);
-		$(itself.label_node['fr']).text(label_fr);
-		$(itself.label_node['en']).text(label_en);
+		for (var lan=0; lan<languages.length;lan++)
+			$(itself.label_node[languages[lan]]).text(eval("label_" + languages[lan]);
 	}
 	if(name=='eval') {
 		$(itself.value_eval_node).text(value);
 		$(itself.code_eval_node).text(code);
-		$(itself.label_eval_node['fr']).text(label_fr);
-		$(itself.label_eval_node['en']).text(label_en);
+		for (var lan=0; lan<languages.length;lan++)
+			$(itself.label_node[languages[lan]]).text(eval("label_" + languages[lan]);
 	}
 	itself.save();
 };
@@ -179,8 +179,9 @@ UIFactory["CompetencyEvaluation"].parse = function(destid,data,lang,self,type,na
 		var nodes = $("node",data);
 		for ( var i = 0; i < $(nodes).length; ++i) {
 			var option = "<option code='"+$(nodes[i]).attr('id')+"' value='"+$('code',nodes[i]).text()+"' " +
-					"label_fr='"+$("label[lang='fr']",nodes[i]).text()+"' " +
-					"label_en='"+$("label[lang='en']",nodes[i]).text()+"' ";
+			for (var lan=0; lan<languages.length;lan++)
+				$(itself.label_node[languages[lan]]).text(eval("label_" + languages[lan]);
+				option+="label_" + languages[lan] + "='" + $(eval("label[lang='" + languages[lan] +"']"),nodes[i]).text()+"' "
 			if (code== $('code',nodes[i]).text())
 				option += " selected ";
 			option += ">"+$("label[lang='"+lang+"']",nodes[i]).text()+"</option>";
@@ -195,8 +196,9 @@ UIFactory["CompetencyEvaluation"].parse = function(destid,data,lang,self,type,na
 			var semtag = $("metadata",nodes[i]).attr('semantictag');
 			if (semtag.indexOf('_parent')<0) {
 				var input = "<input name='"+name+"' type='radio' code='"+$(nodes[i]).attr('id')+"' value='"+$('code',nodes[i]).text()+"' " +
-						"label_fr=\""+$("label[lang='fr']",nodes[i]).text()+"\" " +
-						"label_en=\""+$("label[lang='en']",nodes[i]).text()+"\" ";
+				for (var lan=0; lan<languages.length;lan++)
+					$(itself.label_node[languages[lan]]).text(eval("label_" + languages[lan]);
+					input+="label_" + languages[lan] + "='" + $(eval("label[lang='" + languages[lan] +"']"),nodes[i]).text()+"' "
 				if (code== $('code',nodes[i]).text())
 					input += " checked ";
 				input += "> "+$("label[lang='"+lang+"']",nodes[i]).text()+"<br/>";
