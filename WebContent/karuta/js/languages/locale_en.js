@@ -17,7 +17,6 @@ karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['loading']="Loading... ";
 karutaStr['en']['create_pdf']="Create PDF";
 karutaStr['en']['create_pdf_toc']="Create PDF with TOC";
-karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['Update']="Update";
 karutaStr['en']['Create']="Create";
 karutaStr['en']['Change']="Change";
@@ -323,6 +322,10 @@ karutaStr['en']['pdf']="Roles - Display PDF";
 //=========================================
 //========== EUROPASS =====================
 //=========================================
+karutaStr['en']['mother-tongue']="Mother Tongue";
+karutaStr['en']['foreign-languages']="Foreign Languages";
+karutaStr['en']['add-foreign-language']="Add a foreign Language";
+
 karutaStr['en']['understanding']="UNDERSTANDING";
 karutaStr['en']['listening']="Listening";
 karutaStr['en']['reading']="Reading";
