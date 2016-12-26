@@ -325,6 +325,10 @@ karutaStr['fr']['pdf']="Rôles - Afficher PDF";
 //=========================================
 //========== EUROPASS =====================
 //=========================================
+karutaStr['fr']['mother-tongue']="Langue maternelle";
+karutaStr['fr']['foreign-languages']="Langues étrangères";
+karutaStr['fr']['add-foreign-language']="Ajouter une langue étrangère";
+
 karutaStr['fr']['understanding']="COMPRENDRE";
 karutaStr['fr']['listening']="Écouter";
 karutaStr['fr']['reading']="Lire";

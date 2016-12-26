@@ -140,8 +140,11 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					if (number_of_projects>0) {
 						$("#export-"+projects_list[number_of_projects-1].uuid).attr("href","../../../"+serverBCK+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
 					}
+					var portfolio_label = portfolio.label_node[langcode].text();
+					if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
+						portfolio_label = '- no label in '+languages[langcode]+' -';
 					//-------------------- PROJECT ----------------------
-					projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio.label_node[langcode].text(),"portfolios":""};
+					projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
 					displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
 					projects_list[number_of_projects].portfolios += portfolio.id;
 					number_of_projects_portfolios = 0;
@@ -151,7 +154,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-minus'></span></div>";
 					else
 						html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-plus'></span></div>";
-					html += "		<div id='portfoliolabel_"+portfolio.id+"' class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span></div>";
+					html += "		<div id='portfoliolabel_"+portfolio.id+"' class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio_label+"&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span></div>";
 					html += "		<div class='project-label col-md-2 col-sm-2 hidden-xs'>"+owner+"</div>";
 					html += "		<div id='project-comments_"+$(portfolios_byid[portfolio.id].root).attr("id")+"' class='col-md-4 col-sm3 col-xs-4 comments'></div><!-- comments -->";
 					html += "		<div class='col-md-1 col-xs-1'>";
@@ -294,6 +297,9 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 			var portfoliocode = portfolio.code_node.text();
 			var owner = (Users_byid[portfolio.ownerid]==null) ? "??? "+portfolio.ownerid:Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
 			if (portfolio.semantictag!= undefined && portfolio.semantictag.indexOf('karuta-project')>-1 && portfoliocode!='karuta.project'){
+				var portfolio_label = portfolio.label_node[langcode].text();
+				if (portfolio_label==undefined || portfolio_label=='')
+					portfolio_label = '- no label in '+languages[langcode]+' -';
 				//-------------------- PROJECT ----------------------
 				displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
 				number_of_bins ++;
@@ -303,7 +309,7 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-minus'></span></div>";
 				else
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button glyphicon glyphicon-plus'></span></div>";
-				html += "		<div class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio.label_node[langcode].text()+"</div>";
+				html += "		<div class='project-label col-md-3 col-sm-2 col-xs-3'>"+portfolio_label+"</div>";
 				html += "		<div class='project-label col-md-2 col-sm-2 hidden-xs'>"+owner+"</div>";
 				html += "		<div id='comments_"+portfolio.id+"' class='col-md-4 col-sm3 col-xs-4 comments'></div><!-- comments -->";
 				html += "		<div class='col-md-1 col-xs-1'>";
@@ -402,11 +408,14 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	//---------------------
 	var owner = (Users_byid[this.ownerid]==null) ? "??? "+this.ownerid:Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
 	//---------------------
+	var portfolio_label = this.label_node[langcode].text();
+	if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
+		portfolio_label = '- no label in '+languages[langcode]+' -';
+	//---------------------
 	var html = "";
 	if (type=='list') {
-
 		html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
-		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.id+"')\" onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+this.code_node.text()+"\"><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
+		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.id+"')\" onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+this.code_node.text()+"\"><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
 		if (USER.creator) {
 			html += "<div class='col-md-2 col-sm-2 hidden-xs'><span class='portfolio-owner' >"+owner+"</span></div>";
 			html += "<div class='col-md-2 col-sm-2 hidden-xs'><span class='portfolio-code' >"+this.code_node.text()+"</span></div>";
@@ -462,7 +471,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	if (type=='bin') {
 		if (USER.admin || USER.creator){
 			html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
-			html += "<div class='col-md-3 col-sm-3 col-xs-9'><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
+			html += "<div class='col-md-3 col-sm-3 col-xs-9'><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
 			html += "<div class='col-md-2 col-sm-2 hidden-xs '><a class='portfolio-owner' >"+owner+"</a></div>";
 			html += "<div class='col-md-2 col-sm-2 hidden-xs' >"+this.code_node.text()+"</a></div>";
 			if (this.date_modified!=null)

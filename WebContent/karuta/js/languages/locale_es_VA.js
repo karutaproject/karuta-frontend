@@ -63,6 +63,7 @@ karutaStr['es_VA']['password-mismatch']="Les dos paraules clau no coincideixen."
 karutaStr['es_VA']['saved']="Guardat";
 karutaStr['es_VA']['password-sent']="Se ha enviat una paraula clau nova per correu electrònic.";
 karutaStr['es_VA']['new-account']="No en té conte? <a href='createAccount.htm?lang=es_VA'>Enregistra't!</a>";
+karutaStr['es_VA']['sign-up']="Enregistra't!";
 karutaStr['es_VA']['disconnected']="Ho sentim! S'ha desconectat per accident";
 karutaStr['es_VA']['demo-documentation']="Importar documentació de Karuta";
 karutaStr['es_VA']['demo-ecommerce']="Importar Portfolios d'eCommerce de demostració";
@@ -77,6 +78,8 @@ karutaStr['es_VA']['choose']="Triar";
 karutaStr['es_VA']['quit']="Eixir";
 karutaStr['es_VA']['menu']="Menú";
 karutaStr['es_VA']['block-image-size']="Grandària recomanada en pixels<br>&nbsp; - Altura : 220<br>&nbsp; - Amplària : 800 dividit pel nombre de columnes<br>&nbsp;";
+karutaStr['es_VA']['list-novisible']="No visible";
+karutaStr['es_VA']['empty-bin']="Paperera buida";
 
 //=========================================
 //========== ERRORS =======================
@@ -112,6 +115,7 @@ karutaStr['es_VA']['editnoderoles']="Rols - Editar Etiqueta";
 karutaStr['es_VA']['duplicateroles']="Rols - Duplicar";
 karutaStr['es_VA']['editboxtitle']="Editar caixeta de títol";
 karutaStr['es_VA']['queryGet_Resource']="Cerca <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> La paraula reservada pel portfolio_code és <i>self</i></span>";
+karutaStr['es_VA']['query']=karutaStr['es_VA']['queryGet_Resource'];
 karutaStr['es_VA']['queryURL2Unit']="Cerca <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> La paraula reservada pel portfolio_code és <i>self</i></span>";
 karutaStr['es_VA']['queryGet_Get_Resource']="Cerca <br/><span style='font-size:smaller'> portfolio_code.<i>sibling</i>|<i>parent</i>[.<i>parent</i>].semantic_tag1.semantic_tag2.<i>label</i><br> La palabra reservada para el portfolio_code es <i>self</i></span>";
 karutaStr['es_VA']['queryProxy']="Cerca <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Les paraules reservades pel portfolio_code són <i>all</i> i <i>self</i></span>";
@@ -160,6 +164,8 @@ karutaStr['es_VA']['cssfile']="Fitxer CSS";
 karutaStr['es_VA']['display-type']="Mostrar el tipus";
 karutaStr['es_VA']['node']="Node de contingut";
 karutaStr['es_VA']['resource']="Recurs";
+karutaStr['es_VA']['metadata']="Metadades";
+karutaStr['es_VA']['css-styles']="Estils CSS";
 karutaStr['es_VA']['inparent']="Al pade";
 karutaStr['es_VA']['encrypted']="Cifrar recurs";
 karutaStr['es_VA']['get_rc4key']="Algunes parts d'aquest document estan cifrades.\nPrimera visita: escollïu una paraula clau de cifrat.\nVisites subsegüents: escribiu la vostra paraula clau de cifrat.";
@@ -241,6 +247,14 @@ karutaStr['es_VA']['welcome-add']="Afegir la pàgina de Benvinguda";
 karutaStr['es_VA']['welcome-added']="Se h'afegit la pàgina de Benvinguda al final del model de portfolio.<br>Moure-la a la primera posició.";
 karutaStr['es_VA']['button-welcome-edit']="Canviar a la edició de la pàgina de Benvinguda";
 karutaStr['es_VA']['existing-code']="Aquest codi ja existeix.";
+karutaStr['es_VA']['search-label']="Escribiu un códi o un part";
+karutaStr['es_VA']['no-portfolio']="";
+karutaStr['es_VA']['search-username-label']="Escribiu un nom d'usuari o una part";
+karutaStr['es_VA']['search-firstname-label']="Escribiu un nom de pila o una part";
+karutaStr['es_VA']['search-lastname-label']="Escribiu un cognom o una part";
+karutaStr['es_VA']['username-label']="Nom d'usuari";
+karutaStr['es_VA']['firstname-label']="Nom de pila";
+karutaStr['es_VA']['lastname-label']="Cognom";
 
 //=========================================
 //========== USERS ========================
@@ -261,6 +275,7 @@ karutaStr['es_VA']['admin']="Administrador";
 karutaStr['es_VA']['designer']="Creador";
 karutaStr['es_VA']['active']="Actiu";
 karutaStr['es_VA']['select_users']="Seleccioneu usuaris";
+karutaStr['es_VA']['projects-admin']="Projectes";
 karutaStr['es_VA']['portfolios-admin']="Portfolios";
 karutaStr['es_VA']['bin-admin']="Paperera";
 karutaStr['es_VA']['substitute']="Sustitució";
@@ -278,6 +293,7 @@ karutaStr['es_VA']['select_role']="Seleccioneu un rol";
 karutaStr['es_VA']['batch']="Executar script per lots";
 karutaStr['es_VA']['upload_csv']="Carregar un fitxer CSV";
 karutaStr['es_VA']['process_csv']="Procesar";
+karutaStr['es_VA']['create_user_portfolios']="Crear un usuari i el seu portfoli";
 
 //=========================================
 //========== REPORT ========================
@@ -306,7 +322,6 @@ karutaStr['es_VA']['pdf']="Rols - Mostrar PDF";
 //=========================================
 //========== EUROPASS =====================
 //=========================================
-
 karutaStr['es_VA']['mother-tongue']="Llengua materna";
 karutaStr['es_VA']['foreign-languages']="Llengues extranjeres";
 karutaStr['es_VA']['add-foreign-language']="Afegir una llengua extranjera";
@@ -353,8 +368,44 @@ karutaStr['es_VA']['select_groups']="Seleccionar grups";
 karutaStr['es_VA']['select_portfoliosgroups']="Seleccionar grups de Portfolios";
 karutaStr['es_VA']['create_portfoliosgroup']="Crear un grup de Portfolios";
 karutaStr['es_VA']['button-remove-from-group']="Esborrar del Grup";
+//=========================================
+//========== ERRORS =======================
+//=========================================
+
+karutaStr['es_VA']['code-not-null']="Code cannot be null";
+karutaStr['es_VA']['label-not-null']="Label cannot be null";
+karutaStr['es_VA']['inexistent-selection']="Inexistent Selection";
 
 //=========================================
-//========== TYPE PORTFOLIO================
+//========== RESOURCES =======================
 //=========================================
-karutaStr['es_VA']['actions']="Accions";
+
+karutaStr['es_VA']['asmStructure']="Secció";
+karutaStr['es_VA']['asmUnit']="Pàgina";
+karutaStr['es_VA']['asmUnitStructure']="Subsecció";
+
+karutaStr['es_VA']['TextField']="TextField";
+karutaStr['es_VA']['Field']="Field";
+karutaStr['es_VA']['Document']="Document";
+karutaStr['es_VA']['URL']="URL";
+karutaStr['es_VA']['Calendar']="Calendar";
+karutaStr['es_VA']['Image']="Image";
+karutaStr['es_VA']['Video']="Video";
+karutaStr['es_VA']['Audio']="Audio";
+karutaStr['es_VA']['Oembed']="Oembed";
+karutaStr['es_VA']['Color']="Color";
+karutaStr['es_VA']['URL2Unit']="URL2Unit";
+karutaStr['es_VA']['Comments']="Comments";
+
+karutaStr['es_VA']['SendEmail']="SendEmail";
+karutaStr['es_VA']['Dashboard']="Dashboard";
+
+karutaStr['es_VA']['DocumentBlock']="DocumentBlock";
+karutaStr['es_VA']['URLBlock']="URLBlock";
+karutaStr['es_VA']['ImageBlock']="ImageBlock";
+
+karutaStr['es_VA']['Item']="Item";
+karutaStr['es_VA']['GetResource']="GetResource";
+karutaStr['es_VA']['GetGetResource']="GetGetResource";
+karutaStr['es_VA']['GetDoubleResource']="GetDoubleResource";
+karutaStr['es_VA']['Proxy']="Proxy";
