@@ -52,7 +52,6 @@ function loadLoginPage(url)
 	loadCSS(url+"/other/css/jquery-ui.css");
 	loadCSS(url+"/other/css/font-awesome/css/font-awesome.min.css");
 	loadCSS(url+"/other/colorpicker/css/evol.colorpicker.css");
-	loadCSS(url+"/karuta/css/welcome.css");
 	//--------------------------------------------------------------
 	var karuta_config = "../../../"+appliname+"/application/css/color.less";
 	less = {
