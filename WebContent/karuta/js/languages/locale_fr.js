@@ -172,6 +172,7 @@ karutaStr['fr']['encrypted']="Encrypter la ressource";
 karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
 karutaStr['fr']['seltype']="Présentation ";
+karutaStr['fr']['shareroles']="Rôles - Partager";
 karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> rôle qui partage[,rôle destinataire,rôles et/ou courriels,niveau (0-3),durée de vie du lien (en heures),";
 karutaStr['fr']['shareroles2']="libellé du bouton@fr";
 karutaStr['fr']['shareroles3']="[,condition]][;autre partage]";
@@ -280,6 +281,7 @@ karutaStr['fr']['projects-admin']="Projets";
 karutaStr['fr']['portfolios-admin']="Portfolios";
 karutaStr['fr']['bin-admin']="Poubelle";
 karutaStr['fr']['substitute']="Substitution";
+karutaStr['fr']['create-test-user']="Créer un utilisateur test";
 
 //=========================================
 //========== ROLES ========================
@@ -323,12 +325,16 @@ karutaStr['fr']['pdf']="Rôles - Afficher PDF";
 //=========================================
 //========== EUROPASS =====================
 //=========================================
+karutaStr['fr']['mother-tongue']="Langue maternelle";
+karutaStr['fr']['foreign-languages']="Langues étrangères";
+karutaStr['fr']['add-foreign-language']="Ajouter une langue étrangère";
+
 karutaStr['fr']['understanding']="COMPRENDRE";
 karutaStr['fr']['listening']="Écouter";
 karutaStr['fr']['reading']="Lire";
 karutaStr['fr']['speaking']="PARLER";
 karutaStr['fr']['spoken-interaction']="Prendre part à une conversation";
-karutaStr['fr']['spoken-production']="S'exprimer oralement en continu";
+karutaStr['fr']['spoken-production']="S&rsquo;exprimer oralement en continu";
 karutaStr['fr']['writing']="ÉCRIRE";
 
 //=========================================

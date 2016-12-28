@@ -3,9 +3,9 @@ var application_version = "1.0";
 var application_date = "2016-04-29";
 //----------------------------------
 //var appliname = 'karuta2.2';
-var appliname = 'karuta-frontend';
+var appliname = 'karuta';
 //var karutaname = 'karuta-core'
-var karutaname = 'karuta-frontend'
+var karutaname = 'karuta';
 //var karuta_url = '../../../' + karutaname;
 var karuta_url = '../../../' + karutaname;
 //var bckname = '-ux';

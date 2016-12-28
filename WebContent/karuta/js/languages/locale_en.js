@@ -17,7 +17,6 @@ karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['loading']="Loading... ";
 karutaStr['en']['create_pdf']="Create PDF";
 karutaStr['en']['create_pdf_toc']="Create PDF with TOC";
-karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['Update']="Update";
 karutaStr['en']['Create']="Create";
 karutaStr['en']['Change']="Change";
@@ -64,7 +63,6 @@ karutaStr['en']['password-mismatch']="The two passwords do not match.";
 karutaStr['en']['saved']="Saved";
 karutaStr['en']['password-sent']="A new password has been sent by email.";
 karutaStr['en']['new-account']="You don't have an account?";
-karutaStr['en']['sign-up']="Sign Up!";
 karutaStr['en']['disconnected']="Oups! You have accidentally been disconnected!";
 karutaStr['en']['demo-documentation']="Import Karuta Documentation";
 karutaStr['en']['demo-ecommerce']="Import eCommerce Demo Portfolios";
@@ -79,6 +77,8 @@ karutaStr['en']['choose']="Choose";
 karutaStr['en']['quit']="Quit";
 karutaStr['en']['menu']="Menu";
 karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Height : 220<br>&nbsp; - Width : 800 divided by number of columns<br>&nbsp;";
+karutaStr['en']['sign-up']="Sign Up!";
+karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['list-novisible']="Not Visible";
 karutaStr['en']['empty-bin']="Empty bin";
 
@@ -323,6 +323,10 @@ karutaStr['en']['pdf']="Roles - Display PDF";
 //=========================================
 //========== EUROPASS =====================
 //=========================================
+karutaStr['en']['mother-tongue']="Mother Tongue";
+karutaStr['en']['foreign-languages']="Foreign Languages";
+karutaStr['en']['add-foreign-language']="Add a foreign Language";
+
 karutaStr['en']['understanding']="UNDERSTANDING";
 karutaStr['en']['listening']="Listening";
 karutaStr['en']['reading']="Reading";

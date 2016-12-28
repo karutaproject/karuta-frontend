@@ -7,20 +7,10 @@
 	<link rel="icon" type="image/png" href="../img/faviconK.png" />
 	<!-- =============================================================== -->
 	<script src="../js/_init.js"></script>
-	<script src="../../other/js/jquery-1.10.2.js"></script>
-	<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
-	<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../../other/js/jquery.ui.touch-punch.min.js"></script>
-	<script src="../../other/js/jquery_hotkeys.js"></script>
-	<script src="../../other/js/JQueryRC4.js"></script>
-	<script src="../../other/colorpicker/js/evol.colorpicker.js"></script>
-	<script src="../../karuta/js/karuta.js"></script>
-	<script src="../../other/js/js.cookie.js"></script>
-	<script src="../../karuta/js/version.js"></script>
-	<!-- =============================================================== -->
-	<script src="../../karuta/js/pages/login.js"></script>
-	<script>loadLoginPage(karuta_url);</script>
-	<!-- =============================================================== -->
+	<script>
+		document.write("<script src='"+karuta_url+"/karuta/js/pages/login.js'><\/script>");
+		document.write("<script>loadLoginPage(karuta_url);<\/script>");
+	</script>
 	<script>
 		$(window).load(function() {
 			displayKarutaLogin();

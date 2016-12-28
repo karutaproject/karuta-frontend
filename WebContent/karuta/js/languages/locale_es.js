@@ -407,3 +407,66 @@ karutaStr['es']['Proxy']="Proxy";
 
 karutaStr['es']['BubbleMap']="Mapa de Burbujas";
 karutaStr['es']['asmColumn']="asmColumn";
+karutaStr['es']['select_usersgroups']="Seleccione un Grupo de Usuarios";
+karutaStr['es']['create_usersgroup']="Creatar un Grupo de Usuarios";
+karutaStr['es']['list_usersgroups']="Grupos de Usuarios";
+karutaStr['es']['no_group']="Sin Grupo";
+karutaStr['es']['addshare-portfoliosgroups']="Compartir grupos de Portfolio";
+karutaStr['es']['addshare-portfolios']="Compartir Portfolios";
+karutaStr['es']['addshare-usersgroups']="Compartir con usuarios de grupos";
+karutaStr['es']['addshare-users']="Compartir con usuarios";
+karutaStr['es']['confirm-remove-user-group']="¿Desea borrar el usuario del grupo? Esta acción no se puede deshacer.";
+karutaStr['es']['empty-group']="Grupo vacío";
+karutaStr['es']['list_portfoliosgroups']="Grupos de Portfolios";
+karutaStr['es']['confirm-remove-item-group']="¿Desea boorar este elemento del grupo? Esta acción no se puede deshacer.";
+karutaStr['es']['add_users']="Añadir usuarios";
+karutaStr['es']['add_portfolios']="Añadir Portfolios";
+karutaStr['es']['select_groups']="Seleccionar grupos";
+karutaStr['es']['select_portfoliosgroups']="Seleccionar grupos de Portfolios";
+karutaStr['es']['create_portfoliosgroup']="Crear un grupo de Portfolios";
+karutaStr['es']['button-remove-from-group']="Borrar del Grupo";
+
+//=========================================
+//========== ERRORS =======================
+//=========================================
+
+karutaStr['es']['code-not-null']="El código no puede ser nulo";
+karutaStr['es']['label-not-null']="La etiqueta no puede ser nula";
+karutaStr['es']['inexistent-selection']="No hay selección del usuario";
+
+//=========================================
+//========== RESOURCES =======================
+//=========================================
+
+karutaStr['es']['asmStructure']="Sección";
+karutaStr['es']['asmUnit']="Página";
+karutaStr['es']['asmUnitStructure']="Subsección";
+
+karutaStr['es']['TextField']="Campo de Texto";
+karutaStr['es']['Field']="Campo";
+karutaStr['es']['Document']="Documento";
+karutaStr['es']['URL']="URL";
+karutaStr['es']['Calendar']="Calendario";
+karutaStr['es']['Image']="Imagen";
+karutaStr['es']['Video']="Vídeo";
+karutaStr['es']['Audio']="Audio";
+karutaStr['es']['Oembed']="Oembed";
+karutaStr['es']['Color']="Color";
+karutaStr['es']['URL2Unit']="URL2Unit";
+karutaStr['es']['Comments']="Comentarios";
+
+karutaStr['es']['SendEmail']="Enviar correo";
+karutaStr['es']['Dashboard']="Panel";
+
+karutaStr['es']['DocumentBlock']="DocumentBlock";
+karutaStr['es']['URLBlock']="URLBlock";
+karutaStr['es']['ImageBlock']="ImageBlock";
+
+karutaStr['es']['Item']="Item";
+karutaStr['es']['GetResource']="GetResource";
+karutaStr['es']['GetGetResource']="GetGetResource";
+karutaStr['es']['GetDoubleResource']="GetDoubleResource";
+karutaStr['es']['Proxy']="Proxy";
+
+karutaStr['es']['BubbleMap']="Mapa de Burbujas";
+karutaStr['es']['asmColumn']="asmColumn";

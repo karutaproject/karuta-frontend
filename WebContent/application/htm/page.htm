@@ -10,11 +10,8 @@
 			<script src='http://html5shiv.googlecode.com/svn/trunk/html5.js'></script>
 		<![endif]-->
 		<!-- =============================================================== -->
-		<script>
-			document.write("<script src='"+karuta_url+"/karuta/js/pages/public.js'><\/script>");
-			document.write("<script>loadPublic(karuta_url);<\/script>");
-		</script>
-		<!-- =============================================================== -->
+		<script src="../../../karuta-core/karuta/js/pages/page.js"></script>
+		<script>loadPage(karuta_url);</script>
 		<link rel='stylesheet' type='text/css' href='../css/specific.css'/>
 		<!-- =============================================================== -->
 		<style>
@@ -28,7 +25,7 @@
 	<body>
 		<script>
 			$(window).load(function() {
-				displayKarutaPublic()
+				displayOnePage()
 			});
 		</script>
 	</body>

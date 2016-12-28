@@ -167,8 +167,8 @@ function getLogin(encrypt_url,lang)
 //==============================
 {
 	var html = "";
-	html += "<input id='useridentifier' class='form-control' placeholder='"+karutaStr[LANG]['username']+"' type='text'>";
-	html += "<input id='password' class='form-control' placeholder='"+karutaStr[LANG]['password']+"' type='password'>";
+	html += "<input id='useridentifier' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'>";
+	html += "<input id='password' class='form-control' placeholder=\""+karutaStr[LANG]['password']+"\" type='password'>";
 	html += "<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
 	return html;
 }
@@ -179,7 +179,7 @@ function getNew()
 {
 	var html = "";
 	html += "<p>"+karutaStr[LANG]['newpassword']+"</p>";
-	html += "<input id='useridentifier_new' class='form-control' placeholder='"+karutaStr[LANG]['username']+"' type='text'/>";
+	html += "<input id='useridentifier_new' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'/>";
 	html += "<button id='form-send' onclick='javascript:callSend()'>"+karutaStr[LANG]['button-send']+"</button>";
 	return html;
 }

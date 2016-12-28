@@ -1,5 +1,3 @@
-
-
 karutaStr['es_VA'] = new Array();
 //----------------------------------------------------
 karutaStr['es_VA']['language']="Valencià";
@@ -80,6 +78,8 @@ karutaStr['es_VA']['menu']="Menú";
 karutaStr['es_VA']['block-image-size']="Grandària recomanada en pixels<br>&nbsp; - Altura : 220<br>&nbsp; - Amplària : 800 dividit pel nombre de columnes<br>&nbsp;";
 karutaStr['es_VA']['list-novisible']="No visible";
 karutaStr['es_VA']['empty-bin']="Paperera buida";
+karutaStr['es_VA']['list-novisible']="No visible";
+karutaStr['es_VA']['empty-bin']="Paperera buida";
 //=========================================
 //========== ERRORS =======================
 //=========================================
@@ -114,6 +114,7 @@ karutaStr['es_VA']['editnoderoles']="Rols - Editar Etiqueta";
 karutaStr['es_VA']['duplicateroles']="Rols - Duplicar";
 karutaStr['es_VA']['editboxtitle']="Editar caixeta de títol";
 karutaStr['es_VA']['queryGet_Resource']="Cerca <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> La paraula reservada pel portfolio_code és <i>self</i></span>";
+karutaStr['es_VA']['query']=karutaStr['es_VA']['queryGet_Resource'];
 karutaStr['es_VA']['queryURL2Unit']="Cerca <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> La paraula reservada pel portfolio_code és <i>self</i></span>";
 karutaStr['es_VA']['queryGet_Get_Resource']="Cerca <br/><span style='font-size:smaller'> portfolio_code.<i>sibling</i>|<i>parent</i>[.<i>parent</i>].semantic_tag1.semantic_tag2.<i>label</i><br> La palabra reservada para el portfolio_code es <i>self</i></span>";
 karutaStr['es_VA']['queryProxy']="Cerca <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Les paraules reservades pel portfolio_code són <i>all</i> i <i>self</i></span>";
@@ -253,6 +254,14 @@ karutaStr['es_VA']['search-lastname-label']="Escribiu un cognom o una part";
 karutaStr['es_VA']['username-label']="Nom d'usuari";
 karutaStr['es_VA']['firstname-label']="Nom de pila";
 karutaStr['es_VA']['lastname-label']="Cognom";
+karutaStr['es_VA']['search-label']="Escribiu un códi o un part";
+karutaStr['es_VA']['no-portfolio']="";
+karutaStr['es_VA']['search-username-label']="Escribiu un nom d'usuari o una part";
+karutaStr['es_VA']['search-firstname-label']="Escribiu un nom de pila o una part";
+karutaStr['es_VA']['search-lastname-label']="Escribiu un cognom o una part";
+karutaStr['es_VA']['username-label']="Nom d'usuari";
+karutaStr['es_VA']['firstname-label']="Nom de pila";
+karutaStr['es_VA']['lastname-label']="Cognom";
 //=========================================
 //========== USERS ========================
 //=========================================
@@ -319,7 +328,6 @@ karutaStr['es_VA']['pdf']="Rols - Mostrar PDF";
 //=========================================
 //========== EUROPASS =====================
 //=========================================
-
 karutaStr['es_VA']['mother-tongue']="Llengua materna";
 karutaStr['es_VA']['foreign-languages']="Llengues extranjeres";
 karutaStr['es_VA']['add-foreign-language']="Afegir una llengua extranjera";
@@ -366,6 +374,13 @@ karutaStr['es_VA']['select_groups']="Seleccionar grups";
 karutaStr['es_VA']['select_portfoliosgroups']="Seleccionar grups de Portfolios";
 karutaStr['es_VA']['create_portfoliosgroup']="Crear un grup de Portfolios";
 karutaStr['es_VA']['button-remove-from-group']="Esborrar del Grup";
+//=========================================
+//========== ERRORS =======================
+//========================================= 
+
+karutaStr['es_VA']['code-not-null']="El codi no pot ser buit";
+karutaStr['es_VA']['label-not-null']="La etiqueta no pot ser buida";
+karutaStr['es_VA']['inexistent-selection']="Selecció inexistent";
 //=========================================
 //========== ERRORS =======================
 //=========================================
