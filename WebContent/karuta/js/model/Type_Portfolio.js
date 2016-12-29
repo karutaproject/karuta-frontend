@@ -1911,19 +1911,14 @@ UIFactory["Portfolio"].shareUsers = function(portfolioid)
 	}
 	var url = null;
 	if (groupid!=null) {
-		url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
-		var xml = "<users>";
-		for (var i=0; i<users.length; i++){
-			var userid = $(users[i]).attr('value');
-			xml += "<user id='"+userid+"'/>";
-		}
-		xml += "</users>";
+		//Get all the users in the selected role/group
+		var xml = get_usersxml_from_groups($("input[name='radio_group']").filter(':checked'));
 		if (xml.length>20) {
 			$.ajax({
 				type : "POST",
 				contentType: "application/xml",
 				dataType : "xml",
-				url : url,
+				url : "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users",
 				data : xml,
 				success : function(data) {
 					//--------------------------
@@ -1941,6 +1936,7 @@ UIFactory["Portfolio"].shareUsers = function(portfolioid)
 					//--------------------------
 				}
 			});
+			$.ajaxSetup({async: true});
 		}
 	}
 	//------------------------------------------------------------
