@@ -828,12 +828,17 @@ UIFactory["PortfoliosGroup"].shareUsers = function(gid,type)
 		grouplabel = $(group).attr('value');
 	}
 	if (grouplabel!=null) {
+		//Get all the users in the selected role/group
+		var xml = get_usersxml_from_groups($("input[name='radio_group']").filter(':checked'));
+	}else{
 		var xml = "<users>";
 		for (var i=0; i<users.length; i++){
 			var userid = $(users[i]).attr('value');
 			xml += "<user id='"+userid+"'/>";
 		}
 		xml += "</users>";
+	}
+	if (grouplabel!=null){
 		for (var i=0; i<PortfoliosGroups_byid[gid].rrg[grouplabel].length; i++) {
 			var groupid = PortfoliosGroups_byid[gid].rrg[grouplabel][i];
 			updateRRGroup_Users(groupid,users,xml,type,'value');
