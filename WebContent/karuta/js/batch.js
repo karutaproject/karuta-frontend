@@ -1975,7 +1975,7 @@ function get_usersxml_from_group(groupid)
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/usersgroups?group="+groupid,
 		success : function(data) {
-			xml = $($("users",data)[0]).html();
+			xml += $($("users",data)[0]).html();
 		}
 	});
 	$.ajaxSetup({async: true});
