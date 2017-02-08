@@ -331,7 +331,7 @@ karutaStr['fr']['listening']="Écouter";
 karutaStr['fr']['reading']="Lire";
 karutaStr['fr']['speaking']="PARLER";
 karutaStr['fr']['spoken-interaction']="Prendre part à une conversation";
-karutaStr['fr']['spoken-production']="S'exprimer oralement en continu";
+karutaStr['fr']['spoken-production']="S&#39;exprimer oralement en continu";
 karutaStr['fr']['writing']="ÉCRIRE";
 
 //=========================================
