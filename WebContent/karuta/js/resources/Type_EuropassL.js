@@ -162,27 +162,27 @@ UIFactory["Langue"].prototype.displayEditor = function(destid,type,lang)
 		//---------------------------------------------------------
 		html +="<td id='language_edit_"+this.id+"' class='language_edit' width='150px'></td>";
 		html +="<td class='bordure'><span id='listening_"+this.id+"_edit'>"+UICom.structure["ui"][this.listening_nodeid].resource.getCode("listening_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('listening_edit','"+this.listening_nodeid+"','"+karutaStr[LANG]['listening']+"')\" >";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('listening_edit','"+this.listening_nodeid+"','listening')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='reading_"+this.id+"_edit'>"+UICom.structure["ui"][this.reading_nodeid].resource.getCode("reading_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('reading_edit','"+this.reading_nodeid+"','"+karutaStr[LANG]['reading']+"')\" >";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('reading_edit','"+this.reading_nodeid+"','reading')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='spokenInteraction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getCode("spokenInteraction_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenInteraction_edit','"+this.spokenInteraction_nodeid+"','"+karutaStr[LANG]['spoken-interaction']+"')\" >";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenInteraction_edit','"+this.spokenInteraction_nodeid+"','spoken-interaction')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='spokenProduction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getCode("spokenProduction_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenProduction_edit','"+this.spokenProduction_nodeid+"','"+karutaStr[LANG]['spoken-production']+"')\" >";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenProduction_edit','"+this.spokenProduction_nodeid+"','spoken-production')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='writing_"+this.id+"_edit'>"+UICom.structure["ui"][this.writing_nodeid].resource.getCode("writing_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('writing_edit','"+this.writing_nodeid+"','"+karutaStr[LANG]['writing']+"')\" >";
+		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('writing_edit','"+this.writing_nodeid+"','writing')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
@@ -202,7 +202,7 @@ UIFactory["Langue"].prototype.displayEditor = function(destid,type,lang)
 UIFactory["Langue"].editSkill = function(destid,uuid,title)
 //==================================
 {
-	$("#langue-window-header").html("<h4>"+title+"</h4>");
+	$("#langue-window-header").html("<h4>"+karutaStr[LANG][title]+"</h4>");
 	$("#langue-window-body").html("<div id='"+destid+"'></div>");
 	UICom.structure["ui"][uuid].resource.displayEditor(destid,"radio");
 	$("#langue-window").modal("show");
