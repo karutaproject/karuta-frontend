@@ -3947,7 +3947,7 @@ UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
 		type='default';
 	var html ="";
 	UIFactory["Bubble"].parse(this.node);  // this.node
-	html += "<iframe id='bubble_iframe_"+this.id+"' class='bubble_iframe' src='bubble.html?uuid="+this.id+"' height='500' width='100%'></iframe>";
+	html += "<iframe id='bubble_iframe_"+this.id+"' class='bubble_iframe' src='"+karuta_url+"/karuta/htm/bubble.html?uuid="+this.id+"' height='500' width='100%'></iframe>";
 	html += "<div id='bubble_display_"+this.id+"' class='bubble_display'></div>";
 	return html;
 };
