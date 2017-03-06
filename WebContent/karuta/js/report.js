@@ -562,6 +562,9 @@ function r_processNodeResource(xmlDoc,destid,data)
 					text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
 					prefix_id += "value_";
 				}
+				if (selector.type=='resource label') {
+					text = UICom.structure["ui"][nodeid].resource.getLabel();
+				}
 				if (selector.type=='node label') {
 					text = UICom.structure["ui"][nodeid].getLabel();
 				}
@@ -953,6 +956,9 @@ function r_processWebTitle(xmlDoc,destid,data)
 			if (selector.type=='resource value') {
 				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
 			}
+			if (selector.type=='resource label') {
+				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+			}
 			if (selector.type=='node label') {
 				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
 			}
@@ -991,6 +997,9 @@ function r_processWebAxis(xmlDoc,destid,data)
 			}
 			if (selector.type=='resource value') {
 				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+			}
+			if (selector.type=='resource label') {
+				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
 			}
 			if (selector.type=='node label') {
 				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
@@ -1039,6 +1048,9 @@ function r_processWebLine(xmlDoc,destid,data,no)
 			if (selector.type=='resource value') {
 				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
 			}
+			if (selector.type=='resource label') {
+				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+			}
 			if (selector.type=='node label') {
 				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
 			}
@@ -1080,6 +1092,9 @@ function r_processWebLine(xmlDoc,destid,data,no)
 				}
 				if (selector.type=='resource value') {
 					text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+				}
+				if (selector.type=='resource label') {
+					text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
 				}
 				if (selector.type=='node label') {
 					text = UICom.structure["ui"][nodeid].getLabel(null,'none');

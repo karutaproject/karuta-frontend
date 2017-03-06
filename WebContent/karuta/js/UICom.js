@@ -98,8 +98,10 @@ var UICom =
 					if (UICom.structure["tree"][parentid].children[i]==id)
 						push = false;
 				}
-				if (push)
+				if (push){
 					UICom.structure["tree"][parentid].children.push(id);
+					UICom.structure["tree"][parentid].node.appendChild(root[0]);
+				}
 			}
 		}
 		//---------------------

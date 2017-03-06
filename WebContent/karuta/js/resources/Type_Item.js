@@ -97,6 +97,39 @@ UIFactory["Item"].prototype.getCode = function()
 };
 
 //==================================
+UIFactory["Item"].prototype.getLabel = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (type==null)
+		type = 'span';
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	var html = "";
+	var code = $(this.code_node).text();
+	if (code.indexOf("@")>-1) {
+		display_code = false;
+		code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+	}
+	var label = this.label_node[langcode].text();
+	if (type=="div")
+		html +=   "<div>"+label+"</div>";
+	if (type=="span")
+		html +=  "<span class='label_Item "+code+"'> "+label+"</span>";
+	if (type=="none")
+		html += label;
+	return html;
+};
+
+//==================================
 UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
