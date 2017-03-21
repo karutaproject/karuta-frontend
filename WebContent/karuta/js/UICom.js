@@ -49,7 +49,7 @@ var UICom =
 	},
 
 	//=======================================================================
-	parseStructure: function( data, treeroot, parentid, treerootname,report )
+	parseStructure: function( data, treeroot, parentid, treerootname,report,addnode)
 	//=======================================================================
 	{
 		if (report==null) {
@@ -100,7 +100,12 @@ var UICom =
 				}
 				if (push){
 					UICom.structure["tree"][parentid].children.push(id);
-					UICom.structure["tree"][parentid].node.appendChild(root[0]);
+					if (addnode==null) {
+						addnode = false;
+					}
+					if (addnode) {
+						UICom.structure["tree"][parentid].node.appendChild(root[0]);
+					}
 				}
 			}
 		}
@@ -147,7 +152,8 @@ var UICom =
 								proxies_parent[targetid] = $(current).attr("id");
 								proxies_edit[targetid] = edittargetroles;
 								proxies_nodeid[targetid] = id;
-								UICom.parseStructure(data,false,$(current).attr("id"));
+//								UICom.parseStructure(data,false,$(current).attr("id"));
+								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
 							}
 						});
 					}
@@ -158,7 +164,8 @@ var UICom =
 							dataType : "xml",
 							url : "../../../"+serverBCK+"/nodes/node/" + targetid + "?resources=true",
 							success : function(data) {
-								UICom.parseStructure(data,false,$(current).attr("id"));
+//								UICom.parseStructure(data,false,$(current).attr("id"));
+								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
 							},
 							error : function(jqxhr,textStatus) {
 								alertHTML("Error in parseElement - Get_Proxy : "+jqxhr.responseText);
