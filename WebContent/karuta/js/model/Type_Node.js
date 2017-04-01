@@ -2642,10 +2642,23 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 	var html = "<a class='button text-button' href='#xxx' onclick=\"";
-	var semtags = tag.split(" ");
-	for (var i=0;i<semtags.length;i++){
-		if (semtags[i].length>0)
-		html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+	if (srce=='function'){
+		var items = tag.split("/");
+		html += items[0] +"('"+parentid+"','"+title+"'";
+		if (items.length>0)
+			html += ",";
+		for (var i=1;i<items.length;i++){
+			html += "'" + items[i] + "'";
+			if (i<items.length-1)
+				html += ",";
+		}
+		html += ");"
+	} else {
+		var semtags = tag.split(" ");
+		for (var i=0;i<semtags.length;i++){
+			if (semtags[i].length>0)
+			html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+		}
 	}
 	html += "\">";
 	html += title;
@@ -2660,10 +2673,23 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 	var html = "<li><a class='button text-button' href='#xxx' onclick=\"";
-	var semtags = tag.split(" ");
-	for (var i=0;i<semtags.length;i++){
-		if (semtags[i].length>0)
-		html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+	if (srce=='function'){
+		var items = tag.split("/");
+		html += items[0] +"('"+parentid+"','"+title+"'";
+		if (items.length>0)
+			html += ",";
+		for (var i=1;i<items.length;i++){
+			html += "'" + items[i] + "'";
+			if (i<items.length-1)
+				html += ",";
+		}
+		html += ");"
+	} else {
+		var semtags = tag.split(" ");
+		for (var i=0;i<semtags.length;i++){
+			if (semtags[i].length>0)
+			html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+		}
 	}
 	html += "\">";
 	html += title;

@@ -57,6 +57,7 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.display = {};
 	this.displayCode = {};
 	this.displayValue = {};
+	this.multiple = "";
 };
 
 //==================================
@@ -210,11 +211,18 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable,resettable)
 //==================================
 {
+
+	var multiple_tags = "";
 	if (cachable==undefined || cachable==null)
 		cachable = true;
 	if (type==undefined || type==null)
 		type = $("metadata-wad",this.node).attr('seltype');
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
+	if (this.multiple!=""){
+		multiple_tags = this.multiple.substring(this.multiple.indexOf('/')+1);
+		queryattr_value = this.multiple.substring(0,this.multiple.indexOf('/'));
+		type = 'multiple';
+	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------
 		var srce_indx = queryattr_value.lastIndexOf('.');
@@ -234,7 +242,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		//------------
 		var self = this;
 		if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
-			UIFactory["Get_Resource"].parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,resettable,target,semtag);
+			UIFactory["Get_Resource"].parse(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,resettable,target,semtag,multiple_tags);
 		else
 			$.ajax({
 				type : "GET",
@@ -243,7 +251,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				success : function(data) {
 					if (cachable)
 						g_Get_Resource_caches[queryattr_value] = data;
-					UIFactory["Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag);
+					UIFactory["Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag,multiple_tags);
 				}
 			});
 	}
@@ -251,7 +259,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 
 
 //==================================
-UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag) {
+UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag,multiple_tags) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -515,7 +523,44 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		$("#"+destid).append(inputs_obj);
 		//------------------------------------------------------------
 	}
-
+	//------------------------------------------------------------
+	if (type.indexOf('multiple')>-1) {
+		//------------------------
+		var inputs = "<div id='get_multiple' class='multiple'></div>";
+		var inputs_obj = $(inputs);
+		//-----------------------
+		var nodes = $("node",data);
+		for ( var i = 0; i < $(nodes).length; ++i) {
+			var input = "";
+			var resource = null;
+			if ($("asmResource",nodes[i]).length==3)
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			else
+				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+			var code = $('code',resource).text();
+			var display_code = true;
+			if (code.indexOf("@")>-1) {
+				display_code = false;
+				code =code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+			}
+			if (code.indexOf("#")>-1) {
+				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+			}
+			input += "<div> <input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
+			input += "' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
+			}
+			input += "> ";
+			if (display_code)
+				input += code + " ";
+			input +="<span  class='"+code+"'>"+$("label[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
+			var input_obj = $(input);
+			$(inputs_obj).append(input_obj);
+		}
+		$("#"+destid).append(inputs_obj);
+		//------------------------------------------------------------
+	}
 };
 
 //==================================
@@ -547,3 +592,91 @@ UIFactory["Get_Resource"].prototype.refresh = function()
 		$("#"+dest).html(this.getValue());
 	};
 };
+
+//==================================
+UIFactory["Get_Resource"].addMultiple = function(parentid,multiple_tags)
+//==================================
+{
+	$.ajaxSetup({async: false});
+	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
+	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
+	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
+	var get_resource_semtag = multiple_tags.substring(multiple_tags.indexOf(',')+1);
+	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
+	// for each one create a part
+	var databack = true;
+	var callback = UIFactory.Get_Resource.updateaddedpart;
+	var param2 = get_resource_semtag;
+	var param4 = false;
+	for (var j=0; j<inputs.length;j++){
+		var param3 = inputs[j];
+		if (j==inputs.length-1)
+			param4 = true;
+		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4);
+	}
+};
+
+//==================================
+UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,selected_item,last)
+//==================================
+{
+	var partid = data;
+	var value = $(selected_item).attr('value');
+	var code = $(selected_item).attr('code');
+	var xml = "<asmResource xsi_type='Get_Resource'>";
+	xml += "<code>"+code+"</code>";
+	xml += "<value>"+value+"</value>";
+	for (var i=0; i<languages.length;i++){
+		var label = $(selected_item).attr('label_'+languages[i]);
+		xml += "<label lang='"+languages[i]+"'>"+label+"</label>";
+	}
+	xml += "</asmResource>";
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/nodes/node/"+partid,
+		last : last,
+		success : function(data) {
+			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+			$.ajax({
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : xml,
+				last : this.last,
+				url : "../../../"+serverBCK+"/resources/resource/" + nodeid,
+				success : function(data) {
+					if (this.last) {
+						$('#edit-window').modal('hide');
+						UIFactory.Node.reloadUnit();
+					}
+				}
+			});
+		}
+	});
+
+}
+
+//==================================
+function get_multiple(parentid,title,query,partcode,get_resource_semtag)
+//==================================
+{
+	var langcode = LANGCODE;
+	//---------------------
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+partcode+","+get_resource_semtag+"')";
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(title);
+	var html = "<div id='get-resource-node'></div>";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	getResource.multiple = query+"/"+partcode+","+get_resource_semtag;
+	getResource.displayEditor("get-resource-node");
+	$('#edit-window').modal('show');
+
+}
