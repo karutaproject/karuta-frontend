@@ -247,7 +247,7 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 		$(select_item_a).click(function (ev){
 			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
 			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
-			UIFactory["Proxy"].update(this,self,langcode);
+			UIFactory["Proxy"].update(self,langcode);
 		});
 		$(select_item).append($(select_item_a))
 		$(select).append($(select_item));
