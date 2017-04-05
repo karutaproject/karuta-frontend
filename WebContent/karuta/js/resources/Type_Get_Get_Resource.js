@@ -245,10 +245,9 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			var semtag_parent = queryattr_value.substring(semtag_parent_indx+1,semtag_indx);
 			if (semtag_parent.indexOf('#')==0)
 				semtag_parent = semtag_parent.substring(1);
-			var portfoliocode_end_indx = queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent')+queryattr_value.indexOf('#')+1;
+			var portfoliocode_end_indx = queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent')+queryattr_value.indexOf('#')+queryattr_value.indexOf('itself')+2;
 			var portfoliocode = queryattr_value.substring(0,portfoliocode_end_indx);
 			//------------
-			var portfoliocode = queryattr_value.substring(0,portfoliocode_end_indx);
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 			if (portfoliocode.indexOf('.')<0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
 				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
@@ -278,6 +277,10 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			//----------------------
 			if ($("asmContext:has(metadata[semantictag*='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
 				code_parent = decrypt(code_parent.substring(3),g_rc4key);
+			//----------------------
+			if (query.indexOf('itself')>-1) {
+				code_parent = $("code",$(this.node)[0]).text();
+			}
 			//----------------------
 			var portfoliocode_parent = $("portfoliocode",$("asmContext:has(metadata[semantictag*='"+semtag_parent+"'])",parent)).text();
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
@@ -899,7 +902,7 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 	var partid = data;
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
-	var xml = "<asmResource xsi_type='Get_Resource'>";
+	var xml = "<asmResource xsi_type='Get_Get_Resource'>";
 	xml += "<code>"+code+"</code>";
 	xml += "<value>"+value+"</value>";
 	for (var i=0; i<languages.length;i++){
@@ -913,14 +916,21 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 		url : "../../../"+serverBCK+"/nodes/node/"+partid,
 		last : last,
 		success : function(data) {
-			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+//			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+			var nodeid = $("*:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+			var url_resource = "../../../"+serverBCK+"/resources/resource/" + nodeid;
+			var tagname = $( ":root",data )[ 0 ].nodeName;
+			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
+				xml = xml.replace("Get_Resource","nodeRes");
+				url_resource = "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource";
+			}
 			$.ajax({
 				type : "PUT",
 				contentType: "application/xml",
 				dataType : "text",
 				data : xml,
 				last : this.last,
-				url : "../../../"+serverBCK+"/resources/resource/" + nodeid,
+				url : url_resource,
 				success : function(data) {
 					if (this.last) {
 						$('#edit-window').modal('hide');

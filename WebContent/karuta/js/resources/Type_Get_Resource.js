@@ -637,14 +637,21 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 		url : "../../../"+serverBCK+"/nodes/node/"+partid,
 		last : last,
 		success : function(data) {
-			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+//			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+			var nodeid = $("*:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+			var url_resource = "../../../"+serverBCK+"/resources/resource/" + nodeid;
+			var tagname = $( ":root",data )[ 0 ].nodeName;
+			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
+				xml = xml.replace("Get_Resource","nodeRes");
+				url_resource = "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource";
+			}
 			$.ajax({
 				type : "PUT",
 				contentType: "application/xml",
 				dataType : "text",
 				data : xml,
 				last : this.last,
-				url : "../../../"+serverBCK+"/resources/resource/" + nodeid,
+				url : url_resource,
 				success : function(data) {
 					if (this.last) {
 						$('#edit-window').modal('hide');
