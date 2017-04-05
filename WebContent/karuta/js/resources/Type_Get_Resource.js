@@ -559,8 +559,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			$(inputs_obj).append(input_obj);
 		}
 		$("#"+destid).append(inputs_obj);
-		//------------------------------------------------------------
 	}
+	//------------------------------------------------------------
 };
 
 //==================================

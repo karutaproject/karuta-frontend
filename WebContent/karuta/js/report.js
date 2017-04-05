@@ -208,11 +208,50 @@ function r_processNode(no,xmlDoc,destid,data,line)
 					r_processWebLine(children[j],destid,nodes[i],i);
 				if (tagname=="aggregate")
 					r_processAggregate(children[j],destid,nodes[i],i);
+				if (tagname=="go-parent")
+					r_processGoParent(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 			}
 		};
 	}
 }
 
+//==================================
+function r_processGoParent(no,xmlDoc,destid,data,line)
+//==================================
+{
+	var parent = data.parent();
+	//---------------------------
+	var children = $(">*",xmlDoc);
+	for (var j=0; j<children.length;j++){
+		var tagname = $(children[j])[0].tagName;
+		if (tagname=="for-each-node")
+			r_processNode(no+"_"+i+"_"+j,children[j],destid,parent,i);
+		if (tagname=="table")
+			r_processTable(no+"_"+i+"_"+j,children[j],destid,parent,i);
+		if (tagname=="row")
+			r_processRow(no+"_"+i+"_"+j,children[j],destid,parent,i);
+		if (tagname=="cell")
+			r_processCell(no+"_"+i+"_"+j,children[j],destid,parent,i);
+		if (tagname=="aggregate")
+			r_processAggregate(children[j],destid,parent,i);
+		if (tagname=="node_resource")
+			r_processNodeResource(children[j],destid,parent,i);
+		if (tagname=="text")
+			r_processText(children[j],destid,parent,i);
+		if (tagname=="url2unit")
+			r_processURL2Unit(children[j],destid,parent,i);
+		if (tagname=="jsfunction")
+			r_processJSFunction(children[j],destid,parent,i);
+		if (tagname=="draw-web-axis")
+			r_processWebAxis(children[j],destid,parent,i);
+		if (tagname=="draw-web-line")
+			r_processWebLine(children[j],destid,parent,i);
+		if (tagname=="aggregate")
+			r_processAggregate(children[j],destid,parent,i);
+		if (tagname=="go-parent")
+			r_processGoParent(no+"_"+i+"_"+j,children[j],destid,parent,i);
+	}
+}
 //==================================
 function r_processSVG(no,xmlDoc,destid,data,line)
 //==================================

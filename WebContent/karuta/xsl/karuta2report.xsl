@@ -252,7 +252,11 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</aggregate>
 	</xsl:template>
-	
+		<!-- ================ GoParent ============================ -->
+	<xsl:template match="*[metadata/@semantictag='go-parent']">
+		<goparent>
+		</goparent>
+	</xsl:template>
 	<!-- ================ draw-web-title ============================ -->
 	<xsl:template match="*[metadata/@semantictag='draw-web-title']">
 		<xsl:variable name="editresroles">
