@@ -208,7 +208,7 @@ function r_processNode(no,xmlDoc,destid,data,line)
 					r_processWebLine(children[j],destid,nodes[i],i);
 				if (tagname=="aggregate")
 					r_processAggregate(children[j],destid,nodes[i],i);
-				if (tagname=="go-parent")
+				if (tagname=="goparent")
 					r_processGoParent(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 			}
 		};
@@ -219,9 +219,10 @@ function r_processNode(no,xmlDoc,destid,data,line)
 function r_processGoParent(no,xmlDoc,destid,data,line)
 //==================================
 {
-	var parent = data.parent();
+	var parent = $(data).parent();
 	//---------------------------
 	var children = $(">*",xmlDoc);
+	var i=0;
 	for (var j=0; j<children.length;j++){
 		var tagname = $(children[j])[0].tagName;
 		if (tagname=="for-each-node")
@@ -248,7 +249,7 @@ function r_processGoParent(no,xmlDoc,destid,data,line)
 			r_processWebLine(children[j],destid,parent,i);
 		if (tagname=="aggregate")
 			r_processAggregate(children[j],destid,parent,i);
-		if (tagname=="go-parent")
+		if (tagname=="goparent")
 			r_processGoParent(no+"_"+i+"_"+j,children[j],destid,parent,i);
 	}
 }

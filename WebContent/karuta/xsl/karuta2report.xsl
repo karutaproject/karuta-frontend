@@ -255,6 +255,7 @@
 		<!-- ================ GoParent ============================ -->
 	<xsl:template match="*[metadata/@semantictag='go-parent']">
 		<goparent>
+			<xsl:apply-templates select='asmUnitStructure'/>
 		</goparent>
 	</xsl:template>
 	<!-- ================ draw-web-title ============================ -->
