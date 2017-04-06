@@ -2272,7 +2272,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "		</li>";
 	//-------------------- ROLES-------------------------
 	if (g_userroles[0]=='designer') {
-		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >Role : <span id='userrole'>designer</span><span class='caret'></span></a>";
+		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >"+karutaStr[LANG]['role']+" : <span id='userrole'>designer</span><span class='caret'></span></a>";
 		html += "		<ul class='dropdown-menu pull-right'>";
 		html += "			<li><a  onclick=\"setDesignerRole('designer')\">designer</a></li>";
 		for (role in UICom.roles) {

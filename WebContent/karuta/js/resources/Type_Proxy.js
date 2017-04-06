@@ -245,8 +245,12 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 		html += "&nbsp;</a>";
 		var select_item_a = $(html);
 		$(select_item_a).click(function (ev){
-			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
-			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
+			$("#button_"+self.id).html(portfolio_label+"."+$(this).attr("label_"+languages[langcode]));
+			for (var i=0; i<languages.length;i++){
+				$(self.label_node[i]).text($(this).attr("label_"+languages[i]));
+			}
+			$(self.code_node).text($(this).attr("code"));
+			$(self.value_node).text($(this).attr("value"));
 			UIFactory["Proxy"].update(self,langcode);
 		});
 		$(select_item).append($(select_item_a))
