@@ -2386,7 +2386,7 @@ UIFactory["Portfolio"].displayTreeSelectMultiple = function(selectedlist,nb,dest
 			var html = "";
 			var portfoliocode = portfolio.code_node.text();
 			var owner = (Users_byid[portfolio.ownerid]==null) ? "??? "+portfolio.ownerid:Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
-			if (portfolio.semantictag=='karuta-project' && portfoliocode!='karuta.project'){
+			if (portfolio.semantictag.indexOf('karuta-project')>-1 && portfoliocode!='karuta.project'){
 				//-------------------- PROJECT ----------------------
 				html += "<div id='selectform-project_"+portfolio.id+"' class='project'>";
 				html += "	<div class='row row-label'>";
