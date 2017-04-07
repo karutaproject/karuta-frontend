@@ -2871,6 +2871,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	}
 	//------------- specific menu button ---------------
 	if (menu) {
+		var no_monomenu = 0;
 		try {
 			if ((depth>0 || node.asmtype == 'asmUnitStructure') && menuroles != undefined && menuroles.length>10 && (menuroles.indexOf(userrole)>-1 || (menuroles.containsArrayElt(g_userroles) && menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
 				var menus = [];
@@ -2897,13 +2898,22 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 							menus[i][4] = ""; // condition
 					}
 					if (menus[i][3].indexOf(userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
-						if (menus[i][4]=="")
+						if (menus[i][4]==""){
 							displayMenu = true;  // userrole may be included in semantictag
-						else if(eval(menus[i][4]))
+							no_monomenu = i;
+						}
+						else if(eval(menus[i][4])){
 							displayMenu = true;
+							no_monomenu = i;
+						}
 					}
 				}
-				if (displayMenu && menus.length>1) {
+				//--------------------------------
+				var monomenu = (menus.length==1);
+				if (!monomenu && menuroles.indexOf(g_userroles[0])>-1 && menuroles.indexOf(g_userroles[0])==menuroles.lastIndexOf(g_userroles[0]))
+					monomenu = true;
+				//--------------------------------
+				if (displayMenu && !monomenu) {
 					var databack = false;
 					var callback = "UIFactory['Node'].reloadUnit";
 					if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' )
@@ -2944,7 +2954,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "</ul>"; // class='dropdown-menu'
 					html += "</span><!-- class='dropdown -->";
 				}
-				if (displayMenu && menus.length==1) {
+				if (displayMenu && monomenu) {
 					var databack = false;
 					var callback = "UIFactory['Node'].reloadUnit";
 					if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' )
@@ -2952,7 +2962,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					var param2 = "'"+g_portfolioid+"'";
 					var param3 = null;
 					var param4 = null;
-					var i=0;
+					var i = no_monomenu;
 					//-------------------
 					var titles = [];
 					var title = "";
