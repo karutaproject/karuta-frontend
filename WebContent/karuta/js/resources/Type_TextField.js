@@ -130,7 +130,8 @@ UIFactory["TextField"].prototype.update = function(langcode)
 		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+value);
 		$("#"+this.id+"_edit_"+langcode).val(value);
 	}
-	var newValue = value.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
+	var newValue1 = value.replace(/(<br("[^"]*"|[^\/">])*)>/g, "$1/>");
+	var newValue = newValue1.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
 	if (this.encrypted)
 		newValue = "rc4"+encrypt(newValue,g_rc4key);
 	$(this.text_node[langcode]).text(newValue);
