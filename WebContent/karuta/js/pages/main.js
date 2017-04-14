@@ -21,6 +21,7 @@ function fill_main_page(portfolioid,role)
 //==============================
 {
 	g_dashboard_models = {};
+	g_report_models = {};
 	g_Get_Resource_caches = {};
 	var html = "";
 	$("#main-page").html(html);

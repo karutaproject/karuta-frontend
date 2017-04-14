@@ -316,6 +316,7 @@ karutaStr['es']['email-sent']="El mensaje se ha enviado.";
 karutaStr['es']['alternative-label']="Etiqueta alternativa";
 karutaStr['es']['sent-by']="Enviado por";
 karutaStr['es']['dashboard-code']="Código del panel";
+karutaStr['es']['report-code']="Codi del panel";
 karutaStr['es']['csv']="Roles - Mostrar CSV";
 karutaStr['es']['pdf']="Roles - Mostrar PDF";
 
@@ -400,6 +401,7 @@ karutaStr['es']['Comments']="Comentarios";
 
 karutaStr['es']['SendEmail']="Enviar correo";
 karutaStr['es']['Dashboard']="Panel";
+karutaStr['es']['Report']="Informe";
 
 karutaStr['es']['DocumentBlock']="DocumentBlock";
 karutaStr['es']['URLBlock']="URLBlock";
@@ -413,3 +415,9 @@ karutaStr['es']['Proxy']="Proxy";
 
 karutaStr['es']['BubbleMap']="Mapa de Burbujas";
 karutaStr['es']['asmColumn']="asmColumn";
+
+karutaStr['es']['startday']="Fecha de inicio";
+karutaStr['es']['time']="Tiempo (HH:MM)";
+karutaStr['es']['freq']="Frecuencia";
+karutaStr['es']['execroles']="Rôles - Éxécuter";
+karutaStr['es']['exec']="Exécuter";

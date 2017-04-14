@@ -34,6 +34,7 @@ var g_display_sidebar = true;
 var g_free_toolbar_visibility = 'hidden';
 //---- caches -----
 var g_dashboard_models = {}; // cache for dashboard_models
+var g_report_models = {}; // cache for report_models
 var g_Get_Resource_caches = {};
 //------------------
 var g_wysihtml5_autosave = 60000; // 60 seconds

@@ -316,6 +316,7 @@ karutaStr['en']['email-sent']="The message has been sent.";
 karutaStr['en']['alternative-label']="Alternative Label";
 karutaStr['en']['sent-by']="Sent by";
 karutaStr['en']['dashboard-code']="Dashboard Code";
+karutaStr['en']['report-code']="Report Code";
 karutaStr['en']['csv']="Roles - Display CSV";
 karutaStr['en']['pdf']="Roles - Display PDF";
 
@@ -400,6 +401,7 @@ karutaStr['en']['Comments']="Comments";
 
 karutaStr['en']['SendEmail']="SendEmail";
 karutaStr['en']['Dashboard']="Dashboard";
+karutaStr['en']['Report']="Report";
 
 karutaStr['en']['DocumentBlock']="DocumentBlock";
 karutaStr['en']['URLBlock']="URLBlock";
@@ -413,6 +415,12 @@ karutaStr['en']['Proxy']="Proxy";
 
 karutaStr['en']['BubbleMap']="Bubble Map";
 karutaStr['en']['asmColumn']="asmColumn";
+
+karutaStr['en']['startday']="Start day";
+karutaStr['en']['time']="Time (HH:MM)";
+karutaStr['en']['freq']="Frequency";
+karutaStr['en']['execroles']="Roles - Execute";
+karutaStr['en']['exec']="Execute";
 
 
 

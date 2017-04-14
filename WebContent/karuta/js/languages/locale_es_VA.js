@@ -316,6 +316,7 @@ karutaStr['es_VA']['email-sent']="El missatge s'ha enviat.";
 karutaStr['es_VA']['alternative-label']="Etiqueta alternativa";
 karutaStr['es_VA']['sent-by']="Enviat per";
 karutaStr['es_VA']['dashboard-code']="Codi del panel";
+karutaStr['es_VA']['report-code']="Codi del panel";
 karutaStr['es_VA']['csv']="Rols - Mostrar CSV";
 karutaStr['es_VA']['pdf']="Rols - Mostrar PDF";
 
@@ -399,6 +400,7 @@ karutaStr['es_VA']['Comments']="Comments";
 
 karutaStr['es_VA']['SendEmail']="SendEmail";
 karutaStr['es_VA']['Dashboard']="Dashboard";
+karutaStr['es_VA']['Report']="Informe";
 
 karutaStr['es_VA']['DocumentBlock']="DocumentBlock";
 karutaStr['es_VA']['URLBlock']="URLBlock";
@@ -409,3 +411,12 @@ karutaStr['es_VA']['GetResource']="GetResource";
 karutaStr['es_VA']['GetGetResource']="GetGetResource";
 karutaStr['es_VA']['GetDoubleResource']="GetDoubleResource";
 karutaStr['es_VA']['Proxy']="Proxy";
+
+karutaStr['es_VA']['BubbleMap']="Mapa de Burbujas";
+karutaStr['es_VA']['asmColumn']="asmColumn";
+
+karutaStr['es_VA']['startday']="Fecha de inicio";
+karutaStr['es_VA']['time']="Tiempo (HH:MM)";
+karutaStr['es_VA']['freq']="Frecuencia";
+karutaStr['es_VA']['execroles']="Rôles - Éxécuter";
+karutaStr['es_VA']['exec']="Exécuter";

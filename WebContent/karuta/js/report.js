@@ -891,6 +891,66 @@ function displayCSVButton()
 	$("#report-csv").html(html);
 }
 
+//==================================
+function exec_report(uuid)
+//==================================
+{
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
+	var node_resource = UICom.structure["ui"][uuid].resource;
+	var startday = node_resource.startday_node.text();
+	var time = node_resource.time_node.text();
+	var freq = node_resource.freq_node.text();
+	var comments = node_resource.comments_node[LANGCODE].text();
+	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
+	var url = serverCONF;
+	$.ajax({
+		type : "POST",
+		url : url,
+		data : data,
+		dataType: "text",
+		headers: {
+            'Access-Control-Allow-Origin': '*'
+        },
+		crossDomain: true,
+		success : function(data) {
+			alertHTML("OK - rapport inscrit");
+		},
+		error : function(jqxhr, textStatus, err) {
+			alertHTML("Erreur - rapport non inscrit:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
+		}
+	});
+}
+
+//==================================
+function genDashboardContent(destid,uuid,parent,root_node)
+//==================================
+{
+	var spinning = true;
+	var model_code = UICom.structure["ui"][uuid].resource.getView();
+	if (model_code.indexOf("@local")>-1){
+		root_node = parent.node;
+		model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
+	}
+	if (model_code.indexOf("@nospinning")>-1){
+		spinning = false;
+		model_code = model_code.substring(0,model_code.indexOf("@nospinning"))+model_code.substring(model_code.indexOf("@nospinning")+11);
+	}
+	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
+		model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
+	try {
+		if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
+			r_processPortfolio(0,g_dashboard_models[model_code],destid,root_node,0,spinning);
+		else
+			report_getModelAndPortfolio(model_code,root_node,destid,g_dashboard_models,spinning);
+	}
+	catch(err) {
+		alertHTML("Error in Dashboard : " + err.message);
+	}
+	if (spinning)
+		$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});					
+};
+
 //=========================================================================
 //=========================================================================
 //======================= SVG =============================================
@@ -928,7 +988,7 @@ function getWidthOfText(txt, fontname, fontsize){
 	  ctx.font = fontsize + 'px' + fontname;
 	  var length = ctx.measureText(txt).width;
 	  return length;
-	}
+}
 	
 function drawAxis(destid,label,fontname,fontsize,angle,center,axislength){
 	//-----------------

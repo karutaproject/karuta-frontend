@@ -91,6 +91,7 @@ function loadPage(url)
 	loadJS(url+"/karuta/js/resources/Type_SendEmail.js");
 	loadJS(url+"/karuta/js/resources/Type_URL2Unit.js");
 	loadJS(url+"/karuta/js/resources/Type_Dashboard.js");
+	loadJS(url+"/karuta/js/resources/Type_Report.js");
 	loadJS(url+"/karuta/js/resources/Type_Color.js");
 	loadJS(url+"/karuta/js/resources/Type_Bubble.js");
 	loadJS(url+"/karuta/js/resources/Type_Action.js");

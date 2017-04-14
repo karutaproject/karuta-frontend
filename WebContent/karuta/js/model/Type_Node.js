@@ -1093,30 +1093,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			//------------ Dashboard -----------------
 			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
-				var spinning = true;
 				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
 				var root_node = g_portfolio_current;
-				var model_code = UICom.structure["ui"][uuid].resource.getView();
-				if (model_code.indexOf("@local")>-1){
-					root_node = parent.node;
-					model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
-				}
-				if (model_code.indexOf("@nospinning")>-1){
-					spinning = false;
-					model_code = model_code.substring(0,model_code.indexOf("@nospinning"))+model_code.substring(model_code.indexOf("@nospinning")+11);
-				}
-				var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-				if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
-					model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
-				try {
-					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
-						r_processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0,spinning);
-					else
-						report_getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models,spinning);
-				}
-				catch(err) {
-					alertHTML("Error in Dashboard : " + err.message);
-				}
+				genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
 				if (g_userroles[0]!='designer')
 					$("#node_"+uuid).hide();
 				//---------- display csv or pdf -------
@@ -1129,8 +1108,47 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 					$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div><div class='pdf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF/Word</div>"));				
 				}
-				if (spinning)
-					$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});					
+			}
+			//------------ Report -----------------
+			if (nodetype == "asmContext" && node.resource.type=='Report') {
+				$("#"+dest).append($("<div class='row'><div id='exec_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
+				var model_code = UICom.structure["ui"][uuid].resource.getView();
+				serverREP="http://savoie.hec.ca:8081/reports";
+				if (model_code!='') {
+					$.ajax({
+						type : "GET",
+						url : serverREP+"/"+uuid+".html",
+						dataType: 'text',
+						headers: {
+		                    'Access-Control-Allow-Origin': '*'
+		                },
+						crossDomain: true,
+						success : function(data) {
+//							alertHTML("OK - report");
+							$("#dashboard_"+uuid).html(data);
+						},
+						error : function(jqxhr,textStatus) {
+//							alertHTML("No report - Error ... : "+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
+							var root_node = g_portfolio_current;
+							genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
+						}
+					});
+					var exec_roles = $(UICom.structure["ui"][uuid].resource.exec_node).text();
+					if (exec_roles.containsArrayElt(g_userroles) || (exec_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+						$("#exec_button_"+uuid).html($("<div class='exec-button button' onclick=\"javascript:exec_report('"+uuid+"');return false;\">"+karutaStr[LANG]['exec']+"</div>"));				
+					}
+					//---------- display csv or pdf -------
+					var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
+					if (csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+						$("#csv_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
+					}
+					var pdf_roles = $(UICom.structure["ui"][uuid].resource.pdf_node).text();
+					if (pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+						$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div><div class='pdf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF/Word</div>"));				
+					}
+				}
+				if (g_userroles[0]!='designer')
+					$("#node_"+uuid).hide();
 			}
 			//------------ Public URL -----------------
 			if ($("#2world-"+uuid).length){
@@ -1534,22 +1552,37 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
 				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div></div>"));
 				var root_node = g_portfolio_current;
+				genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
+				if (g_userroles[0]!='designer')
+					$("#node_"+uuid).hide();
+			}
+			//------------ Report -----------------
+			if (nodetype == "asmContext" && node.resource.type=='Report') {
+				$("#"+dest).append($("<div class='row'><div id='exec_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div></div>"));
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
-				if (model_code.indexOf("@local")>-1){
-					root_node = parent.node;
-					model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
-				}
-				var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-				if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // if there is no project, we add the project of the current portfolio
-					model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
-				try {
-					if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
-						r_processPortfolio(0,g_dashboard_models[model_code],"dashboard_"+uuid,root_node,0);
-					else
-						report_getModelAndPortfolio(model_code,root_node,"dashboard_"+uuid,g_dashboard_models);
-				}
-				catch(err) {
-					alertHTML("Error in Dashboard : " + err.message);
+				if (model_code!='') {
+					$.ajax({
+						type : "GET",
+						url : serverREP+"/"+uuid+".html",
+						dataType: 'text',
+						headers: {
+		                    'Access-Control-Allow-Origin': '*'
+		                },
+						crossDomain: true,
+						success : function(data) {
+//							alertHTML("OK - report");
+							$("#dashboard_"+uuid).html(data);
+						},
+						error : function(jqxhr,textStatus) {
+//							alertHTML("No report - Error ... : "+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
+							var root_node = g_portfolio_current;
+							genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
+						}
+					});
+					var exec_roles = $(UICom.structure["ui"][uuid].resource.exec_node).text();
+					if (exec_roles.containsArrayElt(g_userroles) || (exec_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+						$("#exec_button_"+uuid).html($("<div class='exec-button button' onclick=\"javascript:exec_report('"+uuid+"');return false;\">"+karutaStr[LANG]['exec']+"</div>"));				
+					}
 				}
 				if (g_userroles[0]!='designer')
 					$("#node_"+uuid).hide();
@@ -2332,7 +2365,8 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 						if (node.resource_type!=null)
 							html+= "resource-"+node.resource_type;
 						html+= "' >";
-						if (node.resource.type!='Dashboard' || g_userroles[0]=='designer')
+//						if (node.resource.type!='Dashboard' || g_userroles[0]=='designer')
+						if ((node.resource.type!='Dashboard'&&node.resource.type!='Report') || g_userroles[0]=='designer')
 							html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 						html += "</div><!-- inside-full-height -->";
 						html += "</td>";
@@ -2844,6 +2878,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
+					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources-la','Report','Report',databack,callback,param2,param3,param4,freenode);
 					if (semantictag.indexOf("asm-block")>-1) {
 						html += "<hr>";
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
