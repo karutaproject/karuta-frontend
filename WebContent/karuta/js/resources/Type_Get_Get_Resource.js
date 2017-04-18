@@ -279,7 +279,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				code_parent = decrypt(code_parent.substring(3),g_rc4key);
 			//----------------------
 			if (query.indexOf('itself')>-1) {
-				code_parent = $("code",$(this.node)[0]).text();
+				code_parent = $($("code",$(this.node)[0])[0]).text();
 			}
 			//----------------------
 			var portfoliocode_parent = $("portfoliocode",$("asmContext:has(metadata[semantictag*='"+semtag_parent+"'])",parent)).text();
