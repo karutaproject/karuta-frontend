@@ -1113,19 +1113,20 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			if (nodetype == "asmContext" && node.resource.type=='Report') {
 				$("#"+dest).append($("<div class='row'><div id='exec_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
-				serverREP="http://savoie.hec.ca:8081/reports";
+//				serverREP="http://savoie.hec.ca:8081/reports";
 				if (model_code!='') {
 					$.ajax({
 						type : "GET",
 						url : serverREP+"/"+uuid+".html",
-						dataType: 'text',
+						dataType: 'html',
 						headers: {
 		                    'Access-Control-Allow-Origin': '*'
 		                },
 						crossDomain: true,
 						success : function(data) {
 //							alertHTML("OK - report");
-							$("#dashboard_"+uuid).html(data);
+							var content_report =  $(data).find("#dashboard_"+uuid).html();
+							$("#dashboard_"+uuid).html(content_report);
 						},
 						error : function(jqxhr,textStatus) {
 //							alertHTML("No report - Error ... : "+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
@@ -1571,7 +1572,8 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 						crossDomain: true,
 						success : function(data) {
 //							alertHTML("OK - report");
-							$("#dashboard_"+uuid).html(data);
+							var content_report =  $(data).find("#dashboard_"+uuid).html();
+							$("#dashboard_"+uuid).html(content_report);
 						},
 						error : function(jqxhr,textStatus) {
 //							alertHTML("No report - Error ... : "+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
@@ -2878,7 +2880,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
-					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources-la','Report','Report',databack,callback,param2,param3,param4,freenode);
+					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4,freenode);
 					if (semantictag.indexOf("asm-block")>-1) {
 						html += "<hr>";
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
