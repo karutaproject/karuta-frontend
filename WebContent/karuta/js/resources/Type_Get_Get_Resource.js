@@ -612,11 +612,11 @@ UIFactory["Get_Get_Resource"].prototype.redisplayEditor = function(destid,type,l
 				parent = $(this.node).parent();
 			}
 			if (query.indexOf('parent.parent.parent')>-1) {
-				parent = $(this.node).parent().parent().parent().parent();
+				parent = $(this.node).parent().parent().parent();//.parent();
 			} else	if (query.indexOf('parent.parent')>-1) {
-				parent = $(this.node).parent().parent().parent();
+				parent = $(this.node).parent().parent();//.parent();
 			} else if (query.indexOf('parent')>-1) {
-				parent = $(this.node).parent().parent();
+				parent = $(this.node).parent();//.parent();
 			}
 //			alertHTML('query'+query+'--parentid'+$(parent).attr("id"));
 			var code_parent = "";
