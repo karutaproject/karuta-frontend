@@ -275,11 +275,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			else {
 				var child = $("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent);
 				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
-				if (child.length>0){
+				if (itself.length>0){
 //					code_parent = $("code",$("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent)[0]).text();
-					code_parent = $($("code",child)[0]).text();
-				} else {
 					code_parent = $($("code",itself)[0]).text();
+				} else {
+					code_parent = $($("code",child)[0]).text();
 
 				}
 			}
