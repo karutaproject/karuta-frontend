@@ -402,6 +402,7 @@ karutaStr['es']['Comments']="Comentarios";
 karutaStr['es']['SendEmail']="Enviar correo";
 karutaStr['es']['Dashboard']="Panel";
 karutaStr['es']['Report']="Informe";
+karutaStr['es']['BatchForm']="BatchForm";
 
 karutaStr['es']['DocumentBlock']="DocumentBlock";
 karutaStr['es']['URLBlock']="URLBlock";
@@ -419,5 +420,5 @@ karutaStr['es']['asmColumn']="asmColumn";
 karutaStr['es']['startday']="Fecha de inicio";
 karutaStr['es']['time']="Tiempo (HH:MM)";
 karutaStr['es']['freq']="Frecuencia";
-karutaStr['es']['execroles']="Rôles - Éxécuter";
-karutaStr['es']['exec']="Exécuter";
+karutaStr['es']['execroles']="Roles - Ejecutar";
+karutaStr['es']['exec']="Ejecutar";

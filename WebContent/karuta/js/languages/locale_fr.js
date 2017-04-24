@@ -402,6 +402,7 @@ karutaStr['fr']['Comments']="Commentaires";
 karutaStr['fr']['SendEmail']="Envoi courriel";
 karutaStr['fr']['Dashboard']="Tableau de bord";
 karutaStr['fr']['Report']="Rapport";
+karutaStr['fr']['BatchForm']="BatchForm";
 
 karutaStr['fr']['DocumentBlock']="DocumentBlock";
 karutaStr['fr']['URLBlock']="URLBlock";

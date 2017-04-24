@@ -970,6 +970,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					menu = false;
 				html += "<div id='buttons-"+uuid+"' class='col-md-4 buttons'>";
 				html += UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu);
+				if (node.xsi_type == "BatchForm") {
+					html += node.structured_resource.getButtons();
+				}
 				html += "</div><!-- col-md-3  -->";
 				html += "</div><!-- row -->";
 				//--------------------------------------------------*/
@@ -1113,7 +1116,6 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			if (nodetype == "asmContext" && node.resource.type=='Report') {
 				$("#"+dest).append($("<div class='row'><div id='exec_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
-//				serverREP="http://savoie.hec.ca:8081/reports";
 				if (model_code!='') {
 					$.ajax({
 						type : "GET",
@@ -1416,6 +1418,9 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					//-------------- buttons --------------------------
 					html += "	<div id='buttons-"+uuid+"' class='buttons'>";
 					html += UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu);
+					if (node.xsi_type == "BatchForm") {
+						html += node.structured_resource.getButtons();
+					}
 					html += "	</div><!-- buttons -->";
 					//--------------------------------------------------*/
 					html += "</div><!-- row -->";
@@ -2881,6 +2886,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4,freenode);
+					html += UIFactory["Node"].getItemMenu(node.id,'karuta.batchform-parts','BatchForm','BatchForm',databack,callback,param2,param3,param4,freenode);
 					if (semantictag.indexOf("asm-block")>-1) {
 						html += "<hr>";
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
