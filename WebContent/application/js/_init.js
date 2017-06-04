@@ -49,8 +49,8 @@ var welcome3 = {};       // Welcome paragraph
 	welcome3["en"] = "";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.0";
-	welcome4["en"] = "WELCOME TO KARUTA 2.0";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.2";
+	welcome4["en"] = "WELCOME TO KARUTA 2.2";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";

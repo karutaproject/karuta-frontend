@@ -1040,7 +1040,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			//--------------------set editor------------------------------------------
 			if ($("#display_editor_"+uuid).length>0) {
-				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid);
+				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid,null,null,null,true);
 			}
 			if ($("#get_editor_"+uuid).length>0) {
 				$("#get_editor_"+uuid).append(UICom.structure["ui"][uuid].resource.getEditor());
@@ -2809,7 +2809,16 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	//-----------------------------------
 	if (edit) {
 		//------------ edit button ---------------------
-		if ((!inline && ( (writenode && !incrementroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer' )) || (inline && ((USER.admin || g_userroles[0]=='designer') && (!editnoderoles.containsArrayElt(g_userroles) && !editresroles.containsArrayElt(g_userroles))))) {
+		//if ((!inline && ( (writenode && !incrementroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer' )) || (inline && ((USER.admin || g_userroles[0]=='designer') && (!editnoderoles.containsArrayElt(g_userroles) && !editresroles.containsArrayElt(g_userroles))))) {
+		if (
+					(!inline && ( 	(writenode && !incrementroles.containsArrayElt(g_userroles))
+									|| USER.admin
+									|| g_userroles[0]=='designer' 
+								)
+					)
+				|| 	(inline && (	(USER.admin || g_userroles[0]=='designer'|| editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(userrole)>-1) ))
+			)
+		{
 			html += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------ delete button ---------------------
