@@ -6,7 +6,7 @@
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:fo="http://www.w3.org/1999/XSL/Format"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<xsl:output omit-xml-declaration="true" method="text" indent="no"/>
+<xsl:output omit-xml-declaration="yes" method="text" indent="no"/>
 <xsl:template match="/"><xsl:apply-templates select="//table"/></xsl:template>
 <!-- =========================================================================-->
 <!-- =========================================================================-->

@@ -33,7 +33,7 @@ UIFactory["DocumentBlock"] = function( node )
 	//--------------------
 	this.cover_nodeid = $("asmContext:has(metadata[semantictag='cover'])",node).attr('id');
 	//--------------------
-	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.display = {};
 };
 
@@ -62,10 +62,19 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	var html = "";
 	if (type=='standard'){
-		var filename = $(document.resource.filename_node[langcode]).text();
+		//---------------------
+		var img_langcode = langcode;
+		if (!image.multilingual)
+			img_langcode = NONMULTILANGCODE;
+		//---------------------
+		var doc_langcode = langcode;
+		if (!document.multilingual)
+			doc_langcode = NONMULTILANGCODE;
+		//---------------------
+		var filename = $(document.resource.filename_node[doc_langcode]).text();
 		if (filename!="") {
-			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+document.id+"?lang="+languages[langcode]+"'>";
-			var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"');";
+			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+document.id+"?lang="+languages[doc_langcode]+"'>";
+			var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
 			if (cover!=undefined && cover.resource.getValue()=='1')
 				style += "background-size:cover;";
 			html += "<div class='DocumentBlock' style=\""+style+"\">";

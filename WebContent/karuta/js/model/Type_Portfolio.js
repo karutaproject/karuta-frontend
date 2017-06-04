@@ -182,19 +182,23 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					//---------------------------------------
 					html += "		</div><!-- class='col-md-1' -->";
 					html += "		<div class='col-md-1 col-xs-1'>";
-					html += "			<div class='btn-group project-menu'>";
-					html += "				<button  class='btn btn-xs dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-menu-hamburger'>&nbsp;</button>";
-					html += "				<ul class='dropdown-menu dropdown-menu-right' role='menu'>";
-					html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.model')\" >"+karutaStr[LANG]['karuta.model']+"</a></li>";
-					html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.rubrics')\" >"+karutaStr[LANG]['karuta.rubrics']+"</a></li>";
-					html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.parts')\" >"+karutaStr[LANG]['karuta.parts']+"</a></li>";
-					html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.report')\" >"+karutaStr[LANG]['karuta.report']+"</a></li>";
-					html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch')\" >"+karutaStr[LANG]['karuta.batch']+"</a></li>";
-					html += "					<li><a onclick=\"UIFactory['Portfolio'].create('"+portfoliocode+"')\" >"+karutaStr[LANG]['create_tree']+"</a></li>";
-					if (elgg_installed)
-						html += getProjectNetworkMenu(portfoliocode,portfolio.id);
-					html += "				</ul>";
-					html += "			</div>";
+					//------------------------ menu-burger
+					if (USER.admin || USER.creator) {
+						html += "			<div class='btn-group project-menu'>";
+						html += "				<button  class='btn btn-xs dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-menu-hamburger'>&nbsp;</button>";
+						html += "				<ul class='dropdown-menu dropdown-menu-right' role='menu'>";
+						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.model')\" >"+karutaStr[LANG]['karuta.model']+"</a></li>";
+						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.rubrics')\" >"+karutaStr[LANG]['karuta.rubrics']+"</a></li>";
+						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.parts')\" >"+karutaStr[LANG]['karuta.parts']+"</a></li>";
+						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.report')\" >"+karutaStr[LANG]['karuta.report']+"</a></li>";
+						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch')\" >"+karutaStr[LANG]['karuta.batch']+"</a></li>";
+						html += "					<li><a onclick=\"UIFactory['Portfolio'].create('"+portfoliocode+"')\" >"+karutaStr[LANG]['create_tree']+"</a></li>";
+						if (elgg_installed)
+							html += getProjectNetworkMenu(portfoliocode,portfolio.id);
+						html += "				</ul>";
+						html += "			</div>";
+					}
+					//------------------------end menu-burger
 					html += "		</div>";
 					html += "	</div>";
 					if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
