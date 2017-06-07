@@ -593,19 +593,21 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	var html = "";
 	html += "<div class='page-welcome'>";
 	html += "<div id='welcome-image' style=\"background: url('../../../"+serverFIL+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
-	html += "<div class='welcome-box'>";
-	html += "<div class='welcome-subbox'>";
-	html += "<div class='welcome-title' id='welcome-title'>";
-	html += UICom.structure["ui"][titleid].resource.getView('welcome-title','span')
-	html += "</div>";
-	html += "<div class='welcome-line'/>";
-	var texts = $("asmContext:has(metadata[semantictag='welcome-baseline'])",data);
-	var textid = $(texts[0]).attr("id");
-	html += "<div class='welcome-baseline' id='welcome-baseline' style='"+UIFactory["Node"].getContentStyle(textid)+"'>";
-	html += UICom.structure["ui"][textid].resource.getView('welcome-baseline');
-	html += "</div><!-- id='welcome-baseline' -->";
-	html += "</div><!--  class='welcome-subbox' -->";
-	html += "</div><!--  class='welcome-box' -->";
+	if (titles.length>0) {
+		html += "<div class='welcome-box'>";
+		html += "<div class='welcome-subbox'>";
+		html += "<div class='welcome-title' id='welcome-title'>";
+		html += UICom.structure["ui"][titleid].resource.getView('welcome-title','span')
+		html += "</div>";
+		html += "<div class='welcome-line'/>";
+		var texts = $("asmContext:has(metadata[semantictag='welcome-baseline'])",data);
+		var textid = $(texts[0]).attr("id");
+		html += "<div class='welcome-baseline' id='welcome-baseline' style='"+UIFactory["Node"].getContentStyle(textid)+"'>";
+		html += UICom.structure["ui"][textid].resource.getView('welcome-baseline');
+		html += "</div><!-- id='welcome-baseline' -->";
+		html += "</div><!--  class='welcome-subbox' -->";
+		html += "</div><!--  class='welcome-box' -->";
+	}
 	html += "</div><!-- id='welcome-image' -->";
 	html += "<div id='welcome-blocks'>";
 	html += "</div><!-- id='welcome-blocks' -->";
@@ -2241,6 +2243,8 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 	var node = UICom.structure["ui"][uuid];
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
+	var collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
+	var collapsible = 'Y';
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
 	var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
@@ -2393,7 +2397,8 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				//----------------------------
 				if (name=='asmUnitStructure')
 					depth=100;	
-				html += "<div>";
+//				html += "<div>";
+				html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='col-md-1 collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-minus'></span></div>";
 				html += "<div class='model_row'>";	
 				//-------------- buttons --------------------------
 				html += "<div id='buttons-"+uuid+"' class='model_button  visible-lg visible-md'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
@@ -2452,13 +2457,25 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 					});
 				}
 			}
-
-				for( var i=0; i<root.children.length; ++i ) {
-					// Recurse
-					var child = UICom.structure["tree"][root.children[i]];
-					//-------------------
-						UIFactory["Node"].displayModel(child, 'content-'+uuid, depth-1,langcode,edit,inline);
+			//--------------------collapsed------------------------------------------
+			if (collapsible=='Y') {
+				if (collapsed=='Y') {
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-plus collapsible");
+					$("#content-"+uuid).hide();
 				}
+				else {
+					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-minus collapsible");
+					$("#content-"+uuid).show();
+				}
+			}
+			//--------------------------------------------------------------------------
+
+			for( var i=0; i<root.children.length; ++i ) {
+				// Recurse
+				var child = UICom.structure["tree"][root.children[i]];
+				//-------------------
+					UIFactory["Node"].displayModel(child, 'content-'+uuid, depth-1,langcode,edit,inline);
+			}
 			
 			//----------------------------
 			$('a[data-toggle=tooltip]').tooltip({html:true});
