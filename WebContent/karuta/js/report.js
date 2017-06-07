@@ -682,7 +682,7 @@ function r_processText(xmlDoc,destid,data)
 	}
 	text = "<span id='"+nodeid+"'>"+text+"</span>";
 	$("#"+destid).append($(text));
-	$("#"+nodeid).attr("style",style);
+	$("#"+nodeid,$("#"+destid)).attr("style",style);
 }
 
 //==================================
