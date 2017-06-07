@@ -509,10 +509,10 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 };
 
 //==================================
-UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,depth,edit,menu)
+UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,depth,edit,menu,block)
 //==================================
 {
-	return UIFactory["Node"].buttons(this,type,langcode,inline,depth,edit,menu);
+	return UIFactory["Node"].buttons(this,type,langcode,inline,depth,edit,menu,block);
 };
 //-------------------------------------------------------
 //-------------------------------------------------------
@@ -1227,8 +1227,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					else {
 						if (childnode.structured_resource!=null) {
 							var html = "<div id='structured_resource_"+blockid+"'>"+childnode.structured_resource.getView('structured_resource_'+blockid,null,langcode)+"</div>";
-							var menu = false;
-							html += UICom.structure["ui"][blockid].getButtons(null,null,null,inline,depth,edit,menu);
+							var block = true;
+							html += UICom.structure["ui"][blockid].getButtons(null,null,null,inline,depth,edit,menu,block);
 							//-------------- metainfo -------------------------
 							if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
 								html += "<div id='metainfo_"+blockid+"' class='metainfo'></div><!-- metainfo -->";
@@ -2760,7 +2760,7 @@ UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callba
 
 
 //==================================================
-UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
+UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,block)
 //==================================================
 {
 	if (type==null)
@@ -2769,6 +2769,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 		langcode = LANGCODE;
 	if (menu==null)
 		menu = true;
+	if (block==null)
+		block = false;
 	//------------------------
 	var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
@@ -2795,7 +2797,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu)
 	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
 	if (g_designerrole) {
 		deletenode = (delnoderoles.containsArrayElt(g_userroles))? true : false;
-		if (deletenode)
+		if (deletenode && !block)
 			deletenode = menu; //if submitted menu==false
 		writenode = (editnoderoles.containsArrayElt(g_userroles))? true : false;
 		if (!writenode) {

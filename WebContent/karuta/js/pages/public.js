@@ -210,6 +210,7 @@ function displayKarutaPublic()
 				dataType : "xml",
 				url : "../../../"+serverBCK+"/nodes/node/" + g_uuid,
 				success : function(data) {
+					g_portfolio_current = data;
 					UICom.parseStructure(data);
 					var depth = 99;
 					var rootnode = UICom.structure['ui'][g_uuid];

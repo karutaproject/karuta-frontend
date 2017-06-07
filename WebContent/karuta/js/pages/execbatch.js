@@ -60,7 +60,7 @@ function fill_exec_batch()
 		done: function (e, data,uuid) {
 			$("#batch-divfileupload").html("Loaded");
 			g_json = data.result;
-			model_code = g_json.model_code;
+			model_code = g_json["﻿model_code"];
 			getModelAndProcess(model_code);
 		}
     });
