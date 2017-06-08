@@ -2398,7 +2398,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				if (name=='asmUnitStructure')
 					depth=100;	
 //				html += "<div>";
-				html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='col-md-1 collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-minus'></span></div>";
+				html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-minus'></span></div>";
 				html += "<div class='model_row'>";	
 				//-------------- buttons --------------------------
 				html += "<div id='buttons-"+uuid+"' class='model_button  visible-lg visible-md'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";

@@ -22,11 +22,11 @@ var aggregates = {};
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
 jquerySpecificFunctions['.invsort()'] = ".sortElements(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
-jquerySpecificFunctions['.filename_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"filename:not(:empty)\")";
-jquerySpecificFunctions['.url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"url:not(:empty)\")";
-jquerySpecificFunctions['.text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"text:not(:empty)\")";
-jquerySpecificFunctions['.filename_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"url:not(:empty),filename:not(:empty)\")";
-jquerySpecificFunctions['.filename_url_text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\").has(\"text:not(:empty),url:not(:empty),filename:not(:empty)\")";
+jquerySpecificFunctions['.filename_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\")";
+jquerySpecificFunctions['.url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  >url[lang='#lang#']:not(:empty)\")";
+jquerySpecificFunctions['.text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > text[lang='#lang#']:not(:empty)\")";
+jquerySpecificFunctions['.text_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > text[lang='#lang#']:empty\")";
+jquerySpecificFunctions['.submitted()'] = ".has(\"metadata-wad[submitted='Y']\")";
 
 Selector = function(jquery,type,filter1,filter2)
 {
@@ -54,8 +54,11 @@ function r_getSelector(select,test)
 	}
 	var filter2 = test; // test = .has("metadata-wad[submitted='Y']").last()
 	for (fct in jquerySpecificFunctions) {
-		if (test.indexOf(fct)>-1)
+		if (test.indexOf(fct)>-1) {
 			filter2 = filter2.replace(fct,jquerySpecificFunctions[fct]);
+			if (filter2.indexOf("#lang#")>-1)
+				filter2 = filter2.replace("#lang#",languages[LANGCODE]);
+		}
 	}
 	var type = "";
 	if (selects.length>2)
