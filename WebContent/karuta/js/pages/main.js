@@ -78,6 +78,11 @@ function fill_main_page(portfolioid,role)
 					cssfile += ".css";
 				$('<link/>', { rel: 'stylesheet', type: 'text/css', href: '../../application/css/'+cssfile}).appendTo('head');
 			}
+			// --------CSS Text------------------
+			var csstext = $("metadata-wad[csstext]",data).attr('csstext');
+			if (csstext!=undefined && csstext!=''){
+				$('<style>'+csstext+'</style>').appendTo('head');
+			}
 			// --------------------------
 			UICom.parseStructure(data,true);
 			if ($("asmUnit:has(metadata[semantictag*='welcome-unit'])",data).length==0 && $("asmRoot:has(metadata[semantictag*='karuta-model'])",data).length>0) {

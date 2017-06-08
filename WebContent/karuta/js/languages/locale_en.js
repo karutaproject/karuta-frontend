@@ -190,6 +190,7 @@ karutaStr['en']['sharewithrole']="Role - Recepient";
 karutaStr['en']['maxchar']="Chars - Max Number";
 karutaStr['en']['maxword']="Words - Max number";
 karutaStr['en']['maxword-alert']="You exceeded the limit of number of words. Extra wors will not be saved."
+karutaStr['en']['csstext']="CSS";
 
 //=========================================
 //========== ADMIN ========================

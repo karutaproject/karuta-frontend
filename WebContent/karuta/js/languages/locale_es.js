@@ -190,6 +190,7 @@ karutaStr['es']['sharewithrole']="Rol - Receptor";
 karutaStr['es']['maxchar']="Caracteres - Número máximo";
 karutaStr['es']['maxword']="Palabras - Número máximo";
 karutaStr['es']['maxword-alert']="Ha excedido el límite del número de palabras. Las palabras extra no se guardarán."
+karutaStr['es']['csstext']="CSS";
 
 //=========================================
 //========== ADMIN ========================

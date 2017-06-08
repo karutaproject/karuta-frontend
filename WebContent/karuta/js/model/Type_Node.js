@@ -4021,7 +4021,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 		$("#metadata_texts").append($(html));
 		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'menuroles',$(node.metadatawad).attr('menuroles'));
 	}
-	//--------------------------------------------------
+	//------------------------Help-------------------------
 	html = "<br><hr><label>"+karutaStr[languages[langcode]]['help'];
 	if (languages.length>1){
 		var first = true;
@@ -4035,6 +4035,13 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	html += karutaStr[languages[langcode]]['help3']+"</label>";
 	$("#metadata_texts").append($(html));
 	UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'help',$(node.metadatawad).attr('help'),'x100');
+	//----------------------CSS text----------------------------
+	if (name=='asmRoot') {
+		html  = "<hr><label>"+karutaStr[languages[langcode]]['csstext']+"</label>";
+		$("#metadata_texts").append($(html));
+		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'csstext',$(node.metadatawad).attr('csstext'));
+	}
+	//--------------------------------------------------------
 };
 
 //==================================
