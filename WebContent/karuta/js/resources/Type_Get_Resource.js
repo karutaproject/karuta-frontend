@@ -134,13 +134,17 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode)
 		code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 	if (code.indexOf("&")>-1)
 		code = code.substring(0,code.indexOf("&"))+code.substring(code.indexOf("&")+1);
+	if (code.indexOf("%")>-1)
+		code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
 	var html = "";
 	html += "<span class='"+code+"'>";
 	if (($(this.code_node).text()).indexOf("#")>-1)
 		html += code+ " ";
 	if (($(this.code_node).text()).indexOf("&")>-1)
 		html += "["+$(this.value_node).text()+ "] ";
-	html += label+"</span>";
+	if (($(this.code_node).text()).indexOf("%")<0)
+		html += label;
+	html += "</span>";
 	return html;
 };
 
@@ -617,6 +621,20 @@ UIFactory["Get_Resource"].addMultiple = function(parentid,multiple_tags)
 };
 
 //==================================
+UIFactory["Get_Resource"].importMultiple = function(parentid,multiple_tags)
+//==================================
+{
+	$.ajaxSetup({async: false});
+	var srce = multiple_tags.substring(0,multiple_tags.lastIndexOf('.'));
+	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
+	// for each one import a part
+	for (var j=0; j<inputs.length;j++){
+		var code = $(inputs[j]).attr('code');
+		importBranch(parentid,srce,code);
+	}
+};
+
+//==================================
 UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,selected_item,last)
 //==================================
 {
@@ -672,6 +690,30 @@ function get_multiple(parentid,title,query,partcode,get_resource_semtag)
 	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+partcode+","+get_resource_semtag+"')";
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(title);
+	var html = "<div id='get-resource-node'></div>";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	getResource.multiple = query+"/"+partcode+","+get_resource_semtag;
+	getResource.displayEditor("get-resource-node");
+	$('#edit-window').modal('show');
+
+}
+
+//==================================
+function import_multiple(parentid,title,query,partcode,get_resource_semtag)
+//==================================
+{
+	var langcode = LANGCODE;
+	//---------------------
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+query+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);

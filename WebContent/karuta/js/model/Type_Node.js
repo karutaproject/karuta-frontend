@@ -853,6 +853,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						$("#edit-window-body-node").html($(html));
 					}
 					html += "</div><!-- inside-full-height -->";
+					//-------------- context -------------------------
+					html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 					html += "</td>";
 				} else {
 					//--------- display ------------
