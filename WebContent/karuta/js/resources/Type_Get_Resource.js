@@ -173,13 +173,17 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 		code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 	if (code.indexOf("&")>-1)
 		code = code.substring(0,code.indexOf("&"))+code.substring(code.indexOf("&")+1);
+	if (code.indexOf("%")>-1)
+		code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
 	var html = "";
 	html += "<span class='"+code+"'>";
 	if (($(this.code_node).text()).indexOf("#")>-1)
 		html += code+ " ";
 	if (($(this.code_node).text()).indexOf("&")>-1)
 		html += "["+$(this.value_node).text()+ "] ";
-	html += label+"</span>";
+	if (($(this.code_node).text()).indexOf("%")<0)
+		html += label;
+	html += "</span>";
 	$("#"+dest).html("");
 	$("#"+dest).append($(html));
 };
@@ -330,6 +334,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				if (code.indexOf("#")>-1) {
 					code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 				}
+				if (code.indexOf("%")>-1) {
+					code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
+				}
 				if (code.indexOf('----')>-1) {
 					html = "<li class='divider'></li><li></li>";
 				} else {
@@ -358,6 +365,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					}
 					if (code.indexOf("#")>-1) {
 						code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+					}
+					if (code.indexOf("%")>-1) {
+						code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
 					}
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
@@ -443,6 +453,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (code.indexOf("#")>-1) {
 				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 			}
+			if (code.indexOf("%")>-1) {
+				code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
+			}
 			input += "<input type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
 			if (disabled)
 				input +="disabled='disabled' ";
@@ -505,6 +518,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (code.indexOf("#")>-1) {
 				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 			}
+			if (code.indexOf("%")>-1) {
+				code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
+			}
 			input += "<div name='click_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='click-item";
 			if (self_code==$('code',resource).text())
 				input += " clicked";
@@ -549,6 +565,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			}
 			if (code.indexOf("#")>-1) {
 				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+			}
+			if (code.indexOf("%")>-1) {
+				code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
 			}
 			input += "<div> <input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 			input += "' ";
