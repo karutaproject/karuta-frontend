@@ -125,9 +125,6 @@ function loadPage(url)
 	loadJS(url+"/other/js/jquery.iframe-transport.js");
 	loadJS(url+"/other/js/jquery.fileupload.js");
 	//--------------------------------------------------------------
-	loadCSS(url+"/other/oembed/jquery.oembed.css");
-	loadJS(url+"/other/oembed/jquery.oembed.js");
-	//--------------------------------------------------------------
 	loadJS(url+"/other/bootstrap-datepicker/bootstrap-datepicker.js");
 	loadJS(url+"/other/bootstrap-datepicker/bootstrap-datepicker.fr.js");
 	loadCSS(url+"/other/bootstrap-datepicker/datepicker.css");
