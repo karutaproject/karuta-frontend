@@ -1293,10 +1293,12 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			$(".pickcolor").colorpicker();
 			//----------------------------
 			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
+			/*
 			if (!multilingual_resource)
 				$("#embed"+uuid+NONMULTILANGCODE).oembed();
 			else
 				$("#embed"+uuid+langcode).oembed();
+			//*/
 			//----------------------------
 		}
 		if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
