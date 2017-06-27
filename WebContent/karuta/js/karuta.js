@@ -618,8 +618,10 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		depth = 1;
 	if (UICom.structure['tree'][uuid]!=null) {
 		if (type=='standard') {
+			var node = UICom.structure['ui'][uuid].node;
+			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
-			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit)
+			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
 				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 			else
 				UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);

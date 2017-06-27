@@ -640,16 +640,18 @@ UIFactory["Get_Resource"].addMultiple = function(parentid,multiple_tags)
 };
 
 //==================================
-UIFactory["Get_Resource"].importMultiple = function(parentid,multiple_tags)
+UIFactory["Get_Resource"].importMultiple = function(parentid,srce)
 //==================================
 {
 	$.ajaxSetup({async: false});
-	var srce = multiple_tags.substring(0,multiple_tags.lastIndexOf('.'));
+//	var srce = multiple_tags.substring(0,multiple_tags.lastIndexOf('.'));
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	// for each one import a part
+	var databack = true;
+	var callback = UIFactory.Node.reloadUnit;
 	for (var j=0; j<inputs.length;j++){
 		var code = $(inputs[j]).attr('code');
-		importBranch(parentid,srce,code);
+		importBranch(parentid,srce,code,databack,callback);
 	}
 };
 
@@ -732,7 +734,7 @@ function import_multiple(parentid,title,query,partcode,get_resource_semtag)
 	var langcode = LANGCODE;
 	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+query+"')";
+	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+partcode+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
