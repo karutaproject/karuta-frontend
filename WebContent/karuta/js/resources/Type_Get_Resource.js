@@ -111,9 +111,12 @@ UIFactory["Get_Resource"].prototype.getValue = function(dest)
 };
 
 //==================================
-UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode)
+UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indashboard)
 //==================================
 {
+	//---------------------
+	if (indashboard==null)
+		indashboard = false;
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -137,7 +140,10 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode)
 	if (code.indexOf("%")>-1)
 		code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
 	var html = "";
-	html += "<span class='"+code+"'>";
+	html += "<span class='"+code+"'";
+	if (indashboard)
+		html += " style='background-position:center'";
+	html += ">";
 	if (($(this.code_node).text()).indexOf("#")>-1)
 		html += code+ " ";
 	if (($(this.code_node).text()).indexOf("&")>-1)

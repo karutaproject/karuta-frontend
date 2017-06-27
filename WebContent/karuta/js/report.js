@@ -598,7 +598,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 			} else {
 				var prefix_id = "";
 				if (selector.type=='resource') {
-					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid);
+					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
 				}
 				if (selector.type=='resource code') {
 					text = UICom.structure["ui"][nodeid].resource.getCode();
