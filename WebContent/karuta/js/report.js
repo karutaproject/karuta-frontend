@@ -278,6 +278,8 @@ function r_processSVG(no,xmlDoc,destid,data,line)
 			r_processWebLine(children[i],'svg_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],'svg_'+no,data,line);
+		if (tagname=="goparent")
+			r_processGoParent(no+"_"+i,children[i],'svg_'+no,data,line);
 	}
 }
 
@@ -309,6 +311,8 @@ function r_processTable(no,xmlDoc,destid,data,line)
 			r_processRow(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],'table_'+no,data,line);
+		if (tagname=="goparent")
+			r_processGoParent(no+"_"+i,children[i],'table_'+no,data,line);
 	};
 }
 
@@ -338,6 +342,8 @@ function r_processRow(no,xmlDoc,destid,data,line)
 			r_processCell(no+"_"+i,children[i],'tr_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],'tr_'+no,data,line);
+		if (tagname=="goparent")
+			r_processGoParent(no+"_"+i,children[i],'tr_'+no,data,line);
 	}
 }
 
@@ -399,6 +405,8 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			r_processSVG(no,children[i],'td_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no,children[i],'td_'+no,data,line);
+		if (tagname=="goparent")
+			r_processGoParent(no,children[i],'td_'+no,data,line);
 	}
 }
 
