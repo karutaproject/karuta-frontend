@@ -271,11 +271,11 @@ function r_processSVG(no,xmlDoc,destid,data,line)
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
 		if (tagname=="draw-web-title")
-			r_processWebTitle(children[i],'svg_'+no,data);
+			r_processWebTitle(children[i],'svg_'+no,data,line);
 		if (tagname=="draw-web-axis")
-			r_processWebAxis(children[i],'svg_'+no,data);
+			r_processWebAxis(children[i],'svg_'+no,data,line);
 		if (tagname=="draw-web-line")
-			r_processWebLine(children[i],'svg_'+no,data);
+			r_processWebLine(children[i],'svg_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],'svg_'+no,data,line);
 	}
