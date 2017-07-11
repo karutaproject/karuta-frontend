@@ -131,7 +131,7 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 				}
 			}
 			// display div
-			html = '<iframe src='+url+'/>';
+			html = '<iframe style="width: 100%; height: 240px;" src='+url+'/>';
 		}
 	}
 
