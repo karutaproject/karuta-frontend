@@ -1463,7 +1463,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			var h1 = $("#std_resource_"+uuid)[0].scrollHeight;
 			if (h1>g_block_height-$("#title_"+uuid).outerHeight()){
 				$("#std_resource_"+uuid).outerHeight(g_block_height-$("#title_"+uuid).outerHeight()-20);
-				$("#std_resource_"+uuid).parent().append($("<div id='plus_"+uuid+"' style='text-align:right;cursor:pointer'>&nbsp;&nbsp; ... &nbsp;&nbsp;</div>"));
+				$("#std_resource_"+uuid).parent().append($("<div class='thereismore' id='plus_"+uuid+"' style='text-align:right;cursor:pointer'>&nbsp;&nbsp; ... &nbsp;&nbsp;</div>"));
 				$("#std_resource_"+uuid).click(function(){
 					messageHTML(UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid));
 				});
@@ -1690,10 +1690,10 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			$(".pickcolor").colorpicker();
 			//----------------------------
 			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
-			if (!multilingual_resource)
-				$("#embed"+uuid+NONMULTILANGCODE).oembed();
-			else
-				$("#embed"+uuid+langcode).oembed();
+//			if (!multilingual_resource)
+//				$("#embed"+uuid+NONMULTILANGCODE).oembed();
+//			else
+//				$("#embed"+uuid+langcode).oembed();
 			//----------------------------
 		}
 	} //---- end of private

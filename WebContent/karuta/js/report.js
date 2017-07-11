@@ -1027,16 +1027,18 @@ function drawValue(destid,value,angle,center,cssclass){
 	document.getElementById(destid).appendChild(line);
 }
 
-function drawGraduationLine(destid,no,max,angle,center,cssclass){
-	var x = svgaxislength-(svgaxislength/max*no);
+function drawGraduationLine(destid,no,min,max,angle,center,cssclass){
+	var delta = Math.abs(max-min);
+	var x = svgaxislength-(svgaxislength/delta*no);
 	var line = makeSVG('line',{'x1':x,'y1':center.y-5,'x2':x,'y2':center.y+5,'transform':"rotate("+angle+" "+center.x+" "+center.y+")",'stroke':'black','stroke-width': 1});
 	document.getElementById(destid).appendChild(line);
 }
 
-function drawGraduationLabel(destid,no,max,angle,center,cssclass){
-	var x = svgaxislength-(svgaxislength/max*no);
+function drawGraduationLabel(destid,no,min,max,angle,center,cssclass){
+	var delta = Math.abs(max-min);
+	var x = svgaxislength-(svgaxislength/delta*no);
 	var point = svgrotate(center, x, center.y+20, angle);
-	var text = makeSVG('text',{'x':point.x-5,'y':point.y,'font-size':svgfontsize,'font-family':svgfontname},no);
+	var text = makeSVG('text',{'x':point.x,'y':point.y,'font-size':svgfontsize,'font-family':svgfontname},(max>min)?no+min:min-no);
 	document.getElementById(destid).appendChild(text);
 }
 
@@ -1136,8 +1138,8 @@ function r_processWebLine(xmlDoc,destid,data,no)
 	var select = $(xmlDoc).attr("select");
 	var legendselect = $(xmlDoc).attr("legendselect");
 	var test = $(xmlDoc).attr("test");
-	var min = $(xmlDoc).attr("min");
-	var max = $(xmlDoc).attr("max");
+	var min = parseInt($(xmlDoc).attr("min"));
+	var max = parseInt($(xmlDoc).attr("max"));
 	var pos = $(xmlDoc).attr("pos");
 	if (pos==undefined)
 		pos = 0;
@@ -1179,10 +1181,10 @@ function r_processWebLine(xmlDoc,destid,data,no)
 		for (var i=0; i<nodes.length;i++){
 			drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+no);
 			if (no==0 && pos==0){
-				for (var j=1;j<max;j++) {
-					drawGraduationLine(destid,j,max,angle*i,svgcenter,'svg-web-line'+no);
+				for (var j=0;j<=Math.abs(max-min);j++) {
+					drawGraduationLine(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
 					if (i==0)
-						drawGraduationLabel(destid,j,max,angle*i,svgcenter,'svg-web-line'+no);
+						drawGraduationLabel(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
 				}
 			}
 			if (i>0)
