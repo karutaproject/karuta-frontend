@@ -1176,10 +1176,14 @@ function r_processWebLine(xmlDoc,destid,data,no)
 			if (selector.type=='node context') {
 				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
 			}
-			points[points.length] = {'value': ((text - min)/(max-min))*svgaxislength, 'angle':angle*i};
+			if (text.length>0)
+				points[points.length] = {'value': ((text - min)/(max-min))*svgaxislength, 'angle':angle*i};
+			else
+				points[points.length] = {'value': null, 'angle':angle*i};
 		};
 		for (var i=0; i<nodes.length;i++){
-			drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+no);
+			if (points[i].value!=null)
+				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+no);
 			if (no==0 && pos==0){
 				for (var j=0;j<=Math.abs(max-min);j++) {
 					drawGraduationLine(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
@@ -1190,6 +1194,7 @@ function r_processWebLine(xmlDoc,destid,data,no)
 			if (i>0)
 				drawLine(destid,points[i-1].value,points[i-1].angle,points[i].value,points[i].angle,svgcenter,'svg-web-line'+no);
 		}
+		if (points[i-1].value!=null && points[0].value!=null)
 		drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+no);
 		// draw legend
 		if (legendselect!=undefined) {
