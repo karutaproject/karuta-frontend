@@ -1186,16 +1186,17 @@ function r_processWebLine(xmlDoc,destid,data,no)
 				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+no);
 			if (no==0 && pos==0){
 				for (var j=0;j<=Math.abs(max-min);j++) {
-					drawGraduationLine(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
+					if (j>0)
+						drawGraduationLine(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
 					if (i==0)
 						drawGraduationLabel(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
 				}
 			}
-			if (i>0)
+			if (i>0 && points[i-1].value!=null && points[i].value!=null)
 				drawLine(destid,points[i-1].value,points[i-1].angle,points[i].value,points[i].angle,svgcenter,'svg-web-line'+no);
 		}
 		if (points[i-1].value!=null && points[0].value!=null)
-		drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+no);
+			drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+no);
 		// draw legend
 		if (legendselect!=undefined) {
 			var selector = r_getSelector(legendselect,null);
