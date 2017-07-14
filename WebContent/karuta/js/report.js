@@ -906,6 +906,21 @@ function displayCSVButton()
 }
 
 //==================================
+function html2IMG(content)
+//==================================
+{
+	var js1 = "javascript:$('#image-window').modal('hide')";
+	var footer = "";
+	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#image-window-footer").html($(footer));
+	$("#image-window-body").html("");
+	$("#image-window").modal('show');
+	var htmlnode = document.getElementById(content);
+	html2canvas(htmlnode).then(function(canvas) {
+		document.getElementById("image-window-body").appendChild(canvas);
+	});}
+
+//==================================
 function exec_report(uuid)
 //==================================
 {

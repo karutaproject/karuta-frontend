@@ -214,7 +214,7 @@ karutaStr['fr']['nogroup']="Aucun groupe associé";
 karutaStr['fr']['karuta.model']="Créer un modèle de portfolio";
 karutaStr['fr']['code_portfolio']="Code du portfolio";
 karutaStr['fr']['import_portfolio']="Importer un modèle .xml";
-karutaStr['fr']['import_zip']="Importer un modèle/package .zip";
+karutaStr['fr']['import_zip']="Importer un modèle/projet .zip";
 karutaStr['fr']['instantiate_portfolio']="Instancier un portfolio";
 karutaStr['fr']['button-instantiate']="Instancier";
 karutaStr['fr']['unshare']="Départager";
@@ -236,7 +236,7 @@ karutaStr['fr']['bin-admin']="Poubelle";
 karutaStr['fr']['import_instance']="Importer un portfolio instance .xml";
 karutaStr['fr']['remove-selection']="Déplacer vers la poubelle";
 karutaStr['fr']['delete-selection']="Détruire";
-karutaStr['fr']['import_zip_instance']="Importer un portfolio instance .zip";
+karutaStr['fr']['import_zip_instance']="Importer un portfolio/projet instance .zip";
 karutaStr['fr']['rename']="Renommer";
 karutaStr['fr']['karuta.batch']="Créer un modèle batch";
 karutaStr['fr']['karuta.report']="Créer un modèle de rapport";
@@ -320,6 +320,7 @@ karutaStr['fr']['dashboard-code']="Code du rapport";
 karutaStr['fr']['report-code']="Code du rapport";
 karutaStr['fr']['csv']="Rôles - Afficher CSV";
 karutaStr['fr']['pdf']="Rôles - Afficher PDF";
+karutaStr['fr']['img']="Rôles - Afficher Image";
 
 //=========================================
 //========== EUROPASS =====================

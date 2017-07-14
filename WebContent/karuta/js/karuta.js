@@ -496,7 +496,7 @@ function imageBox()
 {
 	var html = "";
 	html += "\n<!-- ==================== image box ==================== -->";
-	html += "\n<div id='image-window' class='modal fade'>";
+	html += "\n<div id='image-window' class='modal'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div id='image-window-body' class='modal-body'>";
 	html += "\n				</div>";

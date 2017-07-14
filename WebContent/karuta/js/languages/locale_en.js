@@ -320,6 +320,7 @@ karutaStr['en']['dashboard-code']="Dashboard Code";
 karutaStr['en']['report-code']="Report Code";
 karutaStr['en']['csv']="Roles - Display CSV";
 karutaStr['en']['pdf']="Roles - Display PDF";
+karutaStr['en']['img']="Rôles - Display Image";
 
 //=========================================
 //========== EUROPASS =====================

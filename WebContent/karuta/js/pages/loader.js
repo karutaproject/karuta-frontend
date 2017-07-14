@@ -133,5 +133,9 @@ function loadKarutaPage(url)
 	loadJS(url+"/karuta/js/version.js");
 	//--------------------------------------------------------------
 	loadJS(url+"/karuta/js/dashboards/matrix_2dims/matrix_2dim.js");
-	//--------------------------------------------------------------		
+	//--------------------------------------------------------------
+	loadJS(url+"/other/html2canvas/html2canvas.js");
+	loadJS(url+"/other/html2canvas/html2canvas.svg.js");
+	//--------------------------------------------------------------
+
 }
