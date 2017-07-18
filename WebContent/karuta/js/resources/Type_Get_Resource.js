@@ -321,16 +321,27 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		});
 		$(select_item).append($(select_item_a))
 		$(select).append($(select_item));
-		//--------------------
+		//-----Node ordering-------------------------------------------------------
 		var nodes = $("node",data);
+		var tableau1 = new Array();
+		for ( var i = 0; i < $(nodes).length; i++) {
+			var resource = null;
+			if ($("asmResource",nodes[i]).length==3)
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			else
+				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+			var code = $('code',resource).text();
+			tableau1[i] = [code,nodes[i]];
+		}
+		var newTableau1 = tableau1.sort(sortOn1);
 		//---------------------
 		if (target=='label') {
-			for ( var i = 0; i < $(nodes).length; i++) {
+			for ( var i = 0; i < newTableau1.length; i++) {
 				var resource = null;
-				if ($("asmResource",nodes[i]).length==3)
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+				if ($("asmResource",newTableau1[i][1]).length==3)
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 				else
-					resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 				var code = $('code',resource).text();
 				var display_code = true;
 				if (code.indexOf("@")>-1) {
@@ -392,8 +403,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		}
 		//---------------------
 		if (target=='text') {
-			for ( var i = 0; i < $(nodes).length; i++) {
-				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			for ( var i = 0; i < newTableau1.length; i++) {
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 				html = "<li></li>";
 				var select_item = $(html);
 				html = "<a  value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
@@ -441,15 +452,14 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			$("#"+destid).append(radio_obj);
 		}
 		//-------------------
-		var nodes = $("node",data);
-		for ( var i = 0; i < $(nodes).length; i++) {
+		for ( var i = 0; i < newTableau1.length; i++) {
 			var radio_obj = $("<div class='get-radio'></div>");
 			var input = "";
 			var resource = null;
-			if ($("asmResource",nodes[i]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			if ($("asmResource",newTableau1[i][1]).length==3)
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 			else
-				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			var code = $('code',resource).text();
 			var display_code = true;
 			if (code.indexOf("@")>-1) {
@@ -507,14 +517,13 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			$(inputs_obj).append(input_obj);
 		}
 		//-----------------------
-		var nodes = $("node",data);
-		for ( var i = 0; i < $(nodes).length; ++i) {
+		for ( var i = 0; i < newTableau1.length; ++i) {
 			var input = "";
 			var resource = null;
-			if ($("asmResource",nodes[i]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			if ($("asmResource",newTableau1[i][1]).length==3)
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 			else
-				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			var code = $('code',resource).text();
 			var display_code = true;
 			if (code.indexOf("@")>-1) {
@@ -555,14 +564,13 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		var inputs = "<div id='get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
 		//-----------------------
-		var nodes = $("node",data);
-		for ( var i = 0; i < $(nodes).length; ++i) {
+		for ( var i = 0; i < newTableau1.length; ++i) {
 			var input = "";
 			var resource = null;
-			if ($("asmResource",nodes[i]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+			if ($("asmResource",newTableau1[i][1]).length==3)
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 			else
-				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			var code = $('code',resource).text();
 			var display_code = true;
 			if (code.indexOf("@")>-1) {
