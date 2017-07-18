@@ -342,16 +342,6 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			$(htmlFormObj).append($(htmlGetResource));
 		}
 
-		//-----------------------------
-		var resizeroles = $(this.metadatawad).attr('resizeroles');
-		if (resizeroles==undefined)
-			resizeroles="";
-		if ((g_userroles[0]=='designer' || USER.admin || resizeroles.containsArrayElt(g_userroles) || resizeroles.indexOf(this.userrole)>-1) && this.resource!=undefined && this.resource.type=='Image') {
-			var htmlHeight = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'height',$(this.metadataepm).attr('height'));
-			$(htmlFormObj).append($(htmlHeight));
-			var htmlWidth = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'width',$(this.metadataepm).attr('width'));
-			$(htmlFormObj).append($(htmlWidth));
-		}
 		$(div).append($(htmlFormObj));
 	}
 	//--------------- set editbox title --------------

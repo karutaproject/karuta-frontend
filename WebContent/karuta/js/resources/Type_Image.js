@@ -35,16 +35,21 @@ UIFactory["Image"] = function( node )
 	}
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Image']",node));
 	//--------------------
+	//--------------------
 	this.filename_node = [];
 	this.type_node = [];
 	this.size_node = [];
 	this.fileid_node = [];
+	this.width_node = [];
+	this.height_node = [];
 	for (var i=0; i<languages.length;i++){
 		//----------------------------
 		this.filename_node[i] = $("filename[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
 		this.type_node[i] = $("type[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
 		this.size_node[i] = $("size[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
 		this.fileid_node[i] = $("fileid[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
+		this.width_node[i] = $("width[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
+		this.height_node[i] = $("height[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
 		//----------------------------
 		if (this.filename_node[i].length==0) {
 			var newfilename = createXmlElement("filename");
@@ -72,6 +77,20 @@ UIFactory["Image"] = function( node )
 			$(newfileid).attr('lang', languages[i]);
 			$("asmResource[xsi_type='Image']",node)[0].appendChild(newfileid);
 			this.fileid_node[i] = $("fileid[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
+		}
+		//----------------------------
+		if (this.width_node[i].length==0) {
+			var newwidth = createXmlElement("width");
+			$(newwidth).attr('lang', languages[i]);
+			$("asmResource[xsi_type='Image']",node)[0].appendChild(newwidth);
+			this.width_node[i] = $("width[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
+		}
+		//----------------------------
+		if (this.height_node[i].length==0) {
+			var newheight = createXmlElement("height");
+			$(newheight).attr('lang', languages[i]);
+			$("asmResource[xsi_type='Image']",node)[0].appendChild(newheight);
+			this.height_node[i] = $("height[lang='"+languages[i]+"']",$("asmResource[xsi_type='Image']",node));
 		}
 		//----------------------------
 	}
@@ -103,6 +122,8 @@ UIFactory["Image"].prototype.getAttributes = function(type,langcode)
 		result['size'] = this.size_node[langcode].text();
 		result['filename'] = this.filename_node[langcode].text();
 		result['fileid'] = this.fileid_node[langcode].text();
+		result['width'] = this.width_node[langcode].text();
+		result['height'] = this.height_node[langcode].text();
 	}
 	return result;
 }
@@ -127,9 +148,13 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		type='default';
 	//------------------------
 	var image_size = "";
-	if ($("metadata-epm",this.node).attr('width')!=undefined && $("metadata-epm",this.node).attr('width')!='') // backward compatibility
+	if ($(this.width_node[langcode]).text()!=undefined && $(this.width_node[langcode]).text()!='') // backward compatibility
+		image_size = "width='"+$(this.width_node[langcode]).text()+"' "; 
+	if (image_size=="" && $("metadata-epm",this.node).attr('width')!=undefined && $("metadata-epm",this.node).attr('width')!='') // backward compatibility
 		image_size = "width='"+$("metadata-epm",this.node).attr('width')+"' "; 
-	if ($("metadata-epm",this.node).attr('height')!=undefined && $("metadata-epm",this.node).attr('height')!='')
+	if ($(this.height_node[langcode]).text()!=undefined && $(this.height_node[langcode]).text()!='') // backward compatibility
+		image_size += "height='"+$(this.height_node[langcode]).text()+"' "; 
+	if (image_size.indexOf('height')<0 && $("metadata-epm",this.node).attr('height')!=undefined && $("metadata-epm",this.node).attr('height')!='')
 		image_size += "height='"+$("metadata-epm",this.node).attr('height')+"' "; 
 	if (image_size=="")
 		image_size = "class='image img-responsive'";
@@ -234,7 +259,7 @@ UIFactory["Image"].remove = function(uuid,langcode)
 };
 
 //==================================
-UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,parent)
+UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,parent,disabled)
 //==================================
 {
 	//---------------------
@@ -267,7 +292,51 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 			UIFactory["Image"].update(data.result,uuid,langcode,parent);
 			$("#divfileupload_"+this.id+"_"+langcode).html("Loaded");
 		}
-    });
+	});
+	var resizeroles = $("metadata-wad",this.node).attr('resizeroles');
+	if (resizeroles==undefined)
+		resizeroles="";
+	if ((g_userroles[0]=='designer' || USER.admin || resizeroles.containsArrayElt(g_userroles) || resizeroles.indexOf(this.userrole)>-1) ) {
+		//---------------------
+		var htmlFormObj = $("<form class='form-horizontal' style='margin-top:10px'></form>");
+		//---------------------
+		var width = $(this.width_node[langcode]).text();
+		if (this.encrypted)
+			width = decrypt(width.substring(3),g_rc4key);
+		var htmlWidthGroupObj = $("<div class='form-group'></div>")
+		var htmlWidthLabelObj = $("<label for='width_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['width']+"</label>");
+		var htmlWidthDivObj = $("<div class='col-sm-9'></div>");
+		var htmlWidthInputObj = $("<input id='width_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+width+"\">");
+		var self = this;
+		$(htmlWidthInputObj).change(function (){
+			$(self.width_node[langcode]).text($(this).val());
+			self.save();
+		});
+		$(htmlWidthDivObj).append($(htmlWidthInputObj));
+		$(htmlWidthGroupObj).append($(htmlWidthLabelObj));
+		$(htmlWidthGroupObj).append($(htmlWidthDivObj));
+		$(htmlFormObj).append($(htmlWidthGroupObj));
+		//---------------------
+		var height = $(this.height_node[langcode]).text();
+		if (this.encrypted)
+			height = decrypt(height.substring(3),g_rc4key);
+		var htmlHeightGroupObj = $("<div class='form-group'></div>")
+		var htmlHeightLabelObj = $("<label for='height_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['height']+"</label>");
+		var htmlHeightDivObj = $("<div class='col-sm-9'></div>");
+		var htmlHeightInputObj = $("<input id='height_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+height+"\">");
+		var self = this;
+		$(htmlHeightInputObj).change(function (){
+			$(self.height_node[langcode]).text($(this).val());
+			self.save();
+		});
+		$(htmlHeightDivObj).append($(htmlHeightInputObj));
+		$(htmlHeightGroupObj).append($(htmlHeightLabelObj));
+		$(htmlHeightGroupObj).append($(htmlHeightDivObj));
+		$(htmlFormObj).append($(htmlHeightGroupObj));
+		//---------------------
+		$("#"+destid).append(htmlFormObj);
+		//---------------------
+	}
 };
 
 //==================================
