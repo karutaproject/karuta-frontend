@@ -183,9 +183,21 @@
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
+		<xsl:variable name="sortag">
+			<xsl:value-of select="asmContext[metadata/@semantictag='sortag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="sortelt">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='sortelt']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
 		<for-each-portfolio select='{$select}'>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(sortag='')">
+				<xsl:attribute name="sortag"><xsl:value-of select="$sortag"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(sortelt='')">
+				<xsl:attribute name="sortelt"><xsl:value-of select="$sortelt"/></xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-portfolio>

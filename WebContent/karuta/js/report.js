@@ -512,6 +512,56 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 	var value = "";
 	var condition = "";
 	var portfolioid = "";
+	//----------------------------------
+	var sortag = $(xmlDoc).attr("sortag");
+	var sortelt = $(xmlDoc).attr("sortelt");
+	var tableau = new Array();
+	var sortvalue = "";
+	if (sortag!=undefined && sortag!="") {
+		for ( var j = 0; j < portfolios_list.length; j++) {
+			portfolioid = portfolios_list[j].id;
+			var code = portfolios_list[j].code_node.text();
+			if (select.indexOf("code*=")>-1) {
+				value = select.substring(7,select.length-1);  // inside quote
+				condition = code.indexOf(value)>-1;
+			}
+			if (select.indexOf("code=")>-1) {
+				value = select.substring(6,select.length-1);  // inside quote
+				condition = code==value;
+			}
+			//------------------------------------
+			if (condition && sortag!=""){
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+					success : function(data) {
+						var text = ";"
+						if (sortelt=='code') {
+							sortvalue = $("code",data)[0].text();
+						}
+						if (sortelt=='value') {
+							sortvalue = $("value",data)[0].text();
+						}
+						if (sortelt=='label') {
+							sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
+						}
+						if (sortelt=='text') {
+							sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
+						}
+						tableau[tableau.length] = [sortvalue,portfolioid];
+					}
+				});
+			}
+			//------------------------------------
+		}
+		var newTableau = tableau.sort(sortOn1);
+		for ( var i = 0; i < newTableau.length; i++) {
+			portfolios_list[i] = portfolios_byid[newTableau[i][1]]
+		}
+		portfolios_list.length = newTableau.length;
+	}
+	//----------------------------------
 	for ( var j = 0; j < portfolios_list.length; j++) {
 		var code = portfolios_list[j].code_node.text();
 //		alertHTML(j+"-"+code);
