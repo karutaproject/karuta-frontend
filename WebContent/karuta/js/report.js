@@ -1119,6 +1119,7 @@ function r_processWebAxis(xmlDoc,destid,data)
 		var angle = 360 / nodes.length;
 		for (var i=0; i<nodes.length;i++){
 			//---------------------------
+			var text = "";
 			var nodeid = $(nodes[i]).attr("id");
 			if (selector.type=='resource') {
 				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');

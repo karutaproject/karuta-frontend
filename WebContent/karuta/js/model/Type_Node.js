@@ -33,7 +33,7 @@ UIFactory["Node"] = function( node )
 			var newelement = createXmlElement("value");
 			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
 		}
-		this.value_node = $("value",$("asmResource[xsi_type='nodeRes']",node));
+		this.value_node = $("value",$("asmResource[xsi_type='nodeRes']",node)[0]);
 		//------------------------------
 		this.userrole = $(node).attr('role');
 		if (this.userrole==undefined || this.userrole=='')
@@ -2982,9 +2982,12 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					}
 				}
 				//--------------------------------
-				var monomenu = (menus.length==1);
-				if (!monomenu && menuroles.indexOf(g_userroles[0])>-1 && menuroles.indexOf(g_userroles[0])==menuroles.lastIndexOf(g_userroles[0]))
-					monomenu = true;
+				var nbmenus = 0;
+				for (var i=0; i<menus.length; i++){
+					if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+							nbmenus++;
+				}
+				var monomenu = (nbmenus==1);
 				//--------------------------------
 				if (displayMenu && !monomenu) {
 					var databack = false;

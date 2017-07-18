@@ -1624,7 +1624,7 @@ function setCSSportfolio(data)
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
 		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
 	//	changeCss(".asmnode .dropdown-button, .submit-button", "border:1px solid "+portfolio_buttons_color+";");
-		changeCss(".collapsible .glyphicon,.btn-group .button", "color:"+portfolio_buttons_color+";");
+		changeCss(".collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+portfolio_buttons_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
