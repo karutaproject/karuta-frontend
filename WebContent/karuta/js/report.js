@@ -266,7 +266,8 @@ function r_processSVG(no,xmlDoc,destid,data,line)
 	var min_height = $(xmlDoc).attr("min-height");
 	var min_width = $(xmlDoc).attr("min-width");
 	var html = "<svg id='svg_"+no+"' min-width='"+min_width+"' min-height='"+min_height+"' viewbox='0 0 1000 1000'></svg>";
-	$("#"+destid).append($(html));
+	var svg = $(html);
+	$("#"+destid).append(svg);
 	var children = $(">*",xmlDoc);
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
@@ -281,6 +282,9 @@ function r_processSVG(no,xmlDoc,destid,data,line)
 		if (tagname=="goparent")
 			r_processGoParent(no+"_"+i,children[i],'svg_'+no,data,line);
 	}
+	var img = SVGToIMG(svg);
+	$(svg).remove();
+	$("#"+destid).append(img);
 }
 
 //==================================
