@@ -28,9 +28,11 @@ UIFactory["Node"] = function( node )
 		this.node = node;
 		this.asmtype = $(node).prop("nodeName");
 		this.code_node = $($("code",node)[0]);
+		var flag_error = 'a';
 		//--------------------
 		if ($("value",$("asmResource[xsi_type='nodeRes']",node)).length==0){  // for backward compatibility
 			var newelement = createXmlElement("value");
+			flag_error = 'b';
 			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
 		}
 		this.value_node = $("value",$("asmResource[xsi_type='nodeRes']",node)[0]);
@@ -43,6 +45,7 @@ UIFactory["Node"] = function( node )
 		for (var i=0; i<languages.length;i++){
 			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
 			if (this.label_node[i].length==0) {
+				flag_error = 'c';
 				var newElement = createXmlElement("label");
 				$(newElement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newElement);
@@ -51,6 +54,7 @@ UIFactory["Node"] = function( node )
 			if (this.label_node[i].text()=="" && (this.asmtype=="asmRoot" || this.asmtype=="asmStructure" || this.asmtype=="asmUnit" ))
 				this.label_node[i].text("&nbsp;"); // to be able to edit it
 		}
+		flag_error = 'd';
 		//------------------------------
 		var resource = null;
 		this.resource_type = null;
@@ -93,7 +97,7 @@ UIFactory["Node"] = function( node )
 		}
 	}
 	catch(err) {
-		alertHTML("UIFactory['Node']--"+err.message+"--"+this.id+"--"+this.resource_type);
+		alertHTML("UIFactory['Node']--flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype);
 	}
 };
 

@@ -693,6 +693,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	}
+	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -714,6 +715,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 			$("#wait-window").modal('hide');			
 		}
 	});
+	$.ajaxSetup({async: true});
 }
 
 //=======================================================================

@@ -170,7 +170,7 @@ function getNewAccount()
 {
 	var html = "";
 	html += "<p>"+karutaStr[LANG]['new-account']+"</p>";
-	html += "<a class='btn btn-account' href='createAccount.htm?lang=en'>"+karutaStr[LANG]['sign-up']+"</a>";
+	html += "<a class='btn btn-account' href='createAccount.htm?lang="+LANG+"'>"+karutaStr[LANG]['sign-up']+"</a>";
 	return html;
 }
 

@@ -291,7 +291,19 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
-
+	//-----Node ordering-------------------------------------------------------
+	var nodes = $("node",data);
+	var tableau1 = new Array();
+	for ( var i = 0; i < $(nodes).length; i++) {
+		var resource = null;
+		if ($("asmResource",nodes[i]).length==3)
+			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+		else
+			resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+		var code = $('code',resource).text();
+		tableau1[i] = [code,nodes[i]];
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
 	//------------------------------------------------------------
 	if (type=='select') {
 		var html = "<div class='btn-group choice-group select-"+semtag+"'>";		
@@ -321,19 +333,6 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		});
 		$(select_item).append($(select_item_a))
 		$(select).append($(select_item));
-		//-----Node ordering-------------------------------------------------------
-		var nodes = $("node",data);
-		var tableau1 = new Array();
-		for ( var i = 0; i < $(nodes).length; i++) {
-			var resource = null;
-			if ($("asmResource",nodes[i]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-			else
-				resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-			var code = $('code',resource).text();
-			tableau1[i] = [code,nodes[i]];
-		}
-		var newTableau1 = tableau1.sort(sortOn1);
 		//---------------------
 		if (target=='label') {
 			for ( var i = 0; i < newTableau1.length; i++) {
