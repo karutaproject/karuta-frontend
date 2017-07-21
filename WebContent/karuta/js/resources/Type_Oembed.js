@@ -107,6 +107,10 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 			// Youtube
 			if( url.indexOf('youtube') != -1 || url.indexOf('youtu.be') != -1 )
 			{
+				// Remove list and index from playlist link,
+				// embed code on youtube treat it as part of the URL (as of 20170721)
+				url = url.replace(/&?index=[^&]*/i, '');
+				url = url.replace(/&?list=[^&]*/i, '');
 				url = url.replace('watch?v=','embed/');
 				url = url.replace('&feature=youtu.be','');
 			}

@@ -2092,10 +2092,12 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			//----------------------------
 			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
+			/*
 			if (!multilingual_resource)
 				$("#embed"+uuid+NONMULTILANGCODE).oembed();
 			else
 				$("#embed"+uuid+langcode).oembed();
+			//*/
 			//----------------------------
 		}
 	} //---- end of private - no display
