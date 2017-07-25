@@ -973,11 +973,14 @@ function html2IMG(content)
 	if(svgnode.length>0) {
 		var svgnode = $("svg",document.getElementById(content));
 		var img = SVGToIMG(svgnode);
-		$("image-window-body").append(img);
+		$("#image-window-body").append(img);
 	} else {
 		var htmlnode = document.getElementById(content);
 		html2canvas(htmlnode).then(function(canvas) {
-			document.getElementById("image-window-body").appendChild(canvas);
+			var src_img = canvas.toDataURL();
+			var img = document.createElement('img');
+			img.src = src_img;
+			document.getElementById("image-window-body").appendChild(img);
 	});
 	}
 }
