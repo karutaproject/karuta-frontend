@@ -94,7 +94,7 @@ function SVGToIMG( svgnode )
 	var css = fetchCSS(svgnode);
 	$(svgnode).append(css);
 	var svghtml = $(svgnode).attr('version', 1.1).attr('xmlns', 'http://www.w3.org/2000/svg');
-//	svghtml = $(svghtml).prop("outerHTML");
+	svghtml = $(svghtml).prop("outerHTML");
 	var image = $('<img></img>');
 	var imgsrc = 'data:image/svg+xml;base64,' + toB64(svghtml);
 	$(image).attr('src', imgsrc);

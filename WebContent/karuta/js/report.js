@@ -282,9 +282,9 @@ function r_processSVG(no,xmlDoc,destid,data,line)
 		if (tagname=="goparent")
 			r_processGoParent(no+"_"+i,children[i],'svg_'+no,data,line);
 	}
-	var img = SVGToIMG(svg);
-	$(svg).remove();
-	$("#"+destid).append(img);
+//	var img = SVGToIMG(svg);
+//	$(svg).remove();
+//	$("#"+destid).append(img);
 }
 
 //==================================
@@ -808,7 +808,7 @@ function r_processAggregate(aggregate,destid)
 		for (var i=0;i<aggregates[select].length;i++){
 			if ($.isNumeric(aggregates[select][i]))
 				sum += parseFloat(aggregates[select][i]);
-		}
+		}SVGToIMG
 		text = sum/aggregates[select].length;
 	}
 	if (ref!=undefined && ref!="") {
@@ -969,10 +969,17 @@ function html2IMG(content)
 	$("#image-window-footer").html($(footer));
 	$("#image-window-body").html("");
 	$("#image-window").modal('show');
-	var htmlnode = document.getElementById(content);
-	html2canvas(htmlnode).then(function(canvas) {
-		document.getElementById("image-window-body").appendChild(canvas);
-	});}
+	if(content.indexOf('svg')) {
+		var svgnode = $("svg",document.getElementById(content));
+		var img = SVGToIMG(svgnode);
+		$("image-window-body").append(img);
+	} else {
+		var htmlnode = document.getElementById(content);
+		html2canvas(htmlnode).then(function(canvas) {
+			document.getElementById("image-window-body").appendChild(canvas);
+	});
+	}
+}
 
 //==================================
 function exec_report(uuid)
