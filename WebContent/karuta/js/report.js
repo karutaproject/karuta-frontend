@@ -969,7 +969,8 @@ function html2IMG(content)
 	$("#image-window-footer").html($(footer));
 	$("#image-window-body").html("");
 	$("#image-window").modal('show');
-	if(content.indexOf('svg')) {
+	var svgnode = $("svg",document.getElementById(content));
+	if(svgnode.length>0) {
 		var svgnode = $("svg",document.getElementById(content));
 		var img = SVGToIMG(svgnode);
 		$("image-window-body").append(img);
