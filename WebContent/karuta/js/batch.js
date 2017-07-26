@@ -2001,3 +2001,38 @@ function get_users_from_group(groupid)
 	return users;
 }
 
+//=================== BatchForm ======================
+
+//==================================================
+function execBatchForm()
+//==================================================
+{
+	var line0 = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLine0'])",g_portfolio_current);
+	var lines = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLines'])",g_portfolio_current);
+	var model_code_node = $("asmContext:has(metadata[semantictag='model_code'])",g_portfolio_current);
+	var model_code_nodeid = $(model_code_node).attr("id");
+	var model_code = UICom.structure["ui"][model_code_nodeid].resource.getView();
+	initBatchVars();
+	g_json = getInputsLine(line0);
+	g_json['model_code'] = model_code;
+	g_json['lines'] = [];
+	g_json.lines[0] = getInputsLine(lines);
+	//------------------------------
+	getModelAndProcess(g_json.model_code);
+	//---------------------
+	$("#wait-window").modal('hide');
+};
+
+//==================================================
+function getInputsLine(node)
+//==================================================
+{
+	line_inputs = $("asmContext:has(metadata[semantictag*='BatchFormInput'])",node);
+	var g_json_line = {};
+	for ( var j = 0; j < line_inputs.length; j++) {
+		var inputid = $(line_inputs[j]).attr('id');
+		code = UICom.structure["ui"][inputid].getCode();
+		g_json_line[code] = UICom.structure["ui"][inputid].resource.getView();
+	}
+	return g_json_line;
+};

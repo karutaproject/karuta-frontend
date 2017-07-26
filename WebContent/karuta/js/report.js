@@ -18,6 +18,8 @@ var xmlDoc = null;
 var userid = null; // current user
 var aggregates = {};
 
+var dashboard_infos = {};
+var dashboard_current = null;
 
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
@@ -74,6 +76,10 @@ function r_getSelector(select,test)
 function r_processPortfolio(no,xmlReport,destid,data,line)
 //==================================
 {
+	if (no==0){
+		dashboard_current = destid;
+		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data};
+	}
 	var children = $(":root",xmlReport).children();
 //	var children = $(">*",xmlReport);
 	no += destid;
@@ -411,6 +417,8 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			r_processNode(no,children[i],'td_'+no,data,line);
 		if (tagname=="goparent")
 			r_processGoParent(no,children[i],'td_'+no,data,line);
+		if (tagname=="refresh")
+			r_processRefresh(children[i],'td_'+no,data,line);
 	}
 }
 
@@ -754,6 +762,26 @@ function r_processText(xmlDoc,destid,data)
 }
 
 //==================================
+function r_processRefresh(xmlDoc,destid,data)
+//==================================
+{
+	var nodeid = $(data).attr("id");
+	var style = $(xmlDoc).attr("style");
+	var text = "<div id='"+nodeid+"'><a onclick=\"refresh_report('"+dashboard_current+"')\" class='glyphicon glyphicon-refresh button' data-title='"+karutaStr[LANG]["button-refresh-report"]+"' data-tooltip='true' data-placement='bottom'></a></div>";
+	$("#"+destid).append($(text));
+	$("#"+nodeid,$("#"+destid)).attr("style",style);
+}
+
+//==================================
+function refresh_report(dashboard_current)
+//==================================
+{
+	$("#"+dashboard_current).html("");
+	r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
+	$('[data-tooltip="true"]').tooltip();
+}
+
+//==================================
 function r_processJSFunction(xmlDoc,destid,data)
 //==================================
 {
@@ -960,7 +988,7 @@ function displayCSVButton()
 }
 
 //==================================
-function html2IMG(content)
+function html2IMG(contentid)
 //==================================
 {
 	var js1 = "javascript:$('#image-window').modal('hide')";
@@ -969,13 +997,22 @@ function html2IMG(content)
 	$("#image-window-footer").html($(footer));
 	$("#image-window-body").html("");
 	$("#image-window").modal('show');
-	var svgnode = $("svg",document.getElementById(content));
+	var svgnode = $("svg",document.getElementById(contentid));
 	if(svgnode.length>0) {
-		var svgnode = $("svg",document.getElementById(content));
-		var img = SVGToIMG(svgnode);
-		$("#image-window-body").append(img);
+		var imgsvg = SVGToIMG(svgnode,'img'+contentid);
+		$("#image-window-body").append(imgsvg);
+/*
+		var html = "<canvas id='c"+contentid+"'></canvas>";
+		$("#image-window-body").append($(html));
+		var canvas = document.getElementById("c"+contentid);
+		var ctx = canvas.getContext("2d");
+		var img = document.getElementById("img"+contentid);
+		img.onload = function(){
+			ctx.drawImage(this,20,20);
+		}
+*/
 	} else {
-		var htmlnode = document.getElementById(content);
+		var htmlnode = document.getElementById(contentid);
 		html2canvas(htmlnode).then(function(canvas) {
 			var src_img = canvas.toDataURL();
 			var img = document.createElement('img');
