@@ -98,5 +98,51 @@ function SVGToIMG( svgnode ,imgid)
 	var image = $("<img id='"+imgid+"'></img>");
 	var imgsrc = 'data:image/svg+xml;base64,' + toB64(svghtml);
 	$(image).attr('src', imgsrc);
+	$(svgnode).remove(css);
 	return image;
 }
+
+
+function SVGToPNG( svgnode )
+{
+	var DOMURL = window.URL || window.webkitURL || window;
+
+	// Prepare SVG
+	// !!Important!! Add needed width, height attribute in svg tag,
+	// otherwise nothing is drawn on the canvas
+	// Also, CSS and namespace
+	var css = fetchCSS(svgnode);
+	$(svgnode).prepend(css);
+	$(svgnode).attr('version', 1.1).attr('xmlns', 'http://www.w3.org/2000/svg');
+	$(svgnode).attr("height", 2100).attr("width", 2100);
+	var data = $(svgnode).prop("outerHTML");
+
+	// Dimension for 8.5"x11" page with 1.5" margin (2*0.75) at 300DPI
+	// -> 2100x2100 (supposed it's a square area)
+	// Prepare canvas
+	var canvas = $("<canvas/>").attr("width","2100").attr("height", "2100");
+	// Ensure canvas is displayed within page width
+	// It's a raw element resize, saving image will be the full dimensions
+	$(canvas).css("width","100%");
+	var ctx = $(canvas)[0].getContext("2d");
+	
+	// Convert SVG
+	var im = new Image();
+	var svg = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+	var url = DOMURL.createObjectURL(svg);
+	
+	im.onload = function()
+	{
+		ctx.drawImage(im, 0, 0);
+		DOMURL.revokeObjectURL(url);
+		
+		// Remove css and svg dimensions so it stays dynamic for phone users
+		// The namespace can stay though
+		$(svgnode).removeAttr("height").removeAttr("width");
+		$(svgnode).remove(css);
+	};
+	im.src = url;
+	
+	return canvas;
+}
+

@@ -288,9 +288,9 @@ function r_processSVG(no,xmlDoc,destid,data,line)
 		if (tagname=="goparent")
 			r_processGoParent(no+"_"+i,children[i],'svg_'+no,data,line);
 	}
-//	var img = SVGToIMG(svg);
+	var img = SVGToPNG(svg);
 //	$(svg).remove();
-//	$("#"+destid).append(img);
+	$("#"+destid).append(img);
 }
 
 //==================================
