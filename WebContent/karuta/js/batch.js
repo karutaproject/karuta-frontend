@@ -2001,7 +2001,11 @@ function get_users_from_group(groupid)
 	return users;
 }
 
-//=================== BatchForm ======================
+//==================================================
+//==================================================
+//=================== BatchForm ====================
+//==================================================
+//==================================================
 
 //==================================================
 function execBatchForm()
@@ -2018,9 +2022,9 @@ function execBatchForm()
 	g_json['lines'] = [];
 	g_json.lines[0] = getInputsLine(lines);
 	//------------------------------
+	display_execBatch()
+	//------------------------------
 	getModelAndProcess(g_json.model_code);
-	//---------------------
-	$("#wait-window").modal('hide');
 };
 
 //==================================================
@@ -2035,4 +2039,22 @@ function getInputsLine(node)
 		g_json_line[code] = UICom.structure["ui"][inputid].resource.getView();
 	}
 	return g_json_line;
+};
+
+//==================================
+function display_execBatch()
+//==================================
+{
+	$("#main-exec-batch").html('');
+	//---------------------
+	var js1 = "javascript:$('#edit-window').modal('hide');$('#edit-window-body').html('')";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html($(footer));
+	$("#edit-window-title").html("KARUTA - "+karutaStr[LANG]['batch']);
+	$("#edit-window-type").html("");
+	var html = "";
+	html += "<div id='batch-log' style='margin-left:20px;margin-top:20px'></div>";
+	$("#edit-window-body").html(html);
+	//---------------------
+	$('#edit-window').modal('show');
 };
