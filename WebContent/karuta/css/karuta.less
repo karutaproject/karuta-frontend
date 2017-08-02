@@ -168,6 +168,10 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 	border-radius:0px;
 }
 
+.navbar-brand {
+	height:auto; /* originaly 50px but too small when minimized on phone  */
+}
+
 .navbar-default{
 	font-size: 14px;
 }
@@ -1120,6 +1124,15 @@ textarea {
 	left:50%;
 }
 
+#image-window {
+	width:90%;
+	top:10%;
+	left:5%;
+}
+
+#image-window-body {
+	padding:5px;
+}
 
 
 /* -------------------------------------------------- */
@@ -1990,25 +2003,25 @@ table.tablesorter th.restore {
 	Select with color
    ====================*/
 
-.selBDG0, option[value="BDG0"] {color: black; background: lightgrey;padding:4px;height:34px;}
-.selBDG1, option[value="BDG1"] {color: black; background: DarkOrange;padding:4px;height:34px;}
-.selBDG2, option[value="BDG2"] { color: black; background: #FF6600;padding:4px;height:34px;}
-.selBDG3, option[value="BDG3"] { color: black; background: #fff;padding:4px;height:34px;}
-.selBDG4, option[value="BDG4"] { color: black; background: #CCFF99;padding:4px;height:34px;}
-.selBDG5, option[value="BDG5"] { color: black; background: #66CC00;padding:4px;height:34px;}
+.selBDG0, option[value="BDG0"] {color: black; background: lightgrey;padding:2px 4px;height:34px;}
+.selBDG1, option[value="BDG1"] {color: black; background: DarkOrange;padding:2px 4px;height:34px;}
+.selBDG2, option[value="BDG2"] { color: black; background: #FF6600;padding:2px 4px;height:34px;}
+.selBDG3, option[value="BDG3"] { color: black; background: #fff;padding:2px 4px;height:34px;}
+.selBDG4, option[value="BDG4"] { color: black; background: #CCFF99;padding:2px 4px;height:34px;}
+.selBDG5, option[value="BDG5"] { color: black; background: #66CC00;padding:2px 4px;height:34px;}
 
 //.BDG0 { color: black; background: lightgrey; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG0 { color: black; background: lightgrey; padding:4px;border-radius:4px;}
+.BDG0 { color: black; background: lightgrey; padding:2px 4px;border-radius:4px;}
 //.BDG1 { color: black; background: red; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG1 { color: black; background: DarkOrange; padding:4px;border-radius:4px;}
+.BDG1 { color: black; background: DarkOrange; padding:2px 4px;border-radius:4px;}
 //.BDG2 { color: black; background: #FF6600; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG2 { color: black; background: #FF6600; padding:4px;border-radius:4px;}
+.BDG2 { color: black; background: #FF6600; padding:2px 4px;border-radius:4px;}
 //.BDG3 { color: black; background: #fff; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG3 { color: black; background: #fff; padding:4px;border-radius:4px;}
+.BDG3 { color: black; background: #fff; padding:2px 4px;border-radius:4px;}
 //.BDG4 { color: black; background: #CCFF99; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG4 { color: black; background: #CCFF99; padding:4px;border-radius:4px;}
+.BDG4 { color: black; background: #CCFF99; padding:2px 4px;border-radius:4px;}
 //.BDG5 { color: black; background: #66CC00; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG5 { color: black; background: #66CC00; padding:4px;border-radius:4px;}
+.BDG5 { color: black; background: #66CC00; padding:2px 4px;border-radius:4px;}
 
 select.Y0, option[value="Y0"] {color: #fff; background: gray;}
 select.Y1, option[value="Y1"] {color: #fff; background: red;}
@@ -2017,7 +2030,7 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .Y1 {color: #fff; background: red;}
 .Y2 {color: #fff; background: green;}
 
-.BDG { color: black; background: lightgrey; padding:4px;border-radius:4px;}
+.BDG { color: black; background: lightgrey; padding-left:4px;padding-right:4px;padding-top:1px;padding-bottom:1px;border-radius:4px;}
 
 .selGREEN {color: black; background: #66cc00;}
 .selORANGE {color: black; background: orange;}
@@ -2050,6 +2063,51 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 
 .selSMILEY-SAD, .SMILEY-SAD {
 	background-image: url("../../karuta/img/smiley-sad.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
+.selSMILEY-GREEN, .SMILEY-GREEN {
+	background-image: url("../../karuta/img/smiley-green.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
+.selSMILEY-ORANGE, .SMILEY-ORANGE {
+	background-image: url("../../karuta/img/smiley-orange.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
+.selSMILEY-RED, .SMILEY-RED {
+	background-image: url("../../karuta/img/smiley-red.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
+.selGREEN-CHECK, .GREEN-CHECK {
+	background-image: url("../../karuta/img/green-check.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
+.selRED-X, .RED-X {
+	background-image: url("../../karuta/img/red-x.png");
 	background-repeat: no-repeat;
 	background-position: 10px 3px;
 	display:inline-block;
@@ -2393,6 +2451,10 @@ div.oembedall-container {
        max-width: 480px !important;
    }
 
+.thereismore {
+	position:relative;
+	top:-10px;
+}
 /* ===========================
 	DASHBOARD CSV PDF BUTTONS
    ===========================*/

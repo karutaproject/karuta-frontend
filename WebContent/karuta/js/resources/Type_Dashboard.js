@@ -45,6 +45,12 @@ UIFactory["Dashboard"] = function( node )
 	}
 	this.pdf_node = $("pdf",$("asmResource[xsi_type='Dashboard']",node));
 	//--------------------
+	if ($("img",$("asmResource[xsi_type='Dashboard']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("img");
+		$("asmResource[xsi_type='Dashboard']",node)[0].appendChild(newelement);
+	}
+	this.img_node = $("img",$("asmResource[xsi_type='Dashboard']",node));
+	//--------------------
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Dashboard']",node));
@@ -171,6 +177,19 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlpdfGroupObj).append($(htmlpdfLabelObj));
 		$(htmlpdfGroupObj).append($(htmlpdfDivObj));
 		$(htmlFormObj).append($(htmlpdfGroupObj));
+		//-----------------------------------------------------
+		var htmlimgGroupObj = $("<div class='form-group'></div>")
+		var htmlimgLabelObj = $("<label for='img_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['img']+"</label>");
+		var htmlimgDivObj = $("<div class='col-sm-9'></div>");
+		var htmlimgInputObj = $("<input id='img_"+this.id+"' type='text' class='form-control' value=\""+this.img_node.text()+"\">");
+		$(htmlimgInputObj).change(function (){
+			$(self.img_node).text($(this).val());
+			UIFactory["Dashboard"].update(self,langcode);
+		});
+		$(htmlimgDivObj).append($(htmlimgInputObj));
+		$(htmlimgGroupObj).append($(htmlimgLabelObj));
+		$(htmlimgGroupObj).append($(htmlimgDivObj));
+		$(htmlFormObj).append($(htmlimgGroupObj));
 	}
 	//------------------------
 	return htmlFormObj;

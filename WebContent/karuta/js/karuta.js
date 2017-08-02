@@ -496,7 +496,7 @@ function imageBox()
 {
 	var html = "";
 	html += "\n<!-- ==================== image box ==================== -->";
-	html += "\n<div id='image-window' class='modal fade'>";
+	html += "\n<div id='image-window' class='modal'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div id='image-window-body' class='modal-body'>";
 	html += "\n				</div>";
@@ -618,8 +618,10 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		depth = 1;
 	if (UICom.structure['tree'][uuid]!=null) {
 		if (type=='standard') {
+			var node = UICom.structure['ui'][uuid].node;
+			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
-			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit)
+			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
 				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 			else
 				UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
@@ -691,6 +693,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	}
+	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -712,6 +715,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 			$("#wait-window").modal('hide');			
 		}
 	});
+	$.ajaxSetup({async: true});
 }
 
 //=======================================================================
@@ -1622,7 +1626,7 @@ function setCSSportfolio(data)
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
 		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
 	//	changeCss(".asmnode .dropdown-button, .submit-button", "border:1px solid "+portfolio_buttons_color+";");
-		changeCss(".collapsible .glyphicon,.btn-group .button", "color:"+portfolio_buttons_color+";");
+		changeCss(".collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+portfolio_buttons_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {

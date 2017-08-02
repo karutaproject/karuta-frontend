@@ -167,7 +167,6 @@ function displayKarutaCreateAccount()
 	$('body').html(html);
 	$('body').append(alertBox());
 
-	getLanguage();
 	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
@@ -181,15 +180,16 @@ function displayKarutaCreateAccount()
 			karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 		}
 	});
+	loadLanguages(function(data) {
+		getLanguage();
+		$("#navigation_bar").html(getNavBar('create_account',null));
+		$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
+	});
 	if (typeof welcome1 != 'undefined') {
 		$("#welcome1").html(welcome1[LANG]);
 		$("#welcome2").html(welcome2[LANG]);
 		$("#welcome3").html(welcome3[LANG]);
 	}
-	loadLanguages(function(data) {
-		$("#navigation_bar").html(getNavBar('create_account',null));
-		$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
-	});
 }
 
 

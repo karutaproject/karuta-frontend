@@ -65,6 +65,23 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</cell>
 	</xsl:template>
+	<!-- ================ refresh ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-refresh']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="help">
+			<xsl:value-of select="metadata-wad/@help"></xsl:value-of>
+		</xsl:variable>
+		<refresh>
+			<xsl:if test="not($style='')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($help='')">
+				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
+			</xsl:if>
+		</refresh>
+	</xsl:template>
 	<!-- ================ text ============================ -->
 	<xsl:template match="*[metadata/@semantictag='text']">
 		<xsl:variable name="style">
@@ -183,9 +200,21 @@
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
+		<xsl:variable name="sortag">
+			<xsl:value-of select="asmContext[metadata/@semantictag='sortag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="sortelt">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='sortelt']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
 		<for-each-portfolio select='{$select}'>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(sortag='')">
+				<xsl:attribute name="sortag"><xsl:value-of select="$sortag"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(sortelt='')">
+				<xsl:attribute name="sortelt"><xsl:value-of select="$sortelt"/></xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-portfolio>

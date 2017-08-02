@@ -111,7 +111,15 @@ function fill_main_page(portfolioid,role)
 			var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
 			if (welcomes.length>0){
 				var welcomeid = $(welcomes[0]).attr('id');
-				$("#sidebar_"+welcomeid).click();
+				var node = UICom.structure['ui'][welcomeid];
+				var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+				if (display=='Y')
+					$("#sidebar_"+welcomeid).click();
+				else {
+					var root = $("asmRoot",data);
+					var rootid = $(root[0]).attr('id');
+					$("#sidebar_"+rootid).click();
+				}
 			} else {
 				var root = $("asmRoot",data);
 				var rootid = $(root[0]).attr('id');

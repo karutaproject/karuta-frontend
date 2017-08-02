@@ -28,12 +28,14 @@ UIFactory["Node"] = function( node )
 		this.node = node;
 		this.asmtype = $(node).prop("nodeName");
 		this.code_node = $($("code",node)[0]);
+		var flag_error = 'a';
 		//--------------------
 		if ($("value",$("asmResource[xsi_type='nodeRes']",node)).length==0){  // for backward compatibility
 			var newelement = createXmlElement("value");
+			flag_error = 'b';
 			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
 		}
-		this.value_node = $("value",$("asmResource[xsi_type='nodeRes']",node));
+		this.value_node = $("value",$("asmResource[xsi_type='nodeRes']",node)[0]);
 		//------------------------------
 		this.userrole = $(node).attr('role');
 		if (this.userrole==undefined || this.userrole=='')
@@ -43,6 +45,7 @@ UIFactory["Node"] = function( node )
 		for (var i=0; i<languages.length;i++){
 			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
 			if (this.label_node[i].length==0) {
+				flag_error = 'c';
 				var newElement = createXmlElement("label");
 				$(newElement).attr('lang', languages[i]);
 				$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newElement);
@@ -51,6 +54,7 @@ UIFactory["Node"] = function( node )
 			if (this.label_node[i].text()=="" && (this.asmtype=="asmRoot" || this.asmtype=="asmStructure" || this.asmtype=="asmUnit" ))
 				this.label_node[i].text("&nbsp;"); // to be able to edit it
 		}
+		flag_error = 'd';
 		//------------------------------
 		var resource = null;
 		this.resource_type = null;
@@ -93,7 +97,7 @@ UIFactory["Node"] = function( node )
 		}
 	}
 	catch(err) {
-		alertHTML("UIFactory['Node']--"+err.message+"--"+this.id+"--"+this.resource_type);
+		alertHTML("UIFactory['Node']--flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype);
 	}
 };
 
@@ -342,16 +346,6 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			$(htmlFormObj).append($(htmlGetResource));
 		}
 
-		//-----------------------------
-		var resizeroles = $(this.metadatawad).attr('resizeroles');
-		if (resizeroles==undefined)
-			resizeroles="";
-		if ((g_userroles[0]=='designer' || USER.admin || resizeroles.containsArrayElt(g_userroles) || resizeroles.indexOf(this.userrole)>-1) && this.resource!=undefined && this.resource.type=='Image') {
-			var htmlHeight = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'height',$(this.metadataepm).attr('height'));
-			$(htmlFormObj).append($(htmlHeight));
-			var htmlWidth = UIFactory["Node"].getMetadataEpmAttributeEditor(this.id,'width',$(this.metadataepm).attr('width'));
-			$(htmlFormObj).append($(htmlWidth));
-		}
 		$(div).append($(htmlFormObj));
 	}
 	//--------------- set editbox title --------------
@@ -554,9 +548,9 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "<div class='sidebar-item' id='parent-"+uuid+"' role='tablist'>";
 					html += "  <div  class='sidebar-link' style='cursor:pointer' redisplay=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >";
 					if (g_toggle_sidebar[uuid]!=undefined && g_toggle_sidebar[uuid]=='open')
-						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='glyphicon glyphicon-minus' style='float:right;margin-right:5px;'></span></small>";
+						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='glyphicon glyphicon-minus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
 					else
-						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='glyphicon glyphicon-plus' style='float:right;margin-right:5px;'></span></small>";
+						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='glyphicon glyphicon-plus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
 					html += "  <a onclick=\"toggleSidebarPlus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
 					html += "  </div>"
 					if (g_toggle_sidebar[uuid]!=undefined && g_toggle_sidebar[uuid]=='open')
@@ -853,6 +847,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						$("#edit-window-body-node").html($(html));
 					}
 					html += "</div><!-- inside-full-height -->";
+					//-------------- context -------------------------
+					html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 					html += "</td>";
 				} else {
 					//--------- display ------------
@@ -1113,6 +1109,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 					$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div><div class='pdf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF/Word</div>"));				
 				}
+				var img_roles = $(UICom.structure["ui"][uuid].resource.img_node).text();
+				if (img_roles.containsArrayElt(g_userroles) || (img_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+					$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">IMG</div>"));
+				}
 			}
 			//------------ Report -----------------
 			if (nodetype == "asmContext" && node.resource.type=='Report') {
@@ -1150,6 +1150,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					var pdf_roles = $(UICom.structure["ui"][uuid].resource.pdf_node).text();
 					if (pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 						$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div><div class='pdf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF/Word</div>"));				
+					}
+					var img_roles = $(UICom.structure["ui"][uuid].resource.img_node).text();
+					if (img_roles.containsArrayElt(g_userroles) || (img_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+						$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">IMG</div>"));
 					}
 				}
 				if (g_userroles[0]!='designer')
@@ -1291,10 +1295,12 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			$(".pickcolor").colorpicker();
 			//----------------------------
 			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
+			/*
 			if (!multilingual_resource)
 				$("#embed"+uuid+NONMULTILANGCODE).oembed();
 			else
 				$("#embed"+uuid+langcode).oembed();
+			//*/
 			//----------------------------
 		}
 		if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
@@ -1459,7 +1465,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			var h1 = $("#std_resource_"+uuid)[0].scrollHeight;
 			if (h1>g_block_height-$("#title_"+uuid).outerHeight()){
 				$("#std_resource_"+uuid).outerHeight(g_block_height-$("#title_"+uuid).outerHeight()-20);
-				$("#std_resource_"+uuid).parent().append($("<div id='plus_"+uuid+"' style='text-align:right;cursor:pointer'>&nbsp;&nbsp; ... &nbsp;&nbsp;</div>"));
+				$("#std_resource_"+uuid).parent().append($("<div class='thereismore' id='plus_"+uuid+"' style='text-align:right;cursor:pointer'>&nbsp;&nbsp; ... &nbsp;&nbsp;</div>"));
 				$("#std_resource_"+uuid).click(function(){
 					messageHTML(UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid));
 				});
@@ -1686,10 +1692,10 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			$(".pickcolor").colorpicker();
 			//----------------------------
 			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
-			if (!multilingual_resource)
-				$("#embed"+uuid+NONMULTILANGCODE).oembed();
-			else
-				$("#embed"+uuid+langcode).oembed();
+//			if (!multilingual_resource)
+//				$("#embed"+uuid+NONMULTILANGCODE).oembed();
+//			else
+//				$("#embed"+uuid+langcode).oembed();
 			//----------------------------
 		}
 	} //---- end of private
@@ -2086,10 +2092,12 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			//----------------------------
 			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
+			/*
 			if (!multilingual_resource)
 				$("#embed"+uuid+NONMULTILANGCODE).oembed();
 			else
 				$("#embed"+uuid+langcode).oembed();
+			//*/
 			//----------------------------
 		}
 	} //---- end of private - no display
@@ -2914,7 +2922,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4,freenode);
-					html += UIFactory["Node"].getItemMenu(node.id,'karuta.batchform-parts','BatchForm','BatchForm',databack,callback,param2,param3,param4,freenode);
 					if (semantictag.indexOf("asm-block")>-1) {
 						html += "<hr>";
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
@@ -2980,9 +2987,12 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					}
 				}
 				//--------------------------------
-				var monomenu = (menus.length==1);
-				if (!monomenu && menuroles.indexOf(g_userroles[0])>-1 && menuroles.indexOf(g_userroles[0])==menuroles.lastIndexOf(g_userroles[0]))
-					monomenu = true;
+				var nbmenus = 0;
+				for (var i=0; i<menus.length; i++){
+					if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+							nbmenus++;
+				}
+				var monomenu = (nbmenus==1);
 				//--------------------------------
 				if (displayMenu && !monomenu) {
 					var databack = false;

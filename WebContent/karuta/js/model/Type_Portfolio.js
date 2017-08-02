@@ -192,6 +192,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.parts')\" >"+karutaStr[LANG]['karuta.parts']+"</a></li>";
 						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.report')\" >"+karutaStr[LANG]['karuta.report']+"</a></li>";
 						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch')\" >"+karutaStr[LANG]['karuta.batch']+"</a></li>";
+						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch-form')\" >"+karutaStr[LANG]['karuta.batch-form']+"</a></li>";
 						html += "					<li><a onclick=\"UIFactory['Portfolio'].create('"+portfoliocode+"')\" >"+karutaStr[LANG]['create_tree']+"</a></li>";
 						if (elgg_installed)
 							html += getProjectNetworkMenu(portfoliocode,portfolio.id);
@@ -406,8 +407,9 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		tree_type='<span class="fa fa-folder-o" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-rubric')>-1)
 		tree_type='<span class="glyphicon glyphicon-list" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-batch-form')>-1)
+		tree_type='<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-dashboard')>-1)
-//		tree_type='<span class="fa fa-dashboard" aria-hidden="true"></span>';
 		tree_type='<span class="fa fa-line-chart" aria-hidden="true"></span>';
 	//---------------------
 	var owner = (Users_byid[this.ownerid]==null) ? "??? "+this.ownerid:Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
@@ -435,7 +437,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 			if (gid==null) {
 				html += "<li><a onclick=\"UIFactory['Portfolio'].callRename('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a></li>";
 				html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].copy('"+this.id+"','"+this.code_node.text()+"-copy',true)\" ><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i> "+karutaStr[LANG]["button-duplicate"]+"</a></li>";
-				if (semtag.indexOf('karuta-model')>-1)
+				if (semtag.indexOf('karuta-model')>-1 || semtag.indexOf('karuta-batch-form')>-1)
 					html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].instantiate('"+this.id+"','"+this.code_node.text()+"-instance',true)\" ><i class='fa fa-file-o'></i><i class='fa fa-file'></i> "+karutaStr[LANG]["button-instantiate"]+"</a></li>";
 				html += "<li><a onclick=\"UIFactory['Portfolio'].remove('"+this.id+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
 				html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
@@ -2289,7 +2291,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 //		html += " Role : <span id='userrole'></span><span class='caret'></span></a>";
 
 	html += "	</li>";
-	html += "	<li><a id='refresh-portfolio' onclick='fill_main_page()' class='glyphicon glyphicon-refresh'></a></li>";
+	html += "	<li><a id='refresh-portfolio' onclick='fill_main_page()' class='glyphicon glyphicon-refresh' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-tooltip='true' data-placement='bottom'></a></li>";
 	//------------------------------------------------
 	html += "</div><!-- class='collapse navbar-collapse' -->";
 	html += "</div><!-- class='container-fluid' -->";

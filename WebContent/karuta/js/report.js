@@ -18,6 +18,8 @@ var xmlDoc = null;
 var userid = null; // current user
 var aggregates = {};
 
+var dashboard_infos = {};
+var dashboard_current = null;
 
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
@@ -74,6 +76,10 @@ function r_getSelector(select,test)
 function r_processPortfolio(no,xmlReport,destid,data,line)
 //==================================
 {
+	if (no==0){
+		dashboard_current = destid;
+		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data};
+	}
 	var children = $(":root",xmlReport).children();
 //	var children = $(">*",xmlReport);
 	no += destid;
@@ -266,19 +272,25 @@ function r_processSVG(no,xmlDoc,destid,data,line)
 	var min_height = $(xmlDoc).attr("min-height");
 	var min_width = $(xmlDoc).attr("min-width");
 	var html = "<svg id='svg_"+no+"' min-width='"+min_width+"' min-height='"+min_height+"' viewbox='0 0 1000 1000'></svg>";
-	$("#"+destid).append($(html));
+	var svg = $(html);
+	$("#"+destid).append(svg);
 	var children = $(">*",xmlDoc);
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
 		if (tagname=="draw-web-title")
-			r_processWebTitle(children[i],'svg_'+no,data);
+			r_processWebTitle(children[i],'svg_'+no,data,line);
 		if (tagname=="draw-web-axis")
-			r_processWebAxis(children[i],'svg_'+no,data);
+			r_processWebAxis(children[i],'svg_'+no,data,line);
 		if (tagname=="draw-web-line")
-			r_processWebLine(children[i],'svg_'+no,data);
+			r_processWebLine(children[i],'svg_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],'svg_'+no,data,line);
+		if (tagname=="goparent")
+			r_processGoParent(no+"_"+i,children[i],'svg_'+no,data,line);
 	}
+	var img = SVGToPNG(svg);
+//	$(svg).remove();
+	$("#"+destid).append(img);
 }
 
 //==================================
@@ -309,6 +321,8 @@ function r_processTable(no,xmlDoc,destid,data,line)
 			r_processRow(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],'table_'+no,data,line);
+		if (tagname=="goparent")
+			r_processGoParent(no+"_"+i,children[i],'table_'+no,data,line);
 	};
 }
 
@@ -338,6 +352,8 @@ function r_processRow(no,xmlDoc,destid,data,line)
 			r_processCell(no+"_"+i,children[i],'tr_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],'tr_'+no,data,line);
+		if (tagname=="goparent")
+			r_processGoParent(no+"_"+i,children[i],'tr_'+no,data,line);
 	}
 }
 
@@ -399,6 +415,10 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			r_processSVG(no,children[i],'td_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no,children[i],'td_'+no,data,line);
+		if (tagname=="goparent")
+			r_processGoParent(no,children[i],'td_'+no,data,line);
+		if (tagname=="refresh")
+			r_processRefresh(children[i],'td_'+no,data,line);
 	}
 }
 
@@ -504,6 +524,56 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 	var value = "";
 	var condition = "";
 	var portfolioid = "";
+	//----------------------------------
+	var sortag = $(xmlDoc).attr("sortag");
+	var sortelt = $(xmlDoc).attr("sortelt");
+	var tableau = new Array();
+	var sortvalue = "";
+	if (sortag!=undefined && sortag!="") {
+		for ( var j = 0; j < portfolios_list.length; j++) {
+			portfolioid = portfolios_list[j].id;
+			var code = portfolios_list[j].code_node.text();
+			if (select.indexOf("code*=")>-1) {
+				value = select.substring(7,select.length-1);  // inside quote
+				condition = code.indexOf(value)>-1;
+			}
+			if (select.indexOf("code=")>-1) {
+				value = select.substring(6,select.length-1);  // inside quote
+				condition = code==value;
+			}
+			//------------------------------------
+			if (condition && sortag!=""){
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+					success : function(data) {
+						var text = ";"
+						if (sortelt=='code') {
+							sortvalue = $("code",data)[0].text();
+						}
+						if (sortelt=='value') {
+							sortvalue = $("value",data)[0].text();
+						}
+						if (sortelt=='label') {
+							sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
+						}
+						if (sortelt=='text') {
+							sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
+						}
+						tableau[tableau.length] = [sortvalue,portfolioid];
+					}
+				});
+			}
+			//------------------------------------
+		}
+		var newTableau = tableau.sort(sortOn1);
+		for ( var i = 0; i < newTableau.length; i++) {
+			portfolios_list[i] = portfolios_byid[newTableau[i][1]]
+		}
+		portfolios_list.length = newTableau.length;
+	}
+	//----------------------------------
 	for ( var j = 0; j < portfolios_list.length; j++) {
 		var code = portfolios_list[j].code_node.text();
 //		alertHTML(j+"-"+code);
@@ -599,7 +669,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 			} else {
 				var prefix_id = "";
 				if (selector.type=='resource') {
-					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid);
+					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
 				}
 				if (selector.type=='resource code') {
 					text = UICom.structure["ui"][nodeid].resource.getCode();
@@ -692,6 +762,26 @@ function r_processText(xmlDoc,destid,data)
 }
 
 //==================================
+function r_processRefresh(xmlDoc,destid,data)
+//==================================
+{
+	var nodeid = $(data).attr("id");
+	var style = $(xmlDoc).attr("style");
+	var text = "<div id='"+nodeid+"'><a onclick=\"refresh_report('"+dashboard_current+"')\" class='glyphicon glyphicon-refresh button' data-title='"+karutaStr[LANG]["button-refresh-report"]+"' data-tooltip='true' data-placement='bottom'></a></div>";
+	$("#"+destid).append($(text));
+	$("#"+nodeid,$("#"+destid)).attr("style",style);
+}
+
+//==================================
+function refresh_report(dashboard_current)
+//==================================
+{
+	$("#"+dashboard_current).html("");
+	r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
+	$('[data-tooltip="true"]').tooltip();
+}
+
+//==================================
 function r_processJSFunction(xmlDoc,destid,data)
 //==================================
 {
@@ -746,7 +836,7 @@ function r_processAggregate(aggregate,destid)
 		for (var i=0;i<aggregates[select].length;i++){
 			if ($.isNumeric(aggregates[select][i]))
 				sum += parseFloat(aggregates[select][i]);
-		}
+		}SVGToIMG
 		text = sum/aggregates[select].length;
 	}
 	if (ref!=undefined && ref!="") {
@@ -898,6 +988,41 @@ function displayCSVButton()
 }
 
 //==================================
+function html2IMG(contentid)
+//==================================
+{
+	var js1 = "javascript:$('#image-window').modal('hide')";
+	var footer = "";
+	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#image-window-footer").html($(footer));
+	$("#image-window-body").html("");
+	$("#image-window").modal('show');
+	var svgnode = $("svg",document.getElementById(contentid));
+	if(svgnode.length>0) {
+		var imgsvg = SVGToIMG(svgnode,'img'+contentid);
+		$("#image-window-body").append(imgsvg);
+/*
+		var html = "<canvas id='c"+contentid+"'></canvas>";
+		$("#image-window-body").append($(html));
+		var canvas = document.getElementById("c"+contentid);
+		var ctx = canvas.getContext("2d");
+		var img = document.getElementById("img"+contentid);
+		img.onload = function(){
+			ctx.drawImage(this,20,20);
+		}
+*/
+	} else {
+		var htmlnode = document.getElementById(contentid);
+		html2canvas(htmlnode).then(function(canvas) {
+			var src_img = canvas.toDataURL();
+			var img = document.createElement('img');
+			img.src = src_img;
+			document.getElementById("image-window-body").appendChild(img);
+	});
+	}
+}
+
+//==================================
 function exec_report(uuid)
 //==================================
 {
@@ -1019,16 +1144,18 @@ function drawValue(destid,value,angle,center,cssclass){
 	document.getElementById(destid).appendChild(line);
 }
 
-function drawGraduationLine(destid,no,max,angle,center,cssclass){
-	var x = svgaxislength-(svgaxislength/max*no);
+function drawGraduationLine(destid,no,min,max,angle,center,cssclass){
+	var delta = Math.abs(max-min);
+	var x = svgaxislength-(svgaxislength/delta*no);
 	var line = makeSVG('line',{'x1':x,'y1':center.y-5,'x2':x,'y2':center.y+5,'transform':"rotate("+angle+" "+center.x+" "+center.y+")",'stroke':'black','stroke-width': 1});
 	document.getElementById(destid).appendChild(line);
 }
 
-function drawGraduationLabel(destid,no,max,angle,center,cssclass){
-	var x = svgaxislength-(svgaxislength/max*no);
+function drawGraduationLabel(destid,no,min,max,angle,center,cssclass){
+	var delta = Math.abs(max-min);
+	var x = svgaxislength-(svgaxislength/delta*no);
 	var point = svgrotate(center, x, center.y+20, angle);
-	var text = makeSVG('text',{'x':point.x-5,'y':point.y,'font-size':svgfontsize,'font-family':svgfontname},no);
+	var text = makeSVG('text',{'x':point.x,'y':point.y,'font-size':svgfontsize,'font-family':svgfontname},(max>min)?no+min:min-no);
 	document.getElementById(destid).appendChild(text);
 }
 
@@ -1094,6 +1221,7 @@ function r_processWebAxis(xmlDoc,destid,data)
 		var angle = 360 / nodes.length;
 		for (var i=0; i<nodes.length;i++){
 			//---------------------------
+			var text = "";
 			var nodeid = $(nodes[i]).attr("id");
 			if (selector.type=='resource') {
 				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
@@ -1128,8 +1256,8 @@ function r_processWebLine(xmlDoc,destid,data,no)
 	var select = $(xmlDoc).attr("select");
 	var legendselect = $(xmlDoc).attr("legendselect");
 	var test = $(xmlDoc).attr("test");
-	var min = $(xmlDoc).attr("min");
-	var max = $(xmlDoc).attr("max");
+	var min = parseInt($(xmlDoc).attr("min"));
+	var max = parseInt($(xmlDoc).attr("max"));
 	var pos = $(xmlDoc).attr("pos");
 	if (pos==undefined)
 		pos = 0;
@@ -1166,21 +1294,27 @@ function r_processWebLine(xmlDoc,destid,data,no)
 			if (selector.type=='node context') {
 				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
 			}
-			points[points.length] = {'value': ((text - min)/(max-min))*svgaxislength, 'angle':angle*i};
+			if (text.length>0)
+				points[points.length] = {'value': ((text - min)/(max-min))*svgaxislength, 'angle':angle*i};
+			else
+				points[points.length] = {'value': null, 'angle':angle*i};
 		};
 		for (var i=0; i<nodes.length;i++){
-			drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+no);
+			if (points[i].value!=null)
+				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+no);
 			if (no==0 && pos==0){
-				for (var j=1;j<max;j++) {
-					drawGraduationLine(destid,j,max,angle*i,svgcenter,'svg-web-line'+no);
+				for (var j=0;j<=Math.abs(max-min);j++) {
+					if (j>0)
+						drawGraduationLine(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
 					if (i==0)
-						drawGraduationLabel(destid,j,max,angle*i,svgcenter,'svg-web-line'+no);
+						drawGraduationLabel(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);
 				}
 			}
-			if (i>0)
+			if (i>0 && points[i-1].value!=null && points[i].value!=null)
 				drawLine(destid,points[i-1].value,points[i-1].angle,points[i].value,points[i].angle,svgcenter,'svg-web-line'+no);
 		}
-		drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+no);
+		if (points[i-1].value!=null && points[0].value!=null)
+			drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+no);
 		// draw legend
 		if (legendselect!=undefined) {
 			var selector = r_getSelector(legendselect,null);

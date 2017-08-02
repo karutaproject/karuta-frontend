@@ -116,9 +116,6 @@ function loadKarutaPage(url)
 	loadJS(url+"/other/js/jquery.iframe-transport.js");
 	loadJS(url+"/other/js/jquery.fileupload.js");
 	//--------------------------------------------------------------
-	loadCSS(url+"/other/oembed/jquery.oembed.css");
-	loadJS(url+"/other/oembed/jquery.oembed.js");
-	//--------------------------------------------------------------
 	loadJS(url+"/other/bootstrap-datepicker/bootstrap-datepicker.js");
 	loadJS(url+"/other/bootstrap-datepicker/bootstrap-datepicker.fr.js");
 	loadCSS(url+"/other/bootstrap-datepicker/datepicker.css");
@@ -137,4 +134,11 @@ function loadKarutaPage(url)
 	//--------------------------------------------------------------
 	loadJS(url+"/karuta/js/dashboards/matrix_2dims/matrix_2dim.js");
 	//--------------------------------------------------------------		
+	loadJS(url+"/karuta/js/SVGToIMG.js");
+	//--------------------------------------------------------------		
+	//--------------------------------------------------------------
+	loadJS(url+"/other/html2canvas/html2canvas.js");
+	loadJS(url+"/other/html2canvas/html2canvas.svg.js");
+	//--------------------------------------------------------------
+
 }
