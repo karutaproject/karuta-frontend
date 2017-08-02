@@ -288,9 +288,6 @@ function r_processSVG(no,xmlDoc,destid,data,line)
 		if (tagname=="goparent")
 			r_processGoParent(no+"_"+i,children[i],'svg_'+no,data,line);
 	}
-	var img = SVGToPNG(svg);
-//	$(svg).remove();
-	$("#"+destid).append(img);
 }
 
 //==================================
@@ -999,18 +996,8 @@ function html2IMG(contentid)
 	$("#image-window").modal('show');
 	var svgnode = $("svg",document.getElementById(contentid));
 	if(svgnode.length>0) {
-		var imgsvg = SVGToIMG(svgnode,'img'+contentid);
-		$("#image-window-body").append(imgsvg);
-/*
-		var html = "<canvas id='c"+contentid+"'></canvas>";
-		$("#image-window-body").append($(html));
-		var canvas = document.getElementById("c"+contentid);
-		var ctx = canvas.getContext("2d");
-		var img = document.getElementById("img"+contentid);
-		img.onload = function(){
-			ctx.drawImage(this,20,20);
-		}
-*/
+		var img = SVGToPNG(svgnode);
+		$("#image-window-body").append(img);
 	} else {
 		var htmlnode = document.getElementById(contentid);
 		html2canvas(htmlnode).then(function(canvas) {
