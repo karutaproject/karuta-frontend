@@ -29,6 +29,7 @@ jquerySpecificFunctions['.url_empty()'] = ".has(\"asmResource[xsi_type!='context
 jquerySpecificFunctions['.text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > text[lang='#lang#']:not(:empty)\")";
 jquerySpecificFunctions['.text_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > text[lang='#lang#']:empty\")";
 jquerySpecificFunctions['.submitted()'] = ".has(\"metadata-wad[submitted='Y']\")";
+jquerySpecificFunctions['.code_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:empty\")";
 
 Selector = function(jquery,type,filter1,filter2)
 {
