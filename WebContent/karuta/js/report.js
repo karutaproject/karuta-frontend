@@ -20,6 +20,7 @@ var aggregates = {};
 
 var dashboard_infos = {};
 var dashboard_current = null;
+var portfolioid_current = null;
 
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
@@ -265,6 +266,7 @@ function r_processGoParent(no,xmlDoc,destid,data,line)
 			r_processGoParent(no+"_"+i+"_"+j,children[j],destid,parent,i);
 	}
 }
+
 //==================================
 function r_processSVG(no,xmlDoc,destid,data,line)
 //==================================
@@ -289,6 +291,24 @@ function r_processSVG(no,xmlDoc,destid,data,line)
 			r_processGoParent(no+"_"+i,children[i],'svg_'+no,data,line);
 	}
 }
+
+//==================================
+function r_processShowSharing(destid)
+//==================================
+{
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid_current,
+		success : function(data) {
+			UIFactory["Portfolio"].displayUnSharing(destid,data,true);
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in r_processShowSharing : "+jqxhr.responseText);
+		}
+	});
+}
+
 
 //==================================
 function r_processTable(no,xmlDoc,destid,data,line)
@@ -416,6 +436,8 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			r_processGoParent(no,children[i],'td_'+no,data,line);
 		if (tagname=="refresh")
 			r_processRefresh(children[i],'td_'+no,data,line);
+		if (tagname=="show-sharing")
+			r_processShowSharing('td_'+no);
 	}
 }
 
@@ -583,8 +605,9 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 			condition = code==value;
 		}
 		//------------------------------------
-		if (condition){
+		if (condition || condition==""){
 			portfolioid = portfolios_list[j].id;
+			portfolioid_current = portfolioid;
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -853,7 +876,7 @@ function r_processAggregate(aggregate,destid)
 //===============================================================
 
 //==================================
-function r_report_processCode()
+function report_processCode()
 //==================================
 {
 	var model_code = $("#report-model_code").val();
@@ -885,6 +908,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 					catch(err) {
 						alertHTML("Error in Dashboard : " + err.message);
 					}
+					$("#wait-window").hide();
 					$("#wait-window").modal('hide');
 				}
 			 });
@@ -911,6 +935,8 @@ function report_getModelAndProcess(model_code,json)
 				url : urlS,
 				success : function(data) {
 					r_report_process(data,json);
+					$("#wait-window").hide();
+					$("#wait-window").modal('hide');
 				}
 			 });
 		}

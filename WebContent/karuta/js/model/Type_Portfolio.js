@@ -1828,7 +1828,7 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 
 
 //==================================
-UIFactory["Portfolio"].displayUnSharing = function(destid,data)
+UIFactory["Portfolio"].displayUnSharing = function(destid,data,unshare_disabled)
 //==================================
 {
 	var html = "";
@@ -1854,11 +1854,13 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data)
 					dest = "#unshare-special-roles";
 				else
 					dest = "#unshare-other-roles";
+				if (unshare_disabled) // display in report
+					dest = "#"+destid;
 				html = "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
 					if (Users_byid[userid]!=undefined)
-						html += "<div>"+Users_byid[userid].getSelector('group',groupid,'select_users2unshare')+"</div>";
+						html += "<div>"+Users_byid[userid].getSelector('group',groupid,'select_users2unshare',null,unshare_disabled)+"</div>";
 				}
 				html += "</div></div>";
 				$(dest).append($(html));
@@ -1870,9 +1872,11 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data)
 };
 
 //==================================
-UIFactory["Portfolio"].unshareUsers = function(portfolioid)
+UIFactory["Portfolio"].unshareUsers = function(portfolioid,destid,unshare_disabled)
 //==================================
 {
+	if (destid==null)
+		destid = 'shared'
 	var users = $("input[name='select_users2unshare']").filter(':checked');
 	for (var i=0; i<users.length; i++){
 		var userid = $(users[i]).attr('value');
@@ -1891,7 +1895,7 @@ UIFactory["Portfolio"].unshareUsers = function(portfolioid)
 					dataType : "xml",
 					url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 					success : function(data) {
-						UIFactory["Portfolio"].displayUnSharing('shared',data);
+						UIFactory["Portfolio"].displayUnSharing(destid,data,unshare_disabled);
 					}
 				});
 				//--------------------------

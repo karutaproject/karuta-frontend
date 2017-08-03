@@ -281,11 +281,16 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</aggregate>
 	</xsl:template>
-		<!-- ================ GoParent ============================ -->
+	<!-- ================ GoParent ============================ -->
 	<xsl:template match="*[metadata/@semantictag='go-parent']">
 		<goparent>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</goparent>
+	</xsl:template>
+	<!-- ================ show-sharing ============================ -->
+	<xsl:template match="*[metadata/@semantictag='show-sharing']">
+		<show-sharing>
+		</show-sharing>
 	</xsl:template>
 	<!-- ================ draw-web-title ============================ -->
 	<xsl:template match="*[metadata/@semantictag='draw-web-title']">
