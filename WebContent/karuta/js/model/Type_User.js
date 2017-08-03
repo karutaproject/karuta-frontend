@@ -146,6 +146,9 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	if (type=='firstname-lastname-username') {
 		html = this.firstname_node.text() + " " + this.lastname_node.text()+ " (" + this.username_node.text()+")";
 	}
+	if (type=='email') {
+		html = this.email_node.text();
+	}
 	return html;
 };
 

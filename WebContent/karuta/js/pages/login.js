@@ -195,6 +195,7 @@ function displayKarutaLogin()
 	html += "</div>";
 	$('body').html(html);
 	$('body').append(alertBox());
+	$('body').append(EditBox());
 
 	$.ajaxSetup({async: false});
 	$.ajax({

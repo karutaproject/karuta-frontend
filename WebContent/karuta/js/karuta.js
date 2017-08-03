@@ -144,10 +144,12 @@ function getNavBar(type,portfolioid,edit)
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
-	html += "			<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
-	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+	if (type!='login')
+		html += "				<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
+//	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+	html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon'><span class='glyphicon glyphicon-wrench' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
 	html += "			</ul>";
-	//-------------------LANGUAGES---------------------------
+	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
 	if (languages.length>1) 
 		if(type=="create_account") {
 			html += "			<ul class='nav navbar-nav'>";
@@ -1676,4 +1678,86 @@ function hideAllPages()
 	$("#main-usersgroup").hide();
 	$("#main-exec-report").hide();
 	$("#main-exec-batch").hide();
+}
+
+//==================================
+function displayTechSupportForm(langcode)
+//==================================
+{
+	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var application_server = serverURL+"/"+appliname;
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	$("#edit-window-footer").html("");
+	$("#edit-window-title").html(karutaStr[LANG]['technical-support']);
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
+	var obj = $(send_button);
+	$(obj).click(function (){
+		var user_name = $("#user-name").val();
+		var user_email = $("#user-email").val();
+		var message = $("#email-message").val();
+		var subject = application_server+" - "+karutaStr[LANG]['sent-by']+" "+USER.getView(null,"firstname-lastname") + " ("+USER.getView(null,"email")+")";
+		//---------------------
+		var xml ="<node>";
+		xml +="<recipient>"+technical_support+"</recipient>";
+		xml +="<subject>"+subject+"</subject>";
+		xml +="<message>"+message+"</message>";
+		xml +="<sender>"+user_email+"</sender>";
+		xml +="</node>";
+		alert(xml);
+		$.ajax({
+			type : "POST",
+			dataType : "text",
+			url : "../../../"+serverFIL+"/mail",
+			data: xml,
+			success : function() {
+				alertHTML(karutaStr[LANG]['email-sent']);
+				$("#edit-window").modal("hide");
+			}
+		});
+
+	});
+	$("#edit-window-footer").append(obj);
+	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").append($(footer));
+
+	var html = "<div class='form-horizontal'>";
+	html += "<div class='form-group'>";
+	html += "		<label for='application-server' class='col-sm-3 control-label'>"+karutaStr[LANG]['application-server']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='application-server' disabled='true' type='text' value='"+application_server+"' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "<div class='form-group'>";
+	html += "		<label for='user-name' class='col-sm-3 control-label'>"+karutaStr[LANG]['user-name']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='user-name' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "<div class='form-group'>";
+	html += "		<label for='user-email' class='col-sm-3 control-label'>"+karutaStr[LANG]['user-email']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='user-email' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "<div class='form-group'>";
+	html += "		<label for='email-message' class='col-sm-3 control-label'>"+karutaStr[LANG]['email-message']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<textarea rows='5' id='email-message' class='form-control'></textarea>";
+	html += "		</div>";
+	html += "</div>";
+	html += "</div>";
+	$("#edit-window-body").html(html);
+	if (USER!=null) {
+		$("#user-name").val(USER.firstname+" "+USER.lastname);
+		$("#user-name").attr('disabled','true');
+		$("#user-email").val($(USER.email_node).text());
+		if ($(USER.email_node).text()!="")
+			$("#user-email").attr('disabled','true');
+	}
+	$('#edit-window').modal('show')
+	//--------------------------
 }

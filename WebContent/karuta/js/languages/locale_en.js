@@ -13,7 +13,6 @@ karutaStr['en']['login']="Login";
 karutaStr['en']['yes']="Yes";
 karutaStr['en']['no']="No";
 karutaStr['en']['home']="Home";
-karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['loading']="Loading... ";
 karutaStr['en']['create_pdf']="Create PDF";
 karutaStr['en']['create_pdf_toc']="Create PDF with TOC";
@@ -382,6 +381,17 @@ karutaStr['en']['button-remove-from-group']="Remove from the Group";
 karutaStr['en']['code-not-null']="Code cannot be null";
 karutaStr['en']['label-not-null']="Label cannot be null";
 karutaStr['en']['inexistent-selection']="Inexistent Selection";
+
+//=========================================
+//========== TECHNICAL SUPPORT ============
+//=========================================
+
+karutaStr['en']['technical_support']="Technical Support";
+karutaStr['en']['technical-support']="Technical Support";
+karutaStr['en']['application-server']="Application";
+karutaStr['en']['user-name']="Your Name";
+karutaStr['en']['user-email']="Your email";
+karutaStr['en']['email-message']="Message";
 
 //=========================================
 //========== RESOURCES =======================

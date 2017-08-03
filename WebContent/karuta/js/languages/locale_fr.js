@@ -13,7 +13,6 @@ karutaStr['fr']['login']="Identifiez-vous";
 karutaStr['fr']['yes']="Oui";
 karutaStr['fr']['no']="Non";
 karutaStr['fr']['home']="Accueil";
-karutaStr['fr']['technical_support']="Soutien technique";
 karutaStr['fr']['loading']="Chargement ... ";
 karutaStr['fr']['create_pdf']="Créer PDF";
 karutaStr['fr']['create_pdf_toc']="Créer PDF avec TdM";
@@ -382,6 +381,17 @@ karutaStr['fr']['button-remove-from-group']="Retirer de ce groupe";
 karutaStr['fr']['code-not-null']="Le code ne peut pas être vide";
 karutaStr['fr']['label-not-null']="Le libellé ne peut pas être vide";
 karutaStr['fr']['inexistent-selection']="Sélection inexistante";
+
+//=========================================
+//========== TECHNICAL SUPPORT ============
+//=========================================
+
+karutaStr['fr']['technical_support']="Soutien technique";
+karutaStr['fr']['technical-support']="Soutien technique";
+karutaStr['fr']['application-server']="Application";
+karutaStr['fr']['user-name']="Votre nom";
+karutaStr['fr']['user-email']="Votre courriel";
+karutaStr['fr']['email-message']="Message";
 
 //=========================================
 //========== RESOURCES =======================
