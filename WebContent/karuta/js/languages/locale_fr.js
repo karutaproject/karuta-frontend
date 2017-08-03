@@ -202,6 +202,8 @@ karutaStr['fr']['list_users']="Usagers";
 karutaStr['fr']['list_roles']="Rôles";
 karutaStr['fr']['list_groups']="Groupes";
 karutaStr['fr']['create-test-user']="Créer un utilisateur test";
+karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre projet. <br>Changez le code de projet (partie avant le point)";
+
 
 //=========================================
 //========== PORTFOLIOS ===================
@@ -238,7 +240,7 @@ karutaStr['fr']['import_instance']="Importer un portfolio instance .xml";
 karutaStr['fr']['remove-selection']="Déplacer vers la poubelle";
 karutaStr['fr']['delete-selection']="Détruire";
 karutaStr['fr']['import_zip_instance']="Importer un portfolio/projet instance .zip";
-karutaStr['fr']['rename']="Renommer";
+karutaStr['fr']['rename']="Renommer/Déplacer";
 karutaStr['fr']['karuta.batch']="Créer un batch";
 karutaStr['fr']['karuta.batch-form']="Créer un modèle de formulaire batch";
 karutaStr['fr']['karuta.report']="Créer un rapport";

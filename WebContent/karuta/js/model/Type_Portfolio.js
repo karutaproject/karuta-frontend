@@ -1619,7 +1619,7 @@ UIFactory["Portfolio"].callRename = function(portfolioid,langcode,project)
 	$(div).append($(htmlFormObj));
 	if (USER.creator || USER.admin) {
 		var htmlCodeGroupObj = $("<div class='form-group'></div>")
-		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code</label>");
+		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code <a href='javascript://' id='code_help'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a></label>");
 		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCodeInputObj = $("<input id='code_"+portfolioid+"' type='text' class='form-control' name='input_code' value=\""+self.code_node.text()+"\">");
 		if (project)
@@ -1660,6 +1660,15 @@ UIFactory["Portfolio"].callRename = function(portfolioid,langcode,project)
 	$("#edit-window-body").append($(html));
 	
 	UIFactory["Node"].displayCommentsEditor('edit_comments_'+$(portfolios_byid[portfolioid].root).attr("id"),portfolios_byid[portfolioid].root);
+
+	$("#code_help").popover({ 
+	    placement : 'right',
+	    container : 'body',
+	    title:karutaStr[LANG]['help-label'],
+	    html : true,
+	    trigger:'click hover',
+	    content: karutaStr[LANG]['help_text_rename']
+	});
 
 	$('#edit-window').modal('show');
 };
