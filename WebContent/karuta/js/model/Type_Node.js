@@ -3086,10 +3086,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:reset('"+node.id+"')\" ";
 					html += " >"+karutaStr[languages[langcode]]['button-unsubmit']+"</span>";
 				}
-				html += "<div class='alert alert-success'>"+karutaStr[languages[langcode]]['submitted']+submitteddate+"</div>";
+				html += "<div class='alert alert-success button text-button'>"+karutaStr[languages[langcode]]['submitted']+submitteddate+"</div>";
 			} 
 			else {
-				html += "<div class='alert alert-danger'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
+				html += "<div class='alert alert-danger button text-button'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
 			}
 		}
 	}
