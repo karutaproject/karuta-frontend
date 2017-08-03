@@ -144,10 +144,12 @@ function getNavBar(type,portfolioid,edit)
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
-	if (type!='login')
+	if (type=='login') {
+		html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+	} else {
 		html += "				<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
-//	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
-	html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon'><span class='glyphicon glyphicon-wrench' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+		html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon'><span class='glyphicon glyphicon-wrench' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+	}
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
 	if (languages.length>1) 
@@ -1699,7 +1701,7 @@ function displayTechSupportForm(langcode)
 		var user_name = $("#user-name").val();
 		var user_email = $("#user-email").val();
 		var message = $("#email-message").val();
-		var subject = application_server+" - "+karutaStr[LANG]['sent-by']+" "+USER.getView(null,"firstname-lastname") + " ("+USER.getView(null,"email")+")";
+		var subject = application_server+" - "+karutaStr[LANG]['sent-by']+" "+user_name + " ("+user_email+")";
 		//---------------------
 		var xml ="<node>";
 		xml +="<recipient>"+technical_support+"</recipient>";
@@ -1707,7 +1709,6 @@ function displayTechSupportForm(langcode)
 		xml +="<message>"+message+"</message>";
 		xml +="<sender>"+user_email+"</sender>";
 		xml +="</node>";
-		alert(xml);
 		$.ajax({
 			type : "POST",
 			dataType : "text",
