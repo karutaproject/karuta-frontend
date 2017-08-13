@@ -59,6 +59,17 @@
 		</create-user>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='delete-person']">
+		<xsl:variable name="identifier">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<delete-user>
+			<identifier>
+				<txtval select='{$identifier}'/>
+			</identifier>
+		</delete-user>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='create-elgg-user']">
 		<xsl:variable name="identifier">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>

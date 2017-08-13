@@ -22,6 +22,9 @@ var g_noline = 0;
 var g_create_users = null;
 var g_nb_createUser = new Array();
 //-----------------------
+var g_delete_users = null;
+var g_nb_deleteUser = new Array();
+//-----------------------
 var g_create_elgg_users = null;
 var g_nb_createElggUser = new Array();
 //-----------------------
@@ -82,6 +85,9 @@ function initBatchVars()
 	//-----------------------
 	g_create_users = null;
 	g_nb_createUser = new Array();
+	//-----------------------
+	g_delete_users = null;
+	g_nb_deleteUser = new Array();
 	//-----------------------
 	g_create_elgg_users = null;
 	g_nb_createElggUser = new Array();
@@ -167,6 +173,7 @@ function processAll()
 	$.ajaxSetup({async: false});
 	g_create_elgg_groups = $("create-elgg-group",g_xmlDoc);
 	g_create_users = $("create-user",g_xmlDoc);
+	g_delete_users = $("delete-user",g_xmlDoc);
 	g_create_elgg_users = $("create-elgg-user",g_xmlDoc);
 	g_join_elgg_goups = $("join-elgg-group",g_xmlDoc);
 	g_create_trees = $("create-tree",g_xmlDoc);
@@ -191,6 +198,7 @@ function processLine()
 {
 	g_nb_createElggGroup[g_noline] = 0;
 	g_nb_createUser[g_noline] = 0;
+	g_nb_deleteUser[g_noline] = 0;
 	g_nb_createElggUser[g_noline] = 0;
 	g_nb_joinElggGroup[g_noline] = 0;
 	g_nb_createTree[g_noline] = 0;
@@ -254,7 +262,7 @@ function processUsers()
 //=================================================
 {
 	if (g_create_users.length==0)
-		processJoinUserGroups();
+		processDeleteUsers();
 	else {
 		$("#batch-log").append("<br>---------------------create_users-------------------------------");
 		for  (var j=0; j<g_create_users.length; j++) {
@@ -290,7 +298,7 @@ function createUser(node)
 			//===========================================================
 			g_nb_createUser[g_noline]++;
 			if (g_nb_createUser[g_noline]==g_create_users.length) {
-				processJoinUserGroups();
+				processDeleteUsers();
 			}
 			//===========================================================
 		},
@@ -324,7 +332,7 @@ function createUser(node)
 						//===========================================================
 						g_nb_createUser[g_noline]++;
 						if (g_nb_createUser[g_noline]>=g_create_users.length) {
-							processJoinUserGroups();
+							processDeleteUsers();
 						}
 						//===========================================================
 					},
@@ -337,7 +345,7 @@ function createUser(node)
 				//===========================================================
 				g_nb_createUser[g_noline]++;
 				if (g_nb_createUser[g_noline]>=g_create_users.length) {
-					processJoinUserGroups();
+					processDeleteUsers();
 				}
 				//===========================================================
 			}
@@ -345,6 +353,64 @@ function createUser(node)
 	});
 }
 
+//=================================================
+function processDeleteUsers()
+//=================================================
+{
+	if (g_delete_users.length==0)
+		processJoinUserGroups();
+	else {
+		$("#batch-log").append("<br>---------------------delete_users-------------------------------");
+		for  (var j=0; j<g_delete_users.length; j++) {
+			deleteUser(g_delete_users[j]);
+		}
+	}
+}
+
+//=================================================
+function deleteUser(node)
+//=================================================
+{
+	var identifier = getTxtvals($("identifier",node));
+	//---- get userid ----------
+	var userid = "";
+	var url = "../../../"+serverBCK+"/users/user/username/"+identifier;
+	$.ajax({
+		async:false,
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			userid = data;
+			var url = "../../../"+serverBCK+"/users/user/" + userid;
+			$.ajax({
+				type : "DELETE",
+				dataType : "text",
+				url : url,
+				data : "",
+				success : function(data) {
+					$("#batch-log").append("<br>- user deleted("+userid+") - identifier:"+identifier;
+					//===========================================================
+					g_nb_deleteUser[g_noline]++;
+					if (g_nb_deleteUser[g_noline]==g_delete_users.length) {
+						processJoinUserGroups();
+					}
+					//===========================================================
+				}
+			});
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ERROR user does not exist - identifier:"+identifier;
+			//===========================================================
+			g_nb_deleteUser[g_noline]++;
+			if (g_nb_deleteUser[g_noline]==g_delete_users.length) {
+				processJoinUserGroups();
+			}
+			//===========================================================
+		}
+	});
+}
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //--------------------------- Join User Group ---------------------------
