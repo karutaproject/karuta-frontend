@@ -390,7 +390,7 @@ function deleteUser(node)
 				url : url,
 				data : "",
 				success : function(data) {
-					$("#batch-log").append("<br>- user deleted("+userid+") - identifier:"+identifier;
+					$("#batch-log").append("<br>- user deleted("+userid+") - identifier:"+identifier);
 					//===========================================================
 					g_nb_deleteUser[g_noline]++;
 					if (g_nb_deleteUser[g_noline]==g_delete_users.length) {
@@ -401,7 +401,7 @@ function deleteUser(node)
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR user does not exist - identifier:"+identifier;
+			$("#batch-log").append("<br>- ERROR user does not exist - identifier:"+identifier);
 			//===========================================================
 			g_nb_deleteUser[g_noline]++;
 			if (g_nb_deleteUser[g_noline]==g_delete_users.length) {
