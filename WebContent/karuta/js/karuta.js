@@ -1171,7 +1171,7 @@ function getEmail(role,emails) {
 function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var serverURL = url.substring(0,url.lastIndexOf(appliname)-1);
 	url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";

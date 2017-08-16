@@ -568,16 +568,16 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 					url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
 					success : function(data) {
 						var text = ";"
-						if (sortelt=='code') {
+						if (sortelt=='resource code') {
 							sortvalue = $("code",data)[0].text();
 						}
 						if (sortelt=='value') {
 							sortvalue = $("value",data)[0].text();
 						}
-						if (sortelt=='label') {
+						if (sortelt=='node label') {
 							sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
 						}
-						if (sortelt=='text') {
+						if (sortelt=='resource') {
 							sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
 						}
 						tableau[tableau.length] = [sortvalue,portfolioid];
@@ -604,8 +604,11 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 			value = select.substring(6,select.length-1);  // inside quote
 			condition = code==value;
 		}
+		if (select.length==0) {
+			condition = true;;
+		}
 		//------------------------------------
-		if (condition || condition==""){
+		if (condition){
 			portfolioid = portfolios_list[j].id;
 			portfolioid_current = portfolioid;
 			$.ajax({
