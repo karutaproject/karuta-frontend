@@ -245,7 +245,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			var semtag_parent = queryattr_value.substring(semtag_parent_indx+1,semtag_indx);
 			if (semtag_parent.indexOf('#')==0)
 				semtag_parent = semtag_parent.substring(1);
-			var portfoliocode_end_indx = queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent')+queryattr_value.indexOf('#')+queryattr_value.indexOf('itself')+2;
+			var portfoliocode_end_indx = queryattr_value.indexOf('child')+queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent')+queryattr_value.indexOf('#')+queryattr_value.indexOf('itself')+3; //  if not present give -1
 			var portfoliocode = queryattr_value.substring(0,portfoliocode_end_indx);
 			//------------
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
@@ -258,6 +258,9 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			var parent = null;
 			var ref = null;
 			// ------- search for parent ----
+			if (query.indexOf('child')>-1) {
+				parent = this.node;
+			}
 			if (query.indexOf('sibling')>-1) {
 				parent = $(this.node).parent();
 			}

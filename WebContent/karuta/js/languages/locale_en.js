@@ -343,14 +343,16 @@ karutaStr['en']['writing']="WRITING";
 //=========================================
 //========== BUBBLE MAP ===================
 //=========================================
+karutaStr['en']['leave-edit-mode']="Leave Edit Mode";
+karutaStr['en']['BubbleMap']="Bubble Map";
+karutaStr['en']['bubble-label']="Label";
 karutaStr['en']['bubble-links']="Links";
 karutaStr['en']['bubble-information']="Information";
-karutaStr['en']['bubble-add-link']="Add a link";
-karutaStr['en']['bubble-add-bubble']="Add a bubble to ";
-karutaStr['en']['update-bubble']="Reload Map";
-karutaStr['en']['bubble-description']="Description";
+karutaStr['en']['bubble-add-link']="Add a Link";
+karutaStr['en']['bubble-add-bubble']="Add a Bubble";
 karutaStr['en']['bubble-weight']="Weight";
 karutaStr['en']['bubble-color']="Color";
+karutaStr['en']['bubble-level']="Level";
 
 //=========================================
 //========== GROUPS =======================
@@ -430,8 +432,7 @@ karutaStr['en']['GetGetResource']="GetGetResource";
 karutaStr['en']['GetDoubleResource']="GetDoubleResource";
 karutaStr['en']['Proxy']="Proxy";
 
-karutaStr['en']['BubbleMap']="Bubble Map";
-karutaStr['en']['asmColumn']="asmColumn";
+arutaStr['en']['asmColumn']="asmColumn";
 
 karutaStr['en']['startday']="Start day";
 karutaStr['en']['time']="Time (HH:MM)";

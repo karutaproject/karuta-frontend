@@ -204,7 +204,6 @@ karutaStr['fr']['list_groups']="Groupes";
 karutaStr['fr']['create-test-user']="Créer un utilisateur test";
 karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre projet., changez le code de projet (partie avant le point)";
 
-
 //=========================================
 //========== PORTFOLIOS ===================
 //=========================================
@@ -344,14 +343,16 @@ karutaStr['fr']['writing']="ÉCRIRE";
 //=========================================
 //========== BUBBLE MAP ===================
 //=========================================
+karutaStr['fr']['leave-edit-mode']="Quitter le mode d'édition";
+karutaStr['fr']['BubbleMap']="Bubble Map";
+karutaStr['fr']['bubble-label']="Libellé";
 karutaStr['fr']['bubble-links']="Liens";
 karutaStr['fr']['bubble-information']="Information";
 karutaStr['fr']['bubble-add-link']="Ajouter un lien";
 karutaStr['fr']['bubble-add-bubble']="Ajouter une bulle à ";
-karutaStr['fr']['update-bubble']="Recharger la carte";
-karutaStr['fr']['bubble-description']="Description";
 karutaStr['fr']['bubble-weight']="Pondération";
 karutaStr['fr']['bubble-color']="Couleur";
+karutaStr['fr']['bubble-level']="Niveau";
 
 //=========================================
 //========== GROUPS =======================
@@ -396,7 +397,7 @@ karutaStr['fr']['user-email']="Votre courriel";
 karutaStr['fr']['email-message']="Message";
 
 //=========================================
-//========== RESOURCES =======================
+//========== RESOURCES ====================
 //=========================================
 
 karutaStr['fr']['asmStructure']="Section";
@@ -431,7 +432,6 @@ karutaStr['fr']['GetGetResource']="GetGetResource";
 karutaStr['fr']['GetDoubleResource']="GetDoubleResource";
 karutaStr['fr']['Proxy']="Proxy";
 
-karutaStr['fr']['BubbleMap']="Bubble Map";
 karutaStr['fr']['asmColumn']="asmColumn";
 
 karutaStr['fr']['startday']="Date de début";

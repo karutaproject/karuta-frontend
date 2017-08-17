@@ -494,7 +494,7 @@ UIFactory["UsersGroup"].displayManageMultipleGroups = function(destid,attr,value
 	$("#"+destid).html("");
 	if (UsersGroups_list.length>0){
 		for ( var i = 0; i < UsersGroups_list.length; i++) {
-			var checked = selectedlist.contains(UsersGroups_list[i].id);
+			var checked = selectedlist.includes(UsersGroups_list[i].id);
 			var input = UsersGroups_list[i].getSelectorWithFunction(attr,value,'select_usersgroups_'+i,checked,callFunction);
 			$("#"+destid).append($(input));
 			$("#"+destid).append($("<br>"));

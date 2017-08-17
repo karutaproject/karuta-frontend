@@ -237,6 +237,19 @@
 		</share-tree>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='join-portfoliogroup']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<join-portfoliogroup select="{$id}">
+			<portfoliogroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">groupname</xsl:with-param>
+				</xsl:call-template>
+			</portfoliogroup>
+		</join-portfoliogroup>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='unshare-tree']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>

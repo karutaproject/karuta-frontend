@@ -373,6 +373,10 @@ function getEditBox(uuid,js2) {
 				var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
 				getResource.displayEditor("get-resource-node");
 			}
+			if ($("#get-get-resource-node").length){
+				var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
+				getgetResource.displayEditor("get-get-resource-node");
+			}
 		}
 	}
 	// ------------admin and designer----------
@@ -1453,8 +1457,8 @@ String.prototype.containsArrayElt = function (rolesarray)
 }
 
 //==================================
-Array.prototype.contains = function(elt)
-//==================================
+/*Array.prototype.contient = function(elt)
+
 	// usage : if (arr.contains(elt)) 
 {
 	for (var i in this){
@@ -1462,7 +1466,7 @@ Array.prototype.contains = function(elt)
 	}
 	return false;
 }
-
+*/
 //==================================
 function toggleGroup(group_type,uuid,callback,type,lang) {
 //==================================

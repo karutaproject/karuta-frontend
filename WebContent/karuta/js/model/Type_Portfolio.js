@@ -2335,7 +2335,7 @@ UIFactory["Portfolio"].displaySelectMultiple = function(selectedlist,destid,type
 {
 	$("#"+destid).html("");
 	for ( var i = 0; i < portfolios_list.length; i++) {
-		var checked = selectedlist.contains(portfolios_list[i].id);
+		var checked = selectedlist.includes(portfolios_list[i].id);
 		if (!checked) {
 			var input = portfolios_list[i].getSelector(null,null,'select_portfolios',false);
 			$("#"+destid).append($(input));
@@ -2428,7 +2428,7 @@ UIFactory["Portfolio"].displayTreeSelectMultiple = function(selectedlist,nb,dest
 				else {
 					$("#selectform-portfolios").append($("<div class='row' id='selectform-portfolio_"+portfolio.id+"'  onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+portfolio.code_node.text()+"<br>"+owner+"\"></div>"));
 				}
-				var checked = selectedlist.contains(portfolio.id);
+				var checked = selectedlist.includes(portfolio.id);
 				$("#selectform-portfolio_"+portfolio.id).html(portfolio.getPortfolioSelector(null,null,'select_portfolios',checked,"#selectform-portfolio_"+portfolio.id,langcode,parentcode,owner));
 /*
 				if (!checked) {

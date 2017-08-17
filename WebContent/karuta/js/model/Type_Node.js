@@ -343,6 +343,8 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			}
 		} else {
 			var htmlGetResource = $("<div id='get-resource-node'></div>")
+			if (query.indexOf('child')+query.indexOf('sibling')+query.indexOf('parent')+query.indexOf('#')+query.indexOf('itself')>-5); //  if not present give -1
+				htmlGetResource = $("<div id='get-get-resource-node'></div>")
 			$(htmlFormObj).append($(htmlGetResource));
 		}
 
@@ -2551,7 +2553,7 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		html += "<h4>"+karutaStr[LANG]['comments']+"</h4>";
 		html += "<div id='div_"+uuid+"'><textarea id='"+uuid+"_edit_comment' class='form-control' style='height:200px'>"+text+"</textarea></div>";
 		$("#"+destid).append($(html));
-		$("#"+uuid+"_edit_comment").wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false},"uuid":uuid,"locale":LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments();},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
+		$("#"+uuid+"_edit_comment").wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},"uuid":uuid,"locale":LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments();},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
 	} else {
 		$("#"+destid).hide();
 	}
@@ -2929,10 +2931,9 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ImageBlock','ImageBlock',databack,callback,param2,param3,param4,freenode);
 //						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ProxyBlock','ProxyBlock',databack,callback,param2,param3,param4,freenode);
 					}
-					if (semantictag.indexOf("bubbleContainer")>-1) {
-//						var interval = setInterval(function(){alert(node.id)},30000);
+//					if (semantictag.indexOf("bubbleContainer")>-1) {
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-bubbles','bubble_level1','BubbleMap',databack,callback,param2,param3,param4,freenode);
-					}
+//					}
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Item','Item',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Resource','GetResource',databack,callback,param2,param3,param4,freenode);
@@ -3968,7 +3969,7 @@ UIFactory["Node"].displayMetadatawWadTextAttributeEditor = function(destid,nodei
 	$("#"+destid).append($(html));
 	//---------------------------
 	if (attribute=='help')
-		$("#"+nodeid+"_"+attribute).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html": true,"blockquote": false,"image": false},'uuid':nodeid,locale:languages[LANG],'events': {'change': function(){UIFactory['Node'].updateMetadatawWadTextAttribute(nodeid,attribute);} }});
+		$("#"+nodeid+"_"+attribute).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html": true,"blockquote": false,"image": false,"link": false},'uuid':nodeid,locale:languages[LANG],'events': {'change': function(){UIFactory['Node'].updateMetadatawWadTextAttribute(nodeid,attribute);} }});
 	else
 		$("#"+nodeid+"_"+attribute).change(function(){UIFactory['Node'].updateMetadatawWadTextAttribute(nodeid,attribute);});
 	//---------------------------
@@ -4071,7 +4072,7 @@ UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
 		type='default';
 	var html ="";
 	UIFactory["Bubble"].parse(this.node);  // this.node
-	html += "<iframe id='bubble_iframe_"+this.id+"' class='bubble_iframe' src='"+karuta_url+"/karuta/htm/bubble.html?uuid="+this.id+"' height='500' width='100%'></iframe>";
+	html += "<iframe id='bubble_iframe' class='bubble_iframe' src='"+karuta_url+"/karuta/htm/bubble.html?uuid="+this.id+"' height='500' width='100%'></iframe>";
 	html += "<div id='bubble_display_"+this.id+"' class='bubble_display'></div>";
 	return html;
 };

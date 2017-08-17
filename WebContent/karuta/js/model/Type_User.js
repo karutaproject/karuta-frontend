@@ -451,7 +451,7 @@ UIFactory["User"].displaySelectMultipleActive2 = function(selectedlist,destid,ty
 {
 	$("#"+destid).html("");
 	for ( var i = 0; i < UsersActive_list.length; i++) {
-		var checked = selectedlist.contains(UsersActive_list[i].id);
+		var checked = selectedlist.includes(UsersActive_list[i].id);
 		if (!checked) {
 			var input = UsersActive_list[i].getSelector(null,null,'select_users');
 			$("#"+destid).append($(input));

@@ -64,6 +64,9 @@ var g_nb_importNode = new Array();
 var g_join_usergroups = null;
 var g_nb_joinUserGroup = new Array();
 //-----------------------
+var g_join_portfoliogroups = null;
+var g_nb_joinPortfolioGroup = new Array();
+//-----------------------
 var g_leave_usergroups = null;
 var g_nb_leaveUserGroup = new Array();
 //-----------------------
@@ -128,6 +131,9 @@ function initBatchVars()
 	g_join_usergroups = null;
 	g_nb_joinUserGroup = new Array();
 	//-----------------------
+	g_join_portfoliogroups = null;
+	g_nb_joinPortfolioGroup = new Array();
+	//-----------------------
 	g_leave_usergroups = null;
 	g_nb_leaveUserGroup = new Array();
 	//-----------------------
@@ -186,6 +192,7 @@ function processAll()
 	g_import_nodes = $("import-node",g_xmlDoc);
 	g_update_tree_roots = $("update-tree-root",g_xmlDoc);
 	g_join_usergroups = $("join-usergroup",g_xmlDoc);
+	g_join_portfoliogroups = $("join-portfoliogroup",g_xmlDoc);
 	g_leave_usergroups = $("leave-usergroup",g_xmlDoc);
 	g_share_usergroup = $("share-usergroup",g_xmlDoc);
 	g_unshare_usergroup = $("unshare-usergroup",g_xmlDoc);
@@ -411,6 +418,7 @@ function deleteUser(node)
 		}
 	});
 }
+
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //--------------------------- Join User Group ---------------------------
@@ -1422,7 +1430,7 @@ function processShareTrees()
 //=================================================
 {
 	if (g_share_trees.length==0)
-		processShareUserGroup();
+		processJoinPortfolioGroups();
 	else {
 		$("#batch-log").append("<br>---------------------share_trees-------------------------------");
 		for (var j=0; j<g_share_trees.length; j++) {
@@ -1487,7 +1495,7 @@ function shareTree(node)
 									//===========================================================
 									g_nb_shareTree[g_noline]++;
 									if (g_nb_shareTree[g_noline]==g_share_trees.length) {
-										processShareUserGroup();
+										processJoinPortfolioGroups();
 									}
 									//===========================================================
 								},
@@ -1506,10 +1514,95 @@ function shareTree(node)
 		//===========================================================
 		g_nb_shareTree[g_noline]++;
 		if (g_nb_shareTree[g_noline]==g_share_trees.length) {
+			processJoinPortfolioGroups();
+		}
+		//===========================================================
+	}
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//--------------------------- Join Portfolio Group ----------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function processJoinPortfolioGroups()
+//=================================================
+{
+	if (g_join_portfoliogroups.length==0)
+		processShareUserGroup();
+	else {
+		$("#batch-log").append("<br>---------------------Join Portfolio Groups-------------------------------");
+		for  (var j=0; j<g_join_portfoliogroups.length; j++) {
+			JoinPortfolioGroup(g_join_portfoliogroups[j]);
+		}
+	}
+}
+
+//=================================================
+function JoinPortfolioGroup(node)
+//=================================================
+{
+	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	var treeref = $(node).attr("select");
+	if (!trace) {
+		//---- get portfoliogroupid ----------
+		var groupid = "";
+		var url = "../../../"+serverBCK+"/portfoliogroups";
+		$.ajax({
+			async:false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				var groups = $("group",data);
+				for (var k=0;k<groups.length;k++){
+					if ($('label',groups[k]).text()==portfoliogroup)
+						groupid = $(groups[k]).attr("id");
+				}
+				if (groupid=="")
+					$("#batch-log").append("<br>- ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" NOT FOUND - user:");
+				else {
+					//---- join group --------------
+					if (!trace)
+						$.ajax({
+							type : 'PUT',
+							dataType : "text",
+							url : "../../../"+serverBCK+"/portfoliogroups?group="+gid+"&uuid=" + g_trees[treeref][0],
+							data : "",
+							success : function(data) {
+								$("#batch-log").append("<br>- JoinPortfolioGroup - usergroup:"+usergroup+" - user:"+user);
+								//===========================================================
+								g_nb_joinPortfolioGroup[g_noline]++;
+								if (g_nb_joinPortfolioGroup[g_noline]==g_join_portfoliogroups.length) {
+									processShareUserGroup();
+								}
+								//===========================================================
+							},
+							error : function(data) {
+								$("#batch-log").append("<br>- ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+							}
+						});
+					else
+						$("#batch-log").append("<br>TRACE - JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+			}
+		});
+	}
+	else {
+		$("#batch-log").append("<br>TRACE JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
+		//===========================================================
+		g_nb_joinPortfolioGroup[g_noline]++;
+		if (g_nb_joinPortfolioGroup[g_noline]==g_join_portfoliogroups.length) {
 			processShareUserGroup();
 		}
 		//===========================================================
 	}
+
 }
 
 //-----------------------------------------------------------------------

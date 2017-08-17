@@ -10,18 +10,16 @@
 	<script type="text/javascript" src="../../other/bubbletree/build/bubbletree.js"></script>
 	<link rel="stylesheet" type="text/css" href="../../other/bubbletree/build/bubbletree.css" />
 	<link rel="stylesheet" href="../../application/css/specific.css" />
-	<script type="text/javascript" src="../../karuta/js/bubbleKaruta.js"></script>	
 	<script type="text/javascript" src="../../karuta/js/karuta.js"></script>	
-	<!--script type="text/javascript" src="../../karuta/js/resources/Type_Bubble.js"></script-->	
+	<!--script type="text/javascript" src="../../karuta/js/resources/Type_Bubble.js"></script-->
+	<script type="text/javascript" src="../../karuta/js/bubbleKaruta.js"></script>	
+		
 		<!-- =============================================================== -->
 		<script src="../../application/js/_init.js"></script>
 		<!-- =============================================================== -->
 	<script src="../../other/js/js.cookie.js"></script>
 	<script type="text/javascript">     
-		var map = null;
-		var LANG = null;
-		getLanguage();
-		var callCpt=0;
+		var buble_map = null;
 	</script>
 </head>
 <body>
@@ -32,7 +30,7 @@
 	var uuid = getURLParameter('uuid');
 	parent.g_current_mapid = uuid;
 	$(document).ready(function(){
-		displayBubbleTreeMap(uuid);
+		parent.loadBubbleTreeMap();
 	});
 	</script>
 </body>
