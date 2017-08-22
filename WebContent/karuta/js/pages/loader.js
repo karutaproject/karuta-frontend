@@ -136,6 +136,7 @@ function loadKarutaPage(url)
 	//--------------------------------------------------------------		
 	loadJS(url+"/karuta/js/SVGToIMG.js");
 	//--------------------------------------------------------------		
+	loadJS(url+"/other/js/jquery-qrcode-0.14.0.js");
 	//--------------------------------------------------------------
 	loadJS(url+"/other/html2canvas/html2canvas.js");
 	loadJS(url+"/other/html2canvas/html2canvas.svg.js");

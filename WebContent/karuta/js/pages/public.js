@@ -162,6 +162,10 @@ function displayKarutaPublic()
 	$("#welcome").html(welcome[LANG]);
 	$.ajaxSetup({async: false});
 	//----------------
+	$.ajaxSetup({async: false});
+	loadLanguages(function(data) {
+		getLanguage();
+	});
 	$.ajax({
 		type : "GET",
 		dataType : "text",
@@ -214,13 +218,17 @@ function displayKarutaPublic()
 					if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 						depth = 1;
 					setCSSportfolio(data);
-					loadLanguages(function(data) {
-						setLanguage(lang,'publichtm');
-						if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
-							UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
-						$("#contenu").html("<div id='page' uuid='"+g_uuid+"'></div>");
+					setLanguage(lang,'publichtm');
+					if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
+						UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
+					$("#contenu").html("<div id='page' uuid='"+g_uuid+"'></div>");
+					var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
+					if (semtag == 'bubble_level1') {
+						$("#main-container").html("");
+						UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'main-container',depth,LANGCODE,true);
+					}
+					else
 						UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
-					});
 					var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
 					if (welcomes.length>0){
 						var welcomeid = $(welcomes[0]).attr('id');

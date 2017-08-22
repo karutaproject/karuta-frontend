@@ -639,6 +639,30 @@ UIFactory["Portfolio"].prototype.getEditor = function(type,lang)
 };
 
 //==================================
+UIFactory["Portfolio"].prototype.setOwner = function(newuserid)
+//==================================
+{
+	$.ajaxSetup({async: false});
+	//----------------
+			var uuid = this.id;
+			var url = "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "/setOwner/"+newuserid;
+			$.ajax({
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				url : url,
+				data : "",
+				success : function(data) {
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error in restore : "+jqxhr.responseText);
+				}
+			});
+	fill_list_page();
+	$.ajaxSetup({async: true});
+};
+
+//==================================
 UIFactory["Portfolio"].reload = function(portfolioid) 
 //==================================
 {

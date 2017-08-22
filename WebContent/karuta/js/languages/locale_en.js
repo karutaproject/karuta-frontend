@@ -192,6 +192,7 @@ karutaStr['en']['maxchar']="Chars - Max Number";
 karutaStr['en']['maxword']="Words - Max number";
 karutaStr['en']['maxword-alert']="You exceeded the limit of number of words. Extra wors will not be saved."
 karutaStr['en']['csstext']="CSS";
+karutaStr['en']['seeqrcoderoles']="Roles - See QR Code and URL";
 
 //=========================================
 //========== ADMIN ========================
@@ -353,6 +354,9 @@ karutaStr['en']['bubble-add-bubble']="Add a Bubble";
 karutaStr['en']['bubble-weight']="Weight";
 karutaStr['en']['bubble-color']="Color";
 karutaStr['en']['bubble-level']="Level";
+karutaStr['en']['bubble-share-map']="Share : ";
+karutaStr['en']['bubble-share-link']="Weblink";
+karutaStr['en']['bubble-share-qrcode']="QR Code";
 
 //=========================================
 //========== GROUPS =======================

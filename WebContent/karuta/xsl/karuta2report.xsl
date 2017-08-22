@@ -82,6 +82,34 @@
 			</xsl:if>
 		</refresh>
 	</xsl:template>
+	<!-- ================ autorefresh ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-autorefresh']">
+		<xsl:variable name="delay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='delay']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<autorefresh>
+			<xsl:if test="not($delay='')">
+				<xsl:attribute name="delay"><xsl:value-of select="$delay"/></xsl:attribute>
+			</xsl:if>
+		</autorefresh>
+	</xsl:template>
+	<!-- ================ qrcode ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-qrcode']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="help">
+			<xsl:value-of select="metadata-wad/@help"></xsl:value-of>
+		</xsl:variable>
+		<qrcode>
+			<xsl:if test="not($style='')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($help='')">
+				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
+			</xsl:if>
+		</qrcode>
+	</xsl:template>
 	<!-- ================ text ============================ -->
 	<xsl:template match="*[metadata/@semantictag='text']">
 		<xsl:variable name="style">

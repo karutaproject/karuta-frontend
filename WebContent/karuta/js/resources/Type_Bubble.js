@@ -254,6 +254,30 @@ UIFactory["Bubble"].reloadparse = function(param2,param3,param4)
 	});
 };
 
+//==================================
+UIFactory["Bubble"].getPublicURL = function(mapid)
+//==================================
+{
+	var map_url = "";
+	var urlS = "../../../"+serverFIL+'/direct?uuid='+mapid+'&role=all&lang=fr&l=4&d=500';
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		mapid : mapid,
+		success : function (data){
+			var url = window.location.href;
+			var serverURL = url.substring(0,url.indexOf("/"+appliname));
+			map_url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+data;
+			$("#qrcode-image").qrcode({text:map_url,size:100,background: 'white'});
+			var text = document.getElementById("qrcode-image").toDataURL("image/jpeg");
+			putQRcodeforCV(text);
+			$("#map-link_"+this.mapid).attr('href',map_url);
+		}
+	});
+}
+
 //====================================
 function isbubbleput(v)
 //====================================
@@ -307,4 +331,43 @@ function clickBubble(node)
 	Bubble_bubbles_byid[node.id].displayView("bubble_display_"+g_current_mapid);
 }
 
+//====================================
+UIFactory["Bubble"].getLinkQRcode = function(uuid)
+//====================================
+{
+	var html = "<div class='btn-group'>"+karutaStr[LANG]["bubble-share-map"]+"<a class='button' id='map-link_"+uuid+"'  href='' target='_blank'>"+karutaStr[LANG]["bubble-share-link"]+"</a> <span class='button' id='qrcode-link_"+uuid+"' onclick=\"$('#qrcode-window').modal('show')\">"+karutaStr[LANG]["bubble-share-qrcode"]+"</span></div>";
+	return html;
+}
+//====================================
+function qrCodeBox()
+//====================================
+{
+	var html = "";
+	html += "<div id='qrcode-window' class='modal'>";
+	html += "	<div id='qrcode-window-header' class='modal-header'>QR Code</div>";
+	html += "	<div id='qrcode-window-body' class='modal-body' style='text-align:center'>";
+	html += "		<canvas width='100' height='100' id='qrcode-image'></canvas>";
+	html += "	</div>";
+	html += "	<div id='qrcode-window-window-footer' class='modal-footer'><button class='btn' onclick=\"$('#qrcode-window').modal('hide')\">"+karutaStr[LANG]["Close"]+"</button></div>";
+	html += "</div>";
+	return html;
+}
 
+//==================================
+function putQRcodeforCV(qrcode)
+//==================================
+{
+	var qrcode_nodeid = $("asmContext:has(metadata[semantictag='qrcode'])",g_portfolio_current).attr('id');
+	var xml = "<asmResource xsi_type='Field'>";
+	xml += "<text lang='"+LANG+"'>"+qrcode+"</text>";
+	xml += "</asmResource>";
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		data : xml,
+		url : "../../../"+serverBCK+"/resources/resource/" + qrcode_nodeid,
+		success : function(data) {
+		}
+	});
+}

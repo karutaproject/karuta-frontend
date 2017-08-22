@@ -22,6 +22,7 @@ var dashboard_infos = {};
 var dashboard_current = null;
 var portfolioid_current = null;
 
+
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
 jquerySpecificFunctions['.invsort()'] = ".sortElements(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
@@ -434,10 +435,10 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			r_processNode(no,children[i],'td_'+no,data,line);
 		if (tagname=="goparent")
 			r_processGoParent(no,children[i],'td_'+no,data,line);
-		if (tagname=="refresh")
-			r_processRefresh(children[i],'td_'+no,data,line);
 		if (tagname=="show-sharing")
 			r_processShowSharing('td_'+no);
+		if (tagname=="qrcode")
+			r_processQRcode(children[i],'td_'+no,data);
 	}
 }
 
@@ -654,6 +655,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 	var text = "";
 	var style = "";
 	var attr_help = "";
+	var prefix_id = "";
 	try {
 		var select = $(xmlDoc).attr("select");
 		var ref = $(xmlDoc).attr("ref");
@@ -678,50 +680,49 @@ function r_processNodeResource(xmlDoc,destid,data)
 			if (inline_metadata=='Y')
 				inline = true;
 			//----------------------------
+			if (selector.type=='resource') {
+				text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			}
+			if (selector.type=='resource code') {
+				text = UICom.structure["ui"][nodeid].resource.getCode();
+			}
+			if (selector.type=='resource value') {
+				text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+				prefix_id += "value_";
+			}
+			if (selector.type=='resource label') {
+				text = UICom.structure["ui"][nodeid].resource.getLabel();
+			}
+			if (selector.type=='node label') {
+				text = UICom.structure["ui"][nodeid].getLabel();
+			}
+			if (selector.type=='node value') {
+				text = UICom.structure["ui"][nodeid].getValue();
+			}
+			if (selector.type=='node context') {
+				text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+				prefix_id += "context_";
+			}
+			if (ref!=undefined && ref!="") {
+				if (aggregates[ref]==undefined)
+					aggregates[ref] = new Array();
+				aggregates[ref][aggregates[ref].length] = text;
+			}
+			text = "<span id='dashboard_"+prefix_id+nodeid+"' style='"+style+"'>"+text+"</span>";
+			if (writenode) {
+				text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
+			}
+			//----------------------------
 			if (inline & writenode) {
 				//-----------------------
 				if(UICom.structure["ui"][nodeid].resource!=null) {
 					try {
 						var test = UICom.structure["ui"][nodeid].resource.getEditor();
-						text += "<span id='report_get_editor_"+nodeid+"' style='"+style+"'></span>";
+						text = "<span id='report_get_editor_"+nodeid+"' style='"+style+"'></span>";
 					}
 					catch(e) {
-						text += "<span id='report_display_editor_"+nodeid+"' style='"+style+"'></span>";
+						text = "<span id='report_display_editor_"+nodeid+"' style='"+style+"'></span>";
 					}
-				}
-			} else {
-				var prefix_id = "";
-				if (selector.type=='resource') {
-					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
-				}
-				if (selector.type=='resource code') {
-					text = UICom.structure["ui"][nodeid].resource.getCode();
-				}
-				if (selector.type=='resource value') {
-					text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
-					prefix_id += "value_";
-				}
-				if (selector.type=='resource label') {
-					text = UICom.structure["ui"][nodeid].resource.getLabel();
-				}
-				if (selector.type=='node label') {
-					text = UICom.structure["ui"][nodeid].getLabel();
-				}
-				if (selector.type=='node value') {
-					text = UICom.structure["ui"][nodeid].getValue();
-				}
-				if (selector.type=='node context') {
-					text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
-					prefix_id += "context_";
-				}
-				if (ref!=undefined && ref!="") {
-					if (aggregates[ref]==undefined)
-						aggregates[ref] = new Array();
-					aggregates[ref][aggregates[ref].length] = text;
-				}
-				text = "<span id='dashboard_"+prefix_id+nodeid+"' style='"+style+"'>"+text+"</span>";
-				if (writenode) {
-					text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
 				}
 			}
 			if ($(node.metadatawad).attr('help')!=undefined && $(node.metadatawad).attr('help')!=""){
@@ -738,8 +739,17 @@ function r_processNodeResource(xmlDoc,destid,data)
 	if ($("#report_display_editor_"+nodeid).length>0) {
 		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
 	}
+	if ($("#dashboard_"+prefix_id+nodeid).length>0) {
+		$("#dashboard_"+prefix_id+nodeid).on('DOMSubtreeModified',function (){
+			refresh_report(dashboard_current);
+		});
+	}
 	if ($("#report_get_editor_"+nodeid).length>0) {
 		$("#report_get_editor_"+nodeid).append(UICom.structure["ui"][nodeid].resource.getEditor());
+		var input = $('input',$("#report_get_editor_"+nodeid));
+		$(input).change(function (){
+			refresh_report(dashboard_current);
+		});
 	}
 	//--------------------help------------------------------------------
 /*	if (attr_help!=undefined && attr_help!="") {
@@ -767,6 +777,28 @@ function r_processNodeResource(xmlDoc,destid,data)
 }
 
 //==================================
+function r_processQRcode(xmlDoc,destid,data)
+//==================================
+{
+	var text = "";
+	var style = "";
+	var attr_help = "";
+	try {
+		var selector = r_getSelector('asmContext.qrcode','');
+		var node = $(selector.jquery,data);
+		if (node.length>0 || select.substring(0,1)=="."){
+			var nodeid = $(node).attr("id");
+			//----------------------------
+			var url = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			text = "<img src=\""+url+"\">";
+		}
+	} catch(e){
+		text = "<span id='dashboard_"+nodeid+"'>&mdash;</span>";
+	}
+	//------------------------------
+	$("#"+destid).append($(text));
+}
+//==================================
 function r_processText(xmlDoc,destid,data)
 //==================================
 {
@@ -784,16 +816,7 @@ function r_processText(xmlDoc,destid,data)
 	$("#"+nodeid,$("#"+destid)).attr("style",style);
 }
 
-//==================================
-function r_processRefresh(xmlDoc,destid,data)
-//==================================
-{
-	var nodeid = $(data).attr("id");
-	var style = $(xmlDoc).attr("style");
-	var text = "<div id='"+nodeid+"'><a onclick=\"refresh_report('"+dashboard_current+"')\" class='glyphicon glyphicon-refresh button' data-title='"+karutaStr[LANG]["button-refresh-report"]+"' data-tooltip='true' data-placement='bottom'></a></div>";
-	$("#"+destid).append($(text));
-	$("#"+nodeid,$("#"+destid)).attr("style",style);
-}
+
 
 //==================================
 function refresh_report(dashboard_current)
@@ -1000,7 +1023,7 @@ function xml2CSV(content)
 	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 	var data = $('#'+content).html();
 	data = data.replace('&nbsp;', ' ');
-	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
+	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"\">]><div>" + data + "</div>";
 	var url =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
 	postAndDownload(url,data);
 }

@@ -755,6 +755,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	if (inline_metadata=='Y')
 		inline = true;
 	var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
+	var seeqrcoderoles = ($(node.metadatawad).attr('seeqrcoderoles')==undefined)?'':$(node.metadatawad).attr('seeqrcoderoles');
 	var contentfreenode = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
@@ -1160,6 +1161,13 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				if (g_userroles[0]!='designer')
 					$("#node_"+uuid).hide();
+			}
+			//------------ Bubble Map -----------------
+			if (semtag=='bubble_level1' && (seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')){
+				var map_info = UIFactory.Bubble.getLinkQRcode(uuid);
+				$('#map-info_'+uuid).html(map_info);
+				$('body').append(qrCodeBox());
+				UIFactory.Bubble.getPublicURL(uuid)
 			}
 			//------------ Public URL -----------------
 			if ($("#2world-"+uuid).length){
@@ -3531,6 +3539,8 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editnoderoles',$(node.metadatawad).attr('editnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'incrementroles',$(node.metadatawad).attr('incrementroles'));
+	if (semtag=='bubble_level1')
+		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seeqrcoderoles',$(node.metadatawad).attr('seeqrcoderoles'));
 	if (node.resource_type=='Proxy')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'edittargetroles',$(node.metadatawad).attr('edittargetroles'));
 	if (name=='asmContext' && node.resource.type=='Image')
@@ -4073,6 +4083,7 @@ UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
 	var html ="";
 	UIFactory["Bubble"].parse(this.node);  // this.node
 	html += "<iframe id='bubble_iframe' class='bubble_iframe' src='"+karuta_url+"/karuta/htm/bubble.html?uuid="+this.id+"' height='500' width='100%'></iframe>";
+	html += "<div id='map-info_"+this.id+"'></div>";
 	html += "<div id='bubble_display_"+this.id+"' class='bubble_display'></div>";
 	return html;
 };

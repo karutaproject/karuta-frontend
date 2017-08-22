@@ -208,6 +208,23 @@
 <!-- =========================================================================-->
 
 <!-- =====================================-->
+<xsl:template match="div [@id='qrcode']">
+<!-- =====================================-->
+	<fo:block text-align='right'>
+			<xsl:variable name="qrcode">
+				<xsl:value-of select="//asmContext[metadata/@semantictag='qrcode']/asmResource[@xsi_type='Field']/text" />
+			</xsl:variable>
+			<fo:external-graphic vertical-align="middle" content-width="scale-to-fit" width="100px" scaling="uniform">
+				<xsl:attribute name="src">url('<xsl:value-of select="$qrcode"/>')</xsl:attribute>
+			</fo:external-graphic>
+	</fo:block>
+</xsl:template>
+
+<!-- =========================================================================-->
+<!-- =========================================================================-->
+<!-- =========================================================================-->
+
+<!-- =====================================-->
 <xsl:template match="strong|b">
 <!-- =====================================-->
   <fo:inline font-weight="bold">
@@ -295,7 +312,7 @@
 <!-- =====================================-->
 	<fo:table width="100%">
 		<fo:table-body>
-			<xsl:apply-templates select="*[not(contains(@style,'display:none'))]"/>
+			<xsl:apply-templates select="*[not(contains(@style,'display:none') or contains(@style,'display: none'))]"/>
 		</fo:table-body>
 	</fo:table>
 </xsl:template>
@@ -304,7 +321,7 @@
 <xsl:template match="tr">
 <!-- =====================================-->
 	<fo:table-row>
-			<xsl:apply-templates select="*[not(contains(@style,'display:none'))]"/>
+			<xsl:apply-templates select="*[not(contains(@style,'display:none') or contains(@style,'display: none'))]"/>
 	</fo:table-row>
 </xsl:template>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0"  encoding="UTF-8" ?>
 <!DOCTYPE xsl:stylesheet [
-<!ENTITY nbsp "&amp;#160;">
+<!ENTITY nbsp " ">
 ]>
 <xsl:stylesheet version="1.0"
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -15,7 +15,7 @@
 <!-- =====================================-->
 <xsl:template match="span"><xsl:apply-templates select="*|text()"/></xsl:template>
 <!-- =====================================-->
-		
+
 
 <!-- =========================================================================-->
 <!-- =========================================================================-->
@@ -32,14 +32,14 @@
 
 
 <!-- =====================================-->
-<xsl:template match="tr"><xsl:apply-templates select="td[not(contains(@style,'none'))]"/>;
+<xsl:template match="tr"><xsl:apply-templates select="td[not(contains(@style,'display:none') or contains(@style,'display: none'))]"/>;
 </xsl:template>
 <!-- =====================================-->
-			
+
 
 <!-- =====================================-->
 <xsl:template match="td"><xsl:if test="position()&gt;1">;</xsl:if><xsl:apply-templates select="span"/></xsl:template>
 <!-- =====================================-->
-			
+
 
 </xsl:stylesheet>

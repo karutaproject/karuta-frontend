@@ -739,6 +739,7 @@ function edit_displayEditor(uuid,type)
 function loadLanguages(callback)
 //=======================================================================
 {
+	$.ajaxSetup({async: false});
 	for (var i=0; i<languages.length; i++){
 		if (i<languages.length-1) {
 			if (elgg_installed) {
@@ -766,11 +767,13 @@ function loadLanguages(callback)
 				type : "GET",
 				dataType : "script",
 				url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js",
-				success : callback
 			});
 		}
 	}
+	callback();
+	$.ajaxSetup({async: true});
 }
+
 
 //=======================================================================
 function sleep(milliseconds)

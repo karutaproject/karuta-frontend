@@ -218,6 +218,7 @@ function processLine()
 	g_nb_deleteTree[g_noline] = 0;
 	g_nb_importNode[g_noline] = 0;
 	g_nb_joinUserGroup[g_noline] = 0;
+	g_nb_joinPortfolioGroup[g_noline] = 0;
 	g_nb_leaveUserGroup[g_noline] = 0;
 	g_nb_shareUserGroup[g_noline] = 0;
 	g_nb_unshareUserGroup[g_noline] = 0;
@@ -1569,10 +1570,10 @@ function JoinPortfolioGroup(node)
 						$.ajax({
 							type : 'PUT',
 							dataType : "text",
-							url : "../../../"+serverBCK+"/portfoliogroups?group="+gid+"&uuid=" + g_trees[treeref][0],
+							url : "../../../"+serverBCK+"/portfoliogroups?group="+groupid+"&uuid=" + g_trees[treeref][0],
 							data : "",
 							success : function(data) {
-								$("#batch-log").append("<br>- JoinPortfolioGroup - usergroup:"+usergroup+" - user:"+user);
+								$("#batch-log").append("<br>- JoinPortfolioGroup - usergroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
 								//===========================================================
 								g_nb_joinPortfolioGroup[g_noline]++;
 								if (g_nb_joinPortfolioGroup[g_noline]==g_join_portfoliogroups.length) {
