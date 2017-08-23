@@ -107,6 +107,7 @@ function export_html()
 			// Send data to the backend
 			// Create temp form
 			var content = document.documentElement.outerHTML;
+			// Fake form so we can get the zip file back, simple .post won't do
 			var form = $("<form method='POST' action='/karuta-backend/export'><input id='pid' name='pid'></input><input id='content' name='content'></input><input type='submit' value='send'></form>");
 			$("html", document).append(form);
 			$("#pid",form).val(g_portfolioid);
