@@ -61,7 +61,10 @@ function fill_exec_batch()
 			$("#batch-divfileupload").html("Loaded");
 			g_json = data.result;
 			model_code = g_json["model_code"];
-			getModelAndProcess(model_code);
+			if( model_code == undefined )
+				$("#batch-log").append("<br> Either model_code is not defined, or that the CSV file wasn't parsed properly (check separators)<br>-------------------------");
+			else
+				getModelAndProcess(model_code);
 		}
     });
 	//------------------------------
