@@ -1052,12 +1052,29 @@ function html2IMG(contentid)
 		$("#image-window-body").append(img);
 	} else {
 		var htmlnode = document.getElementById(contentid);
+		var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>";
+		svg += "<foreignObject width='100%' height='100%'>";
+		svg += xml2string(htmlnode);
+		svg += "</foreignObject>";
+		svg += "</svg>";
+		alert(svg);
+		var htmlcanvas = "<canvas id='canvas' width='400' height='200'></canvas>"
+		$("image-window-body").html(htmlcanvas)
+		rasterizeHTML.drawHTML(xml2string(htmlnode),canvas);
+		var DOMURL = window.URL || window.webkitURL || window;
+		var svgobj = new Blob([svg], {type: 'image/svg+xml'});
+		var url = DOMURL.createObjectURL(svgobj);
+		var img = document.createElement('img');
+		img.src = url;
+		document.getElementById("image-window-body").appendChild(img);
+/*
 		html2canvas(htmlnode).then(function(canvas) {
 			var src_img = canvas.toDataURL();
 			var img = document.createElement('img');
 			img.src = src_img;
 			document.getElementById("image-window-body").appendChild(img);
 	});
+*/
 	}
 }
 

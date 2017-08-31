@@ -233,6 +233,7 @@ karutaStr['en']['export-project']="Export Project";
 karutaStr['en']['export-with-files']="Export with Files";
 karutaStr['en']['button-duplicate']="Duplicate";
 karutaStr['en']['getPDF']="Create PDF";
+karutaStr['en']['getRTF']="Create RTF";
 karutaStr['en']['owner']="Owner";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";

@@ -21,12 +21,12 @@
 			<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="0pt" text-align="center">
 				<xsl:value-of select="$portfolio_code"/>
 			</fo:block>
-			<xsl:for-each select="//portfolio/asmRoot/asmStructure[not(metadata-wad/@displaytree='none')]">
+			<xsl:for-each select="//portfolio/asmRoot/asmStructure[not(metadata-wad/@display='N')]">
 					<fo:block font-size="11pt" font-weight="bold" space-before="24pt" space-after="0pt">
 						<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
 					</fo:block>
 					<fo:block margin-left="10pt">
-						<xsl:for-each select="asmStructure[not(metadata-wad/@displaytree='none')]|asmUnit[not(metadata-wad/@displaytree='none')]">
+						<xsl:for-each select="asmStructure[not(metadata-wad/@display='N')]|asmUnit[not(metadata-wad/@display='N')]">
 								<xsl:choose>
 								<xsl:when test="local-name()='asmStructure'">
 									<xsl:call-template name="node_asmStructure"/>
@@ -111,7 +111,7 @@
 				</fo:flow>
 			</fo:page-sequence>
 		</xsl:if>
-		<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@displaytree='none' or contains(.//metadata/@semantictag, 'welcome-unit'))]"/>
+		<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@display='N' or contains(.//metadata/@semantictag, 'welcome-unit'))]"/>
 </xsl:template>
 
 <!-- =================================== -->
@@ -135,7 +135,7 @@
 			</fo:flow>
 		</fo:page-sequence>
 	</xsl:if>
-	<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@displaytree='none')]"/>
+	<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@display='N')]"/>
 </xsl:template>
 
 <!-- =================================== -->
@@ -940,7 +940,7 @@
             <fo:table-body>
 		        <fo:table-row>
 			 	<xsl:for-each select="asmUnitStructure[metadata/@semantictag='welcome-block']">
-			        <fo:table-cell border="solid black 0px" padding="2px">
+			        <fo:table-cell border="solid white 0px" padding="2px">
 			            <fo:block>
 						<xsl:call-template name="welcome_block">
 							<xsl:with-param name="space-before"><xsl:value-of select="$space-before"/></xsl:with-param>
