@@ -51,7 +51,7 @@
 		<xsl:value-of select="asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/>
 	</fo:block>
 	<fo:block margin-left="10pt">
-		<xsl:for-each select="asmStructure|asmUnit">
+		<xsl:for-each select="asmStructure[not(metadata-wad/@display='N')]|asmUnit[not(metadata-wad/@display='N')]">
 				<xsl:choose>
 					<xsl:when test="local-name()='asmStructure'">
 						<xsl:call-template name="node_asmStructure"/>
@@ -95,7 +95,7 @@
 <xsl:template match="asmRoot">
 		<xsl:variable name="asmNode_label"><xsl:value-of select="../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
 		<xsl:call-template name="welcome_page"/>
-		<xsl:if test="asmUnitStructure | asmContext">
+		<xsl:if test="asmUnitStructure[not(metadata-wad/@display='N')] | asmContext[not(metadata-wad/@display='N')]">
 			<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
 				<fo:static-content flow-name="Footer" font-size="8pt">
 					<fo:block><xsl:value-of select="$portfolio_code"/> - <xsl:value-of select="$asmNode_label"/></fo:block>
@@ -135,7 +135,7 @@
 			</fo:flow>
 		</fo:page-sequence>
 	</xsl:if>
-	<xsl:apply-templates select="./asmStructure|asmUnit[not(metadata-wad/@display='N')]"/>
+	<xsl:apply-templates select="./asmStructure[not(metadata-wad/@display='N')]|asmUnit[not(metadata-wad/@display='N')]"/>
 </xsl:template>
 
 <!-- =================================== -->
@@ -162,7 +162,7 @@
 						<xsl:with-param name="size">12pt</xsl:with-param>
 					</xsl:apply-templates>
 					-->
-					<xsl:for-each select="asmUnit|asmUnitStructure|asmContext">
+					<xsl:for-each select="asmUnit[not(metadata-wad/@display='N')]|asmUnitStructure[not(metadata-wad/@display='N')]|asmContext[not(metadata-wad/@display='N')]">
 						<xsl:choose>
 							<xsl:when test="local-name()='asmUnit'">
 								<xsl:call-template name="processUnit">
@@ -225,7 +225,7 @@
 					<xsl:value-of select="$label"/>
 				</fo:block>
 			</xsl:if>
-			<xsl:for-each select="asmUnit|asmUnitStructure|asmContext">
+			<xsl:for-each select="asmUnit[not(metadata-wad/@display='N')]|asmUnitStructure[not(metadata-wad/@display='N')]|asmContext[not(metadata-wad/@display='N')]">
 				<xsl:choose>
 					<xsl:when test="local-name()='asmUnit'">
 						<xsl:call-template name="processUnit">
