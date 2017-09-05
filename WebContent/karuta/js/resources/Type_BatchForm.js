@@ -35,7 +35,7 @@ UIFactory["BatchForm"] = function( node )
 	//--------------------
 //	this.type_nodeid = $("asmContext:has(metadata[semantictag='formtype'])",node).attr('id');
 	//--------------------
-	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.display = {};
 };
 

@@ -437,7 +437,7 @@ karutaStr['en']['GetGetResource']="GetGetResource";
 karutaStr['en']['GetDoubleResource']="GetDoubleResource";
 karutaStr['en']['Proxy']="Proxy";
 
-arutaStr['en']['asmColumn']="asmColumn";
+karutaStr['en']['asmColumn']="asmColumn";
 
 karutaStr['en']['startday']="Start day";
 karutaStr['en']['time']="Time (HH:MM)";

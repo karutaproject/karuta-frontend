@@ -205,8 +205,10 @@ UIFactory["SendEmail"].prototype.getEditor = function(type,langcode)
 			//------------------------
 		} else{
 			var html = "";
+			html +=  "<div class='receiver_SendEmail'>";
 			html +=  "<div class='name_SendEmail'> "+$(this.firstname_node[langcode]).text()+" "+$(this.lastname_node[langcode]).text()+"</div>";
 			html +=  "<div class='email_SendEmail'> "+$(this.email_node[langcode]).text()+"</div>";
+			html +=  "</div>";
 			html += "<label>"+karutaStr[LANG]['subject']+"</label>";
 			html += "<input type='text' class='form-control' style='width:100%' id='subject_SendEmail'>";
 			html += "<label>"+karutaStr[LANG]['message']+"</label>";
