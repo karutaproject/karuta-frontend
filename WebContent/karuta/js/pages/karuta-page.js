@@ -12,7 +12,7 @@ function initKarutaPage()
 	html += "</div>";
 	html += "<div id='social-button' onclick='toggleSocialNetwork()'></div>";
 	html += "<div id='wait-window' class='modal' style='height:100px;'>";
-	html += "<div id='wait-window-body' class='modal-body' style='text-align:center;'></div>";
+	html += "<div id='wait-window-body' class='modal-body'></div>";
 	html += "<div id='wait-spin'></div>";
 	html += "</div>";
 	html += "<div id='post-form' style='display:none'>";

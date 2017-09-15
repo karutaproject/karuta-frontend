@@ -1599,11 +1599,10 @@ UIFactory["Portfolio"].getPDF = function(portfolioid)
 UIFactory["Portfolio"].getActions = function(portfolioid) 
 //==================================
 {
-//	var url = window.location.href;
-//	var serverURL = url.substring(0,url.indexOf(appliname)-1);
 	var html ="";
 	html += "<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
 	html += "<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf'>"+karutaStr[LANG]['getRTF']+"</a></li>";
+	html += "<li><a  onclick='export_html()'>"+karutaStr[LANG]['getWebsite']+"</a></li>";
 	html += "<li><a  onclick=\"toggleButton('hidden')\">"+karutaStr[LANG]['hide-button']+"</a></li>";
 	html += "<li><a  onclick=\"toggleButton('visible')\">"+karutaStr[LANG]['show-button']+"</a></li>";
 	if (USER.admin || portfolios_byid[portfolioid].owner=='Y') {

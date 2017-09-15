@@ -164,28 +164,28 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		html +="<div uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
 //			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" >";
+			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" />";
 //			html += "</a>";
 		}
 		else
-			html += "<img src='../img/image-icon.png' height='25px'>"+karutaStr[LANG]['no-image'];
+			html += "<img src='../img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
 		html += "</div>";
 	}
 	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" />";
 	}
 	if (type=='withfilename'  && $(this.filename_node[langcode]).text()!=""){
 		html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" />";		
 		html += "</a>";
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='withfilename-withoutlightbox'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" />";		
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='editor'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100'>";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100'/>";		
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='block') {
@@ -193,12 +193,12 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		if ($(this.filename_node[langcode]).text()!="") {
 			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
 			html += "<a href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;max-height:218px;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" >";
+			html += "<img style='display:inline;max-height:218px;' id='image_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" />";
 			html += "</a>";
 			html += "</td></tr></table>";
 		} else {
 			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
-			html += "<img src='../img/image-icon.png' height='150px'>"+karutaStr[LANG]['no-image'];
+			html += "<img src='../img/image-icon.png' height='150px'/>"+karutaStr[LANG]['no-image'];
 			html += "</td></tr></table>";
 		}
 		html += "</div>";

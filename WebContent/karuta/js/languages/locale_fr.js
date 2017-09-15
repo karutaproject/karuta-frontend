@@ -234,6 +234,7 @@ karutaStr['fr']['export-with-files']="Exporter avec fichiers";
 karutaStr['fr']['button-duplicate']="Dupliquer";
 karutaStr['fr']['getPDF']="Créer PDF";
 karutaStr['fr']['getRTF']="Créer RTF";
+karutaStr['fr']['getWebsite']="Exporter site Web";
 karutaStr['fr']['owner']="Propriétaire";
 karutaStr['fr']['portfolios-admin']="Portfolios";
 karutaStr['fr']['bin-admin']="Poubelle";

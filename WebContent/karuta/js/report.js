@@ -109,6 +109,8 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 			r_processNode(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="for-each-portfolio")
 			r_getPortfolios(no+"_"+i,children[i],destid,data,line);
+		if (tagname=="europass")
+			r_processEuropass(children[i],destid,data,line);
 	}
 }
 
@@ -128,6 +130,8 @@ function r_report_process(xmlDoc,json)
 			r_getPortfolios(i,children[i],'report-content');
 		if (tagname=="table")
 			r_processTable(i,children[i],'report-content');
+		if (tagname=="europass")
+			r_processEuropass(i,children[i],'report-content');
 		if (tagname=="aggregate")
 			r_processAggregate(children[i],'report-content');
 		if (tagname=="text")
@@ -798,6 +802,30 @@ function r_processQRcode(xmlDoc,destid,data)
 	//------------------------------
 	$("#"+destid).append($(text));
 }
+
+//==================================
+function r_processEuropass(xmlDoc,destid,data)
+//==================================
+{
+	var style = "";
+	var attr_help = "";
+//	try {
+		var selector = r_getSelector('asmUnitStructure.EuropassL','');
+		var node = $(selector.jquery,data);
+		if (node.length>0 || select.substring(0,1)=="."){
+			var nodeid = $(node).attr("id");
+			var text = "<table id='europass' style='width:100%;margin-top:30px;'></table>";
+			$("#"+destid).append($(text));
+			var europass_node = UICom.structure["ui"][nodeid];
+			//----------------------------
+			europass_node.structured_resource.displayView("europass",null,'report',nodeid,null,false);
+		}
+//	} catch(e){
+//		text = "<span id='dashboard_"+nodeid+"'>&mdash;</span>";
+//	}
+	//------------------------------
+}
+
 //==================================
 function r_processText(xmlDoc,destid,data)
 //==================================
@@ -977,10 +1005,11 @@ function xml2PDF(content)
 	var data = $('#'+content).html();
 	data = data.replace(/&nbsp;/g, ' ');
 	data = data.replace(/<br>/g, '<br/>');
+	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
+	var urlS =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
 	postAndDownload(urlS,data);
 }
 
@@ -1000,10 +1029,11 @@ function xml2RTF(content)
 	var data = $('#'+content).html();
 	data = data.replace(/&nbsp;/g, ' ');
 	data = data.replace(/<br>/g, '<br/>');
+	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
+	var urlS =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
 	postAndDownload(urlS,data);
 }
 
@@ -1057,9 +1087,9 @@ function html2IMG(contentid)
 		svg += xml2string(htmlnode);
 		svg += "</foreignObject>";
 		svg += "</svg>";
-		alert(svg);
+//		alert(svg);
 		var htmlcanvas = "<canvas id='canvas' width='400' height='200'></canvas>"
-		$("image-window-body").html(htmlcanvas)
+/*		$("image-window-body").html(htmlcanvas)
 		rasterizeHTML.drawHTML(xml2string(htmlnode),canvas);
 		var DOMURL = window.URL || window.webkitURL || window;
 		var svgobj = new Blob([svg], {type: 'image/svg+xml'});
@@ -1067,14 +1097,15 @@ function html2IMG(contentid)
 		var img = document.createElement('img');
 		img.src = url;
 		document.getElementById("image-window-body").appendChild(img);
-/*
+*/
+
 		html2canvas(htmlnode).then(function(canvas) {
 			var src_img = canvas.toDataURL();
 			var img = document.createElement('img');
 			img.src = src_img;
 			document.getElementById("image-window-body").appendChild(img);
 	});
-*/
+
 	}
 }
 

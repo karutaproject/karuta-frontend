@@ -110,6 +110,23 @@
 			</xsl:if>
 		</qrcode>
 	</xsl:template>
+	<!-- ================ europass ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-europass']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="help">
+			<xsl:value-of select="metadata-wad/@help"></xsl:value-of>
+		</xsl:variable>
+		<europass>
+			<xsl:if test="not($style='')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($help='')">
+				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
+			</xsl:if>
+		</europass>
+	</xsl:template>
 	<!-- ================ text ============================ -->
 	<xsl:template match="*[metadata/@semantictag='text']">
 		<xsl:variable name="style">

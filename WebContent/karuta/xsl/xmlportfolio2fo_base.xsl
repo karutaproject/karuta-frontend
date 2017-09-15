@@ -149,6 +149,12 @@
 			<fo:block text-align="right" margin-top="-10pt">- <fo:page-number/> - <xsl:value-of select="/portfolio/asmRoot/date"/></fo:block>
 		</fo:static-content>
 		<fo:flow flow-name="Content" font-size="9pt">
+			<xsl:if test="position()=1">
+			<xsl:variable name="parent_label"><xsl:value-of select="../../asmResource[@xsi_type='nodeRes']/label[@lang=$lang]"/></xsl:variable>
+					<fo:block font-size="14pt" font-weight="bold" space-before="24pt" space-after="5pt">
+						<xsl:value-of select="$parent_label"/>
+					</fo:block>
+			</xsl:if>
 			<xsl:choose>
 				<xsl:when test="contains(metadata/@semantictag,'welcome-unit')">
 					<xsl:call-template name="welcomeUnit"/>

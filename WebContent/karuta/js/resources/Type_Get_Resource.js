@@ -343,6 +343,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 				var code = $('code',resource).text();
 				var display_code = true;
+				var display_label = true;
 				if (code.indexOf("@")>-1) {
 					display_code = false;
 					code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
@@ -352,6 +353,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				}
 				if (code.indexOf("%")>-1) {
 					code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
+				}
+				if (code.indexOf("$")>-1) {
+					display_label = false;
+					code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("$")+1);
 				}
 				if (code.indexOf('----')>-1) {
 					html = "<li class='divider'></li><li></li>";
@@ -365,8 +370,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				}
 				html += ">";
 				if (display_code)
-					html += "<div class='li-code'>"+code+"</div> <span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></a>";
-				else
+					html += "<div class='li-code'>"+code+"</div>";
+				if (display_label)
 					html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></a>";
 				
 				var select_item_a = $(html);

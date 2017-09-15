@@ -20,6 +20,7 @@ function export_html()
 	//console.log(Window);
 	
 	// Create hidden div if it doesn't exist
+	$("#wait-window").show();
 	var basehtml = $("html", document);
 	var exportdiv = $('#export_html', basehtml);
 	$(exportdiv).remove();
@@ -31,6 +32,7 @@ function export_html()
 	
 	// List links on the left
 	var leftsidebar = $('a[id^="sidebar_"]', document);
+	$("#wait-window-body").html(leftsidebar.length+1);
 	// Displaying div
 	var divcontent = $("#contenu");
 
@@ -99,6 +101,7 @@ function export_html()
 			var item = leftsidebar.slice(0);
 			leftsidebar = leftsidebar.slice(1, leftsidebar.length);
 			clicking(item);
+			$("#wait-window-body").html(leftsidebar.length+1);
 		}
 		else  // No more link to click
 		{
@@ -108,17 +111,18 @@ function export_html()
 			// Create temp form
 			var content = document.documentElement.outerHTML;
 			// Fake form so we can get the zip file back, simple .post won't do
-			var form = $("<form method='POST' action='/karuta-backend/export'><input id='pid' name='pid'></input><input id='content' name='content'></input><input type='submit' value='send'></form>");
+			var form = $("<form method='POST' action='/"+serverREG+"/export'><input id='pid' name='pid'></input><input id='content' name='content'></input><input type='submit' value='send'></form>");
 			$("html", document).append(form);
 			$("#pid",form).val(g_portfolioid);
 			$("#content",form).val(content);
 			$(form).submit();
 			$(form).remove();
+			$("#wait-window").hide();
 //			$.post("/karuta-backend/export", {pid: g_portfolioid, content: document.documentElement.outerHTML}, function(data){atob(data)});
 		}
 	};
 	
 	/// |---------|---------|---------|---------|---------|---------|
 	/// [click             ][print   ][click             ][print   ]
-	timer = setInterval(clearqueue, 10000);
+	timer = setInterval(clearqueue, 5000);
 }
