@@ -24,7 +24,9 @@ var portfolioid_current = null;
 
 
 var jquerySpecificFunctions = {};
-jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() > $(b).text() ? 1 : -1; })";
+jquerySpecificFunctions['.sortResource()'] = ".sortElements(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jquerySpecificFunctions['.invsortResource()'] = ".sortElements(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
+jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() < $(b).text() ? -1 : 1; })";
 jquerySpecificFunctions['.invsort()'] = ".sortElements(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
 jquerySpecificFunctions['.filename_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\")";
 jquerySpecificFunctions['.filename_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:empty\")";
@@ -64,7 +66,7 @@ function r_getSelector(select,test)
 		if (test.indexOf(fct)>-1) {
 			filter2 = filter2.replace(fct,jquerySpecificFunctions[fct]);
 			if (filter2.indexOf("#lang#")>-1)
-				filter2 = filter2.replace("#lang#",languages[LANGCODE]);
+				filter2 = filter2.replace(/#lang#/g,languages[LANGCODE]);
 		}
 	}
 	var type = "";
@@ -184,6 +186,7 @@ function r_processNode(no,xmlDoc,destid,data,line)
 	var test = $(xmlDoc).attr("test");
 	if (select!=undefined) {
 		var selector = r_getSelector(select,test);
+		var nodeold = $(selector.jquery,data);
 		var nodes = $(selector.jquery,data).filter(selector.filter1);
 		nodes = eval("nodes"+selector.filter2);
 		if (nodes.length==0) { // try the node itself
@@ -1110,7 +1113,7 @@ function html2IMG(contentid)
 }
 
 //==================================
-function exec_report(uuid)
+function register_report(uuid)
 //==================================
 {
 	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});

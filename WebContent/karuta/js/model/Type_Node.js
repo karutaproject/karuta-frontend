@@ -1124,7 +1124,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (model_code!='') {
 					$.ajax({
 						type : "GET",
-						url : serverREP+"/"+uuid+".html",
+						url : serverREG+"/"+uuid+".html",
+//						url : serverREP+"/"+uuid+".html",
 						dataType: 'html',
 						headers: {
 		                    'Access-Control-Allow-Origin': '*'
@@ -1141,10 +1142,12 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 							genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
 						}
 					});
-					var exec_roles = $(UICom.structure["ui"][uuid].resource.exec_node).text();
-					if (exec_roles.containsArrayElt(g_userroles) || (exec_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
-						$("#exec_button_"+uuid).html($("<div class='exec-button button' onclick=\"javascript:exec_report('"+uuid+"');return false;\">"+karutaStr[LANG]['exec']+"</div>"));				
-					}
+					$("#exec_button_"+uuid).html($("<div class='exec-button button'>"+karutaStr[LANG]['exec']+"</div>"));
+					$("#exec_button_"+uuid).click(function(){genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);});
+//					var exec_roles = $(UICom.structure["ui"][uuid].resource.exec_node).text();
+//					if (exec_roles.containsArrayElt(g_userroles) || (exec_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+//						$("#exec_button_"+uuid).html($("<div class='exec-button button' onclick=\"javascript:exec_report('"+uuid+"');return false;\">"+karutaStr[LANG]['rexec']+"</div>"));				
+//					}
 					//---------- display csv or pdf -------
 					var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
 					if (csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {

@@ -285,6 +285,10 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlFormObj).append($(htmlpdfGroupObj));
 	}
 	//------------------------
+	var js1 = "javascript:register_report('"+this.id+"')";
+	var footer = " <button class='btn btn-success' onclick=\""+js1+";\">"+karutaStr[LANG]['register']+"</button>";
+	$("#edit-window-footer").append($(footer));
+	//------------------------
 	return htmlFormObj;
 
 };

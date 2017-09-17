@@ -23,6 +23,7 @@ karutaStr['en']['Save']="Save";
 karutaStr['en']['OK']="OK";
 karutaStr['en']['Close']="Close";
 karutaStr['en']['Cancel']="Cancel";
+karutaStr['en']['register']="Register";
 karutaStr['en']['edit']="Edit";
 karutaStr["en"]["button-edit"] = "Edit";
 karutaStr["en"]["button-delete"] = "Delete";
@@ -444,7 +445,7 @@ karutaStr['en']['startday']="Start day";
 karutaStr['en']['time']="Time (HH:MM)";
 karutaStr['en']['freq']="Frequency";
 karutaStr['en']['execroles']="Roles - Execute";
-karutaStr['en']['exec']="Execute";
+karutaStr['en']['rexec']="Execute Now";
 
 
 
