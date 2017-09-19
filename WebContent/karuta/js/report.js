@@ -24,10 +24,10 @@ var portfolioid_current = null;
 
 
 var jquerySpecificFunctions = {};
-jquerySpecificFunctions['.sortResource()'] = ".sortElements(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
-jquerySpecificFunctions['.invsortResource()'] = ".sortElements(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
-jquerySpecificFunctions['.sort()'] = ".sortElements(function(a, b){ return $(a).text() < $(b).text() ? -1 : 1; })";
-jquerySpecificFunctions['.invsort()'] = ".sortElements(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
+jquerySpecificFunctions['.sortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jquerySpecificFunctions['.invsortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
+jquerySpecificFunctions['.sort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? -1 : 1; })";
+jquerySpecificFunctions['.invsort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
 jquerySpecificFunctions['.filename_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\")";
 jquerySpecificFunctions['.filename_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:empty\")";
 jquerySpecificFunctions['.url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:not(:empty)\")";
