@@ -67,6 +67,8 @@ function fill_main_page(portfolioid,role)
 			UICom.roles = {};
 			g_portfolio_current = data;
 			g_portfolio_rootid = $("asmRoot",data).attr("id");
+			var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
+			$("body").addClass(root_semantictag);
 			// --------Display Type------------------
 			g_display_type = $("metadata[display-type]",data).attr('display-type');
 			if (g_display_type=="" || g_display_type==null || g_display_type==undefined)

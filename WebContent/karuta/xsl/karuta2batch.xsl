@@ -304,6 +304,14 @@
 		</unshare-usergroup>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='moveup-node']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<moveup-node type='Field' select="{$select}">
+		</moveup-node>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-field']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>

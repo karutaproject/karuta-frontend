@@ -784,10 +784,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			html += "'";
 			//-------------- css attribute -----------
 			var metadataepm = $(node.metadataepm);
-	//		if (proxy_target)
-	//			metadataepm = UICom.structure["ui"][proxies_nodeid["proxy-"+semtag]].metadataepm;
 			var style = "";
-//			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'padding-top',true);
 			if (style.length>0 && depth>0)
 				html += " style='"+style+"' ";
 			//----------------------------------
@@ -937,10 +934,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				else {
 					if (g_display_type=='standard')
 						html += "<div id='std_node_"+uuid+"' class='node-label col-md-7  same-height'";
-//					if (nodetype=='asmUnitStructure' && collapsible=='Y')
-//						html += " onclick=\"javascript:toggleContent('"+uuid+"')\" style='"+style+";cursor:pointer'> ";
-//					else
-						html += " style='"+style+"'>";
+					html += " style='"+style+"'>";
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='node-label col-md-offset-1 col-md-7  same-height'";
 						if (g_userroles[0]!='designer' && semtag=='header')
@@ -997,7 +991,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 			}
 			html += "</div><!-- nodetype -->";
+			//==========================================================================
 			//==============================fin NODE ===================================
+			//==========================================================================
 			if ( $("#node_"+uuid).length>0 )
 				$("#node_"+uuid).replaceWith($(html));
 			else
@@ -1089,7 +1085,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 			});
 			//---------- video ------------------
-			if (UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
+			if (!audiovideohtml5 && UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
 				UICom.structure["ui"][uuid].resource.setParameter();
 			// -------------- display metainfo
 			if (g_userroles[0]=='designer' || USER.admin) {  
@@ -1132,22 +1128,16 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 		                },
 						crossDomain: true,
 						success : function(data) {
-//							alertHTML("OK - report");
 							var content_report =  $(data).find("#dashboard_"+uuid).html();
 							$("#dashboard_"+uuid).html(content_report);
 						},
 						error : function(jqxhr,textStatus) {
-//							alertHTML("No report - Error ... : "+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
 							var root_node = g_portfolio_current;
 							genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
 						}
 					});
 					$("#exec_button_"+uuid).html($("<div class='exec-button button'>"+karutaStr[LANG]['exec']+"</div>"));
 					$("#exec_button_"+uuid).click(function(){genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);});
-//					var exec_roles = $(UICom.structure["ui"][uuid].resource.exec_node).text();
-//					if (exec_roles.containsArrayElt(g_userroles) || (exec_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
-//						$("#exec_button_"+uuid).html($("<div class='exec-button button' onclick=\"javascript:exec_report('"+uuid+"');return false;\">"+karutaStr[LANG]['rexec']+"</div>"));				
-//					}
 					//---------- display csv or pdf -------
 					var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
 					if (csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
@@ -1268,13 +1258,12 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 				//---------------------------------------
 			} else {
-				var gotDisplay = false;
-				if (semtag=="EuropassL"){
-					gotDisplay = true;
+				var alreadyDisplayed = false;
+				if (typeof europass_installed != 'undefined' && europass_installed && semtag=="EuropassL"){
+					alreadyDisplayed = true;
 					node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,menu);
-//					UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid,menu);
 				}
-				if (!gotDisplay && semtag!='bubble_level1') {
+				if (!alreadyDisplayed && semtag!='bubble_level1') {
 					for( var i=0; i<root.children.length; ++i ) {
 						// Recurse
 						var child = UICom.structure["tree"][root.children[i]];
@@ -1302,18 +1291,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				}
 			}
 			//-------------------------------------------------------
-//			$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			$('[data-tooltip="true"]').tooltip();
 			$(".pickcolor").colorpicker();
-			//----------------------------
-			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
-			/*
-			if (!multilingual_resource)
-				$("#embed"+uuid+NONMULTILANGCODE).oembed();
-			else
-				$("#embed"+uuid+langcode).oembed();
-			//*/
 			//----------------------------
 		}
 		if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
@@ -1569,7 +1549,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				}
 			});
 			//---------- video ------------------
-			if (UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
+			if (!audiovideohtml5 && UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
 				UICom.structure["ui"][uuid].resource.setParameter();
 			// -------------- display metainfo
 			if (g_userroles[0]=='designer' || USER.admin) {  
@@ -1680,12 +1660,12 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				}
 				//---------------------------------------
 			} else {
-				var gotDisplay = false;
-				if (semtag=="EuropassL"){
-					gotDisplay = true;
+				var alreadyDisplayed = false;
+				if (typeof europass_installed != 'undefined' && europass_installed && semtag=="EuropassL"){
+					alreadyDisplayed = true;
 					UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid);
 				}
-				if (!gotDisplay && semtag!='bubble_level1') {
+				if (!alreadyDisplayed && semtag!='bubble_level1') {
 					for( var i=0; i<root.children.length; ++i ) {
 						// Recurse
 						var child = UICom.structure["tree"][root.children[i]];
@@ -1703,12 +1683,6 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			$('[data-tooltip="true"]').tooltip();
 			$(".pickcolor").colorpicker();
-			//----------------------------
-			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
-//			if (!multilingual_resource)
-//				$("#embed"+uuid+NONMULTILANGCODE).oembed();
-//			else
-//				$("#embed"+uuid+langcode).oembed();
 			//----------------------------
 		}
 	} //---- end of private
@@ -2083,8 +2057,9 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 				}
 			}
 			//----------------------------
-			if (UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
+			if (!audiovideohtml5 && UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].resource.setParameter != undefined)
 				UICom.structure["ui"][uuid].resource.setParameter();
+			//----------------------------
 			if (g_userroles[0]=='designer' || USER.admin) {  //display metainfo
 				UIFactory["Node"].displayMetainfo("metainfo_"+uuid,data);
 			}
@@ -2103,14 +2078,6 @@ UIFactory["Node"].displayFree = function(root, dest, depth,langcode,edit,inline)
 			//==================================
 			$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
 			$('a[data-toggle=tooltip]').tooltip({html:true});
-			//----------------------------
-			var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
-			/*
-			if (!multilingual_resource)
-				$("#embed"+uuid+NONMULTILANGCODE).oembed();
-			else
-				$("#embed"+uuid+langcode).oembed();
-			//*/
 			//----------------------------
 		}
 	} //---- end of private - no display
@@ -2724,7 +2691,7 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 	if (srce=='function'){
 		var items = tag.split("/");
 		html += items[0] +"('"+parentid+"','"+title+"'";
-		if (items.length>0)
+		if (items.length>1)
 			html += ",";
 		for (var i=1;i<items.length;i++){
 			html += "'" + items[i] + "'";
@@ -2940,11 +2907,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4,freenode);
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ImageBlock','ImageBlock',databack,callback,param2,param3,param4,freenode);
-//						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','ProxyBlock','ProxyBlock',databack,callback,param2,param3,param4,freenode);
 					}
-//					if (semantictag.indexOf("bubbleContainer")>-1) {
+					if (bubble_installed) {
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-bubbles','bubble_level1','BubbleMap',databack,callback,param2,param3,param4,freenode);
-//					}
+					}
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Item','Item',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Resource','GetResource',databack,callback,param2,param3,param4,freenode);

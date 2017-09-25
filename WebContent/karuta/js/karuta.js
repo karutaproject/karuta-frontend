@@ -560,7 +560,7 @@ function confirmDel(uuid,type,parentid,destid,callback,param1,param2)
 }
 
 //=======================================================================
-function confirmDelPortfolio(uuid) 
+function ADelPortfolio(uuid) 
 // =======================================================================
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
@@ -1665,15 +1665,17 @@ function setCSSportfolio(data)
 function logout()
 //==============================
 {
-	$.ajax({
-		type : "POST",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/credential/logout",
-		data: ""
-	});
-	window.location="login.htm?lang="+LANG;
+    $.ajax({
+       type: "POST",
+       dataType: "text",
+       url: "../../../"+serverBCK+"/credential/logout",
+       data: "",
+       success: function(data) {
+                       window.location="login.htm?lang="+LANG;
+       }
+    });
 }
-
+ 
 //==============================
 function hideAllPages()
 //==============================

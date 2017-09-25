@@ -21,7 +21,6 @@ function initKarutaPage()
 	//--------------------------
 	$('body').append(EditBox());
 	$('body').append(DeleteBox());
-	$('body').append(LangueBox());
 	$('body').append(savedBox());
 	$('body').append(alertBox());
 	$('body').append(messageBox());
@@ -31,8 +30,11 @@ function initKarutaPage()
 	//--------------------------
 	var target = document.getElementById('wait-spin');
 	var spinner = new Spinner().spin(target);
-	g_elgg_key = Cookies.get('elgg_token');
-	g_socialnetwork = Cookies.get('socialnetwork');
+	//--------------------------
+	if (elgg_installed) {
+		g_elgg_key = Cookies.get('elgg_token');
+		g_socialnetwork = Cookies.get('socialnetwork');
+	}
 	g_edit = true; // à vérifier
 	//--------------------------
 }
@@ -67,7 +69,7 @@ function displayKarutaPage()
 				}
 			});
 			//-------------------------------
-			if (elgg_installed!=undefined && elgg_installed) {
+			if (elgg_installed) {
 				var html = "";
 				html += "<div id='global-row' class='row'>";
 				if (g_socialnetwork==undefined || g_socialnetwork=='shown'){

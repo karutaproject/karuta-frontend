@@ -356,6 +356,9 @@
 <!-- =====================================-->
 	<!--fo:table-cell padding="2px"-->
 	<fo:table-cell>
+		<xsl:if test="@colspan&gt;1">
+			<xsl:attribute name="number-columns-spanned"><xsl:value select="@colspan"/></xsl:attribute>
+		</xsl:if>
 		<xsl:if test="contains(@style,'text-align:center')">
 			<xsl:attribute name="text-align">center</xsl:attribute>
 		</xsl:if>

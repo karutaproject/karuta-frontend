@@ -125,8 +125,6 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 		html += "<div id='jp_container_"+this.id+"' class='jp-audio'>";
 		html += "<div class='jp-type-single'>";	
 		html += "<div class='jp-gui jp-interface'>";
-		//html += "<div class='jp-audio-play'>";
-		//html += "<a href='javascript:;' class='jp-audio-play-icon' tabindex='1'>play</a>";
 		html += "<ul class='jp-controls'>";
 		html += "  <li><a href='javascript:;' class='jp-play' tabindex='1'>play</a></li>";
 		html += "  <li><a href='javascript:;' class='jp-pause' tabindex='1'>pause</a></li>";
@@ -292,7 +290,8 @@ UIFactory["Audio"].prototype.save = function(delfile)
 	else
 		UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
-	UICom.structure["ui"][this.id].resource.setParameter();
+	if (!audiovideohtml5)
+		UICom.structure["ui"][this.id].resource.setParameter();
 };
 
 //==================================

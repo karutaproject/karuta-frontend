@@ -25,6 +25,7 @@ var portfolioid_current = null;
 
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jquerySpecificFunctions['.sortResource(#'] = ".sort(function(a, b){ return $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.invsortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
 jquerySpecificFunctions['.sort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? -1 : 1; })";
 jquerySpecificFunctions['.invsort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
@@ -67,6 +68,10 @@ function r_getSelector(select,test)
 			filter2 = filter2.replace(fct,jquerySpecificFunctions[fct]);
 			if (filter2.indexOf("#lang#")>-1)
 				filter2 = filter2.replace(/#lang#/g,languages[LANGCODE]);
+			if (test.indexOf("(#")>-1){
+				var1 = test.substring(test.indexOf("(#")+1,test.lastIndexOf(")"));
+				filter2 = filter2.replace(/#1/g,languages[LANGCODE]);
+			}
 		}
 	}
 	var type = "";
@@ -388,8 +393,13 @@ function r_processCell(no,xmlDoc,destid,data,line)
 {
 	var style = $(xmlDoc).attr("style");
 	var attr_help = $(xmlDoc).attr("help");
+	var colspan = $(xmlDoc).attr("colspan");
 
-	var html = "<td id='td_"+no+"' style='"+style+"'><span id='help_"+no+"' class='ihelp'></span></td>";
+	var html = "<td id='td_"+no+"' style='"+style+"' ";
+	if (colspan!=null && colspan!='0')
+		html += "colspan='"+colspan+"' "
+	html += "><span id='help_"+no+"' class='ihelp'></span>";
+	html += "</td>";
 	$("#"+destid).append($(html));
 	if (attr_help!=undefined && attr_help!="") {
 		var help_text = "";

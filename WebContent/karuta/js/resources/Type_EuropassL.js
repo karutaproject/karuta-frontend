@@ -9,6 +9,8 @@ var g_mother_tongueid = "";
 var langues_byid = {};
 var langues_list = [];
 
+$('body').append(LangueBox());
+
 //==================================
 UIFactory["EuropassL"] = function( node )
 //==================================

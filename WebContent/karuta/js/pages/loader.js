@@ -80,9 +80,7 @@ function loadKarutaPage(url)
 	loadJS(url+"/karuta/js/resources/Type_Report.js");
 	loadJS(url+"/karuta/js/resources/Type_BatchForm.js");
 	loadJS(url+"/karuta/js/resources/Type_Color.js");
-	loadJS(url+"/karuta/js/resources/Type_Bubble.js");
 	loadJS(url+"/karuta/js/resources/Type_Action.js");
-	loadJS(url+"/karuta/js/resources/Type_EuropassL.js");
 	//--------------------------------------------------------------
 	loadJS(url+"/other/js/jquery-1.10.2.min.js");
 	loadJS(url+"/other/js/jquery-ui-1.10.3.custom.min.js");
@@ -106,11 +104,10 @@ function loadKarutaPage(url)
 	loadJS(url+"/karuta/js/model/Type_UsersGroup.js");
 	loadJS(url+"/karuta/js/model/Type_PortfoliosGroup.js");
 	//--------------------------------------------------------------
-//	loadCSS(url+"/other/lightbox/css/lightbox.css");
-//	loadJS(url+"/other/lightbox/js/lightbox-2.6.min.js");
-	//--------------------------------------------------------------
-	loadCSS(url+"/other/jplayer/jplayer.blue.monday.css");
-	loadJS(url+"/other/jplayer/jquery.jplayer.min.js");
+	if (!audiovideohtml5) {
+		loadCSS(url+"/other/jplayer/jplayer.blue.monday.css");
+		loadJS(url+"/other/jplayer/jquery.jplayer.min.js");
+	}
 	//--------------------------------------------------------------
 	loadJS(url+"/other/js/jquery.ui.widget.js");
 	loadJS(url+"/other/js/jquery.iframe-transport.js");
@@ -120,27 +117,32 @@ function loadKarutaPage(url)
 	loadJS(url+"/other/bootstrap-datepicker/bootstrap-datepicker.fr.js");
 	loadCSS(url+"/other/bootstrap-datepicker/datepicker.css");
 	//--------------------------------------------------------------
+	loadJS(url+"/other/js/js.cookie.js");
+	loadJS(url+"/other/js/jquery.sortElements.js");
+	//--------------------------------------------------------------
+	loadJS(url+"/karuta/js/version.js");
+	//--------------------------------------------------------------
+	loadJS(url+"/karuta/js/SVGToIMG.js");
+	loadJS(url+"/karuta/js/export.js");
+	//--------------------------------------------------------------
+	loadJS(url+"/other/html2canvas/html2canvas.js");
+	loadJS(url+"/other/html2canvas/html2canvas.svg.js");
+	//--------------------------------------------------------------		
+	if (bubble_installed) {
+		loadJS(url+"/karuta/js/resources/Type_Bubble.js");
+		loadJS(url+"/other/js/jquery-qrcode-0.14.0.js");
+	}
+	//--------------------------------------------------------------		
+	if (europass_installed) {
+		loadJS(url+"/karuta/js/resources/Type_EuropassL.js");
+	}
+	//--------------------------------------------------------------
 	if (elgg_installed) {
 		loadCSS(url+"/socialnetwork-elgg/css/elgg.css");
 		loadCSS(url+"/socialnetwork-elgg/css/socialnetwork.css");
 		loadJS(url+"/socialnetwork-elgg/js/socialnetwork.js");
 		loadJS(url+"/socialnetwork-elgg/js/moment-with-locales.min.js");
 	}
-	//--------------------------------------------------------------
-	loadJS(url+"/other/js/js.cookie.js");
-	loadJS(url+"/other/js/jquery.sortElements.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/version.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/dashboards/matrix_2dims/matrix_2dim.js");
-	//--------------------------------------------------------------		
-	loadJS(url+"/karuta/js/SVGToIMG.js");
-	loadJS(url+"/karuta/js/export.js");
-	//--------------------------------------------------------------		
-	loadJS(url+"/other/js/jquery-qrcode-0.14.0.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/other/html2canvas/html2canvas.js");
-	loadJS(url+"/other/html2canvas/html2canvas.svg.js");
 	//--------------------------------------------------------------
 
 }

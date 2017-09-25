@@ -108,14 +108,16 @@ function fill_list_page()
 	html += "</div>";
 	$("#main-list").html(html);
 	// --- list of users to display name of owner
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/users",
-		success : function(data) {
-			UIFactory["User"].parse(data);
-		}
-	});
+	if (USER.admin || USER.creator){
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/users",
+			success : function(data) {
+				UIFactory["User"].parse(data);
+			}
+		});
+	}
 	//---------------------------------------------
 	html  = "<div class='dropdown dropdown-button'>";
 	html += "<span id='list-menu' class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span class='glyphicon glyphicon-menu-hamburger'></span>&nbsp;Menu</span>";

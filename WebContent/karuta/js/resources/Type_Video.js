@@ -320,7 +320,8 @@ UIFactory["Video"].prototype.save = function(delfile)
 	else
 		UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
-	UICom.structure["ui"][this.id].resource.setParameter();
+	if (!audiovideohtml5)
+		UICom.structure["ui"][this.id].resource.setParameter();
 };
 
 //==================================

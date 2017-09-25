@@ -49,6 +49,9 @@
 	</xsl:template>
 	<!-- ================ cell ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-cell']">
+		<xsl:variable name="colspan">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='colspan']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
 		</xsl:variable>
@@ -58,6 +61,9 @@
 		<cell>
 			<xsl:if test="not($style='')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($colspan='')">
+				<xsl:attribute name="colspan"><xsl:value-of select="$colspan"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($help='')">
 				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>

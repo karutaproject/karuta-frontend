@@ -35,6 +35,7 @@ UIFactory["User"] = function( node )
 	this.node = node;
 	this.firstname = $("firstname",node).text();
 	this.lastname = $("lastname",node).text();
+	this.username = $("username",node).text();
 	this.username_node = $("username",node);
 	this.firstname_node = $("firstname",node);
 	this.lastname_node = $("lastname",node);
@@ -571,42 +572,61 @@ UIFactory["User"].createTestUser = function()
 UIFactory["User"].changePassword = function(userid,value)
 //==================================
 {
-	var value2 = null;
-	var username = ""
-	if (userid==null) {
-		userid = USER.id;
-		username = USER.username_node.text();
-	} else {
-		username = Users_byid[userid].username_node.text();
-	}
-	if (value==null){
-		value = $("#user_password-new").val();
-		value2 = $("#user_confirm-password").val();
-	}
-	if (value2 == null || (value2 != null && value2 == value)) {
-		var xml = "";
-		xml +="<?xml version='1.0' encoding='UTF-8'?>";
-		xml +="<user>";
-		xml +="	<password>"+value+"</password>";
-		xml +="</user>";
-		var url = "../../../"+serverBCK+"/users/user/" + userid;
-		if (elgg_installed)
-			user_change_password(value, username);
-		$.ajax({
-			type : "PUT",
-			contentType: "application/xml",
-			dataType : "text",
-			url : url,
-			data : xml,
-			success : function(data) {
-				alertHTML(karutaStr[LANG]['saved']);
-				$('#edit-window').modal('hide');
+	var password_old = $("#user_password-old").val();
+	var data = "<credential><login>"+USER.username+"</login><password>"+password_old+"</password></credential>";
+	$.ajax({
+		contentType: "application/xml",
+		type : "POST",
+		dataType : "text",
+		url : "../../../"+serverBCK+"/credential/login",
+		data: data,
+		success : function(data) {
+			//----------------------------
+			var value2 = null;
+			var username = ""
+			if (userid==null) {
+				userid = USER.id;
+				username = USER.username_node.text();
+			} else {
+				username = Users_byid[userid].username_node.text();
 			}
-		});
-	} else {
-		alertHTML(karutaStr[LANG]['password-mismatch']);
-		UIFactory["User"].callChangePassword();
-	}
+			if (value==null){
+				value = $("#user_password-new").val();
+				value2 = $("#user_confirm-password").val();
+			}
+			if (value2 == null || (value2 != null && value2 == value)) {
+				var xml = "";
+				xml +="<?xml version='1.0' encoding='UTF-8'?>";
+				xml +="<user>";
+				xml +="	<password>"+value+"</password>";
+				xml +="</user>";
+				var url = "../../../"+serverBCK+"/users/user/" + userid;
+				if (elgg_installed)
+					user_change_password(value, username);
+				$.ajax({
+					type : "PUT",
+					contentType: "application/xml",
+					dataType : "text",
+					url : url,
+					data : xml,
+					success : function(data) {
+						alertHTML(karutaStr[LANG]['saved']);
+						$('#edit-window').modal('hide');
+					}
+				});
+			} else {
+				alertHTML(karutaStr[LANG]['password-mismatch']);
+				UIFactory["User"].callChangePassword();
+			}
+			//----------------------------
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Identification : "+jqxhr.responseText);
+		}
+	});
+
+	
+
 };
 
 //==================================
@@ -634,6 +654,7 @@ UIFactory["User"].getPasswordCreator = function()
 //==================================================
 {
 	var html = "";
+	html += UIFactory["User"].getAttributeCreator("password-old","",true);
 	html += UIFactory["User"].getAttributeCreator("password-new","",true);
 	html += UIFactory["User"].getAttributeCreator("confirm-password","",true);
 	return html;

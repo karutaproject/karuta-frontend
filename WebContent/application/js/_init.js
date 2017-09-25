@@ -12,27 +12,21 @@ var serverVER = "karuta-backend"+bckname;
 var serverREG = "karuta-backend"+bckname;
 var serverCONF = "";
 var serverREP = "";
-//------ ELGG SOCIAL NETWORK ----------------------------
-var elgg_url_base = 'elgg/';
-var elgg_installed = false;
-var elgg_refreshing = 240000; // 240 seconds
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'en';
 languages [1] = 'fr';
-//languages [2] = 'es';
-//languages [3] = 'es_VA';
 //----------------------------------
 var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------
-var audiovideohtml5 = false;
+var audiovideohtml5 = true;
 //----------------------------------
 var technical_support = "technical-support@yourinstitution.com"; // email of technical support
 var demo = false;
 var karuta_create_account = true;
-//--------- NAVBAR BRAND ------------------
+//--------- NAVBAR BRAND ------------------ logo 126 x 34
 var navbar_title = {};
 navbar_title["fr"] = "<img style='margin-top:-4px;' src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
 navbar_title["en"] = "<img style='margin-top:-4px;' src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
@@ -49,8 +43,8 @@ var welcome3 = {};       // Welcome paragraph
 	welcome3["en"] = "";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.2";
-	welcome4["en"] = "WELCOME TO KARUTA 2.2";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.3";
+	welcome4["en"] = "WELCOME TO KARUTA 3.2";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";
@@ -78,10 +72,18 @@ g_sendEmailPublicURL_message +="&lt;/div&gt;";
 //----------------------------------------------
 var specificmenus = false;
 
-
 //==============================
 function loadJS(url)
 //==============================
 {
 	document.write("<script src='"+url+"'></script>");
 };
+
+//------ ELGG SOCIAL NETWORK ----------------------------
+var elgg_installed = false;
+var elgg_url_base = 'elgg/';
+var elgg_refreshing = 240000; // 240 seconds
+//------ BUBBLE MAP -------------------------------------
+var bubble_installed = false;
+//------ EUROPASS -------------------------------------
+var europass_installed = false;
