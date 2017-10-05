@@ -9,7 +9,6 @@ var g_mother_tongueid = "";
 var langues_byid = {};
 var langues_list = [];
 
-$('body').append(LangueBox());
 
 //==================================
 UIFactory["EuropassL"] = function( node )
@@ -294,7 +293,7 @@ function LangueBox()
 //==============================
 {
 	var html = "";
-	html += "\n<!-- ==================== Edit box ==================== -->";
+	html += "\n<!-- ==================== Langue box ==================== -->";
 	html += "\n<div id='langue-window' class='modal fade'>";
 	html += "\n		<div class='modal-dialog'>";
 	html += "\n		<div class='modal-content'>";

@@ -57,7 +57,10 @@ UIFactory["Get_Get_Resource"] = function( node,condition)
 		}
 	}
 	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
-	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (this.clause=="xsi_type='Get_Get_Resource'")
+		this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	else // asmUnitStructure - Get_Get_Resource
+		this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.display = {};
 	this.displayValue = {};
 	this.displayCode = {};
@@ -271,7 +274,6 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			} else if (query.indexOf('parent')>-1) {
 				parent = $(this.node).parent();//.parent();
 			}
-//			alertHTML('query'+query+'--parentid'+$(parent).attr("id"));
 			var code_parent = "";
 			if (queryattr_value.indexOf('#')>0)
 				code_parent = semtag_parent;
@@ -279,7 +281,6 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				var child = $("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent);
 				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
 				if (child.length==0 && itself.length>0){
-//					code_parent = $("code",$("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent)[0]).text();
 					code_parent = $($("code",itself)[0]).text();
 				} else {
 					var nodetype = $(child).prop("nodeName"); // name of the xml tag
@@ -886,8 +887,15 @@ UIFactory["Get_Get_Resource"].reparse = function(destid,type,langcode,data,self,
 UIFactory["Get_Get_Resource"].prototype.save = function()
 //==================================
 {
-	UICom.UpdateResource(this.id,writeSaved);
-	this.refresh();
+	if (this.clause=="xsi_type='Get_Resource'") {
+		UICom.UpdateResource(this.id,writeSaved);
+		if (!this.inline)
+			this.refresh();
+	}
+	else {// Node - Get_Get_Resource {
+		UICom.UpdateNode(this.id);
+		UICom.structure.ui[this.id].refresh()
+	}	
 };
 
 //==================================

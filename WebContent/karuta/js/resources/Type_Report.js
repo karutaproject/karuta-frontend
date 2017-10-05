@@ -178,10 +178,8 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 		//-----------------------------------------------------
 		var startday = ['mon','tue','wed','thu','fri','sat','sun'];
 		var htmlstartdayGroupObj = $("<div class='form-group'></div>")
-//		var htmlstartdayLabelObj = $("<label for='startday_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['startday']+"</label>");
 		var htmlstartdayLabelObj = $("<label class='col-sm-3 control-label'>"+karutaStr[LANG]['startday']+"</label>");
 		var htmlstartdayDivObj = $("<div class='col-sm-9'></div>");
-//		var htmlstartdayInputObj = $("<input id='startday_"+this.id+"' type='text' class='form-control' value=\""+this.startday_node.text()+"\">");
 		var html_input = "";
 		var value_input = this.startday_node.text();
 		for (var i=0; i<startday.length;i++){
@@ -191,7 +189,6 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 			html_input +="> "+startday[i];
 		}
 		html_input +="<br/>";
-//		$(htmlstartdayDivObj).append($(htmlstartdayInputObj));
 		$(htmlstartdayDivObj).append($(html_input));
 		$(htmlstartdayGroupObj).append($(htmlstartdayLabelObj));
 		$(htmlstartdayGroupObj).append($(htmlstartdayDivObj));
@@ -214,7 +211,6 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 		var htmlfreqGroupObj = $("<div class='form-group'></div>")
 		var htmlfreqLabelObj = $("<label class='col-sm-3 control-label'>"+karutaStr[LANG]['freq']+"</label>");
 		var htmlfreqDivObj = $("<div class='col-sm-9'></div>");
-//		var htmlfreqInputObj = $("<input id='freq_"+this.id+"' type='text' class='form-control' value=\""+this.freq_node.text()+"\">");
 		html_input = "";
 		value_input = this.freq_node.text();
 		for (var i=0; i<freq.length;i++){
@@ -224,7 +220,6 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 			html_input +="> "+freq[i];
 		}
 		html_input +="<br/>";
-//		$(htmlfreqDivObj).append($(htmlfreqInputObj));
 		$(htmlfreqDivObj).append($(html_input));
 		$(htmlfreqGroupObj).append($(htmlfreqLabelObj));
 		$(htmlfreqGroupObj).append($(htmlfreqDivObj));
@@ -243,7 +238,7 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlexecGroupObj).append($(htmlexecDivObj));
 		$(htmlFormObj).append($(htmlexecGroupObj));
 		//-----------------------------------------------------
-//		/*
+		/*
 		var htmlcommentsGroupObj = $("<div class='form-group'></div>")
 		var htmlcommentsLabelObj = $("<label for='comments_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['comments']+"</label>");
 		var htmlcommentsDivObj = $("<div class='col-sm-9'></div>");

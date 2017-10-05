@@ -2,20 +2,20 @@
 var application_version = "1.0";
 var application_date = "2016-04-29";
 //----------------------------------
-var appliname = 'karuta';
-var karutaname = 'karuta'; // to share the same karuta-core with multiple front-end
+var appliname = 'karuta2.3';
+var karutaname = 'karuta2.3'; // to share the same 'karuta-core' with multiple front-end
 var karuta_url = '../../../' + karutaname;
-var bckname = '';
+var bckname = '2.3';
 var serverBCK = "karuta-backend"+bckname+"/rest/api";
 var serverFIL = "karuta-backend"+bckname;
 var serverVER = "karuta-backend"+bckname;
 var serverREG = "karuta-backend"+bckname;
-var serverCONF = "";
-var serverREP = "";
+var serverCONF = "karuta-backend"+bckname;
+var serverREP = "karuta-backend"+bckname;
 //-------- LANGUAGES------------
 var languages = [];
-languages [0] = 'en';
-languages [1] = 'fr';
+languages [0] = 'fr';
+languages [1] = 'en';
 //----------------------------------
 var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
@@ -25,7 +25,7 @@ var audiovideohtml5 = true;
 //----------------------------------
 var technical_support = "technical-support@yourinstitution.com"; // email of technical support
 var demo = false;
-var karuta_create_account = true;
+var karuta_create_account = false;
 //--------- NAVBAR BRAND ------------------ logo 126 x 34
 var navbar_title = {};
 navbar_title["fr"] = "<img style='margin-top:-4px;' src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
@@ -44,7 +44,7 @@ var welcome3 = {};       // Welcome paragraph
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
 	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.3";
-	welcome4["en"] = "WELCOME TO KARUTA 3.2";
+	welcome4["en"] = "WELCOME TO KARUTA 2.3";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";
@@ -86,4 +86,4 @@ var elgg_refreshing = 240000; // 240 seconds
 //------ BUBBLE MAP -------------------------------------
 var bubble_installed = false;
 //------ EUROPASS -------------------------------------
-var europass_installed = false;
+var europass_installed = true;

@@ -25,7 +25,8 @@ function initKarutaPage()
 	$('body').append(alertBox());
 	$('body').append(messageBox());
 	$('body').append(imageBox());
-	$('body').append(imageBox());
+	if (typeof europass_installed!='undefined' && europass_installed)
+	$('body').append(LangueBox());
 	
 	//--------------------------
 	var target = document.getElementById('wait-spin');

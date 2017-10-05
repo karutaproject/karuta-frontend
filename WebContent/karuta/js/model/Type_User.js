@@ -243,9 +243,10 @@ UIFactory["User"].prototype.getEditor = function(type,lang)
 	html += UIFactory["User"].getAttributeEditor(this.id,"username",this.username_node.text());
 	html += "<div class='form-group'>";
 	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG]['new_password']+"</label>";
-	html += "  <div class='col-sm-9'><input class='form-control'";
-	html += " type='password'";
-	html += " onchange=\"javascript:UIFactory['User'].changePassword('"+this.id+"',this.value)\" value='' ></div>";
+	html += "  <div class='col-sm-9'>";
+	html += "    <input class='form-control passwordbyroot' onkeypress=\"this.style.color='transparent'\" type='text' autocomplete='off' value='' onchange=\"javascript:UIFactory['User'].setPassword('"+this.id+"',this.value)\" >";
+//	html += "  <button class='btn' onclick=\"javascript:UIFactory['User'].setPassword('"+this.id+"',this.value)>&gt;</button>";
+	html += "  </div>";
 	html += "</div>";
 	html +="<hr/>";
 	html += UIFactory["User"].getAttributeRadioEditor(this.id,"designer",this.designer_node.text());
@@ -567,6 +568,40 @@ UIFactory["User"].createTestUser = function()
 		user_register($("#user_firstname").val()+" "+$("#user_lastname").val(), USER.email_node.text(), $("#user_username").val(), $("#user_password").val());
 };
 
+//==================================
+UIFactory["User"].setPassword = function(userid,value)
+//==================================
+{
+	var username = "";
+	if (userid==null) {
+		userid = USER.id;
+		username = USER.username_node.text();
+	} else {
+		username = Users_byid[userid].username_node.text();
+	}
+	var xml = "";
+	xml +="<?xml version='1.0' encoding='UTF-8'?>";
+	xml +="<user>";
+	xml +="	<password>"+value+"</password>";
+	xml +="</user>";
+	var url = "../../../"+serverBCK+"/users/user/" + userid;
+	if (elgg_installed)
+		user_change_password(value, username);
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : xml,
+		success : function(data) {
+			alertHTML(karutaStr[LANG]['saved']);
+			$('#edit-window').modal('hide');
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Identification : "+jqxhr.responseText);
+		}
+	});
+};
 
 //==================================
 UIFactory["User"].changePassword = function(userid,value)
@@ -583,7 +618,7 @@ UIFactory["User"].changePassword = function(userid,value)
 		success : function(data) {
 			//----------------------------
 			var value2 = null;
-			var username = ""
+			var username = "";
 			if (userid==null) {
 				userid = USER.id;
 				username = USER.username_node.text();
@@ -598,6 +633,7 @@ UIFactory["User"].changePassword = function(userid,value)
 				var xml = "";
 				xml +="<?xml version='1.0' encoding='UTF-8'?>";
 				xml +="<user>";
+				xml +="	<prevpass>"+password_old+"</prevpass>";
 				xml +="	<password>"+value+"</password>";
 				xml +="</user>";
 				var url = "../../../"+serverBCK+"/users/user/" + userid;
@@ -624,9 +660,6 @@ UIFactory["User"].changePassword = function(userid,value)
 			alertHTML("Identification : "+jqxhr.responseText);
 		}
 	});
-
-	
-
 };
 
 //==================================

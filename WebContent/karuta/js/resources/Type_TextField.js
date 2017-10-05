@@ -229,7 +229,7 @@ UIFactory["TextField"].toggleExpand = function(uuid,langcode)
 		$("#button_"+uuid).removeClass('glyphicon-resize-small').addClass('glyphicon-resize-full');
 		$("#"+uuid+"_edit_"+langcode).attr('expand','false');
 		$(".wysihtml5-sandbox").css('height','300px');
-		$(".modal-dialog").css('max-width','600px');
+		$(".modal-dialog").css('width','600px');
 	}
 };
 //==================================

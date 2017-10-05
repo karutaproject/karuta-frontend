@@ -235,42 +235,6 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						UIFactory["Portfolio"].displayTree(nb,dest,type,langcode,parentcode);
 					else {
 						if (number_of_projects>0) {
-//							alert("redisplay")
-//									UIFactory["Portfolio"].displayAll('portfolios','list',null,true);
-/*							$.ajax({
-								type : "GET",
-								dataType : "xml",
-								url : "../../../"+serverBCK+"/portfolios?active=1&project=false",
-								success : function(data) {
-									$("#list").html(getList());
-									UIFactory["Portfolio"].parse_add(data);
-									UIFactory["Portfolio"].displayAll('portfolios','list',null,true);
-									if ($("#projects").html()=="") {
-										$("#projects-label").hide();
-									}
-									if (USER.admin || USER.creator) {
-										$.ajax({
-											type : "GET",
-											dataType : "xml",
-											url : "../../../"+serverBCK+"/portfolios?active=false",
-											success : function(data) {
-												var destid = $("div[id='bin']");
-												UIFactory["Portfolio"].parseBin(data);
-												UIFactory["Portfolio"].displayBin('bin','bin');
-											},
-											error : function(jqxhr,textStatus) {
-												alertHTML("Server Error GET bin: "+textStatus);
-											}
-										});
-									}
-									$("#wait-window").hide();
-								},
-								error : function(jqxhr,textStatus) {
-									alertHTML("Server Error GET active=1&project=false : "+textStatus);
-									$("#wait-window").hide();
-								}
-							});
-							*/
 							$("#export-"+projects_list[number_of_projects-1].uuid).attr("href","../../../"+serverBCK+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
 						}
 						else
@@ -1207,7 +1171,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 	html +=" <form id='fileupload' action='"+url+"'>";
 	html += " <input type='hidden' id='project' name='project' value=''>";
 	html += " <input type='hidden' id='instance' name='instance' value='false'>";
-	html += " <input type='file' name='uploadfile'>";
+	html += " <input id='uploadfile' type='file' name='uploadfile'>";
 	html += "</form>";
 	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
 	$("#edit-window-body").append($(html));
@@ -1217,6 +1181,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 			$("#progress").css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress .bar').css('width',progress + '%');
+			$("#uploadfile").hide();
 			$("#wait-window").show();
 		},
 		success : function(data) {
@@ -1271,7 +1236,7 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 		html += " <input type='hidden' id='instance' name='instance' value='true'>";
 	else
 		html += " <input type='hidden' id='instance' name='instance' value='false'>";
-	html += " <input type='file' name='uploadfile'>";
+	html += " <input type='file' id='uploadfile' name='uploadfile'>";
 	html += "</form>";
 	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
 	$("#edit-window-body").append($(html));
@@ -1280,6 +1245,7 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 			$("#progress").css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress .bar').css('width',progress + '%');
+			$("#uploadfile").hide();
 			$("#wait-window").show();
 		},
 		success : function(data) {

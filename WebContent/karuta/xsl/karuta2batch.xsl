@@ -367,6 +367,24 @@
 			</text>
 		</update-resource>
 	</xsl:template>
+	<xsl:template match="*[metadata/@semantictag='update-metadata-inline']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='MetadataInline' select="{$select}">
+			<xsl:if test="$source!=''">
+				<source select="{$source}"/>
+			</xsl:if>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-resource>
+	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-proxy']">
 		<xsl:variable name="select">

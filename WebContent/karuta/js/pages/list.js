@@ -403,10 +403,10 @@ function countProjectPortfolios(uuid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+"&count=true",
+		url : "../../../"+serverBCK+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+".&count=true",
 		uuid: uuid,
 		success : function(data) {
-			var nb = parseInt($('portfolios',data).attr('count'))-1;
+			var nb = parseInt($('portfolios',data).attr('count'));
 			$("#number_of_projects_portfolios_"+this.uuid).html(nb);
 		}
 	});

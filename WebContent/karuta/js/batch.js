@@ -73,7 +73,7 @@ function selectAll()
 	var nodes = $("model",g_xmlDoc).children();
 	for  (var j=0; j<nodes.length; j++) {
 		var actiontype = $(nodes[j]).prop("nodeName");
-		if (typeof g_actions[actiontype] == "function" && actiontype=='for-each-line')
+		if (actiontype=='for-each-line')
 			$.merge(nodes,$(nodes[j]).children());
 	}
 	return nodes
@@ -100,7 +100,12 @@ function processNextLine()
 		$("#batch-log").append("<br>================ LINE "+(g_noline+1)+" =============================");
 		processNextAction();
 	} else {
-		$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
+		if ($("#batch-log").html().indexOf('THIS IS THE END')<0) {
+			setTimeout(function(){
+				if ($("#batch-log").html().indexOf('THIS IS THE END')<0)
+					$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
+				}, 2000);
+		}
 		$.ajaxSetup({async: true});		
 	}	
 }
@@ -883,6 +888,64 @@ g_actions['update-resource'] = function updateResource(node)
 		});
 	}
 	//----------------------------------------------------
+	if (type=='MetadataInline') {
+		var text = getTxtvals($("text",node));
+		if ($("source",node).length>0){
+			var source_select = $("source",node).attr("select");
+			var source_idx = source_select.indexOf(".");
+			var source_treeref = source_select.substring(0,source_idx);
+			var source_semtag = source_select.substring(source_idx+1);
+			if (source_semtag=="UUID")
+				text = g_trees[source_treeref][0];
+		}
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			success : function(data) {
+				var nodes = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmUnitStructure:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmUnit:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmStructure:has(metadata[semantictag='"+semtag+"'])",data);
+				var nb = nodes.length;
+				var nodeid ="";
+				for (var i=0; i<nb; i++){
+					nodeid = $(nodes[i]).attr('id');
+					var metadata = $("metadata",nodes[i]);
+					if (type=='MetadataInline')
+						$(metadata).attr('inline',text);
+					var xml = xml2string(metadata[0]);;
+					$.ajax({
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						nodeid : nodeid,
+						semtag : semtag,
+						url : "../../../"+serverBCK+"/nodes/node/" + nodeid+"/metadata",
+						idx : i,
+						nb : nb-1,
+						success : function(data) {
+							$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag+" "+this.idx+" "+this.nb+" - "+(this.idx==this.nb));
+							processNextAction();
+						},
+						error : function(data,nodeid,semtag) {
+							$("#batch-log").append("<br>- ERROR in update metadata("+this.nodeid+") - semtag="+this.semtag);
+							processNextAction();
+						}
+					});
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ERROR in update metadata("+this.nodeid+") - semtag="+this.semtag);
+				processNextAction();
+			}
+		});
+	}
+	//----------------------------------------------------
 	if (type=='Dashboard') {
 		var text = getTxtvals($("text",node));
 		if ($("source",node).length>0){
@@ -1018,7 +1081,7 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 					groupid = $(groups[k]).attr("id");
 			}
 			if (groupid=="")
-				$("#batch-log").append("<br>- ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" NOT FOUND - user:");
+				$("#batch-log").append("<br>- ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" NOT FOUND");
 			else {
 				//---- join group --------------
 				$.ajax({
@@ -1232,30 +1295,44 @@ g_actions['import-node'] = function importNode(node)
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 		success : function(data) {
-			var destid = $("node",data).attr('id');				
-			var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
-			$.ajax({
-				type : "POST",
-				dataType : "text",
-				url : urlS,
-				data : "",
-				success : function(data) {
-					$("#batch-log").append("<br>- node added at ("+destid+") - semtag="+semtag+ " source="+source);
-					processNextAction();
-				},
-				error : function(data) {
-					$("#batch-log").append("<br>- ERROR in import node("+destid+") - semtag="+semtag+ " source="+source);
-					processNextAction();
-				}
-			});
+			var nodes = $("node",data);
+			import_nodes(nodes,semtag,source,srcetag,srcecode);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR in import node("+destid+") - semtag="+semtag+ " source="+source);
+			$("#batch-log").append("<br>- ERROR in import NOT FOUND - semtag="+semtag+ " source="+source);
 			processNextAction();
 		}
 	});
 }
 
+//===========================
+function import_nodes(nodes,semtag,source,srcetag,srcecode)
+//===========================
+{
+	if (nodes.length>0) {
+		var destid = $(nodes[0]).attr('id');
+		nodes = nodes.slice(1,nodes.length);
+		var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+		$.ajax({
+			type : "POST",
+			dataType : "text",
+			url : urlS,
+			data : "",
+			destid:destid,
+			nodes:nodes,
+			success : function(data) {
+				$("#batch-log").append("<br>- node added at ("+this.destid+") - semtag="+semtag+ " source="+source);
+				import_nodes(this.nodes,semtag,source,srcetag,srcecode);
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ERROR in import node("+this.destid+") - semtag="+semtag+ " source="+source);
+				import_nodes(this.nodes,semtag,source,srcetag,srcecode);
+			}
+		});
+	} else{
+		processNextAction();
+	}
+}
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //------------------------- Moveup Node ----------------------------------
@@ -1263,7 +1340,7 @@ g_actions['import-node'] = function importNode(node)
 //-----------------------------------------------------------------------
 
 //=================================================
-g_actions['moveup-node'] = function moveupNode(node)
+g_actions['moveup-node'] = function moveupNode(node,semtag)
 //=================================================
 {
 	var select = $(node).attr("select");
@@ -1276,28 +1353,41 @@ g_actions['moveup-node'] = function moveupNode(node)
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 		success : function(data) {
-			var nodeid = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data).attr('id');
-			$.ajax({
-				type : "POST",
-				dataType : "text",
-				url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/moveup",
-				success : function(data) {
-					$("#batch-log").append("<br>- node moved up - nodeid("+nodeid+") - semtag="+semtag);
-					processNextAction();
-				},
-				error : function(jqxhr,textStatus) {
-					$("#batch-log").append("<br>- ERROR in moveup node - nodeid("+denodeidstid+") - semtag="+semtag);
-					processNextAction();
-				}
-			});
+			var nodes = $("node",data);
+			moveup_nodes(nodes,semtag);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR in moveup node - nodeid("+denodeidstid+") - semtag="+semtag);
+			$("#batch-log").append("<br>- NOT FOUND ERROR in moveup node - semtag="+semtag);
 			processNextAction();
 		}
 	});
+}
 
-
+//===========================
+function moveup_nodes(nodes,semtag)
+//===========================
+{
+	if (nodes.length>0) {
+		var currentid = $(nodes[0]).attr('id');
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			type : "POST",
+			dataType : "text",
+			current:currentid,
+			nodes:nodes,
+			url : "../../../"+serverBCK+"/nodes/node/" + currentid + "/moveup",
+			success : function(data) {
+				$("#batch-log").append("<br>- node moved up - nodeid("+this.current+") - semtag="+semtag);
+				moveup_nodes(this.nodes,semtag);
+			},
+			error : function(jqxhr,textStatus) {
+				$("#batch-log").append("<br>- ERROR in moveup node - nodeid("+this.current+") - semtag="+semtag);
+				moveup_nodes(this.nodes);
+			}
+		});
+	} else{
+		processNextAction();
+	}
 }
 
 
@@ -1313,6 +1403,10 @@ g_actions['moveup-node'] = function moveupNode(node)
 function processCode()
 //=================================================
 {
+	
+	g_json = {};
+	g_json['lines'] = [];
+	g_json['lines'][0] = 'no_json';// there is no json
 	var model_code = $("#batch-model_code").val();
 	getModelAndProcess(model_code);
 }

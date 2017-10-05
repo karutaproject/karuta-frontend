@@ -445,7 +445,7 @@ karutaStr['en']['startday']="Start day";
 karutaStr['en']['time']="Time (HH:MM)";
 karutaStr['en']['freq']="Frequency";
 karutaStr['en']['execroles']="Roles - Execute";
-karutaStr['en']['rexec']="Execute Now";
+karutaStr['en']['exec']="Execute Now";
 
 
 
