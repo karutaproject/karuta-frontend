@@ -105,13 +105,18 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 		{
 			// Cleanup url
 			// Youtube
-			if( url.indexOf('youtube') != -1 || url.indexOf('youtu.be') != -1 )
+			if( url.indexOf('youtube') != -1)
 			{
 				var vid = /v=([^&]*)&?/i;
 				var v = url.match(vid);
-				url = url.replace(vid, '');
-				url = url.replace('/watch', '/embed/'+v[1]);
-				url = url.replace('&feature=youtu.be','');
+				if (v!=null) {
+					url = url.replace(vid, '');
+					url = url.replace('/watch', '/embed/'+v[1]);
+					url = url.replace('&feature=youtu.be','');
+				}
+			} else if (url.indexOf('youtu.be') != -1) {
+				var youtube_code = url.substring(url.lastIndexOf('/')+1);
+				url = "https://www.youtube.com/embed/" + youtube_code;
 			}
 			// Vimeo
 			else if( url.indexOf('vimeo') != -1 )

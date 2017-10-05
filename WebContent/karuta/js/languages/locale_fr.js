@@ -137,7 +137,7 @@ karutaStr['fr']['menuroles3']=",rôles[;autre menu]</span>";
 karutaStr['fr']['help']="Information <br/><span style='font-size:smaller'>";
 karutaStr['fr']['help2']="texte en français@fr";
 karutaStr['fr']['help3']="</span>";
-karutaStr['fr']['font-size']="Taille police (en pixels)";
+karutaStr['fr']['font-size']="Taille police (en points)";
 karutaStr['fr']['font-weight']="Poids de la police";
 karutaStr['fr']['font-style']="Style de la police";
 karutaStr['fr']['color']="Couleur de la police";

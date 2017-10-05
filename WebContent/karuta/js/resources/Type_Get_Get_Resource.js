@@ -302,12 +302,28 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			var portfoliocode_parent = $("portfoliocode",$("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent)).text();
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 			var url ="";
-			if (portfoliocode=='?'){
+			if (portfoliocode.indexOf('?')!= -1) {
+				if (code_parent.indexOf("@")>-1) {
+					display_code_parent = false;
+					code_parent =code_parent.substring(0,code_parent.indexOf("@"))+code_parent.substring(code_parent.indexOf("@")+1);
+				}
+				if (code_parent.indexOf("#")>-1) {
+					code_parent = code_parent.substring(0,code_parent.indexOf("#"))+code_parent.substring(code_parent.indexOf("#")+1);
+				}
 				$(this.portfoliocode_node).text(code_parent);
+				portfoliocode = code_parent;
 				url = "../../../"+serverBCK+"/nodes?portfoliocode="+code_parent+"&semtag="+semtag;
 			}
 			else if (portfoliocode=='parent?'){
+				if (portfoliocode_parent.indexOf("@")>-1) {
+					display_portfoliocode_parent = false;
+					portfoliocode_parent =portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("@"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("@")+1);
+				}
+				if (portfoliocode_parent.indexOf("#")>-1) {
+					portfoliocode_parent = portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("#"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("#")+1);
+				}
 				$(this.portfoliocode_node).text(portfoliocode_parent);
+				portfoliocode = portfoliocode_parent;
 				url = "../../../"+serverBCK+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
 			} else {
 				$(this.portfoliocode_node).text(portfoliocode);
@@ -318,8 +334,9 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				type : "GET",
 				dataType : "xml",
 				url : url,
+				portfoliocode:portfoliocode,
 				success : function(data) {
-					UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce);
+					UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode);
 				},
 				error : function(jqxhr,textStatus) {
 					$("#"+destid).html("No result");
@@ -334,7 +351,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 
 
 //==================================
-UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce) {
+UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,portfoliocode) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -567,7 +584,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			if (code.indexOf("#")>-1) {
 				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 			}
-			input += "<div> <input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
+			input += "<div> <input type='checkbox' portfoliocode='"+portfoliocode+"' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 			input += "' ";
 			for (var j=0; j<languages.length;j++){
 				input += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
@@ -938,6 +955,22 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags)
 };
 
 //==================================
+UIFactory["Get_Get_Resource"].importMultiple = function(parentid,srce)
+//==================================
+{
+	$.ajaxSetup({async: false});
+	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
+	var databack = true;
+	var callback = UIFactory.Node.reloadUnit;
+	for (var j=0; j<inputs.length;j++){
+		var code = $(inputs[j]).attr('code');
+		if (srce=='?')
+			srce = $(inputs[j]).attr('portfoliocode');
+		importBranch(parentid,srce,code,databack,callback);
+	}
+}
+
+//==================================
 UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semtag,selected_item,last)
 //==================================
 {
@@ -1007,4 +1040,27 @@ function get_get_multiple(parentid,title,query,partcode,get_get_resource_semtag)
 	getgetResource.displayEditor("get-get-resource-node");
 	$('#edit-window').modal('show');
 
+}
+
+//==================================
+function import_ggmultiple(parentid,title,query,partcode,get_get_resource_semtag)
+//==================================
+{
+	var langcode = LANGCODE;
+	//---------------------
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var js2 = "UIFactory.Get_Get_Resource.importMultiple('"+parentid+"','"+partcode+"')";
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(title);
+	var html = "<div id='get-get-resource-node'></div>";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	getgetResource.multiple = query+"/"+partcode+","+get_get_resource_semtag;
+	getgetResource.displayEditor("get-get-resource-node");
+	$('#edit-window').modal('show');
 }

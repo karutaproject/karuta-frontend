@@ -946,6 +946,122 @@ g_actions['update-resource'] = function updateResource(node)
 		});
 	}
 	//----------------------------------------------------
+	if (type=='Metadata') {
+		var attribute = $(node).attr("attribute");
+		var text = getTxtvals($("text",node));
+		if ($("source",node).length>0){
+			var source_select = $("source",node).attr("select");
+			var source_idx = source_select.indexOf(".");
+			var source_treeref = source_select.substring(0,source_idx);
+			var source_semtag = source_select.substring(source_idx+1);
+			if (source_semtag=="UUID")
+				text = g_trees[source_treeref][0];
+		}
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			success : function(data) {
+				var nodes = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmUnitStructure:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmUnit:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmStructure:has(metadata[semantictag='"+semtag+"'])",data);
+				var nb = nodes.length;
+				var nodeid ="";
+				for (var i=0; i<nb; i++){
+					nodeid = $(nodes[i]).attr('id');
+					var metadata = $("metadata",nodes[i]);
+					$(metadata).attr(attribute,text);
+					var xml = xml2string(metadata[0]);;
+					$.ajax({
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						nodeid : nodeid,
+						semtag : semtag,
+						url : "../../../"+serverBCK+"/nodes/node/" + nodeid+"/metadata",
+						idx : i,
+						nb : nb-1,
+						success : function(data) {
+							$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag+" "+this.idx+" "+this.nb+" - "+(this.idx==this.nb));
+							processNextAction();
+						},
+						error : function(data,nodeid,semtag) {
+							$("#batch-log").append("<br>- ERROR in update metadata("+this.nodeid+") - semtag="+this.semtag);
+							processNextAction();
+						}
+					});
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ERROR in update metadata("+this.nodeid+") - semtag="+this.semtag);
+				processNextAction();
+			}
+		});
+	}
+	//----------------------------------------------------
+	if (type=='MetadataWad') {
+		var attribute = $(node).attr("attribute");
+		var text = getTxtvals($("text",node));
+		if ($("source",node).length>0){
+			var source_select = $("source",node).attr("select");
+			var source_idx = source_select.indexOf(".");
+			var source_treeref = source_select.substring(0,source_idx);
+			var source_semtag = source_select.substring(source_idx+1);
+			if (source_semtag=="UUID")
+				text = g_trees[source_treeref][0];
+		}
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			success : function(data) {
+				var nodes = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmUnitStructure:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmUnit:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmStructure:has(metadata[semantictag='"+semtag+"'])",data);
+				var nb = nodes.length;
+				var nodeid ="";
+				for (var i=0; i<nb; i++){
+					nodeid = $(nodes[i]).attr('id');
+					var metadatawad = $("metadata-wad",nodes[i]);
+					$(metadatawad).attr(attribute,text);
+					var xml = xml2string(metadatawad[0]);;
+					$.ajax({
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						nodeid : nodeid,
+						semtag : semtag,
+						url : "../../../"+serverBCK+"/nodes/node/" + nodeid+"/metadatawad",
+						idx : i,
+						nb : nb-1,
+						success : function(data) {
+							$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+")- attribute="+attribute+" - semtag="+this.semtag+" "+this.idx+" "+this.nb+" - "+(this.idx==this.nb));
+							processNextAction();
+						},
+						error : function(data,nodeid,semtag) {
+							$("#batch-log").append("<br>- ERROR in update metadatawad("+this.nodeid+")- attribute="+attribute+" - semtag="+this.semtag);
+							processNextAction();
+						}
+					});
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ERROR in update metadatawad("+this.nodeid+")- attribute="+attribute+" - semtag="+this.semtag);
+				processNextAction();
+			}
+		});
+	}
+	//----------------------------------------------------
 	if (type=='Dashboard') {
 		var text = getTxtvals($("text",node));
 		if ($("source",node).length>0){
