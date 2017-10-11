@@ -15,6 +15,10 @@
 
 window.onload = function()
 {
+	/// Remove wait div
+	var wait = document.getElementById("wait-window");
+	wait.parentElement.removeChild(wait);
+	
 	/// Fix welcome page
 	var blocks = document.getElementsByClassName("welcome-block");
 	while( blocks.length )  // Selector is re-evaluated with classList remove
