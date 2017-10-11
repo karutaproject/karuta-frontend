@@ -616,10 +616,15 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		$(window).scrollTop(0);
 		g_current_page = uuid;
 	}
+	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
+	if ((name == 'asmUnit' || name=='asmStructure') && $(UICom.structure['ui'][uuid].node).children().length==5) {// content is not loaded or empty 5 = 3 metadata + 2 resources
+		$("#wait-window").modal('show');
+		UIFactory.Node.loadNode(uuid);
+	}
 	if (depth==null)
 		depth=100;
 	if (name=='asmRoot' || name=='asmStructure')
@@ -639,7 +644,7 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		if (type=='model')
 			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 	}
-	$("#wait-window").modal('hide');			
+	$("#wait-window").modal('hide');
 }
 
 //==================================

@@ -85,6 +85,8 @@ function processAll()
 //=================================================
 {
 	$.ajaxSetup({async: false});
+	get_list_portfoliosgroups();
+	get_list_usersgroups();
 	g_nodesLine = selectAll();
 	g_noline = 0;
 	g_nodes = g_nodesLine;
@@ -106,8 +108,8 @@ function processNextLine()
 					$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
 				}, 2000);
 		}
-		$.ajaxSetup({async: true});		
-	}	
+		$.ajaxSetup({async: true});
+	}
 }
 
 //=================================================
@@ -1238,37 +1240,57 @@ g_actions['share-usergroup'] = function shareUserGroup(node)
 	var treeref = $(node).attr("select");
 	var role = getTxtvals($("role",node));
 	var usergroupname = getTxtvals($("groupname",node));
-		var usergroupid = get_usergroupid(usergroupname);
-		var users = get_usersxml_from_group(usergroupid);
-	if (users.length>20) {
-		//---- get role groupid ----------
-		var groupid = "";
-		var url = "../../../"+serverBCK+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
-		$.ajax({
-			type : "GET",
-			contentType: "text/html",
-			dataType : "text",
-			url : url,
-			success : function(data) {
-				groupid = data;
-				//---- share tree --------------
-				var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+	var usergroupid = get_usergroupid(usergroupname);
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/usersgroups?group="+usergroupid,
+		success : function(data) {
+			var users = "<users>" + $($("users",data)[0]).html() + "</users>";
+			if (users.length>20) {
+				//---- get role groupid ----------
+				var groupid = "";
+				var url = "../../../"+serverBCK+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
 				$.ajax({
-					type : "POST",
-					contentType: "application/xml",
-					dataType : "xml",
+					type : "GET",
+					contentType: "text/html",
+					dataType : "text",
 					url : url,
-					data : users,
 					success : function(data) {
-						$("#batch-log").append("<br>tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+						groupid = data;
+						//---- share tree --------------
+						var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+						$.ajax({
+							type : "POST",
+							contentType: "application/xml",
+							dataType : "xml",
+							url : url,
+							data : users,
+							success : function(data) {
+								$("#batch-log").append("<br>tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+								processNextAction();
+							},
+							error : function(data) {
+								$("#batch-log").append("<br>- ERROR tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+								processNextAction();
+							}
+						});
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- ERROR tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
 						processNextAction();
 					}
 				});
+			} else {
+				$("#batch-log").append("<br>ERROR Empty group - tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+				processNextAction();
 			}
-		});
-	} else {
-		processNextAction();
-	}
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ERROR tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+			processNextAction();
+		}
+	});
 }
 
 //-----------------------------------------------------------------------
@@ -1350,35 +1372,46 @@ g_actions['unshare-usergroup'] = function unshareUserGroup(node)
 	var role = getTxtvals($("role",node));
 	var usergroupname = getTxtvals($("groupname",node));
 	var usergroupid = get_usergroupid(usergroupname);
-	var users = get_users_from_group(usergroupid);
-	var groupid = "";
-	var url = "../../../"+serverBCK+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
 	$.ajax({
 		type : "GET",
-		contentType: "text/html",
-		dataType : "text",
-		url : url,
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/usersgroups?group="+groupid,
 		success : function(data) {
-			groupid = data;
-			for (var i=0; i<users.length; i++){
-				var userid = $(users[i]).attr('id');
-				var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+userid;
-				$.ajax({
-					type : "DELETE",
-					contentType: "application/xml",
-					dataType : "xml",
-					url : url,
-					data : "",
-					success : function(data) {
-						$("#batch-log").append("<br>tree with usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
-						processNextAction();
-					},
-					error : function(jqxhr,textStatus) {
-						$("#batch-log").append("<br>- ERROR in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
-						processNextAction();
+			var users = $("user",data);
+			var groupid = "";
+			var url = "../../../"+serverBCK+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
+			$.ajax({
+				type : "GET",
+				contentType: "text/html",
+				dataType : "text",
+				url : url,
+				success : function(data) {
+					groupid = data;
+					for (var i=0; i<users.length; i++){
+						var userid = $(users[i]).attr('id');
+						var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+userid;
+						$.ajax({
+							type : "DELETE",
+							contentType: "application/xml",
+							dataType : "xml",
+							url : url,
+							data : "",
+							success : function(data) {
+								$("#batch-log").append("<br>tree with usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
+								processNextAction();
+							},
+							error : function(jqxhr,textStatus) {
+								$("#batch-log").append("<br>- ERROR in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
+								processNextAction();
+							}
+						});
 					}
-				});
-			}
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ERROR in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
+					processNextAction();
+				}
+			});
 		},
 		error : function(data) {
 			$("#batch-log").append("<br>- ERROR in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
@@ -1601,6 +1634,8 @@ function get_usergroupid(groupname)
 //==============================
 {
 	var groupid = null;
+	if (UsersGroups_list.length==0)
+		get_list_usersgroups();
 	for (var i=0;i<UsersGroups_list.length;i++){
 		if (UsersGroups_list[i].label==groupname){
 			groupid = UsersGroups_list[i].id;
@@ -1608,39 +1643,6 @@ function get_usergroupid(groupname)
 		}
 	}
 	return groupid;
-}
-
-//==============================
-function get_usersxml_from_group(groupid)
-//==============================
-{
-	var xml = "<users>";
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?group="+groupid,
-		success : function(data) {
-			xml += $($("users",data)[0]).html();
-		}
-	});
-	xml += "</users>";
-	return xml;
-}
-
-//==============================
-function get_users_from_group(groupid)
-//==============================
-{
-	var users = null;
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?group="+groupid,
-		success : function(data) {
-			users = $("user",data);
-		}
-	});
-	return users;
 }
 
 //==================================================

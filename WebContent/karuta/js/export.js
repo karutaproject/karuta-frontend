@@ -105,6 +105,7 @@ function export_html()
 		}
 		else  // No more link to click
 		{
+			$("#wait-window-body").html("");
 			clearInterval(timer);
 			
 			// Send data to the backend

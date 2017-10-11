@@ -1120,7 +1120,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (model_code!='') {
 					$.ajax({
 						type : "GET",
-						url : serverREP+"/"+uuid+".html",
+						url : "../../../"+serverREP+"/"+uuid+".html",
 						dataType: 'html',
 						headers: {
 		                    'Access-Control-Allow-Origin': '*'
@@ -1569,7 +1569,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				if (model_code!='') {
 					$.ajax({
 						type : "GET",
-						url : serverREP+"/"+uuid+".html",
+						url : "../../../"+serverREP+"/"+uuid+".html",
 						dataType: 'html',
 						headers: {
 		                    'Access-Control-Allow-Origin': '*'
@@ -3234,6 +3234,31 @@ UIFactory['Node'].reloadUnit = function()
 	});
 	$.ajaxSetup({async: true});
 };
+
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//------------------------ LOAD ----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+
+//==================================================
+UIFactory['Node'].loadNode = function(uuid)
+//==================================================
+{
+	var parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
+	$.ajaxSetup({async: false});
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : "../../../"+serverBCK+"/nodes/node/" + uuid,
+		success : function(data) {
+			UICom.parseStructure(data,false,parentid);
+			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
+		}
+	});
+	$.ajaxSetup({async: true});
+};
+
 
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------

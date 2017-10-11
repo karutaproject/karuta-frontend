@@ -7,11 +7,11 @@ var karutaname = 'karuta2.3'; // to share the same 'karuta-core' with multiple f
 var karuta_url = '../../../' + karutaname;
 var bckname = '2.3';
 var serverBCK = "karuta-backend"+bckname+"/rest/api";
-var serverFIL = "karuta-backend"+bckname;
-var serverVER = "karuta-backend"+bckname;
-var serverREG = "karuta-backend"+bckname;
+var serverFIL = "karuta-backend"+bckname; // fileserver backend
+var serverVER = "karuta-backend"+bckname; // version server
+var serverREG = "karuta-backend"+bckname; // user registration server
 var serverCONF = "karuta-backend"+bckname;
-var serverREP = "karuta-backend"+bckname;
+var serverREP = "karuta-backend"+bckname; // delayed report server
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';
