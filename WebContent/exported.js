@@ -15,10 +15,9 @@
 
 window.onload = function()
 {
-	/// Remove wait div
-	var wait = document.getElementById("wait-window");
-	wait.parentElement.removeChild(wait);
-	
+	removeElement("navigation-bar");
+	removeElement("wait-window");
+	removeElement("collapse-2");
 	/// Fix welcome page
 	var blocks = document.getElementsByClassName("welcome-block");
 	while( blocks.length )  // Selector is re-evaluated with classList remove
@@ -68,3 +67,34 @@ function displayPage(id)
 	content.appendChild(div.cloneNode(true));
 };
 
+function removeClass(classname) {
+	var elts = document.getElementsByClassName(classname);
+	while( elts.length )  // Selector is re-evaluated with classList remove
+	{
+		var b = elts[0];
+		b.classList.remove(classname);
+	}
+}
+
+function removeElement(childid) {
+	var child = document.getElementById(childid);
+	child.parentNode.removeChild(child);
+}
+
+
+//==================================
+function toggleSideBar() {
+//==================================
+	var sidebar = document.getElementById("sidebar");
+	var contenu = document.getElementById("contenu");
+	if (sidebar.style.display == 'none')
+	{
+		sidebar.style.display = 'block';
+		contenu.classList.remove("col-md-12");
+		contenu.classList.add("col-md-9");
+	} else {
+		sidebar.style.display = 'none';
+		contenu.classList.remove("col-md-9");
+		contenu.classList.add("col-md-12");
+	}
+}
