@@ -116,7 +116,7 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 	var html ="";
 	if (type=='html5') {
 		html += "<audio controls>";
-		var srce = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp3";
+		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp3";
 		html += "<source src='"+srce+"' type='audio/mpeg'/>";
 		html += "</audio>";		
 	}
@@ -178,7 +178,7 @@ UIFactory["Audio"].prototype.setParameter = function(langcode)
 	//---------------------
 	var destid = "jquery_jplayer_"+this.id;
 	var cssSelectorAncestor = "#jp_container_"+this.id;
-	var srce = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
+	var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	$("#"+destid).jPlayer({
 		cssSelectorAncestor:cssSelectorAncestor,
 		ready: function () {
@@ -256,7 +256,7 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 	//---------------------
 	var html ="";
 	html += "<div class='audio-video-format'>Format: mp3</div>"
-	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
+	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html +=" <div id='div_f_"+this.id+"_"+langcode+"'>";
 	html +=" <input id='f_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</div>";

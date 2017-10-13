@@ -165,7 +165,7 @@ function displayOnePage()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/credential",
+		url : serverBCK_API+"/credential",
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
@@ -174,7 +174,7 @@ function displayOnePage()
 					Accept: "application/xml",
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/credential/group/" + pageid,
+					url : serverBCK_API+"/credential/group/" + pageid,
 					success : function(data) {
 						var usergroups = $("group",data);
 						for (var i=0;i<usergroups.length;i++) {
@@ -194,7 +194,7 @@ function displayOnePage()
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/nodes/node/" + pageid + "?resources=true",
+					url : serverBCK_API+"/nodes/node/" + pageid + "?resources=true",
 					success : function(data) {
 						UICom.parseStructure(data);
 						if (type=='standard')

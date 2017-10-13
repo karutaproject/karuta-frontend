@@ -312,7 +312,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				}
 				$(this.portfoliocode_node).text(code_parent);
 				portfoliocode = code_parent;
-				url = "../../../"+serverBCK+"/nodes?portfoliocode="+code_parent+"&semtag="+semtag;
+				url = serverBCK_API+"/nodes?portfoliocode="+code_parent+"&semtag="+semtag;
 			}
 			else if (portfoliocode=='parent?'){
 				if (portfoliocode_parent.indexOf("@")>-1) {
@@ -324,10 +324,10 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				}
 				$(this.portfoliocode_node).text(portfoliocode_parent);
 				portfoliocode = portfoliocode_parent;
-				url = "../../../"+serverBCK+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
 			} else {
 				$(this.portfoliocode_node).text(portfoliocode);
-				url = "../../../"+serverBCK+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
 			}
 			var self = this;
 			$.ajax({
@@ -676,14 +676,14 @@ UIFactory["Get_Get_Resource"].prototype.redisplayEditor = function(destid,type,l
 			var url ="";
 			if (portfoliocode=='?'){
 				$(this.portfoliocode_node).text(code_parent);
-				url = "../../../"+serverBCK+"/nodes?portfoliocode="+code_parent+"&semtag="+semtag;
+				url = serverBCK_API+"/nodes?portfoliocode="+code_parent+"&semtag="+semtag;
 			}
 			else if (portfoliocode=='parent?'){
 				$(this.portfoliocode_node).text(portfoliocode_parent);
-				url = "../../../"+serverBCK+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
 			} else {
 				$(this.portfoliocode_node).text(portfoliocode);
-				url = "../../../"+serverBCK+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
 			}
 			var self = this;
 			$.ajax({
@@ -988,16 +988,16 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes/node/"+partid,
+		url : serverBCK_API+"/nodes/node/"+partid,
 		last : last,
 		success : function(data) {
 //			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
 			var nodeid = $("*:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
-			var url_resource = "../../../"+serverBCK+"/resources/resource/" + nodeid;
+			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
 			var tagname = $( ":root",data )[ 0 ].nodeName;
 			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
 				xml = xml.replace("Get_Resource","nodeRes");
-				url_resource = "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource";
+				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
 			}
 			$.ajax({
 				type : "PUT",

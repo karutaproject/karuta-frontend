@@ -138,7 +138,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 			var owner = (Users_byid[portfolio.ownerid]==null) ? "":Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
 			if (portfolio.semantictag!= undefined && portfolio.semantictag.indexOf('karuta-project')>-1 && portfoliocode!='karuta.project'){
 					if (number_of_projects>0) {
-						$("#export-"+projects_list[number_of_projects-1].uuid).attr("href","../../../"+serverBCK+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
+						$("#export-"+projects_list[number_of_projects-1].uuid).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
 					}
 					var portfolio_label = portfolio.label_node[langcode].text();
 					if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
@@ -235,7 +235,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						UIFactory["Portfolio"].displayTree(nb,dest,type,langcode,parentcode);
 					else {
 						if (number_of_projects>0) {
-							$("#export-"+projects_list[number_of_projects-1].uuid).attr("href","../../../"+serverBCK+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
+							$("#export-"+projects_list[number_of_projects-1].uuid).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
 						}
 						else
 							$("#portfolios-label").html(karutaStr[LANG]['portfolios']);
@@ -404,8 +404,8 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 				if (semtag.indexOf('karuta-model')>-1 || semtag.indexOf('karuta-batch-form')>-1)
 					html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].instantiate('"+this.id+"','"+this.code_node.text()+"-instance',true)\" ><i class='fa fa-file-o'></i><i class='fa fa-file'></i> "+karutaStr[LANG]["button-instantiate"]+"</a></li>";
 				html += "<li><a onclick=\"UIFactory['Portfolio'].remove('"+this.id+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
-				html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
-				html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&files=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-with-files"]+"</a></li>";
+				html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
+				html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+this.id+"?resources=true&files=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-with-files"]+"</a></li>";
 			} else {
 				if (USER.admin){
 					html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+gid+"','"+this.id+"')\" ><span class='glyphicon glyphicon-remove'></span> "+karutaStr[LANG]["button-remove-from-group"]+"</a></li>";
@@ -424,8 +424,8 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 				html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].copy('"+this.id+"','"+this.code_node.text()+"-copy',true)\" ><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i> "+karutaStr[LANG]["button-duplicate"]+"</a></li>";
 				if (semtag.indexOf('karuta-model')>-1)
 					html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].instantiate('"+this.id+"','"+this.code_node.text()+"-instance',true)\" ><i class='fa fa-file-o'></i><i class='fa fa-file'></i> "+karutaStr[LANG]["button-instantiate"]+"</a></li>";
-				html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
-				html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+this.id+"?resources=true&files=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-with-files"]+"</a></li>";
+				html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
+				html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+this.id+"?resources=true&files=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-with-files"]+"</a></li>";
 			} else {
 //				html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+gid+"','"+this.id+"')\" ><span class='glyphicon glyphicon-remove'></span> "+karutaStr[LANG]["button-delete"]+"</a></li>";
 			}
@@ -609,7 +609,7 @@ UIFactory["Portfolio"].prototype.setOwner = function(newuserid)
 	$.ajaxSetup({async: false});
 	//----------------
 			var uuid = this.id;
-			var url = "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "/setOwner/"+newuserid;
+			var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "/setOwner/"+newuserid;
 			$.ajax({
 				type : "PUT",
 				contentType: "application/xml",
@@ -633,7 +633,7 @@ UIFactory["Portfolio"].reload = function(portfolioid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
 		}
@@ -647,7 +647,7 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
 			UIFactory["Portfolio"].parse(data);
@@ -772,7 +772,7 @@ UIFactory["Portfolio"].create = function(parentcode)
 				type : "POST",
 				contentType: "application/xml",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/portfolios",
+				url : serverBCK_API+"/portfolios",
 				data : xml,
 				success : function(data) {
 					window.location.reload();
@@ -900,7 +900,7 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 //==================================
 {
 	var result = "";
-	var url = "../../../"+serverBCK+"/portfolios/portfolio/code/" + code +( (resources)?"?resources=true":"");
+	var url = serverBCK_API+"/portfolios/portfolio/code/" + code +( (resources)?"?resources=true":"");
 	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
@@ -921,7 +921,7 @@ UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode,callb
 //==================================
 {
 	var uuid = null;
-	var url = "../../../"+serverBCK+"/portfolios/instanciate/null?sourcecode="+sourcecode+"&targetcode="+targetcode+"&owner=true";
+	var url = serverBCK_API+"/portfolios/instanciate/null?sourcecode="+sourcecode+"&targetcode="+targetcode+"&owner=true";
 	$.ajaxSetup({async: false});
 	$.ajax({
 			type : "POST",
@@ -948,7 +948,7 @@ UIFactory["Portfolio"].instantiate = function(templateid,targetcode,reload)
 //==================================
 {
 	var uuid = null;
-	var url = "../../../"+serverBCK+"/portfolios/instanciate/"+templateid+"?targetcode="+targetcode+"&owner=true";
+	var url = serverBCK_API+"/portfolios/instanciate/"+templateid+"?targetcode="+targetcode+"&owner=true";
 	$.ajaxSetup({async: false});
 	$.ajax({
 			type : "POST",
@@ -975,7 +975,7 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 //==================================
 {
 	var uuid = null;
-	var url = "../../../"+serverBCK+"/portfolios/instanciate/"+templateid+"?targetcode="+targetcode+"&owner=true";
+	var url = serverBCK_API+"/portfolios/instanciate/"+templateid+"?targetcode="+targetcode+"&owner=true";
 	$.ajaxSetup({async: false});
 	$.ajax({
 			type : "POST",
@@ -989,7 +989,7 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 					async:false,
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
+					url : serverBCK_API+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
 					success : function(data) {
 						var nodeid = $("asmRoot",data).attr('id');
 						var xml = "<asmResource xsi_type='nodeRes'>";
@@ -1003,7 +1003,7 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 							contentType: "application/xml",
 							dataType : "text",
 							data : xml,
-							url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
+							url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
 							success : function(data) {
 								$("#wait-window").hide();
 								if (reload!=null && reload)
@@ -1026,7 +1026,7 @@ UIFactory["Portfolio"].copy_bycode = function(sourcecode,targetcode,reload)
 //==================================
 {
 	var uuid = null;
-	var url = "../../../"+serverBCK+"/portfolios/copy/null?sourcecode="+sourcecode+"&targetcode="+targetcode+"&owner=true";;
+	var url = serverBCK_API+"/portfolios/copy/null?sourcecode="+sourcecode+"&targetcode="+targetcode+"&owner=true";;
 	$.ajaxSetup({async: false});
 	$.ajax({
 			type : "POST",
@@ -1053,7 +1053,7 @@ UIFactory["Portfolio"].copy = function(templateid,targetcode,reload)
 //==================================
 {
 	var uuid = null;
-	var url = "../../../"+serverBCK+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";;
+	var url = serverBCK_API+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";;
 	$.ajaxSetup({async: false});
 	$.ajax({
 			type : "POST",
@@ -1080,7 +1080,7 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 //==================================
 {
 	var uuid = null;
-	var url = "../../../"+serverBCK+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";
+	var url = serverBCK_API+"/portfolios/copy/"+templateid+"?targetcode="+targetcode+"&owner=true";
 	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "POST",
@@ -1094,7 +1094,7 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 				async:false,
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
+				url : serverBCK_API+"/nodes?portfoliocode=" + targetcode + "&semtag="+rootsemtag,
 				success : function(data) {
 					var nodeid = $("asmRoot",data).attr('id');
 					var xml = "<asmResource xsi_type='nodeRes'>";
@@ -1108,7 +1108,7 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 						contentType: "application/xml",
 						dataType : "text",
 						data : xml,
-						url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
+						url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
 						success : function(data) {
 							$("#wait-window").hide();
 							$('#edit-window').modal('hide');
@@ -1146,7 +1146,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 	var html = "";
 	$("#edit-window-body").html($(html));
 	//--------------------------
-	var url = "../../../"+serverBCK+"/portfolios";
+	var url = serverBCK_API+"/portfolios";
 	//--------------------------
 	var project = "";
 	html +="<div class='dropdown'>";
@@ -1208,7 +1208,7 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	var html = "";
 	$("#edit-window-body").html($(html));
 	//--------------------------
-	var url = "../../../"+serverBCK+"/portfolios/zip";
+	var url = serverBCK_API+"/portfolios/zip";
 	//--------------------------
 	var project = "";
 	html +="<div class='dropdown'>";
@@ -1265,7 +1265,7 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 UIFactory["Portfolio"].remove = function(portfolioid) 
 //==================================
 {
-	var url = "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?active=false";
+	var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?active=false";
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -1294,7 +1294,7 @@ UIFactory["Portfolio"].remove = function(portfolioid)
 UIFactory["Portfolio"].restore = function(portfolioid) 
 //==================================
 {
-	var url = "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?active=true";
+	var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?active=true";
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -1343,7 +1343,7 @@ UIFactory["Portfolio"].removeProject = function(projectid,projectcode)
 		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
 		if (projectcode==prefix || projectcode==portfoliocode) {
 			var uuid = portfolios_list[i].id;
-			var url = "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "?active=false";
+			var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "?active=false";
 			$.ajax({
 				type : "PUT",
 				contentType: "application/xml",
@@ -1365,7 +1365,7 @@ UIFactory["Portfolio"].removeProject = function(projectid,projectcode)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1",
+		url : serverBCK_API+"/portfolios?active=1",
 		success : function(data) {
 			var destid = $("div[id='portfolios']");
 			UIFactory["Portfolio"].parse(data);
@@ -1381,7 +1381,7 @@ UIFactory["Portfolio"].removeProject = function(projectid,projectcode)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=false",
+		url : serverBCK_API+"/portfolios?active=false",
 		success : function(data) {
 			var destid = $("div[id='bin']");
 			UIFactory["Portfolio"].parseBin(data);
@@ -1405,7 +1405,7 @@ UIFactory["Portfolio"].restoreProject = function(projectid,projectcode)
 		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
 		if (projectcode==prefix || projectcode==portfoliocode) {
 			var uuid = bin_list[i].id;
-			var url = "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "?active=true";
+			var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "?active=true";
 			$.ajax({
 				type : "PUT",
 				contentType: "application/xml",
@@ -1426,7 +1426,7 @@ UIFactory["Portfolio"].restoreProject = function(projectid,projectcode)
 /*	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1",
+		url : serverBCK_API+"/portfolios?active=1",
 		success : function(data) {
 			var destid = $("div[id='portfolios']");
 			UIFactory["Portfolio"].parse(data);
@@ -1443,7 +1443,7 @@ UIFactory["Portfolio"].restoreProject = function(projectid,projectcode)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=false",
+		url : serverBCK_API+"/portfolios?active=false",
 		success : function(data) {
 			var destid = $("div[id='bin']");
 			UIFactory["Portfolio"].parseBin(data);
@@ -1467,7 +1467,7 @@ UIFactory["Portfolio"].delProject = function(projectid,projectcode)
 		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
 		if (projectcode==prefix || projectcode==portfoliocode) {
 			var uuid = bin_list[i].id;
-			var url = "../../../"+serverBCK+"/portfolios/portfolio/" + uuid;
+			var url = serverBCK_API+"/portfolios/portfolio/" + uuid;
 			$.ajax({
 				type : "DELETE",
 				contentType: "application/xml",
@@ -1486,7 +1486,7 @@ UIFactory["Portfolio"].delProject = function(projectid,projectcode)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1",
+		url : serverBCK_API+"/portfolios?active=1",
 		success : function(data) {
 			var destid = $("div[id='portfolios']");
 			UIFactory["Portfolio"].parse(data);
@@ -1502,7 +1502,7 @@ UIFactory["Portfolio"].delProject = function(projectid,projectcode)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=false",
+		url : serverBCK_API+"/portfolios?active=false",
 		success : function(data) {
 			var destid = $("div[id='bin']");
 			UIFactory["Portfolio"].parseBin(data);
@@ -1521,7 +1521,7 @@ UIFactory["Portfolio"].delProject = function(projectid,projectcode)
 UIFactory["Portfolio"].del = function(portfolioid) 
 //==================================
 {
-	var url = "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid;
+	var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid;
 	$.ajax({
 		type : "DELETE",
 		contentType: "application/xml",
@@ -1550,7 +1550,7 @@ UIFactory["Portfolio"].del = function(portfolioid)
 UIFactory["Portfolio"].getPDF = function(portfolioid) 
 //=======================================================================
 {
-	var urlS = "../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:fr;pers:mimi&format=application/pdf";
+	var urlS = serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:fr;pers:mimi&format=application/pdf";
 	$.ajax({
 		type : "GET",
 		headers: {
@@ -1566,8 +1566,8 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 //==================================
 {
 	var html ="";
-	html += "<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
-	html += "<li><a href='../../../"+serverFIL+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf'>"+karutaStr[LANG]['getRTF']+"</a></li>";
+	html += "<li><a href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
+	html += "<li><a href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf'>"+karutaStr[LANG]['getRTF']+"</a></li>";
 	html += "<li><a  onclick='export_html()'>"+karutaStr[LANG]['getWebsite']+"</a></li>";
 	html += "<li><a  onclick=\"toggleButton('hidden')\">"+karutaStr[LANG]['hide-button']+"</a></li>";
 	html += "<li><a  onclick=\"toggleButton('visible')\">"+karutaStr[LANG]['show-button']+"</a></li>";
@@ -1575,9 +1575,9 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolioid+"')\" >"+karutaStr[LANG]["addshare-users"]+"</a></li>";
 		html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolioid+"')\" >"+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 	}
-	html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a></li>";
+	html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a></li>";
 	if (USER.admin || g_userroles[0]=='designer') {
-		html += "<li><a href='../../../"+serverBCK+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a></li>";
+		html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a></li>";
 		html += "<li><a  onclick=\"toggleMetadata('hidden')\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
 		html += "<li><a  onclick=\"toggleMetadata('visible')\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
 		if(languages.length>1)
@@ -1699,7 +1699,7 @@ UIFactory["Portfolio"].rename = function(itself,langcode)
 		xml +="		</asmResource>";
 		strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 		var callback = function () {$("#portfolio_"+itself.id).html($(itself.getPortfolioView('portfolio_'+itself.id,'list')));};
-		UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
+		UICom.query("PUT",serverBCK_API+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
 	} else {
 		alertHTML(karutaStr[LANG]['existing-code']);
 		$("#code_"+itself.id).val(oldprojectcode);
@@ -1751,7 +1751,7 @@ UIFactory["Portfolio"].renameProject = function(itself,langcode)
 					xml +="		</asmResource>";
 					strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 					$("#portfolio_"+portfolios_list[i].id).html($(portfolios_list[i].getPortfolioView('portfolio_'+portfolios_list[i].id,'list')));
-					UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+portfolios_list[i].rootid+'/noderesource',null,"text",strippeddata);
+					UICom.query("PUT",serverBCK_API+'/nodes/node/'+portfolios_list[i].rootid+'/noderesource',null,"text",strippeddata);
 				}
 			}
 		} else {
@@ -1764,7 +1764,7 @@ UIFactory["Portfolio"].renameProject = function(itself,langcode)
 			xml +="		</asmResource>";
 			strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 			$("#portfoliolabel_"+itself.id).html($(itself.label_node[langcode]).text());
-			UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+itself.rootid+'/noderesource',null,"text",strippeddata);
+			UICom.query("PUT",serverBCK_API+'/nodes/node/'+itself.rootid+'/noderesource',null,"text",strippeddata);
 		}
 	} else {
 		alertHTML(karutaStr[LANG]['existing-code']);
@@ -1880,7 +1880,7 @@ UIFactory["Portfolio"].unshareUsers = function(portfolioid,destid,unshare_disabl
 	for (var i=0; i<users.length; i++){
 		var userid = $(users[i]).attr('value');
 		var groupid = $(users[i]).attr('group');
-		var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+userid;
+		var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+userid;
 		$.ajax({
 			type : "DELETE",
 			contentType: "application/xml",
@@ -1892,7 +1892,7 @@ UIFactory["Portfolio"].unshareUsers = function(portfolioid,destid,unshare_disabl
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+					url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 					success : function(data) {
 						UIFactory["Portfolio"].displayUnSharing(destid,data,unshare_disabled);
 					}
@@ -1920,7 +1920,7 @@ UIFactory["Portfolio"].shareUsers = function(portfolioid)
 	}
 	var url = null;
 	if (groupid!=null) {
-		url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+		url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
 		var xml = "<users>";
 		for (var i=0; i<users.length; i++){
 			var userid = $(users[i]).attr('value');
@@ -1939,7 +1939,7 @@ UIFactory["Portfolio"].shareUsers = function(portfolioid)
 					$.ajax({
 						type : "GET",
 						dataType : "xml",
-						url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+						url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 						success : function(data) {
 							UIFactory["Portfolio"].displayUnSharing('shared',data);
 						},
@@ -2019,7 +2019,7 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+			url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 			success : function(data) {
 				UIFactory["Portfolio"].displayUnSharing('shared',data);
 			},
@@ -2032,7 +2032,7 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/users",
+			url : serverBCK_API+"/users",
 			success : function(data) {
 				UIFactory["User"].parse(data);
 				UIFactory["User"].displaySelectMultipleActive('sharing_users');
@@ -2040,7 +2040,7 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+					url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 					success : function(data) {
 						UIFactory["Portfolio"].displayUnSharing('shared',data);
 					}
@@ -2056,13 +2056,13 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes/node/" + portfolios_byid[portfolioid].rootid+"/rights",
+		url : serverBCK_API+"/nodes/node/" + portfolios_byid[portfolioid].rootid+"/rights",
 		success : function(data) {
 			var instance = $("role",data).length;
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/rolerightsgroups?portfolio="+portfolioid,
+				url : serverBCK_API+"/rolerightsgroups?portfolio="+portfolioid,
 				success : function(data) {
 					UIFactory["Portfolio"].displaySharingRoleEditor('sharing_roles',portfolioid,data,null,instance);
 					$("#sharing").show();
@@ -2148,7 +2148,7 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+			url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 			success : function(data) {
 				UIFactory["Portfolio"].displayUnSharing('shared',data);
 			},
@@ -2161,14 +2161,14 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/usersgroups",
+			url : serverBCK_API+"/usersgroups",
 			success : function(data) {
 				UIFactory["UsersGroup"].parse(data);
 				UIFactory["UsersGroup"].displaySelectMultipleWithUsersList('sharing_usersgroups');
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+					url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 					success : function(data) {
 						UIFactory["Portfolio"].displayUnSharing('shared',data);
 					},
@@ -2187,13 +2187,13 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes/node/" + portfolios_byid[portfolioid].rootid+"/rights",
+		url : serverBCK_API+"/nodes/node/" + portfolios_byid[portfolioid].rootid+"/rights",
 		success : function(data) {
 			var instance = $("role",data).length;
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/rolerightsgroups?portfolio="+portfolioid,
+				url : serverBCK_API+"/rolerightsgroups?portfolio="+portfolioid,
 				success : function(data) {
 					UIFactory["Portfolio"].displaySharingRoleEditor('sharing_roles',portfolioid,data,"UIFactory['UsersGroup'].hideUsersList('sharing_usersgroups-group-')",instance);
 					$("#sharing").show();
@@ -2503,7 +2503,7 @@ UIFactory["Portfolio"].removePortfolios = function()
 	$.ajaxSetup({async: false});
 	for (var i=0;i<portfolios_list.length;i++){
 		var uuid = portfolios_list[i].id;
-		var url = "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "?active=false";
+		var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "?active=false";
 		$.ajax({
 			type : "PUT",
 			contentType: "application/xml",

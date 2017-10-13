@@ -138,7 +138,7 @@ UIFactory["UsersGroup"].displayUsers = function(gid,destid,type,lang)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+		url : serverBCK_API+"/usersgroups?group="+gid,
 		data: "",
 		success : function(data) {
 			var users_ids = parseList("user",data);
@@ -177,7 +177,7 @@ UIFactory["UsersGroup"].update = function(gid,attribute,value)
 	UsersGroups_byid[gid].attributes[attribute].text(value); // update attribute value
 	var node = UsersGroups_byid[gid].node;
 	var data = xml2string(node);
-	var url = "../../../"+serverBCK+"/usersgroups?group=" + gid +"&"+attribute+"="+value;
+	var url = serverBCK_API+"/usersgroups?group=" + gid +"&"+attribute+"="+value;
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -324,7 +324,7 @@ UIFactory["UsersGroup"].confirmRemove = function(gid,uid)
 UIFactory["UsersGroup"].remove = function(gid,uid) 
 //==================================
 {
-	var url = "../../../"+serverBCK+"/usersgroups?group=" + gid;
+	var url = serverBCK_API+"/usersgroups?group=" + gid;
 	if (uid!=null && uid!='null') {
 		url += "&user="+uid;
 	}
@@ -395,7 +395,7 @@ UIFactory["UsersGroup"].toggleUsersList = function(gid,destid,checked)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+			url : serverBCK_API+"/usersgroups?group="+gid,
 			data: "",
 			success : function(data) {
 				$("#"+destid).html("");
@@ -432,7 +432,7 @@ UIFactory["UsersGroup"].create = function()
 //==================================
 {
 	var label = $("#usersgroup_label").val();
-	var url = "../../../"+serverBCK+"/usersgroups?label="+label;
+	var url = serverBCK_API+"/usersgroups?label="+label;
 	$.ajax({
 		type : "POST",
 		contentType: "application/xml",
@@ -473,7 +473,7 @@ UIFactory["UsersGroup"].editGroupsByUser = function(userid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?user="+userid,
+		url : serverBCK_API+"/usersgroups?user="+userid,
 		data: "",
 		success : function(data) {
 			var user_groupids = parseList("group",data);
@@ -539,7 +539,7 @@ UIFactory["UsersGroup"].callAddUsers = function(gid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+		url : serverBCK_API+"/usersgroups?group="+gid,
 		data: "",
 		success : function(data) {
 			var users = parseList("user",data);
@@ -560,7 +560,7 @@ UIFactory["UsersGroup"].addUsers = function(gid)
 //==================================
 {
 	var users = $("input[name='select_users']").filter(':checked');
-	var url = "../../../"+serverBCK+"/usersgroups?group=" + gid + "&user=";
+	var url = serverBCK_API+"/usersgroups?group=" + gid + "&user=";
 	for (var i=0; i<users.length; i++){
 		var userid = $(users[i]).attr('value');
 		var url2 = url+userid;

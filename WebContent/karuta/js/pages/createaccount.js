@@ -107,7 +107,7 @@ function callSubmit()
 		xml +="	<email>"+useridentifier+"</email>";
 		xml +="</user>";
 		xml +="</users>";
-		var url = "../../../"+serverREG+"/register";
+		var url = "../../../"+serverBCK+"/register";
 		$.ajax({
 			type : "POST",
 			contentType: "application/xml",
@@ -171,7 +171,7 @@ function displayKarutaCreateAccount()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverVER+"/version",
+		url : serverBCK+"/version",
 		data: "",
 		success : function(data) {		
 			karuta_backend_version = $("number",$("#backend",data)).text();

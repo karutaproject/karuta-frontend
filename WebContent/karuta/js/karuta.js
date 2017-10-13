@@ -560,7 +560,7 @@ function confirmDel(uuid,type,parentid,destid,callback,param1,param2)
 }
 
 //=======================================================================
-function ADelPortfolio(uuid) 
+function confirmDelPortfolio(uuid) 
 // =======================================================================
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
@@ -621,10 +621,11 @@ function displayPage(uuid,depth,type,langcode,edit) {
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
-	if ((name == 'asmUnit' || name=='asmStructure') && $(UICom.structure['ui'][uuid].node).children().length==5) {// content is not loaded or empty 5 = 3 metadata + 2 resources
-		$("#wait-window").modal('show');
-		UIFactory.Node.loadNode(uuid);
-	}
+//	if ((name == 'asmUnit' || name=='asmStructure') && !UICom.structure['ui'][uuid].loaded) {// content is not loaded or empty
+//		$("#wait-window").modal('show');
+//		UIFactory.Node.loadNode(uuid);
+//		UICom.structure['ui'][uuid].loaded = true;
+//	}
 	if (depth==null)
 		depth=100;
 	if (name=='asmRoot' || name=='asmStructure')
@@ -699,12 +700,12 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 	if (srcecode=='self')
 		srcecode = selfcode;
 	//------------
-	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+	var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	if (USER.admin || g_userroles[1]=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
-			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	}
 	$.ajaxSetup({async: false});
 	$.ajax({
@@ -796,7 +797,7 @@ function sleep(milliseconds)
 function submit(uuid)
 //=======================================================================
 {
-	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/submit';
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/submit';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -813,7 +814,7 @@ function submit(uuid)
 function reset(uuid)
 //=======================================================================
 {
-	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/reset';
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/reset';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -841,7 +842,7 @@ function postAndDownload(url,data)
 function show(uuid)
 //=======================================================================
 {
-	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/show';
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/show';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -857,7 +858,7 @@ function show(uuid)
 function hide(uuid)
 //=======================================================================
 {
-	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/hide';
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/hide';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -1031,7 +1032,7 @@ function getPublicURL(uuid,email,role,langcode,level,duration) {
 		duration = 720;  //-- max 720h
 	if (role==null)
 		role = "all";
-	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration;
+	var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration;
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -1057,7 +1058,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 		var emails = email.split(" "); // email1 email2 ..
 		for (var i=0;i<emails.length;i++) {
 			if (emails[i].length>4) {
-				var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'&d='+duration;
+				var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'&d='+duration;
 				$.ajax({
 					type : "POST",
 					email : emails[i],
@@ -1078,7 +1079,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/users",
+			url : serverBCK_API+"/users",
 			success : function(data) {
 				UIFactory["User"].parse(data);
 			},
@@ -1089,7 +1090,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
+			url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
 			success : function(data) {
 				groups = $("rrg",data);
 			}
@@ -1109,7 +1110,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 								else {
 									var email = Users_byid[userid].getEmail();
 									if (email.length>4) {
-										var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+roles[i]+'&l='+level+'&d='+duration;
+										var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+roles[i]+'&l='+level+'&d='+duration;
 										$.ajax({
 											type : "POST",
 											email : email,
@@ -1140,14 +1141,14 @@ function getEmail(role,emails) {
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/users",
+		url : serverBCK_API+"/users",
 		success : function(data) {
 			UIFactory["User"].parse(data);
 			//--------------------------
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
+				url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
 				success : function(data) {
 					var groups = $("rrg",data);
 					if (groups.length>0) {
@@ -1202,7 +1203,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	$.ajax({
 		type : "POST",
 		dataType : "xml",
-		url : "../../../"+serverREG+"/mail",
+		url : "../../../"+serverBCK+"/mail",
 		data: xml,
 		success : function(data) {
 			$('#edit-window').modal('hide');
@@ -1673,7 +1674,7 @@ function logout()
     $.ajax({
        type: "POST",
        dataType: "text",
-       url: "../../../"+serverBCK+"/credential/logout",
+       url: serverBCK_API+"/credential/logout",
        data: "",
        success: function(data) {
                        window.location="login.htm?lang="+LANG;
@@ -1726,7 +1727,7 @@ function displayTechSupportForm(langcode)
 		$.ajax({
 			type : "POST",
 			dataType : "text",
-			url : "../../../"+serverFIL+"/mail",
+			url : serverBCK+"/mail",
 			data: xml,
 			success : function() {
 				alertHTML(karutaStr[LANG]['email-sent']);

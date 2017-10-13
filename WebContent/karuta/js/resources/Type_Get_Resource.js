@@ -261,7 +261,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
+				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
 				success : function(data) {
 					if (cachable)
 						g_Get_Resource_caches[queryattr_value] = data;
@@ -691,16 +691,16 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes/node/"+partid,
+		url : serverBCK_API+"/nodes/node/"+partid,
 		last : last,
 		success : function(data) {
 //			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
 			var nodeid = $("*:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
-			var url_resource = "../../../"+serverBCK+"/resources/resource/" + nodeid;
+			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
 			var tagname = $( ":root",data )[ 0 ].nodeName;
 			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
 				xml = xml.replace("Get_Resource","nodeRes");
-				url_resource = "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource";
+				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
 			}
 			$.ajax({
 				type : "PUT",

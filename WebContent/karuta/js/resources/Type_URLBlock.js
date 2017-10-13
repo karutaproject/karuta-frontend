@@ -80,7 +80,7 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 
 		if (url!="") {
 			html =  "<a style='text-decoration:none;color:inherit' id='url_"+url_element.id+"' href='"+url+"' target='_blank'>";
-			var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
+			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
 			if (cover!=undefined && cover.resource.getValue()=='1')
 				style += "background-size:cover;";
 			html += "<div class='URLBlock' style=\""+style+"\">";

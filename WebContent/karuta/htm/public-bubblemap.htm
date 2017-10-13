@@ -110,7 +110,7 @@
 			$.ajax({
 				type : "GET",
 				dataType : "text",
-				url : "../../../"+serverFIL+"/direct?i=" + iid,
+				url : serverBCK+"/direct?i=" + iid,
 				success : function(data) {
 					g_uuid = data;
 				}
@@ -119,7 +119,7 @@
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/credential",
+				url : serverBCK_API+"/credential",
 				data: "",
 				success : function(data) {
 					USER = new UIFactory["User"]($("user",data));
@@ -129,7 +129,7 @@
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/nodes/node/" + g_uuid,
+				url : serverBCK_API+"/nodes/node/" + g_uuid,
 				success : function(data) {
 					UICom.parseStructure(data);
 					UIFactory["Bubble"].parse(data);

@@ -37,7 +37,7 @@ function fill_main_page(portfolioid,role)
 			Accept: "application/xml",
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/credential/group/" + g_portfolioid,
+			url : serverBCK_API+"/credential/group/" + g_portfolioid,
 			success : function(data) {
 				var usergroups = $("group",data);
 				for (var i=0;i<usergroups.length;i++) {
@@ -62,7 +62,8 @@ function fill_main_page(portfolioid,role)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
+//		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?level=asmUnitStructure",
+		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.roles = {};
 			g_portfolio_current = data;

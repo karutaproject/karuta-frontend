@@ -136,7 +136,7 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 	var html ="";
 	if (type=='html5') {
 		html += "<video width='100%' controls>";
-		var srce = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp4";
+		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp4";
 		html += "<source src='"+srce+"' type=\"video/mp4\"></source>";
 		html += "</video>";
 	}
@@ -205,7 +205,7 @@ UIFactory["Video"].prototype.setParameter = function(langcode)
 	//---------------------
 	var destid = "jquery_jplayer_"+this.id;
 	var cssSelectorAncestor = "#jp_container_"+this.id;
-	var srce = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
+	var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	$("#"+destid).jPlayer({
 		cssSelectorAncestor:cssSelectorAncestor,
 		ready: function () {
@@ -285,7 +285,7 @@ UIFactory["Video"].prototype.displayEditor = function(destid,type,langcode)
 		langcode = 0;
 	//---------------------
 	var html ="";
-	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
+	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html += "<div class='audio-video-format'>Format: mp4</div>"
 	html +=" <div id='div_f_"+this.id+"_"+langcode+"'>";
 	html +=" <input id='f_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";

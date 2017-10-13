@@ -161,7 +161,7 @@ UIFactory["User"].update = function(userid,attribute,value)
 	Users_byid[userid].attributes[attribute].text(value); // update attribute value
 	var node = Users_byid[userid].node;
 	var data = xml2string(node);
-	var url = "../../../"+serverBCK+"/users/user/" + userid;
+	var url = serverBCK_API+"/users/user/" + userid;
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -416,7 +416,7 @@ UIFactory["User"].confirmRemove = function(userid,from_page)
 UIFactory["User"].remove = function(userid,from_page) 
 //==================================
 {
-	var url = "../../../"+serverBCK+"/users/user/" + userid;
+	var url = serverBCK_API+"/users/user/" + userid;
 	$.ajax({
 		type : "DELETE",
 		dataType : "text",
@@ -482,7 +482,7 @@ UIFactory["User"].create = function()
 	xml +="	<substitute>"+$("input[name=user_substitute]:checked").val()+"</substitute>";
 	xml +="</user>";
 	xml +="</users>";
-	var url = "../../../"+serverBCK+"/users";
+	var url = serverBCK_API+"/users";
 	$.ajax({
 		type : "POST",
 		contentType: "application/xml",
@@ -547,7 +547,7 @@ UIFactory["User"].createTestUser = function()
 	xml +="	<substitute>0</substitute>";
 	xml +="</user>";
 	xml +="</users>";
-	var url = "../../../"+serverBCK+"/users";
+	var url = serverBCK_API+"/users";
 	$.ajax({
 		type : "POST",
 		contentType: "application/xml",
@@ -584,7 +584,7 @@ UIFactory["User"].setPassword = function(userid,value)
 	xml +="<user>";
 	xml +="	<password>"+value+"</password>";
 	xml +="</user>";
-	var url = "../../../"+serverBCK+"/users/user/" + userid;
+	var url = serverBCK_API+"/users/user/" + userid;
 	if (elgg_installed)
 		user_change_password(value, username);
 	$.ajax({
@@ -613,7 +613,7 @@ UIFactory["User"].changePassword = function(userid,value)
 		contentType: "application/xml",
 		type : "POST",
 		dataType : "text",
-		url : "../../../"+serverBCK+"/credential/login",
+		url : serverBCK_API+"/credential/login",
 		data: data,
 		success : function(data) {
 			//----------------------------
@@ -636,7 +636,7 @@ UIFactory["User"].changePassword = function(userid,value)
 				xml +="	<prevpass>"+password_old+"</prevpass>";
 				xml +="	<password>"+value+"</password>";
 				xml +="</user>";
-				var url = "../../../"+serverBCK+"/users/user/" + userid;
+				var url = serverBCK_API+"/users/user/" + userid;
 				if (elgg_installed)
 					user_change_password(value, username);
 				$.ajax({

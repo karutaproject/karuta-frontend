@@ -53,14 +53,14 @@ function displayKarutaPage()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/credential",
+		url : serverBCK_API+"/credential",
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverVER+"/version",
+				url : serverBCK+"/version",
 				data: "",
 				success : function(data) {		
 					karuta_backend_version = $("number",$("#backend",data)).text();
@@ -173,7 +173,7 @@ function getSearch()
 function showArchiveSearch()
 //==============================
 {
-	var archive_href = "../../../"+serverBCK+"/portfolios/zip?portfolios=";
+	var archive_href = serverBCK_API+"/portfolios/zip?portfolios=";
 	for (var i = 0; i < portfolios_list.length; i++) {
 		if (i>0)
 			archive_href += ","

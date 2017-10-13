@@ -34,7 +34,7 @@ function fill_exec_batch()
 	$("#main-exec-batch").html(html);
 
 	var model_code = "";
-	var url = "../../../"+serverFIL+"/csv";
+	var url = serverBCK+"/csv";
 	var html ="";
 	html +=" <div id='batch-divfileupload'>";
 	html +=" <input id='batch-fileupload' type='file' name='uploadfile' data-url='"+url+"'>";

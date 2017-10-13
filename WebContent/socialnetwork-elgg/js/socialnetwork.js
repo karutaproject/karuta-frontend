@@ -845,7 +845,7 @@ function callAddGroupMembers(groupid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/users",
+		url : serverBCK_API+"/users",
 		success : function(data) {
 			UIFactory["User"].parse(data);
 			UIFactory["User"].displaySelectMultipleActive('sharing_users');

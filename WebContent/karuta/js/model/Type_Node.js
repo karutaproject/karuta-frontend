@@ -95,6 +95,8 @@ UIFactory["Node"] = function( node )
 		if (this.xsi_type!=undefined && this.xsi_type!='' && this.xsi_type != this.asmtype) { // structured resource
 			this.structured_resource = new UIFactory[this.xsi_type](node);
 		}
+		//------------------------------
+		this.loaded = false;
 	}
 	catch(err) {
 		alertHTML("UIFactory['Node']--flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype);
@@ -442,12 +444,12 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 {
 	var destid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
 	$("#wait-window").modal('show');
-	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?uuid="+uuid;  // instance by default
+	var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+uuid;  // instance by default
 	if (USER.admin || g_userrole=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
-			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?uuid="+uuid;
+			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?uuid="+uuid;
 	}
 	$.ajax({
 		type : "POST",
@@ -460,7 +462,7 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 				async:false,
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/nodes/node/"+uuid,
+				url : serverBCK_API+"/nodes/node/"+uuid,
 				success : function(data) {
 					//------------------------------
 					var code = $($("code",data)[0]).text();
@@ -485,7 +487,7 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 						contentType: "application/xml",
 						dataType : "text",
 						data : xml,
-						url : "../../../"+serverBCK+"/nodes/node/" + uuid + "/noderesource",
+						url : serverBCK_API+"/nodes/node/" + uuid + "/noderesource",
 						success : function(data) {
 							$("#wait-window").modal('hide');			
 							UIFactory.Node.reloadUnit();
@@ -588,7 +590,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	var titleid = $(titles[0]).attr("id");
 	var html = "";
 	html += "<div class='page-welcome'>";
-	html += "<div id='welcome-image' style=\"background: url('../../../"+serverFIL+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
+	html += "<div id='welcome-image' style=\"background: url('../../../"+serverBCK+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
 	if (titles.length>0) {
 		html += "<div class='welcome-box'>";
 		html += "<div class='welcome-subbox'>";
@@ -1021,7 +1023,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//-----------------------------------------------------------------------
 			if (nodetype == "asmContext" && node.resource.type=='Image') {
 				$("#image_"+uuid).click(function(){
-					imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>");
+					imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>");
 				});
 			}
 			//--------------------collapsed------------------------------------------
@@ -1120,7 +1122,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				if (model_code!='') {
 					$.ajax({
 						type : "GET",
-						url : "../../../"+serverREP+"/"+uuid+".html",
+						url : serverBCK_REP+"/"+uuid+".html",
 						dataType: 'html',
 						headers: {
 		                    'Access-Control-Allow-Origin': '*'
@@ -1163,7 +1165,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			//------------ Public URL -----------------
 			if ($("#2world-"+uuid).length){
-				var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&role=all&lang=fr&l=4&d=unlimited';
+				var urlS = serverBCK+'/direct?uuid='+uuid+'&role=all&lang=fr&l=4&d=unlimited';
 				$.ajax({
 					type : "POST",
 					dataType : "text",
@@ -1248,7 +1250,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 							//-----------------------------------------------------------------------------
 							if (childnode.structured_resource.type="ImageBlock") {
 								$("#image_"+blockid).click(function(){
-									imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' src='../../../"+serverFIL+"/resources/resource/file/"+childnode.structured_resource.image_nodeid+"?lang="+languages[langcode]+"'>");
+									imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' src='../../../"+serverBCK+"/resources/resource/file/"+childnode.structured_resource.image_nodeid+"?lang="+languages[langcode]+"'>");
 								});
 							}
 					} else
@@ -1465,7 +1467,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			//-----------------------------------------------------------------------------
 			if (nodetype == "asmContext" && node.resource.type=='Image') {
 				$("#image_"+uuid).click(function(){
-					imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+this.id+"' src='../../../"+serverFIL+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"'>");
+					imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"'>");
 				});
 			}
 			//---------------------------- BUTTONS AND BACKGROUND COLOR ---------------------------------------------
@@ -1569,7 +1571,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				if (model_code!='') {
 					$.ajax({
 						type : "GET",
-						url : "../../../"+serverREP+"/"+uuid+".html",
+						url : serverBCK_REP+"/"+uuid+".html",
 						dataType: 'html',
 						headers: {
 		                    'Access-Control-Allow-Origin': '*'
@@ -2582,7 +2584,7 @@ UIFactory['Node'].upNode = function(nodeid)
 	$.ajax({
 		type : "POST",
 		dataType : "text",
-		url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/moveup",
+		url : serverBCK_API+"/nodes/node/" + nodeid + "/moveup",
 		success : function(data) {
 			UIFactory.Node.reloadUnit();
 			$("#edit-window").modal('hide');	
@@ -2603,7 +2605,7 @@ UIFactory['Node'].moveNode = function(nodeid)
 		$.ajax({
 			type : "POST",
 			dataType : "text",
-			url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/parentof/"+parentid,
+			url : serverBCK_API+"/nodes/node/" + nodeid + "/parentof/"+parentid,
 			success : function(data) {
 				UIFactory.Node.reloadUnit();
 				$("#edit-window").modal('hide');	
@@ -3190,7 +3192,7 @@ UIFactory['Node'].reloadStruct = function(uuid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/" + uuid + "?resources=true",
+		url : serverBCK_API+"/portfolios/portfolio/" + uuid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
 			g_portfolio_current = data;
@@ -3217,7 +3219,7 @@ UIFactory['Node'].reloadUnit = function()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes/node/" + uuid,
+		url : serverBCK_API+"/nodes/node/" + uuid,
 		success : function(data) {
 			UICom.parseStructure(data,false,parentid);
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
@@ -3250,7 +3252,7 @@ UIFactory['Node'].loadNode = function(uuid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes/node/" + uuid,
+		url : serverBCK_API+"/nodes/node/" + uuid + "?level=asmUnitStructure",
 		success : function(data) {
 			UICom.parseStructure(data,false,parentid);
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
@@ -3309,7 +3311,7 @@ RoleRights.save = function(rolename)
 		dataType : "xml",
 		contentType: "application/xml",
 		data:xml,
-		url : "../../../"+serverBCK+"/nodes/node/"+role.uuid+"/rights"
+		url : serverBCK_API+"/nodes/node/"+role.uuid+"/rights"
 	});
 };
 
@@ -3350,7 +3352,7 @@ UIFactory["Node"].getRights = function(uuid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes/node/"+uuid+"/rights",
+		url : serverBCK_API+"/nodes/node/"+uuid+"/rights",
 		success : function(data) {
 			rights = data;
 		}

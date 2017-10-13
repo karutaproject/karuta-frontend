@@ -73,8 +73,8 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 		//---------------------
 		var filename = $(document.resource.filename_node[doc_langcode]).text();
 		if (filename!="") {
-			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+document.id+"?lang="+languages[doc_langcode]+"'>";
-			var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
+			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+document.id+"?lang="+languages[doc_langcode]+"'>";
+			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
 			if (cover!=undefined && cover.resource.getValue()=='1')
 				style += "background-size:cover;";
 			html += "<div class='DocumentBlock' style=\""+style+"\">";

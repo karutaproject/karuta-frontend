@@ -268,7 +268,7 @@ UIFactory["SendEmail"].send = function(obj,itself,langcode)
 	$.ajax({
 		type : "POST",
 		dataType : "text",
-		url : "../../../"+serverFIL+"/mail",
+		url : serverBCK+"/mail",
 		data: xml,
 		success : function() {
 			alertHTML(karutaStr[LANG]['email-sent']);

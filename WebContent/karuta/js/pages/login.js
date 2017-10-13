@@ -90,7 +90,7 @@ function callSubmit(encrypt_url,lang)
 		contentType: "application/xml",
 		type : "POST",
 		dataType : "text",
-		url : "../../../"+serverBCK+"/credential/login",
+		url : serverBCK_API+"/credential/login",
 		data: data,
 		i : encrypt_url,
 		lang :lang,
@@ -124,7 +124,7 @@ function callSend()
 	$.ajax({
 		type : "POST",
 		dataType : "text",
-		url : "../../../"+serverBCK+"/credential/forgot",
+		url : serverBCK_API+"/credential/forgot",
 		data: data,
 		success : function(data) {
 			alertHTML(karutaStr[LANG]['password-sent']);
@@ -195,7 +195,7 @@ function displayKarutaLogin()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverVER+"/version",
+		url : serverBCK+"/version",
 		data: "",
 		success : function(data) {		
 			karuta_backend_version = $("number",$("#backend",data)).text();

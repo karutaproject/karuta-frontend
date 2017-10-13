@@ -220,12 +220,12 @@ UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code1 + "&semtag="+semtag1,
+			url : serverBCK_API+"/nodes?portfoliocode=" + code1 + "&semtag="+semtag1,
 			success : function(data1) {				
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code2 + "&semtag="+semtag2,
+					url : serverBCK_API+"/nodes?portfoliocode=" + code2 + "&semtag="+semtag2,
 					success : function(data2) {				
 						UIFactory["Get_Double_Resource"].parse(destid,type,langcode,data1,data2,self,disabled,srce1,srce2);
 					}

@@ -111,8 +111,9 @@ function export_html()
 			// Send data to the backend
 			// Create temp form
 			var content = document.documentElement.outerHTML;
+			$("#navigation-bar",content).remove();
 			// Fake form so we can get the zip file back, simple .post won't do
-			var form = $("<form method='POST' action='/"+serverREG+"/export'><input id='pid' name='pid'></input><input id='content' name='content'></input><input type='submit' value='send'></form>");
+			var form = $("<form method='POST' action='/"+serverBCK+"/export'><input id='pid' name='pid'></input><input id='content' name='content'></input><input type='submit' value='send'></form>");
 			$("html", document).append(form);
 			$("#pid",form).val(g_portfolioid);
 			$("#content",form).val(content);

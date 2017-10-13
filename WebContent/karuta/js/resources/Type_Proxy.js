@@ -156,7 +156,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
+				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
 				success : function(data) {
 					UIFactory["Proxy"].parse(destid,type,langcode,data,self,portfoliocode,srce);
 				}
@@ -168,7 +168,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/portfolios?active=1",
+				url : serverBCK_API+"/portfolios?active=1",
 				success : function(data) {
 					UIFactory["Portfolio"].parse(data);
 					for ( var i = 0; i < portfolios_list.length; i++) {
@@ -177,7 +177,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 						$.ajax({
 							type : "GET",
 							dataType : "xml",
-							url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
+							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
 							success : function(data) {
 								var nodes = $("node",data);
 								var display = false;

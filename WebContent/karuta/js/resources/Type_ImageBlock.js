@@ -64,7 +64,7 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 		if (!image.multilingual)
 			img_langcode = NONMULTILANGCODE;
 		//---------------------
-		var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
+		var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";
 		html += "<div id='image_"+this.id+"' class='ImageBlock' style=\""+style+"\">";

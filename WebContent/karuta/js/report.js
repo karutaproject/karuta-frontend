@@ -312,7 +312,7 @@ function r_processShowSharing(destid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid_current,
+		url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid_current,
 		success : function(data) {
 			UIFactory["Portfolio"].displayUnSharing(destid,data,true);
 		},
@@ -473,7 +473,7 @@ function r_getUsers(no,xmlDoc,destid,data,line)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/users",
+		url : serverBCK_API+"/users",
 		success : function(data) {
 			r_processUsers(no,xmlDoc,destid,data,line);
 		}
@@ -545,7 +545,7 @@ function r_getPortfolios(no,xmlDoc,destid,data,line)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1&user="+userid,
+		url : serverBCK_API+"/portfolios?active=1&user="+userid,
 		success : function(data) {
 			r_processPortfolios(no,xmlDoc,destid,data,line);
 		}
@@ -583,7 +583,7 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+					url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
 					success : function(data) {
 						var text = ";"
 						if (sortelt=='resource code') {
@@ -633,7 +633,7 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 				type : "GET",
 				dataType : "xml",
 				j : j,
-				url : "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 				success : function(data) {
 					UICom.parseStructure(data,true, null, null,true);
 					var children = $(">*",xmlDoc);
@@ -958,11 +958,11 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/code/"+model_code,
+		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
 		success : function(data) {
 			var nodeid = $("asmRoot",data).attr("id");
 			// ---- transform karuta portfolio to report model
-			var urlS = "../../../"+serverBCK+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
+			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -991,11 +991,11 @@ function report_getModelAndProcess(model_code,json)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/code/"+model_code,
+		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
 		success : function(data) {
 			var nodeid = $("asmRoot",data).attr("id");
 			// ---- transform karuta portfolio to report model
-			var urlS = "../../../"+serverBCK+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
+			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -1022,7 +1022,7 @@ function xml2PDF(content)
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
+	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
 	postAndDownload(urlS,data);
 }
 
@@ -1046,7 +1046,7 @@ function xml2RTF(content)
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverFIL+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
+	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
 	postAndDownload(urlS,data);
 }
 
@@ -1067,7 +1067,7 @@ function xml2CSV(content)
 	var data = $('#'+content).html();
 	data = data.replace('&nbsp;', ' ');
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"\">]><div>" + data + "</div>";
-	var url =  "../../../"+serverREG+"/xsl?xsl="+karutaname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
+	var url =  "../../../"+serverBCK+"/xsl?xsl="+karutaname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
 	postAndDownload(url,data);
 }
 
@@ -1133,16 +1133,12 @@ function register_report(uuid)
 	var freq = node_resource.freq_node.text();
 	var comments = node_resource.comments_node[LANGCODE].text();
 	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
-	var url = serverCONF;
+	var url = serverBCK_REG;
 	$.ajax({
 		type : "POST",
 		url : url,
 		data : data,
 		dataType: "text",
-		headers: {
-            'Access-Control-Allow-Origin': '*'
-        },
-		crossDomain: true,
 		success : function(data) {
 			alertHTML("OK - rapport inscrit");
 		},

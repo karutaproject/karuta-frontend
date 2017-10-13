@@ -169,14 +169,14 @@ function displayKarutaPublic()
 	$.ajax({
 		type : "GET",
 		dataType : "text",
-		url : "../../../"+serverFIL+"/direct?i=" + iid,
+		url : serverBCK+"/direct?i=" + iid,
 		success : function(data) {
 			g_uuid = data;
 			$.ajax({ // get group-role for the user
 				Accept: "application/xml",
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/credential/group/" + g_uuid,
+				url : serverBCK_API+"/credential/group/" + g_uuid,
 				success : function(data) {
 					var usergroups = $("group",data);
 					for (var i=0;i<usergroups.length;i++) {
@@ -189,7 +189,7 @@ function displayKarutaPublic()
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/credential",
+				url : serverBCK_API+"/credential",
 				data: "",
 				success : function(data) {
 					USER = new UIFactory["User"]($("user",data));
@@ -209,7 +209,7 @@ function displayKarutaPublic()
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/nodes/node/" + g_uuid,
+				url : serverBCK_API+"/nodes/node/" + g_uuid,
 				success : function(data) {
 					g_portfolio_current = data;
 					UICom.parseStructure(data);

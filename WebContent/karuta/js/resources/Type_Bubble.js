@@ -237,7 +237,7 @@ UIFactory["Bubble"].reloadparse = function(param2,param3,param4)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
+		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data);
 			//------ carte ----------
@@ -259,7 +259,7 @@ UIFactory["Bubble"].getPublicURL = function(mapid)
 //==================================
 {
 	var map_url = "";
-	var urlS = "../../../"+serverFIL+'/direct?uuid='+mapid+'&role=all&lang=fr&l=4&d=500';
+	var urlS = serverBCK+'/direct?uuid='+mapid+'&role=all&lang=fr&l=4&d=500';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -366,7 +366,7 @@ function putQRcodeforCV(qrcode)
 		contentType: "application/xml",
 		dataType : "text",
 		data : xml,
-		url : "../../../"+serverBCK+"/resources/resource/" + qrcode_nodeid,
+		url : serverBCK_API+"/resources/resource/" + qrcode_nodeid,
 		success : function(data) {
 		}
 	});

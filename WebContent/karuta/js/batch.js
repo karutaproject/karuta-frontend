@@ -173,7 +173,7 @@ g_actions['create-user'] = function createUser(node)
 		designer ='0';
 	//---- get userid ----------
 	var userid = "";
-	var url = "../../../"+serverBCK+"/users/user/username/"+identifier;
+	var url = serverBCK_API+"/users/user/username/"+identifier;
 	$.ajax({
 		type : "GET",
 		contentType: "application/xml",
@@ -199,7 +199,7 @@ g_actions['create-user'] = function createUser(node)
 			xml +="	<designer>"+designer+"</designer>";
 			xml +="</user>";
 			xml +="</users>";
-			var url = "../../../"+serverBCK+"/users";
+			var url = serverBCK_API+"/users";
 			$.ajax({
 				type : "POST",
 				contentType: "application/xml; charset=UTF-8",
@@ -228,7 +228,7 @@ g_actions['delete-user'] = function deleteUser(node)
 	var identifier = getTxtvals($("identifier",node));
 	//---- get userid ----------
 	var userid = "";
-	var url = "../../../"+serverBCK+"/users/user/username/"+identifier;
+	var url = serverBCK_API+"/users/user/username/"+identifier;
 	$.ajax({
 		type : "GET",
 		contentType: "application/xml",
@@ -236,7 +236,7 @@ g_actions['delete-user'] = function deleteUser(node)
 		url : url,
 		success : function(data) {
 			userid = data;
-			var url = "../../../"+serverBCK+"/users/user/" + userid;
+			var url = serverBCK_API+"/users/user/" + userid;
 			$.ajax({
 				type : "DELETE",
 				dataType : "text",
@@ -275,7 +275,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 	else
 		user = eval("g_json.lines["+g_noline+"]."+select_user);
 	//---- get userid ----------
-	var url = "../../../"+serverBCK+"/users/user/username/"+user;
+	var url = serverBCK_API+"/users/user/username/"+user;
 	$.ajax({
 		type : "GET",
 		contentType: "application/xml",
@@ -286,7 +286,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 			var xml = "<users><user id='"+data+"'/></users>";
 			//---- get usergroupid ----------
 			var groupid = "";
-			var url = "../../../"+serverBCK+"/usersgroups";
+			var url = serverBCK_API+"/usersgroups";
 			$.ajax({
 				type : "GET",
 				contentType: "text/html",
@@ -305,7 +305,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 						$.ajax({
 							type : 'PUT',
 							dataType : "text",
-							url : "../../../"+serverBCK+"/usersgroups?group=" + groupid + "&user=" + user_id,
+							url : serverBCK_API+"/usersgroups?group=" + groupid + "&user=" + user_id,
 							data : "",
 							success : function(data) {
 								$("#batch-log").append("<br>- JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
@@ -344,7 +344,7 @@ g_actions['join-usergroup'] = function LeaveUserGroup(node)
 	else
 		user = eval("g_json.lines["+g_noline+"]."+select_user);
 	//---- get userid ----------
-	var url = "../../../"+serverBCK+"/users/user/username/"+user;
+	var url = serverBCK_API+"/users/user/username/"+user;
 	$.ajax({
 		type : "GET",
 		contentType: "application/xml",
@@ -355,7 +355,7 @@ g_actions['join-usergroup'] = function LeaveUserGroup(node)
 			var xml = "<users><user id='"+data+"'/></users>";
 			//---- get usergroupid ----------
 			var groupid = "";
-			var url = "../../../"+serverBCK+"/usersgroups";
+			var url = serverBCK_API+"/usersgroups";
 			$.ajax({
 				type : "GET",
 				contentType: "text/html",
@@ -374,7 +374,7 @@ g_actions['join-usergroup'] = function LeaveUserGroup(node)
 						$.ajax({
 							type : 'DELETE',
 							dataType : "text",
-							url : "../../../"+serverBCK+"/usersgroups?group=" + groupid + "&user=" + user_id,
+							url : serverBCK_API+"/usersgroups?group=" + groupid + "&user=" + user_id,
 							data : "",
 							success : function(data) {
 								$("#batch-log").append("<br>- LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
@@ -471,7 +471,7 @@ g_actions['delete-tree'] = function deleteTree(node)
 	try {
 		var portfolioid = UIFactory["Portfolio"].getid_bycode(code,false);
 		if (portfolioid!=undefined) {
-			var url = "../../../"+serverBCK+"/portfolios/portfolio/" + portfolioid;
+			var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid;
 			$.ajax({
 				type : "DELETE",
 				contentType: "application/xml",
@@ -511,7 +511,7 @@ g_actions['create-tree'] = function createTree(node)
 	var code = getTxtvals($("code",node));
 	var treeref = $(node).attr('id');
 	if (code!="") {
-		var url = "../../../"+serverBCK+"/portfolios/portfolio/code/" + code;
+		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
@@ -543,7 +543,7 @@ g_actions['create-tree'] = function createTree(node)
 					$.ajax({
 						type : "GET",
 						dataType : "xml",
-						url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag=root",
+						url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag=root",
 						success : function(data) {
 							var nodeid = $("asmRoot",data).attr('id');
 							var xml = "<asmResource xsi_type='nodeRes'>";
@@ -556,7 +556,7 @@ g_actions['create-tree'] = function createTree(node)
 								contentType: "application/xml",
 								dataType : "text",
 								data : xml,
-								url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
+								url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
 								success : function(data) {
 									$("#batch-log").append("<br>- tree created ("+portfolioid+") - code:"+code);
 									processNextAction();
@@ -626,7 +626,7 @@ g_actions['copy-tree'] = function copyTree(node)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag=root",
+			url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag=root",
 			success : function(data) {
 				var nodeid = $("asmRoot",data).attr('id');
 				var xml = "<asmResource xsi_type='nodeRes'>";
@@ -638,7 +638,7 @@ g_actions['copy-tree'] = function copyTree(node)
 					contentType: "application/xml",
 					dataType : "text",
 					data : xml,
-					url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
+					url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
 					success : function(data) {
 						treeid = data;
 						$("#batch-log").append("<br>- copy-tree created ("+treeid+") - code:"+code);
@@ -677,7 +677,7 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 		$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + oldcode + "&semtag=root",
+				url : serverBCK_API+"/nodes?portfoliocode=" + oldcode + "&semtag=root",
 				success : function(data) {
 					var nodeid = $("asmRoot",data).attr('id');
 					var xml = "<asmResource xsi_type='nodeRes'>";
@@ -693,7 +693,7 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 						contentType: "application/xml",
 						dataType : "text",
 						data : xml,
-						url : "../../../"+serverBCK+"/nodes/node/" + nodeid + "/noderesource",
+						url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
 						success : function(data) {
 							$("#batch-log").append("<br>- tree root updated ("+oldcode+") - newcode:"+newcode);
 							processNextAction();
@@ -745,7 +745,7 @@ g_actions['update-resource'] = function updateResource(node)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 			success : function(data) {
 				var nodeid = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data).attr('id');
 				var xml = "<asmResource xsi_type='Field'>";
@@ -756,7 +756,7 @@ g_actions['update-resource'] = function updateResource(node)
 					contentType: "application/xml",
 					dataType : "text",
 					data : xml,
-					url : "../../../"+serverBCK+"/resources/resource/" + nodeid,
+					url : serverBCK_API+"/resources/resource/" + nodeid,
 					success : function(data) {
 						$("#batch-log").append("<br>- resource updated ("+nodeid+") - semtag="+semtag);
 						processNextAction();
@@ -784,7 +784,7 @@ g_actions['update-resource'] = function updateResource(node)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[source_treeref][1] + "&semtag="+source_semtag,
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[source_treeref][1] + "&semtag="+source_semtag,
 			success : function(data) {
 				sourceid = $("node",data).attr('id');
 				//------ search targetid -------------------
@@ -792,7 +792,7 @@ g_actions['update-resource'] = function updateResource(node)
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+					url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 					success : function(data) {
 						targetid = $("node",data).attr('id');
 						var xml = "<asmResource xsi_type='Proxy'>";
@@ -808,7 +808,7 @@ g_actions['update-resource'] = function updateResource(node)
 							targetid : targetid,
 							sourceid : sourceid,
 							semtag : semtag,
-							url : "../../../"+serverBCK+"/resources/resource/" + targetid,
+							url : serverBCK_API+"/resources/resource/" + targetid,
 							success : function(data) {
 								$("#batch-log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
 								processNextAction();
@@ -843,7 +843,7 @@ g_actions['update-resource'] = function updateResource(node)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 			success : function(data) {
 				var nodes = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data);
 				if (nodes.length==0)
@@ -869,7 +869,7 @@ g_actions['update-resource'] = function updateResource(node)
 						data : xml,
 						nodeid : nodeid,
 						semtag : semtag,
-						url : "../../../"+serverBCK+"/nodes/node/" + nodeid+"/metadatawad",
+						url : serverBCK_API+"/nodes/node/" + nodeid+"/metadatawad",
 						idx : i,
 						nb : nb-1,
 						success : function(data) {
@@ -903,7 +903,7 @@ g_actions['update-resource'] = function updateResource(node)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 			success : function(data) {
 				var nodes = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data);
 				if (nodes.length==0)
@@ -927,7 +927,7 @@ g_actions['update-resource'] = function updateResource(node)
 						data : xml,
 						nodeid : nodeid,
 						semtag : semtag,
-						url : "../../../"+serverBCK+"/nodes/node/" + nodeid+"/metadata",
+						url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
 						idx : i,
 						nb : nb-1,
 						success : function(data) {
@@ -962,7 +962,7 @@ g_actions['update-resource'] = function updateResource(node)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 			success : function(data) {
 				var nodes = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data);
 				if (nodes.length==0)
@@ -985,7 +985,7 @@ g_actions['update-resource'] = function updateResource(node)
 						data : xml,
 						nodeid : nodeid,
 						semtag : semtag,
-						url : "../../../"+serverBCK+"/nodes/node/" + nodeid+"/metadata",
+						url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
 						idx : i,
 						nb : nb-1,
 						success : function(data) {
@@ -1020,7 +1020,7 @@ g_actions['update-resource'] = function updateResource(node)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 			success : function(data) {
 				var nodes = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data);
 				if (nodes.length==0)
@@ -1043,7 +1043,7 @@ g_actions['update-resource'] = function updateResource(node)
 						data : xml,
 						nodeid : nodeid,
 						semtag : semtag,
-						url : "../../../"+serverBCK+"/nodes/node/" + nodeid+"/metadatawad",
+						url : serverBCK_API+"/nodes/node/" + nodeid+"/metadatawad",
 						idx : i,
 						nb : nb-1,
 						success : function(data) {
@@ -1077,7 +1077,7 @@ g_actions['update-resource'] = function updateResource(node)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 			success : function(data) {
 				var nodeid = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data).attr('id');
 				var xml = "<asmResource xsi_type='Dashboard'>";
@@ -1091,7 +1091,7 @@ g_actions['update-resource'] = function updateResource(node)
 					data : xml,
 					nodeid : nodeid,
 					semtag : semtag,
-					url : "../../../"+serverBCK+"/resources/resource/" + nodeid,
+					url : serverBCK_API+"/resources/resource/" + nodeid,
 					success : function(data) {
 						$("#batch-log").append("<br>- resource Dashboard update("+this.nodeid+") - semtag="+this.semtag);
 						processNextAction();
@@ -1127,7 +1127,7 @@ g_actions['share-tree'] = function shareTree(node)
 	var role = getTxtvals($("role",node));
 	var user = getTxtvals($("user",node));
 	//---- get userid ----------
-	var url = "../../../"+serverBCK+"/users/user/username/"+user;
+	var url = serverBCK_API+"/users/user/username/"+user;
 	$.ajax({
 		type : "GET",
 		contentType: "application/xml",
@@ -1138,7 +1138,7 @@ g_actions['share-tree'] = function shareTree(node)
 			var xml = "<users><user id='"+data+"'/></users>";
 			//---- get role groupid ----------
 			var groupid = "";
-			var url = "../../../"+serverBCK+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
+			var url = serverBCK_API+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
 			$.ajax({
 				type : "GET",
 				contentType: "text/html",
@@ -1147,7 +1147,7 @@ g_actions['share-tree'] = function shareTree(node)
 				success : function(data) {
 					groupid = data;
 					//---- share tree --------------
-					var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+					var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
 					$.ajax({
 						type : "POST",
 						contentType: "application/xml",
@@ -1187,7 +1187,7 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 	var treeref = $(node).attr("select");
 	//---- get portfoliogroupid ----------
 	var groupid = "";
-	var url = "../../../"+serverBCK+"/portfoliogroups";
+	var url = serverBCK_API+"/portfoliogroups";
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -1205,7 +1205,7 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 				$.ajax({
 					type : 'PUT',
 					dataType : "text",
-					url : "../../../"+serverBCK+"/portfoliogroups?group="+groupid+"&uuid=" + g_trees[treeref][0],
+					url : serverBCK_API+"/portfoliogroups?group="+groupid+"&uuid=" + g_trees[treeref][0],
 					data : "",
 					success : function(data) {
 						$("#batch-log").append("<br>- JoinPortfolioGroup - usergroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
@@ -1244,13 +1244,13 @@ g_actions['share-usergroup'] = function shareUserGroup(node)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?group="+usergroupid,
+		url : serverBCK_API+"/usersgroups?group="+usergroupid,
 		success : function(data) {
 			var users = "<users>" + $($("users",data)[0]).html() + "</users>";
 			if (users.length>20) {
 				//---- get role groupid ----------
 				var groupid = "";
-				var url = "../../../"+serverBCK+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
+				var url = serverBCK_API+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
 				$.ajax({
 					type : "GET",
 					contentType: "text/html",
@@ -1259,7 +1259,7 @@ g_actions['share-usergroup'] = function shareUserGroup(node)
 					success : function(data) {
 						groupid = data;
 						//---- share tree --------------
-						var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+						var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
 						$.ajax({
 							type : "POST",
 							contentType: "application/xml",
@@ -1313,7 +1313,7 @@ g_actions['unshare-tree'] = function unshareTree(node)
 	else
 		user = eval("g_json.lines["+g_noline+"]."+select_user);
 	//---- get userid ----------
-	var url = "../../../"+serverBCK+"/users/user/username/"+user;
+	var url = serverBCK_API+"/users/user/username/"+user;
 	$.ajax({
 		type : "GET",
 		contentType: "application/xml",
@@ -1323,7 +1323,7 @@ g_actions['unshare-tree'] = function unshareTree(node)
 			var user_id = data;
 			//---- get role groupid ----------
 			var groupid = "";
-			var url = "../../../"+serverBCK+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
+			var url = serverBCK_API+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
 			$.ajax({
 				type : "GET",
 				contentType: "text/html",
@@ -1332,7 +1332,7 @@ g_actions['unshare-tree'] = function unshareTree(node)
 				success : function(data) {
 					groupid = data;
 					//---- share tree --------------
-					var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+user_id;
+					var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+user_id;
 					$.ajax({
 						type : "DELETE",
 						contentType: "application/xml",
@@ -1375,11 +1375,11 @@ g_actions['unshare-usergroup'] = function unshareUserGroup(node)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?group="+groupid,
+		url : serverBCK_API+"/usersgroups?group="+groupid,
 		success : function(data) {
 			var users = $("user",data);
 			var groupid = "";
-			var url = "../../../"+serverBCK+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
+			var url = serverBCK_API+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
 			$.ajax({
 				type : "GET",
 				contentType: "text/html",
@@ -1389,7 +1389,7 @@ g_actions['unshare-usergroup'] = function unshareUserGroup(node)
 					groupid = data;
 					for (var i=0; i<users.length; i++){
 						var userid = $(users[i]).attr('id');
-						var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+userid;
+						var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+userid;
 						$.ajax({
 							type : "DELETE",
 							contentType: "application/xml",
@@ -1442,7 +1442,7 @@ g_actions['import-node'] = function importNode(node)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+		url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 		success : function(data) {
 			var nodes = $("node",data);
 			import_nodes(nodes,semtag,source,srcetag,srcecode);
@@ -1461,7 +1461,7 @@ function import_nodes(nodes,semtag,source,srcetag,srcecode)
 	if (nodes.length>0) {
 		var destid = $(nodes[0]).attr('id');
 		nodes = nodes.slice(1,nodes.length);
-		var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+		var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 		$.ajax({
 			type : "POST",
 			dataType : "text",
@@ -1500,7 +1500,7 @@ g_actions['moveup-node'] = function moveupNode(node,semtag)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+		url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 		success : function(data) {
 			var nodes = $("node",data);
 			moveup_nodes(nodes,semtag);
@@ -1524,7 +1524,7 @@ function moveup_nodes(nodes,semtag)
 			dataType : "text",
 			current:currentid,
 			nodes:nodes,
-			url : "../../../"+serverBCK+"/nodes/node/" + currentid + "/moveup",
+			url : serverBCK_API+"/nodes/node/" + currentid + "/moveup",
 			success : function(data) {
 				$("#batch-log").append("<br>- node moved up - nodeid("+this.current+") - semtag="+semtag);
 				moveup_nodes(this.nodes,semtag);
@@ -1567,11 +1567,11 @@ function getModelAndProcess(model_code)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/code/"+model_code,
+		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
 		success : function(data) {
 			var nodeid = $("asmRoot",data).attr("id");
 			// ---- transform karuta portfolio to batch model
-			var urlS = "../../../"+serverBCK+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2batch.xsl&lang="+LANG;
+			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2batch.xsl&lang="+LANG;
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -1592,7 +1592,7 @@ function get_list_portfoliosgroups()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfoliogroups",
+		url : serverBCK_API+"/portfoliogroups",
 		data: "",
 		success : function(data) {
 			UIFactory["PortfoliosGroup"].parse(data);
@@ -1621,7 +1621,7 @@ function get_list_usersgroups()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups",
+		url : serverBCK_API+"/usersgroups",
 		data: "",
 		success : function(data) {
 			UIFactory["UsersGroup"].parse(data);

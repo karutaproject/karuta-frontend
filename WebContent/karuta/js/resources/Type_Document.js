@@ -151,7 +151,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 	var html = "";
 	if (type=='standard'){
 		if ($(this.filename_node[langcode]).text()!="")
-			html =  "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' style='width:25px'> "+$(this.filename_node[langcode]).text()+"</a>";
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' style='width:25px'> "+$(this.filename_node[langcode]).text()+"</a>";
 		else
 			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
 	}
@@ -160,7 +160,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			var filename = $(this.filename_node[langcode]).text();
 			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 			//alertHTML(extension);
-			html = "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><div class='doc-up'><p style='text-align:center;'>"+$(this.filename_node[langcode]).text()+"</p></div><div class='doc-bottom'><span>Document</span></div></a>";
+			html = "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><div class='doc-up'><p style='text-align:center;'>"+$(this.filename_node[langcode]).text()+"</p></div><div class='doc-bottom'><span>Document</span></div></a>";
 		} else
 			html = "<div class='doc-up'><p style='text-align:center;'>"+karutaStr[LANG]['no-document']+"</p></div><div class='doc-bottom'><span>Document</span></div>";
 	}
@@ -168,7 +168,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		if ($(this.filename_node[langcode]).text()!=""){
 			var filename = $(this.filename_node[langcode]).text();
 			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-			html =  "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
 		} else
 			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
 	}
@@ -176,7 +176,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		if ($(this.filename_node[langcode]).text()!=""){
 			var filename = $(this.filename_node[langcode]).text();
 			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-			html =  "<a id='file_"+this.id+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
 		} else
 			html =  "<img src='../img/document-icon.png' style='width:25px'>";
 	}
@@ -263,12 +263,12 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var html ="";
-	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
+	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html +=" <form id='divfileupload_"+this.id+langcode+"' enctype='multipart/form-data'>";
 	html +=" <input id='fileupload_"+this.id+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</form>";
 	html +=" <div id='progress_"+this.id+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
-	html +=  "<a id='file__"+this.id+"_"+langcode+"' href='../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+"</a>"; 
+	html +=  "<a id='file__"+this.id+"_"+langcode+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+"</a>"; 
 	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Document.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
 	$("#fileupload_"+this.id+langcode).fileupload({

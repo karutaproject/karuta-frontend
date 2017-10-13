@@ -35,7 +35,7 @@ function fill_exec_report()
 	//------------------------------
 	var model_code = "";
 	var html ="";
-	var url = "../../../"+serverFIL+"/csv";
+	var url = serverBCK+"/csv";
 	html +=" <div id='report-divfileupload'>";
 	html +=" <input id='report-fileupload' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</div>";

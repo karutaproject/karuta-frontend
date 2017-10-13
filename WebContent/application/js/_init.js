@@ -6,12 +6,11 @@ var appliname = 'karuta2.3';
 var karutaname = 'karuta2.3'; // to share the same 'karuta-core' with multiple front-end
 var karuta_url = '../../../' + karutaname;
 var bckname = '2.3';
-var serverBCK = "karuta-backend"+bckname+"/rest/api";
-var serverFIL = "karuta-backend"+bckname; // fileserver backend
-var serverVER = "karuta-backend"+bckname; // version server
-var serverREG = "karuta-backend"+bckname; // user registration server
-var serverCONF = "karuta-backend"+bckname;
-var serverREP = "karuta-backend"+bckname; // delayed report server
+var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
+var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
+//----------------------------------
+var serverBCK_REG = "https://savoie.hec.ca:8081/config";  // report registration server
+var serverBCK_REP = "https://savoie.hec.ca:8081/reports"; // report server
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';

@@ -112,7 +112,7 @@ function fill_list_page()
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/users",
+			url : serverBCK_API+"/users",
 			success : function(data) {
 				UIFactory["User"].parse(data);
 			}
@@ -139,7 +139,7 @@ function fill_list_page()
 		}
 	}
 	//----------------
-	var url1 =  "../../../"+serverBCK+"/portfolios?active=1&count=true";
+	var url1 =  serverBCK_API+"/portfolios?active=1&count=true";
 	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
@@ -154,7 +154,7 @@ function fill_list_page()
 			} else 
 				if (g_nb_trees==null || g_nb_trees<100) {
 				//--------we load all the portfolios-----------------------
-				var url0 = "../../../"+serverBCK+"/portfolios?active=1";
+				var url0 = serverBCK_API+"/portfolios?active=1";
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
@@ -174,7 +174,7 @@ function fill_list_page()
 								$.ajax({
 									type : "GET",
 									dataType : "xml",
-									url : "../../../"+serverBCK+"/portfolios?active=false",
+									url : serverBCK_API+"/portfolios?active=false",
 									success : function(data) {
 										var destid = $("div[id='bin']");
 										UIFactory["Portfolio"].parseBin(data);
@@ -201,7 +201,7 @@ function fill_list_page()
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/portfolios?active=1&project=true",
+					url : serverBCK_API+"/portfolios?active=1&project=true",
 					success : function(data) {
 						var nb_projects = parseInt($('portfolios',data).attr('count'));
 						UIFactory["Portfolio"].parse(data);
@@ -212,7 +212,7 @@ function fill_list_page()
 							$.ajax({
 								type : "GET",
 								dataType : "xml",
-								url : "../../../"+serverBCK+"/portfolios?active=false",
+								url : serverBCK_API+"/portfolios?active=false",
 								success : function(data) {
 									var destid = $("div[id='bin']");
 									UIFactory["Portfolio"].parseBin(data);
@@ -232,7 +232,7 @@ function fill_list_page()
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/portfolios?active=1&project=false&count=true",
+					url : serverBCK_API+"/portfolios?active=1&project=false&count=true",
 					success : function(data) {
 						var nb_portfolios = parseInt($('portfolios',data).attr('count'));
 						$("#portfolios-nb").html(nb_portfolios);
@@ -272,7 +272,7 @@ function fill_search_page(code)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/users",
+		url : serverBCK_API+"/users",
 		success : function(data) {
 			UIFactory["User"].parse(data);
 		}
@@ -298,7 +298,7 @@ function fill_search_page(code)
 		}
 	}
 	//----------------
-	var url1 = "../../../"+serverBCK+"/portfolios?active=1&search="+code;
+	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -326,7 +326,7 @@ function fill_search_page(code)
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/portfolios?active=false&search="+code,
+					url : serverBCK_API+"/portfolios?active=false&search="+code,
 					success : function(data) {
 						var destid = $("div[id='bin']");
 						UIFactory["Portfolio"].parseBin(data);
@@ -366,7 +366,7 @@ function loadAndDisplayProjectPortfolios(code)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1&project="+code,
+		url : serverBCK_API+"/portfolios?active=1&project="+code,
 		success : function(data) {
 			UIFactory["Portfolio"].parse_add(data);
 			UIFactory["Portfolio"].displayAll('portfolios','list');
@@ -385,7 +385,7 @@ function loadProjectPortfolios(code)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1&project="+code,
+		url : serverBCK_API+"/portfolios?active=1&project="+code,
 		success : function(data) {
 			UIFactory["Portfolio"].parse_add(data);
 		},
@@ -403,7 +403,7 @@ function countProjectPortfolios(uuid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+".&count=true",
+		url : serverBCK_API+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+".&count=true",
 		uuid: uuid,
 		success : function(data) {
 			var nb = parseInt($('portfolios',data).attr('count'));
