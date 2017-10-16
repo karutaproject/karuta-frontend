@@ -263,6 +263,7 @@ karutaStr['en']['search-lastname-label']="Type a lastname or a part of a lastnam
 karutaStr['en']['username-label']="Login";
 karutaStr['en']['firstname-label']="Firstname";
 karutaStr['en']['lastname-label']="Lastname";
+karutaStr['en']['changeOwner']="Change the Owner";
 
 //=========================================
 //========== USERS ========================
@@ -287,6 +288,7 @@ karutaStr['en']['projects-admin']="Projects";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['substitute']="Substitution";
+karutaStr['en']['select_user']="Select a User";
 
 //=========================================
 //========== ROLES ========================

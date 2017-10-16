@@ -335,6 +335,23 @@ UIFactory["User"].prototype.getSelector = function(attr,value,name,checked,disab
 	var html = "<input type='checkbox' name='"+name+"' username='"+username+"' value='"+userid+"'";
 	if (attr!=null && value!=null)
 		html += " "+attr+"='"+value+"'";
+	if (disabled)
+		html+= " disabled='disabled' ";			
+	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
+	return html;
+};
+
+//==================================
+UIFactory["User"].prototype.getRadio = function(attr,value,name,checked,disabled)
+//==================================
+{
+	var userid = this.id;
+	var firstname = this.firstname_node.text();
+	var lastname = this.lastname_node.text();
+	var username = this.username_node.text();
+	var html = "<input type='radio' name='"+name+"' username='"+username+"' value='"+userid+"'";
+	if (attr!=null && value!=null)
+		html += " "+attr+"='"+value+"'";
 	if ((userid==1)||disabled)
 		html+= " disabled='disabled' ";			
 	if (checked)
@@ -342,6 +359,7 @@ UIFactory["User"].prototype.getSelector = function(attr,value,name,checked,disab
 	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
 	return html;
 };
+
 
 //==================================
 UIFactory["User"].edit = function(userid)
@@ -459,6 +477,18 @@ UIFactory["User"].displaySelectMultipleActive2 = function(selectedlist,destid,ty
 			$("#"+destid).append($(input));
 			$("#"+destid).append($("<br>"));			
 		}
+	}
+};
+
+//==================================
+UIFactory["User"].displaySelectActive = function(destid,type,lang)
+//==================================
+{
+	$("#"+destid).html("");
+	for ( var i = 0; i < UsersActive_list.length; i++) {
+		var input = UsersActive_list[i].getRadio(null,null,destid);
+		$("#"+destid).append($(input));
+		$("#"+destid).append($("<br>"));
 	}
 };
 

@@ -145,7 +145,8 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						portfolio_label = '- no label in '+languages[langcode]+' -';
 					//-------------------- PROJECT ----------------------
 					projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
-					displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
+					displayProject[portfolio.id] = localStorage.getItem('dp'+portfolio.id);
+//					displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
 					projects_list[number_of_projects].portfolios += portfolio.id;
 					number_of_projects_portfolios = 0;
 					html += "<div id='project_"+portfolio.id+"' class='project'>";
@@ -270,7 +271,8 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 				if (portfolio_label==undefined || portfolio_label=='')
 					portfolio_label = '- no label in '+languages[langcode]+' -';
 				//-------------------- PROJECT ----------------------
-				displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
+				displayProject[portfolio.id] = localStorage.getItem('dp'+portfolio.id);
+//				displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
 				number_of_bins ++;
 				html += "<div id='project_"+portfolio.id+"' class='project'>";
 				html += "	<div class='row row-label'>";
@@ -406,6 +408,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 				html += "<li><a onclick=\"UIFactory['Portfolio'].remove('"+this.id+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
 				html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+this.id+"?resources=true&export=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export"]+"</a></li>";
 				html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+this.id+"?resources=true&files=true'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-with-files"]+"</a></li>";
+				html += "<li><a onclick=\"UIFactory['Portfolio'].callChangeOwner('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["changeOwner"]+"</a></li>";
 			} else {
 				if (USER.admin){
 					html += "<li><a onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+gid+"','"+this.id+"')\" ><span class='glyphicon glyphicon-remove'></span> "+karutaStr[LANG]["button-remove-from-group"]+"</a></li>";
@@ -2228,6 +2231,87 @@ UIFactory["Portfolio"].shareGroups = function(portfolioid,type)
 		updateRRGroup_Users(groupid,users,xml,type,'id',portfolioid);
 	}
 };
+
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
+
+//==================================
+UIFactory["Portfolio"].callChangeOwner = function(portfolioid,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var js2 = "javascript:UIFactory.Portfolio.changeOwner('"+portfolioid+"')";
+	var footer = ""
+	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Save']+"</button>";
+	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['changeOwner']+' '+portfolios_byid[portfolioid].label_node[langcode].text());
+	var html = "";
+	html += "<div class='row'>";
+	html += "<div class='col-md-3'><br>";
+	html += karutaStr[LANG]['select_user'];
+	html += "</div>";
+	html += "<div class='col-md-9'>";
+	html += "<div id='select_user'></div>";
+	html += "</div>";
+	html += "</div><!--row-->";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	//----------------------------------------------------------------
+	if (Users_byid.length>0) { // users loaded
+		UIFactory["User"].displaySelectActive('select_user');
+	} else {
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/users",
+			success : function(data) {
+				UIFactory["User"].parse(data);
+				UIFactory["User"].displaySelectActive('select_user');
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error in callChangeOwner : "+jqxhr.responseText);
+			}
+		});
+	}
+	//----------------------------------------------------------------
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].changeOwner = function(portfolioid,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var user = $("input[name='select_user']").filter(':checked');
+	var userid = $(user).val();
+	$.ajax({
+		type : "PUT",
+		dataType : "text",
+		url : serverBCK_API+"/portfolios/portfolio/"+portfolioid+"/setOwner/"+userid,
+		success : function(data) {
+			$('#edit-window').modal('hide')
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in ChangeOwner : "+jqxhr.responseText);
+		}
+	});
+	
+}
 
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------

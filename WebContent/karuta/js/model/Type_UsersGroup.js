@@ -60,7 +60,8 @@ UIFactory["UsersGroup"].displayGroups = function(destid,type,lang)
 		var group_type = "UsersGroup";
 		for ( var i = 0; i < UsersGroups_list.length; i++) {
 			var gid = UsersGroups_list[i].id;
-			displayGroup[group_type][gid] = Cookies.get('dg_'+group_type+"-"+gid);
+			displayGroup[group_type][gid] = localStorage.getItem('dg_'+group_type+"-"+gid);
+//			displayGroup[group_type][gid] = Cookies.get('dg_'+group_type+"-"+gid);
 			if (displayGroup[group_type][gid]!=undefined && displayGroup[group_type][gid]=='open'){
 				UIFactory["UsersGroup"].displayUsers(gid,"content-"+group_type+"-"+gid,type,lang);				
 			}
@@ -82,7 +83,8 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type,lang)
 		type = 'list';
 	var html = "";
 	if (type=='list') {
-		displayGroup[group_type][this.id] = Cookies.get('dg_'+group_type+"-"+this.id);
+		displayGroup[group_type][this.id] = localStorage.getItem('dg_'+group_type+"-"+this.id);
+//		displayGroup[group_type][this.id] = Cookies.get('dg_'+group_type+"-"+this.id);
 		html += "	<div class='row row-label'>";
 		if (displayGroup[group_type][this.id]!=undefined && displayGroup[group_type][this.id]=='open')
 			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.UsersGroup.displayUsers','list','"+lang+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button glyphicon glyphicon-minus'></span></div>";

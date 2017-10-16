@@ -15,7 +15,8 @@ function getList()
 	html += "<h3 id='portfolios-not-in-project'><span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span></h3>";
 	html += "	<div class='row portfolios-not-in-project'>";
 	if (USER.creator) {
-		displayProject['portfolios-not-in-project'] = Cookies.get('dpportfolios-not-in-project');
+		displayProject['portfolios-not-in-project'] = localStorage.getItem('dpportfolios-not-in-project');
+//		displayProject['portfolios-not-in-project'] = Cookies.get('dpportfolios-not-in-project');
 		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
 			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button glyphicon glyphicon-minus'></span></div>";
 		else
@@ -84,7 +85,7 @@ function show_list_page()
 	setLanguageMenu("fill_list_page()");
 	$("#refresh").attr("onclick","fill_list_page()");
 	$("#refresh").show();
-	if (USER.creator)
+//	if (USER.creator)
 		$("#search-portfolio-div").show();
 	$("#main-list").show();
 	$('[data-tooltip="true"]').tooltip();
@@ -443,7 +444,8 @@ function toggleProject(uuid) {
 				$("#remove-"+uuid).show();
 				displayProject[uuid] = 'open';
 			}
-			Cookies.set('dp'+uuid,'open',{ expires: 60 });
+			localStorage.setItem('dp'+uuid,'open');
+//			Cookies.set('dp'+uuid,'open',{ expires: 60 });
 		}
 	} else {
 		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
@@ -453,7 +455,8 @@ function toggleProject(uuid) {
 		$("#remove-"+uuid).hide();
 		displayProject[uuid] = 'closed';
 		if (uuid!="portfolios-not-in-project")
-			Cookies.set('dp'+uuid,'closed',{ expires: 60 });
+			localStorage.setItem('dp'+uuid,'closed');
+//			Cookies.set('dp'+uuid,'closed',{ expires: 60 });
 	}
 }
 

@@ -20,6 +20,7 @@ function show_main_page(portfolioid,role)
 function fill_main_page(portfolioid,role)
 //==============================
 {
+	$("#wait-window").modal('show');
 	g_dashboard_models = {};
 	g_report_models = {};
 	g_Get_Resource_caches = {};
@@ -47,7 +48,7 @@ function fill_main_page(portfolioid,role)
 				if (g_userroles[1]=='designer')
 					g_designerrole = true;
 				if (g_designerrole) {
-					g_visible = Cookies.get('metadata');
+					g_visible = localStorage.getItem('metadata');
 					toggleMetadata(g_visible);
 				}
 			}
@@ -55,15 +56,15 @@ function fill_main_page(portfolioid,role)
 	} else {
 		g_userroles[0] = g_userroles[1] ='designer';
 		g_designerrole = true;
-		g_visible = Cookies.get('metadata');
+		g_visible = localStorage.getItem('metadata');
 		toggleMetadata(g_visible);
 	}
 	$.ajaxSetup({async: true});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-//		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?level=asmUnitStructure",
-		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
+		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?level=1",
+//		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.roles = {};
 			g_portfolio_current = data;
