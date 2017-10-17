@@ -93,6 +93,13 @@ function fill_main_page(portfolioid,role)
 			if ($("asmUnit:has(metadata[semantictag*='welcome-unit'])",data).length==0 && $("asmRoot:has(metadata[semantictag*='karuta-model'])",data).length>0) {
 				g_welcome_add = true;
 			}
+			//----if asmUnitStructures load content--------
+			var unitStructures = $("asmUnitStructure",data);
+			for (var i=0;i<unitStructures.length;i++){
+				var nodeid = $(unitStructures[i]).attr('id');
+				UIFactory.Node.loadNode(nodeid);
+			}
+			//-------------------------------------------------
 			setCSSportfolio(data);
 			if (g_display_type=="header")
 				loadLanguages(function(data) {UIFactory["Portfolio"].displayPortfolio('main-page','header',LANGCODE,g_edit);});
