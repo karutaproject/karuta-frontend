@@ -63,12 +63,13 @@ function fill_main_page(portfolioid,role)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?level=1",
+		url : serverBCK_API+"/nodes/node/" + g_portfolioid + "?level=2",
 //		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.roles = {};
 			g_portfolio_current = data;
 			g_portfolio_rootid = $("asmRoot",data).attr("id");
+			UICom.structure['ui'][g_portfolio_rootid].loaded = true;
 			var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
 			$("body").addClass(root_semantictag);
 			// --------Display Type------------------
@@ -108,7 +109,6 @@ function fill_main_page(portfolioid,role)
 			//---------------------------
 			if (g_encrypted)
 				loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});
-				
 			//---------------------------
 			$("#wait-window").modal('hide');
 			//---------------------------

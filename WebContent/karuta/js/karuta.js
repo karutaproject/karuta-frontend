@@ -621,11 +621,14 @@ function displayPage(uuid,depth,type,langcode,edit) {
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
-//	if ((name == 'asmUnit' || name=='asmStructure') && !UICom.structure['ui'][uuid].loaded) {// content is not loaded or empty
-//		$("#wait-window").modal('show');
-//		UIFactory.Node.loadNode(uuid);
-//		UICom.structure['ui'][uuid].loaded = true;
-//	}
+	if (name == 'asmUnit' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
+		$("#wait-window").modal('show');
+		UIFactory.Node.loadNode(uuid);
+	}
+	if (name=='asmStructure' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
+		$("#wait-window").modal('show');
+		UIFactory.Node.loadStructure(uuid);
+	}
 	if (depth==null)
 		depth=100;
 	if (name=='asmRoot' || name=='asmStructure')
