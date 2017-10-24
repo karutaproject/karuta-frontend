@@ -357,7 +357,7 @@
 	<!--fo:table-cell padding="2px"-->
 	<fo:table-cell>
 		<xsl:if test="@colspan&gt;1">
-			<xsl:attribute name="number-columns-spanned"><xsl:value select="@colspan"/></xsl:attribute>
+			<xsl:attribute name="number-columns-spanned"><xsl:value-of select="@colspan"/></xsl:attribute>
 		</xsl:if>
 		<xsl:if test="contains(@style,'text-align:center')">
 			<xsl:attribute name="text-align">center</xsl:attribute>
@@ -415,110 +415,110 @@
 	</fo:table-cell>
 </xsl:template>
 
-	<!-- ========================================== -->
-	<xsl:template name="europass">
-	<!-- ========================================== -->
-		<fo:block margin-top='10px' margin-bottom='10px' >
-			<fo:table width="100%">
-				<fo:table-column column-width="20%"/>
-				<fo:table-column column-width="80%"/>
-				<fo:table-body>
-					<xsl:call-template name="mother-tongue" />
-					<xsl:call-template name="other-tongue" />
-				</fo:table-body>
-			</fo:table>
-		</fo:block>
-	</xsl:template>
+<!-- ========================================== -->
+<xsl:template name="europass">
+<!-- ========================================== -->
+	<fo:block margin-top='10px' margin-bottom='10px' >
+		<fo:table width="100%">
+			<fo:table-column column-width="20%"/>
+			<fo:table-column column-width="80%"/>
+			<fo:table-body>
+				<xsl:call-template name="mother-tongue" />
+				<xsl:call-template name="other-tongue" />
+			</fo:table-body>
+		</fo:table>
+	</fo:block>
+</xsl:template>
 
-	<!-- ========================================== -->
-	<xsl:template name="mother-tongue">
-	<!-- ========================================== -->
-			<fo:table-row>
-				<fo:table-cell padding-top='5pt' padding-right='5pt'>
-					<fo:block>Langue Maternelle</fo:block>
-				</fo:table-cell>
-				<fo:table-cell padding-top='5pt' padding-right='5pt'>
-					<fo:block><xsl:value-of select="//span[@class='mothertongue-value']" /></fo:block>
-				</fo:table-cell>
-			</fo:table-row>
-	</xsl:template>
-
-	<!-- ========================================== -->
-	<xsl:template name="other-tongue">
-	<!-- ========================================== -->
-			<fo:table-row>
-				<fo:table-cell padding-top='5pt' padding-right='5pt'>
-					<fo:block>Langue(s) Étrangère(s)</fo:block>
-				</fo:table-cell>
-				<fo:table-cell padding-top='5pt' padding-right='5pt'>
-					<!-- ===================== -->
-					<fo:table width="100%">
-						<fo:table-body>
-							<fo:table-row>
-								<fo:table-cell>
-									<fo:block> </fo:block>
-								</fo:table-cell>
-								<fo:table-cell border="1px solid lightgrey" number-columns-spanned="2">
-									<fo:block font-size="9pt" text-align="center" margin-top='4px' >
-										COMPRENDRE
-									</fo:block>
-								</fo:table-cell>
-								<fo:table-cell border="1px solid lightgrey" number-columns-spanned="2">
-									<fo:block  font-size="9pt" text-align="center" margin-top='4px' >
-										PARLER
-									</fo:block>
-								</fo:table-cell>
-								<fo:table-cell border="1px solid lightgrey">
-									<fo:block  font-size="9pt" text-align="center" margin-top='4px' >
-										ÉCRIRE
-									</fo:block>
-								</fo:table-cell>
-							</fo:table-row>
-							<xsl:for-each select="//tr[@class='other-tongue']">
-								<xsl:call-template name="langue"/>
-							</xsl:for-each>
-						</fo:table-body>
-					</fo:table>
-					<!-- ===================== -->
-				</fo:table-cell>
-			</fo:table-row>
-	</xsl:template>
-
-	<!-- ========================================== -->
-	<xsl:template name="langue">
-	<!-- ========================================== -->
+<!-- ========================================== -->
+<xsl:template name="mother-tongue">
+<!-- ========================================== -->
 		<fo:table-row>
-			<fo:table-cell>
-				<fo:block  font-size="9pt" margin-top='4px'>
-					<fo:block><xsl:value-of select=".//td[contains(@class,'language')]/span" /></fo:block>
-				</fo:block>
+			<fo:table-cell padding-top='5pt' padding-right='5pt'>
+				<fo:block>Langue Maternelle</fo:block>
 			</fo:table-cell>
-			<fo:table-cell border="1px solid lightgrey">
-				<fo:block  font-size="9pt" text-align="center" margin-top='4px'>
-					<fo:block><xsl:value-of select=".//td[contains(@class,'listening')]" /></fo:block>
-				</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border="1px solid lightgrey">
-				<fo:block  font-size="9pt" text-align="center" margin-top='4px'>
-					<fo:block><xsl:value-of select=".//td[contains(@class,'reading')]" /></fo:block>
-				</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border="1px solid lightgrey">
-				<fo:block  font-size="9pt" text-align="center" margin-top='4px'>
-					<fo:block><xsl:value-of select=".//td[contains(@class,'spoken-interaction')]" /></fo:block>
-				</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border="1px solid lightgrey">
-				<fo:block  font-size="9pt" text-align="center" margin-top='4px'>
-					<fo:block><xsl:value-of select=".//td[contains(@class,'spoken-production')]" /></fo:block>
-				</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border="1px solid lightgrey">
-				<fo:block  font-size="9pt" text-align="center" margin-top='4px'>
-					<fo:block><xsl:value-of select=".//td[contains(@class,'writing')]" /></fo:block>
-				</fo:block>
+			<fo:table-cell padding-top='5pt' padding-right='5pt'>
+				<fo:block><xsl:value-of select="//span[@class='mothertongue-value']" /></fo:block>
 			</fo:table-cell>
 		</fo:table-row>
-	</xsl:template>
+</xsl:template>
+
+<!-- ========================================== -->
+<xsl:template name="other-tongue">
+<!-- ========================================== -->
+		<fo:table-row>
+			<fo:table-cell padding-top='5pt' padding-right='5pt'>
+				<fo:block>Langue(s) Étrangère(s)</fo:block>
+			</fo:table-cell>
+			<fo:table-cell padding-top='5pt' padding-right='5pt'>
+				<!-- ===================== -->
+				<fo:table width="100%">
+					<fo:table-body>
+						<fo:table-row>
+							<fo:table-cell>
+								<fo:block> </fo:block>
+							</fo:table-cell>
+							<fo:table-cell border="1px solid lightgrey" number-columns-spanned="2">
+								<fo:block font-size="9pt" text-align="center" margin-top='4px' >
+									COMPRENDRE
+								</fo:block>
+							</fo:table-cell>
+							<fo:table-cell border="1px solid lightgrey" number-columns-spanned="2">
+								<fo:block  font-size="9pt" text-align="center" margin-top='4px' >
+									PARLER
+								</fo:block>
+							</fo:table-cell>
+							<fo:table-cell border="1px solid lightgrey">
+								<fo:block  font-size="9pt" text-align="center" margin-top='4px' >
+									ÉCRIRE
+								</fo:block>
+							</fo:table-cell>
+						</fo:table-row>
+						<xsl:for-each select="//tr[@class='other-tongue']">
+							<xsl:call-template name="langue"/>
+						</xsl:for-each>
+					</fo:table-body>
+				</fo:table>
+				<!-- ===================== -->
+			</fo:table-cell>
+		</fo:table-row>
+</xsl:template>
+
+<!-- ========================================== -->
+<xsl:template name="langue">
+<!-- ========================================== -->
+	<fo:table-row>
+		<fo:table-cell>
+			<fo:block  font-size="9pt" margin-top='4px'>
+				<fo:block><xsl:value-of select=".//td[contains(@class,'language')]/span" /></fo:block>
+			</fo:block>
+		</fo:table-cell>
+		<fo:table-cell border="1px solid lightgrey">
+			<fo:block  font-size="9pt" text-align="center" margin-top='4px'>
+				<fo:block><xsl:value-of select=".//td[contains(@class,'listening')]" /></fo:block>
+			</fo:block>
+		</fo:table-cell>
+		<fo:table-cell border="1px solid lightgrey">
+			<fo:block  font-size="9pt" text-align="center" margin-top='4px'>
+				<fo:block><xsl:value-of select=".//td[contains(@class,'reading')]" /></fo:block>
+			</fo:block>
+		</fo:table-cell>
+		<fo:table-cell border="1px solid lightgrey">
+			<fo:block  font-size="9pt" text-align="center" margin-top='4px'>
+				<fo:block><xsl:value-of select=".//td[contains(@class,'spoken-interaction')]" /></fo:block>
+			</fo:block>
+		</fo:table-cell>
+		<fo:table-cell border="1px solid lightgrey">
+			<fo:block  font-size="9pt" text-align="center" margin-top='4px'>
+				<fo:block><xsl:value-of select=".//td[contains(@class,'spoken-production')]" /></fo:block>
+			</fo:block>
+		</fo:table-cell>
+		<fo:table-cell border="1px solid lightgrey">
+			<fo:block  font-size="9pt" text-align="center" margin-top='4px'>
+				<fo:block><xsl:value-of select=".//td[contains(@class,'writing')]" /></fo:block>
+			</fo:block>
+		</fo:table-cell>
+	</fo:table-row>
+</xsl:template>
 
 </xsl:stylesheet>

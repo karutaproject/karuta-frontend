@@ -162,36 +162,26 @@ function fill_list_page()
 					url : url0,
 					success : function(data) {
 						UIFactory["Portfolio"].parse(data);
-/*
-						if (g_nb_trees==1 && !USER.creator) {
-							display_main_page(portfolios_list[0].id);
-							$("#wait-window").hide();
+						$("#list").html(getList());
+						UIFactory["Portfolio"].displayAll('portfolios','list');
+						if (USER.admin || USER.creator) {
+							$.ajax({
+								type : "GET",
+								dataType : "xml",
+								url : serverBCK_API+"/portfolios?active=false",
+								success : function(data) {
+									var destid = $("div[id='bin']");
+									UIFactory["Portfolio"].parseBin(data);
+									UIFactory["Portfolio"].displayBin('bin','bin');
+								},
+								error : function(jqxhr,textStatus) {
+									alertHTML("Server Error GET active=false: "+textStatus);
+								}
+							});
 						}
-						else {
-*/
-							$("#list").html(getList());
-							UIFactory["Portfolio"].displayAll('portfolios','list');
-							if (USER.admin || USER.creator) {
-								$.ajax({
-									type : "GET",
-									dataType : "xml",
-									url : serverBCK_API+"/portfolios?active=false",
-									success : function(data) {
-										var destid = $("div[id='bin']");
-										UIFactory["Portfolio"].parseBin(data);
-										UIFactory["Portfolio"].displayBin('bin','bin');
-									},
-									error : function(jqxhr,textStatus) {
-										alertHTML("Server Error GET active=false: "+textStatus);
-									}
-								});
-							}
-							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
-								$("#portfolios-div").hide();
-							$("#wait-window").hide();
-/*
-						}
-*/
+						if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
+							$("#portfolios-div").hide();
+						$("#wait-window").hide();
 					},
 					error : function(jqxhr,textStatus) {
 						alertHTML("Server Error GET active=1: "+textStatus);

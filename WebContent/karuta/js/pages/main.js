@@ -1,7 +1,7 @@
 
 
 //==============================
-function show_main_page(portfolioid,role)
+function show_main_page(rootid,role)
 //==============================
 {
 	hideAllPages();
@@ -12,12 +12,11 @@ function show_main_page(portfolioid,role)
 	$("body").addClass("main-page")
 	$("#main-page").html("");
 	$("#main-page").show();
-//	changeCss("a.navbar-icon .glyphicon", "color:"+navbar_icon_color+";");
 	$("#refresh").hide();
 }
 
 //==============================
-function fill_main_page(portfolioid,role)
+function fill_main_page(rootid,role)
 //==============================
 {
 	$("#wait-window").modal('show');
@@ -27,8 +26,10 @@ function fill_main_page(portfolioid,role)
 	var html = "";
 	$("#main-page").html(html);
 	g_welcome_add = false;
-	if (portfolioid!=null)
-		g_portfolioid = portfolioid;
+	if (portfolioid!=null){
+		var parentid = $($(UICom.structure.ui[portfolioid].node).parent()).attr('id');
+		g_portfolioid = parentid;
+	}
 	//-------------------------------------------
 	userrole = role;
 	if (userrole=='undefined')
@@ -63,7 +64,7 @@ function fill_main_page(portfolioid,role)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/nodes/node/" + g_portfolioid + "?level=2",
+		url : serverBCK_API+"/nodes/node/" + rootid + "?level=2",
 //		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.roles = {};
@@ -193,10 +194,10 @@ function fill_main_page(portfolioid,role)
 }
 
 //==============================
-function display_main_page(portfolioid,role)
+function display_main_page(rootid,role)
 //==============================
 {
-	fill_main_page(portfolioid,role);
-	show_main_page(portfolioid,role);		
+	fill_main_page(rootid,role);
+	show_main_page(rootid,role);		
 }
 

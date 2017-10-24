@@ -532,46 +532,59 @@ g_actions['create-tree'] = function createTree(node)
 				var template = getTxtvals($("template",node));
 				//----- create tree from template -----
 				var portfolioid = "";
-				if (!trace)
-					portfolioid = UIFactory["Portfolio"].instantiate_bycode(template,code);
-				var portfolio = new Array();
-				portfolio [0] = portfolioid;
-				portfolio [1] = code;
-				g_trees[treeref] = portfolio;
-				//----- update tree label -----
-				if (code!="" && label!="" && !trace) {
-					$.ajax({
-						type : "GET",
-						dataType : "xml",
-						url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag=root",
+				var url = serverBCK_API+"/portfolios/instanciate/null?sourcecode="+template+"&targetcode="+code+"&owner=true";
+				$.ajax({
+						type : "POST",
+						contentType: "application/xml",
+						dataType : "text",
+						url : url,
+						data : "",
 						success : function(data) {
-							var nodeid = $("asmRoot",data).attr('id');
-							var xml = "<asmResource xsi_type='nodeRes'>";
-							xml += "<code>"+code+"</code>";
-							for (var lan=0; lan<languages.length;lan++)
-								xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
-							xml += "</asmResource>";
-							$.ajax({
-								type : "PUT",
-								contentType: "application/xml",
-								dataType : "text",
-								data : xml,
-								url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
-								success : function(data) {
-									$("#batch-log").append("<br>- tree created ("+portfolioid+") - code:"+code);
-									processNextAction();
-								},
-								error : function(data) {
-									$("#batch-log").append("<br>- ERROR in  create tree - code:"+code);
-									processNextAction();
-								}
-							});
+							portfolioid = data;
+							var portfolio = new Array();
+							portfolio [0] = portfolioid;
+							portfolio [1] = code;
+							g_trees[treeref] = portfolio;
+							//----- update tree label -----
+							if (code!="" && label!="") {
+								$.ajax({
+									type : "GET",
+									dataType : "xml",
+									url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag=root",
+									success : function(data) {
+										var nodeid = $("asmRoot",data).attr('id');
+										var xml = "<asmResource xsi_type='nodeRes'>";
+										xml += "<code>"+code+"</code>";
+										for (var lan=0; lan<languages.length;lan++)
+											xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
+										xml += "</asmResource>";
+										$.ajax({
+											type : "PUT",
+											contentType: "application/xml",
+											dataType : "text",
+											data : xml,
+											url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+											success : function(data) {
+												$("#batch-log").append("<br>- tree created ("+portfolioid+") - code:"+code);
+												processNextAction();
+											},
+											error : function(data) {
+												$("#batch-log").append("<br>- ERROR in  create tree - code:"+code);
+												processNextAction();
+											}
+										});
+									}
+								});
+							} else {
+								$("#batch-log").append("<br>- ERROR in  create tree update root label - code:"+code);
+							}
+							processNextAction();
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ERROR in  create tree - code:"+code);
+							processNextAction();
 						}
-					});
-				} else {
-					$("#batch-log").append("<br>-TRACE tree created - template:"+template+" - code:"+code+" - label:"+label);
-				}
-				processNextAction();
+				});
 			}
 		});
 	} else {
