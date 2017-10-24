@@ -1478,17 +1478,6 @@ String.prototype.containsArrayElt = function (rolesarray)
 }
 
 //==================================
-/*Array.prototype.contient = function(elt)
-
-	// usage : if (arr.contains(elt)) 
-{
-	for (var i in this){
-		if (this[i] == elt) return true;
-	}
-	return false;
-}
-*/
-//==================================
 function toggleGroup(group_type,uuid,callback,type,lang) {
 //==================================
 	if ($("#toggleContent_"+group_type+"-"+uuid).hasClass("glyphicon-plus")) {

@@ -381,7 +381,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	if (semtag.indexOf('karuta-dashboard')>-1)
 		tree_type='<span class="fa fa-line-chart" aria-hidden="true"></span>';
 	//---------------------
-	var owner = (Users_byid[this.ownerid]==null) ? "??? "+this.ownerid:Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
+	var owner = (Users_byid[this.ownerid]==null) ? "":Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
 	//---------------------
 	var portfolio_label = this.label_node[langcode].text();
 	if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
@@ -632,6 +632,29 @@ UIFactory["Portfolio"].prototype.setOwner = function(newuserid)
 	$.ajaxSetup({async: true});
 };
 
+
+//==================================
+UIFactory["Portfolio"].load = function(portfolioid,level) 
+//==================================
+{
+	var param = "";
+	if (level==null)
+		param="?resources=true";
+	else
+		param = "?level=" + level;
+	$.ajaxSetup({async: false});
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + param,
+		success : function(data) {
+			UICom.parseStructure(data,true);
+			UIFactory["Portfolio"].parse_add(data);
+		}
+	});
+	$.ajaxSetup({async: true});
+};
+
 //==================================
 UIFactory["Portfolio"].reload = function(portfolioid) 
 //==================================
@@ -656,7 +679,7 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
-			UIFactory["Portfolio"].parse(data);
+			UIFactory["Portfolio"].parse_add(data);
 			$("#sidebar").html("");
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.root);
 			$('a[data-toggle=tooltip]').tooltip({html:true});

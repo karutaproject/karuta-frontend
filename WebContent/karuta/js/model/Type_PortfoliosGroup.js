@@ -147,7 +147,11 @@ UIFactory["PortfoliosGroup"].displayPortfolios = function(gid,destid,type,lang)
 					$("#"+destid_group).append($("<div class='row' id='"+itemid+"'></div>"));
 					if (portfolios_byid[portfolios_ids[i]]!=null && portfolios_byid[portfolios_ids[i]]!=undefined) {
 						$("#"+itemid).html(portfolios_byid[portfolios_ids[i]].getPortfolioView(itemid,type,null,null,null,gid));
-					}
+					} else { // we load portfolio information
+						UIFactory.Portfolio.load(portfolios_ids[i],"1");
+						if (portfolios_byid[portfolios_ids[i]]!=null && portfolios_byid[portfolios_ids[i]]!=undefined) {
+							$("#"+itemid).html(portfolios_byid[portfolios_ids[i]].getPortfolioView(itemid,type,null,null,null,gid));
+						}					}
 				}
 				PortfoliosGroups_byid[gid].members = portfolios_ids;
 				testGroup_Empty("portfolios-group_",gid);

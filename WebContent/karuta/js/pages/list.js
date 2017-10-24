@@ -152,90 +152,90 @@ function fill_list_page()
 				var html = "<h3 id='portfolios-label'>"+karutaStr[LANG]['no-portfolio']+"</h3>";
 				$("#list").html(html);
 				$("#wait-window").hide();
-			} else 
-				if (g_nb_trees==null || g_nb_trees<100) {
-				//--------we load all the portfolios-----------------------
-				var url0 = serverBCK_API+"/portfolios?active=1";
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : url0,
-					success : function(data) {
-						UIFactory["Portfolio"].parse(data);
-						$("#list").html(getList());
-						UIFactory["Portfolio"].displayAll('portfolios','list');
-						if (USER.admin || USER.creator) {
-							$.ajax({
-								type : "GET",
-								dataType : "xml",
-								url : serverBCK_API+"/portfolios?active=false",
-								success : function(data) {
-									var destid = $("div[id='bin']");
-									UIFactory["Portfolio"].parseBin(data);
-									UIFactory["Portfolio"].displayBin('bin','bin');
-								},
-								error : function(jqxhr,textStatus) {
-									alertHTML("Server Error GET active=false: "+textStatus);
-								}
-							});
-						}
-						if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
-							$("#portfolios-div").hide();
-						$("#wait-window").hide();
-					},
-					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET active=1: "+textStatus);
-					}
-				});
-				//---------------------------------------------------
 			} else {
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : serverBCK_API+"/portfolios?active=1&project=true",
-					success : function(data) {
-						var nb_projects = parseInt($('portfolios',data).attr('count'));
-						UIFactory["Portfolio"].parse(data);
-						$("#list").html(getList());
-						UIFactory["Portfolio"].displayAll('portfolios','list');
-						$("#wait-window").hide();
-						if (USER.admin || USER.creator) {
-							$.ajax({
-								type : "GET",
-								dataType : "xml",
-								url : serverBCK_API+"/portfolios?active=false",
-								success : function(data) {
-									var destid = $("div[id='bin']");
-									UIFactory["Portfolio"].parseBin(data);
-									UIFactory["Portfolio"].displayBin('bin','bin');
-								},
-								error : function(jqxhr,textStatus) {
-									alertHTML("Server Error GET active=false: "+textStatus);
-								}
-							});
+				if (g_nb_trees==null || g_nb_trees<100) {
+					//--------we load all the portfolios-----------------------
+					var url0 = serverBCK_API+"/portfolios?active=1";
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : url0,
+						success : function(data) {
+							UIFactory["Portfolio"].parse(data);
+							$("#list").html(getList());
+							UIFactory["Portfolio"].displayAll('portfolios','list');
+							if (USER.admin || USER.creator) {
+								$.ajax({
+									type : "GET",
+									dataType : "xml",
+									url : serverBCK_API+"/portfolios?active=false",
+									success : function(data) {
+										var destid = $("div[id='bin']");
+										UIFactory["Portfolio"].parseBin(data);
+										UIFactory["Portfolio"].displayBin('bin','bin');
+									},
+									error : function(jqxhr,textStatus) {
+										alertHTML("Server Error GET active=false: "+textStatus);
+									}
+								});
+							}
+							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
+								$("#portfolios-div").hide();
+							$("#wait-window").hide();
+						},
+						error : function(jqxhr,textStatus) {
+							alertHTML("Server Error GET active=1: "+textStatus);
 						}
-					},
-					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET active=1&project=true: "+textStatus);
-						$("#wait-window").hide();
-					}
-				});
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : serverBCK_API+"/portfolios?active=1&project=false&count=true",
-					success : function(data) {
-						var nb_portfolios = parseInt($('portfolios',data).attr('count'));
-						$("#portfolios-nb").html(nb_portfolios);
-						if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
-							$("#portfolios-div").hide();
-					},
-					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET active=1&project=false: "+textStatus);
-						$("#wait-window").hide();
-					}
-				});
-
+					});
+					//---------------------------------------------------
+				} else {
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/portfolios?active=1&project=true",
+						success : function(data) {
+							var nb_projects = parseInt($('portfolios',data).attr('count'));
+							UIFactory["Portfolio"].parse(data);
+							$("#list").html(getList());
+							UIFactory["Portfolio"].displayAll('portfolios','list');
+							$("#wait-window").hide();
+							if (USER.admin || USER.creator) {
+								$.ajax({
+									type : "GET",
+									dataType : "xml",
+									url : serverBCK_API+"/portfolios?active=false",
+									success : function(data) {
+										var destid = $("div[id='bin']");
+										UIFactory["Portfolio"].parseBin(data);
+										UIFactory["Portfolio"].displayBin('bin','bin');
+									},
+									error : function(jqxhr,textStatus) {
+										alertHTML("Server Error GET active=false: "+textStatus);
+									}
+								});
+							}
+						},
+						error : function(jqxhr,textStatus) {
+							alertHTML("Server Error GET active=1&project=true: "+textStatus);
+							$("#wait-window").hide();
+						}
+					});
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/portfolios?active=1&project=false&count=true",
+						success : function(data) {
+							var nb_portfolios = parseInt($('portfolios',data).attr('count'));
+							$("#portfolios-nb").html(nb_portfolios);
+							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
+								$("#portfolios-div").hide();
+						},
+						error : function(jqxhr,textStatus) {
+							alertHTML("Server Error GET active=1&project=false: "+textStatus);
+							$("#wait-window").hide();
+						}
+					});
+				}
 			}
 		},
 		error : function(jqxhr,textStatus) {
