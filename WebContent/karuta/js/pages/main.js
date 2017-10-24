@@ -26,9 +26,12 @@ function fill_main_page(rootid,role)
 	var html = "";
 	$("#main-page").html(html);
 	g_welcome_add = false;
-	if (portfolioid!=null){
-		var parentid = $($(UICom.structure.ui[portfolioid].node).parent()).attr('id');
+	if (rootid!=null){
+		var parentid = $($(UICom.structure.ui[rootid].node).parent()).attr('id');
 		g_portfolioid = parentid;
+		g_complex = portfolios_byid[parentid].complex;
+	} else {
+		rootid = g_portfolio_rootid;
 	}
 	//-------------------------------------------
 	userrole = role;
@@ -60,12 +63,16 @@ function fill_main_page(rootid,role)
 		g_visible = localStorage.getItem('metadata');
 		toggleMetadata(g_visible);
 	}
+	var url = "";
+	if (g_complex)
+		url = serverBCK_API+"/nodes/node/" + rootid + "?level=2"
+	else
+		url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
 	$.ajaxSetup({async: true});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/nodes/node/" + rootid + "?level=2",
-//		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
+		url : url,
 		success : function(data) {
 			UICom.roles = {};
 			g_portfolio_current = data;
@@ -95,10 +102,12 @@ function fill_main_page(rootid,role)
 				g_welcome_add = true;
 			}
 			//----if asmUnitStructures load content--------
-			var unitStructures = $("asmUnitStructure",data);
-			for (var i=0;i<unitStructures.length;i++){
-				var nodeid = $(unitStructures[i]).attr('id');
-				UIFactory.Node.loadNode(nodeid);
+			if (g_complex) {
+				var unitStructures = $("asmUnitStructure",data);
+				for (var i=0;i<unitStructures.length;i++){
+					var nodeid = $(unitStructures[i]).attr('id');
+					UIFactory.Node.loadNode(nodeid);
+				}
 			}
 			//-------------------------------------------------
 			setCSSportfolio(data);

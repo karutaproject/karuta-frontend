@@ -22,6 +22,7 @@ var portfolioid = null;
 var g_userrole = "";
 var g_userroles = [];
 var g_portfolioid = "";
+var g_complex = false;
 var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;

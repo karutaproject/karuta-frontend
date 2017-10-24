@@ -51,6 +51,9 @@ UIFactory["Portfolio"] = function( node )
 	this.semantictag = $("metadata",node).attr('semantictag');
 	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.notvisible = ($("metadata",node).attr('list-novisible')=='Y') ? true : false;
+	this.complex = ($("metadata",node).attr('complex')=='Y') ? true : false;
+	if (this.complex==undefined)
+		this.complex = false;
 	//------------------------------
 	this.seerootnoderoles = $("metadata-wad",$("asmRoot",node)).attr('seenoderoles');
 	this.commentnoderoles = $("metadata-wad",$("asmRoot",node)).attr('commentnoderoles');
