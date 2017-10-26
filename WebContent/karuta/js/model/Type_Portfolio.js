@@ -242,7 +242,10 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 							$("#export-"+projects_list[number_of_projects-1].uuid).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
 						}
 						else
-							$("#portfolios-label").html(karutaStr[LANG]['portfolios']);
+							if (g_nb_trees==1)
+								$("#portfolios-label").html(karutaStr[LANG]['portfolio']);
+							else
+								$("#portfolios-label").html(karutaStr[LANG]['portfolios']);
 					}
 			}
 		}

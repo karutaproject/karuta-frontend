@@ -40,8 +40,8 @@ function getList()
 		html += "</button>";
 		html += "</h3>";
 		html += "<div  id='bin'>";
+		html += "</div>";
 	}
-	html += "</div>";
 	return html;
 }
 
