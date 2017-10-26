@@ -662,13 +662,26 @@ UIFactory["Get_Resource"].importMultiple = function(parentid,srce)
 //==================================
 {
 	$.ajaxSetup({async: false});
-//	var srce = multiple_tags.substring(0,multiple_tags.lastIndexOf('.'));
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	// for each one import a part
 	var databack = true;
 	var callback = UIFactory.Node.reloadUnit;
 	for (var j=0; j<inputs.length;j++){
 		var code = $(inputs[j]).attr('code');
+		if (srce.indexOf("?")>-1){
+			var newcode = srce.substring(srce.indexOf(".")+1);
+			srce = code;
+			if (srce.indexOf("@")>-1) {
+				srce =srce.substring(0,srce.indexOf("@"))+srce.substring(srce.indexOf("@")+1);
+			}
+			if (srce.indexOf("#")>-1) {
+				srce = srce.substring(0,srce.indexOf("#"))+srce.substring(srce.indexOf("#")+1);
+			}
+			if (srce.indexOf("%")>-1) {
+				srce = srce.substring(0,srce.indexOf("%"))+srce.substring(srce.indexOf("%")+1);
+			}
+			code = newcode;
+		}
 		importBranch(parentid,srce,code,databack,callback);
 	}
 };
