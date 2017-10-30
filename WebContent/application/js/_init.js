@@ -1,6 +1,6 @@
 //----------------------------------
-var application_version = "1.0";
-var application_date = "2016-04-29";
+var application_version = "2.0";
+var application_date = "2017-10-30";
 //----------------------------------
 var appliname = 'karuta2.3';
 var karutaname = 'karuta2.3'; // to share the same 'karuta-core' with multiple front-end
@@ -42,8 +42,8 @@ var welcome3 = {};       // Welcome paragraph
 	welcome3["en"] = "";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.3";
-	welcome4["en"] = "WELCOME TO KARUTA 2.3";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.3beta";
+	welcome4["en"] = "WELCOME TO KARUTA 2.3beta";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";
