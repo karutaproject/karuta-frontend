@@ -54,6 +54,10 @@ function getTxtvals(node)
 				text = eval("g_json.lines["+g_noline+"]."+select);
 		} else {
 			text = $(txtvals[i]).text();
+			if (text.indexOf('numline()')) {
+				text = text.replace(/numline()/g,g_noline);
+				text = eval(text);
+			}
 		}
 		str += text;
 	}
