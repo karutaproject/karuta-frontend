@@ -785,6 +785,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			//================================================================================================
 			var html = "<div id='node_"+uuid+"' class='standard asmnode "+nodetype+" "+semtag+" ";
+			if (privatevalue)
+				html+= "private ";
 			if(UICom.structure["ui"][uuid].resource!=null)
 				html += UICom.structure["ui"][uuid].resource.type;
 			html += "'";
@@ -3145,7 +3147,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 									if (labels[j].indexOf(languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"')";
+								var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+shareroles+"'"+")";
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
@@ -3158,7 +3160,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 									if (labels[j].indexOf(languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"')";
+								var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+shareroles+"'"+")";
 								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
 								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
@@ -3168,7 +3170,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 						if (shareroles.indexOf('2world')>-1) {
 							html_toadd = "<span id='2world-"+node.id+"'></span>";
 						} else {
-							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
+							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"','"+shareroles+"'"+")\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
 						}
 					}
 					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))

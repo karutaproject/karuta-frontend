@@ -711,7 +711,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	}
-	$.ajaxSetup({async: false});
+//	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -733,7 +733,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 			$("#wait-window").modal('hide');			
 		}
 	});
-	$.ajaxSetup({async: true});
+//	$.ajaxSetup({async: true});
 }
 
 //=======================================================================
@@ -1028,7 +1028,7 @@ function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration)
 
 
 //==================================
-function getPublicURL(uuid,email,role,langcode,level,duration) {
+function getPublicURL(uuid,email,role,langcode,level,duration,shareroles) {
 //==================================
 	if (level==null)
 		level = 4; //public
@@ -1036,7 +1036,7 @@ function getPublicURL(uuid,email,role,langcode,level,duration) {
 		duration = 720;  //-- max 720h
 	if (role==null)
 		role = "all";
-	var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration;
+	var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration+'&shareroles='+shareroles;
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -1049,7 +1049,7 @@ function getPublicURL(uuid,email,role,langcode,level,duration) {
 }
 
 //==================================
-function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,duration) {
+function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,duration,shareroles) {
 //==================================
 	if (level==null)
 		level = 0; //must be logged
@@ -1062,7 +1062,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 		var emails = email.split(" "); // email1 email2 ..
 		for (var i=0;i<emails.length;i++) {
 			if (emails[i].length>4) {
-				var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'&d='+duration;
+				var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'&d='+duration+'&shareroles='+shareroles+'&type=email';
 				$.ajax({
 					type : "POST",
 					email : emails[i],
@@ -1080,7 +1080,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 		var roles = sharetorole.split(" "); // role1 role2 ..
 		var groups = null;
 		$.ajaxSetup({async: false});
-		$.ajax({
+/*		$.ajax({
 			type : "GET",
 			dataType : "xml",
 			url : serverBCK_API+"/users",
@@ -1090,7 +1090,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 			error : function(jqxhr,textStatus) {
 				alertHTML("Error in getEmail : "+jqxhr.responseText);
 			}
-		});
+		}); */
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
@@ -1112,9 +1112,9 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 								if (Users_byid[userid]==undefined)
 									alertHTML('error undefined userid:'+userid);
 								else {
-									var email = Users_byid[userid].getEmail();
+									var email = $("email",$(users[k])).text();
 									if (email.length>4) {
-										var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+roles[i]+'&l='+level+'&d='+duration;
+										var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+sharewithrole+'&l='+level+'&d='+duration+'&shareroles='+shareroles+'&type=showtorole&showtorole='+roles[i];
 										$.ajax({
 											type : "POST",
 											email : email,
