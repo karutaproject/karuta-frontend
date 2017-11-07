@@ -695,6 +695,7 @@ function writeSaved(uuid,data)
 //=======================================================================
 function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,param4,param5,param6,param7,param8) 
 //=======================================================================
+// if srcetag does not exist as semantictag search as code
 {
 	$("#wait-window").modal('show');
 	//------------
@@ -1079,64 +1080,51 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 	if (sharetorole!=null && sharetorole!='') {
 		var roles = sharetorole.split(" "); // role1 role2 ..
 		var groups = null;
-		$.ajaxSetup({async: false});
-/*		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/users",
-			success : function(data) {
-				UIFactory["User"].parse(data);
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error in getEmail : "+jqxhr.responseText);
-			}
-		}); */
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
 			url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
 			success : function(data) {
 				groups = $("rrg",data);
-			}
-		});
-		$.ajaxSetup({async: true});
-		for (var i=0;i<roles.length;i++) {
-			if (roles[i].length>0) {
-				if (groups.length>0) {
-					for (var j=0; j<groups.length; j++) {
-						var label = $("label",groups[j]).text();
-						var users = $("user",groups[j]);
-						if (label==roles[i] && users.length>0){
-							for (var k=0; k<users.length; k++){
-								var userid = $(users[k]).attr('id');
-								if (Users_byid[userid]==undefined)
-									alertHTML('error undefined userid:'+userid);
-								else {
-									var email = $("email",$(users[k])).text();
-									if (email.length>4) {
-										var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+sharewithrole+'&l='+level+'&d='+duration+'&shareroles='+shareroles+'&type=showtorole&showtorole='+roles[i];
-										$.ajax({
-											type : "POST",
-											email : email,
-											dataType : "text",
-											contentType: "application/xml",
-											url : urlS,
-											success : function (data){
-												sendEmailPublicURL(data,this.email,langcode);
+				for (var i=0;i<roles.length;i++) {
+					if (roles[i].length>0) {
+						if (groups.length>0) {
+							for (var j=0; j<groups.length; j++) {
+								var label = $("label",groups[j]).text();
+								var users = $("user",groups[j]);
+								if (label==roles[i] && users.length>0){
+									for (var k=0; k<users.length; k++){
+											var email = $("email",$(users[k])).text();
+											if (email.length>4) {
+												var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+sharewithrole+'&l='+level+'&d='+duration+'&shareroles='+shareroles+'&type=showtorole&showtorole='+roles[i];
+												$.ajax({
+													type : "POST",
+													email : email,
+													dataType : "text",
+													contentType: "application/xml",
+													url : urlS,
+													success : function (data){
+														sendEmailPublicURL(data,this.email,langcode);
+													},
+													error : function(jqxhr,textStatus) {
+														alertHTML("Error in direct : "+jqxhr.responseText);
+													}
+												});
+											} else {
+												alert("email undefined:"+email);
 											}
-										});
 									}
 								}
-
 							}
 						}
 					}
 				}
-				//--------------------------
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error in rolerightsgroups : "+jqxhr.responseText);
 			}
-		}
+		});
 	}
-
 }
 
 //==================================

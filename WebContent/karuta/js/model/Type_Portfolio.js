@@ -55,6 +55,10 @@ UIFactory["Portfolio"] = function( node )
 	if (this.complex==undefined)
 		this.complex = false;
 	//------------------------------
+	this.export_pdf = UIFactory.Portfolio.getLogicalMetadataAttribute(node,"export-pdf");
+	this.export_rtf = UIFactory.Portfolio.getLogicalMetadataAttribute(node,"export-rtf");
+	this.export_htm = UIFactory.Portfolio.getLogicalMetadataAttribute(node,"export-htm");
+	//------------------------------
 	this.seerootnoderoles = $("metadata-wad",$("asmRoot",node)).attr('seenoderoles');
 	this.commentnoderoles = $("metadata-wad",$("asmRoot",node)).attr('commentnoderoles');
 	if (this.seerootnoderoles==undefined)
@@ -90,6 +94,15 @@ UIFactory["Portfolio"] = function( node )
 	this.roles = [];
 };
 
+//==================================
+UIFactory["Portfolio"].getLogicalMetadataAttribute= function(node,attribute)
+//==================================
+{
+	var val = ($("metadata",node).attr(attribute)=='Y') ? true : false;
+	if (val==undefined)
+		val = false;
+	return val;
+	}
 
 /// Display
 
@@ -1599,9 +1612,12 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 //==================================
 {
 	var html ="";
-	html += "<li><a href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
-	html += "<li><a href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf'>"+karutaStr[LANG]['getRTF']+"</a></li>";
-	html += "<li><a  onclick='export_html()'>"+karutaStr[LANG]['getWebsite']+"</a></li>";
+	if (portfolios_byid[portfolioid].export_pdf)
+		html += "<li><a href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a></li>";
+	if (portfolios_byid[portfolioid].export_rtf)
+		html += "<li><a href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf'>"+karutaStr[LANG]['getRTF']+"</a></li>";
+	if (portfolios_byid[portfolioid].export_htm)
+		html += "<li><a  onclick='export_html()'>"+karutaStr[LANG]['getWebsite']+"</a></li>";
 	html += "<li><a  onclick=\"toggleButton('hidden')\">"+karutaStr[LANG]['hide-button']+"</a></li>";
 	html += "<li><a  onclick=\"toggleButton('visible')\">"+karutaStr[LANG]['show-button']+"</a></li>";
 	if (USER.admin || portfolios_byid[portfolioid].owner=='Y') {

@@ -3567,6 +3567,10 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 		html += UIFactory["Node"].getMetadataDisplayTypeAttributeEditor(node.id,'display-type',$(node.metadata).attr('display-type'));
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'list-novisible',$(node.metadata).attr('list-novisible'),true);
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'complex',$(node.metadata).attr('complex'),true);
+		html += "<hr>";
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-pdf',$(node.metadata).attr('export-pdf'),true);
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-rtf',$(node.metadata).attr('export-rtf'),true);
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-htm',$(node.metadata).attr('export-htm'),true);
 	}
 	html += "<hr><h4>"+karutaStr[LANG]['metadata']+"</h4>";
 	if (USER.admin)
