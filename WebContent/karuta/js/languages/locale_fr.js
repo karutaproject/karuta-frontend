@@ -195,6 +195,9 @@ karutaStr['fr']['maxword']="Mots - Max";
 karutaStr['fr']['maxword-alert'] = "Vous avez atteint la limite de mots autorisés. Les mots supplémentaires ne seront pas sauvés."
 karutaStr['fr']['csstext']="CSS";
 karutaStr['fr']['seeqrcoderoles']="Roles - Voir QR Code et URL";
+karutaStr['fr']['export-pdf']="Exporter PDF";
+karutaStr['fr']['export-rtf']="Exporter RTF";
+karutaStr['fr']['export-htm']="Exporter HTML";
 
 //=========================================
 //========== ADMIN ========================

@@ -156,6 +156,14 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 		code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 	if (code.indexOf("&")>-1)
 		code = code.substring(0,code.indexOf("&"))+code.substring(code.indexOf("&")+1);
+	if (code.indexOf("$")>-1) {
+		display_label = false;
+		code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("$")+1);
+	}
+	if (code.indexOf("&")>-1) {
+		display_label = false;
+		code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("&")+1);
+	}
 	var html = "";
 	if (type=='default'){
 		html += "<span class='"+code+"'>";
@@ -168,9 +176,10 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 	if (type=='none'){
 		if (($(this.code_node).text()).indexOf("#")>-1)
 			html += code+ " ";
+		if (($(this.code_node).text()).indexOf("%")<0)
+			html += label;
 		if (($(this.code_node).text()).indexOf("&")>-1)
 			html += "["+$(this.value_node).text()+ "] ";
-		html += label;
 	}
 
 	return html;
@@ -583,6 +592,14 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			}
 			if (code.indexOf("#")>-1) {
 				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+			}
+			if (code.indexOf("$")>-1) {
+				display_label = false;
+				code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("$")+1);
+			}
+			if (code.indexOf("&")>-1) {
+				display_label = false;
+				code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("&")+1);
 			}
 			input += "<div> <input type='checkbox' portfoliocode='"+portfoliocode+"' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 			input += "' ";

@@ -1109,16 +1109,16 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//---------- display csv or pdf -------
 				var html_csv_pdf = ""
 				var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
-				if (csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+				if (csv_roles.indexOf('all')>-1 || csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 					$("#csv_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
 				}
 				var pdf_roles = $(UICom.structure["ui"][uuid].resource.pdf_node).text();
-				if (pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+				if (pdf_roles.indexOf('all')>-1 || pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
 					$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div><div class='pdf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF/Word</div>"));				
 				}
 				var img_roles = $(UICom.structure["ui"][uuid].resource.img_node).text();
-				if (img_roles.containsArrayElt(g_userroles) || (img_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
-					$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">IMG</div>"));
+				if (img_roles.indexOf('all')>-1 || img_roles.containsArrayElt(g_userroles) || (img_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+					$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">PNG</div>"));
 				}
 			}
 			//------------ Report -----------------
@@ -1609,7 +1609,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					}
 					var img_roles = $(UICom.structure["ui"][uuid].resource.img_node).text();
 					if (img_roles.containsArrayElt(g_userroles) || (img_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
-						$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">IMG</div>"));
+						$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">PNG</div>"));
 					}
 				}
 				if (g_userroles[0]!='designer')
@@ -3202,7 +3202,7 @@ UIFactory['Node'].reloadStruct = function(uuid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/nodes/node/" + uuid + "?level=2",
+		url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
@@ -3545,6 +3545,19 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 		semtag = '';
 	var html = "<div><br>";
 	html += "<form id='metadata' class='form-horizontal'>";
+	if (name=='asmRoot') {
+		html += "<div id='root-metadata'>"
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'cssfile',$(node.metadata).attr('cssfile'));
+		html += UIFactory["Node"].getMetadataDisplayTypeAttributeEditor(node.id,'display-type',$(node.metadata).attr('display-type'));
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'list-novisible',$(node.metadata).attr('list-novisible'),true);
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'complex',$(node.metadata).attr('complex'),true);
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-pdf',$(node.metadata).attr('export-pdf'),true);
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-rtf',$(node.metadata).attr('export-rtf'),true);
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-htm',$(node.metadata).attr('export-htm'),true);
+		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'public',$(node.metadata).attr('public'),true);
+		html += "</div>";
+		html += "<hr>";
+	}
 	if (name=='asmContext' && node.resource.type=='Proxy')
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'semantictag',$(node.metadata).attr('semantictag'),false,true);
 	else
@@ -3562,16 +3575,6 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 //	html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'sharedNodeResource',$(node.metadata).attr('sharedNodeResource'),true);
 //	if (name=='asmContext')
 //		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'sharedResource',$(node.metadata).attr('sharedResource'),true);
-	if (name=='asmRoot') {
-		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'cssfile',$(node.metadata).attr('cssfile'));
-		html += UIFactory["Node"].getMetadataDisplayTypeAttributeEditor(node.id,'display-type',$(node.metadata).attr('display-type'));
-		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'list-novisible',$(node.metadata).attr('list-novisible'),true);
-		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'complex',$(node.metadata).attr('complex'),true);
-		html += "<hr>";
-		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-pdf',$(node.metadata).attr('export-pdf'),true);
-		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-rtf',$(node.metadata).attr('export-rtf'),true);
-		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-htm',$(node.metadata).attr('export-htm'),true);
-	}
 	html += "<hr><h4>"+karutaStr[LANG]['metadata']+"</h4>";
 	if (USER.admin)
 		html += UIFactory["Node"].displayRights(node.id);
@@ -3603,27 +3606,6 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
 	if (name=='asmContext' && node.resource.type=='TextField')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'maxword',$(node.metadatawad).attr('maxword'));
-
-	//------------------------------------
-/*
-	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
-	if (shareroles=='none' || shareroles=='') {
-		html += "<div style='font-weight:bold' class='collapsible' onclick=\"javascript:toggleSharing('"+node.id+"')\"><span class='glyphicon glyphicon-plus collapsible' id='toggleSharing_"+node.id+"'></span> "+karutaStr[languages[langcode]]['share']+"</div>";
-		html += "<div id='sharing-content-"+node.id+"' style='display:none'>";
-	} else {
-		html += "<div style='font-weight:bold' class='collapsible' onclick=\"javascript:toggleSharing('"+node.id+"')\"><span class='glyphicon glyphicon-minus collapsible' id='toggleSharing_"+node.id+"'></span> "+karutaStr[languages[langcode]]['share']+"</div>";
-		html += "<div id='sharing-content-"+node.id+"' style='display:block'>";
-	}
-	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'shareroles',$(node.metadatawad).attr('shareroles'));
-	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharewithrole',$(node.metadatawad).attr('sharewithrole'));	
-	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharetoroles',$(node.metadatawad).attr('sharetoroles'));	
-	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharetoemail',$(node.metadatawad).attr('sharetoemail'));	
-	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharelabel',$(node.metadatawad).attr('sharelabel'));	
-	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'sharelevel',$(node.metadatawad).attr('sharelevel'));	
-	html += UIFactory['Node'].getMetadataWadAttributeEditor(node.id,'shareduration',$(node.metadatawad).attr('shareduration'));	
-	html += "</div>";
-	html += "<hr/>";
-*/
 	//------------------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
@@ -3632,8 +3614,6 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'display',$(node.metadatawad).attr('display'),true);
 	if (name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'collapsible',$(node.metadatawad).attr('collapsible'),true);
-	if (name=='asmRoot')
-		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'public',$(node.metadata).attr('public'),true);
 	if (name=='asmContext' && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL' && node.resource.type!='Oembed')
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'inline',$(node.metadata).attr('inline'),true);
 //	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'veriffunction',$(node.metadatawad).attr('veriffunction'));
@@ -4107,9 +4087,9 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'help',$(node.metadatawad).attr('help'),'x100');
 	//----------------------CSS text----------------------------
 	if (name=='asmRoot') {
-		html  = "<hr><label>"+karutaStr[languages[langcode]]['csstext']+"</label>";
-		$("#metadata_texts").append($(html));
-		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'csstext',$(node.metadatawad).attr('csstext'));
+		html  = "<label>"+karutaStr[languages[langcode]]['csstext']+"</label>";
+		$("#root-metadata").append($(html));
+		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('root-metadata',node.id,'csstext',$(node.metadatawad).attr('csstext'));
 	}
 	//--------------------------------------------------------
 };

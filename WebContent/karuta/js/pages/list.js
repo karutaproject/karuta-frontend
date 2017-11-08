@@ -141,7 +141,7 @@ function fill_list_page()
 	}
 	//----------------
 	var url1 =  serverBCK_API+"/portfolios?active=1&count=true";
-//	$.ajaxSetup({async: false});
+	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -243,7 +243,7 @@ function fill_list_page()
 			$("#wait-window").hide();
 		}
 	});
-//	$.ajaxSetup({async: true});
+	$.ajaxSetup({async: true});
 }
 
 //==============================
