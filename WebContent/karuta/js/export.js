@@ -85,10 +85,13 @@ function export_html()
 		}
 	
 		//$(link).click();
+		$("#wait-window").show();
 		displayPage(uuid,1,'standard','0',true)
+	$("#wait-window").show();
 		
 		// Delay so everything has time to render
 		setTimeout(printy, 1000);
+		$("#wait-window").show();
 	}
 	
 	var timer;

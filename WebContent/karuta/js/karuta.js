@@ -1350,12 +1350,14 @@ function toggleSidebarPlusMinus(uuid) { // click on PlusMinus
 //==================================
 	if ($("#toggle_"+uuid).hasClass("glyphicon-plus"))
 	{
-		g_toggle_sidebar [uuid] = 'open';
+//		g_toggle_sidebar [uuid] = 'open';
+		localStorage.setItem('sidebar'+uuid,'open');
 		$("#toggle_"+uuid).removeClass("glyphicon-plus")
 		$("#toggle_"+uuid).addClass("glyphicon-minus")
 		$("#collapse"+uuid).collapse("show")
 	} else {
-		g_toggle_sidebar [uuid] = 'closed';
+//		g_toggle_sidebar [uuid] = 'closed';
+		localStorage.setItem('sidebar'+uuid,'closed');
 		$("#toggle_"+uuid).removeClass("glyphicon-minus")
 		$("#toggle_"+uuid).addClass("glyphicon-plus")
 		$("#collapse"+uuid).collapse("hide")
@@ -1367,7 +1369,8 @@ function toggleSidebarPlus(uuid) { // click on label
 //==================================
 	if ($("#toggle_"+uuid).hasClass("glyphicon-plus"))
 	{
-		g_toggle_sidebar [uuid] = 'open';
+//		g_toggle_sidebar [uuid] = 'open';
+		localStorage.setItem('sidebar'+uuid,'open');
 		$("#toggle_"+uuid).removeClass("glyphicon-plus")
 		$("#toggle_"+uuid).addClass("glyphicon-minus")
 		$("#collapse"+uuid).collapse("show");
@@ -1723,6 +1726,9 @@ function displayTechSupportForm(langcode)
 			success : function() {
 				alertHTML(karutaStr[LANG]['email-sent']);
 				$("#edit-window").modal("hide");
+			},
+			error : function(jqxhr,textStatus) {
+				alert("Error in send mail : "+jqxhr.responseText);
 			}
 		});
 

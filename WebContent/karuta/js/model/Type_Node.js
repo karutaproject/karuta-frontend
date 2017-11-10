@@ -551,13 +551,13 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					var html = "";
 					html += "<div class='sidebar-item' id='parent-"+uuid+"' role='tablist'>";
 					html += "  <div  class='sidebar-link' style='cursor:pointer' redisplay=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >";
-					if (g_toggle_sidebar[uuid]!=undefined && g_toggle_sidebar[uuid]=='open')
+					if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
 						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='glyphicon glyphicon-minus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
 					else
 						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='glyphicon glyphicon-plus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
 					html += "  <a onclick=\"toggleSidebarPlus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
 					html += "  </div>"
-					if (g_toggle_sidebar[uuid]!=undefined && g_toggle_sidebar[uuid]=='open')
+					if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
 						html += "<div id='collapse"+uuid+"' class='panel-collapse collapse in' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 					else
 						html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";

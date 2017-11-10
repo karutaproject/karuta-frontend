@@ -47,6 +47,10 @@ window.onload = function()
 		var nod = nodes[i];
 		nod.setAttribute("class", "panel-collapse");
 	}
+	removeClass('selected');
+	hideElement('buttons-menus');
+	hideElement('metainfo');
+	cleanSidebar();
 }
 
 function toggleSidebarPlus(id)
@@ -81,10 +85,17 @@ function removeElement(childid) {
 	child.parentNode.removeChild(child);
 }
 
+function hideElement(classname) {
+	  var elts = document.getElementsByClassName(classname);
+	  for(i=0; i<elts.length; i++) {
+		  elts[i].style.display = 'none';
+	  }
+	}
 
 //==================================
-function toggleSideBar() {
+function toggleSideBar()
 //==================================
+{
 	var sidebar = document.getElementById("sidebar");
 	var contenu = document.getElementById("contenu");
 	if (sidebar.style.display == 'none')
@@ -98,3 +109,62 @@ function toggleSideBar() {
 		contenu.classList.add("col-md-12");
 	}
 }
+
+//==================================
+function toggleSidebarPlusMinus(uuid) { // click on PlusMinus
+//==================================
+	var node = document.getElementById("toggle_"+uuid);
+	var collapse = document.getElementById("collapse"+uuid);
+
+	if (collapse.style.display=='block')
+	{
+		node.classList.remove("glyphicon-minus");
+		node.classList.add("glyphicon-plus")
+		document.getElementById("collapse"+uuid).style.display='none';
+	} else {
+		node.classList.remove("glyphicon-plus");
+		node.classList.add("glyphicon-minus")
+		document.getElementById("collapse"+uuid).style.display='block';
+	}
+}
+
+//==================================
+function toggleContent(uuid) {
+//==================================
+	var node = document.getElementById("toggleContent_"+uuid);
+	if (node.classList.contains("glyphicon-plus")) {
+		node.classList.remove("glyphicon-plus");
+		node.classList.add("glyphicon-minus")
+		document.getElementById("content-"+uuid).style.display='block';
+	} else {
+		node.classList.remove("glyphicon-minus");
+		node.classList.add("glyphicon-plus")
+		document.getElementById("content-"+uuid).style.display='none';
+	}
+}
+
+//==================================
+function cleanSidebar()
+//==================================
+{
+	var elts = document.getElementsByClassName("glyphicon-minus");
+	for(i=0; i<elts.length; i++) {
+		var nodeid = elts[i].getAttribute('id');
+		if (nodeid.indexOf('toggle_')>-1){
+			var uuid = nodeid.substring(nodeid.indexOf('toggle_')+7);
+			elts[i].classList.add("glyphicon-plus")
+			elts[i].classList.remove("glyphicon-minus");
+			document.getElementById("collapse"+uuid).style.display='none';
+		}
+	}
+	var elts1 = document.getElementsByClassName("glyphicon-plus");
+	for(i=0; i<elts1.length; i++) {
+		var nodeid = elts1[i].getAttribute('id');
+		if (nodeid.indexOf('toggle_')>-1){
+			var uuid = nodeid.substring(nodeid.indexOf('toggle_')+7);
+			document.getElementById("collapse"+uuid).style.display='none';
+		}
+	}
+
+}
+
