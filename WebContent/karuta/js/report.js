@@ -116,6 +116,8 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 			r_processNode(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="for-each-portfolio")
 			r_getPortfolios(no+"_"+i,children[i],destid,data,line);
+		if (tagname=="for-each-portfolios-nodes")
+			r_getPortfoliosNodes(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="europass")
 			r_processEuropass(children[i],destid,data,line);
 	}
@@ -135,6 +137,8 @@ function r_report_process(xmlDoc,json)
 			r_getUsers(i,children[i],'report-content');
 		if (tagname=="for-each-portfolio")
 			r_getPortfolios(i,children[i],'report-content');
+		if (tagname=="for-each-portfolios-nodes")
+			r_getPortfoliosNodes(i,children[i],'report-content');
 		if (tagname=="table")
 			r_processTable(i,children[i],'report-content');
 		if (tagname=="europass")
@@ -173,6 +177,8 @@ function r_processLine(no,xmlDoc,destid,data,line)
 				r_getUsers(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="for-each-portfolio")
 				r_getPortfolios(no+"_"+i,children[j],destid,data,i);
+			if (tagname=="for-each-portfolios-nodes")
+				r_getPortfoliosNodes(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="table")
 				r_processTable(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="row")
@@ -182,6 +188,12 @@ function r_processLine(no,xmlDoc,destid,data,line)
 		}
 	}
 }
+
+//=============================================================================
+//=============================================================================
+//======================= FOR-EACH-NODE =====================================
+//=============================================================================
+//=============================================================================
 
 //==================================
 function r_processNode(no,xmlDoc,destid,data,line)
@@ -347,6 +359,8 @@ function r_processTable(no,xmlDoc,destid,data,line)
 			r_getUsers(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="for-each-portfolio")
 			r_getPortfolios(no+"_"+i,children[i],'table_'+no,data,line);
+		if (tagname=="for-each-portfolios-nodes")
+			r_getPortfoliosNodes(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="row")
 			r_processRow(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="for-each-node")
@@ -378,6 +392,8 @@ function r_processRow(no,xmlDoc,destid,data,line)
 			r_getUsers(no,children[i],'tr_'+no,data,line);
 		if (tagname=="for-each-portfolio")
 			r_getPortfolios(no,children[i],'tr_'+no,data,line);
+		if (tagname=="for-each-portfolios-nodes")
+			r_getPortfoliosNodes(no,children[i],'tr_'+no,data,line);
 		if (tagname=="cell")
 			r_processCell(no+"_"+i,children[i],'tr_'+no,data,line);
 		if (tagname=="for-each-node")
@@ -430,6 +446,8 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			r_getUsers(no,children[i],'td_'+no,data,line);
 		if (tagname=="for-each-portfolio")
 			r_getPortfolios(no,children[i],'td_'+no,data,line);
+		if (tagname=="for-each-portfolios-nodes")
+			r_getPortfoliosNodes(no,children[i],'td_'+no,data,line);
 		if (tagname=="table")
 			r_processTable(no,children[i],'td_'+no,data,line);
 		if (tagname=="node_resource")
@@ -459,6 +477,11 @@ function r_processCell(no,xmlDoc,destid,data,line)
 	}
 }
 
+//=============================================================================
+//=============================================================================
+//======================= FOR-EACH-PERSON =====================================
+//=============================================================================
+//=============================================================================
 
 //==================================
 function r_getUsers(no,xmlDoc,destid,data,line)
@@ -506,6 +529,8 @@ function r_processUsers(no,xmlDoc,destid,data,line)
 				var tagname = $(children[i])[0].tagName;
 				if (tagname=="for-each-portfolio")
 					r_getPortfolios(no+"_"+j,children[i],destid,data,line);
+				if (tagname=="for-each-portfolios-nodes")
+					r_getPortfoliosNodes(no+"_"+j,children[i],destid,data,line);
 				if (tagname=="table")
 					r_processTable(no+"_"+j,children[i],destid,data,line);
 				if (tagname=="row")
@@ -529,6 +554,12 @@ function r_processUsers(no,xmlDoc,destid,data,line)
 			//------------------------------------
 	}
 }
+
+//=============================================================================
+//=============================================================================
+//======================FOR-EACH-PORTFOLIO ====================================
+//=============================================================================
+//=============================================================================
 
 //==================================
 function r_getPortfolios(no,xmlDoc,destid,data,line)
@@ -664,6 +695,151 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 			//------------------------------------
 	}
 }
+
+//=============================================================================
+//=============================================================================
+//======================FOR-EACH-PORTFOLIO-NODE ===============================
+//=============================================================================
+//=============================================================================
+
+//==================================
+function r_getPortfoliosNodes(no,xmlDoc,destid,data,line)
+//==================================
+{
+	var ref_init = $(xmlDoc).attr("ref-init");
+	if (ref_init!=undefined) {
+		var ref_inits = ref_init.split("/"); // ref1/ref2/...
+		for (var i=0;i<ref_inits.length;i++)
+			aggregates[ref_inits[i]] = new Array();
+	}
+	if (userid==null)
+		userid = USER.id;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios?active=1&user="+userid,
+		success : function(data) {
+			r_processPortfoliosNodes(no,xmlDoc,destid,data,line);
+		}
+	});
+}
+
+//==================================
+function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
+//==================================
+{
+	UIFactory["Portfolio"].parse(data);
+	var select = $(xmlDoc).attr("select");
+	var value = "";
+	var condition = "";
+	var portfolioid = "";
+	//----------------------------------
+	var nodetag = $(xmlDoc).attr("nodetag");
+	var sortag = $(xmlDoc).attr("sortag");
+	var sortelt = $(xmlDoc).attr("sortelt");
+	var tableau = new Array();
+	var sortvalue = "";
+	if (sortag!=undefined && sortag!="") {
+		for ( var j = 0; j < portfolios_list.length; j++) {
+			portfolioid = portfolios_list[j].id;
+			var code = portfolios_list[j].code_node.text();
+			if (select.indexOf("code*=")>-1) {
+				value = select.substring(7,select.length-1);  // inside quote
+				condition = code.indexOf(value)>-1;
+			}
+			if (select.indexOf("code=")>-1) {
+				value = select.substring(6,select.length-1);  // inside quote
+				condition = code==value;
+			}
+			//------------------------------------
+			if (condition && sortag!=""){
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+					success : function(data) {
+						var text = ";"
+						if (sortelt=='resource code') {
+							sortvalue = $("code",data)[0].text();
+						}
+						if (sortelt=='value') {
+							sortvalue = $("value",data)[0].text();
+						}
+						if (sortelt=='node label') {
+							sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
+						}
+						if (sortelt=='resource') {
+							sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
+						}
+						tableau[tableau.length] = [sortvalue,portfolioid];
+					}
+				});
+			}
+			//------------------------------------
+		}
+		var newTableau = tableau.sort(sortOn1);
+		for ( var i = 0; i < newTableau.length; i++) {
+			portfolios_list[i] = portfolios_byid[newTableau[i][1]]
+		}
+		portfolios_list.length = newTableau.length;
+	}
+	//----------------------------------
+	for ( var j = 0; j < portfolios_list.length; j++) {
+		var code = portfolios_list[j].code_node.text();
+//		alertHTML(j+"-"+code);
+		if (select.indexOf("code*=")>-1) {
+			value = select.substring(7,select.length-1);  // inside quote
+			condition = code.indexOf(value)>-1;
+		}
+		if (select.indexOf("code=")>-1) {
+			value = select.substring(6,select.length-1);  // inside quote
+			condition = code==value;
+		}
+		if (select.length==0) {
+			condition = true;;
+		}
+		//------------------------------------
+		if (condition){
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				j : j,
+				url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+nodetag,
+				success : function(data) {
+					UICom.parseStructure(data,true, null, null,true);
+					var children = $(">*",xmlDoc);
+					for (var i=0; i<children.length;i++){
+						var tagname = $(children[i])[0].tagName;
+						if (tagname=="table")
+							r_processTable(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+						if (tagname=="row")
+							r_processRow(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+						if (tagname=="cell")
+							r_processCell(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+						if (tagname=="node_resource")
+							r_processNodeResource(children[i],destid,data,line);
+						if (tagname=="jsfunction")
+							r_processJSFunction(children[i],destid,data,line);
+						if (tagname=="text")
+							r_processText(children[i],destid,data,line);
+						if (tagname=="for-each-node")
+							r_processNode(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+						if (tagname=="draw-web-axis")
+							r_processWebAxis(children[i],destid,data,line);
+						if (tagname=="draw-web-line")
+							r_processWebLine(children[i],destid,data,line);
+					}
+				}
+			});
+		}
+			//------------------------------------
+	}
+}
+
+//=============================================================================
+//====================== NodeResource ===============================
+//=============================================================================
+//=============================================================================
 
 //==================================
 function r_processNodeResource(xmlDoc,destid,data)

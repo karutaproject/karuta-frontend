@@ -785,7 +785,7 @@ g_actions['update-resource'] = function updateResource(node)
 				});
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ERROR in update resource("+nodeid+") - semtag="+semtag);
+				$("#batch-log").append("<br>- ERROR in update resource("+g_trees[treeref][1]+") - semtag="+semtag);
 				processNextAction();
 			}
 		});
@@ -1452,7 +1452,9 @@ g_actions['import-node'] = function importNode(node)
 	var idx = select.lastIndexOf(".");
 	var treeref = select.substring(0,idx);
 	var semtag = select.substring(idx+1);
-	var source = $(node).attr("source");
+	var source = getTxtvals($("source",node));
+	if (source=='') // for backward compatibility
+		source = $(node).attr("source");
 	var idx_source = source.lastIndexOf(".");
 	var srcecode = source.substring(0,idx_source);
 	var srcetag = source.substring(idx_source+1);

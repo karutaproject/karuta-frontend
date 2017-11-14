@@ -425,6 +425,11 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<import-node select="{$dest}" source="{$srce}">
+			<source>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">import-source</xsl:with-param>
+				</xsl:call-template>
+			</source>
 		</import-node>
 	</xsl:template>
 	
