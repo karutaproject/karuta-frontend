@@ -241,18 +241,25 @@ UIFactory["User"].prototype.getEditor = function(type,lang)
 	html += UIFactory["User"].getAttributeEditor(this.id,"email",this.email_node.text());
 	html +="<hr/>";
 	html += UIFactory["User"].getAttributeEditor(this.id,"username",this.username_node.text());
-	html += "<div class='form-group'>";
-	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG]['new_password']+"</label>";
-	html += "  <div class='col-sm-9'>";
-	html += "    <input class='form-control passwordbyroot' onkeypress=\"this.style.color='transparent'\" type='text' autocomplete='off' value='' onchange=\"javascript:UIFactory['User'].setPassword('"+this.id+"',this.value)\" >";
-//	html += "  <button class='btn' onclick=\"javascript:UIFactory['User'].setPassword('"+this.id+"',this.value)>&gt;</button>";
-	html += "  </div>";
-	html += "</div>";
+	if (this.id>3){
+		html += "<div class='form-group'>";
+		html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG]['new_password']+"</label>";
+		html += "  <div class='col-sm-9'>";
+		html += "    <input class='form-control passwordbyroot' onkeypress=\"this.style.color='transparent'\" type='text' autocomplete='off' value='' onchange=\"javascript:UIFactory['User'].setPassword('"+this.id+"',this.value)\" >";
+		html += "  </div>";
+		html += "</div>";
+	}
 	html +="<hr/>";
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"designer",this.designer_node.text());
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"admin",this.admin_node.text());
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"substitute",this.substitute_node.text());
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"active",this.active_node.text());
+	if (this.id>3){
+		html += UIFactory["User"].getAttributeRadioEditor(this.id,"designer",this.designer_node.text());
+		html += UIFactory["User"].getAttributeRadioEditor(this.id,"admin",this.admin_node.text());
+	}
+	if (this.id<2 || this.id>3){
+		html += UIFactory["User"].getAttributeRadioEditor(this.id,"substitute",this.substitute_node.text());
+	}
+	if (this.id>3){
+		html += UIFactory["User"].getAttributeRadioEditor(this.id,"active",this.active_node.text());
+	}
 	html += "</form>";
 	return html;
 };
