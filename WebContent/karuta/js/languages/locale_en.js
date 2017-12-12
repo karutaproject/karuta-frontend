@@ -142,6 +142,7 @@ karutaStr['en']['font-size']="Font Size (in points)";
 karutaStr['en']['font-weight']="Font Weight";
 karutaStr['en']['font-style']="Font Style";
 karutaStr['en']['color']="Font Color";
+karutaStr['en']['cssclass']="CSS Class";
 karutaStr['en']['top']="Position - Top";
 karutaStr['en']['left']="Position - Left";
 karutaStr['en']['width']="Width";

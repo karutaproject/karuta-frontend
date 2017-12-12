@@ -768,6 +768,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	if (submitted=='Y') {
 		menu = false;
 	}
+	var cssclass = ($(node.metadataepm).attr('cssclass')==undefined)?'':$(node.metadataepm).attr('cssclass');
 	//-------------------- test if visible
 	if ( (display=='N' && (g_userroles[0]=='designer'  || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || (showtoroles.indexOf("all")>-1 && !privatevalue) || (showtoroles.containsArrayElt(g_userroles) && !privatevalue) || g_userroles[0]=='designer')) ) {
 		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.containsArrayElt(g_userroles)) || (g_userroles[0]=='designer'  || USER.admin)) {
@@ -784,7 +785,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					}
 			}
 			//================================================================================================
-			var html = "<div id='node_"+uuid+"' class='standard asmnode "+nodetype+" "+semtag+" ";
+			var html = "<div id='node_"+uuid+"' class='standard asmnode "+nodetype+" "+semtag+" "+cssclass+" ";
 			if (privatevalue)
 				html+= "private ";
 			if(UICom.structure["ui"][uuid].resource!=null)
@@ -3547,7 +3548,6 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += "<form id='metadata' class='form-horizontal'>";
 	if (name=='asmRoot') {
 		html += "<div id='root-metadata'>"
-		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'cssfile',$(node.metadata).attr('cssfile'));
 		html += UIFactory["Node"].getMetadataDisplayTypeAttributeEditor(node.id,'display-type',$(node.metadata).attr('display-type'));
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'list-novisible',$(node.metadata).attr('list-novisible'),true);
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'complex',$(node.metadata).attr('complex'),true);
@@ -3666,12 +3666,16 @@ UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'none':$(node.metadatawad).attr('editnoderoles');
 	var graphicerroles = ($(node.metadatawad).attr('graphicerroles')==undefined)?'none':$(node.metadatawad).attr('graphicerroles');
 	if (USER.admin || g_userroles[0]=='designer' || graphicerroles.containsArrayElt(g_userroles) || graphicerroles.indexOf(userrole)>-1) {
-//		html += "<hr><h4>CSS - Styles</h4>";
-		html += "<form id='metadata' class='form-horizontal'>";
+		html += "<form id='metadata' class='form-horizontal'><br>";
 		//----------------------------------
 		if (USER.admin || g_userroles[0]=='designer' || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(userrole)>-1) {
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'cssclass',$(node.metadataepm).attr('cssclass'));
+			if (name=='asmRoot') {
+				html += "<hr><div id='root-metadataepm'>"
+				html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'cssfile',$(node.metadata).attr('cssfile'));
+				html += "</div><hr>"
+			}
 			html += "<h4>"+karutaStr[languages[langcode]]['label']+"</h4>";
-//			html += "<h5>"+karutaStr[languages[langcode]]['label']+"</h5>";
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'font-weight',$(node.metadataepm).attr('font-weight'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'font-style',$(node.metadataepm).attr('font-style'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'text-align',$(node.metadataepm).attr('text-align'));
@@ -3684,10 +3688,8 @@ UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 		//----------------------------------
 		if (name=='asmContext') 
 			html += "<hr><h4>"+karutaStr[languages[langcode]]['resource']+"</h4>";
-//			html += "<h5>"+karutaStr[languages[langcode]]['resource']+"</h5>";
 		else
 			html += "<hr><h4>"+karutaStr[languages[langcode]]['node']+"</h4>";
-//			html += "<h5>"+karutaStr[languages[langcode]]['node']+"</h5>";
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-font-weight',$(node.metadataepm).attr('node-font-weight'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-font-style',$(node.metadataepm).attr('node-font-style'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-text-align',$(node.metadataepm).attr('node-text-align'));
@@ -3699,7 +3701,6 @@ UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 		//----------------------------------
 		if (name=='asmStructure' || name=='asmUnit') {
 			html += "<hr><h4>"+karutaStr[languages[langcode]]['inparent']+"</h4>";
-//			html += "<h5>"+karutaStr[languages[langcode]]['inparent']+"</h5>";
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-font-weight',$(node.metadataepm).attr('inparent-font-weight'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-font-style',$(node.metadataepm).attr('inparent-font-style'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-text-align',$(node.metadataepm).attr('inparent-text-align'));
@@ -4088,8 +4089,8 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	//----------------------CSS text----------------------------
 	if (name=='asmRoot') {
 		html  = "<label>"+karutaStr[languages[langcode]]['csstext']+"</label>";
-		$("#root-metadata").append($(html));
-		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('root-metadata',node.id,'csstext',$(node.metadatawad).attr('csstext'));
+		$("#root-metadataepm").append($(html));
+		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('root-metadataepm',node.id,'csstext',$(node.metadataepm).attr('csstext'));
 	}
 	//--------------------------------------------------------
 };

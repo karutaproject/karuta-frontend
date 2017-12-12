@@ -149,11 +149,7 @@ g_actions['create-elgg-group'] = function createElggGroup(node)
 //=================================================
 {
 	var group = getTxtvals($("group",node));
-	var callback = function (param1){	g_nb_joinElggGroup[g_noline]++;
-		if (g_nb_createElggGroup[g_noline]==g_create_elgg_groups.length) {
-			processUsers();
-		}
-	};
+	var callback = function (param1){processNextAction();};
 	createNetworkGroup(name,callback);
 }
 
@@ -216,7 +212,7 @@ g_actions['create-user'] = function createUser(node)
 					processNextAction();
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ERROR in create-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+					$("#batch-log").append("<br>- ***ERROR in create-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
 					processNextAction();
 				}
 			});
@@ -336,7 +332,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 }
 
 //=================================================
-g_actions['join-usergroup'] = function LeaveUserGroup(node)
+g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 //=================================================
 {
 	var role = "";
@@ -372,7 +368,7 @@ g_actions['join-usergroup'] = function LeaveUserGroup(node)
 							groupid = $(groups[k]).attr("id");
 					}
 					if (groupid=="")
-						$("#batch-log").append("<br>- ERROR in LeaveUserGroup - usergroup:"+usergroup+" NOT FOUND - user:"+user);
+						$("#batch-log").append("<br>- ***ERROR in LeaveUserGroup - usergroup:"+usergroup+" NOT FOUND - user:"+user);
 					else {
 						//---- leave group --------------
 						$.ajax({
@@ -384,20 +380,20 @@ g_actions['join-usergroup'] = function LeaveUserGroup(node)
 								$("#batch-log").append("<br>- LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
 							},
 							error : function(data) {
-								$("#batch-log").append("<br>- ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
+								$("#batch-log").append("<br>- ***ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
 							}
 						});
 					}
 					processNextAction();
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
+					$("#batch-log").append("<br>- ***ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
 					processNextAction();
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user+" NOT FOUND");
+			$("#batch-log").append("<br>- ***ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user+" NOT FOUND");
 			processNextAction();
 		}
 	});
@@ -438,7 +434,7 @@ g_actions['create-elgg-user'] = function createElggUser(node)
 			processNextAction();
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("createElggUser : Oups! "+jqxhr.responseText);
+			$("#batch-log").append("<br>- ***ERROR in createElggUser - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 			processNextAction();
 		}
 	});
@@ -487,16 +483,16 @@ g_actions['delete-tree'] = function deleteTree(node)
 					processNextAction();
 				},
 				error : function(jqxhr,textStatus) {
-					$("#batch-log").append("<br>- delete tree ERROR - code:|"+code+" ---- NOT FOUND ----");
+					$("#batch-log").append("<br>- ***ERROR delete tree - code:|"+code+" ---- NOT FOUND ----");
 					processNextAction();
 				}
 			});
 		} else {
-			$("#batch-log").append("<br>- delete tree ERROR - code:|"+code+" ---- NOT FOUND ----");
+			$("#batch-log").append("<br>- ***ERROR delete tree - code:|"+code+" ---- NOT FOUND ----");
 			processNextAction();
 		}	}
 	catch(err) {
-		$("#batch-log").append("<br>- delete tree ERROR - code:|"+code+" ---- NOT FOUND ----");
+		$("#batch-log").append("<br>- ***ERROR delete tree - code:|"+code+" ---- NOT FOUND ----");
 		processNextAction();
 	}
 
@@ -573,26 +569,26 @@ g_actions['create-tree'] = function createTree(node)
 												processNextAction();
 											},
 											error : function(data) {
-												$("#batch-log").append("<br>- ERROR in  create tree - code:"+code);
+												$("#batch-log").append("<br>- ***ERROR in  create tree - code:"+code);
 												processNextAction();
 											}
 										});
 									}
 								});
 							} else {
-								$("#batch-log").append("<br>- ERROR in  create tree update root label - code:"+code);
+								$("#batch-log").append("<br>- ***ERROR in  create tree update root label - code:"+code);
 							}
 							processNextAction();
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ERROR in  create tree - code:"+code);
+							$("#batch-log").append("<br>- ***ERROR in  create tree - code:"+code);
 							processNextAction();
 						}
 				});
 			}
 		});
 	} else {
-		$("#batch-log").append("<br>-ERROR in  create tree - code is empty");
+		$("#batch-log").append("<br>-***ERROR in  create tree - code is empty");
 		processNextAction();
 	}
 
@@ -716,18 +712,18 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 							processNextAction();
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ERROR in  updateTreeRoot - code:"+oldcode+" not found");
+							$("#batch-log").append("<br>- ***ERROR in  updateTreeRoot - code:"+oldcode+" not found");
 							processNextAction();
 						}
 					});
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ERROR in  updateTreeRoot - code:"+oldcode);
+					$("#batch-log").append("<br>- ***ERROR in  updateTreeRoot - code:"+oldcode);
 					processNextAction();
 				}
 		});
 	} else {
-		$("#batch-log").append("<br>-ERROR in  update tree - oldcode or newcode is empty");
+		$("#batch-log").append("<br>-***ERROR in updateTreeRoot - oldcode or newcode is empty");
 		processNextAction();
 	}
 }
@@ -740,7 +736,7 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 //-----------------------------------------------------------------------
 
 //=================================================
-g_actions['update-resource'] = function updateResource(node)
+g_actions['update-resourceXXX'] = function updateResource(node)
 //=================================================
 {
 	var select = $(node).attr("select");
@@ -1130,6 +1126,267 @@ g_actions['update-resource'] = function updateResource(node)
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
+//------------------------ Update Resource ------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['update-resource'] = function updateResource(node)
+//=================================================
+{
+	var select = $(node).attr("select");
+	var type = $(node).attr("type");
+	var idx = select.indexOf(".");
+	var treeref = select.substring(0,idx);
+	var semtag = select.substring(idx+1);
+	//----------------------------------------------------
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+		success : function(data) {
+			var nodes = $("node",data);
+			var text = getTxtvals($("text",node));
+			if ($("source",node).length>0){
+				var source_select = $("source",node).attr("select");
+				var source_idx = source_select.indexOf(".");
+				var source_treeref = source_select.substring(0,source_idx);
+				var source_semtag = source_select.substring(source_idx+1);
+				if (source_semtag=="UUID")
+					text = g_trees[source_treeref][0];
+			}
+			//---------------------------
+			if (type=='Field') {
+				updateField(nodes,node,type,semtag,text);
+			}
+			if (type=='Proxy') {
+				updateProxy(nodes,node,type,semtag);
+			}
+			if (type=='Dashboard') {
+				updateDashboard(nodes,node,type,semtag);
+			}
+			if (type=='Metadata'){
+				var attribute = $(node).attr("attribute");
+				updateMetada(nodes,node,type,semtag,text,attribute)
+			}
+			if (type=='MetadataInline'){
+				var attribute = 'inline';
+				updateMetada(nodes,node,type,semtag,text,attribute)
+			}
+			if (type=='Metadatawad'){
+				var attribute = $(node).attr("attribute");
+				updateMetadawad(nodes,node,type,semtag,text,attribute)
+			}
+			if (type=='MetadatawadQuery') {
+				var attribute = 'query';
+				updateMetadawad(nodes,node,type,semtag,text,attribute);
+			}
+			if (type=='MetadatawadMenu') {
+				var attribute = 'menuroles';
+				updateMetadawad(nodes,node,type,semtag,text,attribute);
+			}
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
+			processNextAction();
+		}
+	});
+}
+
+//=================================================
+function updateField(nodes,node,type,semtag,text)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		nodes = nodes.slice(1,nodes.length);
+		var xml = "<asmResource xsi_type='Field'>";
+		xml += "<text lang='"+LANG+"'>"+text+"</text>";
+		xml += "</asmResource>";
+		$.ajax({
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			url : serverBCK_API+"/resources/resource/" + nodeid,
+			success : function(data) {
+				$("#batch-log").append("<br>- resource updated ("+nodeid+") - semtag="+semtag);
+				updateField(nodes,node,type,semtag,text);
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***ERROR in update resource("+nodeid+") - semtag="+semtag);
+				updateField(nodes,node,type,semtag,text);
+			}
+		});
+	} else{
+		processNextAction();
+	}
+}
+
+//=================================================
+function updateProxy(nodes,node,type,semtag)
+//=================================================
+{
+	if (nodes.length>0) {
+		var source_select = $("source",node).attr("select");
+		var source_idx = source_select.indexOf(".");
+		var source_treeref = source_select.substring(0,source_idx);
+		var source_semtag = source_select.substring(source_idx+1);
+		//------ search sourceid -------------------
+		var sourceid = sourceid = $("node",data).attr('id');
+		//------ search targetid -------------------
+		var targetid = $(nodes[0]).attr('id');
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			success : function(data) {
+				targetid = $("node",data).attr('id');
+				var xml = "<asmResource xsi_type='Proxy'>";
+				xml += "<code>"+sourceid+"</code>";
+				xml += "<value>"+sourceid+"</value>";
+				xml += "</asmResource>";
+				//----- update target ----------------
+				$.ajax({
+					type : "PUT",
+					contentType: "application/xml",
+					dataType : "text",
+					data : xml,
+					targetid : targetid,
+					sourceid : sourceid,
+					semtag : semtag,
+					url : serverBCK_API+"/resources/resource/" + targetid,
+					success : function(data) {
+						$("#batch-log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
+						updateupdateProxyResource(nodes,node,type,semtag);
+						//===========================================================
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- ***ERROR in update resource("+targetid+") - semtag="+semtag);
+						updateProxy(nodes,node,type,semtag);
+					}
+				});
+			}
+		});
+	} else{
+		processNextAction();
+	}
+}
+
+//=================================================
+function updateMetada(nodes,node,type,semtag,text,attribute)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		var metadata = $("metadata",nodes[0]);
+		$(metadata).attr(attribute,text);
+		var xml = xml2string(metadata[0]);
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			nodeid : nodeid,
+			semtag : semtag,
+			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
+			success : function(data) {
+				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag);
+				updateMetada(nodes,node,type,semtag,text,attribute)
+			},
+			error : function(data,nodeid,semtag) {
+				$("#batch-log").append("<br>- ***ERROR in update metadata("+this.nodeid+") - semtag="+this.semtag);
+				updateMetada(nodes,node,type,semtag,text,attribute);
+			}
+		});
+	} else{
+		processNextAction();
+	}
+}
+
+//=================================================
+function updateMetadawad(nodes,node,type,semtag,text,attribute)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		var metadatawad = $("metadata-wad",nodes[0]);
+		$(metadatawad).attr(attribute,text);
+		var xml = xml2string(metadatawad[0]);
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			nodeid : nodeid,
+			semtag : semtag,
+			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadatawad",
+			success : function(data) {
+				$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semtag);
+				updateMetadawad(nodes,node,type,semtag,text,attribute)
+			},
+			error : function(data,nodeid,semtag) {
+				$("#batch-log").append("<br>- ***ERROR in update metadatawad("+this.nodeid+") - semtag="+this.semtag);
+				updateMetadawad(nodes,node,type,semtag,text,attribute);
+			}
+		});
+	} else{
+		processNextAction();
+	}
+}
+
+
+//=================================================
+function updateDashboard(nodes,node,type,semtag,text)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		nodes = nodes.slice(1,nodes.length);
+		var xml = "<asmResource xsi_type='Dashboard'>";
+		for (var lan=0; lan<languages.length;lan++)
+			xml += "<text lang='"+languages[lan]+"'>"+text+"</text>";
+		xml += "</asmResource>";
+		$.ajax({
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			nodeid : nodeid,
+			semtag : semtag,
+			url : serverBCK_API+"/resources/resource/" + nodeid,
+			success : function(data) {
+				$("#batch-log").append("<br>- resource Dashboard update("+this.nodeid+") - semtag="+this.semtag);
+				updateDashboard(nodes,node,type,semtag,text);
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***ERROR in update Dashboard("+nodeid+") - semtag="+semtag);
+				updateDashboard(nodes,node,type,semtag,text);
+			}
+		});
+	} else{
+		processNextAction();
+	}
+}
+/*		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			success : function(data) {
+				var nodes = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmUnitStructure:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmUnit:has(metadata[semantictag='"+semtag+"'])",data);
+				if (nodes.length==0)
+					nodes = $("asmStructure:has(metadata[semantictag='"+semtag+"'])",data);
+*/	
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 //------------------------- Share Tree ----------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -1176,7 +1433,7 @@ g_actions['share-tree'] = function shareTree(node)
 							processNextAction();
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ERROR in share tree ("+g_trees[treeref][0]+") - role:"+role);
+							$("#batch-log").append("<br>- ***ERROR in share tree ("+g_trees[treeref][0]+") - role:"+role);
 							processNextAction();
 						}
 					});
@@ -1184,7 +1441,7 @@ g_actions['share-tree'] = function shareTree(node)
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR in share tree ("+g_trees[treeref][0]+") - role:"+role);
+			$("#batch-log").append("<br>- ***ERROR in share tree ("+g_trees[treeref][0]+") - role:"+role);
 			processNextAction();
 		}
 	});
@@ -1229,14 +1486,14 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 						processNextAction();
 					},
 					error : function(data) {
-						$("#batch-log").append("<br>- ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+						$("#batch-log").append("<br>- ***ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
 						processNextAction();
 					}
 				});
 			}
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+			$("#batch-log").append("<br>- ***ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
 			processNextAction();
 		}
 	});
@@ -1503,12 +1760,12 @@ function import_nodes(nodes,semtag,source,srcetag,srcecode)
 }
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
-//------------------------- Moveup Node ----------------------------------
+//------------------------- Moveup Node ---------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 
 //=================================================
-g_actions['moveup-node'] = function moveupNode(node,semtag)
+g_actions['moveup-node'] = function moveupNode(node)
 //=================================================
 {
 	var select = $(node).attr("select");
@@ -1543,13 +1800,14 @@ function moveup_nodes(nodes,semtag)
 			dataType : "text",
 			current:currentid,
 			nodes:nodes,
+			semtag:semtag,
 			url : serverBCK_API+"/nodes/node/" + currentid + "/moveup",
 			success : function(data) {
-				$("#batch-log").append("<br>- node moved up - nodeid("+this.current+") - semtag="+semtag);
+				$("#batch-log").append("<br>- node moved up - nodeid("+this.current+") - semtag="+this.semtag);
 				moveup_nodes(this.nodes,semtag);
 			},
 			error : function(jqxhr,textStatus) {
-				$("#batch-log").append("<br>- ERROR in moveup node - nodeid("+this.current+") - semtag="+semtag);
+				$("#batch-log").append("<br>- ERROR in moveup node - nodeid("+this.current+") - semtag="+this.semtag);
 				moveup_nodes(this.nodes);
 			}
 		});

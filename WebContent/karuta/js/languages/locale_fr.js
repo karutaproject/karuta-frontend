@@ -142,6 +142,7 @@ karutaStr['fr']['font-size']="Taille police (en points)";
 karutaStr['fr']['font-weight']="Poids de la police";
 karutaStr['fr']['font-style']="Style de la police";
 karutaStr['fr']['color']="Couleur de la police";
+karutaStr['fr']['cssclass']="Classe CSS";
 karutaStr['fr']['top']="Position - Haut";
 karutaStr['fr']['left']="Position - Gauche";
 karutaStr['fr']['width']="Largeur";

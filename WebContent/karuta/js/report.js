@@ -606,7 +606,10 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 				condition = code.indexOf(value)>-1;
 			}
 			if (select.indexOf("code=")>-1) {
-				value = select.substring(6,select.length-1);  // inside quote
+				if (select.indexOf("'")>-1)
+					value = select.substring(6,select.length-1);  // inside quote
+				else
+					value = eval("json.lines["+line+"]."+select.substring(5));
 				condition = code==value;
 			}
 			//------------------------------------
@@ -748,7 +751,10 @@ function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
 				condition = code.indexOf(value)>-1;
 			}
 			if (select.indexOf("code=")>-1) {
-				value = select.substring(6,select.length-1);  // inside quote
+				if (select.indexOf("'")>-1)
+					value = select.substring(6,select.length-1);  // inside quote
+				else
+					value = eval("json.lines["+line+"]."+select.substring(5));
 				condition = code==value;
 			}
 			//------------------------------------

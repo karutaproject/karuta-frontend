@@ -133,13 +133,15 @@ function getNavBar(type,portfolioid,edit)
 		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' >"+navbar_title[LANG]+"</a>";
 	else
 		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' ><img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA </a>";
-	html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
-	html += "				<li><b>Versions</b></li>";
-	html += "				<li>Application : "+application_version+" (" +application_date+")</li>";
-	html += "				<li>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</li>";
-	html += "				<li>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</li>";
-	html += "				<li>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</li>";
-	html += "			</ul>";
+	if (type!='login') {
+		html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
+		html += "				<li><b>Versions</b></li>";
+		html += "				<li>Application : "+application_version+" (" +application_date+")</li>";
+		html += "				<li>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</li>";
+		html += "				<li>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</li>";
+		html += "				<li>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</li>";
+		html += "			</ul>";
+	}
 	html += "		</div>";
 	html += "	  </div>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
@@ -380,17 +382,17 @@ function getEditBox(uuid,js2) {
 			}
 		}
 	}
+	// ------------ context -----------------
+	UIFactory["Node"].displayCommentsEditor('edit-window-body-context',UICom.structure["ui"][uuid]);
+	// ------------ graphicer -----------------
+	var editHtml = UIFactory["Node"].getMetadataEpmAttributesEditor(UICom.structure["ui"][uuid]);
+	$("#edit-window-body-metadata-epm").html($(editHtml));
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
 		var editHtml = UIFactory["Node"].getMetadataAttributesEditor(UICom.structure["ui"][uuid]);
 		$("#edit-window-body-metadata").html($(editHtml));
 		UIFactory["Node"].displayMetadataTextsEditor(UICom.structure["ui"][uuid]);
 	}
-	// ------------ context -----------------
-	UIFactory["Node"].displayCommentsEditor('edit-window-body-context',UICom.structure["ui"][uuid]);
-	// ------------ graphicer -----------------
-	var editHtml = UIFactory["Node"].getMetadataEpmAttributesEditor(UICom.structure["ui"][uuid]);
-	$("#edit-window-body-metadata-epm").html($(editHtml));
 	// ------------------------------
 	$(".modal-dialog").css('width','600px');
 	$(".pickcolor").colorpicker();
