@@ -469,11 +469,10 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 					var label = [];
 					for (var i=0; i<languages.length;i++){
 						label[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",data)[0]).text();
-						var lastspace_indx = label[i].lastIndexOf(' ');
-						var nb = label[i].substring(lastspace_indx);
+						var nb = label[i].match(/\d+/);
 						if ($.isNumeric(nb)) {
 							nb++;
-							label[i] = label[i].substring(0,lastspace_indx)+' '+nb;
+							label[i] = label[i].replace(/\d+/,nb);
 						}
 					}
 					var nbcode = code.match(/\d+/);
