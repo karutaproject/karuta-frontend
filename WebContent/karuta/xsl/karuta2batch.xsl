@@ -331,6 +331,24 @@
 		</update-resource>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='update-node-resource']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='NodeResource' select="{$select}">
+			<newcode>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">node-code</xsl:with-param>
+				</xsl:call-template>
+			</newcode>
+			<label>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">node-label</xsl:with-param>
+				</xsl:call-template>
+			</label>
+		</update-resource>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-metadata-query']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>

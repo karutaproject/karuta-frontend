@@ -476,6 +476,11 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 							label[i] = label[i].substring(0,lastspace_indx)+' '+nb;
 						}
 					}
+					var nbcode = code.match(/\d+/);
+					if ($.isNumeric(nbcode)) {
+						nbcode++;
+						code = code.replace(/\d+/,nbcode);
+					}
 					var xml = "<asmResource xsi_type='nodeRes'>";
 					xml += "<code>"+code+"</code>";
 					for (var i=0; i<languages.length;i++)
@@ -4090,7 +4095,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	if (name=='asmRoot') {
 		html  = "<label>"+karutaStr[languages[langcode]]['csstext']+"</label>";
 		$("#root-metadataepm").append($(html));
-		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('root-metadataepm',node.id,'csstext',$(node.metadataepm).attr('csstext'));
+		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('root-metadataepm',node.id,'csstext',$(node.metadatawad).attr('csstext'));
 	}
 	//--------------------------------------------------------
 };

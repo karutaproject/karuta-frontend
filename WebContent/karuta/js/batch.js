@@ -696,7 +696,7 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 					var xml = "<asmResource xsi_type='nodeRes'>";
 					xml += "<code>"+newcode+"</code>";
 					for (var lan=0; lan<languages.length;lan++)
-						if (lan==LANG && label!="")
+						if (lan==LANGCODE && label!="")
 							xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
 						else
 							xml += "<label lang='"+languages[lan]+"'>"+$("label[lang='"+languages[lan]+"']",$("asmResource[xsi_type='nodeRes']",data)).text()+"</label>";
@@ -1185,6 +1185,9 @@ g_actions['update-resource'] = function updateResource(node)
 				var attribute = 'menuroles';
 				updateMetadawad(nodes,node,type,semtag,text,attribute);
 			}
+			if (type=='NodeResource') {
+				updateNodeResource(nodes,node);
+			}
 		},
 		error : function(data) {
 			$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
@@ -1360,30 +1363,67 @@ function updateDashboard(nodes,node,type,semtag,text)
 			url : serverBCK_API+"/resources/resource/" + nodeid,
 			success : function(data) {
 				$("#batch-log").append("<br>- resource Dashboard update("+this.nodeid+") - semtag="+this.semtag);
-				updateDashboard(nodes,node,type,semtag,text);
+				updateDashboard(nodes,node,type,this.semtag,text);
 			},
 			error : function(data) {
 				$("#batch-log").append("<br>- ***ERROR in update Dashboard("+nodeid+") - semtag="+semtag);
-				updateDashboard(nodes,node,type,semtag,text);
+				updateDashboard(nodes,node,type,this.semtag,text);
 			}
 		});
 	} else{
 		processNextAction();
 	}
 }
-/*		$.ajax({
+
+//=================================================
+function updateNodeResource(nodes,node)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		nodes = nodes.slice(1,nodes.length);
+		var newcode = getTxtvals($("code",node));
+		var label = getTxtvals($("label",node));
+		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			url : serverBCK_API+"/nodes/node/" + nodeid + "?resources=true",
+			nodeid : nodeid,
 			success : function(data) {
-				var nodes = $("asmContext:has(metadata[semantictag='"+semtag+"'])",data);
-				if (nodes.length==0)
-					nodes = $("asmUnitStructure:has(metadata[semantictag='"+semtag+"'])",data);
-				if (nodes.length==0)
-					nodes = $("asmUnit:has(metadata[semantictag='"+semtag+"'])",data);
-				if (nodes.length==0)
-					nodes = $("asmStructure:has(metadata[semantictag='"+semtag+"'])",data);
-*/	
+				var xml = "<asmResource xsi_type='nodeRes'>";
+				xml += "<code>"+newcode+"</code>";
+				for (var lan=0; lan<languages.length;lan++)
+					if (lan==LANGCODE && label!="")
+						xml += "<label lang='"+languages[lan]+"'>"+label+"</label>";
+					else
+						xml += "<label lang='"+languages[lan]+"'>"+$("label[lang='"+languages[lan]+"']",$("asmResource[xsi_type='nodeRes']",data)).text()+"</label>";
+				xml += "</asmResource>";
+				$.ajax({
+					type : "PUT",
+					contentType: "application/xml",
+					dataType : "text",
+					data : xml,
+					url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+					success : function(data) {
+						$("#batch-log").append("<br>- node resource updated - newcode:"+newcode+" - Label:"+label );
+						updateNodeResource(nodes,node);
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- ***ERROR in  updateNodeResource - nodeid:"+nodeid+" not updated");
+						updateNodeResource(nodes,node);
+					}
+				});
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***ERROR in  updateNodeResource - nodeid:"+nodeid+" not found");
+				updateNodeResource(nodes,node);
+			}
+		});
+	} else{
+		processNextAction();
+	}
+}
+
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
