@@ -131,7 +131,7 @@ function callSend()
 			window.location="login.htm?lang="+LANG;
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Identification : "+jqxhr.responseText);
+			alertHTML("Identification : "+karutaStr[LANG]['inexistent-user']);
 		}
 	});
 }

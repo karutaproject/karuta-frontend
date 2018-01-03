@@ -9,20 +9,19 @@ var bckname = '2.3';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 //----------------------------------
-var serverBCK_REG = "https://savoie.hec.ca:8081/config";  // report registration server
-var serverBCK_REP = "https://savoie.hec.ca:8081/reports"; // report server
+var serverBCK_REG = "";  // report registration server
+var serverBCK_REP = ""; // report server
 //-------- LANGUAGES------------
 var languages = [];
-languages [0] = 'fr';
-languages [1] = 'en';
+languages [0] = 'en';
 //----------------------------------
 var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------
-var audiovideohtml5 = true;
+var audiovideohtml5 = false;
 //----------------------------------
-var technical_support = "technical-support@yourinstitution.com"; // email of technical support
+var technical_support = "jcarrillo@nbts.edu"; // email of technical support
 var demo = false;
 var karuta_create_account = false;
 //--------- NAVBAR BRAND ------------------ logo 126 x 34
@@ -42,8 +41,8 @@ var welcome3 = {};       // Welcome paragraph
 	welcome3["en"] = "";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.3beta";
-	welcome4["en"] = "WELCOME TO KARUTA 2.3beta";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.3";
+	welcome4["en"] = "WELCOME TO KARUTA 2.3";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";
@@ -85,4 +84,4 @@ var elgg_refreshing = 240000; // 240 seconds
 //------ BUBBLE MAP -------------------------------------
 var bubble_installed = false;
 //------ EUROPASS -------------------------------------
-var europass_installed = true;
+var europass_installed = false;

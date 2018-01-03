@@ -399,6 +399,7 @@ karutaStr['fr']['button-remove-from-group']="Retirer de ce groupe";
 karutaStr['fr']['code-not-null']="Le code ne peut pas être vide";
 karutaStr['fr']['label-not-null']="Le libellé ne peut pas être vide";
 karutaStr['fr']['inexistent-selection']="Sélection inexistante";
+karutaStr['fr']['inexistent-user']="Désolé. Votre login n'a pas été trouvé.";
 
 //=========================================
 //========== TECHNICAL SUPPORT ============
