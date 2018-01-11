@@ -14,6 +14,7 @@ var serverBCK_REP = ""; // report server
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'en';
+languages [1] = 'fr';
 //----------------------------------
 var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value

@@ -243,6 +243,36 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-person>
 	</xsl:template>
+	<!-- ================ for-each-person ============================ -->
+	<xsl:template match="*[metadata/@semantictag='loop']">
+		<xsl:variable name="ref-init">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="variable">
+			<xsl:value-of select="asmContext[metadata/@semantictag='variable']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="first">
+			<xsl:value-of select="asmContext[metadata/@semantictag='first']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="last">
+			<xsl:value-of select="asmContext[metadata/@semantictag='last']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<loop>
+			<xsl:if test="not($ref-init='')">
+				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($variable='')">
+				<xsl:attribute name="variable"><xsl:value-of select="$variable"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($first='')">
+				<xsl:attribute name="first"><xsl:value-of select="$first"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($last='')">
+				<xsl:attribute name="last"><xsl:value-of select="$last"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</loop>
+	</xsl:template>
 	<!-- ================ for-each-portfolio ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-portfolio']">
 		<xsl:variable name="ref-init">

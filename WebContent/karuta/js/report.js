@@ -17,6 +17,7 @@ var trace = false;
 var xmlDoc = null;
 var userid = null; // current user
 var aggregates = {};
+var variables = {};
 
 var dashboard_infos = {};
 var dashboard_current = null;
@@ -112,6 +113,8 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 			r_processWebAxis(children[i],destid,nodes[i],i);
 		if (tagname=="draw-web-line")
 			r_processWebLine(children[i],destid,nodes[i],i);
+		if (tagname=="loop")
+			r_processLoop(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="for-each-portfolio")
@@ -139,6 +142,8 @@ function r_report_process(xmlDoc,json)
 			r_getPortfolios(i,children[i],'report-content');
 		if (tagname=="for-each-portfolios-nodes")
 			r_getPortfoliosNodes(i,children[i],'report-content');
+		if (tagname=="loop")
+			r_processLoop(i,children[i],'report-content');
 		if (tagname=="table")
 			r_processTable(i,children[i],'report-content');
 		if (tagname=="europass")
@@ -181,6 +186,8 @@ function r_processLine(no,xmlDoc,destid,data,line)
 				r_getPortfoliosNodes(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="table")
 				r_processTable(no+"_"+i,children[j],destid,data,i);
+			if (tagname=="loop")
+				r_processLoop(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="row")
 				r_processRow(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="aggregate")
@@ -205,6 +212,11 @@ function r_processNode(no,xmlDoc,destid,data,line)
 		var selector = r_getSelector(select,test);
 		var nodeold = $(selector.jquery,data);
 		var nodes = $(selector.jquery,data).filter(selector.filter1);
+		while (selector.filter2.indexOf("##")>-1) {
+			var test_string = selector.filter2.substring(selector.filter2.indexOf("##")+2); // test_string = variable##.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			selector.filter2 = selector.filter2.replace("##"+variable_name+"##", variables[variable_name]);
+		}
 		nodes = eval("nodes"+selector.filter2);
 		if (nodes.length==0) { // try the node itself
 			var nodes = $(selector.jquery,data).addBack().filter(selector.filter1);
@@ -224,6 +236,8 @@ function r_processNode(no,xmlDoc,destid,data,line)
 				var tagname = $(children[j])[0].tagName;
 				if (tagname=="for-each-node")
 					r_processNode(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
+				if (tagname=="loop")
+					r_processLoop(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="table")
 					r_processTable(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
 				if (tagname=="row")
@@ -251,6 +265,59 @@ function r_processNode(no,xmlDoc,destid,data,line)
 			}
 		};
 	}
+}
+
+//==================================
+function r_processLoop(no,xmlDoc,destid,data,line)
+//==================================
+{
+	var first = parseInt($(xmlDoc).attr("first"));
+	var last = parseInt($(xmlDoc).attr("last"));
+	for (var i=first; i<last+1;i++){
+		//---------------------------
+		var variable = $(xmlDoc).attr("variable");
+		if (variable!=undefined) {
+				variables[variable] = i;
+		}
+		//---------------------------
+		var ref_init = $(xmlDoc).attr("ref-init");
+		if (ref_init!=undefined) {
+			var ref_inits = ref_init.split("/"); // ref1/ref2/...
+			for (var k=0;k<ref_inits.length;k++)
+				aggregates[ref_inits[k]] = new Array();
+		}
+		//---------------------------
+		var children = $(">*",xmlDoc);
+		for (var j=0; j<children.length;j++){
+			var tagname = $(children[j])[0].tagName;
+			if (tagname=="for-each-node")
+				r_processNode(no+"_"+i+"_"+j,children[j],destid,data,i);
+			if (tagname=="table")
+				r_processTable(no+"_"+i+"_"+j,children[j],destid,data,i);
+			if (tagname=="row")
+				r_processRow(no+"_"+i+"_"+j,children[j],destid,data,i);
+			if (tagname=="cell")
+				r_processCell(no+"_"+i+"_"+j,children[j],destid,data,i);
+			if (tagname=="aggregate")
+				r_processAggregate(children[j],destid,data,i);
+			if (tagname=="node_resource")
+				r_processNodeResource(children[j],destid,data,i);
+			if (tagname=="text")
+				r_processText(children[j],destid,data,i);
+			if (tagname=="url2unit")
+				r_processURL2Unit(children[j],destid,data,i);
+			if (tagname=="jsfunction")
+				r_processJSFunction(children[j],destid,data,i);
+			if (tagname=="draw-web-axis")
+				r_processWebAxis(children[j],destid,data,i);
+			if (tagname=="draw-web-line")
+				r_processWebLine(children[j],destid,data,i);
+			if (tagname=="aggregate")
+				r_processAggregate(children[j],destid,data,i);
+			if (tagname=="goparent")
+				r_processGoParent(no+"_"+i+"_"+j,children[j],destid,data,i);
+		}
+	};
 }
 
 //==================================
@@ -365,6 +432,8 @@ function r_processTable(no,xmlDoc,destid,data,line)
 			r_processRow(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],'table_'+no,data,line);
+		if (tagname=="loop")
+			r_processLoop(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="goparent")
 			r_processGoParent(no+"_"+i,children[i],'table_'+no,data,line);
 	};
@@ -398,6 +467,8 @@ function r_processRow(no,xmlDoc,destid,data,line)
 			r_processCell(no+"_"+i,children[i],'tr_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no+"_"+i,children[i],'tr_'+no,data,line);
+		if (tagname=="loop")
+			r_processLoop(no+"_"+i,children[i],'tr_'+no,data,line);
 		if (tagname=="goparent")
 			r_processGoParent(no+"_"+i,children[i],'tr_'+no,data,line);
 	}
@@ -468,6 +539,8 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			r_processSVG(no,children[i],'td_'+no,data,line);
 		if (tagname=="for-each-node")
 			r_processNode(no,children[i],'td_'+no,data,line);
+		if (tagname=="loop")
+			r_processLoop(no,children[i],'td_'+no,data,line);
 		if (tagname=="goparent")
 			r_processGoParent(no,children[i],'td_'+no,data,line);
 		if (tagname=="show-sharing")
@@ -549,6 +622,8 @@ function r_processUsers(no,xmlDoc,destid,data,line)
 					r_processText(children[i],destid,data,line);
 				if (tagname=="for-each-node")
 					r_processNode(no+"_"+j,children[i],destid,data,line);
+				if (tagname=="loop")
+					r_processLoop(no+"_"+j,children[i],destid,data,line);
 			}
 		}
 			//------------------------------------
@@ -687,6 +762,8 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 							r_processText(children[i],destid,data,line);
 						if (tagname=="for-each-node")
 							r_processNode(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+						if (tagname=="loop")
+							r_processLoop(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
 						if (tagname=="draw-web-axis")
 							r_processWebAxis(children[i],destid,data,line);
 						if (tagname=="draw-web-line")
@@ -830,6 +907,8 @@ function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
 							r_processText(children[i],destid,data,line);
 						if (tagname=="for-each-node")
 							r_processNode(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+						if (tagname=="loop")
+							r_processLoop(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
 						if (tagname=="draw-web-axis")
 							r_processWebAxis(children[i],destid,data,line);
 						if (tagname=="draw-web-line")
