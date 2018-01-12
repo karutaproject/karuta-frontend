@@ -169,9 +169,11 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 		html += "<span class='"+code+"'>";
 		if (($(this.code_node).text()).indexOf("#")>-1)
 			html += code+ " ";
+		if (($(this.code_node).text()).indexOf("%")<0)
+			html += label;
 		if (($(this.code_node).text()).indexOf("&")>-1)
-			html += "["+$(this.value_node).text()+ "] ";
-		html += label+"</span>";
+			html += " ["+$(this.value_node).text()+ "] ";
+		html += "</span>";
 	}
 	if (type=='none'){
 		if (($(this.code_node).text()).indexOf("#")>-1)
@@ -200,10 +202,30 @@ UIFactory["Get_Get_Resource"].prototype.displayView = function(dest,type,langcod
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
+	//---------------------
 	var label = this.label_node[langcode].text();
 	if (this.encrypted)
 		label = decrypt(label.substring(3),g_rc4key);
-	$(dest).html(label);
+	var code = $(this.code_node).text();
+	if (code.indexOf("@")>-1)
+		code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+	if (code.indexOf("#")>-1)
+		code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+	if (code.indexOf("&")>-1)
+		code = code.substring(0,code.indexOf("&"))+code.substring(code.indexOf("&")+1);
+	if (code.indexOf("%")>-1)
+		code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
+	var html = "";
+	html += "<span class='"+code+"'>";
+	if (($(this.code_node).text()).indexOf("#")>-1)
+		html += code+ " ";
+	if (($(this.code_node).text()).indexOf("&")>-1)
+		html += "["+$(this.value_node).text()+ "] ";
+	if (($(this.code_node).text()).indexOf("%")<0)
+		html += label;
+	html += "</span>";
+	$("#"+dest).html("");
+	$("#"+dest).append($(html));
 };
 
 
@@ -427,41 +449,80 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 			else
 				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+			//-------------------------------------
 			var code = $('code',resource).text();
-			if (code.indexOf('-#')>-1) {
+			var display_code = true;
+			var display_label = true;
+			if (code.indexOf("@")>-1) {
+				display_code = false;
+				code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
+			}
+			if (code.indexOf("#")>-1) {
+				code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+			}
+			if (code.indexOf("%")>-1) {
+				code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
+			}
+			if (code.indexOf("$")>-1) {
+				display_label = false;
+				code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("$")+1);
+			}
+			if (code.indexOf("&")>-1) {
+				display_label = false;
+				code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("&")+1);
+			}
+			if (code.indexOf('----')>-1) {
 				html = "<li class='divider'></li><li></li>";
 			} else {
 				html = "<li></li>";
 			}
+			//-----------------------------------------------------------
 			var select_item = $(html);
-			if (code.indexOf('-#')>-1) {
-				html = "<a>" + $(srce+"[lang='"+languages[langcode]+"']",resource).text() + "</a>";
-				$(select_item).html(html);
-			} else {
-				html = "<a code='"+code+"' value=\""+$('value',resource).text()+"\" ";
-				for (var j=0; j<languages.length;j++){
-					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
-				}
-				html += ">";
-				
-				if (code.indexOf("@")<0)
-					html += code + " ";
-				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
-				var select_item_a = $(html);
-				$(select_item_a).click(function (ev){
+			html = "<a  value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+			for (var j=0; j<languages.length;j++){
+				html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+			}
+			html += ">";
+			if (display_code)
+				html += "<div class='li-code'>"+code+"</div>";
+			if (display_label)
+				html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></a>";
+			
+			var select_item_a = $(html);
+			$(select_item_a).click(function (ev){
+				if (($('code',resource).text()).indexOf("#")>-1)
+					$("#button_"+self.id).html(code+" "+$(this).attr("label_"+languages[langcode]));
+				else
 					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
-					$(this).attr('class', '').addClass($(this).children(':selected').val());
-					UIFactory["Get_Get_Resource"].update(this,self,langcode);
-				});
-				$(select_item).append($(select_item_a))
-				//-------------- update button -----
-				if (code!="" && self_code==$('code',resource).text()) {
-					if (($('code',resource).text()).indexOf("#")>-1)
-						$("#button_"+self.id).html(code+" "+$(srce+"[lang='"+languages[langcode]+"']",resource).text());
-					else
-						$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
-					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+				var code = $(this).attr("code");
+				if (code.indexOf("@")>-1) {
+					code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
 				}
+				if (code.indexOf("#")>-1) {
+					code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
+				}
+				if (code.indexOf("%")>-1) {
+					code = code.substring(0,code.indexOf("%"))+code.substring(code.indexOf("%")+1);
+				}
+				if (code.indexOf("$")>-1) {
+					display_label = false;
+					code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("$")+1);
+				}
+				if (code.indexOf("&")>-1) {
+					display_label = false;
+					code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("&")+1);
+				}
+				$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+				UIFactory["Get_Resource"].update(this,self,langcode);
+			});
+			$(select_item).append($(select_item_a))
+			//-------------- update button -----
+			if (code!="" && self_code==$('code',resource).text()) {
+				if (($('code',resource).text()).indexOf("#")>-1)
+					$("#button_"+self.id).html(code+" "+$(srce+"[lang='"+languages[langcode]+"']",resource).text());
+				else
+					$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
+				$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 			}
 			$(select).append($(select_item));
 		}

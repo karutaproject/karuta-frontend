@@ -149,14 +149,18 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 		html += code1+ " ";
 	if (($(this.code1_node).text()).indexOf("&")>-1)
 		html += "["+$(this.value1_node).text()+ "] ";
-	html += label1+" </span>";
+	if (($(this.code1_node).text()).indexOf("%")<0)
+		html += label1;
+	html += " </span>";
 	html += this.separator_node[langcode].text();
 	html += " <span class='Item2 "+code2+"'>";
 	if (($(this.code2_node).text()).indexOf("#")>-1)
 		html += code2+ " ";
 	if (($(this.code2_node).text()).indexOf("&")>-1)
 		html += "["+$(this.value2_node).text()+ "] ";
-	 html += label2+" </span>";
+	if (($(this.code2_node).text()).indexOf("%")<0)
+		html += label2;
+	html += " </span>";
 	 return html;
 };
 

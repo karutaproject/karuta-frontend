@@ -1693,6 +1693,27 @@ function hideAllPages()
 	$("#main-exec-batch").hide();
 }
 
+
+//==============================
+function removeStr(str1,str2)
+//==============================
+{
+	return str1.replace(str2,"");
+}
+
+//==============================
+function cleanCode(code)
+//==============================
+{
+	code = removeStr(code,"@");
+	code = removeStr(code,"#");
+	code = removeStr(code,"%");
+	code = removeStr(code,"$");
+	code = removeStr(code,"&");
+	code = removeStr(code,"----");
+	return code;
+}
+
 //==================================
 function displayTechSupportForm(langcode)
 //==================================
