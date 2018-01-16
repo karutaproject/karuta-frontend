@@ -4036,7 +4036,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 		$("#metadata_texts").append($(html));
 		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'query',$(node.metadatawad).attr('query'));
 	}
-	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Get_Double_Resource') {
+	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
 		html = UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seltype',$(node.metadatawad).attr('seltype'));
 		$("#metadata_texts").append($(html));
 	}
