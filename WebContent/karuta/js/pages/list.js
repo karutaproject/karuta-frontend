@@ -108,6 +108,7 @@ function fill_list_page()
 	html += "	<div id='list'></div>";
 	html += "</div>";
 	$("#main-list").html(html);
+	$.ajaxSetup({async: false});
 	// --- list of users to display name of owner
 	if (USER.admin || USER.creator){
 		$.ajax({
@@ -141,7 +142,6 @@ function fill_list_page()
 	}
 	//----------------
 	var url1 =  serverBCK_API+"/portfolios?active=1&count=true";
-	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
