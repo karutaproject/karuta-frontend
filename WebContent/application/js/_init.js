@@ -20,7 +20,7 @@ var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------
-var audiovideohtml5 = false;
+var audiovideohtml5 = true;
 //----------------------------------
 var technical_support = "jcarrillo@nbts.edu"; // email of technical support
 var demo = false;
@@ -83,6 +83,6 @@ var elgg_installed = false;
 var elgg_url_base = 'elgg/';
 var elgg_refreshing = 240000; // 240 seconds
 //------ BUBBLE MAP -------------------------------------
-var bubble_installed = false;
+var bubble_installed = true;
 //------ EUROPASS -------------------------------------
-var europass_installed = false;
+var europass_installed = true;

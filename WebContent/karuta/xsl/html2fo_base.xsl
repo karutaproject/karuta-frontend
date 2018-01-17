@@ -47,6 +47,9 @@
 				</xsl:call-template>
 			</xsl:attribute>
 		</xsl:if>
+		<xsl:if test="contains(@style,'color:')">
+			<xsl:attribute name="color"><xsl:value-of select="substring-before(substring-after(@style,'color:'),';')"/></xsl:attribute>
+		</xsl:if>
 		<xsl:apply-templates select="*|text()"/>
   </fo:inline>
 </xsl:template>
@@ -374,28 +377,31 @@
 		<xsl:if test="contains(@style,'font-size:')">
 			<xsl:attribute name="font-size"><xsl:value-of select="substring-before(substring-after(@style,'font-size:'),'pt')"/>pt</xsl:attribute>
 		</xsl:if>
+		<xsl:if test="contains(@style,'color:')">
+			<xsl:attribute name="color"><xsl:value-of select="substring-before(substring-after(@style,'color:'),';')"/></xsl:attribute>
+		</xsl:if>
 		<xsl:if test="contains(@style,'background-color:')">
 			<xsl:attribute name="background-color"><xsl:value-of select="substring-before(substring-after(@style,'background-color:'),';')"/></xsl:attribute>
 		</xsl:if>
 		<xsl:choose>
 			<xsl:when test="contains(@style,'border:0px') or contains(@style,'border: 0px')">
 				<xsl:if test="contains(@style,'border-bottom')">
-					<xsl:attribute name="border-bottom">1px solid gray</xsl:attribute>
+					<xsl:attribute name="border-bottom"><xsl:value-of select="substring-before(substring-after(@style,'border-bottom:'),';')"/></xsl:attribute>
 				</xsl:if>
 				<xsl:if test="contains(@style,'border-top')">
-					<xsl:attribute name="border-top">1px solid gray</xsl:attribute>
+					<xsl:attribute name="border-top"><xsl:value-of select="substring-before(substring-after(@style,'border-bottom:'),';')"/></xsl:attribute>
 				</xsl:if>
 				<xsl:if test="contains(@style,'border-left')">
-					<xsl:attribute name="border-left">1px solid gray</xsl:attribute>
+					<xsl:attribute name="border-left"><xsl:value-of select="substring-before(substring-after(@style,'border-bottom:'),';')"/></xsl:attribute>
 				</xsl:if>
 				<xsl:if test="contains(@style,'border-right')">
-					<xsl:attribute name="border-right">1px solid gray</xsl:attribute>
+					<xsl:attribute name="border-right"><xsl:value-of select="substring-before(substring-after(@style,'border-bottom:'),';')"/></xsl:attribute>
 				</xsl:if>
 			</xsl:when>
 			<xsl:when test="contains(@style,'border-bottom')">
-					<xsl:attribute name="border-bottom">1px solid gray</xsl:attribute>
+					<xsl:attribute name="border-bottom"><xsl:value-of select="substring-before(substring-after(@style,'border-bottom:'),';')"/></xsl:attribute>
 			</xsl:when>
-	         <xsl:otherwise>
+			<xsl:otherwise>
 					<xsl:attribute name="border">1px solid gray</xsl:attribute>
 			</xsl:otherwise>	
 		</xsl:choose>
