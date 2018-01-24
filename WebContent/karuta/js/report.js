@@ -69,7 +69,7 @@ function r_getSelector(select,test)
 			filter2 = filter2.replace(fct,jquerySpecificFunctions[fct]);
 			if (filter2.indexOf("#lang#")>-1)
 				filter2 = filter2.replace(/#lang#/g,languages[LANGCODE]);
-			if (test.indexOf("(#")>-1){
+			if (test.indexOf("sortResource(#")>-1){
 				var1 = test.substring(test.indexOf("(#")+1,test.lastIndexOf(")"));
 				filter2 = filter2.replace(/#1/g,languages[LANGCODE]);
 			}

@@ -469,16 +469,16 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 					var label = [];
 					for (var i=0; i<languages.length;i++){
 						label[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",data)[0]).text();
-						var nb = label[i].match(/\d+/);
+						var nb = label[i].match(/\d+$/);
 						if ($.isNumeric(nb)) {
 							nb++;
-							label[i] = label[i].replace(/\d+/,nb);
+							label[i] = label[i].replace(/\d+$/,nb);
 						}
 					}
-					var nbcode = code.match(/\d+/);
+					var nbcode = code.match(/\d+$/);
 					if ($.isNumeric(nbcode)) {
 						nbcode++;
-						code = code.replace(/\d+/,nbcode);
+						code = code.replace(/\d+$/,nbcode);
 					}
 					var xml = "<asmResource xsi_type='nodeRes'>";
 					xml += "<code>"+code+"</code>";
@@ -2868,7 +2868,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
-		if ( g_userroles[0]=='designer' || (duplicateroles!='none'  && duplicateroles!='' && node.asmtype != 'asmRoot' && ((duplicateroles.containsArrayElt(g_userroles) && !"designer".containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer'))) {
+		if ( g_userroles[0]=='designer' || (duplicateroles!='none'  && duplicateroles!='' && node.asmtype != 'asmRoot' && ((duplicateroles.containsArrayElt(g_userroles) /*&& !"designer".containsArrayElt(g_userroles)*/) || USER.admin || g_userroles[0]=='designer'))) {
 			html+= "<span class='button glyphicon glyphicon-duplicate' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 	}
@@ -3210,7 +3210,8 @@ UIFactory['Node'].reloadStruct = function(uuid)
 		url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
-			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
+//			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
+			g_portfolio_current = data;
 			$("#sidebar").html("");
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
 			var uuid = $("#page").attr('uuid');

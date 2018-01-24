@@ -394,7 +394,7 @@ function countProjectPortfolios(uuid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+".&count=true",
+		url : serverBCK_API+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+"&count=true",
 		uuid: uuid,
 		success : function(data) {
 			var nb = parseInt($('portfolios',data).attr('count'));

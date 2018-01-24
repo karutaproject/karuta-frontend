@@ -28,8 +28,12 @@ function fill_main_page(rootid,role)
 	g_welcome_add = false;
 	if (rootid!=null){
 		var parentid = $($(UICom.structure.ui[rootid].node).parent()).attr('id');
-		g_portfolioid = parentid;
-		g_complex = portfolios_byid[parentid].complex;
+		if ($($(UICom.structure.ui[rootid].node).parent())) {
+			g_portfolioid = parentid;
+			g_complex = portfolios_byid[parentid].complex;
+		} else {
+			rootid = g_portfolio_rootid;
+		}
 	} else {
 		rootid = g_portfolio_rootid;
 	}
