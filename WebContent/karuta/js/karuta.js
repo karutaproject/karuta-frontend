@@ -1298,7 +1298,7 @@ function toggleMetadata(state) {
 		changeCss(".metainfo", "display:block;");
 		g_visible = 'visible';
 	}
-	Cookies.set('metadata',g_visible,{ expires: 60 });
+	localStorage.setItem('metadata',g_visible);
 }
 
 //==================================

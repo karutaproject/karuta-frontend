@@ -13,8 +13,8 @@ var serverBCK_REG = "";  // report registration server
 var serverBCK_REP = ""; // report server
 //-------- LANGUAGES------------
 var languages = [];
-languages [0] = 'en';
-languages [1] = 'fr';
+languages [0] = 'fr';
+languages [1] = 'en';
 //----------------------------------
 var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
@@ -22,7 +22,7 @@ var LANG = languages[LANGCODE]; //default value
 //----------------------------------
 var audiovideohtml5 = true;
 //----------------------------------
-var technical_support = "jcarrillo@nbts.edu"; // email of technical support
+var technical_support = ""; // email of technical support
 var demo = false;
 var karuta_create_account = false;
 //--------- NAVBAR BRAND ------------------ logo 126 x 34
