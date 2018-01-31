@@ -194,7 +194,7 @@ function fill_list_page()
 						dataType : "xml",
 						url : serverBCK_API+"/portfolios?active=1&project=true",
 						success : function(data) {
-							var nb_projects = parseInt($('portfolios',data).attr('count'));
+							var nb_projects = parseInt($('portfolios',data).attr('count'))-1;
 							UIFactory["Portfolio"].parse(data);
 							$("#list").html(getList());
 							UIFactory["Portfolio"].displayAll('portfolios','list');
@@ -397,7 +397,7 @@ function countProjectPortfolios(uuid)
 		url : serverBCK_API+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+"&count=true",
 		uuid: uuid,
 		success : function(data) {
-			var nb = parseInt($('portfolios',data).attr('count'));
+			var nb = parseInt($('portfolios',data).attr('count'))-1;
 			$("#number_of_projects_portfolios_"+this.uuid).html(nb);
 		}
 	});
