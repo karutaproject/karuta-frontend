@@ -35,6 +35,7 @@ UIFactory["User"] = function( node )
 	this.node = node;
 	this.firstname = $("firstname",node).text();
 	this.lastname = $("lastname",node).text();
+	this.username = $("username",node).text();
 	this.username_node = $("username",node);
 	this.firstname_node = $("firstname",node);
 	this.lastname_node = $("lastname",node);
@@ -146,6 +147,9 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	if (type=='firstname-lastname-username') {
 		html = this.firstname_node.text() + " " + this.lastname_node.text()+ " (" + this.username_node.text()+")";
 	}
+	if (type=='email') {
+		html = this.email_node.text();
+	}
 	return html;
 };
 
@@ -157,7 +161,7 @@ UIFactory["User"].update = function(userid,attribute,value)
 	Users_byid[userid].attributes[attribute].text(value); // update attribute value
 	var node = Users_byid[userid].node;
 	var data = xml2string(node);
-	var url = "../../../"+serverBCK+"/users/user/" + userid;
+	var url = serverBCK_API+"/users/user/" + userid;
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -237,17 +241,25 @@ UIFactory["User"].prototype.getEditor = function(type,lang)
 	html += UIFactory["User"].getAttributeEditor(this.id,"email",this.email_node.text());
 	html +="<hr/>";
 	html += UIFactory["User"].getAttributeEditor(this.id,"username",this.username_node.text());
-	html += "<div class='form-group'>";
-	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG]['new_password']+"</label>";
-	html += "  <div class='col-sm-9'><input class='form-control'";
-	html += " type='password'";
-	html += " onchange=\"javascript:UIFactory['User'].changePassword('"+this.id+"',this.value)\" value='' ></div>";
-	html += "</div>";
+	if (this.id>3){
+		html += "<div class='form-group'>";
+		html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG]['new_password']+"</label>";
+		html += "  <div class='col-sm-9'>";
+		html += "    <input class='form-control passwordbyroot' onkeypress=\"this.style.color='transparent'\" type='text' autocomplete='off' value='' onchange=\"javascript:UIFactory['User'].setPassword('"+this.id+"',this.value)\" >";
+		html += "  </div>";
+		html += "</div>";
+	}
 	html +="<hr/>";
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"designer",this.designer_node.text());
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"admin",this.admin_node.text());
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"substitute",this.substitute_node.text());
-	html += UIFactory["User"].getAttributeRadioEditor(this.id,"active",this.active_node.text());
+	if (this.id>3){
+		html += UIFactory["User"].getAttributeRadioEditor(this.id,"designer",this.designer_node.text());
+		html += UIFactory["User"].getAttributeRadioEditor(this.id,"admin",this.admin_node.text());
+	}
+	if (this.id<2 || this.id>3){
+		html += UIFactory["User"].getAttributeRadioEditor(this.id,"substitute",this.substitute_node.text());
+	}
+	if (this.id>3){
+		html += UIFactory["User"].getAttributeRadioEditor(this.id,"active",this.active_node.text());
+	}
 	html += "</form>";
 	return html;
 };
@@ -330,6 +342,23 @@ UIFactory["User"].prototype.getSelector = function(attr,value,name,checked,disab
 	var html = "<input type='checkbox' name='"+name+"' username='"+username+"' value='"+userid+"'";
 	if (attr!=null && value!=null)
 		html += " "+attr+"='"+value+"'";
+	if (disabled)
+		html+= " disabled='disabled' ";			
+	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
+	return html;
+};
+
+//==================================
+UIFactory["User"].prototype.getRadio = function(attr,value,name,checked,disabled)
+//==================================
+{
+	var userid = this.id;
+	var firstname = this.firstname_node.text();
+	var lastname = this.lastname_node.text();
+	var username = this.username_node.text();
+	var html = "<input type='radio' name='"+name+"' username='"+username+"' value='"+userid+"'";
+	if (attr!=null && value!=null)
+		html += " "+attr+"='"+value+"'";
 	if ((userid==1)||disabled)
 		html+= " disabled='disabled' ";			
 	if (checked)
@@ -337,6 +366,7 @@ UIFactory["User"].prototype.getSelector = function(attr,value,name,checked,disab
 	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
 	return html;
 };
+
 
 //==================================
 UIFactory["User"].edit = function(userid)
@@ -411,7 +441,7 @@ UIFactory["User"].confirmRemove = function(userid,from_page)
 UIFactory["User"].remove = function(userid,from_page) 
 //==================================
 {
-	var url = "../../../"+serverBCK+"/users/user/" + userid;
+	var url = serverBCK_API+"/users/user/" + userid;
 	$.ajax({
 		type : "DELETE",
 		dataType : "text",
@@ -448,12 +478,24 @@ UIFactory["User"].displaySelectMultipleActive2 = function(selectedlist,destid,ty
 {
 	$("#"+destid).html("");
 	for ( var i = 0; i < UsersActive_list.length; i++) {
-		var checked = selectedlist.contains(UsersActive_list[i].id);
+		var checked = selectedlist.includes(UsersActive_list[i].id);
 		if (!checked) {
 			var input = UsersActive_list[i].getSelector(null,null,'select_users');
 			$("#"+destid).append($(input));
 			$("#"+destid).append($("<br>"));			
 		}
+	}
+};
+
+//==================================
+UIFactory["User"].displaySelectActive = function(destid,type,lang)
+//==================================
+{
+	$("#"+destid).html("");
+	for ( var i = 0; i < UsersActive_list.length; i++) {
+		var input = UsersActive_list[i].getRadio(null,null,destid);
+		$("#"+destid).append($(input));
+		$("#"+destid).append($("<br>"));
 	}
 };
 
@@ -477,7 +519,7 @@ UIFactory["User"].create = function()
 	xml +="	<substitute>"+$("input[name=user_substitute]:checked").val()+"</substitute>";
 	xml +="</user>";
 	xml +="</users>";
-	var url = "../../../"+serverBCK+"/users";
+	var url = serverBCK_API+"/users";
 	$.ajax({
 		type : "POST",
 		contentType: "application/xml",
@@ -542,7 +584,7 @@ UIFactory["User"].createTestUser = function()
 	xml +="	<substitute>0</substitute>";
 	xml +="</user>";
 	xml +="</users>";
-	var url = "../../../"+serverBCK+"/users";
+	var url = serverBCK_API+"/users";
 	$.ajax({
 		type : "POST",
 		contentType: "application/xml",
@@ -563,47 +605,98 @@ UIFactory["User"].createTestUser = function()
 		user_register($("#user_firstname").val()+" "+$("#user_lastname").val(), USER.email_node.text(), $("#user_username").val(), $("#user_password").val());
 };
 
-
 //==================================
-UIFactory["User"].changePassword = function(userid,value)
+UIFactory["User"].setPassword = function(userid,value)
 //==================================
 {
-	var value2 = null;
-	var username = ""
+	var username = "";
 	if (userid==null) {
 		userid = USER.id;
 		username = USER.username_node.text();
 	} else {
 		username = Users_byid[userid].username_node.text();
 	}
-	if (value==null){
-		value = $("#user_password-new").val();
-		value2 = $("#user_confirm-password").val();
-	}
-	if (value2 == null || (value2 != null && value2 == value)) {
-		var xml = "";
-		xml +="<?xml version='1.0' encoding='UTF-8'?>";
-		xml +="<user>";
-		xml +="	<password>"+value+"</password>";
-		xml +="</user>";
-		var url = "../../../"+serverBCK+"/users/user/" + userid;
-		if (elgg_installed)
-			user_change_password(value, username);
-		$.ajax({
-			type : "PUT",
-			contentType: "application/xml",
-			dataType : "text",
-			url : url,
-			data : xml,
-			success : function(data) {
-				alertHTML(karutaStr[LANG]['saved']);
-				$('#edit-window').modal('hide');
+	var xml = "";
+	xml +="<?xml version='1.0' encoding='UTF-8'?>";
+	xml +="<user>";
+	xml +="	<password>"+value+"</password>";
+	xml +="</user>";
+	var url = serverBCK_API+"/users/user/" + userid;
+	if (elgg_installed)
+		user_change_password(value, username);
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : xml,
+		success : function(data) {
+			alertHTML(karutaStr[LANG]['saved']);
+			$('#edit-window').modal('hide');
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Identification : "+jqxhr.responseText);
+		}
+	});
+};
+
+//==================================
+UIFactory["User"].changePassword = function(userid,value)
+//==================================
+{
+	var password_old = $("#user_password-old").val();
+	var data = "<credential><login>"+USER.username+"</login><password>"+password_old+"</password></credential>";
+	$.ajax({
+		contentType: "application/xml",
+		type : "POST",
+		dataType : "text",
+		url : serverBCK_API+"/credential/login",
+		data: data,
+		success : function(data) {
+			//----------------------------
+			var value2 = null;
+			var username = "";
+			if (userid==null) {
+				userid = USER.id;
+				username = USER.username_node.text();
+			} else {
+				username = Users_byid[userid].username_node.text();
 			}
-		});
-	} else {
-		alertHTML(karutaStr[LANG]['password-mismatch']);
-		UIFactory["User"].callChangePassword();
-	}
+			if (value==null){
+				value = $("#user_password-new").val();
+				value2 = $("#user_confirm-password").val();
+			}
+			if (value2 == null || (value2 != null && value2 == value)) {
+				var xml = "";
+				xml +="<?xml version='1.0' encoding='UTF-8'?>";
+				xml +="<user>";
+				xml +="	<prevpass>"+password_old+"</prevpass>";
+				xml +="	<password>"+value+"</password>";
+				xml +="</user>";
+				var url = serverBCK_API+"/users/user/" + userid;
+				if (elgg_installed)
+					user_change_password(value, username);
+				$.ajax({
+					type : "PUT",
+					contentType: "application/xml",
+					dataType : "text",
+					url : url,
+					data : xml,
+					success : function(data) {
+						alertHTML(karutaStr[LANG]['saved']);
+						$('#edit-window').modal('hide');
+					}
+				});
+			} else {
+				alertHTML(karutaStr[LANG]['password-mismatch']);
+				UIFactory["User"].callChangePassword();
+			}
+			//----------------------------
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Identification : "+jqxhr.responseText);
+		}
+	});
 };
 
 //==================================
@@ -631,6 +724,7 @@ UIFactory["User"].getPasswordCreator = function()
 //==================================================
 {
 	var html = "";
+	html += UIFactory["User"].getAttributeCreator("password-old","",true);
 	html += UIFactory["User"].getAttributeCreator("password-new","",true);
 	html += UIFactory["User"].getAttributeCreator("confirm-password","",true);
 	return html;

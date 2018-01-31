@@ -91,6 +91,8 @@ function loadPage(url)
 	loadJS(url+"/karuta/js/resources/Type_SendEmail.js");
 	loadJS(url+"/karuta/js/resources/Type_URL2Unit.js");
 	loadJS(url+"/karuta/js/resources/Type_Dashboard.js");
+	loadJS(url+"/karuta/js/resources/Type_Report.js");
+	loadJS(url+"/karuta/js/resources/Type_BatchForm.js");
 	loadJS(url+"/karuta/js/resources/Type_Color.js");
 	loadJS(url+"/karuta/js/resources/Type_Bubble.js");
 	loadJS(url+"/karuta/js/resources/Type_Action.js");
@@ -122,9 +124,6 @@ function loadPage(url)
 	loadJS(url+"/other/js/jquery.ui.widget.js");
 	loadJS(url+"/other/js/jquery.iframe-transport.js");
 	loadJS(url+"/other/js/jquery.fileupload.js");
-	//--------------------------------------------------------------
-	loadCSS(url+"/other/oembed/jquery.oembed.css");
-	loadJS(url+"/other/oembed/jquery.oembed.js");
 	//--------------------------------------------------------------
 	loadJS(url+"/other/bootstrap-datepicker/bootstrap-datepicker.js");
 	loadJS(url+"/other/bootstrap-datepicker/bootstrap-datepicker.fr.js");
@@ -166,7 +165,7 @@ function displayOnePage()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/credential",
+		url : serverBCK_API+"/credential",
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
@@ -175,7 +174,7 @@ function displayOnePage()
 					Accept: "application/xml",
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/credential/group/" + pageid,
+					url : serverBCK_API+"/credential/group/" + pageid,
 					success : function(data) {
 						var usergroups = $("group",data);
 						for (var i=0;i<usergroups.length;i++) {
@@ -195,7 +194,7 @@ function displayOnePage()
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/nodes/node/" + pageid + "?resources=true",
+					url : serverBCK_API+"/nodes/node/" + pageid + "?resources=true",
 					success : function(data) {
 						UICom.parseStructure(data);
 						if (type=='standard')

@@ -15,13 +15,11 @@ var Bubble_list = [];
 var Bubble_bubbles_byid = {};
 var Bubble_bubbles_list = [];
 
-var dataBubble = ''; 
-
-g_current_mapid = "";
+var g_current_mapid = "";
+var g_bubble_put = true;
 var g_bubble_id = null;
 var g_bubble_destid = null;
-var g_current_mapid_bubble_node = null;
-var g_bubble_put = true;
+
 //==================================
 UIFactory["Bubble"] = function(node,no)
 //==================================
@@ -58,8 +56,10 @@ UIFactory["Bubble"].bubble = function(node,level)
 {
 	this.id = $(node).attr('id');
 	this.node = node;
+	this.metadatawad = $("metadata-wad",node);
 	this.level = level;
-	this.bubble_label_node = node;
+//	this.bubble_label_node = node;
+	this.bubble_label_nodeid = $("asmContext:has(metadata[semantictag='level"+level+"_label'])",node).attr("id");
 	this.bubble_description_nodeid = $("asmContext:has(metadata[semantictag='level"+level+"_description'])",node).attr("id");
 	this.bubble_color_nodeid = $("asmContext:has(metadata[semantictag='level"+level+"_color'])",node).attr("id");
 	this.bubble_amount_nodeid = $("asmContext:has(metadata[semantictag='level"+level+"_amount'])",node).attr("id");
@@ -69,7 +69,10 @@ UIFactory["Bubble"].bubble = function(node,level)
 	this.data = { id:'', label: '',amount:'',color:'',children:'', token:''};
 	this.data.id = this.id;
 	this.data.token = this.id;
-	this.data.label = UICom.structure["ui"][this.id].getLabel(null,"none");
+	if (this.bubble_label_nodeid!=undefined)
+		this.data.label = UICom.structure["ui"][this.bubble_label_nodeid].resource.getView();
+	else
+		this.data.label = UICom.structure["ui"][this.id].getLabel(null,"none");
 	if (UICom.structure["ui"][this.bubble_color_nodeid].resource.type=="Color")
 		this.data.color = UICom.structure["ui"][this.bubble_color_nodeid].resource.getValue();
 	else
@@ -84,25 +87,22 @@ UIFactory["Bubble"].bubble.prototype.displayView = function(destid,type,lang)
 {
 	g_bubble_id = this.id;
 	g_bubble_destid = destid;
-	var node = UICom.structure["ui"][this.id];
-	var writenode = ($(node.node).attr('write')=='Y')? true:false;
-	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
+	var node = UICom.structure["ui"][this.bubble_label_nodeid];
+	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
 	var html = "";
 	$("#"+destid).html(html);  // on vide html
 	if (type==null)
 		type='detail';
-	if (type=='detail') {
-		if ( (writenode && editnoderoles.containsArrayElt(g_userroles)) || g_userroles[0]=='designer') {
-			html += "<div class='btn-group bubble-btn-group'>";
-			html += "<span class='button glyphicon glyphicon-pencil' onclick=\"Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\" data-title='Éditer' rel='tooltip'></span>";
-			html += "</div><!-- class='btn-group' -->";
+	if (type=='detail') {   //editnoderoles.containsArrayElt(g_userroles)
+		if (editresroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer') {
+			html += "<div class='btn-group bubble-button'>&nbsp;<span class='button glyphicon glyphicon-pencil' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\"></span></div>";
 		}
-		html += "<div class='bubble_label'>"+UICom.structure["ui"][this.id].getView()+"</div>";
+		html += "<div class='bubble_label'>"+UICom.structure["ui"][this.bubble_label_nodeid].resource.getView()+"</div>";
 		html += "<div class='bubble_decription'>"+UICom.structure["ui"][this.bubble_description_nodeid].resource.getView()+"</div>";
 		var urls = $("asmContext:has(metadata[semantictag*='level"+this.level+"_url'])",this.node);
 		for (var i=0;i<urls.length;i++){
 			if (i==0)  // first one
-				html += "<h4 class='title'>"+karutaStr[LANG]['bubble-links']+"</h4>";
+				html += "<h4 class='title'>Liens</h4>" 
 			var uuid = $(urls[i]).attr("id");
 			html += "<div class='bubble_url'>"+UICom.structure["ui"][uuid].resource.getView()+"</div>";
 			html += "</div>";
@@ -122,32 +122,14 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 	if (type==null)
 		type='detail';
 	if (type=='detail') {
-		//-------------------------
-		html = "<div class='form-horizontal'></div>";
-		var form_horizontal = $(html)
-		html = "<div><button  class='editbutton btn btn-xs' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayView('"+destid+"');updateBubbleTreeMap();\" data-title='éditer' rel='tooltip'>";
-		html += karutaStr[LANG]['quit-edit'];
-		html += "</button><h4>"+karutaStr[LANG]['bubble-information']+"</h4></div>";
-
-		html += "<div class='btn-group bubble-btn-group'>";
-		html += "<span class='button glyphicon glyphicon-pencil' onclick=\"Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\" data-title='Éditer' rel='tooltip'></span>";
-		html += "</div><!-- class='btn-group' -->";
-
-		$(form_horizontal).html(html);
-		//-------------------------
-		var text_label = karutaStr[LANG]['label'];
-		var text_description = karutaStr[LANG]['bubble-description'];
-		var text_weight = karutaStr[LANG]['bubble-weight'];
-		var text_color = karutaStr[LANG]['bubble-color'];
-		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+text_label+"</label><div id='label_"+this.id+"' class='col-sm-9'></div></div>"));
-		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+text_description+"</label><div id='description_"+this.id+"' class='col-sm-9'></div></div>"));
-		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+text_weight+"</label><div id='amount_"+this.id+"' class='col-sm-9'></div></div>"));
-		$(form_horizontal).append($("<div class='form-group'><label class='col-sm-3 control-label'>"+text_color+"</label><div id='color_"+this.id+"' class='col-sm-9'></div></div>"));
-		$("#"+destid).append(form_horizontal);
-		$("#label_"+this.id).append(UICom.structure.ui[this.id].getNodeLabelEditor());
-		UICom.structure["ui"][this.bubble_description_nodeid].resource.displayEditor('description_'+this.id);
-		$("#amount_"+this.id).append(UICom.structure["ui"][this.bubble_amount_nodeid].resource.getEditor());
-		$("#color_"+this.id).append(UICom.structure["ui"][this.bubble_color_nodeid].resource.getEditor());
+		$("#"+destid).append($("<div class='btn-group bubble-button' ><a class='button' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayView('"+destid+"');updateBubbleTreeMap();\">"+karutaStr[LANG]["leave-edit-mode"]+"</a></div>"));
+		$("#"+destid).append($("<br/><br/>"));
+		$("#"+destid).append($("<div class='form-horizontal' id='editform_"+this.id+"'></div>"));
+		displayControlGroup_getEditor('editform_'+this.id,karutaStr[LANG]["bubble-label"],"label_"+this.id,this.bubble_label_nodeid);
+		displayControlGroup_getEditor('editform_'+this.id,karutaStr[LANG]["bubble-weight"],"amount_"+this.id,this.bubble_amount_nodeid);
+		displayControlGroup_getEditor('editform_'+this.id,karutaStr[LANG]["bubble-color"],"color_"+this.id,this.bubble_color_nodeid);
+		$("#"+'editform_'+this.id).append($("<label class='inline'>"+karutaStr[LANG]["bubble-information"]+"</label>"));
+		UICom.structure["ui"][this.bubble_description_nodeid].resource.displayEditor('editform_'+this.id,'x100');
 		$(".pickcolor").colorpicker();
 		//----------------- children ----------------------
 		if (this.level<3) {
@@ -158,24 +140,25 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param3 = "'"+this.id+"'";
 			var param4 = "null";
 			var level_plus = this.level+1;
-			var js1 = "importBranch('"+this.id+"','karuta.karuta-bubbles','bubble_level"+level_plus+"',"+databack+","+callback+","+param2+","+param3+","+param4+");";
-			html = "<button class='btn btn-xs' onclick=\""+js1+";\">"+karutaStr[LANG]['bubble-add-bubble']+"'"+UICom.structure["ui"][this.id].getLabel('none')+"'</button>";
-
+			var js1 = "importBranch('"+this.id+"','karuta.karuta-structured-resources','bubble_level"+level_plus+"',"+databack+","+callback+","+param2+","+param3+","+param4+")";
+			html += "<div class='bubble-children'>"
+				html += "<div class='btn-group bubble-button'><a class='button' onclick=\""+js1+";\">"+karutaStr[LANG]["bubble-add-bubble"]+"</a></div>";
+			html += "<div class='bubble-children-label'>"+karutaStr[LANG]["bubble-level"]+"&nbsp;"+level_plus+"</div>"
 			var children = $("asmUnitStructure:has(metadata[semantictag*='bubble_level"+level_plus+"'])",this.node);
 			for (var i=0;i<children.length;i++){
 				var uuid = $(children[i]).attr("id");
-				var js2 = "Bubble_bubbles_byid['"+uuid+"'].displayEditor('"+destid+"')";
-				html += "<div class='bubble_label'>"+UICom.structure["ui"][uuid].getLabel();
-				html += "<button  class='editbutton btn btn-xs'  style='cursor:pointer' onclick=\""+js2+"\"><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>";
-				if (i>2) {
+				var label_uuid = Bubble_bubbles_byid[uuid].bubble_label_nodeid;
+				html += "<div class='child-bubble_label'><span>"+UICom.structure["ui"][label_uuid].resource.getView()+"</span>";
+				if (children.length>3 && i>2) {
 					var callback2 = "UIFactory.Bubble.reloadparse";
 					var param2_2 = "'"+destid+"'";
 					var param2_3 = "'"+this.id+"'";
-					html += "<button  class='editbutton btn btn-xs'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\" data-title='supprimer' rel='tooltip'><span class='glyphicon glyphicon-remove'></span></button>";
+					html += " &nbsp;<div class='btn-group bubble-del-bubble'><span  class='button glyphicon glyphicon-remove'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\"></span></div>";
 				}
 				html += "</div>";
 			}
-			$("#"+destid).append($(html));
+			html += "</div>";
+					$("#"+destid).append($(html));
 		}
 		//----------------- competence ----------------------
 		if (this.level==3) {
@@ -185,9 +168,10 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param2 = "'"+destid+"'";
 			var param3 = "'"+this.id+"'";
 			var param4 = "null";
-			var js1 = "importBranch('"+this.id+"','karuta.karuta-bubbles','level"+this.level+"_url',"+databack+","+callback+","+param2+","+param3+","+param4+")";
-			html = "<button class='editbutton btn btn-xs' onclick=\""+js1+";\">"+karutaStr[LANG]['bubble-add-link']+"</button>";
-			html += "<h4>"+karutaStr[LANG]['bubble-links']+"</h4>";
+			var js1 = "importBranch('"+this.id+"','karuta.karuta-structured-resources','level"+this.level+"_url',"+databack+","+callback+","+param2+","+param3+","+param4+")";
+			html += "<div class='bubble-children'>"
+				html += "<div class='btn-group bubble-button'><a class='button' onclick=\""+js1+";\">"+karutaStr[LANG]["bubble-add-link"]+"</a></div>";
+			html += "<div class='bubble-children-label'>Liens</div>"
 
 			var urls = $("asmContext:has(metadata[semantictag*='level"+this.level+"_url'])",this.node);
 			for (var i=0;i<urls.length;i++){
@@ -195,11 +179,9 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 				var callback2 = "UIFactory.Bubble.refreshedit";
 				var param2_2 = "'"+destid+"'";
 				var param2_3 = "'"+this.id+"'";
-				html += "<div class='bubble_link_editor'>";
-				html += "<button  class='editbutton btn btn-xs'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\" data-title='supprimer' rel='tooltip'><span class='glyphicon glyphicon-remove'></span></button>";
 				html += "<div id='edit_"+uuid+"'>";
+				html += "<div class='btn-group bubble-del-url-button'><span  class='button glyphicon glyphicon-remove'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\"></span></div>";
 				html += "</div>";
-				html += "</div><!-- bubble_link_editor -->";
 			}
 			$("#"+destid).append($(html));
 			for (var i=0;i<urls.length;i++){
@@ -216,6 +198,7 @@ UIFactory["Bubble"].remove = function(uuid,parentid,destid,callback,param1,param
 {
 	$("#"+uuid,g_portfolio_current).remove();
 	UICom.DeleteNode(uuid,callback,param1,param2);
+	$("#wait-window").modal('hide');			
 };
 
 //==================================
@@ -223,7 +206,6 @@ UIFactory["Bubble"].refreshedit = function(param1,param2)
 //==================================
 {
 	Bubble_bubbles_byid[param2].displayEditor(param1);
-	$('#wait-window').modal('hide');
 };
 
 //==================================
@@ -235,53 +217,65 @@ UIFactory["Bubble"].parse = function(data)
 
 	Bubble_bubbles_byid = {};
 	Bubble_bubbles_list = [];
-/*
+
 	var niveau1s = $("asmUnitStructure:has(metadata[semantictag*='bubble_level1'])",data);
-	for ( var i = 0; i < niveau1s.length; i++) {
-		var uuid = $(niveau1s[i]).attr('id');
-		Bubble_list[i] = Bubble_byid[uuid] = new UIFactory["Bubble"](niveau1s[i],i);
+	if (niveau1s.length>0){
+		for ( var i = 0; i < niveau1s.length; i++) {
+			var uuid = $(niveau1s[i]).attr('id');
+			Bubble_list[i] = Bubble_byid[uuid] = new UIFactory["Bubble"](niveau1s[i],i);
+		}
+	} else {
+		var uuid = $(data).attr('id');
+		Bubble_list[0] = Bubble_byid[uuid] = new UIFactory["Bubble"](data,0);		
 	}
-*/
-	var uuid = $(data).attr('id');
-	Bubble_byid[uuid] = new UIFactory["Bubble"](data,0);
 };
 
 //==================================
-UIFactory["Bubble"].reloadparse = function(param2,param3) 
+UIFactory["Bubble"].reloadparse = function(param2,param3,param4) 
 //==================================
 {
-	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
+		url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data);
-			//------ cartes ----------
-			var niveau1s = $("asmUnitStructure:has(metadata[semantictag*='bubble_level1'])",data);
-			for ( var i = 0; i < niveau1s.length; i++) {
-				var uuid = $(niveau1s[i]).attr('id');
-				Bubble_byid[uuid] = new UIFactory["Bubble"](niveau1s[i],i);
-			}
+			//------ carte ----------
+			UIFactory["Bubble"].parse(data);
 			//-----------------------
-			if (param2!=null) {
+			if (param2!=null){
 				Bubble_bubbles_byid[param3].displayEditor(param2);
 				isbubbleput(false);
 				updateBubbleTreeMap();
 				isbubbleput(true);
 			}
-			$('#wait-window').modal('hide');
+
 		}
 	});
-	$.ajaxSetup({async: true});
 };
 
-//====================================
-function clickBubble(node)
-//====================================
+//==================================
+UIFactory["Bubble"].getPublicURL = function(mapid)
+//==================================
 {
-	Bubble_bubbles_byid[node.id].displayView("bubble_display_"+g_current_mapid);
-	g_current_mapid_bubble_node = node;
+	var map_url = "";
+	var urlS = serverBCK+'/direct?uuid='+mapid+'&role=all&lang=fr&l=4&d=500';
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		mapid : mapid,
+		success : function (data){
+			var url = window.location.href;
+			var serverURL = url.substring(0,url.indexOf("/"+appliname));
+			map_url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+data;
+			$("#qrcode-image").qrcode({text:map_url,size:100,background: 'white'});
+			var text = document.getElementById("qrcode-image").toDataURL("image/jpeg");
+			putQRcodeforCV(text);
+			$("#map-link_"+this.mapid).attr('href',map_url);
+		}
+	});
 }
 
 //====================================
@@ -292,13 +286,88 @@ function isbubbleput(v)
 }
 
 //====================================
+function getIframeObj(id)
+//====================================
+{
+	var el = document.getElementById(id);
+	var obj_c = null; 
+	if(el.contentWindow){
+		obj_c = el.contentWindow;
+	}else if(el.contentDocument){
+	   obj_c = el.contentDocument;
+	}
+	return obj_c;
+}
+
+//====================================
+function loadBubbleTreeMap()
+//====================================
+{
+	var obj_c = getIframeObj("bubble_iframe"); 
+	if (obj_c.map == null)
+		obj_c.createBubbleTreeMap(g_current_mapid);
+}
+
+//====================================
 function updateBubbleTreeMap()
 //====================================
 {
-	var el = document.getElementById("bubble_iframe_"+g_current_mapid);
+	var obj_c = getIframeObj("bubble_iframe"); 
+	obj_c.displayBubbleTreeMap(g_current_mapid);
+/*
+	var el = document.getElementById("bubble_iframe");
 	if(el.contentWindow){
 	   el.contentWindow.displayBubbleTreeMap(g_current_mapid);
 	}else if(el.contentDocument){
 	   el.contentDocument.displayBubbleTreeMap(g_current_mapid);
 	}
+	*/
+}
+
+//====================================
+function clickBubble(node)
+//====================================
+{
+	Bubble_bubbles_byid[node.id].displayView("bubble_display_"+g_current_mapid);
+}
+
+//====================================
+UIFactory["Bubble"].getLinkQRcode = function(uuid)
+//====================================
+{
+	var html = "<div class='btn-group'>"+karutaStr[LANG]["bubble-share-map"]+"<a class='button' id='map-link_"+uuid+"'  href='' target='_blank'>"+karutaStr[LANG]["bubble-share-link"]+"</a> <span class='button' id='qrcode-link_"+uuid+"' onclick=\"$('#qrcode-window').modal('show')\">"+karutaStr[LANG]["bubble-share-qrcode"]+"</span></div>";
+	return html;
+}
+//====================================
+function qrCodeBox()
+//====================================
+{
+	var html = "";
+	html += "<div id='qrcode-window' class='modal'>";
+	html += "	<div id='qrcode-window-header' class='modal-header'>QR Code</div>";
+	html += "	<div id='qrcode-window-body' class='modal-body' style='text-align:center'>";
+	html += "		<canvas width='100' height='100' id='qrcode-image'></canvas>";
+	html += "	</div>";
+	html += "	<div id='qrcode-window-window-footer' class='modal-footer'><button class='btn' onclick=\"$('#qrcode-window').modal('hide')\">"+karutaStr[LANG]["Close"]+"</button></div>";
+	html += "</div>";
+	return html;
+}
+
+//==================================
+function putQRcodeforCV(qrcode)
+//==================================
+{
+	var qrcode_nodeid = $("asmContext:has(metadata[semantictag='qrcode'])",g_portfolio_current).attr('id');
+	var xml = "<asmResource xsi_type='Field'>";
+	xml += "<text lang='"+LANG+"'>"+qrcode+"</text>";
+	xml += "</asmResource>";
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		data : xml,
+		url : serverBCK_API+"/resources/resource/" + qrcode_nodeid,
+		success : function(data) {
+		}
+	});
 }

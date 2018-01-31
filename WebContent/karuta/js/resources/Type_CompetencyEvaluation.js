@@ -142,7 +142,7 @@ UIFactory["CompetencyEvaluation"].prototype.displayEditor = function(dest,type,l
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
+		url : "../../"+serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
 		success : function(data) {
 			UIFactory["CompetencyEvaluation"].parse(dest,data,lang,self,type,'comp',value_com);
 		}
@@ -156,7 +156,7 @@ UIFactory["CompetencyEvaluation"].prototype.displayEditor = function(dest,type,l
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
+		url : "../../"+serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
 		success : function(data) {
 			UIFactory["CompetencyEvaluation"].parse(dest,data,lang,self,type,'eval',value_eval);
 		}

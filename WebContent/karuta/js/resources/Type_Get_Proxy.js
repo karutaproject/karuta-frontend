@@ -148,7 +148,7 @@ UIFactory["Get_Proxy"].update = function(select,itself,lang,type)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+value,
+		url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+value,
 		success : function(data) {
 			UIFactory["Get_Proxy"].update2(data,itself,lang,type);
 		}
@@ -197,7 +197,7 @@ UIFactory["Get_Proxy"].prototype.displayEditor = function(destid,type,lang)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
+			url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
 			success : function(data) {
 				UIFactory["Get_Proxy"].parse(destid,type,lang,data,self);
 			}

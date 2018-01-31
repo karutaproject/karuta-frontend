@@ -39,11 +39,11 @@
 	font-family: sans-serif;
 	margin-top:5px;
 }
-
+/*
 .bubbletree .label2 span {
 	background: #fff;
 }
-
+*/
 .loading {
 	z-index: 1000;
 	position: absolute;

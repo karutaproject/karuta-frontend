@@ -14,6 +14,7 @@
 	border-bottom:0px solid white;
 }
 
+.createreport .button,
 .collapsible .glyphicon,
 .btn-group .button {
 	color:@portfolio-buttons-color;
@@ -137,6 +138,13 @@ a, .collapsible {
 	cursor:pointer;
 }
 
+#wait-window-body{
+	margin-top:4px;
+	font-weight:bold;
+	text-align:center;
+	verticla-align:middle;
+	font-size:14px;
+}
 
 #navigation_bar .glyphicon{
 	font-size:16px;
@@ -166,6 +174,10 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 .navbar {
 	margin-bottom:0px;
 	border-radius:0px;
+}
+
+.navbar-brand {
+	height:auto; /* originaly 50px but too small when minimized on phone  */
 }
 
 .navbar-default{
@@ -418,11 +430,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 	margin-right:-10px;
 }
 
-#list .dropdown-menu,
-#navigation-bar .dropdown-menu,
-.project-menu .dropdown-menu {
-	min-width:200px;
-}
+
 
 .project-menu .glyphicon-menu-hamburger {
 	width:13px;
@@ -548,6 +556,10 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 #adding_portfolios .row-label,
 #adding_portfolios .row {
 	color: #333;
+}
+
+#adding_portfolios .project-content .row:hover {
+	background-color: #ddd;
 }
 /* ============================================================ */
 
@@ -973,6 +985,11 @@ hr {
 .toggle-content {
 	cursor:pointer;
 }
+
+.private {
+	color:#808080;
+	font-style:italic;
+}
 /* ---------------- resource Comments --------------------- */
 .author-date {
 		font-size:11px;
@@ -1116,7 +1133,25 @@ textarea {
 	left:50%;
 }
 
+#image-window {
+	width:90%;
+	top:10%;
+	left:5%;
+}
 
+#image-window-body {
+	padding:5px;
+}
+
+#qrcode-window {
+	width:200px;
+	height:250px;
+	background-color:white;
+	margin-left:-50px;
+	position:fixed;
+	top:25%;
+	left:50%;
+}
 
 /* -------------------------------------------------- */
 /* Content */
@@ -1379,7 +1414,6 @@ a.active:over{
    ====================*/
 
 .li-code {
-	float:left;
 	padding-right:10px;
 }
 
@@ -1601,10 +1635,23 @@ table.tablesorter th.restore {
 	border:1px solid lightgrey ;
 }
 
+.report .loop{
+	margin-top:7px;
+	border:1px solid #16A085 ;
+}
+.report .go-parent{
+	margin-top:7px;
+	border:1px solid lightgrey ;
+}
 
 .report .model-table {
 	margin-top:7px;
 	border:2px solid Navy;
+}
+
+.report .model-europass {
+	margin-top:7px;
+	border:2px solid #386bc1;
 }
 
 .report .model-row {
@@ -1731,6 +1778,11 @@ table.tablesorter th.restore {
 	border:1px solid Navy ;
 }
 
+.batch .delete-person {
+	margin-top:7px;
+	border:1px solid #46C7C7 ;
+}
+
 .batch .create-elgg-user {
 	margin-top:7px;
 	border:1px solid RoyalBlue ;
@@ -1760,7 +1812,7 @@ table.tablesorter th.restore {
 }
 
 .specific-menu {
-	width:200px;
+	width:220px;
 }
 
 .batch .create-tree{
@@ -1788,6 +1840,11 @@ table.tablesorter th.restore {
 	border:1px solid Aquamarine ;
 }
 
+.batch .join-portfoliogroup{
+	margin-top:7px;
+	border:1px solid #8AFB17 ;
+}
+
 .batch .share-usergroup{
 	margin-top:7px;
 	border:1px solid #46C7C7 ;
@@ -1804,9 +1861,24 @@ table.tablesorter th.restore {
 	border:1px solid Crimson;
 }
 
-.batch .update-metadatawad {
+.batch .update-metadata-wad {
 	margin-top:7px;
 	border:1px solid #FE642E;
+}
+
+.batch .update-metadata-inline {
+	margin-top:7px;
+	border:1px solid #FACC2E;
+}
+
+.batch .update-node-resource {
+	margin-top:7px;
+	border:1px solid #F78181;
+}
+
+.batch .update-metadata {
+	margin-top:7px;
+	border:1px solid #FAAC58;
 }
 
 .batch .update-dashboard {
@@ -1982,25 +2054,25 @@ table.tablesorter th.restore {
 	Select with color
    ====================*/
 
-.selBDG0, option[value="BDG0"] {color: black; background: lightgrey;padding:4px;height:34px;}
-.selBDG1, option[value="BDG1"] {color: black; background: DarkOrange;padding:4px;height:34px;}
-.selBDG2, option[value="BDG2"] { color: black; background: #FF6600;padding:4px;height:34px;}
-.selBDG3, option[value="BDG3"] { color: black; background: #fff;padding:4px;height:34px;}
-.selBDG4, option[value="BDG4"] { color: black; background: #CCFF99;padding:4px;height:34px;}
-.selBDG5, option[value="BDG5"] { color: black; background: #66CC00;padding:4px;height:34px;}
+.selBDG0, option[value="BDG0"] {color: black; background: lightgrey;padding:2px 4px;height:34px;}
+.selBDG1, option[value="BDG1"] {color: black; background: DarkOrange;padding:2px 4px;height:34px;}
+.selBDG2, option[value="BDG2"] { color: black; background: #FF6600;padding:2px 4px;height:34px;}
+.selBDG3, option[value="BDG3"] { color: black; background: #fff;padding:2px 4px;height:34px;}
+.selBDG4, option[value="BDG4"] { color: black; background: #CCFF99;padding:2px 4px;height:34px;}
+.selBDG5, option[value="BDG5"] { color: black; background: #66CC00;padding:2px 4px;height:34px;}
 
 //.BDG0 { color: black; background: lightgrey; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG0 { color: black; background: lightgrey; padding:4px;border-radius:4px;}
+.BDG0 { color: black; background: lightgrey; padding:2px 4px;border-radius:4px;}
 //.BDG1 { color: black; background: red; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG1 { color: black; background: DarkOrange; padding:4px;border-radius:4px;}
+.BDG1 { color: black; background: DarkOrange; padding:2px 4px;border-radius:4px;}
 //.BDG2 { color: black; background: #FF6600; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG2 { color: black; background: #FF6600; padding:4px;border-radius:4px;}
+.BDG2 { color: black; background: #FF6600; padding:2px 4px;border-radius:4px;}
 //.BDG3 { color: black; background: #fff; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG3 { color: black; background: #fff; padding:4px;border-radius:4px;}
+.BDG3 { color: black; background: #fff; padding:2px 4px;border-radius:4px;}
 //.BDG4 { color: black; background: #CCFF99; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG4 { color: black; background: #CCFF99; padding:4px;border-radius:4px;}
+.BDG4 { color: black; background: #CCFF99; padding:2px 4px;border-radius:4px;}
 //.BDG5 { color: black; background: #66CC00; padding:2px; border:1px gray solid;width:100px;border-radius:4px;}
-.BDG5 { color: black; background: #66CC00; padding:4px;border-radius:4px;}
+.BDG5 { color: black; background: #66CC00; padding:2px 4px;border-radius:4px;}
 
 select.Y0, option[value="Y0"] {color: #fff; background: gray;}
 select.Y1, option[value="Y1"] {color: #fff; background: red;}
@@ -2009,12 +2081,12 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 .Y1 {color: #fff; background: red;}
 .Y2 {color: #fff; background: green;}
 
-.BDG { color: black; background: lightgrey; padding:4px;border-radius:4px;}
+.BDG { color: black; background: lightgrey; padding-left:4px;padding-right:4px;padding-top:1px;padding-bottom:1px;border-radius:4px;}
 
 .selGREEN {color: black; background: #66cc00;}
 .selORANGE {color: black; background: orange;}
 .selYELLOW {color: black; background: yellow;}
-.selBLUE {color: black; background: yellow;}
+.selBLUE {color: black; background: #0080ff;}
 .selRED {color: black; background: #ff3333;}
 .GREEN {color: black; background: #66cc00;}
 .RED {color: black; background: #ff3333;}
@@ -2049,6 +2121,51 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	width:90%;
 }
 
+.selSMILEY-GREEN, .SMILEY-GREEN {
+	background-image: url("../../karuta/img/smiley-green.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
+.selSMILEY-ORANGE, .SMILEY-ORANGE {
+	background-image: url("../../karuta/img/smiley-orange.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
+.selSMILEY-RED, .SMILEY-RED {
+	background-image: url("../../karuta/img/smiley-red.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
+.selGREEN-CHECK, .GREEN-CHECK {
+	background-image: url("../../karuta/img/green-check.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
+.selRED-X, .RED-X {
+	background-image: url("../../karuta/img/red-x.png");
+	background-repeat: no-repeat;
+	background-position: 10px 3px;
+	display:inline-block;
+	height:34px;
+	width:90%;
+}
+
 /* ====================
 	Calendar
    ====================*/
@@ -2068,9 +2185,18 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	SendEmail
    ====================*/
 
+.receiver_SendEmail{
+	font-size:12pt;
+	margin-bottom:20px;
+	background-color: lightgrey;
+	padding: 5px;
+}
 
 .name_SendEmail {
 	font-weight:bold;
+}
+
+.email_SendEmail {
 }
 
 /* ====================
@@ -2201,7 +2327,7 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	border: 1px solid lightgrey;
 }
 
-.bubble_display .editbutton {
+.bubble_display .bubble-button {
 	float:right;
 }
 
@@ -2213,6 +2339,7 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	margin-top:5px;
 	margin-left:5px;
 	height:20px;
+	font-size:120%;
 }
 
 .bubble_link_editor{
@@ -2228,6 +2355,40 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 
 .bubble-btn-group {
 	float:right;
+}
+
+.bubble-children{
+	margin-top:15px;
+	margin-left:5px;
+}
+
+.bubble-children-label{
+	height:20px;
+	font-size:120%;
+}
+
+.bubble-del-url-button{
+	position:relative;
+	left:0px;
+	top:55px;
+	margin-top:-30px;
+	z-index:1000;
+}
+
+.bubble-del-bubble{
+	float:left;
+	margin-left:-30px;
+	margin-top:-2px;
+}
+
+.child-bubble_label{
+	margin-top:5px;
+	margin-left:30px;
+	font-size:110%;
+}
+
+#qrcode-link{
+	cursor: pointer;
 }
 
 /* ====================
@@ -2385,6 +2546,10 @@ div.oembedall-container {
        max-width: 480px !important;
    }
 
+.thereismore {
+	position:relative;
+	top:-10px;
+}
 /* ===========================
 	DASHBOARD CSV PDF BUTTONS
    ===========================*/
@@ -2614,4 +2779,11 @@ div.oembedall-container {
 
 .zebra-table td {
 	border: 0px solid white; padding: 10px;
+}
+
+
+.passwordbyroot{
+	background-color:white;
+	text-shadow:0px 0px 5px red;
+	letter-spacing:2px;
 }

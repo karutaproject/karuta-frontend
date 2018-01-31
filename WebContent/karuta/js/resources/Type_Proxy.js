@@ -156,7 +156,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
+				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
 				success : function(data) {
 					UIFactory["Proxy"].parse(destid,type,langcode,data,self,portfoliocode,srce);
 				}
@@ -168,7 +168,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/portfolios?active=1",
+				url : serverBCK_API+"/portfolios?active=1",
 				success : function(data) {
 					UIFactory["Portfolio"].parse(data);
 					for ( var i = 0; i < portfolios_list.length; i++) {
@@ -177,7 +177,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 						$.ajax({
 							type : "GET",
 							dataType : "xml",
-							url : "../../../"+serverBCK+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
+							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
 							success : function(data) {
 								var nodes = $("node",data);
 								var display = false;
@@ -245,9 +245,13 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 		html += "&nbsp;</a>";
 		var select_item_a = $(html);
 		$(select_item_a).click(function (ev){
-			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
-			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
-			UIFactory["Proxy"].update(this,self,langcode);
+			$("#button_"+self.id).html(portfolio_label+"."+$(this).attr("label_"+languages[langcode]));
+			for (var i=0; i<languages.length;i++){
+				$(self.label_node[i]).text($(this).attr("label_"+languages[i]));
+			}
+			$(self.code_node).text($(this).attr("code"));
+			$(self.value_node).text($(this).attr("value"));
+			UIFactory["Proxy"].update(self,langcode);
 		});
 		$(select_item).append($(select_item_a))
 		$(select).append($(select_item));

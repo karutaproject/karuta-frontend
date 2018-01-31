@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Accueil du Eportfolio 4 &eacute;toiles</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+	<!-- =========================================== -->
+	<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../other/css/bootstrap-wysihtml5.css" />
+	<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../karuta/css/karuta.css" />
+	<link rel="stylesheet" type="text/css" href="../../other/pick-a-color/css/pick-a-color-1.1.8.min.css" />
+	<!-- =========================================== -->
+	<script src="../../other/js/jquery-1.10.2.js"></script>
+	<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../other/js/bootstrap-wysihtml5.js"></script>
+	<script src="../../other/js/js.cookie.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/karuta.js"></script>
+	<script src="../../karuta/js/UICom.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/model/Type_Portfolio.js"></script>
+	<script src="../../karuta/js/model/Type_Node.js"></script>
+	<script src="../../karuta/js/model/Type_User.js"></script>
+	<script src="../../karuta/js/UICom.js"></script>
+	<!-- =============================================================== -->
+	<link type="text/css" href="../../other/lightbox/css/lightbox.css" rel="stylesheet" />
+	<script src="../../other/lightbox/js/lightbox-2.6.min.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/resources/Type_Calendar.js"></script>
+	<script src="../../karuta/js/resources/Type_Comments.js"></script>
+	<script src="../../karuta/js/resources/Type_Document.js"></script>
+	<script src="../../karuta/js/resources/Type_Proxy.js"></script>
+	<script src="../../karuta/js/resources/Type_TextField.js"></script>
+	<script src="../../karuta/js/resources/Type_Field.js"></script>
+	<script src="../../karuta/js/resources/Type_Image.js"></script>
+	<script src="../../karuta/js/resources/Type_Get_Resource.js"></script>
+	<script src="../../karuta/js/resources/Type_Get_Get_Resource.js"></script>
+	<script src="../../karuta/js/resources/Type_URL.js"></script>
+	<script src="../../karuta/js/resources/Type_Item.js"></script>
+	<script src="../../karuta/js/resources/Type_Color.js"></script>
+	<script src="../../karuta/js/resources/Type_Bubble.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/bubble.js"></script>
+	<script src="../../application/js/_init.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/version.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/languages/locale_fr.js"></script>
+	<!-- =============================================================== -->
+	<script src="../js/iut2.js"></script>
+	<script src="../js/locale_lang.js"></script>
+	<!-- =========================================== -->
+	<link rel="stylesheet" href="../../application/css/specific.css" />
+	<style>
+		#bubble_iframe {
+			width:400px;
+			height:400px;
+		}
+	</style>
+	
+</head>
+<body style='padding:50px;'>
+	<div class='row'>
+		<div class='span6'>
+			<iframe id="bubble_iframe" src='bubble.html'></iframe>
+		</div>							
+		<div class='span5'>
+			<div id="bubble_display">
+			</div>
+		</div>							
+	</div>
+
+	
+	<script language='javascript'>
+		var portfolioid = getURLParameter('portfolioid');
+		var dataBubble = {
+				label: 'Total',
+				amount: 100,
+				color: '#0066bb',  // color for root node, will be inherited by children
+			};
+
+		function clickBubble(node){
+			Bubble_bubbles_byid[node.id].displayView("bubble_display")
+		}
+
+
+		var iid = getURLParameter('i');
+		var l_userrole = 'all';
+		var g_userrole = 'all';
+		
+		var g_uuid = ''; 
+		//------------------------------
+		var lang = getURLParameter('lang');
+		var lang_local = LANGCODE;
+		if (lang!=null) {
+			for (var i=0; i<languages.length;i++){
+				if (languages[i]==lang)
+					lang_local = i;
+			}
+//			alert(lang);
+		}
+	
+		$(window).load(function() {
+			$.ajaxSetup({async: false});
+			//----------------
+			$.ajax({
+				type : "GET",
+				dataType : "text",
+				url : serverBCK+"/direct?i=" + iid,
+				success : function(data) {
+					g_uuid = data;
+				}
+			});
+			//----------------
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/credential",
+				data: "",
+				success : function(data) {
+					USER = new UIFactory["User"]($("user",data));
+				}
+			});
+			//----------------
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/nodes/node/" + g_uuid,
+				success : function(data) {
+					UICom.parseStructure(data);
+					UIFactory["Bubble"].parse(data);
+					dataBubble = Bubble_list[0].data;
+					g_current_mapid = Bubble_list[0].id;
+					loadBubbleTreeMap();
+				}
+			});
+			$.ajaxSetup({async: true});
+			//----------------
+			$("#alert-window").modal('show');
+		});
+		
+	</script>
+	
+</body>
+</html>

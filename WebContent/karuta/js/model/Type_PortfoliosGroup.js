@@ -62,7 +62,7 @@ UIFactory["PortfoliosGroup"].displayGroups = function(destid,type,lang)
 		var group_type = "PortfoliosGroup";
 		for ( var i = 0; i < PortfoliosGroups_list.length; i++) {
 			var gid = PortfoliosGroups_list[i].id;
-			displayGroup[group_type][gid] = Cookies.get('dg_'+group_type+"-"+gid);
+			displayGroup[group_type][gid] = localStorage.getItem('dg_'+group_type+"-"+gid);
 			if (displayGroup[group_type][gid]!=undefined && displayGroup[group_type][gid]=='open'){
 				UIFactory["PortfoliosGroup"].displayPortfolios(gid,"content-"+group_type+"-"+gid,type,lang);				
 			}
@@ -84,7 +84,8 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,type,lang)
 		type = 'list';
 	var html = "";
 	if (type=='list') {
-		displayGroup[group_type][this.id] = Cookies.get('dg_'+group_type+"-"+this.id);
+		displayGroup[group_type][this.id] = localStorage.getItem('dg_'+group_type+"-"+this.id);
+//		displayGroup[group_type][this.id] = Cookies.get('dg_'+group_type+"-"+this.id);
 		html += "	<div class='row row-label'>";
 		if (displayGroup[group_type][this.id]!=undefined && displayGroup[group_type][this.id]=='open')
 			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.PortfoliosGroup.displayPortfolios','list','"+lang+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button glyphicon glyphicon-minus'></span></div>";
@@ -135,7 +136,7 @@ UIFactory["PortfoliosGroup"].displayPortfolios = function(gid,destid,type,lang)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/portfoliogroups?group="+gid,
+			url : serverBCK_API+"/portfoliogroups?group="+gid,
 			data: "",
 			success : function(data) {
 				var portfolios_ids = parseList("portfolio",data);
@@ -146,7 +147,11 @@ UIFactory["PortfoliosGroup"].displayPortfolios = function(gid,destid,type,lang)
 					$("#"+destid_group).append($("<div class='row' id='"+itemid+"'></div>"));
 					if (portfolios_byid[portfolios_ids[i]]!=null && portfolios_byid[portfolios_ids[i]]!=undefined) {
 						$("#"+itemid).html(portfolios_byid[portfolios_ids[i]].getPortfolioView(itemid,type,null,null,null,gid));
-					}
+					} else { // we load portfolio information
+						UIFactory.Portfolio.load(portfolios_ids[i],"1");
+						if (portfolios_byid[portfolios_ids[i]]!=null && portfolios_byid[portfolios_ids[i]]!=undefined) {
+							$("#"+itemid).html(portfolios_byid[portfolios_ids[i]].getPortfolioView(itemid,type,null,null,null,gid));
+						}					}
 				}
 				PortfoliosGroups_byid[gid].members = portfolios_ids;
 				testGroup_Empty("portfolios-group_",gid);
@@ -167,7 +172,7 @@ UIFactory["PortfoliosGroup"].update = function(gid,attribute,value)
 	PortfoliosGroups_byid[gid].attributes[attribute].text(value); // update attribute value
 	var node = PortfoliosGroups_byid[gid].node;
 	var data = xml2string(node);
-	var url = "../../../"+serverBCK+"/portfoliogroups?group=" + gid +"&"+attribute+"="+value;
+	var url = serverBCK_API+"/portfoliogroups?group=" + gid +"&"+attribute+"="+value;
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -314,7 +319,7 @@ UIFactory["PortfoliosGroup"].confirmRemove = function(gid,uid)
 UIFactory["PortfoliosGroup"].remove = function(gid,uid) 
 //==================================
 {
-	var url = "../../../"+serverBCK+"/portfoliogroups?group=" + gid;
+	var url = serverBCK_API+"/portfoliogroups?group=" + gid;
 	if (uid!=null && uid!='null') {
 		url += "&uuid="+uid;
 	}
@@ -352,7 +357,7 @@ UIFactory["PortfoliosGroup"].create = function()
 {
 
 	var label = $("#portfoliosgroup_label").val();
-	var url = "../../../"+serverBCK+"/portfoliogroups?type=portfolio&label="+label;
+	var url = serverBCK_API+"/portfoliogroups?type=portfolio&label="+label;
 	$.ajax({
 		type : "POST",
 		contentType: "application/xml",
@@ -393,7 +398,7 @@ UIFactory["PortfoliosGroup"].editGroupsByUuid = function(uuid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfoliogroups?uuid="+uuid,
+		url : serverBCK_API+"/portfoliogroups?uuid="+uuid,
 		data: "",
 		success : function(data) {
 			var uuid_groupids = parseList("group",data);
@@ -404,7 +409,7 @@ UIFactory["PortfoliosGroup"].editGroupsByUuid = function(uuid)
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/portfoliogroups",
+					url : serverBCK_API+"/portfoliogroups",
 					success : function(data) {
 						UIFactory["PortfoliosGroup"].parse(data);
 						UIFactory["PortfoliosGroup"].displayManageMultipleGroups('portfolio_list_groups','uuid',uuid,uuid_groupids,'updateGroup_Portfolio');
@@ -478,7 +483,7 @@ UIFactory["PortfoliosGroup"].callAddPortfolios = function(gid,portfolioLabel)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfoliogroups?group="+gid,
+		url : serverBCK_API+"/portfoliogroups?group="+gid,
 		data: "",
 		success : function(data) {
 			var items = parseList("portfolio",data);
@@ -499,7 +504,7 @@ UIFactory["PortfoliosGroup"].addPortfolios = function(gid)
 //==================================
 {
 	var items = $("input[name='select_portfolios']:not(:disabled)").filter(':checked');
-	var url = "../../../"+serverBCK+"/portfoliogroups?group="+gid+"&uuid=";
+	var url = serverBCK_API+"/portfoliogroups?group="+gid+"&uuid=";
 	for (var i=0; i<items.length; i++){
 		var itemid = $(items[i]).attr('value');
 		var url2 = url+itemid;
@@ -534,7 +539,7 @@ UIFactory["PortfoliosGroup"].prototype.fillSharingRoles = function()
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/rolerightsgroups?portfolio="+id,
+			url : serverBCK_API+"/rolerightsgroups?portfolio="+id,
 			success : function(data) {
 				var groups = $("rolerightsgroup",data);
 				if (groups.length>0) {
@@ -598,7 +603,7 @@ UIFactory["PortfoliosGroup"].displaySharingRoleEditor = function(destid,gid,call
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/portfoliogroups?group="+gid,
+			url : serverBCK_API+"/portfoliogroups?group="+gid,
 			data: "",
 			success : function(data) {
 				PortfoliosGroups_byid[gid].members = parseList("portfolio",data);
@@ -670,7 +675,7 @@ UIFactory["PortfoliosGroup"].callShareUsers = function(gid)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/users",
+			url : serverBCK_API+"/users",
 			success : function(data) {
 				UIFactory["User"].parse(data);
 				UIFactory["User"].displaySelectMultipleActive('sharing_users');
@@ -742,7 +747,7 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/usersgroups",
+			url : serverBCK_API+"/usersgroups",
 			success : function(data) {
 				UIFactory["UsersGroup"].parse(data);
 				UIFactory["UsersGroup"].displaySelectMultipleWithUsersList('sharing_usersgroups');
@@ -785,7 +790,7 @@ UIFactory["PortfoliosGroup"].shareGroups = function(gid,type)
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/usersgroups?group="+usergroupid,
+				url : serverBCK_API+"/usersgroups?group="+usergroupid,
 				data: "",
 				success : function(data) {
 					var users_ids = parseList("user",data);

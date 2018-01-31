@@ -28,7 +28,7 @@ function fill_list_usersgroups()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups",
+		url : serverBCK_API+"/usersgroups",
 		data: "",
 		success : function(data) {
 			UIFactory["UsersGroup"].parse(data);
@@ -62,7 +62,7 @@ function updateGroup_User(elt)
 	var type = 'DELETE';
 	if(elt.checked) type='PUT';
 	var userid = $(elt).attr("user");
-	var url = "../../../"+serverBCK+"/usersgroups?group=" + elt.value + "&user="+userid;
+	var url = serverBCK_API+"/usersgroups?group=" + elt.value + "&user="+userid;
 	$.ajax({
 		type : type,
 		dataType : "text",
@@ -90,7 +90,7 @@ function get_usersxml_from_groups(usersgroups)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+			url : serverBCK_API+"/usersgroups?group="+gid,
 			success : function(data) {
 				xml += $($("users",data)[0]).html();
 			},

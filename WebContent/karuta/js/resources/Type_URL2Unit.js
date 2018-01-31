@@ -181,7 +181,7 @@ UIFactory["URL2Unit"].prototype.displayEditor = function(destid,type,langcode,di
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
+				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
 				success : function(data) {
 					if (cachable)
 						g_URL2Unit_caches[queryattr_value] = data;

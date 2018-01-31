@@ -12,7 +12,7 @@ function initKarutaPage()
 	html += "</div>";
 	html += "<div id='social-button' onclick='toggleSocialNetwork()'></div>";
 	html += "<div id='wait-window' class='modal' style='height:100px;'>";
-	html += "<div id='wait-window-body' class='modal-body' style='text-align:center;'></div>";
+	html += "<div id='wait-window-body' class='modal-body'></div>";
 	html += "<div id='wait-spin'></div>";
 	html += "</div>";
 	html += "<div id='post-form' style='display:none'>";
@@ -21,16 +21,21 @@ function initKarutaPage()
 	//--------------------------
 	$('body').append(EditBox());
 	$('body').append(DeleteBox());
-	$('body').append(LangueBox());
 	$('body').append(savedBox());
 	$('body').append(alertBox());
 	$('body').append(messageBox());
 	$('body').append(imageBox());
+	if (typeof europass_installed!='undefined' && europass_installed)
+		$('body').append(LangueBox());
+	
 	//--------------------------
 	var target = document.getElementById('wait-spin');
 	var spinner = new Spinner().spin(target);
-	g_elgg_key = Cookies.get('elgg_token');
-	g_socialnetwork = Cookies.get('socialnetwork');
+	//--------------------------
+	if (elgg_installed) {
+		g_elgg_key = Cookies.get('elgg_token');
+		g_socialnetwork = localStorage.getItem('socialnetwork');
+	}
 	g_edit = true; // à vérifier
 	//--------------------------
 }
@@ -48,14 +53,14 @@ function displayKarutaPage()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/credential",
+		url : serverBCK_API+"/credential",
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverVER+"/version",
+				url : serverBCK+"/version",
 				data: "",
 				success : function(data) {		
 					karuta_backend_version = $("number",$("#backend",data)).text();
@@ -65,7 +70,7 @@ function displayKarutaPage()
 				}
 			});
 			//-------------------------------
-			if (elgg_installed!=undefined && elgg_installed) {
+			if (elgg_installed) {
 				var html = "";
 				html += "<div id='global-row' class='row'>";
 				if (g_socialnetwork==undefined || g_socialnetwork=='shown'){
@@ -157,8 +162,10 @@ function getSearch()
 	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"' onchange='javascript:hideArchiveSearch()'>";
 	html += "	<span class='input-group-btn'>";
 	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><span class='glyphicon glyphicon-search'></span></button>";
-	html += "		<a id='archive-button' href='' class='btn' disabled='true'><i style='margin-top:4px' class='fa fa-download'></i></a>";
-	html += "		<button id='remove-button' type='button' disabled='true' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fa fa-trash-o'></i></button>";
+	if (USER.creator) {
+		html += "		<a id='archive-button' href='' class='btn' disabled='true'><i style='margin-top:4px' class='fa fa-download'></i></a>";
+		html += "		<button id='remove-button' type='button' disabled='true' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fa fa-trash-o'></i></button>";
+	}
 	html += "	</span>";
 	html += "</div>";
 	return html;
@@ -168,7 +175,7 @@ function getSearch()
 function showArchiveSearch()
 //==============================
 {
-	var archive_href = "../../../"+serverBCK+"/portfolios/zip?portfolios=";
+	var archive_href = serverBCK_API+"/portfolios/zip?portfolios=";
 	for (var i = 0; i < portfolios_list.length; i++) {
 		if (i>0)
 			archive_href += ","

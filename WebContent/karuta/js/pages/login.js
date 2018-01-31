@@ -38,9 +38,6 @@ function loadJS(url)
 //==============================
 {
 	document.write("<script src='"+url+"'></script>");
-//	var script = document.createElement('script');
-//	script.src = url;
-//	document.getElementsByTagName('head')[0].appendChild(script);
 }
 
 //==============================
@@ -89,14 +86,11 @@ function callSubmit(encrypt_url,lang)
 //==============================
 {
 	var data = "<credential><login>"+document.getElementById("useridentifier").value+"</login><password>"+document.getElementById("password").value+"</password></credential>";
-	$.ajaxSetup({
-		Accept: "application/xml",
-		contentType: "application/xml"
-		});
 	$.ajax({
+		contentType: "application/xml",
 		type : "POST",
 		dataType : "text",
-		url : "../../../"+serverBCK+"/credential/login",
+		url : serverBCK_API+"/credential/login",
 		data: data,
 		i : encrypt_url,
 		lang :lang,
@@ -130,14 +124,14 @@ function callSend()
 	$.ajax({
 		type : "POST",
 		dataType : "text",
-		url : "../../../"+serverBCK+"/credential/forgot",
+		url : serverBCK_API+"/credential/forgot",
 		data: data,
 		success : function(data) {
 			alertHTML(karutaStr[LANG]['password-sent']);
 			window.location="login.htm?lang="+LANG;
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Identification : "+jqxhr.responseText);
+			alertHTML("Identification : "+karutaStr[LANG]['inexistent-user']);
 		}
 	});
 }
@@ -170,7 +164,7 @@ function getNewAccount()
 {
 	var html = "";
 	html += "<p>"+karutaStr[LANG]['new-account']+"</p>";
-	html += "<a class='btn btn-account' href='createAccount.htm?lang=en'>"+karutaStr[LANG]['sign-up']+"</a>";
+	html += "<a class='btn btn-account' href='createAccount.htm?lang="+LANG+"'>"+karutaStr[LANG]['sign-up']+"</a>";
 	return html;
 }
 
@@ -195,12 +189,13 @@ function displayKarutaLogin()
 	html += "</div>";
 	$('body').html(html);
 	$('body').append(alertBox());
+	$('body').append(EditBox());
 
 	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverVER+"/version",
+		url : serverBCK+"/version",
 		data: "",
 		success : function(data) {		
 			karuta_backend_version = $("number",$("#backend",data)).text();

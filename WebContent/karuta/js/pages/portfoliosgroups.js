@@ -30,7 +30,7 @@ function fill_list_portfoliosgroups()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfoliogroups",
+		url : serverBCK_API+"/portfoliogroups",
 		data: "",
 		success : function(data) {
 			UIFactory["PortfoliosGroup"].parse(data);
@@ -67,7 +67,7 @@ function updateGroup_Portfolio(elt)
 	if(elt.checked) type='PUT';
 	var uuid = $(elt).attr("uuid");
 	var gid = elt.value;
-	var url = "../../../"+serverBCK+"/portfoliogroups?group="+gid+"&uuid="+uuid;
+	var url = serverBCK_API+"/portfoliogroups?group="+gid+"&uuid="+uuid;
 	$.ajax({
 		type : type,
 		dataType : "text",
@@ -100,7 +100,7 @@ function updateRRGroup_Users(groupid,users,xml,type,attribute,portfolioid)
 {
 	if (groupid!=null) {
 		if (type=='share'){
-			var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+			var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
 			if (xml.length>20) {
 				$.ajax({
 					type : "POST",
@@ -113,7 +113,7 @@ function updateRRGroup_Users(groupid,users,xml,type,attribute,portfolioid)
 							$.ajax({
 								type : "GET",
 								dataType : "xml",
-								url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+								url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 								success : function(data) {
 									UIFactory["Portfolio"].displayUnSharing('shared',data);
 								},
@@ -126,7 +126,7 @@ function updateRRGroup_Users(groupid,users,xml,type,attribute,portfolioid)
 				});
 			}
 		} else if (type=='unshare'){
-			var url = "../../../"+serverBCK+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/";
+			var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/";
 			for (var i=0; i<users.length; i++){
 				var userid = $(users[i]).attr(attribute);
 				$.ajax({
@@ -140,7 +140,7 @@ function updateRRGroup_Users(groupid,users,xml,type,attribute,portfolioid)
 							$.ajax({
 								type : "GET",
 								dataType : "xml",
-								url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+								url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
 								success : function(data) {
 									UIFactory["Portfolio"].displayUnSharing('shared',data);
 								},

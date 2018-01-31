@@ -22,6 +22,7 @@ var portfolioid = null;
 var g_userrole = "";
 var g_userroles = [];
 var g_portfolioid = "";
+var g_complex = false;
 var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
@@ -34,6 +35,7 @@ var g_display_sidebar = true;
 var g_free_toolbar_visibility = 'hidden';
 //---- caches -----
 var g_dashboard_models = {}; // cache for dashboard_models
+var g_report_models = {}; // cache for report_models
 var g_Get_Resource_caches = {};
 //------------------
 var g_wysihtml5_autosave = 60000; // 60 seconds
@@ -131,22 +133,28 @@ function getNavBar(type,portfolioid,edit)
 		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' >"+navbar_title[LANG]+"</a>";
 	else
 		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' ><img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA </a>";
-	html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
-	html += "				<li><b>Versions</b></li>";
-	html += "				<li>Application : "+application_version+" (" +application_date+")</li>";
-	html += "				<li>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</li>";
-	html += "				<li>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</li>";
-	html += "				<li>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</li>";
-	html += "			</ul>";
+	if (type!='login') {
+		html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
+		html += "				<li><b>Versions</b></li>";
+		html += "				<li>Application : "+application_version+" (" +application_date+")</li>";
+		html += "				<li>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</li>";
+		html += "				<li>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</li>";
+		html += "				<li>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</li>";
+		html += "			</ul>";
+	}
 	html += "		</div>";
 	html += "	  </div>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
-	html += "			<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
-	html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-wrench' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+	if (type=='login') {
+		html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+	} else {
+		html += "				<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
+		html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+	}
 	html += "			</ul>";
-	//-------------------LANGUAGES---------------------------
+	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
 	if (languages.length>1) 
 		if(type=="create_account") {
 			html += "			<ul class='nav navbar-nav'>";
@@ -368,21 +376,25 @@ function getEditBox(uuid,js2) {
 				var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
 				getResource.displayEditor("get-resource-node");
 			}
+			if ($("#get-get-resource-node").length){
+				var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
+				getgetResource.displayEditor("get-get-resource-node");
+			}
 		}
-	}
-	// ------------admin and designer----------
-	if (USER.admin || g_userroles[0]=='designer') {
-		var editHtml = UIFactory["Node"].getMetadataAttributesEditor(UICom.structure["ui"][uuid]);
-		$("#edit-window-body-metadata").html($(editHtml));
-		UIFactory["Node"].displayMetadataTextsEditor(UICom.structure["ui"][uuid]);
 	}
 	// ------------ context -----------------
 	UIFactory["Node"].displayCommentsEditor('edit-window-body-context',UICom.structure["ui"][uuid]);
 	// ------------ graphicer -----------------
 	var editHtml = UIFactory["Node"].getMetadataEpmAttributesEditor(UICom.structure["ui"][uuid]);
 	$("#edit-window-body-metadata-epm").html($(editHtml));
+	// ------------admin and designer----------
+	if (USER.admin || g_userroles[0]=='designer') {
+		var editHtml = UIFactory["Node"].getMetadataAttributesEditor(UICom.structure["ui"][uuid]);
+		$("#edit-window-body-metadata").html($(editHtml));
+		UIFactory["Node"].displayMetadataTextsEditor(UICom.structure["ui"][uuid]);
+	}
 	// ------------------------------
-	$(".modal-dialog").css('max-width','600px');
+	$(".modal-dialog").css('width','600px');
 	$(".pickcolor").colorpicker();
 	// ------------------------------
 	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');}
@@ -495,7 +507,7 @@ function imageBox()
 {
 	var html = "";
 	html += "\n<!-- ==================== image box ==================== -->";
-	html += "\n<div id='image-window' class='modal fade'>";
+	html += "\n<div id='image-window' class='modal'>";
 	html += "\n			<div class='modal-content'>";
 	html += "\n				<div id='image-window-body' class='modal-body'>";
 	html += "\n				</div>";
@@ -607,18 +619,29 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		$(window).scrollTop(0);
 		g_current_page = uuid;
 	}
+	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
+	if (name == 'asmUnit' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
+		$("#wait-window").modal('show');
+		UIFactory.Node.loadNode(uuid);
+	}
+	if (name=='asmStructure' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
+		$("#wait-window").modal('show');
+		UIFactory.Node.loadStructure(uuid);
+	}
 	if (depth==null)
 		depth=100;
 	if (name=='asmRoot' || name=='asmStructure')
 		depth = 1;
 	if (UICom.structure['tree'][uuid]!=null) {
 		if (type=='standard') {
+			var node = UICom.structure['ui'][uuid].node;
+			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
-			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit)
+			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
 				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 			else
 				UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
@@ -628,7 +651,7 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		if (type=='model')
 			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 	}
-	$("#wait-window").modal('hide');			
+	$("#wait-window").modal('hide');
 }
 
 //==================================
@@ -674,6 +697,7 @@ function writeSaved(uuid,data)
 //=======================================================================
 function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,param4,param5,param6,param7,param8) 
 //=======================================================================
+// if srcetag does not exist as semantictag search as code
 {
 	$("#wait-window").modal('show');
 	//------------
@@ -683,13 +707,14 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 	if (srcecode=='self')
 		srcecode = selfcode;
 	//------------
-	var urlS = "../../../"+serverBCK+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+	var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	if (USER.admin || g_userroles[1]=='designer') {
 		var rights = UIFactory["Node"].getRights(destid);
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
-			urlS = "../../../"+serverBCK+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	}
+//	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -711,6 +736,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 			$("#wait-window").modal('hide');			
 		}
 	});
+//	$.ajaxSetup({async: true});
 }
 
 //=======================================================================
@@ -726,6 +752,7 @@ function edit_displayEditor(uuid,type)
 function loadLanguages(callback)
 //=======================================================================
 {
+	$.ajaxSetup({async: false});
 	for (var i=0; i<languages.length; i++){
 		if (i<languages.length-1) {
 			if (elgg_installed) {
@@ -753,11 +780,13 @@ function loadLanguages(callback)
 				type : "GET",
 				dataType : "script",
 				url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js",
-				success : callback
 			});
 		}
 	}
+	callback();
+	$.ajaxSetup({async: true});
 }
+
 
 //=======================================================================
 function sleep(milliseconds)
@@ -775,7 +804,7 @@ function sleep(milliseconds)
 function submit(uuid)
 //=======================================================================
 {
-	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/submit';
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/submit';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -792,7 +821,7 @@ function submit(uuid)
 function reset(uuid)
 //=======================================================================
 {
-	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/reset';
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/reset';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -820,7 +849,7 @@ function postAndDownload(url,data)
 function show(uuid)
 //=======================================================================
 {
-	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/show';
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/show';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -836,7 +865,7 @@ function show(uuid)
 function hide(uuid)
 //=======================================================================
 {
-	var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/action/hide';
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/hide';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -1002,7 +1031,7 @@ function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration)
 
 
 //==================================
-function getPublicURL(uuid,email,role,langcode,level,duration) {
+function getPublicURL(uuid,email,role,langcode,level,duration,shareroles) {
 //==================================
 	if (level==null)
 		level = 4; //public
@@ -1010,7 +1039,7 @@ function getPublicURL(uuid,email,role,langcode,level,duration) {
 		duration = 720;  //-- max 720h
 	if (role==null)
 		role = "all";
-	var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration;
+	var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration+'&shareroles='+shareroles;
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -1023,7 +1052,7 @@ function getPublicURL(uuid,email,role,langcode,level,duration) {
 }
 
 //==================================
-function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,duration) {
+function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,duration,shareroles) {
 //==================================
 	if (level==null)
 		level = 0; //must be logged
@@ -1036,7 +1065,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 		var emails = email.split(" "); // email1 email2 ..
 		for (var i=0;i<emails.length;i++) {
 			if (emails[i].length>4) {
-				var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'&d='+duration;
+				var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'&d='+duration+'&shareroles='+shareroles+'&type=email';
 				$.ajax({
 					type : "POST",
 					email : emails[i],
@@ -1053,64 +1082,51 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 	if (sharetorole!=null && sharetorole!='') {
 		var roles = sharetorole.split(" "); // role1 role2 ..
 		var groups = null;
-		$.ajaxSetup({async: false});
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/users",
-			success : function(data) {
-				UIFactory["User"].parse(data);
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error in getEmail : "+jqxhr.responseText);
-			}
-		});
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
+			url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
 			success : function(data) {
 				groups = $("rrg",data);
-			}
-		});
-		$.ajaxSetup({async: true});
-		for (var i=0;i<roles.length;i++) {
-			if (roles[i].length>0) {
-				if (groups.length>0) {
-					for (var j=0; j<groups.length; j++) {
-						var label = $("label",groups[j]).text();
-						var users = $("user",groups[j]);
-						if (label==roles[i] && users.length>0){
-							for (var k=0; k<users.length; k++){
-								var userid = $(users[k]).attr('id');
-								if (Users_byid[userid]==undefined)
-									alertHTML('error undefined userid:'+userid);
-								else {
-									var email = Users_byid[userid].getEmail();
-									if (email.length>4) {
-										var urlS = "../../../"+serverFIL+'/direct?uuid='+uuid+'&email='+email+'&role='+roles[i]+'&l='+level+'&d='+duration;
-										$.ajax({
-											type : "POST",
-											email : email,
-											dataType : "text",
-											contentType: "application/xml",
-											url : urlS,
-											success : function (data){
-												sendEmailPublicURL(data,this.email,langcode);
+				for (var i=0;i<roles.length;i++) {
+					if (roles[i].length>0) {
+						if (groups.length>0) {
+							for (var j=0; j<groups.length; j++) {
+								var label = $("label",groups[j]).text();
+								var users = $("user",groups[j]);
+								if (label==roles[i] && users.length>0){
+									for (var k=0; k<users.length; k++){
+											var email = $("email",$(users[k])).text();
+											if (email.length>4) {
+												var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+sharewithrole+'&l='+level+'&d='+duration+'&shareroles='+shareroles+'&type=showtorole&showtorole='+roles[i];
+												$.ajax({
+													type : "POST",
+													email : email,
+													dataType : "text",
+													contentType: "application/xml",
+													url : urlS,
+													success : function (data){
+														sendEmailPublicURL(data,this.email,langcode);
+													},
+													error : function(jqxhr,textStatus) {
+														alertHTML("Error in direct : "+jqxhr.responseText);
+													}
+												});
+											} else {
+												alert("email undefined:"+email);
 											}
-										});
 									}
 								}
-
 							}
 						}
 					}
 				}
-				//--------------------------
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error in rolerightsgroups : "+jqxhr.responseText);
 			}
-		}
+		});
 	}
-
 }
 
 //==================================
@@ -1119,14 +1135,14 @@ function getEmail(role,emails) {
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/users",
+		url : serverBCK_API+"/users",
 		success : function(data) {
 			UIFactory["User"].parse(data);
 			//--------------------------
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
+				url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+g_portfolioid,
 				success : function(data) {
 					var groups = $("rrg",data);
 					if (groups.length>0) {
@@ -1162,7 +1178,7 @@ function getEmail(role,emails) {
 function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var serverURL = url.substring(0,url.lastIndexOf(appliname)-1);
 	url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
@@ -1181,7 +1197,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	$.ajax({
 		type : "POST",
 		dataType : "xml",
-		url : "../../../"+serverREG+"/mail",
+		url : "../../../"+serverBCK+"/mail",
 		data: xml,
 		success : function(data) {
 			$('#edit-window').modal('hide');
@@ -1197,7 +1213,7 @@ function getLanguage(setElggLocale) {
 	if (setElggLocale==null)
 		setElggLocale = true;
 	var lang = languages[0];
-	var cookielang = Cookies.get('karuta-language');
+	var cookielang = localStorage.getItem('karuta-language');
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==cookielang) {
 			LANGCODE = i;
@@ -1214,7 +1230,7 @@ function setLanguage(lang,caller) {
 //==================================
 	if (caller==null)
 		caller="";
-	Cookies.set('karuta-language',lang,{ expires: 60 });
+	localStorage.setItem('karuta-language',lang);
 	LANG = lang;
 	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
@@ -1240,12 +1256,18 @@ function toggleZoom(uuid) {
 function toggleContent(uuid) {
 //==================================
 	if ($("#toggleContent_"+uuid).hasClass("glyphicon-plus")) {
-		UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','N');
+		if (g_designerrole)
+			UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','N');
+		else
+			sessionStorage.setItem("collapsed"+uuid,"N");
 		$("#toggleContent_"+uuid).removeClass("glyphicon-plus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-minus")
 		$("#content-"+uuid).show();
 	} else {
-		UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','Y');
+		if (g_designerrole)
+			UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','Y');
+		else
+			sessionStorage.setItem("collapsed"+uuid,"Y");
 		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
 		$("#content-"+uuid).hide();
@@ -1276,7 +1298,7 @@ function toggleMetadata(state) {
 		changeCss(".metainfo", "display:block;");
 		g_visible = 'visible';
 	}
-	Cookies.set('metadata',g_visible,{ expires: 60 });
+	localStorage.setItem('metadata',g_visible);
 }
 
 //==================================
@@ -1314,12 +1336,14 @@ function toggleSocialNetwork() {
 		$("#socialnetwork").hide();
 		$("#toggleSocialNetwork").removeClass('fa-arrow-left').addClass('fa-arrow-right');
 		$("#main-content").removeClass().addClass('col-md-12');
-		Cookies.set('socialnetwork','hidden',{ expires: 60 });
+		localStorage.setItem('socialnetwork','hidden');
+//		Cookies.set('socialnetwork','hidden',{ expires: 60 });
 	} else {
 		$("#toggleSocialNetwork").removeClass('fa-arrow-right').addClass('fa-arrow-left');
 		$("#main-content").removeClass().addClass('col-md-8 col-md-push-4');
 		$("#socialnetwork").show();
-		Cookies.set('socialnetwork','shown',{ expires: 60 });
+		localStorage.setItem('socialnetwork','shown');
+//		Cookies.set('socialnetwork','shown',{ expires: 60 });
 	}
 }
 
@@ -1328,12 +1352,14 @@ function toggleSidebarPlusMinus(uuid) { // click on PlusMinus
 //==================================
 	if ($("#toggle_"+uuid).hasClass("glyphicon-plus"))
 	{
-		g_toggle_sidebar [uuid] = 'open';
+//		g_toggle_sidebar [uuid] = 'open';
+		localStorage.setItem('sidebar'+uuid,'open');
 		$("#toggle_"+uuid).removeClass("glyphicon-plus")
 		$("#toggle_"+uuid).addClass("glyphicon-minus")
 		$("#collapse"+uuid).collapse("show")
 	} else {
-		g_toggle_sidebar [uuid] = 'closed';
+//		g_toggle_sidebar [uuid] = 'closed';
+		localStorage.setItem('sidebar'+uuid,'closed');
 		$("#toggle_"+uuid).removeClass("glyphicon-minus")
 		$("#toggle_"+uuid).addClass("glyphicon-plus")
 		$("#collapse"+uuid).collapse("hide")
@@ -1345,7 +1371,8 @@ function toggleSidebarPlus(uuid) { // click on label
 //==================================
 	if ($("#toggle_"+uuid).hasClass("glyphicon-plus"))
 	{
-		g_toggle_sidebar [uuid] = 'open';
+//		g_toggle_sidebar [uuid] = 'open';
+		localStorage.setItem('sidebar'+uuid,'open');
 		$("#toggle_"+uuid).removeClass("glyphicon-plus")
 		$("#toggle_"+uuid).addClass("glyphicon-minus")
 		$("#collapse"+uuid).collapse("show");
@@ -1444,17 +1471,6 @@ String.prototype.containsArrayElt = function (rolesarray)
 }
 
 //==================================
-Array.prototype.contains = function(elt)
-//==================================
-	// usage : if (arr.contains(elt)) 
-{
-	for (var i in this){
-		if (this[i] == elt) return true;
-	}
-	return false;
-}
-
-//==================================
 function toggleGroup(group_type,uuid,callback,type,lang) {
 //==================================
 	if ($("#toggleContent_"+group_type+"-"+uuid).hasClass("glyphicon-plus")) {
@@ -1468,13 +1484,15 @@ function toggleGroup(group_type,uuid,callback,type,lang) {
 		}
 		$("#content-"+group_type+"-"+uuid).show();
 		displayGroup[group_type][uuid] = 'open';
-		Cookies.set('dg_'+group_type+"-"+uuid,'open',{ expires: 60 });
+		localStorage.setItem('dg_'+group_type+"-"+uuid,'open');
+//		Cookies.set('dg_'+group_type+"-"+uuid,'open',{ expires: 60 });
 	} else {
 		$("#toggleContent_"+group_type+"-"+uuid).removeClass("glyphicon-minus");
 		$("#toggleContent_"+group_type+"-"+uuid).addClass("glyphicon-plus");
 		$("#content-"+group_type+"-"+uuid).hide();
 		displayGroup[group_type][uuid] = 'closed';
-		Cookies.set('dg_'+group_type+"-"+uuid,'closed',{ expires: 60 });
+		localStorage.setItem('dg_'+group_type+"-"+uuid,'closed');
+//		Cookies.set('dg_'+group_type+"-"+uuid,'closed',{ expires: 60 });
 	}
 }
 
@@ -1621,7 +1639,7 @@ function setCSSportfolio(data)
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
 		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
 	//	changeCss(".asmnode .dropdown-button, .submit-button", "border:1px solid "+portfolio_buttons_color+";");
-		changeCss(".collapsible .glyphicon,.btn-group .button", "color:"+portfolio_buttons_color+";");
+		changeCss(".collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+portfolio_buttons_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
@@ -1649,15 +1667,17 @@ function setCSSportfolio(data)
 function logout()
 //==============================
 {
-	$.ajax({
-		type : "POST",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/credential/logout",
-		data: ""
-	});
-	window.location="login.htm?lang="+LANG;
+    $.ajax({
+       type: "POST",
+       dataType: "text",
+       url: serverBCK_API+"/credential/logout",
+       data: "",
+       success: function(data) {
+                       window.location="login.htm?lang="+LANG;
+       }
+    });
 }
-
+ 
 //==============================
 function hideAllPages()
 //==============================
@@ -1671,4 +1691,109 @@ function hideAllPages()
 	$("#main-usersgroup").hide();
 	$("#main-exec-report").hide();
 	$("#main-exec-batch").hide();
+}
+
+
+//==============================
+function removeStr(str1,str2)
+//==============================
+{
+	return str1.replace(str2,"");
+}
+
+//==============================
+function cleanCode(code)
+//==============================
+{
+	code = removeStr(code,"@");
+	code = removeStr(code,"#");
+	code = removeStr(code,"%");
+	code = removeStr(code,"$");
+	code = removeStr(code,"&");
+	code = removeStr(code,"----");
+	return code;
+}
+
+//==================================
+function displayTechSupportForm(langcode)
+//==================================
+{
+	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var application_server = serverURL+"/"+appliname;
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	$("#edit-window-footer").html("");
+	$("#edit-window-title").html(karutaStr[LANG]['technical-support']);
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
+	var obj = $(send_button);
+	$(obj).click(function (){
+		var user_name = $("#user-name").val();
+		var user_email = $("#user-email").val();
+		var message = $("#email-message").val();
+		var subject = application_server+" - "+karutaStr[LANG]['sent-by']+" "+user_name + " ("+user_email+")";
+		//---------------------
+		var xml ="<node>";
+		xml +="<recipient>"+technical_support+"</recipient>";
+		xml +="<subject>"+subject+"</subject>";
+		xml +="<message>"+message+"</message>";
+		xml +="<sender>"+user_email+"</sender>";
+		xml +="</node>";
+		$.ajax({
+			type : "POST",
+			dataType : "text",
+			url : serverBCK+"/mail",
+			data: xml,
+			success : function() {
+				alertHTML(karutaStr[LANG]['email-sent']);
+				$("#edit-window").modal("hide");
+			},
+			error : function(jqxhr,textStatus) {
+				alert("Error in send mail : "+jqxhr.responseText);
+			}
+		});
+
+	});
+	$("#edit-window-footer").append(obj);
+	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").append($(footer));
+
+	var html = "<div class='form-horizontal'>";
+	html += "<div class='form-group'>";
+	html += "		<label for='application-server' class='col-sm-3 control-label'>"+karutaStr[LANG]['application-server']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='application-server' disabled='true' type='text' value='"+application_server+"' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "<div class='form-group'>";
+	html += "		<label for='user-name' class='col-sm-3 control-label'>"+karutaStr[LANG]['user-name']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='user-name' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "<div class='form-group'>";
+	html += "		<label for='user-email' class='col-sm-3 control-label'>"+karutaStr[LANG]['user-email']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='user-email' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "<div class='form-group'>";
+	html += "		<label for='email-message' class='col-sm-3 control-label'>"+karutaStr[LANG]['email-message']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<textarea rows='5' id='email-message' class='form-control'></textarea>";
+	html += "		</div>";
+	html += "</div>";
+	html += "</div>";
+	$("#edit-window-body").html(html);
+	if (USER!=null) {
+		$("#user-name").val(USER.firstname+" "+USER.lastname);
+		$("#user-name").attr('disabled','true');
+		$("#user-email").val($(USER.email_node).text());
+		if ($(USER.email_node).text()!="")
+			$("#user-email").attr('disabled','true');
+	}
+	$('#edit-window').modal('show')
+	//--------------------------
 }

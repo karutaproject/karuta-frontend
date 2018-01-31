@@ -9,6 +9,7 @@ var g_mother_tongueid = "";
 var langues_byid = {};
 var langues_list = [];
 
+
 //==================================
 UIFactory["EuropassL"] = function( node )
 //==================================
@@ -56,9 +57,11 @@ UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,par
 		html += "<span class='mothertongue-label'>"+UICom.structure["ui"][this.mother_tongueid].getLabel('std_node_'+parentid,"none")+"</span>";
 		html += "<span class='mothertongue-value' id='mother_tongue_"+parentid+"'>"+UICom.structure["ui"][this.mother_tongueid].resource.getView('mother_tongue_'+parentid,"span");
 		html +="</span>";
-		html +="<div id='mother_tongue_button' class='btn-group' style='margin-left:3px;'>";
-		html += UICom.structure["ui"][this.mother_tongueid].getButtons(null,null,null,false,0,true,menu);
-		html +="</div>";
+		if (writenode || g_userroles[0]=='designer') {
+			html +="<div id='mother_tongue_button' class='btn-group' style='margin-left:3px;'>";
+			html += UICom.structure["ui"][this.mother_tongueid].getButtons(null,null,null,false,0,true,menu);
+			html +="</div>";
+		}
 		html += "</div><!--col-->";
 		html += "</div><!--row-->";
 		//----------------------------
@@ -87,6 +90,33 @@ UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,par
 		html += "</div><!--row-->";
 		//----------------------------
 	}
+	if (type=='report') {
+		//----------------------------
+		html += "<tr>";
+		html += "<td style='border:0px solid white'>";
+		html += "<span class='mothertongue-label'>"+UICom.structure["ui"][this.mother_tongueid].getLabel('std_node_'+parentid,"none")+"</span>";
+		html += "<span class='mothertongue-value' id='mother_tongue_"+parentid+"'>"+UICom.structure["ui"][this.mother_tongueid].resource.getView('mother_tongue_'+parentid,"span");
+		html +="</span>";
+		html += "</td><!--col-->";
+		html += "</tr><!--row-->";
+		//----------------------------
+		html += "<tr>";
+		html += "<td style='border:0px solid white'>";
+		html += "<h5>"+UICom.structure["ui"][this.foreignid].getLabel('std_node_'+parentid,"none")+"</h5>";
+		html += "<table id='"+destid+"europass_table' class='europass_table'>";
+		html += "<tr class='en-tete'><td class='language_edit'></td><td class='bordure' colspan='2'> "+karutaStr[LANG]['understanding']+" </td><td class='bordure' colspan='2'> "+karutaStr[LANG]['speaking']+" </td><td class='bordure'> "+karutaStr[LANG]['writing']+" </td></tr>";
+		html += "<tr class='en-tete'><td></td><td class='bordure'> "+karutaStr[LANG]['listening']+" </td><td class='bordure'> "+karutaStr[LANG]['reading']+" </td><td class='bordure'> "+karutaStr[LANG]['spoken-interaction']+" </td><td class='bordure'> "+karutaStr[LANG]['spoken-production']+" </td><td class='bordure'> </td></tr>";
+		html += "</table>";
+		html += "</td>";
+		html += "</tr>";
+		$("#"+destid).html(html);
+		for ( var i = 0; i < this.langues_list.length; i++) {
+				$("#"+destid+"europass_table").append($("<tr class='other-tongue' id='"+destid+"_"+this.langues_list[i].id+"'></tr>"));			
+				this.langues_list[i].displayView(destid+"_"+this.langues_list[i].id,type,langcode,writenode || g_userroles[0]=='designer');
+		}
+		//----------------------------
+	}
+
 }
 
 //=====================================================
@@ -131,14 +161,14 @@ UIFactory["Langue"].prototype.displayView = function(destid,type,langcode,edit)
 		html += "<span id='"+destid+"_short_label'>"+UICom.structure["ui"][this.language_nodeid].resource.getView(destid+"_short_label","span")+"</span>";
 		html += "</a>";
 	}
-	if (type=='detail' || type=='cv' || type=='comp') {
+	if (type=='detail' || type=='report' || type=='comp') {
 		//---------------------------------------------------------
-		html +="<td class='langue' id='"+type+"_language_"+this.id+"'>"+UICom.structure["ui"][this.language_nodeid].resource.getView(type+"_language_"+this.id,"span")+"</td>";
-		html +="<td class='bordure' id='"+type+"_listening_"+this.id+"'>"+UICom.structure["ui"][this.listening_nodeid].resource.getCode(type+"_listening_"+this.id)+"</td>";
-		html +="<td class='bordure' id='"+type+"_reading_"+this.id+"'>"+UICom.structure["ui"][this.reading_nodeid].resource.getCode(type+"_reading_"+this.id)+"</td>";
-		html +="<td class='bordure' id='"+type+"_spokenInteraction_"+this.id+"'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getCode(type+"_spokenInteraction_"+this.id)+"</td>";
-		html +="<td class='bordure' id='"+type+"_spokenProduction_"+this.id+"'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getCode(type+"_spokenProduction_"+this.id)+"</td>";
-		html +="<td class='bordure' id='"+type+"_writing_"+this.id+"'>"+UICom.structure["ui"][this.writing_nodeid].resource.getCode(type+"_writing_"+this.id)+"</td>";
+		html +="<td class='langue language' id='"+type+"_language_"+this.id+"'>"+UICom.structure["ui"][this.language_nodeid].resource.getView(type+"_language_"+this.id,"span")+"</td>";
+		html +="<td class='bordure listening' id='"+type+"_listening_"+this.id+"'>"+UICom.structure["ui"][this.listening_nodeid].resource.getCode(type+"_listening_"+this.id)+"</td>";
+		html +="<td class='bordure reading' id='"+type+"_reading_"+this.id+"'>"+UICom.structure["ui"][this.reading_nodeid].resource.getCode(type+"_reading_"+this.id)+"</td>";
+		html +="<td class='bordure spoken-interaction' id='"+type+"_spokenInteraction_"+this.id+"'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getCode(type+"_spokenInteraction_"+this.id)+"</td>";
+		html +="<td class='bordure spoken-production' id='"+type+"_spokenProduction_"+this.id+"'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getCode(type+"_spokenProduction_"+this.id)+"</td>";
+		html +="<td class='bordure writing' id='"+type+"_writing_"+this.id+"'>"+UICom.structure["ui"][this.writing_nodeid].resource.getCode(type+"_writing_"+this.id)+"</td>";
 		if (edit && type=='detail') {
 			html +="<td class='buttons' style='text-align:left'>";
 			html +="	<div class='btn-group' style='margin-left:3px;'>";
@@ -263,7 +293,7 @@ function LangueBox()
 //==============================
 {
 	var html = "";
-	html += "\n<!-- ==================== Edit box ==================== -->";
+	html += "\n<!-- ==================== Langue box ==================== -->";
 	html += "\n<div id='langue-window' class='modal fade'>";
 	html += "\n		<div class='modal-dialog'>";
 	html += "\n		<div class='modal-content'>";

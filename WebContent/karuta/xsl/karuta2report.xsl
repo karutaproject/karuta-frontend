@@ -49,6 +49,9 @@
 	</xsl:template>
 	<!-- ================ cell ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-cell']">
+		<xsl:variable name="colspan">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='colspan']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
 		</xsl:variable>
@@ -59,11 +62,76 @@
 			<xsl:if test="not($style='')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
 			</xsl:if>
+			<xsl:if test="not($colspan='')">
+				<xsl:attribute name="colspan"><xsl:value-of select="$colspan"/></xsl:attribute>
+			</xsl:if>
 			<xsl:if test="not($help='')">
 				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</cell>
+	</xsl:template>
+	<!-- ================ refresh ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-refresh']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="help">
+			<xsl:value-of select="metadata-wad/@help"></xsl:value-of>
+		</xsl:variable>
+		<refresh>
+			<xsl:if test="not($style='')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($help='')">
+				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
+			</xsl:if>
+		</refresh>
+	</xsl:template>
+	<!-- ================ autorefresh ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-autorefresh']">
+		<xsl:variable name="delay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='delay']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<autorefresh>
+			<xsl:if test="not($delay='')">
+				<xsl:attribute name="delay"><xsl:value-of select="$delay"/></xsl:attribute>
+			</xsl:if>
+		</autorefresh>
+	</xsl:template>
+	<!-- ================ qrcode ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-qrcode']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="help">
+			<xsl:value-of select="metadata-wad/@help"></xsl:value-of>
+		</xsl:variable>
+		<qrcode>
+			<xsl:if test="not($style='')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($help='')">
+				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
+			</xsl:if>
+		</qrcode>
+	</xsl:template>
+	<!-- ================ europass ============================ -->
+	<xsl:template match="*[metadata/@semantictag='model-europass']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="help">
+			<xsl:value-of select="metadata-wad/@help"></xsl:value-of>
+		</xsl:variable>
+		<europass>
+			<xsl:if test="not($style='')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($help='')">
+				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
+			</xsl:if>
+		</europass>
 	</xsl:template>
 	<!-- ================ text ============================ -->
 	<xsl:template match="*[metadata/@semantictag='text']">
@@ -175,6 +243,36 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-person>
 	</xsl:template>
+	<!-- ================ for-each-person ============================ -->
+	<xsl:template match="*[metadata/@semantictag='loop']">
+		<xsl:variable name="ref-init">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="variable">
+			<xsl:value-of select="asmContext[metadata/@semantictag='variable']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="first">
+			<xsl:value-of select="asmContext[metadata/@semantictag='first']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="last">
+			<xsl:value-of select="asmContext[metadata/@semantictag='last']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<loop>
+			<xsl:if test="not($ref-init='')">
+				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($variable='')">
+				<xsl:attribute name="variable"><xsl:value-of select="$variable"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($first='')">
+				<xsl:attribute name="first"><xsl:value-of select="$first"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($last='')">
+				<xsl:attribute name="last"><xsl:value-of select="$last"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</loop>
+	</xsl:template>
 	<!-- ================ for-each-portfolio ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-portfolio']">
 		<xsl:variable name="ref-init">
@@ -183,12 +281,57 @@
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
+		<xsl:variable name="sortag">
+			<xsl:value-of select="asmContext[metadata/@semantictag='sortag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="sortelt">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='sortelt']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
 		<for-each-portfolio select='{$select}'>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
 			</xsl:if>
+			<xsl:if test="not(sortag='')">
+				<xsl:attribute name="sortag"><xsl:value-of select="$sortag"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(sortelt='')">
+				<xsl:attribute name="sortelt"><xsl:value-of select="$sortelt"/></xsl:attribute>
+			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-portfolio>
+	</xsl:template>
+	<!-- ================ for-each-portfolios-nodes ============================ -->
+	<xsl:template match="*[metadata/@semantictag='for-each-portfolios-nodes']">
+		<xsl:variable name="ref-init">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select">
+			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="sortag">
+			<xsl:value-of select="asmContext[metadata/@semantictag='sortag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<xsl:variable name="sortelt">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='sortelt']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="nodetag">
+			<xsl:value-of select="asmContext[metadata/@semantictag='nodetag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<for-each-portfolios-nodes select='{$select}'>
+			<xsl:if test="not($ref-init='')">
+				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(sortag='')">
+				<xsl:attribute name="sortag"><xsl:value-of select="$sortag"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(sortelt='')">
+				<xsl:attribute name="sortelt"><xsl:value-of select="$sortelt"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(nodetag='')">
+				<xsl:attribute name="nodetag"><xsl:value-of select="$nodetag"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</for-each-portfolios-nodes>
 	</xsl:template>
 	<!-- ================ for-each-line ============================ -->
 	<xsl:template match="*[metadata/@semantictag='for-each-line']">
@@ -252,7 +395,17 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</aggregate>
 	</xsl:template>
-	
+	<!-- ================ GoParent ============================ -->
+	<xsl:template match="*[metadata/@semantictag='go-parent']">
+		<goparent>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</goparent>
+	</xsl:template>
+	<!-- ================ show-sharing ============================ -->
+	<xsl:template match="*[metadata/@semantictag='show-sharing']">
+		<show-sharing>
+		</show-sharing>
+	</xsl:template>
 	<!-- ================ draw-web-title ============================ -->
 	<xsl:template match="*[metadata/@semantictag='draw-web-title']">
 		<xsl:variable name="editresroles">

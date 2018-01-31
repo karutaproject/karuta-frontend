@@ -15,7 +15,8 @@ function getList()
 	html += "<h3 id='portfolios-not-in-project'><span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span></h3>";
 	html += "	<div class='row portfolios-not-in-project'>";
 	if (USER.creator) {
-		displayProject['portfolios-not-in-project'] = Cookies.get('dpportfolios-not-in-project');
+		displayProject['portfolios-not-in-project'] = localStorage.getItem('dpportfolios-not-in-project');
+//		displayProject['portfolios-not-in-project'] = Cookies.get('dpportfolios-not-in-project');
 		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
 			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button glyphicon glyphicon-minus'></span></div>";
 		else
@@ -39,8 +40,8 @@ function getList()
 		html += "</button>";
 		html += "</h3>";
 		html += "<div  id='bin'>";
+		html += "</div>";
 	}
-	html += "</div>";
 	return html;
 }
 
@@ -84,7 +85,7 @@ function show_list_page()
 	setLanguageMenu("fill_list_page()");
 	$("#refresh").attr("onclick","fill_list_page()");
 	$("#refresh").show();
-	if (USER.creator)
+//	if (USER.creator)
 		$("#search-portfolio-div").show();
 	$("#main-list").show();
 	$('[data-tooltip="true"]').tooltip();
@@ -107,15 +108,18 @@ function fill_list_page()
 	html += "	<div id='list'></div>";
 	html += "</div>";
 	$("#main-list").html(html);
+	$.ajaxSetup({async: false});
 	// --- list of users to display name of owner
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : "../../../"+serverBCK+"/users",
-		success : function(data) {
-			UIFactory["User"].parse(data);
-		}
-	});
+	if (USER.admin || USER.creator){
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/users",
+			success : function(data) {
+				UIFactory["User"].parse(data);
+			}
+		});
+	}
 	//---------------------------------------------
 	html  = "<div class='dropdown dropdown-button'>";
 	html += "<span id='list-menu' class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span class='glyphicon glyphicon-menu-hamburger'></span>&nbsp;Menu</span>";
@@ -137,8 +141,7 @@ function fill_list_page()
 		}
 	}
 	//----------------
-	var url1 =  "../../../"+serverBCK+"/portfolios?active=1&count=true";
-	$.ajaxSetup({async: false});
+	var url1 =  serverBCK_API+"/portfolios?active=1&count=true";
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -149,30 +152,23 @@ function fill_list_page()
 				var html = "<h3 id='portfolios-label'>"+karutaStr[LANG]['no-portfolio']+"</h3>";
 				$("#list").html(html);
 				$("#wait-window").hide();
-			} else 
+			} else {
 				if (g_nb_trees==null || g_nb_trees<100) {
-				//--------we load all the portfolios-----------------------
-				var url0 = "../../../"+serverBCK+"/portfolios?active=1";
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : url0,
-					success : function(data) {
-						UIFactory["Portfolio"].parse(data);
-/*
-						if (g_nb_trees==1 && !USER.creator) {
-							display_main_page(portfolios_list[0].id);
-							$("#wait-window").hide();
-						}
-						else {
-*/
+					//--------we load all the portfolios-----------------------
+					var url0 = serverBCK_API+"/portfolios?active=1";
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : url0,
+						success : function(data) {
+							UIFactory["Portfolio"].parse(data);
 							$("#list").html(getList());
 							UIFactory["Portfolio"].displayAll('portfolios','list');
 							if (USER.admin || USER.creator) {
 								$.ajax({
 									type : "GET",
 									dataType : "xml",
-									url : "../../../"+serverBCK+"/portfolios?active=false",
+									url : serverBCK_API+"/portfolios?active=false",
 									success : function(data) {
 										var destid = $("div[id='bin']");
 										UIFactory["Portfolio"].parseBin(data);
@@ -186,63 +182,60 @@ function fill_list_page()
 							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
 								$("#portfolios-div").hide();
 							$("#wait-window").hide();
-/*
+						},
+						error : function(jqxhr,textStatus) {
+							alertHTML("Server Error GET active=1: "+textStatus);
 						}
-*/
-					},
-					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET active=1: "+textStatus);
-					}
-				});
-				//---------------------------------------------------
-			} else {
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : "../../../"+serverBCK+"/portfolios?active=1&project=true",
-					success : function(data) {
-						var nb_projects = parseInt($('portfolios',data).attr('count'));
-						UIFactory["Portfolio"].parse(data);
-						$("#list").html(getList());
-						UIFactory["Portfolio"].displayAll('portfolios','list');
-						$("#wait-window").hide();
-						if (USER.admin || USER.creator) {
-							$.ajax({
-								type : "GET",
-								dataType : "xml",
-								url : "../../../"+serverBCK+"/portfolios?active=false",
-								success : function(data) {
-									var destid = $("div[id='bin']");
-									UIFactory["Portfolio"].parseBin(data);
-									UIFactory["Portfolio"].displayBin('bin','bin');
-								},
-								error : function(jqxhr,textStatus) {
-									alertHTML("Server Error GET active=false: "+textStatus);
-								}
-							});
+					});
+					//---------------------------------------------------
+				} else {
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/portfolios?active=1&project=true",
+						success : function(data) {
+							var nb_projects = parseInt($('portfolios',data).attr('count'))-1;
+							UIFactory["Portfolio"].parse(data);
+							$("#list").html(getList());
+							UIFactory["Portfolio"].displayAll('portfolios','list');
+							$("#wait-window").hide();
+							if (USER.admin || USER.creator) {
+								$.ajax({
+									type : "GET",
+									dataType : "xml",
+									url : serverBCK_API+"/portfolios?active=false",
+									success : function(data) {
+										var destid = $("div[id='bin']");
+										UIFactory["Portfolio"].parseBin(data);
+										UIFactory["Portfolio"].displayBin('bin','bin');
+									},
+									error : function(jqxhr,textStatus) {
+										alertHTML("Server Error GET active=false: "+textStatus);
+									}
+								});
+							}
+						},
+						error : function(jqxhr,textStatus) {
+							alertHTML("Server Error GET active=1&project=true: "+textStatus);
+							$("#wait-window").hide();
 						}
-					},
-					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET active=1&project=true: "+textStatus);
-						$("#wait-window").hide();
-					}
-				});
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : "../../../"+serverBCK+"/portfolios?active=1&project=false&count=true",
-					success : function(data) {
-						var nb_portfolios = parseInt($('portfolios',data).attr('count'));
-						$("#portfolios-nb").html(nb_portfolios);
-						if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
-							$("#portfolios-div").hide();
-					},
-					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET active=1&project=false: "+textStatus);
-						$("#wait-window").hide();
-					}
-				});
-
+					});
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/portfolios?active=1&project=false&count=true",
+						success : function(data) {
+							var nb_portfolios = parseInt($('portfolios',data).attr('count'));
+							$("#portfolios-nb").html(nb_portfolios);
+							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
+								$("#portfolios-div").hide();
+						},
+						error : function(jqxhr,textStatus) {
+							alertHTML("Server Error GET active=1&project=false: "+textStatus);
+							$("#wait-window").hide();
+						}
+					});
+				}
 			}
 		},
 		error : function(jqxhr,textStatus) {
@@ -270,7 +263,7 @@ function fill_search_page(code)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/users",
+		url : serverBCK_API+"/users",
 		success : function(data) {
 			UIFactory["User"].parse(data);
 		}
@@ -296,7 +289,7 @@ function fill_search_page(code)
 		}
 	}
 	//----------------
-	var url1 = "../../../"+serverBCK+"/portfolios?active=1&search="+code;
+	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -324,7 +317,7 @@ function fill_search_page(code)
 				$.ajax({
 					type : "GET",
 					dataType : "xml",
-					url : "../../../"+serverBCK+"/portfolios?active=false&search="+code,
+					url : serverBCK_API+"/portfolios?active=false&search="+code,
 					success : function(data) {
 						var destid = $("div[id='bin']");
 						UIFactory["Portfolio"].parseBin(data);
@@ -364,7 +357,7 @@ function loadAndDisplayProjectPortfolios(code)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1&project="+code,
+		url : serverBCK_API+"/portfolios?active=1&project="+code,
 		success : function(data) {
 			UIFactory["Portfolio"].parse_add(data);
 			UIFactory["Portfolio"].displayAll('portfolios','list');
@@ -383,7 +376,7 @@ function loadProjectPortfolios(code)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1&project="+code,
+		url : serverBCK_API+"/portfolios?active=1&project="+code,
 		success : function(data) {
 			UIFactory["Portfolio"].parse_add(data);
 		},
@@ -401,7 +394,7 @@ function countProjectPortfolios(uuid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+"&count=true",
+		url : serverBCK_API+"/portfolios?active=1&project="+$(portfolios_byid[uuid].code_node).text()+"&count=true",
 		uuid: uuid,
 		success : function(data) {
 			var nb = parseInt($('portfolios',data).attr('count'))-1;
@@ -441,7 +434,8 @@ function toggleProject(uuid) {
 				$("#remove-"+uuid).show();
 				displayProject[uuid] = 'open';
 			}
-			Cookies.set('dp'+uuid,'open',{ expires: 60 });
+			localStorage.setItem('dp'+uuid,'open');
+//			Cookies.set('dp'+uuid,'open',{ expires: 60 });
 		}
 	} else {
 		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
@@ -451,7 +445,8 @@ function toggleProject(uuid) {
 		$("#remove-"+uuid).hide();
 		displayProject[uuid] = 'closed';
 		if (uuid!="portfolios-not-in-project")
-			Cookies.set('dp'+uuid,'closed',{ expires: 60 });
+			localStorage.setItem('dp'+uuid,'closed');
+//			Cookies.set('dp'+uuid,'closed',{ expires: 60 });
 	}
 }
 

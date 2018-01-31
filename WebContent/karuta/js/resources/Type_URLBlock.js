@@ -33,7 +33,7 @@ UIFactory["URLBlock"] = function( node )
 	//--------------------
 	this.cover_nodeid = $("asmContext:has(metadata[semantictag='cover'])",node).attr('id');
 	//--------------------
-	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.display = {};
 };
 
@@ -62,20 +62,33 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	var html = "";
 	if (type=='standard'){
-		var url = $(url_element.resource.url_node[langcode]).text();
+		//---------------------
+		var img_langcode = langcode;
+		if (!image.multilingual)
+			img_langcode = NONMULTILANGCODE;
+		//---------------------
+		var url_langcode = langcode;
+		if (!url_element.multilingual)
+			url_langcode = NONMULTILANGCODE;
+		//---------------------
+		var url = $(url_element.resource.url_node[url_langcode]).text();
 		if (url!="" && url.indexOf("http")<0)
 			url = "http://"+url;
-		var label = $(url_element.resource.label_node[langcode]).text();
+		var label = $(url_element.resource.label_node[url_langcode]).text();
 		if (label=="")
 			label = url;
 
 		if (url!="") {
 			html =  "<a style='text-decoration:none;color:inherit' id='url_"+url_element.id+"' href='"+url+"' target='_blank'>";
-			var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"');";
+			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
 			if (cover!=undefined && cover.resource.getValue()=='1')
 				style += "background-size:cover;";
 			html += "<div class='URLBlock' style=\""+style+"\">";
-			html += "<div class='docblock-title'>"+label+"</div>";
+
+			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='URLBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
+				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+			else
+				html += "<div class='docblock-title'>"+label+"</div>";
 			html += "</div>";
 			html += "</a>";
 		} else {

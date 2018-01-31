@@ -25,7 +25,7 @@ function fill_exec_batch()
 	html += "<h2 id='batch' class='line'>KARUTA - <span id='batch-title-page'></span></h2>";
 	html += "<h4 class='line'><span class='badge'>1</span> <span id='batch-title-1'></span></h4>";
 	html += "<div id='batch-csv_file_upload' style='margin-left:20px'></div>";
-	html += "<div style='margin-left:20px'> <span id='batch-title-3'></span>&nbsp;<input  id='batch-model_code' type='text'></input>&nbsp;<span class='button' onclick='javascript:processCode()'>ok</span></div>";
+	html += "<div style='margin-left:20px'> <span id='batch-title-3'></span>&nbsp;<input style='width:300px' id='batch-model_code' type='text'></input>&nbsp;<span class='button' onclick='javascript:processCode()'>ok</span></div>";
 	html += "<div id='batch-model_description' style='margin-left:20px'></div>";
 	html += "<div id='batch-csv_file_upload2' style='margin-left:20px'></div>";
 	html += "<h4 class='line'><span class='badge'>2</span> <span id='batch-title-2'></span></h4>";
@@ -34,7 +34,7 @@ function fill_exec_batch()
 	$("#main-exec-batch").html(html);
 
 	var model_code = "";
-	var url = "../../../"+serverFIL+"/csv";
+	var url = serverBCK+"/csv";
 	var html ="";
 	html +=" <div id='batch-divfileupload'>";
 	html +=" <input id='batch-fileupload' type='file' name='uploadfile' data-url='"+url+"'>";
@@ -60,8 +60,11 @@ function fill_exec_batch()
 		done: function (e, data,uuid) {
 			$("#batch-divfileupload").html("Loaded");
 			g_json = data.result;
-			model_code = g_json.model_code;
-			getModelAndProcess(model_code);
+			model_code = g_json["model_code"];
+			if( model_code == undefined )
+				$("#batch-log").append("<br> Either model_code is not defined, or that the CSV file wasn't parsed properly (check separators)<br>-------------------------");
+			else
+				getModelAndProcess(model_code);
 		}
     });
 	//------------------------------

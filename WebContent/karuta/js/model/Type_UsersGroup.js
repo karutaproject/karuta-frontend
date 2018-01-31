@@ -60,7 +60,8 @@ UIFactory["UsersGroup"].displayGroups = function(destid,type,lang)
 		var group_type = "UsersGroup";
 		for ( var i = 0; i < UsersGroups_list.length; i++) {
 			var gid = UsersGroups_list[i].id;
-			displayGroup[group_type][gid] = Cookies.get('dg_'+group_type+"-"+gid);
+			displayGroup[group_type][gid] = localStorage.getItem('dg_'+group_type+"-"+gid);
+//			displayGroup[group_type][gid] = Cookies.get('dg_'+group_type+"-"+gid);
 			if (displayGroup[group_type][gid]!=undefined && displayGroup[group_type][gid]=='open'){
 				UIFactory["UsersGroup"].displayUsers(gid,"content-"+group_type+"-"+gid,type,lang);				
 			}
@@ -82,7 +83,8 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type,lang)
 		type = 'list';
 	var html = "";
 	if (type=='list') {
-		displayGroup[group_type][this.id] = Cookies.get('dg_'+group_type+"-"+this.id);
+		displayGroup[group_type][this.id] = localStorage.getItem('dg_'+group_type+"-"+this.id);
+//		displayGroup[group_type][this.id] = Cookies.get('dg_'+group_type+"-"+this.id);
 		html += "	<div class='row row-label'>";
 		if (displayGroup[group_type][this.id]!=undefined && displayGroup[group_type][this.id]=='open')
 			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.UsersGroup.displayUsers','list','"+lang+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button glyphicon glyphicon-minus'></span></div>";
@@ -138,7 +140,7 @@ UIFactory["UsersGroup"].displayUsers = function(gid,destid,type,lang)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+		url : serverBCK_API+"/usersgroups?group="+gid,
 		data: "",
 		success : function(data) {
 			var users_ids = parseList("user",data);
@@ -177,7 +179,7 @@ UIFactory["UsersGroup"].update = function(gid,attribute,value)
 	UsersGroups_byid[gid].attributes[attribute].text(value); // update attribute value
 	var node = UsersGroups_byid[gid].node;
 	var data = xml2string(node);
-	var url = "../../../"+serverBCK+"/usersgroups?group=" + gid +"&"+attribute+"="+value;
+	var url = serverBCK_API+"/usersgroups?group=" + gid +"&"+attribute+"="+value;
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -324,7 +326,7 @@ UIFactory["UsersGroup"].confirmRemove = function(gid,uid)
 UIFactory["UsersGroup"].remove = function(gid,uid) 
 //==================================
 {
-	var url = "../../../"+serverBCK+"/usersgroups?group=" + gid;
+	var url = serverBCK_API+"/usersgroups?group=" + gid;
 	if (uid!=null && uid!='null') {
 		url += "&user="+uid;
 	}
@@ -395,7 +397,7 @@ UIFactory["UsersGroup"].toggleUsersList = function(gid,destid,checked)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
-			url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+			url : serverBCK_API+"/usersgroups?group="+gid,
 			data: "",
 			success : function(data) {
 				$("#"+destid).html("");
@@ -432,7 +434,7 @@ UIFactory["UsersGroup"].create = function()
 //==================================
 {
 	var label = $("#usersgroup_label").val();
-	var url = "../../../"+serverBCK+"/usersgroups?label="+label;
+	var url = serverBCK_API+"/usersgroups?label="+label;
 	$.ajax({
 		type : "POST",
 		contentType: "application/xml",
@@ -473,7 +475,7 @@ UIFactory["UsersGroup"].editGroupsByUser = function(userid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?user="+userid,
+		url : serverBCK_API+"/usersgroups?user="+userid,
 		data: "",
 		success : function(data) {
 			var user_groupids = parseList("group",data);
@@ -494,7 +496,7 @@ UIFactory["UsersGroup"].displayManageMultipleGroups = function(destid,attr,value
 	$("#"+destid).html("");
 	if (UsersGroups_list.length>0){
 		for ( var i = 0; i < UsersGroups_list.length; i++) {
-			var checked = selectedlist.contains(UsersGroups_list[i].id);
+			var checked = selectedlist.includes(UsersGroups_list[i].id);
 			var input = UsersGroups_list[i].getSelectorWithFunction(attr,value,'select_usersgroups_'+i,checked,callFunction);
 			$("#"+destid).append($(input));
 			$("#"+destid).append($("<br>"));
@@ -539,7 +541,7 @@ UIFactory["UsersGroup"].callAddUsers = function(gid)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/usersgroups?group="+gid,
+		url : serverBCK_API+"/usersgroups?group="+gid,
 		data: "",
 		success : function(data) {
 			var users = parseList("user",data);
@@ -560,7 +562,7 @@ UIFactory["UsersGroup"].addUsers = function(gid)
 //==================================
 {
 	var users = $("input[name='select_users']").filter(':checked');
-	var url = "../../../"+serverBCK+"/usersgroups?group=" + gid + "&user=";
+	var url = serverBCK_API+"/usersgroups?group=" + gid + "&user=";
 	for (var i=0; i<users.length; i++){
 		var userid = $(users[i]).attr('value');
 		var url2 = url+userid;

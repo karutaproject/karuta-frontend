@@ -13,7 +13,6 @@ karutaStr['en']['login']="Login";
 karutaStr['en']['yes']="Yes";
 karutaStr['en']['no']="No";
 karutaStr['en']['home']="Home";
-karutaStr['en']['technical_support']="Technical Support";
 karutaStr['en']['loading']="Loading... ";
 karutaStr['en']['create_pdf']="Create PDF";
 karutaStr['en']['create_pdf_toc']="Create PDF with TOC";
@@ -24,6 +23,7 @@ karutaStr['en']['Save']="Save";
 karutaStr['en']['OK']="OK";
 karutaStr['en']['Close']="Close";
 karutaStr['en']['Cancel']="Cancel";
+karutaStr['en']['register']="Register";
 karutaStr['en']['edit']="Edit";
 karutaStr["en"]["button-edit"] = "Edit";
 karutaStr["en"]["button-delete"] = "Delete";
@@ -36,6 +36,8 @@ karutaStr["en"]["button-share"] = "Share";
 karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
 karutaStr["en"]["button-up"] = "Up";
+karutaStr["en"]["button-refresh"] = "Reload Portfolio";
+karutaStr["en"]["button-refresh-report"] = "Reload Report";
 karutaStr['en']['Add']="Add";
 karutaStr['en']['AddGroup']="Add a Group";
 karutaStr['en']['confirm-delete']="Do you want to delete? This action cannot be undone.";
@@ -80,6 +82,7 @@ karutaStr['en']['menu']="Menu";
 karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Height : 220<br>&nbsp; - Width : 800 divided by number of columns<br>&nbsp;";
 karutaStr['en']['list-novisible']="Not Visible";
 karutaStr['en']['empty-bin']="Empty bin";
+karutaStr['en']['complex']="Partial Loading";
 
 //=========================================
 //========== ERRORS =======================
@@ -135,10 +138,11 @@ karutaStr['en']['menuroles3']=",roles[;other menu]</span>";
 karutaStr['en']['help']="Information <br/><span style='font-size:smaller'>";
 karutaStr['en']['help2']="Text in English@en";
 karutaStr['en']['help3']="</span>";
-karutaStr['en']['font-size']="Font Size (in pixels)";
+karutaStr['en']['font-size']="Font Size (in points)";
 karutaStr['en']['font-weight']="Font Weight";
 karutaStr['en']['font-style']="Font Style";
 karutaStr['en']['color']="Font Color";
+karutaStr['en']['cssclass']="CSS Class";
 karutaStr['en']['top']="Position - Top";
 karutaStr['en']['left']="Position - Left";
 karutaStr['en']['width']="Width";
@@ -190,6 +194,11 @@ karutaStr['en']['sharewithrole']="Role - Recepient";
 karutaStr['en']['maxchar']="Chars - Max Number";
 karutaStr['en']['maxword']="Words - Max number";
 karutaStr['en']['maxword-alert']="You exceeded the limit of number of words. Extra wors will not be saved."
+karutaStr['en']['csstext']="CSS";
+karutaStr['en']['seeqrcoderoles']="Roles - See QR Code and URL";
+karutaStr['en']['export-pdf']="Export PDF";
+karutaStr['en']['export-rtf']="Export RTF";
+karutaStr['en']['export-htm']="Export HTML";
 
 //=========================================
 //========== ADMIN ========================
@@ -200,6 +209,7 @@ karutaStr['en']['list_users']="Users";
 karutaStr['en']['list_roles']="Roles";
 karutaStr['en']['list_groups']="Groups";
 karutaStr['en']['create-test-user']="Create a Test User";
+karutaStr['en']['help_text_rename']="To move a portfolio to another project, change the project code (part before the dot)";
 
 //=========================================
 //========== PORTFOLIOS ===================
@@ -208,12 +218,13 @@ karutaStr['en']['create-test-user']="Create a Test User";
 karutaStr['en']['projects']="My Projects";
 karutaStr['en']['portfolios-not-in-project']="My Portfolios not in a Project";
 karutaStr['en']['portfolios']="My Portfolios";
+karutaStr['en']['portfolio']="My Portfolio";
 karutaStr['en']['bin']="My Bin";
 karutaStr['en']['nogroup']="No Group";
 karutaStr['en']['karuta.model']="Create a Portfolio Model";
 karutaStr['en']['code_portfolio']="Portfolio Code";
 karutaStr['en']['import_portfolio']="Import a Model .xml";
-karutaStr['en']['import_zip']="Import a Model/Package .zip";
+karutaStr['en']['import_zip']="Import a Model/Project .zip";
 karutaStr['en']['instantiate_portfolio']="Instantiate a Portfolio";
 karutaStr['en']['button-instantiate']="Instantiate";
 karutaStr['en']['unshare']="Unshare";
@@ -229,16 +240,19 @@ karutaStr['en']['export-project']="Export Project";
 karutaStr['en']['export-with-files']="Export with Files";
 karutaStr['en']['button-duplicate']="Duplicate";
 karutaStr['en']['getPDF']="Create PDF";
+karutaStr['en']['getRTF']="Create RTF";
+karutaStr['en']['getWebsite']="Export Website";
 karutaStr['en']['owner']="Owner";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['import_instance']="Import a Portfolio Instance .xml";
 karutaStr['en']['remove-selection']="Move to Bin";
 karutaStr['en']['delete-selection']="Delete";
-karutaStr['en']['import_zip_instance']="Import a Portfolio Instance .zip";
-karutaStr['en']['rename']="Rename";
-karutaStr['en']['karuta.batch']="Create a Batch Model";
-karutaStr['en']['karuta.report']="Create a Report Model";
+karutaStr['en']['import_zip_instance']="Import a Portfolio/Project Instance .zip";
+karutaStr['en']['rename']="Rename/Move";
+karutaStr['en']['karuta.batch']="Create a Batch";
+karutaStr['en']['karuta.batch-form']="Create a Batch Form Model";
+karutaStr['en']['karuta.report']="Create a Report";
 karutaStr['en']['create_tree']="Create an Empty Tree";
 karutaStr['en']['create_project']="Create a Project";
 karutaStr['en']['karuta.rubrics']="Create Rubrics";
@@ -255,6 +269,7 @@ karutaStr['en']['search-lastname-label']="Type a lastname or a part of a lastnam
 karutaStr['en']['username-label']="Login";
 karutaStr['en']['firstname-label']="Firstname";
 karutaStr['en']['lastname-label']="Lastname";
+karutaStr['en']['changeOwner']="Change the Owner";
 
 //=========================================
 //========== USERS ========================
@@ -279,6 +294,7 @@ karutaStr['en']['projects-admin']="Projects";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['substitute']="Substitution";
+karutaStr['en']['select_user']="Select a User";
 
 //=========================================
 //========== ROLES ========================
@@ -316,8 +332,10 @@ karutaStr['en']['email-sent']="The message has been sent.";
 karutaStr['en']['alternative-label']="Alternative Label";
 karutaStr['en']['sent-by']="Sent by";
 karutaStr['en']['dashboard-code']="Dashboard Code";
+karutaStr['en']['report-code']="Report Code";
 karutaStr['en']['csv']="Roles - Display CSV";
 karutaStr['en']['pdf']="Roles - Display PDF";
+karutaStr['en']['img']="Rôles - Display Image";
 
 //=========================================
 //========== EUROPASS =====================
@@ -337,14 +355,19 @@ karutaStr['en']['writing']="WRITING";
 //=========================================
 //========== BUBBLE MAP ===================
 //=========================================
+karutaStr['en']['leave-edit-mode']="Leave Edit Mode";
+karutaStr['en']['BubbleMap']="Bubble Map";
+karutaStr['en']['bubble-label']="Label";
 karutaStr['en']['bubble-links']="Links";
 karutaStr['en']['bubble-information']="Information";
-karutaStr['en']['bubble-add-link']="Add a link";
-karutaStr['en']['bubble-add-bubble']="Add a bubble to ";
-karutaStr['en']['update-bubble']="Reload Map";
-karutaStr['en']['bubble-description']="Description";
+karutaStr['en']['bubble-add-link']="Add a Link";
+karutaStr['en']['bubble-add-bubble']="Add a Bubble";
 karutaStr['en']['bubble-weight']="Weight";
 karutaStr['en']['bubble-color']="Color";
+karutaStr['en']['bubble-level']="Level";
+karutaStr['en']['bubble-share-map']="Share : ";
+karutaStr['en']['bubble-share-link']="Weblink";
+karutaStr['en']['bubble-share-qrcode']="QR Code";
 
 //=========================================
 //========== GROUPS =======================
@@ -376,6 +399,18 @@ karutaStr['en']['button-remove-from-group']="Remove from the Group";
 karutaStr['en']['code-not-null']="Code cannot be null";
 karutaStr['en']['label-not-null']="Label cannot be null";
 karutaStr['en']['inexistent-selection']="Inexistent Selection";
+karutaStr['en']['inexistent-user']="Sorry. Your login has not been found.";
+
+//=========================================
+//========== TECHNICAL SUPPORT ============
+//=========================================
+
+karutaStr['en']['technical_support']="Technical Support";
+karutaStr['en']['technical-support']="Technical Support";
+karutaStr['en']['application-server']="Application";
+karutaStr['en']['user-name']="Your Name";
+karutaStr['en']['user-email']="Your email";
+karutaStr['en']['email-message']="Message";
 
 //=========================================
 //========== RESOURCES =======================
@@ -400,6 +435,8 @@ karutaStr['en']['Comments']="Comments";
 
 karutaStr['en']['SendEmail']="SendEmail";
 karutaStr['en']['Dashboard']="Dashboard";
+karutaStr['en']['Report']="Report";
+karutaStr['en']['BatchForm']="BatchForm";
 
 karutaStr['en']['DocumentBlock']="DocumentBlock";
 karutaStr['en']['URLBlock']="URLBlock";
@@ -411,8 +448,13 @@ karutaStr['en']['GetGetResource']="GetGetResource";
 karutaStr['en']['GetDoubleResource']="GetDoubleResource";
 karutaStr['en']['Proxy']="Proxy";
 
-karutaStr['en']['BubbleMap']="Bubble Map";
 karutaStr['en']['asmColumn']="asmColumn";
+
+karutaStr['en']['startday']="Start day";
+karutaStr['en']['time']="Time (HH:MM)";
+karutaStr['en']['freq']="Frequency";
+karutaStr['en']['execroles']="Roles - Execute";
+karutaStr['en']['exec']="Execute Now";
 
 
 

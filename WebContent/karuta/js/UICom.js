@@ -146,7 +146,7 @@ var UICom =
 						$.ajax({
 							type : "GET",
 							dataType : "xml",
-							url : "../../../"+serverBCK+"/nodes/node/" + targetid + "?resources=true",
+							url : serverBCK_API+"/nodes/node/" + targetid + "?resources=true",
 							success : function(data) {
 								proxies_data[targetid] = data;
 								proxies_parent[targetid] = $(current).attr("id");
@@ -162,7 +162,7 @@ var UICom =
 						$.ajax({
 							type : "GET",
 							dataType : "xml",
-							url : "../../../"+serverBCK+"/nodes/node/" + targetid + "?resources=true",
+							url : serverBCK_API+"/nodes/node/" + targetid + "?resources=true",
 							success : function(data) {
 //								UICom.parseStructure(data,false,$(current).attr("id"));
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
@@ -256,7 +256,7 @@ var UICom =
 		var treenode = UICom.structure["tree"][uuid];
 		var metawad = $(">metadata",treenode.node);
 		var data = xml2string(metawad[0]);
-		UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+uuid+'/metadata',null,"text",data);
+		UICom.query("PUT",serverBCK_API+'/nodes/node/'+uuid+'/metadata',null,"text",data);
 	},
 
 	
@@ -267,10 +267,10 @@ var UICom =
 		var treenode = UICom.structure["tree"][uuid];
 		var metawad = $(">metadata",treenode.node);
 		var data = xml2string(metawad[0]);
-		UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+uuid+'/metadata',null,"text",data);
+		UICom.query("PUT",serverBCK_API+'/nodes/node/'+uuid+'/metadata',null,"text",data);
 		var metawad_wad = $(">metadata-wad",treenode.node);
 		data =  xml2string(metawad_wad[0]);
-		var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/metadatawad';
+		var urlS = serverBCK_API+'/nodes/node/'+uuid+'/metadatawad';
 		$.ajax({
 			type : "PUT",
 			dataType : "text",
@@ -295,7 +295,7 @@ var UICom =
 		var treenode = UICom.structure["tree"][uuid];
 		var metawad = $(">metadata-wad",treenode.node);
 		var data =  xml2string(metawad[0]);
-		var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/metadatawad';
+		var urlS = serverBCK_API+'/nodes/node/'+uuid+'/metadatawad';
 		$.ajax({
 			type : "PUT",
 			dataType : "text",
@@ -320,7 +320,7 @@ var UICom =
 		var treenode = UICom.structure["tree"][uuid];
 		var metawad_epm = $(">metadata-epm",treenode.node);
 		var data =  xml2string(metawad_epm[0]);
-		var urlS = "../../../"+serverBCK+'/nodes/node/'+uuid+'/metadataepm';
+		var urlS = serverBCK_API+'/nodes/node/'+uuid+'/metadataepm';
 		$.ajax({
 			type : "PUT",
 			dataType : "text",
@@ -349,7 +349,7 @@ var UICom =
 		$(resource).removeAttr("contextid");
 		$(resource).removeAttr("modified");
 		var data = xml2string(resource);
-		var urlS = "../../../"+serverBCK+'/resources/resource/'+uuid;
+		var urlS = serverBCK_API+'/resources/resource/'+uuid;
 		if (delfile!=null && delfile)
 			urlS += "?delfile=true";
 		$.ajax({
@@ -392,15 +392,15 @@ var UICom =
 			strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 			/// nodeRes content
 			if( "nodeRes" == type ) {
-				UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+uuid+'/noderesource',null,"text",strippeddata);
+				UICom.query("PUT",serverBCK_API+'/nodes/node/'+uuid+'/noderesource',null,"text",strippeddata);
 			}
 			else if( "context" == type )
 			{
-				UICom.query("PUT","../../../"+serverBCK+'/nodes/node/'+uuid+'/nodecontext',null,"text",strippeddata);
+				UICom.query("PUT",serverBCK_API+'/nodes/node/'+uuid+'/nodecontext',null,"text",strippeddata);
 			}
 			/// Other than nodeRes content
 			else {
-				var urlS = "../../../"+serverBCK+'/resources/resource/'+uuid;
+				var urlS = serverBCK_API+'/resources/resource/'+uuid;
 				$.ajax({
 					type : "PUT",
 					dataType : "text",
@@ -429,7 +429,7 @@ var UICom =
 		$.ajax({
 			type : "DELETE",
 			dataType : "text",
-			url : "../../../"+serverBCK+"/nodes/node/" + uuid,
+			url : serverBCK_API+"/nodes/node/" + uuid,
 			success : function(data) {
 				if (callback!=null && callback!='undefined')
 					if (jQuery.isFunction(callback))

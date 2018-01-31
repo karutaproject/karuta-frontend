@@ -116,7 +116,7 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 	var html ="";
 	if (type=='html5') {
 		html += "<audio controls>";
-		var srce = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp3";
+		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp3";
 		html += "<source src='"+srce+"' type='audio/mpeg'/>";
 		html += "</audio>";		
 	}
@@ -125,8 +125,6 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 		html += "<div id='jp_container_"+this.id+"' class='jp-audio'>";
 		html += "<div class='jp-type-single'>";	
 		html += "<div class='jp-gui jp-interface'>";
-		//html += "<div class='jp-audio-play'>";
-		//html += "<a href='javascript:;' class='jp-audio-play-icon' tabindex='1'>play</a>";
 		html += "<ul class='jp-controls'>";
 		html += "  <li><a href='javascript:;' class='jp-play' tabindex='1'>play</a></li>";
 		html += "  <li><a href='javascript:;' class='jp-pause' tabindex='1'>pause</a></li>";
@@ -180,7 +178,7 @@ UIFactory["Audio"].prototype.setParameter = function(langcode)
 	//---------------------
 	var destid = "jquery_jplayer_"+this.id;
 	var cssSelectorAncestor = "#jp_container_"+this.id;
-	var srce = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
+	var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	$("#"+destid).jPlayer({
 		cssSelectorAncestor:cssSelectorAncestor,
 		ready: function () {
@@ -258,7 +256,7 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 	//---------------------
 	var html ="";
 	html += "<div class='audio-video-format'>Format: mp3</div>"
-	var url = "../../../"+serverFIL+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
+	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html +=" <div id='div_f_"+this.id+"_"+langcode+"'>";
 	html +=" <input id='f_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</div>";
@@ -292,7 +290,8 @@ UIFactory["Audio"].prototype.save = function(delfile)
 	else
 		UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
-	UICom.structure["ui"][this.id].resource.setParameter();
+	if (!audiovideohtml5)
+		UICom.structure["ui"][this.id].resource.setParameter();
 };
 
 //==================================

@@ -1,36 +1,31 @@
 //----------------------------------
-var application_version = "1.0";
-var application_date = "2016-04-29";
+var application_version = "2.0";
+var application_date = "2017-10-30";
 //----------------------------------
 var appliname = 'karuta';
-var karutaname = 'karuta'; // to share the same karuta-core with multiple front-end
+var karutaname = 'karuta'; // to share the same 'karuta-core' with multiple front-end
 var karuta_url = '../../../' + karutaname;
 var bckname = '';
-var serverBCK = "karuta-backend"+bckname+"/rest/api";
-var serverFIL = "karuta-backend"+bckname;
-var serverVER = "karuta-backend"+bckname;
-var serverREG = "karuta-backend"+bckname;
-//------ ELGG SOCIAL NETWORK ----------------------------
-var elgg_url_base = 'elgg/';
-var elgg_installed = false;
-var elgg_refreshing = 240000; // 240 seconds
+var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
+var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
+//----------------------------------
+var serverBCK_REG = "";  // report registration server
+var serverBCK_REP = ""; // report server
 //-------- LANGUAGES------------
 var languages = [];
-languages [0] = 'en';
-languages [1] = 'fr';
-languages [2] = 'es';
-languages [3] = 'es_VA';
+languages [0] = 'fr';
+languages [1] = 'en';
 //----------------------------------
 var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------
-var audiovideohtml5 = false;
+var audiovideohtml5 = true;
 //----------------------------------
-var technical_support = "technical-support@yourinstitution.com"; // email of technical support
+var technical_support = ""; // email of technical support
 var demo = false;
-var karuta_create_account = true;
-//--------- NAVBAR BRAND ------------------
+var karuta_create_account = false;
+//--------- NAVBAR BRAND ------------------ logo 126 x 34
 var navbar_title = {};
 navbar_title["fr"] = "<img style='margin-top:-4px;' src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
 navbar_title["en"] = "<img style='margin-top:-4px;' src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
@@ -47,8 +42,8 @@ var welcome3 = {};       // Welcome paragraph
 	welcome3["en"] = "";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.0";
-	welcome4["en"] = "WELCOME TO KARUTA 2.0";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.3";
+	welcome4["en"] = "WELCOME TO KARUTA 2.3";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";
@@ -76,10 +71,18 @@ g_sendEmailPublicURL_message +="&lt;/div&gt;";
 //----------------------------------------------
 var specificmenus = false;
 
-
 //==============================
 function loadJS(url)
 //==============================
 {
 	document.write("<script src='"+url+"'></script>");
 };
+
+//------ ELGG SOCIAL NETWORK ----------------------------
+var elgg_installed = false;
+var elgg_url_base = 'elgg/';
+var elgg_refreshing = 240000; // 240 seconds
+//------ BUBBLE MAP -------------------------------------
+var bubble_installed = true;
+//------ EUROPASS -------------------------------------
+var europass_installed = true;

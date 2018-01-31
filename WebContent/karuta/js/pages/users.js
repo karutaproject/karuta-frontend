@@ -38,7 +38,7 @@ function fill_list_users()
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/credential",
+		url : serverBCK_API+"/credential",
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
@@ -47,7 +47,7 @@ function fill_list_users()
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : "../../../"+serverBCK+"/users",
+				url : serverBCK_API+"/users",
 				success : function(data) {
 					UIFactory["User"].parse(data);
 					UIFactory["User"].displayActive('active','list');
@@ -80,7 +80,7 @@ function fill_search_users(value,type)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : "../../../"+serverBCK+"/users?"+type+"="+value,
+		url : serverBCK_API+"/users?"+type+"="+value,
 		success : function(data) {
 			UIFactory["User"].parse(data);
 			UIFactory["User"].displayActive('active','list');

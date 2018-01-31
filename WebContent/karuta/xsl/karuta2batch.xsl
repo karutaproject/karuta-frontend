@@ -59,6 +59,17 @@
 		</create-user>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='delete-person']">
+		<xsl:variable name="identifier">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<delete-user>
+			<identifier>
+				<txtval select='{$identifier}'/>
+			</identifier>
+		</delete-user>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='create-elgg-user']">
 		<xsl:variable name="identifier">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -226,6 +237,19 @@
 		</share-tree>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='join-portfoliogroup']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<join-portfoliogroup select="{$id}">
+			<portfoliogroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">groupname</xsl:with-param>
+				</xsl:call-template>
+			</portfoliogroup>
+		</join-portfoliogroup>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='unshare-tree']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
@@ -280,6 +304,14 @@
 		</unshare-usergroup>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='moveup-node']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<moveup-node type='Field' select="{$select}">
+		</moveup-node>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-field']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -296,6 +328,24 @@
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
 			</text>
+		</update-resource>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-node-resource']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='NodeResource' select="{$select}">
+			<newcode>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">node-code</xsl:with-param>
+				</xsl:call-template>
+			</newcode>
+			<label>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">node-label</xsl:with-param>
+				</xsl:call-template>
+			</label>
 		</update-resource>
 	</xsl:template>
 
@@ -317,6 +367,7 @@
 			</text>
 		</update-resource>
 	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-metadata-menu']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -328,6 +379,57 @@
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-resource>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-metadata-inline']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='MetadataInline' select="{$select}">
+			<xsl:if test="$source!=''">
+				<source select="{$source}"/>
+			</xsl:if>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-resource>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-metadata']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="attribute">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='attribute']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='Metadata' select="{$select}" attribute="{$attribute}">
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-resource>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-metadata-wad']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="attribute">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='attribute']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='Metadatawad' select="{$select}" attribute="{$attribute}">
 			<text>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">text</xsl:with-param>
@@ -375,6 +477,11 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<import-node select="{$dest}" source="{$srce}">
+			<source>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">import-source</xsl:with-param>
+				</xsl:call-template>
+			</source>
 		</import-node>
 	</xsl:template>
 	

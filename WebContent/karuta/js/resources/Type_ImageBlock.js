@@ -31,7 +31,7 @@ UIFactory["ImageBlock"] = function( node )
 	//--------------------
 	this.cover_nodeid = $("asmContext:has(metadata[semantictag='cover'])",node).attr('id');
 	//--------------------
-	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.display = {};
 };
 
@@ -59,7 +59,12 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	var html = "";
 	if (type=='standard'){
-		var style = "background-image:url('../../../"+serverFIL+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"');";
+		//---------------------
+		var img_langcode = langcode;
+		if (!image.multilingual)
+			img_langcode = NONMULTILANGCODE;
+		//---------------------
+		var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";
 		html += "<div id='image_"+this.id+"' class='ImageBlock' style=\""+style+"\">";
