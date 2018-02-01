@@ -378,7 +378,9 @@
 			<xsl:attribute name="font-size"><xsl:value-of select="substring-before(substring-after(@style,'font-size:'),'pt')"/>pt</xsl:attribute>
 		</xsl:if>
 		<xsl:if test="contains(@style,'color:')">
-			<xsl:attribute name="color"><xsl:value-of select="substring-before(substring-after(@style,'color:'),';')"/></xsl:attribute>
+			<xsl:if test="not(substring(substring-before(@style,'color:'), string-length(substring-before(@style,'color:')), 1)='-')">
+				<xsl:attribute name="color"><xsl:value-of select="substring-before(substring-after(@style,'color:'),';')"/></xsl:attribute>
+			</xsl:if>
 		</xsl:if>
 		<xsl:if test="contains(@style,'background-color:')">
 			<xsl:attribute name="background-color"><xsl:value-of select="substring-before(substring-after(@style,'background-color:'),';')"/></xsl:attribute>
