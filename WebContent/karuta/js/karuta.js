@@ -1629,6 +1629,12 @@ function setCSSportfolio(data)
 		changeCss(".row-node", "border-top:1px solid "+page_title_background_color+";");
 	}
 	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).length>0) {
+		var section_separator_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).attr("id");
+		var section_separator_color = UICom.structure["ui"][section_separator_color_id].resource.getValue();
+		changeCss(".row-node", "border-top:1px solid "+section_separator_color+";");
+	}
+	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).length>0) {
 		var page_title_subline_color_id = $("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).attr("id");
 		var page_title_subline_color = UICom.structure["ui"][page_title_subline_color_id].resource.getValue();
