@@ -115,10 +115,6 @@ UIFactory["Item"].prototype.getLabel = function(dest,type,langcode)
 	}
 	var html = "";
 	var code = $(this.code_node).text();
-	if (code.indexOf("@")>-1) {
-		display_code = false;
-		code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
-	}
 	var label = this.label_node[langcode].text();
 	if (type=="div")
 		html +=   "<div>"+label+"</div>";
@@ -144,17 +140,15 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
-	var html = "";
+	var label = this.label_node[langcode].text();
 	var code = $(this.code_node).text();
-	if (code.indexOf("@")>-1) {
-		display_code = false;
-		code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
-	}
-
-	html += "<span class='code_Item'>"+$(this.code_node).text()+" </span>";
-	if ($(this.value_node).text()!='')
-		html += " <span class='value_Item'>["+$(this.value_node).text()+"] </span>";
-	html +=  "<span class='label_Item "+code+"'> "+$(this.label_node[langcode]).text()+"</span>";
+	var html = "";
+	if (code.indexOf("#")>-1)
+		html += "<span class='code_Item "+ code +"'>"+ cleanCode(code)+ "</span>";
+	if (code.indexOf("%")<0)
+		html +=  "<span class='label_Item "+code+"'> "+ label +"</span>";
+	if (code.indexOf("&")>-1)
+		html += " <span class='value_Item "+code+"'> ["+$(this.value_node).text()+ "]</span> ";
 	return html;
 };
 

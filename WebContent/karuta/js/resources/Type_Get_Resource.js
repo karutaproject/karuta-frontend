@@ -679,7 +679,7 @@ UIFactory["Get_Resource"].importMultiple = function(parentid,srce)
 			}
 			code = newcode;
 		}
-		importBranch(parentid,srce,code,databack,callback);
+		importBranch(parentid,encodeURIComponent(srce),encodeURIComponent(code),databack,callback);
 	}
 };
 
