@@ -3153,7 +3153,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 									if (labels[j].indexOf(languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+shareroles+"'"+")";
+								var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+shares[i][0]+"'"+")";
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
@@ -3211,7 +3211,6 @@ UIFactory['Node'].reloadStruct = function(uuid)
 		url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
-//			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
 			g_portfolio_current = data;
 			$("#sidebar").html("");
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);

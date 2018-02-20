@@ -667,7 +667,7 @@ UIFactory["Get_Get_Resource"].reloadIfInLine = function(uuid,destid,type,langcod
 	var node = UICom.structure["ui"][uuid];
 	var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
 	if (inline_metadata=='Y')
-		node.resource.redisplayEditor(destid,type,langcode);
+		node.resource.redisplayEditor(destid,type,langcode); //(destid,type,langcode,disabled,cachable)
 }
 
 //==================================
@@ -719,11 +719,15 @@ UIFactory["Get_Get_Resource"].prototype.redisplayEditor = function(destid,type,l
 			else {
 				var child = $("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent);
 				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
-				if (itself.length>0){
-//					code_parent = $("code",$("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent)[0]).text();
+				if (child.length==0 && itself.length>0){
 					code_parent = $($("code",itself)[0]).text();
 				} else {
-					code_parent = $($("code",child)[0]).text();
+					var nodetype = $(child).prop("nodeName"); // name of the xml tag
+					if (nodetype=='asmContext')
+						code_parent = $($("code",child)[1]).text();
+					else
+						code_parent = $($("code",child)[0]).text();
+
 				}
 			}
 			//----------------------
