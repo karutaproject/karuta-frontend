@@ -119,25 +119,21 @@ UIFactory["TextField"].prototype.update = function(langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
-	var value = $.trim($("#"+this.id+"_edit_"+langcode).val());
+	var value = $.trim($("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val());
 	var words = $.trim(value).split(' ');
 	if (this.maxword>0 && countWords(value)>this.maxword) {
 		value = getFirstWords(value,this.maxword);
 		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+value);
-		$("#"+this.id+"_edit_"+langcode).val(value);
+		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(value);
+		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(value);
 	}
 	var newValue1 = value.replace(/(<br("[^"]*"|[^\/">])*)>/g, "$1/>");
 	var newValue = newValue1.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
 	if (this.encrypted)
 		newValue = "rc4"+encrypt(newValue,g_rc4key);
 	$(this.text_node[langcode]).text(newValue);
-	this.save();
-	this.save();
 	this.updateCounterWords(langcode);
+	this.save();
 };
 
 //==================================
@@ -148,7 +144,7 @@ UIFactory["TextField"].prototype.updateCounterWords = function(langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	if (this.maxword>0) {
-		var value = $.trim($("#"+this.id+"_edit_"+langcode).val());
+		var value = $.trim($("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val());
 		var nbWords = countWords(value);
 		$("#counter_"+this.id).html(nbWords+"/"+this.maxword);
 		if (nbWords>this.maxword){
@@ -179,6 +175,10 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
+	//---------------------
+	this.inline = ($("metadata",this.node).attr('inline')=='Y') ? true : false;
+	if (this.inline==undefined)
+		this.inline = false;
 	//---------------------
 	if (type==null)
 		type = 'default';
@@ -212,7 +212,19 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (this.maxword>0) {
 		$("#counter_"+uuid).html(countWords(text)+"/"+this.maxword);
 	}
-	$("#"+uuid+"_edit_"+langcode+(inline?'inline':'')).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},"uuid":uuid,"locale":LANG,'events': {'load': function(){$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][currentTexfieldUuid].resource.updateCounterWords(langcode);});},'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
+	$("#"+uuid+"_edit_"+langcode+(this.inline?'inline':'')).wysihtml5(
+		{
+			toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},
+			"uuid":uuid,
+			"locale":LANG,
+			'events': {
+				'load': function(){$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][currentTexfieldUuid].resource.updateCounterWords(langcode);});},
+				'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},
+				'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},
+				'blur': function(){clearInterval(currentTexfieldInterval);}
+			}
+		}
+	);
 	//------------------------------------------------
 };
 
