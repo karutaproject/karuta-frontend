@@ -108,7 +108,7 @@ function fill_list_page()
 	html += "	<div id='list'></div>";
 	html += "</div>";
 	$("#main-list").html(html);
-	$.ajaxSetup({async: false});
+//	$.ajaxSetup({async: false});
 	// --- list of users to display name of owner
 	if (USER.admin || USER.creator){
 		$.ajax({
@@ -244,14 +244,14 @@ function fill_list_page()
 			$("#wait-window").hide();
 		}
 	});
-	$.ajaxSetup({async: true});
+//	$.ajaxSetup({async: true});
 }
 
 //==============================
 function fill_search_page(code)
 //==============================
 {
-	$.ajaxSetup({async: true});
+//	$.ajaxSetup({async: true});
 	g_sum_trees = 0;
 	$("#wait-window").show();
 	var html = "";
@@ -371,15 +371,16 @@ function loadAndDisplayProjectPortfolios(code)
 }
 
 //==============================
-function loadProjectPortfolios(code)
+function loadProjectPortfolios(portfoliocode,nb,destid,type,langcode)
 //==============================
 {
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&project="+code,
+		url : serverBCK_API+"/portfolios?active=1&project="+portfoliocode,
 		success : function(data) {
 			UIFactory["Portfolio"].parse_add(data);
+			UIFactory["Portfolio"].displayTree(nb,destid,type,langcode,portfoliocode);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);

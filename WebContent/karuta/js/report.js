@@ -125,6 +125,10 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 			r_getPortfoliosNodes(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="europass")
 			r_processEuropass(children[i],destid,data,line);
+		if (tagname=="csv-line")
+			r_processCsvLine(no+"_"+i,children[i],destid,data,line);
+		if (tagname=="csv-value")
+			r_processCsvValue(destid,data,line);
 	}
 }
 
@@ -194,6 +198,10 @@ function r_processLine(no,xmlDoc,destid,data,line)
 				r_processRow(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="aggregate")
 				r_processAggregate(children[i],destid,data,i);
+			if (tagname=="csv-line")
+				r_processCsvLine(no+"_"+i,children[j],destid,data,i);
+			if (tagname=="csv-value")
+				r_processCsvValue(children[j],destid,data,i);
 		}
 	}
 }
@@ -264,6 +272,10 @@ function r_processNode(no,xmlDoc,destid,data,line)
 					r_processAggregate(children[j],destid,nodes[i],i);
 				if (tagname=="goparent")
 					r_processGoParent(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
+				if (tagname=="csv-line")
+					r_processCsvLine(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
+				if (tagname=="csv-value")
+					r_processCsvValue(children[j],destid,nodes[i],i);
 			}
 		};
 	}
@@ -626,6 +638,10 @@ function r_processUsers(no,xmlDoc,destid,data,line)
 					r_processNode(no+"_"+j,children[i],destid,data,line);
 				if (tagname=="loop")
 					r_processLoop(no+"_"+j,children[i],destid,data,line);
+				if (tagname=="csv-line")
+					r_processCsvLine(no+"_"+j,children[i],destid,data,line);
+				if (tagname=="csv-value")
+					r_processCsvValue(children[i],destid,data,line);
 			}
 		}
 			//------------------------------------
@@ -770,6 +786,10 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 							r_processWebAxis(children[i],destid,data,line);
 						if (tagname=="draw-web-line")
 							r_processWebLine(children[i],destid,data,line);
+						if (tagname=="csv-line")
+							r_processCsvLine(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+						if (tagname=="csv-value")
+							r_processCsvValue(children[i],destid,data,line);
 					}
 				}
 			});
@@ -915,6 +935,10 @@ function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
 							r_processWebAxis(children[i],destid,data,line);
 						if (tagname=="draw-web-line")
 							r_processWebLine(children[i],destid,data,line);
+						if (tagname=="csv-line")
+							r_processCsvLine(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
+						if (tagname=="csv-value")
+							r_processCsvValue(children[i],destid,data,line);
 					}
 				}
 			});
@@ -924,7 +948,8 @@ function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
 }
 
 //=============================================================================
-//====================== NodeResource ===============================
+//=============================================================================
+//====================== NodeResource =========================================
 //=============================================================================
 //=============================================================================
 
@@ -1056,6 +1081,43 @@ function r_processNodeResource(xmlDoc,destid,data)
 	} */
 }
 
+//=============================================================================
+//=============================================================================
+//====================== CSV ==================================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+function r_processCsvLine(no,xmlDoc,destid,data,line)
+//==================================
+{
+	csvline = "";
+	var children = $(">*",xmlDoc);
+	for (var i=0; i<children.length;i++){
+		var tagname = $(children[i])[0].tagName;
+		if (tagname=="for-each-node")
+			r_processNode(no+"_"+i,children[i],'csv_'+no,data,line);
+		if (tagname=="loop")
+			r_processLoop(no+"_"+i,children[i],'csv_'+no,data,line);
+		if (tagname=="goparent")
+			r_processGoParent(no+"_"+i,children[i],'csv_'+no,data,line);
+		if (tagname=="node_resource")
+			r_processNodeResource(children[i],destid,data,line);
+		if (tagname=="csv-value")
+			r_processCsvValue(children[i],destid,data,line);
+	};
+	alert (csvline);
+	$.ajax({
+		type : "POST",
+		contentType: "text",
+		dataType : "text",
+		data : csvline,
+		url : serverBCK+"/logging?n=1&user=false&info=false",
+		success : function() {
+		}
+	}); 
+}
+
 //==================================
 function r_processCsvValue(xmlDoc,destid,data)
 //==================================
@@ -1066,7 +1128,6 @@ function r_processCsvValue(xmlDoc,destid,data)
 	var prefix_id = "";
 	try {
 		var select = $(xmlDoc).attr("select");
-		var ref = $(xmlDoc).attr("ref");
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
 		if (node.length==0) // try the node itself
@@ -1099,24 +1160,22 @@ function r_processCsvValue(xmlDoc,destid,data)
 			}
 			if (selector.type=='node context') {
 				text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
-				prefix_id += "context_";
-			}
-			if (ref!=undefined && ref!="") {
-				if (aggregates[ref]==undefined)
-					aggregates[ref] = new Array();
-				aggregates[ref][aggregates[ref].length] = text;
-			}
-			text = "<span id='dashboard_"+prefix_id+nodeid+"' style='"+style+"'>"+text+"</span>";
-			if (writenode) {
-				text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
 			}
 		}
 	} catch(e){
 		text = "-";
 	}
 	//------------------------------
-	cvsline += csvseparator + text;
+	if (typeof csvseparator == 'undefined') // for backward compatibility
+		csvseparator = ";";
+	csvline += text + csvseparator;
 }
+
+//=============================================================================
+//=============================================================================
+//====================== QRCODE ===============================================
+//=============================================================================
+//=============================================================================
 
 //==================================
 function r_processQRcode(xmlDoc,destid,data)
@@ -1140,6 +1199,12 @@ function r_processQRcode(xmlDoc,destid,data)
 	//------------------------------
 	$("#"+destid).append($(text));
 }
+
+//=============================================================================
+//=============================================================================
+//====================== EUROPASS =============================================
+//=============================================================================
+//=============================================================================
 
 //==================================
 function r_processEuropass(xmlDoc,destid,data)

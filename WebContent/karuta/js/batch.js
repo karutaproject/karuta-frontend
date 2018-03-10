@@ -800,6 +800,7 @@ g_actions['update-resource'] = function updateResource(node)
 				var sb = $(node).attr("sb");
 				updateRights(nodes,node,role,rd,wr,dl,sb);
 			}
+		},
 		error : function(data) {
 			$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
 			processNextAction();
@@ -969,11 +970,11 @@ function updateRights(nodes,node,role,rd,wr,dl,sb)
 			semtag : semtag,
 			url : serverBCK_API+"/nodes/node/rights/" + nodeid,
 			success : function(data) {
-				$("#batch-log").append("<br>- resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb+";
+				$("#batch-log").append("<br>- resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
 				updateRights(nodes,node,role,rd,wr,dl,sb);
 			},
 			error : function(data,nodeid,semtag) {
-				$("#batch-log").append("<br>- ***ERROR resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb+";
+				$("#batch-log").append("<br>- ***ERROR resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
 				updateRights(nodes,node,role,rd,wr,dl,sb);
 			}
 		});

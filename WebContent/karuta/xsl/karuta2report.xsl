@@ -187,6 +187,30 @@
 			</xsl:if>
 		</node_resource>
 	</xsl:template>
+	<!-- ================ csv-line ============================ -->
+	<xsl:template match="*[metadata/@semantictag='csv-line']">
+		<csv-line>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</csv-line>
+	</xsl:template>
+	<!-- ================ csv-value ============================ -->
+	<xsl:template match="*[metadata/@semantictag='csv-value']">
+		<xsl:variable name="nodetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="todisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
+		<csv-value>
+			<xsl:if test="not($select='..')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+		</csv-value>
+	</xsl:template>
 	<!-- ================ url2unit ============================ -->
 	<xsl:template match="*[metadata/@semantictag='url2unit']">
 		<xsl:variable name="style">

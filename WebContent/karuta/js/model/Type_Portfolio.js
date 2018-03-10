@@ -23,7 +23,7 @@ var number_of_projects = 0;
 var number_of_projects_portfolios = 0;
 var number_of_portfolios = 0;
 var number_of_bins = 0;
-
+var loadedProjects = {};
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -225,15 +225,19 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					else
 						html += "	<div class='project-content' id='content-"+portfolio.id+"' code='"+portfolio.code_node.text()+"' style='display:none'></div>";
 					html += "</div><!-- class='project'-->"
-					$("#projects").append($(html));
-					countProjectPortfolios(projects_list[number_of_projects].uuid);
-					if (g_nb_trees>100 && displayProject[portfolio.id]=='open') 
-						loadProjectPortfolios($("#content-"+portfolio.id).attr("code"));
-					UIFactory["Portfolio"].displayComments('project-comments_'+$(portfolios_byid[portfolio.id].root).attr("id"),portfolio);
-					number_of_projects ++;
-					nb++;
-					if (nb<portfolios_list.length)
-						UIFactory["Portfolio"].displayTree(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
+					if (!loadedProjects[portfolio.id] && g_nb_trees>100 && displayProject[portfolio.id]=='open') {
+						loadedProjects[portfolio.id] = true;
+						loadProjectPortfolios(portfoliocode,nb,'content-'+portfolio.id,type,langcode);
+					}
+					else {
+						$("#projects").append($(html));
+						countProjectPortfolios(projects_list[number_of_projects].uuid);
+						UIFactory["Portfolio"].displayComments('project-comments_'+$(portfolios_byid[portfolio.id].root).attr("id"),portfolio);
+						number_of_projects ++;
+						nb++;
+						if (nb<portfolios_list.length)
+							UIFactory["Portfolio"].displayTree(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
+					}
 			} else {
 				//-------------------- PORTFOLIO ----------------------
 					var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
@@ -629,24 +633,21 @@ UIFactory["Portfolio"].prototype.getEditor = function(type,lang)
 UIFactory["Portfolio"].prototype.setOwner = function(newuserid)
 //==================================
 {
-	$.ajaxSetup({async: false});
-	//----------------
-			var uuid = this.id;
-			var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "/setOwner/"+newuserid;
-			$.ajax({
-				type : "PUT",
-				contentType: "application/xml",
-				dataType : "text",
-				url : url,
-				data : "",
-				success : function(data) {
-				},
-				error : function(jqxhr,textStatus) {
-					alertHTML("Error in restore : "+jqxhr.responseText);
-				}
-			});
-	fill_list_page();
-	$.ajaxSetup({async: true});
+	var uuid = this.id;
+	var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "/setOwner/"+newuserid;
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : "",
+		success : function(data) {
+			fill_list_page();
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in restore : "+jqxhr.responseText);
+		}
+	});
 };
 
 
@@ -659,7 +660,7 @@ UIFactory["Portfolio"].load = function(portfolioid,level)
 		param="?resources=true";
 	else
 		param = "?level=" + level;
-	$.ajaxSetup({async: false});
+//	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -669,7 +670,7 @@ UIFactory["Portfolio"].load = function(portfolioid,level)
 			UIFactory["Portfolio"].parse_add(data);
 		}
 	});
-	$.ajaxSetup({async: true});
+//	$.ajaxSetup({async: true});
 };
 
 //==================================
