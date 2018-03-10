@@ -226,9 +226,10 @@ function fill_list_page()
 						url : serverBCK_API+"/portfolios?active=1&project=false&count=true",
 						success : function(data) {
 							var nb_portfolios = parseInt($('portfolios',data).attr('count'));
-							$("#portfolios-nb").html(nb_portfolios);
-							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
+							if (nb_portfolios==0)
 								$("#portfolios-div").hide();
+							else
+								$("#portfolios-nb").html(nb_portfolios);
 						},
 						error : function(jqxhr,textStatus) {
 							alertHTML("Server Error GET active=1&project=false: "+textStatus);

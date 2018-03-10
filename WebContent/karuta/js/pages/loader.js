@@ -128,16 +128,16 @@ function loadKarutaPage(url)
 	loadJS(url+"/other/html2canvas/html2canvas.js");
 	loadJS(url+"/other/html2canvas/html2canvas.svg.js");
 	//--------------------------------------------------------------		
-	if (bubble_installed) {
+	if (typeof bubble_installed!="undefined" && bubble_installed) {
 		loadJS(url+"/karuta/js/resources/Type_Bubble.js");
 		loadJS(url+"/other/js/jquery-qrcode-0.14.0.js");
 	}
 	//--------------------------------------------------------------		
-	if (europass_installed) {
+	if (typeof europass_installed!="undefined" && europass_installed) {
 		loadJS(url+"/karuta/js/resources/Type_EuropassL.js");
 	}
 	//--------------------------------------------------------------
-	if (elgg_installed) {
+	if (typeof elgg_installed!="undefined" && elgg_installed) {
 		loadCSS(url+"/socialnetwork-elgg/css/elgg.css");
 		loadCSS(url+"/socialnetwork-elgg/css/socialnetwork.css");
 		loadJS(url+"/socialnetwork-elgg/js/socialnetwork.js");

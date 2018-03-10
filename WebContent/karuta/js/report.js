@@ -18,6 +18,8 @@ var xmlDoc = null;
 var userid = null; // current user
 var aggregates = {};
 var variables = {};
+var refresh = true;
+var csvline = "";
 
 var dashboard_infos = {};
 var dashboard_current = null;
@@ -1017,12 +1019,12 @@ function r_processNodeResource(xmlDoc,destid,data)
 	if ($("#report_display_editor_"+nodeid).length>0) {
 		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
 	}
-	if ($("#dashboard_"+prefix_id+nodeid).length>0) {
+	if (refresh && $("#dashboard_"+prefix_id+nodeid).length>0) {
 		$("#dashboard_"+prefix_id+nodeid).on('DOMSubtreeModified',function (){
 			refresh_report(dashboard_current);
 		});
 	}
-	if ($("#report_get_editor_"+nodeid).length>0) {
+	if (refresh && $("#report_get_editor_"+nodeid).length>0) {
 		$("#report_get_editor_"+nodeid).append(UICom.structure["ui"][nodeid].resource.getEditor());
 		var input = $('input',$("#report_get_editor_"+nodeid));
 		$(input).change(function (){
@@ -1052,6 +1054,68 @@ function r_processNodeResource(xmlDoc,destid,data)
 		    content: help_text
 		});
 	} */
+}
+
+//==================================
+function r_processCsvValue(xmlDoc,destid,data)
+//==================================
+{
+	var text = "";
+	var style = "";
+	var attr_help = "";
+	var prefix_id = "";
+	try {
+		var select = $(xmlDoc).attr("select");
+		var ref = $(xmlDoc).attr("ref");
+		var selector = r_getSelector(select);
+		var node = $(selector.jquery,data);
+		if (node.length==0) // try the node itself
+			node = $(selector.jquery,data).addBack();
+		if (select.substring(0,2)=="..") // node itself
+			node = data;
+		if (node.length>0 || select.substring(0,1)=="."){
+			var nodeid = $(node).attr("id");
+			//----------------------------
+			var node = UICom.structure["ui"][nodeid];
+			//----------------------------
+			if (selector.type=='resource') {
+				text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			}
+			if (selector.type=='resource code') {
+				text = UICom.structure["ui"][nodeid].resource.getCode();
+			}
+			if (selector.type=='resource value') {
+				text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+				prefix_id += "value_";
+			}
+			if (selector.type=='resource label') {
+				text = UICom.structure["ui"][nodeid].resource.getLabel();
+			}
+			if (selector.type=='node label') {
+				text = UICom.structure["ui"][nodeid].getLabel();
+			}
+			if (selector.type=='node value') {
+				text = UICom.structure["ui"][nodeid].getValue();
+			}
+			if (selector.type=='node context') {
+				text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+				prefix_id += "context_";
+			}
+			if (ref!=undefined && ref!="") {
+				if (aggregates[ref]==undefined)
+					aggregates[ref] = new Array();
+				aggregates[ref][aggregates[ref].length] = text;
+			}
+			text = "<span id='dashboard_"+prefix_id+nodeid+"' style='"+style+"'>"+text+"</span>";
+			if (writenode) {
+				text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
+			}
+		}
+	} catch(e){
+		text = "-";
+	}
+	//------------------------------
+	cvsline += csvseparator + text;
 }
 
 //==================================
@@ -1418,6 +1482,10 @@ function genDashboardContent(destid,uuid,parent,root_node)
 	if (model_code.indexOf("@local")>-1){
 		root_node = parent.node;
 		model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
+	}
+	if (model_code.indexOf("@norefresh")>-1){
+		refresh = false;
+		model_code = removeStr(model_code,"@norefresh");
 	}
 	if (model_code.indexOf("@nospinning")>-1){
 		spinning = false;

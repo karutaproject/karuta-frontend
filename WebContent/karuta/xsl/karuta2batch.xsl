@@ -422,6 +422,25 @@
 		</update-resource>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='update-rights']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="rd">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='rd']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="wr">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='wr']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="dl">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='dl']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="sb">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='sb']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type="Rights" select="{$select}" rd="{$rd}" wr="{$dl}" dl="{$dl}" sb="{$sb}"/>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-metadata-wad']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>

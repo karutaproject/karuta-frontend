@@ -793,7 +793,13 @@ g_actions['update-resource'] = function updateResource(node)
 			if (type=='NodeResource') {
 				updateNodeResource(nodes,node);
 			}
-		},
+			if (type=='Rights'){
+				var rd = $(node).attr("rd");
+				var wr = $(node).attr("wr");
+				var dl = $(node).attr("dl");
+				var sb = $(node).attr("sb");
+				updateRights(nodes,node,role,rd,wr,dl,sb);
+			}
 		error : function(data) {
 			$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
 			processNextAction();
@@ -946,6 +952,35 @@ function updateMetadawad(nodes,node,type,semtag,text,attribute)
 	}
 }
 
+//=================================================
+function updateRights(nodes,node,role,rd,wr,dl,sb)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		var xml = "<node><role name='"+role+"'><right RD='"+rd+"' WR='"+wr+"' DL='"+dl+"' SB='"+sb+"'></right></role></node>"
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			type : "POST",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			nodeid : nodeid,
+			semtag : semtag,
+			url : serverBCK_API+"/nodes/node/rights/" + nodeid,
+			success : function(data) {
+				$("#batch-log").append("<br>- resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb+";
+				updateRights(nodes,node,role,rd,wr,dl,sb);
+			},
+			error : function(data,nodeid,semtag) {
+				$("#batch-log").append("<br>- ***ERROR resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb+";
+				updateRights(nodes,node,role,rd,wr,dl,sb);
+			}
+		});
+	} else{
+		processNextAction();
+	}
+}
 
 //=================================================
 function updateDashboard(nodes,node,type,semtag,text)
