@@ -110,6 +110,7 @@ UIFactory["Portfolio"].getLogicalMetadataAttribute= function(node,attribute)
 UIFactory["Portfolio"].displayAll = function(dest,type,langcode)
 //==================================
 {
+	loadedProjects = {};
 	projects_list = [];
 	number_of_projects = 0;
 	number_of_portfolios = 0;
@@ -741,7 +742,8 @@ UIFactory["Portfolio"].parse_add = function(data)
 {
 	var tableau1 = [];
 	for ( var i = 0; i < portfolios_list.length; i++) {
-		tableau1[tableau1.length] = [portfolios_list[i].code_node.text(),portfolios_list[i].id];
+		if (portfolios_list[i]!=null)
+			tableau1[tableau1.length] = [portfolios_list[i].code_node.text(),portfolios_list[i].id];
 	}	
 	portfolios_list = [];
 	var uuid = "";
