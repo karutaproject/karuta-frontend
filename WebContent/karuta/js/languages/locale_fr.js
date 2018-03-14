@@ -199,6 +199,7 @@ karutaStr['fr']['seeqrcoderoles']="Roles - Voir QR Code et URL";
 karutaStr['fr']['export-pdf']="Exporter PDF";
 karutaStr['fr']['export-rtf']="Exporter RTF";
 karutaStr['fr']['export-htm']="Exporter HTML";
+karutaStr['fr']['list-semtags']="Liste des tags sémantiques";
 
 //=========================================
 //========== ADMIN ========================

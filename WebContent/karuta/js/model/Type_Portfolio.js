@@ -1634,6 +1634,7 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a></li>";
 		html += "<li><a  onclick=\"toggleMetadata('hidden')\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
 		html += "<li><a  onclick=\"toggleMetadata('visible')\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
+		html += "<li><a  onclick=\"$('#contenu').html('');UICom.structure.ui['"+g_portfolio_rootid+"'].displaySemanticTags('contenu')\">"+karutaStr[LANG]['list-semtags']+"</a></li>";
 		if(languages.length>1)
 			html += "<li><a  onclick=\"$('#sub-bar').html(UIFactory.Portfolio.getNavBar('translate',LANGCODE,g_edit,g_portfolioid));UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a></li>";
 	}
@@ -2410,7 +2411,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	}
 	//-------------------- ACTIONS----------------------
 	html += "		<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >Actions<span class='caret'></span></a>";
-	html += "			<ul class='dropdown-menu'>";
+	html += "			<ul class='dropdown-menu actions'>";
 	html += UIFactory["Portfolio"].getActions(portfolioid);
 	html += "			</ul>";
 	html += "		</li>";

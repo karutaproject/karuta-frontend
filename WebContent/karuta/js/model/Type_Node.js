@@ -4122,3 +4122,31 @@ UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
 	html += "<div id='bubble_display_"+this.id+"' class='bubble_display'></div>";
 	return html;
 };
+
+//==================================
+UIFactory["Node"].prototype.displaySemanticTags = function(destid,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var semtag = this.semantictag; //		this.semantictag = $("metadata",node).attr('semantictag');
+	var label = this.getLabel(null,'none',langcode);
+	var html ="";
+	html += "<div class='semtag-line'>";
+	html += "	<div class='semtag-line-header'>";
+	html += "		<span class='semtag-label'>"+label+"</span>";
+	html += "		<span class='badge semtag-value'>"+semtag+"</span>";
+	html += "	</div>";
+	html += "	<div id='content-"+this.id+"' class='semtag-line-content'></div>";
+	html += "</div>";
+	$('#'+destid).append($(html));
+	var children = $(this.node).children();
+	for (var i=0;i<children.length;i++){
+		var tagname = $(children[i])[0].tagName;
+		if (tagname=="asmStructure" || tagname=="asmUnit" || tagname=="asmUnitStructure" || tagname=="asmContext")
+			UICom.structure.ui[$(children[i]).attr('id')].displaySemanticTags("content-"+this.id,langcode);
+	}
+};
+
