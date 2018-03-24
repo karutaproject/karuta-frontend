@@ -1193,8 +1193,10 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	xml +="<recipient>"+email+"</recipient>";
 	xml +="<subject>"+USER.firstname+" "+USER.lastname+" "+karutaStr[LANG]['want-sharing']+"</subject>";
 	xml +="<message>"+message+"</message>";
+	xml +="<recipient_cc></recipient_cc><recipient_bcc></recipient_bcc>";
 	xml +="</node>";
 	$.ajax({
+		contentType: "application/xml",
 		type : "POST",
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/mail",

@@ -20,6 +20,7 @@ function show_exec_batch()
 function fill_exec_batch()
 //==============================
 {
+	$("#navigation-bar").html(getNavBar('exec',null));  // in case the user has changed language
 	initBatchVars();
 	var html = "";
 	html += "<h2 id='batch' class='line'>KARUTA - <span id='batch-title-page'></span></h2>";

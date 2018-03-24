@@ -307,7 +307,7 @@ karutaStr['fr']['select_role']="Sélectionner un rôle";
 //========== BATCH ========================
 //=========================================
 
-karutaStr['fr']['batch']="Exécuter un script (batch)";
+karutaStr['fr']['batch']="Exécuter un script de batch <span class='badge'>Utiliser Firefox pour suivre l'exécution du batch</span>";
 karutaStr['fr']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['fr']['process_csv']="Exécuter";
 karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
@@ -316,7 +316,7 @@ karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
 //========== REPORT ========================
 //=========================================
 
-karutaStr['fr']['report']="Créer un rapport";
+karutaStr['fr']['report']="Exécuter un script de rapport";
 karutaStr['fr']['upload_csv_or_code']="Téléverser un fichier CSV ou Saisir un code de modèle";
 karutaStr['fr']['model_code']="Code du modèle";
 

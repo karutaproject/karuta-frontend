@@ -316,7 +316,7 @@ karutaStr['en']['create_user_portfolios']="Create an user and his portfolios";
 //========== REPORT ========================
 //=========================================
 
-karutaStr['en']['report']="Create a Report";
+karutaStr['en']['report']="Execute Report Script";
 karutaStr['en']['upload_csv_or_code']="Upload a CSV File or Type a Model Code";
 karutaStr['en']['model_code']="Model Code";
 

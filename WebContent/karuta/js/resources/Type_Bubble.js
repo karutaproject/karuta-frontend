@@ -259,7 +259,7 @@ UIFactory["Bubble"].getPublicURL = function(mapid)
 //==================================
 {
 	var map_url = "";
-	var urlS = serverBCK+'/direct?uuid='+mapid+'&role=all&lang=fr&l=4&d=500&type=showtorole&showtorole=all';
+	var urlS = serverBCK+'/direct?uuid='+mapid+'&role=all&lang=fr&l=4&d=500&type=showtorole&showtorole=all&showroles=etudiant';
 	$.ajax({
 		type : "POST",
 		dataType : "text",

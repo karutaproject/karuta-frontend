@@ -67,6 +67,8 @@ function displayKarutaPage()
 					karuta_backend_date = $("date",$("#backend",data)).text();
 					karuta_fileserver_version = $("number",$("#fileserver",data)).text();
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
+					var navbar_html = getNavBar('list',null);
+					$("#navigation-bar").html(navbar_html);
 				}
 			});
 			//-------------------------------
@@ -139,8 +141,6 @@ function displayKarutaPage()
 				$("#social-button").hide();
 			}
 			//-------------------------------
-			var navbar_html = getNavBar('list',null);
-			$("#navigation-bar").html(navbar_html);
 			//-------------------------------
 			display_list_page();
 			//-------------------------------

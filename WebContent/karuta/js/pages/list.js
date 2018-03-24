@@ -95,6 +95,7 @@ function show_list_page()
 function fill_list_page()
 //==============================
 {
+	$("#navigation-bar").html(getNavBar('list',null));  // in case the user has changed language
 	$("#wait-window").show();
 	$("#search-portfolio-div").html(getSearch()); // we erase code if any
 	$("#search-input").keypress(function(f) {
