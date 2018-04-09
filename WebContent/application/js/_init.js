@@ -8,7 +8,8 @@ var karuta_url = '../../../' + karutaname;
 var bckname = '2.3';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
-//----------------------------------
+var cas_url = "";
+//---------------------------------
 var serverBCK_REG = "";  // report registration server
 var serverBCK_REP = ""; // report server
 //-------- LANGUAGES------------

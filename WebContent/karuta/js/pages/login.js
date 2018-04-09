@@ -81,6 +81,16 @@ function loadLoginPage(url)
 	//--------------------------------------------------------------
 }
 
+//==================================
+function callCAS()
+//==================================
+{
+	var url = window.location.href;
+	var serverURL = url.substring(0,url.lastIndexOf(appliname+"/")-1);
+	var locationURL = cas_url+"/login?service="+serverURL+"/"+serverBCK_API.substring(9)+"/credential/login/cas?redir="+serverURL+"/"+appliname+"/application/htm/karuta.htm";
+	window.location = locationURL;
+}
+
 //==============================
 function callSubmit(encrypt_url,lang)
 //==============================
@@ -141,6 +151,12 @@ function getLogin(encrypt_url,lang)
 //==============================
 {
 	var html = "";
+	html += "<div id='connection-cas' style='display:none'>";
+	html += "<h5>Connexion avec un compte universitaire (CAS)</h5>";
+	html += "<button class='button-login' onclick='javascript:callCAS()'>"+karutaStr[LANG]['login']+"</button>";
+	html += "<h5>Connexion hors compte universitaire</h5>";
+	html += "</div>";
+
 	html += "<input id='useridentifier' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'>";
 	html += "<input id='password' class='form-control' placeholder=\""+karutaStr[LANG]['password']+"\" type='password'>";
 	html += "<button class='button-login' onclick=\"javascript:callSubmit('"+encrypt_url+"','"+lang+"')\">"+karutaStr[LANG]['login']+"</button>";
@@ -212,6 +228,8 @@ function displayKarutaLogin()
 		$("#newpassword").html(getNew());
 		if(karuta_create_account)
 			$("#newaccount").html(getNewAccount());
+		if (cas_url!="")
+			$("#connection-cas").show();
 		});
 	$('#password').keypress(function(e) {
 		var code= (e.keyCode ? e.keyCode : e.which);

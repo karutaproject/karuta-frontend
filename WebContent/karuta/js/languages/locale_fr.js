@@ -115,6 +115,7 @@ karutaStr['fr']['commentnoderoles']="Rôles - Commenter";
 karutaStr['fr']['annotnoderoles']="Rôles - Annoter";
 karutaStr['fr']['submitroles']="Rôles - Soumettre";
 karutaStr['fr']['editnoderoles']="Rôles - Éditer libellé";
+karutaStr['fr']['editcoderoles']="Rôles - Éditer code";
 karutaStr['fr']['duplicateroles']="Rôles - Dupliquer";
 karutaStr['fr']['editboxtitle']="Titre boîte d'édition";
 karutaStr['fr']['queryGet_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
