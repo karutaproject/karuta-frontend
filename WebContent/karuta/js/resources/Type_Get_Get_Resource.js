@@ -967,7 +967,7 @@ UIFactory["Get_Get_Resource"].reparse = function(destid,type,langcode,data,self,
 UIFactory["Get_Get_Resource"].prototype.save = function()
 //==================================
 {
-	if (this.clause=="xsi_type='Get_Resource'") {
+	if (this.clause=="xsi_type='Get_Get_Resource'") {
 		UICom.UpdateResource(this.id,writeSaved);
 		if (!this.inline)
 			this.refresh();

@@ -993,7 +993,7 @@ function getSendPublicURL(uuid,langcode)
 }
 
 //==================================
-function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration)
+function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,shareroles)
 //==================================
 {
 	//---------------------
@@ -1010,7 +1010,7 @@ function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration)
 		var email = $("#email").val();
 		var role = "all"
 		if (email!='') {
-			getPublicURL(uuid,email,sharewithrole,langcode,sharelevel,shareduration)
+			getPublicURL(uuid,email,sharewithrole,langcode,sharelevel,shareduration,shareroles);
 		}
 	});
 	$("#edit-window-footer").append(obj);
