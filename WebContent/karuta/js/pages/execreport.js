@@ -18,7 +18,7 @@ function show_exec_report()
 function fill_exec_report()
 //==============================
 {
-	$("#navigation-bar").html(getNavBar('report',null));  // in case the user has changed language
+	setLanguageMenu("fill_exec_report()");
 	var html = "";
 	html += "<h2 id='report' class='line'>KARUTA - <span id='report-title-page'></span></h2>";
 	html += "<h4 class='line'><span class='badge'>1</span> <span id='report-title-1'></span></h4>";

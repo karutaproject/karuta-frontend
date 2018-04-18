@@ -19,7 +19,7 @@ function show_list_users()
 function fill_list_users()
 //==============================
 {
-	$("#navigation-bar").html(getNavBar('users',null));  // in case the user has changed language
+	setLanguageMenu("fill_list_users()");
 	$("#search-user-div").html(getSearchUser()); // we erase code if any
 	$("#search-user-input").keypress(function(f) {
 		var code= (f.keyCode ? f.keyCode : f.which);

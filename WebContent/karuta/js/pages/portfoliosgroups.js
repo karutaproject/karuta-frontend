@@ -19,7 +19,7 @@ function show_list_portfoliosgroups()
 function fill_list_portfoliosgroups()
 //==============================
 {
-	$("#navigation-bar").html(getNavBar('portfoliosgroups',null));  // in case the user has changed language
+	setLanguageMenu("fill_list_portfoliosgroups()");
 	$("#wait-window").show();
 	var html = "";
 	html += "<span id='portfoliosgroup-create' onclick=\"UIFactory['PortfoliosGroup'].callCreate()\" >"+karutaStr[LANG]['create_portfoliosgroup']+"</span>";
