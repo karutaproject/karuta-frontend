@@ -21,6 +21,7 @@ var g_actions = [];
 var g_nodes = {};
 var g_nodesLine = {};
 
+var g_current_node_uuid = null;
 //-----------------------
 
 
@@ -742,70 +743,136 @@ g_actions['update-resource'] = function updateResource(node)
 	var select = $(node).attr("select");
 	var type = $(node).attr("type");
 	var idx = select.indexOf(".");
-	var treeref = select.substring(0,idx);
-	var semtag = select.substring(idx+1);
 	//----------------------------------------------------
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
-		success : function(data) {
-			var nodes = $("node",data);
-			var text = getTxtvals($("text",node));
-			if ($("source",node).length>0){
-				var source_select = $("source",node).attr("select");
-				var source_idx = source_select.indexOf(".");
-				var source_treeref = source_select.substring(0,source_idx);
-				var source_semtag = source_select.substring(source_idx+1);
-				if (source_semtag=="UUID")
-					text = g_trees[source_treeref][0];
+	if (select=='#current_node') {
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/"+g_current_node_uuid,
+			success : function(data) {
+				var results = $('*',data);
+				var nodes = new Array();
+				nodes[0] = results[0];
+				var text = getTxtvals($("text",node));
+				if ($("source",node).length>0){
+					var source_select = $("source",node).attr("select");
+					var source_idx = source_select.indexOf(".");
+					var source_treeref = source_select.substring(0,source_idx);
+					var source_semtag = source_select.substring(source_idx+1);
+					if (source_semtag=="UUID")
+						text = g_trees[source_treeref][0];
+				}
+				//---------------------------
+				if (type=='Field') {
+					updateField(nodes,node,type,semtag,text);
+				}
+				if (type=='Proxy') {
+					updateProxy(nodes,node,type,semtag);
+				}
+				if (type=='Dashboard') {
+					updateDashboard(nodes,node,type,semtag);
+				}
+				if (type=='Metadata'){
+					var attribute = $(node).attr("attribute");
+					updateMetada(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='MetadataInline'){
+					var attribute = 'inline';
+					updateMetada(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='Metadatawad'){
+					var attribute = $(node).attr("attribute");
+					updateMetadawad(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='MetadatawadQuery') {
+					var attribute = 'query';
+					updateMetadawad(nodes,node,type,semtag,text,attribute);
+				}
+				if (type=='MetadatawadMenu') {
+					var attribute = 'menuroles';
+					updateMetadawad(nodes,node,type,semtag,text,attribute);
+				}
+				if (type=='NodeResource') {
+					updateNodeResource(nodes,node);
+				}
+				if (type=='Rights'){
+					var rd = $(node).attr("rd");
+					var wr = $(node).attr("wr");
+					var dl = $(node).attr("dl");
+					var sb = $(node).attr("sb");
+					updateRights(nodes,node,role,rd,wr,dl,sb);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
+				processNextAction();
 			}
-			//---------------------------
-			if (type=='Field') {
-				updateField(nodes,node,type,semtag,text);
+		});
+	} else {
+		var treeref = select.substring(0,idx);
+		var semtag = select.substring(idx+1);
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			success : function(data) {
+				var nodes = $("node",data);
+				var text = getTxtvals($("text",node));
+				if ($("source",node).length>0){
+					var source_select = $("source",node).attr("select");
+					var source_idx = source_select.indexOf(".");
+					var source_treeref = source_select.substring(0,source_idx);
+					var source_semtag = source_select.substring(source_idx+1);
+					if (source_semtag=="UUID")
+						text = g_trees[source_treeref][0];
+				}
+				//---------------------------
+				if (type=='Field') {
+					updateField(nodes,node,type,semtag,text);
+				}
+				if (type=='Proxy') {
+					updateProxy(nodes,node,type,semtag);
+				}
+				if (type=='Dashboard') {
+					updateDashboard(nodes,node,type,semtag);
+				}
+				if (type=='Metadata'){
+					var attribute = $(node).attr("attribute");
+					updateMetada(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='MetadataInline'){
+					var attribute = 'inline';
+					updateMetada(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='Metadatawad'){
+					var attribute = $(node).attr("attribute");
+					updateMetadawad(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='MetadatawadQuery') {
+					var attribute = 'query';
+					updateMetadawad(nodes,node,type,semtag,text,attribute);
+				}
+				if (type=='MetadatawadMenu') {
+					var attribute = 'menuroles';
+					updateMetadawad(nodes,node,type,semtag,text,attribute);
+				}
+				if (type=='NodeResource') {
+					updateNodeResource(nodes,node);
+				}
+				if (type=='Rights'){
+					var rd = $(node).attr("rd");
+					var wr = $(node).attr("wr");
+					var dl = $(node).attr("dl");
+					var sb = $(node).attr("sb");
+					updateRights(nodes,node,role,rd,wr,dl,sb);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
+				processNextAction();
 			}
-			if (type=='Proxy') {
-				updateProxy(nodes,node,type,semtag);
-			}
-			if (type=='Dashboard') {
-				updateDashboard(nodes,node,type,semtag);
-			}
-			if (type=='Metadata'){
-				var attribute = $(node).attr("attribute");
-				updateMetada(nodes,node,type,semtag,text,attribute)
-			}
-			if (type=='MetadataInline'){
-				var attribute = 'inline';
-				updateMetada(nodes,node,type,semtag,text,attribute)
-			}
-			if (type=='Metadatawad'){
-				var attribute = $(node).attr("attribute");
-				updateMetadawad(nodes,node,type,semtag,text,attribute)
-			}
-			if (type=='MetadatawadQuery') {
-				var attribute = 'query';
-				updateMetadawad(nodes,node,type,semtag,text,attribute);
-			}
-			if (type=='MetadatawadMenu') {
-				var attribute = 'menuroles';
-				updateMetadawad(nodes,node,type,semtag,text,attribute);
-			}
-			if (type=='NodeResource') {
-				updateNodeResource(nodes,node);
-			}
-			if (type=='Rights'){
-				var rd = $(node).attr("rd");
-				var wr = $(node).attr("wr");
-				var dl = $(node).attr("dl");
-				var sb = $(node).attr("sb");
-				updateRights(nodes,node,role,rd,wr,dl,sb);
-			}
-		},
-		error : function(data) {
-			$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
-			processNextAction();
-		}
-	});
+		});
+	}
 }
 
 //=================================================
@@ -1023,7 +1090,7 @@ function updateNodeResource(nodes,node)
 	if (nodes.length>0) {
 		var nodeid = $(nodes[0]).attr('id');
 		nodes = nodes.slice(1,nodes.length);
-		var newcode = getTxtvals($("code",node));
+		var newcode = getTxtvals($("newcode",node));
 		var label = getTxtvals($("label",node));
 		$.ajax({
 			type : "GET",
@@ -1427,6 +1494,7 @@ function import_nodes(nodes,semtag,source,srcetag,srcecode)
 			destid:destid,
 			nodes:nodes,
 			success : function(data) {
+				g_current_node_uuid = data;
 				$("#batch-log").append("<br>- node added at ("+this.destid+") - semtag="+semtag+ " source="+source);
 				import_nodes(this.nodes,semtag,source,srcetag,srcecode);
 			},
