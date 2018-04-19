@@ -19,7 +19,7 @@ function show_main_page(rootid,role)
 function fill_main_page(rootid,role)
 //==============================
 {
-	$("#navigation-bar").html(getNavBar('main',null));  // in case the user has changed language
+	setLanguageMenu("fill_main_page()");
 	$("#wait-window").modal('show');
 	g_dashboard_models = {};
 	g_report_models = {};

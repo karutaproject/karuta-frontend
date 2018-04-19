@@ -765,6 +765,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	if (inline_metadata=='Y')
 		inline = true;
 	var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
+	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)? 'all' : $(node.metadatawad).attr('shareroles');
 	var seeqrcoderoles = ($(node.metadatawad).attr('seeqrcoderoles')==undefined)?'':$(node.metadatawad).attr('seeqrcoderoles');
 	var contentfreenode = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
@@ -1176,19 +1177,48 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			//------------ Public URL -----------------
 			if ($("#2world-"+uuid).length){
-				var urlS = serverBCK+'/direct?uuid='+uuid+'&role=all&lang=fr&l=4&d=unlimited';
-				$.ajax({
-					type : "POST",
-					dataType : "text",
-					contentType: "application/xml",
-					url : urlS,
-					success : function (data){
-						var url = window.location.href;
-						var serverURL = url.substring(0,url.indexOf(appliname)-1);
-						url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
-						$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe button' target='_blank' href='"+url+"'></a> ");
+				var shares = [];
+				var displayShare = [];
+				var items = shareroles.split(";");
+				for (var i=0; i<items.length; i++){
+					var subitems = items[i].split(",");
+					shares[i] = [];
+					shares[i][0] = subitems[0]; // sharing role
+					if (subitems.length>1) {
+						shares[i][1] = subitems[1]; // recepient role
+						shares[i][2] = subitems[2]; // roles or emails
+						shares[i][3] = subitems[3]; // level
+						shares[i][4] = subitems[4]; // duration
+						shares[i][5] = subitems[5]; // labels
+					} else {
+						shares[i][1] = "all"; // recepient role
+						shares[i][2] = "2world"; // roles or emails
+						shares[i][3] = "4"; // level
+						shares[i][4] = "unlimited"; // duration
+						shares[i][5] = "URL"; // labels
 					}
-				});
+					if (subitems.length>6)
+						shares[i][6] = subitems[6]; // condition
+					if (shares[i][0].indexOf(userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+						displayShare[i] = true;
+					else
+						displayShare[i] = false;
+				}
+				for (var i=0; i<items.length; i++){
+					var urlS = serverBCK+"/direct?uuid="+uuid+"&role="+shares[i][1]+"&lang="+languages[langcode]+"&l="+shares[i][3]+"&d="+shares[i][4]+"&type=showtorole&showtorole="+shares[i][2];
+					$.ajax({
+						type : "POST",
+						dataType : "text",
+						contentType: "application/xml",
+						url : urlS,
+						success : function (data){
+							var url = window.location.href;
+							var serverURL = url.substring(0,url.indexOf(appliname)-1);
+							url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
+							$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe button' target='_blank' href='"+url+"'></a> ");
+						}
+					});
+				}
 
 			}
 			// ================================= For each child ==========================
@@ -2822,7 +2852,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 	var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
 	var moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'none':$(node.metadatawad).attr('moveroles');
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
 	var duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
 	var incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
 	var shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
@@ -3135,7 +3164,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					var sharelevel = shares[i][3];
 					var shareduration = shares[i][4];
 					var sharelabel = shares[i][5];
-					if (shareto!='') {
+					if (shareto!='' && shareroles.indexOf('2world')<0) {
 						if (shareto!='?') {
 							var sharetoemail = "";
 							var sharetoroles = "";
