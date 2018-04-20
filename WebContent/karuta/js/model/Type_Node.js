@@ -1215,11 +1215,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 							var url = window.location.href;
 							var serverURL = url.substring(0,url.indexOf(appliname)-1);
 							url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
-							$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe button' target='_blank' href='"+url+"'></a> ");
+							$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-tooltip='true' data-placement='bottom'></a> ");
 						}
 					});
 				}
-
 			}
 			// ================================= For each child ==========================
 			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
