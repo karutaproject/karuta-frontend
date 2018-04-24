@@ -992,7 +992,7 @@ function getSendPublicURL(uuid,shareroles)
 }
 
 //==================================
-function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,shareroles)
+function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,sharerole)
 //==================================
 {
 	//---------------------
@@ -1009,7 +1009,7 @@ function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,
 		var email = $("#email").val();
 		var role = "all"
 		if (email!='') {
-			getPublicURL(uuid,email,shareroles,sharewithrole,sharelevel,shareduration,langcode);
+			getPublicURL(uuid,email,sharerole,sharewithrole,sharelevel,shareduration,langcode);
 		}
 	});
 	$("#edit-window-footer").append(obj);
@@ -1030,7 +1030,7 @@ function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,
 
 
 //==================================
-function getPublicURL(uuid,email,shareroles,role,level,duration,lancode) {
+function getPublicURL(uuid,email,sharerole,role,level,duration,lancode) {
 //==================================
 	if (role==null)
 		role = "all";
@@ -1038,7 +1038,7 @@ function getPublicURL(uuid,email,shareroles,role,level,duration,lancode) {
 		level = 4; //public
 	if (duration==null)
 		duration = 720;  //-- max 720h
-	var urlS = serverBCK+'/direct?type=email&uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration+'&shareroles='+shareroles;
+	var urlS = serverBCK+'/direct?type=email&uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration+'&sharerole='+sharerole;
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -1051,7 +1051,7 @@ function getPublicURL(uuid,email,shareroles,role,level,duration,lancode) {
 }
 
 //==================================
-function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,duration,shareroles) {
+function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,duration,sharerole) {
 //==================================
 	if (level==null)
 		level = 0; //must be logged
@@ -1064,7 +1064,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 		var emails = email.split(" "); // email1 email2 ..
 		for (var i=0;i<emails.length;i++) {
 			if (emails[i].length>4) {
-				var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'&d='+duration+'&shareroles='+shareroles+'&type=email';
+				var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+emails[i]+'&role='+sharewithrole+'&l='+level+'&d='+duration+'&sharerole='+sharerole+'&type=email';
 				$.ajax({
 					type : "POST",
 					email : emails[i],
@@ -1097,7 +1097,7 @@ function sendSharingURL(uuid,sharewithrole,email,sharetorole,langcode,level,dura
 									for (var k=0; k<users.length; k++){
 											var email = $("email",$(users[k])).text();
 											if (email.length>4) {
-												var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+sharewithrole+'&l='+level+'&d='+duration+'&shareroles='+shareroles+'&type=showtorole&showtorole='+roles[i];
+												var urlS = serverBCK+'/direct?uuid='+uuid+'&email='+email+'&role='+sharewithrole+'&l='+level+'&d='+duration+'&sharerole='+sharerole+'&type=showtorole&showtorole='+roles[i];
 												$.ajax({
 													type : "POST",
 													email : email,
@@ -1747,6 +1747,7 @@ function displayTechSupportForm(langcode)
 		xml +="<subject>"+subject+"</subject>";
 		xml +="<message>"+message+"</message>";
 		xml +="<sender>"+user_email+"</sender>";
+		xml +="<recipient_cc></recipient_cc><recipient_bcc></recipient_bcc>";
 		xml +="</node>";
 		$.ajax({
 			type : "POST",

@@ -263,11 +263,12 @@ UIFactory["SendEmail"].send = function(obj,itself,langcode)
 	xml +="<subject>"+subject+"</subject>";
 	xml +="<message>"+message+"</message>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
+	xml +="<recipient_cc></recipient_cc><recipient_bcc></recipient_bcc>";
 	xml +="</node>";
 
 	$.ajax({
 		type : "POST",
-		dataType : "text",
+		contentType: "application/xml",
 		url : serverBCK+"/mail",
 		data: xml,
 		success : function() {

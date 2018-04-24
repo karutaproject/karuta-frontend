@@ -255,11 +255,11 @@ UIFactory["Bubble"].reloadparse = function(param2,param3,param4)
 };
 
 //==================================
-UIFactory["Bubble"].getPublicURL = function(mapid)
+UIFactory["Bubble"].getPublicURL = function(mapid,sharerole)
 //==================================
 {
 	var map_url = "";
-	var urlS = serverBCK+'/direct?uuid='+mapid+'&role=all&lang=fr&l=4&d=unlimited&type=showtorole&showtorole=all';
+	var urlS = serverBCK+'/direct?uuid='+mapid+'&role=all&lang=fr&l=4&d=unlimited&type=showtorole&showtorole=all&sharerole='+sharerole;
 	$.ajax({
 		type : "POST",
 		dataType : "text",

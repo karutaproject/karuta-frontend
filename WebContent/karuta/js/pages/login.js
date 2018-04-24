@@ -228,7 +228,7 @@ function displayKarutaLogin()
 		$("#newpassword").html(getNew());
 		if(karuta_create_account)
 			$("#newaccount").html(getNewAccount());
-		if (cas_url!="")
+		if (typeof cas_url != 'undefined' &&cas_url!="")
 			$("#connection-cas").show();
 		});
 	$('#password').keypress(function(e) {
