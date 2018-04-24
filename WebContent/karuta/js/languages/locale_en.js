@@ -35,6 +35,7 @@ karutaStr["en"]["button-send"] = "Send";
 karutaStr["en"]["button-share"] = "Share";
 karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
+karutaStr["en"]["button-2world"] = "Public URL";
 karutaStr["en"]["button-up"] = "Up";
 karutaStr["en"]["button-refresh"] = "Reload Portfolio";
 karutaStr["en"]["button-refresh-report"] = "Reload Report";
