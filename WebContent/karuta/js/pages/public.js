@@ -208,6 +208,15 @@ function displayKarutaPublic()
 			//----------------
 			$.ajax({
 				type : "GET",
+				dataType : "text",
+				url : serverBCK_API+"/nodes/node/" + g_uuid  +"/portfolioid",
+				success : function(data) {
+					g_portfolioid = data;
+				}
+			});
+			//----------------
+			$.ajax({
+				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/nodes/node/" + g_uuid,
 				success : function(data) {
