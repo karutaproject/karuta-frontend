@@ -960,9 +960,6 @@ function getSendPublicURL(uuid,shareroles)
 //==================================
 {
 	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
 	$("#edit-window-footer").html("");
 	fillEditBoxBody();
 	$("#edit-window-title").html(karutaStr[LANG]['share-URL']);
@@ -1037,7 +1034,7 @@ function getPublicURL(uuid,email,sharerole,role,level,duration,lancode) {
 	if (level==null)
 		level = 4; //public
 	if (duration==null)
-		duration = 720;  //-- max 720h
+		duration = 'unlimited'; 
 	var urlS = serverBCK+'/direct?type=email&uuid='+uuid+'&email='+email+'&role='+role+'&l='+level+'&d='+duration+'&sharerole='+sharerole;
 	$.ajax({
 		type : "POST",

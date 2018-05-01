@@ -3207,7 +3207,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 						if (shareroles.indexOf('2world')>-1) {
 							html_toadd = "<span id='2world-"+node.id+"'></span>";
 						} else {
-							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"','2world'"+")\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
+							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"','"+shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
 						}
 					}
 					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))
