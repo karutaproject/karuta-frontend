@@ -14,9 +14,8 @@ function getList()
 	html += "<div id='portfolios-div'>";
 	html += "<h3 id='portfolios-not-in-project'><span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span></h3>";
 	html += "	<div class='row portfolios-not-in-project'>";
-	if (USER.creator) {
+	if (USER.creator && !USER.limited) {
 		displayProject['portfolios-not-in-project'] = localStorage.getItem('dpportfolios-not-in-project');
-//		displayProject['portfolios-not-in-project'] = Cookies.get('dpportfolios-not-in-project');
 		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
 			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button glyphicon glyphicon-minus'></span></div>";
 		else
@@ -30,7 +29,7 @@ function getList()
 	}
 	html += "</div>";  // <div class='row portfolios-not-in-project'>
 	html += "</div>"; // <div id='portfolios-div'>
-	if (USER.admin || USER.creator) {
+	if (USER.admin || (USER.creator && !USER.limited) ) {
 		var text2 = karutaStr[LANG]['bin'];
 		if (USER.admin)
 			text2 = karutaStr[LANG]['bin-admin'];
@@ -111,7 +110,7 @@ function fill_list_page()
 	$("#main-list").html(html);
 //	$.ajaxSetup({async: false});
 	// --- list of users to display name of owner
-	if (USER.admin || USER.creator){
+	if (USER.admin || (USER.creator && !USER.limited) ){
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
@@ -134,7 +133,7 @@ function fill_list_page()
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
 	html += "</ul>";
 	html += "</div>";
-	if (USER.admin || USER.creator){
+	if (USER.admin || (USER.creator && !USER.limited) ){
 		$("#menu").html(html);
 		if (demo) {
 			$("#start").html(listinfo[LANG]);
@@ -165,7 +164,7 @@ function fill_list_page()
 							UIFactory["Portfolio"].parse(data);
 							$("#list").html(getList());
 							UIFactory["Portfolio"].displayAll('portfolios','list');
-							if (USER.admin || USER.creator) {
+							if (USER.admin || (USER.creator && !USER.limited) ) {
 								$.ajax({
 									type : "GET",
 									dataType : "xml",
@@ -200,7 +199,7 @@ function fill_list_page()
 							$("#list").html(getList());
 							UIFactory["Portfolio"].displayAll('portfolios','list');
 							$("#wait-window").hide();
-							if (USER.admin || USER.creator) {
+							if (USER.admin || (USER.creator && !USER.limited) ) {
 								$.ajax({
 									type : "GET",
 									dataType : "xml",
@@ -283,7 +282,7 @@ function fill_search_page(code)
 	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
 	html += "</ul>";
 	html += "</div>";
-	if (USER.admin || USER.creator){
+	if (USER.admin || (USER.creator && !USER.limited) ){
 		$("#menu").html(html);
 		if (demo) {
 			$("#start").html(listinfo[LANG]);
@@ -315,7 +314,7 @@ function fill_search_page(code)
 				hideArchiveSearch();
 				$("#portfolios-div").hide();				
 			}
-			if (USER.admin || USER.creator) {
+			if (USER.admin || (USER.creator && !USER.limited) ) {
 				$.ajax({
 					type : "GET",
 					dataType : "xml",

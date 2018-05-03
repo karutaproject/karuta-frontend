@@ -188,7 +188,7 @@ function getNavBar(type,portfolioid,edit)
 			}		
 	//-----------------ACTIONS-------------------------------
 	if (type!='login' && USER!=undefined) {
-		if (USER.admin || USER.creator) {
+		if (USER.admin || (USER.creator && !USER.limited) ) {
 			html += "			<ul class='nav navbar-nav'>";
 			html += "				<li>&nbsp;</li>";
 			html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' >Actions<span class='caret'></span></a>";
@@ -230,7 +230,7 @@ function getNavBar(type,portfolioid,edit)
 		html += " 					<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
-		if (USER.creator && !USER.admin)
+		if ((USER.creator && !USER.limited)  && !USER.admin)
 			html += "						<li><a href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a></li>";
 		html += "					</ul>";
 		html += "				</li>";
@@ -1027,7 +1027,7 @@ function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,
 
 
 //==================================
-function getPublicURL(uuid,email,sharerole,role,level,duration,lancode) {
+function getPublicURL(uuid,email,sharerole,role,level,duration,langcode) {
 //==================================
 	if (role==null)
 		role = "all";

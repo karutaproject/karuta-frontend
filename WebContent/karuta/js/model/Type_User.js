@@ -45,6 +45,13 @@ UIFactory["User"] = function( node )
 	this.admin_node = $("admin",node);
 	this.active_node = $("active",node);
 	this.substitute_node = $("substitute",node);
+	this.other_node = $("other",node);
+	if (this.other_node.length==0) { // for backward compatibility
+		var newelement = createXmlElement("other");
+		$(node)[0].appendChild(newelement);
+		this.other_node = $("other",node);
+	}
+	//-----------------------------------
 	this.attributes = {};
 	this.attributes["username"] = this.username_node;
 	this.attributes["firstname"] = this.firstname_node;
@@ -55,8 +62,12 @@ UIFactory["User"] = function( node )
 	this.attributes["designer"] = this.designer_node;
 	this.attributes["active"] = this.active_node;
 	this.attributes["substitute"] = this.substitute_node;
+	this.attributes["other"] = this.other_node;
+	//-----------------------------------
 	this.admin = this.admin_node.text()=='1';
 	this.creator = this.designer_node.text()=='1' || this.admin_node.text()=='1';
+	this.limited = this.other_node.text().indexOf('limited')>-1;
+	//-----------------------------------
 	this.display = {};
 };
 
@@ -253,6 +264,7 @@ UIFactory["User"].prototype.getEditor = function(type,lang)
 	if (this.id>3){
 		html += UIFactory["User"].getAttributeRadioEditor(this.id,"designer",this.designer_node.text());
 		html += UIFactory["User"].getAttributeRadioEditor(this.id,"admin",this.admin_node.text());
+		html += UIFactory["User"].getAttributeEditor(this.id,"other",this.other_node.text());
 	}
 	if (this.id<2 || this.id>3){
 		html += UIFactory["User"].getAttributeRadioEditor(this.id,"substitute",this.substitute_node.text());
@@ -323,6 +335,7 @@ UIFactory["User"].callCreate = function()
 	html +="<hr/>";
 	html += UIFactory["User"].getAttributeRadioCreator("designer","0");
 	html += UIFactory["User"].getAttributeRadioCreator("admin","0");
+	html += UIFactory["User"].getAttributeCreator("other","");
 	html += UIFactory["User"].getAttributeRadioCreator("substitute","0");
 	html += UIFactory["User"].getAttributeRadioCreator("active","1");
 	html += "</form>";
@@ -512,6 +525,7 @@ UIFactory["User"].create = function()
 	xml +="	<lastname>"+$("#user_lastname").val()+"</lastname>";
 	xml +="	<firstname>"+$("#user_firstname").val()+"</firstname>";
 	xml +="	<email>"+$("#user_email").val()+"</email>";
+	xml +="	<other>"+$("#user_other").val()+"</otheril>";
 	xml +="	<password>"+$("#user_password").val()+"</password>";
 	xml +="	<active>"+$("input[name=user_active]:checked").val()+"</active>";
 	xml +="	<admin>"+$("input[name=user_admin]:checked").val()+"</admin>";
@@ -576,6 +590,7 @@ UIFactory["User"].createTestUser = function()
 	xml +="	<username>"+$("#user_username").val()+"</username>";
 	xml +="	<lastname>"+$("#user_lastname").val()+"</lastname>";
 	xml +="	<firstname>"+$("#user_firstname").val()+"</firstname>";
+	xml +="	<other>"+$("#user_other").val()+"</other>";
 	xml +="	<email>"+USER.email_node.text()+"</email>";
 	xml +="	<password>"+$("#user_password").val()+"</password>";
 	xml +="	<active>1</active>";
