@@ -1353,7 +1353,7 @@ g_actions['unshare-tree'] = function unshareTree(node)
 				url : url,
 				success : function(data) {
 					groupid = data;
-					//---- share tree --------------
+					//---- unshare tree --------------
 					var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+user_id;
 					$.ajax({
 						type : "DELETE",
@@ -1397,7 +1397,7 @@ g_actions['unshare-usergroup'] = function unshareUserGroup(node)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/usersgroups?group="+groupid,
+		url : serverBCK_API+"/usersgroups?group="+usergroupid,
 		success : function(data) {
 			var users = $("user",data);
 			var groupid = "";
