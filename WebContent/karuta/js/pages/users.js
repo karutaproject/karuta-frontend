@@ -31,8 +31,11 @@ function fill_list_users()
 	html += "<h3 id='active-users'>"+karutaStr[LANG]['active_users']+"</h3>";
 	html += "<div  id='active'>";
 	html += "</div>";
-	html += "<h3 id='inactive-users'>"+karutaStr[LANG]['inactive_users']+"</h3>";
-	html += "<div  id='inactive'>";
+	html += "<h3 id='inactive-users' style='display:none'>"+karutaStr[LANG]['inactive_users']+"</h3>";
+	html += "<div  id='inactive' style='display:none'>";
+	html += "</div>";
+	html += "<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users']+"</h3>";
+	html += "<div  id='temporary'>";
 	html += "</div>";
 	$("#main-user").html(html);
 	$.ajaxSetup({async: false});

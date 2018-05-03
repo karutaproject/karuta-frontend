@@ -73,7 +73,7 @@ function r_getSelector(select,test)
 				filter2 = filter2.replace(/#lang#/g,languages[LANGCODE]);
 			if (test.indexOf("sortResource(#")>-1){
 				var1 = test.substring(test.indexOf("(#")+1,test.lastIndexOf(")"));
-				filter2 = filter2.replace(/#1/g,languages[LANGCODE]);
+				filter2 = filter2.replace(/#1/g,var1);
 			}
 		}
 	}
