@@ -282,6 +282,7 @@ karutaStr['fr']['create_account']="Créer un compte";
 karutaStr['fr']['create_user']="Ajouter un usager";
 karutaStr['fr']['active_users']="Usagers actifs";
 karutaStr['fr']['inactive_users']="Usagers inactifs";
+karutaStr['fr']['temporary_users']="Usagers temporaires";
 karutaStr['fr']['username']="Login";
 karutaStr['fr']['lastname']="Nom";
 karutaStr['fr']['firstname']="Prénom";

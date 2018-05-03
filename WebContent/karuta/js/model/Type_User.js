@@ -79,11 +79,19 @@ UIFactory["User"].displayActive = function(destid,type,lang)
 //==================================
 {
 	$("#"+destid).html("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_users'></tbody></table>");
+	$("#temporary").html("<table id='temp_users'></table>");
 	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var itemid = destid+"_"+UsersActive_list[i].id;
-		$("#list_users").append($("<tr class='item' id='"+itemid+"'></tr>"));
-		$("#"+itemid).html(UsersActive_list[i].getView(destid,type,lang));
+		var login = UsersActive_list[i].username_node.text();
+		if (login.length<80){ //not a temporary user
+			$("#list_users").append($("<tr class='item' id='"+itemid+"'></tr>"));
+			$("#"+itemid).html(UsersActive_list[i].getView(destid,type,lang));
+		} else {
+			$('#temporary-users').show();
+			$("#temp_users").append($("<tr id='"+itemid+"'></tr>"));
+			$("#"+itemid).html(UsersActive_list[i].getView(destid,'temporary',lang));
+		}
 	}
 };
 
@@ -94,6 +102,8 @@ UIFactory["User"].displayInactive = function(destid,type,lang)
 	$("#"+destid).html("<table id='table_unusers' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
 	$("#list_unusers").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersInactive_list.length; i++) {
+		$('#inactive-users').show();
+		$('#inactive').show();
 		var itemid = destid+"_"+UsersInactive_list[i].id;
 		$("#list_unusers").append($("<tr class='item' id='"+itemid+"'></tr>"));
 		$("#"+itemid).html(UsersInactive_list[i].getView(destid,type,lang));
@@ -104,7 +114,7 @@ UIFactory["User"].displayInactive = function(destid,type,lang)
 UIFactory["User"].prototype.getEmail = function()
 //==================================
 {
-	return this.email_node.text()
+	return this.email_node.text();
 }
 
 //==================================
@@ -160,6 +170,14 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	}
 	if (type=='email') {
 		html = this.email_node.text();
+	}
+	if (type=='temporary' && USER.admin) {
+		html = "<td style='padding-left:4px;padding-right:4px'>"+this.username_node.text() +"</td>";
+		html += "<td><div class='btn-group'>";
+		html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+		html += "<i class='fa fa-trash-o'></i>";
+		html += "</button>";
+		html += "</div></td>";
 	}
 	return html;
 };
