@@ -202,7 +202,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					html += "		</div><!-- class='col-md-1' -->";
 					html += "		<div class='col-md-1 col-xs-1'>";
 					//------------------------ menu-burger
-					if (USER.admin || USER.creator) {
+					if (USER.admin || (USER.creator && !USER.limited) ) {
 						html += "			<div class='btn-group project-menu'>";
 						html += "				<button  class='btn btn-xs dropdown-toggle' data-toggle='dropdown'><span class='glyphicon glyphicon-menu-hamburger'>&nbsp;</button>";
 						html += "				<ul class='dropdown-menu dropdown-menu-right' role='menu'>";
@@ -251,7 +251,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						number_of_portfolios++;
 						$("#portfolios").append($("<div class='row' id='portfolio_"+portfolio.id+"'></div>"));
 					}
-					if (!portfolio.notvisible || USER.creator)
+					if (!portfolio.notvisible || (USER.creator && !USER.limited) )
 						$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type,langcode,parentcode,owner));
 					nb++;
 					if (nb<portfolios_list.length)
@@ -413,7 +413,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	if (type=='list') {
 		html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
 		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.rootid+"')\" onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+this.code_node.text()+"\"><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
-		if (USER.creator) {
+		if (USER.creator && !USER.limited) {
 			html += "<div class='col-md-2 col-sm-2 hidden-xs'><span class='portfolio-owner' >"+owner+"</span></div>";
 			html += "<div class='col-md-2 col-sm-2 hidden-xs'><span class='portfolio-code' >"+this.code_node.text()+"</span></div>";
 		}
@@ -445,7 +445,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+this.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
 			html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 			html += "</ul>";
-		} else if (USER.creator){
+		} else if (USER.creator && !USER.limited) {
 			html += "<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 			html += "<ul class='dropdown-menu  pull-right'>";
 			if (gid==null) {
@@ -467,7 +467,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
 	}
 	if (type=='bin') {
-		if (USER.admin || USER.creator){
+		if (USER.admin || (USER.creator && !USER.limited) ){
 			html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
 			html += "<div class='col-md-3 col-sm-3 col-xs-9'><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
 			html += "<div class='col-md-2 col-sm-2 hidden-xs '><a class='portfolio-owner' >"+owner+"</a></div>";
@@ -487,7 +487,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		}
 	}
 	if (type=='select') {
-//		if (USER.admin || USER.creator){
+//		if (USER.admin || (USER.creator && !USER.limited) ){
 			html += "<div class='col-md-1 col-xs-1'>"+this.getSelector(null,null,'select_portfolios',true)+"</div>";
 			html += "<div class='col-md-3 col-sm-5 col-xs-7'><a class='portfolio-label' >"+this.label_node[langcode].text()+"</a> "+tree_type+"</div>";
 			html += "<div class='col-md-3 hidden-sm hidden-xs '><a class='portfolio-owner' >"+owner+"</a></div>";
@@ -1662,7 +1662,7 @@ UIFactory["Portfolio"].callRename = function(portfolioid,langcode,project)
 	var div = $("<div></div>");
 	var htmlFormObj = $("<form class='form-horizontal'></form>");
 	$(div).append($(htmlFormObj));
-	if (USER.creator || USER.admin) {
+	if ((USER.creator && !USER.limited)  || USER.admin) {
 		var htmlCodeGroupObj = $("<div class='form-group'></div>")
 		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code <a href='javascript://' id='code_help'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a></label>");
 		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
@@ -1680,7 +1680,7 @@ UIFactory["Portfolio"].callRename = function(portfolioid,langcode,project)
 		$(htmlCodeGroupObj).append($(htmlCodeDivObj));
 		$(htmlFormObj).append($(htmlCodeGroupObj));
 	}
-	if (USER.creator || USER.admin) {
+	if ((USER.creator && !USER.limited)  || USER.admin) {
 		var htmlLabelGroupObj = $("<div class='form-group'></div>")
 		var htmlLabelLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");

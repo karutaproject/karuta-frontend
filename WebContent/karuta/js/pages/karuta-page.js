@@ -162,7 +162,7 @@ function getSearch()
 	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"' onchange='javascript:hideArchiveSearch()'>";
 	html += "	<span class='input-group-btn'>";
 	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><span class='glyphicon glyphicon-search'></span></button>";
-	if (USER.creator) {
+	if (USER.creator && !USER.limited)  {
 		html += "		<a id='archive-button' href='' class='btn' disabled='true'><i style='margin-top:4px' class='fa fa-download'></i></a>";
 		html += "		<button id='remove-button' type='button' disabled='true' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fa fa-trash-o'></i></button>";
 	}

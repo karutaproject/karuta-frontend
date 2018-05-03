@@ -298,6 +298,7 @@ karutaStr['fr']['portfolios-admin']="Portfolios";
 karutaStr['fr']['bin-admin']="Poubelle";
 karutaStr['fr']['substitute']="Substitution";
 karutaStr['fr']['select_user']="Select unusager";
+karutaStr['fr']['other']="Autre";
 
 //=========================================
 //========== ROLES ========================

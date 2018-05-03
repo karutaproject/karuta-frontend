@@ -298,6 +298,7 @@ karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['substitute']="Substitution";
 karutaStr['en']['select_user']="Select a User";
+karutaStr['en']['other']="Other";
 
 //=========================================
 //========== ROLES ========================

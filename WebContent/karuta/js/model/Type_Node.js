@@ -1016,7 +1016,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			var buttons_color = eval($(".button").css("color"));
 			var buttons_background_style = UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
 			if (buttons_background_style!="") {
-				var buttons_background_color = buttons_background_style.substring(buttons_background_style.indexOf(":")+1,buttons_background_style.indexOf(";"))
+				var buttons_background_color = buttons_background_style.substring(buttons_background_style.indexOf(":")+1,buttons_background_style.indexOf(";"));
 				if (buttons_background_color==buttons_color)
 					if (buttons_color!="#000000")
 						changeCss("#node_"+uuid+" .button", "color:black;");
@@ -1025,8 +1025,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			}
 			var buttons_node_background_style = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
 			if (buttons_node_background_style!="") {
-				var buttons_node_background_color = buttons_node_background_style.substring(buttons_node_background_style.indexOf(":")+1,buttons_node_background_style.indexOf(";"))
-				if (buttons_background_color==buttons_color)
+				var buttons_node_background_color = buttons_node_background_style.substring(buttons_node_background_style.indexOf(":")+1,buttons_node_background_style.indexOf(";"));
+				if (buttons_node_background_color==buttons_color)
 					if (buttons_color!="#000000")
 						changeCss("#node_"+uuid+" .button", "color:black;");
 					else
