@@ -846,7 +846,10 @@ function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
 			portfolioid = portfolios_list[j].id;
 			var code = portfolios_list[j].code_node.text();
 			if (select.indexOf("code*=")>-1) {
-				value = select.substring(7,select.length-1);  // inside quote
+				if (select.indexOf("'")>-1)
+					value = select.substring(7,select.length-1);  // inside quote
+				else
+					value = eval("json.lines["+line+"]."+select.substring(6));
 				condition = code.indexOf(value)>-1;
 			}
 			if (select.indexOf("code=")>-1) {

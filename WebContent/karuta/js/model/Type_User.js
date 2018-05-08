@@ -543,7 +543,7 @@ UIFactory["User"].create = function()
 	xml +="	<lastname>"+$("#user_lastname").val()+"</lastname>";
 	xml +="	<firstname>"+$("#user_firstname").val()+"</firstname>";
 	xml +="	<email>"+$("#user_email").val()+"</email>";
-	xml +="	<other>"+$("#user_other").val()+"</otheril>";
+	xml +="	<other>"+$("#user_other").val()+"</other>";
 	xml +="	<password>"+$("#user_password").val()+"</password>";
 	xml +="	<active>"+$("input[name=user_active]:checked").val()+"</active>";
 	xml +="	<admin>"+$("input[name=user_admin]:checked").val()+"</admin>";
