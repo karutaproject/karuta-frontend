@@ -32,6 +32,8 @@ function fill_main_page(rootid,role)
 		if ($($(UICom.structure.ui[rootid].node).parent())) {
 			g_portfolioid = parentid;
 			g_complex = portfolios_byid[parentid].complex;
+			if (typeof g_complex=='undefined' || g_complex==undefined || g_complex.lenght==0)
+				g_complex = false;
 		} else {
 			rootid = g_portfolio_rootid;
 		}

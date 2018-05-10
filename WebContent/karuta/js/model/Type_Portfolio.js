@@ -1629,8 +1629,8 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolioid+"')\" >"+karutaStr[LANG]["addshare-users"]+"</a></li>";
 		html += "<li><a onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolioid+"')\" >"+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
 	}
-	html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a></li>";
 	if (USER.admin || g_userroles[0]=='designer') {
+		html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a></li>";
 		html += "<li><a href='../../../"+serverBCK_API+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a></li>";
 		html += "<li><a  onclick=\"toggleMetadata('hidden')\">"+karutaStr[LANG]['hide-metainfo']+"</a></li>";
 		html += "<li><a  onclick=\"toggleMetadata('visible')\">"+karutaStr[LANG]['show-metainfo']+"</a></li>";
@@ -2410,11 +2410,14 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 		html += "	</li>";
 	}
 	//-------------------- ACTIONS----------------------
-	html += "		<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >Actions<span class='caret'></span></a>";
-	html += "			<ul class='dropdown-menu actions'>";
-	html += UIFactory["Portfolio"].getActions(portfolioid);
-	html += "			</ul>";
-	html += "		</li>";
+	var actions = UIFactory["Portfolio"].getActions(portfolioid);
+	if (actions!='') {
+		html += "		<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >Actions<span class='caret'></span></a>";
+		html += "			<ul class='dropdown-menu actions'>";
+		html += actions;
+		html += "			</ul>";
+		html += "		</li>";
+	}
 	//-------------------- ROLES-------------------------
 	if (g_userroles[0]=='designer') {
 		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >"+karutaStr[LANG]['role']+" : <span id='userrole'>designer</span><span class='caret'></span></a>";

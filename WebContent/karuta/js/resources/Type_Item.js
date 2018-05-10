@@ -144,7 +144,19 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 	var code = $(this.code_node).text();
 	var value = $(this.value_node).text();
 	var html = "";
+	if (g_userroles[0]=='designer' || USER.admin) {
 		html += "<div class='"+ code +"'></div><div>"+ code+ " " +label+ " ["+ value + "]</div> ";
+	} else {
+		html += "<div class='"+ code +"'></div>";
+		html += "<div>";
+		if (code.indexOf("#")>-1)
+			html += cleanCode(code) + " ";
+		if (code.indexOf("%")<0)
+			html += label;
+		if (code.indexOf("&")>-1)
+			html += " ["+$(this.value_node).text()+ "] ";
+		html += "</div>";
+	}
 	return html;
 };
 
