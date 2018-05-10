@@ -435,7 +435,7 @@ function r_processTable(no,xmlDoc,destid,data,line)
 	for (var i=0; i<children.length;i++){
 		var tagname = $(children[i])[0].tagName;
 		if (tagname=="for-each-line")
-			r_processLine(no+"_"+i,xmlDoc,'table_'+no,data,'table_'+no);
+			r_processLine(no+"_"+i,children[i],'table_'+no,data,'table_'+no);
 		if (tagname=="for-each-person")
 			r_getUsers(no+"_"+i,children[i],'table_'+no,data,line);
 		if (tagname=="for-each-portfolio")
@@ -742,11 +742,17 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 		var code = portfolios_list[j].code_node.text();
 //		alertHTML(j+"-"+code);
 		if (select.indexOf("code*=")>-1) {
-			value = select.substring(7,select.length-1);  // inside quote
+			if (select.indexOf("'")>-1)
+				value = select.substring(7,select.length-1);  // inside quote
+			else
+				value = eval("json.lines["+line+"]."+select.substring(6));
 			condition = code.indexOf(value)>-1;
 		}
 		if (select.indexOf("code=")>-1) {
-			value = select.substring(6,select.length-1);  // inside quote
+			if (select.indexOf("'")>-1)
+				value = select.substring(6,select.length-1);  // inside quote
+			else
+				value = eval("json.lines["+line+"]."+select.substring(5));
 			condition = code==value;
 		}
 		if (select.length==0) {
