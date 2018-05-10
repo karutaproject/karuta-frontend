@@ -694,16 +694,27 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 		for ( var j = 0; j < portfolios_list.length; j++) {
 			portfolioid = portfolios_list[j].id;
 			var code = portfolios_list[j].code_node.text();
+			//------------------------------------
 			if (select.indexOf("code*=")>-1) {
-				value = select.substring(7,select.length-1);  // inside quote
+				if (select.indexOf("'")>-1)
+					value = select.substring(7,select.length-1);  // inside quote
+				else if (select.indexOf("//")>-1)
+					value = eval("json."+select.substring(8));
+				else
+					value = eval("json.lines["+line+"]."+select.substring(6));
 				condition = code.indexOf(value)>-1;
 			}
 			if (select.indexOf("code=")>-1) {
 				if (select.indexOf("'")>-1)
 					value = select.substring(6,select.length-1);  // inside quote
+				else if (select.indexOf("//")>-1)
+					value = eval("json."+select.substring(7));
 				else
 					value = eval("json.lines["+line+"]."+select.substring(5));
 				condition = code==value;
+			}
+			if (select.length==0) {
+				condition = true;;
 			}
 			//------------------------------------
 			if (condition && sortag!=""){
@@ -740,10 +751,12 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 	//----------------------------------
 	for ( var j = 0; j < portfolios_list.length; j++) {
 		var code = portfolios_list[j].code_node.text();
-//		alertHTML(j+"-"+code);
+		//------------------------------------
 		if (select.indexOf("code*=")>-1) {
 			if (select.indexOf("'")>-1)
 				value = select.substring(7,select.length-1);  // inside quote
+			else if (select.indexOf("//")>-1)
+				value = eval("json."+select.substring(8));
 			else
 				value = eval("json.lines["+line+"]."+select.substring(6));
 			condition = code.indexOf(value)>-1;
@@ -751,6 +764,8 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 		if (select.indexOf("code=")>-1) {
 			if (select.indexOf("'")>-1)
 				value = select.substring(6,select.length-1);  // inside quote
+			else if (select.indexOf("//")>-1)
+				value = eval("json."+select.substring(7));
 			else
 				value = eval("json.lines["+line+"]."+select.substring(5));
 			condition = code==value;
