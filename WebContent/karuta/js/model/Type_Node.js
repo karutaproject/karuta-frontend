@@ -2454,7 +2454,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				html += "<div id='metaepm_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
 				//--------------------------------------------------*/
 				if (root.children.length>0 && depth>0) {
-					if (semtag=="asmNop" || semtag=="node_resource" || semtag=="draw-web-axis" || semtag=="draw-web-line" || semtag=="text" || semtag=="aggregate" || semtag=="url2unit")
+					if (semtag=="asmNop" || semtag=="node_resource" || semtag=="draw-web-axis" || semtag=="draw-web-line" || semtag=="text" || semtag=="aggregate" || semtag=="url2unit" || semtag=="csv-value")
 						html += "<div id='content-"+uuid+"' class='row'></div>";
 					else
 						html += "<div id='content-"+uuid+"' class='model-content'></div>";
@@ -3128,7 +3128,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 		}
 	}
 	//------------- share node button ---------------
-	if (shareroles!='none' && shareroles!='' && g_portfolioid!='') {
+	if (depth>0 && shareroles!='none' && shareroles!='' && g_portfolioid!='') {
 		try {
 			var shares = [];
 			var displayShare = [];
