@@ -539,12 +539,16 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 			var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+			var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 			if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
 				if(name == "asmUnit") // Click on Unit
 				{
 					var html = "";
 					var depth = 99;
-					html += "<div class='sidebar-item' id='parent-"+uuid+"' role='tablist'>";
+					html += "<div class='sidebar-item ";
+					if (privatevalue)
+						html+= "private"
+					html += "' id='parent-"+uuid+"' role='tablist'>";
 					html += "  <a style='cursor:pointer' id='sidebar_"+uuid+"' class='sidebar-link' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</a>";
 					html += "</div><!-- panel -->";
 					$("#"+destid).append($(html));
@@ -553,7 +557,10 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				{
 					var depth = 1;
 					var html = "";
-					html += "<div class='sidebar-item' id='parent-"+uuid+"' role='tablist'>";
+					html += "<div class='sidebar-item ";
+					if (privatevalue)
+						html+= "private"
+					html += "' id='parent-"+uuid+"' role='tablist'>";
 					html += "  <div  class='sidebar-link' style='cursor:pointer' redisplay=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >";
 					if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
 						html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='glyphicon glyphicon-minus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
@@ -3278,6 +3285,7 @@ UIFactory['Node'].reloadUnit = function()
 				var window_uuid = $("#window-page").attr('uuid');
 				eval(redisplays[window_uuid]);
 			}
+			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
 			$('#wait-window').modal('hide');
 		}
 	});
