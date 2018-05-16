@@ -73,63 +73,78 @@ function toggleReplyBox(objectid,tabid)
 function displaySocialNetwork()
 //==================================
 {
-	getElggUser();
-	if (g_elgg_userid!=null) {
-		setUserGroups($(USER.username_node).text());
-		var html = "";
-		$("#socialnetwork-head").html($(html));
-		html += "<div class='hello'>"+snStr[LANG]['hello'] + " " + USER.firstname_node.text()+" "+USER.lastname_node.text()+"</div>";
-		$("#socialnetwork-head").append($(html));
-		$("#socialnetwork-head").append($("<div class='welcome-line'></div>"));
-		html  = "<div class='row'>";
-		html += "	<div class='col-md-3 user'><i class='fa fa-users'></i></div>";
-		html += "	<div class='col-md-9 publish'>";
-		html += "		<div class='form-group'>";
-		html += "			<label class='control-label' for='wire-message'>"+snStr[LANG]["something_to_publish"]+"</label>";
-		html += "			<textarea class='form-control' rows='3' id='wire-message'></textarea>";
-		html += "			<table><tr>";
-		html += "				<td class='publish-button'>";
-		html += "					<span onclick=\"postWire('socialnetwork-body');\" class='action-button'>"+snStr[LANG]["publish"]+"</span>";
-		html += "				</td>";
-		html += "				<td class='publish_on'>&nbsp;"+snStr[LANG]["publish_on"]+"&nbsp;</td> ";
-		html += "				<td class='group-button'>";
-		html += "					<span class='dropdown dropdown-button'>";
-		html += "						<span data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span id='publish-group' value='0'>Public</span>&nbsp;<span class='caret'></span></span>";
-		html += "						<ul id='select-group' class='dropdown-menu' role='menu' aria-labelledby='list-menu'>";
-		html += "						</ul>";
-		html += "					</span>";
-		html += "				</td>";
-		html += "			</tr></table>";
-		html += "		</div>";
-		html += "	</div>";
-		html += "</div>";
-		$("#socialnetwork-head").append(html);
-	
-		html = "<div class='panels'>";
-	
-		html += "	<ul class='nav nav-tabs' role='tablist'>";
-		html += "		<li role='presentation' class='active'><a href='#activities' aria-controls='activities' role='tab' data-toggle='tab'>"+snStr[LANG]["activities"]+"</a></li>";
-		html += "		<li role='presentation'><a href='#public' aria-controls='public' role='tab' data-toggle='tab'>"+snStr[LANG]["public"]+"</a></li>";
-		html += "		<li role='presentation'><a href='#groups' aria-controls='groups' role='tab' data-toggle='tab'>"+snStr[LANG]["groups"]+"</a></li>";
-		html += "	</ul>";
-	
-		  <!-- Tab panes -->
-		html += "	<div class='tab-content'>";
-		html += "		<div role='tabpanel' class='tab-pane active' id='activities'></div>";
-		html += "		<div role='tabpanel' class='tab-pane' id='public'>...</div>";
-		html += "		<div role='tabpanel' class='tab-pane' id='groups'>...</div>";
-		html += "	</div>";
-	
-		html += "</div>";
-		display_select_group("select-group");
-		$("#socialnetwork-body").html(html);
-		//------------------------------
-		getRiverFeed('activities');
-		getWall('public');
-		displayGroupWalls('groups');
-	} else {
-		$("#socialnetwork-body").html(snStr[LANG]["not-logged"]);		
-	}
+	var url = "../../../../"+elgg_url_base+"services/api/rest/xml";
+	var data = "auth_token="+g_elgg_key+"&method=auth.getuser";
+	$.ajax({
+		dataType : "json",
+		type : "GET",
+		url : url,
+		data : data,
+		success : function(data) {
+			if (data.status!=-1)
+				g_elgg_userid = data.result.guid;
+			else
+				g_elgg_userid = null;
+			if (g_elgg_userid!=null) {
+				setUserGroups($(USER.username_node).text());
+				var html = "";
+				$("#socialnetwork-head").html($(html));
+				html += "<div class='hello'>"+snStr[LANG]['hello'] + " " + USER.firstname_node.text()+" "+USER.lastname_node.text()+"</div>";
+				$("#socialnetwork-head").append($(html));
+				$("#socialnetwork-head").append($("<div class='welcome-line'></div>"));
+				html  = "<div class='row'>";
+				html += "	<div class='col-md-3 user'><i class='fa fa-users'></i></div>";
+				html += "	<div class='col-md-9 publish'>";
+				html += "		<div class='form-group'>";
+				html += "			<label class='control-label' for='wire-message'>"+snStr[LANG]["something_to_publish"]+"</label>";
+				html += "			<textarea class='form-control' rows='3' id='wire-message'></textarea>";
+				html += "			<table><tr>";
+				html += "				<td class='publish-button'>";
+				html += "					<span onclick=\"postWire('socialnetwork-body');\" class='action-button'>"+snStr[LANG]["publish"]+"</span>";
+				html += "				</td>";
+				html += "				<td class='publish_on'>&nbsp;"+snStr[LANG]["publish_on"]+"&nbsp;</td> ";
+				html += "				<td class='group-button'>";
+				html += "					<span class='dropdown dropdown-button'>";
+				html += "						<span data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span id='publish-group' value='0'>Public</span>&nbsp;<span class='caret'></span></span>";
+				html += "						<ul id='select-group' class='dropdown-menu' role='menu' aria-labelledby='list-menu'>";
+				html += "						</ul>";
+				html += "					</span>";
+				html += "				</td>";
+				html += "			</tr></table>";
+				html += "		</div>";
+				html += "	</div>";
+				html += "</div>";
+				$("#socialnetwork-head").append(html);
+			
+				html = "<div class='panels'>";
+			
+				html += "	<ul class='nav nav-tabs' role='tablist'>";
+				html += "		<li role='presentation' class='active'><a href='#activities' aria-controls='activities' role='tab' data-toggle='tab'>"+snStr[LANG]["activities"]+"</a></li>";
+				html += "		<li role='presentation'><a href='#public' aria-controls='public' role='tab' data-toggle='tab'>"+snStr[LANG]["public"]+"</a></li>";
+				html += "		<li role='presentation'><a href='#groups' aria-controls='groups' role='tab' data-toggle='tab'>"+snStr[LANG]["groups"]+"</a></li>";
+				html += "	</ul>";
+			
+				html += "	<div class='tab-content'>";
+				html += "		<div role='tabpanel' class='tab-pane active' id='activities'></div>";
+				html += "		<div role='tabpanel' class='tab-pane' id='public'>...</div>";
+				html += "		<div role='tabpanel' class='tab-pane' id='groups'>...</div>";
+				html += "	</div>";
+			
+				html += "</div>";
+				display_select_group("select-group");
+				$("#socialnetwork-body").html(html);
+				//------------------------------
+				getRiverFeed('activities');
+				getWall('public');
+				displayGroupWalls('groups');
+			} else {
+				$("#socialnetwork-body").html(snStr[LANG]["not-logged"]);		
+			}
+		},
+		error : function(jqxhr,textStatus) {
+//			alert("getElggUser : Oups! "+jqxhr.responseText);
+		}
+	});
 }
 
 

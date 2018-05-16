@@ -82,7 +82,7 @@ function loadJS(url)
 
 //------ ELGG SOCIAL NETWORK ----------------------------
 var elgg_installed = false;
-var elgg_url_base = 'elgg/';
+var elgg_url_base = 'elgg112/';
 var elgg_refreshing = 240000; // 240 seconds
 //------ BUBBLE MAP -------------------------------------
 var bubble_installed = true;
