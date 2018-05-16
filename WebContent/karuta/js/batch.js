@@ -1728,3 +1728,48 @@ function display_execBatch()
 	//---------------------
 	$('#edit-window').modal('show');
 };
+
+//==================================================
+function execReport_BatchForm(parentid,title,codeReport,codeBatch)
+//==================================================
+{
+	csvreport = [];
+	$.ajaxSetup({async: false});
+	report_getModelAndPortfolio(codeReport,g_portfolio_current,null,g_dashboard_models);
+	$.ajaxSetup({async: true});
+	initBatchVars();
+	if (csvreport.length>3) {
+		var codesLine = csvreport[0].substring(0,csvreport[0].length-1).split(csvseparator);
+		g_json = convertCSVLine2json(codesLine,csvreport[1]);
+		g_json['model_code'] = codeBatch;
+		g_json['lines'] = [];
+		/*
+		for ( var i = 0; i < codesLine.length; i++) {
+			alert(codesLine[i]+"/"+g_json[codesLine[i]]);
+		}
+		*/
+		codesLine = csvreport[2].substring(0,csvreport[2].length-1).split(csvseparator);
+		for (var i=3; i<csvreport.length;i++){
+			//alert(csvreport[i]);
+			g_json.lines[g_json.lines.length] = convertCSVLine2json(codesLine,csvreport[i]);
+		}
+		//------------------------------
+		display_execBatch()
+		//------------------------------
+		getModelAndProcess(g_json.model_code);		
+	} else  {
+		alertHTML("No report data for batch execution!");
+	}
+};
+
+//==================================================
+function convertCSVLine2json(codes,csvline)
+//==================================================
+{
+	var items = csvline.split(csvseparator);
+	var g_json_line = {};
+	for ( var i = 0; i < codes.length; i++) {
+		g_json_line[codes[i]] = items[i];
+	}
+	return g_json_line;
+};
