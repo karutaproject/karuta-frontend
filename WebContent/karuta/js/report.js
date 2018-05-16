@@ -518,7 +518,7 @@ function r_processCell(no,xmlDoc,destid,data,line)
 		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
 		$("#help_"+no).html(help);
 		$(".popinfo").popover({ 
-		    placement : 'right',
+		    placement : 'bottom',
 		    container : 'body',
 		    title:karutaStr[LANG]['help-label'],
 		    html : true,
@@ -785,6 +785,8 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 				j : j,
 				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 				success : function(data) {
+					UICom.structure["tree"] = {};
+					UICom.structure["ui"] = {};
 					UICom.parseStructure(data,true, null, null,true);
 					var children = $(">*",xmlDoc);
 					for (var i=0; i<children.length;i++){
@@ -937,6 +939,8 @@ function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
 				j : j,
 				url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+nodetag,
 				success : function(data) {
+					UICom.structure["tree"] = {};
+					UICom.structure["ui"] = {};
 					UICom.parseStructure(data,true, null, null,true);
 					var children = $(">*",xmlDoc);
 					for (var i=0; i<children.length;i++){
