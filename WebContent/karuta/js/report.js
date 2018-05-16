@@ -1262,7 +1262,7 @@ function r_processEuropass(xmlDoc,destid,data)
 //=============================================================================
 
 //==================================
-function r_processText(xmlDoc,destid,data)
+r_processText(xmlDoc,destid,data,line,is_out_csv)
 //==================================
 {
 	var nodeid = $(data).attr("id");
@@ -1278,8 +1278,6 @@ function r_processText(xmlDoc,destid,data)
 	$("#"+destid).append($(text));
 	$("#"+nodeid,$("#"+destid)).attr("style",style);
 }
-
-
 
 //=============================================================================
 //=============================================================================
