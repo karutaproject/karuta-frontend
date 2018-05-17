@@ -34,6 +34,9 @@
 		<xsl:variable name="password">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='password']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="other">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='other']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="designer">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='designer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
@@ -53,6 +56,9 @@
 			<password>
 				<txtval select='{$password}'/>
 			</password>
+			<other>
+				<txtval select='{$other}'/>
+			</other>
 			<designer>
 				<txtval><xsl:value-of select="$designer"/></txtval>
 			</designer>
@@ -237,6 +243,19 @@
 		</share-tree>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='set-owner']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<set-owner select="{$id}">
+			<user>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">person</xsl:with-param>
+				</xsl:call-template>
+			</user>
+		</set-owner>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='join-portfoliogroup']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
@@ -329,6 +348,21 @@
 				</xsl:call-template>
 			</text>
 		</update-resource>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-field-byid']">
+		<update-field-byid>
+			<uuid>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">uuid</xsl:with-param>
+				</xsl:call-template>
+			</uuid>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-field-byid>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-node-resource']">

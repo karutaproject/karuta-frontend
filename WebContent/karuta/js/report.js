@@ -1140,7 +1140,6 @@ function r_processCsvLine(no,xmlDoc,destid,data,line)
 		if (tagname=="username")
 			r_processAddUsername(true);
 	};
-	alert (csvline);
 	csvreport[csvreport.length]=csvline;
 	$.ajax({
 		type : "POST",
@@ -1210,6 +1209,9 @@ function r_processCsvValue(xmlDoc,destid,data)
 			}
 			if (selector.type=='node value') {
 				text = UICom.structure["ui"][nodeid].getValue();
+			}
+			if (selector.type=='uuid') {
+				text = nodeid;
 			}
 			if (selector.type=='node context') {
 				text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
