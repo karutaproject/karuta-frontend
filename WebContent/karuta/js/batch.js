@@ -1801,7 +1801,7 @@ function display_execBatch()
 };
 
 //==================================================
-function execReport_BatchForm(parentid,title,codeReport,codeBatch)
+function execReport_BatchCSV(parentid,title,codeReport)
 //==================================================
 {
 	csvreport = [];
@@ -1812,7 +1812,7 @@ function execReport_BatchForm(parentid,title,codeReport,codeBatch)
 	if (csvreport.length>3) {
 		var codesLine = csvreport[0].substring(0,csvreport[0].length-1).split(csvseparator);
 		g_json = convertCSVLine2json(codesLine,csvreport[1]);
-		g_json['model_code'] = codeBatch;
+//		g_json['model_code'] = codeBatch;
 		g_json['lines'] = [];
 		codesLine = csvreport[2].substring(0,csvreport[2].length-1).split(csvseparator);
 		for (var i=3; i<csvreport.length;i++){
@@ -1822,7 +1822,8 @@ function execReport_BatchForm(parentid,title,codeReport,codeBatch)
 		display_execBatch()
 		//------------------------------
 		getModelAndProcess(g_json.model_code);		
-	} else  {
+		UIFactory.Node.reloadUnit();
+		} else  {
 		alertHTML("No report data for batch execution!");
 	}
 };
