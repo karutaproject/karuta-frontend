@@ -170,6 +170,7 @@ g_actions['create-user'] = function createUser(node)
 	var email = getTxtvals($("email",node));
 	var designer = getTxtvals($("designer",node));
 	var password = getTxtvals($("password",node));
+	var other = getTxtvals($("other",node));
 	if (designer==undefined || designer=='')
 		designer ='0';
 	//---- get userid ----------
@@ -196,6 +197,7 @@ g_actions['create-user'] = function createUser(node)
 			xml +="	<email>"+email+"</email>";
 			xml +="	<password>"+password+"</password>";
 			xml +="	<active>1</active>";
+			xml +="	<other>"+other+"</other>";
 			xml +="	<admin>0</admin>";
 			xml +="	<designer>"+designer+"</designer>";
 			xml +="</user>";
@@ -905,6 +907,7 @@ function updateField(nodes,node,type,semtag,text)
 	}
 }
 
+
 //=================================================
 function updateProxy(nodes,node,type,semtag)
 //=================================================
@@ -1132,6 +1135,32 @@ function updateNodeResource(nodes,node)
 	}
 }
 
+//=================================================
+g_actions['update-field-byid'] = function updateFieldById(node)
+//=================================================
+{
+	var text = getTxtvals($("text",node));
+	var nodeid = getTxtvals($("uuid",node));
+	var xml = "<asmResource xsi_type='Field'>";
+	xml += "<text lang='"+LANG+"'>"+text+"</text>";
+	xml += "</asmResource>";
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		data : xml,
+		url : serverBCK_API+"/resources/resource/" + nodeid,
+		success : function(data) {
+			$("#batch-log").append("<br>- resource updated ("+nodeid+")");
+			processNextAction();
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***ERROR in update resource("+nodeid+")");
+			processNextAction();
+		}
+	});
+}
+
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -1194,6 +1223,52 @@ g_actions['share-tree'] = function shareTree(node)
 		}
 	});
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Set Owner Tree ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['set-owner'] = function setOwner(node)
+//=================================================
+{
+	var user = "";
+	var treeref = $(node).attr("select");
+	var user = getTxtvals($("user",node));
+	//---- get userid ----------
+	var url = serverBCK_API+"/users/user/username/"+user;
+	$.ajax({
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			var userid = data;
+			//---- set owner --------------
+			var url = serverBCK_API+"/portfolios/portfolio/" + g_trees[treeref][0] + "/setOwner/" + userid;
+			$.ajax({
+				type : "PUT",
+				dataType : "text",
+				url : url,
+				success : function(data) {
+					$("#batch-log").append("<br>- tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
+					processNextAction();
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***ERROR tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
+					processNextAction();
+				}
+			});
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***ERROR tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
+			processNextAction();
+		}
+	});
+}
+
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -1329,11 +1404,7 @@ g_actions['unshare-tree'] = function unshareTree(node)
 	var user = "";
 	var treeref = $(node).attr("select");
 	var role = getTxtvals($("role",node));
-	var select_user = $("user>txtval",node).attr("select");
-	if(typeof(select_user)=='undefined')
-		user = $("user>txtval",node).text();
-	else
-		user = eval("g_json.lines["+g_noline+"]."+select_user);
+	var user = getTxtvals($("user",node));
 	//---- get userid ----------
 	var url = serverBCK_API+"/users/user/username/"+user;
 	$.ajax({
@@ -1730,7 +1801,7 @@ function display_execBatch()
 };
 
 //==================================================
-function execReport_BatchForm(parentid,title,codeReport,codeBatch)
+function execReport_BatchCSV(parentid,title,codeReport)
 //==================================================
 {
 	csvreport = [];
@@ -1741,23 +1812,18 @@ function execReport_BatchForm(parentid,title,codeReport,codeBatch)
 	if (csvreport.length>3) {
 		var codesLine = csvreport[0].substring(0,csvreport[0].length-1).split(csvseparator);
 		g_json = convertCSVLine2json(codesLine,csvreport[1]);
-		g_json['model_code'] = codeBatch;
+//		g_json['model_code'] = codeBatch;
 		g_json['lines'] = [];
-		/*
-		for ( var i = 0; i < codesLine.length; i++) {
-			alert(codesLine[i]+"/"+g_json[codesLine[i]]);
-		}
-		*/
 		codesLine = csvreport[2].substring(0,csvreport[2].length-1).split(csvseparator);
 		for (var i=3; i<csvreport.length;i++){
-			//alert(csvreport[i]);
 			g_json.lines[g_json.lines.length] = convertCSVLine2json(codesLine,csvreport[i]);
 		}
 		//------------------------------
 		display_execBatch()
 		//------------------------------
 		getModelAndProcess(g_json.model_code);		
-	} else  {
+		UIFactory.Node.reloadUnit();
+		} else  {
 		alertHTML("No report data for batch execution!");
 	}
 };

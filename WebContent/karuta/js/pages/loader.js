@@ -35,6 +35,7 @@ function loadKarutaPage(url)
 		    	'KARUTA-CONFIG': "'"+karuta_config+"'"
 		    }
 		  };
+	loadLESS(url+"/application/css/color.less");
 	loadLESS(url+"/karuta/css/karuta.less");
 	loadJS(url+"/other/js/less.min.js")
 	//--------------------------------------------------------------

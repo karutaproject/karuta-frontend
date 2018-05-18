@@ -21,6 +21,8 @@ var variables = {};
 var refresh = true;
 var csvline = "";
 
+var csvreport = null;
+
 var dashboard_infos = {};
 var dashboard_current = null;
 var portfolioid_current = null;
@@ -516,7 +518,7 @@ function r_processCell(no,xmlDoc,destid,data,line)
 		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
 		$("#help_"+no).html(help);
 		$(".popinfo").popover({ 
-		    placement : 'right',
+		    placement : 'bottom',
 		    container : 'body',
 		    title:karutaStr[LANG]['help-label'],
 		    html : true,
@@ -783,6 +785,8 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 				j : j,
 				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 				success : function(data) {
+					UICom.structure["tree"] = {};
+					UICom.structure["ui"] = {};
 					UICom.parseStructure(data,true, null, null,true);
 					var children = $(">*",xmlDoc);
 					for (var i=0; i<children.length;i++){
@@ -935,6 +939,8 @@ function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
 				j : j,
 				url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+nodetag,
 				success : function(data) {
+					UICom.structure["tree"] = {};
+					UICom.structure["ui"] = {};
 					UICom.parseStructure(data,true, null, null,true);
 					var children = $(">*",xmlDoc);
 					for (var i=0; i<children.length;i++){
@@ -1129,10 +1135,12 @@ function r_processCsvLine(no,xmlDoc,destid,data,line)
 			r_processNodeResource(children[i],destid,data,line);
 		if (tagname=="csv-value")
 			r_processCsvValue(children[i],destid,data,line);
+		if (tagname=="text")
+			r_processText(children[i],destid,data,line,true);
 		if (tagname=="username")
-			r_processUsername(children[i],destid,data,line);
+			r_processAddUsername(true);
 	};
-	alert (csvline);
+	csvreport[csvreport.length]=csvline;
 	$.ajax({
 		type : "POST",
 		contentType: "text",
@@ -1142,6 +1150,24 @@ function r_processCsvLine(no,xmlDoc,destid,data,line)
 		success : function() {
 		}
 	}); 
+}
+
+//==================================
+function r_processAddUsername(is_out_csv,destid,data)
+//==================================
+{
+	var text = USER.username_node.text();
+	//-----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		var nodeid = $(data).attr("id");
+		text = "<span id='"+nodeid+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+	//-----------------
 }
 
 //==================================
@@ -1183,6 +1209,9 @@ function r_processCsvValue(xmlDoc,destid,data)
 			}
 			if (selector.type=='node value') {
 				text = UICom.structure["ui"][nodeid].getValue();
+			}
+			if (selector.type=='uuid') {
+				text = nodeid;
 			}
 			if (selector.type=='node context') {
 				text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
@@ -1255,14 +1284,8 @@ function r_processEuropass(xmlDoc,destid,data)
 	//------------------------------
 }
 
-//=============================================================================
-//=============================================================================
-//====================== TEXT =============================================
-//=============================================================================
-//=============================================================================
-
 //==================================
-r_processText(xmlDoc,destid,data,line,is_out_csv)
+function r_processText(xmlDoc,destid,data,line,is_out_csv)
 //==================================
 {
 	var nodeid = $(data).attr("id");
@@ -1274,32 +1297,17 @@ r_processText(xmlDoc,destid,data,line,is_out_csv)
 			aggregates[ref] = new Array();
 		aggregates[ref][aggregates[ref].length] = text;
 	}
+	//-----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	}
+	//-----------------
 	text = "<span id='"+nodeid+"'>"+text+"</span>";
 	$("#"+destid).append($(text));
 	$("#"+nodeid,$("#"+destid)).attr("style",style);
 }
-
-//=============================================================================
-//=============================================================================
-//====================== USERNAME =============================================
-//=============================================================================
-//=============================================================================
-
-//==================================
-function r_processUsername(xmlDoc,destid,data)
-//==================================
-{
-	var username = USER.username;
-	if (typeof csvseparator == 'undefined') // for backward compatibility
-		csvseparator = ";";
-	csvline += text + csvseparator;
-	$("#"+destid).append($(username));
-}
-
-//=============================================================================
-//=============================================================================
-//=============================================================================
-//=============================================================================
 
 //==================================
 function refresh_report(dashboard_current)
