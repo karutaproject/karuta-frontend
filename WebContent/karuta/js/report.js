@@ -22,6 +22,7 @@ var refresh = true;
 var csvline = "";
 
 var csvreport = null;
+var report_not_in_a_portfolio = false;
 
 var dashboard_infos = {};
 var dashboard_current = null;
@@ -785,8 +786,10 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 				j : j,
 				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 				success : function(data) {
-					UICom.structure["tree"] = {};
-					UICom.structure["ui"] = {};
+					if (report_not_in_a_portfolio){
+						UICom.structure["tree"] = {};
+					UICo	m.structure["ui"] = {};
+					}
 					UICom.parseStructure(data,true, null, null,true);
 					var children = $(">*",xmlDoc);
 					for (var i=0; i<children.length;i++){
