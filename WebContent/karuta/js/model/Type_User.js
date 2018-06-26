@@ -31,7 +31,38 @@ if( UIFactory === undefined )
 UIFactory["User"] = function( node )
 //==================================
 {
-	this.id = $(node).attr('id');
+	// For compatibility
+  var xml=0;
+  if( node.selector != null )
+  { xml = node[0].outerHTML; }
+  else
+  { xml = node; }
+
+  parser = new DOMParser();
+  xmlDoc = parser.parseFromString(xml,"text/xml");
+  var p = xmlDoc.querySelector("user");
+  this.id = p.getAttribute("id");
+  this.node = xmlDoc;
+  this.attributes = {};
+  this.display = {};
+  var cds = p.children;
+  for( var i=0; i<cds.length; i++ )
+  {
+    var c = cds[i];
+    var nn = c.nodeName;
+    var nc = c.textContent;
+    this[nn] = nc;
+    // For compatibility
+    this[nn+"_node"] = c;
+    this.attributes[nn] = c;
+  }
+  // setting flags
+  this.admin = this.admin == "1";
+  this.creator = this.designer == "1" || this.admin;
+  this.limited = this.other.indexOf('limited')>-1;
+  
+	/*
+  this.id = $(node).attr('id');
 	this.node = node;
 	this.firstname = $("firstname",node).text();
 	this.lastname = $("lastname",node).text();
@@ -52,7 +83,6 @@ UIFactory["User"] = function( node )
 		this.other_node = $("other",node);
 	}
 	//-----------------------------------
-	this.attributes = {};
 	this.attributes["username"] = this.username_node;
 	this.attributes["firstname"] = this.firstname_node;
 	this.attributes["lastname"] = this.lastname_node;
@@ -68,7 +98,7 @@ UIFactory["User"] = function( node )
 	this.creator = this.designer_node.text()=='1' || this.admin_node.text()=='1';
 	this.limited = this.other_node.text().indexOf('limited')>-1;
 	//-----------------------------------
-	this.display = {};
+	//*/
 };
 
 
