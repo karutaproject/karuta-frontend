@@ -12,6 +12,7 @@ function show_exec_report()
 	$("#refresh").attr("onclick","fill_exec_report()");
 	$("#refresh").show();
 	$("#main-exec-report").show();
+	report_not_in_a_portfolio = true;
 }
 
 //==============================
