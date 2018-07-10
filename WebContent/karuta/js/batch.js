@@ -772,7 +772,7 @@ g_actions['update-resource'] = function updateResource(node)
 					updateProxy(nodes,node,type,semtag);
 				}
 				if (type=='Dashboard') {
-					updateDashboard(nodes,node,type,semtag);
+					updateDashboard(nodes,node,type,semtag,text);
 				}
 				if (type=='Metadata'){
 					var attribute = $(node).attr("attribute");
@@ -1524,38 +1524,53 @@ g_actions['unshare-usergroup'] = function unshareUserGroup(node)
 g_actions['import-node'] = function importNode(node)
 //=================================================
 {
-	var select = $(node).attr("select");
-	var idx = select.lastIndexOf(".");
-	var treeref = select.substring(0,idx);
-	var semtag = select.substring(idx+1);
+	//------------------------------------
 	var source = getTxtvals($("source",node));
 	if (source=='') // for backward compatibility
 		source = $(node).attr("source");
 	var idx_source = source.lastIndexOf(".");
 	var srcecode = source.substring(0,idx_source);
 	var srcetag = source.substring(idx_source+1);
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
-		success : function(data) {
-			var nodes = $("node",data);
-			import_nodes(nodes,semtag,source,srcetag,srcecode);
-		},
-		error : function(data) {
-			$("#batch-log").append("<br>- ERROR in import NOT FOUND - semtag="+semtag+ " source="+source);
-			processNextAction();
-		}
-	});
+	//------------------------------------
+	var select = $(node).attr("select");
+	if (select=='#current_node'){
+		var nodes = select;
+		import_nodes(nodes,'',source,srcetag,srcecode);
+	} else {
+		var idx = select.lastIndexOf(".");
+		var treeref = select.substring(0,idx);
+		var semtag = select.substring(idx+1);
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			success : function(data) {
+				var nodes = $("node",data);
+				import_nodes(nodes,semtag,source,srcetag,srcecode);
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ERROR in import NOT FOUND - semtag="+semtag+ " source="+source);
+				processNextAction();
+			}
+		});
+	}
+
 }
 
 //===========================
 function import_nodes(nodes,semtag,source,srcetag,srcecode)
 //===========================
 {
+	var destid = "";
 	if (nodes.length>0) {
-		var destid = $(nodes[0]).attr('id');
-		nodes = nodes.slice(1,nodes.length);
+		if (nodes=='#current_node') {
+			destid = g_current_node_uuid;
+			nodes = "";
+		}
+		else {
+			destid = $(nodes[0]).attr('id');
+			nodes = nodes.slice(1,nodes.length);
+		}
 		var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 		$.ajax({
 			type : "POST",
