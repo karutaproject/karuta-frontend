@@ -1194,6 +1194,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	$.ajax({
 		contentType: "application/xml",
 		type : "POST",
+		contentType: "text/plain",
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/mail",
 		data: xml,
@@ -1749,6 +1750,7 @@ function displayTechSupportForm(langcode)
 		$.ajax({
 			type : "POST",
 			dataType : "text",
+			contentType: "text/plain",
 			url : serverBCK+"/mail",
 			data: xml,
 			success : function() {
