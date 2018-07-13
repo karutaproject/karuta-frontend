@@ -67,7 +67,7 @@ karutaStr['fr']['saved']="Enregistré";
 karutaStr['fr']['password-sent']="Un nouveau mot de passe a été envoyé par courriel.";
 karutaStr['fr']['new-account']="Vous n'avez pas de compte?";
 karutaStr['fr']['sign-up']="Inscrivez-vous!";
-karutaStr['fr']['disconnected']="Oups! Vous avez été accidentellement déconnecté!";
+karutaStr['fr']['disconnected']="Oups! Vous avez peut-être été accidentellement déconnecté! Vérifiez en rechargeant la page.";
 karutaStr['fr']['demo-documentation']="Importer la documentation Karuta";
 karutaStr['fr']['demo-ecommerce']="Importer les portfolios démo eCommerce";
 karutaStr['fr']['demo-aacu']="Importer les portfolios démo AACU";
@@ -97,6 +97,7 @@ karutaStr['fr']['error-existing-login']="ERREUR - Le login existe déjà ou une 
 //=========================================
 
 karutaStr['fr']['label']="Libellé";
+karutaStr['fr']['code']="Code";
 karutaStr['fr']['value']="Valeur";
 karutaStr['fr']['edit']="Édition";
 karutaStr['fr']['comments']="Information complémentaire";

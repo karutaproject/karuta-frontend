@@ -49,10 +49,17 @@ function getTxtvals(node)
 		var select = $(txtvals[i]).attr("select");
 		var text = "";
 		if (select!=undefined && select!="") {
+			var fct = null;
+			if (select.indexOf('function(')>-1) {
+				fct = select.substring(9,select.indexOf(','))
+				select = select.substring(select.indexOf(',')+1,select.indexOf(')'))
+			}
 			if (select.indexOf("//")>-1)
 				text = eval("g_json."+select.substring(2));
 			else
 				text = eval("g_json.lines["+g_noline+"]."+select);
+			if (fct!=null)
+				text = eval(fct+"('"+text+"')");
 		} else {
 			text = $(txtvals[i]).text();
 			if (text.indexOf('numline()')>-1) {
@@ -95,6 +102,9 @@ function processAll()
 	g_nodesLine = selectAll();
 	g_noline = 0;
 	g_nodes = g_nodesLine;
+//	for (var i=0;i<g_nodes.length;i++){
+//		$("#batch-log").append("<br>"+$(g_nodes[i]).prop("nodeName"));
+//	}
 	processNextLine();
 }
 
@@ -121,10 +131,11 @@ function processNextLine()
 function processNextAction()
 //=================================================
 {
-	if (g_nodes.length>0) {
+		if (g_nodes.length>0) {
 		var actionnode = g_nodes[0];
 		g_nodes = g_nodes.slice(1, g_nodes.length);
 		var actiontype = $(actionnode).prop("nodeName");
+		$("#batch-log").append("<br>------------- "+actiontype+" -----------------");
 		if (typeof g_actions[actiontype] == "function" && actiontype!='for-each-line') {
 				g_actions[actiontype](actionnode);
 		} else {
@@ -576,12 +587,16 @@ g_actions['create-tree'] = function createTree(node)
 												processNextAction();
 											}
 										});
+									},
+									error : function(data) {
+										$("#batch-log").append("<br>- ***ERROR in  create tree - code:"+code);
+										processNextAction();
 									}
 								});
 							} else {
 								$("#batch-log").append("<br>- ***ERROR in  create tree update root label - code:"+code);
+								processNextAction();
 							}
-							processNextAction();
 						},
 						error : function(data) {
 							$("#batch-log").append("<br>- ***ERROR in  create tree - code:"+code);
@@ -806,7 +821,7 @@ g_actions['update-resource'] = function updateResource(node)
 				}
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
+				$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - uuid="+g_current_node_uuid+" semtag="+semtag);
 				processNextAction();
 			}
 		});

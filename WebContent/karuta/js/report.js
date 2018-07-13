@@ -1559,7 +1559,7 @@ function html2IMG(contentid)
 		svg += "</foreignObject>";
 		svg += "</svg>";
 //		alert(svg);
-		var htmlcanvas = "<canvas id='canvas' width='400' height='200'></canvas>"
+		var htmlcanvas = "<canvas id='canvas' width='400' height='400'></canvas>"
 /*		$("image-window-body").html(htmlcanvas)
 		rasterizeHTML.drawHTML(xml2string(htmlnode),canvas);
 		var DOMURL = window.URL || window.webkitURL || window;
