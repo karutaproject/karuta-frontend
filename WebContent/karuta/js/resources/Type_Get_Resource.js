@@ -497,6 +497,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		}
 		//-------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
+			var uuid = $(newTableau1[i][1]).attr('id');
 			var radio_obj = $("<div class='get-radio'></div>");
 			var input = "";
 			//------------------------------
@@ -520,7 +521,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
-				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+				if (target=='fileid')
+					input += "label_"+languages[j]+"=\"fileid-"+uuid+"\" ";
+				else
+					input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
 			if (code!="" && self_code==$('code',resource).text())
 				input += " checked ";
@@ -528,8 +532,12 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			input += "<span  class='sel"+code+"'>"
 			if (display_code)
 				input += code + " ";
-			if (display_label)
-				input += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+			if (display_label){
+				if (target=='label')
+					input += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+				if (target=='fileid')
+					input += UICom.structure["ui"][uuid].resource.getView(null,'span');
+			}
 			input += "</span></input>";
 			var obj = $(input);
 			$(obj).click(function (){
