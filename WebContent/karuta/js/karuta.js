@@ -1802,3 +1802,11 @@ function displayTechSupportForm(langcode)
 	$('#edit-window').modal('show')
 	//--------------------------
 }
+
+//==================================
+function convertDot2Dash(text) 
+//==================================
+{
+	return text.replace(/\./g, '-'); 
+}
+

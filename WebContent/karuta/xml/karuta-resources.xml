@@ -282,6 +282,8 @@
 			</asmResource>
 			<asmResource xsi_type="Image">
 				<lastmodified />
+				<code />
+				<value />
 				<filename lang="fr" />
 				<size lang="fr" />
 				<type lang="fr" />

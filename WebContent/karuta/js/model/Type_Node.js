@@ -1115,7 +1115,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//------------ Dashboard -----------------
 			if (nodetype == "asmContext" && node.resource.type=='Dashboard') {
 				report_not_in_a_portfolio = false;
-				$("#"+dest).append($("<div class='row'><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
+				$("#"+dest).append($("<div class='row'><div id='csv_button_"+uuid+"' class='dashboard-buttons col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div></div>"));
 				var root_node = g_portfolio_current;
 				genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
 				if (g_userroles[0]!='designer')

@@ -282,7 +282,7 @@ var UICom =
 			},
 			error : function(jqxhr,textStatus) {
 			alertHTML("Error in UpdateMeta : "+jqxhr.responseText);
-//				alertHTML(karutaStr[LANG]['disconnected']);
+				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
 			}
 		});
@@ -307,7 +307,7 @@ var UICom =
 			},
 			error : function(jqxhr,textStatus) {
 				alertHTML("Error in UpdateMetaWad : "+jqxhr.responseText);
-//				alertHTML(karutaStr[LANG]['disconnected']);
+				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
 			}
 		});
@@ -366,7 +366,7 @@ var UICom =
 			},
 			error : function(jqxhr,textStatus) {
 				alertHTML("Error in UpdateResource : "+jqxhr.responseText);
-//				alertHTML(karutaStr[LANG]['disconnected']);
+				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
 			}
 		});
@@ -413,7 +413,7 @@ var UICom =
 					},
 					error : function(jqxhr,textStatus) {
 						alertHTML("Error in UpdateNode : "+jqxhr.responseText);
-//						alertHTML(karutaStr[LANG]['disconnected']);
+						alertHTML(karutaStr[LANG]['disconnected']);
 //						window.location = "login.htm";
 					}
 				});

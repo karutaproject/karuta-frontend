@@ -67,7 +67,7 @@ karutaStr['fr']['saved']="Enregistré";
 karutaStr['fr']['password-sent']="Un nouveau mot de passe a été envoyé par courriel.";
 karutaStr['fr']['new-account']="Vous n'avez pas de compte?";
 karutaStr['fr']['sign-up']="Inscrivez-vous!";
-karutaStr['fr']['disconnected']="Oups! Vous avez été accidentellement déconnecté!";
+karutaStr['fr']['disconnected']="Oups! Vous avez peut-être été accidentellement déconnecté! Vérifiez en rechargeant la page.";
 karutaStr['fr']['demo-documentation']="Importer la documentation Karuta";
 karutaStr['fr']['demo-ecommerce']="Importer les portfolios démo eCommerce";
 karutaStr['fr']['demo-aacu']="Importer les portfolios démo AACU";
@@ -97,6 +97,7 @@ karutaStr['fr']['error-existing-login']="ERREUR - Le login existe déjà ou une 
 //=========================================
 
 karutaStr['fr']['label']="Libellé";
+karutaStr['fr']['code']="Code";
 karutaStr['fr']['value']="Valeur";
 karutaStr['fr']['edit']="Édition";
 karutaStr['fr']['comments']="Information complémentaire";
@@ -122,7 +123,7 @@ karutaStr['fr']['editboxtitle']="Titre boîte d'édition";
 karutaStr['fr']['queryGet_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
 karutaStr['fr']['query']=karutaStr['fr']['queryGet_Resource'];
 karutaStr['fr']['queryURL2Unit']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
-karutaStr['fr']['queryGet_Get_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio.<i>sibling</i>|<i>parent</i>[.<i>parent</i>].tag_sémantique1.tag_sémantique2.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
+karutaStr['fr']['queryGet_Get_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio.<i>child</i>|<i>parent</i>[.<i>parent</i>].tag_sémantique1.tag_sémantique2.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
 karutaStr['fr']['queryProxy']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mots réservés pour code_portfolio : <i>all</i> et <i>self</i></span>";
 karutaStr['fr']['queryAction']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mots réservés pour code_portfolio : <i>all</i> et <i>self</i></span>";
 karutaStr['fr']['queryGet_Double_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio1.tag_sémantique1.<i>label;</i>code_portfolio2.tag_sémantique2.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
@@ -140,7 +141,7 @@ karutaStr['fr']['menuroles3']=",rôles[;autre menu]</span>";
 karutaStr['fr']['help']="Information <br/><span style='font-size:smaller'>";
 karutaStr['fr']['help2']="texte en français@fr";
 karutaStr['fr']['help3']="</span>";
-karutaStr['fr']['font-size']="Taille police (en points)";
+karutaStr['fr']['font-size']="Taille police (px)";
 karutaStr['fr']['font-weight']="Poids de la police";
 karutaStr['fr']['font-style']="Style de la police";
 karutaStr['fr']['color']="Couleur de la police";

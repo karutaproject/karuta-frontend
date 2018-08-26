@@ -178,7 +178,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					html += "		<div class='col-md-1 col-xs-1'>";
 					//------------ buttons ---------------
 					html += "			<div class='btn-group'>";
-					if (USER.admin || portfolio.owner=='Y') {
+					if (USER.admin || (portfolio.owner=='Y' && !USER.xlimited)) {
 						html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 						html += "			<ul class='dropdown-menu  pull-right'>";
 						html += "				<li><a onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
@@ -422,7 +422,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		html += "<div class='col-md-1 col-sm-1 col-xs-1'>";
 		html += "<div class='btn-group'>";
 		//------------ buttons ---------------
-		if (USER.admin || this.owner=='Y') {
+		if (USER.admin || (this.owner=='Y' && !USER.xlimited)) {
 			html += "<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 			html += "<ul class='dropdown-menu  pull-right'>";
 			if (gid==null) {

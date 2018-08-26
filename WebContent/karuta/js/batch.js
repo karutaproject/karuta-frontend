@@ -49,10 +49,17 @@ function getTxtvals(node)
 		var select = $(txtvals[i]).attr("select");
 		var text = "";
 		if (select!=undefined && select!="") {
+			var fct = null;
+			if (select.indexOf('function(')>-1) {
+				fct = select.substring(9,select.indexOf(','))
+				select = select.substring(select.indexOf(',')+1,select.indexOf(')'))
+			}
 			if (select.indexOf("//")>-1)
 				text = eval("g_json."+select.substring(2));
 			else
 				text = eval("g_json.lines["+g_noline+"]."+select);
+			if (fct!=null)
+				text = eval(fct+"('"+text+"')");
 		} else {
 			text = $(txtvals[i]).text();
 			if (text.indexOf('numline()')>-1) {
@@ -95,6 +102,9 @@ function processAll()
 	g_nodesLine = selectAll();
 	g_noline = 0;
 	g_nodes = g_nodesLine;
+//	for (var i=0;i<g_nodes.length;i++){
+//		$("#batch-log").append("<br>"+$(g_nodes[i]).prop("nodeName"));
+//	}
 	processNextLine();
 }
 
@@ -121,10 +131,11 @@ function processNextLine()
 function processNextAction()
 //=================================================
 {
-	if (g_nodes.length>0) {
+		if (g_nodes.length>0) {
 		var actionnode = g_nodes[0];
 		g_nodes = g_nodes.slice(1, g_nodes.length);
 		var actiontype = $(actionnode).prop("nodeName");
+		$("#batch-log").append("<br>------------- "+actiontype+" -----------------");
 		if (typeof g_actions[actiontype] == "function" && actiontype!='for-each-line') {
 				g_actions[actiontype](actionnode);
 		} else {
@@ -576,12 +587,16 @@ g_actions['create-tree'] = function createTree(node)
 												processNextAction();
 											}
 										});
+									},
+									error : function(data) {
+										$("#batch-log").append("<br>- ***ERROR in  create tree - code:"+code);
+										processNextAction();
 									}
 								});
 							} else {
 								$("#batch-log").append("<br>- ***ERROR in  create tree update root label - code:"+code);
+								processNextAction();
 							}
-							processNextAction();
 						},
 						error : function(data) {
 							$("#batch-log").append("<br>- ***ERROR in  create tree - code:"+code);
@@ -772,7 +787,7 @@ g_actions['update-resource'] = function updateResource(node)
 					updateProxy(nodes,node,type,semtag);
 				}
 				if (type=='Dashboard') {
-					updateDashboard(nodes,node,type,semtag);
+					updateDashboard(nodes,node,type,semtag,text);
 				}
 				if (type=='Metadata'){
 					var attribute = $(node).attr("attribute");
@@ -806,7 +821,7 @@ g_actions['update-resource'] = function updateResource(node)
 				}
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
+				$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - uuid="+g_current_node_uuid+" semtag="+semtag);
 				processNextAction();
 			}
 		});
@@ -1524,38 +1539,53 @@ g_actions['unshare-usergroup'] = function unshareUserGroup(node)
 g_actions['import-node'] = function importNode(node)
 //=================================================
 {
-	var select = $(node).attr("select");
-	var idx = select.lastIndexOf(".");
-	var treeref = select.substring(0,idx);
-	var semtag = select.substring(idx+1);
+	//------------------------------------
 	var source = getTxtvals($("source",node));
 	if (source=='') // for backward compatibility
 		source = $(node).attr("source");
 	var idx_source = source.lastIndexOf(".");
 	var srcecode = source.substring(0,idx_source);
 	var srcetag = source.substring(idx_source+1);
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
-		success : function(data) {
-			var nodes = $("node",data);
-			import_nodes(nodes,semtag,source,srcetag,srcecode);
-		},
-		error : function(data) {
-			$("#batch-log").append("<br>- ERROR in import NOT FOUND - semtag="+semtag+ " source="+source);
-			processNextAction();
-		}
-	});
+	//------------------------------------
+	var select = $(node).attr("select");
+	if (select=='#current_node'){
+		var nodes = select;
+		import_nodes(nodes,'',source,srcetag,srcecode);
+	} else {
+		var idx = select.lastIndexOf(".");
+		var treeref = select.substring(0,idx);
+		var semtag = select.substring(idx+1);
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			success : function(data) {
+				var nodes = $("node",data);
+				import_nodes(nodes,semtag,source,srcetag,srcecode);
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ERROR in import NOT FOUND - semtag="+semtag+ " source="+source);
+				processNextAction();
+			}
+		});
+	}
+
 }
 
 //===========================
 function import_nodes(nodes,semtag,source,srcetag,srcecode)
 //===========================
 {
+	var destid = "";
 	if (nodes.length>0) {
-		var destid = $(nodes[0]).attr('id');
-		nodes = nodes.slice(1,nodes.length);
+		if (nodes=='#current_node') {
+			destid = g_current_node_uuid;
+			nodes = "";
+		}
+		else {
+			destid = $(nodes[0]).attr('id');
+			nodes = nodes.slice(1,nodes.length);
+		}
 		var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 		$.ajax({
 			type : "POST",

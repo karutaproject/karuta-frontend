@@ -67,7 +67,7 @@ karutaStr['en']['saved']="Saved";
 karutaStr['en']['password-sent']="A new password has been sent by email.";
 karutaStr['en']['new-account']="You don't have an account?";
 karutaStr['en']['sign-up']="Sign Up!";
-karutaStr['en']['disconnected']="Oups! You have accidentally been disconnected!";
+karutaStr['en']['disconnected']="Oups! Maybe you have accidentally been disconnected! Reload the page to verify.";
 karutaStr['en']['demo-documentation']="Import Karuta Documentation";
 karutaStr['en']['demo-ecommerce']="Import eCommerce Demo Portfolios";
 karutaStr['en']['demo-aacu']="Import AACU Demo Portfolios";
@@ -97,6 +97,7 @@ karutaStr['en']['error-existing-login']="ERROR - The login already exists or an 
 //=========================================
 
 karutaStr['en']['label']="Label";
+karutaStr['en']['code']="Code";
 karutaStr['en']['value']="Value";
 karutaStr['en']['edit']="Edit";
 karutaStr['en']['comments']="Additional Information";
@@ -122,7 +123,7 @@ karutaStr['en']['editboxtitle']="Editing Box Title";
 karutaStr['en']['queryGet_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
 karutaStr['en']['query']=karutaStr['en']['queryGet_Resource'];
 karutaStr['en']['queryURL2Unit']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
-karutaStr['en']['queryGet_Get_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code.<i>sibling</i>|<i>parent</i>[.<i>parent</i>].semantic_tag1.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
+karutaStr['en']['queryGet_Get_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code.<i>child</i>|<i>parent</i>[.<i>parent</i>].semantic_tag1.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
 karutaStr['en']['queryProxy']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
 karutaStr['en']['queryAction']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
 karutaStr['en']['queryGet_Double_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code1.semantic_tag1.<i>label;</i>portfolio_code2.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
@@ -140,7 +141,7 @@ karutaStr['en']['menuroles3']=",roles[;other menu]</span>";
 karutaStr['en']['help']="Information <br/><span style='font-size:smaller'>";
 karutaStr['en']['help2']="Text in English@en";
 karutaStr['en']['help3']="</span>";
-karutaStr['en']['font-size']="Font Size (in points)";
+karutaStr['en']['font-size']="Font Size (px)";
 karutaStr['en']['font-weight']="Font Weight";
 karutaStr['en']['font-style']="Font Style";
 karutaStr['en']['color']="Font Color";

@@ -57,7 +57,7 @@
 				<txtval select='{$password}'/>
 			</password>
 			<other>
-				<txtval select='{$other}'/>
+				<txtval><xsl:value-of select="$other"/></txtval>
 			</other>
 			<designer>
 				<txtval><xsl:value-of select="$designer"/></txtval>
@@ -503,7 +503,7 @@
 		</update-resource>
 	</xsl:template>
 
-	<xsl:template match="*[metadata/@semantictag='update-dashbrd']">
+	<xsl:template match="*[metadata/@semantictag='update-dashboard']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>

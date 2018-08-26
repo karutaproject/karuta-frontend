@@ -35,6 +35,17 @@ UIFactory["Image"] = function( node )
 	}
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Image']",node));
 	//--------------------
+	if ($("code",$("asmResource[xsi_type='Image']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("code");
+		$("asmResource[xsi_type='Image']",node)[0].appendChild(newelement);
+	}
+	this.code_node = $("code",$("asmResource[xsi_type='Image']",node));
+	//--------------------
+	if ($("value",$("asmResource[xsi_type='Image']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("value");
+		$("asmResource[xsi_type='Image']",node)[0].appendChild(newelement);
+	}
+	this.value_node = $("value",$("asmResource[xsi_type='Image']",node));
 	//--------------------
 	this.filename_node = [];
 	this.type_node = [];
@@ -170,6 +181,17 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		else
 			html += "<img src='../img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
 		html += "</div>";
+	}
+	if (type=='span') {
+		html +="<span uuid='img_"+this.id+"'>";
+		if ($(this.filename_node[langcode]).text()!="") {
+//			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" />";
+//			html += "</a>";
+		}
+		else
+			html += "<img src='../img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
+		html += "</span>";
 	}
 	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
 		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" />";
@@ -333,6 +355,43 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 		$(htmlHeightGroupObj).append($(htmlHeightLabelObj));
 		$(htmlHeightGroupObj).append($(htmlHeightDivObj));
 		$(htmlFormObj).append($(htmlHeightGroupObj));
+		if (g_userroles[0]=='designer' || USER.admin) {
+			//---------------------
+			var code = $(this.code_node).text();
+			if (this.encrypted)
+				code = decrypt(code.substring(3),g_rc4key);
+			var htmlcodeGroupObj = $("<div class='form-group'></div>")
+			var htmlcodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
+			var htmlcodeDivObj = $("<div class='col-sm-9'></div>");
+			var htmlcodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' value=\""+code+"\">");
+			var self = this;
+			$(htmlcodeInputObj).change(function (){
+				$(self.code_node).text($(this).val());
+				self.save();
+			});
+			$(htmlcodeDivObj).append($(htmlcodeInputObj));
+			$(htmlcodeGroupObj).append($(htmlcodeLabelObj));
+			$(htmlcodeGroupObj).append($(htmlcodeDivObj));
+			$(htmlFormObj).append($(htmlcodeGroupObj));
+			//---------------------
+			var value = $(this.value_node).text();
+			if (this.encrypted)
+				value = decrypt(value.substring(3),g_rc4key);
+			var htmlvalueGroupObj = $("<div class='form-group'></div>")
+			var htmlvalueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
+			var htmlvalueDivObj = $("<div class='col-sm-9'></div>");
+			var htmlvalueInputObj = $("<input id='value_"+this.id+"' type='text' class='form-control' value=\""+value+"\">");
+			var self = this;
+			$(htmlvalueInputObj).change(function (){
+				$(self.value_node).text($(this).val());
+				self.save();
+			});
+			$(htmlvalueDivObj).append($(htmlvalueInputObj));
+			$(htmlvalueGroupObj).append($(htmlvalueLabelObj));
+			$(htmlvalueGroupObj).append($(htmlvalueDivObj));
+			$(htmlFormObj).append($(htmlvalueGroupObj));
+			//---------------------
+		}
 		//---------------------
 		$("#"+destid).append(htmlFormObj);
 		//---------------------

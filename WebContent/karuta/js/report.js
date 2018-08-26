@@ -685,6 +685,11 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 {
 	UIFactory["Portfolio"].parse(data);
 	var select = $(xmlDoc).attr("select");
+	while (select.indexOf("##")>-1) {
+		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##"));
+		select = select.replace("##"+variable_name+"##", variables[variable_name]);
+	}
 	var value = "";
 	var condition = "";
 	var portfolioid = "";
@@ -788,7 +793,7 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 				success : function(data) {
 					if (report_not_in_a_portfolio){
 						UICom.structure["tree"] = {};
-					UICo	m.structure["ui"] = {};
+						UICom.structure["ui"] = {};
 					}
 					UICom.parseStructure(data,true, null, null,true);
 					var children = $(">*",xmlDoc);
@@ -1554,7 +1559,7 @@ function html2IMG(contentid)
 		svg += "</foreignObject>";
 		svg += "</svg>";
 //		alert(svg);
-		var htmlcanvas = "<canvas id='canvas' width='400' height='200'></canvas>"
+		var htmlcanvas = "<canvas id='canvas' width='400' height='400'></canvas>"
 /*		$("image-window-body").html(htmlcanvas)
 		rasterizeHTML.drawHTML(xml2string(htmlnode),canvas);
 		var DOMURL = window.URL || window.webkitURL || window;
@@ -1607,6 +1612,13 @@ function genDashboardContent(destid,uuid,parent,root_node)
 {
 	var spinning = true;
 	var model_code = UICom.structure["ui"][uuid].resource.getView();
+	if (model_code.indexOf('/')>-1){
+		var parameters = model_code.substring(model_code.indexOf('/')+1).split('/');
+		for (var i=0; i<parameters.length;i++){
+			variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = parameters[i].substring(parameters[i].indexOf(":")+1);
+		}
+	model_code = model_code.substring(0,model_code.indexOf("/"));
+	}
 	if (model_code.indexOf("@local")>-1){
 		root_node = parent.node;
 		model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
