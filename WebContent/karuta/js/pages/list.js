@@ -148,11 +148,38 @@ function fill_list_page()
 		url : url1,
 		success : function(data) {
 			g_nb_trees = parseInt($('portfolios',data).attr('count'));
+			//---------------------------------------------------
 			if (g_nb_trees==0) {
 				var html = "<h3 id='portfolios-label'>"+karutaStr[LANG]['no-portfolio']+"</h3>";
+				var text2 = karutaStr[LANG]['bin'];
+				if (USER.admin)
+					text2 = karutaStr[LANG]['bin-admin'];
+				html += "<h3 id='bin-label'>"+text2;
+				html += "&nbsp<button class='btn btn-xs' onclick=\"confirmDelPortfolios_EmptyBin()\">";
+				html += karutaStr[LANG]["empty-bin"];
+				html += "</button>";
+				html += "</h3>";
+				html += "<div  id='bin'>";
+				html += "</div>";
 				$("#list").html(html);
+				if (USER.admin || (USER.creator && !USER.limited) ) {
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/portfolios?active=false",
+						success : function(data) {
+							var destid = $("div[id='bin']");
+							UIFactory["Portfolio"].parseBin(data);
+							UIFactory["Portfolio"].displayBin('bin','bin');
+						},
+						error : function(jqxhr,textStatus) {
+							alertHTML("Server Error GET active=false: "+textStatus);
+						}
+					});
+				}
 				$("#wait-window").hide();
 			} else {
+				//---------------------------------------------------
 				if (g_nb_trees==null || g_nb_trees<100) {
 					//--------we load all the portfolios-----------------------
 					var url0 = serverBCK_API+"/portfolios?active=1";
