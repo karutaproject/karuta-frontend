@@ -1383,6 +1383,9 @@ function r_processAggregate(aggregate,destid)
 				sum += parseFloat(aggregates[select][i]);
 		}SVGToIMG
 		text = sum/aggregates[select].length;
+		if (text.toString().indexOf(".")>-1)
+			text = text.toFixed(2);
+		
 	}
 	if (ref!=undefined && ref!="") {
 		if (aggregates[ref]==undefined)

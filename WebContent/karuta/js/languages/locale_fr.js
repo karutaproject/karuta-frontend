@@ -116,6 +116,7 @@ karutaStr['fr']['delnoderoles']="Rôles - Supprimer";
 karutaStr['fr']['commentnoderoles']="Rôles - Commenter";
 karutaStr['fr']['annotnoderoles']="Rôles - Annoter";
 karutaStr['fr']['submitroles']="Rôles - Soumettre";
+karutaStr['fr']['submitall']="Soumettre - Supprimer tous";
 karutaStr['fr']['editnoderoles']="Rôles - Éditer libellé";
 karutaStr['fr']['editcoderoles']="Rôles - Éditer code";
 karutaStr['fr']['duplicateroles']="Rôles - Dupliquer";
@@ -210,10 +211,11 @@ karutaStr['fr']['list-semtags']="Liste des tags sémantiques";
 
 karutaStr['fr']['list_portfolios']="Portfolios";
 karutaStr['fr']['list_users']="Usagers";
+karutaStr['fr']['list_user_portfolio']="Portfolios de l'usager";
 karutaStr['fr']['list_roles']="Rôles";
 karutaStr['fr']['list_groups']="Groupes";
 karutaStr['fr']['create-test-user']="Créer un utilisateur test";
-karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre projet., changez le code de projet (partie avant le point)";
+karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre projet, changez le code de projet (partie avant le point)";
 
 //=========================================
 //========== PORTFOLIOS ===================
@@ -253,7 +255,8 @@ karutaStr['fr']['import_instance']="Importer un portfolio instance .xml";
 karutaStr['fr']['remove-selection']="Déplacer vers la poubelle";
 karutaStr['fr']['delete-selection']="Détruire";
 karutaStr['fr']['import_zip_instance']="Importer un portfolio/projet instance .zip";
-karutaStr['fr']['rename']="Renommer/Déplacer";
+karutaStr['fr']['rename-move']="Renommer/Déplacer";
+karutaStr['fr']['rename']="Renommer";
 karutaStr['fr']['karuta.batch']="Créer un batch";
 karutaStr['fr']['karuta.batch-form']="Créer un modèle de formulaire batch";
 karutaStr['fr']['karuta.report']="Créer un rapport";

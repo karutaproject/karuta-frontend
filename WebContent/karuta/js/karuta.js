@@ -111,7 +111,7 @@ function setLanguageMenu(js)
 //==============================
 {
 	for (var i=0; i<languages.length;i++) {
-		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');if (elgg_installed) displaySocialNetwork();setWelcomeTitles();"+js);
+		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');$('#navigation-bar').html(getNavBar('list',null));if (elgg_installed) displaySocialNetwork();setWelcomeTitles();"+js);
 	}
 }
 
@@ -181,7 +181,8 @@ function getNavBar(type,portfolioid,edit)
 				html += "			<ul class='nav navbar-nav'>";
 				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 				html += "					<ul class='dropdown-menu'>";
-				html += getLanguageMenu("fill_list_page();$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
+//				html += getLanguageMenu("fill_list_page();$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
+				html += getLanguageMenu("fill_list_page();$('#navigation-bar').html(getNavBar('list',null));$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
 				html += "					</ul>";
 				html += "				</li>";
 				html += "			</ul>";
@@ -226,7 +227,7 @@ function getNavBar(type,portfolioid,edit)
 		html += "			</ul>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname_node.text()+" "+USER.lastname_node.text();
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
 		html += " 					<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
@@ -541,12 +542,12 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 }
 
 //=======================================================================
-function confirmSubmit(uuid) 
+function confirmSubmit(uuid,submitall) 
 // =======================================================================
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"')\">" + karutaStr[LANG]["button-submit"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+")\">" + karutaStr[LANG]["button-submit"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
@@ -801,10 +802,12 @@ function sleep(milliseconds)
 }
 
 //=======================================================================
-function submit(uuid)
+function submit(uuid,submitall)
 //=======================================================================
 {
 	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/submit';
+	if (submitall!=null && submitall)
+		urlS += 'all';
 	$.ajax({
 		type : "POST",
 		dataType : "text",

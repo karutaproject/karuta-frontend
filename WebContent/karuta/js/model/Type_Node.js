@@ -2855,7 +2855,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'none':$(node.metadatawad).attr('editresroles');
 	var delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'none':$(node.metadatawad).attr('delnoderoles');
 	var submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
-	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
+	var submitall = ($(node.metadatawad).attr('submitall')==undefined)?'none':$(node.metadatawad).attr('submitall');
+	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'N':$(node.metadatawad).attr('submitted');
 	var submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
 	var menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
@@ -3120,7 +3121,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 				|| ( g_userroles[1]=='designer' && submitroles.indexOf(g_userroles[0])>-1)
 				|| submitroles.indexOf(userrole)>-1 )))
 		{
-			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"')\" ";
+			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
+			if (submitall=='Y')
+				html += ",true";
+			html += ")\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
 		} else {
 			if (submitted=='Y') {
@@ -3633,6 +3637,8 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editresroles',$(node.metadatawad).attr('editresroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'commentnoderoles',$(node.metadatawad).attr('commentnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitroles',$(node.metadatawad).attr('submitroles'));
+	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
+		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitall',$(node.metadatawad).attr('submitall'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editnoderoles',$(node.metadatawad).attr('editnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'incrementroles',$(node.metadatawad).attr('incrementroles'));

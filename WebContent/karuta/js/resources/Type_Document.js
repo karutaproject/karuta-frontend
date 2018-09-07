@@ -269,8 +269,10 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 	html += "</form>";
 	html +=" <div id='progress_"+this.id+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
 	html +=  "<a id='file__"+this.id+"_"+langcode+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+"</a>"; 
+	html += "<span id='loaded_"+this.id+langcode+"'></span>"
 	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Document.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
+	var loadedid = 'loaded_'+this.id+langcode;
 	$("#fileupload_"+this.id+langcode).fileupload({
 		dataType: 'json',
 		add: function (e, data) {
@@ -287,7 +289,7 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 			$("#wait-window").modal('hide');
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
 			UIFactory["Document"].update(data.result,uuid,langcode,parent);
-			$("#divfileupload_"+this.id+"_"+langcode).html("Loaded");
+			$("#"+loadedid).append(" <i class='fa fa-check'></i>");
 		}
     });
 };
