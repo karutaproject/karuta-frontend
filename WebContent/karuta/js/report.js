@@ -1146,7 +1146,13 @@ function r_processCsvLine(no,xmlDoc,destid,data,line)
 		if (tagname=="text")
 			r_processText(children[i],destid,data,line,true);
 		if (tagname=="username")
-			r_processAddUsername(true);
+			r_processAddusername(true);
+		if (tagname=="firstname")
+			r_processAddfirstname(true);
+		if (tagname=="lastname")
+			r_processAddlastname(true);
+		if (tagname=="firstname-lastname")
+			r_processAddfirstname_lastname(true);
 	};
 	csvreport[csvreport.length]=csvline;
 	$.ajax({
@@ -1161,10 +1167,10 @@ function r_processCsvLine(no,xmlDoc,destid,data,line)
 }
 
 //==================================
-function r_processAddUsername(is_out_csv,destid,data)
+function r_processAddusername(is_out_csv,destid,data)
 //==================================
 {
-	var text = USER.username_node.text();
+	var text = USER.username;
 	//-----------------
 	if (is_out_csv!=null && is_out_csv) {
 		if (typeof csvseparator == 'undefined') // for backward compatibility
@@ -1177,6 +1183,62 @@ function r_processAddUsername(is_out_csv,destid,data)
 	}
 	//-----------------
 }
+
+//==================================
+function r_processAddfirstname(is_out_csv,destid,data)
+//==================================
+{
+	var text = USER.firstname;
+	//-----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		var nodeid = $(data).attr("id");
+		text = "<span id='"+nodeid+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+	//-----------------
+}
+
+//==================================
+function r_processAddlastname(is_out_csv,destid,data)
+//==================================
+{
+	var text = USER.lastname;
+	//-----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		var nodeid = $(data).attr("id");
+		text = "<span id='"+nodeid+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+	//-----------------
+}
+
+//==================================
+function r_processAddfirstname_lastname(is_out_csv,destid,data)
+//==================================
+{
+	var text1 = USER.firstname;
+	var text2 = USER.lastname;
+	//-----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text1 +"-" + text2 + csvseparator;		
+	} else {
+		var nodeid = $(data).attr("id");
+		var text = "<span id='"+nodeid+"'>"+text1 + "&nbsp" +text2 + "</span>";
+		$("#"+destid).append($(text));		
+	}
+	//-----------------
+}
+
 
 //==================================
 function r_processCsvValue(xmlDoc,destid,data)

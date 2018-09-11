@@ -2,10 +2,10 @@
 var application_version = "2.0";
 var application_date = "2017-10-30";
 //----------------------------------
-var appliname = 'karuta2.3';
-var karutaname = 'karuta2.3'; // to share the same 'karuta-core' with multiple front-end
+var appliname = 'nbts-isabelle';
+var karutaname = 'nbts-isabelle'; // to share the same 'karuta-core' with multiple front-end
 var karuta_url = '../../../' + karutaname;
-var bckname = '2.3';
+var bckname = '-nbts';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";

@@ -150,6 +150,57 @@
 			</xsl:if>
 		</username>
 	</xsl:template>
+	<!-- ================ firstname ============================ -->
+	<xsl:template match="*[metadata/@semantictag='firstname']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="help">
+			<xsl:value-of select="metadata-wad/@help"></xsl:value-of>
+		</xsl:variable>
+		<firstname>
+			<xsl:if test="not($style='')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($help='')">
+				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
+			</xsl:if>
+		</firstname>
+	</xsl:template>
+	<!-- ================ lastname ============================ -->
+	<xsl:template match="*[metadata/@semantictag='lastname']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="help">
+			<xsl:value-of select="metadata-wad/@help"></xsl:value-of>
+		</xsl:variable>
+		<lastname>
+			<xsl:if test="not($style='')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($help='')">
+				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
+			</xsl:if>
+		</lastname>
+	</xsl:template>
+	<!-- ================ firstname-lastname ============================ -->
+	<xsl:template match="*[metadata/@semantictag='firstname-lastname']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="help">
+			<xsl:value-of select="metadata-wad/@help"></xsl:value-of>
+		</xsl:variable>
+		<firstname-lastname>
+			<xsl:if test="not($style='')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($help='')">
+				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
+			</xsl:if>
+		</firstname-lastname>
+	</xsl:template>
 	<!-- ================ text ============================ -->
 	<xsl:template match="*[metadata/@semantictag='text']">
 		<xsl:variable name="style">
