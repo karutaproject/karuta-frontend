@@ -2,10 +2,10 @@
 var application_version = "2.0";
 var application_date = "2017-10-30";
 //----------------------------------
-var appliname = 'nbts-isabelle';
-var karutaname = 'nbts-isabelle'; // to share the same 'karuta-core' with multiple front-end
+var appliname = 'karuta2.3';
+var karutaname = 'karuta2.3'; // to share the same 'karuta-core' with multiple front-end
 var karuta_url = '../../../' + karutaname;
-var bckname = '-nbts';
+var bckname = '2.3';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
@@ -43,8 +43,8 @@ var welcome3 = {};       // Welcome paragraph
 	welcome3["en"] = "";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.4";
-	welcome4["en"] = "WELCOME TO KARUTA 2.4";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.4 beta";
+	welcome4["en"] = "WELCOME TO KARUTA 2.4 beta";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";

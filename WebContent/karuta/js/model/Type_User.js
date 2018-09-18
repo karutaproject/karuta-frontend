@@ -200,7 +200,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 			html += "</button>";
 			//----------------------------------
 			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
-				html += "<button class='btn btn-xs' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"')\">";
+				html += "<button class='btn btn-xs' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
 				html += "<i class='fa fa-file' ></i>";
 				html += "</button>";
 			}

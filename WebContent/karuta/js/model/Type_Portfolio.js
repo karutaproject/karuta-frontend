@@ -1944,6 +1944,8 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 				first = false;
 				var input = "<input type='radio' name='radio_group' value='"+groupid+"'";
 				input += "onclick=\""+js+"\" ";
+				if (label == 'designer')
+					label = karutaStr[LANG]['designer'];
 				input +="> "+label+" </input>";
 				$(dest).append($(input));
 			}
@@ -1984,6 +1986,8 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data,unshare_disabled)
 					dest = "#unshare-other-roles";
 				if (unshare_disabled) // display in report
 					dest = "#"+destid;
+				if (label == 'designer')
+					label = karutaStr[LANG]['designer'];
 				html = "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
@@ -2494,9 +2498,9 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	}
 	//-------------------- ROLES-------------------------
 	if (g_userroles[0]=='designer') {
-		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >"+karutaStr[LANG]['role']+" : <span id='userrole'>designer</span><span class='caret'></span></a>";
+		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >"+karutaStr[LANG]['role']+" : <span id='userrole'>"+karutaStr[LANG]['designer']+"</span><span class='caret'></span></a>";
 		html += "		<ul class='dropdown-menu pull-right'>";
-		html += "			<li><a  onclick=\"setDesignerRole('designer')\">designer</a></li>";
+		html += "			<li><a  onclick=\"setDesignerRole('designer')\">"+karutaStr[LANG]['designer']+"</a></li>";
 		for (role in UICom.roles) {
 			if (role!="designer")
 				html += "	<li><a  onclick=\"setDesignerRole('"+role+"')\">"+role+"</a></li>";
@@ -2755,7 +2759,7 @@ UIFactory["Portfolio"].emptyBin = function()
 }
 
 //==================================
-UIFactory["Portfolio"].getListPortfolios = function(userid) 
+UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname) 
 //==================================
 {
 
@@ -2765,9 +2769,11 @@ UIFactory["Portfolio"].getListPortfolios = function(userid)
 		dataType : "xml",
 		url : url0,
 		userid : userid,
+		firstname :firstname,
+		lastname :lastname,
 		success : function(data) {
 			UIFactory["Portfolio"].parse(data);
-			UIFactory["Portfolio"].displayListPortfolios(this.userid);
+			UIFactory["Portfolio"].displayListPortfolios(this.userid,this.firstname,this.lastname);
 			$("#wait-window").hide();
 		},
 		error : function(jqxhr,textStatus) {
@@ -2777,7 +2783,7 @@ UIFactory["Portfolio"].getListPortfolios = function(userid)
 }
 
 //==================================
-UIFactory["Portfolio"].displayListPortfolios = function(userid,langcode)
+UIFactory["Portfolio"].displayListPortfolios = function(userid,firstname,lastname,langcode)
 //==================================
 {
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
@@ -2787,7 +2793,7 @@ UIFactory["Portfolio"].displayListPortfolios = function(userid,langcode)
 		langcode = LANGCODE;
 	//---------------------
 	$("#edit-window-footer").html("");
-	$("#edit-window-title").html(karutaStr[LANG]['list_user_portfolio']);
+	$("#edit-window-title").html(karutaStr[LANG]['list_user_portfolio']+" " + firstname + " " +lastname);
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 
 	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";

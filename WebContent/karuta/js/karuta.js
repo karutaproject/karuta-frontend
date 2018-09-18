@@ -60,7 +60,10 @@ function setDesignerRole(role)
 		role = 'designer';
 	g_userroles[0] = role;
 	fillEditBoxBody();
-	$("#userrole").html(role);
+	if(role == 'designer')
+		$("#userrole").html(karutaStr[LANG]['designer']);
+	else
+		$("#userrole").html(role);
 	if (g_display_type=='standard'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";

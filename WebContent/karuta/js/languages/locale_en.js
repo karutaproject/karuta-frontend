@@ -211,7 +211,7 @@ karutaStr['en']['list-semtags']="List of Semantic Tags";
 
 karutaStr['en']['list_portfolios']="Portfolios";
 karutaStr['en']['list_users']="Users";
-karutaStr['en']['list_user_portfolio']="Portfolios of the user";
+karutaStr['en']['list_user_portfolio']="Portfolios of ";
 karutaStr['en']['list_roles']="Roles";
 karutaStr['en']['list_groups']="Groups";
 karutaStr['en']['create-test-user']="Create a Test User";
