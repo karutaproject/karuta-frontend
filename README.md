@@ -10,9 +10,10 @@ Download Karuta
 -------
 
 To download executable files go to [ePortfolium website](http://www.eportfolium.com/site/karuta_download_en.htm)
-Installing Karuta Source Code
 
+Installing Karuta Source Code
 -------
+
 Tomcat 7 is recommended.
 
 MySQL 5.5 is recommended.
