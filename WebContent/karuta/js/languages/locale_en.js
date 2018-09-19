@@ -393,6 +393,7 @@ karutaStr['en']['addshare-users']="Share with Users";
 karutaStr['en']['confirm-remove-user-group']="Do you want to remove this user from the group? This action cannot be undone.";
 karutaStr['en']['empty-group']="Empty Group";
 karutaStr['en']['list_portfoliosgroups']="Portfolio Groups";
+karutaStr['en']['note-list_portfoliosgroups']="Attention - The projects in which the portfolios are contained must be open on the Porfilio Page";
 karutaStr['en']['confirm-remove-item-group']="Do you want to remove this element from the group? This action cannot be undone.";
 karutaStr['en']['add_users']="Add Users";
 karutaStr['en']['add_portfolios']="Add Portfolios";
