@@ -275,6 +275,28 @@ g_actions['delete-user'] = function deleteUser(node)
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 
+//=================================================
+g_actions['create-usergroup'] = function CreateUserGroup(node)
+//=================================================
+{
+	var usergroup = getTxtvals($("usergroup",node));
+	var url = serverBCK_API+"/usersgroups?label="+usergroup;
+	$.ajax({
+		type : "POST",
+		contentType: "application/xml; charset=UTF-8",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			var usergroupid = data;
+			$("#batch-log").append("<br>- usergroup created ("+usergroupid+") - label:"+usergroup);
+			processNextAction();
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***ERROR in create-usergroup - label:"+usergroup);					
+			processNextAction();
+		}
+	});
+}
 
 //=================================================
 g_actions['join-usergroup'] = function JoinUserGroup(node)
@@ -812,6 +834,9 @@ g_actions['update-resource'] = function updateResource(node)
 				if (type=='NodeResource') {
 					updateNodeResource(nodes,node);
 				}
+				if (type=='Calendar') {
+					updateCalendar(nodes,node,text,semtag);
+				}
 				if (type=='Rights'){
 					var rd = $(node).attr("rd");
 					var wr = $(node).attr("wr");
@@ -876,6 +901,9 @@ g_actions['update-resource'] = function updateResource(node)
 				if (type=='NodeResource') {
 					updateNodeResource(nodes,node);
 				}
+				if (type=='Calendar') {
+					updateCalendar(nodes,node,text,semtag);
+				}
 				if (type=='Rights'){
 					var rd = $(node).attr("rd");
 					var wr = $(node).attr("wr");
@@ -922,6 +950,43 @@ function updateField(nodes,node,type,semtag,text)
 	}
 }
 
+//=================================================
+function updateCalendar(nodes,node,text,semtag)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		nodes = nodes.slice(1,nodes.length);
+		var minViewMode = $(node).attr("minViewMode");
+		if (typeof minViewMode=='undefined' || minViewMode=="")
+			minViewMode = "days";
+		var format = $(node).attr("format");
+		if (typeof format=='undefined' || format=="")
+			format = "yyyy/mm/dd";
+		var xml = "<asmResource xsi_type='Calendar'>";
+		xml += "<minViewMode>"+minViewMode+"</minViewMode>";
+		xml += "<text lang='"+LANG+"'>"+text+"</text>";
+		xml += "<format lang='"+LANG+"'>"+format+"</format>";
+		xml += "</asmResource>";
+		$.ajax({
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			url : serverBCK_API+"/resources/resource/" + nodeid,
+			success : function(data) {
+				$("#batch-log").append("<br>- calendar resource updated ("+nodeid+") - semtag="+semtag);
+				updateCalendar(nodes,node,text);
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***ERROR in update calendar resource("+nodeid+") - semtag="+semtag);
+				updateCalendar(nodes,node,text);
+			}
+		});
+	} else{
+		processNextAction();
+	}
+}
 
 //=================================================
 function updateProxy(nodes,node,type,semtag)
@@ -1290,6 +1355,29 @@ g_actions['set-owner'] = function setOwner(node)
 //--------------------------- Join Portfolio Group ----------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
+
+//=================================================
+g_actions['create-portfoliogroup'] = function CreatePortfolioGroup(node)
+//=================================================
+{
+	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	var url = serverBCK_API+"/portfoliogroups?type=portfolio&label="+portfoliogroup;
+	$.ajax({
+		type : "POST",
+		contentType: "application/xml; charset=UTF-8",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			var portfoliogroupid = data;
+			$("#batch-log").append("<br>- portfoliogroup created ("+portfoliogroupid+") - label:"+portfoliogroup);
+			processNextAction();
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***ERROR in create-portfoliogroup - label:"+portfoliogroup);					
+			processNextAction();
+		}
+	});
+}
 
 //=================================================
 g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)

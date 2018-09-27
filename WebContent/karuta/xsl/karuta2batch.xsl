@@ -138,6 +138,29 @@
 		</create-elgg-group>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='create-usergroup']">
+		<create-usergroup>
+			<usergroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">usergroup</xsl:with-param>
+				</xsl:call-template>
+			</usergroup>
+		</create-usergroup>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='create-portfoliogroup']">
+		<xsl:variable name="portfoliogroup">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='portfoliogroup']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<create-portfoliogroup>
+			<portfoliogroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">portfoliogroup</xsl:with-param>
+				</xsl:call-template>
+			</portfoliogroup>
+		</create-portfoliogroup>
+	</xsl:template>
+
 	<xsl:template name='txtval'>
 		<xsl:param name="semtag"/>
 		<xsl:for-each select=".//*[metadata/@semantictag=$semtag]/*[metadata/@semantictag='txtsel' or metadata/@semantictag='txtval']">
@@ -380,6 +403,29 @@
 					<xsl:with-param name="semtag">node-label</xsl:with-param>
 				</xsl:call-template>
 			</label>
+		</update-resource>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-calendar']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='Calendar' select="{$select}">
+			<minViewMode>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">minViewMode</xsl:with-param>
+				</xsl:call-template>
+			</minViewMode>
+			<format>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">format</xsl:with-param>
+				</xsl:call-template>
+			</format>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
 		</update-resource>
 	</xsl:template>
 
