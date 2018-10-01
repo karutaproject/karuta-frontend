@@ -1475,6 +1475,7 @@ function xml2PDF(content)
 	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 	var data = $('#'+content).html();
 	data = data.replace(/&nbsp;/g, ' ');
+	data = data.replace(/<hr>/g, '<hr/>');
 	data = data.replace(/<br>/g, '<br/>');
 	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
@@ -1499,6 +1500,7 @@ function xml2RTF(content)
 	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 	var data = $('#'+content).html();
 	data = data.replace(/&nbsp;/g, ' ');
+	data = data.replace(/<hr>/g, '<hr/>');
 	data = data.replace(/<br>/g, '<br/>');
 	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
