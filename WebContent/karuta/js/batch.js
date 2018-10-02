@@ -837,6 +837,9 @@ g_actions['update-resource'] = function updateResource(node)
 				if (type=='Calendar') {
 					updateCalendar(nodes,node,text,semtag);
 				}
+				if (type=='Document') {
+					updateDocument(nodes,node,text,semtag);
+				}
 				if (type=='Rights'){
 					var rd = $(node).attr("rd");
 					var wr = $(node).attr("wr");
@@ -904,6 +907,9 @@ g_actions['update-resource'] = function updateResource(node)
 				if (type=='Calendar') {
 					updateCalendar(nodes,node,text,semtag);
 				}
+				if (type=='Document') {
+					updateDocument(nodes,node,text,semtag);
+				}
 				if (type=='Rights'){
 					var rd = $(node).attr("rd");
 					var wr = $(node).attr("wr");
@@ -917,6 +923,44 @@ g_actions['update-resource'] = function updateResource(node)
 				processNextAction();
 			}
 		});
+	}
+}
+
+//=================================================
+function updateDocument(nodes,node,type,semtag,text)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		var filename = $("filename",node).text();
+		var size = $("size",node).text();
+		var type = $("type",node).text();
+		var fileid = $("fileid",node).text();
+		var resource = $("asmResource[xsi_type='Document']",nodes[0]);
+		$("filename[lang='"+LANG+"']",resource).text(filename);
+		$("size[lang='"+LANG+"']",resource).text(size);
+		$("type[lang='"+LANG+"']",resource).text(type);
+		$("fileid[lang='"+LANG+"']",resource).text(fileid);
+		var data = "<asmResource xsi_type='Document'>" + $(resource).html() + "</asmResource>";
+		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : data,
+			url : serverBCK_API+"/resources/resource/" + nodeid,
+			success : function(data) {
+				$("#batch-log").append("<br>- Document resource updated ("+nodeid+") - semtag="+semtag);
+				updateCalendar(nodes,node,text);
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***ERROR in update Document resource("+nodeid+") - semtag="+semtag);
+				updateCalendar(nodes,node,text);
+			}
+		});
+	} else{
+		processNextAction();
 	}
 }
 
@@ -1236,6 +1280,38 @@ g_actions['update-field-byid'] = function updateFieldById(node)
 		},
 		error : function(data) {
 			$("#batch-log").append("<br>- ***ERROR in update resource("+nodeid+")");
+			processNextAction();
+		}
+	});
+}
+
+//=================================================
+g_actions['reset-document-byid'] = function resetDocumentById(node)
+//=================================================
+{
+	var nodeid = getTxtvals($("uuid",node));
+	var xml = "<asmResource xsi_type='Document'>";
+	xml += "<filename lang='fr'>Aucun document</text>";
+	xml += "<filename lang='en'>No Document</text>";
+	xml += "<size lang='fr'></text>";
+	xml += "<size lang='en'></text>";
+	xml += "<type lang='fr'></text>";
+	xml += "<type lang='en'></text>";
+	xml += "<fileid lang='fr'></text>";
+	xml += "<fileid lang='en'></text>";
+	xml += "</asmResource>";
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		data : xml,
+		url : serverBCK_API+"/resources/resource/" + nodeid +"?delfile=true",
+		success : function(data) {
+			$("#batch-log").append("<br>- document reset ("+nodeid+")");
+			processNextAction();
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***ERROR in reset document("+nodeid+")");
 			processNextAction();
 		}
 	});

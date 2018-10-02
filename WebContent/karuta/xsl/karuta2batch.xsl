@@ -388,6 +388,16 @@
 		</update-field-byid>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='reset-document-byid']">
+		<reset-document-byid>
+			<uuid>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">uuid</xsl:with-param>
+				</xsl:call-template>
+			</uuid>
+		</reset-document-byid>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-node-resource']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -426,6 +436,26 @@
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
 			</text>
+		</update-resource>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-document']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='Document' select="{$select}">
+			<filename>
+				<xsl:value-of select=".//asmContext[metadata/@semantictag='filename']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			</filename>
+			<size>
+				<xsl:value-of select=".//asmContext[metadata/@semantictag='size']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			</size>
+			<type>
+				<xsl:value-of select=".//asmContext[metadata/@semantictag='type']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			</type>
+			<fileid>
+				<xsl:value-of select=".//asmContext[metadata/@semantictag='fileid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			</fileid>
 		</update-resource>
 	</xsl:template>
 

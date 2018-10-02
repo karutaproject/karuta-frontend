@@ -1042,6 +1042,9 @@ function r_processNodeResource(xmlDoc,destid,data)
 			if (selector.type=='node value') {
 				text = UICom.structure["ui"][nodeid].getValue();
 			}
+			if (selector.type=='uuid') {
+				text = nodeid;
+			}
 			if (selector.type=='node context') {
 				text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
 				prefix_id += "context_";
