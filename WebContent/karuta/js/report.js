@@ -686,7 +686,7 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 	UIFactory["Portfolio"].parse(data);
 	var select = $(xmlDoc).attr("select");
 	while (select.indexOf("##")>-1) {
-		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##.....
+		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
 		var variable_name = test_string.substring(0,test_string.indexOf("##"));
 		select = select.replace("##"+variable_name+"##", variables[variable_name]);
 	}
