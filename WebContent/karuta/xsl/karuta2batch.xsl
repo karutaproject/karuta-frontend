@@ -76,6 +76,28 @@
 		</delete-user>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='activate-person']">
+		<xsl:variable name="identifier">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<activate-user>
+			<identifier>
+				<txtval select='{$identifier}'/>
+			</identifier>
+		</activate-user>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='inactivate-person']">
+		<xsl:variable name="identifier">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<inactivate-user>
+			<identifier>
+				<txtval select='{$identifier}'/>
+			</identifier>
+		</inactivate-user>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='create-elgg-user']">
 		<xsl:variable name="identifier">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>

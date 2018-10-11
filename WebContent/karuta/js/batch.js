@@ -260,6 +260,88 @@ g_actions['delete-user'] = function deleteUser(node)
 	});
 }
 
+//=================================================
+g_actions['inactivate-user'] = function inactivateUser(node)
+//=================================================
+{
+	var identifier = getTxtvals($("identifier",node));
+	//---- get userid ----------
+	var userid = "";
+	var url = serverBCK_API+"/users/user/username/"+identifier;
+	$.ajax({
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			userid = data;
+			var url = serverBCK_API+"/users/user/" + userid;
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : url,
+				success : function(data) {
+					$("active",data).text('0');
+					$.ajax({
+						type : "PUT",
+						dataType : "xml",
+						url : url,
+						data : data,
+						success : function(data) {
+							$("#batch-log").append("<br>- user inactive("+userid+") - identifier:"+identifier);
+						}
+					});
+				}
+			});
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ERROR user does not exist - identifier:"+identifier);
+		}
+	});
+}
+
+//=================================================
+g_actions['activate-user'] = function activateUser(node)
+//=================================================
+{
+	var identifier = getTxtvals($("identifier",node));
+	//---- get userid ----------
+	var userid = "";
+	var url = serverBCK_API+"/users/user/username/"+identifier;
+	$.ajax({
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			userid = data;
+			var url = serverBCK_API+"/users/user/" + userid;
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : url,
+				success : function(data) {
+					$("active",data).text('1');
+					$.ajax({
+						type : "PUT",
+						dataType : "xml",
+						url : url,
+						data : data,
+						success : function(data) {
+							$("#batch-log").append("<br>- user inactive("+userid+") - identifier:"+identifier);
+						}
+					});
+				}
+			});
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ERROR user does not exist - identifier:"+identifier);
+		}
+	});
+}
+
+
+
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //-------------------------------- User Group ---------------------------
@@ -866,7 +948,7 @@ g_actions['update-resource'] = function updateResource(node)
 					updateCalendar(nodes,node,text,semtag);
 				}
 				if (type=='Document') {
-					updateDocument(nodes,node,text,semtag);
+					updateDocument(nodes,node,semtag);
 				}
 				if (type=='Rights'){
 					var rd = $(node).attr("rd");
@@ -884,7 +966,7 @@ g_actions['update-resource'] = function updateResource(node)
 }
 
 //=================================================
-function updateDocument(nodes,node,type,semtag,text)
+function updateDocument(nodes,node,semtag)
 //=================================================
 {
 	if (nodes.length>0) {
@@ -912,11 +994,11 @@ function updateDocument(nodes,node,type,semtag,text)
 			url : serverBCK_API+"/resources/resource/" + nodeid,
 			success : function(data) {
 				$("#batch-log").append("<br>- Document resource updated ("+nodeid+") - semtag="+semtag);
-				updateDocument(nodes,node,text);
+				updateDocument(nodes,node,semtag);
 			},
 			error : function(data) {
 				$("#batch-log").append("<br>- ***ERROR in update Document resource("+nodeid+") - semtag="+semtag);
-				updateDocument(nodes,node,text);
+				updateDocument(nodes,node,semtag);
 			}
 		});
 	}
@@ -927,8 +1009,6 @@ function updateField(nodes,node,type,semtag,text)
 //=================================================
 {
 	if (nodes.length>0) {
-		//-------------------
-		var text = getTxtvals($("text",node));
 		//-------------------
 		var nodeid = $(nodes[0]).attr('id');
 		var resource = $("asmResource[xsi_type='Field']",nodes[0]);
@@ -961,24 +1041,26 @@ function updateCalendar(nodes,node,text,semtag)
 //=================================================
 {
 	if (nodes.length>0) {
-		var nodeid = $(nodes[0]).attr('id');
-		nodes = nodes.slice(1,nodes.length);
 		var minViewMode = $(node).attr("minViewMode");
-		if (typeof minViewMode=='undefined' || minViewMode=="")
-			minViewMode = "days";
 		var format = $(node).attr("format");
-		if (typeof format=='undefined' || format=="")
-			format = "yyyy/mm/dd";
-		var xml = "<asmResource xsi_type='Calendar'>";
-		xml += "<minViewMode>"+minViewMode+"</minViewMode>";
-		xml += "<text lang='"+LANG+"'>"+text+"</text>";
-		xml += "<format lang='"+LANG+"'>"+format+"</format>";
-		xml += "</asmResource>";
+		//-------------------
+		var nodeid = $(nodes[0]).attr('id');
+		var resource = $("asmResource[xsi_type='Calendar']",nodes[0]);
+		if (minViewMode!='')
+			$("minViewMode",resource).text(minViewMode);
+		if (format!='')
+			$("format[lang='"+LANG+"']",resource).text(format);
+		$("text[lang='"+LANG+"']",resource).text(text);
+		var data = "<asmResource xsi_type='Calendar'>" + $(resource).html() + "</asmResource>";
+		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+		//-------------------
+		nodes = nodes.slice(1,nodes.length);
+		//-------------------
 		$.ajax({
 			type : "PUT",
 			contentType: "application/xml",
 			dataType : "text",
-			data : xml,
+			data : strippeddata,
 			url : serverBCK_API+"/resources/resource/" + nodeid,
 			success : function(data) {
 				$("#batch-log").append("<br>- calendar resource updated ("+nodeid+") - semtag="+semtag);
@@ -1002,7 +1084,7 @@ function updateProxy(nodes,node,type,semtag)
 		var source_treeref = source_select.substring(0,source_idx);
 		var source_semtag = source_select.substring(source_idx+1);
 		//------ search sourceid -------------------
-		var sourceid = sourceid = $("node",data).attr('id');
+		var sourceid = $("node",data).attr('id');
 		//------ search targetid -------------------
 		var targetid = $(nodes[0]).attr('id');
 		nodes = nodes.slice(1,nodes.length);
