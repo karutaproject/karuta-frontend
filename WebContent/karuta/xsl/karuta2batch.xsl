@@ -77,24 +77,20 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='activate-person']">
-		<xsl:variable name="identifier">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
 		<activate-user>
 			<identifier>
-				<txtval select='{$identifier}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">identifier</xsl:with-param>
+				</xsl:call-template>
 			</identifier>
 		</activate-user>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='inactivate-person']">
-		<xsl:variable name="identifier">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
 		<inactivate-user>
-			<identifier>
-				<txtval select='{$identifier}'/>
-			</identifier>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">identifier</xsl:with-param>
+				</xsl:call-template>
 		</inactivate-user>
 	</xsl:template>
 
@@ -181,6 +177,26 @@
 				</xsl:call-template>
 			</portfoliogroup>
 		</create-portfoliogroup>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='share-groups']">
+		<share-groups>
+			<portfoliogroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">portfoliogroup</xsl:with-param>
+				</xsl:call-template>
+			</portfoliogroup>
+			<usergroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">usergroup</xsl:with-param>
+				</xsl:call-template>
+			</usergroup>
+			<role>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">role</xsl:with-param>
+				</xsl:call-template>
+			</role>
+		</share-groups>
 	</xsl:template>
 
 	<xsl:template name='txtval'>
@@ -312,6 +328,59 @@
 				</xsl:call-template>
 			</portfoliogroup>
 		</join-portfoliogroup>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='leave-portfoliogroup']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<leave-portfoliogroup select="{$id}">
+			<portfoliogroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">groupname</xsl:with-param>
+				</xsl:call-template>
+			</portfoliogroup>
+		</leave-portfoliogroup>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='share-portfoliogroup']">
+		<share-portfoliogroup>
+			<identifier>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">identifier</xsl:with-param>
+				</xsl:call-template>
+			</identifier>
+			<portfoliogroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">portfoliogroup</xsl:with-param>
+				</xsl:call-template>
+			</portfoliogroup>
+			<role>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">role</xsl:with-param>
+				</xsl:call-template>
+			</role>
+		</share-portfoliogroup>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='unshare-portfoliogroup']">
+		<unshare-portfoliogroup>
+			<identifier>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">identifier</xsl:with-param>
+				</xsl:call-template>
+			</identifier>
+			<portfoliogroup>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">portfoliogroup</xsl:with-param>
+				</xsl:call-template>
+			</portfoliogroup>
+			<role>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">role</xsl:with-param>
+				</xsl:call-template>
+			</role>
+		</unshare-portfoliogroup>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='unshare-tree']">

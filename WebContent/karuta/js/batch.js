@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2017 - ePortfolium - Licensed under the
+	Copyright 2018 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -220,7 +220,7 @@ g_actions['create-user'] = function createUser(node)
 					$("#batch-log").append("<br>- user created("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***ERROR in create-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in create-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
 				}
 			});
 		}
@@ -255,7 +255,7 @@ g_actions['delete-user'] = function deleteUser(node)
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR user does not exist - identifier:"+identifier);
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
 		}
 	});
 }
@@ -278,29 +278,38 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 			var url = serverBCK_API+"/users/user/" + userid;
 			$.ajax({
 				type : "GET",
+				contentType: "application/xml",
 				dataType : "xml",
 				url : url,
 				success : function(data) {
 					$("active",data).text('0');
+					data = xml2string(data);
 					$.ajax({
 						type : "PUT",
-						dataType : "xml",
+						dataType : "text",
 						url : url,
 						data : data,
 						success : function(data) {
-							$("#batch-log").append("<br>- user inactive("+userid+") - identifier:"+identifier);
+							$("#batch-log").append("<br>- user inactived ("+userid+") - identifier:"+identifier);
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> cannot update user - identifier:"+identifier);
 						}
 					});
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> cannot get user info - identifier:"+identifier);
 				}
+
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR user does not exist - identifier:"+identifier);
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
 		}
 	});
 }
 
-//=================================================
+///=================================================
 g_actions['activate-user'] = function activateUser(node)
 //=================================================
 {
@@ -318,29 +327,36 @@ g_actions['activate-user'] = function activateUser(node)
 			var url = serverBCK_API+"/users/user/" + userid;
 			$.ajax({
 				type : "GET",
+				contentType: "application/xml",
 				dataType : "xml",
 				url : url,
 				success : function(data) {
 					$("active",data).text('1');
+					data = xml2string(data);
 					$.ajax({
 						type : "PUT",
-						dataType : "xml",
+						dataType : "text",
 						url : url,
 						data : data,
 						success : function(data) {
-							$("#batch-log").append("<br>- user inactive("+userid+") - identifier:"+identifier);
+							$("#batch-log").append("<br>- user actived ("+userid+") - identifier:"+identifier);
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> cannot update user - identifier:"+identifier);
 						}
 					});
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> cannot get user info - identifier:"+identifier);
 				}
+
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR user does not exist - identifier:"+identifier);
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> user does not exist - identifier:"+identifier);
 		}
 	});
 }
-
-
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -364,7 +380,7 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 			$("#batch-log").append("<br>- usergroup created ("+usergroupid+") - label:"+usergroup);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***ERROR in create-usergroup - label:"+usergroup);					
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in create-usergroup - label:"+usergroup);					
 		}
 	});
 }
@@ -406,7 +422,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 							groupid = $(groups[k]).attr("id");
 					}
 					if (groupid=="")
-						$("#batch-log").append("<br>- ERROR in JoinUserGroup - usergroup:"+usergroup+" NOT FOUND - user:"+user);
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in JoinUserGroup - usergroup:"+usergroup+" NOT FOUND - user:"+user);
 					else {
 						//---- join group --------------
 						$.ajax({
@@ -418,18 +434,18 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 								$("#batch-log").append("<br>- JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
 							},
 							error : function(data) {
-								$("#batch-log").append("<br>- ERROR in JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
+								$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
 							}
 						});
 					}
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ERROR in JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in JoinUserGroup - usergroup:"+usergroup+" - user:"+user);
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR in JoinUserGroup - usergroup:"+usergroup+" - user:"+user+" NOT FOUND");
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in JoinUserGroup - usergroup:"+usergroup+" - user:"+user+" NOT FOUND");
 		}
 	});
 
@@ -472,7 +488,7 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 							groupid = $(groups[k]).attr("id");
 					}
 					if (groupid=="")
-						$("#batch-log").append("<br>- ***ERROR in LeaveUserGroup - usergroup:"+usergroup+" NOT FOUND - user:"+user);
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in LeaveUserGroup - usergroup:"+usergroup+" NOT FOUND - user:"+user);
 					else {
 						//---- leave group --------------
 						$.ajax({
@@ -484,18 +500,18 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 								$("#batch-log").append("<br>- LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
 							},
 							error : function(data) {
-								$("#batch-log").append("<br>- ***ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
+								$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
 							}
 						});
 					}
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user);
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***ERROR in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user+" NOT FOUND");
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in LeaveUserGroup - usergroup:"+usergroup+" - user:"+user+" NOT FOUND");
 		}
 	});
 }
@@ -534,7 +550,7 @@ g_actions['create-elgg-user'] = function createElggUser(node)
 			}
 		},
 		error : function(jqxhr,textStatus) {
-			$("#batch-log").append("<br>- ***ERROR in createElggUser - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in createElggUser - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 		}
 	});
 }
@@ -581,14 +597,14 @@ g_actions['delete-tree'] = function deleteTree(node)
 					$("#batch-log").append("<br>- tree deleted - code:|"+code+"| portfolioid:"+portfolioid);
 				},
 				error : function(jqxhr,textStatus) {
-					$("#batch-log").append("<br>- ***ERROR delete tree - code:|"+code+" ---- NOT FOUND ----");
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
 				}
 			});
 		} else {
-			$("#batch-log").append("<br>- ***ERROR delete tree - code:|"+code+" ---- NOT FOUND ----");
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
 		}	}
 	catch(err) {
-		$("#batch-log").append("<br>- ***ERROR delete tree - code:|"+code+" ---- NOT FOUND ----");
+		$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
 	}
 
 }
@@ -662,26 +678,26 @@ g_actions['create-tree'] = function createTree(node)
 												$("#batch-log").append("<br>- tree created ("+portfolioid+") - code:"+code);
 											},
 											error : function(data) {
-												$("#batch-log").append("<br>- ***ERROR in  create tree - code:"+code);
+												$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  create tree - code:"+code);
 											}
 										});
 									},
 									error : function(data) {
-										$("#batch-log").append("<br>- ***ERROR in  create tree - code:"+code);
+										$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  create tree - code:"+code);
 									}
 								});
 							} else {
-								$("#batch-log").append("<br>- ***ERROR in  create tree update root label - code:"+code);
+								$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  create tree update root label - code:"+code);
 							}
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ***ERROR in  create tree - code:"+code);
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  create tree - code:"+code);
 						}
 				});
 			}
 		});
 	} else {
-		$("#batch-log").append("<br>-***ERROR in  create tree - code is empty");
+		$("#batch-log").append("<br>-***<span class='danger'>ERROR</span> in  create tree - code is empty");
 	}
 
 }
@@ -748,12 +764,12 @@ g_actions['copy-tree'] = function copyTree(node)
 						$("#batch-log").append("<br>- copy-tree created ("+treeid+") - code:"+code);
 					},
 					error : function(data) {
-						$("#batch-log").append("<br>- ERROR in  copy-tree - code:"+code);
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in  copy-tree - code:"+code);
 					}
 				});
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ERROR in  copy-tree - code:"+code);
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in  copy-tree - code:"+code);
 			}
 		});
 }
@@ -796,16 +812,16 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 							$("#batch-log").append("<br>- tree root updated ("+oldcode+") - newcode:"+newcode);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ***ERROR in  updateTreeRoot - code:"+oldcode+" not found");
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateTreeRoot - code:"+oldcode+" not found");
 						}
 					});
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***ERROR in  updateTreeRoot - code:"+oldcode);
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateTreeRoot - code:"+oldcode);
 				}
 		});
 	} else {
-		$("#batch-log").append("<br>-***ERROR in updateTreeRoot - oldcode or newcode is empty");		//processNextAction();
+		$("#batch-log").append("<br>-***<span class='danger'>ERROR</span> in updateTreeRoot - oldcode or newcode is empty");		//processNextAction();
 	}
 }
 
@@ -890,7 +906,7 @@ g_actions['update-resource'] = function updateResource(node)
 				}
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - uuid="+g_current_node_uuid+" semtag="+semtag);
+				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-resource - uuid="+g_current_node_uuid+" semtag="+semtag);
 			}
 		});
 	} else {
@@ -959,7 +975,7 @@ g_actions['update-resource'] = function updateResource(node)
 				}
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ***NOT FOUND ERROR in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
+				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
 			}
 		});
 	}
@@ -997,7 +1013,7 @@ function updateDocument(nodes,node,semtag)
 				updateDocument(nodes,node,semtag);
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ***ERROR in update Document resource("+nodeid+") - semtag="+semtag);
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update Document resource("+nodeid+") - semtag="+semtag);
 				updateDocument(nodes,node,semtag);
 			}
 		});
@@ -1029,7 +1045,7 @@ function updateField(nodes,node,type,semtag,text)
 				updateField(nodes,node,type,semtag,text);
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ***ERROR in update resource("+nodeid+") - semtag="+semtag);
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource("+nodeid+") - semtag="+semtag);
 				updateField(nodes,node,type,semtag,text);
 			}
 		});
@@ -1067,7 +1083,7 @@ function updateCalendar(nodes,node,text,semtag)
 				updateCalendar(nodes,node,text);
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ***ERROR in update calendar resource("+nodeid+") - semtag="+semtag);
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update calendar resource("+nodeid+") - semtag="+semtag);
 				updateCalendar(nodes,node,text);
 			}
 		});
@@ -1114,7 +1130,7 @@ function updateProxy(nodes,node,type,semtag)
 						//===========================================================
 					},
 					error : function(data) {
-						$("#batch-log").append("<br>- ***ERROR in update resource("+targetid+") - semtag="+semtag);
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource("+targetid+") - semtag="+semtag);
 						updateProxy(nodes,node,type,semtag);
 					}
 				});
@@ -1146,7 +1162,7 @@ function updateMetada(nodes,node,type,semtag,text,attribute)
 				updateMetada(nodes,node,type,semtag,text,attribute)
 			},
 			error : function(data,nodeid,semtag) {
-				$("#batch-log").append("<br>- ***ERROR in update metadata("+this.nodeid+") - semtag="+this.semtag);
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadata("+this.nodeid+") - semtag="+this.semtag);
 				updateMetada(nodes,node,type,semtag,text,attribute);
 			}
 		});
@@ -1176,7 +1192,7 @@ function updateMetadawad(nodes,node,type,semtag,text,attribute)
 				updateMetadawad(nodes,node,type,semtag,text,attribute)
 			},
 			error : function(data,nodeid,semtag) {
-				$("#batch-log").append("<br>- ***ERROR in update metadatawad("+this.nodeid+") - semtag="+this.semtag);
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadatawad("+this.nodeid+") - semtag="+this.semtag);
 				updateMetadawad(nodes,node,type,semtag,text,attribute);
 			}
 		});
@@ -1204,7 +1220,7 @@ function updateRights(nodes,node,role,rd,wr,dl,sb)
 				updateRights(nodes,node,role,rd,wr,dl,sb);
 			},
 			error : function(data,nodeid,semtag) {
-				$("#batch-log").append("<br>- ***ERROR resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
 				updateRights(nodes,node,role,rd,wr,dl,sb);
 			}
 		});
@@ -1235,7 +1251,7 @@ function updateDashboard(nodes,node,type,semtag,text)
 				updateDashboard(nodes,node,type,this.semtag,text);
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ***ERROR in update Dashboard("+nodeid+") - semtag="+semtag);
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update Dashboard("+nodeid+") - semtag="+semtag);
 				updateDashboard(nodes,node,type,this.semtag,text);
 			}
 		});
@@ -1276,13 +1292,13 @@ function updateNodeResource(nodes,node)
 						updateNodeResource(nodes,node);
 					},
 					error : function(data) {
-						$("#batch-log").append("<br>- ***ERROR in  updateNodeResource - nodeid:"+nodeid+" not updated");
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateNodeResource - nodeid:"+nodeid+" not updated");
 						updateNodeResource(nodes,node);
 					}
 				});
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ***ERROR in  updateNodeResource - nodeid:"+nodeid+" not found");
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateNodeResource - nodeid:"+nodeid+" not found");
 				updateNodeResource(nodes,node);
 			}
 		});
@@ -1314,7 +1330,7 @@ g_actions['update-field-byid'] = function updateFieldById(node)
 			$("#batch-log").append("<br>- resource updated ("+nodeid+")");
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***ERROR in update resource("+nodeid+")");
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource("+nodeid+")");
 		}
 	});
 }
@@ -1344,7 +1360,7 @@ g_actions['reset-document-byid'] = function resetDocumentById(node)
 			$("#batch-log").append("<br>- document reset ("+nodeid+")");
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***ERROR in reset document("+nodeid+")");
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in reset document("+nodeid+")");
 		}
 	});
 }
@@ -1397,14 +1413,14 @@ g_actions['share-tree'] = function shareTree(node)
 							$("#batch-log").append("<br>- tree shared ("+g_trees[treeref][0]+") - user:"+user_id+" - role:"+role);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ***ERROR in share tree ("+g_trees[treeref][0]+") - role:"+role);
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref][0]+") - role:"+role);
 						}
 					});
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***ERROR in share tree ("+g_trees[treeref][0]+") - role:"+role);
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref][0]+") - role:"+role);
 		}
 	});
 }
@@ -1441,12 +1457,12 @@ g_actions['set-owner'] = function setOwner(node)
 					$("#batch-log").append("<br>- tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***ERROR tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***ERROR tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
 		}
 	});
 }
@@ -1454,7 +1470,7 @@ g_actions['set-owner'] = function setOwner(node)
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
-//--------------------------- Join Portfolio Group ----------------------
+//--------------------------- Portfolio Group ---------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 
@@ -1474,7 +1490,7 @@ g_actions['create-portfoliogroup'] = function CreatePortfolioGroup(node)
 			$("#batch-log").append("<br>- portfoliogroup created ("+portfoliogroupid+") - label:"+portfoliogroup);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***ERROR in create-portfoliogroup - label:"+portfoliogroup);					
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in create-portfoliogroup - label:"+portfoliogroup);					
 		}
 	});
 }
@@ -1499,7 +1515,7 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 					groupid = $(groups[k]).attr("id");
 			}
 			if (groupid=="")
-				$("#batch-log").append("<br>- ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" NOT FOUND");
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" NOT FOUND");
 			else {
 				//---- join group --------------
 				$.ajax({
@@ -1508,16 +1524,201 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 					url : serverBCK_API+"/portfoliogroups?group="+groupid+"&uuid=" + g_trees[treeref][0],
 					data : "",
 					success : function(data) {
-						$("#batch-log").append("<br>- JoinPortfolioGroup - usergroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+						$("#batch-log").append("<br>- JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
 					},
 					error : function(data) {
-						$("#batch-log").append("<br>- ***ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
 					}
 				});
 			}
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***ERROR in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+		}
+	});
+}
+
+//=================================================
+g_actions['leave-portfoliogroup'] = function LeavePortfolioGroup(node)
+//=================================================
+{
+	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	var treeref = $(node).attr("select");
+	//---- get portfoliogroupid ----------
+	var groupid = "";
+	var url = serverBCK_API+"/portfoliogroups";
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			var groups = $("group",data);
+			for (var k=0;k<groups.length;k++){
+				if ($('label',groups[k]).text()==portfoliogroup)
+					groupid = $(groups[k]).attr("id");
+			}
+			if (groupid=="")
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in LeavePortfolioGroup - portfoliogroup : "+portfoliogroup+" NOT FOUND");
+			else {
+				//---- leave group --------------
+				$.ajax({
+					type : 'DELETE',
+					dataType : "text",
+					url : serverBCK_API+"/portfoliogroups?group="+groupid+"&uuid=" + g_trees[treeref][0],
+					data : "",
+					success : function(data) {
+						$("#batch-log").append("<br>- LeavePortfolioGroup - portfoliogroup : "+portfoliogroup+" - portfolio : "+g_trees[treeref][0]);
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup : "+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+					}
+				});
+			}
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+		}
+	});
+}
+
+//=================================================
+g_actions['share-portfoliogroup'] = function sharePortfolioGroup(node)
+//=================================================
+{
+	var user = getTxtvals($("identifier",node));;
+	var role = getTxtvals($("role",node));
+	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	var portfoliogroupid = get_portfoliogroupid(portfoliogroup);
+	var url = serverBCK_API+"/users/user/username/"+user;
+	$.ajax({
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			var user_id = data;
+			var users = "<users><user id='"+user_id+"'/></users>";
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfoliogroups?group="+portfoliogroupid,
+				success : function(data) {
+					var portfolios = $("portfolio",data);
+					if (portfolios.length>0) {
+						for (var i=0; i<portfolios.length;i++) {
+							var portfolioid = $(portfolios[i]).attr("id");
+							//---- get role groupid ----------
+							var groupid = "";
+							var url = serverBCK_API+"/rolerightsgroups?portfolio="+portfolioid+"&role="+role;
+							$.ajax({
+								type : "GET",
+								contentType: "text/html",
+								dataType : "text",
+								url : url,
+								success : function(data) {
+									groupid = data;
+									//---- share tree --------------
+									var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+									$.ajax({
+										type : "POST",
+										contentType: "application/xml",
+										dataType : "xml",
+										url : url,
+										data : users,
+										success : function(data) {
+											$("#batch-log").append("<br>* tree shared - portfoliogroup : "+portfoliogroup+" - user : "+user+" - role : "+role+" - portfolioid:"+portfolioid);
+										},
+										error : function(data) {
+											$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in sharing tree - portfoliogroup : "+portfoliogroup+" - user : "+user+" - role : "+role+" - portfolioid : "+portfolioid);
+										}
+									});
+								},
+								error : function(data) {
+									$("#batch-log").append("<br>- <span class='danger'>ERROR</span> role:"+role+" NOT FOUND - portfolioid : "+portfolioid);
+								}
+							});
+						}
+					} else {
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> - portfoliogroup : "+portfoliogroup+" is EMPTY");				
+					}
+				},		
+				error : function(data) {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> Portfoliogroup does not exist - portfoliogroup:"+portfoliogroup);
+				}
+			});
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> user : "+user+" NOT FOUND");
+		}
+	});
+}
+
+//=================================================
+g_actions['unshare-portfoliogroup'] = function unsharePortfolioGroup(node)
+//=================================================
+{
+	var user = getTxtvals($("identifier",node));;
+	var role = getTxtvals($("role",node));
+	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	var portfoliogroupid = get_portfoliogroupid(portfoliogroup);
+	var url = serverBCK_API+"/users/user/username/"+user;
+	$.ajax({
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			var user_id = data;
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfoliogroups?group="+portfoliogroupid,
+				success : function(data) {
+					var portfolios = $("portfolio",data);
+					if (portfolios.length>0) {
+						for (var i=0; i<portfolios.length;i++) {
+							var portfolioid = $(portfolios[i]).attr("id");
+							//---- get role groupid ----------
+							var groupid = "";
+							var url = serverBCK_API+"/rolerightsgroups?portfolio="+portfolioid+"&role="+role;
+							$.ajax({
+								type : "GET",
+								contentType: "text/html",
+								dataType : "text",
+								url : url,
+								success : function(data) {
+									groupid = data;
+									//---- unshare tree --------------
+									var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users/user/"+user_id;
+									$.ajax({
+										type : "DELETE",
+										contentType: "application/xml",
+										dataType : "xml",
+										url : url,
+										success : function(data) {
+											$("#batch-log").append("<br>* tree unshared - portfoliogroup : "+portfoliogroup+" - user : "+user+" - role : "+role+" - portfolioid:"+portfolioid);
+										},
+										error : function(data) {
+											$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in unsharing tree - portfoliogroup : "+portfoliogroup+" - user : "+user+" - role : "+role+" - portfolioid : "+portfolioid);
+										}
+									});
+								},
+								error : function(data) {
+									$("#batch-log").append("<br>- <span class='danger'>ERROR</span> role:"+role+" NOT FOUND - portfolioid : "+portfolioid);
+								}
+							});
+						}
+					} else {
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> - portfoliogroup : "+portfoliogroup+" is EMPTY");				
+					}
+				},		
+				error : function(data) {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> Portfoliogroup does not exist - portfoliogroup:"+portfoliogroup);
+				}
+			});
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> user : "+user+" NOT FOUND");
 		}
 	});
 }
@@ -1538,6 +1739,7 @@ g_actions['share-usergroup'] = function shareUserGroup(node)
 	var role = getTxtvals($("role",node));
 	var usergroupname = getTxtvals($("groupname",node));
 	var usergroupid = get_usergroupid(usergroupname);
+	
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -1567,20 +1769,20 @@ g_actions['share-usergroup'] = function shareUserGroup(node)
 								$("#batch-log").append("<br>tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
 							},
 							error : function(data) {
-								$("#batch-log").append("<br>- ERROR tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+								$("#batch-log").append("<br>- <span class='danger'>ERROR</span> tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
 							}
 						});
 					},
 					error : function(data) {
-						$("#batch-log").append("<br>- ERROR tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
 					}
 				});
 			} else {
-				$("#batch-log").append("<br>ERROR Empty group - tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+				$("#batch-log").append("<br><span class='danger'>ERROR</span> Empty group - tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
 			}
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
 		}
 	});
 }
@@ -1631,14 +1833,14 @@ g_actions['unshare-tree'] = function unshareTree(node)
 							$("#batch-log").append("<br>- tree unshared ("+g_trees[treeref][0]+") - user:"+user_id+" - role:"+role);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ERROR in unshare tree ("+g_trees[treeref][0]+") - role:"+role);
+							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in unshare tree ("+g_trees[treeref][0]+") - role:"+role);
 						}
 					});
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR in unshare tree ("+g_trees[treeref][0]+") - role:"+role);
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in unshare tree ("+g_trees[treeref][0]+") - role:"+role);
 		}
 	});
 }
@@ -1685,22 +1887,102 @@ g_actions['unshare-usergroup'] = function unshareUserGroup(node)
 								$("#batch-log").append("<br>tree with usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
 							},
 							error : function(jqxhr,textStatus) {
-								$("#batch-log").append("<br>- ERROR in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
+								$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
 							}
 						});
 					}
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ERROR in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ERROR in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
 		}
 	});
 }
 
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Share Groups --------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['share-groups'] = function shareGroups(node)
+//=================================================
+{
+	var role = getTxtvals($("role",node));
+	var usergroup = getTxtvals($("usergroup",node));
+	var usergroupid = get_usergroupid(usergroup);
+	var portfoliogroup = getTxtvals($("portfoliogroup",node));
+	var portfoliogroupid = get_portfoliogroupid(portfoliogroup);
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfoliogroups?group="+portfoliogroupid,
+		success : function(data) {
+			var portfolios = $("portfolio",data);
+			if (portfolios.length>0) {
+				$.ajax({
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/usersgroups?group="+usergroupid,
+					success : function(data) {
+						var users = "<users>" + $($("users",data)[0]).html() + "</users>";
+						if (users.length>20) {
+							for (var i=0; i<portfolios.length;i++) {
+								var portfolioid = $(portfolios[i]).attr("id");
+								//---- get role groupid ----------
+								var groupid = "";
+								var url = serverBCK_API+"/rolerightsgroups?portfolio="+portfolioid+"&role="+role;
+								$.ajax({
+									type : "GET",
+									contentType: "text/html",
+									dataType : "text",
+									url : url,
+									success : function(data) {
+										groupid = data;
+										//---- share tree --------------
+										var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+										$.ajax({
+											type : "POST",
+											contentType: "application/xml",
+											dataType : "xml",
+											url : url,
+											data : users,
+											success : function(data) {
+												$("#batch-log").append("<br>* tree shared - portfoliogroup:"+portfoliogroup+" - usergroup:"+usergroup+" - role:"+role+" - portfolioid:"+portfolioid);
+											},
+											error : function(data) {
+												$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in tree sharing with usergroup  - portfolioid:"+portfolioid+") - usergroup:"+usergroup+" - role:"+role);
+											}
+										});
+									},
+									error : function(data) {
+										$("#batch-log").append("<br>- <span class='danger'>ERROR</span> role does not exist  - portfolioid:"+portfolioid+" - role:"+role);
+									}
+								});
+							}
+						} else {
+							$("#batch-log").append("<br><span class='danger'>ERROR</span> - Usergroup is empty - usergroup:"+usergroup);
+						}
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> - Usergroup does not exist -  - usergroup:"+usergroup);
+					}
+				});
+			} else {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span>  - Portfoliogroup is empty - portfoliogroup:"+portfoliogroup);				
+			}
+		},		
+		error : function(data) {
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> Portfoliogroup does not exist - portfoliogroup:"+portfoliogroup);
+		}
+	});
+}
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -1737,7 +2019,7 @@ g_actions['import-node'] = function importNode(node)
 				import_nodes(nodes,semtag,source,srcetag,srcecode);
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ERROR in import NOT FOUND - semtag="+semtag+ " source="+source);
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in import NOT FOUND - semtag="+semtag+ " source="+source);
 			}
 		});
 	}
@@ -1771,7 +2053,7 @@ function import_nodes(nodes,semtag,source,srcetag,srcecode)
 				import_nodes(this.nodes,semtag,source,srcetag,srcecode);
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ERROR in import node("+this.destid+") - semtag="+semtag+ " source="+source);
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in import node("+this.destid+") - semtag="+semtag+ " source="+source);
 				import_nodes(this.nodes,semtag,source,srcetag,srcecode);
 			}
 		});
@@ -1801,7 +2083,7 @@ g_actions['moveup-node'] = function moveupNode(node)
 			moveup_nodes(nodes,semtag);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- NOT FOUND ERROR in moveup node - semtag="+semtag);
+			$("#batch-log").append("<br>- NOT FOUND <span class='danger'>ERROR</span> in moveup node - semtag="+semtag);
 		}
 	});
 }
@@ -1825,7 +2107,7 @@ function moveup_nodes(nodes,semtag)
 				moveup_nodes(this.nodes,semtag);
 			},
 			error : function(jqxhr,textStatus) {
-				$("#batch-log").append("<br>- ERROR in moveup node - nodeid("+this.current+") - semtag="+this.semtag);
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in moveup node - nodeid("+this.current+") - semtag="+this.semtag);
 				moveup_nodes(this.nodes);
 			}
 		});
@@ -1899,7 +2181,7 @@ function get_portfoliogroupid(groupname)
 {
 	var groupid = null;
 	for (var i=0;i<PortfoliosGroups_list.length;i++){
-		if (PortfoliosGroups_list[i]==groupname){
+		if (PortfoliosGroups_list[i].label==groupname){
 			groupid = PortfoliosGroups_list[i].id;
 			break;
 		}

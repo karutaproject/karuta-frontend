@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2014 - ePortfolium - Licensed under the
+	Copyright 2018 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -223,6 +223,14 @@ function getNavBar(type,portfolioid,edit)
 			html += "					</ul>";
 			html += "				</li>";
 			html += "			</ul>";
+		}
+		//-----------------NEW WINDOW-----------------------------------------
+		if (type!='login' && USER!=undefined) {
+			if (USER.admin || (USER.creator && !USER.limited) ) {
+				html += "			<ul class='nav navbar-nav'>";
+				html += "						<li><a href='"+window.location+"' target='_blank' class='navbar-icon'><i class='glyphicon glyphicon-new-window'></i></a></li>";
+				html += "			</ul>";
+			}
 		}
 		//-----------------LOGOUT-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
