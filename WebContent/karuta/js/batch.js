@@ -171,6 +171,7 @@ g_actions['create-elgg-group'] = function createElggGroup(node)
 g_actions['create-user'] = function createUser(node)
 //=================================================
 {
+	var ok = false;
 	var identifier = getTxtvals($("identifier",node));
 	var lastname = getTxtvals($("lastname",node));
 	var firstname = getTxtvals($("firstname",node));
@@ -190,6 +191,7 @@ g_actions['create-user'] = function createUser(node)
 		url : url,
 		success : function(data) {
 			userid = data;
+			ok = true;
 			$("#batch-log").append("<br>- user already defined("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 			},
 		error : function(data) {
@@ -225,6 +227,7 @@ g_actions['create-user'] = function createUser(node)
 			});
 		}
 	});
+	return ok;
 };
 
 
@@ -232,6 +235,7 @@ g_actions['create-user'] = function createUser(node)
 g_actions['delete-user'] = function deleteUser(node)
 //=================================================
 {
+	var ok = false;
 	var identifier = getTxtvals($("identifier",node));
 	//---- get userid ----------
 	var userid = "";
@@ -264,6 +268,7 @@ g_actions['delete-user'] = function deleteUser(node)
 g_actions['inactivate-user'] = function inactivateUser(node)
 //=================================================
 {
+	var ok = false;
 	var identifier = getTxtvals($("identifier",node));
 	//---- get userid ----------
 	var userid = "";
@@ -313,6 +318,7 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 g_actions['activate-user'] = function activateUser(node)
 //=================================================
 {
+	var ok = false;
 	var identifier = getTxtvals($("identifier",node));
 	//---- get userid ----------
 	var userid = "";
@@ -368,6 +374,7 @@ g_actions['activate-user'] = function activateUser(node)
 g_actions['create-usergroup'] = function CreateUserGroup(node)
 //=================================================
 {
+	var ok = false;
 	var usergroup = getTxtvals($("usergroup",node));
 	var url = serverBCK_API+"/usersgroups?label="+usergroup;
 	$.ajax({
@@ -389,6 +396,7 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 g_actions['join-usergroup'] = function JoinUserGroup(node)
 //=================================================
 {
+	var ok = false;
 	var role = "";
 	var user = "";
 	var usergroup = getTxtvals($("usergroup",node));
@@ -455,6 +463,7 @@ g_actions['join-usergroup'] = function JoinUserGroup(node)
 g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 //=================================================
 {
+	var ok = false;
 	var role = "";
 	var user = "";
 	var usergroup = getTxtvals($("usergroup",node));
@@ -526,6 +535,7 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 g_actions['create-elgg-user'] = function createElggUser(node)
 //=================================================
 {
+	var ok = false;
 	var identifier = getTxtvals($("identifier",node));
 	var lastname = getTxtvals($("lastname",node));
 	var firstname = getTxtvals($("firstname",node));
@@ -581,6 +591,7 @@ g_actions['join-elgg-group'] = function createElggGroupMember(node)
 g_actions['delete-tree'] = function deleteTree(node)
 //=================================================
 {
+	var ok = false;
 	var code = getTxtvals($("code",node));
 	//----- get tree id -----
 	try {
@@ -619,6 +630,7 @@ g_actions['delete-tree'] = function deleteTree(node)
 g_actions['create-tree'] = function createTree(node)
 //=================================================
 {
+	var ok = false;
 	var code = getTxtvals($("code",node));
 	var treeref = $(node).attr('id');
 	if (code!="") {
@@ -712,6 +724,7 @@ g_actions['create-tree'] = function createTree(node)
 g_actions['select-tree'] = function selectTree(node)
 //=================================================
 {
+	var ok = false;
 	var code = getTxtvals($("code",node));
 	//----- get tree id -----
 	var portfolioid = UIFactory["Portfolio"].getid_bycode(code,false); 
@@ -734,6 +747,7 @@ g_actions['select-tree'] = function selectTree(node)
 g_actions['copy-tree'] = function copyTree(node)
 //=================================================
 {
+	var ok = false;
 	var code = getTxtvals($("code",node));
 	var label = getTxtvals($("label",node));
 	var template = getTxtvals($("template",node));
@@ -784,6 +798,7 @@ g_actions['copy-tree'] = function copyTree(node)
 g_actions['update-tree-root'] = function updateTreeRoot(node)
 //=================================================
 {
+	var ok = false;
 	var oldcode = getTxtvals($("oldcode",node));
 	var newcode = getTxtvals($("newcode",node));
 	var label = getTxtvals($("label",node));
@@ -1361,6 +1376,25 @@ g_actions['reset-document-byid'] = function resetDocumentById(node)
 		},
 		error : function(data) {
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in reset document("+nodeid+")");
+		}
+	});
+}
+
+//=================================================
+g_actions['delete-node-byid'] = function deleteNodeById(node)
+//=================================================
+{
+	var nodeid = getTxtvals($("uuid",node));
+	$.ajax({
+		type : "DELETE",
+		dataType : "text",
+		url : serverBCK_API+"/nodes/node/=" + nodeid,
+		data : "",
+		success : function(data) {
+			$("#batch-log").append("<br>- node deleted ("+nodeid+")");
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- *** <span class='danger'>ERROR</span> in deleting node : "+nodeid);
 		}
 	});
 }
@@ -2059,6 +2093,50 @@ function import_nodes(nodes,semtag,source,srcetag,srcecode)
 		});
 	}
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Delete Node ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['delete-node'] = function deleteNode(node)
+//=================================================
+{
+	var select = $(node).attr("select");
+	var idx = select.indexOf(".");
+	//----------------------------------------------------
+	var treeref = select.substring(0,idx);
+	var semtag = select.substring(idx+1);
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+		success : function(data) {
+			var nodes = $("node",data);
+			for (i=0; i<nodes.length; i++){
+				var nodeid = $(nodes[i]).attr('id');
+				$.ajax({
+					type : "DELETE",
+					dataType : "text",
+					url : serverBCK_API+"/nodes/node/" + nodeid,
+					nodeid : nodeid,
+					success : function(data) {
+						$("#batch-log").append("<br>- node deleted ("+this.nodeid+")");
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- *** <span class='danger'>ERROR</span> in deleting node : "+this.nodeid+" - tree="+g_trees[treeref][1]+" semtag="+semtag);
+					}
+				});
+			}
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span>No node - tree="+g_trees[treeref][1]+" semtag="+semtag);
+		}
+	});
+}
+
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //------------------------- Moveup Node ---------------------------------

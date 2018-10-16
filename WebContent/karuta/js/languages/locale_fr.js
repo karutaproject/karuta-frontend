@@ -394,6 +394,7 @@ karutaStr['fr']['confirm-remove-user-group']="Voulez-vous vraiment retirer cet u
 karutaStr['fr']['empty-group']="Groupe vide";
 karutaStr['fr']['list_portfoliosgroups']="Groupes de Portfolios";
 karutaStr['fr']['note-list_portfoliosgroups']="Attention - Les projets contenants les portfolios doivent être ouverts dans la page des portfolios";
+karutaStr['fr']['note-list_usergroups']="Attention - Les usagers ne doivent pas être filtrés dans la pages Usagers";
 karutaStr['fr']['confirm-remove-item-group']="Voulez-vous vraiment retirer cet élément du group ? Cette action est irréversible.";
 karutaStr['fr']['add_users']="Ajouter des usagers";
 karutaStr['fr']['add_portfolios']="Ajouter des portfolios";

@@ -88,9 +88,11 @@
 
 	<xsl:template match="*[metadata/@semantictag='inactivate-person']">
 		<inactivate-user>
+			<identifier>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">identifier</xsl:with-param>
 				</xsl:call-template>
+			</identifier>
 		</inactivate-user>
 	</xsl:template>
 
@@ -479,6 +481,16 @@
 		</update-field-byid>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='delete-node-byid']">
+		<delete-node-byid>
+			<uuid>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">uuid</xsl:with-param>
+				</xsl:call-template>
+			</uuid>
+		</delete-node-byid>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='reset-document-byid']">
 		<reset-document-byid>
 			<uuid>
@@ -487,6 +499,14 @@
 				</xsl:call-template>
 			</uuid>
 		</reset-document-byid>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='delete-node']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<delete-node select="{$select}">
+		</delete-node>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-node-resource']">
