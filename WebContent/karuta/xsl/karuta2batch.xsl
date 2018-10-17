@@ -18,6 +18,30 @@
 		</for-each-line>
 	</xsl:template>
 	
+	<xsl:template match="*[metadata/@semantictag='if-then-else']">
+		<if-then-else>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</if-then-else>
+	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='if-part']">
+		<if-part>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</if-part>		
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='then-part']">
+		<then-part>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</then-part>		
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='else-part']">
+		<else-part>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</else-part>		
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='create-person']">
 		<xsl:variable name="identifier">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
