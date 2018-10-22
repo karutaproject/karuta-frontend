@@ -341,6 +341,7 @@ karutaStr['fr']['report-code']="Code du rapport";
 karutaStr['fr']['csv']="Rôles - Afficher CSV";
 karutaStr['fr']['pdf']="Rôles - Afficher PDF";
 karutaStr['fr']['img']="Rôles - Afficher Image";
+karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
 
 //=========================================
 //========== EUROPASS =====================

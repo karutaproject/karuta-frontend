@@ -72,6 +72,7 @@ g_sendEmailPublicURL_message +="&lt;/div&gt;";
 //----------------------------------------------
 var specificmenus = false;
 var csvseparator = ";";
+var requiredToSubmit = true;
 
 //==============================
 function loadJS(url)

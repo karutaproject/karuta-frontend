@@ -320,6 +320,7 @@ karutaStr['es']['dashboard-code']="Código del panel";
 karutaStr['es']['report-code']="Codi del panel";
 karutaStr['es']['csv']="Roles - Mostrar CSV";
 karutaStr['es']['pdf']="Roles - Mostrar PDF";
+karutaStr['es']['document-required']="Tienes que especificar un documento antes de enviar !";
 
 //=========================================
 //========== EUROPASS =====================
