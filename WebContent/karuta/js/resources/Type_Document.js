@@ -270,6 +270,17 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 	html +=" <div id='progress_"+this.id+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
 	html +=  "<a id='file__"+this.id+"_"+langcode+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+"</a>"; 
 	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Document.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+    //Max size to upload
+    html +="<script type='text/javascript'>";
+    html +="$('#fileupload_"+this.id+langcode+"').bind('change', function() {";
+    html +=" var sizeFile = this.files[0].size /1024 / 1024;";
+    html +=" if (sizeFile > " + maxfilesizeupload + ") {";
+    html +="   alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);";
+    html +="   this.val('');";
+    html +=" }";
+    html +="});";
+    html +="</script>";
+
 	$("#"+destid).append($(html));
 	$("#fileupload_"+this.id+langcode).fileupload({
 		dataType: 'json',

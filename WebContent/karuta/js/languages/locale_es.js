@@ -320,6 +320,7 @@ karutaStr['es']['dashboard-code']="Código del panel";
 karutaStr['es']['report-code']="Codi del panel";
 karutaStr['es']['csv']="Roles - Mostrar CSV";
 karutaStr['es']['pdf']="Roles - Mostrar PDF";
+karutaStr['es']['size-upload']="Archivo es demasiado grande: debe ser inferior a " + maxfilesizeupload + " Mo !";
 
 //=========================================
 //========== EUROPASS =====================

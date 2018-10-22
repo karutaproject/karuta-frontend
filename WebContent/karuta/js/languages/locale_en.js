@@ -341,6 +341,7 @@ karutaStr['en']['report-code']="Report Code";
 karutaStr['en']['csv']="Roles - Display CSV";
 karutaStr['en']['pdf']="Roles - Display PDF";
 karutaStr['en']['img']="Rôles - Display Image";
+karutaStr['en']['size-upload']="Your file is so big : it must be less than " + maxfilesizeupload + " Mo !";
 
 //=========================================
 //========== EUROPASS =====================
