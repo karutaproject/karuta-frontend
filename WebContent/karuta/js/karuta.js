@@ -1330,9 +1330,9 @@ function toggleSideBar() {
 	{
 		$("#sidebar").hide();
 		g_display_sidebar = false;
-		$("#contenu").removeClass().addClass('col-md-12');
+		$("#contenu").removeClass().addClass('col-md-12').addClass('col-sm-12');
 	} else {
-		$("#contenu").removeClass().addClass('col-md-9');
+		$("#contenu").removeClass().addClass('col-md-9').addClass('col-sm-9');
 		$("#sidebar").show();
 		g_display_sidebar = true;
 	}
