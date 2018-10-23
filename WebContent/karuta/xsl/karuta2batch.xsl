@@ -225,23 +225,6 @@
 		</share-groups>
 	</xsl:template>
 
-	<xsl:template name='txtval'>
-		<xsl:param name="semtag"/>
-		<xsl:for-each select=".//*[metadata/@semantictag=$semtag]/*[metadata/@semantictag='txtsel' or metadata/@semantictag='txtval']">
-			<xsl:if test="metadata/@semantictag='txtsel'">
-				<xsl:variable name="txtsel">
-					<xsl:value-of select="asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
-				</xsl:variable>
-				<txtval select='{$txtsel}'/>
-			</xsl:if>
-			<xsl:if test="metadata/@semantictag='txtval'">
-				<xsl:variable name="txtval">
-					<xsl:value-of select="asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
-				</xsl:variable>
-				<txtval><xsl:value-of select="$txtval"/></txtval>
-			</xsl:if>
-		</xsl:for-each>
-	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='create-tree']">
 		<xsl:variable name="id">
@@ -289,17 +272,17 @@
 		</update-tree-root>
 	</xsl:template>
 
-	<xsl:template match="*[metadata/@semantictag='select-tree']">
+	<xsl:template match="*[metadata/@semantictag='for-each-tree']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<select-tree id="{$id}">
+		<for-each-tree id="{$id}">
 			<code>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">code</xsl:with-param>
 				</xsl:call-template>
 			</code>
-		</select-tree>
+		</for-each-tree>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='delete-tree']">
@@ -472,13 +455,11 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-field']">
-		<xsl:variable name="select">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
+		<xsl:variable name="select"><xsl:call-template name='get-select'/></xsl:variable>
 		<xsl:variable name="source">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<update-resource type='Field' select="{$select}">
+		<update-node type='Field' select="{$select}">
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
@@ -487,8 +468,48 @@
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
 			</text>
+		</update-node>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-textfield']">
+		<xsl:variable name="select"><xsl:call-template name='get-select'/></xsl:variable>
+		<xsl:variable name="source">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-resource type='TextField' select="{$select}">
+			<xsl:if test="$source!=''">
+				<source select="{$source}"/>
+			</xsl:if>
+			<attribute name='text' language-dependent='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
 		</update-resource>
 	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='update-calendar']">
+		<xsl:variable name="select"><xsl:call-template name='get-select'/></xsl:variable>
+		<update-resource type='Calendar' select="{$select}">
+			<attribute name='minViewMode' language-dependent='N'>
+				<txtval>
+					<xsl:value-of select=".//asmContext[metadata/@semantictag='minViewMode']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+				</txtval>
+			</attribute>
+			<attribute name='format' language-dependent='Y'>
+				<txtval>
+					<xsl:value-of select=".//asmContext[metadata/@semantictag='format']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+				</txtval>
+			</attribute>
+			<attribute name='text' language-dependent='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+		</update-resource>
+	</xsl:template>
+
+	
 
 	<xsl:template match="*[metadata/@semantictag='update-field-byid']">
 		<update-field-byid>
@@ -537,7 +558,7 @@
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<update-resource type='NodeResource' select="{$select}">
+		<update-node type='NodeResource' select="{$select}">
 			<newcode>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">node-code</xsl:with-param>
@@ -548,14 +569,15 @@
 					<xsl:with-param name="semtag">node-label</xsl:with-param>
 				</xsl:call-template>
 			</label>
-		</update-resource>
+		</update-node>
 	</xsl:template>
 
-	<xsl:template match="*[metadata/@semantictag='update-calendar']">
+
+	<xsl:template match="*[metadata/@semantictag='update-calendar2']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<update-resource type='Calendar' select="{$select}">
+		<update-node type='Calendar' select="{$select}">
 			<minViewMode>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">minViewMode</xsl:with-param>
@@ -571,14 +593,14 @@
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
 			</text>
-		</update-resource>
+		</update-node>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-document']">
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<update-resource type='Document' select="{$select}">
+		<update-node type='Document' select="{$select}">
 			<filename>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='filename']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 			</filename>
@@ -591,115 +613,7 @@
 			<fileid>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='fileid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 			</fileid>
-		</update-resource>
-	</xsl:template>
-
-	<xsl:template match="*[metadata/@semantictag='update-metadata-query']">
-		<xsl:variable name="select">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="source">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='MetadatawadQuery' select="{$select}">
-			<xsl:if test="$source!=''">
-				<source select="{$source}"/>
-			</xsl:if>
-			<text>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">text</xsl:with-param>
-				</xsl:call-template>
-			</text>
-		</update-resource>
-	</xsl:template>
-
-	<xsl:template match="*[metadata/@semantictag='update-metadata-menu']">
-		<xsl:variable name="select">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="source">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='MetadatawadMenu' select="{$select}">
-			<xsl:if test="$source!=''">
-				<source select="{$source}"/>
-			</xsl:if>
-			<text>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">text</xsl:with-param>
-				</xsl:call-template>
-			</text>
-		</update-resource>
-	</xsl:template>
-
-	<xsl:template match="*[metadata/@semantictag='update-metadata-inline']">
-		<xsl:variable name="select">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="source">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='MetadataInline' select="{$select}">
-			<xsl:if test="$source!=''">
-				<source select="{$source}"/>
-			</xsl:if>
-			<text>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">text</xsl:with-param>
-				</xsl:call-template>
-			</text>
-		</update-resource>
-	</xsl:template>
-
-	<xsl:template match="*[metadata/@semantictag='update-metadata']">
-		<xsl:variable name="select">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="attribute">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='attribute']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='Metadata' select="{$select}" attribute="{$attribute}">
-			<text>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">text</xsl:with-param>
-				</xsl:call-template>
-			</text>
-		</update-resource>
-	</xsl:template>
-
-	<xsl:template match="*[metadata/@semantictag='update-rights']">
-		<xsl:variable name="select">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="rd">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='rd']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="wr">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='wr']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="dl">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='dl']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="sb">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='sb']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type="Rights" select="{$select}" rd="{$rd}" wr="{$dl}" dl="{$dl}" sb="{$sb}"/>
-	</xsl:template>
-
-	<xsl:template match="*[metadata/@semantictag='update-metadata-wad']">
-		<xsl:variable name="select">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="attribute">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='attribute']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<update-resource type='Metadatawad' select="{$select}" attribute="{$attribute}">
-			<text>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">text</xsl:with-param>
-				</xsl:call-template>
-			</text>
-		</update-resource>
+		</update-node>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-proxy']">
@@ -709,9 +623,9 @@
 		<xsl:variable name="source">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<update-resource type='Proxy' select="{$select}">
+		<update-node type='Proxy' select="{$select}">
 			<source select="{$source}"/>
-		</update-resource>
+		</update-node>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-dashboard']">
@@ -721,7 +635,7 @@
 		<xsl:variable name="source">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<update-resource type='Dashboard' select="{$select}">
+		<update-node type='Dashboard' select="{$select}">
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
@@ -730,7 +644,7 @@
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
 			</text>
-		</update-resource>
+		</update-node>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='import-node']">
@@ -779,6 +693,160 @@
 		</leave-usergroup>
 	</xsl:template>
 	
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ================================ METADATA ============================================ -->
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+	
+		<xsl:template match="*[metadata/@semantictag='update-rights']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="rd">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='rd']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="wr">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='wr']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="dl">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='dl']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="sb">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='sb']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-rights type="Rights" select="{$select}" rd="{$rd}" wr="{$dl}" dl="{$dl}" sb="{$sb}"/>
+	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='update-metadata']">
+		<xsl:variable name="select"><xsl:call-template name='get-select'/></xsl:variable>
+		<xsl:variable name="attribute">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='attribute']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<update-node type='Metadata' select="{$select}" attribute="{$attribute}">
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-node>
+	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='update-metadata-wad']">
+		<xsl:variable name="select"><xsl:call-template name='get-select'/></xsl:variable>
+		<xsl:variable name="attribute">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='attribute']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<update-node type='Metadatawad' select="{$select}" attribute="{$attribute}">
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-node>
+	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='update-metadata-query']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-node type='Metadatawad' select="{$select}" attribute="query">
+			<xsl:if test="$source!=''">
+				<source select="{$source}"/>
+			</xsl:if>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-node>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-metadata-menu']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-node type='Metadatawad' select="{$select}" attribute='menuroles'>
+			<xsl:if test="$source!=''">
+				<source select="{$source}"/>
+			</xsl:if>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-node>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-metadata-inline']">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<update-node type='Metadata' select="{$select}" attribute="inline">
+			<xsl:if test="$source!=''">
+				<source select="{$source}"/>
+			</xsl:if>
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-node>
+	</xsl:template>
+
+	<xsl:template name="get-select">
+		<xsl:variable name="select">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="$select=''">
+				<xsl:value-of select='$id'/>.<xsl:value-of select='$semtag'/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select='$select'/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name='txtval'>
+		<xsl:param name="semtag"/>
+		<xsl:for-each select=".//*[metadata/@semantictag=$semtag]/*[metadata/@semantictag='txtsel' or metadata/@semantictag='txtval' or metadata/@semantictag='textval']">
+			<xsl:if test="metadata/@semantictag='txtsel'">
+				<xsl:variable name="txtsel">
+					<xsl:value-of select="asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+				</xsl:variable>
+				<txtval select='{$txtsel}'/>
+			</xsl:if>
+			<xsl:if test="metadata/@semantictag='txtval'">
+				<xsl:variable name="txtval"> 
+					<xsl:value-of select="asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+				</xsl:variable>
+				<txtval><xsl:value-of select="$txtval"/></txtval>
+			</xsl:if>
+			<xsl:if test="metadata/@semantictag='textval'">
+				<xsl:variable name="txtval"> 
+					<xsl:value-of select="asmResource[@xsi_type='TextField']/text[@lang=$lang]"/>
+				</xsl:variable>
+				<txtval><xsl:value-of select="$txtval"/></txtval>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:template>
+
 
 </xsl:stylesheet>
 

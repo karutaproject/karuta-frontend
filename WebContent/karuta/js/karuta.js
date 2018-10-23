@@ -463,8 +463,8 @@ function savedBox()
 {
 	var html = "";
 	html += "\n<!-- ==================== Saved box ==================== -->";
-	html += "\n<div id='saved-window' class='modal hide'>";
-	html += "\n	<div id='saved-window-body' class='modal-body' style='text-align:center'>Saved</div>";
+	html += "\n<div id='saved-window'>";
+	html += "\n	<div id='saved-window-body' style='text-align:center'></div>";
 	html += "\n</div>";
 	html += "\n<!-- ============================================== -->";
 	return html;
@@ -702,8 +702,7 @@ function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,cla
 function writeSaved(uuid,data)
 //=======================================================================
 {
-	$("#saved-window").show(1000);
-	$("#saved-window").hide(1000);
+	$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 }
 
 //=======================================================================

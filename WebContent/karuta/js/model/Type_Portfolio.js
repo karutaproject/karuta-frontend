@@ -952,8 +952,8 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 {
 	var result = "";
 	var url = serverBCK_API+"/portfolios/portfolio/code/" + code +( (resources)?"?resources=true":"");
-	$.ajaxSetup({async: false});
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : url,
@@ -962,7 +962,6 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 			result = $(portfolio).attr('id');
 		}
 	});
-	$.ajaxSetup({async: true});
 	return result;
 };
 

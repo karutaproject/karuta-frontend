@@ -84,6 +84,12 @@ a.sidebar-link:hover {
 	border-color:@navigation-bar-border-color;
 }
 
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover {
+	background-color:@navigation-bar-background-color;
+}
+
+
 .navbar-default .navbar-nav > li > a {
 	color:@navigation-bar-color;
 }
@@ -1120,14 +1126,23 @@ textarea {
 	color:inherit;
 }
 
-#wait-window,
-#saved-window {
+#wait-window {
 	width:100px;
 	margin-left:-50px;
 	background-color:lightgrey;
 	position:fixed;
 	top:25%;
 	left:50%;
+}
+
+#saved-window {
+	width:100%;
+	background-color:white;
+	position:fixed;
+	top:0;
+	left:0;
+	height: 17px;
+	z-index:2000;
 }
 
 #info-window {

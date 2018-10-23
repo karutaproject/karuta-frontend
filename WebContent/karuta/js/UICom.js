@@ -340,7 +340,8 @@ var UICom =
 	//=======================================================================
 	  UpdateResource: function(uuid, cb1, cb2, delfile )
 	//=======================================================================
-	{
+	{	
+		$("#saved-window-body").html("<img src='../../karuta//img/red.png'/> recording...");
 		var treenode = UICom.structure["tree"][uuid];
 		var resource = $(">asmResource[xsi_type!='nodeRes'][xsi_type!='context']",treenode.node)[0];
 	
@@ -365,6 +366,7 @@ var UICom =
 					cb2(uuid,data);
 			},
 			error : function(jqxhr,textStatus) {
+				$("#saved-window-body").css('background-color','red');
 				alertHTML("Error in UpdateResource : "+jqxhr.responseText);
 				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
@@ -412,6 +414,7 @@ var UICom =
 							cb(uuid,data);
 					},
 					error : function(jqxhr,textStatus) {
+						$("#saved-window-body").css('background-color','red');
 						alertHTML("Error in UpdateNode : "+jqxhr.responseText);
 						alertHTML(karutaStr[LANG]['disconnected']);
 //						window.location = "login.htm";
@@ -438,8 +441,9 @@ var UICom =
 						eval(callback+"('"+param1+"','"+param2+"')");
 			},
 			error : function(jqxhr,textStatus) {
+				$("#saved-window-body").css('background-color','red');
 				alertHTML("Error in DeleteNode : "+jqxhr.responseText);
-//				alertHTML(karutaStr[LANG]['disconnected']);
+				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
 			}
 
