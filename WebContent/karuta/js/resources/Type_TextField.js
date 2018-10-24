@@ -120,15 +120,15 @@ UIFactory["TextField"].prototype.update = function(langcode)
 		langcode = LANGCODE;
 	//---------------------
 	var value = $.trim($("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val());
-	var words = $.trim(value).split(' ');
-	if (this.maxword>0 && countWords(value)>this.maxword) {
-		value = getFirstWords(value,this.maxword);
-		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+value);
-		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(value);
-		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(value);
-	}
 	var newValue1 = value.replace(/(<br("[^"]*"|[^\/">])*)>/g, "$1/>");
 	var newValue = newValue1.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
+	var words = $.trim(newValue).split(' ');
+	if (this.maxword>0 && countWords(newValue)>this.maxword) {
+		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+markFirstWords(newValue,this.maxword));
+		newValue = getFirstWords(newValue,this.maxword);
+		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(newValue);
+		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(newValue);
+	}
 	if (this.encrypted)
 		newValue = "rc4"+encrypt(newValue,g_rc4key);
 	$(this.text_node[langcode]).text(newValue);

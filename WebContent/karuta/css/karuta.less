@@ -144,6 +144,9 @@ a {
 	background:@portfolio-section-title-background-color;
 }
 
+.toomuch {
+	color:red;
+}
 /* ============================================================ */
 a, .collapsible {
 	cursor:pointer;
@@ -1763,11 +1766,6 @@ table.tablesorter th.restore {
 	width:150px;
 }
 
-.aggregationselect input,
-.ref input {
-	width:300px;
-}
-
 .asmNop .model_row {
 	visibility:hidden;
 }
@@ -1804,6 +1802,11 @@ table.tablesorter th.restore {
 	margin-top:2px;
 }
 
+.batch .collapsible {
+	float:left;
+	margin-right:3px;
+}
+
 .batch .asmUnitStructure{
 	padding:10px;
 }
@@ -1812,6 +1815,18 @@ table.tablesorter th.restore {
 	margin-top:7px;
 	border:1px solid lightgrey;
 }
+
+.batch .for-each-tree {
+	margin-top:7px;
+	border:1px solid lightgrey;
+}
+
+.batch .actions {
+	margin-top:7px;
+	border:1px dashed lightgrey;
+}
+
+/* ------------------------ */
 
 .batch .create-person {
 	margin-top:7px;
@@ -1822,6 +1837,18 @@ table.tablesorter th.restore {
 	margin-top:7px;
 	border:1px solid #46C7C7 ;
 }
+
+.batch .inactivate-person {
+	margin-top:7px;
+	border:1px solid #63E1FF ;
+}
+
+.batch .activate-person {
+	margin-top:7px;
+	border:1px solid #8BFFFF ;
+}
+
+/* ------------------------ */
 
 .batch .create-elgg-user {
 	margin-top:7px;
@@ -1880,30 +1907,46 @@ table.tablesorter th.restore {
 	border:1px solid Aquamarine ;
 }
 
+.batch .set-owner {
+	margin-top:7px;
+	border:1px solid #347C17;
+}
+
+/* ------------------------ */
+
+.batch .create-portfoliogroup{
+	margin-top:7px;
+	border:1px solid #AE6929;
+}
+
 .batch .join-portfoliogroup{
 	margin-top:7px;
-	border:1px solid #8AFB17 ;
+	border:1px solid #C27D3D ;
 }
 
 .batch .leave-portfoliogroup{
 	margin-top:7px;
-	border:1px solid #99CF79 ;
+	border:1px solid #E09B5B ;
 }
 
 .batch .share-portfoliogroup{
 	margin-top:7px;
-	border:1px solid #C1F7A1 ;
+	border:1px solid #F4AF6F ;
 }
 
 .batch .unshare-portfoliogroup{
 	margin-top:7px;
-	border:1px solid #71A751 ;
+	border:1px solid #FFC383 ;
 }
+
+/* ------------------------ */
 
 .batch .share-groups{
 	margin-top:7px;
 	border:1px solid #85BB65 ;
 }
+
+/* ------------------------ */
 
 .batch .share-usergroup{
 	margin-top:7px;
@@ -1915,21 +1958,52 @@ table.tablesorter th.restore {
 	border:1px solid #FFDB58 ;
 }
 
-.batch .create-portfoliogroup{
-	margin-top:7px;
-	border:1px solid #348017 ;
-}
-
-
 .batch .unshare-usergroup{
 	margin-top:7px;
 	border:1px solid #46C7C7 ;
 }
 
+/* ------------------------ */
+
+.batch .update-resource {
+	margin-top:7px;
+	border:1px dotted lightgrey;
+}
 
 .batch .update-field {
 	margin-top:7px;
-	border:1px solid Crimson;
+	border:1px solid #FF895A;
+}
+
+.batch .update-textfield {
+	margin-top:7px;
+	border:1px solid #FF9D6E;
+}
+
+.batch .update-dashboard {
+	margin-top:7px;
+	border:1px solid #FFB182;
+}
+
+.batch .update-proxy{
+	margin-top:7px;
+	border:1px solid #FFC596;
+}
+
+.batch .update-calendar{
+	margin-top:7px;
+	border:1px solid #FFCFA0;
+}
+
+.batch .update-document{
+	margin-top:7px;
+	border:1px solid #FFD9AA;
+}
+
+/* ------------------------ */
+.batch .update-metadata {
+	margin-top:7px;
+	border:1px solid #FAAC58;
 }
 
 .batch .update-metadata-wad {
@@ -1942,25 +2016,6 @@ table.tablesorter th.restore {
 	border:1px solid #FACC2E;
 }
 
-.batch .update-node-resource {
-	margin-top:7px;
-	border:1px solid #F78181;
-}
-
-.batch .update-metadata {
-	margin-top:7px;
-	border:1px solid #FAAC58;
-}
-
-.batch .update-dashboard {
-	margin-top:7px;
-	border:1px solid #F7BE81;
-}
-
-.batch .update-proxy{
-	margin-top:7px;
-	border:1px solid Gold;
-}
 
 .batch .update-metadata-query {
 	margin-top:7px;
@@ -1972,10 +2027,20 @@ table.tablesorter th.restore {
 	border:1px solid PeachPuff ;
 }
 
+/* ------------------------ */
+
+.batch .update-node-resource {
+	margin-top:7px;
+	border:1px solid #F78181;
+}
+
+
 .batch .import-node {
 	margin-top:7px;
 	border:1px solid Pink ;
 }
+
+/* ------------------------ */
 
 .batch .join-usergroup {
 	margin-top:7px;
@@ -1990,11 +2055,6 @@ table.tablesorter th.restore {
 .batch .update-field-byid {
 	margin-top:7px;
 	border:1px solid  #C35817;
-}
-
-.batch .set-owner {
-	margin-top:7px;
-	border:1px solid #990012;
 }
 
 
@@ -2013,9 +2073,18 @@ table.tablesorter th.restore {
 }
 
 .batch .if-then-else {
-	margin-bottom:7px;
-	border:1px dashed red;
+	margin-top:7px;
+	border:1px solid lightgrey;
 }
+
+.batch .if-action,
+.batch .then-part,
+.batch .else-part {
+	margin-bottom:7px;
+	border:1px dashed lightgrey;
+}
+
+
 
 
 /* ====================

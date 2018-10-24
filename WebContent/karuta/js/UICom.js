@@ -341,7 +341,7 @@ var UICom =
 	  UpdateResource: function(uuid, cb1, cb2, delfile )
 	//=======================================================================
 	{	
-		$("#saved-window-body").html("<img src='../../karuta//img/red.png'/> recording...");
+		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
 		var treenode = UICom.structure["tree"][uuid];
 		var resource = $(">asmResource[xsi_type!='nodeRes'][xsi_type!='context']",treenode.node)[0];
 	

@@ -702,7 +702,7 @@ function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,cla
 function writeSaved(uuid,data)
 //=======================================================================
 {
-	$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+	$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 }
 
 //=======================================================================
@@ -1566,6 +1566,20 @@ function getFirstWords(html,nb) {
 		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
 	}
 	return html.substring(0,tableIndex[tableOfWords.length-1].end);
+}
+
+//==================================
+function markFirstWords(html,nb) {
+//==================================
+	var text = html.replace("<span class='toomuch'>","").replace("</span><!--toomuch-->","").replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
+	var tableIndex = [];
+	var end = 0;
+	for (var i=0;i<tableOfWords.length;i++){
+		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
+		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
+	}
+	return html.substring(0,tableIndex[tableOfWords.length-1].end) + "<span class='toomuch'>" + html.substring(tableIndex[tableOfWords.length-1].end)+"</span><!--toomuch-->";
 }
 
 //==================================

@@ -272,6 +272,19 @@
 		</update-tree-root>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='select-tree']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
+		</xsl:variable>
+		<select-tree id="{$id}">
+			<code>
+				<xsl:call-template name="txtval">
+				<xsl:with-param name="semtag">code</xsl:with-param>
+				</xsl:call-template>
+		</code>
+		</select-tree>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='for-each-tree']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -282,6 +295,9 @@
 					<xsl:with-param name="semtag">code</xsl:with-param>
 				</xsl:call-template>
 			</code>
+			<actions>
+				<xsl:apply-templates select='asmUnitStructure'/>
+			</actions>
 		</for-each-tree>
 	</xsl:template>
 
@@ -311,6 +327,13 @@
 				</xsl:call-template>
 			</role>
 		</share-tree>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='re-instantiate-tree']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<re-instantiate-tree select="{$id}"/>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='set-owner']">

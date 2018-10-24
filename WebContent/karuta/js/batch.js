@@ -153,8 +153,8 @@ g_actions['for-each-tree'] = function forEachTree(node)
 			var trees = $("portfolio",data);
 			for (var i=0; i<trees.length; i++){
 				var portfolio = new Array();
-				portfolio [0] = $(portfolio[i]).attr("id");
-				portfolio [1] = $("code",portfolio[i]).text();
+				portfolio [0] = $(trees[i]).attr("id");
+				portfolio [1] = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",trees[i])).text();
 				var treeref = $(node).attr('id');
 				g_trees[treeref] = portfolio;
 				$("#batch-log").append("<br>- tree selected -  - code:"+portfolio [1]+" - portfolioid:"+portfolio [0]);
@@ -934,6 +934,34 @@ g_actions['set-owner'] = function setOwner(node)
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
 		}
 	});
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Set Owner Tree ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['re-instantiate-tree'] = function reInstantiateTree(node)
+//=================================================
+{
+	var ok = false;
+	var treeref = $(node).attr("select");
+	var url = serverBCK_API+"/portfolios/portfolio/" + g_trees[treeref][0] + "/parserights";
+	$.ajax({
+		async : false,
+		type : "POST",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			$("#batch-log").append("<br>- tree re-instantiated ("+g_trees[treeref][0]+")");
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in tree re-instantiated ("+g_trees[treeref][0]+")");
+		}
+	});
+
 }
 
 //-----------------------------------------------------------------------
