@@ -1118,6 +1118,7 @@ g_actions['update-rights'] = function updateRights(node)
 //=================================================
 {
 	var ok = 0;
+	var role = $(node).attr("role");
 	var rd = $(node).attr("rd");
 	var wr = $(node).attr("wr");
 	var dl = $(node).attr("dl");
@@ -1163,11 +1164,9 @@ g_actions['update-rights'] = function updateRights(node)
 					success : function(data) {
 						ok++;
 						$("#batch-log").append("<br>- resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
-						updateRights(nodes,node,role,rd,wr,dl,sb);
 					},
 					error : function(data,nodeid,semtag) {
 						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
-						updateRights(nodes,node,role,rd,wr,dl,sb);
 					}
 				});
 			}

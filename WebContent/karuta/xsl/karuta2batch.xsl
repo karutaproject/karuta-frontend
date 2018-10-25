@@ -719,6 +719,9 @@
 		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="role">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='role']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="rd">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='rd']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -731,7 +734,7 @@
 		<xsl:variable name="sb">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='sb']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<update-rights type="Rights" select="{$select}" rd="{$rd}" wr="{$dl}" dl="{$dl}" sb="{$sb}"/>
+		<update-rights type="Rights" select="{$select}" role="{$role}" rd="{$rd}" wr="{$dl}" dl="{$dl}" sb="{$sb}"/>
 	</xsl:template>
 	
 	<xsl:template match="*[metadata/@semantictag='update-metadata']">
