@@ -136,6 +136,12 @@ function fill_main_page(rootid,role)
 			//---------------------------
 			$("#wait-window").modal('hide');
 			//---------------------------
+			if (root_semantictag.indexOf('karuta-batch')>-1){
+				g_userroles[0] = 'batcher';
+				USER.admin = false;
+				$("#userrole").html('batcher');
+			}
+			//---------------------------
 			var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
 			if (welcomes.length>0){
 				var welcomeid = $(welcomes[0]).attr('id');

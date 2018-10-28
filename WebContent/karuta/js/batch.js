@@ -70,6 +70,26 @@ function getTxtvals(node)
 	return str;
 }
 
+//==================================
+function getTargetUrl(node)
+//==================================
+{
+	var url = "";
+	var select = $(node).attr("select");
+	var idx = select.lastIndexOf(".");
+	var treeref = select.substring(0,idx);
+	var semtag = select.substring(idx+1);
+	if (semtag=='#current_node')
+		url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
+	else if (semtag=='#uuid')
+		url = serverBCK_API+"/nodes/node/"+treeref;
+	else if (treeref.indexOf("#")>-1)
+		url = serverBCK_API+"/nodes?portfoliocode=" + treeref.substring(1) + "&semtag="+semtag;	
+	else
+		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag;
+	return url;
+}
+
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -131,7 +151,7 @@ function processListActions(list)
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
-//---------------------------Select Tree --------------------------------
+//---------------------------FOR EACH TREE --------------------------------
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 
@@ -1039,28 +1059,20 @@ g_actions['update-resource'] = function updateResource(node)
 	var ok = 0;
 	var type = $(node).attr("type");
 	var attributes = $("attribute",node)
-	var select = $(node).attr("select");
-	var idx = select.indexOf(".");
-	var treeref = select.substring(0,idx);
-	var semtag = select.substring(idx+1);
-	var url = "";
-	var current_node = (select=='#current_node');
-	if (current_node)
-		url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
-	else
-		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag;
+	//------------ Target --------------------
+	var url = getTargetUrl(node);
+	//--------------------------------
 	var nodes = new Array();
 	$.ajax({
 		async : false,
 		type : "GET",
 		dataType : "xml",
 		url : url,
-		current_node :current_node,
 		success : function(data) {
-			if (this.current_node) {
+			if (this.url.indexOf('/node/')>-1) {  // get by uuid
 				var results = $('*',data);
 				nodes[0] = results[0];
-			} else {
+			} else {							// get by code and semtag
 				nodes = $("node",data);
 			}
 			for (var i=0; i<nodes.length; i++){
@@ -1106,6 +1118,73 @@ g_actions['update-resource'] = function updateResource(node)
 	return (ok!=0 && ok == nodes.length);
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Update Node Resource -------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['update-node-resource'] = function updateResource(node)
+//=================================================
+{
+	var ok = 0;
+	var type = $(node).attr("type");
+	var attributes = $("attribute",node)
+	//------------ Target --------------------
+	var url = getTargetUrl(node);
+	//--------------------------------
+	var nodes = new Array();
+	$.ajax({
+		async : false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			if (this.url.indexOf('/node/')>-1) {  // get by uuid
+				var results = $('*',data);
+				nodes[0] = results[0];
+			} else {							// get by code and semtag
+				nodes = $("node",data);
+			}
+			for (var i=0; i<nodes.length; i++){
+				//-------------------
+				var nodeid = $(nodes[i]).attr('id');
+				var resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+				var code = getTxtvals($("newcode",node));
+				var label = getTxtvals($("label",node));
+				$("code",resource).text(code);
+				$("label[lang='"+LANG+"']",resource).text(label);
+				var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+				var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+				//-------------------
+				$.ajax({
+					async : false,
+					type : "PUT",
+					contentType: "application/xml",
+					dataType : "text",
+					data : strippeddata,
+					url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+					success : function(data) {
+						ok++;
+						$("#batch-log").append("<br>- resource updated ("+nodeid+")");
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource("+nodeid+")");
+					}
+				});
+				//-------------------
+			}
+
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-node-resource ");
+		}
+	});
+	
+	return (ok!=0 && ok == nodes.length);
+}
+
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -1123,28 +1202,20 @@ g_actions['update-rights'] = function updateRights(node)
 	var wr = $(node).attr("wr");
 	var dl = $(node).attr("dl");
 	var sb = $(node).attr("sb");
-	var select = $(node).attr("select");
-	var idx = select.indexOf(".");
-	var treeref = select.substring(0,idx);
-	var semtag = select.substring(idx+1);
-	var url = "";
-	var current_node = (select=='#current_node');
-	if (current_node)
-		url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
-	else
-		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag;
+	//------------ Target --------------------
+	var url = getTargetUrl(node);
+	//--------------------------------
 	var nodes = new Array();
 	$.ajax({
 		async : false,
 		type : "GET",
 		dataType : "xml",
 		url : url,
-		current_node :current_node,
 		success : function(data) {
-			if (this.current_node) {
+			if (this.url.indexOf('/node/')>-1) {  // get by uuid
 				var results = $('*',data);
 				nodes[0] = results[0];
-			} else {
+			} else {							// get by code and semtag
 				nodes = $("node",data);
 			}
 			for (var i=0; i<nodes.length; i++){
@@ -1160,7 +1231,7 @@ g_actions['update-rights'] = function updateRights(node)
 					data : xml,
 					nodeid : nodeid,
 					semtag : semtag,
-					url : serverBCK_API+"/nodes/node/rights/" + nodeid,
+					url : serverBCK_API+"/nodes/node/" + nodeid +"/rights",
 					success : function(data) {
 						ok++;
 						$("#batch-log").append("<br>- resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
@@ -1773,16 +1844,28 @@ g_actions['import-node'] = function importNode(node)
 {
 	var ok = false
 	//------------------------------------
-	var source = getTxtvals($("source",node));
+	var source = $("source",node).text();
 	if (source=='') // for backward compatibility
 		source = $(node).attr("source");
 	var idx_source = source.lastIndexOf(".");
 	var srcecode = source.substring(0,idx_source);
+	if (srcecode.indexOf('#')>-1)
+		srcecode = srcecode.substring(1);
+	else
+		srcecode = g_trees[srcecode][1];
+	
 	var srcetag = source.substring(idx_source+1);
 	//------------------------------------
 	var select = $(node).attr("select");
-	if (select=='#current_node'){
-		destid = g_current_node_uuid;
+	var idx = select.lastIndexOf(".");
+	var treeref = select.substring(0,idx);
+	var semtag = select.substring(idx+1);
+	//------------------------------------
+	if (select.indexOf('#current_node')+select.indexOf('#uuid')>-1){
+		if (select.indexOf('#current_node')>-1)
+			destid = g_current_node_uuid;
+		else
+			destid = treeref; // select = porfolio_uuid.#uuid
 		var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 		$.ajax({
 			async:false,
@@ -1802,14 +1885,18 @@ g_actions['import-node'] = function importNode(node)
 			}
 		});
 	} else {
-		var idx = select.lastIndexOf(".");
-		var treeref = select.substring(0,idx);
-		var semtag = select.substring(idx+1);
+		//------------ Target --------------------
+		var url = "";
+		if (treeref.indexOf("#")>-1)
+			url = serverBCK_API+"/nodes?portfoliocode=" + treeref.substring(1) + "&semtag="+semtag;	
+		else
+			url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag;
+		//--------------------------------
 		$.ajax({
 			async: false,
 			type : "GET",
 			dataType : "xml",
-			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			url : url,
 			success : function(data) {
 				var nodes = $("node",data);
 				for (var i=0; i<nodes.length; i++){
@@ -1822,7 +1909,6 @@ g_actions['import-node'] = function importNode(node)
 						url : urlS,
 						data : "",
 						destid:destid,
-						nodes:nodes,
 						success : function(data) {
 							ok = true;
 
@@ -1902,50 +1988,47 @@ g_actions['delete-node'] = function deleteNode(node)
 g_actions['moveup-node'] = function moveupNode(node)
 //=================================================
 {
-	var ok =false;
-	var select = $(node).attr("select");
-	var idx = select.indexOf(".");
-	var treeref = select.substring(0,idx);
-	var semtag = select.substring(idx+1);
-	//----------------------------------------------------
+	var ok = 0;
+	var type = $(node).attr("type");
+	var attributes = $("attribute",node)
+	//------------ Target --------------------
+	var url = getTargetUrl(node);
+	//--------------------------------
+	var nodes = new Array();
 	$.ajax({
+		async : false,
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+		url : url,
 		success : function(data) {
-			var nodes = $("node",data);
-			moveup_nodes(nodes,semtag);
+			if (this.url.indexOf('/node/')>-1) {  // get by uuid
+				var results = $('*',data);
+				nodes[0] = results[0];
+			} else {							// get by code and semtag
+				nodes = $("node",data);
+			}
+			for (i=0; i<nodes.length; i++){
+				var nodeid = $(nodes[i]).attr('id');
+				$.ajax({
+					type : "POST",
+					dataType : "text",
+					current:nodeid,
+					url : serverBCK_API+"/nodes/node/" + nodeid + "/moveup",
+					success : function(data) {
+						$("#batch-log").append("<br>- node moved up - nodeid("+this.current+")");
+					},
+					error : function(jqxhr,textStatus) {
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in moveup node - nodeid("+this.current+")");
+					}
+				});
+			}
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- NOT FOUND <span class='danger'>ERROR</span> in moveup node - semtag="+semtag);
+			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-moveup ");
 		}
 	});
-}
-
-//===========================
-function moveup_nodes(nodes,semtag)
-//===========================
-{
-	if (nodes.length>0) {
-		var currentid = $(nodes[0]).attr('id');
-		nodes = nodes.slice(1,nodes.length);
-		$.ajax({
-			type : "POST",
-			dataType : "text",
-			current:currentid,
-			nodes:nodes,
-			semtag:semtag,
-			url : serverBCK_API+"/nodes/node/" + currentid + "/moveup",
-			success : function(data) {
-				$("#batch-log").append("<br>- node moved up - nodeid("+this.current+") - semtag="+this.semtag);
-				moveup_nodes(this.nodes,semtag);
-			},
-			error : function(jqxhr,textStatus) {
-				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in moveup node - nodeid("+this.current+") - semtag="+this.semtag);
-				moveup_nodes(this.nodes);
-			}
-		});
-	}
+	
+	return (ok!=0 && ok == nodes.length);
 }
 
 

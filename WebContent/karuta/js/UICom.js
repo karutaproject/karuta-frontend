@@ -42,7 +42,8 @@ var UICom =
 					callback(data);
 			},
 			error : function(jqxhr,textStatus) {
-//				alertHTML("Error in UICom.query : "+jqxhr.responseText);
+				alertDisconnected();
+				alertHTML(karutaStr[LANG]['disconnected']);
 			}
 		};
 		jQuery.ajax(set);
@@ -264,6 +265,7 @@ var UICom =
 	 UpdateMeta: function( uuid, cb )
 	//=======================================================================
 	{
+		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
 		var treenode = UICom.structure["tree"][uuid];
 		var metawad = $(">metadata",treenode.node);
 		var data = xml2string(metawad[0]);
@@ -278,10 +280,12 @@ var UICom =
 			url : urlS,
 			data : data,
 			success : function (data){
+				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 				UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
-			alertHTML("Error in UpdateMeta : "+jqxhr.responseText);
+				alertDisconnected();
+				alertHTML("Error in UpdateMeta : "+jqxhr.responseText);
 				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
 			}
@@ -292,6 +296,7 @@ var UICom =
 	 UpdateMetaWad: function(uuid)
 	//=======================================================================
 	{
+		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
 		var treenode = UICom.structure["tree"][uuid];
 		var metawad = $(">metadata-wad",treenode.node);
 		var data =  xml2string(metawad[0]);
@@ -303,9 +308,11 @@ var UICom =
 			url : urlS,
 			data : data,
 			success : function (data){
+				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 				UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
+				alertDisconnected();
 				alertHTML("Error in UpdateMetaWad : "+jqxhr.responseText);
 				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
@@ -317,6 +324,7 @@ var UICom =
 	 UpdateMetaEpm: function(uuid,refresh)
 	//=======================================================================
 	{
+		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
 		var treenode = UICom.structure["tree"][uuid];
 		var metawad_epm = $(">metadata-epm",treenode.node);
 		var data =  xml2string(metawad_epm[0]);
@@ -328,10 +336,13 @@ var UICom =
 			url : urlS,
 			data : data,
 			success : function (data){
+				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 				if (refresh)
 					UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
+				alertDisconnected();
+				alertHTML(karutaStr[LANG]['disconnected']);
 				alertHTML("Error in UpdateMetaEpm : "+jqxhr.responseText);
 			}
 		});
@@ -360,13 +371,14 @@ var UICom =
 			url : urlS,
 			data : data,
 			success : function (data){
+				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 				if (cb1!=undefined && jQuery.isFunction(cb1))
 					cb1(uuid,data);
 				if (cb2!=undefined && jQuery.isFunction(cb2))
 					cb2(uuid,data);
 			},
 			error : function(jqxhr,textStatus) {
-				$("#saved-window-body").css('background-color','red');
+				alertDisconnected();
 				alertHTML("Error in UpdateResource : "+jqxhr.responseText);
 				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
@@ -379,6 +391,7 @@ var UICom =
 	  UpdateNode: function( uuid, cb )
 	//=======================================================================
 	{
+		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
 		var treenode = UICom.structure["ui"][uuid];
 		var resources = $(">asmResource",treenode.node);
 	
@@ -410,11 +423,12 @@ var UICom =
 					url : urlS,
 					data : strippeddata,
 					success : function (data){
+						$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 						if (cb!=undefined && jQuery.isFunction(cb))
 							cb(uuid,data);
 					},
 					error : function(jqxhr,textStatus) {
-						$("#saved-window-body").css('background-color','red');
+						alertDisconnected();
 						alertHTML("Error in UpdateNode : "+jqxhr.responseText);
 						alertHTML(karutaStr[LANG]['disconnected']);
 //						window.location = "login.htm";
@@ -429,11 +443,13 @@ var UICom =
 	  DeleteNode: function( uuid, callback,param1,param2 )
 	//=======================================================================
 	{
-		$.ajax({
+			$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
+			$.ajax({
 			type : "DELETE",
 			dataType : "text",
 			url : serverBCK_API+"/nodes/node/" + uuid,
 			success : function(data) {
+				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> deleted : "+new Date().toLocaleString());
 				if (callback!=null && callback!='undefined')
 					if (jQuery.isFunction(callback))
 						callback(param1,param2);
@@ -441,7 +457,7 @@ var UICom =
 						eval(callback+"('"+param1+"','"+param2+"')");
 			},
 			error : function(jqxhr,textStatus) {
-				$("#saved-window-body").css('background-color','red');
+				alertDisconnected();
 				alertHTML("Error in DeleteNode : "+jqxhr.responseText);
 				alertHTML(karutaStr[LANG]['disconnected']);
 //				window.location = "login.htm";
@@ -483,4 +499,16 @@ function createXmlElement(tag)
 	}
 	else
 		return document.createElement(tag);
+}
+
+//=======================================================================
+function alertDisconnected()
+//=======================================================================
+{
+	$("#saved-window-body").css('background-color','red');
+	$("#saved-window-body").css('color','white');				
+	$("#saved-window-body").css('font-weight','bold');				
+	$("#saved-window-body").css('font-size','24px');				
+	$("#saved-window").css('height','24px');				
+	$("#saved-window-body").html(karutaStr[LANG]['disconnected']);
 }

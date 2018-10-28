@@ -2294,7 +2294,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	var collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
-	var collapsible = 'Y';
+	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
 	var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
@@ -2448,7 +2448,9 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				if (name=='asmUnitStructure')
 					depth=100;	
 //				html += "<div>";
-				html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-minus'></span></div>";
+				//-------------------- collapsible -------------------
+				if (collapsible=='Y')
+					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-expand'></span></div>";
 				html += "<div class='model_row'>";	
 				//-------------- buttons --------------------------
 				html += "<div id='buttons-"+uuid+"' class='model_button  visible-lg visible-md'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";

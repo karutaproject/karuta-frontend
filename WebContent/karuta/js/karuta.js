@@ -660,8 +660,9 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
-		if (type=='model')
+		if (type=='model') {
 			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+		}
 	}
 	$("#wait-window").modal('hide');
 }
@@ -702,7 +703,6 @@ function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,cla
 function writeSaved(uuid,data)
 //=======================================================================
 {
-	$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 }
 
 //=======================================================================
@@ -1547,40 +1547,7 @@ function toggleProject2Select(uuid) {
 	}
 }
 
-//==================================
-function countWords(html) {
-//==================================
-	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
-	return text.trim().split( /\s+/ ).length;
-}
 
-//==================================
-function getFirstWords(html,nb) {
-//==================================
-	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
-	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
-	var tableIndex = [];
-	var end = 0;
-	for (var i=0;i<tableOfWords.length;i++){
-		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
-		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
-	}
-	return html.substring(0,tableIndex[tableOfWords.length-1].end);
-}
-
-//==================================
-function markFirstWords(html,nb) {
-//==================================
-	var text = html.replace("<span class='toomuch'>","").replace("</span><!--toomuch-->","").replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
-	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
-	var tableIndex = [];
-	var end = 0;
-	for (var i=0;i<tableOfWords.length;i++){
-		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
-		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
-	}
-	return html.substring(0,tableIndex[tableOfWords.length-1].end) + "<span class='toomuch'>" + html.substring(tableIndex[tableOfWords.length-1].end)+"</span><!--toomuch-->";
-}
 
 //==================================
 function setCSSportfolio(data)
