@@ -2906,7 +2906,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 		//------------- move node buttons ---------------
 		if (((writenode && moveroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer') && node.asmtype != 'asmRoot') {
 			html+= "<span class='button glyphicon glyphicon-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-tooltip='true' data-placement='bottom'></span>";
-			if (USER.admin || g_userroles[0]=='designer')
+			if (USER.admin || g_userroles[0]=='designer' || g_userroles[0]=='batcher' || g_userroles[0]=='reporter')
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
