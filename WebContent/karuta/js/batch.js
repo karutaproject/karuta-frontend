@@ -1075,43 +1075,46 @@ g_actions['update-resource'] = function updateResource(node)
 			} else {							// get by code and semtag
 				nodes = $("node",data);
 			}
-			for (var i=0; i<nodes.length; i++){
-				//-------------------
-				var nodeid = $(nodes[i]).attr('id');
-				var resource = $("asmResource[xsi_type='"+type+"']",nodes[i]);
-				for (var j=0; j<attributes.length; j++){
-					var attribute_name = $(attributes[j]).attr("name");
-					var language_dependent = $(attributes[j]).attr("language-dependent");
-					var attribute_value =  getTxtvals($("attribute[name='"+attribute_name+"']",node));
-					if (language_dependent=='Y')
-						$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
-					else
-						$(attribute_name,resource).text(attribute_value);
-				}
-				var data = "<asmResource xsi_type='"+type+"'>" + $(resource).html() + "</asmResource>";
-				var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-				//-------------------
-				$.ajax({
-					async : false,
-					type : "PUT",
-					contentType: "application/xml",
-					dataType : "text",
-					data : strippeddata,
-					url : serverBCK_API+"/resources/resource/" + nodeid,
-					success : function(data) {
-						ok++;
-						$("#batch-log").append("<br>- resource updated ("+nodeid+") - semtag="+semtag);
-					},
-					error : function(data) {
-						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource("+nodeid+") - semtag="+semtag);
+			if (nodes.length>0){
+				for (var i=0; i<nodes.length; i++){
+					//-------------------
+					var nodeid = $(nodes[i]).attr('id');
+					var resource = $("asmResource[xsi_type='"+type+"']",nodes[i]);
+					for (var j=0; j<attributes.length; j++){
+						var attribute_name = $(attributes[j]).attr("name");
+						var language_dependent = $(attributes[j]).attr("language-dependent");
+						var attribute_value =  getTxtvals($("attribute[name='"+attribute_name+"']",node));
+						if (language_dependent=='Y')
+							$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
+						else
+							$(attribute_name,resource).text(attribute_value);
 					}
-				});
-				//-------------------
+					var data = "<asmResource xsi_type='"+type+"'>" + $(resource).html() + "</asmResource>";
+					var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+					//-------------------
+					$.ajax({
+						async : false,
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : strippeddata,
+						url : serverBCK_API+"/resources/resource/" + nodeid,
+						success : function(data) {
+							ok++;
+							$("#batch-log").append("<br>- resource updated ("+nodeid+")");
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource("+nodeid+")");
+						}
+					});
+					//-------------------
+				}
+			} else {
+				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span>");
 			}
-
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-resource ");
+			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span>");
 		}
 	});
 	
@@ -1147,38 +1150,41 @@ g_actions['update-node-resource'] = function updateResource(node)
 			} else {							// get by code and semtag
 				nodes = $("node",data);
 			}
-			for (var i=0; i<nodes.length; i++){
-				//-------------------
-				var nodeid = $(nodes[i]).attr('id');
-				var resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-				var code = getTxtvals($("newcode",node));
-				var label = getTxtvals($("label",node));
-				$("code",resource).text(code);
-				$("label[lang='"+LANG+"']",resource).text(label);
-				var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
-				var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-				//-------------------
-				$.ajax({
-					async : false,
-					type : "PUT",
-					contentType: "application/xml",
-					dataType : "text",
-					data : strippeddata,
-					url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
-					success : function(data) {
-						ok++;
-						$("#batch-log").append("<br>- resource updated ("+nodeid+")");
-					},
-					error : function(data) {
-						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource("+nodeid+")");
-					}
-				});
-				//-------------------
+			if (nodes.length>0){
+				for (var i=0; i<nodes.length; i++){
+					//-------------------
+					var nodeid = $(nodes[i]).attr('id');
+					var resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+					var code = getTxtvals($("newcode",node));
+					var label = getTxtvals($("label",node));
+					$("code",resource).text(code);
+					$("label[lang='"+LANG+"']",resource).text(label);
+					var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+					var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+					//-------------------
+					$.ajax({
+						async : false,
+						type : "PUT",
+						contentType: "application/xml",
+						dataType : "text",
+						data : strippeddata,
+						url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+						success : function(data) {
+							ok++;
+							$("#batch-log").append("<br>- resource updated ("+nodeid+")");
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource("+nodeid+")");
+						}
+					});
+					//-------------------
+				}
+			} else {
+				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span>");
 			}
-
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-node-resource ");
+			$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span>");
 		}
 	});
 	
@@ -1218,28 +1224,32 @@ g_actions['update-rights'] = function updateRights(node)
 			} else {							// get by code and semtag
 				nodes = $("node",data);
 			}
-			for (var i=0; i<nodes.length; i++){
-				//-------------------
-				var nodeid = $(nodes[i]).attr('id');
-				var xml = "<node><role name='"+role+"'><right RD='"+rd+"' WR='"+wr+"' DL='"+dl+"' SB='"+sb+"'></right></role></node>"
-				nodes = nodes.slice(1,nodes.length);
-				$.ajax({
-					async : false,
-					type : "POST",
-					contentType: "application/xml",
-					dataType : "text",
-					data : xml,
-					nodeid : nodeid,
-					semtag : semtag,
-					url : serverBCK_API+"/nodes/node/" + nodeid +"/rights",
-					success : function(data) {
-						ok++;
-						$("#batch-log").append("<br>- resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
-					},
-					error : function(data,nodeid,semtag) {
-						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
-					}
-				});
+			if (nodes.length>0){
+				for (var i=0; i<nodes.length; i++){
+					//-------------------
+					var nodeid = $(nodes[i]).attr('id');
+					var xml = "<node><role name='"+role+"'><right RD='"+rd+"' WR='"+wr+"' DL='"+dl+"' SB='"+sb+"'></right></role></node>"
+					nodes = nodes.slice(1,nodes.length);
+					$.ajax({
+						async : false,
+						type : "POST",
+						contentType: "application/xml",
+						dataType : "text",
+						data : xml,
+						nodeid : nodeid,
+						semtag : semtag,
+						url : serverBCK_API+"/nodes/node/" + nodeid +"/rights",
+						success : function(data) {
+							ok++;
+							$("#batch-log").append("<br>- resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
+						},
+						error : function(data,nodeid,semtag) {
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> resource rights updated ("+this.nodeid+") - RD="+rd+" WR="+wr+" DL="+dl+" SB="+sb);
+						}
+					});
+				}
+			} else {
+				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span>");
 			}
 		},
 		error : function(data) {
@@ -1874,7 +1884,6 @@ g_actions['import-node'] = function importNode(node)
 			url : urlS,
 			data : "",
 			destid:destid,
-			nodes:nodes,
 			success : function(data) {
 				g_current_node_uuid = data;
 				$("#batch-log").append("<br>- node added at ("+this.destid+") - semtag="+semtag+ " source="+source);
@@ -1899,27 +1908,31 @@ g_actions['import-node'] = function importNode(node)
 			url : url,
 			success : function(data) {
 				var nodes = $("node",data);
-				for (var i=0; i<nodes.length; i++){
-					destid = $(nodes[i]).attr('id');
-					var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
-					$.ajax({
-						async:false,
-						type : "POST",
-						dataType : "text",
-						url : urlS,
-						data : "",
-						destid:destid,
-						success : function(data) {
-							ok = true;
-
-							g_current_node_uuid = data;
-							$("#batch-log").append("<br>- node added at ("+this.destid+") - semtag="+semtag+ " source="+source);
-							ok = true;
-						},
-						error : function(data) {
-							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in import node("+this.destid+") - semtag="+semtag+ " source="+source);
-						}
-					});
+				if (nodes.length>0){
+					for (var i=0; i<nodes.length; i++){
+						destid = $(nodes[i]).attr('id');
+						var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
+						$.ajax({
+							async:false,
+							type : "POST",
+							dataType : "text",
+							url : urlS,
+							data : "",
+							destid:destid,
+							success : function(data) {
+								ok = true;
+	
+								g_current_node_uuid = data;
+								$("#batch-log").append("<br>- node added at ("+this.destid+") - semtag="+semtag+ " source="+source);
+								ok = true;
+							},
+							error : function(data) {
+								$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in import node("+this.destid+") - semtag="+semtag+ " source="+source);
+							}
+						});
+					}
+				} else {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> NOT FOUND - semtag="+semtag+ " source="+source);
 				}
 			},
 			error : function(data) {

@@ -2453,7 +2453,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-expand'></span></div>";
 				html += "<div class='model_row'>";	
 				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='model_button  visible-lg visible-md'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
+				html += "<div id='buttons-"+uuid+"' class='model_button'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
 				//-------------- node -----------------------------
 				html += "<div id='std_node_"+uuid+"'  class='model_node'>";
 				html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);

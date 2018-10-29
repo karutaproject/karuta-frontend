@@ -443,11 +443,11 @@
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
-			<text>
+			<attribute name='text' language-dependent='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
-			</text>
+			</attribute>
 		</update-resource>
 	</xsl:template>
 
@@ -506,23 +506,27 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<update-resource type='Document' select="{$select}">
-			<filename>
+			<attribute name='filename' language-dependent='Y'>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='filename']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-			</filename>
-			<size>
+			</attribute>
+			<attribute name='size' language-dependent='Y'>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='size']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-			</size>
-			<type>
+			</attribute>
+			<attribute name='type' language-dependent='Y'>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='type']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-			</type>
-			<fileid>
+			</attribute>
+			<attribute name='fileid' language-dependent='Y'>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='fileid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-			</fileid>
+			</attribute>
 		</update-resource>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-proxy']">
-		<xsl:variable name="select"><xsl:call-template name='get-select'/></xsl:variable>
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
 		<xsl:variable name="source">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -544,11 +548,11 @@
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
-			<text>
+			<attribute name='text' language-dependent='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
-			</text>
+			</attribute>
 		</update-resource>
 	</xsl:template>
 
