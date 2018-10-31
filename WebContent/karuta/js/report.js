@@ -1003,6 +1003,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 		var select = $(xmlDoc).attr("select");
 		var ref = $(xmlDoc).attr("ref");
 		var editresroles = $(xmlDoc).attr("editresroles");
+		var delnoderoles = $(xmlDoc).attr("delnoderoles");
 		style = $(xmlDoc).attr("style");
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
@@ -1017,6 +1018,10 @@ function r_processNodeResource(xmlDoc,destid,data)
 			var writenode = ($(node.node).attr('write')=='Y')? true:false;
 			if (g_designerrole || writenode) {
 				writenode = (editresroles.containsArrayElt(g_userroles))? true : false;
+			}
+			var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
+			if (g_designerrole || deletenode) {
+				deletenode = (delnoderoles.containsArrayElt(g_userroles))? true : false;
 			}
 			var inline = false;
 			var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
@@ -1057,6 +1062,10 @@ function r_processNodeResource(xmlDoc,destid,data)
 			text = "<span id='dashboard_"+prefix_id+nodeid+"' style='"+style+"'>"+text+"</span>";
 			if (writenode) {
 				text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
+			}
+			if (deletenode) {
+				var type = UICom.structure["ui"][nodeid].asmtype;
+				text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
 			}
 			//----------------------------
 			if (inline & writenode) {

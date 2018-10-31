@@ -224,6 +224,9 @@
 		<xsl:variable name="editresroles">
 			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="delnoderoles">
+			<xsl:value-of select="metadata-wad/@delnoderoles"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
 		</xsl:variable>
@@ -243,6 +246,9 @@
 		<node_resource>
 			<xsl:if test="not(editresroles='')">
 				<xsl:attribute name="editresroles"><xsl:value-of select="$editresroles"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(delnoderoles='')">
+				<xsl:attribute name="delnoderoles"><xsl:value-of select="$delnoderoles"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($ref='')">
 				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
