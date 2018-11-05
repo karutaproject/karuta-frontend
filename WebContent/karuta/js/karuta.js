@@ -700,9 +700,10 @@ function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,cla
 }
 
 //=======================================================================
-function writeSaved(uuid,data)
+function writeSaved()
 //=======================================================================
 {
+	$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 }
 
 //=======================================================================

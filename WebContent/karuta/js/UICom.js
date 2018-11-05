@@ -407,11 +407,11 @@ var UICom =
 			strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 			/// nodeRes content
 			if( "nodeRes" == type ) {
-				UICom.query("PUT",serverBCK_API+'/nodes/node/'+uuid+'/noderesource',null,"text",strippeddata);
+				UICom.query("PUT",serverBCK_API+'/nodes/node/'+uuid+'/noderesource',writeSaved,"text",strippeddata);
 			}
 			else if( "context" == type )
 			{
-				UICom.query("PUT",serverBCK_API+'/nodes/node/'+uuid+'/nodecontext',null,"text",strippeddata);
+				UICom.query("PUT",serverBCK_API+'/nodes/node/'+uuid+'/nodecontext',writeSaved,"text",strippeddata);
 			}
 			/// Other than nodeRes content
 			else {
@@ -511,4 +511,5 @@ function alertDisconnected()
 	$("#saved-window-body").css('font-size','24px');				
 	$("#saved-window").css('height','24px');				
 	$("#saved-window-body").html(karutaStr[LANG]['disconnected']);
+	$("body").append($("<div class='modal-backdrop fade in'></div>"));
 }

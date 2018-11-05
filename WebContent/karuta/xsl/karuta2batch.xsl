@@ -279,10 +279,12 @@
 	<!-- ====================================================================================== -->
 	
 	<xsl:template match="*[metadata/@semantictag='join-portfoliogroup']">
-		<xsl:variable name="id">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
 		</xsl:variable>
-		<join-portfoliogroup select="{$id}">
+		<join-portfoliogroup select="{$select}">
 			<portfoliogroup>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">groupname</xsl:with-param>
@@ -376,7 +378,9 @@
 
 	<xsl:template match="*[metadata/@semantictag='delete-node']">
 		<xsl:variable name="select">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
 		</xsl:variable>
 		<delete-node select="{$select}">
 		</delete-node>
@@ -528,11 +532,13 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="source">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
 		</xsl:variable>
-		<update-node type='Proxy' select="{$select}">
+		<update-proxy type='Proxy' select="{$select}">
 			<source select="{$source}"/>
-		</update-node>
+		</update-proxy>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-dashboard']">
@@ -739,13 +745,19 @@
 					<xsl:when test="$ref-id=''">
 						<xsl:choose>
 							<xsl:when test="$uuid=''">
-								<xsl:value-of select='$portfoliocode'/>.<xsl:value-of select='$semtag'/>
+								<xsl:choose>
+									<xsl:when test="$semtag=''"><xsl:value-of select='$portfoliocode'/></xsl:when>
+									<xsl:otherwise><xsl:value-of select='$portfoliocode'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+								</xsl:choose>
 							</xsl:when>
 							<xsl:otherwise><xsl:value-of select='$uuid'/>.#uuid</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select='$ref-id'/>.<xsl:value-of select='$semtag'/>
+						<xsl:choose>
+							<xsl:when test="$semtag=''"><xsl:value-of select='$ref-id'/></xsl:when>
+							<xsl:otherwise><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+						</xsl:choose>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>

@@ -725,9 +725,7 @@ UIFactory["Portfolio"].parse = function(data)
 				code += ".";
 			tableau1[i] = [code,uuid];
 		} catch(e) {
-			var del = confirm("Erreur portfolio"+uuid+" - code:"+code + "Voulez-vous le supprimer?");
-			if (del)
-				UIFactory["Portfolio"].del(uuid)
+			var del = alert("Erreur portfolio"+uuid+" - code:"+code);
 		}
 	}
 	var newTableau1 = tableau1.sort(sortOn1);

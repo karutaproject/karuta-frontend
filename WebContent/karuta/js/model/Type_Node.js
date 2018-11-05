@@ -265,8 +265,10 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	var code = $.trim($("#code_"+itself.id).val());
-	$(itself.code_node).text(code);
+	if ($("#code_"+itself.id).lenght){
+		var code = $.trim($("#code_"+itself.id).val());
+		$(itself.code_node).text(code);
+	}
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
 	$(itself.label_node[langcode]).text(label);
 	itself.save();
@@ -332,7 +334,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			}
 			if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 				var htmlLabelGroupObj = $("<div class='form-group'></div>")
-				var htmlLabelLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
+				var htmlLabelLabelObj = $("<label for='label_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
 				var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 				var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.label_node[langcode].text()+"\">");
 				$(htmlLabelInputObj).change(function (){
