@@ -4035,9 +4035,10 @@ UIFactory["Node"].updateMetadatawWadTextAttribute = function(nodeid,attribute)
 	var node = UICom.structure["ui"][nodeid].node;
 	var value = $.trim($("#"+nodeid+"_"+attribute).val());
 	if (attribute=='query' && UICom.structure["ui"][nodeid].resource!=undefined && UICom.structure["ui"][nodeid].resource.type=='Proxy' && value!=undefined && value!='') {
-		var p1 = value.indexOf('.');
-		var p2 = value.indexOf('.',p1+1);
-		var semtag = value.substring(p1+1,p2);
+		var srce_indx = value.lastIndexOf('.');
+		var srce = value.substring(srce_indx+1);
+		var semtag_indx = value.substring(0,srce_indx).lastIndexOf('.');
+		var semtag = value.substring(semtag_indx+1,srce_indx);
 		$($("metadata",node)[0]).attr('semantictag','proxy-'+semtag);
 		UICom.UpdateMetadata(nodeid);
 	}
