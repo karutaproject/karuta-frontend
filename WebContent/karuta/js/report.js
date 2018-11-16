@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2014 - ePortfolium - Licensed under the
+	Copyright 2018 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -686,7 +686,7 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 	UIFactory["Portfolio"].parse(data);
 	var select = $(xmlDoc).attr("select");
 	while (select.indexOf("##")>-1) {
-		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##.....
+		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
 		var variable_name = test_string.substring(0,test_string.indexOf("##"));
 		select = select.replace("##"+variable_name+"##", variables[variable_name]);
 	}
@@ -1003,6 +1003,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 		var select = $(xmlDoc).attr("select");
 		var ref = $(xmlDoc).attr("ref");
 		var editresroles = $(xmlDoc).attr("editresroles");
+		var delnoderoles = $(xmlDoc).attr("delnoderoles");
 		style = $(xmlDoc).attr("style");
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
@@ -1017,6 +1018,10 @@ function r_processNodeResource(xmlDoc,destid,data)
 			var writenode = ($(node.node).attr('write')=='Y')? true:false;
 			if (g_designerrole || writenode) {
 				writenode = (editresroles.containsArrayElt(g_userroles))? true : false;
+			}
+			var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
+			if (g_designerrole || deletenode) {
+				deletenode = (delnoderoles.containsArrayElt(g_userroles))? true : false;
 			}
 			var inline = false;
 			var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
@@ -1042,6 +1047,9 @@ function r_processNodeResource(xmlDoc,destid,data)
 			if (selector.type=='node value') {
 				text = UICom.structure["ui"][nodeid].getValue();
 			}
+			if (selector.type=='uuid') {
+				text = nodeid;
+			}
 			if (selector.type=='node context') {
 				text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
 				prefix_id += "context_";
@@ -1054,6 +1062,10 @@ function r_processNodeResource(xmlDoc,destid,data)
 			text = "<span id='dashboard_"+prefix_id+nodeid+"' style='"+style+"'>"+text+"</span>";
 			if (writenode) {
 				text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
+			}
+			if (deletenode) {
+				var type = UICom.structure["ui"][nodeid].asmtype;
+				text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
 			}
 			//----------------------------
 			if (inline & writenode) {
@@ -1146,7 +1158,13 @@ function r_processCsvLine(no,xmlDoc,destid,data,line)
 		if (tagname=="text")
 			r_processText(children[i],destid,data,line,true);
 		if (tagname=="username")
-			r_processAddUsername(true);
+			r_processAddusername(true);
+		if (tagname=="firstname")
+			r_processAddfirstname(true);
+		if (tagname=="lastname")
+			r_processAddlastname(true);
+		if (tagname=="firstname-lastname")
+			r_processAddfirstname_lastname(true);
 	};
 	csvreport[csvreport.length]=csvline;
 	$.ajax({
@@ -1161,10 +1179,10 @@ function r_processCsvLine(no,xmlDoc,destid,data,line)
 }
 
 //==================================
-function r_processAddUsername(is_out_csv,destid,data)
+function r_processAddusername(is_out_csv,destid,data)
 //==================================
 {
-	var text = USER.username_node.text();
+	var text = USER.username;
 	//-----------------
 	if (is_out_csv!=null && is_out_csv) {
 		if (typeof csvseparator == 'undefined') // for backward compatibility
@@ -1177,6 +1195,62 @@ function r_processAddUsername(is_out_csv,destid,data)
 	}
 	//-----------------
 }
+
+//==================================
+function r_processAddfirstname(is_out_csv,destid,data)
+//==================================
+{
+	var text = USER.firstname;
+	//-----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		var nodeid = $(data).attr("id");
+		text = "<span id='"+nodeid+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+	//-----------------
+}
+
+//==================================
+function r_processAddlastname(is_out_csv,destid,data)
+//==================================
+{
+	var text = USER.lastname;
+	//-----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		var nodeid = $(data).attr("id");
+		text = "<span id='"+nodeid+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+	//-----------------
+}
+
+//==================================
+function r_processAddfirstname_lastname(is_out_csv,destid,data)
+//==================================
+{
+	var text1 = USER.firstname;
+	var text2 = USER.lastname;
+	//-----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text1 +"-" + text2 + csvseparator;		
+	} else {
+		var nodeid = $(data).attr("id");
+		var text = "<span id='"+nodeid+"'>"+text1 + "&nbsp" +text2 + "</span>";
+		$("#"+destid).append($(text));		
+	}
+	//-----------------
+}
+
 
 //==================================
 function r_processCsvValue(xmlDoc,destid,data)
@@ -1383,6 +1457,9 @@ function r_processAggregate(aggregate,destid)
 				sum += parseFloat(aggregates[select][i]);
 		}SVGToIMG
 		text = sum/aggregates[select].length;
+		if (text.toString().indexOf(".")>-1)
+			text = text.toFixed(2);
+		
 	}
 	if (ref!=undefined && ref!="") {
 		if (aggregates[ref]==undefined)
@@ -1476,6 +1553,7 @@ function xml2PDF(content)
 	var data = $('#'+content).html();
 	data = data.replace(/&nbsp;/g, ' ');
 	data = data.replace(/<br>/g, '<br/>');
+	data = data.replace(/<hr>/g, '<hr/>');
 	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url = window.location.href;
@@ -1499,6 +1577,7 @@ function xml2RTF(content)
 	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 	var data = $('#'+content).html();
 	data = data.replace(/&nbsp;/g, ' ');
+	data = data.replace(/<hr>/g, '<hr/>');
 	data = data.replace(/<br>/g, '<br/>');
 	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";

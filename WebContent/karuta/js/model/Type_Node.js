@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2017 - ePortfolium - Licensed under the
+	Copyright 2018 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -265,8 +265,10 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	var code = $.trim($("#code_"+itself.id).val());
-	$(itself.code_node).text(code);
+	if ($("#code_"+itself.id).length){
+		var code = $.trim($("#code_"+itself.id).val());
+		$(itself.code_node).text(code);
+	}
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
 	$(itself.label_node[langcode]).text(label);
 	itself.save();
@@ -332,7 +334,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			}
 			if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 				var htmlLabelGroupObj = $("<div class='form-group'></div>")
-				var htmlLabelLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
+				var htmlLabelLabelObj = $("<label for='label_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
 				var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 				var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.label_node[langcode].text()+"\">");
 				$(htmlLabelInputObj).change(function (){
@@ -601,7 +603,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	var titleid = $(titles[0]).attr("id");
 	var html = "";
 	html += "<div class='page-welcome'>";
-	html += "<div id='welcome-image' style=\"background: url('../../../"+serverBCK+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
+	html += "<div id='welcome-image' style=\"background: url('../../../"+serverBCK+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"') no-repeat\">";
 	if (titles.length>0) {
 		html += "<div class='welcome-box'>";
 		html += "<div class='welcome-subbox'>";
@@ -1221,8 +1223,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						url : urlS,
 						success : function (data){
 							var url = window.location.href;
-							var serverURL = url.substring(0,url.indexOf(appliname)-1);
-							url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
+							var serverURL = url.substring(0,url.lastIndexOf('karuta')-1);
+							url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
 							$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-tooltip='true' data-placement='bottom'></a> ");
 						}
 					});
@@ -2294,7 +2296,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 	var writenode = ($(node.node).attr('write')=='Y')? true:false;
 	var semtag =  ($("metadata",data)[0]==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	var collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
-	var collapsible = 'Y';
+	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
 	var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
@@ -2448,10 +2450,12 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				if (name=='asmUnitStructure')
 					depth=100;	
 //				html += "<div>";
-				html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-minus'></span></div>";
+				//-------------------- collapsible -------------------
+				if (collapsible=='Y')
+					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-expand'></span></div>";
 				html += "<div class='model_row'>";	
 				//-------------- buttons --------------------------
-				html += "<div id='buttons-"+uuid+"' class='model_button  visible-lg visible-md'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
+				html += "<div id='buttons-"+uuid+"' class='model_button'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit)+"</div>";
 				//-------------- node -----------------------------
 				html += "<div id='std_node_"+uuid+"'  class='model_node'>";
 				html += " "+UICom.structure["ui"][uuid].getView('std_node_'+uuid);
@@ -2855,7 +2859,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'none':$(node.metadatawad).attr('editresroles');
 	var delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'none':$(node.metadatawad).attr('delnoderoles');
 	var submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
-	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
+	var submitall = ($(node.metadatawad).attr('submitall')==undefined)?'none':$(node.metadatawad).attr('submitall');
+	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'N':$(node.metadatawad).attr('submitted');
 	var submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
 	var menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
@@ -2903,7 +2908,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 		//------------- move node buttons ---------------
 		if (((writenode && moveroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer') && node.asmtype != 'asmRoot') {
 			html+= "<span class='button glyphicon glyphicon-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-tooltip='true' data-placement='bottom'></span>";
-			if (USER.admin || g_userroles[0]=='designer')
+			if (USER.admin || g_userroles[0]=='designer' || g_userroles[0]=='batcher' || g_userroles[0]=='reporter')
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
@@ -3061,7 +3066,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 								titles = menus[i][2].split("/");
 								if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
 									for (var j=0; j<titles.length; j++){
-										if (titles[j].indexOf(languages[langcode])>-1)
+										if (titles[j].indexOf("@"+languages[langcode])>-1)
 											title = titles[j].substring(0,titles[j].indexOf("@"));
 									}
 								} else { // lang1/lang2/...
@@ -3120,7 +3125,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 				|| ( g_userroles[1]=='designer' && submitroles.indexOf(g_userroles[0])>-1)
 				|| submitroles.indexOf(userrole)>-1 )))
 		{
-			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"')\" ";
+			html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
+			if (submitall=='Y')
+				html += ",true";
+			html += ")\" ";
 			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
 		} else {
 			if (submitted=='Y') {
@@ -3633,6 +3641,8 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editresroles',$(node.metadatawad).attr('editresroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'commentnoderoles',$(node.metadatawad).attr('commentnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitroles',$(node.metadatawad).attr('submitroles'));
+	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
+		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitall',$(node.metadatawad).attr('submitall'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editnoderoles',$(node.metadatawad).attr('editnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'incrementroles',$(node.metadatawad).attr('incrementroles'));
@@ -4025,9 +4035,10 @@ UIFactory["Node"].updateMetadatawWadTextAttribute = function(nodeid,attribute)
 	var node = UICom.structure["ui"][nodeid].node;
 	var value = $.trim($("#"+nodeid+"_"+attribute).val());
 	if (attribute=='query' && UICom.structure["ui"][nodeid].resource!=undefined && UICom.structure["ui"][nodeid].resource.type=='Proxy' && value!=undefined && value!='') {
-		var p1 = value.indexOf('.');
-		var p2 = value.indexOf('.',p1+1);
-		var semtag = value.substring(p1+1,p2);
+		var srce_indx = value.lastIndexOf('.');
+		var srce = value.substring(srce_indx+1);
+		var semtag_indx = value.substring(0,srce_indx).lastIndexOf('.');
+		var semtag = value.substring(semtag_indx+1,srce_indx);
 		$($("metadata",node)[0]).attr('semantictag','proxy-'+semtag);
 		UICom.UpdateMetadata(nodeid);
 	}

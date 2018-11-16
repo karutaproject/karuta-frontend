@@ -206,8 +206,8 @@ function fill_list_page()
 									}
 								});
 							}
-							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
-								$("#portfolios-div").hide();
+//							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
+//								$("#portfolios-div").hide();
 							$("#wait-window").hide();
 						},
 						error : function(jqxhr,textStatus) {

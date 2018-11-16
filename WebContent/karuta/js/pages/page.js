@@ -201,8 +201,10 @@ function displayOnePage()
 							UIFactory['Node'].displayStandard(UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
 						if (type=='translate')
 							UIFactory['Node'].displayTranslate(UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
-						if (type=='model')
+						if (type=='model'){
+							setDesignerRole('batcher');
 							UIFactory['Node'].displayModel(UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
+						}
 						$('a[data-toggle=tooltip]').tooltip({html:true});
 						//---------------------------
 						if (g_display_type=="standard")

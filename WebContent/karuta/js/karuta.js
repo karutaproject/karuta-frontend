@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2014 - ePortfolium - Licensed under the
+	Copyright 2018 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -60,7 +60,10 @@ function setDesignerRole(role)
 		role = 'designer';
 	g_userroles[0] = role;
 	fillEditBoxBody();
-	$("#userrole").html(role);
+	if(role == 'designer')
+		$("#userrole").html(karutaStr[LANG]['designer']);
+	else
+		$("#userrole").html(role);
 	if (g_display_type=='standard'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
@@ -111,7 +114,7 @@ function setLanguageMenu(js)
 //==============================
 {
 	for (var i=0; i<languages.length;i++) {
-		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');if (elgg_installed) displaySocialNetwork();setWelcomeTitles();"+js);
+		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');$('#navigation-bar').html(getNavBar('list',null));if (elgg_installed) displaySocialNetwork();setWelcomeTitles();"+js);
 	}
 }
 
@@ -148,7 +151,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
 	if (type=='login') {
-		html += "				<li><a href='mailto:"+technical_support+"' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+		html += "				<li><a href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
 	} else {
 		html += "				<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
 		html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
@@ -181,7 +184,8 @@ function getNavBar(type,portfolioid,edit)
 				html += "			<ul class='nav navbar-nav'>";
 				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 				html += "					<ul class='dropdown-menu'>";
-				html += getLanguageMenu("fill_list_page();$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
+//				html += getLanguageMenu("fill_list_page();$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
+				html += getLanguageMenu("fill_list_page();$('#navigation-bar').html(getNavBar('list',null));$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
 				html += "					</ul>";
 				html += "				</li>";
 				html += "			</ul>";
@@ -220,13 +224,21 @@ function getNavBar(type,portfolioid,edit)
 			html += "				</li>";
 			html += "			</ul>";
 		}
+		//-----------------NEW WINDOW-----------------------------------------
+		if (type!='login' && USER!=undefined) {
+			if (USER.admin || (USER.creator && !USER.limited) ) {
+				html += "			<ul class='nav navbar-nav'>";
+				html += "						<li><a href='"+window.location+"' target='_blank' class='navbar-icon'><i class='glyphicon glyphicon-new-window'></i></a></li>";
+				html += "			</ul>";
+			}
+		}
 		//-----------------LOGOUT-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
 		html += "						<li><a onclick='logout()' class='navbar-icon'><span class='glyphicon glyphicon-log-out'></span></a></li>";
 		html += "			</ul>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname_node.text()+" "+USER.lastname_node.text();
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
 		html += " 					<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
@@ -451,8 +463,8 @@ function savedBox()
 {
 	var html = "";
 	html += "\n<!-- ==================== Saved box ==================== -->";
-	html += "\n<div id='saved-window' class='modal hide'>";
-	html += "\n	<div id='saved-window-body' class='modal-body' style='text-align:center'>Saved</div>";
+	html += "\n<div id='saved-window'>";
+	html += "\n	<div id='saved-window-body' style='text-align:center'></div>";
 	html += "\n</div>";
 	html += "\n<!-- ============================================== -->";
 	return html;
@@ -541,12 +553,12 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 }
 
 //=======================================================================
-function confirmSubmit(uuid) 
+function confirmSubmit(uuid,submitall) 
 // =======================================================================
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"')\">" + karutaStr[LANG]["button-submit"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+")\">" + karutaStr[LANG]["button-submit"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
@@ -648,8 +660,9 @@ function displayPage(uuid,depth,type,langcode,edit) {
 		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
-		if (type=='model')
+		if (type=='model') {
 			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+		}
 	}
 	$("#wait-window").modal('hide');
 }
@@ -687,11 +700,10 @@ function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,cla
 }
 
 //=======================================================================
-function writeSaved(uuid,data)
+function writeSaved()
 //=======================================================================
 {
-	$("#saved-window").show(1000);
-	$("#saved-window").hide(1000);
+	$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 }
 
 //=======================================================================
@@ -801,10 +813,12 @@ function sleep(milliseconds)
 }
 
 //=======================================================================
-function submit(uuid)
+function submit(uuid,submitall)
 //=======================================================================
 {
 	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/submit';
+	if (submitall!=null && submitall)
+		urlS += 'all';
 	$.ajax({
 		type : "POST",
 		dataType : "text",
@@ -1174,8 +1188,8 @@ function getEmail(role,emails) {
 function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.lastIndexOf(appliname)-1);
-	url = serverURL+"/"+appliname+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
+	var serverURL = url.substring(0,url.lastIndexOf('/karuta'));
+	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
 	message = g_sendEmailPublicURL_message.replace("#firstname#",USER.firstname);
@@ -1317,9 +1331,9 @@ function toggleSideBar() {
 	{
 		$("#sidebar").hide();
 		g_display_sidebar = false;
-		$("#contenu").removeClass().addClass('col-md-12');
+		$("#contenu").removeClass().addClass('col-md-12').addClass('col-sm-12');
 	} else {
-		$("#contenu").removeClass().addClass('col-md-9');
+		$("#contenu").removeClass().addClass('col-md-9').addClass('col-sm-9');
 		$("#sidebar").show();
 		g_display_sidebar = true;
 	}
@@ -1534,26 +1548,7 @@ function toggleProject2Select(uuid) {
 	}
 }
 
-//==================================
-function countWords(html) {
-//==================================
-	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
-	return text.trim().split( /\s+/ ).length;
-}
 
-//==================================
-function getFirstWords(html,nb) {
-//==================================
-	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
-	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
-	var tableIndex = [];
-	var end = 0;
-	for (var i=0;i<tableOfWords.length;i++){
-		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
-		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
-	}
-	return html.substring(0,tableIndex[tableOfWords.length-1].end);
-}
 
 //==================================
 function setCSSportfolio(data)
@@ -1748,6 +1743,7 @@ function displayTechSupportForm(langcode)
 		xml +="</node>";
 		$.ajax({
 			type : "POST",
+			contentType: "application/xml",
 			dataType : "text",
 			url : serverBCK+"/mail",
 			data: xml,

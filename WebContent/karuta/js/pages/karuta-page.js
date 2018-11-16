@@ -69,6 +69,10 @@ function displayKarutaPage()
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
+				},
+				error : function(jqxhr,textStatus) {
+					var navbar_html = getNavBar('list',null);
+					$("#navigation-bar").html(navbar_html);
 				}
 			});
 			//-------------------------------

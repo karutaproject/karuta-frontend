@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2015 - ePortfolium - Licensed under the
+	Copyright 2018 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -89,7 +89,7 @@ function displaySocialNetwork()
 				setUserGroups($(USER.username_node).text());
 				var html = "";
 				$("#socialnetwork-head").html($(html));
-				html += "<div class='hello'>"+snStr[LANG]['hello'] + " " + USER.firstname_node.text()+" "+USER.lastname_node.text()+"</div>";
+				html += "<div class='hello'>"+snStr[LANG]['hello'] + " " + USER.firstname+" "+USER.lastname+"</div>";
 				$("#socialnetwork-head").append($(html));
 				$("#socialnetwork-head").append($("<div class='welcome-line'></div>"));
 				html  = "<div class='row'>";

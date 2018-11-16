@@ -84,6 +84,12 @@ a.sidebar-link:hover {
 	border-color:@navigation-bar-border-color;
 }
 
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover {
+	background-color:@navigation-bar-background-color;
+}
+
+
 .navbar-default .navbar-nav > li > a {
 	color:@navigation-bar-color;
 }
@@ -138,6 +144,9 @@ a {
 	background:@portfolio-section-title-background-color;
 }
 
+.toomuch {
+	color:red;
+}
 /* ============================================================ */
 a, .collapsible {
 	cursor:pointer;
@@ -1120,14 +1129,23 @@ textarea {
 	color:inherit;
 }
 
-#wait-window,
-#saved-window {
+#wait-window {
 	width:100px;
 	margin-left:-50px;
 	background-color:lightgrey;
 	position:fixed;
 	top:25%;
 	left:50%;
+}
+
+#saved-window {
+	width:100%;
+	background-color:white;
+	position:fixed;
+	top:0;
+	left:0;
+	height: 17px;
+	z-index:2000;
 }
 
 #info-window {
@@ -1748,11 +1766,6 @@ table.tablesorter th.restore {
 	width:150px;
 }
 
-.aggregationselect input,
-.ref input {
-	width:300px;
-}
-
 .asmNop .model_row {
 	visibility:hidden;
 }
@@ -1789,14 +1802,34 @@ table.tablesorter th.restore {
 	margin-top:2px;
 }
 
+.batch .collapsible {
+	float:left;
+	margin-right:3px;
+}
+
 .batch .asmUnitStructure{
 	padding:10px;
 }
+
+
+/* ------------------------ */
 
 .batch .for-each-line{
 	margin-top:7px;
 	border:1px solid lightgrey;
 }
+
+.batch .for-each-tree {
+	margin-top:7px;
+	border:1px solid lightgrey;
+}
+
+.batch .actions {
+	margin-top:7px;
+	border:1px dashed lightgrey;
+}
+
+/* ------------------------ */
 
 .batch .create-person {
 	margin-top:7px;
@@ -1807,6 +1840,18 @@ table.tablesorter th.restore {
 	margin-top:7px;
 	border:1px solid #46C7C7 ;
 }
+
+.batch .inactivate-person {
+	margin-top:7px;
+	border:1px solid #63E1FF ;
+}
+
+.batch .activate-person {
+	margin-top:7px;
+	border:1px solid #8BFFFF ;
+}
+
+/* ------------------------ */
 
 .batch .create-elgg-user {
 	margin-top:7px;
@@ -1822,7 +1867,7 @@ table.tablesorter th.restore {
 	margin-top:7px;
 	border:1px solid LightSkyBlue ;
 }
-
+/* 
 .batch .text,
 .batch .code,
 .batch .person,
@@ -1835,7 +1880,7 @@ table.tablesorter th.restore {
 	padding-bottom:0px;
 	border-top:1px solid lightgrey;
 }
-
+*/
 .specific-menu {
 	width:220px;
 }
@@ -1865,14 +1910,55 @@ table.tablesorter th.restore {
 	border:1px solid Aquamarine ;
 }
 
+.batch .set-owner {
+	margin-top:7px;
+	border:1px solid #347C17;
+}
+
+/* ------------------------ */
+
+.batch .create-portfoliogroup{
+	margin-top:7px;
+	border:1px solid #AE6929;
+}
+
 .batch .join-portfoliogroup{
 	margin-top:7px;
-	border:1px solid #8AFB17 ;
+	border:1px solid #C27D3D ;
 }
+
+.batch .leave-portfoliogroup{
+	margin-top:7px;
+	border:1px solid #E09B5B ;
+}
+
+.batch .share-portfoliogroup{
+	margin-top:7px;
+	border:1px solid #F4AF6F ;
+}
+
+.batch .unshare-portfoliogroup{
+	margin-top:7px;
+	border:1px solid #FFC383 ;
+}
+
+/* ------------------------ */
+
+.batch .share-groups{
+	margin-top:7px;
+	border:1px solid #85BB65 ;
+}
+
+/* ------------------------ */
 
 .batch .share-usergroup{
 	margin-top:7px;
 	border:1px solid #46C7C7 ;
+}
+
+.batch .create-usergroup{
+	margin-top:7px;
+	border:1px solid #FFDB58 ;
 }
 
 .batch .unshare-usergroup{
@@ -1880,10 +1966,47 @@ table.tablesorter th.restore {
 	border:1px solid #46C7C7 ;
 }
 
+/* ------------------------ */
+
+.batch .update-resource {
+	margin-top:7px;
+	border:1px dotted lightgrey;
+}
 
 .batch .update-field {
 	margin-top:7px;
-	border:1px solid Crimson;
+	border:1px solid #FF895A;
+}
+
+.batch .update-textfield {
+	margin-top:7px;
+	border:1px solid #FF9D6E;
+}
+
+.batch .update-dashboard {
+	margin-top:7px;
+	border:1px solid #FFB182;
+}
+
+.batch .update-proxy{
+	margin-top:7px;
+	border:1px solid #FFC596;
+}
+
+.batch .update-calendar{
+	margin-top:7px;
+	border:1px solid #FFCFA0;
+}
+
+.batch .update-document{
+	margin-top:7px;
+	border:1px solid #FFD9AA;
+}
+
+/* ------------------------ */
+.batch .update-metadata {
+	margin-top:7px;
+	border:1px solid #FAAC58;
 }
 
 .batch .update-metadata-wad {
@@ -1896,25 +2019,6 @@ table.tablesorter th.restore {
 	border:1px solid #FACC2E;
 }
 
-.batch .update-node-resource {
-	margin-top:7px;
-	border:1px solid #F78181;
-}
-
-.batch .update-metadata {
-	margin-top:7px;
-	border:1px solid #FAAC58;
-}
-
-.batch .update-dashboard {
-	margin-top:7px;
-	border:1px solid #F7BE81;
-}
-
-.batch .update-proxy{
-	margin-top:7px;
-	border:1px solid Gold;
-}
 
 .batch .update-metadata-query {
 	margin-top:7px;
@@ -1926,10 +2030,20 @@ table.tablesorter th.restore {
 	border:1px solid PeachPuff ;
 }
 
+/* ------------------------ */
+
+.batch .update-node-resource {
+	margin-top:7px;
+	border:1px solid #F78181;
+}
+
+
 .batch .import-node {
 	margin-top:7px;
 	border:1px solid Pink ;
 }
+
+/* ------------------------ */
 
 .batch .join-usergroup {
 	margin-top:7px;
@@ -1946,11 +2060,6 @@ table.tablesorter th.restore {
 	border:1px solid  #C35817;
 }
 
-.batch .set-owner {
-	margin-top:7px;
-	border:1px solid #990012;
-}
-
 
 .batch .update-tree-root {
 	margin-top:7px;
@@ -1965,6 +2074,19 @@ table.tablesorter th.restore {
 	margin-bottom:0px;
 	height:32px;
 }
+
+.batch .if-then-else {
+	margin-top:7px;
+	border:1px solid lightgrey;
+}
+
+.batch .if-action,
+.batch .then-part,
+.batch .else-part {
+	margin-bottom:7px;
+	border:1px dashed lightgrey;
+}
+
 
 
 
@@ -2876,3 +2998,19 @@ div.oembedall-container {
 	border-top:0px solid white;
 }
 
+/* ===========================
+	USER PORTFOLIO LIST
+   ===========================*/
+
+#displayListPortfolios td {
+	padding : 5px;
+}
+
+#displayListPortfolios td.portfolio_label {
+	font-weight:900;
+}
+
+#displayListPortfolios tr.head {
+	font-weight:900;
+	text-transform: uppercase;
+}

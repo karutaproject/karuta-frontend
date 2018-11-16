@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2014 - ePortfolium - Licensed under the
+	Copyright 2018 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -181,7 +181,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					if (USER.admin || (portfolio.owner=='Y' && !USER.xlimited)) {
 						html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 						html += "			<ul class='dropdown-menu  pull-right'>";
-						html += "				<li><a onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
+						html += "				<li><a onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a></li>";
 						if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
 							html += "			<li><a id='remove-"+portfolio.id+"' href='' style='display:block' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
 						else
@@ -426,7 +426,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 			html += "<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 			html += "<ul class='dropdown-menu  pull-right'>";
 			if (gid==null) {
-				html += "<li><a onclick=\"UIFactory['Portfolio'].callRename('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a></li>";
+				html += "<li><a onclick=\"UIFactory['Portfolio'].callRenameMove('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename-move"]+"</a></li>";
 				html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].copy('"+this.id+"','"+this.code_node.text()+"-copy',true)\" ><i class='fa fa-file-o'></i><i class='fa fa-file-o'></i> "+karutaStr[LANG]["button-duplicate"]+"</a></li>";
 				if (semtag.indexOf('karuta-model')>-1 || semtag.indexOf('karuta-batch-form')>-1)
 					html += "<li><a onclick=\"document.getElementById('wait-window').style.display='block';UIFactory['Portfolio'].instantiate('"+this.id+"','"+this.code_node.text()+"-instance',true)\" ><i class='fa fa-file-o'></i><i class='fa fa-file'></i> "+karutaStr[LANG]["button-instantiate"]+"</a></li>";
@@ -725,9 +725,7 @@ UIFactory["Portfolio"].parse = function(data)
 				code += ".";
 			tableau1[i] = [code,uuid];
 		} catch(e) {
-			var del = confirm("Erreur portfolio"+uuid+" - code:"+code + "Voulez-vous le supprimer?");
-			if (del)
-				UIFactory["Portfolio"].del(uuid)
+			var del = alert("Erreur portfolio"+uuid+" - code:"+code);
 		}
 	}
 	var newTableau1 = tableau1.sort(sortOn1);
@@ -952,8 +950,8 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 {
 	var result = "";
 	var url = serverBCK_API+"/portfolios/portfolio/code/" + code +( (resources)?"?resources=true":"");
-	$.ajaxSetup({async: false});
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : url,
@@ -962,7 +960,6 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 			result = $(portfolio).attr('id');
 		}
 	});
-	$.ajaxSetup({async: true});
 	return result;
 };
 
@@ -1641,6 +1638,80 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 	return html;
 };
 
+//==================================
+UIFactory["Portfolio"].callRenameMove = function(portfolioid,langcode,project)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (project==null)
+		project = false;
+	//---------------------
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var self = portfolios_byid[portfolioid];
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['rename-move']);
+	var div = $("<div></div>");
+	var htmlFormObj = $("<form class='form-horizontal'></form>");
+	$(div).append($(htmlFormObj));
+	if ((USER.creator && !USER.limited)  || USER.admin) {
+		var htmlCodeGroupObj = $("<div class='form-group'></div>")
+		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code <a href='javascript://' id='code_help'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a></label>");
+		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
+		var htmlCodeInputObj = $("<input id='code_"+portfolioid+"' type='text' class='form-control' name='input_code' value=\""+self.code_node.text()+"\">");
+		if (project)
+			$(htmlCodeInputObj).change(function (){
+					UIFactory["Portfolio"].renameProject(self,langcode);
+			});
+		else
+			$(htmlCodeInputObj).change(function (){
+					UIFactory["Portfolio"].rename(self,langcode);
+			});
+		$(htmlCodeDivObj).append($(htmlCodeInputObj));
+		$(htmlCodeGroupObj).append($(htmlCodeLabelObj));
+		$(htmlCodeGroupObj).append($(htmlCodeDivObj));
+		$(htmlFormObj).append($(htmlCodeGroupObj));
+	}
+	if ((USER.creator && !USER.limited)  || USER.admin) {
+		var htmlLabelGroupObj = $("<div class='form-group'></div>")
+		var htmlLabelLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
+		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
+		var htmlLabelInputObj = $("<input id='label_"+portfolioid+"_"+langcode+"' type='text' class='form-control' value=\""+self.label_node[langcode].text()+"\">");
+		if (project)
+			$(htmlLabelInputObj).change(function (){
+					UIFactory["Portfolio"].renameProject(self,langcode);
+			});
+		else
+			$(htmlLabelInputObj).change(function (){
+					UIFactory["Portfolio"].rename(self,langcode);
+			});
+		$(htmlLabelDivObj).append($(htmlLabelInputObj));
+		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
+		$(htmlLabelGroupObj).append($(htmlLabelDivObj));
+		$(htmlFormObj).append($(htmlLabelGroupObj));
+	}
+
+	$("#edit-window-body").html(div);
+	var html = "";
+	html += "<div id='edit_comments_"+$(portfolios_byid[portfolioid].root).attr("id")+"'></div>";
+	$("#edit-window-body").append($(html));
+	
+	UIFactory["Node"].displayCommentsEditor('edit_comments_'+$(portfolios_byid[portfolioid].root).attr("id"),portfolios_byid[portfolioid].root);
+
+	$("#code_help").popover({ 
+	    placement : 'right',
+	    container : 'body',
+	    title:karutaStr[LANG]['help-label'],
+	    html : true,
+	    trigger:'click hover',
+	    content: karutaStr[LANG]['help_text_rename']
+	});
+
+	$('#edit-window').modal('show');
+};
 
 
 //==================================
@@ -1664,7 +1735,7 @@ UIFactory["Portfolio"].callRename = function(portfolioid,langcode,project)
 	$(div).append($(htmlFormObj));
 	if ((USER.creator && !USER.limited)  || USER.admin) {
 		var htmlCodeGroupObj = $("<div class='form-group'></div>")
-		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code <a href='javascript://' id='code_help'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a></label>");
+		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code</label>");
 		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCodeInputObj = $("<input id='code_"+portfolioid+"' type='text' class='form-control' name='input_code' value=\""+self.code_node.text()+"\">");
 		if (project)
@@ -1870,6 +1941,8 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 				first = false;
 				var input = "<input type='radio' name='radio_group' value='"+groupid+"'";
 				input += "onclick=\""+js+"\" ";
+				if (label == 'designer')
+					label = karutaStr[LANG]['designer'];
 				input +="> "+label+" </input>";
 				$(dest).append($(input));
 			}
@@ -1910,6 +1983,8 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data,unshare_disabled)
 					dest = "#unshare-other-roles";
 				if (unshare_disabled) // display in report
 					dest = "#"+destid;
+				if (label == 'designer')
+					label = karutaStr[LANG]['designer'];
 				html = "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
@@ -2420,9 +2495,9 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	}
 	//-------------------- ROLES-------------------------
 	if (g_userroles[0]=='designer') {
-		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >"+karutaStr[LANG]['role']+" : <span id='userrole'>designer</span><span class='caret'></span></a>";
+		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >"+karutaStr[LANG]['role']+" : <span id='userrole'>"+karutaStr[LANG]['designer']+"</span><span class='caret'></span></a>";
 		html += "		<ul class='dropdown-menu pull-right'>";
-		html += "			<li><a  onclick=\"setDesignerRole('designer')\">designer</a></li>";
+		html += "			<li><a  onclick=\"setDesignerRole('designer')\">"+karutaStr[LANG]['designer']+"</a></li>";
 		for (role in UICom.roles) {
 			if (role!="designer")
 				html += "	<li><a  onclick=\"setDesignerRole('"+role+"')\">"+role+"</a></li>";
@@ -2680,3 +2755,74 @@ UIFactory["Portfolio"].emptyBin = function()
 	//----------------
 }
 
+//==================================
+UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname) 
+//==================================
+{
+
+	var url0 = serverBCK_API+"/portfolios?active=1&userid="+userid;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : url0,
+		userid : userid,
+		firstname :firstname,
+		lastname :lastname,
+		success : function(data) {
+			UIFactory["Portfolio"].parse(data);
+			UIFactory["Portfolio"].displayListPortfolios(this.userid,this.firstname,this.lastname);
+			$("#wait-window").hide();
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active=1: "+textStatus);
+		}
+	});
+}
+
+//==================================
+UIFactory["Portfolio"].displayListPortfolios = function(userid,firstname,lastname,langcode)
+//==================================
+{
+	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var application_server = serverURL+"/"+appliname;
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	$("#edit-window-footer").html("");
+	$("#edit-window-title").html(karutaStr[LANG]['list_user_portfolio']+" " + firstname + " " +lastname);
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+
+	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").append($(footer));
+
+	var html = "<table id='displayListPortfolios' class='zebra-table'>";
+	html += "<tr class='head'><td>"+karutaStr[LANG]['label']+"</td><td>"+karutaStr[LANG]['role']+"</td><td>"+karutaStr[LANG]['code']+"</td></tr>"
+	for (var i=0;i<portfolios_list.length;i++)
+		{
+		var portfolio = portfolios_list[i];
+		var portfolioid = portfolio.id;
+		var portfoliocode = portfolio.code_node.text();
+		var portfolio_label = portfolio.label_node[langcode].text();
+
+		html += "<tr><td class='portfolio_label'>"+portfolio_label+"</td><td class='role' id='role_"+portfolioid+"'>&nbsp;</td><td class='portfoliocode'>"+portfoliocode+"</td><td id='role_"+portfolioid+"'></td></tr>";
+		$.ajax({ // get group-role for the user
+			Accept: "application/xml",
+			type : "GET",
+			dataType : "xml",
+// https://www.eportfolium.com/karuta-backend2.3/rest/api/rolerightsgroups/all/users?portfolio=19d287ad-8d5f-41c8-8df8-3d54db51daa1
+			url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + portfolioid,
+			userid : userid,
+			portfolioid : portfolioid,
+			success : function(data) {
+				var userrole = $("user[id='"+this.userid+"']",data).parent().parent().find('label').text();
+				$("#role_"+this.portfolioid).html(userrole);
+			}
+		});
+
+		}
+	html += "</table>";
+	$("#edit-window-body").html(html);
+	$('#edit-window').modal('show')
+	//--------------------------
+}

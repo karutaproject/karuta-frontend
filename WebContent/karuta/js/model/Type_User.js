@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2014 - ePortfolium - Licensed under the
+	Copyright 2018 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -31,6 +31,7 @@ if( UIFactory === undefined )
 UIFactory["User"] = function( node )
 //==================================
 {
+
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.firstname = $("firstname",node).text();
@@ -51,6 +52,7 @@ UIFactory["User"] = function( node )
 		$(node)[0].appendChild(newelement);
 		this.other_node = $("other",node);
 	}
+	this.display = {};
 	//-----------------------------------
 	this.attributes = {};
 	this.attributes["username"] = this.username_node;
@@ -64,12 +66,47 @@ UIFactory["User"] = function( node )
 	this.attributes["substitute"] = this.substitute_node;
 	this.attributes["other"] = this.other_node;
 	//-----------------------------------
+	// setting flags
 	this.admin = this.admin_node.text()=='1';
 	this.creator = this.designer_node.text()=='1' || this.admin_node.text()=='1';
 	this.limited = this.other_node.text().indexOf('limited')>-1;
 	this.xlimited = this.other_node.text().indexOf('xlimited')>-1;
 	//-----------------------------------
+
+/*
+	// For compatibility
+	var xml=0;
+	if( node.selector != null )
+		{ xml = node[0].outerHTML; }
+	else
+		{ xml = node; }
+
+	var parser = new DOMParser();
+	var xmlDoc = parser.parseFromString(xml,"text/xml");
+	var p = xmlDoc.querySelector("user");
+	this.id = p.getAttribute("id");
+	this.node = xmlDoc;
+	this.attributes = {};
 	this.display = {};
+	var cds = p.children;
+	for( var i=0; i<cds.length; i++ )
+		{
+		var c = cds[i];
+		var nn = c.nodeName;
+		var nc = c.textContent;
+		this[nn] = nc;
+		// For compatibility
+		this[nn+"_node"] = c;
+		this.attributes[nn] = c;
+	}
+	//-----------------------------------
+	// setting flags
+	this.admin = this.admin == "1";
+	this.creator = this.designer == "1" || this.admin;
+	this.limited = this.other.indexOf('limited')>-1;
+	this.xlimited = this.other.indexOf('xlimited')>-1;
+	//-----------------------------------
+*/
 };
 
 
@@ -152,6 +189,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 				html += "<span class='glyphicon glyphicon-remove'></span>";
 				html += "</button>";				
 			}
+			//----------------------------------
 			html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
 			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
 				html += ">";
@@ -160,6 +198,13 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 			}
 			html += "<i class='fa fa-users fa-lg' ></i>";
 			html += "</button>";
+			//----------------------------------
+			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
+				html += "<button class='btn btn-xs' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
+				html += "<i class='fa fa-file' ></i>";
+				html += "</button>";
+			}
+			//----------------------------------
 			html += "</div></td>";
 		}
 	}

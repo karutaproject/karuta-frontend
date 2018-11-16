@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2014 - ePortfolium - Licensed under the
+	Copyright 2018 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -120,15 +120,15 @@ UIFactory["TextField"].prototype.update = function(langcode)
 		langcode = LANGCODE;
 	//---------------------
 	var value = $.trim($("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val());
-	var words = $.trim(value).split(' ');
-	if (this.maxword>0 && countWords(value)>this.maxword) {
-		value = getFirstWords(value,this.maxword);
-		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+value);
-		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(value);
-		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(value);
-	}
 	var newValue1 = value.replace(/(<br("[^"]*"|[^\/">])*)>/g, "$1/>");
 	var newValue = newValue1.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
+	var words = $.trim(newValue).split(' ');
+	if (this.maxword>0 && countWords(newValue)>this.maxword) {
+		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+markFirstWords(newValue,this.maxword));
+//		newValue = getFirstWords(newValue,this.maxword);
+		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(newValue);
+		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(newValue);
+	}
 	if (this.encrypted)
 		newValue = "rc4"+encrypt(newValue,g_rc4key);
 	$(this.text_node[langcode]).text(newValue);
@@ -262,4 +262,37 @@ UIFactory["TextField"].prototype.refresh = function()
 
 };
 
+//==================================
+function countWords(html) {
+//==================================
+	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	return text.trim().split( /\s+/ ).length;
+}
 
+//==================================
+function getFirstWords(html,nb) {
+//==================================
+	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
+	var tableIndex = [];
+	var end = 0;
+	for (var i=0;i<tableOfWords.length;i++){
+		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
+		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
+	}
+	return html.substring(0,tableIndex[tableOfWords.length-1].end)+"======"+nb+"======"+ html.substring(tableIndex[tableOfWords.length-1].end);
+}
+
+//==================================
+function markFirstWords(html,nb) {
+//==================================
+	var text = html.replace("<span class='toomuch'>","").replace("</span><!--toomuch-->","").replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
+	var tableIndex = [];
+	var end = 0;
+	for (var i=0;i<tableOfWords.length;i++){
+		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
+		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
+	}
+	return html.substring(0,tableIndex[tableOfWords.length-1].end) + "<span class='toomuch'>" + html.substring(tableIndex[tableOfWords.length-1].end)+"</span><!--toomuch-->";
+}

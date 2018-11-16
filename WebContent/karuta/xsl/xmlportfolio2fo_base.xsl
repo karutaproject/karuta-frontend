@@ -439,13 +439,14 @@
 
 	<fo:block font-size="9pt" space-before="5pt" space-after="5pt">
 		<fo:inline><xsl:value-of select="$nodeLabel"/></fo:inline>
-		<fo:inline padding-left="5pt">
+		<fo:inline><xsl:value-of select="filename[@lang=$lang]"/></fo:inline>
+		<!-- fo:inline padding-left="5pt"> - no hyperlink because no access rights
 			<xsl:call-template name="link2file">
 				<xsl:with-param name="url0"><xsl:value-of select="$url"/>/resources/resource/file</xsl:with-param>
 				<xsl:with-param name="fpath"><xsl:value-of select="./@contextid"/>?lang=<xsl:value-of select="$lang"/></xsl:with-param>
 				<xsl:with-param name="str"><xsl:value-of select="filename[@lang=$lang]"/></xsl:with-param>
 			</xsl:call-template>
-		</fo:inline>
+		</fo:inline -->
 	</fo:block>
 
 </xsl:template>

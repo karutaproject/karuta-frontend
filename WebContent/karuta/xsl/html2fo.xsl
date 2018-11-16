@@ -28,7 +28,7 @@
 				</fo:simple-page-master>
 			</fo:layout-master-set>
 			<fo:page-sequence master-reference="default-sequence" id="{generate-id(.)}">
-				<fo:flow flow-name="Content" font-size="8pt">
+				<fo:flow flow-name="Content" font-size="8pt">x
 					<xsl:apply-templates select="*"/>
 				</fo:flow>
 			</fo:page-sequence>
