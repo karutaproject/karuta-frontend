@@ -112,12 +112,11 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='delete-person']">
-		<xsl:variable name="identifier">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
 		<delete-user>
 			<identifier>
-				<txtval select='{$identifier}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">identifier</xsl:with-param>
+				</xsl:call-template>
 			</identifier>
 		</delete-user>
 	</xsl:template>

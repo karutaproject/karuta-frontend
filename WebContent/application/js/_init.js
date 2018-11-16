@@ -25,7 +25,7 @@ var audiovideohtml5 = true;
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;
-var karuta_create_account = true;
+var karuta_create_account = false;
 //--------- NAVBAR BRAND ------------------ logo 126 x 34
 var navbar_title = {};
 navbar_title["fr"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";

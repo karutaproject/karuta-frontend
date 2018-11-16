@@ -265,7 +265,7 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	if (!itself.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	if ($("#code_"+itself.id).lenght){
+	if ($("#code_"+itself.id).length){
 		var code = $.trim($("#code_"+itself.id).val());
 		$(itself.code_node).text(code);
 	}
@@ -603,7 +603,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	var titleid = $(titles[0]).attr("id");
 	var html = "";
 	html += "<div class='page-welcome'>";
-	html += "<div id='welcome-image' style=\"background: url('../../../"+serverBCK+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
+	html += "<div id='welcome-image' style=\"background: url('../../../"+serverBCK+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"') no-repeat\">";
 	if (titles.length>0) {
 		html += "<div class='welcome-box'>";
 		html += "<div class='welcome-subbox'>";
