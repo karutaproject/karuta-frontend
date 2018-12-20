@@ -37,8 +37,8 @@
 			loadJS(karuta_url+"/karuta/js/karuta.js", "stage2", s3);
 		};
 		loadJS(karuta_url+"/other/js/jquery-1.10.2.min.js", "stage1");
-		loadJS(karuta_url+"/karuta/js/languages/locale_"+languages[0]+".js", "stage1");
-		loadJS(karuta_url+"/karuta/js/languages/locale_"+languages[1]+".js", "stage1");
+		for (var i=0; i<languages.length; i++)
+			loadJS(karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js", "stage1");
 		loadJS(karuta_url+"/karuta/js/version.js", "stage1");
 		loadJS(karuta_url+"/karuta/js/pages/users.js", "stage1");
 		loadJS(karuta_url+"/karuta/js/pages/loader.js", "stage1", s2);
