@@ -2,10 +2,10 @@
 var application_version = "2.0";
 var application_date = "2017-10-30";
 //----------------------------------
-var appliname = 'karuta';
-var karutaname = 'karuta'; // to share the same 'karuta-core' with multiple front-end
+var appliname = 'karuta2.4';
+var karutaname = 'karuta-core2.4'; // to share the same 'karuta-core' with multiple front-end
 var karuta_url = '../../../' + karutaname;
-var bckname = '';
+var bckname = '2.3';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
@@ -25,11 +25,12 @@ var audiovideohtml5 = true;
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;
-var karuta_create_account = false;
+var karuta_create_account = true;
 //--------- NAVBAR BRAND ------------------ logo 126 x 34
 var navbar_title = {};
 navbar_title["fr"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
 navbar_title["en"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
+navbar_title["ja"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
 //-----------LOGIN PAGE -----------------------
 var welcome1 = {};// Welcome title
 	welcome1["fr"] = "<img class='img-responsive' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
@@ -42,8 +43,8 @@ var welcome3 = {};       // Welcome paragraph
 	welcome3["en"] = "";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA";
-	welcome4["en"] = "WELCOME TO KARUTA";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.4 beta";
+	welcome4["en"] = "WELCOME TO KARUTA 2.4 beta";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";
@@ -73,10 +74,41 @@ var specificmenus = false;
 var csvseparator = ";";
 
 //==============================
-function loadJS(url)
+var asynccount = [];
+var asynccb = [];
+function loadJS(url, group, cb)
 //==============================
 {
-	document.write("<script src='"+url+"'></script>");
+	var bin = "";	// Default group
+	if( group != null ) bin = group;
+	var execCB = function(){
+		asynccount[bin]--;
+		console.log("Count "+bin+" "+asynccount[bin]);
+		if( asynccount[bin] == 0 && typeof asynccb[bin] !== "undefined" )
+		{
+			var c = asynccb[bin];
+			asynccb[bin] = null;
+			console.log("Running CB "+bin);
+			c();
+		}
+	};
+
+	if( asynccb[bin] == null && typeof cb !== "undefined" )
+	{
+		console.log("Defining CB "+asynccount[bin]+" "+bin);
+		asynccb[bin] = cb;
+	}
+	if( asynccount[bin] == null ) asynccount[bin] = 0;
+	asynccount[bin]++;
+
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.async = true;
+//	script.defer = true;
+	script.src = url;
+	script.onload = execCB;
+	document.getElementsByTagName('head')[0].appendChild(script);
+//	document.write("<script src='"+url+"'></script>");
 };
 
 //------ ELGG SOCIAL NETWORK ----------------------------
@@ -87,3 +119,9 @@ var elgg_refreshing = 240000; // 240 seconds
 var bubble_installed = true;
 //------ EUROPASS -------------------------------------
 var europass_installed = true;
+
+var karutaStr = new Array();
+
+var date = new Date();
+var time = date.getMinutes() +":"+ date.getSeconds();
+console.log("End init at: "+time);

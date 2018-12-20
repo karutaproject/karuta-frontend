@@ -14,7 +14,7 @@
    ======================================================= */
 
 //--------- for languages
-var karutaStr = new Array();
+//var karutaStr = new Array();
 
 var portfolioid = null;
 
@@ -700,7 +700,7 @@ function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,cla
 }
 
 //=======================================================================
-function writeSaved()
+function writeSaved(uuid,data)
 //=======================================================================
 {
 	$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
@@ -1208,7 +1208,6 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	$.ajax({
 		contentType: "application/xml",
 		type : "POST",
-		contentType: "text/plain",
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/mail",
 		data: xml,
@@ -1245,6 +1244,8 @@ function setLanguage(lang,caller) {
 		caller="";
 	localStorage.setItem('karuta-language',lang);
 	LANG = lang;
+	console.log("LANG: "+LANG);
+	console.log("karutaStr: "+karutaStr);
 	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
@@ -1549,7 +1550,26 @@ function toggleProject2Select(uuid) {
 	}
 }
 
+//==================================
+function countWords(html) {
+//==================================
+	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	return text.trim().split( /\s+/ ).length;
+}
 
+//==================================
+function getFirstWords(html,nb) {
+//==================================
+	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
+	var tableIndex = [];
+	var end = 0;
+	for (var i=0;i<tableOfWords.length;i++){
+		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
+		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
+	}
+	return html.substring(0,tableIndex[tableOfWords.length-1].end);
+}
 
 //==================================
 function setCSSportfolio(data)
@@ -1746,7 +1766,6 @@ function displayTechSupportForm(langcode)
 			type : "POST",
 			contentType: "application/xml",
 			dataType : "text",
-			contentType: "text/plain",
 			url : serverBCK+"/mail",
 			data: xml,
 			success : function() {

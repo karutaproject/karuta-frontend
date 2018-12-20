@@ -47,9 +47,6 @@ function displayKarutaPage()
 //==============================
 {
 	$.ajaxSetup({async: false});
-	loadLanguages(function(data) {
-		getLanguage();
-	});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -57,6 +54,7 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
+			console.log("PARSED USER:"+USER);
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -153,6 +151,9 @@ function displayKarutaPage()
 			alertHTML(karutaStr[LANG]['not-logged']);
 			window.location="login.htm?lang="+LANG;
 		}
+	});
+	loadLanguages(function(data) {
+		getLanguage();
 	});
 	$.ajaxSetup({async: true});
 }

@@ -66,7 +66,7 @@ UIFactory["URL2Unit"] = function(node,condition)
 };
 
 //==================================
-UIFactory["URL"].prototype.getAttributes = function(type,langcode)
+UIFactory["URL2Unit"].prototype.getAttributes = function(type,langcode)
 //==================================
 {
 	var result = {};
