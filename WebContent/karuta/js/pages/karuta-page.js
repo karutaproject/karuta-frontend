@@ -47,6 +47,9 @@ function displayKarutaPage()
 //==============================
 {
 	$.ajaxSetup({async: false});
+	loadLanguages(function(data) {
+		getLanguage();
+	});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -124,7 +127,7 @@ function displayKarutaPage()
 			} else {
 				var html = "";
 				html += "<div id='global-row' class='row'>";
-				html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
+				html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x' style='display:inline'></i>";
 				html += "	<div id='search-portfolio-div' class='search' style='display:none'>";
 				html += getSearch();
 				html += "	</div>";
@@ -151,9 +154,6 @@ function displayKarutaPage()
 			alertHTML(karutaStr[LANG]['not-logged']);
 			window.location="login.htm?lang="+LANG;
 		}
-	});
-	loadLanguages(function(data) {
-		getLanguage();
 	});
 	$.ajaxSetup({async: true});
 }

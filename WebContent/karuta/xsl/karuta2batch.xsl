@@ -738,6 +738,7 @@
 		<xsl:variable name="portfoliocode">#<xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='portfoliocode']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="semtag"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="uuid"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='uuid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="old-select"><xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$select=''">
 				<xsl:choose>
@@ -745,6 +746,7 @@
 						<xsl:choose>
 							<xsl:when test="$uuid=''">
 								<xsl:choose>
+									<xsl:when test="$old-select!=''"><xsl:value-of select='$old-select'/></xsl:when>
 									<xsl:when test="$semtag=''"><xsl:value-of select='$portfoliocode'/></xsl:when>
 									<xsl:otherwise><xsl:value-of select='$portfoliocode'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
 								</xsl:choose>

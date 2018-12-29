@@ -409,7 +409,8 @@ function getEditBox(uuid,js2) {
 	$(".modal-dialog").css('width','600px');
 	$(".pickcolor").colorpicker();
 	// ------------------------------
-	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');}
+	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');
+}
 
 
 //==================================

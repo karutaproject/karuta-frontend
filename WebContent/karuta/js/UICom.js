@@ -297,8 +297,8 @@ var UICom =
 	//=======================================================================
 	{
 		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
-		var treenode = UICom.structure["tree"][uuid];
-		var metawad = $(">metadata-wad",treenode.node);
+		var node = UICom.structure["ui"][uuid].node;
+		var metawad = $("metadata-wad",node);
 		var data =  xml2string(metawad[0]);
 		var urlS = serverBCK_API+'/nodes/node/'+uuid+'/metadatawad';
 		$.ajax({
@@ -315,7 +315,6 @@ var UICom =
 				alertDisconnected();
 				alertHTML("Error in UpdateMetaWad : "+jqxhr.responseText);
 				alertHTML(karutaStr[LANG]['disconnected']);
-//				window.location = "login.htm";
 			}
 		});
 	},
@@ -325,8 +324,8 @@ var UICom =
 	//=======================================================================
 	{
 		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
-		var treenode = UICom.structure["tree"][uuid];
-		var metawad_epm = $(">metadata-epm",treenode.node);
+		var node = UICom.structure["ui"][uuid].node;
+		var metawad_epm = $("metadata-epm",node);
 		var data =  xml2string(metawad_epm[0]);
 		var urlS = serverBCK_API+'/nodes/node/'+uuid+'/metadataepm';
 		$.ajax({

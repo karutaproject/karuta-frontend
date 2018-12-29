@@ -529,7 +529,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (code!="" && self_code==$('code',resource).text())
 				input += " checked ";
 			input += ">&nbsp;&nbsp;";
-			input += "<span  class='sel"+code+"'>"
+			input += "<div  class='sel"+code+" radio-div'>"
 			if (display_code)
 				input += code + " ";
 			if (display_label){
@@ -538,7 +538,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				if (target=='fileid')
 					input += UICom.structure["ui"][uuid].resource.getView(null,'span');
 			}
-			input += "</span></input>";
+			input += "</div></input>";
 			var obj = $(input);
 			$(obj).click(function (){
 				UIFactory["Get_Resource"].update(this,self,langcode,type);

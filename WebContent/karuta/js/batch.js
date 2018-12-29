@@ -2399,7 +2399,13 @@ function execReport_BatchCSV(parentid,title,codeReport)
 {
 	csvreport = [];
 	$.ajaxSetup({async: false});
-	report_getModelAndPortfolio(codeReport,g_portfolio_current,null,g_dashboard_models);
+	var root_node = g_portfolio_current;
+	if (codeReport.indexOf("@local")>-1){
+		root_node = UICom.structure["ui"][parentid].node;
+		codeReport = codeReport.substring(0,codeReport.indexOf("@local"))+codeReport.substring(codeReport.indexOf("@local")+6);
+	}
+
+	report_getModelAndPortfolio(codeReport,root_node,null,g_dashboard_models);
 	$.ajaxSetup({async: true});
 	initBatchVars();
 	if (csvreport.length>3) {
