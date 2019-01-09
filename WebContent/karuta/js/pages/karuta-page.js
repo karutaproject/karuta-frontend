@@ -57,6 +57,7 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
+			console.log("PARSED USER:"+USER);
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -126,7 +127,7 @@ function displayKarutaPage()
 			} else {
 				var html = "";
 				html += "<div id='global-row' class='row'>";
-				html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
+				html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x' style='display:inline'></i>";
 				html += "	<div id='search-portfolio-div' class='search' style='display:none'>";
 				html += getSearch();
 				html += "	</div>";

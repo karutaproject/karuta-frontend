@@ -221,15 +221,15 @@ UIFactory["Get_Get_Resource"].update = function(selected_item,itself,langcode,ty
 	if (itself.encrypted)
 		code = "rc4"+encrypt(code,g_rc4key);
 	//---------------------
-	$(itself.value_node).text(value);
-	$(itself.code_node).text(code);
+	$(itself.value_node[0]).text(value);
+	$(itself.code_node[0]).text(code);
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);
 		//---------------------
 		if (itself.encrypted)
 			label = "rc4"+encrypt(label,g_rc4key);
 		//---------------------
-		$(itself.label_node[i]).text(label);
+		$(itself.label_node[i][0]).text(label);
 	}
 	itself.save();
 };
@@ -542,12 +542,12 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			if (code!="" && self_code==$('code',resource).text())
 				input += " checked ";
 			input += ">&nbsp;&nbsp;";
-			input += "<span  class='sel"+code+"'>"
+			input += "<div  class='sel"+code+" radio-div'>"
 			if (display_code)
 				input += code + " ";
 			if (display_label)
 				input += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
-			input += "</span></input>";
+			input += "</div></input>";
 			var obj = $(input);
 			$(obj).click(function (){
 				UIFactory["Get_Get_Resource"].update(this,self,langcode,type);

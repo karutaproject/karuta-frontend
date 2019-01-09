@@ -267,10 +267,10 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	//---------------------
 	if ($("#code_"+itself.id).length){
 		var code = $.trim($("#code_"+itself.id).val());
-		$(itself.code_node).text(code);
+		$(itself.code_node[0]).text(code);
 	}
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
-	$(itself.label_node[langcode]).text(label);
+	$(itself.label_node[langcode][0]).text(label);
 	itself.save();
 	writeSaved(itself.id);
 };
@@ -338,7 +338,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 				var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 				var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.label_node[langcode].text()+"\">");
 				$(htmlLabelInputObj).change(function (){
-					UIFactory["Node"].update(htmlLabelInputObj,self,langcode);
+					UIFactory["Node"].updateLabel(htmlLabelInputObj,self,langcode);
 				});
 				$(htmlLabelDivObj).append($(htmlLabelInputObj));
 				$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
@@ -1312,7 +1312,15 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				var alreadyDisplayed = false;
 				if (typeof europass_installed != 'undefined' && europass_installed && semtag=="EuropassL"){
 					alreadyDisplayed = true;
-					node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,menu);
+					if( node.structured_resource != null )
+					{
+						node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,menu);
+					}
+					else
+					{
+						console.error("Europass not shown");
+						// FIXME: Need visual feedback for missing data
+					}
 				}
 				if (!alreadyDisplayed && semtag!='bubble_level1') {
 					for( var i=0; i<root.children.length; ++i ) {
@@ -1727,7 +1735,15 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				var alreadyDisplayed = false;
 				if (typeof europass_installed != 'undefined' && europass_installed && semtag=="EuropassL"){
 					alreadyDisplayed = true;
-					UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid);
+					if( node.structured_resource != null )
+					{
+						node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,menu);
+					}
+					else
+					{
+						console.error("Europass not shown");
+						// FIXME: Need visual feedback for missing data
+					}
 				}
 				if (!alreadyDisplayed && semtag!='bubble_level1') {
 					for( var i=0; i<root.children.length; ++i ) {
@@ -2432,6 +2448,8 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 						if ((node.resource.type!='Dashboard'&&node.resource.type!='Report') || g_userroles[0]=='designer')
 							html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 						html += "</div><!-- inside-full-height -->";
+						//-------------- context -------------------------
+						html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 						html += "</td>";
 					}
 					//-------------- buttons --------------------------
@@ -2462,6 +2480,8 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				html += "</div>";
 				//--------------------------------------------------
 				html += "</div><!-- row -->";
+				//-------------- context -------------------------
+				html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 				//-------------- metainfo -------------------------
 				html += "<div id='metaepm_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
 				//--------------------------------------------------*/
@@ -2486,7 +2506,9 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 			if (g_userroles[0]=='designer' || USER.admin) {  
 				UIFactory["Node"].displayMetaEpmInfos("metaepm_"+uuid,data);
 			}
-			//----------- help -----------
+			// -------------- display comments
+			UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+		//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				if (depth>0 || nodetype == "asmContext") {
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
