@@ -22,6 +22,7 @@ var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------
 var audiovideohtml5 = true;
+var maxfilesizeupload = "32"; //Mo
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;

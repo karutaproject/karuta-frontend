@@ -557,11 +557,25 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 function confirmSubmit(uuid,submitall) 
 // =======================================================================
 {
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+")\">" + karutaStr[LANG]["button-submit"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
+	var href = "";
+	var type = "";
+	try {
+		type = UICom.structure.ui[uuid].resource.type;
+		href = document.getElementById('file_'+uuid).href;
+	}
+	catch(err) {
+		href = "";
+	}
+	if (href=="" && type!="" && type=="Document")
+		alertHTML(karutaStr[LANG]["document-required"]);
+	else
+	{
+		document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
+		var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+")\">" + karutaStr[LANG]["button-submit"] + "</button>";
+		document.getElementById('delete-window-footer').innerHTML = buttons;
+		$('#delete-window').modal('show');
+    }
 }
 
 //=======================================================================

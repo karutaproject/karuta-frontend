@@ -274,12 +274,17 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 	$("#"+destid).append($(html));
 	var loadedid = 'loaded_'+this.id+langcode;
 	$("#fileupload_"+this.id+langcode).fileupload({
-		dataType: 'json',
-		add: function (e, data) {
+		add: function(e, data) {
 			$("#wait-window").modal('show');
-	        data.submit();
-	    },
-	    progressall: function (e, data) {
+			if(data.originalFiles[0]['size'] > maxfilesizeupload * 1024 * 1024) {
+				$("#wait-window").modal('hide');
+				alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
+			} else {
+				data.submit();
+			}
+		},
+		dataType: 'json',
+		progressall: function (e, data) {
 			$("#wait-window").modal('show');
 			$("#progress_"+this.id+langcode).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);

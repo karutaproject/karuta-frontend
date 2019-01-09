@@ -132,7 +132,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
 	var html = "";
-	html += "<span class='"+cleanCode(code)+"'";
+	html += "<div class='"+cleanCode(code)+" view-div' ";
 	if (indashboard)
 		html += " style='background-position:center'";
 	html += ">";
@@ -146,7 +146,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	}
 	if (code.indexOf("&")>-1)
 		html += " ["+$(this.value_node).text()+ "] ";
-	html += "</span>";
+	html += "</div>";
 	return html;
 };
 
