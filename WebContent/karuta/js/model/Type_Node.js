@@ -2607,7 +2607,12 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 	var commentnoderoles = $(node.metadatawad).attr('commentnoderoles');
 	if (commentnoderoles==undefined)
 		commentnoderoles = "";
-	if (commentnoderoles!="" && (USER.admin || (USER.creator && commentnoderoles=='designer') || g_userroles[0]=='designer' || commentnoderoles.containsArrayElt(g_userroles) || commentnoderoles.indexOf(this.userrole)>-1)) {
+	if (commentnoderoles!="" 
+		&& (USER.admin 
+			|| g_userroles[0]=='designer' 
+			|| commentnoderoles.indexOf(g_userroles[0])>-1 
+			)
+		) {
 		//---------------------
 		if (langcode==null)
 			langcode = LANGCODE;
