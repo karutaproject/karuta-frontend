@@ -2940,7 +2940,14 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
-		if ( g_userroles[0]=='designer' || (duplicateroles!='none'  && duplicateroles!='' && node.asmtype != 'asmRoot' && ((duplicateroles.containsArrayElt(g_userroles) /*&& !"designer".containsArrayElt(g_userroles)*/) || USER.admin || g_userroles[0]=='designer'))) {
+		if ( g_userroles[0]=='designer'  // always duplicate for designer
+			 || (duplicateroles!='none'  
+				 	&& duplicateroles!='' 
+				 	&& node.asmtype != 'asmRoot' 
+				 	&& ( duplicateroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer' )
+			 	 )
+			)
+		{
 			html+= "<span class='button glyphicon glyphicon-duplicate' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 	}

@@ -350,7 +350,7 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 							$("#batch-log").append("<br>- user inactived ("+userid+") - identifier:"+identifier);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> cannot update user - identifier:"+identifier);
+							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> cannot inactivate user - identifier:"+identifier);
 						}
 					});
 				},
@@ -403,7 +403,7 @@ g_actions['activate-user'] = function activateUser(node)
 							$("#batch-log").append("<br>- user actived ("+userid+") - identifier:"+identifier);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> cannot update user - identifier:"+identifier);
+							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> cannot activate user - identifier:"+identifier);
 						}
 					});
 				},
