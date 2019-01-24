@@ -2,16 +2,16 @@
 var application_version = "2.0";
 var application_date = "2017-10-30";
 //----------------------------------
-var appliname = 'karuta';
-var karutaname = 'karuta'; // to share the same 'karuta-core' with multiple front-end
+var appliname = 'karuta2.3';
+var karutaname = 'karuta2.3'; // to share the same 'karuta-core' with multiple front-end
 var karuta_url = '../../../' + karutaname;
-var bckname = '';
+var bckname = '2.3';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
 //---------------------------------
-var serverBCK_REG = "";  // report registration server
-var serverBCK_REP = ""; // report server
+var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report/config";  // report registration server
+var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report server
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';
@@ -25,7 +25,7 @@ var audiovideohtml5 = true;
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;
-var karuta_create_account = false;
+var karuta_create_account = true;
 //--------- NAVBAR BRAND ------------------ logo 126 x 34
 var navbar_title = {};
 navbar_title["fr"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
