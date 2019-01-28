@@ -64,26 +64,26 @@ var UICom =
 		if( UICom.structure["ui"] == null )
 			UICom.structure["ui"] = {};
 		/// ------------------ Get root node
-		var root = $("asmRoot", data);
+		var root = data.querySelector("asmRoot");
 		var name = "asmRoot";
 		if (root.length==0) {
-			root = $("asmStructure", data);
+			root = data.querySelector("asmStructure");
 			name = "asmStructure";
 		}
 		if (root.length==0){
-			root = $("asmUnit", data);
+			root = data.querySelector("asmUnit");
 			name = "asmUnit";
 		}
 		if (root.length==0) {
-			root = $("asmUnitStructure", data);
+			root = data.querySelector("asmUnitStructure");
 			name = "asmUnitStructure";
 		}
 		if (root.length==0) {
-			root = $("asmContext", data);
+			root = data.querySelector("asmContext");
 		}
 		//---------------------
-		var id = $(root).attr("id");
-		var r = new UICom.Tree(root[0]);
+		var id = root.getAttribute("id");
+		var r = new UICom.Tree(root);
 		//---------------------
 		if (treeroot && !report) {
 			UICom.root = r;
