@@ -42,7 +42,8 @@ UIFactory["Portfolio"] = function( node )
 	this.ownerid = $(node).attr('ownerid');
 	this.node = node;
 	this.rootid = $("asmRoot",node).attr("id");
-	this.root = new UIFactory["Node"]( $("asmRoot",node));
+	var asmroot = node.querySelector("asmRoot");
+	this.root = new UIFactory["Node"]( asmroot );
 	if( UICom.structure["ui"] == null )
 		UICom.structure["ui"] = {};
 	UICom.structure["ui"][this.rootid] = this.root;

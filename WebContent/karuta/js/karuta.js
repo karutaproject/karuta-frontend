@@ -624,48 +624,19 @@ function getURLParameter(sParam) {
 //==================================
 function displayPage(uuid,depth,type,langcode,edit) {
 //==================================
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (g_current_page!=uuid) {
-		$(window).scrollTop(0);
-		g_current_page = uuid;
-	}
-	//---------------------
-	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
-	$('.selected').removeClass('selected');
-	$("#sidebar_"+uuid).parent().addClass('selected');
-	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
-	if (name == 'asmUnit' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
-		$("#wait-window").modal('show');
-		UIFactory.Node.loadNode(uuid);
-	}
-	if (name=='asmStructure' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
-		$("#wait-window").modal('show');
-		UIFactory.Node.loadStructure(uuid);
-	}
-	if (depth==null)
-		depth=100;
-	if (name=='asmRoot' || name=='asmStructure')
-		depth = 1;
-	if (UICom.structure['tree'][uuid]!=null) {
-		if (type=='standard') {
-			var node = UICom.structure['ui'][uuid].node;
-			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
-			$("#welcome-edit").html("");
-			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
-				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
-			else
-				UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
-		}
-		if (type=='translate')
-			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
-		if (type=='model') {
-			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
-		}
-	}
-	$("#wait-window").modal('hide');
+	// Read page configuration
+	var basenode = UICom.structure["tree"][uuid];
+	var metadata = basenode.node.querySelector("metadata");
+	var pageconf = metadata.getAttribute("display-type");	// this or other attribute
+	if( pageconf == null )
+		pageconf = metadata.getAttribute("semantictag");
+
+	if( typeof pageconf === "undefined" || pageconf == null || pageconf=="" )
+		pageconf = "standard";
+	if( pageRender[pageconf] == null )
+		pageconf = "standard";
+
+	pageRender[pageconf](uuid, depth, type, langcode, edit);
 }
 
 //==================================
@@ -1277,7 +1248,7 @@ function toggleContent(uuid) {
 			sessionStorage.setItem("collapsed"+uuid,"N");
 		$("#toggleContent_"+uuid).removeClass("glyphicon-plus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-minus")
-		$("#content-"+uuid).show();
+		$("#content_"+uuid).show();
 	} else {
 		if (g_designerrole)
 			UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','Y');
@@ -1285,7 +1256,7 @@ function toggleContent(uuid) {
 			sessionStorage.setItem("collapsed"+uuid,"Y");
 		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
-		$("#content-"+uuid).hide();
+		$("#content_"+uuid).hide();
 	}
 }
 
