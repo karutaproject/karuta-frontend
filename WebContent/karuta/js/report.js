@@ -95,6 +95,7 @@ function r_getSelector(select,test)
 function r_processPortfolio(no,xmlReport,destid,data,line)
 //==================================
 {
+	$.ajaxSetup({async: false});
 	if (no==0){
 		dashboard_current = destid;
 		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data};
@@ -137,6 +138,7 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 		if (tagname=="csv-value")
 			r_processCsvValue(destid,data,line);
 	}
+	$.ajaxSetup({async: true});
 }
 
 //==================================
@@ -1459,7 +1461,7 @@ function r_processAggregate(aggregate,destid)
 		for (var i=0;i<aggregates[select].length;i++){
 			if ($.isNumeric(aggregates[select][i]))
 				sum += parseFloat(aggregates[select][i]);
-		}SVGToIMG
+		}
 		text = sum/aggregates[select].length;
 		if (text.toString().indexOf(".")>-1)
 			text = text.toFixed(2);
@@ -1675,7 +1677,7 @@ function register_report(uuid)
 	var freq = node_resource.freq_node.text();
 	var comments = node_resource.comments_node[LANGCODE].text();
 	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
-	var url = serverBCK_REG;
+	var url = serverBCK+"/report";
 	$.ajax({
 		type : "POST",
 		url : url,

@@ -61,6 +61,7 @@ karutaStr['en']['not-logged']="You are not connected.";
 karutaStr['en']['translate']="Translate";
 karutaStr['en']['submit']="Submit";
 karutaStr['en']['newpassword']="Forgot password? Send your login:";
+karutaStr['en']['tipnewpassword']="If you can not find our message in your inbox, check your &quot;junk mail&quot; or &quot;spam&quot; folder";
 karutaStr['en']['confirm-password']="Confirm password";
 karutaStr['en']['password-mismatch']="The two passwords do not match.";
 karutaStr['en']['saved']="Saved";

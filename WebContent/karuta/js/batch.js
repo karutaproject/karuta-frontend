@@ -117,7 +117,7 @@ function getSourceUrl(node)
 //-----------------------------------------------------------------------
 
 //================================================
-function processAll()
+function processAll(model_code,portfoliologcode)
 //=================================================
 {
 	$.ajaxSetup({async: false});
@@ -127,6 +127,8 @@ function processAll()
 	processListActions(actions_list);
 	$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
 	$.ajaxSetup({async: true});
+	if (portfoliologcode!="")
+		saveLog(model_code,portfoliologcode,$("#batch-log").html());
 }
 
 //=================================================
@@ -2257,8 +2259,11 @@ function getModelAndProcess(model_code)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
+		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code + "?resources=true",
 		success : function(data) {
+			var portfoliologcode = "";
+			if ($("asmContext:has(metadata[semantictag='portfoliologcode'])",data).length>0)
+				portfoliologcode = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='Field']",$("asmContext:has(metadata[semantictag='portfoliologcode'])",data))).text();
 			var nodeid = $("asmRoot",data).attr("id");
 			// ---- transform karuta portfolio to batch model
 			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2batch.xsl&lang="+LANG;
@@ -2268,7 +2273,7 @@ function getModelAndProcess(model_code)
 				url : urlS,
 				success : function(data) {
 					g_xmlDoc = data;
-					processAll();
+					processAll(model_code,portfoliologcode);
 				}
 			 });
 		}
@@ -2981,3 +2986,66 @@ function updateMetadawad(nodes,node,type,semtag,text,attribute)
 	}
 }
 
+//=================================================
+function saveLog(model_code,portfoliologcode,logtext)
+//=================================================
+{
+	var text ="<h3>"+model_code+"</h3>"+"<h4>"+new Date().toLocaleString()+"</h4>"+logtext;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/code/"+portfoliologcode,
+		success : function(data) {
+			var nodeid = $("asmRoot",data).attr("id");
+			// ---- import textfield ---------
+			var urlS = serverBCK_API+"/nodes/node/import/"+nodeid+"?srcetag=TextField&srcecode=karuta.karuta-resources";
+			$.ajax({
+				async:false,
+				type : "POST",
+				dataType : "text",
+				url : urlS,
+				data : "",
+				success : function(data) {
+					// ---- update textfield ---------
+					var uuid = data;
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/nodes/node/" + uuid,
+						success : function(data) {
+						var resource = $("asmResource[xsi_type='TextField']",data);
+						$("text[lang='"+LANG+"']",resource).text(text);
+						var data = "<asmResource xsi_type='TextField'>" + $(resource).html() + "</asmResource>";
+						var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+						//-------------------
+						$.ajax({
+							async : false,
+							type : "PUT",
+							contentType: "application/xml",
+							dataType : "text",
+							data : strippeddata,
+							url : serverBCK_API+"/resources/resource/" + uuid,
+							success : function(data) {
+								$("#batch-log").append("<br>--- log saved in "+portfoliologcode+" ---");
+							},
+							error : function(data) {
+								$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in saveLog");
+							}
+						});
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in saveLog");
+						}
+					});
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in saveLog");
+				}
+			});
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> Portfolio log does not exist");
+		}
+	});
+
+}

@@ -278,6 +278,7 @@ UIFactory["Video"].remove = function(uuid,langcode)
 UIFactory["Video"].prototype.displayEditor = function(destid,type,langcode)
 //==================================
 {
+	var filename = ""; // to avoid problem : filename with accents	
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -292,21 +293,35 @@ UIFactory["Video"].prototype.displayEditor = function(destid,type,langcode)
 	html += "</div>";
 	html +=" <div id='progress_f_"+this.id+"_"+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileVideo_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
+	html += "<span id='loaded_"+this.id+langcode+"'></span>"
 	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Video.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
+	var loadedid = 'loaded_'+this.id+langcode;
 	$("#f_"+this.id+"_"+langcode).fileupload({
+		add: function(e, data) {
+			$("#wait-window").modal('show');
+			filename = data.originalFiles[0]['name'];
+			if(data.originalFiles[0]['size'] > maxfilesizeupload * 1024 * 1024) {
+				$("#wait-window").modal('hide');
+				alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
+			} else {
+				data.submit();
+			}
+		},
 		progressall: function (e, data) {
 			$("#progress_"+this.id).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+' .bar').css('width',progress + '%');
 		},
 		done: function (e, data,uuid) {
+			$("#wait-window").modal('hide');
 			$("#progress_"+this.id).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+' .bar').css('width',progress + '%');
-			$("#div_"+this.id).html("Loaded");
+			$("#"+loadedid).html(" <i class='fa fa-check'></i>");
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
-			UIFactory["Video"].update(data.result,uuid,langcode);
+			data.result.files[0].name = filename;
+			UIFactory["Video"].update(data.result,uuid,langcode,filename);
 		}
     });
 };

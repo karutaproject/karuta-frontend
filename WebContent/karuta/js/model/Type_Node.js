@@ -1142,20 +1142,24 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			if (nodetype == "asmContext" && node.resource.type=='Report') {
 				$("#"+dest).append($("<div class='row'><div id='exec_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
+				var node_resource = UICom.structure["ui"][uuid].resource;
+				var startday = node_resource.startday_node.text();
+				var time = node_resource.time_node.text();
+				var freq = node_resource.freq_node.text();
+				var comments = node_resource.comments_node[LANGCODE].text();
+//				var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
+
 				if (model_code!='') {
 					$.ajax({
 						type : "GET",
-						url : serverBCK_REP+"/"+uuid+".html",
+						url : serverBCK+"/report/"+uuid+".html",
 						dataType: 'html',
-						headers: {
-		                    'Access-Control-Allow-Origin': '*'
-		                },
-						crossDomain: true,
 						success : function(data) {
 							var content_report =  $(data).find("#dashboard_"+uuid).html();
 							$("#dashboard_"+uuid).html(content_report);
 						},
 						error : function(jqxhr,textStatus) {
+							register_report(uuid);
 							var root_node = g_portfolio_current;
 							genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
 						}
@@ -3005,7 +3009,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
-//					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4,freenode);
+					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4,freenode);
 					if (semantictag.indexOf("asm-block")>-1) {
 						html += "<hr>";
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
@@ -3696,11 +3700,12 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
 	if (name=='asmContext' && node.resource.type=='TextField')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'maxword',$(node.metadatawad).attr('maxword'));
-	//------------------------------------
-	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
-		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
-	if (name!='asmRoot')
-		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'freenode',$(node.metadatawad).attr('freenode'),true);
+	//-------------free positioning --------
+//	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
+//		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
+//	if (name!='asmRoot')
+//		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'freenode',$(node.metadatawad).attr('freenode'),true);
+	//--------------------------------------
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'display',$(node.metadatawad).attr('display'),true);
 	if (name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'collapsible',$(node.metadatawad).attr('collapsible'),true);
@@ -4235,4 +4240,5 @@ UIFactory["Node"].prototype.displaySemanticTags = function(destid,langcode)
 			UICom.structure.ui[$(children[i]).attr('id')].displaySemanticTags("content-"+this.id,langcode);
 	}
 };
+
 

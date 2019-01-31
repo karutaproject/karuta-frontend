@@ -753,8 +753,12 @@
 						<xsl:choose>
 							<xsl:when test="$uuid=''">
 								<xsl:choose>
-									<xsl:when test="$semtag=''"><xsl:value-of select='$portfoliocode'/></xsl:when>
-									<xsl:when test="$semtag!=''"><xsl:value-of select='$portfoliocode'/>.<xsl:value-of select='$semtag'/></xsl:when>
+									<xsl:when test="$portfoliocode!='#'">
+										<xsl:choose>
+											<xsl:when test="$semtag=''"><xsl:value-of select='$portfoliocode'/></xsl:when>
+											<xsl:when test="$semtag!=''"><xsl:value-of select='$portfoliocode'/>.<xsl:value-of select='$semtag'/></xsl:when>
+										</xsl:choose>
+									</xsl:when>
 									<xsl:when test="$old-select!=''"><xsl:value-of select='$old-select'/></xsl:when>
 									<xsl:when test="$old-tree-select!=''"><xsl:value-of select='$old-tree-select'/></xsl:when>
 									<xsl:otherwise><xsl:value-of select='$portfoliocode'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>

@@ -768,7 +768,10 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 		last : last,
 		success : function(data) {
 //			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
-			var nodeid = $("*:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+			var node = $("*:has(metadata[semantictag='"+get_resource_semtag+"'])",data);
+			if (node.length==0)
+				node = $( ":root",data ); //node itself
+			var nodeid = $(node).attr('id');
 			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
 			var tagname = $( ":root",data )[ 0 ].nodeName;
 			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {

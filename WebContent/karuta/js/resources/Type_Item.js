@@ -59,6 +59,8 @@ UIFactory["Item"] = function( node )
 	}
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
+	this.displayCode = {};
+	this.displayValue = {};
 };
 
 //==================================
@@ -94,6 +96,16 @@ UIFactory["Item"].prototype.getCode = function()
 //==================================
 {
 	return this.code_node.text();
+};
+
+//==================================
+UIFactory["Item"].prototype.getValue = function(dest)
+//==================================
+{
+	if (dest!=null) {
+		this.displayValue[dest] = true;
+	}
+	return this.value_node.text();
 };
 
 //==================================
