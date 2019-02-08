@@ -615,8 +615,6 @@ UIFactory["User"].create = function()
 			$('#edit-window').modal('hide');
 		}
 	});
-	if (elgg_installed)
-		user_register($("#user_firstname").val()+" "+$("#user_lastname").val(), $("#user_email").val(), $("#user_username").val(), $("#user_password").val());
 };
 
 //==================================
@@ -680,8 +678,6 @@ UIFactory["User"].createTestUser = function()
 				alertHTML("Error : "+jqxhr.responseText);
 		}
 	});
-	if (elgg_installed)
-		user_register($("#user_firstname").val()+" "+$("#user_lastname").val(), USER.email_node.text(), $("#user_username").val(), $("#user_password").val());
 };
 
 //==================================
@@ -701,8 +697,6 @@ UIFactory["User"].setPassword = function(userid,value)
 	xml +="	<password>"+value+"</password>";
 	xml +="</user>";
 	var url = serverBCK_API+"/users/user/" + userid;
-	if (elgg_installed)
-		user_change_password(value, username);
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -753,8 +747,6 @@ UIFactory["User"].changePassword = function(userid,value)
 				xml +="	<password>"+value+"</password>";
 				xml +="</user>";
 				var url = serverBCK_API+"/users/user/" + userid;
-				if (elgg_installed)
-					user_change_password(value, username);
 				$.ajax({
 					type : "PUT",
 					contentType: "application/xml",

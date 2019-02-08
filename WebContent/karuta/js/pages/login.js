@@ -66,11 +66,6 @@ function loadLoginPage(url)
 	loadJS(url+"/other/bootstrap/js/bootstrap.min.js");
 	loadJS(url+"/other/js/jquery.ui.touch-punch.min.js");
 	//--------------------------------------------------------------
-	if (elgg_installed) {
-		loadJS(url+"/socialnetwork-elgg/js/socialnetwork.js");
-		loadJS(url+"/socialnetwork-elgg/js/moment-with-locales.min.js");		
-	}
-	//--------------------------------------------------------------
 	loadJS(url+"/karuta/js/model/Type_Portfolio.js");
 	loadJS(url+"/karuta/js/model/Type_Node.js");
 	loadJS(url+"/karuta/js/model/Type_User.js");
@@ -105,16 +100,10 @@ function callSubmit(encrypt_url,lang)
 		i : encrypt_url,
 		lang :lang,
 		success : function(data) {
-			if (elgg_installed!=undefined && elgg_installed)
-				if (self.encrypt_url=="")
-					loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (){window.location="karuta.htm";});
-				else
-					loginElgg(document.getElementById("useridentifier").value,document.getElementById("password").value,function (){window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang;});
-			else 
-				if (self.encrypt_url=="")
-					window.location="karuta.htm";
-				else
-					window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang
+			if (self.encrypt_url=="")
+				window.location="karuta.htm";
+			else
+				window.location="public.htm?i="+self.encrypt_url+"&lang="+self.lang
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Identification : "+jqxhr.responseText);

@@ -102,7 +102,7 @@ function getLanguageMenu(js)
 {
 	var html = "";
 	for (var i=0; i<languages.length;i++) {
-		html += "			<li><a  id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');if (elgg_installed) displaySocialNetwork();setWelcomeTitles();"+js+"\">";
+		html += "			<li><a  id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');setWelcomeTitles();"+js+"\">";
 		html += "<img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 	}
 	return html;
@@ -114,7 +114,7 @@ function setLanguageMenu(js)
 //==============================
 {
 	for (var i=0; i<languages.length;i++) {
-		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');$('#navigation-bar').html(getNavBar('list',null));if (elgg_installed) displaySocialNetwork();setWelcomeTitles();"+js);
+		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');$('#navigation-bar').html(getNavBar('list',null));setWelcomeTitles();"+js);
 	}
 }
 
@@ -788,13 +788,6 @@ function loadLanguages(callback)
 	$.ajaxSetup({async: false});
 	for (var i=0; i<languages.length; i++){
 		if (i<languages.length-1) {
-			if (elgg_installed) {
-				$.ajax({
-					type : "GET",
-					dataType : "script",
-					url : karuta_url+"/socialnetwork-elgg/js/languages/locale_"+languages[i]+".js"
-				});
-			}
 			$.ajax({
 				type : "GET",
 				dataType : "script",
@@ -802,13 +795,6 @@ function loadLanguages(callback)
 			});
 		}
 		else { // last one so we callback
-			if (elgg_installed) {
-				$.ajax({
-					type : "GET",
-					dataType : "script",
-					url : karuta_url+"/socialnetwork-elgg/js/languages/locale_"+languages[i]+".js"
-				});
-			}
 			$.ajax({
 				type : "GET",
 				dataType : "script",
@@ -1241,10 +1227,8 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 
 
 //==================================
-function getLanguage(setElggLocale) {
+function getLanguage() {
 //==================================
-	if (setElggLocale==null)
-		setElggLocale = true;
 	var lang = languages[0];
 	var cookielang = localStorage.getItem('karuta-language');
 	for (var i=0; i<languages.length;i++){
@@ -1254,8 +1238,6 @@ function getLanguage(setElggLocale) {
 		}
 	}
 	setLanguage(LANG);
-	if (setElggLocale && USER!=undefined && elgg_installed && $(USER.username_node).text()!="public") // not public Account
-		moment.locale(lang);  // for elgg
 }
 
 //==================================
@@ -1272,8 +1254,6 @@ function setLanguage(lang,caller) {
 		if (languages[i]==lang)
 			LANGCODE = i;
 	}
-	if (caller=="" && elgg_installed && USER!=undefined && $(USER.username_node).text()!="public") // not public Account
-		moment.locale(lang);
 }
 
 
@@ -1361,25 +1341,6 @@ function toggleSideBar() {
 		g_display_sidebar = true;
 	}
 	UIFactory['Node'].reloadUnit();
-}
-
-//==================================
-function toggleSocialNetwork() {
-//==================================
-	if ($("#socialnetwork").is(":visible"))
-	{
-		$("#socialnetwork").hide();
-		$("#toggleSocialNetwork").removeClass('fa-arrow-left').addClass('fa-arrow-right');
-		$("#main-content").removeClass().addClass('col-md-12');
-		localStorage.setItem('socialnetwork','hidden');
-//		Cookies.set('socialnetwork','hidden',{ expires: 60 });
-	} else {
-		$("#toggleSocialNetwork").removeClass('fa-arrow-right').addClass('fa-arrow-left');
-		$("#main-content").removeClass().addClass('col-md-8 col-md-push-4');
-		$("#socialnetwork").show();
-		localStorage.setItem('socialnetwork','shown');
-//		Cookies.set('socialnetwork','shown',{ expires: 60 });
-	}
 }
 
 //==================================
