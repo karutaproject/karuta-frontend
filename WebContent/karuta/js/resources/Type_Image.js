@@ -230,6 +230,99 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 };
 
 //==================================
+UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest]=langcode;
+	}
+	if (type==null)
+		type='default';
+	//------------------------
+	var image_size = "";
+	if ($(this.width_node[langcode]).text()!=undefined && $(this.width_node[langcode]).text()!='') // backward compatibility
+		image_size = "width='"+$(this.width_node[langcode]).text()+"' "; 
+	if (image_size=="" && $("metadata-epm",this.node).attr('width')!=undefined && $("metadata-epm",this.node).attr('width')!='') // backward compatibility
+		image_size = "width='"+$("metadata-epm",this.node).attr('width')+"' "; 
+	if ($(this.height_node[langcode]).text()!=undefined && $(this.height_node[langcode]).text()!='') // backward compatibility
+		image_size += "height='"+$(this.height_node[langcode]).text()+"' "; 
+	if (image_size.indexOf('height')<0 && $("metadata-epm",this.node).attr('height')!=undefined && $("metadata-epm",this.node).attr('height')!='')
+		image_size += "height='"+$("metadata-epm",this.node).attr('height')+"' "; 
+	if (image_size=="")
+		image_size = "class='image img-responsive'";
+	//------------------------
+	var html ="";
+	if (type=='default') {
+		html +="<div uuid='img_"+this.id+"'>";
+		if ($(this.filename_node[langcode]).text()!="") {
+//			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" />";
+//			html += "</a>";
+		}
+		else
+			html += "<img src='../img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
+		html += "</div>";
+	}
+	if (type=='span') {
+		html +="<span uuid='img_"+this.id+"'>";
+		if ($(this.filename_node[langcode]).text()!="") {
+//			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" />";
+//			html += "</a>";
+		}
+		else
+			html += "<img src='../img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
+		html += "</span>";
+	}
+	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" />";
+	}
+	if (type=='withfilename'  && $(this.filename_node[langcode]).text()!=""){
+		html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" />";		
+		html += "</a>";
+		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
+	}
+	if (type=='withfilename-withoutlightbox'  && $(this.filename_node[langcode]).text()!=""){
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" />";		
+		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
+	}
+	if (type=='editor'  && $(this.filename_node[langcode]).text()!=""){
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100'/>";		
+		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
+	}
+	if (type=='block') {
+		html +="<div uuid='img_"+this.id+"' style='height:100%'>";
+		if ($(this.filename_node[langcode]).text()!="") {
+			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
+			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+			html += "<img style='display:inline;max-height:218px;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" />";
+			html += "</a>";
+			html += "</td></tr></table>";
+		} else {
+			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
+			html += "<img src='../img/image-icon.png' height='150px'/>"+karutaStr[LANG]['no-image'];
+			html += "</td></tr></table>";
+		}
+		html += "</div>";
+	}
+
+	$("#"+dest).append(html);
+	var uuid = this.id;
+	$("#image_"+this.id).click(function(){
+		imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+uuid+"' src='../../../"+serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>");
+	});
+
+};
+//==================================
 UIFactory["Image"].update = function(data,uuid,langcode,parent,filename)
 //==================================
 {

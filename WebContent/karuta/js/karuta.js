@@ -83,12 +83,12 @@ function setDesignerRole(role)
 	if (g_display_type=='model'){
 		displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);
 	}
-	if (g_display_type=='header'){
+	if (g_display_type=='basic'){
 		if (g_userroles[0]!='designer')
 			$("#rootnode").hide();
 		else
 			$("#rootnode").show();
-		UIFactory["Portfolio"].displayNodes('header',UICom.root.node,'header',LANGCODE,g_edit);
+		UIFactory["Portfolio"].displayNodes('basic',UICom.root.node,'basic',LANGCODE,g_edit);
 		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,g_edit,UICom.root.node);
 		var uuid = $("#page").attr('uuid');
 		$("#sidebar_"+uuid).click();
@@ -671,12 +671,18 @@ function displayPage(uuid,depth,type,langcode,edit) {
 			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
 				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 			else
-				UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+//				UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 		if (type=='model') {
-			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+			UICom.structure["ui"][uuid].displayNode('model',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+//			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+		}
+		if (type=='basic') {
+			UICom.structure["ui"][uuid].displayNode('basic',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+//			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 		}
 	}
 	$("#wait-window").modal('hide');
@@ -1422,19 +1428,7 @@ function changeCss(className, classValue)
     cssMainContainer.append(className + " {" + classValue + "}\n");
 }
 
-//================================== not used
-function equalize_column_height(uuid)
-//==================================
-{
-	var heights = $("#node_"+uuid).find(".same-height").map(function() {
-		if (UICom.structure["ui"][uuid].resource!=undefined && UICom.structure["ui"][uuid].resource.type == 'image')
-			return $("#image_uuid").height();
-		else
-			return $(this).height();
-	});
-	var maxHeight = Math.max.apply(null, heights);
-	$("#node_"+uuid).find(".same-height").height(maxHeight);
-}
+
 
 //==================================
 function rgb(red, green, blue)
@@ -1680,8 +1674,8 @@ function setCSSportfolio(data)
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
 		var portfolio_buttons_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).attr("id");
 		var portfolio_buttons_background_color = UICom.structure["ui"][portfolio_buttons_background_color_id].resource.getValue();
-		changeCss(".row-resource td.buttons,.csv-button,.pdf-button", "border:1px solid "+portfolio_buttons_background_color+";");
-		changeCss(".row-resource td.buttons,.csv-button,.pdf-button", "background:"+portfolio_buttons_background_color+";");
+		changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "border:1px solid "+portfolio_buttons_background_color+";");
+		changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "background:"+portfolio_buttons_background_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).length>0) {

@@ -110,6 +110,46 @@ UIFactory["Dashboard"].prototype.getView = function(dest,langcode)
 	return $(this.text_node[langcode]).text();
 };
 
+//==================================
+UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
+//==================================
+{
+	var uuid = this.id;
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	$("#"+dest).html($(this.text_node[langcode]).text());
+//	report_not_in_a_portfolio = false;
+	//-----------------------------------------------------
+	$("#extra_"+uuid).append($("<div class='row'><div id='csv_button_"+uuid+"' class='dashboard-buttons col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div></div>"));
+	var root_node = g_portfolio_current;
+	genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
+	if (g_userroles[0]!='designer')
+		$("#sub_node_"+uuid).hide();
+	//---------- display csv or pdf -------
+	var html_csv_pdf = ""
+	var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
+	if (csv_roles.indexOf('all')>-1 || csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+		$("#csv_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
+	}
+	var pdf_roles = $(UICom.structure["ui"][uuid].resource.pdf_node).text();
+	if (pdf_roles.indexOf('all')>-1 || pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+		$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div><div class='pdf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF/Word</div>"));				
+	}
+	var img_roles = $(UICom.structure["ui"][uuid].resource.img_node).text();
+	if (img_roles.indexOf('all')>-1 || img_roles.containsArrayElt(g_userroles) || (img_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+		$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">PNG</div>"));
+	}
+};
+
 /// Editor
 //==================================
 UIFactory["Dashboard"].update = function(itself,langcode)

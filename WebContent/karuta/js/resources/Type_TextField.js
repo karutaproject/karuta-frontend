@@ -109,6 +109,33 @@ UIFactory["TextField"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["TextField"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	//---------------------
+	if (type==null)
+		type = "standard";
+	var html = $(this.text_node[langcode]).text();
+	//---------------------
+	if(type=='standard') {
+		if (this.encrypted)
+			html = decrypt(html.substring(3),g_rc4key);
+	}
+	$("#"+dest).html(html);
+};
+
 /// Editor
 //==================================
 UIFactory["TextField"].prototype.update = function(langcode)
@@ -176,10 +203,6 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (disabled==null)
 		disabled = false;
 	//---------------------
-	this.inline = ($("metadata",this.node).attr('inline')=='Y') ? true : false;
-	if (this.inline==undefined)
-		this.inline = false;
-	//---------------------
 	if (type==null)
 		type = 'default';
 	//---------------------
@@ -212,7 +235,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (this.maxword>0) {
 		$("#counter_"+uuid).html(countWords(text)+"/"+this.maxword);
 	}
-	$("#"+uuid+"_edit_"+langcode+(this.inline?'inline':'')).wysihtml5(
+	$("#"+uuid+"_edit_"+langcode+(inline?'inline':'')).wysihtml5(
 		{
 			toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},
 			"uuid":uuid,
@@ -257,7 +280,7 @@ UIFactory["TextField"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,null,this.display[dest]));
+		this.displayView(dest,null,this.display[dest]);
 	};
 
 };

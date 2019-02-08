@@ -192,6 +192,78 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	var documentIcon = {};
+	documentIcon['.doc'] = "../img/word.gif";
+	documentIcon['.docx'] = "../img/word.gif'";
+	documentIcon['.xls'] = "../img/excel.gif";
+	documentIcon['.xlsx'] = "../img/excel.gif";
+	documentIcon['.ppt'] = "../img/powerpoint.gif";
+	documentIcon['.pptx'] = "../img/powerpoint.gif";
+	documentIcon['.pdf'] = "../img/adobe.gif";
+	documentIcon['.txt'] = "../img/text.png";
+
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = {langcode: langcode, type : type};
+	}
+	//---------------------
+	if (type==null)
+		type = "standard";
+	//---------------------
+	var html = "";
+	if (type=='standard'){
+		if ($(this.filename_node[langcode]).text()!="")
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' style='width:25px'> "+$(this.filename_node[langcode]).text()+"</a>";
+		else
+			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
+	}
+	if (type=='free-positioning'){
+		if ($(this.filename_node[langcode]).text()!="") {
+			var filename = $(this.filename_node[langcode]).text();
+			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+			//alertHTML(extension);
+			html = "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><div class='doc-up'><p style='text-align:center;'>"+$(this.filename_node[langcode]).text()+"</p></div><div class='doc-bottom'><span>Document</span></div></a>";
+		} else
+			html = "<div class='doc-up'><p style='text-align:center;'>"+karutaStr[LANG]['no-document']+"</p></div><div class='doc-bottom'><span>Document</span></div>";
+	}
+	if (type=='icon-url-label'){
+		if ($(this.filename_node[langcode]).text()!=""){
+			var filename = $(this.filename_node[langcode]).text();
+			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
+		} else
+			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
+	}
+	if (type=='icon-url'){
+		if ($(this.filename_node[langcode]).text()!=""){
+			var filename = $(this.filename_node[langcode]).text();
+			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
+		} else
+			html =  "<img src='../img/document-icon.png' style='width:25px'>";
+	}
+	if (type=='icon'){
+		if ($(this.filename_node[langcode]).text()!=""){
+			var filename = $(this.filename_node[langcode]).text();
+			var extension = filename.substring(filename.lastIndexOf(".")+1);
+			html =  documentIcon[extension]; 
+		} else
+			html =  "<img src='../img/document-icon.png' style='width:25px'>";
+
+	}
+	$("#"+dest).html(html);
+};
 /// Editor
 //==================================
 UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)

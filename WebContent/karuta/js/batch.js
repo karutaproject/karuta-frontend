@@ -625,7 +625,8 @@ g_actions['delete-tree'] = function deleteTree(node)
 			});
 		} else {
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
-		}	}
+		}	
+	}
 	catch(err) {
 		$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
 	}

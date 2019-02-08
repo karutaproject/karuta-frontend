@@ -506,7 +506,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		type = 'standard';
 	g_display_type = type;
 	//---------------------------------------
-	if (type=='standard'){
+	if (type=='standard' || type=='basic'){
 		html += "	<div id='main-row' class='row'>";
 		html += "		<div class='col-sm-3 col-md-3' id='sidebar'></div>";
 		html += "		<div class='col-sm-9 col-md-9' id='contenu'></div>";
@@ -599,7 +599,7 @@ UIFactory["Portfolio"].displayNodes = function(destid,tree,semtag,langcode,edit)
 	$("#"+destid).html("");
 	var rootnodeid = $("*:has(metadata[semantictag="+semtag+"])",tree).attr("id");
 	var depth = 99;
-	UIFactory['Node'].displayStandard(UICom.structure['tree'][rootnodeid],destid,depth,langcode,edit);
+	UIFactory['Node'].displayNode('standard',UICom.structure['tree'][rootnodeid],destid,depth,langcode,edit);
 };
 
 

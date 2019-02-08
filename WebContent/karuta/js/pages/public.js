@@ -234,10 +234,10 @@ function displayKarutaPublic()
 					var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
 					if (semtag == 'bubble_level1') {
 						$("#main-container").html("");
-						UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'main-container',depth,LANGCODE,true);
+						UIFactory['Node'].displayNode('standard',UICom.structure['tree'][g_uuid],'main-container',depth,LANGCODE,true);
 					}
 					else
-						UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
+						UIFactory['Node'].displayNode('standard',UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
 					var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
 					if (welcomes.length>0){
 						var welcomeid = $(welcomes[0]).attr('id');

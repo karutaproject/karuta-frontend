@@ -126,15 +126,7 @@ a.sidebar-link:hover {
 	border-bottom:1px solid @page-title-subline-color;
 }
 
-.row-resource td.buttons,
-.csv-button,.pdf-button {
-	border:1px solid @portfolio-buttons-background-color;
-}
 
-.row-resource td.buttons,
-.csv-button,.pdf-button {
-	background:@portfolio-buttons-background-color;
-}
 
 a {
 	color:@portfolio-link-color;
@@ -147,6 +139,53 @@ a {
 .toomuch {
 	color:red;
 }
+/* ========================= */
+/*     RESOURCE STANDARD     */
+/* ========================= */
+.inside-full-height {
+	padding:7px;
+	margin-top: 0;
+	margin-bottom: 0;
+	min-height: 34px;
+}
+
+.extra-standard .csv-button,
+.extra-standard .pdf-button {
+	background: @resource-standard-buttons-background-color;
+	border:1px solid @resource-standard-border-color;
+}
+
+.resource-standard .buttons{
+	background: @resource-standard-buttons-background-color;
+	border:1px solid @resource-standard-border-color;
+	width:200px;
+}
+
+.resource-standard {
+	padding-top:10px;
+}
+.resource-standard .node-label{
+	margin-top:-6px;
+	padding-left:10px;
+	padding-right:0px;
+}
+
+.resource-standard table{
+	widht:100%;
+	margin-left:5px;
+	margin-right:5px;
+}
+
+.resource-standard .td-resource{
+	width:80%;
+	margin-right:0px;
+	background:white;
+	border: 1px solid @resource-standard-border-color;
+	padding-left:0px;
+	padding-right:0px;
+	margin-left:0px;
+}
+
 /* ============================================================ */
 a, .collapsible {
 	cursor:pointer;
@@ -929,12 +968,6 @@ hr {
 	padding-bottom:6px;
 }
 
-.inside-full-height {
-	padding:7px;
-	margin-top: 0;
-	margin-bottom: 0;
-	min-height: 34px;
-}
 
 .row-node{
 	padding-top:15px;
@@ -953,40 +986,7 @@ hr {
 	padding-right:0px;
 }
 
-.row-resource{
-	padding-top:10px;
-}
-.row-resource .node-label{
-	margin-top:-6px;
-	padding-left:10px;
-	padding-right:0px;
-}
 
-.row-resource table{
-	widht:100%;
-	margin-left:5px;
-	margin-right:5px;
-}
-
-.row-resource td.resource{
-	width:80%;
-	margin-right:0px;
-	background:white;
-	border: 1px solid @row-resource-border-color;
-	padding-left:0px;
-	padding-right:0px;
-	margin-left:0px;
-}
-
-.row-resource td.buttons{
-	background: lightgrey;
-	border: 1px solid lightgrey;
-	width:200px;
-/*	vertical-align: top;
-	margin-left:0px;
-	padding-left:0px;
-	padding-right:0px;*/
-}
 
 .button{
 	font-size: 12px;
@@ -1678,6 +1678,11 @@ table.tablesorter th.restore {
 	color:lightgrey;
 }
 
+.report .collapsible {
+	float:left;
+	margin-right:3px;
+}
+
 .report .btn {
 	min-height:34px;
 }
@@ -1816,8 +1821,8 @@ table.tablesorter th.restore {
 	width:150px;
 }
 
-.asmNop .model_row {
-	visibility:hidden;
+.asmNop .node-model {
+	display:none;
 }
 
 .asmNop .row {
