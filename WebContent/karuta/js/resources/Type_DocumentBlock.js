@@ -93,6 +93,60 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["DocumentBlock"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	var document = UICom.structure["ui"][this.document_nodeid];
+	var image = UICom.structure["ui"][this.image_nodeid];
+	var cover = UICom.structure["ui"][this.cover_nodeid];
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = {langcode: langcode, type : type};
+	}
+	//---------------------
+	if (type==null)
+		type = "standard";
+	//---------------------
+	var html = "";
+	if (type=='standard'){
+		//---------------------
+		var img_langcode = langcode;
+		if (!image.multilingual)
+			img_langcode = NONMULTILANGCODE;
+		//---------------------
+		var doc_langcode = langcode;
+		if (!document.multilingual)
+			doc_langcode = NONMULTILANGCODE;
+		//---------------------
+		var filename = $(document.resource.filename_node[doc_langcode]).text();
+		if (filename!="") {
+			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+document.id+"?lang="+languages[doc_langcode]+"'>";
+			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
+			if (cover!=undefined && cover.resource.getValue()=='1')
+				style += "background-size:cover;";
+			html += "<div class='DocumentBlock' style=\""+style+"\">";
+			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='DocumentBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
+				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+			else
+				html += "<div class='docblock-title'>"+filename+"</div>";
+			html += "</div>";
+			html += "</a>";
+		} else {
+			html =  "<div class='DocumentBlock no-document'>";
+			html += "<div class='docblock-title'>"+karutaStr[LANG]['no-document']+"</div>";
+			html += "</div>";
+		}
+	}
+	$("#"+dest).html(html);
+};
+
 
 //==================================
 UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langcode)

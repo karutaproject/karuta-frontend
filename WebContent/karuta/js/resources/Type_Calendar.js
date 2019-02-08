@@ -112,6 +112,25 @@ UIFactory["Calendar"].prototype.getView = function(dest,langcode)
 	return $(this.text_node[langcode]).text();
 };
 
+//==================================
+UIFactory["Calendar"].prototype.getView = function(dest,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	var html = $(this.text_node[langcode]).text();
+	$("#"+dest).html(html);
+};
+
 /// Editor
 //==================================
 UIFactory["Calendar"].update = function(itself,langcode)
@@ -233,7 +252,7 @@ UIFactory["Calendar"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,null,this.display[dest]));
+		this.displayView(dest,null,this.display[dest])
 	};
 
 };

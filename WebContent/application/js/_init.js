@@ -21,7 +21,6 @@ var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------
-var audiovideohtml5 = true;
 var maxfilesizeupload = "32"; //Mo
 //----------------------------------
 var technical_support = ""; // email of technical support
@@ -73,56 +72,3 @@ g_sendEmailPublicURL_message +="&lt;/div&gt;";
 //----------------------------------------------
 var specificmenus = false;
 var csvseparator = ";";
-
-//==============================
-var asynccount = [];
-var asynccb = [];
-function loadJS(url, group, cb)
-//==============================
-{
-	var bin = "";	// Default group
-	if( group != null ) bin = group;
-	var execCB = function(){
-		asynccount[bin]--;
-		console.log("Count "+bin+" "+asynccount[bin]);
-		if( asynccount[bin] == 0 && typeof asynccb[bin] !== "undefined" )
-		{
-			var c = asynccb[bin];
-			asynccb[bin] = null;
-			console.log("Running CB "+bin);
-			c();
-		}
-	};
-
-	if( asynccb[bin] == null && typeof cb !== "undefined" )
-	{
-		console.log("Defining CB "+asynccount[bin]+" "+bin);
-		asynccb[bin] = cb;
-	}
-	if( asynccount[bin] == null ) asynccount[bin] = 0;
-	asynccount[bin]++;
-
-	var script = document.createElement('script');
-	script.type = 'text/javascript';
-	script.async = true;
-//	script.defer = true;
-	script.src = url;
-	script.onload = execCB;
-	document.getElementsByTagName('head')[0].appendChild(script);
-//	document.write("<script src='"+url+"'></script>");
-};
-
-//------ ELGG SOCIAL NETWORK ----------------------------
-var elgg_installed = false;
-var elgg_url_base = 'elgg112/';
-var elgg_refreshing = 240000; // 240 seconds
-//------ BUBBLE MAP -------------------------------------
-var bubble_installed = true;
-//------ EUROPASS -------------------------------------
-var europass_installed = true;
-
-var karutaStr = new Array();
-
-var date = new Date();
-var time = date.getMinutes() +":"+ date.getSeconds();
-console.log("End init at: "+time);

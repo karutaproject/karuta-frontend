@@ -75,7 +75,45 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["ImageBlock"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	var image = UICom.structure["ui"][this.image_nodeid];
+	var cover = UICom.structure["ui"][this.cover_nodeid];
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = {langcode: langcode, type : type};
+	}
+	//---------------------
+	if (type==null)
+		type = "standard";
+	//---------------------
+	var html = "";
+	if (type=='standard'){
+		//---------------------
+		var img_langcode = langcode;
+		if (!image.multilingual)
+			img_langcode = NONMULTILANGCODE;
+		//---------------------
+		var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
+		if (cover!=undefined && cover.resource.getValue()=='1')
+			style += "background-size:cover;";
+		html += "<div id='image_"+this.id+"' class='ImageBlock' style=\""+style+"\">";
+		if (UICom.structure["ui"][this.id].getLabel(null,'none').indexOf('ImageBlock')<0 && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
+			html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+		html += "</div>";
+	}
+	$("#"+dest).html(html);
+};
 
+/// EDITOR
 //==================================
 UIFactory["ImageBlock"].prototype.displayEditor = function(destid,type,langcode)
 //==================================

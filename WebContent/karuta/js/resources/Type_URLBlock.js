@@ -100,6 +100,66 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["URLBlock"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	var url_element = UICom.structure["ui"][this.url_nodeid];
+	var image = UICom.structure["ui"][this.image_nodeid];
+	var cover = UICom.structure["ui"][this.cover_nodeid];
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = {langcode: langcode, type : type};
+	}
+	//---------------------
+	if (type==null)
+		type = "standard";
+	//---------------------
+	var html = "";
+	if (type=='standard'){
+		//---------------------
+		var img_langcode = langcode;
+		if (!image.multilingual)
+			img_langcode = NONMULTILANGCODE;
+		//---------------------
+		var url_langcode = langcode;
+		if (!url_element.multilingual)
+			url_langcode = NONMULTILANGCODE;
+		//---------------------
+		var url = $(url_element.resource.url_node[url_langcode]).text();
+		if (url!="" && url.indexOf("http")<0)
+			url = "http://"+url;
+		var label = $(url_element.resource.label_node[url_langcode]).text();
+		if (label=="")
+			label = url;
+
+		if (url!="") {
+			html =  "<a style='text-decoration:none;color:inherit' id='url_"+url_element.id+"' href='"+url+"' target='_blank'>";
+			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
+			if (cover!=undefined && cover.resource.getValue()=='1')
+				style += "background-size:cover;";
+			html += "<div class='URLBlock' style=\""+style+"\">";
+
+			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='URLBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
+				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+			else
+				html += "<div class='docblock-title'>"+label+"</div>";
+			html += "</div>";
+			html += "</a>";
+		} else {
+			html =  "<div class='URLBlock no-document'>";
+			html += "<div class='docblock-title'>"+karutaStr[LANG]['no-URL']+"</div>";
+			html += "</div>";
+		}
+	}
+	$("#"+dest).html(html);
+};
 
 //==================================
 UIFactory["URLBlock"].prototype.displayEditor = function(destid,type,langcode)

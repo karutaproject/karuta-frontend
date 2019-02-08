@@ -174,6 +174,43 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["Item"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	var label = this.label_node[langcode].text();
+	var code = $(this.code_node).text();
+	var value = $(this.value_node).text();
+	var html = "";
+	if (g_userroles[0]=='designer' || USER.admin) {
+		html += "<div class='"+ code +" view-div'>"+ code + " "+label;
+		if (value!='')
+			html += " ["+ value + "]";
+		html += "</div> ";
+	} else {
+		html += "<div class='"+ code +" view-div'>";
+		if (code.indexOf("#")>-1)
+			html += cleanCode(code) + " ";
+		if (code.indexOf("%")<0)
+			html += " "+label;
+		if (code.indexOf("&")>-1)
+			html += " ["+$(this.value_node).text()+ "] ";
+		html += "</div>";
+	}
+	$("#"+dest).html(html);
+};
+
 /// Editor
 //==================================
 UIFactory["Item"].update = function(itself,langcode)

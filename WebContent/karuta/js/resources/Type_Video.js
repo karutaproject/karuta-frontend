@@ -128,10 +128,7 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 	}
 	//---------------------
 	if (type==null)
-		if (typeof audiovideohtml5 != "undefined" && audiovideohtml5)
-			type = "html5";
-		else
-			type = 'default';
+		type = "html5";
 	//---------------------
 	var html ="";
 	if (type=='html5') {
@@ -140,57 +137,34 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 		html += "<source src='"+srce+"' type=\"video/mp4\"></source>";
 		html += "</video>";
 	}
-	if (type=='default') {
-		var html ="";
-		html += "<div id='jp_container_"+this.id+"' class='jp-video '>";
-		html += "<div class='jp-type-single'>";
-		html += "<div id='jquery_jplayer_"+this.id+"' class='jp-jplayer'></div>";
-		html += "<div class='jp-gui'>";
-		html += "<div class='jp-video-play'>";
-		html += "<a href='javascript:;' class='jp-video-play-icon' tabindex='1'>play</a>";
-		html += "</div>";
-		html += "<div class='jp-interface'>";
-		html += "<div class='jp-progress'>";
-		html += "<div class='jp-seek-bar'>";
-		html += "<div class='jp-play-bar'></div>";
-		html += "</div>";
-		html += "  </div>";
-		html += "  <div class='jp-current-time'></div>";
-		html += "  <div class='jp-duration'></div>";
-		html += "  <div class='jp-controls-holder'>";
-		html += "<ul class='jp-controls'>";
-		html += "  <li><a href='javascript:;' class='jp-play' tabindex='1'>play</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-pause' tabindex='1'>pause</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-stop' tabindex='1'>stop</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-mute' tabindex='1' title='mute'>mute</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-unmute' tabindex='1' title='unmute'>unmute</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-volume-max' tabindex='1' title='max volume'>max volume</a></li>";
-		html += "</ul>";
-		html += "<div class='jp-volume-bar'>";
-		html += "  <div class='jp-volume-bar-value'></div>";
-		html += "</div>";
-		html += "<ul class='jp-toggles'>";
-		html += "  <li><a href='javascript:;' class='jp-full-screen' tabindex='1' title='full screen'>full screen</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-restore-screen' tabindex='1' title='restore screen'>restore screen</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-repeat' tabindex='1' title='repeat'>repeat</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-repeat-off' tabindex='1' title='repeat off'>repeat off</a></li>";
-		html += "</ul>";
-		html += "  </div>";
-		html += "  <div class='jp-title'>";
-		html += "<ul>";
-		html += "  <li>"+this.filename_node[langcode].text()+"</li>";
-		html += "</ul>";
-		html += "  </div>";
-		html += "</div>";
-		html += "  </div>";
-		html += "  <div class='jp-no-solution'>";
-		html += "<span>Update Required</span>";
-		html += "To play the media you will need to either update your browser to a recent version or update your <a href='http://get.adobe.com/flashplayer/' target='_blank'>Flash plugin</a>.";
-		html += "  </div>";
-		html += "</div>";
-		html += "  </div>";
-	}
 	return html;
+};
+
+//==================================
+UIFactory["Video"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	//---------------------
+	if (type==null)
+		type = "html5";
+	//---------------------
+	var html ="";
+	if (type=='html5') {
+		html += "<video width='100%' controls>";
+		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp4";
+		html += "<source src='"+srce+"' type=\"video/mp4\"></source>";
+		html += "</video>";
+	}
+	$("#"+dest).html(html);
 };
 
 //==================================

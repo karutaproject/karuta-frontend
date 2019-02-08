@@ -178,8 +178,7 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 	if (code.indexOf("&")>-1)
 		html += " ["+$(this.value_node).text()+ "] ";
 	html += "</span>";
-	$("#"+dest).html("");
-	$("#"+dest).append($(html));
+	$("#"+dest).html(html);
 };
 
 
