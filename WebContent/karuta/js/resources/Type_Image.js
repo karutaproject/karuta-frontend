@@ -315,7 +315,7 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 		html += "</div>";
 	}
 
-	$("#"+dest).append(html);
+	$("#"+dest).html(html);
 	var uuid = this.id;
 	$("#image_"+this.id).click(function(){
 		imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+uuid+"' src='../../../"+serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>");
@@ -522,6 +522,6 @@ UIFactory["Image"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,null,this.display[dest]));
+		this.displayView(dest,null,this.display[dest]);
 	};		
 };

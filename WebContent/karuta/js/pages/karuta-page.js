@@ -24,8 +24,7 @@ function initKarutaPage()
 	$('body').append(alertBox());
 	$('body').append(messageBox());
 	$('body').append(imageBox());
-	if (typeof europass_installed!='undefined' && europass_installed)
-		$('body').append(LangueBox());
+	$('body').append(LangueBox());
 	
 	//--------------------------
 	var target = document.getElementById('wait-spin');
@@ -50,7 +49,6 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
-			console.log("PARSED USER:"+USER);
 			$.ajax({
 				type : "GET",
 				dataType : "xml",

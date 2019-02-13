@@ -103,7 +103,7 @@ UIFactory["Proxy"].prototype.getView = function(dest,type,langcode)
 };
 
 //==================================
-UIFactory["Proxy"].prototype.displayView = function(dest,type,lang)
+UIFactory["Proxy"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
 	//---------------------
@@ -118,7 +118,7 @@ UIFactory["Proxy"].prototype.displayView = function(dest,type,lang)
 		this.display[dest] = langcode;
 	}
 	var html = this.label_node[langcode].text();
-	$(dest).html(html);
+	$("#"+dest).html(html);
 };
 
 

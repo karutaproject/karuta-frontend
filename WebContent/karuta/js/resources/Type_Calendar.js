@@ -113,7 +113,7 @@ UIFactory["Calendar"].prototype.getView = function(dest,langcode)
 };
 
 //==================================
-UIFactory["Calendar"].prototype.getView = function(dest,langcode)
+UIFactory["Calendar"].prototype.displayView = function(dest,langcode)
 //==================================
 {
 	//---------------------
@@ -141,7 +141,7 @@ UIFactory["Calendar"].update = function(itself,langcode)
 };
 
 //==================================
-UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
+UIFactory["Calendar"].prototype.displayEditor = function(type,langcode,disabled)
 //==================================
 {
 	//---------------------
@@ -236,7 +236,7 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 		}
 	//-----
 
-	return form;
+	$("#"+dest).append(form);
 };
 
 //==================================

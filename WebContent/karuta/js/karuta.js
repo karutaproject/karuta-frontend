@@ -16,6 +16,11 @@
 //--------- for languages
 //var karutaStr = new Array();
 
+if( karutaStr === undefined )
+{
+  var karutaStr = {};
+}
+
 var portfolioid = null;
 
 // -------------------
@@ -1248,7 +1253,6 @@ function setLanguage(lang,caller) {
 	localStorage.setItem('karuta-language',lang);
 	LANG = lang;
 	console.log("LANG: "+LANG);
-	console.log("karutaStr: "+karutaStr);
 	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
@@ -1628,8 +1632,7 @@ function setCSSportfolio(data)
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
 		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
-	//	changeCss(".asmnode .dropdown-button, .submit-button", "border:1px solid "+portfolio_buttons_color+";");
-		changeCss(".collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+portfolio_buttons_color+";");
+		changeCss(".menus,.collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+portfolio_buttons_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {

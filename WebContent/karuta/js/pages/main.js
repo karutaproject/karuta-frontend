@@ -107,9 +107,6 @@ function fill_main_page(rootid,role)
 			}
 			// --------------------------
 			UICom.parseStructure(data,true);
-			if ($("asmUnit:has(metadata[semantictag*='welcome-unit'])",data).length==0 && $("asmRoot:has(metadata[semantictag*='karuta-model'])",data).length>0) {
-				g_welcome_add = true;
-			}
 			//----if asmUnitStructures load content--------
 			if (g_complex) {
 				var unitStructures = $("asmUnitStructure",data);
@@ -149,7 +146,9 @@ function fill_main_page(rootid,role)
 				$("#userrole").html('reporter');
 			}
 			//---------------------------
-			var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
+			var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
+			if (welcomes.length==0) // for backward compatibility
+				welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
 			if (welcomes.length>0){
 				var welcomeid = $(welcomes[0]).attr('id');
 				var node = UICom.structure['ui'][welcomeid];

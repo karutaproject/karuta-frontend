@@ -11,6 +11,31 @@
 body {
 	font-family: "Open Sans",sans-serif;
 }
+
+#contenu {
+	background-color: white;
+}
+
+html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
+	height:100%;
+	min-height:110%;
+}
+
+#main-container blockquote {
+	font-size: 12px;
+}
+
+#contenu {
+	padding-left:0px;
+	padding-right:0px;
+	padding-bottom:50px;
+}
+
+#contenu .page {
+	padding-left:10px;
+	padding-right:10px;
+}
+
 .asmRoot .row-node-asmStructure .title-subline,
 .asmStructure .asmStructure .row-node-asmStructure .title-subline,
 .asmStructure .row-node-asmUnit  .title-subline{
@@ -19,23 +44,18 @@ body {
 
 .createreport .button,
 .collapsible .glyphicon,
-.btn-group .button {
+.btn-group .button,
+.menus {
 	color:@portfolio-buttons-color;
 }
 
 .navbar-brand {padding-bottom:0px;}
 
-#contenu {
-	background-color: white;
-}
 
 .button:hover {
 	box-shadow: 0px 0px 1px @portfolio-buttons-color inset;
 }
 
-.asmnode .dropdown-button, .submit-button, .sharing-button {
-/* 	border:1px solid @portfolio-buttons-color;*/
-	}
 
 .list-page,
 .list-portfoliosgroups,
@@ -50,10 +70,11 @@ body {
 	background-color:@main-background-color;
 }
 
-#sub-bar a {
-	color:@portfolio-navbar-link-color;
-}
-
+/*
+ * -----------------------
+ * ------ sidebar --------
+ * -----------------------
+ */
 .sidebar-link {
 	color:@portfolio-sidebar-link-color;
 }
@@ -63,6 +84,10 @@ body {
 
 #sidebar {
 	background-color:@portfolio-sidebar-color;
+}
+
+#sidebar .selected{
+	border-right:4px solid @portfolio-sidebar-selected-border-color;
 }
 
 .selected a,
@@ -75,9 +100,11 @@ a.sidebar-link:hover {
 	border-bottom:1px solid @portfolio-sidebar-separator-color;
 }
 
-.page-welcome .welcome-title {
-	color:@welcome-title-color;
-}
+/*
+ * -----------------------
+ * ------ navbar --------
+ * -----------------------
+ */
 
 .navbar-default{
 	background-color:@navigation-bar-background-color;
@@ -94,6 +121,16 @@ a.sidebar-link:hover {
 	color:@navigation-bar-color;
 }
 
+#sub-bar a {
+	color:@portfolio-navbar-link-color;
+}
+
+/*
+ * -----------------------
+ * ------ sub-bar --------
+ * -----------------------
+ */
+
 #sub-bar .navbar-default,
 #sub-bar .dropdown-menu,
 #sub-bar .open > a {
@@ -101,9 +138,26 @@ a.sidebar-link:hover {
 	border-color:@portfolio-navbar-color;
 }
 
-#sidebar .selected{
-	border-right:4px solid @portfolio-sidebar-selected-border-color;
+#sub-bar .welcome-title {
+    color: @welcome-title-color;
+    font-size: 30px;
+    text-align: center;
+    width: 100%;
 }
+
+#sub-bar .welcome-line {
+    border-bottom: 1px solid @welcome-line-color;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+}
+
+/*
+ * -----------------------
+ * ------  --------
+ * -----------------------
+ */
+
 
 .welcome-line {
 	border-bottom:1px solid @welcome-line-color;
@@ -139,18 +193,41 @@ a {
 .toomuch {
 	color:red;
 }
+
+/* ========================= */
+/*     NODE STANDARD     */
+/* ========================= */
+
+#contenu .node-standard .node:first-child {
+	background-color:@page-title-background-color;
+	min-height:100px;
+}
+
+#contenu .node-standard .node-standard .node {
+	background-color:inherit;
+	min-height:inherit;
+}
+
 /* ========================= */
 /*     RESOURCE STANDARD     */
 /* ========================= */
-.inside-full-height {
+.inside-full {
 	padding:7px;
 	margin-top: 0;
 	margin-bottom: 0;
 	min-height: 34px;
 }
 
-.extra-standard .csv-button,
-.extra-standard .pdf-button {
+.inside-full-height {
+	padding-top:7px;
+	padding-bottom:7px;
+	margin-top: 0;
+	margin-bottom: 0;
+	min-height: 34px;
+}
+
+.resource-standard .extra .csv-button,
+.resource-standard .extra .pdf-button {
 	background: @resource-standard-buttons-background-color;
 	border:1px solid @resource-standard-border-color;
 }
@@ -204,25 +281,6 @@ a, .collapsible {
 }
 
 
-html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
-	height:100%;
-	min-height:110%;
-}
-
-#main-container blockquote {
-	font-size: 12px;
-}
-
-#contenu {
-	padding-left:0px;
-	padding-right:0px;
-	padding-bottom:50px;
-}
-
-#contenu .page {
-	padding-left:10px;
-	padding-right:10px;
-}
 
 .navbar {
 	margin-bottom:0px;
@@ -346,19 +404,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 	display:none;
 }
 
-#sub-bar .welcome-title {
-    color: @welcome-title-color;
-    font-size: 30px;
-    text-align: center;
-    width: 100%;
-}
 
-#sub-bar .welcome-line {
-    border-bottom: 1px solid @welcome-line-color;
-    margin-left: auto;
-    margin-right: auto;
-    width: 25%;
-}
 
 #welcome-baseline{
 	color:@welcome-subtitle-color;
@@ -1356,7 +1402,6 @@ a.active:over{
 	padding-left:10px;
 	padding-top:10px;
 	padding-bottom:10px;
-	border-top:1px solid #ddd;
 }
 
 .novisible > .row{
@@ -1749,9 +1794,11 @@ table.tablesorter th.restore {
 	margin-bottom:0px;
 }
 
-.report .model_button {
+.report .buttons,
+.report .menus {
 	float:right
 }
+
 .report button.select-label {
 	padding-left:5px;
 	min-width:120px;
@@ -2066,7 +2113,8 @@ table.tablesorter th.restore {
 	border:1px solid LightCoral  ;
 }
 
-.batch .model_button {
+.batch .buttons,
+.batch .menus {
 	float:right
 }
 
@@ -3013,4 +3061,11 @@ div.oembedall-container {
 #displayListPortfolios tr.head {
 	font-weight:900;
 	text-transform: uppercase;
+}
+/* ===========================
+	For backward compatibility
+   ===========================*/
+
+.page-welcome .welcome-title {
+	color:@welcome-title-color;
 }

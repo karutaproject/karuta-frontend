@@ -238,7 +238,9 @@ function displayKarutaPublic()
 					}
 					else
 						UIFactory['Node'].displayNode('standard',UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
-					var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
+					var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
+					if (welcomes.length==0) // for backward compatibility
+						welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
 					if (welcomes.length>0){
 						var welcomeid = $(welcomes[0]).attr('id');
 						$("#sidebar_"+welcomeid).click();

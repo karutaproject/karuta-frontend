@@ -564,7 +564,7 @@ UIFactory["Portfolio"].displaySidebar = function(root,destid,type,langcode,edit,
 	var html = "";
 	if (type==null || type==undefined)
 		type = 'standard';
-	if (type=='standard' || type=='translate' || type=='model'){
+	if (type=='standard' || type=='translate' || type=='model' || type=='basic'){
 		html += "<div id='sidebar-content'><div  class='panel-group' id='parent-"+rootid+"' role='tablist'></div></div>";
 		$("#"+destid).html($(html));
 		UIFactory["Node"].displaySidebar(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
@@ -2468,20 +2468,6 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "</div><!-- class='navbar-inner' -->";
 	html += "<div class='collapse navbar-collapse' id='collapse-2'>";
 	html += "	<ul class='nav navbar-nav navbar-right'>";
-	//-------------------- WELCOME PAGE EDIT -----------
-	html += "		<li id='welcome-edit'></li>";
-	if (g_welcome_add && g_designerrole && g_userroles[0]=='designer'){
-		html += "	<li id='welcome-add'>";
-		var databack = false;
-		var callback = "UIFactory['Node'].reloadStruct";
-		var param2 = "'"+g_portfolio_rootid+"'";
-		var param3 = null;
-		var param4 = null;
-		html += "		<a href='#xxx' onclick=\"javascript:importBranch('"+rootid+"','karuta.model','welcome-unit',"+databack+","+callback+","+param2+","+param3+","+param4+");alertHTML('"+karutaStr[LANG]['welcome-added']+"')\">";
-		html += karutaStr[LANG]['welcome-add'];
-		html += "		</a>";
-		html += "	</li>";
-	}
 	//-------------------- ACTIONS----------------------
 	var actions = UIFactory["Portfolio"].getActions(portfolioid);
 	if (actions!='') {
