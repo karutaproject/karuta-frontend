@@ -2686,13 +2686,48 @@ UIFactory['Node'].upNode = function(nodeid)
 	});
 };
 
+//==================================
+function moveTO(nodeid,title,destsemtag,srcesemtag) 
+//==================================
+{
+	$('#wait-window').modal('show');
+	var parentid = null;
+	// change menu
+	var node = UICom.structure["ui"][nodeid];
+	var menusroles = $(node.metadatawad).attr('menuroles');
+	var newmenusroles = menusroles.substring(0,menusroles.indexOf(destsemtag)) + srcesemtag + '/' + destsemtag + menusroles.substring(menusroles.indexOf(srcesemtag)+srcesemtag.length);
+	UIFactory.Node.updateMetadataWadAttribute(nodeid,'menuroles',newmenusroles);
+	// search for destination
+	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes?portfoliocode=" + selfcode + "&semtag="+destsemtag,
+		success : function(data) {
+			var nodes = $("node",data);
+			parentid = $(nodes[0]).attr('id');
+			// move node
+			UIFactory.Node.moveTo(nodeid,parentid);
+			// reload destination
+			UIFactory.Node.loadNode(parentid);
+		}
+	});
+}
+
 //==================================================
 UIFactory['Node'].moveNode = function(nodeid)
 //==================================================
 {
 	var option = $("select",$("#edit-window-body")).find("option:selected");
 	var parentid = $(option).attr('uuid');
-	if (parent !=undefined)
+	UIFactory['Node'].moveTo(nodeid,parentid);
+};
+
+//==================================================
+UIFactory['Node'].moveTo = function(nodeid,parentid)
+//==================================================
+{
+	if (parent !=undefined && parent!=null)
 		$.ajax({
 			type : "POST",
 			dataType : "text",

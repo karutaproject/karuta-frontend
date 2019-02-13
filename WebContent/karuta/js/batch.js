@@ -625,7 +625,8 @@ g_actions['delete-tree'] = function deleteTree(node)
 			});
 		} else {
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
-		}	}
+		}	
+	}
 	catch(err) {
 		$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
 	}
@@ -919,17 +920,17 @@ g_actions['share-tree'] = function shareTree(node)
 						url : url,
 						data : xml,
 						success : function(data) {
-							$("#batch-log").append("<br>- tree shared ("+g_trees[treeref][0]+") - user:"+user_id+" - role:"+role);
+							$("#batch-log").append("<br>- tree shared ("+g_trees[treeref][1]+") - user:"+user_id+" - role:"+role);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref][0]+") - role:"+role);
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref][1]+") - role:"+role);
 						}
 					});
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref][0]+") - role:"+role);
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref][1]+") - role:"+role);
 		}
 	});
 }
@@ -966,15 +967,15 @@ g_actions['set-owner'] = function setOwner(node)
 				dataType : "text",
 				url : url,
 				success : function(data) {
-					$("#batch-log").append("<br>- tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
+					$("#batch-log").append("<br>- tree owner changed ("+g_trees[treeref][1]+") - user:"+user);
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree owner changed ("+g_trees[treeref][1]+") - user:"+user);
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree owner changed ("+g_trees[treeref][0]+") - user:"+user);
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree owner changed ("+g_trees[treeref][1]+") - user:"+user);
 		}
 	});
 }
@@ -998,10 +999,10 @@ g_actions['re-instantiate-tree'] = function reInstantiateTree(node)
 		dataType : "text",
 		url : url,
 		success : function(data) {
-			$("#batch-log").append("<br>- tree re-instantiated ("+g_trees[treeref][0]+")");
+			$("#batch-log").append("<br>- tree re-instantiated ("+g_trees[treeref][1]+")");
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in tree re-instantiated ("+g_trees[treeref][0]+")");
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in tree re-instantiated ("+g_trees[treeref][1]+")");
 		}
 	});
 
@@ -1054,17 +1055,17 @@ g_actions['unshare-tree'] = function unshareTree(node)
 						url : url,
 						data : "",
 						success : function(data) {
-							$("#batch-log").append("<br>- tree unshared ("+g_trees[treeref][0]+") - user:"+user_id+" - role:"+role);
+							$("#batch-log").append("<br>- tree unshared ("+g_trees[treeref][1]+") - user:"+user_id+" - role:"+role);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in unshare tree ("+g_trees[treeref][0]+") - role:"+role);
+							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in unshare tree ("+g_trees[treeref][1]+") - role:"+role);
 						}
 					});
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in unshare tree ("+g_trees[treeref][0]+") - role:"+role);
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in unshare tree ("+g_trees[treeref][1]+") - role:"+role);
 		}
 	});
 }
@@ -1435,10 +1436,10 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 						url : serverBCK_API+"/portfoliogroups?group="+groupid+"&uuid=" + g_trees[treeref][0],
 						data : "",
 						success : function(data) {
-							$("#batch-log").append("<br>- JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+							$("#batch-log").append("<br>- JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][1]);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][1]);
 						}
 					});
 				}else if (select.length>2) {
@@ -1510,16 +1511,16 @@ g_actions['leave-portfoliogroup'] = function LeavePortfolioGroup(node)
 					url : serverBCK_API+"/portfoliogroups?group="+groupid+"&uuid=" + g_trees[treeref][0],
 					data : "",
 					success : function(data) {
-						$("#batch-log").append("<br>- LeavePortfolioGroup - portfoliogroup : "+portfoliogroup+" - portfolio : "+g_trees[treeref][0]);
+						$("#batch-log").append("<br>- LeavePortfolioGroup - portfoliogroup : "+portfoliogroup+" - portfolio : "+g_trees[treeref][1]);
 					},
 					error : function(data) {
-						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup : "+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup : "+portfoliogroup+" - portfolio:"+g_trees[treeref][1]);
 					}
 				});
 			}
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][0]);
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" - portfolio:"+g_trees[treeref][1]);
 		}
 	});
 }
@@ -1723,23 +1724,23 @@ g_actions['share-usergroup'] = function shareUserGroup(node)
 							url : url,
 							data : users,
 							success : function(data) {
-								$("#batch-log").append("<br>tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+								$("#batch-log").append("<br>tree shared with usergroup  ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - role:"+role);
 							},
 							error : function(data) {
-								$("#batch-log").append("<br>- <span class='danger'>ERROR</span> tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+								$("#batch-log").append("<br>- <span class='danger'>ERROR</span> tree shared with usergroup  ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - role:"+role);
 							}
 						});
 					},
 					error : function(data) {
-						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+						$("#batch-log").append("<br>- <span class='danger'>ERROR</span> tree shared with usergroup  ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - role:"+role);
 					}
 				});
 			} else {
-				$("#batch-log").append("<br><span class='danger'>ERROR</span> Empty group - tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+				$("#batch-log").append("<br><span class='danger'>ERROR</span> Empty group - tree shared with usergroup  ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - role:"+role);
 			}
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> tree shared with usergroup  ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - role:"+role);
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> tree shared with usergroup  ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - role:"+role);
 		}
 	});
 }
@@ -1789,21 +1790,21 @@ g_actions['unshare-usergroup'] = function unshareUserGroup(node)
 							url : url,
 							data : "",
 							success : function(data) {
-								$("#batch-log").append("<br>tree with usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
+								$("#batch-log").append("<br>tree with usergroup unshared ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
 							},
 							error : function(jqxhr,textStatus) {
-								$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
+								$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in usergroup unshared ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
 							}
 						});
 					}
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in usergroup unshared ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in usergroup unshared ("+g_trees[treeref][0]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in usergroup unshared ("+g_trees[treeref][1]+") - usergroup:"+usergroupname+" - userid:"+userid+" - role:"+role);
 		}
 	});
 }
@@ -2445,83 +2446,6 @@ function convertCSVLine2json(codes,csvline)
 };
 
 
-
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//--------------------------- Elgg Group --------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-
-
-
-//=================================================
-g_actions['create-elgg-group'] = function createElggGroup(node)
-//=================================================
-{
-	var group = getTxtvals($("group",node));
-	var callback = function (param1){
-	};
-	createNetworkGroup(name,callback);
-}
-
-
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//--------------------------- Elgg User ---------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-
-//=================================================
-g_actions['create-elgg-user'] = function createElggUser(node)
-//=================================================
-{
-	var ok = false;
-	var identifier = getTxtvals($("identifier",node));
-	var lastname = getTxtvals($("lastname",node));
-	var firstname = getTxtvals($("firstname",node));
-	var email = getTxtvals($("email",node));
-	var password = getTxtvals($("password",node));
-	//---- get userid ----------
-	var userid = "";
-	var url = "../../../../"+elgg_url_base+"services/api/rest/xml";
-	var data = "auth_token="+g_elgg_key+"&method=auth.getuser&username="+identifier;
-	$.ajax({
-		async : false,
-		Accept: "json",
-		dataType : "json",
-		type : "GET",
-		url : url,
-		data: data,
-		success : function(data) {
-			ok = true;
-			elgg_userid = data.result.guid;
-			if (elgg_userid>0) {
-				$("#batch-log").append("<br>- Elgg user already defined("+elgg_userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
-			} else {
-				user_register(identifier, email, username, password,callback,param1)
-			}
-		},
-		error : function(jqxhr,textStatus) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in createElggUser - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
-		}
-	});
-}
-
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//--------------------------- Elgg Member -------------------------------
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-
-
-//=================================================
-g_actions['join-elgg-group'] = function createElggGroupMember(node)
-//=================================================
-{
-	var identifier = getTxtvals($("identifier",node));
-	var group = getTxtvals($("group",node));
-	addGroupMember(group,identifier,null,null,null);
-}
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
