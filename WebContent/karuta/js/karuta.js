@@ -1281,7 +1281,7 @@ function toggleContent(uuid) {
 			sessionStorage.setItem("collapsed"+uuid,"N");
 		$("#toggleContent_"+uuid).removeClass("glyphicon-plus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-minus")
-		$("#content-"+uuid).show();
+		$("#content_"+uuid).show();
 	} else {
 		if (g_designerrole)
 			UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','Y');
@@ -1289,7 +1289,7 @@ function toggleContent(uuid) {
 			sessionStorage.setItem("collapsed"+uuid,"Y");
 		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
-		$("#content-"+uuid).hide();
+		$("#content_"+uuid).hide();
 	}
 }
 
