@@ -65,6 +65,30 @@ UIFactory["BatchForm"].prototype.getView = function(dest,type,langcode)
 };
 
 //==================================
+UIFactory["BatchForm"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	var execroles = UICom.structure["ui"][this.execroles_nodeid].resource.getView();
+	var model_code = UICom.structure["ui"][this.model_code_nodeid];
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = {langcode: langcode, type : type};
+	}
+	//---------------------
+	if (type==null)
+		type = "standard";
+	//---------------------
+	var html = "";
+	$("#"+dest).html(html);
+};
+
+//==================================
 UIFactory["BatchForm"].prototype.displayEditor = function(destid,type,langcode)
 //==================================
 {

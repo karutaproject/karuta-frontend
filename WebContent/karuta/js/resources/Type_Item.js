@@ -59,6 +59,8 @@ UIFactory["Item"] = function( node )
 	}
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
+	this.displayCode = {};
+	this.displayValue = {};
 };
 
 //==================================
@@ -94,6 +96,16 @@ UIFactory["Item"].prototype.getCode = function()
 //==================================
 {
 	return this.code_node.text();
+};
+
+//==================================
+UIFactory["Item"].prototype.getValue = function(dest)
+//==================================
+{
+	if (dest!=null) {
+		this.displayValue[dest] = true;
+	}
+	return this.value_node.text();
 };
 
 //==================================
@@ -145,21 +157,58 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 	var value = $(this.value_node).text();
 	var html = "";
 	if (g_userroles[0]=='designer' || USER.admin) {
-		html += "<div>"+ code + " <span class='"+ code +"'>"+label+"</span>";
+		html += "<div class='"+ code +" view-div'>"+ code + " "+label;
 		if (value!='')
 			html += " ["+ value + "]";
 		html += "</div> ";
 	} else {
-		html += "<div>";
+		html += "<div class='"+ code +" view-div'>";
 		if (code.indexOf("#")>-1)
 			html += cleanCode(code) + " ";
 		if (code.indexOf("%")<0)
-			html += " <span class='"+ code +"'>"+label+"</span>"
+			html += " "+label;
 		if (code.indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
 		html += "</div>";
 	}
 	return html;
+};
+
+//==================================
+UIFactory["Item"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	var label = this.label_node[langcode].text();
+	var code = $(this.code_node).text();
+	var value = $(this.value_node).text();
+	var html = "";
+	if (g_userroles[0]=='designer' || USER.admin) {
+		html += "<div class='"+ code +" view-div'>"+ code + " "+label;
+		if (value!='')
+			html += " ["+ value + "]";
+		html += "</div> ";
+	} else {
+		html += "<div class='"+ code +" view-div'>";
+		if (code.indexOf("#")>-1)
+			html += cleanCode(code) + " ";
+		if (code.indexOf("%")<0)
+			html += " "+label;
+		if (code.indexOf("&")>-1)
+			html += " ["+$(this.value_node).text()+ "] ";
+		html += "</div>";
+	}
+	$("#"+dest).html(html);
 };
 
 /// Editor

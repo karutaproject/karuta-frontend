@@ -102,6 +102,27 @@ UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["Field"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	var html = $(this.text_node[langcode]).text();
+	if (this.encrypted)
+		html = decrypt(html.substring(3),g_rc4key);
+	$("#"+dest).html(html);
+};
+
 /// Editor
 //==================================
 UIFactory["Field"].update = function(itself,langcode)
@@ -143,6 +164,38 @@ UIFactory["Field"].prototype.getEditor = function(type,langcode,disabled)
 		UIFactory["Field"].update(self,langcode);
 	});
 	return obj;
+};
+
+//==================================
+UIFactory["Field"].prototype.displayEditor = function(dest,type,langcode,disabled)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	if (disabled==null)
+		disabled = false;
+	//---------------------
+	var value = $(this.text_node[langcode]).text();
+	if (this.encrypted)
+		value = decrypt(value.substring(3),g_rc4key);
+	var html = "";
+	html += "<input type='text' class='form-control'";
+	if (disabled)
+		html += "disabled='disabled' ";
+	html += "value=''>";
+	var obj = $(html);
+	$(obj).attr('value',value);
+	var self = this;
+	$(obj).change(function (){
+		$(self.text_node[langcode]).text($(this).val());
+		UIFactory["Field"].update(self,langcode);
+	});
+	$("#"+dest).append(obj);
 };
 
 //==================================

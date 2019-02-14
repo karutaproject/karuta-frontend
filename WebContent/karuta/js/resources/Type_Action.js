@@ -106,7 +106,8 @@ UIFactory["Action"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
-	return this.label_node[langcode].text() + " ("+this.action_node.text() + " - " + this.role_node.text() + ")";
+	var html = this.label_node[langcode].text() + " ("+this.action_node.text() + " - " + this.role_node.text() + ")";
+	return html;
 };
 
 //==================================
@@ -124,7 +125,8 @@ UIFactory["Action"].prototype.displayView = function(dest,type,lang)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
-	$(dest).html(this.label_node[langcode].text() + " ("+this.action_node.text() + " - " + this.role_node.text() + ")");
+	var html = this.label_node[langcode].text() + " ("+this.action_node.text() + " - " + this.role_node.text() + ")";
+	$(dest).html(html);
 };
 
 
@@ -364,7 +366,7 @@ UIFactory["Action"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,null,this.display[dest]));
+		this.displayView(dest,null,this.display[dest])
 	};
 
 };

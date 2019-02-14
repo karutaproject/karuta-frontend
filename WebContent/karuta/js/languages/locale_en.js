@@ -61,6 +61,7 @@ karutaStr['en']['not-logged']="You are not connected.";
 karutaStr['en']['translate']="Translate";
 karutaStr['en']['submit']="Submit";
 karutaStr['en']['newpassword']="Forgot password? Send your login:";
+karutaStr['en']['tipnewpassword']="If you can not find our message in your inbox, check your &quot;junk mail&quot; or &quot;spam&quot; folder";
 karutaStr['en']['confirm-password']="Confirm password";
 karutaStr['en']['password-mismatch']="The two passwords do not match.";
 karutaStr['en']['saved']="Saved";
@@ -170,6 +171,7 @@ karutaStr['en']['moveroles']="Roles - Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
 karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
+karutaStr['en']['displayview']="Display View";
 karutaStr['en']['node']="Node Content";
 karutaStr['en']['resource']="Resource";
 karutaStr['en']['metadata']="Metadata";
@@ -345,6 +347,8 @@ karutaStr['en']['report-code']="Report Code";
 karutaStr['en']['csv']="Roles - Display CSV";
 karutaStr['en']['pdf']="Roles - Display PDF";
 karutaStr['en']['img']="Rôles - Display Image";
+karutaStr['en']['document-required']="You have to specify a document before to submit !";
+karutaStr['en']['size-upload']="Your file is so big : it must be less than " + maxfilesizeupload + " Mo !";
 
 //=========================================
 //========== EUROPASS =====================

@@ -42,7 +42,8 @@ UIFactory["Portfolio"] = function( node )
 	this.ownerid = $(node).attr('ownerid');
 	this.node = node;
 	this.rootid = $("asmRoot",node).attr("id");
-	this.root = new UIFactory["Node"]( $("asmRoot",node));
+	var asmroot = node.querySelector("asmRoot");
+	this.root = new UIFactory["Node"]( asmroot );
 	if( UICom.structure["ui"] == null )
 		UICom.structure["ui"] = {};
 	UICom.structure["ui"][this.rootid] = this.root;
@@ -213,8 +214,6 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch')\" >"+karutaStr[LANG]['karuta.batch']+"</a></li>";
 						html += "					<li><a onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch-form')\" >"+karutaStr[LANG]['karuta.batch-form']+"</a></li>";
 						html += "					<li><a onclick=\"UIFactory['Portfolio'].create('"+portfoliocode+"')\" >"+karutaStr[LANG]['create_tree']+"</a></li>";
-						if (elgg_installed)
-							html += getProjectNetworkMenu(portfoliocode,portfolio.id);
 						html += "				</ul>";
 						html += "			</div>";
 					}
@@ -506,7 +505,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		type = 'standard';
 	g_display_type = type;
 	//---------------------------------------
-	if (type=='standard'){
+	if (type=='standard' || type=='basic'){
 		html += "	<div id='main-row' class='row'>";
 		html += "		<div class='col-sm-3 col-md-3' id='sidebar'></div>";
 		html += "		<div class='col-sm-9 col-md-9' id='contenu'></div>";
@@ -566,7 +565,7 @@ UIFactory["Portfolio"].displaySidebar = function(root,destid,type,langcode,edit,
 	var html = "";
 	if (type==null || type==undefined)
 		type = 'standard';
-	if (type=='standard' || type=='translate' || type=='model'){
+	if (type=='standard' || type=='translate' || type=='model' || type=='basic'){
 		html += "<div id='sidebar-content'><div  class='panel-group' id='parent-"+rootid+"' role='tablist'></div></div>";
 		$("#"+destid).html($(html));
 		UIFactory["Node"].displaySidebar(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
@@ -599,7 +598,7 @@ UIFactory["Portfolio"].displayNodes = function(destid,tree,semtag,langcode,edit)
 	$("#"+destid).html("");
 	var rootnodeid = $("*:has(metadata[semantictag="+semtag+"])",tree).attr("id");
 	var depth = 99;
-	UIFactory['Node'].displayStandard(UICom.structure['tree'][rootnodeid],destid,depth,langcode,edit);
+	UIFactory['Node'].displayNode('standard',UICom.structure['tree'][rootnodeid],destid,depth,langcode,edit);
 };
 
 
@@ -2470,20 +2469,6 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "</div><!-- class='navbar-inner' -->";
 	html += "<div class='collapse navbar-collapse' id='collapse-2'>";
 	html += "	<ul class='nav navbar-nav navbar-right'>";
-	//-------------------- WELCOME PAGE EDIT -----------
-	html += "		<li id='welcome-edit'></li>";
-	if (g_welcome_add && g_designerrole && g_userroles[0]=='designer'){
-		html += "	<li id='welcome-add'>";
-		var databack = false;
-		var callback = "UIFactory['Node'].reloadStruct";
-		var param2 = "'"+g_portfolio_rootid+"'";
-		var param3 = null;
-		var param4 = null;
-		html += "		<a href='#xxx' onclick=\"javascript:importBranch('"+rootid+"','karuta.model','welcome-unit',"+databack+","+callback+","+param2+","+param3+","+param4+");alertHTML('"+karutaStr[LANG]['welcome-added']+"')\">";
-		html += karutaStr[LANG]['welcome-add'];
-		html += "		</a>";
-		html += "	</li>";
-	}
 	//-------------------- ACTIONS----------------------
 	var actions = UIFactory["Portfolio"].getActions(portfolioid);
 	if (actions!='') {

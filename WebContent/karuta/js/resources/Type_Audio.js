@@ -108,10 +108,7 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 	}
 	//---------------------
 	if (type==null)
-		if (typeof audiovideohtml5 != "undefined" && audiovideohtml5)
-			type = "html5";
-		else
-			type = 'default';
+		type = "html5";
 	//---------------------
 	var html ="";
 	if (type=='html5') {
@@ -120,54 +117,12 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 		html += "<source src='"+srce+"' type='audio/mpeg'/>";
 		html += "</audio>";		
 	}
-	if (type=='default') {
-		html += "<div id='jquery_jplayer_"+this.id+"' class='jp-jplayer'></div>";
-		html += "<div id='jp_container_"+this.id+"' class='jp-audio'>";
-		html += "<div class='jp-type-single'>";	
-		html += "<div class='jp-gui jp-interface'>";
-		html += "<ul class='jp-controls'>";
-		html += "  <li><a href='javascript:;' class='jp-play' tabindex='1'>play</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-pause' tabindex='1'>pause</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-stop' tabindex='1'>stop</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-mute' tabindex='1' title='mute'>mute</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-unmute' tabindex='1' title='unmute'>unmute</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-volume-max' tabindex='1' title='max volume'>max volume</a></li>";
-		html += "</ul>";
-		html += "<div class='jp-progress'>";
-		html += "<div class='jp-seek-bar'>";
-		html += "<div class='jp-play-bar'></div>";
-		html += "</div>";
-		html += "</div>";
-		html += "<div class='jp-volume-bar'>";
-		html += "  <div class='jp-volume-bar-value'></div>";
-		html += "</div>";
-		html += "  <div class='jp-time-holder'>";
-		//html += "<div class='jp-interface'>";	
-		html += "  <div class='jp-current-time'></div>";
-		html += "  <div class='jp-duration'></div>";	
-		html += "<ul class='jp-toggles'>";
-		html += "  <li><a href='javascript:;' class='jp-repeat' tabindex='1' title='repeat'>repeat</a></li>";
-		html += "  <li><a href='javascript:;' class='jp-repeat-off' tabindex='1' title='repeat off'>repeat off</a></li>";
-		html += "</ul>";
-		html += "</div>";
-		html += "</div>";
-		html += "  <div class='jp-title'>";
-		html += "<ul>";
-		html += "  <li>"+this.filename_node[langcode].text()+"</li>";
-		html += "</ul>";
-		html += "  </div>";
-		html += "  <div class='jp-no-solution'>";
-		html += "<span>Update Required</span>";
-		html += "To play the media you will need to either update your browser to a recent version or update your <a href='http://get.adobe.com/flashplayer/' target='_blank'>Flash plugin</a>.";
-		html += "  </div>";
-		html += "</div>";
-		html += "  </div>";
-	}
+
 	return html;
 };
 
 //==================================
-UIFactory["Audio"].prototype.setParameter = function(langcode)
+UIFactory["Audio"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
 	//---------------------
@@ -176,24 +131,24 @@ UIFactory["Audio"].prototype.setParameter = function(langcode)
 	if (this.multilingual!=undefined && !this.multilingual)
 		langcode = 0;
 	//---------------------
-	var destid = "jquery_jplayer_"+this.id;
-	var cssSelectorAncestor = "#jp_container_"+this.id;
-	var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
-	$("#"+destid).jPlayer({
-		cssSelectorAncestor:cssSelectorAncestor,
-		ready: function () {
-			$("#"+destid).jPlayer("setMedia", {
-			mp3: srce
-			});
-		},
-		swfPath: "../../other/jplayer",
-		supplied: "mp3"
-	});
+	if (type==null)
+		type = "html5";
+	//---------------------
+	this.display[dest] = {"type":type,"langcode":langcode};
+	//---------------------
+	var html ="";
+	if (type=='html5') {
+		html += "<audio controls>";
+		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp3";
+		html += "<source src='"+srce+"' type='audio/mpeg'/>";
+		html += "</audio>";		
+	}
+	$("#"+dest).html(html);
 };
 
 /// Editor
 //==================================
-UIFactory["Audio"].update = function(data,uuid,langcode)
+UIFactory["Audio"].update = function(data,uuid,langcode,filename)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
@@ -206,7 +161,6 @@ UIFactory["Audio"].update = function(data,uuid,langcode)
 		langcode = 0;
 	//---------------------
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
-	var filename = data.files[0].name;
 	var size = data.files[0].size;
 	var type = data.files[0].type;
 	$("#fileAudio_"+uuid+"_"+langcode).html(filename);
@@ -248,6 +202,7 @@ UIFactory["Audio"].remove = function(uuid,langcode)
 UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 //==================================
 {
+	var filename = ""; // to avoid problem : filename with accents	
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -262,21 +217,34 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 	html += "</div>";
 	html +=" <div id='progress_f_"+this.id+"_"+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileAudio_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
+	html += "<span id='loaded_"+this.id+langcode+"'></span>"
 	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Audio.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
+	var loadedid = 'loaded_'+this.id+langcode;
 	$("#f_"+this.id+"_"+langcode).fileupload({
+		add: function(e, data) {
+			$("#wait-window").modal('show');
+			filename = data.originalFiles[0]['name'];
+			if(data.originalFiles[0]['size'] > maxfilesizeupload * 1024 * 1024) {
+				$("#wait-window").modal('hide');
+				alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
+			} else {
+				data.submit();
+			}
+		},
 		progressall: function (e, data) {
 			$("#progress_"+this.id).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+' .bar').css('width',progress + '%');
 		},
 		done: function (e, data,uuid) {
+			$("#wait-window").modal('hide');
 			$("#progress_"+this.id).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+' .bar').css('width',progress + '%');
-			$("#div_"+this.id).html("Loaded");
+			$("#"+loadedid).html(" <i class='fa fa-check'></i>");
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
-			UIFactory["Audio"].update(data.result,uuid,langcode);
+			UIFactory["Audio"].update(data.result,uuid,langcode,filename);
 		}
     });
 };
@@ -299,7 +267,7 @@ UIFactory["Audio"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,null,this.display[dest]));
+		this.displayView(dest,this.display[dest].type,this.display[dest].langcode)
 	};
 
 };

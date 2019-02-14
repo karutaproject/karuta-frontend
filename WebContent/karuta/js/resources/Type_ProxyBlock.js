@@ -64,6 +64,32 @@ UIFactory["ProxyBlock"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["ProxyBlock"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	var proxy_element = UICom.structure["ui"][this.proxy_nodeid];
+	var image = UICom.structure["ui"][this.image_nodeid];
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = {langcode: langcode, type : type};
+	}
+	//---------------------
+	if (type==null)
+		type = "standard";
+	//---------------------
+	var html = "";
+	if (type=='standard'){
+		html = $(proxy_element.resource.label_node[langcode]).text();
+	}
+	$("#"+dest).html(html);
+};
 
 //==================================
 UIFactory["ProxyBlock"].prototype.displayEditor = function(destid,type,langcode)
