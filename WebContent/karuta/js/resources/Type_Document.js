@@ -192,9 +192,81 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	var documentIcon = {};
+	documentIcon['.doc'] = "../img/word.gif";
+	documentIcon['.docx'] = "../img/word.gif'";
+	documentIcon['.xls'] = "../img/excel.gif";
+	documentIcon['.xlsx'] = "../img/excel.gif";
+	documentIcon['.ppt'] = "../img/powerpoint.gif";
+	documentIcon['.pptx'] = "../img/powerpoint.gif";
+	documentIcon['.pdf'] = "../img/adobe.gif";
+	documentIcon['.txt'] = "../img/text.png";
+
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = {langcode: langcode, type : type};
+	}
+	//---------------------
+	if (type==null)
+		type = "standard";
+	//---------------------
+	var html = "";
+	if (type=='standard'){
+		if ($(this.filename_node[langcode]).text()!="")
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' style='width:25px'> "+$(this.filename_node[langcode]).text()+"</a>";
+		else
+			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
+	}
+	if (type=='free-positioning'){
+		if ($(this.filename_node[langcode]).text()!="") {
+			var filename = $(this.filename_node[langcode]).text();
+			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+			//alertHTML(extension);
+			html = "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><div class='doc-up'><p style='text-align:center;'>"+$(this.filename_node[langcode]).text()+"</p></div><div class='doc-bottom'><span>Document</span></div></a>";
+		} else
+			html = "<div class='doc-up'><p style='text-align:center;'>"+karutaStr[LANG]['no-document']+"</p></div><div class='doc-bottom'><span>Document</span></div>";
+	}
+	if (type=='icon-url-label'){
+		if ($(this.filename_node[langcode]).text()!=""){
+			var filename = $(this.filename_node[langcode]).text();
+			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
+		} else
+			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
+	}
+	if (type=='icon-url'){
+		if ($(this.filename_node[langcode]).text()!=""){
+			var filename = $(this.filename_node[langcode]).text();
+			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
+		} else
+			html =  "<img src='../img/document-icon.png' style='width:25px'>";
+	}
+	if (type=='icon'){
+		if ($(this.filename_node[langcode]).text()!=""){
+			var filename = $(this.filename_node[langcode]).text();
+			var extension = filename.substring(filename.lastIndexOf(".")+1);
+			html =  documentIcon[extension]; 
+		} else
+			html =  "<img src='../img/document-icon.png' style='width:25px'>";
+
+	}
+	$("#"+dest).html(html);
+};
 /// Editor
 //==================================
-UIFactory["Document"].update = function(data,uuid,langcode,parent)
+UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
@@ -210,7 +282,7 @@ UIFactory["Document"].update = function(data,uuid,langcode,parent)
 //		data = jQuery.parseJSON(data);
 	//---------------------
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
-	var filename = data.files[0].name;
+	var filename = filename; //data.files[0].name;
 	var size = data.files[0].size;
 	var type = data.files[0].type;
 	$("#file_"+uuid+"_"+langcode).html(filename);
@@ -241,6 +313,7 @@ UIFactory["Document"].remove = function(uuid,langcode)
 	var type = "";
 	$("#file_"+uuid+"_"+langcode).html(filename);
 	$("#file__"+uuid+"_"+langcode).html(filename);
+	$("#loaded_"+uuid+langcode).html("");
 	var fileid = "";
 	itself.resource.fileid_node[langcode].text(fileid);
 	itself.resource.filename_node[langcode].text(filename);
@@ -254,6 +327,7 @@ UIFactory["Document"].remove = function(uuid,langcode)
 UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,parent)
 //==================================
 {
+	var filename = ""; // to avoid problem : filename with accents
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -274,12 +348,18 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 	$("#"+destid).append($(html));
 	var loadedid = 'loaded_'+this.id+langcode;
 	$("#fileupload_"+this.id+langcode).fileupload({
-		dataType: 'json',
-		add: function (e, data) {
+		add: function(e, data) {
 			$("#wait-window").modal('show');
-	        data.submit();
-	    },
-	    progressall: function (e, data) {
+			filename = data.originalFiles[0]['name'];
+			if(data.originalFiles[0]['size'] > maxfilesizeupload * 1024 * 1024) {
+				$("#wait-window").modal('hide');
+				alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
+			} else {
+				data.submit();
+			}
+		},
+		dataType: 'json',
+		progressall: function (e, data) {
 			$("#wait-window").modal('show');
 			$("#progress_"+this.id+langcode).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -288,8 +368,8 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 		done: function (e, data) {
 			$("#wait-window").modal('hide');
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
-			UIFactory["Document"].update(data.result,uuid,langcode,parent);
-			$("#"+loadedid).append(" <i class='fa fa-check'></i>");
+			UIFactory["Document"].update(data.result,uuid,langcode,parent,filename);
+			$("#"+loadedid).html(" <i class='fa fa-check'></i>");
 		}
     });
 };

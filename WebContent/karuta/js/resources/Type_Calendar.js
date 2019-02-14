@@ -112,6 +112,25 @@ UIFactory["Calendar"].prototype.getView = function(dest,langcode)
 	return $(this.text_node[langcode]).text();
 };
 
+//==================================
+UIFactory["Calendar"].prototype.displayView = function(dest,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	var html = $(this.text_node[langcode]).text();
+	$("#"+dest).html(html);
+};
+
 /// Editor
 //==================================
 UIFactory["Calendar"].update = function(itself,langcode)
@@ -122,7 +141,7 @@ UIFactory["Calendar"].update = function(itself,langcode)
 };
 
 //==================================
-UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
+UIFactory["Calendar"].prototype.displayEditor = function(type,langcode,disabled)
 //==================================
 {
 	//---------------------
@@ -217,7 +236,7 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 		}
 	//-----
 
-	return form;
+	$("#"+dest).append(form);
 };
 
 //==================================
@@ -233,7 +252,7 @@ UIFactory["Calendar"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,null,this.display[dest]));
+		this.displayView(dest,null,this.display[dest])
 	};
 
 };

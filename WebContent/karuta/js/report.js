@@ -43,6 +43,10 @@ jquerySpecificFunctions['.text_not_empty()'] = ".has(\"asmResource[xsi_type!='co
 jquerySpecificFunctions['.text_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > text[lang='#lang#']:empty\")";
 jquerySpecificFunctions['.submitted()'] = ".has(\"metadata-wad[submitted='Y']\")";
 jquerySpecificFunctions['.code_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:empty\")";
+jquerySpecificFunctions['.filename_or_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:not(:empty)\")";
+jquerySpecificFunctions['.filename_or_text_or_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:empty\")";
+jquerySpecificFunctions['.filename_or_text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\")";
+jquerySpecificFunctions['.url_or_text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > url[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\")";
 
 Selector = function(jquery,type,filter1,filter2)
 {
@@ -91,6 +95,7 @@ function r_getSelector(select,test)
 function r_processPortfolio(no,xmlReport,destid,data,line)
 //==================================
 {
+	$.ajaxSetup({async: false});
 	if (no==0){
 		dashboard_current = destid;
 		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data};
@@ -133,6 +138,7 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 		if (tagname=="csv-value")
 			r_processCsvValue(destid,data,line);
 	}
+	$.ajaxSetup({async: true});
 }
 
 //==================================
@@ -1455,7 +1461,7 @@ function r_processAggregate(aggregate,destid)
 		for (var i=0;i<aggregates[select].length;i++){
 			if ($.isNumeric(aggregates[select][i]))
 				sum += parseFloat(aggregates[select][i]);
-		}SVGToIMG
+		}
 		text = sum/aggregates[select].length;
 		if (text.toString().indexOf(".")>-1)
 			text = text.toFixed(2);
@@ -1671,7 +1677,7 @@ function register_report(uuid)
 	var freq = node_resource.freq_node.text();
 	var comments = node_resource.comments_node[LANGCODE].text();
 	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
-	var url = serverBCK_REG;
+	var url = serverBCK+"/report";
 	$.ajax({
 		type : "POST",
 		url : url,

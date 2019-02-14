@@ -125,6 +125,28 @@ UIFactory["Color"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["Color"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	var value = $(this.text_node[langcode]).text();
+	if (this.encrypted)
+		value = decrypt(html.substring(3),g_rc4key);
+	var html = "<span style='display:inline-block;width:1.5em;background-color:"+value+"'>&nbsp;&nbsp;&nbsp;</span>&nbsp;"+value; 
+	$("#"+dest).html(html);
+};
+
 /// Editor
 //==================================
 UIFactory["Color"].update = function(itself,langcode)

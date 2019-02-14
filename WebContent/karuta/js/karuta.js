@@ -16,6 +16,11 @@
 //--------- for languages
 //var karutaStr = new Array();
 
+if( karutaStr === undefined )
+{
+  var karutaStr = {};
+}
+
 var portfolioid = null;
 
 // -------------------
@@ -83,12 +88,12 @@ function setDesignerRole(role)
 	if (g_display_type=='model'){
 		displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);
 	}
-	if (g_display_type=='header'){
+	if (g_display_type=='basic'){
 		if (g_userroles[0]!='designer')
 			$("#rootnode").hide();
 		else
 			$("#rootnode").show();
-		UIFactory["Portfolio"].displayNodes('header',UICom.root.node,'header',LANGCODE,g_edit);
+		UIFactory["Portfolio"].displayNodes('basic',UICom.root.node,'basic',LANGCODE,g_edit);
 		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,g_edit,UICom.root.node);
 		var uuid = $("#page").attr('uuid');
 		$("#sidebar_"+uuid).click();
@@ -102,7 +107,7 @@ function getLanguageMenu(js)
 {
 	var html = "";
 	for (var i=0; i<languages.length;i++) {
-		html += "			<li><a  id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');if (elgg_installed) displaySocialNetwork();setWelcomeTitles();"+js+"\">";
+		html += "			<li><a  id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');setWelcomeTitles();"+js+"\">";
 		html += "<img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
 	}
 	return html;
@@ -114,7 +119,7 @@ function setLanguageMenu(js)
 //==============================
 {
 	for (var i=0; i<languages.length;i++) {
-		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');$('#navigation-bar').html(getNavBar('list',null));if (elgg_installed) displaySocialNetwork();setWelcomeTitles();"+js);
+		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');$('#navigation-bar').html(getNavBar('list',null));setWelcomeTitles();"+js);
 	}
 }
 
@@ -557,11 +562,25 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 function confirmSubmit(uuid,submitall) 
 // =======================================================================
 {
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+")\">" + karutaStr[LANG]["button-submit"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
+	var href = "";
+	var type = "";
+	try {
+		type = UICom.structure.ui[uuid].resource.type;
+		href = document.getElementById('file_'+uuid).href;
+	}
+	catch(err) {
+		href = "";
+	}
+	if (href=="" && type!="" && type=="Document")
+		alertHTML(karutaStr[LANG]["document-required"]);
+	else
+	{
+		document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
+		var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+")\">" + karutaStr[LANG]["button-submit"] + "</button>";
+		document.getElementById('delete-window-footer').innerHTML = buttons;
+		$('#delete-window').modal('show');
+    }
 }
 
 //=======================================================================
@@ -624,19 +643,54 @@ function getURLParameter(sParam) {
 //==================================
 function displayPage(uuid,depth,type,langcode,edit) {
 //==================================
-	// Read page configuration
-	var basenode = UICom.structure["tree"][uuid];
-	var metadata = basenode.node.querySelector("metadata");
-	var pageconf = metadata.getAttribute("display-type");	// this or other attribute
-	if( pageconf == null )
-		pageconf = metadata.getAttribute("semantictag");
-
-	if( typeof pageconf === "undefined" || pageconf == null || pageconf=="" )
-		pageconf = "standard";
-	if( pageRender[pageconf] == null )
-		pageconf = "standard";
-
-	pageRender[pageconf](uuid, depth, type, langcode, edit);
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (g_current_page!=uuid) {
+		$(window).scrollTop(0);
+		g_current_page = uuid;
+	}
+	//---------------------
+	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
+	$('.selected').removeClass('selected');
+	$("#sidebar_"+uuid).parent().addClass('selected');
+	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
+	if (name == 'asmUnit' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
+		$("#wait-window").modal('show');
+		UIFactory.Node.loadNode(uuid);
+	}
+	if (name=='asmStructure' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
+		$("#wait-window").modal('show');
+		UIFactory.Node.loadStructure(uuid);
+	}
+	if (depth==null)
+		depth=100;
+	if (name=='asmRoot' || name=='asmStructure')
+		depth = 1;
+	if (UICom.structure['tree'][uuid]!=null) {
+		if (type=='standard') {
+			var node = UICom.structure['ui'][uuid].node;
+			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+			$("#welcome-edit").html("");
+			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
+				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+			else
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+//				UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+		}
+		if (type=='translate')
+			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+		if (type=='model') {
+			UICom.structure["ui"][uuid].displayNode('model',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+//			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+		}
+		if (type=='basic') {
+			UICom.structure["ui"][uuid].displayNode('basic',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+//			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+		}
+	}
+	$("#wait-window").modal('hide');
 }
 
 //==================================
@@ -739,13 +793,6 @@ function loadLanguages(callback)
 	$.ajaxSetup({async: false});
 	for (var i=0; i<languages.length; i++){
 		if (i<languages.length-1) {
-			if (elgg_installed) {
-				$.ajax({
-					type : "GET",
-					dataType : "script",
-					url : karuta_url+"/socialnetwork-elgg/js/languages/locale_"+languages[i]+".js"
-				});
-			}
 			$.ajax({
 				type : "GET",
 				dataType : "script",
@@ -753,13 +800,6 @@ function loadLanguages(callback)
 			});
 		}
 		else { // last one so we callback
-			if (elgg_installed) {
-				$.ajax({
-					type : "GET",
-					dataType : "script",
-					url : karuta_url+"/socialnetwork-elgg/js/languages/locale_"+languages[i]+".js"
-				});
-			}
 			$.ajax({
 				type : "GET",
 				dataType : "script",
@@ -1192,10 +1232,8 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 
 
 //==================================
-function getLanguage(setElggLocale) {
+function getLanguage() {
 //==================================
-	if (setElggLocale==null)
-		setElggLocale = true;
 	var lang = languages[0];
 	var cookielang = localStorage.getItem('karuta-language');
 	for (var i=0; i<languages.length;i++){
@@ -1205,8 +1243,6 @@ function getLanguage(setElggLocale) {
 		}
 	}
 	setLanguage(LANG);
-	if (setElggLocale && USER!=undefined && elgg_installed && $(USER.username_node).text()!="public") // not public Account
-		moment.locale(lang);  // for elgg
 }
 
 //==================================
@@ -1217,14 +1253,11 @@ function setLanguage(lang,caller) {
 	localStorage.setItem('karuta-language',lang);
 	LANG = lang;
 	console.log("LANG: "+LANG);
-	console.log("karutaStr: "+karutaStr);
 	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
 			LANGCODE = i;
 	}
-	if (caller=="" && elgg_installed && USER!=undefined && $(USER.username_node).text()!="public") // not public Account
-		moment.locale(lang);
 }
 
 
@@ -1315,25 +1348,6 @@ function toggleSideBar() {
 }
 
 //==================================
-function toggleSocialNetwork() {
-//==================================
-	if ($("#socialnetwork").is(":visible"))
-	{
-		$("#socialnetwork").hide();
-		$("#toggleSocialNetwork").removeClass('fa-arrow-left').addClass('fa-arrow-right');
-		$("#main-content").removeClass().addClass('col-md-12');
-		localStorage.setItem('socialnetwork','hidden');
-//		Cookies.set('socialnetwork','hidden',{ expires: 60 });
-	} else {
-		$("#toggleSocialNetwork").removeClass('fa-arrow-right').addClass('fa-arrow-left');
-		$("#main-content").removeClass().addClass('col-md-8 col-md-push-4');
-		$("#socialnetwork").show();
-		localStorage.setItem('socialnetwork','shown');
-//		Cookies.set('socialnetwork','shown',{ expires: 60 });
-	}
-}
-
-//==================================
 function toggleSidebarPlusMinus(uuid) { // click on PlusMinus
 //==================================
 	if ($("#toggle_"+uuid).hasClass("glyphicon-plus"))
@@ -1379,19 +1393,7 @@ function changeCss(className, classValue)
     cssMainContainer.append(className + " {" + classValue + "}\n");
 }
 
-//================================== not used
-function equalize_column_height(uuid)
-//==================================
-{
-	var heights = $("#node_"+uuid).find(".same-height").map(function() {
-		if (UICom.structure["ui"][uuid].resource!=undefined && UICom.structure["ui"][uuid].resource.type == 'image')
-			return $("#image_uuid").height();
-		else
-			return $(this).height();
-	});
-	var maxHeight = Math.max.apply(null, heights);
-	$("#node_"+uuid).find(".same-height").height(maxHeight);
-}
+
 
 //==================================
 function rgb(red, green, blue)
@@ -1630,15 +1632,14 @@ function setCSSportfolio(data)
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
 		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
-	//	changeCss(".asmnode .dropdown-button, .submit-button", "border:1px solid "+portfolio_buttons_color+";");
-		changeCss(".collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+portfolio_buttons_color+";");
+		changeCss(".menus,.collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+portfolio_buttons_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
 		var portfolio_buttons_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).attr("id");
 		var portfolio_buttons_background_color = UICom.structure["ui"][portfolio_buttons_background_color_id].resource.getValue();
-		changeCss(".row-resource td.buttons,.csv-button,.pdf-button", "border:1px solid "+portfolio_buttons_background_color+";");
-		changeCss(".row-resource td.buttons,.csv-button,.pdf-button", "background:"+portfolio_buttons_background_color+";");
+		changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "border:1px solid "+portfolio_buttons_background_color+";");
+		changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "background:"+portfolio_buttons_background_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).length>0) {

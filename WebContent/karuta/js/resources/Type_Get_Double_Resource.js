@@ -151,7 +151,51 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 	 return html;
 };
 
-
+//==================================
+UIFactory["Get_Double_Resource"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------	
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	//---------------------	
+	var label1 = this.label1_node[langcode].text();
+	if (this.encrypted)
+		label1 = decrypt(label1.substring(3),g_rc4key);
+	var code1 = $(this.code1_node).text();
+	var label2 = this.label2_node[langcode].text();
+	if (this.encrypted)
+		label2 = decrypt(label2.substring(3),g_rc4key);
+	var code2 = $(this.code_node).text();
+	//---------------------	
+	var html = "";
+	html += "<span class='Item1 "+cleanCode(code1)+"'>";
+	if (($(this.code1_node).text()).indexOf("#")>-1)
+		html += cleanCode(code1)+ " ";
+	if (($(this.code1_node).text()).indexOf("&")>-1)
+		html += "["+$(this.value1_node).text()+ "] ";
+	if (($(this.code1_node).text()).indexOf("%")<0)
+		html += label1;
+	html += " </span>";
+	html += this.separator_node[langcode].text();
+	html += " <span class='Item2 "+cleanCode(code2)+"'>";
+	if (($(this.code2_node).text()).indexOf("#")>-1)
+		html += cleanCode(code2)+ " ";
+	if (($(this.code2_node).text()).indexOf("%")<0)
+		html += label2;
+	if (($(this.code2_node).text()).indexOf("&")>-1)
+		html += "["+$(this.value2_node).text()+ "] ";
+	html += " </span>";
+	$("#"+dest).html(html);
+};
 
 /// Editor
 //==================================

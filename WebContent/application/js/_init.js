@@ -10,8 +10,8 @@ var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
 //---------------------------------
-var serverBCK_REG = "";  // report registration server
-var serverBCK_REP = ""; // report server
+var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report";  // report registration server
+var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report servervar serverBCK_REG = "";  // report registration server
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';
@@ -21,7 +21,7 @@ var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------
-var audiovideohtml5 = true;
+var maxfilesizeupload = "32"; //Mo
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;
@@ -43,8 +43,8 @@ var welcome3 = {};       // Welcome paragraph
 	welcome3["en"] = "";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.4 beta";
-	welcome4["en"] = "WELCOME TO KARUTA 2.4 beta";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 3.0 alpha";
+	welcome4["en"] = "WELCOME TO KARUTA 3.0 alpha";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";
@@ -72,56 +72,3 @@ g_sendEmailPublicURL_message +="&lt;/div&gt;";
 //----------------------------------------------
 var specificmenus = false;
 var csvseparator = ";";
-
-//==============================
-var asynccount = [];
-var asynccb = [];
-function loadJS(url, group, cb)
-//==============================
-{
-	var bin = "";	// Default group
-	if( group != null ) bin = group;
-	var execCB = function(){
-		asynccount[bin]--;
-		console.log("Count "+bin+" "+asynccount[bin]);
-		if( asynccount[bin] == 0 && typeof asynccb[bin] !== "undefined" )
-		{
-			var c = asynccb[bin];
-			asynccb[bin] = null;
-			console.log("Running CB "+bin);
-			c();
-		}
-	};
-
-	if( asynccb[bin] == null && typeof cb !== "undefined" )
-	{
-		console.log("Defining CB "+asynccount[bin]+" "+bin);
-		asynccb[bin] = cb;
-	}
-	if( asynccount[bin] == null ) asynccount[bin] = 0;
-	asynccount[bin]++;
-
-	var script = document.createElement('script');
-	script.type = 'text/javascript';
-	script.async = true;
-//	script.defer = true;
-	script.src = url;
-	script.onload = execCB;
-	document.getElementsByTagName('head')[0].appendChild(script);
-//	document.write("<script src='"+url+"'></script>");
-};
-
-//------ ELGG SOCIAL NETWORK ----------------------------
-var elgg_installed = false;
-var elgg_url_base = 'elgg112/';
-var elgg_refreshing = 240000; // 240 seconds
-//------ BUBBLE MAP -------------------------------------
-var bubble_installed = true;
-//------ EUROPASS -------------------------------------
-var europass_installed = true;
-
-var karutaStr = new Array();
-
-var date = new Date();
-var time = date.getMinutes() +":"+ date.getSeconds();
-console.log("End init at: "+time);

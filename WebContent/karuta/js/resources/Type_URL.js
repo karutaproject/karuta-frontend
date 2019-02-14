@@ -158,6 +158,62 @@ if(type=='standard') {
 	return html;
 };
 
+//==================================
+UIFactory["URL"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = {langcode: langcode, type : type};
+	}
+	//---------------------
+	if (type==null)
+		type = "standard";
+	var html = "";
+	//---------------------
+	var url = $(this.url_node[langcode]).text();
+	if (url!="" && url.indexOf("http")<0)
+		url = "http://"+url;
+	var label = $(this.label_node[langcode]).text();
+	if (label=="")
+		label = url;
+	if(type=='url') {
+		if (url!="")
+			html = "<a href='"+url+"' target='_blank'> "+label+"</a>";
+		else
+			html =  " "+karutaStr[LANG]['no-URL'];
+	}
+	if(type=='standard') {
+		if (url!="")
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' style='width:25px'> "+label+"</a>";
+		else
+			html =  "<img src='../img/link-icon.png' style='width:25px'> "+karutaStr[LANG]['no-URL'];
+	}
+	if (type=='icon-url-label'){
+		if (url!="")
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' style='width:25px'> "+label+urlIcon["web"]+"</a>";
+		else
+			html =  "<img src='../img/link-icon.png' style='width:25px'><p style='text-align:center;'>"+karutaStr[LANG]['no-URL']+"</p>";
+	}
+	if (type=='icon-url'){
+		if (url!="")
+			html = "<a href='"+url+"' target='_blank'><img src='../img/link-icon.png' style='width:25px'> "+urlIcon["web"]+"</a>";
+		else
+			html =  "<img src='../img/link-icon.png' style='width:25px'>"+karutaStr[LANG]['no-URL'];
+	}
+	if (type=='icon'){
+		html = urlIcon["web"];
+	}
+	$("#"+dest).html(html);
+};
+
 /// Editor
 //==================================
 UIFactory["URL"].update = function(obj,itself,type,langcode,parent)

@@ -152,14 +152,14 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 	var code = $(this.code_node).text();
 	var html = "";
 	if (type=='default'){
-		html += "<span class='"+cleanCode(code)+"'>";
+		html += "<div class='"+cleanCode(code)+" view-div'>";
 		if (($(this.code_node).text()).indexOf("#")>-1)
 			html += cleanCode(code) + " ";
 		if (($(this.code_node).text()).indexOf("%")<0)
 			html += label;
 		if (($(this.code_node).text()).indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
-		html += "</span>";
+		html += "</div>";
 	}
 	if (type=='none'){
 		if (($(this.code_node).text()).indexOf("#")>-1)
@@ -171,6 +171,49 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 	}
 
 	return html;
+};
+
+//==================================
+UIFactory["Get_Get_Resource"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (type==null)
+		type = "default";
+	//---------------------
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	var label = this.label_node[langcode].text();
+	if (this.encrypted)
+		label = decrypt(label.substring(3),g_rc4key);
+	var code = $(this.code_node).text();
+	var html = "";
+	if (type=='default'){
+		html += "<div class='"+cleanCode(code)+" view-div'>";
+		if (($(this.code_node).text()).indexOf("#")>-1)
+			html += cleanCode(code) + " ";
+		if (($(this.code_node).text()).indexOf("%")<0)
+			html += label;
+		if (($(this.code_node).text()).indexOf("&")>-1)
+			html += " ["+$(this.value_node).text()+ "] ";
+		html += "</div>";
+	}
+	if (type=='none'){
+		if (($(this.code_node).text()).indexOf("#")>-1)
+			html += cleanCode(code) + " ";
+		if (($(this.code_node).text()).indexOf("%")<0)
+			html += label;
+		if (($(this.code_node).text()).indexOf("&")>-1)
+			html += " ["+$(this.value_node).text()+ "] ";
+	}
+	$("#"+dest).html(html);
 };
 
 //==================================
@@ -503,6 +546,8 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 		for (var j=0; j<languages.length;j++){
 			input += "label_"+languages[j]+"='&nbsp;'";
 		}
+		if (self_code=='')
+			input += " checked ";
 		input += ">&nbsp;&nbsp;";
 		input += "</input>";
 		var obj = $(input);

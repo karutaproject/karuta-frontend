@@ -118,6 +118,27 @@ UIFactory["SendEmail"].prototype.getView = function(dest,type,langcode)
 	return html;
 };
 
+//==================================
+UIFactory["SendEmail"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
+	if (dest!=null) {
+		this.display[dest] = langcode;
+	}
+	var html = "";
+	html +=  "<div class='name_SendEmail'> "+$(this.firstname_node[langcode]).text()+" "+$(this.lastname_node[langcode]).text()+"</div>";
+	html +=  "<div class='email_SendEmail'> "+$(this.email_node[langcode]).text()+"</div>";
+	$("#"+dest).html(html);
+};
+
 
 /// Editor
 //==================================

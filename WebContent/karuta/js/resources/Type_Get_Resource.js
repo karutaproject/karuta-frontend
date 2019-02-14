@@ -132,7 +132,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
 	var html = "";
-	html += "<span class='"+cleanCode(code)+"'";
+	html += "<div class='"+cleanCode(code)+" view-div' ";
 	if (indashboard)
 		html += " style='background-position:center'";
 	html += ">";
@@ -146,7 +146,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	}
 	if (code.indexOf("&")>-1)
 		html += " ["+$(this.value_node).text()+ "] ";
-	html += "</span>";
+	html += "</div>";
 	return html;
 };
 
@@ -178,8 +178,7 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 	if (code.indexOf("&")>-1)
 		html += " ["+$(this.value_node).text()+ "] ";
 	html += "</span>";
-	$("#"+dest).html("");
-	$("#"+dest).append($(html));
+	$("#"+dest).html(html);
 };
 
 
@@ -768,7 +767,10 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 		last : last,
 		success : function(data) {
 //			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
-			var nodeid = $("*:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+			var node = $("*:has(metadata[semantictag='"+get_resource_semtag+"'])",data);
+			if (node.length==0)
+				node = $( ":root",data ); //node itself
+			var nodeid = $(node).attr('id');
 			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
 			var tagname = $( ":root",data )[ 0 ].nodeName;
 			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
