@@ -2,16 +2,16 @@
 var application_version = "2.0";
 var application_date = "2017-10-30";
 //----------------------------------
-var appliname = 'karuta2.3';
-var karutaname = 'karuta2.3'; // to share the same 'karuta-core' with multiple front-end
+var appliname = 'karuta2.4';
+var karutaname = 'karuta-core2.4'; // to share the same 'karuta-core' with multiple front-end
 var karuta_url = '../../../' + karutaname;
 var bckname = '2.3';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
 //---------------------------------
-var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report/config";  // report registration server
-var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report server
+var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report";  // report registration server
+var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report servervar serverBCK_REG = "";  // report registration server
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';
@@ -21,7 +21,7 @@ var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------
-var audiovideohtml5 = true;
+var maxfilesizeupload = "32"; //Mo
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;
@@ -30,6 +30,7 @@ var karuta_create_account = true;
 var navbar_title = {};
 navbar_title["fr"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
 navbar_title["en"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
+navbar_title["ja"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
 //-----------LOGIN PAGE -----------------------
 var welcome1 = {};// Welcome title
 	welcome1["fr"] = "<img class='img-responsive' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
@@ -42,8 +43,8 @@ var welcome3 = {};       // Welcome paragraph
 	welcome3["en"] = "";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA";
-	welcome4["en"] = "WELCOME TO KARUTA";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 3.0 alpha";
+	welcome4["en"] = "WELCOME TO KARUTA 3.0 alpha";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";
@@ -71,19 +72,3 @@ g_sendEmailPublicURL_message +="&lt;/div&gt;";
 //----------------------------------------------
 var specificmenus = false;
 var csvseparator = ";";
-
-//==============================
-function loadJS(url)
-//==============================
-{
-	document.write("<script src='"+url+"'></script>");
-};
-
-//------ ELGG SOCIAL NETWORK ----------------------------
-var elgg_installed = false;
-var elgg_url_base = 'elgg112/';
-var elgg_refreshing = 240000; // 240 seconds
-//------ BUBBLE MAP -------------------------------------
-var bubble_installed = true;
-//------ EUROPASS -------------------------------------
-var europass_installed = true;
