@@ -932,7 +932,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-othercss',false);
 				}
-				html += "<div class='row row-node row-node-"+nodetype+"'  style='"+style+"'>";
+//				html += "<div class='row row-node row-node-"+nodetype+"'  style='"+style+"'>";
+				html += "<div class='row row-node row-node-"+nodetype+"' >";
 				//-------------------- collapsible -------------------
 				if (collapsible=='Y')
 					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='col-md-1 collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-expand'></span></div>";
@@ -1141,20 +1142,24 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			if (nodetype == "asmContext" && node.resource.type=='Report') {
 				$("#"+dest).append($("<div class='row'><div id='exec_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
+				var node_resource = UICom.structure["ui"][uuid].resource;
+				var startday = node_resource.startday_node.text();
+				var time = node_resource.time_node.text();
+				var freq = node_resource.freq_node.text();
+				var comments = node_resource.comments_node[LANGCODE].text();
+//				var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
+
 				if (model_code!='') {
 					$.ajax({
 						type : "GET",
-						url : serverBCK_REP+"/"+uuid+".html",
+						url : serverBCK+"/report/"+uuid+".html",
 						dataType: 'html',
-						headers: {
-		                    'Access-Control-Allow-Origin': '*'
-		                },
-						crossDomain: true,
 						success : function(data) {
 							var content_report =  $(data).find("#dashboard_"+uuid).html();
 							$("#dashboard_"+uuid).html(content_report);
 						},
 						error : function(jqxhr,textStatus) {
+							register_report(uuid);
 							var root_node = g_portfolio_current;
 							genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
 						}
@@ -2606,7 +2611,12 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 	var commentnoderoles = $(node.metadatawad).attr('commentnoderoles');
 	if (commentnoderoles==undefined)
 		commentnoderoles = "";
-	if (commentnoderoles!="" && (USER.admin || (USER.creator && commentnoderoles=='designer') || g_userroles[0]=='designer' || commentnoderoles.containsArrayElt(g_userroles) || commentnoderoles.indexOf(this.userrole)>-1)) {
+	if (commentnoderoles!="" 
+		&& (USER.admin 
+			|| g_userroles[0]=='designer' 
+			|| commentnoderoles.indexOf(g_userroles[0])>-1 
+			)
+		) {
 		//---------------------
 		if (langcode==null)
 			langcode = LANGCODE;
@@ -2676,13 +2686,48 @@ UIFactory['Node'].upNode = function(nodeid)
 	});
 };
 
+//==================================
+function moveTO(nodeid,title,destsemtag,srcesemtag) 
+//==================================
+{
+	$('#wait-window').modal('show');
+	var parentid = null;
+	// change menu
+	var node = UICom.structure["ui"][nodeid];
+	var menusroles = $(node.metadatawad).attr('menuroles');
+	var newmenusroles = menusroles.substring(0,menusroles.indexOf(destsemtag)) + srcesemtag + '/' + destsemtag + menusroles.substring(menusroles.indexOf(srcesemtag)+srcesemtag.length);
+	UIFactory.Node.updateMetadataWadAttribute(nodeid,'menuroles',newmenusroles);
+	// search for destination
+	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes?portfoliocode=" + selfcode + "&semtag="+destsemtag,
+		success : function(data) {
+			var nodes = $("node",data);
+			parentid = $(nodes[0]).attr('id');
+			// move node
+			UIFactory.Node.moveTo(nodeid,parentid);
+			// reload destination
+			UIFactory.Node.loadNode(parentid);
+		}
+	});
+}
+
 //==================================================
 UIFactory['Node'].moveNode = function(nodeid)
 //==================================================
 {
 	var option = $("select",$("#edit-window-body")).find("option:selected");
 	var parentid = $(option).attr('uuid');
-	if (parent !=undefined)
+	UIFactory['Node'].moveTo(nodeid,parentid);
+};
+
+//==================================================
+UIFactory['Node'].moveTo = function(nodeid,parentid)
+//==================================================
+{
+	if (parent !=undefined && parent!=null)
 		$.ajax({
 			type : "POST",
 			dataType : "text",
@@ -2934,7 +2979,14 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
-		if ( g_userroles[0]=='designer' || (duplicateroles!='none'  && duplicateroles!='' && node.asmtype != 'asmRoot' && ((duplicateroles.containsArrayElt(g_userroles) /*&& !"designer".containsArrayElt(g_userroles)*/) || USER.admin || g_userroles[0]=='designer'))) {
+		if ( g_userroles[0]=='designer'  // always duplicate for designer
+			 || (duplicateroles!='none'  
+				 	&& duplicateroles!='' 
+				 	&& node.asmtype != 'asmRoot' 
+				 	&& ( duplicateroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer' )
+			 	 )
+			)
+		{
 			html+= "<span class='button glyphicon glyphicon-duplicate' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 	}
@@ -2992,7 +3044,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					html += "<hr>";
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4,freenode);
-//					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4,freenode);
+					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4,freenode);
 					if (semantictag.indexOf("asm-block")>-1) {
 						html += "<hr>";
 						html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4,freenode);
@@ -3683,11 +3735,12 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
 	if (name=='asmContext' && node.resource.type=='TextField')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'maxword',$(node.metadatawad).attr('maxword'));
-	//------------------------------------
-	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
-		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
-	if (name!='asmRoot')
-		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'freenode',$(node.metadatawad).attr('freenode'),true);
+	//-------------free positioning --------
+//	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
+//		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
+//	if (name!='asmRoot')
+//		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'freenode',$(node.metadatawad).attr('freenode'),true);
+	//--------------------------------------
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'display',$(node.metadatawad).attr('display'),true);
 	if (name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'collapsible',$(node.metadatawad).attr('collapsible'),true);
@@ -4222,4 +4275,5 @@ UIFactory["Node"].prototype.displaySemanticTags = function(destid,langcode)
 			UICom.structure.ui[$(children[i]).attr('id')].displaySemanticTags("content-"+this.id,langcode);
 	}
 };
+
 

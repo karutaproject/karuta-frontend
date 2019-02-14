@@ -171,6 +171,7 @@ function getNew()
 	html += "<p>"+karutaStr[LANG]['newpassword']+"</p>";
 	html += "<input id='useridentifier_new' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'/>";
 	html += "<button id='form-send' onclick='javascript:callSend()'>"+karutaStr[LANG]['button-send']+"</button>";
+	html += "<p><br/>"+karutaStr[LANG]['tipnewpassword']+"</p>";
 	return html;
 }
 

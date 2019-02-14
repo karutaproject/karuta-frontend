@@ -193,7 +193,7 @@ UIFactory["Audio"].prototype.setParameter = function(langcode)
 
 /// Editor
 //==================================
-UIFactory["Audio"].update = function(data,uuid,langcode)
+UIFactory["Audio"].update = function(data,uuid,langcode,filename)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
@@ -206,7 +206,6 @@ UIFactory["Audio"].update = function(data,uuid,langcode)
 		langcode = 0;
 	//---------------------
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
-	var filename = data.files[0].name;
 	var size = data.files[0].size;
 	var type = data.files[0].type;
 	$("#fileAudio_"+uuid+"_"+langcode).html(filename);
@@ -248,6 +247,7 @@ UIFactory["Audio"].remove = function(uuid,langcode)
 UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 //==================================
 {
+	var filename = ""; // to avoid problem : filename with accents	
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -262,21 +262,34 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 	html += "</div>";
 	html +=" <div id='progress_f_"+this.id+"_"+langcode+"'><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileAudio_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
+	html += "<span id='loaded_"+this.id+langcode+"'></span>"
 	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Audio.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
+	var loadedid = 'loaded_'+this.id+langcode;
 	$("#f_"+this.id+"_"+langcode).fileupload({
+		add: function(e, data) {
+			$("#wait-window").modal('show');
+			filename = data.originalFiles[0]['name'];
+			if(data.originalFiles[0]['size'] > maxfilesizeupload * 1024 * 1024) {
+				$("#wait-window").modal('hide');
+				alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
+			} else {
+				data.submit();
+			}
+		},
 		progressall: function (e, data) {
 			$("#progress_"+this.id).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+' .bar').css('width',progress + '%');
 		},
 		done: function (e, data,uuid) {
+			$("#wait-window").modal('hide');
 			$("#progress_"+this.id).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress_'+this.id+' .bar').css('width',progress + '%');
-			$("#div_"+this.id).html("Loaded");
+			$("#"+loadedid).html(" <i class='fa fa-check'></i>");
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
-			UIFactory["Audio"].update(data.result,uuid,langcode);
+			UIFactory["Audio"].update(data.result,uuid,langcode,filename);
 		}
     });
 };

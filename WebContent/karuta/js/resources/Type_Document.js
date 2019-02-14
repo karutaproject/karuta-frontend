@@ -194,7 +194,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 
 /// Editor
 //==================================
-UIFactory["Document"].update = function(data,uuid,langcode,parent)
+UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
@@ -210,7 +210,7 @@ UIFactory["Document"].update = function(data,uuid,langcode,parent)
 //		data = jQuery.parseJSON(data);
 	//---------------------
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
-	var filename = data.files[0].name;
+	var filename = filename; //data.files[0].name;
 	var size = data.files[0].size;
 	var type = data.files[0].type;
 	$("#file_"+uuid+"_"+langcode).html(filename);
@@ -241,6 +241,7 @@ UIFactory["Document"].remove = function(uuid,langcode)
 	var type = "";
 	$("#file_"+uuid+"_"+langcode).html(filename);
 	$("#file__"+uuid+"_"+langcode).html(filename);
+	$("#loaded_"+uuid+langcode).html("");
 	var fileid = "";
 	itself.resource.fileid_node[langcode].text(fileid);
 	itself.resource.filename_node[langcode].text(filename);
@@ -254,6 +255,7 @@ UIFactory["Document"].remove = function(uuid,langcode)
 UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,parent)
 //==================================
 {
+	var filename = ""; // to avoid problem : filename with accents
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -274,12 +276,18 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 	$("#"+destid).append($(html));
 	var loadedid = 'loaded_'+this.id+langcode;
 	$("#fileupload_"+this.id+langcode).fileupload({
-		dataType: 'json',
-		add: function (e, data) {
+		add: function(e, data) {
 			$("#wait-window").modal('show');
-	        data.submit();
-	    },
-	    progressall: function (e, data) {
+			filename = data.originalFiles[0]['name'];
+			if(data.originalFiles[0]['size'] > maxfilesizeupload * 1024 * 1024) {
+				$("#wait-window").modal('hide');
+				alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
+			} else {
+				data.submit();
+			}
+		},
+		dataType: 'json',
+		progressall: function (e, data) {
 			$("#wait-window").modal('show');
 			$("#progress_"+this.id+langcode).css('border','1px solid lightgrey');
 			var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -288,8 +296,8 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 		done: function (e, data) {
 			$("#wait-window").modal('hide');
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
-			UIFactory["Document"].update(data.result,uuid,langcode,parent);
-			$("#"+loadedid).append(" <i class='fa fa-check'></i>");
+			UIFactory["Document"].update(data.result,uuid,langcode,parent,filename);
+			$("#"+loadedid).html(" <i class='fa fa-check'></i>");
 		}
     });
 };

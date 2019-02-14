@@ -101,7 +101,9 @@ function fill_main_page(rootid,role)
 			// --------CSS Text------------------
 			var csstext = $("metadata-wad[csstext]",data).attr('csstext');
 			if (csstext!=undefined && csstext!=''){
-				$('<style>'+csstext+'</style>').appendTo('head');
+				$("<style id='csstext'>"+csstext+"</style>").appendTo('head');
+			} else {
+				$("#csstext").remove();
 			}
 			// --------------------------
 			UICom.parseStructure(data,true);
@@ -140,6 +142,11 @@ function fill_main_page(rootid,role)
 				g_userroles[0] = 'batcher';
 				USER.admin = false;
 				$("#userrole").html('batcher');
+			}
+			if (root_semantictag.indexOf('karuta-report')>-1){
+				g_userroles[0] = 'reporter';
+				USER.admin = false;
+				$("#userrole").html('reporter');
 			}
 			//---------------------------
 			var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);

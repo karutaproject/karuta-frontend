@@ -10,8 +10,8 @@ var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
 //---------------------------------
-var serverBCK_REG = "";  // report registration server
-var serverBCK_REP = ""; // report server
+var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report";  // report registration server
+var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report servervar serverBCK_REG = "";  // report registration server
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';
@@ -22,6 +22,7 @@ var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------
 var audiovideohtml5 = true;
+var maxfilesizeupload = "32"; //Mo
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;

@@ -116,6 +116,7 @@ function loadKarutaPage(url)
 	loadJS(url+"/karuta/js/resources/Type_BatchForm.js");
 	loadJS(url+"/karuta/js/resources/Type_Color.js");
 	loadJS(url+"/karuta/js/resources/Type_Action.js");
+	loadJS(url+"/karuta/js/resources/Type_ROME.js");
 	//--------------------------------------------------------------
 //	var sp = function(){
 //		loadJS(url+"/other/js/jquery.spin.js");

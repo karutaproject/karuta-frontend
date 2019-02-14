@@ -152,14 +152,14 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 	var code = $(this.code_node).text();
 	var html = "";
 	if (type=='default'){
-		html += "<span class='"+cleanCode(code)+"'>";
+		html += "<div class='"+cleanCode(code)+" view-div'>";
 		if (($(this.code_node).text()).indexOf("#")>-1)
 			html += cleanCode(code) + " ";
 		if (($(this.code_node).text()).indexOf("%")<0)
 			html += label;
 		if (($(this.code_node).text()).indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
-		html += "</span>";
+		html += "</div>";
 	}
 	if (type=='none'){
 		if (($(this.code_node).text()).indexOf("#")>-1)
@@ -503,6 +503,8 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 		for (var j=0; j<languages.length;j++){
 			input += "label_"+languages[j]+"='&nbsp;'";
 		}
+		if (self_code=='')
+			input += " checked ";
 		input += ">&nbsp;&nbsp;";
 		input += "</input>";
 		var obj = $(input);
