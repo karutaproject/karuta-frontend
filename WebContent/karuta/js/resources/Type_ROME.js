@@ -44,7 +44,7 @@ UIFactory["ROME"].prototype.displayEditor = function(destid,parentid)
 //==================================
 {
 	var cachable = true;
-	var html = "<div id='granddomaine'></div><div id='domaine'></div><div id='metier'></div><div id='competence'></div>";
+	var html = "<div class='ROME'><div id='granddomaine'></div><div id='domaine'></div><div id='metier'></div><div id='competence'></div>";
 	$("#"+destid).html(html);
 
 	var l = 'granddomaine';

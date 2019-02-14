@@ -1,11 +1,6 @@
-if( UIFactory === undefined )
-{
-  var UIFactory = {};
-}
+
 	var displayHTML = {};
 	
-	displayHTML["core"]  = "<div id='node_#uuid#' class='#displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'></div>";
-
 	//========================== BEGIN DO NOT EDIT ===========================	
 	
 	displayHTML["struct-basic"] =	"<div id='node_#uuid#' class='struct-basic #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
@@ -96,7 +91,7 @@ if( UIFactory === undefined )
 
 	//====================================================================
 
-	displayHTML["node-xlarge"]  =	"<div id='node_#uuid#' class='#displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
+	displayHTML["node-xlarge"]  =	"<div id='node_#uuid#' class='node-xlarge #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 									" <div id='sub_node_#uuid#' name='lbl-div' class='node #displayview#' >" +
 									"	<div id='collapsible_#uuid#' class='collapsible'>&nbsp;</div>" +
 									"	<div id='std_node_#uuid#' class='node-label'>" +
@@ -109,7 +104,7 @@ if( UIFactory === undefined )
 									" <div id='content-#uuid#' name='cnt-div' class='content row' ><\div>" +
 									"</div>";
 
-	displayHTML["resource-xlarge"]  =	"<div id='node_#uuid#' class='#displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
+	displayHTML["resource-xlarge"]  =	"<div id='node_#uuid#' class='resource-xlarge #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 									" <div id='sub_node_#uuid#' class='resource-node #displayview#' >" +
 									"	<div id='std_node_#uuid#' name='lbl-div' class='row'>" +
 									"		<div class='col-md-offset-1 col-md-7 node-label inside-full-height'>" +
@@ -159,7 +154,7 @@ if( UIFactory === undefined )
 
 	//====================================================================
 
-	var node1 = "<div id='node_#uuid#' class='#displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv# col-md-";
+	var node1 = "<div id='node_#uuid#' class='node- #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv# col-md-";
 	var node2 = " ' >" +
 					"<div id='sub_node_#uuid#' name='lbl-div' class='node #displayview#' >" +
 					"	<div id='collapsible_#uuid#' class='collapsible'>&nbsp;</div>" +
@@ -180,7 +175,7 @@ if( UIFactory === undefined )
 	displayHTML["node-5/12"]  =	node1 + "5" + node2;
 	displayHTML["node-6/12"]  =	node1 + "6" + node2;
 	
-	var resource1 = "<div id='node_#uuid#' class='#displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv# col-md-";
+	var resource1 = "<div id='node_#uuid#' class='resource- #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv# col-md-";
 	var resource2 = " ' >" +
 					"<div id='sub_node_#uuid#' class='node #displayview#' >" +
 					"	<div id='std_node_#uuid#' class='node-label'>" +
