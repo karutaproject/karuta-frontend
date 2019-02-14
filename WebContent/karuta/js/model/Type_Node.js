@@ -79,10 +79,10 @@ UIFactory["Node"] = function( node )
 			}
 		}
 		//------------------------------
-		this.metadata = $("metadata",node);
-		this.metadatawad = $("metadata-wad",node);
-		this.metadataepm = $("metadata-epm",node);
-		this.semantictag = $("metadata",node).attr('semantictag');
+		this.metadata = node.querySelector("metadata");
+		this.metadatawad = node.querySelector("metadata-wad");
+		this.metadataepm = node.querySelector("metadata-epm");
+		this.semantictag = this.metadata.getAttribute('semantictag');
 		if (this.semantictag==undefined) // for backward compatibility - node without semantictag attribute
 			this.semantictag='';
 		this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
@@ -586,7 +586,7 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-node')=='Y') ? true : false;
+	this.multilingual = (this.metadata.getAttribute('multilingual-node')=='Y') ? true : false;
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
@@ -594,14 +594,14 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 		this.display[dest] = langcode;
 	}
 	//---------------------
-	if (g_userroles[0]=='designer' || USER.admin || $(this.metadatawad).attr('display')!='N') {
+	if (g_userroles[0]=='designer' || USER.admin || this.metadatawad.getAttribute('display')!='N') {
 		if (type=="default")
 			html += "<div><div class='title'";
 		if (type=="span")
 			html += "<span class='title'";
 		//----------------------------
 		var style ="";
-		var metadataepm = $(this.metadataepm);
+		var metadataepm = this.metadataepm;
 		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
 		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-weight',false);
 		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-style',false);
@@ -711,10 +711,10 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	//---------------------
 	if ($("#code_"+itself.id).length){
 		var code = $.trim($("#code_"+itself.id).val());
-		$(itself.code_node[0]).text(code);
+		$(itself.code_node).text(code);
 	}
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
-	$(itself.label_node[langcode][0]).text(label);
+	$(itself.label_node[langcode]).text(label);
 	itself.save();
 	writeSaved(itself.id);
 };
@@ -1089,11 +1089,12 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 }
 
 //==================================================
+
 UIFactory["Node"].getLabelStyle = function(uuid)
 //==================================================
 {
 	var node = UICom.structure["ui"][uuid];
-	metadataepm = $(node.metadataepm);
+	metadataepm = node.metadataepm;
 	var style = "";
 	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'padding-top',true);
 	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
@@ -1112,7 +1113,7 @@ UIFactory["Node"].getContentStyle = function(uuid)
 //==================================================
 {
 	var node = UICom.structure["ui"][uuid];
-	metadataepm = $(node.metadataepm);
+	metadataepm = node.metadataepm;
 	var style = "";
 	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',true);
 	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',true);
@@ -1126,6 +1127,7 @@ UIFactory["Node"].getContentStyle = function(uuid)
 	style += UIFactory["Node"].getOtherMetadataEpm(metadataepm,'node-othercss');
 	return style;
 }
+
 
 //==================================================
 UIFactory["Node"].prototype.getContentStyle = function()
@@ -1239,135 +1241,6 @@ UIFactory["Node"].updateSize = function (obj)
 		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'width',width);
 		UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'height',height);
 	}
-};
-
-
-
-//==============================================================================
-//==============================================================================
-//==============================================================================
-UIFactory["Node"].displayTranslate = function(root,dest,depth)
-//==============================================================================
-//==============================================================================
-//==============================================================================
-{
-	//---------------------
-	// Base info
-	var data = root.node;
-	var name = $(data).prop("nodeName");
-	var uuid = $(data).attr("id");
-
-	var node = UICom.structure["ui"][uuid];
-	var multilingual_node = ($("metadata",data).attr('multilingual-node')=='Y') ? true : false;
-	var multilingual_resource = ($("metadata",data).attr('multilingual-resource')=='Y') ? true : false;
-
-	//----------------------------------
-	if( depth < 0) return;
-		//----------------------------------
-		var html = "<div class='translate "+name+"'>";
-		//----------------------------
-		if (name == "asmContext"){
-			html += "<div class='row'  style='margin-left:5px;margin-top:5px;padding-top:5px;padding-bottom:5px;border-top:3px solid black'>";
-			if (multilingual_node) {
-				for (var lang=0; lang<languages.length;lang++) {
-					var lgcolumn = Math.floor(12/languages.length);
-					html += "<div id='trs_node_"+uuid+"' class='col-md-"+lgcolumn+"'>";
-					//-------------- node -----------------------------
-					html += "<div class='lang'>"+languages[lang]+" - "+karutaStr[languages[lang]]['label']+"</div>";
-					html += "<div id='get_nodeeditor_"+uuid+languages[lang]+"'></div>";
-					//-------------- resource -------------------------
-					if(UICom.structure["ui"][uuid].resource!=null) {
-						html += "<hr>";
-						if (multilingual_resource) {
-							try {
-								var test = UICom.structure["ui"][uuid].resource.getEditor(null,lang);
-								html += " <div id='get_editor_"+uuid+languages[lang]+"'></div>";
-							}
-							catch(e) {
-								html += " <div id='display_editor_"+uuid+languages[lang]+"'></div>";
-							}
-						} else {
-							try {
-								var test = UICom.structure["ui"][uuid].resource.getEditor();
-								html += " <div id='get_editor_"+uuid+LANG+"'></div>";
-							}
-							catch(e) {
-								html += " <div id='display_editor_"+uuid+LANG+"'></div>";
-							}
-						}
-					}
-					html += "</div>";
-					//-------------------------------------------------
-				}
-			} else {
-				html += "<div class='lang'>"+karutaStr[LANG]['label']+"</div>";
-				html += "<div id='get_nodeeditor_"+uuid+LANG+"'></div>";
-			}
-			html += "</div><!-- row -->";
-		}
-		else { // other than asmContext
-			//-------------- node -----------------------------
-			if (depth!=1 && depth<10 && name=='asmStructure') {
-				html += "<div id='trs_node_"+uuid+"' class='col-md-7'>";
-				html += "<a  onclick=\"displayPage('"+uuid+"',1,'translate','"+LANGCODE+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('trs_node_'+uuid,'span')+"</a>";
-				html += "</div>";
-			} else if (depth!=1 && depth<10 && name=='asmUnit') {
-				html += "<div id='trs_node_"+uuid+"' class='col-md-7'>";
-				html += "<a  onclick=\"displayPage('"+uuid+"',100,'translate','"+LANGCODE+"',"+g_edit+")\">"+UICom.structure["ui"][uuid].getLabel('trs_node_'+uuid,'span')+"</a>"+"<span id='help_"+uuid+"' class='ihelp'></span>";
-				html += "</div>";
-			} else {
-				html += "<div class='row'  style='margin-left:5px;margin-top:5px;padding-top:5px;padding-bottom:5px;border-top:3px solid black'>";
-				if (multilingual_node) {
-					for (var lang=0; lang<languages.length;lang++) {
-						var lgcolumn = Math.floor(12/languages.length);
-						html += "<div id='trs_node_"+uuid+"' class='col-md-"+lgcolumn+"'>";
-						//-------------- node -----------------------------
-						html += "<div class='lang'>"+languages[lang]+" - "+karutaStr[languages[lang]]['label']+"</div>";
-						html += "<div id='get_nodeeditor_"+uuid+languages[lang]+"'></div>";
-						html += "</div>";
-						//-------------------------------------------------
-					}
-				} else {
-					html += "<div class='lang'>"+languages[lang]+" - "+karutaStr[LANG]['label']+"</div>";
-					html += "<div id='get_nodeeditor_"+uuid+LANG+"'></div>";
-				}
-				html += "</div><!-- row -->";
-			}
-			//--------------------------------------------------*/
-			html += "<div id='content-"+uuid+"'style='position:relative'></div>";
-		}
-		html += "</div><!-- name -->";
-		$("#"+dest).append(html);
-		for (var lang=0; lang<languages.length;lang++) {
-			if ($("#get_nodeeditor_"+uuid+languages[lang]).length>0) {
-				$("#get_nodeeditor_"+uuid+languages[lang]).append(UICom.structure["ui"][uuid].getNodeLabelEditor(null,lang));
-			}
-			if ($("#display_editor_"+uuid+languages[lang]).length>0) {
-				UICom.structure["ui"][uuid].resource.displayEditor("display_editor_"+uuid+languages[lang],null,lang);
-			}
-			if ($("#get_editor_"+uuid+languages[lang]).length>0) {
-				$("#get_editor_"+uuid+languages[lang]).append(UICom.structure["ui"][uuid].resource.getEditor(null,lang));
-			}
-		}
-		//----------------------------
-		if (name=='asmUnitStructure')
-			depth=100;	
-		// ---------------------------- For each child 
-		for( var i=0; i<root.children.length; ++i ) {
-			// Recurse
-			var child = UICom.structure["tree"][root.children[i]];
-			var childnode = UICom.structure["ui"][root.children[i]];
-			UIFactory["Node"].displayTranslate(child, 'content-'+uuid, depth-1);
-		}
-		//----------------------------
-		$('input[name="datepicker"]').datepicker({format: 'yyyy/mm/dd'});
-		$('a[data-toggle=tooltip]').tooltip({html:true});
-		$('a.popinfo').popover({ 
-		    placement : 'right',
-		    html : true
-		    })
-		    .click(function(e) {
-		});
 };
 
 
@@ -2800,8 +2673,8 @@ UIFactory["Node"].displayMetadataEpm = function(data,attribute,number)
 //==================================================
 {
 	var html = "";
-	if (data.attr(attribute)!=undefined && data.attr(attribute)!="") {
-		var value = $(data).attr(attribute);
+	if (data.getAttribute(attribute)!=undefined && data.getAttribute(attribute)!="") {
+		var value = data.getAttribute(attribute);
 		if (attribute.indexOf("inparent-othercss")>-1)
 			html += attribute.substring(17) + value;
 		else if (attribute.indexOf("node-othercss")>-1)
@@ -2827,8 +2700,8 @@ UIFactory["Node"].getOtherMetadataEpm = function(data,attribute)
 //==================================================
 {
 	var html = "";
-	if (data.attr(attribute)!=undefined && data.attr(attribute)!="") {
-		var value = $(data).attr(attribute);
+	if (data.getAttribute(attribute)!=undefined && data.getAttribute(attribute)!="") {
+		var value = data.getAttribute(attribute);
 		html += value;
 	}	return html;
 };
@@ -2837,7 +2710,7 @@ UIFactory["Node"].getOtherMetadataEpm = function(data,attribute)
 UIFactory["Node"].getMetadataWadAttribute = function(data,attribute)
 //==================================================
 {
-	return $("metadata-wad",data).attr(attribute);
+	return data.metadatawad.getAttribute(attribute);
 	
 };
 
@@ -2846,8 +2719,8 @@ UIFactory["Node"].displayMetadataWad = function(data,attribute)
 //==================================================
 {
 	var html = "";
-	if ($("metadata-wad",data).attr(attribute)!=undefined && $("metadata-wad",data).attr(attribute)!="")
-		html += "<span>"+attribute+":"+$("metadata-wad",data).attr(attribute)+"| </span>";
+	if (data.getAttribute(attribute)!=undefined && data.getAttribute(attribute)!="")
+		html += "<span>"+attribute+":"+data.getAttribute(attribute)+"| </span>";
 	return html;
 };
 
@@ -2856,8 +2729,8 @@ UIFactory["Node"].displayMetadata = function(data,attribute)
 //==================================================
 {
 	var html = "";
-	if ($("metadata",data).attr(attribute)!=undefined && $("metadata",data).attr(attribute)!="")
-		html += "<span>"+attribute+":"+$("metadata",data).attr(attribute)+"| </span>";
+	if( data.getAttribute(attribute)!=undefined && data.getAttribute(attribute)!="")
+		html += "<span>"+attribute+":"+data.getAttribute(attribute)+"| </span>";
 	return html;
 };
 
@@ -2866,34 +2739,36 @@ UIFactory["Node"].displayMetainfo = function(destid,data)
 //==================================================
 {
 	var html = "";
-	var name = $(data).prop("nodeName");
+	var name = data.nodeName;
 	if (name=='asmContext') {
 		var asmResources = $("asmResource",data);
 		name = $(asmResources[2]).attr('xsi_type');
 	}
 	html += "<span>"+name+" - </span>";
-	if ($("metadata",data).attr('semantictag')!=undefined && $("metadata",data).attr('semantictag')!="")
-		html += "<span>semantictag:"+$("metadata",data).attr('semantictag')+"| </span>";
-	html += UIFactory["Node"].displayMetadataWad(data,'seenoderoles');
-	html += UIFactory["Node"].displayMetadataWad(data,'editresroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'delnoderoles');
-	html += UIFactory["Node"].displayMetadataWad(data,'commentnoderoles');
-	html += UIFactory["Node"].displayMetadataWad(data,'submitroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'editnoderoles');
-	html += UIFactory["Node"].displayMetadataWad(data,'duplicateroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'incrementroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'query');
-	html += UIFactory["Node"].displayMetadataWad(data,'display');
-	html += UIFactory["Node"].displayMetadataWad(data,'menuroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'notifyroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'graphicerroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'resizeroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'edittargetroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'showroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'showtoroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'moveroles');
-	html += UIFactory["Node"].displayMetadataWad(data,'inline');
-	$("#"+destid).html(html);
+	var metadata = data.querySelector("metadata");
+	var metadatawad = data.querySelector("metadata-wad");
+	if (metadata.getAttribute('semantictag')!=undefined && metadata.getAttribute('semantictag')!="")
+		html += "<span>semantictag:"+metadata.getAttribute('semantictag')+"| </span>";
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'seenoderoles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'editresroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'delnoderoles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'commentnoderoles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'submitroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'editnoderoles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'duplicateroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'incrementroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'query');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'display');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'menuroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'notifyroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'graphicerroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'resizeroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'edittargetroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'showroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'showtoroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'moveroles');
+	html += UIFactory["Node"].displayMetadataWad(metadatawad,'inline');
+	document.getElementById(destid).innerHTML = html;
 };
 
 //==================================================
