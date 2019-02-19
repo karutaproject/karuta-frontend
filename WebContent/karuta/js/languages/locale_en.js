@@ -39,6 +39,7 @@ karutaStr["en"]["button-2world"] = "Public URL";
 karutaStr["en"]["button-up"] = "Up";
 karutaStr["en"]["button-refresh"] = "Reload Portfolio";
 karutaStr["en"]["button-refresh-report"] = "Reload Report";
+karutaStr["en"]["button-disconnect"] = "Disconnect";
 karutaStr['en']['Add']="Add";
 karutaStr['en']['AddGroup']="Add a Group";
 karutaStr['en']['confirm-delete']="Do you want to delete? This action cannot be undone.";

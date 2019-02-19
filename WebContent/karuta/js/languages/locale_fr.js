@@ -39,6 +39,7 @@ karutaStr["fr"]["button-2world"] = "URL publique";
 karutaStr["fr"]["button-up"] = "Monter";
 karutaStr["fr"]["button-refresh"] = "Recharger le portfolio";
 karutaStr["fr"]["button-refresh-report"] = "Rafraîchir le rapport";
+karutaStr["fr"]["button-disconnect"] = "Se déconnecter";
 karutaStr['fr']['Add']="Ajouter";
 karutaStr['fr']['AddGroup']="Ajouter un groupe";
 karutaStr['fr']['confirm-delete']="Voulez-vous vraiment supprimer ? Cette action est irréversible.";
