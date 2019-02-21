@@ -322,27 +322,22 @@ a {
 
 /*  --- node --- */
 
-.node-standard:nth-child(2) .node {
+.first-node {
 	background-color:@page-title-background-color;
 	min-height:100px;
 	margin-bottom:10px;
 }
 
+.first-node .title-subline {
+	border-bottom:1px solid @page-title-subline-color;
+	margin-top:10px;
+	width:50px;
+}
 .node-standard .node-standard .node {
 	background-color:inherit;
 	min-height:inherit;
 }
 
-.node-standard .title-subline {
-	border-bottom:1px solid @page-title-subline-color;
-	margin-top:10px;
-	width:50px;
-}
-
-.content .node-standard .title-subline {
-	border-bottom:0px solid @page-title-subline-color;
-	margin-top:0px;
-}
 
 
 /*  --- resource --- */
@@ -403,6 +398,31 @@ a {
 	padding-right:0px;
 	margin-left:0px;
 }
+
+.standard-resource-Image-Img-Label div[name=res-div]{
+	text-align : center;
+	position:relative;
+}
+
+.standard-resource-Image-Img-Label .node-label {
+	margin : 5px;
+	padding : 20px;
+	background-color : black;
+	opacity : 0.6;
+}
+.standard-resource-Image-Img-Label .title {
+	font-size : inherit;
+}
+
+
+.standard-resource-Image-Img-Label div[name=lbl-div]{
+	position :relative;
+	width:fit-content;
+	top : -100px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
 
 /* ============================ */
 /* ============================ */
@@ -1610,11 +1630,11 @@ table.tablesorter th.restore {
 	width:150px;
 }
 
-.asmNop .node-model {
+.report .asmNop .node-model {
 	display:none;
 }
 
-.asmNop .row {
+.report .asmNop .row {
 	margin-top:-20px;
 	margin-left: -30px;
 }
@@ -2380,19 +2400,6 @@ div.oembedall-container {
 	padding-left:0px;
 	padding-right:0px;
 }  
-/* 
-.asmBlockContainer .col-md-6:first-child,
-.asmBlockContainer .col-md-4:first-child,
-.asmBlockContainer .col-md-3:first-child {
-	padding-left:0px;
-}
-
-.asmBlockContainer .col-md-3,
-.asmBlockContainer .col-md-4,
-.asmBlockContainer .col-md-6 {
-	padding-right:0px;
-}   
-*/
 
 .block {
 	height:@block-height;
@@ -2411,10 +2418,15 @@ div.oembedall-container {
 	text-align:center;
 }
 
+//----------------------
 .block .ProxyBlock,
 .block .ImageBlock,
 .block .DocumentBlock,
-.block .URLBlock{
+.block .URLBlock,
+//----------------------
+.ImageBlock .ImageBlock,
+.DocumentBlock .DocumentBlock,
+.URLBlock .URLBlock {
 	height:@block-img-height;
 	text-align:center;
 	background-repeat: no-repeat;
@@ -2436,8 +2448,14 @@ div.oembedall-container {
 }
 
 
+//----------------------
 .block .docblock-title,
-.block .no-document .docblock-title{
+.block .no-document .docblock-title,
+//----------------------
+.URLBlock .no-document .docblock-title,
+.URLBlock .docblock-title,
+.DocumentBlock .no-document .docblock-title,
+.DocumentBlock .docblock-title {
 	display: inline-block;
 	margin-top:90px;
 	margin-left:10px;

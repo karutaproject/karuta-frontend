@@ -61,10 +61,13 @@ function displayKarutaPage()
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
+					$("a[data-tooltip='true']").tooltip({html:true});
+
 				},
 				error : function(jqxhr,textStatus) {
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
+					$("a[data-tooltip='true']").tooltip({html:true});
 				}
 			});
 			//-------------------------------
@@ -79,7 +82,7 @@ function displayKarutaPage()
 			html += "	</div>";
 			html += "	<div id='main-list' class='col-md-12'></div>";
 			html += "	<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-page' class='col-md-12' style='display:none'></div>";
+			html += "	<div id='main-page' class='col-md-12' role='all' style='display:none'></div>";
 			html += "	<div id='main-user' class='col-md-12' style='display:none'></div>";
 			html += "	<div id='main-usersgroup' class='col-md-12' style='display:none'></div>";
 			html += "	<div id='main-exec-batch' class='col-md-12' style='display:none'></div>";
@@ -96,6 +99,7 @@ function displayKarutaPage()
 		}
 	});
 	$.ajaxSetup({async: true});
+	$('[data-tooltip="true"]').tooltip();
 }
 
 //==============================

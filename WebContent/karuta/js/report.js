@@ -13,12 +13,10 @@
 	permissions and limitations under the License.
    ======================================================= */
 
-var trace = false;
-var xmlDoc = null;
 var userid = null; // current user
 var aggregates = {};
 var variables = {};
-var refresh = true;
+var report_refresh = true;
 var csvline = "";
 
 var csvreport = null;
@@ -28,6 +26,7 @@ var dashboard_infos = {};
 var dashboard_current = null;
 var portfolioid_current = null;
 
+var g_report_actions = {};
 
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
@@ -91,6 +90,7 @@ function r_getSelector(select,test)
 	return selector;
 }
 
+
 //==================================
 function r_processPortfolio(no,xmlReport,destid,data,line)
 //==================================
@@ -101,43 +101,7 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data};
 	}
 	var children = $(":root",xmlReport).children();
-//	var children = $(">*",xmlReport);
-	no += destid;
-	for (var i=0; i<children.length;i++){
-		var tagname = $(children[i])[0].tagName;
-		if (tagname=="table")
-			r_processTable(no+"_"+i,children[i],destid,data,line);
-		if (tagname=="row")
-			r_processRow(no+"_"+i,children[i],destid,data,line);
-		if (tagname=="cell")
-			r_processCell(no+"_"+i,children[i],destid,data,line);
-		if (tagname=="node_resource")
-			r_processNodeResource(children[i],destid,data,line);
-		if (tagname=="text")
-			r_processText(children[i],destid,data,line);
-		if (tagname=="url2unit")
-			r_processURL2Unit(children[i],destid,data,line);
-		if (tagname=="jsfunction")
-			r_processJSFunction(children[i],destid,data,line);
-		if (tagname=="draw-web-axis")
-			r_processWebAxis(children[i],destid,nodes[i],i);
-		if (tagname=="draw-web-line")
-			r_processWebLine(children[i],destid,nodes[i],i);
-		if (tagname=="loop")
-			r_processLoop(no+"_"+i,children[i],destid,data,line);
-		if (tagname=="for-each-node")
-			r_processNode(no+"_"+i,children[i],destid,data,line);
-		if (tagname=="for-each-portfolio")
-			r_getPortfolios(no+"_"+i,children[i],destid,data,line);
-		if (tagname=="for-each-portfolios-nodes")
-			r_getPortfoliosNodes(no+"_"+i,children[i],destid,data,line);
-		if (tagname=="europass")
-			r_processEuropass(children[i],destid,data,line);
-		if (tagname=="csv-line")
-			r_processCsvLine(no+"_"+i,children[i],destid,data,line);
-		if (tagname=="csv-value")
-			r_processCsvValue(destid,data,line);
-	}
+	processReportActions(destid,children);
 	$.ajaxSetup({async: true});
 }
 
@@ -147,86 +111,89 @@ function r_report_process(xmlDoc,json)
 {
 	$.ajaxSetup({async: false});
 	var children = $(":root",xmlDoc).children();
-	for (var i=0; i<children.length;i++){
-		var tagname = $(children[i])[0].tagName;
-		if (tagname=="for-each-line")
-			r_processLine(i,children[i],'report-content');
-		if (tagname=="for-each-person")
-			r_getUsers(i,children[i],'report-content');
-		if (tagname=="for-each-portfolio")
-			r_getPortfolios(i,children[i],'report-content');
-		if (tagname=="for-each-portfolios-nodes")
-			r_getPortfoliosNodes(i,children[i],'report-content');
-		if (tagname=="loop")
-			r_processLoop(i,children[i],'report-content');
-		if (tagname=="table")
-			r_processTable(i,children[i],'report-content');
-		if (tagname=="europass")
-			r_processEuropass(i,children[i],'report-content');
-		if (tagname=="aggregate")
-			r_processAggregate(children[i],'report-content');
-		if (tagname=="text")
-			r_processText(children[i],'report-content');
-		if (tagname=="url2unit")
-			r_processURL2Unit(children[i],'report-content');
-		if (tagname=="jsfunction")
-			r_processJSFunction(children[i],'report-content');
-	}
+	processReportActions("report-content",children);
 	$.ajaxSetup({async: true});
 }
 
+//=================================================
+function processReportActions(destid,actions)
+//=================================================
+{
+	for (var i=0; i<actions.length;i++){
+		var tagname = $(actions[i])[0].tagName;
+		g_report_actions[tagname](destid,actions[i],i.toString(),data);
+	};
+};
+
+//=============================================================================
+//=============================================================================
+//======================= IF-THEN-ELSE ========================================
+//=============================================================================
+//=============================================================================
+
 //==================================
-function r_processLine(no,xmlDoc,destid,data,line)
+g_report_actions['if-then-else'] = function (destid,action,no,data)
 //==================================
 {
-	var ref_init = $(xmlDoc).attr("ref-init");
+	var if_action = $('if-part',action).children()[0]; // only one action in test
+	var then_actions = $('then-part',action).children();
+	var else_actions = $('else-part',action).children();
+	var tagname = $(if_action).prop("nodeName");
+	if (g_report_actions[tagname](destid,action,no,data)){
+		for (var i=0; i<then_actions.length;i++){
+			var tagname = $(then_actions[i])[0].tagName;
+			g_report_actions[tagname](destid,then_actions[i],no+i.toString(),data);
+		};
+	}
+	else {
+		for (var i=0; i<else_actions.length;i++){
+			var tagname = $(else_actions[i])[0].tagName;
+			g_report_actions[tagname](destid,else_actions[i],no+i.toString(),data);
+		};
+	}
+}
+
+//=============================================================================
+//=============================================================================
+//======================= FOR-EACH-LINE =======================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['for-each-line'] = function (destid,action,no,data)
+//==================================
+{
+	var ref_init = $(action).attr("ref-init");
 	//---------------------
-	var children = $(">*",xmlDoc);
+	var actions = $(action).children();
 	$("#line-number").html('0');
 	$("#number_lines").html(json.lines.length);
-	for (var i=0; i<json.lines.length; i++){
+	for (var j=0; j<json.lines.length; j++){
 		if (ref_init!=undefined) {
-			$("#line-number").html(i+1);
+			$("#line-number").html(j+1);
 			var ref_inits = ref_init.split("/"); // ref1/ref2/...
 			for (var k=0;k<ref_inits.length;k++)
 				aggregates[ref_inits[k]] = new Array();
 		}
-		for (var j=0; j<children.length;j++){
-			var tagname = $(children[j])[0].tagName;
-			if (tagname=="for-each-person")
-				r_getUsers(no+"_"+i,children[j],destid,data,i);
-			if (tagname=="for-each-portfolio")
-				r_getPortfolios(no+"_"+i,children[j],destid,data,i);
-			if (tagname=="for-each-portfolios-nodes")
-				r_getPortfoliosNodes(no+"_"+i,children[j],destid,data,i);
-			if (tagname=="table")
-				r_processTable(no+"_"+i,children[j],destid,data,i);
-			if (tagname=="loop")
-				r_processLoop(no+"_"+i,children[j],destid,data,i);
-			if (tagname=="row")
-				r_processRow(no+"_"+i,children[j],destid,data,i);
-			if (tagname=="aggregate")
-				r_processAggregate(children[i],destid,data,i);
-			if (tagname=="csv-line")
-				r_processCsvLine(no+"_"+i,children[j],destid,data,i);
-			if (tagname=="csv-value")
-				r_processCsvValue(children[j],destid,data,i);
+		for (var i=0; i<actions.length;i++){
+			var tagname = $(actions[i])[0].tagName;
+			g_report_actions[tagname](destid,actions[j],no+j.toString()+i.toString(),data);
 		}
 	}
 }
 
 //=============================================================================
 //=============================================================================
-//======================= FOR-EACH-NODE =====================================
+//======================= FOR-EACH-NODE =======================================
 //=============================================================================
 //=============================================================================
 
 //==================================
-function r_processNode(no,xmlDoc,destid,data,line)
+g_report_actions['for-each-node'] = function (destid,action,no,data)
 //==================================
 {
-	var select = $(xmlDoc).attr("select");
-	var test = $(xmlDoc).attr("test");
+	var select = $(action).attr("select");
+	var test = $(action).attr("test");
 	if (select!=undefined) {
 		var selector = r_getSelector(select,test);
 		var nodeold = $(selector.jquery,data);
@@ -241,174 +208,87 @@ function r_processNode(no,xmlDoc,destid,data,line)
 			var nodes = $(selector.jquery,data).addBack().filter(selector.filter1);
 			nodes = eval("nodes"+selector.filter2);
 		}
-		for (var i=0; i<nodes.length;i++){
-			//---------------------------
-			var ref_init = $(xmlDoc).attr("ref-init");
+		//---------------------------
+		var actions = $(action).children();
+		for (var j=0; j<nodes.length;j++){
+			//----------------------------------
+			var ref_init = $(action).attr("ref-init");
 			if (ref_init!=undefined) {
 				var ref_inits = ref_init.split("/"); // ref1/ref2/...
 				for (var k=0;k<ref_inits.length;k++)
 					aggregates[ref_inits[k]] = new Array();
 			}
-			//---------------------------
-			var children = $(">*",xmlDoc);
-			for (var j=0; j<children.length;j++){
-				var tagname = $(children[j])[0].tagName;
-				if (tagname=="for-each-node")
-					r_processNode(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
-				if (tagname=="loop")
-					r_processLoop(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
-				if (tagname=="table")
-					r_processTable(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
-				if (tagname=="row")
-					r_processRow(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
-				if (tagname=="cell")
-					r_processCell(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
-				if (tagname=="aggregate")
-					r_processAggregate(children[j],destid,nodes[i],i);
-				if (tagname=="node_resource")
-					r_processNodeResource(children[j],destid,nodes[i],i);
-				if (tagname=="text")
-					r_processText(children[j],destid,nodes[i],i);
-				if (tagname=="url2unit")
-					r_processURL2Unit(children[j],destid,nodes[i],i);
-				if (tagname=="jsfunction")
-					r_processJSFunction(children[j],destid,nodes[i],i);
-				if (tagname=="draw-web-axis")
-					r_processWebAxis(children[j],destid,nodes[i],i);
-				if (tagname=="draw-web-line")
-					r_processWebLine(children[j],destid,nodes[i],i);
-				if (tagname=="aggregate")
-					r_processAggregate(children[j],destid,nodes[i],i);
-				if (tagname=="goparent")
-					r_processGoParent(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
-				if (tagname=="csv-line")
-					r_processCsvLine(no+"_"+i+"_"+j,children[j],destid,nodes[i],i);
-				if (tagname=="csv-value")
-					r_processCsvValue(children[j],destid,nodes[i],i);
+			//----------------------------------
+			for (var i=0; i<actions.length;i++){
+				var tagname = $(children[i])[0].tagName;
+				g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),nodes[j])
 			}
+			//----------------------------------
 		};
 	}
 }
 
+//=============================================================================
+//=============================================================================
+//================================= LOOP ======================================
+//=============================================================================
+//=============================================================================
+
 //==================================
-function r_processLoop(no,xmlDoc,destid,data,line)
+g_report_actions['loop'] = function (destid,action,no,data)
 //==================================
 {
-	var first = parseInt($(xmlDoc).attr("first"));
-	var last = parseInt($(xmlDoc).attr("last"));
-	for (var i=first; i<last+1;i++){
+	var first = parseInt($(action).attr("first"));
+	var last = parseInt($(action).attr("last"));
+	for (var j=first; j<last+1;j++){
 		//---------------------------
-		var variable = $(xmlDoc).attr("variable");
+		var variable = $(action).attr("variable");
 		if (variable!=undefined) {
-				variables[variable] = i;
+				variables[variable] = j;
 		}
 		//---------------------------
-		var ref_init = $(xmlDoc).attr("ref-init");
+		var ref_init = $(action).attr("ref-init");
 		if (ref_init!=undefined) {
 			var ref_inits = ref_init.split("/"); // ref1/ref2/...
 			for (var k=0;k<ref_inits.length;k++)
 				aggregates[ref_inits[k]] = new Array();
 		}
 		//---------------------------
-		var children = $(">*",xmlDoc);
-		for (var j=0; j<children.length;j++){
-			var tagname = $(children[j])[0].tagName;
-			if (tagname=="for-each-node")
-				r_processNode(no+"_"+i+"_"+j,children[j],destid,data,i);
-			if (tagname=="table")
-				r_processTable(no+"_"+i+"_"+j,children[j],destid,data,i);
-			if (tagname=="row")
-				r_processRow(no+"_"+i+"_"+j,children[j],destid,data,i);
-			if (tagname=="cell")
-				r_processCell(no+"_"+i+"_"+j,children[j],destid,data,i);
-			if (tagname=="aggregate")
-				r_processAggregate(children[j],destid,data,i);
-			if (tagname=="node_resource")
-				r_processNodeResource(children[j],destid,data,i);
-			if (tagname=="text")
-				r_processText(children[j],destid,data,i);
-			if (tagname=="url2unit")
-				r_processURL2Unit(children[j],destid,data,i);
-			if (tagname=="jsfunction")
-				r_processJSFunction(children[j],destid,data,i);
-			if (tagname=="draw-web-axis")
-				r_processWebAxis(children[j],destid,data,i);
-			if (tagname=="draw-web-line")
-				r_processWebLine(children[j],destid,data,i);
-			if (tagname=="aggregate")
-				r_processAggregate(children[j],destid,data,i);
-			if (tagname=="goparent")
-				r_processGoParent(no+"_"+i+"_"+j,children[j],destid,data,i);
+		var actions = $(action).children();
+		for (var i=0; i<actions.length;i++){
+			var tagname = $(actions[i])[0].tagName;
+			g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),nodes[j]);
 		}
 	};
 }
 
+//=============================================================================
+//=============================================================================
+//================================= GOPARENT ==================================
+//=============================================================================
+//=============================================================================
+
 //==================================
-function r_processGoParent(no,xmlDoc,destid,data,line)
+g_report_actions['goparent'] = function (destid,action,no,data)
 //==================================
 {
 	var parent = $(data).parent();
 	//---------------------------
-	var children = $(">*",xmlDoc);
-	var i=0;
-	for (var j=0; j<children.length;j++){
-		var tagname = $(children[j])[0].tagName;
-		if (tagname=="for-each-node")
-			r_processNode(no+"_"+i+"_"+j,children[j],destid,parent,i);
-		if (tagname=="table")
-			r_processTable(no+"_"+i+"_"+j,children[j],destid,parent,i);
-		if (tagname=="row")
-			r_processRow(no+"_"+i+"_"+j,children[j],destid,parent,i);
-		if (tagname=="cell")
-			r_processCell(no+"_"+i+"_"+j,children[j],destid,parent,i);
-		if (tagname=="aggregate")
-			r_processAggregate(children[j],destid,parent,i);
-		if (tagname=="node_resource")
-			r_processNodeResource(children[j],destid,parent,i);
-		if (tagname=="text")
-			r_processText(children[j],destid,parent,i);
-		if (tagname=="url2unit")
-			r_processURL2Unit(children[j],destid,parent,i);
-		if (tagname=="jsfunction")
-			r_processJSFunction(children[j],destid,parent,i);
-		if (tagname=="draw-web-axis")
-			r_processWebAxis(children[j],destid,parent,i);
-		if (tagname=="draw-web-line")
-			r_processWebLine(children[j],destid,parent,i);
-		if (tagname=="aggregate")
-			r_processAggregate(children[j],destid,parent,i);
-		if (tagname=="goparent")
-			r_processGoParent(no+"_"+i+"_"+j,children[j],destid,parent,i);
+	for (var i=0; i<actions.length;i++){
+		var tagname = $(actions[i])[0].tagName;
+		g_report_actions[tagname](destid,actions[i],no+i.toString(),parent);
 	}
+
 }
 
-//==================================
-function r_processSVG(no,xmlDoc,destid,data,line)
-//==================================
-{
-	var min_height = $(xmlDoc).attr("min-height");
-	var min_width = $(xmlDoc).attr("min-width");
-	var html = "<svg id='svg_"+no+"' min-width='"+min_width+"' min-height='"+min_height+"' viewbox='0 0 1000 1000'></svg>";
-	var svg = $(html);
-	$("#"+destid).append(svg);
-	var children = $(">*",xmlDoc);
-	for (var i=0; i<children.length;i++){
-		var tagname = $(children[i])[0].tagName;
-		if (tagname=="draw-web-title")
-			r_processWebTitle(children[i],'svg_'+no,data,line);
-		if (tagname=="draw-web-axis")
-			r_processWebAxis(children[i],'svg_'+no,data,line);
-		if (tagname=="draw-web-line")
-			r_processWebLine(children[i],'svg_'+no,data,line);
-		if (tagname=="for-each-node")
-			r_processNode(no+"_"+i,children[i],'svg_'+no,data,line);
-		if (tagname=="goparent")
-			r_processGoParent(no+"_"+i,children[i],'svg_'+no,data,line);
-	}
-}
+//=============================================================================
+//=============================================================================
+//============================ SHOW-SHARING ===================================
+//=============================================================================
+//=============================================================================
 
 //==================================
-function r_processShowSharing(destid)
+g_report_actions['show-sharing'] = function (destid,action,no,data)
 //==================================
 {
 	$.ajax({
@@ -419,96 +299,75 @@ function r_processShowSharing(destid)
 			UIFactory["Portfolio"].displayUnSharing(destid,data,true);
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Error in r_processShowSharing : "+jqxhr.responseText);
+			alertHTML("Error in show-sharing : "+jqxhr.responseText);
 		}
 	});
 }
 
+//=============================================================================
+//=============================================================================
+//======================= TABLE - ROW - CELL ==================================
+//=============================================================================
+//=============================================================================
 
 //==================================
-function r_processTable(no,xmlDoc,destid,data,line)
+g_report_actions['table'] = function (destid,action,no,data)
 //==================================
 {
 	//---------------------------
-	var ref_init = $(xmlDoc).attr("ref-init");
+	var ref_init = $(action).attr("ref-init");
 	if (ref_init!=undefined) {
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
 		for (var k=0;k<ref_inits.length;k++)
 			aggregates[ref_inits[k]] = new Array();
 	}
 	//---------------------------
-	var style = $(xmlDoc).attr("style");
-	var html = "<table id='table_"+no+"' style='"+style+"'></table>";
+	var style = $(action).attr("style");
+	var html = "<table id='"+destid+no+"' style='"+style+"'></table>";
 	$("#"+destid).append($(html));
-	var children = $(">*",xmlDoc);
-	for (var i=0; i<children.length;i++){
-		var tagname = $(children[i])[0].tagName;
-		if (tagname=="for-each-line")
-			r_processLine(no+"_"+i,children[i],'table_'+no,data,'table_'+no);
-		if (tagname=="for-each-person")
-			r_getUsers(no+"_"+i,children[i],'table_'+no,data,line);
-		if (tagname=="for-each-portfolio")
-			r_getPortfolios(no+"_"+i,children[i],'table_'+no,data,line);
-		if (tagname=="for-each-portfolios-nodes")
-			r_getPortfoliosNodes(no+"_"+i,children[i],'table_'+no,data,line);
-		if (tagname=="row")
-			r_processRow(no+"_"+i,children[i],'table_'+no,data,line);
-		if (tagname=="for-each-node")
-			r_processNode(no+"_"+i,children[i],'table_'+no,data,line);
-		if (tagname=="loop")
-			r_processLoop(no+"_"+i,children[i],'table_'+no,data,line);
-		if (tagname=="goparent")
-			r_processGoParent(no+"_"+i,children[i],'table_'+no,data,line);
+	//---------------------------
+	var actions = $(action).children();
+	for (var i=0; i<actions.length;i++){
+		var tagname = $(actions[i])[0].tagName;
+		g_report_actions[tagname](destid+no,actions[i],i.toString(),data);
 	};
 }
 
 //==================================
-function r_processRow(no,xmlDoc,destid,data,line)
+g_report_actions['row'] = function (destid,action,no,data)
 //==================================
 {
 	//---------------------------
-	var ref_init = $(xmlDoc).attr("ref-init");
+	var ref_init = $(action).attr("ref-init");
 	if (ref_init!=undefined) {
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
 		for (var k=0;k<ref_inits.length;k++)
 			aggregates[ref_inits[k]] = new Array();
 	}
 	//---------------------------
-	var style = $(xmlDoc).attr("style");
-	var html = "<tr id='tr_"+no+"' style='"+style+"'></tr>";
+	var style = $(action).attr("style");
+	var html = "<tr id='"+destid+no+"' style='"+style+"'></table>";
 	$("#"+destid).append($(html));
-	var children = $(">*",xmlDoc);
-	for (var i=0; i<children.length;i++){
-		var tagname = $(children[i])[0].tagName;
-		if (tagname=="for-each-person")
-			r_getUsers(no,children[i],'tr_'+no,data,line);
-		if (tagname=="for-each-portfolio")
-			r_getPortfolios(no,children[i],'tr_'+no,data,line);
-		if (tagname=="for-each-portfolios-nodes")
-			r_getPortfoliosNodes(no,children[i],'tr_'+no,data,line);
-		if (tagname=="cell")
-			r_processCell(no+"_"+i,children[i],'tr_'+no,data,line);
-		if (tagname=="for-each-node")
-			r_processNode(no+"_"+i,children[i],'tr_'+no,data,line);
-		if (tagname=="loop")
-			r_processLoop(no+"_"+i,children[i],'tr_'+no,data,line);
-		if (tagname=="goparent")
-			r_processGoParent(no+"_"+i,children[i],'tr_'+no,data,line);
-	}
+	//---------------------------
+	var actions = $(action).children();
+	for (var i=0; i<actions.length;i++){
+		var tagname = $(actions[i])[0].tagName;
+		g_report_actions[tagname](destid+no,actions[i],i.toString(),data);
+	};
 }
 
 //==================================
-function r_processCell(no,xmlDoc,destid,data,line)
+g_report_actions['cell'] = function (destid,action,no,data)
 //==================================
 {
-	var style = $(xmlDoc).attr("style");
-	var attr_help = $(xmlDoc).attr("help");
-	var colspan = $(xmlDoc).attr("colspan");
+	var style = $(action).attr("style");
+	var attr_help = $(action).attr("help");
+	var colspan = $(action).attr("colspan");
 
-	var html = "<td id='td_"+no+"' style='"+style+"' ";
+	var html = "<td id='"+destid+no+"' style='"+style+"' ";
 	if (colspan!=null && colspan!='0')
 		html += "colspan='"+colspan+"' "
-	html += "><span id='help_"+no+"' class='ihelp'></span>";
+	html += "><span id='help_"+destid+no+"' class='ihelp'></span>";
 	html += "</td>";
 	$("#"+destid).append($(html));
 	if (attr_help!=undefined && attr_help!="") {
@@ -523,7 +382,7 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			help_text = helps[langcode];  // lang1/lang2/...
 		}
 		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
-		$("#help_"+no).html(help);
+		$("#help_"+destid+no).html(help);
 		$(".popinfo").popover({ 
 		    placement : 'bottom',
 		    container : 'body',
@@ -533,44 +392,12 @@ function r_processCell(no,xmlDoc,destid,data,line)
 		    content: help_text
 		});
 	}
-	var children = $(">*",xmlDoc);
-	for (var i=0; i<children.length;i++){
-		var tagname = $(children[i])[0].tagName;
-		if (tagname=="for-each-person")
-			r_getUsers(no,children[i],'td_'+no,data,line);
-		if (tagname=="for-each-portfolio")
-			r_getPortfolios(no,children[i],'td_'+no,data,line);
-		if (tagname=="for-each-portfolios-nodes")
-			r_getPortfoliosNodes(no,children[i],'td_'+no,data,line);
-		if (tagname=="table")
-			r_processTable(no,children[i],'td_'+no,data,line);
-		if (tagname=="node_resource")
-			r_processNodeResource(children[i],'td_'+no,data,line);
-		if (tagname=="text")
-			r_processText(children[i],'td_'+no,data,line);
-		if (tagname=="url2unit")
-			r_processURL2Unit(children[i],'td_'+no,data,line);
-		if (tagname=="jsfunction")
-			r_processJSFunction(children[i],'td_'+no,data,line);
-		if (tagname=="draw-web-axis")
-			r_processWebAxis(children[i],'td_'+no,data,line);
-		if (tagname=="draw-web-line")
-			r_processWebLine(children[i],'td_'+no,data,line);
-		if (tagname=="aggregate")
-			r_processAggregate(children[i],'td_'+no,data,line);
-		if (tagname=="svg")
-			r_processSVG(no,children[i],'td_'+no,data,line);
-		if (tagname=="for-each-node")
-			r_processNode(no,children[i],'td_'+no,data,line);
-		if (tagname=="loop")
-			r_processLoop(no,children[i],'td_'+no,data,line);
-		if (tagname=="goparent")
-			r_processGoParent(no,children[i],'td_'+no,data,line);
-		if (tagname=="show-sharing")
-			r_processShowSharing('td_'+no);
-		if (tagname=="qrcode")
-			r_processQRcode(children[i],'td_'+no,data);
-	}
+	//---------------------------
+	var actions = $(action).children();
+	for (var i=0; i<actions.length;i++){
+		var tagname = $(actions[i])[0].tagName;
+		g_report_actions[tagname](destid+no,actions[i],i.toString(),data);
+	};
 }
 
 //=============================================================================
@@ -580,81 +407,49 @@ function r_processCell(no,xmlDoc,destid,data,line)
 //=============================================================================
 
 //==================================
-function r_getUsers(no,xmlDoc,destid,data,line)
+g_report_actions['for-each-person'] = function (destid,action,no,data)
 //==================================
 {
-	var ref_init = $(xmlDoc).attr("ref-init");
-	if (ref_init!=undefined) {
-		var ref_inits = ref_init.split("/"); // ref1/ref2/...
-		for (var i=0;i<ref_inits.length;i++)
-			aggregates[ref_inits[i]] = new Array();
-	}
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/users",
 		success : function(data) {
-			r_processUsers(no,xmlDoc,destid,data,line);
-		}
-	});
-}
-
-//==================================
-function r_processUsers(no,xmlDoc,destid,data,line)
-//==================================
-{
-	UIFactory["User"].parse(data);
-	var select = $(xmlDoc).attr("select");
-	var value = "";
-	if (select.indexOf("username=")>-1)
-		if (select.indexOf("'")>-1)
-			value = select.substring(10,select.length-1);  // inside quote
-		else
-			value = eval("json.lines["+line+"]."+select.substring(9));
-	var condition = false;
-	for ( var j = 0; j < UsersActive_list.length; j++) {
-		var username = UsersActive_list[j].username_node.text();
-		if (select.indexOf("username=")>-1) {
-			condition = username.indexOf(value)>-1;
-		}
-		//------------------------------------
-		if (condition){
-			userid = UsersActive_list[j].id;
-			var children = $(">*",xmlDoc);
-			for (var i=0; i<children.length;i++){
-				var tagname = $(children[i])[0].tagName;
-				if (tagname=="for-each-portfolio")
-					r_getPortfolios(no+"_"+j,children[i],destid,data,line);
-				if (tagname=="for-each-portfolios-nodes")
-					r_getPortfoliosNodes(no+"_"+j,children[i],destid,data,line);
-				if (tagname=="table")
-					r_processTable(no+"_"+j,children[i],destid,data,line);
-				if (tagname=="row")
-					r_processRow(no+"_"+j,children[i],destid,data,line);
-				if (tagname=="cell")
-					r_processCell(no+"_"+j,children[i],destid,data,line);
-				if (tagname=="node_resource")
-					r_processNodeResource(children[i],destid,data,line);
-				if (tagname=="jsfunction")
-					r_processJSFunction(children[i],destid,data,line);
-				if (tagname=="draw-web-axis")
-					r_processWebAxis(children[i],destid,data,line);
-				if (tagname=="draw-web-line")
-					r_processWebLine(children[i],destid,data,line);
-				if (tagname=="text")
-					r_processText(children[i],destid,data,line);
-				if (tagname=="for-each-node")
-					r_processNode(no+"_"+j,children[i],destid,data,line);
-				if (tagname=="loop")
-					r_processLoop(no+"_"+j,children[i],destid,data,line);
-				if (tagname=="csv-line")
-					r_processCsvLine(no+"_"+j,children[i],destid,data,line);
-				if (tagname=="csv-value")
-					r_processCsvValue(children[i],destid,data,line);
+			UIFactory["User"].parse(data);
+			var select = $(xmlDoc).attr("select");
+			var value = "";
+			if (select.indexOf("username=")>-1)
+				if (select.indexOf("'")>-1)
+					value = select.substring(10,select.length-1);  // inside quote
+				else
+					value = eval("json.lines["+line+"]."+select.substring(9));
+			var condition = false;
+			for ( var j = 0; j < UsersActive_list.length; j++) {
+				//------------------------------------
+				var ref_init = $(action).attr("ref-init");
+				if (ref_init!=undefined) {
+					var ref_inits = ref_init.split("/"); // ref1/ref2/...
+					for (var i=0;i<ref_inits.length;i++)
+						aggregates[ref_inits[i]] = new Array();
+				}
+				//------------------------------------
+				var username = UsersActive_list[j].username_node.text();
+				if (select.indexOf("username=")>-1) {
+					condition = username.indexOf(value)>-1;
+				}
+				//------------------------------------
+				if (condition){
+					userid = UsersActive_list[j].id;
+					var actions = $(action).children();
+					for (var i=0; i<actions.length;i++){
+						var tagname = $(actions[i])[0].tagName;
+						g_report_actions[tagname](destid,actions[i],no+i.toString(),userid);
+					};
+				}
+					//------------------------------------
 			}
 		}
-			//------------------------------------
-	}
+	});
 }
 
 //=============================================================================
@@ -664,10 +459,10 @@ function r_processUsers(no,xmlDoc,destid,data,line)
 //=============================================================================
 
 //==================================
-function r_getPortfolios(no,xmlDoc,destid,data,line)
+g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 //==================================
 {
-	var ref_init = $(xmlDoc).attr("ref-init");
+	var ref_init = $(action).attr("ref-init");
 	if (ref_init!=undefined) {
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
 		for (var i=0;i<ref_inits.length;i++)
@@ -680,161 +475,130 @@ function r_getPortfolios(no,xmlDoc,destid,data,line)
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&user="+userid,
 		success : function(data) {
-			r_processPortfolios(no,xmlDoc,destid,data,line);
-		}
-	});
-}
-
-//==================================
-function r_processPortfolios(no,xmlDoc,destid,data,line)
-//==================================
-{
-	UIFactory["Portfolio"].parse(data);
-	var select = $(xmlDoc).attr("select");
-	while (select.indexOf("##")>-1) {
-		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-		var variable_name = test_string.substring(0,test_string.indexOf("##"));
-		select = select.replace("##"+variable_name+"##", variables[variable_name]);
-	}
-	var value = "";
-	var condition = "";
-	var portfolioid = "";
-	//----------------------------------
-	var sortag = $(xmlDoc).attr("sortag");
-	var sortelt = $(xmlDoc).attr("sortelt");
-	var tableau = new Array();
-	var sortvalue = "";
-	if (sortag!=undefined && sortag!="") {
-		for ( var j = 0; j < portfolios_list.length; j++) {
-			portfolioid = portfolios_list[j].id;
-			var code = portfolios_list[j].code_node.text();
-			//------------------------------------
-			if (select.indexOf("code*=")>-1) {
-				if (select.indexOf("'")>-1)
-					value = select.substring(7,select.length-1);  // inside quote
-				else if (select.indexOf("//")>-1)
-					value = eval("json."+select.substring(8));
-				else
-					value = eval("json.lines["+line+"]."+select.substring(6));
-				condition = code.indexOf(value)>-1;
+			UIFactory["Portfolio"].parse(data);
+			var select = $(action).attr("select");
+			while (select.indexOf("##")>-1) {
+				var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+				var variable_name = test_string.substring(0,test_string.indexOf("##"));
+				select = select.replace("##"+variable_name+"##", variables[variable_name]);
 			}
-			if (select.indexOf("code=")>-1) {
-				if (select.indexOf("'")>-1)
-					value = select.substring(6,select.length-1);  // inside quote
-				else if (select.indexOf("//")>-1)
-					value = eval("json."+select.substring(7));
-				else
-					value = eval("json.lines["+line+"]."+select.substring(5));
-				condition = code==value;
-			}
-			if (select.length==0) {
-				condition = true;;
-			}
-			//------------------------------------
-			if (condition && sortag!=""){
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
-					success : function(data) {
-						var text = ";"
-						if (sortelt=='resource code') {
-							sortvalue = $("code",data)[0].text();
-						}
-						if (sortelt=='value') {
-							sortvalue = $("value",data)[0].text();
-						}
-						if (sortelt=='node label') {
-							sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
-						}
-						if (sortelt=='resource') {
-							sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
-						}
-						tableau[tableau.length] = [sortvalue,portfolioid];
+			var value = "";
+			var condition = "";
+			var portfolioid = "";
+			//----------------------------------
+			var sortag = $(action).attr("sortag");
+			var sortelt = $(action).attr("sortelt");
+			var tableau = new Array();
+			var sortvalue = "";
+			if (sortag!=undefined && sortag!="") {
+				for ( var j = 0; j < portfolios_list.length; j++) {
+					portfolioid = portfolios_list[j].id;
+					var code = portfolios_list[j].code_node.text();
+					//------------------------------------
+					if (select.indexOf("code*=")>-1) {
+						if (select.indexOf("'")>-1)
+							value = select.substring(7,select.length-1);  // inside quote
+						else if (select.indexOf("//")>-1)
+							value = eval("json."+select.substring(8));
+						else
+							value = eval("json.lines["+line+"]."+select.substring(6));
+						condition = code.indexOf(value)>-1;
 					}
-				});
-			}
-			//------------------------------------
-		}
-		var newTableau = tableau.sort(sortOn1);
-		for ( var i = 0; i < newTableau.length; i++) {
-			portfolios_list[i] = portfolios_byid[newTableau[i][1]]
-		}
-		portfolios_list.length = newTableau.length;
-	}
-	//----------------------------------
-	for ( var j = 0; j < portfolios_list.length; j++) {
-		var code = portfolios_list[j].code_node.text();
-		//------------------------------------
-		if (select.indexOf("code*=")>-1) {
-			if (select.indexOf("'")>-1)
-				value = select.substring(7,select.length-1);  // inside quote
-			else if (select.indexOf("//")>-1)
-				value = eval("json."+select.substring(8));
-			else
-				value = eval("json.lines["+line+"]."+select.substring(6));
-			condition = code.indexOf(value)>-1;
-		}
-		if (select.indexOf("code=")>-1) {
-			if (select.indexOf("'")>-1)
-				value = select.substring(6,select.length-1);  // inside quote
-			else if (select.indexOf("//")>-1)
-				value = eval("json."+select.substring(7));
-			else
-				value = eval("json.lines["+line+"]."+select.substring(5));
-			condition = code==value;
-		}
-		if (select.length==0) {
-			condition = true;;
-		}
-		//------------------------------------
-		if (condition){
-			portfolioid = portfolios_list[j].id;
-			portfolioid_current = portfolioid;
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				j : j,
-				url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
-				success : function(data) {
-					if (report_not_in_a_portfolio){
-						UICom.structure["tree"] = {};
-						UICom.structure["ui"] = {};
+					if (select.indexOf("code=")>-1) {
+						if (select.indexOf("'")>-1)
+							value = select.substring(6,select.length-1);  // inside quote
+						else if (select.indexOf("//")>-1)
+							value = eval("json."+select.substring(7));
+						else
+							value = eval("json.lines["+line+"]."+select.substring(5));
+						condition = code==value;
 					}
-					UICom.parseStructure(data,true, null, null,true);
-					var children = $(">*",xmlDoc);
-					for (var i=0; i<children.length;i++){
-						var tagname = $(children[i])[0].tagName;
-						if (tagname=="table")
-							r_processTable(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="row")
-							r_processRow(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="cell")
-							r_processCell(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="node_resource")
-							r_processNodeResource(children[i],destid,data,line);
-						if (tagname=="jsfunction")
-							r_processJSFunction(children[i],destid,data,line);
-						if (tagname=="text")
-							r_processText(children[i],destid,data,line);
-						if (tagname=="for-each-node")
-							r_processNode(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="loop")
-							r_processLoop(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="draw-web-axis")
-							r_processWebAxis(children[i],destid,data,line);
-						if (tagname=="draw-web-line")
-							r_processWebLine(children[i],destid,data,line);
-						if (tagname=="csv-line")
-							r_processCsvLine(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="csv-value")
-							r_processCsvValue(children[i],destid,data,line);
+					if (select.length==0) {
+						condition = true;;
 					}
+					//------------------------------------
+					if (condition && sortag!=""){
+						$.ajax({
+							type : "GET",
+							dataType : "xml",
+							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+							success : function(data) {
+								var text = ";"
+								if (sortelt=='resource code') {
+									sortvalue = $("code",data)[0].text();
+								}
+								if (sortelt=='value') {
+									sortvalue = $("value",data)[0].text();
+								}
+								if (sortelt=='node label') {
+									sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
+								}
+								if (sortelt=='resource') {
+									sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
+								}
+								tableau[tableau.length] = [sortvalue,portfolioid];
+							}
+						});
+					}
+					//------------------------------------
 				}
-			});
-		}
-			//------------------------------------
-	}
+				var newTableau = tableau.sort(sortOn1);
+				for ( var i = 0; i < newTableau.length; i++) {
+					portfolios_list[i] = portfolios_byid[newTableau[i][1]]
+				}
+				portfolios_list.length = newTableau.length;
+			}
+			//----------------------------------
+			for ( var j = 0; j < portfolios_list.length; j++) {
+				var code = portfolios_list[j].code_node.text();
+				//------------------------------------
+				if (select.indexOf("code*=")>-1) {
+					if (select.indexOf("'")>-1)
+						value = select.substring(7,select.length-1);  // inside quote
+					else if (select.indexOf("//")>-1)
+						value = eval("json."+select.substring(8));
+					else
+						value = eval("json.lines["+line+"]."+select.substring(6));
+					condition = code.indexOf(value)>-1;
+				}
+				if (select.indexOf("code=")>-1) {
+					if (select.indexOf("'")>-1)
+						value = select.substring(6,select.length-1);  // inside quote
+					else if (select.indexOf("//")>-1)
+						value = eval("json."+select.substring(7));
+					else
+						value = eval("json.lines["+line+"]."+select.substring(5));
+					condition = code==value;
+				}
+				if (select.length==0) {
+					condition = true;;
+				}
+				//------------------------------------
+				if (condition){
+					portfolioid = portfolios_list[j].id;
+					portfolioid_current = portfolioid;
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						j : j,
+						url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+						success : function(data) {
+							if (report_not_in_a_portfolio){
+								UICom.structure["tree"] = {};
+								UICom.structure["ui"] = {};
+							}
+							UICom.parseStructure(data,true, null, null,true);
+							var actions = $(action).children();
+							for (var i=0; i<actions.length;i++){
+								var tagname = $(actions[i])[0].tagName;
+								g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),data);
+							};
+						}
+					});
+				}
+					//------------------------------------
+			}		}
+	});
 }
 
 //=============================================================================
@@ -844,15 +608,10 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 //=============================================================================
 
 //==================================
-function r_getPortfoliosNodes(no,xmlDoc,destid,data,line)
+g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 //==================================
 {
-	var ref_init = $(xmlDoc).attr("ref-init");
-	if (ref_init!=undefined) {
-		var ref_inits = ref_init.split("/"); // ref1/ref2/...
-		for (var i=0;i<ref_inits.length;i++)
-			aggregates[ref_inits[i]] = new Array();
-	}
+	var userid = data;
 	if (userid==null)
 		userid = USER.id;
 	$.ajax({
@@ -860,134 +619,181 @@ function r_getPortfoliosNodes(no,xmlDoc,destid,data,line)
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&user="+userid,
 		success : function(data) {
-			r_processPortfoliosNodes(no,xmlDoc,destid,data,line);
+			UIFactory["Portfolio"].parse(data);
+			var select = $(action).attr("select");
+			var value = "";
+			var condition = "";
+			var portfolioid = "";
+			//----------------------------------
+			var nodetag = $(action).attr("nodetag");
+			var sortag = $(action).attr("sortag");
+			var sortelt = $(xmlDoc).attr("sortelt");
+			var tableau = new Array();
+			var sortvalue = "";
+			if (sortag!=undefined && sortag!="") {
+				for ( var j = 0; j < portfolios_list.length; j++) {
+					portfolioid = portfolios_list[j].id;
+					var code = portfolios_list[j].code_node.text();
+					if (select.indexOf("code*=")>-1) {
+						if (select.indexOf("'")>-1)
+							value = select.substring(7,select.length-1);  // inside quote
+						else
+							value = eval("json.lines["+line+"]."+select.substring(6));
+						condition = code.indexOf(value)>-1;
+					}
+					if (select.indexOf("code=")>-1) {
+						if (select.indexOf("'")>-1)
+							value = select.substring(6,select.length-1);  // inside quote
+						else
+							value = eval("json.lines["+line+"]."+select.substring(5));
+						condition = code==value;
+					}
+					//------------------------------------
+					if (condition && sortag!=""){
+						$.ajax({
+							type : "GET",
+							dataType : "xml",
+							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
+							success : function(data) {
+								var text = ";"
+								if (sortelt=='resource code') {
+									sortvalue = $("code",data)[0].text();
+								}
+								if (sortelt=='value') {
+									sortvalue = $("value",data)[0].text();
+								}
+								if (sortelt=='node label') {
+									sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
+								}
+								if (sortelt=='resource') {
+									sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
+								}
+								tableau[tableau.length] = [sortvalue,portfolioid];
+							}
+						});
+					}
+					//------------------------------------
+				}
+				var newTableau = tableau.sort(sortOn1);
+				for ( var i = 0; i < newTableau.length; i++) {
+					portfolios_list[i] = portfolios_byid[newTableau[i][1]]
+				}
+				portfolios_list.length = newTableau.length;
+			}
+			//----------------------------------
+			for ( var j = 0; j < portfolios_list.length; j++) {
+				//------------------------------------
+				var code = portfolios_list[j].code_node.text();
+				if (select.indexOf("code*=")>-1) {
+					value = select.substring(7,select.length-1);  // inside quote
+					condition = code.indexOf(value)>-1;
+				}
+				if (select.indexOf("code=")>-1) {
+					value = select.substring(6,select.length-1);  // inside quote
+					condition = code==value;
+				}
+				if (select.length==0) {
+					condition = true;;
+				}
+				//------------------------------------
+				if (condition){
+					//--------------------------------
+					var ref_init = $(action).attr("ref-init");
+					if (ref_init!=undefined) {
+						var ref_inits = ref_init.split("/"); // ref1/ref2/...
+						for (var i=0;i<ref_inits.length;i++)
+							aggregates[ref_inits[i]] = new Array();
+					}
+					//--------------------------------
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						j : j,
+						url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+nodetag,
+						success : function(data) {
+							//-----------------------------
+							UICom.structure["tree"] = {};
+							UICom.structure["ui"] = {};
+							UICom.parseStructure(data,true, null, null,true);
+							//-----------------------------
+							var actions = $(action).children();
+							for (var i=0; i<actions.length;i++){
+								var tagname = $(actions[i])[0].tagName;
+								g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),data);
+							};
+							//-----------------------------
+						}
+					});
+				}
+			}
 		}
 	});
 }
 
+//=============================================================================
+//============================= USER ==========================================
+//======================  username firstname lastname =========================
+//=============================firstname-lastname==============================
+//=============================================================================
+
 //==================================
-function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
+g_report_actions['username'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
-	UIFactory["Portfolio"].parse(data);
-	var select = $(xmlDoc).attr("select");
-	var value = "";
-	var condition = "";
-	var portfolioid = "";
-	//----------------------------------
-	var nodetag = $(xmlDoc).attr("nodetag");
-	var sortag = $(xmlDoc).attr("sortag");
-	var sortelt = $(xmlDoc).attr("sortelt");
-	var tableau = new Array();
-	var sortvalue = "";
-	if (sortag!=undefined && sortag!="") {
-		for ( var j = 0; j < portfolios_list.length; j++) {
-			portfolioid = portfolios_list[j].id;
-			var code = portfolios_list[j].code_node.text();
-			if (select.indexOf("code*=")>-1) {
-				if (select.indexOf("'")>-1)
-					value = select.substring(7,select.length-1);  // inside quote
-				else
-					value = eval("json.lines["+line+"]."+select.substring(6));
-				condition = code.indexOf(value)>-1;
-			}
-			if (select.indexOf("code=")>-1) {
-				if (select.indexOf("'")>-1)
-					value = select.substring(6,select.length-1);  // inside quote
-				else
-					value = eval("json.lines["+line+"]."+select.substring(5));
-				condition = code==value;
-			}
-			//------------------------------------
-			if (condition && sortag!=""){
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
-					success : function(data) {
-						var text = ";"
-						if (sortelt=='resource code') {
-							sortvalue = $("code",data)[0].text();
-						}
-						if (sortelt=='value') {
-							sortvalue = $("value",data)[0].text();
-						}
-						if (sortelt=='node label') {
-							sortvalue = $("label[lang='"+languages[LANGCODE]+"']",data)[0].text();
-						}
-						if (sortelt=='resource') {
-							sortvalue = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data)).text();
-						}
-						tableau[tableau.length] = [sortvalue,portfolioid];
-					}
-				});
-			}
-			//------------------------------------
-		}
-		var newTableau = tableau.sort(sortOn1);
-		for ( var i = 0; i < newTableau.length; i++) {
-			portfolios_list[i] = portfolios_byid[newTableau[i][1]]
-		}
-		portfolios_list.length = newTableau.length;
+	var text = USER.username;
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
 	}
-	//----------------------------------
-	for ( var j = 0; j < portfolios_list.length; j++) {
-		var code = portfolios_list[j].code_node.text();
-//		alertHTML(j+"-"+code);
-		if (select.indexOf("code*=")>-1) {
-			value = select.substring(7,select.length-1);  // inside quote
-			condition = code.indexOf(value)>-1;
-		}
-		if (select.indexOf("code=")>-1) {
-			value = select.substring(6,select.length-1);  // inside quote
-			condition = code==value;
-		}
-		if (select.length==0) {
-			condition = true;;
-		}
-		//------------------------------------
-		if (condition){
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				j : j,
-				url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+nodetag,
-				success : function(data) {
-					UICom.structure["tree"] = {};
-					UICom.structure["ui"] = {};
-					UICom.parseStructure(data,true, null, null,true);
-					var children = $(">*",xmlDoc);
-					for (var i=0; i<children.length;i++){
-						var tagname = $(children[i])[0].tagName;
-						if (tagname=="table")
-							r_processTable(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="row")
-							r_processRow(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="cell")
-							r_processCell(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="node_resource")
-							r_processNodeResource(children[i],destid,data,line);
-						if (tagname=="jsfunction")
-							r_processJSFunction(children[i],destid,data,line);
-						if (tagname=="text")
-							r_processText(children[i],destid,data,line);
-						if (tagname=="for-each-node")
-							r_processNode(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="loop")
-							r_processLoop(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="draw-web-axis")
-							r_processWebAxis(children[i],destid,data,line);
-						if (tagname=="draw-web-line")
-							r_processWebLine(children[i],destid,data,line);
-						if (tagname=="csv-line")
-							r_processCsvLine(no+"p_"+this.j+"_"+i,children[i],destid,data,line);
-						if (tagname=="csv-value")
-							r_processCsvValue(children[i],destid,data,line);
-					}
-				}
-			});
-		}
-			//------------------------------------
+}
+
+//==================================
+g_report_actions['firstname'] = function (destid,action,no,data,is_out_csv)
+//==================================
+{
+	var text = USER.firstname;
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+}
+
+//==================================
+g_report_actions['lastname'] = function (destid,action,no,data,is_out_csv)
+//==================================
+{
+	var text = USER.lastname;
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+}
+
+//==================================
+g_report_actions['first-lastname'] = function (destid,action,no,data,is_out_csv)
+//==================================
+{
+	var text1 = USER.firstname;
+	var text2 = USER.lastname;
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text1 +"-" + text2 + csvseparator;		
+	} else {
+		var text = "<span id='"+destid+no+"'>"+text1 + "&nbsp" +text2 + "</span>";
+		$("#"+destid).append($(text));		
 	}
 }
 
@@ -998,7 +804,7 @@ function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
 //=============================================================================
 
 //==================================
-function r_processNodeResource(xmlDoc,destid,data)
+g_report_actions['node_resource'] = function (destid,action,no,data)
 //==================================
 {
 	var text = "";
@@ -1006,11 +812,11 @@ function r_processNodeResource(xmlDoc,destid,data)
 	var attr_help = "";
 	var prefix_id = "";
 	try {
-		var select = $(xmlDoc).attr("select");
-		var ref = $(xmlDoc).attr("ref");
-		var editresroles = $(xmlDoc).attr("editresroles");
-		var delnoderoles = $(xmlDoc).attr("delnoderoles");
-		style = $(xmlDoc).attr("style");
+		var select = $(action).attr("select");
+		var ref = $(action).attr("ref");
+		var editresroles = $(action).attr("editresroles");
+		var delnoderoles = $(action).attr("delnoderoles");
+		style = $(action).attr("style");
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
 		if (node.length==0) // try the node itself
@@ -1100,41 +906,18 @@ function r_processNodeResource(xmlDoc,destid,data)
 	if ($("#report_display_editor_"+nodeid).length>0) {
 		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
 	}
-	if (refresh && $("#dashboard_"+prefix_id+nodeid).length>0) {
+	if (report_refresh && $("#dashboard_"+prefix_id+nodeid).length>0) {
 		$("#dashboard_"+prefix_id+nodeid).on('DOMSubtreeModified',function (){
 			refresh_report(dashboard_current);
 		});
 	}
-	if (refresh && $("#report_get_editor_"+nodeid).length>0) {
+	if (report_refresh && $("#report_get_editor_"+nodeid).length>0) {
 		$("#report_get_editor_"+nodeid).append(UICom.structure["ui"][nodeid].resource.getEditor());
 		var input = $('input',$("#report_get_editor_"+nodeid));
 		$(input).change(function (){
 			refresh_report(dashboard_current);
 		});
 	}
-	//--------------------help------------------------------------------
-/*	if (attr_help!=undefined && attr_help!="") {
-		var help_text = "";
-		var helps = attr_help.split("//"); // lang1/lang2/...
-		if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
-			for (var j=0; j<helps.length; j++){
-				if (helps[j].indexOf("@"+languages[LANGCODE])>-1)
-					help_text = helps[j].substring(0,helps[j].indexOf("@"));
-			}
-		} else { // lang1/lang2/...
-			help_text = helps[langcode];  // lang1/lang2/...
-		}
-		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
-		$("#reshelp_"+nodeid).html(help);
-		$(".popinfo").popover({ 
-		    placement : 'right',
-		    container : 'body',
-		    title:karutaStr[LANG]['help-label'],
-		    html : true,
-		    trigger:'click hover',
-		    content: help_text
-		});
-	} */
 }
 
 //=============================================================================
@@ -1182,79 +965,6 @@ function r_processCsvLine(no,xmlDoc,destid,data,line)
 		success : function() {
 		}
 	}); 
-}
-
-//==================================
-function r_processAddusername(is_out_csv,destid,data)
-//==================================
-{
-	var text = USER.username;
-	//-----------------
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	} else {
-		var nodeid = $(data).attr("id");
-		text = "<span id='"+nodeid+"'>"+text+"</span>";
-		$("#"+destid).append($(text));		
-	}
-	//-----------------
-}
-
-//==================================
-function r_processAddfirstname(is_out_csv,destid,data)
-//==================================
-{
-	var text = USER.firstname;
-	//-----------------
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	} else {
-		var nodeid = $(data).attr("id");
-		text = "<span id='"+nodeid+"'>"+text+"</span>";
-		$("#"+destid).append($(text));		
-	}
-	//-----------------
-}
-
-//==================================
-function r_processAddlastname(is_out_csv,destid,data)
-//==================================
-{
-	var text = USER.lastname;
-	//-----------------
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	} else {
-		var nodeid = $(data).attr("id");
-		text = "<span id='"+nodeid+"'>"+text+"</span>";
-		$("#"+destid).append($(text));		
-	}
-	//-----------------
-}
-
-//==================================
-function r_processAddfirstname_lastname(is_out_csv,destid,data)
-//==================================
-{
-	var text1 = USER.firstname;
-	var text2 = USER.lastname;
-	//-----------------
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text1 +"-" + text2 + csvseparator;		
-	} else {
-		var nodeid = $(data).attr("id");
-		var text = "<span id='"+nodeid+"'>"+text1 + "&nbsp" +text2 + "</span>";
-		$("#"+destid).append($(text));		
-	}
-	//-----------------
 }
 
 
@@ -1321,7 +1031,7 @@ function r_processCsvValue(xmlDoc,destid,data)
 //=============================================================================
 
 //==================================
-function r_processQRcode(xmlDoc,destid,data)
+g_report_actions['qrcode'] = function (destid,action,no,data)
 //==================================
 {
 	var text = "";
@@ -1333,7 +1043,7 @@ function r_processQRcode(xmlDoc,destid,data)
 		if (node.length>0 || select.substring(0,1)=="."){
 			var nodeid = $(node).attr("id");
 			//----------------------------
-			var url = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			var url = UICom.structure["ui"][nodeid].resource.getView(null,null,null,true);
 			text = "<img src=\""+url+"\">";
 		}
 	} catch(e){
@@ -1350,36 +1060,37 @@ function r_processQRcode(xmlDoc,destid,data)
 //=============================================================================
 
 //==================================
-function r_processEuropass(xmlDoc,destid,data)
+g_report_actions['europass'] = function (destid,action,no,data)
 //==================================
 {
 	var style = "";
 	var attr_help = "";
-//	try {
-		var selector = r_getSelector('asmUnitStructure.EuropassL','');
-		var node = $(selector.jquery,data);
-		if (node.length>0 || select.substring(0,1)=="."){
-			var nodeid = $(node).attr("id");
-			var text = "<table id='europass' style='width:100%;margin-top:30px;'></table>";
-			$("#"+destid).append($(text));
-			var europass_node = UICom.structure["ui"][nodeid];
-			//----------------------------
-			europass_node.structured_resource.displayView("europass",null,'report',nodeid,null,false);
-		}
-//	} catch(e){
-//		text = "<span id='dashboard_"+nodeid+"'>&mdash;</span>";
-//	}
-	//------------------------------
+	var selector = r_getSelector('asmUnitStructure.EuropassL','');
+	var node = $(selector.jquery,data);
+	if (node.length>0 || select.substring(0,1)=="."){
+		var nodeid = $(node).attr("id");
+		var text = "<table id='"+destid+"europass' style='width:100%;margin-top:30px;'></table>";
+		$("#"+destid).append($(text));
+		var europass_node = UICom.structure["ui"][nodeid];
+		//----------------------------
+		europass_node.structured_resource.displayView(destid+"europass",null,'report',nodeid,null,false);
+	}
 }
 
+//=============================================================================
+//=============================================================================
+//========================== TEXT =============================================
+//=============================================================================
+//=============================================================================
+
 //==================================
-function r_processText(xmlDoc,destid,data,line,is_out_csv)
+g_report_actions['text'] = function (destid,action,no,data)
 //==================================
 {
 	var nodeid = $(data).attr("id");
-	var text = $(xmlDoc).text();
-	var style = $(xmlDoc).attr("style");
-	var ref = $(xmlDoc).attr("ref");
+	var text = $(action).text();
+	var style = $(action).attr("style");
+	var ref = $(action).attr("ref");
 	if (ref!=undefined && ref!="") {
 		if (aggregates[ref]==undefined)
 			aggregates[ref] = new Array();
@@ -1392,37 +1103,41 @@ function r_processText(xmlDoc,destid,data,line,is_out_csv)
 		csvline += text + csvseparator;		
 	}
 	//-----------------
-	text = "<span id='"+nodeid+"'>"+text+"</span>";
+	text = "<span id='txt"+nodeid+"' style='"+style+"'>"+text+"</span>";
 	$("#"+destid).append($(text));
-	$("#"+nodeid,$("#"+destid)).attr("style",style);
 }
 
-//==================================
-function refresh_report(dashboard_current)
-//==================================
-{
-	$("#"+dashboard_current).html("");
-	r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
-	$('[data-tooltip="true"]').tooltip();
-}
+//=============================================================================
+//=============================================================================
+//====================== JSFUNCTION ===========================================
+//=============================================================================
+//=============================================================================
+
 
 //==================================
-function r_processJSFunction(xmlDoc,destid,data)
+g_report_actions['jsfunction'] = function (destid,action,no,data)
 //==================================
 {
-	var jsfunction = $(xmlDoc).attr("function");
+	var jsfunction = $(action).attr("function");
 	eval (jsfunction);
+	// ???????
 }
 
+//=============================================================================
+//=============================================================================
+//======================== URL2UNIT ===========================================
+//=============================================================================
+//=============================================================================
+
 //==================================
-function r_processURL2Unit(xmlDoc,destid,data)
+g_report_actions['url2unit'] = function (destid,action,no,data)
 //==================================
 {
 	var nodeid = $(data).attr("id");
 	var targetid = "";
 	var text = "";
-	var style = $(xmlDoc).attr("style");
-	var select = $(xmlDoc).attr("select");
+	var style = $(action).attr("style");
+	var select = $(action).attr("select");
 	var selector = r_getSelector(select);
 	var node = $(selector.jquery,data);
 	if (node.length==0) // try the node itself
@@ -1434,19 +1149,25 @@ function r_processURL2Unit(xmlDoc,destid,data)
 		targetid = UICom.structure["ui"][nodeid].getUuid();
 		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
 	}
-	text = "<span id='"+nodeid+"' class='report-url2unit' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
+	text = "<span id='"+nodeid+"' style='"+style+"' class='report-url2unit' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
 }
 
+//=============================================================================
+//=============================================================================
+//======================== AGGREGATE ==========================================
+//=============================================================================
+//=============================================================================
+
 //==================================
-function r_processAggregate(aggregate,destid)
+g_report_actions['aggregate'] = function (destid,action,no,data)
 //==================================
 {
-	var style = $(xmlDoc).attr("style");
-	var ref = $(aggregate).attr("ref");
-	var type = $(aggregate).attr("type");
-	var select = $(aggregate).attr("select");
+	var style = $(action).attr("style");
+	var ref = $(action).attr("ref");
+	var type = $(action).attr("type");
+	var select = $(action).attr("select");
 	var text = "";
 	if (type=="sum" && aggregates[select]!=undefined){
 		var sum = 0;
@@ -1474,14 +1195,23 @@ function r_processAggregate(aggregate,destid)
 	}
 	if (!$.isNumeric(text))
 		text="";
-	text = "<span>"+text+"</span>";
+	text = "<span style='"+style+"'>"+text+"</span>";
 	$("#"+destid).append($(text));
-	$("#"+destid).attr("style",style);
 }
+
 //===============================================================
 //===============================================================
 //===============================================================
 //===============================================================
+
+//==================================
+function refresh_report(dashboard_current)
+//==================================
+{
+	$("#"+dashboard_current).html("");
+	r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
+	$('[data-tooltip="true"]').tooltip();
+}
 
 //==================================
 function report_processCode()
@@ -1527,6 +1257,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 function report_getModelAndProcess(model_code,json)
 //==================================
+/// csv +report
 {
 	$('#wait-window').show();
 	$.ajax({
@@ -1710,7 +1441,7 @@ function genDashboardContent(destid,uuid,parent,root_node)
 		model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
 	}
 	if (model_code.indexOf("@norefresh")>-1){
-		refresh = false;
+		report_refresh = false;
 		model_code = removeStr(model_code,"@norefresh");
 	}
 	if (model_code.indexOf("@nospinning")>-1){
@@ -1738,6 +1469,7 @@ function genDashboardContent(destid,uuid,parent,root_node)
 //======================= SVG =============================================
 //=========================================================================
 //=========================================================================
+
 
 var svgfontname = 'Arial';
 var svgfontsize = 16;
@@ -1816,6 +1548,24 @@ function drawLine(destid,value1,angle1,value2,angle2,center,cssclass){
 	var point2 = svgrotate(center, svgaxislength-value2, center.y, angle2);
 	var line = makeSVG('line',{'x1':point1.x,'y1':point1.y,'x2':point2.x,'y2':point2.y,'class':cssclass});
 	document.getElementById(destid).appendChild(line);
+}
+
+
+//==================================
+g_report_actions['svg'] = function (destid,action,no,data)
+//==================================
+{
+	var min_height = $(action).attr("min-height");
+	var min_width = $(action).attr("min-width");
+	var html = "<svg id='"+destid+no+"' min-width='"+min_width+"' min-height='"+min_height+"' viewbox='0 0 1000 1000'></svg>";
+	var svg = $(html);
+	$("#"+destid).append(svg);
+	//----------------------------------
+	var actions = $(action).children();
+	for (var i=0; i<actions.length;i++){
+		var tagname = $(actions[i])[0].tagName;
+		g_report_actions[tagname](destid+no,actions[i],i.toString(),data)
+	}
 }
 
 //==================================
