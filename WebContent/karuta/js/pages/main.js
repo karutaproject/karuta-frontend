@@ -11,6 +11,7 @@ function show_main_page(rootid,role)
 	$("body").removeClass();
 	$("body").addClass("main-page")
 	$("#main-page").html("");
+	$("#main-page").attr('role',g_userroles[0]);
 	$("#main-page").show();
 	$("#refresh").hide();
 }
@@ -100,10 +101,9 @@ function fill_main_page(rootid,role)
 			}
 			// --------CSS Text------------------
 			var csstext = $("metadata-wad[csstext]",data).attr('csstext');
+			$("#csstext").remove();
 			if (csstext!=undefined && csstext!=''){
 				$("<style id='csstext'>"+csstext+"</style>").appendTo('head');
-			} else {
-				$("#csstext").remove();
 			}
 			// --------------------------
 			UICom.parseStructure(data,true);
@@ -217,8 +217,7 @@ function fill_main_page(rootid,role)
 					break;
 			};
 		}
-});
-	$(".free-toolbar").css('visibility')=='hidden';
+	});
 }
 
 //==============================

@@ -36,11 +36,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 	padding-right:10px;
 }
 
-.asmRoot .row-node-asmStructure .title-subline,
-.asmStructure .asmStructure .row-node-asmStructure .title-subline,
-.asmStructure .row-node-asmUnit  .title-subline{
-	border-bottom:0px solid white;
-}
 
 .createreport .button,
 .collapsible .glyphicon,
@@ -70,12 +65,59 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 	background-color:@main-background-color;
 }
 
+
+
+/* ====================== */
+/*      SIDEBAR            */
+/* ====================== */
+
 /*
- * -----------------------
- * ------ sidebar --------
- * -----------------------
- */
-.sidebar-link {
+.panel-default > .panel-heading {
+	background-color:transparent;
+}
+
+.panel-default,
+.panel-default > .panel-heading {
+	border-color:transparent;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0);
+	padding-left:0px;
+	padding-top:0px;
+	padding-bottom:0px;
+}
+
+.panel-body{
+	padding-top:0px;
+	padding-bottom:0px;
+}
+*/
+
+
+
+#sidebar-content {
+	padding-top:15px;
+	min-height: 100%;
+	padding-left:0px;
+	padding-right:0px
+  }
+
+.sidebar-item a {
+	width:100%;
+}
+
+.selected a {
+	font-weight:bold;
+}
+
+.sidebar-item {
+	padding-left:15px;
+	padding-top:8px;
+	padding-bottom:8px;
+}
+.sidebar-item .sidebar-item {
+	padding-top:5px;
+	padding-bottom:5px;
+	
+}.sidebar-link {
 	color:@portfolio-sidebar-link-color;
 }
 .sidebar-link a {
@@ -98,6 +140,27 @@ a.sidebar-link:hover {
 
 .sidebar-item {
 	border-bottom:1px solid @portfolio-sidebar-separator-color;
+}
+
+#sidebar li.selected ul.nested {
+	display: block;
+}
+#sidebar li.selected ul.nested li.selected a {
+	background-image: none;
+	color: #000;
+}
+#sidebar li.nested {
+	text-indent: 15px;
+}
+#sidebar .number {
+	color: #aaa;
+	float: right;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+.sidebar-link {
+	padding-right:9px;
 }
 
 /*
@@ -163,10 +226,7 @@ a.sidebar-link:hover {
 	border-bottom:1px solid @welcome-line-color;
 }
 
-.welcome-line,
-.row-node-asmRoot,
-.row-node-asmStructure,
-.row-node-asmUnit {
+.welcome-line {
 	background-color:@page-title-background-color;
 }
 
@@ -174,43 +234,119 @@ a.sidebar-link:hover {
 	border-top:1px solid @page-title-background-color;
 }
 
-.row-node-asmRoot .title-subline,
-.row-node-asmStructure .title-subline,
-.row-node-asmUnit .title-subline {
-	border-bottom:1px solid @page-title-subline-color;
-}
-
-
 
 a {
 	color:@portfolio-link-color;
 }
 
-.row-node-asmUnitStructure {
-	background:@portfolio-section-title-background-color;
-}
 
 .toomuch {
 	color:red;
 }
+/* ====================== */
+/*     SECTION TITLES     */
+/* ====================== */
 
-/* ========================= */
-/*     NODE STANDARD     */
-/* ========================= */
-
-#contenu .node-standard .node:first-child {
-	background-color:@page-title-background-color;
-	min-height:100px;
+.asmRoot .title {
+	font-size: 24px;
+	line-height: 30px;
 }
 
-#contenu .node-standard .node-standard .node {
+
+.asmStructure .title {
+	font-size: 24px;
+	line-height: 30px;
+}
+
+.asmStructure .asmStructure .title,
+.asmRoot .asmStructure .title {
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.asmUnit .title {
+	font-size: 24px;
+	line-height: 30px;
+}
+
+.asmStructure .asmUnit .title,
+.asmRoot .asmUnit .title {
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 20px;
+}
+
+.asmUnitStructure .title {
+	font-size: 20px;
+	line-height: 20px;
+}
+
+.asmUnitStructure .asmUnitStructure .title {
+	font-size: 16px;
+	line-height: 20px;
+}
+
+.asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+	font-size: 12px;
+	line-height: 20px;
+}
+
+.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .asmContext .title,
+.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmContext .title,
+.asmUnitStructure .asmUnitStructure .asmContext .title,
+.asmUnitStructure .asmContext .title,
+.asmContext .title {
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 16px;
+}
+
+/* ========================= */
+/*     VUE  STANDARD         */
+/* ========================= */
+
+/*  --- struct --- */
+.content .struct-standard .title-subline {
+	border-bottom:0px solid @page-title-subline-color;
+	margin-top:0px;
+}
+
+.struct-standard .title {
+	font-size:16px;
+}
+
+/*  --- node --- */
+
+.first-node {
+	background-color:@page-title-background-color;
+	min-height:100px;
+	margin-bottom:10px;
+}
+
+.first-node .title-subline {
+	border-bottom:1px solid @page-title-subline-color;
+	margin-top:10px;
+	width:50px;
+}
+.node-standard .node-standard .node {
 	background-color:inherit;
 	min-height:inherit;
 }
 
-/* ========================= */
-/*     RESOURCE STANDARD     */
-/* ========================= */
+
+
+/*  --- resource --- */
+
+.content .resource-standard .title-subline {
+	border-bottom:0px solid @page-title-subline-color;
+	margin-top:0px;
+}
+
 .inside-full {
 	padding:7px;
 	margin-top: 0;
@@ -263,7 +399,35 @@ a {
 	margin-left:0px;
 }
 
-/* ============================================================ */
+.standard-resource-Image-Img-Label div[name=res-div]{
+	text-align : center;
+	position:relative;
+}
+
+.standard-resource-Image-Img-Label .node-label {
+	margin : 5px;
+	padding : 20px;
+	background-color : black;
+	opacity : 0.6;
+}
+.standard-resource-Image-Img-Label .title {
+	font-size : inherit;
+}
+
+
+.standard-resource-Image-Img-Label div[name=lbl-div]{
+	position :relative;
+	width:fit-content;
+	top : -100px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+
+/* ============================ */
+/* ============================ */
+/* ============================ */
+/* ============================ */
 a, .collapsible {
 	cursor:pointer;
 }
@@ -295,39 +459,6 @@ a, .collapsible {
 	font-size: 14px;
 }
 
-.row-node-asmRoot,
-.row-node-asmStructure,
-.row-node-asmUnit {
-	min-height:100px;
-}
-
-.asmRoot .row-node-asmStructure,
-.asmRoot .row-node-asmUnit,
-.asmStructure .asmStructure .row-node-asmStructure,
-.asmStructure .row-node-asmUnit {
-	background-color:inherit;
-	min-height:0px;
-}
-
-.asmRoot .row-node-asmStructure .node-label,
-.asmRoot .row-node-asmUnit .node-label,
-.asmStructure .asmStructure .row-node-asmStructure .node-label,
-.asmStructure .row-node-asmUnit  .node-label{
-	font-size:16px;
-}
-
-.row-node-asmRoot .title-subline,
-.row-node-asmStructure .title-subline,
-.row-node-asmUnit .title-subline {
-	margin-top:10px;
-	width:50px;
-}
-
-.asmRoot .row-node-asmStructure .title-subline,
-.asmStructure .asmStructure .row-node-asmStructure .title-subline,
-.asmStructure .row-node-asmUnit  .title-subline{
-	margin-top:0px;
-}
 
 .toggle-content .glyphicon {
 	font-size:12px;
@@ -348,6 +479,11 @@ a, .collapsible {
 /* ====================== */
 /*     ROME               */
 /* ====================== */
+
+.ROME {
+	height: 300px;
+	overflow-y: scroll;
+}
 
 .select-rome .select-label {
 	margin-bottom:3px;
@@ -682,63 +818,7 @@ a, .collapsible {
 /* ============================================================ */
 
 
-/* ====================== */
-/*      SIDEBAR            */
-/* ====================== */
 
-
-.panel-default > .panel-heading {
-	background-color:transparent;
-}
-
-.panel-default,
-.panel-default > .panel-heading {
-	border-color:transparent;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0);
-	padding-left:0px;
-	padding-top:0px;
-	padding-bottom:0px;
-}
-
-.panel-body{
-	padding-top:0px;
-	padding-bottom:0px;
-}
-
-.well{
-	background-color:transparent;
-}
-
-.link-unit{
-	padding-top:4px;
-	padding-bottom:5px;
-	padding-left:1px;
-}
-
-#sidebar-content {
-	padding-top:15px;
-	min-height: 100%;
-	padding-left:0px;
-	padding-right:0px
-  }
-
-.sidebar-item a {
-	width:100%;
-}
-
-.selected a {
-	font-weight:bold;
-}
-
-.sidebar-item {
-	padding-left:15px;
-	padding-top:8px;
-	padding-bottom:8px;
-}
-.sidebar-item .sidebar-item {
-	padding-top:5px;
-	padding-bottom:5px;
-}
 
 .page-welcome .welcome-title {
 	text-align:center;
@@ -827,9 +907,6 @@ a, .collapsible {
 }
 /* ============================================== */
 
-.sidebar-link {
-	padding-right:9px;
-}
 
 /* --- buton are redefined to use with Ipad and solve size errors */
 .btn-xs [class*="icon-"] {
@@ -866,14 +943,14 @@ a.btn {
 	height: 18px;
 	background: green;
 }
-/* --------------------------*/
+/* ---------------
 
 #file-loader {
     border: 0 none;
     height: 80px;
     padding: 0;
 }
-
+-----------*/
 hr {
 	margin-bottom: 7px;
 	margin-top: 5px;
@@ -881,69 +958,7 @@ hr {
 
 
 
-/* ====================== */
-/*     SECTION TITLES     */
-/* ====================== */
 
-.asmRoot .title {
-	font-size: 24px;
-	line-height: 30px;
-}
-
-
-.asmStructure .title {
-	font-size: 24px;
-	line-height: 30px;
-}
-
-.asmStructure .asmStructure .title,
-.asmRoot .asmStructure .title {
-	font-size: 12px;
-	font-weight: normal;
-	line-height: 20px;
-}
-
-.asmUnit .title {
-	font-size: 24px;
-	line-height: 30px;
-}
-
-.asmStructure .asmUnit .title,
-.asmRoot .asmUnit .title {
-	font-size: 12px;
-	font-weight: normal;
-	line-height: 20px;
-}
-
-.asmUnitStructure .title {
-	font-size: 20px;
-	line-height: 20px;
-}
-
-.asmUnitStructure .asmUnitStructure .title {
-	font-size: 16px;
-	line-height: 20px;
-}
-
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-	font-size: 14px;
-	line-height: 20px;
-}
-
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-	font-size: 12px;
-	line-height: 20px;
-}
-
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .asmContext .title,
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmContext .title,
-.asmUnitStructure .asmUnitStructure .asmContext .title,
-.asmUnitStructure .asmContext .title,
-.asmContext .title {
-	font-size: 12px;
-	font-weight: normal;
-	line-height: 16px;
-}
 
 /* ==================================================== */
 #contenu .row{
@@ -981,6 +996,19 @@ hr {
 	padding-bottom:6px;
 }
 
+.button{
+	font-size: 12px;
+	padding: 5px;
+	cursor:pointer;
+	display: inline-block;
+	white-space:nowrap;
+}
+
+.drop-down-menu{
+	border:1px solid gray;
+}
+
+/*-------- block backward compatibility ----------------- */
 
 .row-node{
 	padding-top:15px;
@@ -999,20 +1027,10 @@ hr {
 	padding-right:0px;
 }
 
+/*-------------------------------------------- */
 
 
-.button{
-	font-size: 12px;
-	padding: 5px;
-	cursor:pointer;
-	display: inline-block;
-	white-space:nowrap;
-}
-
-.drop-down-menu{
-	border:1px solid gray;
-}
-
+/* --
 .text-editor {
 	background-color: white;
 	border: 1px solid rgb(204, 204, 204); 
@@ -1033,7 +1051,7 @@ hr {
 .asmUnit .content .row-node{
 	min-height:50px;
 }
-
+----*/
 
 .toggle-content {
 	cursor:pointer;
@@ -1060,26 +1078,6 @@ tr.item {
 }
 
 
-button.delete-portfolio {
-	margin-top:5px;
-}
-
-/* -------------------------------------------------- */
-/* --------------old WAD css    --------------------- */
-/* -------------------------------------------------- */
-
-
-
-/* -------------------------------------------------- */
-/* Container */
-
-body {
-	font-size: 12px;
-}
-
-#content .texte{
-	text-align:justify;
-}
 
 /* -------------------------------------------------- */
 /* Container */
@@ -1093,79 +1091,11 @@ textarea {
 	height:200px;
 }
 
-/* -------------------------------------------------- */
-/* Main Nav */
-
-.sidebar-title {
-	font-size: 18px;
-	font-weight: bold;
-	line-height: 22px;
-	margin-bottom: 15px;
-}
-#main-nav .title a {
-	color: #333;
-}
-
-#main-nav div.divider {
-	background-color: #e5e5e5;
-	border-bottom: 1px solid #fff;
-	height: 1px;
-	margin-bottom: 10px;
-	width: 100%;
-}
-
-#main-nav .nav-list {
-	padding: 0;
-}
-
-#main-nav .nav-list .branch-top > a {
-	background-image: url('images/main-nav-arrow-closed.png');
-	background-position: 0 9px;
-	background-repeat: no-repeat;
-	font-weight: bold;
-	margin-left: 0;
-	margin-right: 0;
-	padding-right: 10px;
-}
-#main-nav .nav-list .selected > a {
-	background-image: url('images/main-nav-arrow-opened.png');
-}
-
-#main-nav .nav-list ul.nested li {
-	margin-bottom: 5px;
-}
-#main-nav .nav-list ul.nested {
-	display: none;
-	padding-top: 11px;
-}
-
-
-
-#sidebar li.selected ul.nested {
-	display: block;
-}
-#sidebar li.selected ul.nested li.selected a {
-	background-image: none;
-	color: #000;
-}
-#sidebar li.nested {
-	text-indent: 15px;
-}
-#sidebar .number {
-	color: #aaa;
-	float: right;
-	font-size: 11px;
-	font-weight: normal;
-}
-
-
-.activeTreeColor, .parentTreeColor {
-	color:#01A9DB;
-}
-
-.noTreeColor {
-	color:inherit;
-}
+/* =============================== */
+/* =============================== */
+/* ========== WINDOWS ============ */
+/* =============================== */
+/* =============================== */
 
 #wait-window {
 	width:100px;
@@ -1216,7 +1146,8 @@ textarea {
 }
 
 /* -------------------------------------------------- */
-/* Content */
+/* -------------------------------------------------- */
+/* -------------------------------------------------- */
 
 
 hr {
@@ -1268,24 +1199,6 @@ hr {
 /* -------------------------------------------------- */
 
 
-/* ====================== 
-				ARBRE
-    ======================
-
-.children {
-	margin-left:20px;
-}
-
-a:hover {
-	color:#01A9DB;
-}
-
-a, a:hover, a:active, a:focus {
-	text-decoration: none;
-}
-
-*/
- 
  
 /* ====================== */
 /*         LOGIN          */
@@ -1318,80 +1231,8 @@ a, a:hover, a:active, a:focus {
 	height:50px;
 }
 
-.selectUserRole {
-	background-color: #DDDDDD;
-}
-.selectRole {
-	background-color:white;
-	border: 1px solid gray;
-	z-index:20;
-	margin-left:40%;
-	margin-right:40%;
-	margin-top:150px;
-	padding:10px;
-	width:300px;
-}
-
-.selectRole td{
-	padding-top:10px;
-	padding-right:5px;
-}
-
-.wad{
-	font-size:800%;
-	width:100%;
-	text-align:center;
-	font-weight:bold;
-	color:#BBBBBB;
-}
-
 /* ====================== */
-/*      SIDEBAR           */
-
-/* ======================
-
-.selected,
-.selected a {
-	font-weight:bold;
-	color:#848484;
-}
-
-.panel-default > .panel-heading {
-	background-color:transparent;
-}
-
-.panel-default,
-.panel-default > .panel-heading {
-	border-color:transparent;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0);
-	padding-left:0px;
-	padding-top:0px;
-	padding-bottom:0px;
-}
-
-.panel-body{
-	padding-top:0px;
-	padding-bottom:0px;
-}
-
-.well{
-	background-color:transparent;
-}
-.link-unit{
-	padding-top:4px;
-	padding-bottom:5px;
-	padding-left:1px;
-}
-
-a.active:over{
-	color:black;
-}
-
- ====================== */
-
-
-/* ====================== */
-/*      PAGE            */
+/*      PAGE              */
 /* ====================== */
 
 
@@ -1403,49 +1244,21 @@ a.active:over{
 	padding-top:10px;
 	padding-bottom:10px;
 }
-
+/*
 .novisible > .row{
 	display:none;
 }
 .novisible  div .section{
 	display:block;
 }
-
-
-
+ */
 
 /* ====================== */
 /*      EDITOR            */
 /* ====================== */
 
-.edit-shared {
-	width:150px;
-	padding-left:4px;
-}
 
-.edit-field {
-	display:inline-block;
-	width:150px;
-	padding-left:3px;
-}
 
-.editwad-field {
-	display:inline-block;
-	width:180px;
-	padding-left:3px;
-}
-
-.editnode-field {
-	display:inline-block;
-	width:80px;
-	padding-left:3px;
-}
-
-.file-loader{
-  border:0px;
-  padding:0px;
-  height:80px;
- }
 
 #metadata input[type='checkbox'],
 #metadata input[type='radio'] {
@@ -1533,32 +1346,16 @@ button.select-label {
 	margin-top:20px;
 }
 
-/* ====================
-	TextRaw
-   ====================*/
-.rawtext blockquote {
-	margin-bottom:0px;
-}
-
-/* ====================
-	Annotation
-   ====================*/
-.annotation-content {
-	margin-top:5px;
-	font-size:12px;
-	font-weight:normal;
-	line-height:14px;
-}
-
-.annotation-content .writer {
-	font-style:italic;
-
-	}
 
 
 /* ====================
 	divers
    ====================*/
+
+.well{
+	background-color:transparent;
+}
+
 .metainfo {
 	color: #808080;
 	font-size: 10px;
@@ -1583,6 +1380,7 @@ button.select-label {
 .evo-palette {
 	margin-right:5px;
 }
+
 #wait-window {
 	padding:20px;
 	background-color:#F0F0F0;
@@ -1604,10 +1402,6 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th
 	min-width:150px;
 }
 
-table.tablesorter th.del-checkbox {
-	min-width:20px;
-	width:20px;
-}
 
 table.tablesorter th.restore {
 	min-width:35px;
@@ -1615,10 +1409,11 @@ table.tablesorter th.restore {
 }
 
 
-#th_menus {
-	min-width:35px;
+.passwordbyroot{
+	background-color:white;
+	text-shadow:0px 0px 5px red;
+	letter-spacing:2px;
 }
-
 /* ====================
 	partage
    ====================*/
@@ -1835,11 +1630,11 @@ table.tablesorter th.restore {
 	width:150px;
 }
 
-.asmNop .node-model {
+.report .asmNop .node-model {
 	display:none;
 }
 
-.asmNop .row {
+.report .asmNop .row {
 	margin-top:-20px;
 	margin-left: -30px;
 }
@@ -2147,43 +1942,6 @@ table.tablesorter th.restore {
 }
 
 
-/* ====================
-	Free
-   ====================*/
-   
-.free-toolbar{
-	height:24px;
-	z-index:10;
-}
-.asmUnitStructure .free-toolbar {
-	margin-top:-24px;
-}
-.free-toolbar-buttons {
-	z-index:10;
-}
-
-.free-toolbar-menu{
-	margin-left:10px;
-	margin-top:10px;
-}
-
-#free-content {
-	margin-top:-23px;
-}
-
-.movable {
-	cursor:move;
-}
-.free-node {
-	padding:5px;
-}
-
-.free-context .resource-Field,
-.free-context .resource-TextField,
-.free-context .resource-Calendar,
-.free-context .resource-Oembed {
-	min-height:15px;
-}
 
 /* ====================
 	DisplayType : header
@@ -2642,19 +2400,6 @@ div.oembedall-container {
 	padding-left:0px;
 	padding-right:0px;
 }  
-/* 
-.asmBlockContainer .col-md-6:first-child,
-.asmBlockContainer .col-md-4:first-child,
-.asmBlockContainer .col-md-3:first-child {
-	padding-left:0px;
-}
-
-.asmBlockContainer .col-md-3,
-.asmBlockContainer .col-md-4,
-.asmBlockContainer .col-md-6 {
-	padding-right:0px;
-}   
-*/
 
 .block {
 	height:@block-height;
@@ -2673,10 +2418,15 @@ div.oembedall-container {
 	text-align:center;
 }
 
+//----------------------
 .block .ProxyBlock,
 .block .ImageBlock,
 .block .DocumentBlock,
-.block .URLBlock{
+.block .URLBlock,
+//----------------------
+.ImageBlock .ImageBlock,
+.DocumentBlock .DocumentBlock,
+.URLBlock .URLBlock {
 	height:@block-img-height;
 	text-align:center;
 	background-repeat: no-repeat;
@@ -2698,8 +2448,14 @@ div.oembedall-container {
 }
 
 
+//----------------------
 .block .docblock-title,
-.block .no-document .docblock-title{
+.block .no-document .docblock-title,
+//----------------------
+.URLBlock .no-document .docblock-title,
+.URLBlock .docblock-title,
+.DocumentBlock .no-document .docblock-title,
+.DocumentBlock .docblock-title {
 	display: inline-block;
 	margin-top:90px;
 	margin-left:10px;
@@ -2733,23 +2489,7 @@ div.oembedall-container {
 	display:none;
 }
 
-    /* jplayer */
-    .jp-video video, .jp-audio, .jp-controls-holder {
-        width: 100% !important;
-    }
 
-   .jp-video, .jp-video > div, .jp-video img {
-       height: auto !important;
-       width: 100% !important;
-   }
-
-   .jp-video-360p {
-       max-width: 570px !important;
-   }
-
-   .jp-video-270p {
-       max-width: 480px !important;
-   }
 
 .thereismore {
 	position:relative;
@@ -2986,12 +2726,6 @@ div.oembedall-container {
 	border: 0px solid white; padding: 10px;
 }
 
-
-.passwordbyroot{
-	background-color:white;
-	text-shadow:0px 0px 5px red;
-	letter-spacing:2px;
-}
 
 /* ===========================
 	SEMANTIC TAGS LIST

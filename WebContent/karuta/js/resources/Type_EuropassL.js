@@ -72,6 +72,7 @@ UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,par
 		if (writenode || g_userroles[0]=='designer') {
 			html += "<div class='col-md-4'>";
 			html += UICom.structure["ui"][this.foreignid].getButtons(null,null,null,false,0,true,menu);
+			html += UICom.structure["ui"][this.foreignid].getMenus(langcode,null,null,false,0,true,menu);
 			html += "</div><!--col-->";
 		}
 		html += "</div><!--row-->";

@@ -82,6 +82,7 @@ function setDesignerRole(role)
 		}
 		html += "	</div>";
 		$("#main-page").html(html);
+		$("#main-page").attr('role',role);
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,true,g_portfolio_rootid);
 		$("#sidebar_"+uuid).click();
 	};
@@ -156,10 +157,10 @@ function getNavBar(type,portfolioid,edit)
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
 	if (type=='login') {
-		html += "				<li><a href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+		html += "				<li><a href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' class='navbar-icon' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
 	} else {
-		html += "				<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
-		html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+		html += "				<li><a  onclick='show_list_page()' class='navbar-icon' data-title='"+karutaStr[LANG]["home"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-home'></span></a></li>";
+		html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-envelope'></span></a></li>";
 	}
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
@@ -233,17 +234,17 @@ function getNavBar(type,portfolioid,edit)
 		if (type!='login' && USER!=undefined) {
 			if (USER.admin || (USER.creator && !USER.limited) ) {
 				html += "			<ul class='nav navbar-nav'>";
-				html += "						<li><a href='"+window.location+"' target='_blank' class='navbar-icon'><i class='glyphicon glyphicon-new-window'></i></a></li>";
+				html += "						<li><a href='"+window.location+"' target='_blank' class='navbar-icon' data-title='"+karutaStr[LANG]["button-new-window"]+"' data-tooltip='true' data-placement='bottom'><i class='glyphicon glyphicon-new-window'></i></a></li>";
 				html += "			</ul>";
 			}
 		}
 		//-----------------LOGOUT-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "						<li><a onclick='logout()' class='navbar-icon'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+		html += "						<li><a onclick='logout()' class='navbar-icon' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-log-out'></span></a></li>";
 		html += "			</ul>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon'data-title='"+karutaStr[LANG]["button-change-password"]+"' data-tooltip='true' data-placement='bottom' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
 		html += " 					<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
@@ -376,7 +377,7 @@ function getEditBox(uuid,js2) {
 			$("#edit-window-body-node").html($(html));
 		}
 	} else {
-		if(UICom.structure["ui"][uuid].structured_resource!=null) {
+		if(UICom.structure["ui"][uuid].structured_resource!=null && g_display_type!='basic') {
 			try {
 				UICom.structure["ui"][uuid].structured_resource.displayEditor("edit-window-body-resource");
 				html = UICom.structure["ui"][uuid].getEditor();
@@ -1281,7 +1282,7 @@ function toggleContent(uuid) {
 			sessionStorage.setItem("collapsed"+uuid,"N");
 		$("#toggleContent_"+uuid).removeClass("glyphicon-plus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-minus")
-		$("#content_"+uuid).show();
+		$("#content-"+uuid).show();
 	} else {
 		if (g_designerrole)
 			UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','Y');
@@ -1289,7 +1290,7 @@ function toggleContent(uuid) {
 			sessionStorage.setItem("collapsed"+uuid,"Y");
 		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
 		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
-		$("#content_"+uuid).hide();
+		$("#content-"+uuid).hide();
 	}
 }
 
