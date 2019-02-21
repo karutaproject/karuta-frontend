@@ -37,6 +37,7 @@ karutaStr["fr"]["button-show"] = "Montrer";
 karutaStr["fr"]["button-hide"] = "Cacher";
 karutaStr["fr"]["button-2world"] = "URL publique";
 karutaStr["fr"]["button-up"] = "Monter";
+karutaStr["fr"]["button-reload"] = "Recharger le portfolio";
 karutaStr["fr"]["button-refresh"] = "Recharger le portfolio";
 karutaStr["fr"]["button-refresh-report"] = "Rafraîchir le rapport";
 karutaStr["fr"]["button-disconnect"] = "Se déconnecter";
@@ -301,7 +302,7 @@ karutaStr['fr']['change_password']="Changer le mot de passe";
 karutaStr['fr']['password']="Mot de passe";
 karutaStr['fr']['new_password']="Nouveau mot de passe";
 karutaStr['fr']['admin']="Admin";
-karutaStr['fr']['designer']="designer";
+karutaStr['fr']['designer']="Créateur";
 karutaStr['fr']['active']="Actif";
 karutaStr['fr']['select_users']="Sélectionner des usagers";
 karutaStr['fr']['projects-admin']="Projets";
@@ -310,6 +311,7 @@ karutaStr['fr']['bin-admin']="Poubelle";
 karutaStr['fr']['substitute']="Substitution";
 karutaStr['fr']['select_user']="Select unusager";
 karutaStr['fr']['other']="Autre";
+karutaStr['fr']['delete-temporary-users']="Supprimer tous";
 
 //=========================================
 //========== ROLES ========================

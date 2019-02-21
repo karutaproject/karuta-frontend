@@ -416,10 +416,10 @@
 				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:variable name="srce">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<import-node select="{$destination}" source="{$srce}">
+		<xsl:variable name="old-source">#<xsl:call-template name="txtval"><xsl:with-param name="semtag">import-source</xsl:with-param></xsl:call-template></xsl:variable>
+		<xsl:variable name="dest"><xsl:value-of select=".//asmContext[metadata/@semantictag='destination-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="srce"><xsl:value-of select=".//asmContext[metadata/@semantictag='source-select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<import-node select="{$destination}{$dest}" source="{$srce}{$old-source}">
 			<source>
 				<xsl:value-of select='$source'/>
 			</source>
@@ -743,8 +743,10 @@
 		<xsl:variable name="portfoliocode">#<xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='portfoliocode']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="semtag"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="uuid"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='uuid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<!-- for backward compatibility -->
 		<xsl:variable name="old-select"><xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="old-tree-select"><xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<!-- ==================================== -->
 		<!-- ===parent:<xsl:value-of select='$parent'/>===old-tree-select:<xsl:value-of select='$old-tree-select'/>===old-select:<xsl:value-of select='$old-select'/>===uuid:<xsl:value-of select='$uuid'/>===select:<xsl:value-of select='$select'/>===ref-id:<xsl:value-of select='$ref-id'/>===portfoliocode:<xsl:value-of select='$portfoliocode'/>===semtag:<xsl:value-of select='$semtag'/>=== -->
 		<xsl:choose>
 			<xsl:when test="$select=''">
@@ -761,7 +763,7 @@
 									</xsl:when>
 									<xsl:when test="$old-select!=''"><xsl:value-of select='$old-select'/></xsl:when>
 									<xsl:when test="$old-tree-select!=''"><xsl:value-of select='$old-tree-select'/></xsl:when>
-									<xsl:otherwise><xsl:value-of select='$portfoliocode'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
+									<xsl:otherwise></xsl:otherwise>
 								</xsl:choose>
 							</xsl:when>
 							<xsl:otherwise><xsl:value-of select='$uuid'/>.#uuid</xsl:otherwise>
@@ -907,7 +909,73 @@
 			</text>
 		</update-node>
 	</xsl:template>
+	
+		<xsl:template match="*[metadata/@semantictag='create-elgg-user']">
+		<xsl:variable name="identifier">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="firstname">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='firstname']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="lastname">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='lastname']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="email">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='email']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="password">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='password']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<create-elgg-user>
+			<identifier>
+				<txtval select='{$identifier}'/>
+			</identifier>
+			<firstname>
+				<txtval select='{$firstname}'/>
+			</firstname>
+			<lastname>
+				<txtval select='{$lastname}'/>
+			</lastname>
+			<email>
+				<txtval select='{$email}'/>
+			</email>
+			<password>
+				<txtval select='{$password}'/>
+			</password>
+		</create-elgg-user>
+	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='join-elgg-group']">
+		<xsl:variable name="identifier">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<join-elgg-group>
+			<identifier>
+				<txtval select='{$identifier}'/>
+			</identifier>
+			<group>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">group</xsl:with-param>
+				</xsl:call-template>
+			</group>
+		</join-elgg-group>
+	</xsl:template>
+		
+	<xsl:template match="*[metadata/@semantictag='create-elgg-group']">
+		<xsl:variable name="group">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='group']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<create-elgg-group>
+			<group>
+				<txtval select='{group}'/>
+			</group>
+		</create-elgg-group>
+	</xsl:template>
+
+	
+	
+	
+	
 </xsl:stylesheet>
 
  

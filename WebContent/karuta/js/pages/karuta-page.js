@@ -73,7 +73,7 @@ function displayKarutaPage()
 			//-------------------------------
 			var html = "";
 			html += "<div id='global-row' class='row'>";
-			html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x' style='display:inline'></i>";
+			html += "	 <i onclick='' id='refresh' class='fa fa-refresh fa-2x' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-tooltip='true' data-placement='bottom'></i>";
 			html += "	<div id='search-portfolio-div' class='search' style='display:none'>";
 			html += getSearch();
 			html += "	</div>";

@@ -1926,7 +1926,7 @@ g_actions['import-node'] = function importNode(node)
 	var treeref = select.substring(0,idx);
 	var semtag = select.substring(idx+1);
 	//------------------------------------
-	if (select.indexOf('#current_node')+select.indexOf('#uuid')>-1){
+	if (select.indexOf('#current_node')+select.indexOf('#uuid')>-2){
 		if (select.indexOf('#current_node')>-1)
 			destid = g_current_node_uuid;
 		else
