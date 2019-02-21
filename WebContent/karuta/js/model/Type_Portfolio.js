@@ -1940,10 +1940,7 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 					$(dest).append($("<br>"));
 				first = false;
 				var input = "<input type='radio' name='radio_group' value='"+groupid+"'";
-				input += "onclick=\""+js+"\" ";
-				if (label == 'designer')
-					label = karutaStr[LANG]['designer'];
-				input +="> "+label+" </input>";
+				input += "onclick=\""+js+"\">"+label+"</input>";
 				$(dest).append($(input));
 			}
 		}
@@ -2495,9 +2492,9 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	}
 	//-------------------- ROLES-------------------------
 	if (g_userroles[0]=='designer') {
-		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >"+karutaStr[LANG]['role']+" : <span id='userrole'>"+karutaStr[LANG]['designer']+"</span><span class='caret'></span></a>";
+		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >"+karutaStr[LANG]['role']+" : <span id='userrole'>designer</span><span class='caret'></span></a>";
 		html += "		<ul class='dropdown-menu pull-right'>";
-		html += "			<li><a  onclick=\"setDesignerRole('designer')\">"+karutaStr[LANG]['designer']+"</a></li>";
+		html += "			<li><a  onclick=\"setDesignerRole('designer')\">designer</a></li>";
 		for (role in UICom.roles) {
 			if (role!="designer")
 				html += "	<li><a  onclick=\"setDesignerRole('"+role+"')\">"+role+"</a></li>";
@@ -2508,7 +2505,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 //		html += " Role : <span id='userrole'></span><span class='caret'></span></a>";
 
 	html += "	</li>";
-	html += "	<li><a id='refresh-portfolio' onclick='fill_main_page()' class='glyphicon glyphicon-refresh' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-tooltip='true' data-placement='bottom'></a></li>";
+	html += "	<li><a id='refresh-portfolio' onclick='fill_main_page()' class='glyphicon glyphicon-refresh' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></a></li>";
 	//------------------------------------------------
 	html += "</div><!-- class='collapse navbar-collapse' -->";
 	html += "</div><!-- class='container-fluid' -->";

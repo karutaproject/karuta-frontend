@@ -1228,7 +1228,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						url : urlS,
 						success : function (data){
 							var url = window.location.href;
-							var serverURL = url.substring(0,url.lastIndexOf('karuta')-1);
+							var serverURL = url.substring(0,url.indexOf('/application/htm/karuta.htm'));
 							url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
 							$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-tooltip='true' data-placement='bottom'></a> ");
 						}
@@ -2727,7 +2727,7 @@ UIFactory['Node'].moveNode = function(nodeid)
 UIFactory['Node'].moveTo = function(nodeid,parentid)
 //==================================================
 {
-	if (parent !=undefined && parent!=null)
+	if (parentid !=undefined && parentid!=null)
 		$.ajax({
 			type : "POST",
 			dataType : "text",

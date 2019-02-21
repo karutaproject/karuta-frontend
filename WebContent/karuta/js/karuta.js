@@ -60,10 +60,7 @@ function setDesignerRole(role)
 		role = 'designer';
 	g_userroles[0] = role;
 	fillEditBoxBody();
-	if(role == 'designer')
-		$("#userrole").html(karutaStr[LANG]['designer']);
-	else
-		$("#userrole").html(role);
+	$("#userrole").html(role);
 	if (g_display_type=='standard'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
@@ -621,6 +618,18 @@ function confirmDelPortfolios_EmptyBin()
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
+
+//=======================================================================
+function confirmDelTemporaryUsers() 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.User.deleteTemporaryUsers()\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
 
 //==================================
 function getURLParameter(sParam) {
@@ -1203,7 +1212,7 @@ function getEmail(role,emails) {
 function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.lastIndexOf('/karuta'));
+	var serverURL = url.substring(0,url.indexOf('/application/htm/karuta.htm'));
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";

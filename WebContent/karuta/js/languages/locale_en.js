@@ -37,7 +37,8 @@ karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
 karutaStr["en"]["button-2world"] = "Public URL";
 karutaStr["en"]["button-up"] = "Up";
-karutaStr["en"]["button-refresh"] = "Reload Portfolio";
+karutaStr["en"]["button-relaod"] = "Reload Portfolio";
+karutaStr["en"]["button-refresh"] = "Reload Page";
 karutaStr["en"]["button-refresh-report"] = "Reload Report";
 karutaStr["en"]["button-disconnect"] = "Disconnect";
 karutaStr["en"]["button-change-password"] = "To change your password";
@@ -309,6 +310,7 @@ karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['substitute']="Substitution";
 karutaStr['en']['select_user']="Select a User";
 karutaStr['en']['other']="Other";
+karutaStr['en']['delete-temporary-users']="Delete All";
 
 //=========================================
 //========== ROLES ========================
