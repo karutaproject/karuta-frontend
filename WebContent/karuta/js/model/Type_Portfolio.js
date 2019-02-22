@@ -1980,8 +1980,6 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data,unshare_disabled)
 					dest = "#unshare-other-roles";
 				if (unshare_disabled) // display in report
 					dest = "#"+destid;
-				if (label == 'designer')
-					label = karutaStr[LANG]['designer'];
 				html = "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
