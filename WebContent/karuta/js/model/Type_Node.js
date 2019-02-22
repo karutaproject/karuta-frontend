@@ -267,10 +267,10 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	//---------------------
 	if ($("#code_"+itself.id).length){
 		var code = $.trim($("#code_"+itself.id).val());
-		$(itself.code_node).text(code);
+		$(itself.code_node[0]).text(code);
 	}
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
-	$(itself.label_node[langcode]).text(label);
+	$(itself.label_node[langcode][0]).text(label);
 	itself.save();
 	writeSaved(itself.id);
 };
@@ -338,7 +338,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 				var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 				var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.label_node[langcode].text()+"\">");
 				$(htmlLabelInputObj).change(function (){
-					UIFactory["Node"].update(htmlLabelInputObj,self,langcode);
+					UIFactory["Node"].updateLabel(htmlLabelInputObj,self,langcode);
 				});
 				$(htmlLabelDivObj).append($(htmlLabelInputObj));
 				$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
@@ -932,7 +932,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-othercss',false);
 				}
-				html += "<div class='row row-node row-node-"+nodetype+"'  style='"+style+"'>";
+//				html += "<div class='row row-node row-node-"+nodetype+"'  style='"+style+"'>";
+				html += "<div class='row row-node row-node-"+nodetype+"' >";
 				//-------------------- collapsible -------------------
 				if (collapsible=='Y')
 					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='col-md-1 collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-expand'></span></div>";
@@ -1141,20 +1142,24 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			if (nodetype == "asmContext" && node.resource.type=='Report') {
 				$("#"+dest).append($("<div class='row'><div id='exec_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
 				var model_code = UICom.structure["ui"][uuid].resource.getView();
+				var node_resource = UICom.structure["ui"][uuid].resource;
+				var startday = node_resource.startday_node.text();
+				var time = node_resource.time_node.text();
+				var freq = node_resource.freq_node.text();
+				var comments = node_resource.comments_node[LANGCODE].text();
+//				var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
+
 				if (model_code!='') {
 					$.ajax({
 						type : "GET",
-						url : serverBCK_REP+"/"+uuid+".html",
+						url : serverBCK+"/report/"+uuid+".html",
 						dataType: 'html',
-						headers: {
-		                    'Access-Control-Allow-Origin': '*'
-		                },
-						crossDomain: true,
 						success : function(data) {
 							var content_report =  $(data).find("#dashboard_"+uuid).html();
 							$("#dashboard_"+uuid).html(content_report);
 						},
 						error : function(jqxhr,textStatus) {
+							register_report(uuid);
 							var root_node = g_portfolio_current;
 							genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
 						}
@@ -1223,7 +1228,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						url : urlS,
 						success : function (data){
 							var url = window.location.href;
-							var serverURL = url.substring(0,url.lastIndexOf('karuta')-1);
+							var serverURL = url.substring(0,url.indexOf('/application/htm/karuta.htm'));
 							url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
 							$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-tooltip='true' data-placement='bottom'></a> ");
 						}
@@ -1312,7 +1317,15 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				var alreadyDisplayed = false;
 				if (typeof europass_installed != 'undefined' && europass_installed && semtag=="EuropassL"){
 					alreadyDisplayed = true;
-					node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,menu);
+					if( node.structured_resource != null )
+					{
+						node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,menu);
+					}
+					else
+					{
+						console.error("Europass not shown");
+						// FIXME: Need visual feedback for missing data
+					}
 				}
 				if (!alreadyDisplayed && semtag!='bubble_level1') {
 					for( var i=0; i<root.children.length; ++i ) {
@@ -1727,7 +1740,15 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				var alreadyDisplayed = false;
 				if (typeof europass_installed != 'undefined' && europass_installed && semtag=="EuropassL"){
 					alreadyDisplayed = true;
-					UIFactory["EuropassL"].displayView('content-'+uuid,langcode,'detail',uuid);
+					if( node.structured_resource != null )
+					{
+						node.structured_resource.displayView('content-'+uuid,langcode,'detail',uuid,menu);
+					}
+					else
+					{
+						console.error("Europass not shown");
+						// FIXME: Need visual feedback for missing data
+					}
 				}
 				if (!alreadyDisplayed && semtag!='bubble_level1') {
 					for( var i=0; i<root.children.length; ++i ) {
@@ -2432,6 +2453,8 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 						if ((node.resource.type!='Dashboard'&&node.resource.type!='Report') || g_userroles[0]=='designer')
 							html += UICom.structure["ui"][uuid].resource.getView('std_resource_'+uuid);
 						html += "</div><!-- inside-full-height -->";
+						//-------------- context -------------------------
+						html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 						html += "</td>";
 					}
 					//-------------- buttons --------------------------
@@ -2462,6 +2485,8 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 				html += "</div>";
 				//--------------------------------------------------
 				html += "</div><!-- row -->";
+				//-------------- context -------------------------
+				html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 				//-------------- metainfo -------------------------
 				html += "<div id='metaepm_"+uuid+"' class='metainfo'></div><!-- metainfo -->";
 				//--------------------------------------------------*/
@@ -2486,7 +2511,9 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 			if (g_userroles[0]=='designer' || USER.admin) {  
 				UIFactory["Node"].displayMetaEpmInfos("metaepm_"+uuid,data);
 			}
-			//----------- help -----------
+			// -------------- display comments
+			UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+		//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				if (depth>0 || nodetype == "asmContext") {
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
@@ -2584,7 +2611,12 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 	var commentnoderoles = $(node.metadatawad).attr('commentnoderoles');
 	if (commentnoderoles==undefined)
 		commentnoderoles = "";
-	if (commentnoderoles!="" && (USER.admin || (USER.creator && commentnoderoles=='designer') || g_userroles[0]=='designer' || commentnoderoles.containsArrayElt(g_userroles) || commentnoderoles.indexOf(this.userrole)>-1)) {
+	if (commentnoderoles!="" 
+		&& (USER.admin 
+			|| g_userroles[0]=='designer' 
+			|| commentnoderoles.indexOf(g_userroles[0])>-1 
+			)
+		) {
 		//---------------------
 		if (langcode==null)
 			langcode = LANGCODE;
@@ -2654,13 +2686,48 @@ UIFactory['Node'].upNode = function(nodeid)
 	});
 };
 
+//==================================
+function moveTO(nodeid,title,destsemtag,srcesemtag) 
+//==================================
+{
+	$('#wait-window').modal('show');
+	var parentid = null;
+	// change menu
+	var node = UICom.structure["ui"][nodeid];
+	var menusroles = $(node.metadatawad).attr('menuroles');
+	var newmenusroles = menusroles.substring(0,menusroles.indexOf(destsemtag)) + srcesemtag + '/' + destsemtag + menusroles.substring(menusroles.indexOf(srcesemtag)+srcesemtag.length);
+	UIFactory.Node.updateMetadataWadAttribute(nodeid,'menuroles',newmenusroles);
+	// search for destination
+	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes?portfoliocode=" + selfcode + "&semtag="+destsemtag,
+		success : function(data) {
+			var nodes = $("node",data);
+			parentid = $(nodes[0]).attr('id');
+			// move node
+			UIFactory.Node.moveTo(nodeid,parentid);
+			// reload destination
+			UIFactory.Node.loadNode(parentid);
+		}
+	});
+}
+
 //==================================================
 UIFactory['Node'].moveNode = function(nodeid)
 //==================================================
 {
 	var option = $("select",$("#edit-window-body")).find("option:selected");
 	var parentid = $(option).attr('uuid');
-	if (parent !=undefined)
+	UIFactory['Node'].moveTo(nodeid,parentid);
+};
+
+//==================================================
+UIFactory['Node'].moveTo = function(nodeid,parentid)
+//==================================================
+{
+	if (parentid !=undefined && parentid!=null)
 		$.ajax({
 			type : "POST",
 			dataType : "text",
@@ -2912,7 +2979,14 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 			html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+node.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
-		if ( g_userroles[0]=='designer' || (duplicateroles!='none'  && duplicateroles!='' && node.asmtype != 'asmRoot' && ((duplicateroles.containsArrayElt(g_userroles) /*&& !"designer".containsArrayElt(g_userroles)*/) || USER.admin || g_userroles[0]=='designer'))) {
+		if ( g_userroles[0]=='designer'  // always duplicate for designer
+			 || (duplicateroles!='none'  
+				 	&& duplicateroles!='' 
+				 	&& node.asmtype != 'asmRoot' 
+				 	&& ( duplicateroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer' )
+			 	 )
+			)
+		{
 			html+= "<span class='button glyphicon glyphicon-duplicate' onclick=\"javascript:UIFactory.Node.duplicate('"+node.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 	}
@@ -3661,11 +3735,12 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
 	if (name=='asmContext' && node.resource.type=='TextField')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'maxword',$(node.metadatawad).attr('maxword'));
-	//------------------------------------
-	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
-		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
-	if (name!='asmRoot')
-		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'freenode',$(node.metadatawad).attr('freenode'),true);
+	//-------------free positioning --------
+//	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
+//		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
+//	if (name!='asmRoot')
+//		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'freenode',$(node.metadatawad).attr('freenode'),true);
+	//--------------------------------------
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'display',$(node.metadatawad).attr('display'),true);
 	if (name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'collapsible',$(node.metadatawad).attr('collapsible'),true);
@@ -4200,4 +4275,5 @@ UIFactory["Node"].prototype.displaySemanticTags = function(destid,langcode)
 			UICom.structure.ui[$(children[i]).attr('id')].displaySemanticTags("content-"+this.id,langcode);
 	}
 };
+
 

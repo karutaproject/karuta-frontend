@@ -37,8 +37,13 @@ karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
 karutaStr["en"]["button-2world"] = "Public URL";
 karutaStr["en"]["button-up"] = "Up";
-karutaStr["en"]["button-refresh"] = "Reload Portfolio";
+karutaStr["en"]["button-relaod"] = "Reload Portfolio";
+karutaStr["en"]["button-refresh"] = "Reload Page";
 karutaStr["en"]["button-refresh-report"] = "Reload Report";
+karutaStr["en"]["button-disconnect"] = "Disconnect";
+karutaStr["en"]["button-change-password"] = "To change your password";
+karutaStr["en"]["button-new-window"] = "Open a new tap";
+karutaStr["en"]["button-support"] = "Technical Support";
 karutaStr['en']['Add']="Add";
 karutaStr['en']['AddGroup']="Add a Group";
 karutaStr['en']['confirm-delete']="Do you want to delete? This action cannot be undone.";
@@ -61,6 +66,7 @@ karutaStr['en']['not-logged']="You are not connected.";
 karutaStr['en']['translate']="Translate";
 karutaStr['en']['submit']="Submit";
 karutaStr['en']['newpassword']="Forgot password? Send your login:";
+karutaStr['en']['tipnewpassword']="If you can not find our message in your inbox, check your &quot;junk mail&quot; or &quot;spam&quot; folder";
 karutaStr['en']['confirm-password']="Confirm password";
 karutaStr['en']['password-mismatch']="The two passwords do not match.";
 karutaStr['en']['saved']="Saved";
@@ -304,6 +310,7 @@ karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['substitute']="Substitution";
 karutaStr['en']['select_user']="Select a User";
 karutaStr['en']['other']="Other";
+karutaStr['en']['delete-temporary-users']="Delete All";
 
 //=========================================
 //========== ROLES ========================
@@ -345,6 +352,8 @@ karutaStr['en']['report-code']="Report Code";
 karutaStr['en']['csv']="Roles - Display CSV";
 karutaStr['en']['pdf']="Roles - Display PDF";
 karutaStr['en']['img']="Rôles - Display Image";
+karutaStr['en']['document-required']="You have to specify a document before to submit !";
+karutaStr['en']['size-upload']="Your file is so big : it must be less than " + maxfilesizeupload + " Mo !";
 
 //=========================================
 //========== EUROPASS =====================

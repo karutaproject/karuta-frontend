@@ -808,3 +808,20 @@ UIFactory["User"].getPasswordCreator = function()
 	html += UIFactory["User"].getAttributeCreator("confirm-password","",true);
 	return html;
 };
+
+//==================================
+UIFactory["User"].deleteTemporaryUsers = function() 
+//==================================
+{
+	$("#wait-window").show();
+	//----------------
+	$.ajaxSetup({async: false});
+	var temp_users = $("#temporary tr");
+	for (var i=0;i<temp_users.length;i++){
+		var userid = $(temp_users[i]).attr("id").substring(7);
+		UIFactory.User.remove(userid); 
+	}
+	$("#wait-window").hide();
+	$.ajaxSetup({async: true});
+	//----------------
+}

@@ -57,6 +57,7 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
+			console.log("PARSED USER:"+USER);
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -69,10 +70,12 @@ function displayKarutaPage()
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
+					$("a[data-tooltip='true']").tooltip({html:true});
 				},
 				error : function(jqxhr,textStatus) {
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
+					$("a[data-tooltip='true']").tooltip({html:true});
 				}
 			});
 			//-------------------------------
@@ -81,7 +84,7 @@ function displayKarutaPage()
 				html += "<div id='global-row' class='row'>";
 				if (g_socialnetwork==undefined || g_socialnetwork=='shown'){
 					html += "	<div id='main-content' class='col-md-8 col-md-push-4'>";
-					html += "	 <i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
+					html += "	 <i onclick='' id='refresh' class='fa fa-refresh fa-2x' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-tooltip='true' data-placement='bottom'></i>";
 					html += "	<div id='search-portfolio-div' class='search' style='display:none'>";
 					html += getSearch();
 					html += "	</div>";
@@ -99,7 +102,7 @@ function displayKarutaPage()
 					html += "	<div id='socialnetwork' class='col-md-4 col-md-pull-8'><div id='socialnetwork-head'></div><div id='socialnetwork-body'></div></div>";
 				} else {
 					html += "	<div id='main-content' class='col-md-12'>";
-					html += "		<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
+					html += "		<i onclick='' id='refresh' class='fa fa-refresh fa-2x' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-tooltip='true' data-placement='bottom'></i>";
 					html += "	<div id='search-portfolio-div' class='search' style='display:none'>";
 					html += getSearch();
 					html += "	</div>";
@@ -126,7 +129,7 @@ function displayKarutaPage()
 			} else {
 				var html = "";
 				html += "<div id='global-row' class='row'>";
-				html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x'></i>";
+				html += "	<i onclick='' id='refresh' class='fa fa-refresh fa-2x' style='display:inline' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-tooltip='true' data-placement='bottom'></i>";
 				html += "	<div id='search-portfolio-div' class='search' style='display:none'>";
 				html += getSearch();
 				html += "	</div>";

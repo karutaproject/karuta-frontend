@@ -14,7 +14,7 @@
    ======================================================= */
 
 //--------- for languages
-var karutaStr = new Array();
+//var karutaStr = new Array();
 
 var portfolioid = null;
 
@@ -60,10 +60,7 @@ function setDesignerRole(role)
 		role = 'designer';
 	g_userroles[0] = role;
 	fillEditBoxBody();
-	if(role == 'designer')
-		$("#userrole").html(karutaStr[LANG]['designer']);
-	else
-		$("#userrole").html(role);
+	$("#userrole").html(role);
 	if (g_display_type=='standard'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
@@ -151,10 +148,10 @@ function getNavBar(type,portfolioid,edit)
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
 	if (type=='login') {
-		html += "				<li><a href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+		html += "				<li><a href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' class='navbar-icon' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
 	} else {
-		html += "				<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
-		html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+		html += "				<li><a  onclick='show_list_page()' class='navbar-icon' data-title='"+karutaStr[LANG]["home"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-home'></span></a></li>";
+		html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-envelope'></span></a></li>";
 	}
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
@@ -228,17 +225,17 @@ function getNavBar(type,portfolioid,edit)
 		if (type!='login' && USER!=undefined) {
 			if (USER.admin || (USER.creator && !USER.limited) ) {
 				html += "			<ul class='nav navbar-nav'>";
-				html += "						<li><a href='"+window.location+"' target='_blank' class='navbar-icon'><i class='glyphicon glyphicon-new-window'></i></a></li>";
+				html += "						<li><a href='"+window.location+"' target='_blank' class='navbar-icon' data-title='"+karutaStr[LANG]["button-new-window"]+"' data-tooltip='true' data-placement='bottom'><i class='glyphicon glyphicon-new-window'></i></a></li>";
 				html += "			</ul>";
 			}
 		}
 		//-----------------LOGOUT-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "						<li><a onclick='logout()' class='navbar-icon'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+		html += "						<li><a onclick='logout()' class='navbar-icon' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-log-out'></span></a></li>";
 		html += "			</ul>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' data-title='"+karutaStr[LANG]["button-change-password"]+"' data-tooltip='true' data-placement='bottom' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
 		html += " 					<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
@@ -409,7 +406,8 @@ function getEditBox(uuid,js2) {
 	$(".modal-dialog").css('width','600px');
 	$(".pickcolor").colorpicker();
 	// ------------------------------
-	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');}
+	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');
+}
 
 
 //==================================
@@ -556,11 +554,25 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 function confirmSubmit(uuid,submitall) 
 // =======================================================================
 {
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+")\">" + karutaStr[LANG]["button-submit"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
+	var href = "";
+	var type = "";
+	try {
+		type = UICom.structure.ui[uuid].resource.type;
+		href = document.getElementById('file_'+uuid).href;
+	}
+	catch(err) {
+		href = "";
+	}
+	if (href=="" && type!="" && type=="Document")
+		alertHTML(karutaStr[LANG]["document-required"]);
+	else
+	{
+		document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
+		var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+")\">" + karutaStr[LANG]["button-submit"] + "</button>";
+		document.getElementById('delete-window-footer').innerHTML = buttons;
+		$('#delete-window').modal('show');
+    }
 }
 
 //=======================================================================
@@ -606,6 +618,18 @@ function confirmDelPortfolios_EmptyBin()
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
+
+//=======================================================================
+function confirmDelTemporaryUsers() 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.User.deleteTemporaryUsers()\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
 
 //==================================
 function getURLParameter(sParam) {
@@ -700,7 +724,7 @@ function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,cla
 }
 
 //=======================================================================
-function writeSaved()
+function writeSaved(uuid,data)
 //=======================================================================
 {
 	$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
@@ -1188,7 +1212,7 @@ function getEmail(role,emails) {
 function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.lastIndexOf('/karuta'));
+	var serverURL = url.substring(0,url.indexOf('/application/htm/karuta.htm'));
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
@@ -1208,7 +1232,6 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	$.ajax({
 		contentType: "application/xml",
 		type : "POST",
-		contentType: "text/plain",
 		dataType : "xml",
 		url : "../../../"+serverBCK+"/mail",
 		data: xml,
@@ -1245,6 +1268,8 @@ function setLanguage(lang,caller) {
 		caller="";
 	localStorage.setItem('karuta-language',lang);
 	LANG = lang;
+	console.log("LANG: "+LANG);
+	console.log("karutaStr: "+karutaStr);
 	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
@@ -1549,7 +1574,26 @@ function toggleProject2Select(uuid) {
 	}
 }
 
+//==================================
+function countWords(html) {
+//==================================
+	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	return text.trim().split( /\s+/ ).length;
+}
 
+//==================================
+function getFirstWords(html,nb) {
+//==================================
+	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
+	var tableIndex = [];
+	var end = 0;
+	for (var i=0;i<tableOfWords.length;i++){
+		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
+		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
+	}
+	return html.substring(0,tableIndex[tableOfWords.length-1].end);
+}
 
 //==================================
 function setCSSportfolio(data)
@@ -1746,7 +1790,6 @@ function displayTechSupportForm(langcode)
 			type : "POST",
 			contentType: "application/xml",
 			dataType : "text",
-			contentType: "text/plain",
 			url : serverBCK+"/mail",
 			data: xml,
 			success : function() {

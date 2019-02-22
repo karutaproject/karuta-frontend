@@ -37,8 +37,13 @@ karutaStr["fr"]["button-show"] = "Montrer";
 karutaStr["fr"]["button-hide"] = "Cacher";
 karutaStr["fr"]["button-2world"] = "URL publique";
 karutaStr["fr"]["button-up"] = "Monter";
-karutaStr["fr"]["button-refresh"] = "Recharger le portfolio";
+karutaStr["fr"]["button-reload"] = "Recharger le portfolio";
+karutaStr["fr"]["button-refresh"] = "Recharger la page";
 karutaStr["fr"]["button-refresh-report"] = "Rafraîchir le rapport";
+karutaStr["fr"]["button-disconnect"] = "Se déconnecter";
+karutaStr["fr"]["button-change-password"] = "Changement de mot de passe";
+karutaStr["fr"]["button-new-window"] = "Ouvrir un nouvel onglet";
+karutaStr["fr"]["button-support"] = "Support technique";
 karutaStr['fr']['Add']="Ajouter";
 karutaStr['fr']['AddGroup']="Ajouter un groupe";
 karutaStr['fr']['confirm-delete']="Voulez-vous vraiment supprimer ? Cette action est irréversible.";
@@ -61,6 +66,7 @@ karutaStr['fr']['not-logged']="Vous n'êtes pas connecté.";
 karutaStr['fr']['translate']="Traduire";
 karutaStr['fr']['submit']="Soumettre";
 karutaStr['fr']['newpassword']="Mot de passe oublié? Envoyez votre login :";
+karutaStr['fr']['tipnewpassword']="Si vous ne trouvez pas notre message dans votre boîte de réception, vérifiez dans votre dossier «&nbsp;courrier indésirable&nbsp;» ou «&nbsp;spam&nbsp;»";
 karutaStr['fr']['confirm-password']="Confirmez mot de passe";
 karutaStr['fr']['password-mismatch']="Les deux mots de passe ne correspondent pas.";
 karutaStr['fr']['saved']="Enregistré";
@@ -239,7 +245,7 @@ karutaStr['fr']['shared']="Partages";
 karutaStr['fr']['unshared']="Départages";
 karutaStr['fr']['noshared']="Aucun Partage";
 karutaStr['fr']['sharing']="Partager";
-karutaStr['fr']['sharing_with_designers']="Partager avec des concepteurs";
+karutaStr['fr']['sharing_with_designers']="Partager avec des designers";
 karutaStr['fr']['unsharing']="Départager";
 karutaStr['fr']['export']="Exporter";
 karutaStr['fr']['export-project']="Exporter le projet";
@@ -295,7 +301,7 @@ karutaStr['fr']['change_password']="Changer le mot de passe";
 karutaStr['fr']['password']="Mot de passe";
 karutaStr['fr']['new_password']="Nouveau mot de passe";
 karutaStr['fr']['admin']="Admin";
-karutaStr['fr']['designer']="Concepteur";
+karutaStr['fr']['designer']="Créateur";
 karutaStr['fr']['active']="Actif";
 karutaStr['fr']['select_users']="Sélectionner des usagers";
 karutaStr['fr']['projects-admin']="Projets";
@@ -304,6 +310,8 @@ karutaStr['fr']['bin-admin']="Poubelle";
 karutaStr['fr']['substitute']="Substitution";
 karutaStr['fr']['select_user']="Select unusager";
 karutaStr['fr']['other']="Autre";
+karutaStr['fr']['delete-temporary-users']="Supprimer tous";
+
 
 //=========================================
 //========== ROLES ========================
@@ -345,6 +353,8 @@ karutaStr['fr']['report-code']="Code du rapport";
 karutaStr['fr']['csv']="Rôles - Afficher CSV";
 karutaStr['fr']['pdf']="Rôles - Afficher PDF";
 karutaStr['fr']['img']="Rôles - Afficher Image";
+karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
+karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + maxfilesizeupload + " Mo sont autorisés !";
 
 //=========================================
 //========== EUROPASS =====================

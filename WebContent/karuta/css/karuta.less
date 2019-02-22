@@ -249,6 +249,31 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 	margin-top:5px;
 }
 
+#edit-window-body-resource .dropdown-menu,
+.Get_Resource .dropdown-menu,
+.Get_Get_Resource .dropdown-menu {
+	font-size: 12px;
+}
+
+/* ====================== */
+/*     ROME               */
+/* ====================== */
+
+.ROME {
+	height: 400px;
+	overflow-y: scroll;
+}
+
+.select-rome .select-label {
+	margin-bottom:3px;
+} 
+
+.select-rome button.select-label {
+	min-width:400px;
+	max-width:90%;
+}
+
+
 /* ====================== */
 /*     PAGE LIST     */
 /* ====================== */
@@ -278,6 +303,11 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 	background-color:initial;
 }
 
+.warning-list{
+	font-size:120%;
+	font-weight:bold;
+	color:@list-title-color;
+}
 
 #refresh {
 	float:right;
@@ -1416,11 +1446,23 @@ a.active:over{
 }
 
 .get-radio{
-	font-size:14px;
+	font-size:12px;
 }
 #edit-window-body-resource .get-radio,
 .edit-inline .get-radio {
 	margin-left:20px;
+}
+
+.radio-div {
+	margin-left: 25px;
+	margin-top: -19px;
+	margin-bottom:2px;
+	width:fit-content;
+}
+
+.view-div {
+	margin-bottom:2px;
+	width:fit-content;
 }
 
 .click-item{
@@ -1452,6 +1494,7 @@ button.select-label {
 	word-wrap: break-word;
 	white-space: normal;
 	text-align:left;
+	font-size:12px;
 }
 
 .dropdown-menu li a{
@@ -1631,6 +1674,15 @@ table.tablesorter th.restore {
 	Report Model
    ====================*/
 
+.report-comment,
+.report-comment .collapsible,
+.report-comment .btn-default,
+.report-comment a,
+.report-comment .btn-group .button,
+.report-comment .form-control {
+	color:lightgrey;
+}
+
 .report .btn {
 	min-height:34px;
 }
@@ -1752,7 +1804,10 @@ table.tablesorter th.restore {
 
 .createreport td {
 	padding:5px;
-	border:1px solid lightgrey;
+	border-left:1px solid lightgrey;
+	border-right:1px solid lightgrey;
+	border-bottom:1px solid lightgrey;
+	border-top:1px solid lightgrey;
 }
 
 .createreport ul {
@@ -1811,7 +1866,14 @@ table.tablesorter th.restore {
 	padding:10px;
 }
 
-
+.batch-comment,
+.batch-comment .collapsible,
+.batch-comment .btn-default,
+.batch-comment a,
+.batch-comment .btn-group .button,
+.batch-comment .form-control {
+	color:lightgrey;
+}
 /* ------------------------ */
 
 .batch .for-each-line{

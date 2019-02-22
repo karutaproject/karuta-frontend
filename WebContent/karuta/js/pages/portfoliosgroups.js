@@ -24,7 +24,7 @@ function fill_list_portfoliosgroups()
 	var html = "";
 	html += "<span id='portfoliosgroup-create' onclick=\"UIFactory['PortfoliosGroup'].callCreate()\" >"+karutaStr[LANG]['create_portfoliosgroup']+"</span>";
 	html += "<h3 id='portfoliosgroups-label'>"+karutaStr[LANG]['list_portfoliosgroups']+"</h3>";
-	html += "<div style='color:red'>"+karutaStr[LANG]['note-list_portfoliosgroups']+ "</div>";
+	html += "<div class='warning-list'>"+karutaStr[LANG]['note-list_portfoliosgroups']+ "</div>";
 	html += "<div  id='portfoliosgroups'>";
 	html += "</div>";
 	$("#main-portfoliosgroup").html(html);

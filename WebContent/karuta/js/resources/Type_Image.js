@@ -230,7 +230,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 };
 
 //==================================
-UIFactory["Image"].update = function(data,uuid,langcode,parent)
+UIFactory["Image"].update = function(data,uuid,langcode,parent,filename)
 //==================================
 {
 	var itself = UICom.structure["ui"][uuid];  // context node
@@ -243,7 +243,6 @@ UIFactory["Image"].update = function(data,uuid,langcode,parent)
 	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	var filename = data.files[0].name;
 	$("#fileimage_"+uuid+"_"+langcode).html(filename);
 	var size = data.files[0].size;
 	var type = data.files[0].type;
@@ -284,6 +283,7 @@ UIFactory["Image"].remove = function(uuid,langcode)
 UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,parent,disabled)
 //==================================
 {
+	var filename = ""; // to avoid problem : filename with accents	
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -300,9 +300,21 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 	html += "</div>";
 	html +=" <div id='progress_"+this.id+"_"+langcode+"''><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
+	html += "<span id='loaded_"+this.id+langcode+"'></span>"
 	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
+	var loadedid = 'loaded_'+this.id+langcode;
 	$('#fileupload_'+this.id+"_"+langcode).fileupload({
+		add: function(e, data) {
+			$("#wait-window").modal('show');
+			filename = data.originalFiles[0]['name'];
+			if(data.originalFiles[0]['size'] > maxfilesizeupload * 1024 * 1024) {
+				$("#wait-window").modal('hide');
+				alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
+			} else {
+				data.submit();
+			}
+		},
 		dataType: 'json',
 		progressall: function (e, data) {
 			$("#progress_"+this.id+"_"+langcode).css('border','1px solid lightgrey');
@@ -310,9 +322,10 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 			$('#progress_'+this.id+"_"+langcode+' .bar').css('width',progress + '%');
 		},
 		done: function (e, data) {
+			$("#wait-window").modal('hide');
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
-			UIFactory["Image"].update(data.result,uuid,langcode,parent);
-			$("#divfileupload_"+this.id+"_"+langcode).html("Loaded");
+			UIFactory["Image"].update(data.result,uuid,langcode,parent,filename);
+			$("#"+loadedid).html(" <i class='fa fa-check'></i>");
 		}
 	});
 	var resizeroles = $("metadata-wad",this.node).attr('resizeroles');
