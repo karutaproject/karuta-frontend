@@ -2493,7 +2493,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 //		html += " Role : <span id='userrole'></span><span class='caret'></span></a>";
 
 	html += "	</li>";
-	html += "	<li><a id='refresh-portfolio' onclick='fill_main_page()' class='glyphicon glyphicon-refresh' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-tooltip='true' data-placement='bottom'></a></li>";
+	html += "	<li><a id='refresh-portfolio' onclick='fill_main_page()' class='glyphicon glyphicon-refresh' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></a></li>";
 	//------------------------------------------------
 	html += "</div><!-- class='collapse navbar-collapse' -->";
 	html += "</div><!-- class='container-fluid' -->";

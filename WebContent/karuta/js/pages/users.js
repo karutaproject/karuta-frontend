@@ -34,7 +34,12 @@ function fill_list_users()
 	html += "<h3 id='inactive-users' style='display:none'>"+karutaStr[LANG]['inactive_users']+"</h3>";
 	html += "<div  id='inactive' style='display:none'>";
 	html += "</div>";
-	html += "<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users']+"</h3>";
+	html += "<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users'];
+	html += "&nbsp<button class='btn btn-xs' onclick=\"confirmDelTemporaryUsers()\">";
+	html += karutaStr[LANG]["delete-temporary-users"];
+	html += "</button>";
+	html += "</h3>";
+
 	html += "<div  id='temporary'>";
 	html += "</div>";
 	$("#main-user").html(html);
