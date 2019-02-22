@@ -141,7 +141,7 @@ UIFactory["Calendar"].update = function(itself,langcode)
 };
 
 //==================================
-UIFactory["Calendar"].prototype.displayEditor = function(type,langcode,disabled)
+UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disabled)
 //==================================
 {
 	//---------------------
@@ -235,7 +235,6 @@ UIFactory["Calendar"].prototype.displayEditor = function(type,langcode,disabled)
 		$(form).append(group3);
 		}
 	//-----
-
 	$("#"+dest).append(form);
 };
 

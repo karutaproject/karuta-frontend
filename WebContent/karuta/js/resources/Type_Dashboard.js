@@ -25,6 +25,7 @@ UIFactory["Dashboard"] = function( node )
 {
 	this.id = $(node).attr('id');
 	this.node = node;
+	this.parent = $(node).parent()
 	this.type = 'Dashboard';
 	//--------------------
 	if ($("lastmodified",$("asmResource[xsi_type='Dashboard']",node)).length==0){  // for backward compatibility
@@ -132,7 +133,8 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 	//-----------------------------------------------------
 	$("#extra_"+uuid).append($("<div class='row'><div id='csv_button_"+uuid+"' class='dashboard-buttons col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div></div>"));
 	var root_node = g_portfolio_current;
-	genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
+	var parent_node = UICom.structure.ui[$(this.parent).attr("id")];
+	genDashboardContent("dashboard_"+uuid,uuid,parent_node,root_node);
 	if (g_userroles[0]!='designer')
 		$("#sub_node_"+uuid).hide();
 	//---------- display csv or pdf -------

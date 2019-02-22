@@ -65,10 +65,7 @@ function setDesignerRole(role)
 		role = 'designer';
 	g_userroles[0] = role;
 	fillEditBoxBody();
-	if(role == 'designer')
-		$("#userrole").html(karutaStr[LANG]['designer']);
-	else
-		$("#userrole").html(role);
+	$("#userrole").html(role);
 	if (g_display_type=='standard'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
@@ -686,16 +683,14 @@ function displayPage(uuid,depth,type,langcode,edit) {
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
 			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
-				UIFactory['Node'].displayWelcomePage(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,edit);
 			else
 				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
-//				UIFactory['Node'].displayStandard(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
 		if (type=='model') {
-			UICom.structure["ui"][uuid].displayNode('model',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
-//			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+			UICom.structure["ui"][uuid].displayNode('model',UICom.structure.tree[uuid],'contenu',depth,langcode,edit);
 		}
 		if (type=='basic') {
 			UICom.structure["ui"][uuid].displayNode('basic',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
@@ -1812,3 +1807,25 @@ function convertDot2Dash(text)
 	return text.replace(/\./g, '-'); 
 }
 
+//==================================
+function selectRole(nodeid,attribute,value,yes_no,disabled) 
+//==================================
+{
+	var html = "<div class='btn-group roles-choice'>";		
+	html += "<input id='"+attribute+nodeid+"' type='text' class='btn btn-default select select-label'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
+	if(disabled!=null && disabled)
+		html+= " disabled='disabled' ";			
+	html += ">";
+	if(disabled==null || !disabled) {
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "<ul class='dropdown-menu' role='menu'>";
+		html += "<li><a value='' onclick=\"$('#"+attribute+nodeid+"').attr('value','');$('#"+attribute+nodeid+"').change();\")>&nbsp;</a></li>";
+		//---------------------
+		for (role in UICom.roles) {
+			html += "<li><a value='"+role+"' onclick=\"$('#"+attribute+nodeid+"').attr('value','"+role+"');$('#"+attribute+nodeid+"').change();\")>"+role+"</a></li>";
+		}
+		html += "</ul>"
+	}
+	html += "</div>";
+	return html;
+}

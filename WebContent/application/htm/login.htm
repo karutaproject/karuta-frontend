@@ -5,17 +5,44 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 	<link rel="icon" type="image/png" href="../img/faviconK.png" />
-	<!-- =============================================================== -->
-	<script src="../js/_init.js"></script>
-	<!-- =============================================================== -->
-	<script>
-		document.write("<script src='"+karuta_url+"/karuta/js/pages/login.js'><\/script>");
-		document.write("<script>loadLoginPage(karuta_url);<\/script>");
-	</script>
-	<!-- =============================================================== -->
-	<link rel='stylesheet' type='text/css' href='../css/specific.css'/>
-	<!-- =============================================================== -->
-	<script>
+		<link rel="icon" type="image/png" href="../../application/img/faviconK.png"></link>
+		<script src="../js/_init.js">></script>
+		<!-- =============================================================== -->
+		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/bootstrap/css/bootstrap.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/css/jquery-ui.css"></link>
+		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/css/font-awesome/css/font-awesome.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/colorpicker/css/evol.colorpicker.min.css"></link>
+		<!-- =============================================================== -->
+		<script>
+			var karuta_config = "../../../"+appliname+"/application/css/color.less";
+			less = {
+				globalVars: {
+				'KARUTA-CONFIG': "'"+karuta_config+"'"
+				}
+			};
+		</script>
+		<link rel='stylesheet/less' type='text/css' href='../../../karuta3.0/karuta/css/welcome.less'></link>
+		<script src="../../../karuta3.0/other/js/less.min.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../../karuta3.0/karuta/js/karuta.js"></script>
+		<script src="../../../karuta3.0/karuta/js/UICom.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../../karuta3.0/karuta/js/pages/karuta-page.js"></script>
+		<script src="../../../karuta3.0/karuta/js/pages/login.js"></script>
+		<script src="../../../karuta3.0/karuta/js/pages/users.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../../karuta3.0/other/js/jquery-1.10.2.min.js"></script>
+		<script src="../../../karuta3.0/other/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="../../../karuta3.0/other/bootstrap/js/bootstrap.min.js"></script>
+		<script src="../../../karuta3.0/other/js/jquery.ui.touch-punch.min.js"></script>
+		<!-- =============================================================== -->
+		<style>
+			.block div.oembedall-container {
+				 margin-top : -10px; 
+				 text-align: center;
+			}
+			.datepicker{z-index:1200 !important;}
+		</style>	<script>
 		$(window).load(function() {
 			displayKarutaLogin();
 		});

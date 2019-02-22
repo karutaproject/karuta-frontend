@@ -160,6 +160,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
 	this.seeqrcoderoles = ($(node.metadatawad).attr('seeqrcoderoles')==undefined)?'':$(node.metadatawad).attr('seeqrcoderoles');
 	this.moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'':$(node.metadatawad).attr('moveroles');
+	this.printroles = ($(node.metadatawad).attr('printroles')==undefined)?'':$(node.metadatawad).attr('printroles');
 	this.privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
 	if (this.submitted=='Y') {
@@ -253,7 +254,7 @@ if (this.visible) {
 		//----------- help ---------------------------------------------
 		var data = this.node;
 		if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
-			if (this.depth>0 || nodetype == "asmContext") {
+			if (this.depth>0 || this.nodetype == "asmContext") {
 				var help_text = "";
 				var attr_help = $($("metadata-wad",data)[0]).attr('help');
 				var helps = attr_help.split("/"); // lang1/lang2/...
@@ -394,8 +395,8 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode)
 	if (this.menu)
 		this.displayMenus("#menus-"+uuid,langcode);
 	//----------------- hide lbl-div if empty ------------------------------------
-	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
-		$("div[name='lbl-div']","#node_"+uuid).hide();
+//	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
+//		$("div[name='lbl-div']","#node_"+uuid).hide();
 	//----------- Comments -----------
 	if (this.edit && this.inline && this.writenode)
 		UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
@@ -1425,6 +1426,10 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			html += "<span class='button glyphicon glyphicon-eye-open' onclick=\"javascript:hide('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-hide"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 	}
+	//------------- print button -------------------
+	if ((this.printroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
+			html += "<span class='button glyphicon glyphicon-print' onclick=\"javascript:print('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-tooltip='true' data-placement='bottom'></span>";
+	}
 	//-------------------------------------------------
 	if (html!="")
 		html = "<div class='btn-group'>"+html+"</div><!-- class='btn-group' -->"
@@ -2331,6 +2336,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'graphicerroles',$(node.metadatawad).attr('graphicerroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'moveroles',$(node.metadatawad).attr('moveroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showroles',$(node.metadatawad).attr('showroles'));
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'printroles',$(node.metadatawad).attr('printroles'));
 //	if ($(node.metadatawad).attr('showroles')!='')
 //		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'private',$(node.metadatawad).attr('private'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showtoroles',$(node.metadatawad).attr('showtoroles'));
@@ -2672,6 +2678,8 @@ UIFactory["Node"].getMetadataWadAttributeEditor = function(nodeid,attribute,valu
 			html +=" checked";
 		html +="> Click";
 		html += "</div>";
+	} else if (attribute.indexOf('roles')>-1){
+		html += selectRole(nodeid,attribute,value,yes_no,disabled);
 	} else {
 		html += "  <div class='col-sm-9'><input type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
 		if(disabled!=null && disabled)
