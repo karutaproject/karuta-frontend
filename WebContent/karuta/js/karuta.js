@@ -1851,3 +1851,26 @@ function convertDot2Dash(text)
 	return text.replace(/\./g, '-'); 
 }
 
+//==================================
+function selectRole(nodeid,attribute,value,yes_no,disabled) 
+//==================================
+{
+	var html = "<div class='btn-group roles-choice'>";		
+	html += "<input id='"+attribute+nodeid+"' type='text' class='btn btn-default select select-label'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
+	if(disabled!=null && disabled)
+		html+= " disabled='disabled' ";			
+	html += ">";
+	if(disabled==null || !disabled) {
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "<ul class='dropdown-menu' role='menu'>";
+		html += "<li><a value='' onclick=\"$('#"+attribute+nodeid+"').attr('value','');$('#"+attribute+nodeid+"').change();\")>&nbsp;</a></li>";
+		//---------------------
+		for (role in UICom.roles) {
+			html += "<li><a value='"+role+"' onclick=\"$('#"+attribute+nodeid+"').attr('value','"+role+"');$('#"+attribute+nodeid+"').change();\")>"+role+"</a></li>";
+		}
+		html += "</ul>"
+	}
+	html += "</div>";
+	return html;
+}
+

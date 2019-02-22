@@ -4013,6 +4013,8 @@ UIFactory["Node"].getMetadataWadAttributeEditor = function(nodeid,attribute,valu
 			html +=" checked";
 		html +="> Click";
 		html += "</div>";
+	} else if (attribute.indexOf('roles')>-1){
+		html += selectRole(nodeid,attribute,value,yes_no,disabled);
 	} else {
 		html += "  <div class='col-sm-9'><input type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
 		if(disabled!=null && disabled)
