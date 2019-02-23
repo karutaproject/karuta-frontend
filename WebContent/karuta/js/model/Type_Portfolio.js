@@ -1940,8 +1940,6 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 				first = false;
 				var input = "<input type='radio' name='radio_group' value='"+groupid+"'";
 				input += "onclick=\""+js+"\" ";
-				if (label == 'designer')
-					label = karutaStr[LANG]['designer'];
 				input +="> "+label+" </input>";
 				$(dest).append($(input));
 			}
@@ -1982,8 +1980,6 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data,unshare_disabled)
 					dest = "#unshare-other-roles";
 				if (unshare_disabled) // display in report
 					dest = "#"+destid;
-				if (label == 'designer')
-					label = karutaStr[LANG]['designer'];
 				html = "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
@@ -2480,9 +2476,9 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	}
 	//-------------------- ROLES-------------------------
 	if (g_userroles[0]=='designer') {
-		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >"+karutaStr[LANG]['role']+" : <span id='userrole'>"+karutaStr[LANG]['designer']+"</span><span class='caret'></span></a>";
+		html += "	<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle' >"+karutaStr[LANG]['role']+" : <span id='userrole'>designer</span><span class='caret'></span></a>";
 		html += "		<ul class='dropdown-menu pull-right'>";
-		html += "			<li><a  onclick=\"setDesignerRole('designer')\">"+karutaStr[LANG]['designer']+"</a></li>";
+		html += "			<li><a  onclick=\"setDesignerRole('designer')\">designer</a></li>";
 		for (role in UICom.roles) {
 			if (role!="designer")
 				html += "	<li><a  onclick=\"setDesignerRole('"+role+"')\">"+role+"</a></li>";

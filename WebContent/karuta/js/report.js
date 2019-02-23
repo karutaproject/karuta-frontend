@@ -101,7 +101,7 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data};
 	}
 	var children = $(":root",xmlReport).children();
-	processReportActions(destid,children);
+	processReportActions(destid,children,data);
 	$.ajaxSetup({async: true});
 }
 
@@ -116,7 +116,7 @@ function r_report_process(xmlDoc,json)
 }
 
 //=================================================
-function processReportActions(destid,actions)
+function processReportActions(destid,actions,data)
 //=================================================
 {
 	for (var i=0; i<actions.length;i++){
@@ -220,7 +220,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 			}
 			//----------------------------------
 			for (var i=0; i<actions.length;i++){
-				var tagname = $(children[i])[0].tagName;
+				var tagname = $(actions[i])[0].tagName;
 				g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),nodes[j])
 			}
 			//----------------------------------
@@ -416,7 +416,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 		url : serverBCK_API+"/users",
 		success : function(data) {
 			UIFactory["User"].parse(data);
-			var select = $(xmlDoc).attr("select");
+			var select = $(action).attr("select");
 			var value = "";
 			if (select.indexOf("username=")>-1)
 				if (select.indexOf("'")>-1)
@@ -627,7 +627,7 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 			//----------------------------------
 			var nodetag = $(action).attr("nodetag");
 			var sortag = $(action).attr("sortag");
-			var sortelt = $(xmlDoc).attr("sortelt");
+			var sortelt = $(action).attr("sortelt");
 			var tableau = new Array();
 			var sortvalue = "";
 			if (sortag!=undefined && sortag!="") {
@@ -927,33 +927,15 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 //=============================================================================
 
 //==================================
-function r_processCsvLine(no,xmlDoc,destid,data,line)
+g_report_actions['csv-line'] = function (destid,action,no,data)
 //==================================
 {
 	csvline = "";
-	var children = $(">*",xmlDoc);
-	for (var i=0; i<children.length;i++){
-		var tagname = $(children[i])[0].tagName;
-		if (tagname=="for-each-node")
-			r_processNode(no+"_"+i,children[i],'csv_'+no,data,line);
-		if (tagname=="loop")
-			r_processLoop(no+"_"+i,children[i],'csv_'+no,data,line);
-		if (tagname=="goparent")
-			r_processGoParent(no+"_"+i,children[i],'csv_'+no,data,line);
-		if (tagname=="node_resource")
-			r_processNodeResource(children[i],destid,data,line);
-		if (tagname=="csv-value")
-			r_processCsvValue(children[i],destid,data,line);
-		if (tagname=="text")
-			r_processText(children[i],destid,data,line,true);
-		if (tagname=="username")
-			r_processAddusername(true);
-		if (tagname=="firstname")
-			r_processAddfirstname(true);
-		if (tagname=="lastname")
-			r_processAddlastname(true);
-		if (tagname=="firstname-lastname")
-			r_processAddfirstname_lastname(true);
+	var actions = $(action).children();
+	for (var i=0; i<actions.length;i++){
+		var tagname = $(actions[i])[0].tagName;
+		var is_out_csv = true;
+		g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),data,is_out_csv);
 	};
 	csvreport[csvreport.length]=csvline;
 	$.ajax({
@@ -964,12 +946,12 @@ function r_processCsvLine(no,xmlDoc,destid,data,line)
 		url : serverBCK+"/logging?n=1&user=false&info=false",
 		success : function() {
 		}
-	}); 
+	});
 }
 
 
 //==================================
-function r_processCsvValue(xmlDoc,destid,data)
+g_report_actions['csv-value'] = function (destid,action,no,data)
 //==================================
 {
 	var text = "";
@@ -1084,7 +1066,7 @@ g_report_actions['europass'] = function (destid,action,no,data)
 //=============================================================================
 
 //==================================
-g_report_actions['text'] = function (destid,action,no,data)
+g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
 	var nodeid = $(data).attr("id");
@@ -1569,10 +1551,10 @@ g_report_actions['svg'] = function (destid,action,no,data)
 }
 
 //==================================
-function r_processWebTitle(xmlDoc,destid,data)
+g_report_actions['draw-web-title'] = function (destid,action,no,data)
 //==================================
 {
-	var select = $(xmlDoc).attr("select");
+	var select = $(action).attr("select");
 	if (select!=undefined) {
 		var selector = r_getSelector(select,null);
 		var nodes = $(selector.jquery,data).addBack(selector.jquery).filter(selector.filter1);
@@ -1611,10 +1593,10 @@ function r_processWebTitle(xmlDoc,destid,data)
 	}
 }
 //==================================
-function r_processWebAxis(xmlDoc,destid,data)
+g_report_actions['draw-web-axis'] = function (destid,action,no,data)
 //==================================
 {
-	var select = $(xmlDoc).attr("select");
+	var select = $(action).attr("select");
 	if (select!=undefined) {
 		var selector = r_getSelector(select,null);
 		var nodes = $(selector.jquery,data).filter(selector.filter1);
@@ -1651,15 +1633,15 @@ function r_processWebAxis(xmlDoc,destid,data)
 }
 
 //==================================
-function r_processWebLine(xmlDoc,destid,data,no)
+g_report_actions['draw-web-line'] = function (destid,action,no,data)
 //==================================
 {
-	var select = $(xmlDoc).attr("select");
-	var legendselect = $(xmlDoc).attr("legendselect");
-	var test = $(xmlDoc).attr("test");
-	var min = parseInt($(xmlDoc).attr("min"));
-	var max = parseInt($(xmlDoc).attr("max"));
-	var pos = $(xmlDoc).attr("pos");
+	var select = $(action).attr("select");
+	var legendselect = $(action).attr("legendselect");
+	var test = $(action).attr("test");
+	var min = parseInt($(action).attr("min"));
+	var max = parseInt($(action).attr("max"));
+	var pos = $(action).attr("pos");
 	if (pos==undefined)
 		pos = 0;
 	if (pos > no)
