@@ -3082,3 +3082,23 @@ div.oembedall-container {
 	font-weight:900;
 	text-transform: uppercase;
 }
+
+@media print {
+	#saved-window,
+	#navigation-bar,
+	#sub-bar,
+	#sidebar,
+	.btn-group {
+		display:none !important;
+	}
+
+    a:after {
+        content:" (" attr(href) ") ";
+        color:@portfolio-link-color;
+    }
+
+	@page {
+	    margin: 2cm 2cm;
+	}
+
+}
