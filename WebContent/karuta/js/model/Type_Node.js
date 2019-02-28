@@ -2677,6 +2677,10 @@ UIFactory["Node"].getMetadataWadAttributeEditor = function(nodeid,attribute,valu
 		if (value=='click')
 			html +=" checked";
 		html +="> Click";
+		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='completion'";
+		if (value=='completion')
+			html +=" checked";
+		html +="> Completion";
 		html += "</div>";
 	} else if (attribute.indexOf('roles')>-1){
 		html += selectRole(nodeid,attribute,value,yes_no,disabled);

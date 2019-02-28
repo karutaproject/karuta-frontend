@@ -112,7 +112,7 @@ UIFactory["ROME"].display = function(no,type,data,parentid) {
 				if (no<1)
 					UIFactory["ROME"].display(1,'select','',parentid);
 				if (no<2)
-				UIFactory["ROME"].display(2,'select','',parentid);
+					UIFactory["ROME"].display(2,'select','',parentid);
 				$("#competence").html("");
 				//--------------------------------
 				var code = $(this).attr('code');
