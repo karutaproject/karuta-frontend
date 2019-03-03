@@ -140,9 +140,6 @@ a {
 	color:@portfolio-link-color;
 }
 
-.row-node-asmUnitStructure {
-	background:@portfolio-section-title-background-color;
-}
 
 .toomuch {
 	color:red;
@@ -253,24 +250,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 .Get_Resource .dropdown-menu,
 .Get_Get_Resource .dropdown-menu {
 	font-size: 12px;
-}
-
-/* ====================== */
-/*     ROME               */
-/* ====================== */
-
-.ROME {
-	height: 400px;
-	overflow-y: scroll;
-}
-
-.select-rome .select-label {
-	margin-bottom:3px;
-} 
-
-.select-rome button.select-label {
-	min-width:400px;
-	max-width:90%;
 }
 
 
@@ -912,7 +891,7 @@ hr {
 
 .asmnode{
 	height:100%;
-	margin-top:10px;
+/* 	margin-top:10px; */
 
 }
 
@@ -3081,4 +3060,28 @@ div.oembedall-container {
 #displayListPortfolios tr.head {
 	font-weight:900;
 	text-transform: uppercase;
+}
+
+/* ===========================
+	PRINT STYLESHEET
+   ===========================*/
+
+@media print {
+	#saved-window,
+	#navigation-bar,
+	#sub-bar,
+	#sidebar,
+	.btn-group {
+		display:none !important;
+	}
+
+    a:after {
+        content:" (" attr(href) ") ";
+        color:@portfolio-link-color;
+    }
+
+	@page {
+	    margin: 2cm 2cm;
+	}
+
 }

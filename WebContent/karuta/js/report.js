@@ -1091,6 +1091,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 			}
 		}
 	} catch(e){
+		console.log("Error in report:"+e.message);
 		text = "<span id='dashboard_"+nodeid+"'>&mdash;</span>";
 	}
 	//------------------------------
