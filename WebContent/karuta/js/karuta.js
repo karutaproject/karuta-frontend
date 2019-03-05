@@ -78,8 +78,8 @@ function setDesignerRole(role)
 			html += "		<div class='col-md-12' id='contenu'></div>";
 		}
 		html += "	</div>";
-		$("#main-page").html(html);
-		$("#main-page").attr('role',role);
+		$("#portfolio-container").html(html);
+		$("#portfolio-container").attr('role',role);
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,true,g_portfolio_rootid);
 		$("#sidebar_"+uuid).click();
 	};
@@ -105,8 +105,9 @@ function getLanguageMenu(js)
 {
 	var html = "";
 	for (var i=0; i<languages.length;i++) {
-		html += "			<li><a  id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');setWelcomeTitles();"+js+"\">";
-		html += "<img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
+		html += "<a class='dropdown-item' id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');"+js+"\">";
+		html += "	<img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
+		html += "</a>"
 	}
 	return html;
 }
@@ -127,18 +128,14 @@ function getNavBar(type,portfolioid,edit)
 //==============================
 {
 	var html = "";
-	html += "<nav class='navbar navbar-default'>";
-	html += "<div class='navbar-inner'>";
-	html += "	<div class='container-fluid'>";
-	html += "	  <div class='nav-bar-header'>";
-	html += "		<button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='#collapse-1'>";
-	html += "			<span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span><span class='icon-bar'></span>";
+	html += "	<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
+	html += "		<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-1' aria-controls='collapse-1' aria-expanded='false' aria-label='Toggle navigation'>";
+	html += "			<span class='navbar-toggler-icon'></span>";
 	html += "		</button>";
-	html += "		<div class='navbar-brand'>";
-	if (typeof navbar_title != 'undefined')
-		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' >"+navbar_title[LANG]+"</a>";
-	else
-		html += "			<a data-toggle='dropdown' class='brand dropdown-toggle' ><img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/> KARUTA </a>";
+
+	html += "		<a href='#' class='navbar-brand'>";
+	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/>";
+	html +="		</a>";
 	if (type!='login') {
 		html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
 		html += "				<li><b>Versions</b></li>";
@@ -148,18 +145,16 @@ function getNavBar(type,portfolioid,edit)
 		html += "				<li>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</li>";
 		html += "			</ul>";
 	}
-	html += "		</div>";
-	html += "	  </div>";
-	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
-	html += "			<ul class='nav navbar-nav'>";
+	html += "			<ul class='mr-auto navbar-nav'>";
+	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	if (type=='login') {
-		html += "				<li><a href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' class='navbar-icon' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+		html += "			<li class='nav-item icon'><a class='nav-link' href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></i></a></li>";
 	} else {
-		html += "				<li><a  onclick='show_list_page()' class='navbar-icon' data-title='"+karutaStr[LANG]["home"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-home'></span></a></li>";
-		html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-envelope'></span></a></li>";
+		html += "			<li class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
+		html += "			<li class='nav-item icon'><a class='nav-link' href='javascript:displayTechSupportForm()' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-envelope'></i></a></li>";
 	}
-	html += "			</ul>";
+//	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
 	if (languages.length>1) 
 		if(type=="create_account") {
@@ -172,92 +167,83 @@ function getNavBar(type,portfolioid,edit)
 			html += "					</ul>";
 			html += "				</li>";
 			html += "			</ul>";
-		} else
-			if(type=="login") {
-				html += "			<ul class='nav navbar-nav'>";
-				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
-				html += "					<ul class='dropdown-menu'>";
-				for (var i=0; i<languages.length;i++) {
-					html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');displayKarutaLogin();\"><img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
-				}
-				html += "					</ul>";
-				html += "				</li>";
-				html += "			</ul>";
-			} else {
-				html += "			<ul class='nav navbar-nav'>";
-				html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
-				html += "					<ul class='dropdown-menu'>";
-//				html += getLanguageMenu("fill_list_page();$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
-				html += getLanguageMenu("fill_list_page();$('#navigation-bar').html(getNavBar('list',null));$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
-				html += "					</ul>";
-				html += "				</li>";
-				html += "			</ul>";
-			}		
+		} else {
+			html += "	<li class='nav-item dropdown'>";
+			html += "		<a class='nav-link dropdown-toggle' href='#' id='languageDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+			html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
+			html += "		</a>";
+			html += "		<div class='dropdown-menu' aria-labelledby='languageDropdown'>";
+			if(type=="login")
+				html += getLanguageMenu("displayKarutaLogin();");
+			else
+				html += getLanguageMenu("setWelcomeTitles();fill_list_page();$('#navigation-bar').html(getNavBar('list',null));$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
+			html += "		</div>";
+			html += "	</li>";
+			}
 	//-----------------ACTIONS-------------------------------
 	if (type!='login' && USER!=undefined) {
 		if (USER.admin || (USER.creator && !USER.limited) ) {
-			html += "			<ul class='nav navbar-nav'>";
-			html += "				<li>&nbsp;</li>";
-			html += "				<li class='dropdown active'><a data-toggle='dropdown' class='dropdown-toggle' >Actions<span class='caret'></span></a>";
-			html += "					<ul class='dropdown-menu'>";
-			html += "						<li><a  onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</a></li>";
+			html += "		<li class='nav-item dropdown'>";
+			html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+			html += "				Actions";
+			html += "			</a>";
+			html += "			<div class='dropdown-menu'>";
+			html += "				<a class='dropdown-item' onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</a>";
 			//-----------------
 			if (USER.admin) {
 				if ($("#main-portfoliosgroup").length && $("#main-portfoliosgroup").html()!="")
-					html += "						<li><a  onclick='show_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a></li>";
+					html += "		<a class='dropdown-item' onclick='show_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a>";
 				else
-					html += "						<li><a  onclick='display_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a></li>";
+					html += "		<a class='dropdown-item' onclick='display_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a>";
 				//-----------------
 				if ($("#main-user").length && $("#main-user").html()!="")
-					html += "						<li><a  onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
+					html += "		<a class='dropdown-item' onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a>";
 				else
-					html += "						<li><a  onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</a></li>";
+					html += "		<a class='dropdown-item' onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</a>";
 				//-----------------
 				if ($("#main-usersgroup").length && $("#main-usersgroup").html()!="")
-					html += "						<li><a  onclick='show_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a></li>";
+					html += "		<a class='dropdown-item' onclick='show_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a>";
 				else
-					html += "						<li><a  onclick='display_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a></li>";
+					html += "		<a class='dropdown-item' onclick='display_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a>";
 				if (typeof specificmenus!='undefined' &&  specificmenus)
 					html += specificmenushtml();
 			}
 			//-----------------
-			html += "						<li><a  onclick='display_exec_batch()'>"+karutaStr[LANG]['batch']+"</a></li>";
-			html += "						<li><a  onclick='display_exec_report()'>"+karutaStr[LANG]['report']+"</a></li>";
-			html += "					</ul>";
-			html += "				</li>";
-			html += "			</ul>";
+			html += "				<a class='dropdown-item' onclick='display_exec_batch()'>"+karutaStr[LANG]['batch']+"</a>";
+			html += "				<a class='dropdown-item' onclick='display_exec_report()'>"+karutaStr[LANG]['report']+"</a>";
+			html += "			</div>";
+			html += "		</li>";
 		}
 		//-----------------NEW WINDOW-----------------------------------------
 		if (type!='login' && USER!=undefined) {
 			if (USER.admin || (USER.creator && !USER.limited) ) {
-				html += "			<ul class='nav navbar-nav'>";
-				html += "						<li><a href='"+window.location+"' target='_blank' class='navbar-icon' data-title='"+karutaStr[LANG]["button-new-window"]+"' data-tooltip='true' data-placement='bottom'><i class='glyphicon glyphicon-new-window'></i></a></li>";
-				html += "			</ul>";
+				html += "	<li class='nav-item icon'>";
+				html += "		<a class='nav-link' href='"+window.location+"' target='_blank' data-title='"+karutaStr[LANG]["button-new-window"]+"' data-tooltip='true' data-placement='bottom'><i class='far fa-clone'></i></a>";
+				html += "	</li>";
 			}
-		}
-		//-----------------LOGOUT-----------------------------------------
-		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "						<li><a onclick='logout()' class='navbar-icon' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+		} 
 		html += "			</ul>";
+		html += "			<ul class='navbar-nav'>";
 		//-----------------USERNAME-----------------------------------------
-		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon'data-title='"+karutaStr[LANG]["button-change-password"]+"' data-tooltip='true' data-placement='bottom' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
-		html += " 					<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
-		html += "					<ul class='dropdown-menu pull-right'>";
-		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
+		html += "			<li class='nav-item dropdown'>";
+		html += "				<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-tooltip='true' data-placement='bottom'>";
+		html += "					<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
+		html += " 				</a>";
+		html += "				<div class='dropdown-menu' aria-labelledby='userDropdown'>";
+		html += "					<a class='dropdown-item' href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a>";
 		if ((USER.creator && !USER.limited)  && !USER.admin)
-			html += "						<li><a href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a></li>";
-		html += "					</ul>";
-		html += "				</li>";
-		html += "			</ul>";
+			html += "				<a class='dropdown-item' href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a>";
+		html += "				</div>";
+		html += "			</li>";
+		//-----------------LOGOUT-----------------------------------------
+		html += "			<li class='nav-item icon'>";
+		html += "				<a class='nav-link' onclick='logout()' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-sign-out-alt'></i></a>";
+		html += "			</li>";
 	}
-
+	html += "			</ul>";
 	//----------------------------------------------------------
-	html += "			</div><!--.nav-collapse -->";
+	html += "		</div><!--.nav-collapse -->";
 	html += "	</div>";
-	html += "</div>";
-	html += "</div>";
-	
 	html += "</nav>";
 	return html;
 }
@@ -431,7 +417,7 @@ function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
 {
 	var html = "";
 	html += "\n<!-- ==================== Delete Button ==================== -->";
-	html += "<span id='del-"+uuid+"' class='button glyphicon glyphicon-remove' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-tooltip='true' data-placement='bottom'></span>";
+	html += "<i id='del-"+uuid+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-tooltip='true' data-placement='bottom'></i>";
 	return html;
 }
 
@@ -1281,21 +1267,21 @@ function toggleZoom(uuid) {
 //==================================
 function toggleContent(uuid) {
 //==================================
-	if ($("#toggleContent_"+uuid).hasClass("glyphicon-plus")) {
+	if ($("#toggleContent_"+uuid).hasClass("fa-plus")) {
 		if (g_designerrole)
 			UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','N');
 		else
 			sessionStorage.setItem("collapsed"+uuid,"N");
-		$("#toggleContent_"+uuid).removeClass("glyphicon-plus")
-		$("#toggleContent_"+uuid).addClass("glyphicon-minus")
+		$("#toggleContent_"+uuid).removeClass("fa-plus")
+		$("#toggleContent_"+uuid).addClass("fa-minus")
 		$("#content-"+uuid).show();
 	} else {
 		if (g_designerrole)
 			UIFactory["Node"].updateMetadataAttribute(uuid,'collapsed','Y');
 		else
 			sessionStorage.setItem("collapsed"+uuid,"Y");
-		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
-		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
+		$("#toggleContent_"+uuid).removeClass("fa-minus")
+		$("#toggleContent_"+uuid).addClass("fa-plus")
 		$("#content-"+uuid).hide();
 	}
 }
@@ -1357,18 +1343,18 @@ function toggleSideBar() {
 //==================================
 function toggleSidebarPlusMinus(uuid) { // click on PlusMinus
 //==================================
-	if ($("#toggle_"+uuid).hasClass("glyphicon-plus"))
+	if ($("#toggle_"+uuid).hasClass("fa-plus"))
 	{
 //		g_toggle_sidebar [uuid] = 'open';
 		localStorage.setItem('sidebar'+uuid,'open');
-		$("#toggle_"+uuid).removeClass("glyphicon-plus")
-		$("#toggle_"+uuid).addClass("glyphicon-minus")
+		$("#toggle_"+uuid).removeClass("fa-plus")
+		$("#toggle_"+uuid).addClass("fa-minus")
 		$("#collapse"+uuid).collapse("show")
 	} else {
 //		g_toggle_sidebar [uuid] = 'closed';
 		localStorage.setItem('sidebar'+uuid,'closed');
-		$("#toggle_"+uuid).removeClass("glyphicon-minus")
-		$("#toggle_"+uuid).addClass("glyphicon-plus")
+		$("#toggle_"+uuid).removeClass("fa-minus")
+		$("#toggle_"+uuid).addClass("fa-plus")
 		$("#collapse"+uuid).collapse("hide")
 	}
 }
@@ -1376,12 +1362,12 @@ function toggleSidebarPlusMinus(uuid) { // click on PlusMinus
 //==================================
 function toggleSidebarPlus(uuid) { // click on label
 //==================================
-	if ($("#toggle_"+uuid).hasClass("glyphicon-plus"))
+	if ($("#toggle_"+uuid).hasClass("fa-plus"))
 	{
 //		g_toggle_sidebar [uuid] = 'open';
 		localStorage.setItem('sidebar'+uuid,'open');
-		$("#toggle_"+uuid).removeClass("glyphicon-plus")
-		$("#toggle_"+uuid).addClass("glyphicon-minus")
+		$("#toggle_"+uuid).removeClass("fa-plus")
+		$("#toggle_"+uuid).addClass("fa-minus")
 		$("#collapse"+uuid).collapse("show");
 	}
 }
@@ -1560,7 +1546,7 @@ function setCSSportfolio(data)
 	if ($("asmContext:has(metadata[semantictag='portfolio-navbar'])",data).length>0) {
 		var portfolio_navbar_id = $("asmContext:has(metadata[semantictag='portfolio-navbar'])",data).attr("id");
 		var portfolio_navbar_color = UICom.structure["ui"][portfolio_navbar_id].resource.getValue();
-		changeCss("#sub-bar .navbar-default", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
+		changeCss("#sub-bar", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
 		changeCss("#sub-bar .dropdown-menu", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
 		changeCss("#sub-bar .open > a", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
 	}
@@ -1684,9 +1670,9 @@ function hideAllPages()
 {
 	$("#search-portfolio-div").hide();
 	$("#search-user-div").hide();
-	$("#main-list").hide();
+	$("#list-container").hide();
 	$("#main-portfoliosgroup").hide();
-	$("#main-page").hide();
+	$("#portfolio-container").hide();
 	$("#main-user").hide();
 	$("#main-usersgroup").hide();
 	$("#main-exec-report").hide();
@@ -1831,106 +1817,88 @@ function selectRole(nodeid,attribute,value,yes_no,disabled)
 }
 
 //==================================
-function autocomplete(inp, arr,onupdate,self,langcode) {
+function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 //==================================
-	  /*the autocomplete function takes two arguments,
-	  the text field element and an array of possible autocompleted values:*/
-	  var currentFocus;
-	  /*execute a function when someone writes in the text field:*/
-	  inp.addEventListener("input", function(e) {
-	      var a, b, i, val = this.value;
-	      /*close any already open lists of autocompleted values*/
-	      closeAllLists();
-	      if (!val) { return false;}
-	      currentFocus = -1;
-	      /*create a DIV element that will contain the items (values):*/
-	      a = document.createElement("DIV");
-	      a.setAttribute("id", this.id + "autocomplete-list");
-	      a.setAttribute("class", "autocomplete-items");
-	      /*append the DIV element as a child of the autocomplete container:*/
-	      this.parentNode.appendChild(a);
-	      /*for each item in the array...*/
-	      for (i = 0; i < arr.length; i++) {
-	        /*check if the item starts with the same letters as the text field value:*/
-//	    	  if (arr[i].libelle.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-	    	  var indexval = arr[i].libelle.toUpperCase().indexOf(val.toUpperCase());
-	        if (indexval>-1) {
-	          /*create a DIV element for each matching element:*/
-	          b = document.createElement("DIV");
-	          /*make the matching letters bold:*/
-	          b.innerHTML = arr[i].libelle.substr(0, indexval);
-	          b.innerHTML += "<strong>" + arr[i].libelle.substr(indexval,val.length) + "</strong>";
-	          b.innerHTML += arr[i].libelle.substr(indexval+val.length);
-	          /*insert a input field that will hold the current array item's value:*/
-	          b.innerHTML += "<input type='hidden' code='"+arr[i].code+"' label=\""+arr[i].libelle+"\" >";
-	          /*execute a function when someone clicks on the item value (DIV element):*/
-	              b.addEventListener("click", function(e) {
-	              /*insert the value for the autocomplete text field:*/
-	              $(inp).attr("label_"+languages[langcode],$("input",this).attr('label'));
-	              $(inp).attr('code',$("input",this).attr('code'));
-	              inp.value = $("input",this).attr('label');
-	              eval(onupdate);
-	              /*close the list of autocompleted values,
-	              (or any other open lists of autocompleted values:*/
-	              closeAllLists();
-	          });
-	          a.appendChild(b);
-	        }
-	      }
-	  });
-	  /*execute a function presses a key on the keyboard:*/
-	  inp.addEventListener("keydown", function(e) {
-	      var x = document.getElementById(this.id + "autocomplete-list");
-	      if (x) x = x.getElementsByTagName("div");
-	      if (e.keyCode == 40) {
-	        /*If the arrow DOWN key is pressed,
-	        increase the currentFocus variable:*/
-	        currentFocus++;
-	        /*and and make the current item more visible:*/
-	        addActive(x);
-	      } else if (e.keyCode == 38) { //up
-	        /*If the arrow UP key is pressed,
-	        decrease the currentFocus variable:*/
-	        currentFocus--;
-	        /*and and make the current item more visible:*/
-	        addActive(x);
-	      } else if (e.keyCode == 13) {
-	        /*If the ENTER key is pressed, prevent the form from being submitted,*/
-	        e.preventDefault();
-	        if (currentFocus > -1) {
-	          /*and simulate a click on the "active" item:*/
-	          if (x) x[currentFocus].click();
-	        }
-	      }
-	  });
-	  function addActive(x) {
-	    /*a function to classify an item as "active":*/
-	    if (!x) return false;
-	    /*start by removing the "active" class on all items:*/
-	    removeActive(x);
-	    if (currentFocus >= x.length) currentFocus = 0;
-	    if (currentFocus < 0) currentFocus = (x.length - 1);
-	    /*add class "autocomplete-active":*/
-	    x[currentFocus].classList.add("autocomplete-active");
-	  }
-	  function removeActive(x) {
-	    /*a function to remove the "active" class from all autocomplete items:*/
-	    for (var i = 0; i < x.length; i++) {
-	      x[i].classList.remove("autocomplete-active");
-	    }
-	  }
-	  function closeAllLists(elmnt) {
-	    /*close all autocomplete lists in the document,
-	    except the one passed as an argument:*/
-	    var x = document.getElementsByClassName("autocomplete-items");
-	    for (var i = 0; i < x.length; i++) {
-	      if (elmnt != x[i] && elmnt != inp) {
-	      x[i].parentNode.removeChild(x[i]);
-	    }
-	  }
+	var currentFocus;
+	/*execute a function when someone writes in the text field:*/
+	input.addEventListener("input", function(e) {
+		var a, b, i, val = this.value;
+		closeAllLists();
+		if (!val) { return false;}
+	 	currentFocus = -1;
+		a = document.createElement("DIV");
+		a.setAttribute("id", this.id + "autocomplete-list");
+		a.setAttribute("class", "autocomplete-items");
+		this.parentNode.appendChild(a);
+		for (i = 0; i < arrayOfValues.length; i++) {
+			var indexval = arrayOfValues[i].libelle.toUpperCase().indexOf(val.toUpperCase());
+			if (indexval>-1) {
+				b = document.createElement("DIV");
+				b.innerHTML = arrayOfValues[i].libelle.substr(0, indexval);
+				b.innerHTML += "<strong>" + arrayOfValues[i].libelle.substr(indexval,val.length) + "</strong>";
+				b.innerHTML += arrayOfValues[i].libelle.substr(indexval+val.length);
+				b.innerHTML += "<input type='hidden' code='"+arrayOfValues[i].code+"' label=\""+arrayOfValues[i].libelle+"\" >";
+				b.addEventListener("click", function(e) {
+					$(input).attr("label_"+languages[langcode],$("input",this).attr('label'));
+					$(input).attr('code',$("input",this).attr('code'));
+					input.value = $("input",this).attr('label');
+					eval(onupdate);
+					closeAllLists();
+				});
+				a.appendChild(b);
+			}
+		}
+	});
+	/*execute a function presses a key on the keyboard:*/
+	input.addEventListener("keydown", function(e) {
+		var x = document.getElementById(this.id + "autocomplete-list");
+		if (x) x = x.getElementsByTagName("div");
+		if (e.keyCode == 40) {
+		/*If the arrow DOWN key is pressed, increase the currentFocus variable:*/
+			currentFocus++;
+			/*and and make the current item more visible:*/
+		addActive(x);
+		} else if (e.keyCode == 38) { //up
+			/*If the arrow UP key is pressed, decrease the currentFocus variable:*/
+			currentFocus--;
+			/*and and make the current item more visible:*/
+			addActive(x);
+		} else if (e.keyCode == 13) {
+			/*If the ENTER key is pressed, prevent the form from being submitted,*/
+			e.preventDefault();
+			if (currentFocus > -1) {
+				/*and simulate a click on the "active" item:*/
+				if (x) x[currentFocus].click();
+			}
+		}
+	});
+	function addActive(x) {
+		/*a function to classify an item as "active":*/
+		if (!x) return false;
+		/*start by removing the "active" class on all items:*/
+		removeActive(x);
+		if (currentFocus >= x.length) currentFocus = 0;
+		if (currentFocus < 0) currentFocus = (x.length - 1);
+		/*add class "autocomplete-active":*/
+		x[currentFocus].classList.add("autocomplete-active");
+	}
+	function removeActive(x) {
+		/*a function to remove the "active" class from all autocomplete items:*/
+		for (var i = 0; i < x.length; i++) {
+			x[i].classList.remove("autocomplete-active");
+		}
+	}
+	function closeAllLists(elmnt) {
+		/*close all autocomplete lists in the document, except the one passed as an argument:*/
+		var x = document.getElementsByClassName("autocomplete-items");
+		for (var i = 0; i < x.length; i++) {
+			if (elmnt != x[i] && elmnt != input) {
+				x[i].parentNode.removeChild(x[i]);
+			}
+		}
 	}
 	/*execute a function when someone clicks in the document:*/
 	document.addEventListener("click", function (e) {
-	    closeAllLists(e.target);
+		closeAllLists(e.target);
 	});
 }

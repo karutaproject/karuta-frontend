@@ -86,7 +86,7 @@ function show_list_page()
 	$("#refresh").show();
 //	if (USER.creator)
 		$("#search-portfolio-div").show();
-	$("#main-list").show();
+	$("#list-container").show();
 	$('[data-tooltip="true"]').tooltip();
 }
 
@@ -96,21 +96,26 @@ function fill_list_page()
 {
 	setLanguageMenu("fill_list_page()");
 	$("#wait-window").show();
+	//--------------------------
 	$("#search-portfolio-div").html(getSearch()); // we erase code if any
 	$("#search-input").keypress(function(f) {
 		var code= (f.keyCode ? f.keyCode : f.which);
 		if (code == 13)
 			searchPortfolio();
 	});
+	//--------------------------
 	var html = "";
-	html += "<div class='projects'>";
-	html += "	<div id='menu'></div>";
-	html += "	<div id='list'></div>";
+	html += "<div id='list-header' class='row'>";
+	html += "	<div id='menu' class='col'></div>";
+	html += "	<div id='search-portfolio-div' class='col ml-auto'>" + getSearch() + "</div>";
+	html += "	<i class='fas fa-sync-alt' onclick='fill_list_page()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></i>";
 	html += "</div>";
-	$("#main-list").html(html);
+	html += "<div id='list'></div>";
+	$("#list-container").html(html);
+	//---------------------------------------------
 //	$.ajaxSetup({async: false});
-	// --- list of users to display name of owner
 	if (USER.admin || (USER.creator && !USER.limited) ){
+		// --- list of users to display name of owner
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
@@ -119,28 +124,22 @@ function fill_list_page()
 				UIFactory["User"].parse(data);
 			}
 		});
+		//-------- menu -------------------------------------
+		html  = "<div class='dropdown'>";
+		html += "	<button id='list-menu' class='btn dropdown-toggle' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'>&nbsp;Menu</button>";
+		html += "	<div class='dropdown-menu' aria-labelledby='list-menu'>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].createProject()\" >"+karutaStr[LANG]['create_project']+"</a>";
+		html += "		<div class='dropdown-divider'></div>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].importFile()\" >"+karutaStr[LANG]['import_portfolio']+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].importZip()\" >"+karutaStr[LANG]['import_zip']+"</a>";
+		html += "		<div class='dropdown-divider'></div>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" >"+karutaStr[LANG]['import_instance']+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a>";
+		html += "	</div>";
+		html += "</div>";
+		$("#menu").html(html);
 	}
 	//---------------------------------------------
-	html  = "<div class='dropdown dropdown-button'>";
-	html += "<span id='list-menu' class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span class='glyphicon glyphicon-menu-hamburger'></span>&nbsp;Menu</span>";
-	html += "<ul class='dropdown-menu' role='menu' aria-labelledby='list-menu'>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createProject()\" >"+karutaStr[LANG]['create_project']+"</a></li>";
-	html += "<hr>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile()\" >"+karutaStr[LANG]['import_portfolio']+"</a></li>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip()\" >"+karutaStr[LANG]['import_zip']+"</a></li>";
-	html += "<hr>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" >"+karutaStr[LANG]['import_instance']+"</a></li>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
-	html += "</ul>";
-	html += "</div>";
-	if (USER.admin || (USER.creator && !USER.limited) ){
-		$("#menu").html(html);
-		if (demo) {
-			$("#start").html(listinfo[LANG]);
-			$("#start").attr('style','visibility:visible');
-		}
-	}
-	//----------------
 	var url1 =  serverBCK_API+"/portfolios?active=1&count=true";
 	$.ajax({
 		type : "GET",
@@ -286,7 +285,7 @@ function fill_search_page(code)
 	html += "	<div id='menu'></div>";
 	html += "	<div id='list'></div>";
 	html += "</div>";
-	$("#main-list").html(html);
+	$("#list-container").html(html);
 	// --- list of users to display name of owner
 	$.ajax({
 		type : "GET",
@@ -444,9 +443,9 @@ function searchPortfolio()
 //==================================
 function toggleProject(uuid) {
 //==================================
-	if ($("#toggleContent_"+uuid).hasClass("glyphicon-plus")) {
-		$("#toggleContent_"+uuid).removeClass("glyphicon-plus");
-		$("#toggleContent_"+uuid).addClass("glyphicon-minus");
+	if ($("#toggleContent_"+uuid).hasClass("fa-plus")) {
+		$("#toggleContent_"+uuid).removeClass("fa-plus");
+		$("#toggleContent_"+uuid).addClass("fa-minus");
 		if (uuid=="portfolios-not-in-project") {
 			if ($("#portfolios").html()=="") {
 				loadAndDisplayProjectPortfolios("false");
@@ -468,8 +467,8 @@ function toggleProject(uuid) {
 //			Cookies.set('dp'+uuid,'open',{ expires: 60 });
 		}
 	} else {
-		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")
-		$("#toggleContent_"+uuid).addClass("glyphicon-plus")
+		$("#toggleContent_"+uuid).removeClass("fa-minus")
+		$("#toggleContent_"+uuid).addClass("fa-plus")
 		$("#content-"+uuid).hide();
 		$("#export-"+uuid).hide();
 		$("#remove-"+uuid).hide();

@@ -11,71 +11,6 @@ function getURLParameter(sParam) {
 	}
 }
 
-//==============================
-function loadCSS(url)
-//==============================
-{
-//	document.write("<link rel='stylesheet' type='text/css' href='"+url+"'></link>");
-	var link = document.createElement('link');
-	link.href = url;
-	link.rel = 'stylesheet';
-	document.getElementsByTagName('head')[0].appendChild(link);
-}
-
-//==============================
-function loadLESS(url)
-//==============================
-{
-//	document.write("<link rel='stylesheet/less' type='text/css' href='"+url+"'></link>");
-	var link = document.createElement('link');
-	link.href = url;
-	link.rel = 'stylesheet/less';
-	document.getElementsByTagName('head')[0].appendChild(link);
-}
-
-//==============================
-function loadJS(url)
-//==============================
-{
-	document.write("<script src='"+url+"'></script>");
-}
-
-//==============================
-function loadLoginPage(url)
-//==============================
-{
-	//--------------------------------------------------------------
-	loadCSS(url+"/other/bootstrap/css/bootstrap.min.css");
-	loadCSS(url+"/other/css/jquery-ui.css");
-	loadCSS(url+"/other/css/font-awesome/css/font-awesome.min.css");
-	//--------------------------------------------------------------
-	var karuta_config = "../../../"+appliname+"/application/css/color.less";
-	less = {
-		    globalVars: {
-		    	'KARUTA-CONFIG': "'"+karuta_config+"'"
-		    }
-		  };
-	loadLESS(url+"/karuta/css/welcome.less");
-	loadJS(url+"/other/js/less.min.js")
-	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/karuta.js");
-	loadJS(url+"/karuta/js/UICom.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/other/js/jquery-1.10.2.js");
-	loadJS(url+"/other/js/jquery-ui-1.10.3.custom.min.js");
-	loadJS(url+"/other/bootstrap/js/bootstrap.min.js");
-	loadJS(url+"/other/js/jquery.ui.touch-punch.min.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/model/Type_Portfolio.js");
-	loadJS(url+"/karuta/js/model/Type_Node.js");
-	loadJS(url+"/karuta/js/model/Type_User.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/other/js/js.cookie.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/version.js");
-	//--------------------------------------------------------------
-}
-
 //==================================
 function callCAS()
 //==================================
@@ -180,7 +115,7 @@ function displayKarutaLogin()
 {
 	var html = "";
 	html += "<div id='main-welcome'>";
-	html += "<div id='navigation_bar'></div>";
+	html += "<div id='navigation-bar'></div>";
 	html += "<div id='main-container' class='container'>";
 	html += "	<div class='form-signin'>";
 	html += "		<div id='welcome1'></div>";
@@ -212,7 +147,7 @@ function displayKarutaLogin()
 	});
 	loadLanguages(function(data) {
 		getLanguage();
-		$("#navigation_bar").html(getNavBar('login',null));
+		$("#navigation-bar").html(getNavBar('login',null));
 		$("#login").html(getLogin(encrypt_url,lang));
 		$("#useridentifier").focus();
 		$("#newpassword").html(getNew());
@@ -228,7 +163,7 @@ function displayKarutaLogin()
 	});
 	if (typeof welcome1 != 'undefined') {
 		$("#welcome1").html(welcome1[LANG]);
-		var version_html = "<div style='color:black;text-align:center;font-size:14px;margin-bottom:15px;'>Version "+karuta_version+"</div>";
+	//	var version_html = "<div style='color:black;text-align:center;font-size:14px;margin-bottom:15px;'>Version "+karuta_version+"</div>";
 	//	$("#welcome-version").html(version_html);
 		$("#welcome2").html(welcome2[LANG]);
 		$("#welcome3").html(welcome3[LANG]);

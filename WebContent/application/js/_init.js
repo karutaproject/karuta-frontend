@@ -33,8 +33,8 @@ navbar_title["en"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
 navbar_title["ja"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
 //-----------LOGIN PAGE -----------------------
 var welcome1 = {};// Welcome title
-	welcome1["fr"] = "<img class='img-responsive' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
-	welcome1["en"] = "<img class='img-responsive' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
+	welcome1["fr"] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
+	welcome1["en"] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
 var welcome2 = {};       // Welcome sub-title
 	welcome2["fr"] = "";
 	welcome2["en"] = "";
@@ -53,8 +53,8 @@ var welcome5 = {}; 			//  Welcome sub-title
 	listinfo["en"] = "";
 //-----------PUBLIC PAGE -----------------------
 var welcome = {};// Welcome title
-	welcome["fr"] = "<img class='img-responsive' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
-	welcome["en"] = "<img class='img-responsive' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
+	welcome["fr"] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
+	welcome["en"] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
 //--------- PUBLIC EMAIL LOGO - MESSAGE -------
 var url = window.location.href;
 var serverURL = url.substring(0,url.indexOf(appliname)-1);
