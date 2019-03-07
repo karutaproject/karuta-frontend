@@ -1234,8 +1234,6 @@ UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,sel
 		var btn_group = $(html);
 		$(form).append($(btn_group));
 		$("#"+destid).append(form);
-		var onupdate = "UIFactory.Get_Get_Resource.update(input,self)";
-		autocomplete(document.getElementById("input_"+self.id), newTableau1,onupdate,self,langcode);
 		//-------------------------------------------------
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
@@ -1264,7 +1262,7 @@ UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,sel
 					html += code+" ";
 				if (display_label)
 					html += $(this).attr("label_fr");
-				$("#button_"+self.id).html(html);
+				$("#input_"+self.id).html(html);
 				UIFactory["Get_Get_Resource"].update(this,self,langcode);
 				//--------------------------------
 			});
@@ -1277,7 +1275,7 @@ UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,sel
 					html += code+" ";
 				if (display_label)
 					html += label;
-				$("#button_"+self.id).html(html);
+				$("#input_"+self.id).html(html);
 			}
 		}
 		//---------------------

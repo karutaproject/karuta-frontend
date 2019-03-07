@@ -1600,7 +1600,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += "	<button class='btn dropdown-toggle' type='button' id='add_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 		html += 		karutaStr[languages[langcode]]['Add'];
 		html += "	</button>";
-		html += "	<div class='dropdown-menu' aria-labelledby='add_"+this.id+"'>";
+		html += "	<div class='dropdown-menu dropdown-menu-right' aria-labelledby='add_"+this.id+"'>";
 		//--------------------------------
 		if (this.asmtype == 'asmRoot' || this.asmtype == 'asmStructure') {
 			var databack = false;
@@ -1702,7 +1702,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				html += "	<button class='btn dropdown-toggle' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 				html += 		karutaStr[languages[langcode]]['menu'];
 				html += "	</button>";
-				html += "	<div class='dropdown-menu' aria-labelledby='specific_"+this.id+"'>";
+				html += "	<div class='dropdown-menu dropdown-menu-right' aria-labelledby='specific_"+this.id+"'>";
 				//-----------------------
 				var databack = false;
 				var callback = "UIFactory.Node.reloadUnit";
@@ -2630,15 +2630,15 @@ UIFactory["Node"].getMetadataEpmDisplayViewAttributeEditor = function(nodeid,att
 		html+= " disabled='disabled' ";			
 	html+= ">";
 	html+= "		<option value=''></option>";
-	for (dest in displayView[g_display_type,nodetype]) {
-		html += "	<option value='"+displayView[g_display_type,nodetype][dest]+"'";
-		if (value==displayView[g_display_type,nodetype][dest])
+	for (dest in displayView[g_display_type][nodetype]) {
+		html += "	<option value='"+displayView[g_display_type][nodetype][dest]+"'";
+		if (value==displayView[g_display_type][nodetype][dest])
 			html += " selected ";
-		html += ">"+displayView[g_display_type,nodetype][dest]+"</option>";
+		html += ">"+displayView[g_display_type][nodetype][dest]+"</option>";
 	}
 	if (resourcetype!=undefined && resourcetype!=null)
 		html+= "		<option disabled>────────────────────</option>";
-	for (dest in displayView[g_display_type,nodetype,resourcetype]) {
+	for (dest in displayView[g_display_type][nodetype][resourcetype]) {
 		html += "<option value='"+displayView[g_display_type,nodetype,resourcetype][dest]+"'";
 		if (value==displayView[g_display_type,nodetype,resourcetype][dest])
 			html += " selected ";
@@ -2720,7 +2720,7 @@ UIFactory["Node"].selectRole= function(nodeid,attribute,value,yes_no,disabled)
 	if(disabled==null || !disabled) {
 		html += "<div class='input-group-append'>";
 		html += "	<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
-		html += "	<div class='dropdown-menu button-role-caret'>";
+		html += "	<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
 //		html += "		<div class='dropdown-menu'>";
 		html += "			<a class='dropdown-item' value='' onclick=\"$('#"+attribute+nodeid+"').attr('value','');$('#"+attribute+nodeid+"').change();\")>&nbsp;</a>";
 		//---------------------

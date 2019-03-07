@@ -181,7 +181,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					html += "			<div class='btn-group'>";
 					if (USER.admin || (portfolio.owner=='Y' && !USER.xlimited)) {
 						html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
-						html += "			<ul class='dropdown-menu  pull-right'>";
+						html += "			<ul class='dropdown-menu  dropdown-menu-right'>";
 						html += "				<li><a onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a></li>";
 						if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
 							html += "			<li><a id='remove-"+portfolio.id+"' href='' style='display:block' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='fa fa-trash-o'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
@@ -460,7 +460,7 @@ UIFactory["Portfolio"].getAdminPortfolioMenu = function(gid,self,semtag)
 	var html = "";
 	html += "<div class='dropdown portfolio-menu'>";
 	html += "<button id='dropdown"+self.id+"' data-toggle='dropdown' class='btn dropdown-toggle'></button>";
-	html += "<div class='dropdown-menu' aria-labelledby='dropdown"+self.id+"'>";
+	html += "<div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdown"+self.id+"'>";
 	if (gid==null) {
 		if (USER.admin || (self.owner=='Y' && !USER.xlimited))
 			html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callRenameMove('"+self.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename-move"]+"</a>";
@@ -493,8 +493,8 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	//---------------------------------------
 	if (type=='standard' || type=='basic'){
 		html += "	<div id='main-row' class='row'>";
-		html += "		<div class='col-sm-3 col-md-3' id='sidebar'></div>";
-		html += "		<div class='col-sm-9 col-md-9' id='contenu'></div>";
+		html += "		<div class='col-sm-3' id='sidebar'></div>";
+		html += "		<div class='col-sm-9' id='contenu'></div>";
 		html += "	</div>";
 		$("#"+destid).append($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
@@ -512,8 +512,8 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	//---------------------------------------
 	if (type=='translate'){
 		html += "	<div class='row'>";
-		html += "		<div class='col-md-3' id='sidebar'></div>";
-		html += "		<div class='col-md-9' id='contenu'></div>";
+		html += "		<div class='col-sm-3' id='sidebar'></div>";
+		html += "		<div class='colsm-9' id='contenu'></div>";
 		html += "	</div>";
 		$("#"+destid).append($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
@@ -1187,7 +1187,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 	html +="    Select a project ";
 	html +="    <span class='caret'></span>";
 	html +="  </button>";
-	html +="  <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>";
+	html +="  <ul class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenu1'>";
 	html +="    <li><a href='#'>&nbsp;</a></li>";
 	for (var i=0;i<projects_list.length;i++) {
 		var js = "";
@@ -1249,7 +1249,7 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	html +="    Select a project ";
 	html +="    <span class='caret'></span>";
 	html +="  </button>";
-	html +="  <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>";
+	html +="  <ul class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenu1'>";
 	html +="    <li><a href='#'>&nbsp;</a></li>";
 	for (var i=0;i<projects_list.length;i++) {
 		var js = "";

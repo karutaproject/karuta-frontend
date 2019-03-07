@@ -69,7 +69,7 @@ function displayKarutaPage()
 			});
 			//-------------------------------
 			var html = "";
-			html += "	<div id='list-container' class='container-fluid'></div>";
+			html += "	<div id='list-container'></div>";
 			html += "	<div id='portfolio-container' role='all' style='display:none'></div>";
 			html += "	<div id='search-user-div' class='search' style='display:none'>";
 			html += getSearchUser();

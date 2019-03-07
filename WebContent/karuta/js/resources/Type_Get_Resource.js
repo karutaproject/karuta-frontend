@@ -1031,14 +1031,12 @@ UIFactory["Get_Resource"].parseROME = function(destid,type,langcode,data,self,di
 		var form = $(html);
 		html = "";
 		html += "<div class='auto-complete btn-group roles-choice'>";
-		html += "<input id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>";
+		html += "<button id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>&nbsp</button>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
 		var btn_group = $(html);
 		$(form).append($(btn_group));
 		$("#"+destid).append(form);
-		var onupdate = "UIFactory.Get_Resource.update(input,self)";
-		autocomplete(document.getElementById("input_"+self.id), newTableau1,onupdate,self,langcode);
 		//-------------------------------------------------
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);

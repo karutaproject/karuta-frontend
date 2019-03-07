@@ -3,18 +3,19 @@
 	var displayView = {};
 	
 	displayView["basic"] = {};
-	displayView["basic","struct"] = ["default"];
-	displayView["basic","node"] = ["default"];
-	displayView["basic","resource"] = ["default"];
+	displayView["basic"]["struct"] = ["default"];
+	displayView["basic"]["node"] = ["default"];
+	displayView["basic"]["resource"] = ["default"];
 
 	displayView["standard"] = {};
-	displayView["standard","struct"] = ["strcut"];
-	displayView["standard","node"] = ["default","row","xwide","card","card-deck","card-card-deck"];
-	displayView["standard","resource"] = ["default","1/12","2/12","3/12","4/12","5/12","6/12","xwide","card"];
-	displayView["standard","resource","Image"] = ["Img-Label"];
+	displayView["standard"]["struct"] = ["strcut"];
+	displayView["standard"]["node"] = ["default","row","xwide","card","carddeck","card-carddeck"];
+	displayView["standard"]["resource"] = ["default","1/12","2/12","3/12","4/12","5/12","6/12","xwide","card"];
+//	displayView["standard"]["resource"]["Image"] = ["Img-Label"];
 
-	displayView["model","node"] = ["default","card","row"];
-	displayView["model","resource"] = ["default","1/12","2/12","3/12","4/12","5/12","6/12"];
+	displayView["model"] = {};
+	displayView["model"]["node"] = ["default","card","row"];
+	displayView["model"]["resource"] = ["default","1/12","2/12","3/12","4/12","5/12","6/12"];
 
 	//========================== BEGIN DO NOT EDIT ===========================	
 	
@@ -73,17 +74,17 @@
 										"</div>";
 
 	displayHTML["standard-node-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
-									" <div id='sub_node_#uuid#' name='lbl-div' class='node row #first#' >" +
-									"	<div id='collapsible_#uuid#' class='collapsible col-1'></div>" +
-									"	<div id='std_node_#uuid#' class='node-label col-7'>" +
-									"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
-									"		<div id='comments_#uuid#' class='comments'></div>" +
-									"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
-									"	</div>" +
-									"	<div class='col-4'><span id='buttons-#uuid#' class='buttons'></span><span id='menus-#uuid#' class='menus'></span></div>" +
-									" </div>" +
-									" <div id='content-#uuid#' name='cnt-div' class='content' ><\div>" +
-									"</div>";
+											"	<div id='sub_node_#uuid#' name='lbl-div' class='node-header node #first#' >" +
+											"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
+											"		<div id='std_node_#uuid#' class='node-label'>" +
+											"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
+											"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+											"			<div id='comments_#uuid#' class='comments'></div>" +
+											"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
+											"		</div>" +
+											"	</div>" +
+											"	<div id='content-#uuid#' name='cnt-div' class='content' ><\div>" +
+											"</div>";
 
 	displayHTML["standard-node-row"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 											" <div id='sub_node_#uuid#' name='lbl-div' class='node row #first#' >" +
@@ -152,28 +153,28 @@
 	//====================================================================
 	//========================== CARD ====================================
 	//====================================================================
-	displayHTML["standard-node-card-deck"]  =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
-												" <div id='sub_node_#uuid#' name='lbl-div' class='node row #first#' >" +
-												"	<div id='collapsible_#uuid#' class='collapsible col-1'></div>" +
-												"	<div id='std_node_#uuid#' class='node-label col-6'>" +
-												"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
-												"		<div id='comments_#uuid#' class='comments'></div>" +
-												"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
-												"	</div>" +
-												"	<div class='col-4 ml-auto butmen'><span id='buttons-#uuid#' class='buttons'></span><span id='menus-#uuid#' class='menus'></span></div>" +
-												" </div>" +
-												" <div id='content-#uuid#' name='cnt-div' class='content card-deck' ></div>" +
+	displayHTML["standard-node-carddeck"]  =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
+												"	<div id='sub_node_#uuid#' name='lbl-div' class='node-header node #first#' >" +
+												"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
+												"		<div id='std_node_#uuid#' class='node-label'>" +
+												"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
+												"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+												"			<div id='comments_#uuid#' class='comments'></div>" +
+												"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
+												"		</div>" +
+												 "	</div>" +
+												"	<div id='content-#uuid#' name='cnt-div' class='content card-deck' ></div>" +
 												"</div>";
 	//====================================================================
 	displayHTML["standard-node-card"]  =	"<div id='node_#uuid#' class='card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
-											"	<div id='sub_node_#uuid#' name='lbl-div' class='card-header node row #first#' >" +
-											"		<div id='collapsible_#uuid#' class='collapsible col-1'></div>" +
-											"		<div id='std_node_#uuid#' class='node-label col-6'>" +
+											"	<div id='sub_node_#uuid#' name='lbl-div' class='card-header node #first#' >" +
+											"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
+											"		<div id='std_node_#uuid#' class='node-label'>" +
+											"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
 											"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
 											"			<div id='comments_#uuid#' class='comments'></div>" +
 											"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
 											"		</div>" +
-											"		<div class='col-4 ml-auto butmen'><span id='buttons-#uuid#' class='buttons'></span><span id='menus-#uuid#' class='menus'></span></div>" +
 											 "	</div>" +
 											 "	<div class='card-body' name='res-div'>" +
 											" 		<div id='content-#uuid#' name='cnt-div' class='content'></div>" +
@@ -181,21 +182,22 @@
 											 "	<div id='metainfo_#uuid#' class='metainfo'></div>" +
 											 "</div>";
 	//====================================================================
-	displayHTML["standard-node-card-card-deck"]  =	"<div id='node_#uuid#' class='card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
-													"	<div id='sub_node_#uuid#' name='lbl-div' class='card-header node row #first#' >" +
-													"		<div id='collapsible_#uuid#' class='collapsible col-1'></div>" +
-													"		<div id='std_node_#uuid#' class='node-label col-6'>" +
+	displayHTML["standard-node-card-carddeck"]  =	"<div id='node_#uuid#' class='card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
+													"	<div id='sub_node_#uuid#' name='lbl-div' class='card-header node #first#' >" +
+													"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
+													"		<div id='std_node_#uuid#' class='node-label'>" +
+													"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
 													"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
 													"			<div id='comments_#uuid#' class='comments'></div>" +
 													"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
 													"		</div>" +
-													"		<div class='col-4 ml-auto butmen'><span id='buttons-#uuid#' class='buttons'></span><span id='menus-#uuid#' class='menus'></span></div>" +
 													"	</div>" +
 													"	<div class='card-body' name='res-div'>" +
 													"		<div id='content-#uuid#' name='cnt-div' class='content card-deck'></div>" +
 													"	</div>" +
 													"	<div id='metainfo_#uuid#' class='metainfo'></div>" +
 													"</div>";
+	//====================================================================
 	displayHTML["standard-resource-card"]  =	"<div id='node_#uuid#' class='card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 												"	<div id='std_node_#uuid#' name='lbl-div' class='card-header'>" +
 												 "		<div id='buttons-#uuid#' class='buttons'></div>" +

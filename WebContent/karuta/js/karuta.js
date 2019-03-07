@@ -395,7 +395,7 @@ function getEditBox(uuid,js2) {
 		UIFactory["Node"].displayMetadataTextsEditor(UICom.structure["ui"][uuid]);
 	}
 	// ------------------------------
-	$(".modal-dialog").css('width','600px');
+//	$(".modal-dialog").css('width','70%');
 	$(".pickcolor").colorpicker();
 	// ------------------------------
 	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');
@@ -1625,7 +1625,7 @@ function setCSSportfolio(data)
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
 		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
-		changeCss(".menus,.collapsible .glyphicon, .createreport .button,.btn-group .button", "color:"+portfolio_buttons_color+";");
+		changeCss(".menus,.collapsible, .createreport .button,.btn-group .button, .menus button", "color:"+portfolio_buttons_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
