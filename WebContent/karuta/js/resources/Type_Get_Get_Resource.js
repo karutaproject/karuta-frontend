@@ -1238,6 +1238,35 @@ UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,sel
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
 		//---------------------
+		var code = "";
+		var label = "";
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+		if (display_code)
+			html += "<span class='li-code'>"+code+"</span>";
+		if (display_label)
+			html += "<span class='li-label'>"+label+"</span>";
+		html += "</a>";			
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			//--------------------------------
+			var code = $(this).attr('code');
+			var display_code = false;
+			var display_label = true;
+			//--------------------------------
+			var html = "";
+			if (display_code)
+				html += code+" ";
+			if (display_label)
+				html += $(this).attr("label_fr");
+			$("#input_"+self.id).html(html);
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+			//--------------------------------
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
 			//------------------------------
 			var code = newTableau1[i].code;
@@ -1262,7 +1291,7 @@ UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,sel
 					html += code+" ";
 				if (display_label)
 					html += $(this).attr("label_fr");
-				$("#button_"+self.id).html(html);
+				$("#input_"+self.id).attr('value',html);
 				UIFactory["Get_Get_Resource"].update(this,self,langcode);
 				//--------------------------------
 			});
@@ -1275,7 +1304,7 @@ UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,sel
 					html += code+" ";
 				if (display_label)
 					html += label;
-				$("#button_"+self.id).html(html);
+				$("#input_"+self.id).attr('value',html);
 			}
 		}
 		//---------------------
