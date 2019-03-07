@@ -37,8 +37,13 @@ karutaStr["fr"]["button-show"] = "Montrer";
 karutaStr["fr"]["button-hide"] = "Cacher";
 karutaStr["fr"]["button-2world"] = "URL publique";
 karutaStr["fr"]["button-up"] = "Monter";
-karutaStr["fr"]["button-refresh"] = "Recharger le portfolio";
+karutaStr["fr"]["button-reload"] = "Recharger le portfolio";
+karutaStr["fr"]["button-refresh"] = "Recharger la page";
 karutaStr["fr"]["button-refresh-report"] = "Rafraîchir le rapport";
+karutaStr["fr"]["button-disconnect"] = "Se déconnecter";
+karutaStr["fr"]["button-change-password"] = "Changement de mot de passe";
+karutaStr["fr"]["button-new-window"] = "Ouvrir un nouvel onglet";
+karutaStr["fr"]["button-support"] = "Support technique";
 karutaStr['fr']['Add']="Ajouter";
 karutaStr['fr']['AddGroup']="Ajouter un groupe";
 karutaStr['fr']['confirm-delete']="Voulez-vous vraiment supprimer ? Cette action est irréversible.";
@@ -296,7 +301,7 @@ karutaStr['fr']['change_password']="Changer le mot de passe";
 karutaStr['fr']['password']="Mot de passe";
 karutaStr['fr']['new_password']="Nouveau mot de passe";
 karutaStr['fr']['admin']="Admin";
-karutaStr['fr']['designer']="Designer";
+karutaStr['fr']['designer']="Créateur";
 karutaStr['fr']['active']="Actif";
 karutaStr['fr']['select_users']="Sélectionner des usagers";
 karutaStr['fr']['projects-admin']="Projets";
@@ -305,6 +310,8 @@ karutaStr['fr']['bin-admin']="Poubelle";
 karutaStr['fr']['substitute']="Substitution";
 karutaStr['fr']['select_user']="Select unusager";
 karutaStr['fr']['other']="Autre";
+karutaStr['fr']['delete-temporary-users']="Supprimer tous";
+
 
 //=========================================
 //========== ROLES ========================

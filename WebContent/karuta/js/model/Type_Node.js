@@ -932,8 +932,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-othercss',false);
 				}
-//				html += "<div class='row row-node row-node-"+nodetype+"'  style='"+style+"'>";
-				html += "<div class='row row-node row-node-"+nodetype+"' >";
+				html += "<div class='row row-node row-node-"+nodetype+"'  style='"+style+"'>";
+//				html += "<div class='row row-node row-node-"+nodetype+"' >";
 				//-------------------- collapsible -------------------
 				if (collapsible=='Y')
 					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='col-md-1 collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-expand'></span></div>";
@@ -1228,7 +1228,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 						url : urlS,
 						success : function (data){
 							var url = window.location.href;
-							var serverURL = url.substring(0,url.lastIndexOf('karuta')-1);
+							var serverURL = url.substring(0,url.indexOf('/application/htm/karuta.htm'));
 							url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
 							$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-tooltip='true' data-placement='bottom'></a> ");
 						}
@@ -2727,7 +2727,7 @@ UIFactory['Node'].moveNode = function(nodeid)
 UIFactory['Node'].moveTo = function(nodeid,parentid)
 //==================================================
 {
-	if (parent !=undefined && parent!=null)
+	if (parentid !=undefined && parentid!=null)
 		$.ajax({
 			type : "POST",
 			dataType : "text",
@@ -4013,6 +4013,8 @@ UIFactory["Node"].getMetadataWadAttributeEditor = function(nodeid,attribute,valu
 			html +=" checked";
 		html +="> Click";
 		html += "</div>";
+	} else if (attribute.indexOf('roles')>-1){
+		html += selectRole(nodeid,attribute,value,yes_no,disabled);
 	} else {
 		html += "  <div class='col-sm-9'><input type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
 		if(disabled!=null && disabled)

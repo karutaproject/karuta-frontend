@@ -60,10 +60,7 @@ function setDesignerRole(role)
 		role = 'designer';
 	g_userroles[0] = role;
 	fillEditBoxBody();
-	if(role == 'designer')
-		$("#userrole").html(karutaStr[LANG]['designer']);
-	else
-		$("#userrole").html(role);
+	$("#userrole").html(role);
 	if (g_display_type=='standard'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
@@ -151,10 +148,10 @@ function getNavBar(type,portfolioid,edit)
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='nav navbar-nav'>";
 	if (type=='login') {
-		html += "				<li><a href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+		html += "				<li><a href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' class='navbar-icon' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
 	} else {
-		html += "				<li><a  onclick='show_list_page()' class='navbar-icon'><span class='glyphicon glyphicon-home'></span></a></li>";
-		html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon'><span class='glyphicon glyphicon-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></span></a></li>";
+		html += "				<li><a  onclick='show_list_page()' class='navbar-icon' data-title='"+karutaStr[LANG]["home"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-home'></span></a></li>";
+		html += "				<li><a href='javascript:displayTechSupportForm()' class='navbar-icon' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-envelope'></span></a></li>";
 	}
 	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
@@ -228,17 +225,17 @@ function getNavBar(type,portfolioid,edit)
 		if (type!='login' && USER!=undefined) {
 			if (USER.admin || (USER.creator && !USER.limited) ) {
 				html += "			<ul class='nav navbar-nav'>";
-				html += "						<li><a href='"+window.location+"' target='_blank' class='navbar-icon'><i class='glyphicon glyphicon-new-window'></i></a></li>";
+				html += "						<li><a href='"+window.location+"' target='_blank' class='navbar-icon' data-title='"+karutaStr[LANG]["button-new-window"]+"' data-tooltip='true' data-placement='bottom'><i class='glyphicon glyphicon-new-window'></i></a></li>";
 				html += "			</ul>";
 			}
 		}
 		//-----------------LOGOUT-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "						<li><a onclick='logout()' class='navbar-icon'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+		html += "						<li><a onclick='logout()' class='navbar-icon' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-tooltip='true' data-placement='bottom'><span class='glyphicon glyphicon-log-out'></span></a></li>";
 		html += "			</ul>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<ul class='nav navbar-nav navbar-right'>";
-		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
+		html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' data-title='"+karutaStr[LANG]["button-change-password"]+"' data-tooltip='true' data-placement='bottom' ><span class='glyphicon glyphicon-user'></span>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
 		html += " 					<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 		html += "					<ul class='dropdown-menu pull-right'>";
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
@@ -621,6 +618,18 @@ function confirmDelPortfolios_EmptyBin()
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
+
+//=======================================================================
+function confirmDelTemporaryUsers() 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.User.deleteTemporaryUsers()\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
 
 //==================================
 function getURLParameter(sParam) {
@@ -1203,7 +1212,7 @@ function getEmail(role,emails) {
 function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.lastIndexOf('/karuta'));
+	var serverURL = url.substring(0,url.indexOf('/application/htm/karuta.htm'));
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
@@ -1842,3 +1851,112 @@ function convertDot2Dash(text)
 	return text.replace(/\./g, '-'); 
 }
 
+//==================================
+function selectRole(nodeid,attribute,value,yes_no,disabled) 
+//==================================
+{
+	var html = "<div class='btn-group roles-choice'>";		
+	html += "<input id='"+attribute+nodeid+"' type='text' class='btn btn-default select select-label'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
+	if(disabled!=null && disabled)
+		html+= " disabled='disabled' ";			
+	html += ">";
+	if(disabled==null || !disabled) {
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "<ul class='dropdown-menu' role='menu'>";
+		html += "<li><a value='' onclick=\"$('#"+attribute+nodeid+"').attr('value','');$('#"+attribute+nodeid+"').change();\")>&nbsp;</a></li>";
+		//---------------------
+		for (role in UICom.roles) {
+			html += "<li><a value='"+role+"' onclick=\"$('#"+attribute+nodeid+"').attr('value','"+role+"');$('#"+attribute+nodeid+"').change();\")>"+role+"</a></li>";
+		}
+		html += "</ul>"
+	}
+	html += "</div>";
+	return html;
+}
+
+//==================================
+function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
+//==================================
+	var currentFocus;
+	/*execute a function when someone writes in the text field:*/
+	input.addEventListener("input", function(e) {
+		var a, b, i, val = this.value;
+		closeAllLists();
+		if (!val) { return false;}
+	 	currentFocus = -1;
+		a = document.createElement("DIV");
+		a.setAttribute("id", this.id + "autocomplete-list");
+		a.setAttribute("class", "autocomplete-items");
+		this.parentNode.appendChild(a);
+		for (i = 0; i < arrayOfValues.length; i++) {
+			var indexval = arrayOfValues[i].libelle.toUpperCase().indexOf(val.toUpperCase());
+			if (indexval>-1) {
+				b = document.createElement("DIV");
+				b.innerHTML = arrayOfValues[i].libelle.substr(0, indexval);
+				b.innerHTML += "<strong>" + arrayOfValues[i].libelle.substr(indexval,val.length) + "</strong>";
+				b.innerHTML += arrayOfValues[i].libelle.substr(indexval+val.length);
+				b.innerHTML += "<input type='hidden' code='"+arrayOfValues[i].code+"' label=\""+arrayOfValues[i].libelle+"\" >";
+				b.addEventListener("click", function(e) {
+					$(input).attr("label_"+languages[langcode],$("input",this).attr('label'));
+					$(input).attr('code',$("input",this).attr('code'));
+					input.value = $("input",this).attr('label');
+					eval(onupdate);
+					closeAllLists();
+				});
+				a.appendChild(b);
+			}
+		}
+	});
+	/*execute a function presses a key on the keyboard:*/
+	input.addEventListener("keydown", function(e) {
+		var x = document.getElementById(this.id + "autocomplete-list");
+		if (x) x = x.getElementsByTagName("div");
+		if (e.keyCode == 40) {
+		/*If the arrow DOWN key is pressed, increase the currentFocus variable:*/
+			currentFocus++;
+			/*and and make the current item more visible:*/
+		addActive(x);
+		} else if (e.keyCode == 38) { //up
+			/*If the arrow UP key is pressed, decrease the currentFocus variable:*/
+			currentFocus--;
+			/*and and make the current item more visible:*/
+			addActive(x);
+		} else if (e.keyCode == 13) {
+			/*If the ENTER key is pressed, prevent the form from being submitted,*/
+			e.preventDefault();
+			if (currentFocus > -1) {
+				/*and simulate a click on the "active" item:*/
+				if (x) x[currentFocus].click();
+			}
+		}
+	});
+	function addActive(x) {
+		/*a function to classify an item as "active":*/
+		if (!x) return false;
+		/*start by removing the "active" class on all items:*/
+		removeActive(x);
+		if (currentFocus >= x.length) currentFocus = 0;
+		if (currentFocus < 0) currentFocus = (x.length - 1);
+		/*add class "autocomplete-active":*/
+		x[currentFocus].classList.add("autocomplete-active");
+	}
+	function removeActive(x) {
+		/*a function to remove the "active" class from all autocomplete items:*/
+		for (var i = 0; i < x.length; i++) {
+			x[i].classList.remove("autocomplete-active");
+		}
+	}
+	function closeAllLists(elmnt) {
+		/*close all autocomplete lists in the document, except the one passed as an argument:*/
+		var x = document.getElementsByClassName("autocomplete-items");
+		for (var i = 0; i < x.length; i++) {
+			if (elmnt != x[i] && elmnt != input) {
+				x[i].parentNode.removeChild(x[i]);
+			}
+		}
+	}
+	/*execute a function when someone clicks in the document:*/
+	document.addEventListener("click", function (e) {
+		closeAllLists(e.target);
+	});
+}
