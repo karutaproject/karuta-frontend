@@ -419,33 +419,47 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode)
 
 	if (nodetype=='asmUnitStructure')
 		this.depth=100;	
+	var displayview = "";
 	//---------------- DISPLAY -------------------------------
 	if (this.depth!=1 && this.depth<10 && nodetype=='asmStructure') {
-		html = displayHTML[type+"-struct-default"].replace(/#uuid#/g,uuid);
-		html = html.replace(/#nodetype#/g,nodetype);
+		if (this.displayview!='' & type!='basic')
+			displayview = type+"-node-"+this.displayview;
+		else
+			displayview = type+"-struct-default";
+		html = displayHTML[displayview];
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
 		$("#"+dest).append (html);
 		$("#label_node_"+uuid).click(function() {displayPage(uuid,1,type,langcode,g_edit)});
 	} else if (this.depth!=1 && this.depth<10 && nodetype=='asmUnit') {
-		html = displayHTML[type+"-struct-default"].replace(/#uuid#/g,uuid);
-		html = html.replace(/#nodetype#/g,nodetype);
+		if (this.displayview!='' & type!='basic')
+			displayview = type+"-node-"+this.displayview;
+		else
+			displayview = type+"-struct-default";
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
 		$("#"+dest).append (html);
 		$("#label_node_"+uuid).click(function() {displayPage(uuid,100,type,langcode,g_edit)});
 	} else {
-		if (this.displayview!='' & type!='basic') {
-			try {
-				html = displayHTML[type+"-node-"+this.displayview];
-			}
-			catch (err) {
-				alert("error: "+this.displayview+" does not exist");
-				html = displayHTML[type+"-node-default"];
-			}
-		}
+		if (this.displayview!='' & type!='basic')
+				displayview = type+"-node-"+this.displayview;
 		else
 			if (type=='basic')
-				html = displayHTML["basic-node-default"];
+				displayview = "basic-node-default";
 			else
-				html = displayHTML[type+"-node-default"];
-		html = html.replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass).replace(/#nodetype#/g,nodetype);
+				displayview = type+"-node-default";
+		try {
+			html = displayHTML[displayview];
+			if (html==undefined || html==""){
+				alert("error: "+this.displayview+" does not exist");
+				displayview = type+"-node-default";
+				html = displayHTML[displayview];
+			}
+		}
+		catch (err) {
+			alert("error: "+this.displayview+" does not exist");
+			displayview = type+"-node-default";
+			html = displayHTML[displayview];
+		}
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
 		if (nodetype=='asmUnit')
 			html = html.replace(/#first#/g,"first-node");
 		$("#"+dest).append (html);
@@ -1479,7 +1493,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 {	// note: #xxx is to avoid to scroll to the top of the page
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<li><a class='button text-button' href='#xxx' onclick=\"";
+	var html = "<a class='dropdown-item button text-button' href='#xxx' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
 		html += items[0] +"('"+parentid+"','"+title+"'";
@@ -1500,19 +1514,17 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 	}
 	html += "\">";
 	html += title;
-	html += "</a></li>";
+	html += "</a>";
 	return html;
 };
 
 //==================================================
 UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4,freenode)
 //==================================================
-{	// note: #xxx is to avoid to scroll to the top of the page
-//	if (freenode)
-//		tag += '_free';
+{	// note: # is to avoid to scroll to the top of the page
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<li><a href='#xxx' onclick=\"";
+	var html = "<a class='dropdown-item' href='#' onclick=\"";
 	var semtags = tag.split(" ");
 	for (var i=0;i<semtags.length;i++){
 		if (semtags[i].length>0)
@@ -1520,7 +1532,7 @@ UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callba
 	}
 	html += "\">";
 	html += karutaStr[LANG][title];
-	html += "</a></li>";
+	html += "</a>";
 	return html;
 };
 
@@ -1571,7 +1583,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 					var url = window.location.href;
 					var serverURL = url.substring(0,url.lastIndexOf('karuta')-1);
 					url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
-					$("#2world-"+uuid).html("<a  class='glyphicon glyphicon-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-tooltip='true' data-placement='bottom'></a> ");
+					$("#2world-"+uuid).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-tooltip='true' data-placement='bottom'></a> ");
 				}
 			});
 		}
@@ -1584,11 +1596,12 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 	var html = "";
 	//------------- node menus button ---------------
 	if ((USER.admin || g_userroles[0]=='designer') && (this.asmtype != 'asmContext' && (this.depth>0 || this.asmtype == 'asmUnitStructure'))) {
-		html += "<span class='dropdown dropdown-button'>";
-		html += "<span  data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false' id='add_"+this.id+"'>";
-		html += " <span class='button text-button'>"+karutaStr[languages[langcode]]['Add']+"<span class='caret'></span> </span>";
-		html += "</span>";
-		html += "<ul class='dropdown-menu dropdown-menu-right' aria-labelledby='add_"+this.id+"'>";
+		html += "<div class='dropdown'>";
+		html += "	<button class='btn dropdown-toggle' type='button' id='add_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		html += 		karutaStr[languages[langcode]]['Add'];
+		html += "	</button>";
+		html += "	<div class='dropdown-menu' aria-labelledby='add_"+this.id+"'>";
+		//--------------------------------
 		if (this.asmtype == 'asmRoot' || this.asmtype == 'asmStructure') {
 			var databack = false;
 			var callback = "UIFactory['Node'].reloadStruct";
@@ -1603,42 +1616,39 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		var param2 = "'"+g_portfolioid+"'";
 		var param3 = null;
 		var param4 = null;
-		if (this.semantictag.indexOf("asmColumns")>-1)
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','asmColumn','asmColumn',databack,callback,param2,param3,param4);
-		else {
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','asmUnitStructure','asmUnitStructure',databack,callback,param2,param3,param4);
-			html += "<hr>";
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','TextField','TextField',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Field','Field',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Document','Document',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','URL','URL',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Calendar','Calendar',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Image','Image',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Video','Video',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Audio','Audio',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Oembed','Oembed',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Color','Color',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','URL2Unit','URL2Unit',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Comments','Comments',databack,callback,param2,param3,param4);
-			html += "<hr>";
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4);
-			html += "<hr>";
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','ImageBlock','ImageBlock',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-bubbles','bubble_level1','BubbleMap',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'europass.parts','EuropassL','Europass',databack,callback,param2,param3,param4);
-			html += "<hr>";
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Item','Item',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Resource','GetResource',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Get_Resource','GetGetResource',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Double_Resource','GetDoubleResource',databack,callback,param2,param3,param4);
-			html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4);
-		}
-		html += "</ul>"; // class='dropdown-menu'
-		html += "</span><!-- class='dropdown -->";
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','asmUnitStructure','asmUnitStructure',databack,callback,param2,param3,param4);
+		html += "<hr>";
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','TextField','TextField',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Field','Field',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Document','Document',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','URL','URL',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Calendar','Calendar',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Image','Image',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Video','Video',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Audio','Audio',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Oembed','Oembed',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Color','Color',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','URL2Unit','URL2Unit',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Comments','Comments',databack,callback,param2,param3,param4);
+		html += "<hr>";
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4);
+		html += "<hr>";
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','ImageBlock','ImageBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-bubbles','bubble_level1','BubbleMap',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'europass.parts','EuropassL','Europass',databack,callback,param2,param3,param4);
+		html += "<hr>";
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Item','Item',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Resource','GetResource',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Get_Resource','GetGetResource',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Double_Resource','GetDoubleResource',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4);
+		//--------------------------------
+		html += "	</div>"; // class='dropdown-menu'
+		html += "</div>"; // class='dropdown'
 	}
 	//------------- specific menu button ---------------
 	var no_monomenu = 0;
@@ -1687,6 +1697,13 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			var monomenu = (nbmenus==1);
 			//--------------------------------
 			if (displayMenu && !monomenu) {
+				//-----------------------
+				html += "<div class='dropdown'>";
+				html += "	<button class='btn dropdown-toggle' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+				html += 		karutaStr[languages[langcode]]['menu'];
+				html += "	</button>";
+				html += "	<div class='dropdown-menu' aria-labelledby='specific_"+this.id+"'>";
+				//-----------------------
 				var databack = false;
 				var callback = "UIFactory.Node.reloadUnit";
 				if (this.asmtype=='asmStructure' || this.asmtype=='asmRoot' )
@@ -1694,16 +1711,9 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				var param2 = "'"+g_portfolio_rootid+"'";
 				var param3 = null;
 				var param4 = null;
-				html += "<span class='dropdown dropdown-menu-left dropdown-button'>";
-				//-----------------------
-				html += "<span class='dropdown-toggle'  data-toggle='dropdown' id='specific_"+this.id+"'> ";
-				html += " <span class='button text-button'>"+karutaStr[languages[langcode]]['menu']+"<span class='caret'></span> </span>";
-				html += "</span>";
-				//-----------------------
-				html += "<ul class='dropdown-menu dropdown-menu-right specific-menu' aria-labelledby='specific_"+this.id+"'>";
 				for (var i=0; i<menus.length; i++){
 					if (menus[i][0]=="#line") {
-						html += "<hr>";
+						html += "<div class='dropdown-divider'></div>";
 					} else {
 						var titles = [];
 						var title = "";
@@ -1724,8 +1734,9 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 							html += UIFactory["Node"].getSpecificMenu(this.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
 					}
 				}
-				html += "</ul>"; // class='dropdown-menu'
-				html += "</span><!-- class='dropdown -->";
+				//-----------------------
+				html += "		</div>"; // class='dropdown-menu'
+				html += "	</div><!-- class='dropdown -->";
 			}
 			if (displayMenu && monomenu) {
 				var databack = false;
@@ -2278,8 +2289,11 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	var semtag =  ($("metadata",node.node)[0]==undefined)?'': $($("metadata",node.node)[0]).attr('semantictag');
 	if (semtag==undefined) // for backward compatibility - node without semantic tag
 		semtag = '';
+	var resource_type = "";
+	if (node.resource!=null)
+		resource_type = node.resource.type;
 	var html = "<div><br>";
-	html += "<form id='metadata' class='form-horizontal'>";
+	html += "<form id='metadata'>";
 	if (name=='asmRoot') {
 		html += "<div id='root-metadata'>"
 		html += UIFactory["Node"].getMetadataDisplayTypeAttributeEditor(node.id,'display-type',$(node.metadata).attr('display-type'));
@@ -2306,9 +2320,6 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 		if (node.resource.type=='Field' || node.resource.type=='TextField' || node.resource.type=='Get_Resource' || node.resource.type=='Get_Get_Resource' || node.resource.type=='Get_Double_Resource')
 			html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'encrypted',$(node.metadata).attr('encrypted'),true);
 	}
-//	html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'sharedNodeResource',$(node.metadata).attr('sharedNodeResource'),true);
-//	if (name=='asmContext')
-//		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'sharedResource',$(node.metadata).attr('sharedResource'),true);
 	html += "<hr><h4>"+karutaStr[LANG]['metadata']+"</h4>";
 	if (USER.admin)
 		html += UIFactory["Node"].displayRights(node.id);
@@ -2343,11 +2354,6 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
 	if (name=='asmContext' && node.resource.type=='TextField')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'maxword',$(node.metadatawad).attr('maxword'));
-	//-------------free positioning --------
-//	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
-//		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'contentfreenode',$(node.metadatawad).attr('contentfreenode'),true);
-//	if (name!='asmRoot')
-//		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'freenode',$(node.metadatawad).attr('freenode'),true);
 	//--------------------------------------
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'display',$(node.metadatawad).attr('display'),true);
 	if (name=='asmUnitStructure')
@@ -2355,7 +2361,10 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	if (name=='asmContext' && node.resource.type!='Proxy' && node.resource.type!='Audio' && node.resource.type!='Video' && node.resource.type!='Document' && node.resource.type!='Image' && node.resource.type!='URL' && node.resource.type!='Oembed')
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'inline',$(node.metadata).attr('inline'),true);
 //	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'veriffunction',$(node.metadatawad).attr('veriffunction'));
-	html += "<div id='metadata_texts'></div>";
+	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
+		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seltype',$(node.metadatawad).attr('seltype'));
+	}
+		html += "<div id='metadata_texts'></div>";
 	html += "</form>";
 	html += "</div>";
 	return html;
@@ -2404,7 +2413,7 @@ UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'none':$(node.metadatawad).attr('editnoderoles');
 	var graphicerroles = ($(node.metadatawad).attr('graphicerroles')==undefined)?'none':$(node.metadatawad).attr('graphicerroles');
 	if (USER.admin || g_userroles[0]=='designer' || graphicerroles.containsArrayElt(g_userroles) || graphicerroles.indexOf(userrole)>-1) {
-		html += "<form id='metadata' class='form-horizontal'><br>";
+		html += "<br><form id='metadata'>";
 		//----------------------------------
 		if (USER.admin || g_userroles[0]=='designer' || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(userrole)>-1) {
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'cssclass',$(node.metadataepm).attr('cssclass'));
@@ -2420,10 +2429,10 @@ UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'font-style',$(node.metadataepm).attr('font-style'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'text-align',$(node.metadataepm).attr('text-align'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'font-size',$(node.metadataepm).attr('font-size'));
-			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'color',$(node.metadataepm).attr('color'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'padding-top',$(node.metadataepm).attr('padding-top'));
-			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'background-color',$(node.metadataepm).attr('background-color'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'othercss',$(node.metadataepm).attr('othercss'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'color',$(node.metadataepm).attr('color'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'background-color',$(node.metadataepm).attr('background-color'));
 		}
 		//----------------------------------
 		if (name=='asmContext') 
@@ -2434,10 +2443,10 @@ UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-font-style',$(node.metadataepm).attr('node-font-style'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-text-align',$(node.metadataepm).attr('node-text-align'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-font-size',$(node.metadataepm).attr('node-font-size'));
-			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-color',$(node.metadataepm).attr('node-color'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-padding-top',$(node.metadataepm).attr('node-padding-top'));
-			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-background-color',$(node.metadataepm).attr('node-background-color'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-othercss',$(node.metadataepm).attr('node-othercss'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-color',$(node.metadataepm).attr('node-color'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'node-background-color',$(node.metadataepm).attr('node-background-color'));
 		//----------------------------------
 		if (name=='asmStructure' || name=='asmUnit') {
 			html += "<hr><h4>"+karutaStr[languages[langcode]]['inparent']+"</h4>";
@@ -2445,20 +2454,12 @@ UIFactory["Node"].getMetadataEpmAttributesEditor = function(node,type,langcode)
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-font-style',$(node.metadataepm).attr('inparent-font-style'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-text-align',$(node.metadataepm).attr('inparent-text-align'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-font-size',$(node.metadataepm).attr('inparent-font-size'));
-			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-color',$(node.metadataepm).attr('inparent-color'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-padding-top',$(node.metadataepm).attr('inparent-padding-top'));
-			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-background-color',$(node.metadataepm).attr('inparent-background-color'));
 			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-othercss',$(node.metadataepm).attr('inparent-othercss'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-color',$(node.metadataepm).attr('inparent-color'));
+			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'inparent-background-color',$(node.metadataepm).attr('inparent-background-color'));
 		}
 		//----------------------------------
-		var parent = $(node.node).parent();
-		if ($(node.metadatawad).attr('freenode')=='Y' || $("metadata-wad",$(parent)).attr('contentfreenode')=='Y'){
-			html += "<hr>";
-			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'top',$(node.metadataepm).attr('top'));
-			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'left',$(node.metadataepm).attr('left'));
-			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'width',$(node.metadataepm).attr('width'));
-			html += UIFactory["Node"].getMetadataEpmAttributeEditor(node.id,'height',$(node.metadataepm).attr('height'));
-		}
 		html += "</form>";
 	}
 	return html;
@@ -2553,10 +2554,12 @@ UIFactory["Node"].getMetadataAttributeEditor = function(nodeid,attribute,value,y
 	if (value==null || value==undefined || value=='undefined')
 		value = "";
 	var html = "";
-	html += "<div class='form-group'>";
-	html += "  <label class='col-sm-3 control-label'>"+karutaStr[languages[langcode]][attribute]+"</label>";
 	if (yes_no!=null && yes_no) {
-		html += "  <div class='col-sm-9'><input type='checkbox' onchange=\"javascript:UIFactory['Node'].updateMetadataAttribute('"+nodeid+"','"+attribute+"',this.value,this.checked)\" value='Y'";
+		html += "<div class='input-group input-group-sm'>";
+		html += "	<div class='input-group-prepend'>";
+		html += "		<div class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute]+"</div>";
+		html += "	</div>";
+		html += "  <input class='form-control' type='checkbox' onchange=\"javascript:UIFactory['Node'].updateMetadataAttribute('"+nodeid+"','"+attribute+"',this.value,this.checked)\" value='Y'";		
 		if(disabled!=null && disabled)
 			html+= " disabled='disabled' ";			
 		if (value=='Y')
@@ -2564,12 +2567,16 @@ UIFactory["Node"].getMetadataAttributeEditor = function(nodeid,attribute,value,y
 		html+= "></div>";
 	}
 	else {
-		html += "  <div class='col-sm-9'><input type='text' class='form-control' onchange=\"javascript:UIFactory['Node'].updateMetadataAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+value+"'";
-		if(disabled!=null && disabled)
-			html+= " disabled='disabled' ";			
-		html += "></div>";
+		html += "<div class='input-group input-group-sm'>";
+		html += "	<div class='input-group-prepend'>";
+		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";
+		html += "	</div>";
+		html += "<input type='text' class='form-control' aria-label='"+karutaStr[languages[langcode]][attribute]+"' aria-describedby='"+attribute+nodeid+"' onchange=\"javascript:UIFactory['Node'].updateMetadataAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
+		if (disabled!=null && disabled)
+			html+= " disabled='disabled'";
+		html+= ">";
+		html += "</div>";
 	}
-	html += "</div>";
 	return html;
 };
 
@@ -2614,32 +2621,31 @@ UIFactory["Node"].getMetadataEpmDisplayViewAttributeEditor = function(nodeid,att
 	if (value==null || value==undefined || value=='undefined')
 		value = "";
 	var html = "";
-	html += "<div class='form-group'>";
-	html += "  <label class='col-sm-3 control-label'>"+karutaStr[languages[langcode]][attribute]+"</label>";
-		html += "  <div class='col-sm-9'><select class='form-control' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmSelectAttribute('"+nodeid+"','"+attribute+"',this)\"";
-		if(disabled!=null && disabled)
-			html+= " disabled='disabled' ";			
-		html+= ">";
-		html+= "<option value=''></option>";
-		for (dest in displayView[g_display_type,nodetype]) {
-			html += "<option value='"+displayView[g_display_type,nodetype][dest]+"'";
-			if (value==displayView[g_display_type,nodetype][dest])
-				html += " selected ";
-			html += ">"+displayView[g_display_type,nodetype][dest]+"</option>";
-		}
-		if (resourcetype!=undefined && resourcetype!=null)
-			html+= "<option value=''>----------------------------</option>";
-			for (dest in displayView[g_display_type,nodetype,resourcetype]) {
-				html += "<option value='"+displayView[g_display_type,nodetype,resourcetype][dest]+"'";
-				if (value==displayView[g_display_type,nodetype,resourcetype][dest])
-					html += " selected ";
-				html += ">"+displayView[g_display_type,nodetype,resourcetype][dest]+"</option>";
-			}
-
-			
-		html+= "</select>";
-		html+= "</div>";
-	html += "</div>";
+	html += "<div class='input-group input-group-sm'>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<div class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute]+"</div>";
+	html += "	</div>";
+	html += "	<select class='form-control' onchange=\"javascript:UIFactory.Node.updateMetadataEpmSelectAttribute('"+nodeid+"','"+attribute+"',this)\"";
+	if(disabled!=null && disabled)
+		html+= " disabled='disabled' ";			
+	html+= ">";
+	html+= "		<option value=''></option>";
+	for (dest in displayView[g_display_type,nodetype]) {
+		html += "	<option value='"+displayView[g_display_type,nodetype][dest]+"'";
+		if (value==displayView[g_display_type,nodetype][dest])
+			html += " selected ";
+		html += ">"+displayView[g_display_type,nodetype][dest]+"</option>";
+	}
+	if (resourcetype!=undefined && resourcetype!=null)
+		html+= "		<option disabled>────────────────────</option>";
+	for (dest in displayView[g_display_type,nodetype,resourcetype]) {
+		html += "<option value='"+displayView[g_display_type,nodetype,resourcetype][dest]+"'";
+		if (value==displayView[g_display_type,nodetype,resourcetype][dest])
+			html += " selected ";
+		html += ">"+displayView[g_display_type,nodetype,resourcetype][dest]+"</option>";
+	}
+	html+= "	</select>";
+	html+= "</div>";
 	return html;
 };
 
@@ -2653,10 +2659,12 @@ UIFactory["Node"].getMetadataWadAttributeEditor = function(nodeid,attribute,valu
 	if (value==null || value==undefined || value=='undefined')
 		value = "";
 	var html = "";
-	html += "<div class='form-group'>";
-	html += "  <label class='col-sm-3 control-label'>"+karutaStr[languages[langcode]][attribute]+"</label>";
 	if (yes_no!=null && yes_no) {
-		html += "  <div class='col-sm-9'><input type='checkbox' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value,this.checked)\" value='Y'";		
+		html += "<div class='input-group input-group-sm'>";
+		html += "	<div class='input-group-prepend'>";
+		html += "		<div class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute]+"</div>";
+		html += "	</div>";
+		html += "  <input class='form-control' type='checkbox' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value,this.checked)\" value='Y'";		
 		if(disabled!=null && disabled)
 			html+= " disabled='disabled' ";			
 		if (value=='Y')
@@ -2664,35 +2672,68 @@ UIFactory["Node"].getMetadataWadAttributeEditor = function(nodeid,attribute,valu
 		html+= "></div>";
 	}
 	else if (attribute.indexOf('seltype')>-1){
-		html += "  <div class='col-sm-9'>";
-		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='select' ";
-		if (value=='select' || value=='')
-			html +=" checked";
-		html +="> Select";
-		html += "&nbsp;&nbsp;&nbsp;<input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='radio'";
-		if (value=='radio')
-			html +=" checked";
-		html +="> Radio";
-		html += "&nbsp;&nbsp;&nbsp;<input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='click'";
-		if (value=='click')
-			html +=" checked";
-		html +="> Click";
-		html += "&nbsp;&nbsp;&nbsp;<input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='completion'";
-		if (value=='completion')
-			html +=" checked";
-		html +="> Auto-complete";
+		var choices = [{code:'select',label:'Select'},{code:'radio',label:'Radio'},{code:'click',label:'click'},{code:'completion',label:'Auto-complete'}];
+		html += "<div class='input-group input-group-sm'>";
+		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
+		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";
+		html += "	</div>";
+		for (var i=0; i<choices.length; i++){
+			html +="	<div class='form-check form-check-inline'>";
+			html += "		<input class='form-check-input' type='radio' name='"+attribute+nodeid+"' onchange=\"javascript:UIFactory.Node.updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+choices[i].code+"' ";
+			if (value==choices[i].code)
+				html +=" checked";
+			html +=">";
+			html +="		<label class='form-check-label'>"+choices[i].label+"</label>";
+			html += "	</div>";
+		}
 		html += "</div>";
 	} else if (attribute.indexOf('roles')>-1){
-		html += selectRole(nodeid,attribute,value,yes_no,disabled);
+		html += UIFactory.Node.selectRole(nodeid,attribute,value,yes_no,disabled);
 	} else {
-		html += "  <div class='col-sm-9'><input type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
-		if(disabled!=null && disabled)
-			html+= " disabled='disabled' ";			
-		html += "></div>";
+		html += "<div class='input-group input-group-sm'>";
+		html += "	<div class='input-group-prepend'>";
+		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";
+		html += "	</div>";
+		html += "<input type='text' class='form-control' aria-label='"+karutaStr[languages[langcode]][attribute]+"' aria-describedby='"+attribute+nodeid+"' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
+		if (disabled!=null && disabled)
+			html+= " disabled='disabled'";
+		html+= ">";
+		html += "</div>";
+	}
+	return html;
+};
+
+//==================================
+UIFactory["Node"].selectRole= function(nodeid,attribute,value,yes_no,disabled) 
+//==================================
+{
+	var langcode = LANGCODE;
+	var html = "";
+	html += "<div class='input-group input-group-sm'>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<div class='input-group-text'>"+karutaStr[languages[langcode]][attribute]+"</div>";
+	html += "	</div>";
+	html += "	<input id='"+attribute+nodeid+"' type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
+	if(disabled!=null && disabled)
+		html+= " disabled='disabled' ";			
+	html += ">";
+	if(disabled==null || !disabled) {
+		html += "<div class='input-group-append'>";
+		html += "	<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+		html += "	<div class='dropdown-menu button-role-caret'>";
+//		html += "		<div class='dropdown-menu'>";
+		html += "			<a class='dropdown-item' value='' onclick=\"$('#"+attribute+nodeid+"').attr('value','');$('#"+attribute+nodeid+"').change();\")>&nbsp;</a>";
+		//---------------------
+		for (role in UICom.roles) {
+			html += "		<a  class='dropdown-item' value='"+role+"' onclick=\"$('#"+attribute+nodeid+"').attr('value','"+role+"');$('#"+attribute+nodeid+"').change();\")>"+role+"</a>";
+		}
+//		html += "		</div>";
+		html += "	</div>";
+		html += "</div>";
 	}
 	html += "</div>";
 	return html;
-};
+}
 
 //==================================================
 UIFactory["Node"].getMetadataEpmAttributeEditor = function(nodeid,attribute,value)
@@ -2702,75 +2743,79 @@ UIFactory["Node"].getMetadataEpmAttributeEditor = function(nodeid,attribute,valu
 	if (value==null || value==undefined || value=='undefined')
 		value = "";
 	var html = "";
-	html += "<div class='form-group'>";
 	var attribute_label = attribute;
 	if (attribute.indexOf('node-')>-1)
 		attribute_label = attribute.substring(5);
 	if (attribute.indexOf('inparent-')>-1)
 		attribute_label = attribute.substring(9);
-	html += "  <label class='col-sm-3 control-label'>"+karutaStr[languages[langcode]][attribute_label]+"</label>";
 	if (attribute.indexOf('font-weight')>-1){
-		html += "  <div class='col-sm-9'>";
-		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='normal' ";
-		if (value=='normal' || value=='')
-			html +=" checked";
-		html +="> Normal";
-		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='bold'";
-		if (value=='bold')
-			html +=" checked";
-		html +="> Bold";
-		html += "</div>";
-	}
-	else if (attribute=='css_in_parent'){
-		html += "  <div class='col-sm-9'>";
-		html += "    <input type='radio' name='css_in_parent' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='N' ";
-		if (value=='N' || value=='')
-			html +=" checked";
-		html +="> "+karutaStr[languages[langcode]]['no'];
-		html += "    <input type='radio' name='css_in_parent' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='Y'";
-		if (value=='Y')
-			html +=" checked";
-		html +="> "+karutaStr[languages[langcode]]['yes'];
+		var choices = [{code:'normal',label:'Normal'},{code:'bold',label:'Bold'}];
+		html += "<div class='input-group input-group-sm'>";
+		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
+		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
+		html += "	</div>";
+		for (var i=0; i<choices.length; i++){
+			html +="	<div class='form-check form-check-inline'>";
+			html += "		<input class='form-check-input' type='radio' name='"+attribute+nodeid+"' onchange=\"javascript:UIFactory.Node.updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+choices[i].code+"' ";
+			if (value==choices[i].code)
+				html +=" checked";
+			html +=">";
+			html +="		<label class='form-check-label'>"+choices[i].label+"</label>";
+			html += "	</div>";
+		}
 		html += "</div>";
 	}
 	else if (attribute.indexOf('font-style')>-1){
-		html += "  <div class='col-sm-9'>";
-		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='normal' ";
-		if (value=='normal' || value=='')
-			html +=" checked";
-		html +="> Normal";
-		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='italic'";
-		if (value=='italic')
-			html +=" checked";
-		html +="> Italic";
+		var choices = [{code:'normal',label:'Normal'},{code:'italic',label:'Italic'}];
+		html += "<div class='input-group input-group-sm'>";
+		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
+		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
+		html += "	</div>";
+		for (var i=0; i<choices.length; i++){
+			html +="	<div class='form-check form-check-inline'>";
+			html += "		<input class='form-check-input' type='radio' name='"+attribute+nodeid+"' onchange=\"javascript:UIFactory.Node.updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+choices[i].code+"' ";
+			if (value==choices[i].code)
+				html +=" checked";
+			html +=">";
+			html +="		<label class='form-check-label'>"+choices[i].label+"</label>";
+			html += "	</div>";
+		}
 		html += "</div>";
 	}
 	else if (attribute.indexOf('color')>-1){
-		html += "  <div class='col-sm-9'><input type='text' class='form-control pickcolor' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+value+"' ></div>";
+		html += "<div class='input-group input-group-sm'>";
+		html += "	<div class='input-group-prepend'>";
+		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
+		html += "	</div>";
+		html += "	<input type='text' class='form-control pickcolor' aria-label='"+karutaStr[languages[langcode]][attribute]+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\">";
+		html += "</div>";
+//		html += "  <input type='text' class='form-control pickcolor' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+value+"' >";
 	}
 	else if (attribute.indexOf('text-align')>-1){
-		html += "  <div class='col-sm-9'>";
-		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='left' ";
-		if (value=='left' || value=='')
-			html +=" checked";
-		html +="> Left";
-		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='right'";
-		if (value=='right')
-			html +=" checked";
-		html +="> Right";
-		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='center'";
-		if (value=='center')
-			html +=" checked";
-		html +="> Center";
-		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='justify'";
-		if (value=='justify')
-			html +=" checked";
-		html +="> Justify";
+		var choices = [{code:'left',label:'Left'},{code:'right',label:'Right'},{code:'center',label:'Center'},{code:'justify',label:'Justify'}];
+		html += "<div class='input-group input-group-sm'>";
+		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
+		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
+		html += "	</div>";
+		for (var i=0; i<choices.length; i++){
+			html +="	<div class='form-check form-check-inline'>";
+			html += "		<input class='form-check-input' type='radio' name='"+attribute+nodeid+"' onchange=\"javascript:UIFactory.Node.updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+choices[i].code+"' ";
+			if (value==choices[i].code)
+				html +=" checked";
+			html +=">";
+			html +="		<label class='form-check-label'>"+choices[i].label+"</label>";
+			html += "	</div>";
+		}
 		html += "</div>";
 	}
-	else
-		html += "  <div class='col-sm-9'><input type='text' class='form-control' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+value+"' ></div>";
-	html += "</div>";
+	else {
+		html += "<div class='input-group input-group-sm'>";
+		html += "	<div class='input-group-prepend'>";
+		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
+		html += "	</div>";
+		html += "	<input type='text' class='form-control' aria-label='"+karutaStr[languages[langcode]][attribute]+"' aria-describedby='"+attribute+nodeid+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\">";
+		html += "</div>";
+	}
 	return html;
 };
 
@@ -2833,10 +2878,6 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 		html  = "<hr><label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
 		$("#metadata_texts").append($(html));
 		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'query',$(node.metadatawad).attr('query'));
-	}
-	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
-		html = UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seltype',$(node.metadatawad).attr('seltype'));
-		$("#metadata_texts").append($(html));
 	}
 	//----------------------Share----------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {

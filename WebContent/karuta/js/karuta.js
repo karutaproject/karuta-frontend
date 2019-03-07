@@ -278,11 +278,11 @@ function fillEditBoxBody()
 {
 	var html = "";
 	if (g_userroles[0]=='designer' || USER.admin) {
-		html += "\n			<div role='tabpanel'>";
+//		html += "\n			<div role='tabpanel'>";
 		html += "\n				<ul class='nav nav-tabs' role='tablist'>";
-		html += "\n					<li role='presentation' class='active'><a href='#edit-window-body-main' aria-controls='edit-window-body-main' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
-		html += "\n					<li role='presentation'><a href='#edit-window-body-metadata' aria-controls='edit-window-body-metadata' role='tab' data-toggle='tab'>"+karutaStr[LANG]['metadata']+"</a></li>";
-		html += "\n					<li role='presentation'><a href='#edit-window-body-metadata-epm' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>"+karutaStr[LANG]['css-styles']+"</a></li>";
+		html += "\n					<li class='nav-item'><a class='nav-link active' href='#edit-window-body-main' aria-controls='edit-window-body-main' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
+		html += "\n					<li class='nav-item'><a class='nav-link' href='#edit-window-body-metadata' aria-controls='edit-window-body-metadata' role='tab' data-toggle='tab'>"+karutaStr[LANG]['metadata']+"</a></li>";
+		html += "\n					<li class='nav-item'><a class='nav-link' href='#edit-window-body-metadata-epm' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>"+karutaStr[LANG]['css-styles']+"</a></li>";
 		html += "\n				</ul>";
 		html += "\n				<div class='tab-content'>";
 		html += "\n					<div role='tabpanel' class='tab-pane active' id='edit-window-body-main' style='margin-top:10px'>";
@@ -293,7 +293,7 @@ function fillEditBoxBody()
 		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata'></div>";
 		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata-epm'></div>";
 		html += "\n				</div>";
-		html += "\n			</div>";
+//		html += "\n			</div>";
 	}
 	else {
 		html += "\n					<div id='edit-window-body-resource'></div>";
@@ -1793,28 +1793,6 @@ function convertDot2Dash(text)
 	return text.replace(/\./g, '-'); 
 }
 
-//==================================
-function selectRole(nodeid,attribute,value,yes_no,disabled) 
-//==================================
-{
-	var html = "<div class='btn-group roles-choice'>";		
-	html += "<input id='"+attribute+nodeid+"' type='text' class='btn btn-default select select-label'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
-	if(disabled!=null && disabled)
-		html+= " disabled='disabled' ";			
-	html += ">";
-	if(disabled==null || !disabled) {
-		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
-		html += "<ul class='dropdown-menu' role='menu'>";
-		html += "<li><a value='' onclick=\"$('#"+attribute+nodeid+"').attr('value','');$('#"+attribute+nodeid+"').change();\")>&nbsp;</a></li>";
-		//---------------------
-		for (role in UICom.roles) {
-			html += "<li><a value='"+role+"' onclick=\"$('#"+attribute+nodeid+"').attr('value','"+role+"');$('#"+attribute+nodeid+"').change();\")>"+role+"</a></li>";
-		}
-		html += "</ul>"
-	}
-	html += "</div>";
-	return html;
-}
 
 //==================================
 function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
