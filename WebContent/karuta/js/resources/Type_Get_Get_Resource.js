@@ -1313,7 +1313,7 @@ UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,sel
 	//------------------------------------------------------------
 	if (type.indexOf('multiple')>-1) {
 		//------------------------
-		var inputs = "<div id='get_get_multiple' class='multiple'></div>";
+		var inputs = "<div class='ROME' id='get_get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
 		//-----------------------
 		var nodes = $("node",data);
