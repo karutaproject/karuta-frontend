@@ -561,6 +561,31 @@
 		</update-resource>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='update-item']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<update-resource type='Item' select="{$select}">
+			<attribute name='code' language-dependent='N'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">code</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+			<attribute name='label' language-dependent='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">libelle</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+			<attribute name='code' language-dependent='N'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">value</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+		</update-resource>
+	</xsl:template>
+
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	<!-- ================================ USERGROUP =========================================== -->
