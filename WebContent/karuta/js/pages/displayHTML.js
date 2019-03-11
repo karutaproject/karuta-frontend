@@ -11,7 +11,7 @@
 	displayView["standard"]["struct"] = ["strcut"];
 	displayView["standard"]["node"] = ["default","row","xwide","card","carddeck","card-carddeck"];
 	displayView["standard"]["resource"] = ["default","1/12","2/12","3/12","4/12","5/12","6/12","xwide","card"];
-//	displayView["standard"]["resource"]["Image"] = ["Img-Label"];
+	displayView["standard"]["resource"]["Image"] = ["Img-Label"];
 
 	displayView["model"] = {};
 	displayView["model"]["node"] = ["default","card","row"];
@@ -102,7 +102,7 @@
 	displayHTML["standard-resource-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 												"	<div id='sub_node_#uuid#' class='resource-node row' >" +
 												"		<div class='col-2'></div>" +
-												"		<div id='std_node_#uuid#' name='lbl-div' class='col-2 node-label inside-full-height'>" +
+												"		<div id='std_node_#uuid#' name='lbl-div' class='col-2 resource-label inside-full-height'>" +
 												"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid' class='ihelp'></span></div>" +
 												"		</div>" +
 												"		<div name='res-div' class='col-8'>" +

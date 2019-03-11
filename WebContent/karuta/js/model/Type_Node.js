@@ -1042,7 +1042,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "  <a class='sidebar-link' href='#' onclick=\"toggleSidebarPlus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
 					html += "  </div>"
 					if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
-						html += "<div id='collapse"+uuid+"' class='panel-collapse collapse in' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
+						html += "<div id='collapse"+uuid+"' class='panel-collapse collapse show' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 					else
 						html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
 					html += "<div id='panel-body"+uuid+"' class='panel-body'></div><!-- panel-body -->";
@@ -2639,10 +2639,10 @@ UIFactory["Node"].getMetadataEpmDisplayViewAttributeEditor = function(nodeid,att
 	if (resourcetype!=undefined && resourcetype!=null)
 		html+= "		<option disabled>────────────────────</option>";
 	for (dest in displayView[g_display_type][nodetype][resourcetype]) {
-		html += "<option value='"+displayView[g_display_type,nodetype,resourcetype][dest]+"'";
-		if (value==displayView[g_display_type,nodetype,resourcetype][dest])
+		html += "<option value='"+displayView[g_display_type][nodetype][resourcetype][dest]+"'";
+		if (value==displayView[g_display_type][nodetype][resourcetype][dest])
 			html += " selected ";
-		html += ">"+displayView[g_display_type,nodetype,resourcetype][dest]+"</option>";
+		html += ">"+displayView[g_display_type][nodetype][resourcetype][dest]+"</option>";
 	}
 	html+= "	</select>";
 	html+= "</div>";

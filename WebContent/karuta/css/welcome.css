@@ -2,6 +2,10 @@
   padding-top: 60px;
 }
 
+#navigation-bar {
+  margin-top: 0px;
+}
+
 body {
   background: url("../img/login-background.jpg") no-repeat;
 }

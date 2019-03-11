@@ -106,9 +106,9 @@ function fill_list_page()
 	//--------------------------
 	var html = "";
 	html += "<div id='list-header' class='row'>";
-	html += "	<div id='menu' class='col'></div>";
-	html += "	<div id='search-portfolio-div' class='col ml-auto'>" + getSearch() + "</div>";
-	html += "	<i class='fas fa-sync-alt' onclick='fill_list_page()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></i>";
+	html += "	<div id='menu' class='col-1'></div>";
+	html += "	<div id='search-portfolio-div' class='col-10'>" + getSearch() + "</div>";
+	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_page()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></i></div>";
 	html += "</div>";
 	html += "<div id='list'></div>";
 	$("#list-container").html(html);

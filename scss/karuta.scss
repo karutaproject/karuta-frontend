@@ -1,28 +1,42 @@
 
+
 /* ====================== */
 /*     DEFAULT VALUES     */
 /* ====================== */
 
-	body {
-		font-family: "Open Sans",sans-serif;
+	body,
+		.form-control,
+		.btn {
+			font-family: "Open Sans",sans-serif;
+			font-size: 0.8rem;
 	}
 	
+	@media (min-width: 768px) {  
+		body,
+		.form-control,
+		.btn {
+			font-size: 1rem;
+		}
+	}
+
+
 	#contenu {
 		background-color: white;
+		padding-left:0px;
+		padding-right:0px;
+		padding-bottom:50px;
 	}
 
 	#edit-window-body {
-		height: 600px;
+		height: 400px;
 		overflow-y: scroll;
 	}
+
+/*
 
 html, body, #main-body, #main-container, #global-row, #main-row, {
 	height:100%;
 	min-height:110%;
-}
-/*
-#main-container blockquote {
-	font-size: 12px;
 }
 */
 	.collapsible {
@@ -31,11 +45,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		margin-right:5px;
 	}
 
-#contenu {
-	padding-left:0px;
-	padding-right:0px;
-	padding-bottom:50px;
-}
 /*
 #contenu .page {
 	padding-left:10px;
@@ -73,37 +82,31 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 /* ====================== */
 
 
-#flagimage {
-	width:25px;
-	margin-top:-5px;
-}
-
-#navigation-bar {
-	background-color: var(--navbar-background-color);
-	margin-top: 15px; // space for saved information
-	li.icon {
-		margin-top:4px;
+	#flagimage {
+		width:25px;
+		margin-top:-5px;
 	}
-}
+	
+	#navigation-bar {
+		background-color: var(--navbar-background-color);
+		margin-top: 15px; // space for saved information
+		li.icon {
+			margin-top:4px;
+		}
+	}
 
-/*
-.navbar-brand {padding-bottom:0px;}
 
-#main-welcome .navbar {
-	margin-top: inherit; // space for saved information
-}
-*/
 /* ====================== */
 /*      SUBBAR            */
 /* ====================== */
 
-#sub-bar {
-	background-color : var(--sub-bar-background-color);
-	color : var(--sub-bar-color);
-	.icon {
-		margin-top:4px;
+	#sub-bar {
+		background-color : var(--sub-bar-background-color);
+		color : var(--sub-bar-color);
+		.icon {
+			margin-top:4px;
+		}
 	}
-}
 
 /* ====================== */
 /*      SIDEBAR            */
@@ -238,7 +241,7 @@ a.sidebar-link:hover {
 
 #sub-bar .welcome-title {
     color: var(--welcome-title-color);
-    font-size: 30px;
+    font-size: 120%;
     text-align: center;
     width: 100%;
 }
@@ -256,14 +259,14 @@ a.sidebar-link:hover {
  * -------------------------
  */
 //--- le libellé Bienvenue de la page WELCOME n'est visible que pour le designer
-#portfolio-container{
-	&:not([role=designer]) .WELCOME div[name=lbl-div]:first-child{ 
-		display:none
-	};
-	&[role=designer] .WELCOME div[name=lbl-div]:first-child{
-		display:block
-	};
-}
+	#portfolio-container{
+		&:not([role=designer]) .WELCOME div[name=lbl-div]:first-child{ 
+			display:none
+		};
+		&[role=designer] .WELCOME div[name=lbl-div]:first-child{
+			display:block
+		};
+	}
 
 .welcome-line {
 	border-bottom:1px solid var(--welcome-line-color);
@@ -283,79 +286,103 @@ a {
 }
 
 
-.toomuch {
-	color:red;
-}
+
+/* ====================== */
+/*     FIRST NODE         */
+/* ====================== */
+	
+	//--first node of the page
+	.asmRoot>div[name=lbl-div],
+	.asmStructure>div[name=lbl-div],
+	.asmUnit>div[name=lbl-div] {
+		background-color:var(--page-title-background-color);
+		min-height:6.25rem;
+		.title-subline {
+			border-bottom:1px solid var(--page-title-subline-color);
+			margin-top:0.625rem;
+			width:50px;
+		}
+	}
+
+	//-- not first node of the page
+	.asmRoot .asmStructure>div[name=lbl-div],
+	.asmRoot .asmUnit>div[name=lbl-div],
+	.asmStructure .asmStructure>div[name=lbl-div],
+	.asmStructure .asmUnit>div[name=lbl-div] {
+		background-color:inherit;
+		min-height: 0px;
+		.title-subline {
+			border-bottom:none;
+			margin-top:0px;
+			width:0px;
+		}
+	}
+
 /* ====================== */
 /*     SECTION TITLES     */
 /* ====================== */
 
-.asmRoot .title {
-	font-size: 24px;
-	line-height: 30px;
-}
+	.asmRoot .title {
+		font-size: 1.5rem;
+		line-height: 1.875rem;
+	}
+	
+	
+	.asmStructure .title {
+		font-size: 1.5rem;
+		line-height: 1.875rem;
+	}
+	
+	.asmStructure .asmStructure .title,
+	.asmRoot .asmStructure .title {
+		font-size: 1.2rem;
+		font-weight: normal;
+	}
+	
+	.asmUnit .title {
+		font-size: 1.5rem;
+		line-height: 1.875rem;
+	}
+	
+	.asmStructure .asmUnit .title,
+	.asmRoot .asmUnit .title {
+		font-size: 0.875rem;
+		font-weight: normal;
+		line-height: 1.25rem;
+	}
+	
+	.asmUnitStructure .title {
+		font-size: 1.25rem;
+		line-height: 1.25rem;
+	}
+	
+	.asmUnitStructure .asmUnitStructure .title {
+		font-size: 16px;
+		line-height: 1.25rem;
+	}
+	
+	.asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+	}
+	
+	.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+		font-size: 0.75rem;
+		line-height: 1.25rem;
+	}
 
+	.resource-label {
+		.title {
+			font-size:inherit;
+		}
+	}
 
-.asmStructure .title {
-	font-size: 24px;
-	line-height: 30px;
-}
-
-.asmStructure .asmStructure .title,
-.asmRoot .asmStructure .title {
-	font-size: 14px;
-	font-weight: normal;
-}
-
-.asmUnit .title {
-	font-size: 24px;
-	line-height: 30px;
-}
-
-.asmStructure .asmUnit .title,
-.asmRoot .asmUnit .title {
-	font-size: 14px;
-	font-weight: normal;
-	line-height: 20px;
-}
-
-.asmUnitStructure .title {
-	font-size: 20px;
-	line-height: 20px;
-}
-
-.asmUnitStructure .asmUnitStructure .title {
-	font-size: 16px;
-	line-height: 20px;
-}
-
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-	font-size: 14px;
-	line-height: 20px;
-}
-
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-	font-size: 12px;
-	line-height: 20px;
-}
-
-/*
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .asmContext .title,
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmContext .title,
-.asmUnitStructure .asmUnitStructure .asmContext .title,
-.asmUnitStructure .asmContext .title,
-.asmContext .title {
-	font-size: 12px;
-	font-weight: normal;
-	line-height: 16px;
-}
-*/
 
 /* ========================= */
 /*     VUE  STANDARD         */
 /* ========================= */
 
-/*  --- struct --- */
+/*  --- struct --- 
 .content .struct-standard .title-subline {
 	border-bottom:0px solid var(--page-title-subline-color);
 	margin-top:0px;
@@ -364,7 +391,7 @@ a {
 .struct-standard .title {
 	font-size:16px;
 }
-
+*/
 	.td-resource {
 		width: 80%;
 		margin-right: 0px;
@@ -385,15 +412,6 @@ a {
 
 /*  --- node --- */
 
-	.first-node {
-		background-color:var(--page-title-background-color);
-		min-height:100px;
-		.title-subline {
-			border-bottom:1px solid var(--page-title-subline-color);
-			margin-top:10px;
-			width:50px;
-		}
-	}
 
 /*
 .node-standard .node-standard .node {
@@ -679,14 +697,13 @@ input.select-rome,
 	color:var(--list-title-color);
 }
 
-#refresh {
-	float:right;
-	margin:5px 25px 5px 5px;
-	padding:3px;
-	border-radius:3px;
-	color:var(--list-icon-section-color);
-	cursor:pointer;
-}
+	#refresh {
+		float:right;
+		margin-top:12px;
+		margin-right:20%;
+		color:var(--list-icon-section-color);
+		cursor:pointer;
+	}
 
 
 
@@ -1001,7 +1018,7 @@ input.select-rome,
 }
 
 .welcome-block .welcome-title {
-	font-size:24px;
+	font-size:1.5rem;
 	text-align:center;
 	width:100%;
 	padding-bottom:5px;
@@ -1045,28 +1062,30 @@ input.select-rome,
 }
 
 #edit-window-body-resource {
-	.wysihtml5-toolbar {
-		.btn {
-			min-height:0px;
-		}
-	}
 	button.selected-label {
 		min-width:300px;
 	}
 }
 
+/* =========== TEXT EDITOR======================= */
+
+	.wysihtml5-toolbar {
+		i.fas {
+			margin-top:4px;
+		}
+		.btn {
+			min-height:0px;
+			padding:.375rem;
+		}
+	}
+
+	.toomuch {
+		color:red;
+	}
+
 /* ============================================== */
 
 
-/* --- buton are redefined to use with Ipad and solve size errors */
-.btn-xs [class*="icon-"] {
-	margin-top:auto;
-	margin-bottom:auto;
-}
-.btn-xs .icon-font {
-	margin-top:0px;
-	margin-bottom:0px;
-}
 
 a.btn {
 	font-weight:normal;
@@ -1926,7 +1945,7 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 
 /* list of structures/units in a portfolio */
 .btn-xs{
-	height:24px;
+	height:1.5rem;
 	cursor:pointer;
 }
 
@@ -2254,10 +2273,10 @@ div.oembedall-container {
 	SEARCH PORTFOLIO
    ===========================*/
 
-#search {
-	float:right;
-	width:400px;
-}
+	#search {
+		float:right;
+		width:80%;
+	}
 
 
 #archive-button,
