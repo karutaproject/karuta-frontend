@@ -9,6 +9,11 @@ body {
   background-color: white;
 }
 
+#edit-window-body {
+  height: 600px;
+  overflow-y: scroll;
+}
+
 html, body, #main-body, #main-container, #global-row, #main-row {
   height: 100%;
   min-height: 110%;
@@ -575,11 +580,6 @@ a {
 /* ====================== */
 /*     ROME               */
 /* ====================== */
-.ROME {
-  height: 300px;
-  overflow-y: scroll;
-}
-
 .select-rome .select-label {
   margin-bottom: 3px;
 }

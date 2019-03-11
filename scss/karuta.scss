@@ -3,13 +3,18 @@
 /*     DEFAULT VALUES     */
 /* ====================== */
 
-body {
-	font-family: "Open Sans",sans-serif;
-}
+	body {
+		font-family: "Open Sans",sans-serif;
+	}
+	
+	#contenu {
+		background-color: white;
+	}
 
-#contenu {
-	background-color: white;
-}
+	#edit-window-body {
+		height: 600px;
+		overflow-y: scroll;
+	}
 
 html, body, #main-body, #main-container, #global-row, #main-row, {
 	height:100%;
@@ -604,10 +609,6 @@ a {
 /*     ROME               */
 /* ====================== */
 
-.ROME {
-	height: 300px;
-	overflow-y: scroll;
-}
 
 .select-rome .select-label {
 	margin-bottom:3px;
