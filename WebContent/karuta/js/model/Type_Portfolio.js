@@ -2439,7 +2439,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "			<span class='navbar-toggler-icon'></span>";
 	html += "	</button>";
 	html += "	<a  onclick='toggleSideBar()' class='nav-item button icon'><i class='fa fa-bars'></i></a>";
-	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+edit+")\">";
+	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
 	html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
 	html += "	</a>";
 	html += "	<div class='navbar-collapse collapse' id='collapse-2'>";
@@ -2471,6 +2471,12 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 		html += "			</div>";
 		html += "		</li>";
 	}
+	//-------------------- MODE READ/EDIT---------------
+	html += "			<li id='toggle-mode' class='nav-item'>";
+	var toggle_mode_class = (g_edit) ? "fas fa-toggle-on":"fas fa-toggle-off";
+	html += "				<span>"+karutaStr[LANG]["write-mode"]+"</span>&nbsp;<a onclick='toggleMode()' data-title='"+karutaStr[LANG]["toggle-mode"]+"' data-tooltip='true' data-placement='bottom'><i id='toggle-mode-icon' class='"+toggle_mode_class+"'></i></a>";
+	html += "			</li>";
+	//-------------------- REFRESH---------------
 	html += "			<li class='nav-item icon'>";
 	html += "				<a id='refresh-portfolio' onclick='fill_main_page()' class='nav-link fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></a>";
 	html += "			</li>";

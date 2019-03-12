@@ -224,11 +224,11 @@ if (this.visible) {
 		}
 		//============================== ASMCONTEXT =============================
 		if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='basic' && this.semtag!='EuropassL')){
-			this.displayAsmContext(dest,type,langcode);
+			this.displayAsmContext(dest,type,langcode,edit);
 		}
 		//============================== NODE ===================================
 		else { // other than asmContext
-			this.displayAsmNode(dest,type,langcode);
+			this.displayAsmNode(dest,type,langcode,edit);
 		}
 		//---------------------------- BUTTONS AND BACKGROUND COLOR -----------------------------------------------------------------
 		// ---------- if by error button color == background color we set button color to white or black to be able to see them -----
@@ -325,7 +325,7 @@ if (this.visible) {
 };
 
 //==================================================
-UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode)
+UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edit)
 //==================================================
 
 {
@@ -391,12 +391,14 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode)
 	//---------------- display label ---------------------------------
 	$("#label_node_"+uuid).html(this.getView('label_node_'+uuid));
 	//----------- Buttons & Menus -----------
-	$("#buttons-"+uuid).html(this.getButtons(langcode));
-	if (this.menu)
-		this.displayMenus("#menus-"+uuid,langcode);
+	if(edit) {
+		$("#buttons-"+uuid).html(this.getButtons(langcode));
+		if (this.menu)
+			this.displayMenus("#menus-"+uuid,langcode);
+	}
 	//----------------- hide lbl-div if empty ------------------------------------
-	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
-		$("div[name='lbl-div']","#node_"+uuid).hide();
+//	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
+//		$("div[name='lbl-div']","#node_"+uuid).hide();
 	//----------- Comments -----------
 	if (this.edit && this.inline && this.writenode)
 		UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
@@ -410,7 +412,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode)
 }
 
 //==================================================
-UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode)
+UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit)
 //==================================================
 {
 	var nodetype = this.asmtype;
@@ -435,6 +437,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode)
 			displayview = type+"-node-"+this.displayview;
 		else
 			displayview = type+"-struct-default";
+		html = displayHTML[displayview];
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
 		$("#"+dest).append (html);
 		$("#label_node_"+uuid).click(function() {displayPage(uuid,100,type,langcode,g_edit)});
@@ -507,15 +510,17 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode)
 		label_html += " "+ this.getView('std_node_'+uuid);
 	$("#label_node_"+uuid).html(label_html);
 	//-------------- buttons --------------------------
-	if (this.semtag.indexOf("bubble_level1")>-1)
-		this.menu = false;
-	var buttons = this.getButtons(langcode);
-	if (nodetype == "BatchForm") {
-		buttons += node.structured_resource.getButtons();
+	if (edit) {
+		if (this.semtag.indexOf("bubble_level1")>-1)
+			this.menu = false;
+		var buttons = this.getButtons(langcode);
+		if (nodetype == "BatchForm") {
+			buttons += node.structured_resource.getButtons();
+		}
+		$("#buttons-"+uuid).html(buttons);
+		if (this.menu)
+			this.displayMenus("#menus-"+uuid,langcode);
 	}
-	$("#buttons-"+uuid).html(buttons);
-	if (this.menu)
-		this.displayMenus("#menus-"+uuid,langcode);
 	//----------- Comments -----------
 	if (this.edit && this.inline && this.writenode)
 		UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
@@ -1421,7 +1426,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
-		if ( g_userroles[0]=='designer'  // always duplicate for designer
+		if ( (g_userroles[0]=='designer' && this.asmtype != 'asmRoot') // always duplicate for designer
 			 || (this.duplicateroles!='none'  
 				 	&& this.duplicateroles!='' 
 				 	&& this.asmtype != 'asmRoot' 

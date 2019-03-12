@@ -62,23 +62,23 @@
 	//========================== END DO NOT EDIT ===========================	
 
 	displayHTML["standard-struct-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
-										"<div id='sub_node_#uuid#' name='lbl-div' class='row  #displayview#' >" +
-										"	<div id='collapsible_#uuid#' class='col-1'></div>" +
-										"	<div id='std_node_#uuid#' class='node-label col-md-7  '>" +
-										"		<div><a id='label_node_#uuid#' class='label-libelle'></a><span id='help_#uuid' class='ihelp'></span></div>" +
-										"		<div id='comments_#uuid#' class='comments'></div><!-- comments -->" +
-										"		<div id='metainfo_#uuid#' class='metainfo'></div><!-- metainfo -->" +
-										"	</div><!-- col-md-7 -->" +
-										"	<div class='col-md-4'><span id='buttons-#uuid#' class='buttons'></span><span id='menus-#uuid#' class='menus'><span></div><!-- col-md-4  -->" +
-										"</div><!-- row -->" +
-										"</div>";
+												"	<div id='sub_node_#uuid#' name='lbl-div' class='node-header node #first#' >" +
+												"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
+												"		<div id='std_node_#uuid#' class='node-label'>" +
+												"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
+												"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+												"			<div id='comments_#uuid#' class='comments'></div>" +
+												"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
+												"		</div>" +
+												"	</div>" +
+												"</div>";
 
 	displayHTML["standard-node-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 											"	<div id='sub_node_#uuid#' name='lbl-div' class='node-header node #first#' >" +
 											"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
 											"		<div id='std_node_#uuid#' class='node-label'>" +
 											"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
-											"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+											"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
 											"			<div id='comments_#uuid#' class='comments'></div>" +
 											"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
 											"		</div>" +

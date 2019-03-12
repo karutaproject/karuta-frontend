@@ -284,6 +284,8 @@ karutaStr['en']['username-label']="Login";
 karutaStr['en']['firstname-label']="Firstname";
 karutaStr['en']['lastname-label']="Lastname";
 karutaStr['en']['changeOwner']="Change the Owner";
+karutaStr['en']['toggle-mode']="Toggle Edit/Read Mode";
+karutaStr['en']['write-mode']="Edit Mode";
 
 //=========================================
 //========== USERS ========================

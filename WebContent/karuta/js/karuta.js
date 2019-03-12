@@ -32,7 +32,7 @@ var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
 var g_display_type = "standard"; // default value
-var g_edit = true;
+var g_edit = false;
 var g_visible = 'hidden';
 var g_welcome_edit = false;
 var g_welcome_add = false;  // we don't display add a welcome page
@@ -80,7 +80,7 @@ function setDesignerRole(role)
 		html += "	</div>";
 		$("#portfolio-container").html(html);
 		$("#portfolio-container").attr('role',role);
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,true,g_portfolio_rootid);
+		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
 		$("#sidebar_"+uuid).click();
 	};
 	if (g_display_type=='model'){
@@ -636,7 +636,7 @@ function getURLParameter(sParam) {
 }
 
 //==================================
-function displayPage(uuid,depth,type,langcode,edit) {
+function displayPage(uuid,depth,type,langcode) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -669,18 +669,17 @@ function displayPage(uuid,depth,type,langcode,edit) {
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
 			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
-				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,edit);
+				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 			else
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
 		}
 		if (type=='translate')
-			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
 		if (type=='model') {
-			UICom.structure["ui"][uuid].displayNode('model',UICom.structure.tree[uuid],'contenu',depth,langcode,edit);
+			UICom.structure["ui"][uuid].displayNode('model',UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
 		if (type=='basic') {
-			UICom.structure["ui"][uuid].displayNode('basic',UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
-//			UIFactory['Node'].displayModel(UICom.structure['tree'][uuid],'contenu',depth,langcode,edit);
+			UICom.structure["ui"][uuid].displayNode('basic',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
 		}
 	}
 	$("#wait-window").modal('hide');
@@ -1879,4 +1878,20 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 	document.addEventListener("click", function (e) {
 		closeAllLists(e.target);
 	});
+}
+
+//==============================
+function toggleMode()
+//==============================
+{
+	if (g_edit) {
+		g_edit = false;
+		$("#toggle-mode-icon").removeClass('fas fa-toggle-on').addClass('fas fa-toggle-off');
+	} else {
+		g_edit = true;
+		$("#toggle-mode-icon").removeClass('fas fa-toggle-off').addClass('fas fa-toggle-on');
+	}
+	UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
+	var uuid = $("#page").attr('uuid');
+	$("#sidebar_"+uuid).click();
 }

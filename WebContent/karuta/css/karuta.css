@@ -242,6 +242,19 @@ a.sidebar-link:hover {
   width: 25%;
 }
 
+/* ====================== */
+/*   PORTFOLIO NAVBAR     */
+/* ====================== */
+#toggle-mode {
+  padding-top: 9px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#toggle-mode-icon {
+  font-size: 1.1rem;
+}
+
 /*
  * -------------------------
  * ------ PORTFOLIO --------
@@ -306,6 +319,10 @@ a {
 /* ====================== */
 /*     SECTION TITLES     */
 /* ====================== */
+.asmStructure .label-node:hover {
+  cursor: pointer;
+}
+
 .asmRoot .title {
   font-size: 1.5rem;
   line-height: 1.875rem;
@@ -329,7 +346,7 @@ a {
 
 .asmStructure .asmUnit .title,
 .asmRoot .asmUnit .title {
-  font-size: 0.875rem;
+  font-size: 1.25rem;
   font-weight: normal;
   line-height: 1.25rem;
 }

@@ -27,7 +27,7 @@ function initKarutaPage()
 	var target = document.getElementById('wait-spin');
 	var spinner = new Spinner().spin(target);
 	//--------------------------
-	g_edit = true; // à vérifier
+//	g_edit = true; // à vérifier
 	//--------------------------
 }
 
