@@ -140,13 +140,42 @@ a {
 	color:@portfolio-link-color;
 }
 
-.row-node-asmUnitStructure {
-	background:@portfolio-section-title-background-color;
-}
 
 .toomuch {
 	color:red;
 }
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+}
+
+input.select-rome {
+    min-width: 300px;
+    max-width: 90%;
+    word-wrap: break-word;
+    white-space: normal;
+    text-align: left;
+    font-size: 12px;
+}
+
+.ROME {
+ 	height: 400px;
+ 	overflow-y: scroll;
+ }
 /* ============================================================ */
 a, .collapsible {
 	cursor:pointer;
@@ -253,24 +282,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 .Get_Resource .dropdown-menu,
 .Get_Get_Resource .dropdown-menu {
 	font-size: 12px;
-}
-
-/* ====================== */
-/*     ROME               */
-/* ====================== */
-
-.ROME {
-	height: 400px;
-	overflow-y: scroll;
-}
-
-.select-rome .select-label {
-	margin-bottom:3px;
-} 
-
-.select-rome button.select-label {
-	min-width:400px;
-	max-width:90%;
 }
 
 
@@ -912,7 +923,7 @@ hr {
 
 .asmnode{
 	height:100%;
-	margin-top:10px;
+/* 	margin-top:10px; */
 
 }
 
@@ -1026,6 +1037,7 @@ hr {
 	min-height:100px;
 }
 
+.asmStructure .asmStructure .row-node,
 .asmStructure .asmUnit .row-node,
 .asmRoot .asmUnit .row-node,
 .asmUnit .content .row-node{
@@ -3082,6 +3094,10 @@ div.oembedall-container {
 	font-weight:900;
 	text-transform: uppercase;
 }
+
+/* ===========================
+	PRINT STYLESHEET
+   ===========================*/
 
 @media print {
 	#saved-window,
