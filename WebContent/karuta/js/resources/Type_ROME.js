@@ -44,7 +44,7 @@ UIFactory["ROME"].prototype.displayEditor = function(destid,parentid)
 //==================================
 {
 	var cachable = true;
-	var html = "<div class='ROME'><div id='granddomaine'></div><div id='domaine'></div><div id='metier'></div><div id='competence'></div></div>";
+	var html = "<div class='ROME'><div id='granddomaine'></div><div id='domaine'></div><div id='metier'></div><div id='competence'></div>";
 	$("#"+destid).html(html);
 
 	var l = 'granddomaine';
@@ -112,7 +112,7 @@ UIFactory["ROME"].display = function(no,type,data,parentid) {
 				if (no<1)
 					UIFactory["ROME"].display(1,'select','',parentid);
 				if (no<2)
-				UIFactory["ROME"].display(2,'select','',parentid);
+					UIFactory["ROME"].display(2,'select','',parentid);
 				$("#competence").html("");
 				//--------------------------------
 				var code = $(this).attr('code');

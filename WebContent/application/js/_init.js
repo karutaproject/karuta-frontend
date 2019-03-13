@@ -2,16 +2,13 @@
 var application_version = "2.0";
 var application_date = "2017-10-30";
 //----------------------------------
-var appliname = 'karuta2.4';
-var karutaname = 'karuta-core2.4'; // to share the same 'karuta-core' with multiple front-end
+var appliname = 'karuta';
+var karutaname = 'karuta'; // to share the same 'karuta-core' with multiple front-end
 var karuta_url = '../../../' + karutaname;
-var bckname = '2.3';
+var bckname = '';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
-//---------------------------------
-var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report";  // report registration server
-var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report servervar serverBCK_REG = "";  // report registration server
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';
@@ -44,8 +41,8 @@ var welcome3 = {};       // Welcome paragraph
 	welcome3["en"] = "";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.4 beta";
-	welcome4["en"] = "WELCOME TO KARUTA 2.4 beta";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 2.4";
+	welcome4["en"] = "WELCOME TO KARUTA 2.4";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";

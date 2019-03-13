@@ -564,6 +564,8 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			r_processNode(no,children[i],'td_'+no,data,line);
 		if (tagname=="loop")
 			r_processLoop(no,children[i],'td_'+no,data,line);
+		if (tagname=="europass")
+			r_processEuropass(children[i],'td_'+no,data);
 		if (tagname=="goparent")
 			r_processGoParent(no,children[i],'td_'+no,data,line);
 		if (tagname=="show-sharing")
@@ -1091,6 +1093,7 @@ function r_processNodeResource(xmlDoc,destid,data)
 			}
 		}
 	} catch(e){
+		console.log("Error in report:"+e.message);
 		text = "<span id='dashboard_"+nodeid+"'>&mdash;</span>";
 	}
 	//------------------------------
@@ -1360,7 +1363,7 @@ function r_processEuropass(xmlDoc,destid,data)
 		var node = $(selector.jquery,data);
 		if (node.length>0 || select.substring(0,1)=="."){
 			var nodeid = $(node).attr("id");
-			var text = "<table id='europass' style='width:100%;margin-top:30px;'></table>";
+			var text = "<table id='europass'></table>";
 			$("#"+destid).append($(text));
 			var europass_node = UICom.structure["ui"][nodeid];
 			//----------------------------
