@@ -5,16 +5,13 @@ function initKarutaPage()
 	//--------------------------
 	var html = "";
 	html += "<div id='main-body'>";
-	html += "<div id='navigation-bar'></div>";
-	html += "<div id='sub-bar'></div>";
-	html += "<div id='main-container' class='container-fluid'></div>";
-	html += "<div id='var-list' class='container-fluid'></div>";
-	html += "</div>";
-	html += "<div id='wait-window' class='modal' style='height:100px;'>";
-	html += "<div id='wait-window-body' class='modal-body'></div>";
-	html += "<div id='wait-spin'></div>";
-	html += "</div>";
-	html += "<div id='post-form' style='display:none'>";
+	html += "	<div id='navigation-bar'></div>";
+	html += "	<div id='sub-bar'></div>";
+	html += "	<div id='main-container' class='container-fluid'></div>";
+	html += "	<div id='wait-window' class='modal' style='height:100px;'><div id='wait-window-body' class='modal-body'></div>";
+	html += "	<div id='wait-spin'></div>";
+	html += "	</div>";
+	html += "	<div id='post-form' style='display:none'>";
 	html += "</div>";
 	$('body').html(html)
 	//--------------------------
@@ -30,7 +27,7 @@ function initKarutaPage()
 	var target = document.getElementById('wait-spin');
 	var spinner = new Spinner().spin(target);
 	//--------------------------
-	g_edit = true; // à vérifier
+//	g_edit = true; // à vérifier
 	//--------------------------
 }
 
@@ -72,17 +69,12 @@ function displayKarutaPage()
 			});
 			//-------------------------------
 			var html = "";
-			html += "<div id='global-row' class='row'>";
-			html += "	 <i onclick='' id='refresh' class='fa fa-refresh fa-2x' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></i>";
-			html += "	<div id='search-portfolio-div' class='search' style='display:none'>";
-			html += getSearch();
-			html += "	</div>";
+			html += "	<div id='list-container'></div>";
+			html += "	<div id='portfolio-container' role='all' style='display:none'></div>";
 			html += "	<div id='search-user-div' class='search' style='display:none'>";
 			html += getSearchUser();
 			html += "	</div>";
-			html += "	<div id='main-list' class='col-md-12'></div>";
 			html += "	<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-page' class='col-md-12' role='all' style='display:none'></div>";
 			html += "	<div id='main-user' class='col-md-12' style='display:none'></div>";
 			html += "	<div id='main-usersgroup' class='col-md-12' style='display:none'></div>";
 			html += "	<div id='main-exec-batch' class='col-md-12' style='display:none'></div>";
@@ -109,13 +101,13 @@ function getSearch()
 	var html = "";
 	html += "<div id='search' class='input-group'>";
 	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"' onchange='javascript:hideArchiveSearch()'>";
-	html += "	<span class='input-group-btn'>";
-	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><span class='glyphicon glyphicon-search'></span></button>";
+	html += "	<div class='input-group-append'>";
+	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><i class='fas fa-search'></i></button>";
 	if (USER.creator && !USER.limited)  {
-		html += "		<a id='archive-button' href='' class='btn' disabled='true'><i style='margin-top:4px' class='fa fa-download'></i></a>";
-		html += "		<button id='remove-button' type='button' disabled='true' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fa fa-trash-o'></i></button>";
+		html += "		<a id='archive-button' href='' class='btn' disabled='true'><i style='margin-top:4px' class='fas fa-download'></i></a>";
+		html += "		<button id='remove-button' type='button' disabled='true' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fas fa-trash'></i></button>";
 	}
-	html += "	</span>";
+	html += "	</div>";
 	html += "</div>";
 	return html;
 }

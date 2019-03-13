@@ -1,0 +1,144 @@
+
+#main-container {
+	padding-top:60px;
+}
+
+#navigation-bar {
+	margin-top: 0px; // no space for saved information
+}
+
+body {
+	background: url("../img/login-background.jpg") no-repeat;
+}
+
+a.navbar-icon .glyphicon {
+	color:var(--navbar-icon-color);	
+}
+
+/* ----------------------- */
+
+.form-signin {
+	max-width: 400px;
+	padding: 19px 29px 29px;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: var(--login-color);
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	text-align:center;
+}
+
+
+.form-signin .form-signin-heading {
+  margin-bottom: 10px;
+}
+.form-signin input[type="text"],
+.form-signin input[type="password"] {
+  font-size: 16px;
+  height: auto;
+  margin-bottom: 15px;
+  padding: 7px 9px;
+}
+
+.button-login {
+	background-color:var(--button-login-background-color);
+	color:var(--button-login-color);
+	-moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.button-login:hover {
+	color:var(--button-login-color-hover);
+}
+
+.form-newpassword {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 400px;
+	padding-top: 19px ;
+	padding-bottom: 19px ;
+	padding-left: 29px ;
+	padding-right: 29px ;
+	background-color: rgb(245, 245, 245); 
+	border-left: 1px solid #e5e5e5;
+	border-right: 1px solid #e5e5e5;
+	border-top: 1px solid #e5e5e5;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	text-align:center;
+}
+
+.form-newpassword input[type="text"] {
+  font-size: 16px;
+  height: auto;
+  margin-bottom: 15px;
+  padding: 7px 9px;
+}
+
+.form-newpassword button {
+	background-color: #e1e1e1;
+	border: 1px solid #e0e0e0;
+}
+
+.form-newaccount {
+	padding-top:10px;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 400px;
+	padding-bottom: 19px ;
+	padding-left: 29px ;
+	padding-right: 29px ;
+	background-color: #e9b32d; 
+	border-left: 1px solid #e9b32d;
+	border-right: 1px solid #e9b32d;
+	border-bottom: 1px solid #e9b32d;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	text-align:center;
+}
+
+.btn-account {
+	background-color: #b12472;
+	color: white;
+}
+
+#form-send {
+	background-color:var(--form-send-background-color);
+	color:black;
+	-moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+#form-send:hover {
+	color:var(--form-send-background-color-hover);
+}
+
+

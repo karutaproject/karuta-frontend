@@ -168,7 +168,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	if (image_size.indexOf('height')<0 && $("metadata-epm",this.node).attr('height')!=undefined && $("metadata-epm",this.node).attr('height')!='')
 		image_size += "height='"+$("metadata-epm",this.node).attr('height')+"' "; 
 	if (image_size=="")
-		image_size = "class='image img-responsive'";
+		image_size = "class='image img-fluid'";
 	//------------------------
 	var html ="";
 	if (type=='default') {
@@ -257,7 +257,7 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 	if (image_size.indexOf('height')<0 && $("metadata-epm",this.node).attr('height')!=undefined && $("metadata-epm",this.node).attr('height')!='')
 		image_size += "height='"+$("metadata-epm",this.node).attr('height')+"' "; 
 	if (image_size=="")
-		image_size = "class='image img-responsive'";
+		image_size = "class='image img-fluid'";
 	//------------------------
 	var html ="";
 	if (type=='default') {
@@ -318,7 +318,7 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 	$("#"+dest).html(html);
 	var uuid = this.id;
 	$("#image_"+this.id).click(function(){
-		imageHTML("<img class='img-responsive' style='margin-left:auto;margin-right:auto' uuid='img_"+uuid+"' src='../../../"+serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>");
+		imageHTML("<img class='img-fluid' style='margin-left:auto;margin-right:auto' uuid='img_"+uuid+"' src='../../../"+serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>");
 	});
 
 };

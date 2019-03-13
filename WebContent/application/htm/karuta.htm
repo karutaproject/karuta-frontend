@@ -2,27 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Karuta</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1" shrink-to-fit="no"/>
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
 		<link rel="icon" type="image/png" href="../../application/img/faviconK.png"></link>
-		<script src="../js/_init.js">></script>
+		<script src="../js/_init.js"></script>
 		<!-- =============================================================== -->
-		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/bootstrap/css/bootstrap.min.css"></link>
-		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/bootstrap/css/bootstrap.min.css" media='print'></link>
+		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/bootstrap-4.3.1/css/bootstrap.min.css"></link>
 		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/css/jquery-ui.css"></link>
-		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/css/font-awesome/css/font-awesome.min.css"></link>
+		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/font-awesome/css/all.css"></link>
 		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/colorpicker/css/evol.colorpicker.min.css"></link>
 		<!-- =============================================================== -->
-		<script>
-			var karuta_config = "../../../"+appliname+"/application/css/color.less";
-			less = {
-				globalVars: {
-				'KARUTA-CONFIG': "'"+karuta_config+"'"
-				}
-			};
-		</script>
-		<link rel='stylesheet/less' type='text/css' href='../../../karuta3.0/karuta/css/karuta.less'></link>
-		<script src="../../../karuta3.0/other/js/less.min.js"></script>
+		<link rel='stylesheet' type='text/css' href='../../application/css/color.css'></link>
+		<link rel='stylesheet' type='text/css' href='../../../karuta3.0/karuta/css/karuta.css'></link>
+		<link rel='stylesheet' type='text/css' href='../../../karuta3.0/karuta/css/report.css'></link>
+		<link rel='stylesheet' type='text/css' href='../../../karuta3.0/karuta/css/batch.css'></link>
 		<!-- =============================================================== -->
 		<script src="../../../karuta3.0/karuta/js/karuta.js"></script>
 		<script src="../../../karuta3.0/karuta/js/UICom.js"></script>
@@ -70,38 +63,11 @@
 		<script src="../../../karuta3.0/karuta/js/resources/Type_Action.js"></script>
 		<script src="../../../karuta3.0/karuta/js/resources/Type_ROME.js"></script>
 		<!-- =============================================================== -->
-		<script src="../../../karuta3.0/other/js/jquery-1.10.2.min.js"></script>
-		<script src="../../../karuta3.0/other/js/jquery-ui-1.10.3.custom.min.js"></script>
-		<script src="../../../karuta3.0/other/bootstrap/js/bootstrap.min.js"></script>
-		<script src="../../../karuta3.0/other/js/jquery.ui.touch-punch.min.js"></script>
-		<!-- =============================================================== -->
-		<script src="../../../karuta3.0/other/js/spin.js"></script>
-		<script src="../../../karuta3.0/other/js/jquery.spin.js"></script>
-		<!-- =============================================================== -->
-		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/wysihtml5/bootstrap3-wysihtml5.min.css"></link>
-		<script src="../../../karuta3.0/other/wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-		<!-- =============================================================== -->
-		<script src="../../../karuta3.0/other/js/jquery_hotkeys.js"></script>
-		<script src="../../../karuta3.0/other/js/JQueryRC4.js"></script>
-		<!-- =============================================================== -->
-		<script src="../../../karuta3.0/other/colorpicker/js/evol.colorpicker.min.js"></script>
-		<!-- =============================================================== -->
 		<script src="../../../karuta3.0/karuta/js/model/Type_Portfolio.js"></script>
 		<script src="../../../karuta3.0/karuta/js/model/Type_Node.js"></script>
 		<script src="../../../karuta3.0/karuta/js/model/Type_User.js"></script>
 		<script src="../../../karuta3.0/karuta/js/model/Type_UsersGroup.js"></script>
 		<script src="../../../karuta3.0/karuta/js/model/Type_PortfoliosGroup.js"></script>
-		<!-- =============================================================== -->
-		<script src="../../../karuta3.0/other/js/jquery.ui.widget.js"></script>
-		<script src="../../../karuta3.0/other/js/jquery.iframe-transport.js"></script>
-		<script src="../../../karuta3.0/other/js/jquery.fileupload.js"></script>
-		<!-- =============================================================== -->
-		<script src="../../../karuta3.0/other/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-		<script src="../../../karuta3.0/other/bootstrap-datepicker/bootstrap-datepicker.fr.js"></script>
-		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/bootstrap-datepicker/datepicker.css"></link>
-		<!-- =============================================================== -->
-		<script src="../../../karuta3.0/other/js/js.cookie.js"></script>
-		<script src="../../../karuta3.0/other/js/jquery.sortElements.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../../karuta3.0/karuta/js/version.js"></script>
 		<!-- =============================================================== -->
@@ -112,9 +78,41 @@
 		<script src="../../../karuta3.0/other/html2canvas/html2canvas.svg.js"></script>
 		<!-- =============================================================== -->		
 		<script src="../../../karuta3.0/karuta/js/resources/Type_Bubble.js"></script>
-		<script src="../../../karuta3.0/other/js/jquery-qrcode-0.14.0.js"></script>
 		<!-- =============================================================== -->		
 		<script src="../../../karuta3.0/karuta/js/resources/Type_EuropassL.js"></script>
+		<!-- =============================================================== -->
+		<link rel='stylesheet' type='text/css' href='../../application/css/specific.css'></link>
+		<!-- =============================================================== -->
+		<script src="../../../karuta3.0/other/js/jquery-3.3.1.min.js"></script>
+		<script src="../../../karuta3.0/other/js/popper.min.js"></script>
+		<script src="../../../karuta3.0/other/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+		<!-- =============================================================== -->
+		<!--  script src="../../../karuta3.0/other/js/jquery-ui-1.10.3.custom.min.js"></script-->
+		<!--script src="../../../karuta3.0/other/js/jquery.ui.touch-punch.min.js"></script-->
+		<!-- =============================================================== -->
+		<script src="../../../karuta3.0/other/js/spin.js"></script>
+		<script src="../../../karuta3.0/other/js/jquery.spin.js"></script>
+		<!-- =============================================================== -->
+		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/wysihtml5/bootstrap3-wysihtml5.min.css"></link>
+		<script src="../../../karuta3.0/other/wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../../karuta3.0/other/js/jquery_hotkeys.js"></script>
+		<script src="../../../karuta3.0/other/js/JQueryRC4.js"></script>
+		<script src="../../../karuta3.0/other/js/jquery.ui.widget.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../../karuta3.0/other/colorpicker-master/js/evol-colorpicker.min.js"></script>
+		<!-- =============================================================== -->
+		<!--script src="../../../karuta3.0/other/js/jquery.iframe-transport.js"></script-->
+		<script src="../../../karuta3.0/other/js/jquery.fileupload.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../../karuta3.0/other/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+		<script src="../../../karuta3.0/other/bootstrap-datepicker/bootstrap-datepicker.fr.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../karuta3.0/other/bootstrap-datepicker/datepicker.css"></link>
+		<!-- =============================================================== -->
+		<script src="../../../karuta3.0/other/js/js.cookie.js"></script>
+		<script src="../../../karuta3.0/other/js/jquery.sortElements.js"></script>
+		<!-- =============================================================== -->
+		<script src="../../../karuta3.0/other/js/jquery-qrcode-0.14.0.js"></script>
 		<!-- =============================================================== -->
 		<style>
 			.block div.oembedall-container {
@@ -127,9 +125,9 @@
 	<body>
 		<script>
 			initKarutaPage();
-			$(window).load(function() {
+			window.onload = function() {
 				displayKarutaPage();
-			});
+			};
 		</script>
 	</body>
 

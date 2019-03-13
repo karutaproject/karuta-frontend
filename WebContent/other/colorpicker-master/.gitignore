@@ -1,0 +1,8 @@
+
+node_modules/
+
+Thumbs.db
+.DS_Store
+
+Desktop.ini
+.idea

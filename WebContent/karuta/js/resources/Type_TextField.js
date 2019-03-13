@@ -258,13 +258,15 @@ UIFactory["TextField"].toggleExpand = function(uuid,langcode)
 	if ($("#"+uuid+"_edit_"+langcode).attr('expand')=='false') {
 		$("#button_"+uuid).removeClass('glyphicon-resize-full').addClass('glyphicon-resize-small');
 		$("#"+uuid+"_edit_"+langcode).attr('expand','true');
-		$(".wysihtml5-sandbox").css('height','600px');
-		$(".modal-dialog").css('width','90%');
+//		$(".wysihtml5-sandbox").css('height','600px');
+//		$(".modal-dialog").css('width','90%');
+		$(".modal-dialog").addClass('modal-lg');
 	} else {
 		$("#button_"+uuid).removeClass('glyphicon-resize-small').addClass('glyphicon-resize-full');
 		$("#"+uuid+"_edit_"+langcode).attr('expand','false');
-		$(".wysihtml5-sandbox").css('height','300px');
-		$(".modal-dialog").css('width','600px');
+//		$(".wysihtml5-sandbox").css('height','300px');
+//		$(".modal-dialog").css('width','50%');
+		$(".modal-dialog").removeClass('modal-lg');
 	}
 };
 //==================================

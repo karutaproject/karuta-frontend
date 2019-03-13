@@ -9,10 +9,10 @@ function show_main_page(rootid,role)
 	setLanguageMenu("fill_main_page()");
 	$("#refresh").attr("onclick","fill_main_page()");
 	$("body").removeClass();
-	$("body").addClass("main-page")
-	$("#main-page").html("");
-	$("#main-page").attr('role',g_userroles[0]);
-	$("#main-page").show();
+	$("body").addClass("portfolio-container")
+	$("#portfolio-container").html("");
+	$("#portfolio-container").attr('role',g_userroles[0]);
+	$("#portfolio-container").show();
 	$("#refresh").hide();
 }
 
@@ -26,7 +26,7 @@ function fill_main_page(rootid,role)
 	g_report_models = {};
 	g_Get_Resource_caches = {};
 	var html = "";
-	$("#main-page").html(html);
+	$("#portfolio-container").html(html);
 	g_welcome_add = false;
 	if (rootid!=null){
 		var parentid = $($(UICom.structure.ui[rootid].node).parent()).attr('id');
@@ -118,9 +118,9 @@ function fill_main_page(rootid,role)
 			//-------------------------------------------------
 			setCSSportfolio(data);
 			if (g_display_type=="header")
-				loadLanguages(function(data) {UIFactory["Portfolio"].displayPortfolio('main-page','header',LANGCODE,g_edit);});
+				loadLanguages(function(data) {UIFactory["Portfolio"].displayPortfolio('portfolio-container','header',LANGCODE,g_edit);});
 			else
-				UIFactory["Portfolio"].displayPortfolio('main-page',g_display_type,LANGCODE,g_edit);
+				UIFactory["Portfolio"].displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			// --------------------------
