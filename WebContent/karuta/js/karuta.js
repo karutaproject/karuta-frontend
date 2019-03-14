@@ -129,10 +129,6 @@ function getNavBar(type,portfolioid,edit)
 {
 	var html = "";
 	html += "	<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
-	html += "		<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-1' aria-controls='collapse-1' aria-expanded='false' aria-label='Toggle navigation'>";
-	html += "			<span class='navbar-toggler-icon'></span>";
-	html += "		</button>";
-
 	html += "		<a href='#' class='navbar-brand'>";
 	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/>";
 	html +="		</a>";
@@ -145,6 +141,9 @@ function getNavBar(type,portfolioid,edit)
 		html += "				<li>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</li>";
 		html += "			</ul>";
 	}
+	html += "		<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-1' aria-controls='collapse-1' aria-expanded='false' aria-label='Toggle navigation'>";
+	html += "			<span class='navbar-toggler-icon'></span>";
+	html += "		</button>";
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='mr-auto navbar-nav'>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
@@ -1624,7 +1623,7 @@ function setCSSportfolio(data)
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
 		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
-		changeCss(".menus,.collapsible, .createreport .button,.btn-group .button, .menus button", "color:"+portfolio_buttons_color+";");
+		changeCss(".menus,.collapsible, .createreport .button,.btn-group .button, .menus button, .menus a.button", "color:"+portfolio_buttons_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {

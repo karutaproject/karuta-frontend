@@ -11,7 +11,7 @@
 	displayView["standard"]["struct"] = ["strcut"];
 	displayView["standard"]["node"] = ["default","row","xwide","card","carddeck","card-carddeck"];
 	displayView["standard"]["resource"] = ["default","1/12","2/12","3/12","4/12","5/12","6/12","xwide","card"];
-	displayView["standard"]["resource"]["Image"] = ["Img-Label"];
+	displayView["standard"]["resource"]["Image"] = ["Img-Label","IMG-Label"];
 
 	displayView["model"] = {};
 	displayView["model"]["node"] = ["default","card","row"];
@@ -210,9 +210,18 @@
 												 "	</div>" +
 												 " <div id='metainfo_#uuid#' class='metainfo'></div>" +
 												 "</div>";
+///====================================================================
 //====================================================================
 //====================================================================
-//====================================================================
+	//====================================================================
+	displayHTML["standard-resource-Image-IMG-Label"]  =	"<div id='node_#uuid#' class='card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
+													"	<img id='resource_#uuid#' class='card-img' src=''></img>" +
+													"	<div id='std_node_#uuid#' name='lbl-div' class='card-img-overlay'>" +
+													 "		<div id='buttons-#uuid#' class='buttons'></div>" +
+													 "		<span id='label_node_#uuid#' class='card-title'></span><span id='help_#uuid' class='ihelp'></span>" +
+													 "	</div>" +
+													 " <div id='metainfo_#uuid#' class='metainfo'></div>" +
+													 "</div>";
 	displayHTML["standard-resource-Image-Img-Label"]  =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 												"<div id='buttons-#uuid#' class='buttons' style='text-align:right'></div>" +
 												" <div id='sub_node_#uuid#' class='resource-node #displayview#' >" +
@@ -235,7 +244,7 @@
 	displayHTML["model-node-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype#'>" +
 								" <div id='sub_node_#uuid#' name='lbl-div' class='node-model' >" +
 								"	<div id='collapsible_#uuid#' class='collapsible'></div>" +
-								"	<div id='std_node_#uuid#' class='node-label'>" +
+								"	<div id='std_node_#uuid#' class='model-node-label'>" +
 								"		<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
 								"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
 								"		<div id='comments_#uuid#' class='comments'></div>" +
@@ -247,7 +256,7 @@
 	
 	var model_resource = "<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #col#'>" +
 											"	<div id='sub_node_#uuid#' class='row' >" +
-											"		<div id='std_node_#uuid#'  name='label-div'class='#col-a# node-label inside-full'>" +
+											"		<div id='std_node_#uuid#'  name='label-div'class='#col-a# resource-node-label inside-full'>" +
 											"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
 											"		</div>" +
 											"		<div class='#col-b#'>" +

@@ -70,6 +70,24 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 }
 
 /* ====================== */
+/*    BUTTONS - MENUS     */
+/* ====================== */
+.button {
+  font-size: 0.75rem;
+  padding: 5px;
+  cursor: pointer;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.menus .dropdown {
+  float: left;
+}
+.menus a.textbutton {
+  font-size: 1rem;
+}
+
+/* ====================== */
 /*      NAVBAR            */
 /* ====================== */
 #flagimage {
@@ -84,6 +102,9 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 #navigation-bar li.icon {
   margin-top: 4px;
 }
+#navigation-bar ul.navbar-nav {
+  text-align: right;
+}
 
 /* ====================== */
 /*      SUBBAR            */
@@ -97,7 +118,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 }
 
 /* ====================== */
-/*      SIDEBAR            */
+/*      SIDEBAR           */
 /* ====================== */
 .panel-default > .panel-heading {
   background-color: transparent;
@@ -248,11 +269,18 @@ a.sidebar-link:hover {
 #toggle-mode {
   padding-top: 9px;
   padding-left: 10px;
-  padding-right: 10px;
 }
 
 #toggle-mode-icon {
   font-size: 1.1rem;
+}
+
+#refresh-portfolio {
+  padding-left: 15px;
+}
+
+#sub-bar ul.navbar-nav {
+  text-align: right;
 }
 
 /*
@@ -492,24 +520,18 @@ a {
   margin-left: 0px;
 }
 
-.standard-resource-Image-Img-Label .node-label {
-  padding: 20px;
-  background-color: black;
-  opacity: 0.5;
-}
 .standard-resource-Image-Img-Label .title {
   font-size: inherit;
 }
-.standard-resource-Image-Img-Label div[name=lbl-div] {
-  position: relative;
-  width: fit-content;
-  top: -100px;
-  margin-left: auto;
-  margin-right: auto;
-}
 .standard-resource-Image-Img-Label div[name=res-div] {
-  text-align: center;
   position: relative;
+}
+.standard-resource-Image-Img-Label div[name=res-div] div[name=lbl-div] {
+  position: absolute;
+  top: 15%;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /*------ CARD --------*/
@@ -555,6 +577,17 @@ a {
 }
 .standard-node-carddeck .butmen {
   text-align: right;
+}
+
+/* ====================== */
+/*         MODEL          */
+/* ====================== */
+.model-node-label .title {
+  font-size: 1rem;
+}
+
+.resource-node-label .title {
+  font-size: 0.875rem;
 }
 
 /* ============================ */
@@ -1112,18 +1145,6 @@ hr {
 	padding-bottom:6px;
 }
 */
-.button {
-  font-size: 12px;
-  padding: 5px;
-  cursor: pointer;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.drop-down-menu {
-  border: 1px solid gray;
-}
-
 /*-------- block backward compatibility ----------------- */
 .row-node {
   padding-top: 15px;

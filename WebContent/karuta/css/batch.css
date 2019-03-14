@@ -26,10 +26,17 @@
   padding-bottom: 0px;
   height: 1.7em;
 }
-.batch .buttons {
+.batch .model-node-label .buttons {
   float: right;
 }
-.batch .menus {
+.batch .model-node-label .menus {
+  float: right;
+  margin-top: -10px;
+}
+.batch .model-resource-label .buttons {
+  float: none;
+}
+.batch .model-resource-label .menus {
   float: right;
   margin-top: -10px;
 }

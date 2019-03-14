@@ -1401,7 +1401,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		//------------ edit button ---------------------
 		//if ((!inline && ( (writenode && !incrementroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer' )) || (inline && ((USER.admin || g_userroles[0]=='designer') && (!editnoderoles.containsArrayElt(g_userroles) && !editresroles.containsArrayElt(g_userroles))))) {
 		if (
-					(!this.inline && ( 	(this.writenode && !this.incrementroles.containsArrayElt(g_userroles))
+					(!this.inline && ( 	(this.writenode && !this.incrementroles.containsArrayElt(g_userroles) && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
 									|| USER.admin
 									|| g_userroles[0]=='designer' 
 								)
@@ -1412,7 +1412,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			html += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------ delete button ---------------------
-		if ((this.deletenode || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
+		if (( (this.deletenode && this.delnoderoles.containsArrayElt(g_userroles) ) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			if (this.asmtype == 'asmStructure' || this.asmtype == 'asmUnit') {
 				html += deleteButton(this.id,this.asmtype,undefined,undefined,"UIFactory.Node.reloadStruct",g_portfolio_rootid,null);
 			} else {
@@ -1601,7 +1601,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 	var html = "";
 	//------------- node menus button ---------------
 	if ((USER.admin || g_userroles[0]=='designer') && (this.asmtype != 'asmContext' && (this.depth>0 || this.asmtype == 'asmUnitStructure'))) {
-		html += "<div class='dropdown'>";
+		html += "<div class='dropdown '>";
 		html += "	<button class='btn dropdown-toggle' type='button' id='add_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 		html += 		karutaStr[languages[langcode]]['Add'];
 		html += "	</button>";

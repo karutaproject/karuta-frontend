@@ -2434,14 +2434,16 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 {
 	var html = "";
 	var rootid = $(UICom.root.node).attr('id');
-	html += "<nav class='navbar navbar-expand-md'>";
-	html += "	<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-2' aria-controls='collapse-1' aria-expanded='false' aria-label='Toggle navigation'>";
-	html += "			<span class='navbar-toggler-icon'></span>";
-	html += "	</button>";
+	html += "<nav class='navbar navbar-expand-md navbar-dark'>";
+	html += "	<div>";
 	html += "	<a  onclick='toggleSideBar()' class='nav-item button icon'><i class='fa fa-bars'></i></a>";
 	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
 	html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
 	html += "	</a>";
+	html += "	</div>";
+	html += "	<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-2' aria-controls='collapse-1' aria-expanded='false' aria-label='Toggle navigation'>";
+	html += "			<span class='navbar-toggler-icon'></span>";
+	html += "	</button>";
 	html += "	<div class='navbar-collapse collapse' id='collapse-2'>";
 	html += "		<ul class='ml-auto navbar-nav'>";
 	//-------------------- ACTIONS----------------------

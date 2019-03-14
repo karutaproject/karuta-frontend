@@ -78,9 +78,32 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	background-color:var(--main-background-color);
 }
 /* ====================== */
-/*      NAVBAR            */
+/*    BUTTONS - MENUS     */
 /* ====================== */
 
+	.button{
+		font-size: 0.75rem;
+		padding: 5px;
+		cursor:pointer;
+		display: inline-block;
+		white-space:nowrap;
+	}
+
+	.menus {
+		 .dropdown {
+			float:left;
+		}
+		a.textbutton {
+			font-size:1rem;
+		}
+	}
+	
+//.drop-down-menu{
+//	border:1px solid gray;
+//}
+/* ====================== */
+/*      NAVBAR            */
+/* ====================== */
 
 	#flagimage {
 		width:25px;
@@ -93,8 +116,10 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		li.icon {
 			margin-top:4px;
 		}
+		ul.navbar-nav {
+			text-align:right;
+		}
 	}
-
 
 /* ====================== */
 /*      SUBBAR            */
@@ -109,7 +134,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	}
 
 /* ====================== */
-/*      SIDEBAR            */
+/*      SIDEBAR           */
 /* ====================== */
 
 
@@ -260,14 +285,19 @@ a.sidebar-link:hover {
 	#toggle-mode {
 		padding-top: 9px;
 		padding-left: 10px;
-		padding-right: 10px;
 	}
 	
 	#toggle-mode-icon {
 		font-size:1.1rem;
 	}
-
-	
+	#refresh-portfolio {
+		padding-left: 15px;
+	}
+	#sub-bar {
+		ul.navbar-nav {
+			text-align:right;
+		}
+	}
 /*
  * -------------------------
  * ------ PORTFOLIO --------
@@ -520,24 +550,18 @@ a {
 }
 
 .standard-resource-Image-Img-Label {
-	.node-label {
-		padding : 20px;
-		background-color : black;
-		opacity : 0.5;
-	}
 	.title {
 		font-size : inherit;
 	}
-	 div[name=lbl-div]{
-		position :relative;
-		width:fit-content;
-		top : -100px;
-		margin-left:auto;
-		margin-right:auto;
-	}
 	div[name=res-div]{
-		text-align : center;
 		position:relative;
+		div[name=lbl-div]{
+			position :absolute;
+			top : 15%;
+			bottom : 15%;
+			left : 50%;
+			transform : translateX(-50%);
+		}
 	}
 }
 
@@ -592,6 +616,18 @@ a {
 			text-align:right;
 		}
 	}
+
+/* ====================== */
+/*         MODEL          */
+/* ====================== */
+
+	.model-node-label .title{
+		font-size:1rem;
+	}
+	.resource-node-label .title{
+		font-size:0.875rem;
+	}
+
 
 /* ============================ */
 /* ============================ */
@@ -1185,17 +1221,7 @@ hr {
 	padding-bottom:6px;
 }
 */
-.button{
-	font-size: 12px;
-	padding: 5px;
-	cursor:pointer;
-	display: inline-block;
-	white-space:nowrap;
-}
 
-.drop-down-menu{
-	border:1px solid gray;
-}
 
 /*-------- block backward compatibility ----------------- */
 

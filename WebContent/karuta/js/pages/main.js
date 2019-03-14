@@ -124,7 +124,12 @@ function fill_main_page(rootid,role)
 			// --------------------------
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			// --------------------------
-			if (g_display_type=="standard" || g_display_type=="model" || g_display_type=="basic" || g_display_type=="translate") {
+			if (g_display_type=="standard" || g_display_type=="basic") {
+				g_edit = false;
+				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
+			}
+			if (g_display_type=="model" || g_display_type=="translate") {
+				g_edit = true;
 				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 			}
 			if (g_display_type=="header")
