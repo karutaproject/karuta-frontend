@@ -83,8 +83,9 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 .menus .dropdown {
   float: left;
 }
-.menus a.textbutton {
+.menus a.text-button {
   font-size: 1rem;
+  margin-top: 2px;
 }
 
 /* ====================== */
@@ -309,6 +310,10 @@ a.sidebar-link:hover {
 
 a {
   color: var(--portfolio-link-color);
+}
+
+a.portfolio-label:hover {
+  cursor: pointer;
 }
 
 /* ====================== */

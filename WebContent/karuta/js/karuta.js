@@ -51,6 +51,7 @@ var g_toggle_sidebar = [];
 var g_current_page = "";
 var g_nb_trees = 0;
 var g_sum_trees = 0;
+var g_roles = []; // list of portfolio roles for designer
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------

@@ -65,14 +65,14 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 }
 
 
-.list-page,
-.list-portfoliosgroups,
-.list-usersgroups,
-.list-users,
-.exec_report,
-.exec_batch{
-	background-color:var(--list-background-color);
-}
+	.list-page,
+	.list-portfoliosgroups,
+	.list-usersgroups,
+	.list-users,
+	.exec_report,
+	.exec_batch{
+		background-color:var(--list-background-color);
+	}
 
 #portfolio-container{
 	background-color:var(--main-background-color);
@@ -93,8 +93,9 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		 .dropdown {
 			float:left;
 		}
-		a.textbutton {
+		a.text-button {
 			font-size:1rem;
+			margin-top:2px;
 		}
 	}
 	
@@ -330,7 +331,9 @@ a.sidebar-link:hover {
 a {
 	color:var(--portfolio-link-color);
 }
-
+	a.portfolio-label:hover {
+		cursor:pointer;
+	}
 
 
 /* ====================== */

@@ -107,6 +107,8 @@ function fill_main_page(rootid,role)
 			}
 			// --------------------------
 			UICom.parseStructure(data,true);
+			for (role in UICom.roles)
+				g_roles[g_roles.length] = {'code':'','libelle':role};
 			//----if asmUnitStructures load content--------
 			if (g_complex) {
 				var unitStructures = $("asmUnitStructure",data);
