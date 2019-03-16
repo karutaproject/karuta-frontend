@@ -492,15 +492,6 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		type = 'standard';
 	g_display_type = type;
 	//---------------------------------------
-	if (type=='standard' || type=='basic'){
-		html += "	<div id='main-row' class='row'>";
-		html += "		<div class='col-sm-3' id='sidebar'></div>";
-		html += "		<div class='col-sm-9' id='contenu'></div>";
-		html += "	</div>";
-		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
-	}
-	//---------------------------------------
 	if (type=='model'){
 		html += "<div id='navigation_bar'></div>";
 		html += "<div id='main-container' class='container-fluid'>";
@@ -510,8 +501,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
 	}
-	//---------------------------------------
-	if (type=='translate'){
+	else if (type=='translate'){
 		html += "	<div class='row'>";
 		html += "		<div class='col-sm-3' id='sidebar'></div>";
 		html += "		<div class='colsm-9' id='contenu'></div>";
@@ -522,25 +512,35 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#sidebar_"+uuid).click();
 
 	}
-	if (type=='header'){
-		if ($("*:has(metadata[semantictag=header])",UICom.root.node).length==0)
-			alertHTML("Error: header semantic tag is missing");
-		if (g_userroles[0]=='designer') {
-			html += "   <div id='rootnode' style='position:absolute;top:70px;left:10px;'>";
-			html += "<button class='btn btn-xs' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+UICom.rootid+"')\"><div class='btn-text'>Root</div></button>";
-			html += "</div>";
-		}
-		html += "<div id='navigation_bar'></div>";
-		html += "<div id='main-header' class='container navbar navbar-fixed-top'>";
-		html += "   <div id='header'></div>";
-		html += "   <div id='menu'></div>";
+	else if (type=='horizontal-menu'){
+		html += "<div id='menu_bar'></div>";
+		html += "<div id='main-container' class='container-fluid'>";
+		html += "	<div id='contenu'>";
+		html += "	</div>";
 		html += "</div>";
-		html += "<div id='contenu' class='container header-container'></div>";
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displayNodes('header',UICom.root.node,'header',LANGCODE,edit);
-		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,edit,UICom.root.node);
+		g_display_type = type = 'standard';
+		UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar',type,LANGCODE,edit,UICom.rootid);
 	}
+	else if (type=='standard' || type=='basic'){
+		html += "	<div id='main-row' class='row'>";
+		html += "		<div class='col-sm-3' id='sidebar'></div>";
+		html += "		<div class='col-sm-9' id='contenu'></div>";
+		html += "	</div>";
+		$("#"+destid).append($(html));
+		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
+	}
+	else { // unknown type
+		type = "standard";
+		html += "	<div id='main-row' class='row'>";
+		html += "		<div class='col-sm-3' id='sidebar'></div>";
+		html += "		<div class='col-sm-9' id='contenu'></div>";
+		html += "	</div>";
+		$("#"+destid).append($(html));
+		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
+	}
+
 	//---------------------------------------
 	$('a[data-toggle=tooltip]').tooltip({html:true});
 };
@@ -555,8 +555,25 @@ UIFactory["Portfolio"].displaySidebar = function(root,destid,type,langcode,edit,
 	if (type=='standard' || type=='translate' || type=='model' || type=='basic'){
 		html += "<div id='sidebar-content'><div  class='panel-group' id='parent-"+rootid+"' role='tablist'></div></div>";
 		$("#"+destid).html($(html));
-		UIFactory["Node"].displaySidebar(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
+		UIFactory.Node.displaySidebar(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
 	}
+};
+
+//======================
+UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcode,edit,rootid)
+//======================
+{	
+	var html = "";
+	html += "<nav class='navbar navbar-expand-md navbar-dark'>";
+	html += "	<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-3' aria-controls='collapse-3' aria-expanded='false' aria-label='Toggle navigation'>";
+	html += "			<span class='navbar-toggler-icon'></span>";
+	html += "	</button>";
+	html += "	<div class='navbar-collapse collapse' id='collapse-3'>";
+	html += "		<ul id='parent-"+rootid+"' class='navbar-nav'></ul>";
+	html += "	</div>";
+	html += "</nav>";
+	$("#"+destid).html($(html));
+	UIFactory.Node.displayHorizontalMenu(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
 };
 
 //======================

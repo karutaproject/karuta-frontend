@@ -119,14 +119,11 @@ function fill_main_page(rootid,role)
 			}
 			//-------------------------------------------------
 			setCSSportfolio(data);
-			if (g_display_type=="header")
-				loadLanguages(function(data) {UIFactory["Portfolio"].displayPortfolio('portfolio-container','header',LANGCODE,g_edit);});
-			else
-				UIFactory["Portfolio"].displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
+			UIFactory["Portfolio"].displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			// --------------------------
-			if (g_display_type=="standard" || g_display_type=="basic") {
+			if (g_display_type=="standard" || g_display_type=="basic" || g_display_type=="horizontal-menu") {
 				g_edit = false;
 				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 			}
@@ -134,8 +131,6 @@ function fill_main_page(rootid,role)
 				g_edit = true;
 				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 			}
-			if (g_display_type=="header")
-				$("#navigation-bar").html(getNavBar('main',g_portfolioid,g_edit));
 			//---------------------------
 			if (g_encrypted)
 				loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});

@@ -445,21 +445,35 @@ a {
 	font-size:16px;
 }
 */
+	table[name=res-div] {
+		border: 1px solid var(--standard-border-color);
+	}
 	.td-resource {
 		width: 80%;
 		margin-right: 0px;
 		background: white;
-		border: 1px solid var(--standard-border-color);
 		padding-left: 0px;
 		padding-right: 0px;
 		margin-left: 0px;
 	}
 	.td-buttons {
 		background: var(--standard-border-color);
-		border: 1px solid var(--standard-border-color);
 		width: 200px;
 		.buttons {
 			float:none;
+		}
+	}
+
+	.standard-resource-simple {
+		td {
+			min-height:1.75rem
+		}
+		 .resource {
+			border: none;
+		}
+		.form-control {
+			padding:0px;
+			height:inherit;
 		}
 	}
 
@@ -617,6 +631,10 @@ a {
 		}
 		.butmen {
 			text-align:right;
+		}
+		div[name=cnt-div] div[name=cnt-div]{
+			padding-left:0px;
+			padding-right:0px;
 		}
 	}
 

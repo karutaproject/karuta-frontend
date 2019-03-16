@@ -675,11 +675,8 @@ function displayPage(uuid,depth,type,langcode) {
 		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
-		if (type=='model') {
-			UICom.structure["ui"][uuid].displayNode('model',UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
-		}
-		if (type=='basic') {
-			UICom.structure["ui"][uuid].displayNode('basic',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+		if (type=='basic' || type=='model' || type=='horizontal-menu') {
+			UICom.structure["ui"][uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
 	}
 	$("#wait-window").modal('hide');

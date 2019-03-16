@@ -421,11 +421,14 @@ a.portfolio-label:hover {
 	font-size:16px;
 }
 */
+table[name=res-div] {
+  border: 1px solid var(--standard-border-color);
+}
+
 .td-resource {
   width: 80%;
   margin-right: 0px;
   background: white;
-  border: 1px solid var(--standard-border-color);
   padding-left: 0px;
   padding-right: 0px;
   margin-left: 0px;
@@ -433,11 +436,21 @@ a.portfolio-label:hover {
 
 .td-buttons {
   background: var(--standard-border-color);
-  border: 1px solid var(--standard-border-color);
   width: 200px;
 }
 .td-buttons .buttons {
   float: none;
+}
+
+.standard-resource-simple td {
+  min-height: 1.75rem;
+}
+.standard-resource-simple .resource {
+  border: none;
+}
+.standard-resource-simple .form-control {
+  padding: 0px;
+  height: inherit;
 }
 
 /*  --- node --- */
@@ -582,6 +595,10 @@ a.portfolio-label:hover {
 }
 .standard-node-carddeck .butmen {
   text-align: right;
+}
+.standard-node-carddeck div[name=cnt-div] div[name=cnt-div] {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 /* ====================== */

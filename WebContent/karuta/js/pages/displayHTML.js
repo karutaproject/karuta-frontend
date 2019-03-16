@@ -10,7 +10,7 @@
 	displayView["standard"] = {};
 	displayView["standard"]["struct"] = ["strcut"];
 	displayView["standard"]["node"] = ["default","row","xwide","card","carddeck","card-carddeck"];
-	displayView["standard"]["resource"] = ["default","1/12","2/12","3/12","4/12","5/12","6/12","xwide","card"];
+	displayView["standard"]["resource"] = ["default","1/12","2/12","3/12","4/12","5/12","6/12","simple","xwide","card"];
 	displayView["standard"]["resource"]["Image"] = ["Img-Label","IMG-Label"];
 
 	displayView["model"] = {};
@@ -105,17 +105,32 @@
 												"		<div id='std_node_#uuid#' name='lbl-div' class='col-2 resource-label inside-full-height'>" +
 												"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid' class='ihelp'></span></div>" +
 												"		</div>" +
-												"		<div name='res-div' class='col-8'>" +
-												"			<table width='100%'><tr>" +
+//												"		<div name='res-div' class='col-8'>" +
+												"			<table name='res-div' class='col-8' width='100%'><tr>" +
 											"					<td  width='80%' class='td-resource'>" +
 												"					<div id='resource_#uuid#' class='resource inside-full'></div>" +
 												"					<div id='comments_#uuid#' class='comments'></div>" +
 												"				</td>" +
 												"				<td class='td-buttons buttons'><span id='buttons-#uuid#'></span><span id='menus-#uuid#' class='menus'><span></td>" +
 												"			</tr></table>" +
-												"		</div>" +
+//												"		</div>" +
 												"	</div><!-- row -->" +
 												"	<div class='row'><div id='metainfo_#uuid#' class='offset-md-1 col-md-10 metainfo'></div></div>" +
+												"	<div id='content-#uuid#' name='cnt-div' class='content' ><\div>" +
+												"	<div id='extra_#uuid#' class='extra'></div>" +
+												"</div>";
+	
+	displayHTML["standard-resource-simple"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
+												"	<div id='sub_node_#uuid#' class='resource-node' >" +
+												"		<table width='100%'><tr>" +
+												"			<td width='50%'><span id='buttons-#uuid#' style='float:right'></span><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid' class='ihelp'></span></td>" +
+												"			<td width='50%' class='td-resource'>" +
+												"				<div id='resource_#uuid#' class='resource'></div>" +
+												"			</td>" +
+												"		</tr></table>" +
+												"	</div>" +
+												"	<div id='comments_#uuid#' class='comments'></div>" +
+												"	<div id='metainfo_#uuid#' class='metainfo'></div></div>" +
 												"	<div id='content-#uuid#' name='cnt-div' class='content' ><\div>" +
 												"	<div id='extra_#uuid#' class='extra'></div>" +
 												"</div>";
@@ -176,9 +191,7 @@
 											"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
 											"		</div>" +
 											 "	</div>" +
-											 "	<div class='card-body' name='res-div'>" +
-											" 		<div id='content-#uuid#' name='cnt-div' class='content'></div>" +
-											 "	</div>" +
+											 "	<div id='content-#uuid#' name='cnt-div' class='card-body content'></div>" +
 											 "	<div id='metainfo_#uuid#' class='metainfo'></div>" +
 											 "</div>";
 	//====================================================================
