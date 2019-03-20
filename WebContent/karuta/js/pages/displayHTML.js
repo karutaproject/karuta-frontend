@@ -23,7 +23,7 @@
 									"	<div id='sub_node_#uuid#' name='lbl-div' class='row  #displayview#' >" +
 									"		<div id='collapsible_#uuid#' class='col-md-1'></div>" +
 									"		<div id='std_node_#uuid#' class='node-label col-md-7  '>" +
-									"			<div><a id='label_node_#uuid#' class='label-libelle'></a><span id='help_#uuid' class='ihelp'></span></div>" +
+									"			<div><a id='label_node_#uuid#' class='label-libelle'></a><span id='help_#uuid#' class='ihelp'></span></div>" +
 									"			<div id='comments_#uuid#' class='comments'></div><!-- comments -->" +
 									"			<div id='metainfo_#uuid#' class='metainfo'></div><!-- metainfo -->" +
 									"		</div>" +
@@ -35,7 +35,7 @@
 								" <div id='sub_node_#uuid#' name='lbl-div' class='node row' >" +
 								"	<div id='collapsible_#uuid#' class='collapsible col-md-1'></div>" +
 								"	<div id='std_node_#uuid#' class='node-label col-md-7'>" +
-								"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+								"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 								"		<div id='comments_#uuid#' class='comments'></div>" +
 								"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
 								"	</div>" +
@@ -47,7 +47,7 @@
 	displayHTML["basic-resource-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 									"	<div id='sub_node_#uuid#' class='resource-node row' >" +
 									"		<div id='std_node_#uuid#' name='lbl-div' class='col-md-offset-1 col-md-2 node-label inside-full-height'>" +
-									"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+									"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 									"		</div>" +
 									"		<div name='res-div' class='col-md-5'>" +
 									"					<div id='resource_#uuid#' class='resource'></div>" +
@@ -66,7 +66,7 @@
 												"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
 												"		<div id='std_node_#uuid#' class='node-label'>" +
 												"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
-												"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+												"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 												"			<div id='comments_#uuid#' class='comments'></div>" +
 												"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
 												"		</div>" +
@@ -78,7 +78,7 @@
 											"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
 											"		<div id='std_node_#uuid#' class='node-label'>" +
 											"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
-											"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+											"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 											"			<div id='comments_#uuid#' class='comments'></div>" +
 											"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
 											"		</div>" +
@@ -90,7 +90,7 @@
 											" <div id='sub_node_#uuid#' name='lbl-div' class='node row #first#' >" +
 											"	<div id='collapsible_#uuid#' class='collapsible col-1'></div>" +
 											"	<div id='std_node_#uuid#' class='node-label col-7'>" +
-											"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+											"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 											"		<div id='comments_#uuid#' class='comments'></div>" +
 											"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
 											"	</div>" +
@@ -103,7 +103,7 @@
 												"	<div id='sub_node_#uuid#' class='resource-node row' >" +
 												"		<div class='col-2'></div>" +
 												"		<div id='std_node_#uuid#' name='lbl-div' class='col-2 resource-label inside-full-height'>" +
-												"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+												"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 												"		</div>" +
 //												"		<div name='res-div' class='col-8'>" +
 												"			<table name='res-div' class='col-8' width='100%'><tr>" +
@@ -123,7 +123,7 @@
 	displayHTML["standard-resource-simple"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 												"	<div id='sub_node_#uuid#' class='resource-node' >" +
 												"		<table width='100%'><tr>" +
-												"			<td width='50%'><span id='buttons-#uuid#' style='float:right'></span><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid' class='ihelp'></span></td>" +
+												"			<td width='50%'><span id='buttons-#uuid#' style='float:right'></span><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></td>" +
 												"			<td width='50%' class='td-resource'>" +
 												"				<div id='resource_#uuid#' class='resource'></div>" +
 												"			</td>" +
@@ -140,7 +140,7 @@
 									" <div id='sub_node_#uuid#' name='lbl-div' class='node #displayview#' >" +
 									"	<div id='collapsible_#uuid#' class='collapsible'></div>" +
 									"	<div id='std_node_#uuid#' class='node-label'>" +
-									"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+									"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 									"		<div id='comments_#uuid#' class='comments'></div>" +
 									"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
 									"	</div>" +
@@ -153,7 +153,7 @@
 									" <div id='sub_node_#uuid#' class='resource-node #displayview#' >" +
 									"	<div id='std_node_#uuid#' name='lbl-div' class='row'>" +
 									"		<div class='col-md-offset-1 col-md-7 node-label inside-full-height'>" +
-									 "			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+									 "			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 									 "		</div>" +
 									 "		<div id='buttons-#uuid#' class='buttons col-md-4'></div>" +
 									 "	</div>" +
@@ -173,7 +173,7 @@
 												"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
 												"		<div id='std_node_#uuid#' class='node-label'>" +
 												"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
-												"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+												"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 												"			<div id='comments_#uuid#' class='comments'></div>" +
 												"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
 												"		</div>" +
@@ -186,7 +186,7 @@
 											"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
 											"		<div id='std_node_#uuid#' class='node-label'>" +
 											"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
-											"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+											"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 											"			<div id='comments_#uuid#' class='comments'></div>" +
 											"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
 											"		</div>" +
@@ -200,7 +200,7 @@
 													"		<div id='collapsible_#uuid#' class='collapsible'></div>" +
 													"		<div id='std_node_#uuid#' class='node-label'>" +
 													"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
-													"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+													"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 													"			<div id='comments_#uuid#' class='comments'></div>" +
 													"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
 													"		</div>" +
@@ -214,7 +214,7 @@
 	displayHTML["standard-resource-card"]  =	"<div id='node_#uuid#' class='card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 												"	<div id='std_node_#uuid#' name='lbl-div' class='card-header'>" +
 												 "		<div id='buttons-#uuid#' class='buttons'></div>" +
-												 "		<span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid' class='ihelp'></span>" +
+												 "		<span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span>" +
 												 "	</div>" +
 												 "	<div class='card-body' name='res-div'>" +
 												 "		<div id='resource_#uuid#' class='resource'></div>" +
@@ -231,7 +231,7 @@
 													"	<img id='resource_#uuid#' class='card-img' src=''></img>" +
 													"	<div id='std_node_#uuid#' name='lbl-div' class='card-img-overlay'>" +
 													 "		<div id='buttons-#uuid#' class='buttons'></div>" +
-													 "		<span id='label_node_#uuid#' class='card-title'></span><span id='help_#uuid' class='ihelp'></span>" +
+													 "		<span id='label_node_#uuid#' class='card-title'></span><span id='help_#uuid#' class='ihelp'></span>" +
 													 "	</div>" +
 													 " <div id='metainfo_#uuid#' class='metainfo'></div>" +
 													 "</div>";
@@ -242,7 +242,7 @@
 												"		<div id='resource_#uuid#' class='resource'></div>" +
 												"		<div id='std_node_#uuid#' name='lbl-div'>" +
 												"			<div class='node-label'>" +
-												"				<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+												"				<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 												"			</div>" +
 												"		</div>" +
 												"		<div id='comments_#uuid#' class='comments'></div>" +
@@ -259,7 +259,7 @@
 								"	<div id='collapsible_#uuid#' class='collapsible'></div>" +
 								"	<div id='std_node_#uuid#' class='model-node-label'>" +
 								"		<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
-								"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+								"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 								"		<div id='comments_#uuid#' class='comments'></div>" +
 								"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
 								"	</div>" +
@@ -270,7 +270,7 @@
 	var model_resource = "<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #col#'>" +
 											"	<div id='sub_node_#uuid#' class='row' >" +
 											"		<div id='std_node_#uuid#'  name='label-div'class='#col-a# resource-node-label inside-full'>" +
-											"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+											"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 											"		</div>" +
 											"		<div class='#col-b#'>" +
 											"			<table width='100%'><tr>" +
@@ -292,7 +292,7 @@
 										"	<div id='collapsible_#uuid#' class='collapsible'></div>" +
 										"	<div id='std_node_#uuid#' class='node-label'>" +
 										"		<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
-										"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+										"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 										"		<div id='comments_#uuid#' class='comments'></div>" +
 										"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
 										"	</div>" +
@@ -307,7 +307,7 @@
 										"	<div id='collapsible_#uuid#' class='collapsible'></div>" +
 										"	<div id='std_node_#uuid#' class='node-label'>" +
 										"		<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
-										"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+										"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 										"		<div id='comments_#uuid#' class='comments'></div>" +
 										"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
 										"	</div>" +
@@ -335,7 +335,7 @@
 					"<div id='sub_node_#uuid#' name='lbl-div' class='node #displayview#' >" +
 					"	<div id='collapsible_#uuid#' class='collapsible'></div>" +
 					"	<div id='std_node_#uuid#' class='node-label'>" +
-					"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+					"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 					"		<div id='comments_#uuid#' class='comments'></div>" +
 					"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
 					"	</div>" +
@@ -355,7 +355,7 @@
 	var resource2 = " ' >" +
 					"<div id='sub_node_#uuid#' class='node #displayview#' >" +
 					"	<div id='std_node_#uuid#' class='node-label'>" +
-					"		<div name='lbl-div'><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid' class='ihelp'></span></div>" +
+					"		<div name='lbl-div'><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 					"		<div id='resource_#uuid#' name='res-div' class='resource'></div>" +
 					"	</div>" +
 					"	<div id='buttons-#uuid#' name='res-div' class='buttons'></div>" +

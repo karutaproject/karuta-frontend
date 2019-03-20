@@ -390,9 +390,10 @@ function getEditBox(uuid,js2) {
 	$("#edit-window-body-metadata-epm").html($(editHtml));
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
-		var editHtml = UIFactory["Node"].getMetadataAttributesEditor(UICom.structure["ui"][uuid]);
-		$("#edit-window-body-metadata").html($(editHtml));
-		UIFactory["Node"].displayMetadataTextsEditor(UICom.structure["ui"][uuid]);
+		UICom.structure.ui[uuid].displayMetadataAttributesEditor("edit-window-body-metadata");
+//		var editHtml = UIFactory["Node"].getMetadataAttributesEditor(UICom.structure["ui"][uuid]);
+//		$("#edit-window-body-metadata").html($(editHtml));
+//		UIFactory["Node"].displayMetadataTextsEditor(UICom.structure["ui"][uuid]);
 	}
 	// ------------------------------
 //	$(".modal-dialog").css('width','70%');
