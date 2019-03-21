@@ -391,9 +391,6 @@ function getEditBox(uuid,js2) {
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
 		UICom.structure.ui[uuid].displayMetadataAttributesEditor("edit-window-body-metadata");
-//		var editHtml = UIFactory["Node"].getMetadataAttributesEditor(UICom.structure["ui"][uuid]);
-//		$("#edit-window-body-metadata").html($(editHtml));
-//		UIFactory["Node"].displayMetadataTextsEditor(UICom.structure["ui"][uuid]);
 	}
 	// ------------------------------
 //	$(".modal-dialog").css('width','70%');
@@ -737,7 +734,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 	//------------
 	var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	if (USER.admin || g_userroles[1]=='designer') {
-		var rights = UIFactory["Node"].getRights(destid);
+		var rights = UICom.structure["ui"][destid].getRights();
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
@@ -1889,7 +1886,7 @@ function toggleMode()
 		g_edit = true;
 		$("#toggle-mode-icon").removeClass('fas fa-toggle-off').addClass('fas fa-toggle-on');
 	}
-	UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
+//	UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
 	var uuid = $("#page").attr('uuid');
 	$("#sidebar_"+uuid).click();
 }

@@ -7,7 +7,7 @@ function initKarutaPage()
 	html += "<div id='main-body'>";
 	html += "	<div id='navigation-bar'></div>";
 	html += "	<div id='sub-bar'></div>";
-	html += "	<div id='main-container' class='container-fluid'></div>";
+	html += "	<div id='main-container'></div>";
 	html += "	<div id='wait-window' class='modal' style='height:100px;'><div id='wait-window-body' class='modal-body'></div>";
 	html += "	<div id='wait-spin'></div>";
 	html += "	</div>";
@@ -66,7 +66,7 @@ function displayKarutaPage()
 			});
 			//-------------------------------
 			var html = "";
-			html += "	<div id='list-container'></div>";
+			html += "	<div id='list-container' class='container-fluid'></div>";
 			html += "	<div id='portfolio-container' role='all' style='display:none'></div>";
 			html += "	<div id='search-user-div' class='search' style='display:none'>";
 			html += getSearchUser();

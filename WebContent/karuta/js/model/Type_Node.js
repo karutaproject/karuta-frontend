@@ -1068,12 +1068,15 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	//----------------------------------------------------------------------------------------------------------------------------
 
 	//===========================================
-	UIFactory["Node"].displayHorizontalMenu = function(root,destid,type,langcode,edit,parentid)
+	UIFactory["Node"].displayHorizontalMenu = function(root,destid,type,langcode,edit,parentid,level)
 	//===========================================
 	{
 		//---------------------
 		if (langcode==null)
 			langcode = LANGCODE;
+		//---------------------
+		if (level==null)
+			level = 0;
 		//---------------------
 		for( var i=0;i<root.children.length;i++ )
 		{
@@ -1087,19 +1090,24 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 			if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
-				if(name == "asmUnit") // Click on Unit
+				if(name == "asmUnit" && level==0) // Click on Unit
 				{
 					var html = "";
 					var depth = 99;
-					html += "<a id='parent-"+uuid+"' class='nav-item ";
+					html += "<a style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='nav-item";
 					if (privatevalue)
-						html+= "private"
-					html += "'>";
-					html += "  <a style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='sidebar-link' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</a>";
-					html += "</a>";
+						html+= " private";
+					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</a>";
 					$("#"+destid).append($(html));
 				}
-				if(name == "asmStructure") // Click on Structure
+				if(name == "asmUnit" && level==1) // Click on Unit
+				{
+					var html = "";
+					var depth = 99;
+					html += "<a class='dropdown-item' href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+					$("#"+destid).append($(html));
+				}
+				if(name == "asmStructure" && level==0) // Click on Structure
 				{
 					var depth = 1;
 					var html = "";
@@ -1107,13 +1115,29 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					if (privatevalue)
 						html+= "private"
 					html += "' id='parent-"+uuid+"' role='tablist'>";
-					html += "<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+text+"</a>";
+					html += "<a class='dropdown-toggle' href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+text+"</a>";
 					html += "<div id='dropdown"+uuid+"' class='dropdown-menu' aria-labelledby='sidebar_"+uuid+"'>";
-					html += "<a class='sidebar-link' href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+					html += "<a class='dropdown-item' href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
 					html += "</div><!-- panel-collapse -->";
 					html += "</li>";
 					$("#"+destid).append($(html));
-					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid);
+					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
+				}
+				if(name == "asmStructure" && level==1) // Click on Structure
+				{
+					var depth = 1;
+					var html = "";
+					html += "<li class='dropdown-submenu";
+					if (privatevalue)
+						html+= "private"
+					html += "' id='parent-"+uuid+"' role='tablist'>";
+					html += "<a class='dropdown-item' href='#'>"+text+"</a>";
+					html += "<div id='dropdown"+uuid+"' class='dropdown-menu' aria-labelledby='sidebar_"+uuid+"'>";
+					html += "<a class='dropdown-item' href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+					html += "</div><!-- panel-collapse -->";
+					html += "</li>";
+					$("#"+destid).append($(html));
+					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
 				}
 			}
 		}

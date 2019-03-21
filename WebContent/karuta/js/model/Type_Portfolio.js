@@ -494,10 +494,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	//---------------------------------------
 	if (type=='model'){
 		html += "<div id='navigation_bar'></div>";
-		html += "<div id='main-container' class='container-fluid'>";
-		html += "	<div id='contenu'>";
-		html += "	</div>";
-		html += "</div>";
+		html += "<div id='contenu' class='container-fluid'></div>";
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
 	}
@@ -514,10 +511,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	}
 	else if (type=='horizontal-menu'){
 		html += "<div id='menu_bar'></div>";
-		html += "<div id='main-container' class='container-fluid'>";
-		html += "	<div id='contenu'>";
-		html += "	</div>";
-		html += "</div>";
+		html += "<div id='contenu' class='container-fluid'></div>";
 		html += "<div id='footer'></div>";
 		$("#"+destid).append($(html));
 		g_display_type = type = 'standard';

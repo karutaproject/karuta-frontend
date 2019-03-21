@@ -119,7 +119,7 @@ function fill_main_page(rootid,role)
 			}
 			//-------------------------------------------------
 			setCSSportfolio(data);
-			UIFactory["Portfolio"].displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
+			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			// --------------------------
