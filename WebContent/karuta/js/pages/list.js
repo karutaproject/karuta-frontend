@@ -110,7 +110,7 @@ function fill_list_page()
 	$("#main-list").html(html);
 //	$.ajaxSetup({async: false});
 	// --- list of users to display name of owner
-	if (USER.admin || (USER.creator && !USER.limited) ){
+	if (USER.admin || USER.creator){
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
