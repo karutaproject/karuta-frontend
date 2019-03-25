@@ -176,6 +176,7 @@ karutaStr['fr']['moveroles']="Rôles - Déplacer";
 karutaStr['fr']['othercss']="Autres instructions CSS";
 karutaStr['fr']['cssfile']="Fichier CSS";
 karutaStr['fr']['display-type']="Type de présentation";
+karutaStr['fr']['menu-type']="Type de menu";
 karutaStr['fr']['displayview']="Type de vue";
 karutaStr['fr']['node']="Contenu du noeud";
 karutaStr['fr']['resource']="Ressource";

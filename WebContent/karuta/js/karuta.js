@@ -23,7 +23,7 @@ if( karutaStr === undefined )
 
 var portfolioid = null;
 
-// -------------------
+// ------ GLOBAL VARIABLES ------------
 var g_userrole = "";
 var g_userroles = [];
 var g_portfolioid = "";
@@ -32,12 +32,13 @@ var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
 var g_display_type = "standard"; // default value
+var g_menu_type = "vertical"; // default value
 var g_edit = false;
 var g_visible = 'hidden';
 var g_welcome_edit = false;
 var g_welcome_add = false;  // we don't display add a welcome page
 var g_display_sidebar = true;
-var g_free_toolbar_visibility = 'hidden';
+//var g_free_toolbar_visibility = 'hidden';
 //---- caches -----
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_report_models = {}; // cache for report_models
@@ -70,18 +71,24 @@ function setDesignerRole(role)
 	if (g_display_type=='standard'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
-		html += "	<div id='main-row' class='row'>";
-		if (g_display_sidebar) {
-			html += "		<div class='col-md-3' id='sidebar'></div>";
-			html += "		<div class='col-md-9' id='contenu'></div>";
-		} else {
-			html += "		<div class='col-md-3' id='sidebar' style='display:none'></div>";
-			html += "		<div class='col-md-12' id='contenu'></div>";
+		if (g_menu_type=="horizontal"){
+			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
+			$("#portfolio-container").attr('role',role);			
 		}
-		html += "	</div>";
-		$("#portfolio-container").html(html);
-		$("#portfolio-container").attr('role',role);
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
+		else {
+			html += "	<div id='main-row' class='row'>";
+			if (g_display_sidebar) {
+				html += "		<div class='col-md-3' id='sidebar'></div>";
+				html += "		<div class='col-md-9' id='contenu'></div>";
+			} else {
+				html += "		<div class='col-md-3' id='sidebar' style='display:none'></div>";
+				html += "		<div class='col-md-12' id='contenu'></div>";
+			}
+			html += "	</div>";
+			$("#portfolio-container").html(html);
+			$("#portfolio-container").attr('role',role);
+			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
+		}
 		$("#sidebar_"+uuid).click();
 	};
 	if (g_display_type=='model'){
@@ -93,7 +100,7 @@ function setDesignerRole(role)
 		else
 			$("#rootnode").show();
 		UIFactory["Portfolio"].displayNodes('basic',UICom.root.node,'basic',LANGCODE,g_edit);
-		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,g_edit,UICom.root.node);
+//		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,g_edit,UICom.root.node);
 		var uuid = $("#page").attr('uuid');
 		$("#sidebar_"+uuid).click();
 	};
@@ -384,10 +391,9 @@ function getEditBox(uuid,js2) {
 		}
 	}
 	// ------------ context -----------------
-	UIFactory["Node"].displayCommentsEditor('edit-window-body-context',UICom.structure["ui"][uuid]);
+	UIFactory.Node.displayCommentsEditor('edit-window-body-context',UICom.structure["ui"][uuid]);
 	// ------------ graphicer -----------------
-	var editHtml = UIFactory["Node"].getMetadataEpmAttributesEditor(UICom.structure["ui"][uuid]);
-	$("#edit-window-body-metadata-epm").html($(editHtml));
+	UICom.structure.ui[uuid].displayMetadataEpmAttributesEditor('edit-window-body-metadata-epm');
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
 		UICom.structure.ui[uuid].displayMetadataAttributesEditor("edit-window-body-metadata");
@@ -673,7 +679,7 @@ function displayPage(uuid,depth,type,langcode) {
 		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
-		if (type=='basic' || type=='model' || type=='horizontal-menu') {
+		if (type=='basic' || type=='model') {
 			UICom.structure["ui"][uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
 	}
@@ -1889,4 +1895,24 @@ function toggleMode()
 //	UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
 	var uuid = $("#page").attr('uuid');
 	$("#sidebar_"+uuid).click();
+}
+
+//==============================
+String.prototype.noAccent = function()
+//==============================
+{	var accent = [
+		/[\300-\306]/g, /[\340-\346]/g, // A, a
+		/[\310-\313]/g, /[\350-\353]/g, // E, e
+		/[\314-\317]/g, /[\354-\357]/g, // I, i
+		/[\322-\330]/g, /[\362-\370]/g, // O, o
+		/[\331-\334]/g, /[\371-\374]/g, // U, u
+		/[\321]/g, /[\361]/g, // N, n
+		/[\307]/g, /[\347]/g, // C, c
+	];
+	var noaccent = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
+	var str = this;
+	for(var i = 0; i < accent.length; i++){
+		str = str.replace(accent[i], noaccent[i]);
+	}
+	return str;
 }

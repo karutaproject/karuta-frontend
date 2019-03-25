@@ -509,21 +509,21 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#sidebar_"+uuid).click();
 
 	}
-	else if (type=='horizontal-menu'){
-		html += "<div id='menu_bar'></div>";
-		html += "<div id='contenu' class='container-fluid'></div>";
-		html += "<div id='footer'></div>";
-		$("#"+destid).append($(html));
-		g_display_type = type = 'standard';
-		UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar',type,LANGCODE,edit,UICom.rootid);
-	}
 	else if (type=='standard' || type=='basic'){
-		html += "	<div id='main-row' class='row'>";
-		html += "		<div class='col-sm-3' id='sidebar'></div>";
-		html += "		<div class='col-sm-9' id='contenu'></div>";
-		html += "	</div>";
-		$("#"+destid).append($(html));
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
+		if (g_menu_type=='horizontal') {
+			html += "<div id='menu_bar'></div>";
+			html += "<div id='contenu' class='container-fluid'></div>";
+			$("#"+destid).append($(html));
+			UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar',type,LANGCODE,edit,UICom.rootid);
+		}
+		else {
+			html += "	<div id='main-row' class='row'>";
+			html += "		<div class='col-sm-3' id='sidebar'></div>";
+			html += "		<div class='col-sm-9' id='contenu'></div>";
+			html += "	</div>";
+			$("#"+destid).append($(html));
+			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
+		}
 	}
 	else { // unknown type
 		type = "standard";

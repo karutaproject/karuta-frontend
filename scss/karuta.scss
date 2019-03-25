@@ -5,10 +5,10 @@
 /* ====================== */
 
 	body,
-		.form-control,
-		.btn {
-			font-family: "Open Sans",sans-serif;
-			font-size: 0.8rem;
+	.form-control,
+	.btn {
+		font-family: "Open Sans",sans-serif;
+		font-size: 0.8rem;
 	}
 	
 	@media (min-width: 768px) {  
@@ -683,7 +683,7 @@ a {
 
 /* ====================== */
 /*         MODEL          */
-/* ====================== */
+/* ====================== */	
 
 	.model-node-label .title{
 		font-size:1rem;
@@ -1469,7 +1469,8 @@ hr {
 /*         METADATA       */
 /* ====================== */
 
-#metadata {
+.metadata {
+	padding-top:5px;
 	.input-group-text {
 		border: 0px solid #ced4da;
 	}
@@ -1502,6 +1503,13 @@ hr {
 		width:100px;
 		border: 1px solid #ced4da;
 	}
+	.form-group{
+		margin-bottom:3px;
+	}
+}
+
+#metadata-part1 {
+	margin-top:1rem;
 }
 
 

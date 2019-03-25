@@ -176,6 +176,7 @@ karutaStr['en']['moveroles']="Roles - Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
 karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
+karutaStr['en']['menu-type']="Menu Type";
 karutaStr['en']['displayview']="Display View";
 karutaStr['en']['node']="Node Content";
 karutaStr['en']['resource']="Resource";

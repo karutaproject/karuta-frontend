@@ -233,7 +233,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			//---------------------------- BUTTONS AND BACKGROUND COLOR -----------------------------------------------------------------
 			// ---------- if by error button color == background color we set button color to white or black to be able to see them -----
 			var buttons_color = eval($(".button").css("color"));
-			var buttons_background_style = UIFactory["Node"].displayMetadataEpm(this.metadataepm,'background-color',false);
+			var buttons_background_style = UIFactory.Node.getMetadataEpm(this.metadataepm,'background-color',false);
 			if (buttons_background_style!="") {
 				var buttons_background_color = buttons_background_style.substring(buttons_background_style.indexOf(":")+1,buttons_background_style.indexOf(";"));
 				if (buttons_background_color==buttons_color)
@@ -242,7 +242,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					else
 						changeCss("#node_"+uuid+" .button", "color:white;");
 			}
-			var buttons_node_background_style = UIFactory["Node"].displayMetadataEpm(this.metadataepm,'node-background-color',false);
+			var buttons_node_background_style = UIFactory.Node.getMetadataEpm(this.metadataepm,'node-background-color',false);
 			if (buttons_node_background_style!="") {
 				var buttons_node_background_color = buttons_node_background_style.substring(buttons_node_background_style.indexOf(":")+1,buttons_node_background_style.indexOf(";"));
 				if (buttons_node_background_color==buttons_color)
@@ -281,7 +281,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			// ===========================================================================
 			// ================================= For each child ==========================
 			// ===========================================================================
-			var backgroundParent = UIFactory["Node"].displayMetadataEpm(this.metadataepm,'node-background-color',false);
+			var backgroundParent = UIFactory.Node.getMetadataEpm(this.metadataepm,'node-background-color',false);
 			
 			if (this.semtag.indexOf('asmColumns')>-1 && type!='basic') {
 				//-------------- for backward compatibility -----------
@@ -473,13 +473,13 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit)
 	if (this.depth>0) {
 		style = UIFactory["Node"].getLabelStyle(uuid);
 	} else {
-		style += UIFactory["Node"].displayMetadataEpm(this.metadataepm,'inparent-font-size',true);
-		style += UIFactory["Node"].displayMetadataEpm(this.metadataepm,'inparent-font-weight',false);
-		style += UIFactory["Node"].displayMetadataEpm(this.metadataepm,'inparent-font-style',false);
-		style += UIFactory["Node"].displayMetadataEpm(this.metadataepm,'inparent-color',false);
-		style += UIFactory["Node"].displayMetadataEpm(this.metadataepm,'inparent-text-align',false);
-		style += UIFactory["Node"].displayMetadataEpm(this.metadataepm,'inparent-background-color',false);
-		style += UIFactory["Node"].displayMetadataEpm(this.metadataepm,'inparent-othercss',false);
+		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-size',true);
+		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-weight',false);
+		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-style',false);
+		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-color',false);
+		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-text-align',false);
+		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-background-color',false);
+		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-othercss',false);
 	}
 	$("div[name='lbl-div']","#node_"+uuid).attr("style",style);
 	//-------------------- content style -------------------
@@ -641,12 +641,12 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 		//----------------------------
 		var style ="";
 		var metadataepm = this.metadataepm;
-		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
-		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-weight',false);
-		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-style',false);
-		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'color',false);
-		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'text-align',false);
-		style += UIFactory["Node"].getOtherMetadataEpm(metadataepm,'othercss');
+		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
+		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
+		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
+		style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
+		style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
+		style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
 //		if (style.length>0)
 //			html += " style='"+style+"' ";
 		//----------------------------
@@ -692,12 +692,12 @@ UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 		//----------------------------
 		var style ="";
 		var metadataepm = $(this.metadataepm);
-		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
-		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-weight',false);
-		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-style',false);
-		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'color',false);
-		style += UIFactory["Node"].displayMetadataEpm(metadataepm,'text-align',false);
-		style += UIFactory["Node"].getOtherMetadataEpm(metadataepm,'othercss');
+		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
+		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
+		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
+		style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
+		style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
+		style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
 		if (style.length>0)
 			html += " style='"+style+"' ";
 		//----------------------------
@@ -862,9 +862,9 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	//------------- write resource type in the upper right corner ----------------
 	if (g_userroles[0]=='designer' || USER.admin){
 		if (this.asmtype=='asmContext')
-			$("#edit-window-type").html(this.resource.type);
+			$("#edit-window-type").html(karutaStr[languages[LANGCODE]][this.resource.type]);
 		else
-			$("#edit-window-type").html(this.asmtype);
+			$("#edit-window-type").html(karutaStr[languages[LANGCODE]][this.asmtype]);
 	} else {
 		$("#edit-window-type").html("");
 	}
@@ -1159,14 +1159,14 @@ UIFactory["Node"].getLabelStyle = function(uuid)
 	var node = UICom.structure["ui"][uuid];
 	metadataepm = node.metadataepm;
 	var style = "";
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'padding-top',true);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-weight',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-style',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'color',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'text-align',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
-	style += UIFactory["Node"].getOtherMetadataEpm(metadataepm,'othercss');
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
 	return style;
 }
 
@@ -1178,16 +1178,16 @@ UIFactory["Node"].getContentStyle = function(uuid)
 	var node = UICom.structure["ui"][uuid];
 	metadataepm = node.metadataepm;
 	var style = "";
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',true);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',true);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-width',true);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-height',true);
-	style += UIFactory["Node"].getOtherMetadataEpm(metadataepm,'node-othercss');
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
 	return style;
 }
 
@@ -1198,16 +1198,16 @@ UIFactory["Node"].prototype.getContentStyle = function()
 {
 	metadataepm = this.metadataepm;
 	var style = "";
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',true);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-size',true);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-weight',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-text-align',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-width',true);
-	style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-height',true);
-	style += UIFactory["Node"].getOtherMetadataEpm(metadataepm,'node-othercss');
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
 	return style;
 }
 
@@ -1403,9 +1403,9 @@ UIFactory["Node"].selectNode = function(nodeid,node)
 	$("#edit-window-title").html("&nbsp;");
 	//-----------------------------
 	if (UICom.structure.ui[nodeid].asmtype=='asmContext')
-		$("#edit-window-type").html(UICom.structure.ui[nodeid].resource.type);
+		$("#edit-window-type").html(karutaStr[languages[LANGCODE]][UICom.structure.ui[nodeid].resource.type]);
 	else
-		$("#edit-window-type").html(UICom.structure.ui[nodeid].asmtype);
+		$("#edit-window-type").html(karutaStr[languages[LANGCODE]][UICom.structure.ui[nodeid].asmtype]);
 	//-----------------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory.Node.moveNode('"+nodeid+"')";
@@ -1873,7 +1873,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			//============================== ASMCONTEXT =============================
 			if (nodetype == "asmContext"){
 				if (UICom.structure["ui"][uuid].getLabel(null,'none')!=""){ // test if not empty label
-					style = UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
+					style = UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
 					html += "<div  id='title_"+uuid+"' style='"+style+"'>";
 					html += UICom.structure["ui"][uuid].getView('std_node_'+uuid,null,langcode);
 					html += "</div>";
@@ -1940,11 +1940,11 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				if (root.children.length>0 && depth>0) {
 					html += "<div id='content-"+uuid+"' class='content' ";
 					style = "position:relative;";
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-font-style',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-color',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-padding-top',true);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'node-othercss',false);
+					style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
+					style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
+					style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
+					style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
+					style += UIFactory.Node.getMetadataEpm(metadataepm,'node-othercss',false);
 					html +=" style='"+style+"'";
 					html += ">";
 					//-----------------------------------------
@@ -1981,7 +1981,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			}
 			//---------------------------- BUTTONS AND BACKGROUND COLOR ---------------------------------------------
 			var buttons_color = eval($(".button").css("color"));
-			var buttons_background_style = UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
+			var buttons_background_style = UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
 			if (buttons_background_style!="") {
 				var buttons_background_color = buttons_background_style.substring(buttons_background_style.indexOf(":")+1,buttons_background_style.indexOf(";"))
 				if (buttons_background_color==buttons_color)
@@ -1990,7 +1990,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					else
 						changeCss("#node_"+uuid+" .button", "color:white;");
 			}
-			var buttons_node_background_style = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
+			var buttons_node_background_style = UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
 			if (buttons_node_background_style!="") {
 				var buttons_node_background_color = buttons_node_background_style.substring(buttons_node_background_style.indexOf(":")+1,buttons_node_background_style.indexOf(";"))
 				if (buttons_background_color==buttons_color)
@@ -2112,7 +2112,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					$("#node_"+uuid).hide();
 			}
 			// ================================= For each child ==========================
-			var backgroundParent = UIFactory["Node"].displayMetadataEpm(metadataepm,'node-background-color',false);
+			var backgroundParent = UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
 			if (semtag.indexOf('asmColumns')>-1) {
 					//----------------- COLUMNS ------------------------
 					var blockid = $(root.node).attr("id");

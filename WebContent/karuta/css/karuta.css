@@ -1374,37 +1374,47 @@ hr {
 /* ====================== */
 /*         METADATA       */
 /* ====================== */
-#metadata .input-group-text {
+.metadata {
+  padding-top: 5px;
+}
+.metadata .input-group-text {
   border: 0px solid #ced4da;
 }
-#metadata .input-group {
+.metadata .input-group {
   margin-bottom: 3px;
   margin-top: 3px;
   border: 1px solid #ced4da;
   border-radius: 0.2rem;
 }
-#metadata .input-group .form-control {
+.metadata .input-group .form-control {
   border: 0px solid #ced4da;
 }
-#metadata .btn-select-role {
+.metadata .btn-select-role {
   border-left: 1px solid #ced4da;
 }
-#metadata .input-group-text {
+.metadata .input-group-text {
   width: 150px;
 }
-#metadata input[type=checkbox] {
+.metadata input[type=checkbox] {
   margin-left: 10px;
 }
-#metadata .seltype-radio {
+.metadata .seltype-radio {
   font-size: 90%;
   margin-top: 5px;
 }
-#metadata .seltype-radio::nth-child(2) {
+.metadata .seltype-radio::nth-child(2) {
   margin-left: 5px;
 }
-#metadata input.pickcolor {
+.metadata input.pickcolor {
   width: 100px;
   border: 1px solid #ced4da;
+}
+.metadata .form-group {
+  margin-bottom: 3px;
+}
+
+#metadata-part1 {
+  margin-top: 1rem;
 }
 
 /* -------------------------------------------------- */
