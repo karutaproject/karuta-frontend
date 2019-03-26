@@ -654,6 +654,15 @@ function displayPage(uuid,depth,type,langcode) {
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
+	if (g_menu_type=="horizontal"){  // breadcrumb
+		var nodeid = uuid;
+		var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
+		while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
+			nodeid = $(UICom.structure.ui[nodeid].node).parent().attr("id");
+			breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none') + breadcrumb;
+		}
+		$("#breadcrumb").html(breadcrumb);
+	}
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (name == 'asmUnit' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
 		$("#wait-window").modal('show');

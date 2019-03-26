@@ -512,6 +512,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	else if (type=='standard' || type=='basic'){
 		if (g_menu_type=='horizontal') {
 			html += "<div id='menu_bar'></div>";
+			html += "<div id='breadcrumb'></div>";
 			html += "<div id='contenu' class='container-fluid'></div>";
 			$("#"+destid).append($(html));
 			UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar',type,LANGCODE,edit,UICom.rootid);

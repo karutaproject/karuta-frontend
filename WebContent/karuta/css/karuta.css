@@ -119,6 +119,16 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 }
 
 /* ====================== */
+/*      BREADCRUMB        */
+/* ====================== */
+#breadcrumb {
+  border-top: 1px solid red;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 0.875rem;
+}
+
+/* ====================== */
 /*      SIDEBAR           */
 /* ====================== */
 .panel-default > .panel-heading {
