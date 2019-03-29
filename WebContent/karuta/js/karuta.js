@@ -1907,9 +1907,10 @@ function toggleMode()
 }
 
 //==============================
-String.prototype.noAccent = function()
+String.prototype.toNoAccents = function()
 //==============================
-{	var accent = [
+{
+	var accent = [
 		/[\300-\306]/g, /[\340-\346]/g, // A, a
 		/[\310-\313]/g, /[\350-\353]/g, // E, e
 		/[\314-\317]/g, /[\354-\357]/g, // I, i
