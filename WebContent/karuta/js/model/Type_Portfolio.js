@@ -559,7 +559,7 @@ UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcod
 //======================
 {	
 	var html = "";
-	html += "<nav class='navbar navbar-expand-md navbar-dark'>";
+	html += "<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
 	html += "	<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-3' aria-controls='collapse-3' aria-expanded='false' aria-label='Toggle navigation'>";
 	html += "			<span class='navbar-toggler-icon'></span>";
 	html += "	</button>";

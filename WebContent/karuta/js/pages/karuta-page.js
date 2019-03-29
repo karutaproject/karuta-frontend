@@ -43,6 +43,7 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
+			setConfigurationVariables();
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -56,6 +57,8 @@ function displayKarutaPage()
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
 					$("a[data-tooltip='true']").tooltip({html:true});
+					UICom.structure.ui[g_config_navbar_brand_logo_id].resource.displayView("config_navbar_brand_logo");
+					$("#config_navbar_brand_logo").attr("style",UICom.structure.ui[g_config_navbar_brand_logo_id].getContentStyle());
 
 				},
 				error : function(jqxhr,textStatus) {
@@ -131,4 +134,23 @@ function hideArchiveSearch()
 	$("#archive-button").attr("href","");
 	$("#archive-button").attr('disabled', true);
 	$("#remove-button").prop('disabled', true);
+}
+
+
+//==============================
+function setConfigurationVariables()
+//==============================
+{
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration?resources=true";
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			UICom.parseStructure(data);
+			g_config_navbar_brand_logo_id = $("metadata[semantictag='config-navbar-brand-logo']",data).parent().attr("id");
+		}
+	});
+
 }

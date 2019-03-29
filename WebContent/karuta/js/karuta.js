@@ -56,7 +56,7 @@ var g_roles = []; // list of portfolio roles for designer
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------
-
+g_config_navbar_brand_logo_id = "";
 
 //==============================
 function setDesignerRole(role)
@@ -137,7 +137,7 @@ function getNavBar(type,portfolioid,edit)
 {
 	var html = "";
 	html += "	<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
-	html += "		<a href='#' class='navbar-brand'>";
+	html += "		<a id='config_navbar_brand_logo' href='#' class='navbar-brand'>";
 	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/>";
 	html +="		</a>";
 	if (type!='login') {

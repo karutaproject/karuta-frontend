@@ -250,8 +250,8 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 	var image_size = "";
 	if ($(this.width_node[langcode]).text()!=undefined && $(this.width_node[langcode]).text()!='') // backward compatibility
 		image_size = "width='"+$(this.width_node[langcode]).text()+"' "; 
-	if (image_size=="" && $("metadata-epm",this.node).attr('width')!=undefined && $("metadata-epm",this.node).attr('width')!='') // backward compatibility
-		image_size = "width='"+$("metadata-epm",this.node).attr('width')+"' "; 
+//	if (image_size=="" && $("metadata-epm",this.node).attr('width')!=undefined && $("metadata-epm",this.node).attr('width')!='') // backward compatibility
+//		image_size = "width='"+$("metadata-epm",this.node).attr('width')+"' "; 
 	if ($(this.height_node[langcode]).text()!=undefined && $(this.height_node[langcode]).text()!='') // backward compatibility
 		image_size += "height='"+$(this.height_node[langcode]).text()+"' "; 
 	if (image_size.indexOf('height')<0 && $("metadata-epm",this.node).attr('height')!=undefined && $("metadata-epm",this.node).attr('height')!='')

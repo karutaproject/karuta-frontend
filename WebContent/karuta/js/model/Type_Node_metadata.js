@@ -241,7 +241,7 @@ UIFactory["Node"].displayMetainfo = function(destid,data)  // for backward compa
 };
 
 //==================================================
-UIFactory["Node"].displayMetaEpmInfos = function(destid,data)
+UIFactory["Node"].prototype.displayMetaEpmInfos = function(destid,data)
 //==================================================
 {
 	var html = "";
