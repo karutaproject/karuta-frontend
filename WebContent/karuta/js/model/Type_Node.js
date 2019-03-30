@@ -929,7 +929,8 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 	$("#wait-window").modal('show');
 	var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+uuid;  // instance by default
 	if (USER.admin || g_userrole=='designer') {
-		var rights = UIFactory["Node"].getRights(destid);
+//		var rights = UIFactory["Node"].getRights(destid);
+		var rights = UICom.structure["ui"][uuid].getRights();
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?uuid="+uuid;

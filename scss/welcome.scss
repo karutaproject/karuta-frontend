@@ -23,7 +23,6 @@ a.navbar-icon .glyphicon {
 	margin-top: 20px;
 	margin-left: auto;
 	margin-right: auto;
-	background-color: var(--login-color);
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	box-shadow: 0 1px 2px rgba(0,0,0,.05);
@@ -43,8 +42,6 @@ a.navbar-icon .glyphicon {
 }
 
 .button-login {
-	background-color:var(--button-login-background-color);
-	color:var(--button-login-color);
 	-moz-user-select: none;
     background-image: none;
     border: 1px solid transparent;
@@ -73,7 +70,6 @@ a.navbar-icon .glyphicon {
 	padding-bottom: 19px ;
 	padding-left: 29px ;
 	padding-right: 29px ;
-	background-color: rgb(245, 245, 245); 
 	border-left: 1px solid #e5e5e5;
 	border-right: 1px solid #e5e5e5;
 	border-top: 1px solid #e5e5e5;
@@ -103,10 +99,6 @@ a.navbar-icon .glyphicon {
 	padding-bottom: 19px ;
 	padding-left: 29px ;
 	padding-right: 29px ;
-	background-color: #e9b32d; 
-	border-left: 1px solid #e9b32d;
-	border-right: 1px solid #e9b32d;
-	border-bottom: 1px solid #e9b32d;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
 	box-shadow: 0 1px 2px rgba(0,0,0,.05);
@@ -119,7 +111,6 @@ a.navbar-icon .glyphicon {
 }
 
 #form-send {
-	background-color:var(--form-send-background-color);
 	color:black;
 	-moz-user-select: none;
     background-image: none;
@@ -137,8 +128,5 @@ a.navbar-icon .glyphicon {
     white-space: nowrap;
 }
 
-#form-send:hover {
-	color:var(--form-send-background-color-hover);
-}
 
 

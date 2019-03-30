@@ -1,3 +1,21 @@
+var g_config_login_background_imageid = "";
+//-----------------------------------
+var g_config_login_logo_id = "";
+var g_config_login_background_colorid = "";
+//-----------------------------------
+var g_config_login_new_password_displayid = "";
+var g_config_login_new_password_background_colorid = "";
+var g_config_login_new_password_text_colorid = "";
+var g_config_login_new_password_button_colorid = "";
+var g_config_login_new_password_button_text_colorid = "";
+//-----------------------------------
+var g_config_login_new_account_displayid = "";
+var g_config_login_new_account_background_colorid = "";
+var g_config_login_new_account_text_colorid = "";
+var g_config_login_new_account_button_colorid = "";
+var g_config_login_new_account_button_text_colorid = "";
+
+
 //==================================
 function getURLParameter(sParam) {
 //==================================
@@ -105,7 +123,7 @@ function getNewAccount()
 {
 	var html = "";
 	html += "<p>"+karutaStr[LANG]['new-account']+"</p>";
-	html += "<a class='btn btn-account' href='createAccount.htm?lang="+LANG+"'>"+karutaStr[LANG]['sign-up']+"</a>";
+	html += "<a id='newaccount-button' class='btn btn-account' href='createAccount.htm?lang="+LANG+"'>"+karutaStr[LANG]['sign-up']+"</a>";
 	return html;
 }
 
@@ -117,7 +135,7 @@ function displayKarutaLogin()
 	html += "<div id='main-welcome'>";
 	html += "<div id='navigation-bar'></div>";
 	html += "<div id='main-container' class='container'>";
-	html += "	<div class='form-signin'>";
+	html += "	<div id='form-signin' class='form-signin'>";
 	html += "		<div id='welcome1'></div>";
 	html += "		<div id='welcome-version'></div>";
 	html += "		<div id='welcome2'></div>";
@@ -168,6 +186,42 @@ function displayKarutaLogin()
 		$("#welcome2").html(welcome2[LANG]);
 		$("#welcome3").html(welcome3[LANG]);
 	}
+	//----------------------------------------------
+	var login_page_background_url = UICom.structure.ui[g_config_login_background_imageid].resource.getView(null,"url");
+	$('body').css("background-image", "url('"+login_page_background_url+"')");
+	UICom.structure.ui[g_config_navbar_brand_logo_id].resource.displayView("config_navbar_brand_logo");
+	$("#config_navbar_brand_logo").attr("style",UICom.structure.ui[g_config_navbar_brand_logo_id].getContentStyle());
+	//--------------------------
+	UICom.structure.ui[g_config_login_logo_id].resource.displayView("welcome1");
+	$("#welcome1").attr("style",UICom.structure.ui[g_config_login_logo_id].getContentStyle());
+	var login_background_color = UICom.structure.ui[g_config_login_background_colorid].resource.getValue();
+	$('#form-signin').css("background-color",login_background_color);
+	//--------------------------
+	var newpassword_display = UICom.structure.ui[g_config_login_new_password_displayid].resource.getValue();
+	if (newpassword_display=="0")
+		$('#newpassword').hide();
+	var newpassword_background_color = UICom.structure.ui[g_config_login_new_password_background_colorid].resource.getValue();
+	$('#newpassword').css("background-color",newpassword_background_color);
+	var newpassword_text_color = UICom.structure.ui[g_config_login_new_password_text_colorid].resource.getValue();
+	$('#newpassword').css("color",newpassword_text_color);
+	var newpassword_button_color = UICom.structure.ui[g_config_login_new_password_button_colorid].resource.getValue();
+	$('#form-send').css("background-color",newpassword_button_color);
+	var newpassword_button_text_color = UICom.structure.ui[g_config_login_new_password_button_text_colorid].resource.getValue();
+	$('#form-send').css("color",newpassword_button_text_color);
+	//--------------------------
+	var newaccount_display = UICom.structure.ui[g_config_login_new_account_displayid].resource.getValue();
+	if (newaccount_display=="0")
+		$('#newaccount').hide();
+	var newaccount_background_color = UICom.structure.ui[g_config_login_new_account_background_colorid].resource.getValue();
+	$('#newaccount').css("background-color",newaccount_background_color);
+	var newaccount_text_color = UICom.structure.ui[g_config_login_new_account_text_colorid].resource.getValue();
+	$('#newaccount').css("color",newaccount_text_color);
+	var newaccount_button_color = UICom.structure.ui[g_config_login_new_account_button_colorid].resource.getValue();
+	$('#newaccount-button').css("background-color",newaccount_button_color);
+	var newaccount_button_text_color = UICom.structure.ui[g_config_login_new_account_button_text_colorid].resource.getValue();
+	$('#newaccount-button').css("color",newaccount_button_text_color);
+	//----------------------------------------------
+
 	$.ajaxSetup({async: true});
 }
 
@@ -182,4 +236,38 @@ var lang = getURLParameter('lang');
 if (lang==null)
 	lang = "" ;
 //-------------------------------
+
+//==============================
+function setLoginConfigurationVariables()
+//==============================
+{
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration?resources=true";
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			UICom.parseStructure(data);
+			g_config_navbar_brand_logo_id = $("metadata[semantictag='config-navbar-brand-logo']",data).parent().attr("id");
+			//---------------------
+			g_config_login_logo_id = $("metadata[semantictag='config-login-logo']",data).parent().attr("id");
+			g_config_login_background_imageid = $("metadata[semantictag='config-login-background-image']",data).parent().attr("id");
+			g_config_login_background_colorid = $("metadata[semantictag='config-login-background-color']",data).parent().attr("id");
+			//---------------------
+			g_config_login_new_password_displayid = $("metadata[semantictag='config-login-new-password-display']",data).parent().attr("id");
+			g_config_login_new_password_background_colorid = $("metadata[semantictag='config-login-new-password-background-color']",data).parent().attr("id");
+			g_config_login_new_password_text_colorid = $("metadata[semantictag='config-login-new-password-text-color']",data).parent().attr("id");
+			g_config_login_new_password_button_colorid = $("metadata[semantictag='config-login-new-password-button-color']",data).parent().attr("id");
+			g_config_login_new_password_button_text_colorid = $("metadata[semantictag='config-login-new-password-button-text-color']",data).parent().attr("id");
+			//---------------------
+			g_config_login_new_account_displayid = $("metadata[semantictag='config-login-new-account-display']",data).parent().attr("id");
+			g_config_login_new_account_background_colorid = $("metadata[semantictag='config-login-new-account-background-color']",data).parent().attr("id");
+			g_config_login_new_account_text_colorid = $("metadata[semantictag='config-login-new-account-text-color']",data).parent().attr("id");
+			g_config_login_new_account_button_colorid = $("metadata[semantictag='config-login-new-account-button-color']",data).parent().attr("id");
+			g_config_login_new_account_button_text_colorid = $("metadata[semantictag='config-login-new-account-button-text-color']",data).parent().attr("id");
+		}
+	});
+
+}
 

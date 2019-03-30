@@ -99,7 +99,7 @@ UIFactory["Color"].prototype.getValue = function(dest,type,langcode)
 	var value = $(this.text_node[langcode]).text();
 	if (this.encrypted)
 		value = decrypt(html.substring(3),g_rc4key);
-	if (value.charAt(0) != "#") value = "#"+value;
+//	if (value.charAt(0) != "#") value = "#"+value;
 	return value;
 };
 

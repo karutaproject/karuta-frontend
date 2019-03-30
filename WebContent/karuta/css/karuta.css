@@ -1516,12 +1516,6 @@ hr {
 	margin-left:20px;
 }
 
-.radio-div {
-	margin-left: 25px;
-	margin-top: -19px;
-	margin-bottom:2px;
-	width:fit-content;
-}
 
 .view-div {
 	margin-bottom:2px;
@@ -1552,6 +1546,11 @@ hr {
 */
 .select-label .btn {
   border: 1px solid #ced4da;
+}
+
+.radio-div {
+  display: inline-block;
+  width: fit-content;
 }
 
 button.selected-label {

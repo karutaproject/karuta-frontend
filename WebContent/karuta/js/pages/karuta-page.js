@@ -43,7 +43,7 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
-			setConfigurationVariables();
+			setPageConfigurationVariables();
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -138,7 +138,7 @@ function hideArchiveSearch()
 
 
 //==============================
-function setConfigurationVariables()
+function setPageConfigurationVariables()
 //==============================
 {
 	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration?resources=true";

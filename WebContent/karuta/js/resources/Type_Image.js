@@ -225,6 +225,9 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		}
 		html += "</div>";
 	}
+	if (type=='url') {
+		html = "../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime();
+	}
 
 	return html;
 };
