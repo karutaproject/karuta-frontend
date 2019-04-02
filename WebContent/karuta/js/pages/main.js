@@ -106,6 +106,7 @@ function fill_main_page(rootid,role)
 				$("#csstext").remove();
 			}
 			// --------------------------
+			var g_encrypted = false;
 			UICom.parseStructure(data,true);
 			if ($("asmUnit:has(metadata[semantictag*='welcome-unit'])",data).length==0 && $("asmRoot:has(metadata[semantictag*='karuta-model'])",data).length>0) {
 				g_welcome_add = true;
