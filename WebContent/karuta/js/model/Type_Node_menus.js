@@ -146,7 +146,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 	//------------- node menus button ---------------
 	if ((USER.admin || g_userroles[0]=='designer') && (this.asmtype != 'asmContext' && (this.depth>0 || this.asmtype == 'asmUnitStructure'))) {
 		html += "<div class='dropdown '>";
-		html += "	<button class='btn dropdown-toggle' type='button' id='add_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		html += "	<button class='btn dropdown-toggle add-button' type='button' id='add_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 		html += 		karutaStr[languages[langcode]]['Add'];
 		html += "	</button>";
 		html += "	<div class='dropdown-menu dropdown-menu-right' aria-labelledby='add_"+this.id+"'>";
@@ -191,9 +191,9 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += UIFactory["Node"].getItemMenu(this.id,'europass.parts','EuropassL','Europass',databack,callback,param2,param3,param4);
 		html += "<hr>";
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Item','Item',databack,callback,param2,param3,param4);
-		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Resource','GetResource',databack,callback,param2,param3,param4);
-		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Get_Resource','GetGetResource',databack,callback,param2,param3,param4);
-		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Double_Resource','GetDoubleResource',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Resource','Get_Resource',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Get_Resource','Get_Get_Resource',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Double_Resource','Get_Double_Resource',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4);
 		//--------------------------------
 		html += "	</div>"; // class='dropdown-menu'
@@ -225,6 +225,11 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 						menus[i][4] = subitems[4]; // condition
 					else
 						menus[i][4] = ""; // condition
+				}
+				while (menus[i][0].indexOf("##")>-1) {
+					var test_string = menus[i][0].substring(menus[i][0].indexOf("##")+2); // test_string = abcd##variable##efgh.....
+					var variable_name = test_string.substring(0,test_string.indexOf("##"));
+					menus[i][0] = menus[i][0].replace("##"+variable_name+"##", g_variables[variable_name]);
 				}
 				if (menus[i][3].indexOf(userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
 					if (menus[i][4]==""){

@@ -362,6 +362,7 @@ karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fi
 //=========================================
 //========== EUROPASS =====================
 //=========================================
+karutaStr['fr']['Europass']="EUROPASS";
 karutaStr['fr']['mother-tongue']="Langue maternelle";
 karutaStr['fr']['foreign-languages']="Langues étrangères";
 karutaStr['fr']['add-foreign-language']="Ajouter une langue étrangère";
@@ -467,9 +468,9 @@ karutaStr['fr']['URLBlock']="URLBlock";
 karutaStr['fr']['ImageBlock']="ImageBlock";
 
 karutaStr['fr']['Item']="Item";
-karutaStr['fr']['GetResource']="GetResource";
-karutaStr['fr']['GetGetResource']="GetGetResource";
-karutaStr['fr']['GetDoubleResource']="GetDoubleResource";
+karutaStr['fr']['Get_Resource']="GetResource";
+karutaStr['fr']['Get_Get_Resource']="GetGetResource";
+karutaStr['fr']['Get_Double_Resource']="GetDoubleResource";
 karutaStr['fr']['Proxy']="Proxy";
 
 karutaStr['fr']['asmColumn']="asmColumn";

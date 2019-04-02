@@ -33,9 +33,6 @@ function displayKarutaPage()
 //==============================
 {
 	$.ajaxSetup({async: false});
-	loadLanguages(function(data) {
-		getLanguage();
-	});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -43,7 +40,6 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
-			setPageConfigurationVariables();
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -54,12 +50,7 @@ function displayKarutaPage()
 					karuta_backend_date = $("date",$("#backend",data)).text();
 					karuta_fileserver_version = $("number",$("#fileserver",data)).text();
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
-					var navbar_html = getNavBar('list',null);
-					$("#navigation-bar").html(navbar_html);
-					$("a[data-tooltip='true']").tooltip({html:true});
-					UICom.structure.ui[g_config_navbar_brand_logo_id].resource.displayView("config_navbar_brand_logo");
-					$("#config_navbar_brand_logo").attr("style",UICom.structure.ui[g_config_navbar_brand_logo_id].getContentStyle());
-
+					getAndApplyMainConfiguration();
 				},
 				error : function(jqxhr,textStatus) {
 					var navbar_html = getNavBar('list',null);
@@ -136,9 +127,8 @@ function hideArchiveSearch()
 	$("#remove-button").prop('disabled', true);
 }
 
-
 //==============================
-function setPageConfigurationVariables()
+function getAndApplyMainConfiguration()
 //==============================
 {
 	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration?resources=true";
@@ -148,8 +138,18 @@ function setPageConfigurationVariables()
 		dataType : "xml",
 		url : url,
 		success : function(data) {
+			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
+			for (i=0;i<language_nodes.length;i++){
+				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
+			}
 			UICom.parseStructure(data);
-			g_config_navbar_brand_logo_id = $("metadata[semantictag='config-navbar-brand-logo']",data).parent().attr("id");
+			loadLanguages(function() {
+				getLanguage();
+			});
+			var navbar_html = getNavBar('list',null);
+			$("#navigation-bar").html(navbar_html);
+			$("a[data-tooltip='true']").tooltip({html:true});
+			applyNavbarConfiguration(data);
 		}
 	});
 

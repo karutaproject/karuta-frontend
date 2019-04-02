@@ -233,6 +233,11 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		//------------
 		var portfoliocode = queryattr_value.substring(0,semtag_indx);
+		while (portfoliocode.indexOf("##")>-1) {
+			var test_string = portfoliocode.substring(portfoliocode.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			portfoliocode = portfoliocode.replace("##"+variable_name+"##", g_variables[variable_name]);
+		}
 		if (portfoliocode.indexOf("ROME")<0){
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio

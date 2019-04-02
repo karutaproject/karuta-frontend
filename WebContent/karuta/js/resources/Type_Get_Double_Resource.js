@@ -235,6 +235,11 @@ UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,
 		var target1 = part1.substring(srce1_indx+1); // label or text
 		
 		var code1 = part1.substring(0,semtag1_indx);
+		while (code1.indexOf("##")>-1) {
+			var test_string = code1.substring(code1.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			code1 = code1.replace("##"+variable_name+"##", g_variables[variable_name]);
+		}
 		if (code1.indexOf('.')<0 && selfcode.indexOf('.')>0 && code1!='self')  // There is no project, we add the project of the current portfolio
 			code1 = selfcode.substring(0,selfcode.indexOf('.')) + "." + code1;
 		if (code1=='self')
@@ -246,6 +251,11 @@ UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,
 		var semtag2 = part2.substring(semtag2_indx+1,srce2_indx);
 		var target2 = part2.substring(srce2_indx+1); // label or text
 		var code2 = part2.substring(0,semtag2_indx);
+		while (code2.indexOf("##")>-2) {
+			var test_string = code2.substring(code2.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			code2 = code2.replace("##"+variable_name+"##", g_variables[variable_name]);
+		}
 		if (code2.indexOf('.')<0  && selfcode.indexOf('.')>0 && code2!='self')  // There is no project, we add the project of the current portfolio
 			code2 = selfcode.substring(0,selfcode.indexOf('.')) + "." + code2;
 		if (code2=='self')

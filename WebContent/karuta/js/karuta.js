@@ -24,6 +24,7 @@ if( karutaStr === undefined )
 var portfolioid = null;
 
 // ------ GLOBAL VARIABLES ------------
+var languages = [];
 var g_userrole = "";
 var g_userroles = [];
 var g_portfolioid = "";
@@ -53,6 +54,7 @@ var g_current_page = "";
 var g_nb_trees = 0;
 var g_sum_trees = 0;
 var g_roles = []; // list of portfolio roles for designer
+var g_variables = {}; // variables for substitution in Get_resource and menus
 //-------------- used for designer-----
 var redisplays = {};
 // -------------------------------------
@@ -792,25 +794,15 @@ function edit_displayEditor(uuid,type)
 function loadLanguages(callback)
 //=======================================================================
 {
-	$.ajaxSetup({async: false});
 	for (var i=0; i<languages.length; i++){
-		if (i<languages.length-1) {
-			$.ajax({
-				type : "GET",
-				dataType : "script",
-				url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js"
-			});
-		}
-		else { // last one so we callback
-			$.ajax({
-				type : "GET",
-				dataType : "script",
-				url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js",
-			});
-		}
+		$.ajax({
+			async:false,
+			type : "GET",
+			dataType : "script",
+			url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js"
+		});
 	}
 	callback();
-	$.ajaxSetup({async: true});
 }
 
 
@@ -1236,8 +1228,9 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 function getLanguage() {
 //==================================
-	var lang = languages[0];
 	var cookielang = localStorage.getItem('karuta-language');
+	if (cookielang == "undefined")
+		cookielang = languages[0];
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==cookielang) {
 			LANGCODE = i;
@@ -1548,6 +1541,15 @@ function getFirstWords(html,nb) {
 }
 
 //==================================
+function setVariables(data)
+//==================================
+{
+	var variable_nodes = $("asmContext:has(metadata[semantictag='g-variable'])",data);
+	for (var i=0;i<variable_nodes.length;i++) {
+		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].getLabel(null,'none')] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().text;
+	}
+}
+//==================================
 function setCSSportfolio(data)
 //==================================
 {
@@ -1634,7 +1636,7 @@ function setCSSportfolio(data)
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
 		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
-		changeCss(".menus,.collapsible, .createreport .button,.btn-group .button, .menus button, .menus a.button", "color:"+portfolio_buttons_color+";");
+		changeCss(".menus,.collapsible,.dropdownn-toggle, .createreport .button,.btn-group .button, .menus button, .menus a.button", "color:"+portfolio_buttons_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
@@ -1925,4 +1927,22 @@ String.prototype.toNoAccents = function()
 		str = str.replace(accent[i], noaccent[i]);
 	}
 	return str;
+}
+
+//==============================
+function applyNavbarConfiguration(data)
+//==============================
+{
+	var navbar_brand_logo_id = $("metadata[semantictag='config-navbar-brand-logo']",data).parent().attr("id");
+	UICom.structure.ui[navbar_brand_logo_id].resource.displayView("config_navbar_brand_logo");
+	$("#config_navbar_brand_logo").attr("style",UICom.structure.ui[navbar_brand_logo_id].getContentStyle());
+	var navbar_text_color = UICom.structure.ui[getNodeid('config-navbar-text-color',data)].resource.getValue();
+	changeCss('.navbar-light .navbar-nav .nav-link', 'color:'+navbar_text_color);
+}
+
+//==============================
+function getNodeid(semtag,data)
+//==============================
+{
+	return $("metadata[semantictag='"+semtag+"']",data).parent().attr("id")
 }

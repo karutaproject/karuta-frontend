@@ -112,7 +112,7 @@ UIFactory["Node"].prototype.displayRights = function(destid)
 	html+= "<tr><td></td><td> Read </td><td> Write </td><td> Delete </td><td> Submit </td>";
 	for (var i=0;i<roles.length;i++){
 		var rolename = $(roles[i]).attr("name");
-		roles_by_role[rolename] = new RoleRights(roles[i],uuid);
+		roles_by_role[rolename] = new RoleRights(roles[i],this.id);
 	}
 	for (role in roles_by_role) {
 		html += roles_by_role[role].getEditor();
@@ -333,7 +333,7 @@ UIFactory["Node"].prototype.displayMetadataAttributeEditor = function(destid,att
 		html += "	<div class='input-group-prepend'>";
 		html += "		<div class='input-group-text' id='"+attribute+this.id+"'>"+karutaStr[languages[langcode]][attribute]+"</div>";
 		html += "	</div>";
-		html += "  <input class='form-control' type='checkbox' onchange=\"javascript:UIFactory['Node'].updateMetadataAttribute('"+this.id+"','"+attribute+"',this.value,this.checked)\" value='Y'";		
+		html += "  <input type='checkbox' onchange=\"javascript:UIFactory['Node'].updateMetadataAttribute('"+this.id+"','"+attribute+"',this.value,this.checked)\" value='Y'";		
 		if(disabled!=null && disabled)
 			html+= " disabled='disabled' ";			
 		if (value=='Y')
@@ -370,7 +370,7 @@ UIFactory["Node"].prototype.displayMetadataWadAttributeEditor = function(destid,
 		html += "	<div class='input-group-prepend'>";
 		html += "		<div class='input-group-text' id='"+attribute+this.id+"'>"+karutaStr[languages[langcode]][attribute]+"</div>";
 		html += "	</div>";
-		html += "  <input class='form-control' type='checkbox' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+this.id+"','"+attribute+"',this.value,this.checked)\" value='Y'";		
+		html += "  <input type='checkbox' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+this.id+"','"+attribute+"',this.value,this.checked)\" value='Y'";		
 		if(disabled!=null && disabled)
 			html+= " disabled='disabled' ";			
 		if (value=='Y')
@@ -428,10 +428,7 @@ UIFactory["Node"].prototype.displayMetadatawWadTextAttributeEditor = function(de
 	}
 	$("#"+destid).append($(html));
 	//---------------------------
-	if (attribute=='help')
-		$("#"+nodeid+"_"+attribute).wysihtml5({toolbar:{"size":"xs","font-styles": false,"html": true,"blockquote": false,"image": false,"link": false},'uuid':nodeid,locale:languages[LANG],'events': {'change': function(){UIFactory.Node.updateMetadatawWadTextAttribute(nodeid,attribute);} }});
-	else
-		$("#"+nodeid+"_"+attribute).change(function(){UIFactory.Node.updateMetadatawWadTextAttribute(nodeid,attribute);});
+	$("#"+nodeid+"_"+attribute).change(function(){UIFactory.Node.updateMetadatawWadTextAttribute(nodeid,attribute);});
 	//---------------------------
 };
 
@@ -794,9 +791,8 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 		html += "	<div class='input-group-prepend'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
 		html += "	</div>";
-		html += "	<input type='text' class='form-control pickcolor' aria-label='"+karutaStr[languages[langcode]][attribute]+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\">";
+		html += "	<input type='text' class=' pickcolor' aria-label='"+karutaStr[languages[langcode]][attribute]+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\">";
 		html += "</div>";
-//		html += "  <input type='text' class='form-control pickcolor' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='"+value+"' >";
 	}
 	else if (attribute.indexOf('text-align')>-1){
 		var choices = [{code:'left',label:'Left'},{code:'right',label:'Right'},{code:'center',label:'Center'},{code:'justify',label:'Justify'}];

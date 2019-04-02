@@ -12,14 +12,6 @@ var cas_url = "";
 //---------------------------------
 var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report";  // report registration server
 var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report servervar serverBCK_REG = "";  // report registration server
-//-------- LANGUAGES------------
-var languages = [];
-languages [0] = 'fr';
-languages [1] = 'en';
-//----------------------------------
-var NONMULTILANGCODE = 0;  // default language if non-multilingual
-var LANGCODE = 0; //default value
-var LANG = languages[LANGCODE]; //default value
 //----------------------------------
 var maxfilesizeupload = "32"; //Mo
 //----------------------------------

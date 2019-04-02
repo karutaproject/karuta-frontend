@@ -192,13 +192,15 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 //==============================================================================
 //==============================================================================
 //==============================================================================
-UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock)
+UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock,refresh)
 //==============================================================================
 //==============================================================================
 //==============================================================================
 {
+	if (refresh==null)
+		refresh = false;
 	var uuid = this.id;
-	this.display_node[dest] = {"type":type,"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":type};
+	this.display_node[dest] = {"type":type,"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":type,"parent":parent,"menu":menu,"inblock":inblock};
 	this.setMetadata(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock);
 	var alreadyDisplayed = false;
 	//---------------------------------------
@@ -224,11 +226,11 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			}
 			//============================== ASMCONTEXT =============================
 			if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='basic' && this.semtag!='EuropassL')){
-				this.displayAsmContext(dest,type,langcode,edit);
+				this.displayAsmContext(dest,type,langcode,edit,refresh);
 			}
 			//============================== NODE ===================================
 			else { // other than asmContext
-				this.displayAsmNode(dest,type,langcode,edit);
+				this.displayAsmNode(dest,type,langcode,edit,refresh);
 			}
 			//---------------------------- BUTTONS AND BACKGROUND COLOR -----------------------------------------------------------------
 			// ---------- if by error button color == background color we set button color to white or black to be able to see them -----
@@ -326,7 +328,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 };
 
 //==================================================
-UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edit)
+UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edit,refresh)
 //==================================================
 
 {
@@ -373,10 +375,15 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 			displayview = type+"-resource-default";
 		}
 	html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
-	$("#"+dest).append (html);
+	//-------------------- display ----------------------
+	if (!refresh) {
+		$("#"+dest).append (html);
+	} else {
+		$("#node_"+this.id).replaceWith(html);
+	}
 	//-------------------- node style -------------------
 	var style = "";
-	style = UIFactory["Node"].getLabelStyle(uuid);
+	style = this.getLabelStyle(uuid);
 	$("div[name='lbl-div']","#node_"+uuid).attr("style",style);
 	//-------------------- resource style -------------------
 	style = this.getContentStyle();
@@ -413,7 +420,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 }
 
 //==================================================
-UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit)
+UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,refresh)
 //==================================================
 {
 	var nodetype = this.asmtype;
@@ -466,7 +473,11 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit)
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
 		if (nodetype=='asmUnit')
 			html = html.replace(/#first#/g,"first-node");
-		$("#"+dest).append (html);
+		if (!refresh) {
+			$("#"+dest).append (html);
+		} else {
+			$("#node_"+this.id).replaceWith(html);
+		}
 	}
 	//-------------------- node style -------------------
 	var style = "";
@@ -908,7 +919,7 @@ UIFactory["Node"].prototype.refresh = function()
 
 	for (dest3 in this.display_node) {
 		if (this.display_node[dest3].display=="standard"){
-			this.displayNode(this.display_node[dest3].type,this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent);
+			this.displayNode(this.display_node[dest3].type,this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent,this.display_node[dest3].parent,this.display_node[dest3].menu,this.display_node[dest3].inblock,true);
 		}
 		if (this.display_node[dest3].display=="block"){
 			UIFactory["Node"].displayBlock(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent);
@@ -1153,7 +1164,6 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 
 
 //==================================================
-
 UIFactory["Node"].getLabelStyle = function(uuid)
 //==================================================
 {
@@ -1171,6 +1181,22 @@ UIFactory["Node"].getLabelStyle = function(uuid)
 	return style;
 }
 
+//==================================================
+UIFactory["Node"].prototype.getLabelStyle = function()
+//==================================================
+{
+	metadataepm = this.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
+	return style;
+}
 
 //==================================================
 UIFactory["Node"].getContentStyle = function(uuid)

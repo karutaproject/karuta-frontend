@@ -65,16 +65,12 @@ UIFactory["Field"].prototype.getAttributes = function(type,langcode)
 	if (this.multilingual!=undefined && !this.multilingual)
 		langcode = 0;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest]=langcode;
-	}
-	//---------------------
 	if (type==null)
 		type = 'default';
 	//---------------------
 	if (type=='default') {
 		result['restype'] = this.type;
-		result['lastmodified'] = this.lastmodified.text();
+		result['lastmodified'] = this.lastmodified_node.text();
 		result['text'] = this.text_node[langcode].text();
 	}
 	return result;

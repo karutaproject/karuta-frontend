@@ -43,6 +43,8 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		cursor:pointer;
 		float:left;
 		margin-right:5px;
+		margin-top: 3px;
+		color:var(--portfolio-buttons-color);
 	}
 
 /*
@@ -54,7 +56,8 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 
 .createreport .button,
 .btn-group .button,
-.menus {
+.menus,
+.add-button {
 	color:var(--portfolio-buttons-color);
 }
 
@@ -369,6 +372,9 @@ a.sidebar-link:hover {
 		};
 	}
 
+	.standard-struct-default {
+		cursor:pointer;
+	}
 
 .welcome-line {
 	border-bottom:1px solid var(--welcome-line-color);
@@ -1485,6 +1491,7 @@ hr {
 	padding-top:5px;
 	.input-group-text {
 		border: 0px solid #ced4da;
+		width:180px;
 	}
 	.input-group {
 		margin-bottom:3px;
@@ -1497,9 +1504,6 @@ hr {
 	}
 	.btn-select-role {
 		border-left: 1px solid #ced4da;
-	}
-	.input-group-text {
-		width:150px;
 	}
 	input[type=checkbox]{
 		margin-left:10px;
@@ -1514,6 +1518,14 @@ hr {
 	.form-group{
 		margin-bottom:3px;
 	}
+	input[type=checkbox] {
+		-ms-transform: scale(1.4); // IE
+		-moz-transform: scale(1.4); //FF
+		-webkit-transform: scale(1.4); //Safari and Chrome
+		-o-transform: scale(1.4); // Opera
+		margin-top: auto;
+		margin-bottom:auto;
+	}	
 }
 
 
@@ -1529,15 +1541,16 @@ hr {
 	.evo-colorind-ff {
 		height:14px;
 		width:14px;
-		margin:2px;
+		margin:9px;
 		float:left;
 	}
-
-	.input-group input.form-control.pickcolor{
+	.evo-cp-wrap{
+		padding-top:4px;
+	}
+	.input-group input.colorpicker{
 		height:24px;
 		margin-top:2px;
 		width:100px;
-		border: 1px solid #ced4da;
 	}
 
 /* -------------------------------------------------- */
