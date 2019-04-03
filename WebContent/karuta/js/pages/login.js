@@ -160,9 +160,6 @@ function displayKarutaLogin()
 		$("#navigation-bar").html(getNavBar('login',null));
 		$("#login").html(getLogin(encrypt_url,lang));
 		$("#useridentifier").focus();
-		$("#newpassword").html(getNew());
-		if(karuta_create_account)
-			$("#newaccount").html(getNewAccount());
 		if (typeof cas_url != 'undefined' &&cas_url!="")
 			$("#connection-cas").show();
 		applyNavbarConfiguration();

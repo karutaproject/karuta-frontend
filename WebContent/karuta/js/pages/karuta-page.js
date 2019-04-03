@@ -40,6 +40,9 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			setConfigurationVariables();
+			loadLanguages(function() {
+				getLanguage();
+			});
 			USER = new UIFactory["User"]($("user",data));
 			//-------------------------------
 			var html = "";
@@ -148,9 +151,6 @@ function setConfigurationVariables()
 			for (i=0;i<language_nodes.length;i++){
 				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
 			}
-			loadLanguages(function() {
-				getLanguage();
-			});
 			NONMULTILANGCODE = 0;  // default language if non-multilingual
 			LANGCODE = 0; //default value
 			LANG = languages[LANGCODE]; //default value
@@ -172,7 +172,6 @@ function setConfigurationVariables()
 			g_configVar['list-title-color'] = getText('config-list-title-color','Color','text',data);
 			g_configVar['list-button-background-color'] = getText('config-list-button-background-color','Color','text',data);
 			g_configVar['list-button-text-color'] = getText('config-list-button-text-color','Color','text',data);
-			
 		}
 	});
 }

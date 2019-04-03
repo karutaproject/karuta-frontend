@@ -49,6 +49,10 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 .dropdown-menu .dropdown-item {
   color: inherit;
 }
+.dropdown-menu a.dropdown-item:hover {
+  color: var(--list-button-background-color);
+  background-color: var(--list-button-color);
+}
 
 /*
 #contenu .page {
@@ -67,6 +71,11 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
   box-shadow: 0px 0px 1px var(--portfolio-buttons-color) inset;
 }
 
+/* ====================== 
+     INITIAL INFOS
+    used until KARUTA
+    has been loaded
+   ====================== */
 .list-page,
 .list-portfoliosgroups,
 .list-usersgroups,
@@ -74,6 +83,12 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 .exec_report,
 .exec_batch {
   background-color: var(--list-background-color);
+}
+
+.portfolio-row,
+.project,
+h3 {
+  color: var(--list-button-color);
 }
 
 /* ====================== */

@@ -53,6 +53,10 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		.dropdown-item {
 			color:inherit;
 		}
+		a.dropdown-item:hover {
+			color:var(--list-button-background-color);
+			background-color:var(--list-button-color);
+		}
 	}
 
 /*
@@ -76,6 +80,11 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 }
 
 
+/* ====================== 
+     INITIAL INFOS
+    used until KARUTA
+    has been loaded
+   ====================== */
 	.list-page,
 	.list-portfoliosgroups,
 	.list-usersgroups,
@@ -84,6 +93,12 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	.exec_batch{
 		background-color:var(--list-background-color);
 	}
+	.portfolio-row,
+	.project,
+	h3 {
+		color:var(--list-button-color);
+	}
+
 
 /* ====================== */
 /*    BUTTONS - MENUS     */
@@ -808,7 +823,6 @@ a {
 /*     ROME               */
 /* ====================== */
 
-
 .select-rome .select-label {
 	margin-bottom:3px;
 } 
@@ -835,8 +849,6 @@ input.select-rome,
 /* ====================== */
 /*     PAGE LIST          */
 /* ====================== */
-
-
 
 	#list-container {
 		#list-header {
@@ -1075,7 +1087,6 @@ input.select-rome,
 #portfolios .row,
 #bin .row  {
 	margin-top:2px;
-//	color:var(--list-button-color);
 }
 
 #projects .row .col-md-5,

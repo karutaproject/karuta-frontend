@@ -24,12 +24,6 @@ if( karutaStr === undefined )
 var portfolioid = null;
 
 // ------ GLOBAL VARIABLES ------------
-var NONMULTILANGCODE = "";
-var LANGCODE = "";
-var LANG = "";
-var languages = []; //list of available languages
-
-var g_configVar = {}; //list of configuration variables
 var g_userrole = "";
 var g_userroles = [];
 var g_portfolioid = "";

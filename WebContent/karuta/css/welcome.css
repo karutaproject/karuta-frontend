@@ -12,6 +12,7 @@ body {
 
 /* ----------------------- */
 .form-signin {
+  background-color: var(--login-color);
   max-width: 400px;
   padding: 19px 29px 29px;
   margin-top: 20px;

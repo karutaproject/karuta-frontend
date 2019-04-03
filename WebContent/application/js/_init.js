@@ -13,25 +13,27 @@ var cas_url = "";
 var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report";  // report registration server
 var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report servervar serverBCK_REG = "";  // report registration server
 //----------------------------------
+//-------- LANGUAGES------------
+var languages = [];
+languages [0] = 'fr';
+languages [1] = 'en';
+//----------------------------------
+var NONMULTILANGCODE = 0;  // default language if non-multilingual
+var LANGCODE = 0; //default value
+var LANG = languages[LANGCODE]; //default value
+//----------------------------------
+var audiovideohtml5 = true;
+var g_configVar = {}; //list of configuration variables
+g_configVar['maxfilesizeupload'] = '32';
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;
-var karuta_create_account = true;
+g_configVar['login-new-password-display'] = "0";
+g_configVar['login-new-account-display'] = "0";
 //--------- NAVBAR BRAND ------------------ logo 126 x 34
-var navbar_title = {};
-navbar_title["fr"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
-navbar_title["en"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
-navbar_title["ja"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";
+g_configVar['navbar-brand-logo'] = "<img src='"+karuta_url+"/karuta/img/logofonblanc.jpg'/>";
 //-----------LOGIN PAGE -----------------------
-var welcome1 = {};// Welcome title
-	welcome1["fr"] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
-	welcome1["en"] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
-var welcome2 = {};       // Welcome sub-title
-	welcome2["fr"] = "";
-	welcome2["en"] = "";
-var welcome3 = {};       // Welcome paragraph
-	welcome3["fr"] = "";
-	welcome3["en"] = "";
+g_configVar['login-logo'] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
 	welcome4["fr"] = "BIENVENUE DANS KARUTA 3.0 alpha";

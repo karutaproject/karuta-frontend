@@ -258,9 +258,9 @@ UIFactory["User"].getAttributeEditor = function(userid,attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='form-group'>";
-	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "  <div class='col-sm-9'><input class='form-control'";
+	html += "<div class='form-group row'>";
+	html += "  <label class='col-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "  <div class='col-9'><input class='form-control'";
 	html += " type='text'";
 	html += " onchange=\"javascript:UIFactory['User'].update('"+userid+"','"+attribute+"',this.value)\" value='"+value+"' ></div>";
 	html += "</div>";
@@ -272,9 +272,9 @@ UIFactory["User"].getAttributeCheckEditor = function(userid,attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='form-group'>";
-	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "  <div class='col-sm-9'><input";
+	html += "<div class='form-group row'>";
+	html += "  <label class='col-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "  <div class='col-9'><input";
 	html += " type='checkbox'";
 	if (value=='1')
 		html += " checked='true' ";
@@ -288,9 +288,9 @@ UIFactory["User"].getAttributeRadioEditor = function(userid,attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='form-group'>";
-	html += "	<label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "	<div class='col-sm-9'>";
+	html += "<div class='form-group row'>";
+	html += "	<label class='col-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "	<div class='col-9'>";
 	html += "		<input type='radio' name='"+attribute+"'";
 	if (value=='1')
 		html += " checked='true' ";
@@ -317,9 +317,9 @@ UIFactory["User"].prototype.getEditor = function(type,lang)
 	html +="<hr/>";
 	html += UIFactory["User"].getAttributeEditor(this.id,"username",this.username_node.text());
 	if (this.id>3){
-		html += "<div class='form-group'>";
-		html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG]['new_password']+"</label>";
-		html += "  <div class='col-sm-9'>";
+		html += "<div class='form-group row'>";
+		html += "  <label class='col-3 control-label'>"+karutaStr[LANG]['new_password']+"</label>";
+		html += "  <div class='col-9'>";
 		html += "    <input class='form-control passwordbyroot' onkeypress=\"this.style.color='transparent'\" type='text' autocomplete='off' value='' onchange=\"javascript:UIFactory['User'].setPassword('"+this.id+"',this.value)\" >";
 		html += "  </div>";
 		html += "</div>";
@@ -345,9 +345,9 @@ UIFactory["User"].getAttributeCreator = function(attribute,value,pwd)
 //==================================================
 {
 	var html = "";
-	html += "<div class='form-group'>";
-	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "  <div class='col-sm-9'><input class='form-control' id='user_"+attribute+"'";
+	html += "<div class='form-group row'>";
+	html += "  <label class='col-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "  <div class='col-9'><input class='form-control' id='user_"+attribute+"'";
 	if (pwd!=null && pwd)
 		html += " type='password'";
 	else
@@ -362,9 +362,9 @@ UIFactory["User"].getAttributeRadioCreator = function(attribute,value)
 //==================================================
 {
 	var html = "";
-	html += "<div class='form-group'>";
-	html += "	<label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
-	html += "	<div class='col-sm-9'>";
+	html += "<div class='form-group row'>";
+	html += "	<label class='col-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
+	html += "	<div class='col-9'>";
 	html += "		<input type='radio' name='user_"+attribute+"'";
 	if (value=='1')
 		html += " checked='true' ";
