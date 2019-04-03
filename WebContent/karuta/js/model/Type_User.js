@@ -172,25 +172,25 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		if (USER.admin){
 			html += "<td><div class='btn-group'>";
 			if (gid==null) {
-				html += " <button class='btn btn-xs' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
-				html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
+				html += " <button class='btn ' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
+				html += "<span class='fas fa-pencil-alt' aria-hidden='true'></span>";
 				html += "</button>";
 				if (this.username_node.text()!='root' && this.username_node.text()!='public' && this.username_node.text()!='sys_public') {
-					html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-					html += "<i class='fa fa-trash-o'></i>";
+					html += "<button class='btn ' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+					html += "<i class='fa fa-trash-alt'></i>";
 					html += "</button>";
 				} else {
-					html += "<button class='btn btn-xs' disabled='true'>";
-					html += "<i class='fa fa-trash-o'></i>";
+					html += "<button class='btn ' disabled='true'>";
+					html += "<i class='fa fa-trash-alt'></i>";
 					html += "</button>";
 				}
 			} else {
-				html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-				html += "<span class='glyphicon glyphicon-remove'></span>";
+				html += "<button class='btn ' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<span class='fas fa-trash-alt'></span>";
 				html += "</button>";				
 			}
 			//----------------------------------
-			html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
+			html += "<button class='btn ' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
 			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
 				html += ">";
 			} else {
@@ -200,7 +200,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 			html += "</button>";
 			//----------------------------------
 			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
-				html += "<button class='btn btn-xs' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
+				html += "<button class='btn ' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
 				html += "<i class='fa fa-file' ></i>";
 				html += "</button>";
 			}
@@ -220,7 +220,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	if (type=='temporary' && USER.admin) {
 		html = "<td style='padding-left:4px;padding-right:4px'>"+this.username_node.text() +"</td>";
 		html += "<td><div class='btn-group'>";
-		html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+		html += "<button class='btn ' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 		html += "<i class='fa fa-trash-o'></i>";
 		html += "</button>";
 		html += "</div></td>";

@@ -39,7 +39,20 @@ function displayKarutaPage()
 		url : serverBCK_API+"/credential",
 		data: "",
 		success : function(data) {
+			setConfigurationVariables();
 			USER = new UIFactory["User"]($("user",data));
+			//-------------------------------
+			var html = "";
+			html += "	<div id='list-container' class='container-fluid'></div>";
+			html += "	<div id='portfolio-container' role='all' style='display:none'></div>";
+			html += "	<div id='search-user-div' class='search' style='display:none'></div>";
+			html += "	<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
+			html += "	<div id='main-user' class='col-md-12' style='display:none'></div>";
+			html += "	<div id='main-usersgroup' class='col-md-12' style='display:none'></div>";
+			html += "	<div id='main-exec-batch' class='col-md-12' style='display:none'></div>";
+			html += "	<div id='main-exec-report' class='col-md-12' style='display:none'></div>";
+			html += "</div>";
+			$("#main-container").html(html);
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -50,28 +63,18 @@ function displayKarutaPage()
 					karuta_backend_date = $("date",$("#backend",data)).text();
 					karuta_fileserver_version = $("number",$("#fileserver",data)).text();
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
-					getAndApplyMainConfiguration();
+					var navbar_html = getNavBar('list',null);
+					$("#navigation-bar").html(navbar_html);
+					$("a[data-tooltip='true']").tooltip({html:true});
+					applyNavbarConfiguration();
 				},
 				error : function(jqxhr,textStatus) {
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
 					$("a[data-tooltip='true']").tooltip({html:true});
+					getAndApplyMainConfiguration();
 				}
 			});
-			//-------------------------------
-			var html = "";
-			html += "	<div id='list-container' class='container-fluid'></div>";
-			html += "	<div id='portfolio-container' role='all' style='display:none'></div>";
-			html += "	<div id='search-user-div' class='search' style='display:none'>";
-			html += getSearchUser();
-			html += "	</div>";
-			html += "	<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-user' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-usersgroup' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-exec-batch' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-exec-report' class='col-md-12' style='display:none'></div>";
-			html += "</div>";
-			$("#main-container").html(html);
 			//-------------------------------
 			display_list_page();
 			//-------------------------------
@@ -127,8 +130,10 @@ function hideArchiveSearch()
 	$("#remove-button").prop('disabled', true);
 }
 
+
+
 //==============================
-function getAndApplyMainConfiguration()
+function setConfigurationVariables()
 //==============================
 {
 	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration?resources=true";
@@ -138,19 +143,36 @@ function getAndApplyMainConfiguration()
 		dataType : "xml",
 		url : url,
 		success : function(data) {
+			//-----------------------
 			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
 			for (i=0;i<language_nodes.length;i++){
 				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
 			}
-			UICom.parseStructure(data);
 			loadLanguages(function() {
 				getLanguage();
 			});
-			var navbar_html = getNavBar('list',null);
-			$("#navigation-bar").html(navbar_html);
-			$("a[data-tooltip='true']").tooltip({html:true});
-			applyNavbarConfiguration(data);
+			NONMULTILANGCODE = 0;  // default language if non-multilingual
+			LANGCODE = 0; //default value
+			LANG = languages[LANGCODE]; //default value
+			//---------Navigation Bar--------------
+			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
+			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
+			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data);
+			//----------------------
+			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
+			//----------------------
+			g_configVar['list-welcome-image'] = getBackgroundURL('config-list-welcome-image',data);		
+			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data);
+			g_configVar['list-welcome-subtitle'] = getText('config-list-welcome-subtitle','Field','text',data);
+			//----------------------
+			g_configVar['list-background-color'] = getText('config-list-background-color','Color','text',data);
+			g_configVar['list-element-background-color'] = getText('config-list-element-background-color','Color','text',data);
+			g_configVar['list-element-text-color'] = getText('config-list-element-text-color','Color','text',data);
+			g_configVar['list-element-background-color-complement'] = getText('config-list-element-background-color-complement','Color','text',data);
+			g_configVar['list-title-color'] = getText('config-list-title-color','Color','text',data);
+			g_configVar['list-button-background-color'] = getText('config-list-button-background-color','Color','text',data);
+			g_configVar['list-button-text-color'] = getText('config-list-button-text-color','Color','text',data);
+			
 		}
 	});
-
 }

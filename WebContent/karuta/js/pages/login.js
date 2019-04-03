@@ -136,6 +136,7 @@ function displayKarutaLogin()
 //==============================
 {
 	loginPublic();
+	setLoginConfigurationVariables();
 	var html = "";
 	html += "<div id='main-welcome'>";
 	html += "<div id='navigation-bar'></div>";
@@ -154,8 +155,19 @@ function displayKarutaLogin()
 	$('body').html(html);
 	$('body').append(alertBox());
 	$('body').append(EditBox());
-
-	$.ajaxSetup({async: false});
+	loadLanguages(function(data) {
+		getLanguage();
+		$("#navigation-bar").html(getNavBar('login',null));
+		$("#login").html(getLogin(encrypt_url,lang));
+		$("#useridentifier").focus();
+		$("#newpassword").html(getNew());
+		if(karuta_create_account)
+			$("#newaccount").html(getNewAccount());
+		if (typeof cas_url != 'undefined' &&cas_url!="")
+			$("#connection-cas").show();
+		applyNavbarConfiguration();
+		applyLoginConfiguration();
+		});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -168,25 +180,12 @@ function displayKarutaLogin()
 			karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 		}
 	});
-	loadLanguages(function(data) {
-		getLanguage();
-		$("#navigation-bar").html(getNavBar('login',null));
-		$("#login").html(getLogin(encrypt_url,lang));
-		$("#useridentifier").focus();
-		$("#newpassword").html(getNew());
-		if(karuta_create_account)
-			$("#newaccount").html(getNewAccount());
-		if (typeof cas_url != 'undefined' &&cas_url!="")
-			$("#connection-cas").show();
-		getAndApplyLoginConfiguration();
-		});
 	$('#password').keypress(function(e) {
 		var code= (e.keyCode ? e.keyCode : e.which);
 		if (code == 13)
 			callSubmit();
 	});
 	//----------------------------------------------
-	$.ajaxSetup({async: true});
 }
 
 //------------------------------
@@ -202,7 +201,47 @@ if (lang==null)
 //-------------------------------
 
 //==============================
-function getAndApplyLoginConfiguration()
+function applyLoginConfiguration()
+//==============================
+{
+	//========================================
+	$('body').css("background-image", g_configVar['login-background-image']);
+	//========================================
+	$('#welcome1').html(g_configVar['login-logo']);
+	$("#welcome1").attr("style",g_configVar['login-logo_style']);
+	//---------------------
+	$('#welcome2').html(g_configVar['login-subtitle']);
+	$("#welcome2").attr("style",g_configVar['login-subtitle-style']);
+	//---------------------
+	$('#welcome3').html(g_configVar['login-subtext']);
+	$("#welcome3").attr("style",g_configVar['login-subtext-style']);
+	//---------------------
+	$('#form-signin').css("background-color",g_configVar['login-background-color']);
+	$('#form-signin').css("color",g_configVar['login-text-color']);
+	$('button.button-login').css("background-color",g_configVar['login-button-color']);
+	$('button.button-login').css("color",g_configVar['login-button-text-color']);
+	//========================================
+	if (g_configVar['login-new-password-display']=="0")
+		$('#newpassword').hide();
+	else {
+		$('#newpassword').css("background-color",g_configVar['login-new-password-background-color']);
+		$('#newpassword').css("color",g_configVar['login-new-password-text-color']);
+		$('#form-send').css("background-color",g_configVar['login-new-password-button-color']);
+		$('#form-send').css("color",g_configVar['login-new-password-button-text-color']);
+	}
+	//========================================
+	if (g_configVar['login-new-account-display']=="0")
+		$('#newaccount').hide();
+	else {
+		$('#newaccount').css("background-color",g_configVar['login-new-account-background-color']);
+		$('#newaccount').css("color",g_configVar['login-new-account-text-color']);
+		$('#form-send').css("background-color",g_configVar['login-new-account-button-color']);
+		$('#form-send').css("color",g_configVar['login-new-account-button-text-color']);
+	}
+}
+
+//==============================
+function setLoginConfigurationVariables()
 //==============================
 {
 	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration?resources=true";
@@ -212,74 +251,45 @@ function getAndApplyLoginConfiguration()
 		dataType : "xml",
 		url : url,
 		success : function(data) {
-			UICom.parseStructure(data);
-			
-			applyNavbarConfiguration(data);
-			applyLoginConfiguration(data);
+			//---------Languages--------------
+			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
+			for (i=0;i<language_nodes.length;i++){
+				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
+			}
+			loadLanguages(function() {
+				getLanguage();
+			});
+			NONMULTILANGCODE = 0;  // default language if non-multilingual
+			LANGCODE = 0; //default value
+			LANG = languages[LANGCODE]; //default value
+			//---------Navigation Bar--------------
+			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
+			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
+			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data);
+			//---------- Login -------------
+			g_configVar['login-background-image'] = getBackgroundURL('config-login-background-image',data);
+			g_configVar['login-background-color'] = getText('config-login-background-color','Color','text',data);
+			g_configVar['login-logo'] = getImg('config-login-logo',data);
+			g_configVar['login_logo_style'] = getContentStyle('config-login-logo',data);
+			g_configVar['login-subtitle'] = getText('config-login-subtitle','Field','text',data);
+			g_configVar['login-subtitle-style'] = getContentStyle('config-login-subtitle',data);
+			g_configVar['login-subtext'] = getText('config-login-subtext','Field','text',data);
+			g_configVar['login-subtext-style'] = getContentStyle('config-login-subtext',data);
+			g_configVar['login-text-color'] = getText('config-login-text-color','Color','text',data);
+			g_configVar['login-button-color'] = getText('config-login-button-color','Color','text',data);
+			g_configVar['login-button-text-color'] = getText('config-login-button-text-color','Color','text',data);
+			//-----------New Password ----------
+			g_configVar['login-new-password-display'] = getText('config-login-new-password-display','Get_Resource','value',data);
+			g_configVar['login-new-password-background-color'] = getText('config-login-new-password-background-color','Color','text',data);
+			g_configVar['login-new-password-text-color'] = getText('config-login-new-password-text-color','Color','text',data);
+			g_configVar['login-new-password-button-color'] = getText('config-login-new-password-button-color','Color','text',data);
+			g_configVar['login-new-password-button-text-color'] = getText('config-login-new-password-button-text-color','Color','text',data);
+			//------------New Account ---------
+			g_configVar['login-new-account-display'] = getText('config-login-new-account-display','Get_Resource','value',data);
+			g_configVar['login-new-account-background-color'] = getText('config-login-new-account-background-color','Color','text',data);
+			g_configVar['login-new-account-text-color'] = getText('config-login-new-account-text-color','Color','text',data);
+			g_configVar['login-new-account-button-color'] = getText('config-login-new-account-button-color','Color','text',data);
+			g_configVar['login-new-account-button-text-color'] = getText('config-login-new-account-button-text-color','Color','text',data);
 		}
 	});
-
 }
-
-//==============================
-function applyLoginConfiguration(data)
-//==============================
-{
-	//========================================
-	var login_page_background_url = UICom.structure.ui[getNodeid('config-login-background-image',data)].resource.getView(null,"url");
-	$('body').css("background-image", "url('"+login_page_background_url+"')");
-	//========================================
-	UICom.structure.ui[getNodeid('config-login-logo',data)].resource.displayView("welcome1");
-	$("#welcome1").attr("style",UICom.structure.ui[getNodeid('config-login-logo',data)].getContentStyle());
-	//---------------------
-	UICom.structure.ui[getNodeid('config-login-subtitle',data)].resource.displayView("welcome2");
-	$("#welcome2").attr("style",UICom.structure.ui[getNodeid('config-login-subtitle',data)].getContentStyle());
-	//---------------------
-	UICom.structure.ui[getNodeid('config-login-subtext',data)].resource.displayView("welcome3");
-	$("#welcome3").attr("style",UICom.structure.ui[getNodeid('config-login-subtext',data)].getContentStyle());
-	//---------------------
-	var login_background_color = UICom.structure.ui[getNodeid('config-login-background-color',data)].resource.getValue();
-	$('#form-signin').css("background-color",login_background_color);
-	//---------------------
-	var login_text_color = UICom.structure.ui[getNodeid('config-login-text-color',data)].resource.getValue();
-	$('#form-signin').css("color",login_text_color);
-	//---------------------
-	var login_button_color = UICom.structure.ui[getNodeid('config-login-button-color',data)].resource.getValue();
-	$('button.button-login').css("background-color",login_button_color);
-	//---------------------
-	var login_button_text_color = UICom.structure.ui[getNodeid('config-login-button-text-color',data)].resource.getValue();
-	$('button.button-login').css("color",login_button_text_color);
-	//========================================
-	var newpassword_display = UICom.structure.ui[getNodeid('config-login-new-password-display',data)].resource.getValue();
-	if (newpassword_display=="0")
-		$('#newpassword').hide();
-	//---------------------
-	var newpassword_background_color = UICom.structure.ui[getNodeid('config-login-new-password-background-color',data)].resource.getValue();
-	$('#newpassword').css("background-color",newpassword_background_color);
-	//---------------------
-	var newpassword_text_color = UICom.structure.ui[getNodeid('config-login-new-password-text-color',data)].resource.getValue();
-	$('#newpassword').css("color",newpassword_text_color);
-	//---------------------
-	var newpassword_button_color = UICom.structure.ui[getNodeid('config-login-new-password-button-color',data)].resource.getValue();
-	$('#form-send').css("background-color",newpassword_button_color);
-	//---------------------
-	var newpassword_button_text_color = UICom.structure.ui[getNodeid('config-login-new-password-button-text-color',data)].resource.getValue();
-	$('#form-send').css("color",newpassword_button_text_color);
-	//========================================
-	var newaccount_display = UICom.structure.ui[getNodeid('config-login-new-account-display',data)].resource.getValue();
-	if (newaccount_display=="0")
-		$('#newaccount').hide();
-	//---------------------
-	var newaccount_background_color = UICom.structure.ui[getNodeid('config-login-new-account-background-color',data)].resource.getValue();
-	$('#newaccount').css("background-color",newaccount_background_color);
-	//---------------------
-	var newaccount_text_color = UICom.structure.ui[getNodeid('config-login-new-account-text-color',data)].resource.getValue();
-	$('#newaccount').css("color",newaccount_text_color);
-	//---------------------
-	var newaccount_button_color = UICom.structure.ui[getNodeid('config-login-new-account-button-color',data)].resource.getValue();
-	$('#newaccount-button').css("background-color",newaccount_button_color);
-	//---------------------
-	var newaccount_button_text_color = UICom.structure.ui[getNodeid('config-login-new-account-button-text-color',data)].resource.getValue();
-	$('#newaccount-button').css("color",newaccount_button_text_color);
-}
-

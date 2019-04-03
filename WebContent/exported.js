@@ -118,12 +118,12 @@ function toggleSidebarPlusMinus(uuid) { // click on PlusMinus
 
 	if (collapse.style.display=='block')
 	{
-		node.classList.remove("glyphicon-minus");
-		node.classList.add("glyphicon-plus")
+		node.classList.remove("fa-minus");
+		node.classList.add("fa-minus")
 		document.getElementById("collapse"+uuid).style.display='none';
 	} else {
-		node.classList.remove("glyphicon-plus");
-		node.classList.add("glyphicon-minus")
+		node.classList.remove("fa-minus");
+		node.classList.add("fa-minus")
 		document.getElementById("collapse"+uuid).style.display='block';
 	}
 }
@@ -132,13 +132,13 @@ function toggleSidebarPlusMinus(uuid) { // click on PlusMinus
 function toggleContent(uuid) {
 //==================================
 	var node = document.getElementById("toggleContent_"+uuid);
-	if (node.classList.contains("glyphicon-plus")) {
-		node.classList.remove("glyphicon-plus");
-		node.classList.add("glyphicon-minus")
+	if (node.classList.contains("fa-minus")) {
+		node.classList.remove("fa-minus");
+		node.classList.add("fa-minus")
 		document.getElementById("content-"+uuid).style.display='block';
 	} else {
-		node.classList.remove("glyphicon-minus");
-		node.classList.add("glyphicon-plus")
+		node.classList.remove("fa-minus");
+		node.classList.add("fa-minus")
 		document.getElementById("content-"+uuid).style.display='none';
 	}
 }
@@ -147,17 +147,17 @@ function toggleContent(uuid) {
 function cleanSidebar()
 //==================================
 {
-	var elts = document.getElementsByClassName("glyphicon-minus");
+	var elts = document.getElementsByClassName("fa-minus");
 	for(i=0; i<elts.length; i++) {
 		var nodeid = elts[i].getAttribute('id');
 		if (nodeid.indexOf('toggle_')>-1){
 			var uuid = nodeid.substring(nodeid.indexOf('toggle_')+7);
-			elts[i].classList.add("glyphicon-plus")
-			elts[i].classList.remove("glyphicon-minus");
+			elts[i].classList.add("fa-minus")
+			elts[i].classList.remove("fa-minus");
 			document.getElementById("collapse"+uuid).style.display='none';
 		}
 	}
-	var elts1 = document.getElementsByClassName("glyphicon-plus");
+	var elts1 = document.getElementsByClassName("fa-minus");
 	for(i=0; i<elts1.length; i++) {
 		var nodeid = elts1[i].getAttribute('id');
 		if (nodeid.indexOf('toggle_')>-1){

@@ -88,26 +88,26 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,type,lang)
 //		displayGroup[group_type][this.id] = Cookies.get('dg_'+group_type+"-"+this.id);
 		html += "	<div class='row row-label'>";
 		if (displayGroup[group_type][this.id]!=undefined && displayGroup[group_type][this.id]=='open')
-			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.PortfoliosGroup.displayPortfolios','list','"+lang+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button glyphicon glyphicon-minus'></span></div>";
+			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.PortfoliosGroup.displayPortfolios','list','"+lang+"')\" class='col-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button fas fa-minus'></span></div>";
 		else
-			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.PortfoliosGroup.displayPortfolios','list','"+lang+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button glyphicon glyphicon-plus'></span></div>";
-		html += "		<div class='portfoliosgroup-label col-md-5 col-sm-4 col-xs-5'>"+this.label_node.text()+"</div>";
-		html += "		<div class='col-md-5 col-xs-5'>";
+			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.PortfoliosGroup.displayPortfolios','list','"+lang+"')\" class='col-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button fas fa-plus'></span></div>";
+		html += "		<div class='portfoliosgroup-label col-5'>"+this.label_node.text()+"</div>";
+		html += "		<div class='col-5'>";
 		//------------ buttons ---------------
-		html += "			<div class='btn-group'>";
+		html += "			<div class='dropdown'>";
 		if (USER.admin) {
-			html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
-			html += "			<ul class='dropdown-menu  pull-right'>";
-			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
-			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
-			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].callAddPortfolios('"+this.id+"','"+this.label_node.text()+"')\" ><i class='fa fa-plus-square'></i> "+karutaStr[LANG]["add_portfolios"]+"</a></li>";
-			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].callShareUsers('"+this.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
-			html += "				<li><a onclick=\"UIFactory['PortfoliosGroup'].callShareUsersGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
-			html += "			</ul>";
+			html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
+			html += "			<div class='dropdown-menu  dropdown-menu-right'>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callAddPortfolios('"+this.id+"','"+this.label_node.text()+"')\" ><i class='fa fa-plus-square'></i> "+karutaStr[LANG]["add_portfolios"]+"</a>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callShareUsers('"+this.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callShareUsersGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
+			html += "			</div>";
 		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
-			html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
+			html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle' style='visibility:hidden'></button>";
 		}
-		html += "			</div><!-- class='btn-group' -->";
+		html += "			</div><!-- class='dropdown' -->";
 		//---------------------------------------
 		html += "		</div><!-- class='col-md-1' -->";
 		html += "	</div>";

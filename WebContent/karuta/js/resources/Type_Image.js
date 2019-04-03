@@ -397,14 +397,14 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 	html +=" <div id='progress_"+this.id+"_"+langcode+"''><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
 	html += "<span id='loaded_"+this.id+langcode+"'></span>"
-	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+	html +=  " <button type='button' class='btn ' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
 	var loadedid = 'loaded_'+this.id+langcode;
 	$('#fileupload_'+this.id+"_"+langcode).fileupload({
 		add: function(e, data) {
 			$("#wait-window").modal('show');
 			filename = data.originalFiles[0]['name'];
-			if(data.originalFiles[0]['size'] > maxfilesizeupload * 1024 * 1024) {
+			if(data.originalFiles[0]['size'] > g_configVar['maxfilesizeupload'] * 1024 * 1024) {
 				$("#wait-window").modal('hide');
 				alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
 			} else {

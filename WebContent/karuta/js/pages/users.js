@@ -27,7 +27,7 @@ function fill_list_users()
 			searchUser();
 	});
 	var html = "";
-	html += "<span id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
+	html += "<span id='user-create' class='btn' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
 	html += "<h3 id='active-users'>"+karutaStr[LANG]['active_users']+"</h3>";
 	html += "<div  id='active'>";
 	html += "</div>";
@@ -35,7 +35,7 @@ function fill_list_users()
 	html += "<div  id='inactive' style='display:none'>";
 	html += "</div>";
 	html += "<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users'];
-	html += "&nbsp<button class='btn btn-xs' onclick=\"confirmDelTemporaryUsers()\">";
+	html += "&nbsp<button class='btn ' onclick=\"confirmDelTemporaryUsers()\">";
 	html += karutaStr[LANG]["delete-temporary-users"];
 	html += "</button>";
 	html += "</h3>";
@@ -78,7 +78,7 @@ function fill_search_users(value,type)
 //==============================
 {
 	var html = "";
-	html += "<span id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
+	html += "<span id='user-create' class='btn' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
 	html += "<h3 id='active-users'>"+karutaStr[LANG]['active_users']+"</h3>";
 	html += "<div  id='active'>";
 	html += "</div>";

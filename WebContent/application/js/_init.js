@@ -13,7 +13,6 @@ var cas_url = "";
 var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report";  // report registration server
 var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report servervar serverBCK_REG = "";  // report registration server
 //----------------------------------
-var maxfilesizeupload = "32"; //Mo
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;

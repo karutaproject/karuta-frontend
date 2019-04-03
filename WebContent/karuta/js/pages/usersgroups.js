@@ -20,7 +20,7 @@ function fill_list_usersgroups()
 {
 	setLanguageMenu("fill_list_usersgroups()");
 	var html = "";
-	html += "<span id='usersgroup-create' onclick=\"UIFactory['UsersGroup'].callCreate()\" >"+karutaStr[LANG]['create_usersgroup']+"</span>";
+	html += "<span id='usersgroup-create' class='btn' onclick=\"UIFactory['UsersGroup'].callCreate()\" >"+karutaStr[LANG]['create_usersgroup']+"</span>";
 	html += "<h3 id='usersgroups-label'>"+karutaStr[LANG]['list_usersgroups']+"</h3>";
 	html += "<div class='warning-list'>"+karutaStr[LANG]['note-list_usergroups']+ "</div>";
 	html += "<div id='usersgroups'>";

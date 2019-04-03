@@ -42,6 +42,14 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
   color: var(--portfolio-buttons-color);
 }
 
+.dropdown-menu {
+  color: var(--list-button-color);
+  background-color: var(--list-button-background-color);
+}
+.dropdown-menu .dropdown-item {
+  color: inherit;
+}
+
 /*
 #contenu .page {
 	padding-left:10px;
@@ -66,10 +74,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 .exec_report,
 .exec_batch {
   background-color: var(--list-background-color);
-}
-
-#portfolio-container {
-  background-color: var(--main-background-color);
 }
 
 /* ====================== */
@@ -109,11 +113,57 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 #navigation-bar ul.navbar-nav {
   text-align: right;
 }
+#navigation-bar .navbar {
+  margin-bottom: 0px;
+  border-radius: 0px;
+  padding-bottom: 0px;
+}
+#navigation-bar .navbar-brand {
+  padding: 0px;
+}
+#navigation-bar .navbar-brand img {
+  height: 60px;
+}
+
+/* ====================== */
+/*    LIST- WELCOME       */
+/* ====================== */
+#welcome-image {
+  padding-top: 50px;
+  width: 100%;
+  height: 250px;
+}
+#welcome-image .welcome-box {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  min-width: 200px;
+  padding: 3px;
+  border: 1px solid var(--welcome-box-border-color);
+}
+#welcome-image .welcome-subbox {
+  width: 100%;
+  height: 100%;
+  background-color: var(--welcome-subbox-background-color);
+  padding: 10px;
+  opacity: 0.6;
+}
+
+/* ====================== */
+/*      PORTFOLIO         */
+/* ====================== */
+#portfolio-container {
+  background-color: var(--main-background-color);
+}
+#portfolio-container .dropdown-menu {
+  color: black;
+  background-color: var(--main-background-color);
+}
 
 /* ====================== */
 /*      SUBBAR            */
 /* ====================== */
-#sub-bar {
+#sub-bar .navbar {
   background-color: var(--sub-bar-background-color);
   color: var(--sub-bar-color);
 }
@@ -680,28 +730,6 @@ table[name=res-div] {
   font-size: 14px;
 }
 
-#navigation_bar .glyphicon {
-  font-size: 16px;
-}
-
-.navbar {
-  margin-bottom: 0px;
-  border-radius: 0px;
-}
-
-.navbar-brand {
-  height: auto;
-  /* originaly 50px but too small when minimized on phone  */
-}
-
-.navbar-default {
-  font-size: 14px;
-}
-
-.toggle-content .glyphicon {
-  font-size: 12px;
-}
-
 .word-counter {
   margin-right: 10px;
   margin-top: 5px;
@@ -728,26 +756,68 @@ input.select-rome,
 }
 
 /* ====================== */
-/*     PAGE LIST     */
+/*     PAGE ADMIN         */
 /* ====================== */
-#list-header {
+h3 {
+  font-weight: 900;
+}
+
+.warning-list {
+  font-size: 120%;
+  font-weight: bold;
+  color: var(--list-title-color);
+}
+
+/* ====================== */
+/*     PAGE LIST          */
+/* ====================== */
+#list-container #list-header {
   padding-top: 10px;
   padding-bottom: 10px;
 }
-
 #list-container .btn {
   background-color: var(--list-button-background-color);
   color: var(--list-button-color);
 }
+#list-container #bin-label {
+  margin-top: 5px;
+}
+#list-container .portfolio-menu .btn {
+  height: 25px;
+  padding-left: 9px;
+  padding-right: 9px;
+}
+#list-container #bin {
+  padding: 5px;
+}
 
-.portfolio-menu .btn {
+/* ====================== */
+/*     PAGE USERS         */
+/* ====================== */
+#active {
+  padding: 10px;
+}
+
+#main-user .item:hover {
+  background-color: var(--list-background-color-complement);
+}
+
+/* ====================== */
+/*     PAGE USERGROUP     */
+/* ====================== */
+.usersgroup .btn {
   height: 25px;
   padding-left: 9px;
   padding-right: 9px;
 }
 
-.portfolio-row:hover {
-  background-color: var(--list-background-color);
+/* ====================== */
+/*  PAGE PORTFOLIOGROUP   */
+/* ====================== */
+.portfoliosgroup .btn {
+  height: 25px;
+  padding-left: 9px;
+  padding-right: 9px;
 }
 
 /* ====================== */
@@ -757,9 +827,9 @@ input.select-rome,
 #selectform-projects .row,
 #main-user {
   margin-top: 2px;
-  color: var(--list-button-color);
 }
 
+/*
 #projects-label,
 #projects-nb,
 #portfolios-label,
@@ -770,9 +840,9 @@ input.select-rome,
 #portfoliosgroups-label,
 #usersgroups-label,
 #inactive-users {
-  color: var(--list-icon-section-color);
+	color:var(--list-icon-section-color);
 }
-
+*/
 #main-container .row-label {
   background-color: initial;
 }
@@ -843,18 +913,6 @@ input.select-rome,
   border-radius: 3px;
 }
 
-#main-user .item:hover {
-  background-color: var(--list-background-color-complement);
-}
-
-#main-portfoliosgroup .dropdown-menu,
-#main-usersgroup .dropdown-menu,
-#menu .dropdown-menu,
-#list .dropdown-menu {
-  color: var(--list-button-color);
-  background-color: var(--list-button-background-color);
-}
-
 #main-portfoliosgroup .dropdown-menu li a,
 #main-usersgroup .dropdown-menu li a,
 #menu .dropdown-menu li a,
@@ -878,14 +936,15 @@ input.select-rome,
   color: var(--list-button-color);
 }
 
+/*
 #portfoliosgroups a,
 #usersgroups a,
 #projects a,
 #portfolios a,
 #bin a {
-  color: var(--list-button-color);
+	color:var(--list-button-color);
 }
-
+*/
 .portfolios-not-in-project {
   margin-left: 0px;
   margin-right: 0px;
@@ -931,7 +990,6 @@ input.select-rome,
 #portfolios .row,
 #bin .row {
   margin-top: 2px;
-  color: var(--list-button-color);
 }
 
 #projects .row .col-md-5,
@@ -965,6 +1023,7 @@ input.select-rome,
   padding-top: 4px;
 }
 
+/*
 #projects .row:hover .col-md-5,
 #projects .row:hover .col-md-5 a,
 #projects .row:hover .col-md-4,
@@ -972,7 +1031,7 @@ input.select-rome,
 #projects .row:hover .col-md-3,
 #projects .row:hover .col-md-2,
 #projects .row:hover .col-md-1 {
-  background-color: var(--list-background-color);
+	background-color:var(--list-background-color);
 }
 
 #projects .row-label:hover .col-md-5,
@@ -982,7 +1041,7 @@ input.select-rome,
 #projects .row-label:hover .col-md-3,
 #projects .row-label:hover .col-md-2,
 #projects .row-label:hover .col-md-1 {
-  background-color: initial;
+	background-color:initial;
 }
 
 #portfolios .row:hover .col-md-5,
@@ -999,25 +1058,24 @@ input.select-rome,
 #bin .row:hover .col-md-3,
 #bin .row:hover .col-md-2,
 #bin .row:hover .col-md-1 {
-  background-color: var(--list-background-color);
+	background-color:var(--list-background-color);
 }
 
 #portfoliosgroups .row:hover {
-  background-color: var(--list-background-color);
+	background-color:var(--list-background-color);
 }
 
 #portfoliosgroups .row-label:hover {
-  background-color: initial;
+	background-color:initial;
 }
 
 #usersgroups .item:hover {
-  background-color: var(--list-background-color);
+	background-color:var(--list-background-color);
 }
-
 #usersgroups table {
-  color: var(--list-button-color);
+	color:var(--list-button-color);
 }
-
+*/
 #main-exec-batch,
 #main-exec-report {
   color: var(--list-icon-section-color);
@@ -1059,30 +1117,6 @@ input.select-rome,
 .welcome-block {
   margin-left: 0px;
   margin-right: 0px;
-}
-
-#welcome-image {
-  background: url("../../karuta/img/list-image.jpg") no-repeat;
-  padding-top: 50px;
-  width: 100%;
-  height: 250px;
-}
-
-.welcome-box {
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-  min-width: 200px;
-  padding: 3px;
-  border: 1px solid var(--welcome-box-border-color);
-}
-
-.welcome-subbox {
-  width: 100%;
-  height: 100%;
-  background-color: var(--welcome-subbox-background-color);
-  padding: 10px;
-  opacity: 0.6;
 }
 
 .welcome-block .welcome-title {
@@ -1277,15 +1311,6 @@ hr {
 .author-date {
   font-size: 11px;
   font-style: italic;
-}
-
-/* ---------------- list portfolios --------------------- */
-tr.item {
-  padding-left: 10px;
-}
-
-.item td {
-  padding-top: 4px;
 }
 
 /* -------------------------------------------------- */
@@ -2091,12 +2116,12 @@ select.Y2, option[value=Y2] {
 /* ====================
 	Isabelle
    ====================*/
-/* list of structures/units in a portfolio */
-.btn-xs {
-  height: 1.5rem;
-  cursor: pointer;
+/* list of structures/units in a portfolio
+.{
+	height:1.5rem;
+	cursor:pointer;
 }
-
+ */
 /* no underline in sidebar
 .well a:focus,
 .well a:hover {

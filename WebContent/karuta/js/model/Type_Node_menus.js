@@ -145,7 +145,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 	var html = "";
 	//------------- node menus button ---------------
 	if ((USER.admin || g_userroles[0]=='designer') && (this.asmtype != 'asmContext' && (this.depth>0 || this.asmtype == 'asmUnitStructure'))) {
-		html += "<div class='dropdown '>";
+		html += "<div class='dropdown'>";
 		html += "	<button class='btn dropdown-toggle add-button' type='button' id='add_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 		html += 		karutaStr[languages[langcode]]['Add'];
 		html += "	</button>";

@@ -47,6 +47,14 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		color:var(--portfolio-buttons-color);
 	}
 
+	.dropdown-menu {
+		color:var(--list-button-color);
+		background-color:var(--list-button-background-color);
+		.dropdown-item {
+			color:inherit;
+		}
+	}
+
 /*
 #contenu .page {
 	padding-left:10px;
@@ -77,9 +85,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		background-color:var(--list-background-color);
 	}
 
-#portfolio-container{
-	background-color:var(--main-background-color);
-}
 /* ====================== */
 /*    BUTTONS - MENUS     */
 /* ====================== */
@@ -123,15 +128,75 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		ul.navbar-nav {
 			text-align:right;
 		}
+		.navbar {
+			margin-bottom:0px;
+			border-radius:0px;
+			padding-bottom:0px;
+		}
+		.navbar-brand{
+			padding:0px;
+			img{
+				height:60px;
+			}
+		}
 	}
+
+
+
+.navbar-brand {
+//	height:auto; /* originaly 50px but too small when minimized on phone  */
+}
+
+/* ====================== */
+/*    LIST- WELCOME       */
+/* ====================== */
+
+#welcome-image {
+	padding-top:50px;
+	width: 100%;
+	height: 250px;
+	.welcome-box {
+		margin-left:auto;
+		margin-right:auto;
+		width:50%;
+		min-width:200px;
+		padding:3px;
+		border:1px solid var(--welcome-box-border-color);
+	}
+	.welcome-subbox {
+		width:100%;
+		height:100%;
+		background-color:var(--welcome-subbox-background-color);
+		padding:10px;
+		opacity: 0.6;
+	}
+}
+
+/* ====================== */
+/*      PORTFOLIO         */
+/* ====================== */
+#portfolio-container{
+}
+
+	#portfolio-container{
+		background-color:var(--main-background-color);
+		.dropdown-menu {
+			color:black;
+			background-color:var(--main-background-color);;
+	}
+
+	}
+
 
 /* ====================== */
 /*      SUBBAR            */
 /* ====================== */
 
 	#sub-bar {
-		background-color : var(--sub-bar-background-color);
-		color : var(--sub-bar-color);
+		.navbar {
+			background-color : var(--sub-bar-background-color);
+			color : var(--sub-bar-color);
+		}
 		.icon {
 			margin-top:4px;
 		}
@@ -247,42 +312,42 @@ a.sidebar-link:hover {
 /*      MENUBAR           */
 /* ====================== */
 
-#menu_bar {
-	.nav-item {
-		padding-right:10px;
+	#menu_bar {
+		.nav-item {
+			padding-right:10px;
+		}
+		.dropdown-submenu {
+			position: relative;
+			&>.dropdown-menu {
+				top: 0;
+				left: 100%;
+				margin-top: -6px;
+				margin-left: -1px;
+				-webkit-border-radius: 0 6px 6px 6px;
+				-moz-border-radius: 0 6px 6px;
+				border-radius: 0 6px 6px 6px;
+			}
+			&:hover>.dropdown-menu {
+				display: block;
+			}
+			&>a:after {
+				display: block;
+				content: " ";
+				float: right;
+				width: 0;
+				height: 0;
+				border-color: transparent;
+				border-style: solid;
+				border-width: 5px 0 5px 5px;
+				border-left-color: #ccc;
+				margin-top: 5px;
+				margin-right: -10px;
+			}
+			&:hover>a:after {
+				border-left-color: #fff;
+			}
+		}
 	}
-	.dropdown-submenu {
-		position: relative;
-		&>.dropdown-menu {
-			top: 0;
-			left: 100%;
-			margin-top: -6px;
-			margin-left: -1px;
-			-webkit-border-radius: 0 6px 6px 6px;
-			-moz-border-radius: 0 6px 6px;
-			border-radius: 0 6px 6px 6px;
-		}
-		&:hover>.dropdown-menu {
-			display: block;
-		}
-		&>a:after {
-			display: block;
-			content: " ";
-			float: right;
-			width: 0;
-			height: 0;
-			border-color: transparent;
-			border-style: solid;
-			border-width: 5px 0 5px 5px;
-			border-left-color: #ccc;
-			margin-top: 5px;
-			margin-right: -10px;
-		}
-		&:hover>a:after {
-			border-left-color: #fff;
-		}
-	}
-}
 
 
 /*
@@ -725,29 +790,7 @@ a {
 	font-size:14px;
 }
 
-#navigation_bar .glyphicon{
-	font-size:16px;
-}
 
-
-
-.navbar {
-	margin-bottom:0px;
-	border-radius:0px;
-}
-
-.navbar-brand {
-	height:auto; /* originaly 50px but too small when minimized on phone  */
-}
-
-.navbar-default{
-	font-size: 14px;
-}
-
-
-.toggle-content .glyphicon {
-	font-size:12px;
-}
 
 
 .word-counter {
@@ -776,30 +819,78 @@ input.select-rome,
 	max-width:90%;
 }
 
+/* ====================== */
+/*     PAGE ADMIN         */
+/* ====================== */
+	h3 {	
+		font-weight:900
+	};
+
+	.warning-list{
+		font-size:120%;
+		font-weight:bold;
+		color:var(--list-title-color);
+	}
 
 /* ====================== */
-/*     PAGE LIST     */
+/*     PAGE LIST          */
 /* ====================== */
 
-#list-header {
-	padding-top:10px;
-	padding-bottom:10px;
-}
 
-#list-container .btn  {
-	background-color:var(--list-button-background-color);
-	color:var(--list-button-color);
-}
 
-.portfolio-menu .btn{
-	height:25px;
-	padding-left:9px;
-	padding-right:9px;
-}
+	#list-container {
+		#list-header {
+			padding-top:10px;
+			padding-bottom:10px;
+		}
+		.btn  {
+			background-color:var(--list-button-background-color);
+			color:var(--list-button-color);
+		}
+		#bin-label{
+			margin-top:5px;
+		}
+		.portfolio-menu .btn{
+			height:25px;
+			padding-left:9px;
+			padding-right:9px;
+		}
+		#bin {
+			padding:5px;
+		}
+	}
 
-.portfolio-row:hover {
-	background-color:var(--list-background-color);
-}
+
+/* ====================== */
+/*     PAGE USERS         */
+/* ====================== */
+
+	#active {
+		padding:10px;
+	}
+	#main-user .item:hover {
+		background-color:var(--list-background-color-complement);
+	}
+
+/* ====================== */
+/*     PAGE USERGROUP     */
+/* ====================== */
+
+	.usersgroup .btn {
+		height:25px;
+		padding-left:9px;
+		padding-right:9px;
+	}
+
+/* ====================== */
+/*  PAGE PORTFOLIOGROUP   */
+/* ====================== */
+
+	.portfoliosgroup .btn {
+		height:25px;
+		padding-left:9px;
+		padding-right:9px;
+	}
 
 /* ====================== */
 
@@ -809,9 +900,9 @@ input.select-rome,
 #selectform-projects .row,
 #main-user  {
 	margin-top:2px;
-	color:var(--list-button-color);
+//	color:var(--list-button-color);
 }
-
+/*
 #projects-label,
 #projects-nb,
 #portfolios-label,
@@ -824,7 +915,7 @@ input.select-rome,
 #inactive-users {
 	color:var(--list-icon-section-color);
 }
-
+*/
 #main-container .row-label {
 	background-color:initial;
 }
@@ -900,17 +991,7 @@ input.select-rome,
 	border-radius:3px;
 }
 
-#main-user .item:hover {
-	background-color:var(--list-background-color-complement);
-}
 
-#main-portfoliosgroup .dropdown-menu,
-#main-usersgroup .dropdown-menu,
-#menu .dropdown-menu,
-#list .dropdown-menu {
-	color:var(--list-button-color);
-	background-color:var(--list-button-background-color);
-}
 
 #main-portfoliosgroup .dropdown-menu li a,
 #main-usersgroup .dropdown-menu li a,
@@ -935,7 +1016,7 @@ input.select-rome,
 	background-color:var(--list-button-background-color);
 	color:var(--list-button-color);
 }
-
+/*
 #portfoliosgroups a,
 #usersgroups a,
 #projects a,
@@ -943,22 +1024,22 @@ input.select-rome,
 #bin a {
 	color:var(--list-button-color);
 }
-
+*/
 .portfolios-not-in-project{
 	margin-left:0px;
 	margin-right:0px;
 }
 
 
-#usersgroups .usersgroup-users,
-.usersgroup,
-.project,
-.portfolios-not-in-project,
-.portfoliosgroup {
-	margin-top:10px;
-	padding:7px;
-	background-color:var(--list-background-color-complement);
-}
+	#usersgroups .usersgroup-users,
+	.usersgroup,
+	.project,
+	.portfolios-not-in-project,
+	.portfoliosgroup {
+		margin-top:10px;
+		padding:7px;
+		background-color:var(--list-background-color-complement);
+	}
 
 .usersgroup-users .inactive {
 	text-decoration: line-through;
@@ -994,7 +1075,7 @@ input.select-rome,
 #portfolios .row,
 #bin .row  {
 	margin-top:2px;
-	color:var(--list-button-color);
+//	color:var(--list-button-color);
 }
 
 #projects .row .col-md-5,
@@ -1029,7 +1110,7 @@ input.select-rome,
 	padding-top:4px;
 }
 
-
+/*
 #projects .row:hover .col-md-5,
 #projects .row:hover .col-md-5 a,
 #projects .row:hover .col-md-4,
@@ -1081,7 +1162,7 @@ input.select-rome,
 #usersgroups table {
 	color:var(--list-button-color);
 }
-
+*/
 #main-exec-batch,
 #main-exec-report {
 		color:var(--list-icon-section-color);
@@ -1131,29 +1212,6 @@ input.select-rome,
 	margin-right:0px;
 }
 
-#welcome-image {
-	background: url("../../karuta/img/list-image.jpg") no-repeat;
-	padding-top:50px;
-	width: 100%;
-    height: 250px;
-}
-
-.welcome-box {
-	margin-left:auto;
-	margin-right:auto;
-	width:50%;
-	min-width:200px;
-	padding:3px;
-	border:1px solid var(--welcome-box-border-color);
-}
-
-.welcome-subbox {
-	width:100%;
-	height:100%;
-	background-color:var(--welcome-subbox-background-color);
-	padding:10px;
-	opacity: 0.6;
-}
 
 .welcome-block .welcome-title {
 	font-size:1.5rem;
@@ -1363,17 +1421,6 @@ hr {
 		font-size:11px;
 		font-style:italic;
 }
-
-/* ---------------- list portfolios --------------------- */
-
-tr.item {
-	padding-left:10px;
-}
-
-.item td {
-	padding-top:4px;
-}
-
 
 
 /* -------------------------------------------------- */
@@ -2092,12 +2139,12 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	Isabelle
    ====================*/
 
-/* list of structures/units in a portfolio */
-.btn-xs{
+/* list of structures/units in a portfolio
+.{
 	height:1.5rem;
 	cursor:pointer;
 }
-
+ */
 /* no underline in sidebar
 .well a:focus,
 .well a:hover {

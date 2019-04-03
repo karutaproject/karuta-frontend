@@ -1218,6 +1218,24 @@ UIFactory["Node"].getContentStyle = function(uuid)
 	return style;
 }
 
+//==================================================
+UIFactory["Node"].getDataContentStyle = function(data)
+//==================================================
+{
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(data,'node-padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(data,'node-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(data,'node-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(data,'node-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(data,'node-color',false);
+	style += UIFactory.Node.getMetadataEpm(data,'node-text-align',false);
+	style += UIFactory.Node.getMetadataEpm(data,'node-background-color',false);
+	style += UIFactory.Node.getMetadataEpm(data,'node-width',true);
+	style += UIFactory.Node.getMetadataEpm(data,'node-height',true);
+	style += UIFactory.Node.getOtherMetadataEpm(data,'node-othercss');
+	return style;
+}
+
 
 //==================================================
 UIFactory["Node"].prototype.getContentStyle = function()
@@ -1977,7 +1995,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					//-----------------------------------------
 					var graphicers = $("metadata-wad[graphicerroles*="+g_userroles[0]+"]",data);
 					if (contentfreenode=='Y' && (graphicers.length>0 || g_userroles[0]=='designer'))
-						html += "<button class='btn btn-xs free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
+						html += "<button class='btn  free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
 					//-----------------------------------------
 					html += "</div>";
 				}
@@ -2029,11 +2047,11 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 			//--------------------collapsed------------------------------------------
 			if (collapsible=='Y') {
 				if (collapsed=='Y') {
-					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-plus");
+					$("#toggleContent_"+uuid).attr("class","fas fa-plus");
 					$("#content-"+uuid).hide();
 				}
 				else {
-					$("#toggleContent_"+uuid).attr("class","glyphicon glyphicon-minus");
+					$("#toggleContent_"+uuid).attr("class","fas fa-minus");
 					$("#content-"+uuid).show();
 				}
 			}

@@ -24,7 +24,12 @@ if( karutaStr === undefined )
 var portfolioid = null;
 
 // ------ GLOBAL VARIABLES ------------
-var languages = [];
+var NONMULTILANGCODE = "";
+var LANGCODE = "";
+var LANG = "";
+var languages = []; //list of available languages
+
+var g_configVar = {}; //list of configuration variables
 var g_userrole = "";
 var g_userroles = [];
 var g_portfolioid = "";
@@ -36,17 +41,14 @@ var g_display_type = "standard"; // default value
 var g_menu_type = "vertical"; // default value
 var g_edit = false;
 var g_visible = 'hidden';
-var g_welcome_edit = false;
-var g_welcome_add = false;  // we don't display add a welcome page
 var g_display_sidebar = true;
-//var g_free_toolbar_visibility = 'hidden';
+
 //---- caches -----
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_report_models = {}; // cache for report_models
 var g_Get_Resource_caches = {};
 //------------------
 var g_wysihtml5_autosave = 60000; // 60 seconds
-var g_block_height = 220; // block height in pixels
 var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
 var g_portfolio_rootid = "";
 var g_toggle_sidebar = [];
@@ -57,8 +59,9 @@ var g_roles = []; // list of portfolio roles for designer
 var g_variables = {}; // variables for substitution in Get_resource and menus
 //-------------- used for designer-----
 var redisplays = {};
-// -------------------------------------
-g_config_navbar_brand_logo_id = "";
+// -------------backward compatibility------------------------
+var g_welcome_edit = false;
+var g_block_height = 220; // block height in pixels
 
 //==============================
 function setDesignerRole(role)
@@ -139,7 +142,7 @@ function getNavBar(type,portfolioid,edit)
 {
 	var html = "";
 	html += "	<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
-	html += "		<a id='config_navbar_brand_logo' href='#' class='navbar-brand'>";
+	html += "		<a id='navbar-brand-logo' href='#' class='navbar-brand'>";
 	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/>";
 	html +="		</a>";
 	if (type!='login') {
@@ -1291,13 +1294,13 @@ function toggleContent(uuid) {
 //==================================
 function toggleSharing(uuid) {
 //==================================
-	if ($("#toggleSharing_"+uuid).hasClass("glyphicon-plus")) {
-		$("#toggleSharing_"+uuid).removeClass("glyphicon-plus")
-		$("#toggleSharing_"+uuid).addClass("glyphicon-minus")
+	if ($("#toggleSharing_"+uuid).hasClass("fa-minus")) {
+		$("#toggleSharing_"+uuid).removeClass("fa-minus")
+		$("#toggleSharing_"+uuid).addClass("fa-minus")
 		$("#sharing-content-"+uuid).show();
 	} else {
-		$("#toggleSharing_"+uuid).removeClass("glyphicon-minus")
-		$("#toggleSharing_"+uuid).addClass("glyphicon-plus")
+		$("#toggleSharing_"+uuid).removeClass("fa-minus")
+		$("#toggleSharing_"+uuid).addClass("fa-minus")
 		$("#sharing-content-"+uuid).hide();
 	}
 }
@@ -1456,9 +1459,9 @@ String.prototype.containsArrayElt = function (rolesarray)
 //==================================
 function toggleGroup(group_type,uuid,callback,type,lang) {
 //==================================
-	if ($("#toggleContent_"+group_type+"-"+uuid).hasClass("glyphicon-plus")) {
-		$("#toggleContent_"+group_type+"-"+uuid).removeClass("glyphicon-plus");
-		$("#toggleContent_"+group_type+"-"+uuid).addClass("glyphicon-minus");
+	if ($("#toggleContent_"+group_type+"-"+uuid).hasClass("fa-plus")) {
+		$("#toggleContent_"+group_type+"-"+uuid).removeClass("fa-plus");
+		$("#toggleContent_"+group_type+"-"+uuid).addClass("fa-minus");
 		if (callback!=null){
 			if (jQuery.isFunction(callback))
 				callback(uuid,"content-"+group_type+"-"+uuid,type,lang);
@@ -1468,14 +1471,12 @@ function toggleGroup(group_type,uuid,callback,type,lang) {
 		$("#content-"+group_type+"-"+uuid).show();
 		displayGroup[group_type][uuid] = 'open';
 		localStorage.setItem('dg_'+group_type+"-"+uuid,'open');
-//		Cookies.set('dg_'+group_type+"-"+uuid,'open',{ expires: 60 });
 	} else {
-		$("#toggleContent_"+group_type+"-"+uuid).removeClass("glyphicon-minus");
-		$("#toggleContent_"+group_type+"-"+uuid).addClass("glyphicon-plus");
+		$("#toggleContent_"+group_type+"-"+uuid).removeClass("fa-minus");
+		$("#toggleContent_"+group_type+"-"+uuid).addClass("fa-plus");
 		$("#content-"+group_type+"-"+uuid).hide();
 		displayGroup[group_type][uuid] = 'closed';
 		localStorage.setItem('dg_'+group_type+"-"+uuid,'closed');
-//		Cookies.set('dg_'+group_type+"-"+uuid,'closed',{ expires: 60 });
 	}
 }
 
@@ -1508,13 +1509,13 @@ function updateDisplay_page(elt,callback)
 //==================================
 function toggleProject2Select(uuid) {
 //==================================
-	if ($("#toggleContent2Select_"+uuid).hasClass("glyphicon-plus")) {
-		$("#toggleContent2Select_"+uuid).removeClass("glyphicon-plus")
-		$("#toggleContent2Select_"+uuid).addClass("glyphicon-minus")
+	if ($("#toggleContent2Select_"+uuid).hasClass("fa-minus")) {
+		$("#toggleContent2Select_"+uuid).removeClass("fa-minus")
+		$("#toggleContent2Select_"+uuid).addClass("fa-minus")
 		$("#selectform-content-"+uuid).show();
 	} else {
-		$("#toggleContent2Select_"+uuid).removeClass("glyphicon-minus")
-		$("#toggleContent2Select_"+uuid).addClass("glyphicon-plus")
+		$("#toggleContent2Select_"+uuid).removeClass("fa-minus")
+		$("#toggleContent2Select_"+uuid).addClass("fa-minus")
 		$("#selectform-content-"+uuid).hide();
 	}
 }
@@ -1930,14 +1931,12 @@ String.prototype.toNoAccents = function()
 }
 
 //==============================
-function applyNavbarConfiguration(data)
+function applyNavbarConfiguration()
 //==============================
 {
-	var navbar_brand_logo_id = $("metadata[semantictag='config-navbar-brand-logo']",data).parent().attr("id");
-	UICom.structure.ui[navbar_brand_logo_id].resource.displayView("config_navbar_brand_logo");
-	$("#config_navbar_brand_logo").attr("style",UICom.structure.ui[navbar_brand_logo_id].getContentStyle());
-	var navbar_text_color = UICom.structure.ui[getNodeid('config-navbar-text-color',data)].resource.getValue();
-	changeCss('.navbar-light .navbar-nav .nav-link', 'color:'+navbar_text_color);
+	$('#navbar-brand-logo').html(g_configVar['navbar-brand-logo']);
+	$("#navbar-brand-logo").attr("style",g_configVar['navbar-brand-logo-style']);
+	changeCss('.navbar-light .navbar-nav .nav-link', 'color:'+g_configVar['navbar-text-color']);
 }
 
 //==============================
@@ -1946,3 +1945,34 @@ function getNodeid(semtag,data)
 {
 	return $("metadata[semantictag='"+semtag+"']",data).parent().attr("id")
 }
+
+//==============================
+function getImg(semtag,data)
+//==============================
+{
+	return "<img class='img-fluid' style='display:inline;' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[LANGCODE]+"'/>";
+}
+
+
+//==============================
+function getBackgroundURL(semtag,data)
+//==============================
+{
+	return "url('../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[LANGCODE]+"')";
+}
+
+//==============================
+function getContentStyle(semtag,data)
+//==============================
+{
+	return UIFactory.Node.getDataContentStyle($("metadata-epm",$("metadata[semantictag='"+semtag+"']",data).parent())[0]);
+}
+
+//==============================
+function getText(semtag,objtype,elttype,data)
+//==============================
+{
+	return 	$(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+}
+
+
