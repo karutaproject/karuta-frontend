@@ -22,7 +22,7 @@ function fill_list_portfoliosgroups()
 	setLanguageMenu("fill_list_portfoliosgroups()");
 	$("#wait-window").show();
 	var html = "";
-	html += "<span id='portfoliosgroup-create' onclick=\"UIFactory['PortfoliosGroup'].callCreate()\" >"+karutaStr[LANG]['create_portfoliosgroup']+"</span>";
+	html += "<span id='portfoliosgroup-create' class='btn' onclick=\"UIFactory['PortfoliosGroup'].callCreate()\" >"+karutaStr[LANG]['create_portfoliosgroup']+"</span>";
 	html += "<h3 id='portfoliosgroups-label'>"+karutaStr[LANG]['list_portfoliosgroups']+"</h3>";
 	html += "<div class='warning-list'>"+karutaStr[LANG]['note-list_portfoliosgroups']+ "</div>";
 	html += "<div  id='portfoliosgroups'>";

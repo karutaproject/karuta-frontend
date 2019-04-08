@@ -23,7 +23,7 @@ if( karutaStr === undefined )
 
 var portfolioid = null;
 
-// -------------------
+// ------ GLOBAL VARIABLES ------------
 var g_userrole = "";
 var g_userroles = [];
 var g_portfolioid = "";
@@ -32,29 +32,30 @@ var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
 var g_display_type = "standard"; // default value
+var g_menu_type = "vertical"; // default value
 var g_edit = false;
 var g_visible = 'hidden';
-var g_welcome_edit = false;
-var g_welcome_add = false;  // we don't display add a welcome page
 var g_display_sidebar = true;
-var g_free_toolbar_visibility = 'hidden';
+
 //---- caches -----
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_report_models = {}; // cache for report_models
 var g_Get_Resource_caches = {};
 //------------------
 var g_wysihtml5_autosave = 60000; // 60 seconds
-var g_block_height = 220; // block height in pixels
 var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml
 var g_portfolio_rootid = "";
 var g_toggle_sidebar = [];
 var g_current_page = "";
 var g_nb_trees = 0;
 var g_sum_trees = 0;
+var g_roles = []; // list of portfolio roles for designer
+var g_variables = {}; // variables for substitution in Get_resource and menus
 //-------------- used for designer-----
 var redisplays = {};
-// -------------------------------------
-
+// -------------backward compatibility------------------------
+var g_welcome_edit = false;
+var g_block_height = 220; // block height in pixels
 
 //==============================
 function setDesignerRole(role)
@@ -69,18 +70,24 @@ function setDesignerRole(role)
 	if (g_display_type=='standard'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
-		html += "	<div id='main-row' class='row'>";
-		if (g_display_sidebar) {
-			html += "		<div class='col-md-3' id='sidebar'></div>";
-			html += "		<div class='col-md-9' id='contenu'></div>";
-		} else {
-			html += "		<div class='col-md-3' id='sidebar' style='display:none'></div>";
-			html += "		<div class='col-md-12' id='contenu'></div>";
+		if (g_menu_type=="horizontal"){
+			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
+			$("#portfolio-container").attr('role',role);			
 		}
-		html += "	</div>";
-		$("#portfolio-container").html(html);
-		$("#portfolio-container").attr('role',role);
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
+		else {
+			html += "	<div id='main-row' class='row'>";
+			if (g_display_sidebar) {
+				html += "		<div class='col-md-3' id='sidebar'></div>";
+				html += "		<div class='col-md-9' id='contenu'></div>";
+			} else {
+				html += "		<div class='col-md-3' id='sidebar' style='display:none'></div>";
+				html += "		<div class='col-md-12' id='contenu'></div>";
+			}
+			html += "	</div>";
+			$("#portfolio-container").html(html);
+			$("#portfolio-container").attr('role',role);
+			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
+		}
 		$("#sidebar_"+uuid).click();
 	};
 	if (g_display_type=='model'){
@@ -92,7 +99,7 @@ function setDesignerRole(role)
 		else
 			$("#rootnode").show();
 		UIFactory["Portfolio"].displayNodes('basic',UICom.root.node,'basic',LANGCODE,g_edit);
-		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,g_edit,UICom.root.node);
+//		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,g_edit,UICom.root.node);
 		var uuid = $("#page").attr('uuid');
 		$("#sidebar_"+uuid).click();
 	};
@@ -129,11 +136,7 @@ function getNavBar(type,portfolioid,edit)
 {
 	var html = "";
 	html += "	<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
-	html += "		<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-1' aria-controls='collapse-1' aria-expanded='false' aria-label='Toggle navigation'>";
-	html += "			<span class='navbar-toggler-icon'></span>";
-	html += "		</button>";
-
-	html += "		<a href='#' class='navbar-brand'>";
+	html += "		<a id='navbar-brand-logo' href='#' class='navbar-brand'>";
 	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/>";
 	html +="		</a>";
 	if (type!='login') {
@@ -145,6 +148,9 @@ function getNavBar(type,portfolioid,edit)
 		html += "				<li>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</li>";
 		html += "			</ul>";
 	}
+	html += "		<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-1' aria-controls='collapse-1' aria-expanded='false' aria-label='Toggle navigation'>";
+	html += "			<span class='navbar-toggler-icon'></span>";
+	html += "		</button>";
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='mr-auto navbar-nav'>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
@@ -384,15 +390,12 @@ function getEditBox(uuid,js2) {
 		}
 	}
 	// ------------ context -----------------
-	UIFactory["Node"].displayCommentsEditor('edit-window-body-context',UICom.structure["ui"][uuid]);
+	UIFactory.Node.displayCommentsEditor('edit-window-body-context',UICom.structure["ui"][uuid]);
 	// ------------ graphicer -----------------
-	var editHtml = UIFactory["Node"].getMetadataEpmAttributesEditor(UICom.structure["ui"][uuid]);
-	$("#edit-window-body-metadata-epm").html($(editHtml));
+	UICom.structure.ui[uuid].displayMetadataEpmAttributesEditor('edit-window-body-metadata-epm');
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
-		var editHtml = UIFactory["Node"].getMetadataAttributesEditor(UICom.structure["ui"][uuid]);
-		$("#edit-window-body-metadata").html($(editHtml));
-		UIFactory["Node"].displayMetadataTextsEditor(UICom.structure["ui"][uuid]);
+		UICom.structure.ui[uuid].displayMetadataAttributesEditor("edit-window-body-metadata");
 	}
 	// ------------------------------
 //	$(".modal-dialog").css('width','70%');
@@ -650,6 +653,15 @@ function displayPage(uuid,depth,type,langcode) {
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
+	if (g_menu_type=="horizontal"){  // breadcrumb
+		var nodeid = uuid;
+		var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
+		while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
+			nodeid = $(UICom.structure.ui[nodeid].node).parent().attr("id");
+			breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none') + breadcrumb;
+		}
+		$("#breadcrumb").html(breadcrumb);
+	}
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (name == 'asmUnit' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
 		$("#wait-window").modal('show');
@@ -675,11 +687,8 @@ function displayPage(uuid,depth,type,langcode) {
 		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
-		if (type=='model') {
-			UICom.structure["ui"][uuid].displayNode('model',UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
-		}
-		if (type=='basic') {
-			UICom.structure["ui"][uuid].displayNode('basic',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+		if (type=='basic' || type=='model') {
+			UICom.structure["ui"][uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
 	}
 	$("#wait-window").modal('hide');
@@ -739,7 +748,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 	//------------
 	var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	if (USER.admin || g_userroles[1]=='designer') {
-		var rights = UIFactory["Node"].getRights(destid);
+		var rights = UICom.structure["ui"][destid].getRights();
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
@@ -782,25 +791,15 @@ function edit_displayEditor(uuid,type)
 function loadLanguages(callback)
 //=======================================================================
 {
-	$.ajaxSetup({async: false});
 	for (var i=0; i<languages.length; i++){
-		if (i<languages.length-1) {
-			$.ajax({
-				type : "GET",
-				dataType : "script",
-				url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js"
-			});
-		}
-		else { // last one so we callback
-			$.ajax({
-				type : "GET",
-				dataType : "script",
-				url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js",
-			});
-		}
+		$.ajax({
+			async:false,
+			type : "GET",
+			dataType : "script",
+			url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js"
+		});
 	}
 	callback();
-	$.ajaxSetup({async: true});
 }
 
 
@@ -1226,8 +1225,9 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 function getLanguage() {
 //==================================
-	var lang = languages[0];
 	var cookielang = localStorage.getItem('karuta-language');
+	if (cookielang == "undefined")
+		cookielang = languages[0];
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==cookielang) {
 			LANGCODE = i;
@@ -1288,13 +1288,13 @@ function toggleContent(uuid) {
 //==================================
 function toggleSharing(uuid) {
 //==================================
-	if ($("#toggleSharing_"+uuid).hasClass("glyphicon-plus")) {
-		$("#toggleSharing_"+uuid).removeClass("glyphicon-plus")
-		$("#toggleSharing_"+uuid).addClass("glyphicon-minus")
+	if ($("#toggleSharing_"+uuid).hasClass("fa-minus")) {
+		$("#toggleSharing_"+uuid).removeClass("fa-minus")
+		$("#toggleSharing_"+uuid).addClass("fa-minus")
 		$("#sharing-content-"+uuid).show();
 	} else {
-		$("#toggleSharing_"+uuid).removeClass("glyphicon-minus")
-		$("#toggleSharing_"+uuid).addClass("glyphicon-plus")
+		$("#toggleSharing_"+uuid).removeClass("fa-minus")
+		$("#toggleSharing_"+uuid).addClass("fa-minus")
 		$("#sharing-content-"+uuid).hide();
 	}
 }
@@ -1453,9 +1453,9 @@ String.prototype.containsArrayElt = function (rolesarray)
 //==================================
 function toggleGroup(group_type,uuid,callback,type,lang) {
 //==================================
-	if ($("#toggleContent_"+group_type+"-"+uuid).hasClass("glyphicon-plus")) {
-		$("#toggleContent_"+group_type+"-"+uuid).removeClass("glyphicon-plus");
-		$("#toggleContent_"+group_type+"-"+uuid).addClass("glyphicon-minus");
+	if ($("#toggleContent_"+group_type+"-"+uuid).hasClass("fa-plus")) {
+		$("#toggleContent_"+group_type+"-"+uuid).removeClass("fa-plus");
+		$("#toggleContent_"+group_type+"-"+uuid).addClass("fa-minus");
 		if (callback!=null){
 			if (jQuery.isFunction(callback))
 				callback(uuid,"content-"+group_type+"-"+uuid,type,lang);
@@ -1465,14 +1465,12 @@ function toggleGroup(group_type,uuid,callback,type,lang) {
 		$("#content-"+group_type+"-"+uuid).show();
 		displayGroup[group_type][uuid] = 'open';
 		localStorage.setItem('dg_'+group_type+"-"+uuid,'open');
-//		Cookies.set('dg_'+group_type+"-"+uuid,'open',{ expires: 60 });
 	} else {
-		$("#toggleContent_"+group_type+"-"+uuid).removeClass("glyphicon-minus");
-		$("#toggleContent_"+group_type+"-"+uuid).addClass("glyphicon-plus");
+		$("#toggleContent_"+group_type+"-"+uuid).removeClass("fa-minus");
+		$("#toggleContent_"+group_type+"-"+uuid).addClass("fa-plus");
 		$("#content-"+group_type+"-"+uuid).hide();
 		displayGroup[group_type][uuid] = 'closed';
 		localStorage.setItem('dg_'+group_type+"-"+uuid,'closed');
-//		Cookies.set('dg_'+group_type+"-"+uuid,'closed',{ expires: 60 });
 	}
 }
 
@@ -1505,13 +1503,13 @@ function updateDisplay_page(elt,callback)
 //==================================
 function toggleProject2Select(uuid) {
 //==================================
-	if ($("#toggleContent2Select_"+uuid).hasClass("glyphicon-plus")) {
-		$("#toggleContent2Select_"+uuid).removeClass("glyphicon-plus")
-		$("#toggleContent2Select_"+uuid).addClass("glyphicon-minus")
+	if ($("#toggleContent2Select_"+uuid).hasClass("fa-minus")) {
+		$("#toggleContent2Select_"+uuid).removeClass("fa-minus")
+		$("#toggleContent2Select_"+uuid).addClass("fa-minus")
 		$("#selectform-content-"+uuid).show();
 	} else {
-		$("#toggleContent2Select_"+uuid).removeClass("glyphicon-minus")
-		$("#toggleContent2Select_"+uuid).addClass("glyphicon-plus")
+		$("#toggleContent2Select_"+uuid).removeClass("fa-minus")
+		$("#toggleContent2Select_"+uuid).addClass("fa-minus")
 		$("#selectform-content-"+uuid).hide();
 	}
 }
@@ -1537,6 +1535,15 @@ function getFirstWords(html,nb) {
 	return html.substring(0,tableIndex[tableOfWords.length-1].end);
 }
 
+//==================================
+function setVariables(data)
+//==================================
+{
+	var variable_nodes = $("asmContext:has(metadata[semantictag='g-variable'])",data);
+	for (var i=0;i<variable_nodes.length;i++) {
+		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].getLabel(null,'none')] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().text;
+	}
+}
 //==================================
 function setCSSportfolio(data)
 //==================================
@@ -1624,7 +1631,7 @@ function setCSSportfolio(data)
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
 		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
-		changeCss(".menus,.collapsible, .createreport .button,.btn-group .button, .menus button", "color:"+portfolio_buttons_color+";");
+		changeCss(".menus,.collapsible,.dropdownn-toggle, .createreport .button,.btn-group .button, .menus button, .menus a.button", "color:"+portfolio_buttons_color+";");
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
@@ -1891,7 +1898,75 @@ function toggleMode()
 		g_edit = true;
 		$("#toggle-mode-icon").removeClass('fas fa-toggle-off').addClass('fas fa-toggle-on');
 	}
-	UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
+//	UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
 	var uuid = $("#page").attr('uuid');
 	$("#sidebar_"+uuid).click();
 }
+
+//==============================
+String.prototype.toNoAccents = function()
+//==============================
+{
+	var accent = [
+		/[\300-\306]/g, /[\340-\346]/g, // A, a
+		/[\310-\313]/g, /[\350-\353]/g, // E, e
+		/[\314-\317]/g, /[\354-\357]/g, // I, i
+		/[\322-\330]/g, /[\362-\370]/g, // O, o
+		/[\331-\334]/g, /[\371-\374]/g, // U, u
+		/[\321]/g, /[\361]/g, // N, n
+		/[\307]/g, /[\347]/g, // C, c
+	];
+	var noaccent = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
+	var str = this;
+	for(var i = 0; i < accent.length; i++){
+		str = str.replace(accent[i], noaccent[i]);
+	}
+	return str;
+}
+
+//==============================
+function applyNavbarConfiguration()
+//==============================
+{
+	$('#navbar-brand-logo').html(g_configVar['navbar-brand-logo']);
+	$("#navbar-brand-logo").attr("style",g_configVar['navbar-brand-logo-style']);
+	changeCss('.navbar-light .navbar-nav .nav-link', 'color:'+g_configVar['navbar-text-color']);
+}
+
+//==============================
+function getNodeid(semtag,data)
+//==============================
+{
+	return $("metadata[semantictag='"+semtag+"']",data).parent().attr("id")
+}
+
+//==============================
+function getImg(semtag,data)
+//==============================
+{
+	return "<img class='img-fluid' style='display:inline;' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[LANGCODE]+"'/>";
+}
+
+
+//==============================
+function getBackgroundURL(semtag,data)
+//==============================
+{
+	return "url('../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[LANGCODE]+"')";
+}
+
+//==============================
+function getContentStyle(semtag,data)
+//==============================
+{
+	return UIFactory.Node.getDataContentStyle($("metadata-epm",$("metadata[semantictag='"+semtag+"']",data).parent())[0]);
+}
+
+//==============================
+function getText(semtag,objtype,elttype,data)
+//==============================
+{
+	return 	$(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+}
+
+

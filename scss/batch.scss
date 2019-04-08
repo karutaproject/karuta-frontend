@@ -26,12 +26,23 @@
 			height: 1.7em;
 		}
 	}
-	.buttons { 
-		float:right;
+	.model-node-label {
+		.buttons { 
+			float:right;
+		}
+		.menus {
+			float:right;
+			margin-top:-10px;
+		}
 	}
-	.menus {
-		float:right;
-		margin-top:-10px;
+	.model-resource-label {
+		.buttons { 
+			float:none;
+		}
+		.menus {
+			float:right;
+			margin-top:-10px;
+		}
 	}
 	.node-model {
 		margin-bottom:5px;

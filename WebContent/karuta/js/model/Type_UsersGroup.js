@@ -61,7 +61,6 @@ UIFactory["UsersGroup"].displayGroups = function(destid,type,lang)
 		for ( var i = 0; i < UsersGroups_list.length; i++) {
 			var gid = UsersGroups_list[i].id;
 			displayGroup[group_type][gid] = localStorage.getItem('dg_'+group_type+"-"+gid);
-//			displayGroup[group_type][gid] = Cookies.get('dg_'+group_type+"-"+gid);
 			if (displayGroup[group_type][gid]!=undefined && displayGroup[group_type][gid]=='open'){
 				UIFactory["UsersGroup"].displayUsers(gid,"content-"+group_type+"-"+gid,type,lang);				
 			}
@@ -84,37 +83,28 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type,lang)
 	var html = "";
 	if (type=='list') {
 		displayGroup[group_type][this.id] = localStorage.getItem('dg_'+group_type+"-"+this.id);
-//		displayGroup[group_type][this.id] = Cookies.get('dg_'+group_type+"-"+this.id);
 		html += "	<div class='row row-label'>";
 		if (displayGroup[group_type][this.id]!=undefined && displayGroup[group_type][this.id]=='open')
-			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.UsersGroup.displayUsers','list','"+lang+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button glyphicon glyphicon-minus'></span></div>";
+			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.UsersGroup.displayUsers','list','"+lang+"')\" class='col-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button fas fa-minus'></span></div>";
 		else
-			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.UsersGroup.displayUsers','list','"+lang+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button glyphicon glyphicon-plus'></span></div>";
-		html += "		<div class='usersgroup-label col-md-5 col-sm-4 col-xs-5'>"+this.label_node.text()+"</div>";
-		html += "		<div class='col-md-5 col-xs-5'>";
-		//------------ buttons ---------------
-		html += "			<div class='btn-group'>";
+			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.UsersGroup.displayUsers','list','"+lang+"')\" class='col-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button fas fa-plus'></span></div>";
+		html += "		<div class='usersgroup-label col-5'>"+this.label_node.text()+"</div>";
+		html += "		<div class='col-5'>";
+		//------------ menu ---------------
+		html += "			<div class='dropdown'>";
 		if (USER.admin) {
-			/*
-			html += " <button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
-			html += "<span class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
-			html += "</button>";
-			html += "<button class='btn btn-xs' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"',null)\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-			html += "<span class='glyphicon glyphicon-remove'></span>";
-			html += "</button>";
-			*/
-			html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle'>&nbsp;<span class='caret'></span>&nbsp;</button>";
-			html += "			<ul class='dropdown-menu  pull-right'>";
-			html += "				<li><a onclick=\"UIFactory['UsersGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a></li>";
-			html += "				<li><a onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a></li>";
-			html += "				<li><a onclick=\"UIFactory['UsersGroup'].callAddUsers('"+this.id+"')\" ><i class='fa fa-user-plus'></i> "+karutaStr[LANG]["add_users"]+"</a></li>";
-			html += "			</ul>";
+			html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
+			html += "			<div class='dropdown-menu  dropdown-menu-right'>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].callAddUsers('"+this.id+"')\" ><i class='fa fa-user-plus'></i> "+karutaStr[LANG]["add_users"]+"</a>";
+			html += "			</div>";
 		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
-			html += "			<button  data-toggle='dropdown' class='btn  btn-xs dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
+			html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle' style='visibility:hidden'></button>";
 		}
-		html += "			</div><!-- class='btn-group' -->";
+		html += "			</div><!-- class='dropdown' -->";
 		//---------------------------------------
-		html += "		</div><!-- class='col-md-1' -->";
+		html += "		</div>";
 		html += "	</div>";
 		if (displayGroup[group_type][this.id]!=undefined && displayGroup[group_type][this.id]=='open')
 			html += "	<div class='usersgroup-content' id='content-"+group_type+"-"+this.id+"' style='display:block'></div>";

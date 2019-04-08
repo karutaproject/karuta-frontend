@@ -92,6 +92,10 @@ function fill_main_page(rootid,role)
 			g_display_type = $("metadata[display-type]",data).attr('display-type');
 			if (g_display_type=="" || g_display_type==null || g_display_type==undefined)
 				g_display_type = 'standard';
+			// --------Menu Type------------------
+			g_menu_type = $("metadata[menu-type]",data).attr('menu-type');
+			if (g_menu_type=="" || g_menu_type==null || g_menu_type==undefined)
+				g_menu_type = 'vertical';
 			// --------CSS File------------------
 			var cssfile = $("metadata[cssfile]",data).attr('cssfile');
 			if (cssfile!=undefined && cssfile!=''){
@@ -107,6 +111,8 @@ function fill_main_page(rootid,role)
 			}
 			// --------------------------
 			UICom.parseStructure(data,true);
+			for (role in UICom.roles)
+				g_roles[g_roles.length] = {'code':'','libelle':role};
 			//----if asmUnitStructures load content--------
 			if (g_complex) {
 				var unitStructures = $("asmUnitStructure",data);
@@ -117,18 +123,22 @@ function fill_main_page(rootid,role)
 			}
 			//-------------------------------------------------
 			setCSSportfolio(data);
-			if (g_display_type=="header")
-				loadLanguages(function(data) {UIFactory["Portfolio"].displayPortfolio('portfolio-container','header',LANGCODE,g_edit);});
-			else
-				UIFactory["Portfolio"].displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
+			setVariables(data);
+			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
 			$('a[data-toggle=tooltip]').tooltip({html:true});
 			// --------------------------
-			if (g_display_type=="standard" || g_display_type=="model" || g_display_type=="basic" || g_display_type=="translate") {
+			if (g_display_type=="standard" || g_display_type=="basic") {
+				if (USER.creator)
+					g_edit = true;
+				else
+					g_edit = false;
 				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 			}
-			if (g_display_type=="header")
-				$("#navigation-bar").html(getNavBar('main',g_portfolioid,g_edit));
+			if (g_display_type=="model" || g_display_type=="translate") {
+				g_edit = true;
+				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
+			}
 			//---------------------------
 			if (g_encrypted)
 				loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});

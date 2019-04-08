@@ -225,6 +225,9 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		}
 		html += "</div>";
 	}
+	if (type=='url') {
+		html = "../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime();
+	}
 
 	return html;
 };
@@ -250,8 +253,8 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 	var image_size = "";
 	if ($(this.width_node[langcode]).text()!=undefined && $(this.width_node[langcode]).text()!='') // backward compatibility
 		image_size = "width='"+$(this.width_node[langcode]).text()+"' "; 
-	if (image_size=="" && $("metadata-epm",this.node).attr('width')!=undefined && $("metadata-epm",this.node).attr('width')!='') // backward compatibility
-		image_size = "width='"+$("metadata-epm",this.node).attr('width')+"' "; 
+//	if (image_size=="" && $("metadata-epm",this.node).attr('width')!=undefined && $("metadata-epm",this.node).attr('width')!='') // backward compatibility
+//		image_size = "width='"+$("metadata-epm",this.node).attr('width')+"' "; 
 	if ($(this.height_node[langcode]).text()!=undefined && $(this.height_node[langcode]).text()!='') // backward compatibility
 		image_size += "height='"+$(this.height_node[langcode]).text()+"' "; 
 	if (image_size.indexOf('height')<0 && $("metadata-epm",this.node).attr('height')!=undefined && $("metadata-epm",this.node).attr('height')!='')
@@ -394,14 +397,14 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 	html +=" <div id='progress_"+this.id+"_"+langcode+"''><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
 	html += "<span id='loaded_"+this.id+langcode+"'></span>"
-	html +=  " <button type='button' class='btn btn-xs' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+	html +=  " <button type='button' class='btn ' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	$("#"+destid).append($(html));
 	var loadedid = 'loaded_'+this.id+langcode;
 	$('#fileupload_'+this.id+"_"+langcode).fileupload({
 		add: function(e, data) {
 			$("#wait-window").modal('show');
 			filename = data.originalFiles[0]['name'];
-			if(data.originalFiles[0]['size'] > maxfilesizeupload * 1024 * 1024) {
+			if(data.originalFiles[0]['size'] > g_configVar['maxfilesizeupload'] * 1024 * 1024) {
 				$("#wait-window").modal('hide');
 				alertHTML(karutaStr[languages[LANGCODE]]['size-upload']);
 			} else {

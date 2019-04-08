@@ -32,8 +32,8 @@ var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.sortResource(#'] = ".sort(function(a, b){ return $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.invsortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
-jquerySpecificFunctions['.sort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? -1 : 1; })";
-jquerySpecificFunctions['.invsort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
+jquerySpecificFunctions['.sort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
+jquerySpecificFunctions['.invsort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? -1 : 1; })";
 jquerySpecificFunctions['.filename_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\")";
 jquerySpecificFunctions['.filename_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:empty\")";
 jquerySpecificFunctions['.url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:not(:empty)\")";
@@ -42,6 +42,7 @@ jquerySpecificFunctions['.text_not_empty()'] = ".has(\"asmResource[xsi_type!='co
 jquerySpecificFunctions['.text_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > text[lang='#lang#']:empty\")";
 jquerySpecificFunctions['.submitted()'] = ".has(\"metadata-wad[submitted='Y']\")";
 jquerySpecificFunctions['.code_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:empty\")";
+jquerySpecificFunctions['.code_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:not(:empty)\")";
 jquerySpecificFunctions['.filename_or_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:not(:empty)\")";
 jquerySpecificFunctions['.filename_or_text_or_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:empty\")";
 jquerySpecificFunctions['.filename_or_text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\")";
@@ -195,6 +196,11 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	var test = $(action).attr("test");
 	if (select!=undefined) {
+		while (select.indexOf("##")>-1) {
+			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			select = select.replace("##"+variable_name+"##", variables[variable_name]);
+		}
 		var selector = r_getSelector(select,test);
 		var nodeold = $(selector.jquery,data);
 		var nodes = $(selector.jquery,data).filter(selector.filter1);
@@ -417,6 +423,11 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 		success : function(data) {
 			UIFactory["User"].parse(data);
 			var select = $(action).attr("select");
+			while (select.indexOf("##")>-1) {
+				var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+				var variable_name = test_string.substring(0,test_string.indexOf("##"));
+				select = select.replace("##"+variable_name+"##", variables[variable_name]);
+			}
 			var value = "";
 			if (select.indexOf("username=")>-1)
 				if (select.indexOf("'")>-1)
@@ -621,6 +632,11 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 		success : function(data) {
 			UIFactory["Portfolio"].parse(data);
 			var select = $(action).attr("select");
+			while (select.indexOf("##")>-1) {
+				var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+				var variable_name = test_string.substring(0,test_string.indexOf("##"));
+				select = select.replace("##"+variable_name+"##", variables[variable_name]);
+			}
 			var value = "";
 			var condition = "";
 			var portfolioid = "";
@@ -813,6 +829,11 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 	var prefix_id = "";
 	try {
 		var select = $(action).attr("select");
+		while (select.indexOf("##")>-1) {
+			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			select = select.replace("##"+variable_name+"##", variables[variable_name]);
+		}
 		var ref = $(action).attr("ref");
 		var editresroles = $(action).attr("editresroles");
 		var delnoderoles = $(action).attr("delnoderoles");
@@ -922,6 +943,122 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 
 //=============================================================================
 //=============================================================================
+//====================== Variable =============================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['variable'] = function (destid,action,no,data)
+//==================================
+{
+	var text = "";
+	var style = "";
+	var attr_help = "";
+	var prefix_id = "";
+	try {
+		var varlabel = $(action).attr("varlabel");
+		var ref = $(action).attr("ref");
+		var aggregatetype = $(action).attr("aggregatetype");
+		//------------ aggregate ------------------
+		if (aggregatetype!="") {
+			var select = $(action).attr("select");
+			while (select.indexOf("##")>-1) {
+				var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+				var variable_name = test_string.substring(0,test_string.indexOf("##"));
+				select = select.replace("##"+variable_name+"##", variables[variable_name]);
+			}
+			if (type=="sum" && aggregates[select]!=undefined){
+				var sum = 0;
+				for (var i=0;i<aggregates[select].length;i++){
+					if ($.isNumeric(aggregates[select][i]))
+						sum += parseFloat(aggregates[select][i]);
+				}
+				text = sum;
+			}
+			if (type=="avg" && aggregates[select]!=undefined){
+				var sum = 0;
+				for (var i=0;i<aggregates[select].length;i++){
+					if ($.isNumeric(aggregates[select][i]))
+						sum += parseFloat(aggregates[select][i]);
+				}
+				text = sum/aggregates[select].length;
+				if (text.toString().indexOf(".")>-1)
+					text = text.toFixed(2);
+				
+			}
+			if (ref!=undefined && ref!="") {
+				if (aggregates[ref]==undefined)
+					aggregates[ref] = new Array();
+				aggregates[ref][aggregates[ref].length] = text;
+			}
+			if (!$.isNumeric(text))
+				text="";
+		} else {
+			var select = $(action).attr("select");
+				if (select!=undefined && select.length>0) {
+				//---------- node-resource -----------
+				while (select.indexOf("##")>-1) {
+					var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+					var variable_name = test_string.substring(0,test_string.indexOf("##"));
+					select = select.replace("##"+variable_name+"##", variables[variable_name]);
+				}
+				var selector = r_getSelector(select);
+				var node = $(selector.jquery,data);
+				if (node.length==0) // try the node itself
+					node = $(selector.jquery,data).addBack();
+				if (select.substring(0,2)=="..") // node itself
+					node = data;
+				if (node.length>0 || select.substring(0,1)=="."){
+					var nodeid = $(node).attr("id");
+					//----------------------------
+					var node = UICom.structure["ui"][nodeid];
+					//----------------------------
+					if (selector.type=='resource') {
+						text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+					}
+					if (selector.type=='resource code') {
+						text = UICom.structure["ui"][nodeid].resource.getCode();
+					}
+					if (selector.type=='resource value') {
+						text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+						prefix_id += "value_";
+					}
+					if (selector.type=='resource label') {
+						text = UICom.structure["ui"][nodeid].resource.getLabel();
+					}
+					if (selector.type=='node label') {
+						text = UICom.structure["ui"][nodeid].getLabel();
+					}
+					if (selector.type=='node value') {
+						text = UICom.structure["ui"][nodeid].getValue();
+					}
+					if (selector.type=='uuid') {
+						text = nodeid;
+					}
+					if (selector.type=='node context') {
+						text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+						prefix_id += "context_";
+					}
+				}
+			} else {
+				//------------ text ------------------
+				text = $(action).text();
+			}
+		}
+	} catch(e){
+		text = "";
+	}
+	//------------------------------
+	variables[varlabel] = text;
+	if (ref!=undefined && ref!="") {
+		if (aggregates[ref]==undefined)
+			aggregates[ref] = new Array();
+		aggregates[ref][aggregates[ref].length] = text;
+	}
+}
+
+//=============================================================================
+//=============================================================================
 //====================== CSV ==================================================
 //=============================================================================
 //=============================================================================
@@ -960,6 +1097,11 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 	var prefix_id = "";
 	try {
 		var select = $(xmlDoc).attr("select");
+		while (select.indexOf("##")>-1) {
+			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			select = select.replace("##"+variable_name+"##", variables[variable_name]);
+		}
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
 		if (node.length==0) // try the node itself
@@ -1071,6 +1213,11 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 {
 	var nodeid = $(data).attr("id");
 	var text = $(action).text();
+	while (text.indexOf("##")>-1) {
+		var test_string = text.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##"));
+		text = text.replace("##"+variable_name+"##", variables[variable_name]);
+	}
 	var style = $(action).attr("style");
 	var ref = $(action).attr("ref");
 	if (ref!=undefined && ref!="") {
@@ -1120,6 +1267,11 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 	var text = "";
 	var style = $(action).attr("style");
 	var select = $(action).attr("select");
+	while (select.indexOf("##")>-1) {
+		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##"));
+		select = select.replace("##"+variable_name+"##", variables[variable_name]);
+	}
 	var selector = r_getSelector(select);
 	var node = $(selector.jquery,data);
 	if (node.length==0) // try the node itself
@@ -1150,6 +1302,11 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 	var ref = $(action).attr("ref");
 	var type = $(action).attr("type");
 	var select = $(action).attr("select");
+	while (select.indexOf("##")>-1) {
+		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##"));
+		select = select.replace("##"+variable_name+"##", variables[variable_name]);
+	}
 	var text = "";
 	if (type=="sum" && aggregates[select]!=undefined){
 		var sum = 0;
@@ -1556,6 +1713,11 @@ g_report_actions['draw-web-title'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	if (select!=undefined) {
+		while (select.indexOf("##")>-1) {
+			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			select = select.replace("##"+variable_name+"##", variables[variable_name]);
+		}
 		var selector = r_getSelector(select,null);
 		var nodes = $(selector.jquery,data).addBack(selector.jquery).filter(selector.filter1);
 		nodes = eval("nodes"+selector.filter2);
@@ -1598,6 +1760,11 @@ g_report_actions['draw-web-axis'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	if (select!=undefined) {
+		while (select.indexOf("##")>-1) {
+			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			select = select.replace("##"+variable_name+"##", variables[variable_name]);
+		}
 		var selector = r_getSelector(select,null);
 		var nodes = $(selector.jquery,data).filter(selector.filter1);
 		nodes = eval("nodes"+selector.filter2);
@@ -1648,6 +1815,11 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 		no = pos;
 	var html = "";
 	if (select!=undefined) {
+		while (select.indexOf("##")>-1) {
+			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			select = select.replace("##"+variable_name+"##", variables[variable_name]);
+		}
 		var selector = r_getSelector(select,null);
 		var nodes = $(selector.jquery,data).filter(selector.filter1);
 		nodes = eval("nodes"+selector.filter2);

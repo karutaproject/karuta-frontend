@@ -176,6 +176,7 @@ karutaStr['fr']['moveroles']="Rôles - Déplacer";
 karutaStr['fr']['othercss']="Autres instructions CSS";
 karutaStr['fr']['cssfile']="Fichier CSS";
 karutaStr['fr']['display-type']="Type de présentation";
+karutaStr['fr']['menu-type']="Type de menu";
 karutaStr['fr']['displayview']="Type de vue";
 karutaStr['fr']['node']="Contenu du noeud";
 karutaStr['fr']['resource']="Ressource";
@@ -356,11 +357,12 @@ karutaStr['fr']['csv']="Rôles - Afficher CSV";
 karutaStr['fr']['pdf']="Rôles - Afficher PDF";
 karutaStr['fr']['img']="Rôles - Afficher Image";
 karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
-karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + maxfilesizeupload + " Mo sont autorisés !";
+karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + g_configVar['maxfilesizeupload'] + " Mo sont autorisés !";
 
 //=========================================
 //========== EUROPASS =====================
 //=========================================
+karutaStr['fr']['Europass']="EUROPASS";
 karutaStr['fr']['mother-tongue']="Langue maternelle";
 karutaStr['fr']['foreign-languages']="Langues étrangères";
 karutaStr['fr']['add-foreign-language']="Ajouter une langue étrangère";
@@ -466,9 +468,9 @@ karutaStr['fr']['URLBlock']="URLBlock";
 karutaStr['fr']['ImageBlock']="ImageBlock";
 
 karutaStr['fr']['Item']="Item";
-karutaStr['fr']['GetResource']="GetResource";
-karutaStr['fr']['GetGetResource']="GetGetResource";
-karutaStr['fr']['GetDoubleResource']="GetDoubleResource";
+karutaStr['fr']['Get_Resource']="GetResource";
+karutaStr['fr']['Get_Get_Resource']="GetGetResource";
+karutaStr['fr']['Get_Double_Resource']="GetDoubleResource";
 karutaStr['fr']['Proxy']="Proxy";
 
 karutaStr['fr']['asmColumn']="asmColumn";

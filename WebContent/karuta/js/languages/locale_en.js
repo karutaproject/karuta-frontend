@@ -176,6 +176,7 @@ karutaStr['en']['moveroles']="Roles - Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
 karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
+karutaStr['en']['menu-type']="Menu Type";
 karutaStr['en']['displayview']="Display View";
 karutaStr['en']['node']="Node Content";
 karutaStr['en']['resource']="Resource";
@@ -356,7 +357,7 @@ karutaStr['en']['csv']="Roles - Display CSV";
 karutaStr['en']['pdf']="Roles - Display PDF";
 karutaStr['en']['img']="Rôles - Display Image";
 karutaStr['en']['document-required']="You have to specify a document before to submit !";
-karutaStr['en']['size-upload']="Your file is so big : it must be less than " + maxfilesizeupload + " Mo !";
+karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g_configVar['maxfilesizeupload'] + " Mo !";
 
 //=========================================
 //========== EUROPASS =====================
