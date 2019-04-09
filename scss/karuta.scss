@@ -4,6 +4,7 @@
 /*     DEFAULT VALUES     */
 /* ====================== */
 
+// ----General font size ---------------
 	body,
 	.form-control,
 	.btn {
@@ -18,6 +19,7 @@
 			font-size: 1rem;
 		}
 	}
+// --------------------------------------
 
 
 	#contenu {
@@ -59,13 +61,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		}
 	}
 
-/*
-#contenu .page {
-	padding-left:10px;
-	padding-right:10px;
-}
-*/
-
 .createreport .button,
 .btn-group .button,
 .menus,
@@ -74,11 +69,11 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 }
 
 
-
+/*
 .button:hover {
 	box-shadow: 0px 0px 1px var(--portfolio-buttons-color) inset;
 }
-
+*/
 
 /* ====================== 
      INITIAL INFOS
@@ -93,12 +88,12 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	.exec_batch{
 		background-color:var(--list-background-color);
 	}
+
 	.portfolio-row,
 	.project,
 	h3 {
 		color:var(--list-button-color);
 	}
-
 
 /* ====================== */
 /*    BUTTONS - MENUS     */
@@ -122,9 +117,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		}
 	}
 	
-//.drop-down-menu{
-//	border:1px solid gray;
-//}
 /* ====================== */
 /*      NAVBAR            */
 /* ====================== */
@@ -166,42 +158,38 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 /*    LIST- WELCOME       */
 /* ====================== */
 
-#welcome-image {
-	padding-top:50px;
-	width: 100%;
-	height: 250px;
-	.welcome-box {
-		margin-left:auto;
-		margin-right:auto;
-		width:50%;
-		min-width:200px;
-		padding:3px;
-		border:1px solid var(--welcome-box-border-color);
+	#welcome-image {
+		padding-top:50px;
+		width: 100%;
+		height: 250px;
+		.welcome-box {
+			margin-left:auto;
+			margin-right:auto;
+			width:50%;
+			min-width:200px;
+			padding:3px;
+			border:1px solid var(--welcome-box-border-color);
+		}
+		.welcome-subbox {
+			width:100%;
+			height:100%;
+			background-color:var(--welcome-subbox-background-color);
+			padding:10px;
+			opacity: 0.6;
+		}
 	}
-	.welcome-subbox {
-		width:100%;
-		height:100%;
-		background-color:var(--welcome-subbox-background-color);
-		padding:10px;
-		opacity: 0.6;
-	}
-}
 
 /* ====================== */
 /*      PORTFOLIO         */
 /* ====================== */
-#portfolio-container{
-}
 
 	#portfolio-container{
 		background-color:var(--main-background-color);
 		.dropdown-menu {
 			color:black;
-			background-color:var(--main-background-color);;
+			background-color:var(--main-background-color);
+		}
 	}
-
-	}
-
 
 /* ====================== */
 /*      SUBBAR            */
@@ -386,15 +374,16 @@ a.sidebar-link:hover {
 	color:var(--navigation-bar-color);
 }
 
-#sub-bar a {
-	color:var(--portfolio-navbar-link-color);
-}
 
 /*
  * -----------------------
  * ------ sub-bar --------
  * -----------------------
  */
+
+#sub-bar a {
+	color:var(--portfolio-navbar-link-color);
+}
 
 #sub-bar .navbar-default,
 #sub-bar .dropdown-menu,
@@ -437,6 +426,7 @@ a.sidebar-link:hover {
 			text-align:right;
 		}
 	}
+
 /*
  * -------------------------
  * ------ PORTFOLIO --------
@@ -458,11 +448,9 @@ a.sidebar-link:hover {
 
 .welcome-line {
 	border-bottom:1px solid var(--welcome-line-color);
-}
-
-.welcome-line {
 	background-color:var(--page-title-background-color);
 }
+
 
 .row-node {
 	border-top:1px solid var(--page-title-background-color);
@@ -1611,11 +1599,6 @@ hr {
 		width:100px;
 	}
 
-/* -------------------------------------------------- */
-/* -------------------------------------------------- */
-/* -------------------------------------------------- */
-
-
  
 /* ====================== */
 /*         LOGIN          */
@@ -1946,10 +1929,6 @@ table.tablesorter th.restore {
 	Document/Image/URL
    ====================*/
    
-.free-context {
-	height:100%;
-}
-
 
 .resource-Image {
 	display:inline-block;
@@ -2129,20 +2108,6 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 }
 
 .email_SendEmail {
-}
-
-
-/* ====================
-	Start - Demo
-   ====================*/
-
-#start {
-	background-image: linear-gradient(#fff, #eee);
-    border: 1px solid lightGrey;
-    border-radius: 4px;
-    box-shadow: 3px 3px 3px #ccc;
-    margin-right: 10px;
-    padding: 10px;
 }
 
 
@@ -2550,137 +2515,137 @@ div.oembedall-container {
 /* ===========================
 	SVG
    ===========================*/
-*[class*='svg-web-line'] {
-	stroke:black;
-	stroke-width:1;
-}
-
-*[class*='svg-web-value'] {
-	stroke:black;
-	stroke-width:7;
-	stroke-linecap:round;
-}
-
-.svg-web-line0 {
-	stroke:var(--svg-web0-color);
-	stroke-width:1;
-}
-
-.svg-web-value0 {
-	stroke:var(--svg-web0-color);
-	stroke-width:7;
-	stroke-linecap:round;
-}
-
-.svg-web-line1 {
-	stroke:var(--svg-web1-color);
-	stroke-width:1;
-}
-
-.svg-web-value1 {
-	stroke:var(--svg-web1-color);
-	stroke-width:7;
-	stroke-linecap:round;
-}
-
-.svg-web-line2 {
-	stroke:var(--svg-web1-color);
-	stroke-width:1;
-}
-
-.svg-web-value2 {
-	stroke:var(--svg-web1-color);
-	stroke-width:7;
-	stroke-linecap:round;
-}
-
-.svg-web-line3 {
-	stroke:var(--svg-web1-color);
-	stroke-width:1;
-}
-
-.svg-web-value3 {
-	stroke:var(--svg-web1-color);
-	stroke-width:7;
-	stroke-linecap:round;
-}
-
-.svg-web-line4 {
-	stroke:var(--svg-web1-color);
-	stroke-width:1;
-}
-
-.svg-web-value4 {
-	stroke:var(--svg-web1-color);
-	stroke-width:7;
-	stroke-linecap:round;
-}
-
-.svg-web-line5 {
-	stroke:var(--svg-web1-color);
-	stroke-width:1;
-}
-
-.svg-web-value5 {
-	stroke:var(--svg-web1-color);
-	stroke-width:7;
-	stroke-linecap:round;
-}
-
-.svg-web-line6 {
-	stroke:var(--svg-web1-color);
-	stroke-width:1;
-}
-
-.svg-web-value6 {
-	stroke:var(--svg-web1-color);
-	stroke-width:7;
-	stroke-linecap:round;
-}
-
-.svg-web-line7 {
-	stroke:var(--svg-web1-color);
-	stroke-width:1;
-}
-
-.svg-web-value7 {
-	stroke:var(--svg-web1-color);
-	stroke-width:7;
-	stroke-linecap:round;
-}
-.svg-web-line8 {
-	stroke:var(--svg-web1-color);
-	stroke-width:1;
-}
-
-.svg-web-value8 {
-	stroke:var(--svg-web1-color);
-	stroke-width:7;
-	stroke-linecap:round;
-}
-.svg-web-line9 {
-	stroke:var(--svg-web1-color);
-	stroke-width:1;
-}
-
-.svg-web-value9 {
-	stroke:var(--svg-web1-color);
-	stroke-width:7;
-	stroke-linecap:round;
-}
+	*[class*='svg-web-line'] {
+		stroke:black;
+		stroke-width:1;
+	}
+	
+	*[class*='svg-web-value'] {
+		stroke:black;
+		stroke-width:7;
+		stroke-linecap:round;
+	}
+	
+	.svg-web-line0 {
+		stroke:var(--svg-web0-color);
+		stroke-width:1;
+	}
+	
+	.svg-web-value0 {
+		stroke:var(--svg-web0-color);
+		stroke-width:7;
+		stroke-linecap:round;
+	}
+	
+	.svg-web-line1 {
+		stroke:var(--svg-web1-color);
+		stroke-width:1;
+	}
+	
+	.svg-web-value1 {
+		stroke:var(--svg-web1-color);
+		stroke-width:7;
+		stroke-linecap:round;
+	}
+	
+	.svg-web-line2 {
+		stroke:var(--svg-web1-color);
+		stroke-width:1;
+	}
+	
+	.svg-web-value2 {
+		stroke:var(--svg-web1-color);
+		stroke-width:7;
+		stroke-linecap:round;
+	}
+	
+	.svg-web-line3 {
+		stroke:var(--svg-web1-color);
+		stroke-width:1;
+	}
+	
+	.svg-web-value3 {
+		stroke:var(--svg-web1-color);
+		stroke-width:7;
+		stroke-linecap:round;
+	}
+	
+	.svg-web-line4 {
+		stroke:var(--svg-web1-color);
+		stroke-width:1;
+	}
+	
+	.svg-web-value4 {
+		stroke:var(--svg-web1-color);
+		stroke-width:7;
+		stroke-linecap:round;
+	}
+	
+	.svg-web-line5 {
+		stroke:var(--svg-web1-color);
+		stroke-width:1;
+	}
+	
+	.svg-web-value5 {
+		stroke:var(--svg-web1-color);
+		stroke-width:7;
+		stroke-linecap:round;
+	}
+	
+	.svg-web-line6 {
+		stroke:var(--svg-web1-color);
+		stroke-width:1;
+	}
+	
+	.svg-web-value6 {
+		stroke:var(--svg-web1-color);
+		stroke-width:7;
+		stroke-linecap:round;
+	}
+	
+	.svg-web-line7 {
+		stroke:var(--svg-web1-color);
+		stroke-width:1;
+	}
+	
+	.svg-web-value7 {
+		stroke:var(--svg-web1-color);
+		stroke-width:7;
+		stroke-linecap:round;
+	}
+	.svg-web-line8 {
+		stroke:var(--svg-web1-color);
+		stroke-width:1;
+	}
+	
+	.svg-web-value8 {
+		stroke:var(--svg-web1-color);
+		stroke-width:7;
+		stroke-linecap:round;
+	}
+	.svg-web-line9 {
+		stroke:var(--svg-web1-color);
+		stroke-width:1;
+	}
+	
+	.svg-web-value9 {
+		stroke:var(--svg-web1-color);
+		stroke-width:7;
+		stroke-linecap:round;
+	}
 
 /* ===========================
 	ZEBRA-TABLE
    ===========================*/
 
-.zebra-table tr:nth-child(even) {
-	background-color: #d8d8d8;
-}
-
-.zebra-table td {
-	border: 0px solid white; padding: 10px;
-}
-
+	.zebra-table {
+		tr:nth-child(even) {
+			background-color: #d8d8d8;
+		}
+		td {
+			border: 0px solid white; padding: 10px;
+		}
+	}
 
 /* ===========================
 	SEMANTIC TAGS LIST
