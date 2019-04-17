@@ -126,4 +126,8 @@
 	--svg-web7-color : pink;
 	--svg-web8-color : cyan;
 	--svg-web9-color : magenta;
+	
+	/* ========== metadata =============== */
+	--edit-window-border-color: #ced4da;
+	
 }

@@ -105,6 +105,16 @@ h3 {
   margin-top: 2px;
 }
 
+/* --- EDIT-WINDOW -----*/
+#edit-window-body .dropdown-menu {
+  max-height: 350px;
+  overflow-y: auto;
+  width: 100%;
+}
+#edit-window-body .dropdown-toggle {
+  border: 1px solid var(--edit-window-border-color);
+}
+
 /* ====================== */
 /*      NAVBAR            */
 /* ====================== */
@@ -179,6 +189,34 @@ h3 {
 }
 #sub-bar .icon {
   margin-top: 4px;
+}
+#sub-bar a {
+  color: var(--portfolio-navbar-link-color);
+}
+#sub-bar .navbar-default,
+#sub-bar .dropdown-menu,
+#sub-bar .open > a {
+  background-color: var(--portfolio-navbar-color);
+  border-color: var(--portfolio-navbar-color);
+}
+
+#sub-bar .welcome-title {
+  color: var(--welcome-title-color);
+  font-size: 120%;
+  text-align: center;
+  width: 100%;
+}
+
+#sub-bar .welcome-line {
+  border-bottom: 1px solid var(--welcome-line-color);
+  margin-left: auto;
+  margin-right: auto;
+  width: 25%;
+}
+
+#sub-bar .welcome-baseline, #sub-bar .welcome-text {
+  padding: 10px;
+  width: 100%;
 }
 
 /* ====================== */
@@ -346,36 +384,6 @@ a.sidebar-link:hover {
   color: var(--navigation-bar-color);
 }
 
-/*
- * -----------------------
- * ------ sub-bar --------
- * -----------------------
- */
-#sub-bar a {
-  color: var(--portfolio-navbar-link-color);
-}
-
-#sub-bar .navbar-default,
-#sub-bar .dropdown-menu,
-#sub-bar .open > a {
-  background-color: var(--portfolio-navbar-color);
-  border-color: var(--portfolio-navbar-color);
-}
-
-#sub-bar .welcome-title {
-  color: var(--welcome-title-color);
-  font-size: 120%;
-  text-align: center;
-  width: 100%;
-}
-
-#sub-bar .welcome-line {
-  border-bottom: 1px solid var(--welcome-line-color);
-  margin-left: auto;
-  margin-right: auto;
-  width: 25%;
-}
-
 /* ====================== */
 /*   PORTFOLIO NAVBAR     */
 /* ====================== */
@@ -396,11 +404,9 @@ a.sidebar-link:hover {
   text-align: right;
 }
 
-/*
- * -------------------------
- * ------ PORTFOLIO --------
- * -------------------------
- */
+/* ==================================================================== */
+/*                          PORTFOLIO                                   */
+/* ==================================================================== */
 #portfolio-container:not([role=designer]) .WELCOME div[name=lbl-div]:first-child {
   display: none;
 }
@@ -494,16 +500,16 @@ a.portfolio-label:hover {
 .asmRoot .asmUnit .title {
   font-size: 1.25rem;
   font-weight: normal;
-  line-height: 1.25rem;
+  line-height: 1.5rem;
 }
 
 .asmUnitStructure .title {
   font-size: 1.25rem;
-  line-height: 1.25rem;
+  line-height: 1.5rem;
 }
 
 .asmUnitStructure .asmUnitStructure .title {
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.25rem;
 }
 
@@ -729,14 +735,6 @@ table[name=res-div] {
 /* ============================ */
 /* ============================ */
 /* ============================ */
-#wait-window-body {
-  margin-top: 4px;
-  font-weight: bold;
-  text-align: center;
-  verticla-align: middle;
-  font-size: 14px;
-}
-
 .word-counter {
   margin-right: 10px;
   margin-top: 5px;
@@ -760,6 +758,21 @@ input.select-rome,
 .select-rome button.select-label {
   min-width: 400px;
   max-width: 90%;
+}
+
+/* ====================== */
+/*     CNAM               */
+/* ====================== */
+.select-cnam .select-label {
+  margin-bottom: 3px;
+}
+
+input.select-cnam,
+.select-cnam button.select-label {
+  min-width: 400px;
+  max-width: 90%;
+  text-align: left;
+  border: 1px solid #ced4da;
 }
 
 /* ====================== */
@@ -871,11 +884,6 @@ h3 {
 #welcome-baseline {
   color: var(--welcome-subtitle-color);
   text-align: center;
-}
-
-#sub-bar .welcome-baseline, #sub-bar .welcome-text {
-  padding: 10px;
-  width: 100%;
 }
 
 .page-list .welcome-title {
@@ -999,6 +1007,7 @@ h3 {
   margin-top: 2px;
 }
 
+/*
 #projects .row .col-md-5,
 #projects .row .col-md-4,
 #projects .row .col-md-3,
@@ -1014,12 +1023,13 @@ h3 {
 #bin .row .col-md-3,
 #bin .row .col-md-2,
 #bin .row .col-md-1 {
-  min-height: 26px;
+	min-height:26px;
+
 }
 
 #projects .row .col-md-5,
 #portfolios .row .col-md-5 {
-  padding-left: 5px;
+	padding-left:5px;
 }
 
 #projects .row .col-md-5,
@@ -1027,7 +1037,7 @@ h3 {
 #projects .row .col-md-3,
 #portfolios .row .col-md-5,
 #portfolios .row .col-md-3 {
-  padding-top: 4px;
+	padding-top:4px;
 }
 
 /*
@@ -1067,22 +1077,23 @@ h3 {
 #bin .row:hover .col-md-1 {
 	background-color:var(--list-background-color);
 }
-
+*/
 #portfoliosgroups .row:hover {
-	background-color:var(--list-background-color);
+  background-color: var(--list-background-color);
 }
 
 #portfoliosgroups .row-label:hover {
-	background-color:initial;
+  background-color: initial;
 }
 
 #usersgroups .item:hover {
-	background-color:var(--list-background-color);
+  background-color: var(--list-background-color);
 }
+
 #usersgroups table {
-	color:var(--list-button-color);
+  color: var(--list-button-color);
 }
-*/
+
 #main-exec-batch,
 #main-exec-report {
   color: var(--list-icon-section-color);
@@ -1120,7 +1131,7 @@ h3 {
   font-size: 30px;
 }
 
-/* =========== PORTFOLIO-WELCOME ================= */
+/* =========== PORTFOLIO-WELCOME-BLOCK ================= */
 .welcome-block {
   margin-left: 0px;
   margin-right: 0px;
@@ -1339,10 +1350,27 @@ textarea {
 #wait-window {
   width: 100px;
   margin-left: -50px;
-  background-color: lightgrey;
+  padding: 20px;
+  background-color: #F0F0F0;
   position: fixed;
-  top: 25%;
-  left: 50%;
+  top: 20%;
+  left: 48%;
+  z-index: 3000;
+  display: none;
+  text-align: center;
+  border: 1px solid black;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+#wait-window-body {
+  margin-top: 4px;
+  font-weight: bold;
+  text-align: center;
+  verticla-align: middle;
+  font-size: 14px;
 }
 
 #saved-window {
@@ -1401,14 +1429,15 @@ hr {
   margin-top: 0;
 }
 
+/*
 #content hr.spacer {
-  margin-bottom: 66px;
+	margin-bottom: 66px;
 }
 
 #content .icon-move {
-  cursor: move;
+	cursor: move;
 }
-
+*/
 #content .comment {
   font-size: 12px;
   padding-bottom: 22px;
@@ -1428,7 +1457,7 @@ hr {
   padding-top: 5px;
 }
 .metadata .input-group-text {
-  border: 0px solid #ced4da;
+  border: 0px solid var(--edit-window-border-color);
   width: 180px;
 }
 .metadata .input-group {
@@ -1438,10 +1467,10 @@ hr {
   border-radius: 0.2rem;
 }
 .metadata .input-group .form-control {
-  border: 0px solid #ced4da;
+  border: 0px solid var(--edit-window-border-color);
 }
 .metadata .btn-select-role {
-  border-left: 1px solid #ced4da;
+  border-left: 1px solid var(--edit-window-border-color);
 }
 .metadata input[type=checkbox] {
   margin-left: 10px;
@@ -1668,22 +1697,6 @@ button.selected-label {
   margin-right: 5px;
 }
 
-#wait-window {
-  padding: 20px;
-  background-color: #F0F0F0;
-  position: fixed;
-  top: 20%;
-  left: 48%;
-  z-index: 3000;
-  display: none;
-  text-align: center;
-  border: 1px solid black;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
-  border-top-left-radius: 3px;
-}
-
 table.tablesorter thead tr th, table.tablesorter tfoot tr th {
   min-width: 150px;
 }
@@ -1709,10 +1722,6 @@ table.tablesorter th.restore {
 .ajout-mani hr.asmUnitStructure {
   margin-top: 20px;
   border-width: 5px;
-}
-
-.free-fieldname {
-  font-weight: bold;
 }
 
 /*
@@ -1748,7 +1757,6 @@ table.tablesorter th.restore {
   margin-left: 180px;
   border: 1px solid lightgrey;
 }
-
 #rights td {
   padding: 5px;
   border: 1px solid lightgrey;
@@ -2128,23 +2136,22 @@ select.Y2, option[value=Y2] {
 .europass_table {
   margin-bottom: 10px;
 }
-
 .europass_table td {
   width: 12%;
   height: 40px;
   text-align: center;
 }
-
 .europass_table select {
   min-width: 150px;
 }
-
 .europass_table tr.en-tete {
   color: #999;
 }
-
 .europass_table td.bordure {
   border: 1px solid lightgrey;
+}
+.europass_table td.buttons {
+  width: 50px;
 }
 
 #langues-detail h5 {
@@ -2174,11 +2181,7 @@ select.Y2, option[value=Y2] {
   width: 20%;
 }
 
-.europass_table td.buttons {
-  width: 50px;
-}
-
-.select-language .li-code {
+.europass_table .select-language .li-code {
   width: 30px;
   font-family: Monaco, Consolas, monospace;
 }
