@@ -84,7 +84,6 @@ function fill_main_page(rootid,role)
 			UICom.roles = {};
 			g_portfolio_current = data;
 			g_portfolio_rootid = $("asmRoot",data).attr("id");
-			UICom.structure['ui'][g_portfolio_rootid].loaded = true;
 			var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
 			$("body").addClass(root_semantictag);
 			// --------Display Type------------------
@@ -108,6 +107,7 @@ function fill_main_page(rootid,role)
 			// --------------------------
 			var g_encrypted = false;
 			UICom.parseStructure(data,true);
+			UICom.structure['ui'][g_portfolio_rootid].loaded = true;
 			if ($("asmUnit:has(metadata[semantictag*='welcome-unit'])",data).length==0 && $("asmRoot:has(metadata[semantictag*='karuta-model'])",data).length>0) {
 				g_welcome_add = true;
 			}

@@ -2612,7 +2612,8 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 	if (commentnoderoles==undefined)
 		commentnoderoles = "";
 	if (commentnoderoles!="" 
-		&& (USER.admin 
+		&& (USER.admin
+			|| (USER.creator && commentnoderoles=='designer') //-- to edit project comments on list page
 			|| g_userroles[0]=='designer' 
 			|| commentnoderoles.indexOf(g_userroles[0])>-1 
 			)
