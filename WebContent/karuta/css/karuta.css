@@ -2806,22 +2806,6 @@ input[type=submit] {
 	.section2print {
 		display:block !important;
 	}
-
-/*
-	.section2hide {
-		visibility: hidden;
-	}
-	.section2print {
-		position: fixed;
- 		left: 0px;
-		top: 0px;
-		width: 100%;
-		visibility: visible;
-	}
-	.section2print * {
-		position: relative;
-	}
-*/
 }
 
 /*# sourceMappingURL=karuta.css.map */
