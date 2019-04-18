@@ -1576,7 +1576,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 	}
 	//------------- print button -------------------
 	if ((this.printroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-			html += "<span class='button fas fa-print' onclick=\"javascript:print('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-tooltip='true' data-placement='bottom'></span>";
+			html += "<span class='button fas fa-print' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-tooltip='true' data-placement='bottom'></span>";
 	}
 	//-------------------------------------------------
 	if (html!="")

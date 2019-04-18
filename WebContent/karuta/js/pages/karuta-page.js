@@ -11,7 +11,8 @@ function initKarutaPage()
 	html += "	<div id='wait-window' class='modal' style='height:100px;'><div id='wait-window-body' class='modal-body'></div>";
 	html += "	<div id='wait-spin'></div>";
 	html += "	</div>";
-	html += "	<div id='post-form' style='display:none'>";
+	html += "	<div id='post-form' style='display:none'></div>";
+	html += "	<div id='print-window' style='display:none'></div>";
 	html += "</div>";
 	$('body').html(html)
 	//--------------------------

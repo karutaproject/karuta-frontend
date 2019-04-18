@@ -90,6 +90,7 @@ karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Heig
 karutaStr['en']['list-novisible']="Not Visible";
 karutaStr['en']['empty-bin']="Empty bin";
 karutaStr['en']['complex']="Partial Loading";
+karutaStr["en"]["button-print"] = "Print";
 
 //=========================================
 //========== ERRORS =======================
@@ -212,6 +213,7 @@ karutaStr['en']['export-pdf']="Export PDF";
 karutaStr['en']['export-rtf']="Export RTF";
 karutaStr['en']['export-htm']="Export HTML";
 karutaStr['en']['list-semtags']="List of Semantic Tags";
+karutaStr['en']['printroles']="Roles - Print";
 
 //=========================================
 //========== ADMIN ========================

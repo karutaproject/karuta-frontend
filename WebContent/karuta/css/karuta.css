@@ -2748,4 +2748,64 @@ input[type=submit] {
   color: var(--welcome-title-color);
 }
 
+/* ===========================
+	PRINTED VERSION
+   ===========================*/
+
+@media print {
+	@page {
+	    margin: 2cm 2cm;
+		@bottom-right {
+			content: "Page " counter(page) "/" counter(pages);
+		}
+	}
+	
+    * {
+    	-webkit-print-color-adjust:exact !important;
+    	color-adjust:exact !important;
+		overflow: visible !important;
+		overflow-y : visible !important;
+    }
+    
+	#saved-window,
+	#navigation-bar,
+	#sub-bar,
+	#sidebar,
+    .tooltip,
+	.menus,
+	.buttons,
+    .buttons-menus,
+	.btn-group {
+		display:none !important;
+	}
+
+    a:after {
+        content:none !important;
+        color:var(--portfolio-link-color);
+    }
+
+	img {
+		page-break-inside:avoid !important; 
+		page-break-after:avoid !important;
+	}	
+
+	.title {
+		page-break-inside:avoid !important; 
+	}
+	table {
+		page-break-after:auto !important;
+	}
+	tr,
+	td {
+		page-break-inside:auto !important;
+		page-break-after:auto !important;
+	}
+	.section2hide {
+		display:none !important;
+	}
+	.section2print {
+		display:block !important;
+	}
+}
+
 /*# sourceMappingURL=karuta.css.map */
