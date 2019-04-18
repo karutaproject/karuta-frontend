@@ -1616,6 +1616,12 @@ function setCSSportfolio(data)
 		changeCss(".row-node", "border-top:1px solid "+page_title_background_color+";");
 	}
 	//--------------------------------
+	if ($("asmContext:has(metadata[semantictag='text-color'])",data).length>0) {
+		var text_color_id = $("asmContext:has(metadata[semantictag='text-color'])",data).attr("id");
+		var text_color = UICom.structure["ui"][text_color_id].resource.getValue();
+		changeCss("#contenu", "color:"+text_color+";");
+	}
+	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).length>0) {
 		var section_separator_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).attr("id");
 		var section_separator_color = UICom.structure["ui"][section_separator_color_id].resource.getValue();

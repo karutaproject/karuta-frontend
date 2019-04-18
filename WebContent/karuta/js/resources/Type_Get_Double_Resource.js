@@ -383,7 +383,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 				code = cleanCode(code);
 				//------------------------------
 				if ($('code',resource).text().indexOf('----')>-1) {
-					html = "<li class='divider'></li><li></li>";
+					html = "<div class='dropdown-divider'></div>";
 				} else {
 					html = "<li></li>";
 				}
@@ -508,7 +508,7 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 				code = cleanCode(code);
 				//------------------------------
 				if ($('code',resource).text().indexOf('----')>-1) {
-					html = "<li class='divider'></li><li></li>";
+					html = "<div class='dropdown-divider'></div>";
 				} else {
 					html = "<li></li>";
 				}
