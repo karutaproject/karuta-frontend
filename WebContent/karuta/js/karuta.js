@@ -1975,4 +1975,25 @@ function getText(semtag,objtype,elttype,data)
 	return 	$(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
 }
 
+//==============================
+function printSection(eltid)
+//==============================
+{
+	$("#wait-window").show();
+	$("#print-window").html("");
+	var divcontent = $(eltid).clone();
+	var ids = $("*[id]", divcontent);
+	$(ids).removeAttr("id");
+	var content = $(divcontent).html();
+	$("#print-window").html(content);
+    $("#main-container").addClass("section2hide");
+    $("#print-window").addClass("section2print");
+	$("#wait-window").hide();
+	
+    window.print();
+    $("#print-window").removeClass("section2print");
+    $("#main-container").removeClass("section2hide");
+	$("#print-window").css("display", "none");
+}
+
 

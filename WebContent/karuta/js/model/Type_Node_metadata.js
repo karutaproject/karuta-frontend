@@ -229,6 +229,7 @@ UIFactory["Node"].prototype.displayMetainfo = function(destid)
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'showtoroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'moveroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'inline');
+	html += UIFactory.Node.getMetadataInfo(metadatawad,'printroles');
 	$("#"+destid).html(html);
 };
 
