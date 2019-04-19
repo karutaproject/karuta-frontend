@@ -251,7 +251,6 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				});
 			}
 		} else if  (portfoliocode.indexOf("CNAM")>-1){  // ==== CNAM =====
-			$('#wait-window').modal('show');
 			var self = this;
 			if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
 				UIFactory["Get_Resource"].parseCNAM(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,resettable,target,semtag,multiple_tags);
@@ -1113,13 +1112,14 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 	//------------------------------------------------------------
 	$('#wait-window').modal('hide');
 	if (type=='select') {
+		var newTableau2 = [];
 		var html ="";
 		html += "<form autocomplete='off'>";
 		html += "</form>";
 		var form = $(html);
 		html = "";
 		html += "<div class='auto-complete btn-group roles-choice'>";
-		html += "<button id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>&nbsp</button>";
+		html += "<input id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
 		var btn_group = $(html);
@@ -1133,6 +1133,7 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 			//------------------------------
 			var code = newTableau1[i].code;
 			var label = newTableau1[i].intitule;
+			newTableau2.push({'code':code,'libelle':label});
 			html = "<li></li>";
 			var select_item = $(html);
 			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
@@ -1153,7 +1154,7 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 					html += code+" ";
 				if (display_label)
 					html += $(this).attr("label_fr");
-				$("#button_"+self.id).html(html);
+				$("#input_"+self.id).attr("value",html);
 				UIFactory["Get_Resource"].update(this,self,langcode);
 				//--------------------------------
 			});
@@ -1166,12 +1167,14 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 					html += code+" ";
 				if (display_label)
 					html += label;
-				$("#button_"+self.id).html(html);
+				$("#input_"+self.id).attr("value",html);
 			}
 		}
 		//---------------------
 		$(btn_group).append($(select));
-	}
+		var onupdate = "UIFactory.Get_Resource.update(input,self)";
+		autocomplete(document.getElementById("input_"+self.id), newTableau2,onupdate,self,langcode);
+}
 	if (type=='completion') {
 		var newTableau2 = [];
 		var html ="";

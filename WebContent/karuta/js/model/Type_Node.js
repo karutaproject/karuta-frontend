@@ -2933,6 +2933,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 	var menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
 	var moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'none':$(node.metadatawad).attr('moveroles');
+	var printroles = ($(node.metadatawad).attr('printroles')==undefined)?'none':$(node.metadatawad).attr('printroles');
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	var duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
 	var incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
@@ -2998,6 +2999,10 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 		} else {
 			html += "<span class='button glyphicon glyphicon-eye-open' onclick=\"javascript:hide('"+node.id+"')\" data-title='"+karutaStr[LANG]["button-hide"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
+	}
+	//------------- print button -------------------
+	if ((printroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && printroles!='none' && printroles!='' && depth>0) {
+			html += "<span class='button glyphicon glyphicon-print' onclick=\"printSection('#node_"+node.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-tooltip='true' data-placement='bottom'></span>";
 	}
 	//------------- node menus button ---------------
 	if (menu) {
@@ -3657,6 +3662,7 @@ UIFactory["Node"].displayMetainfo = function(destid,data)
 	html += UIFactory["Node"].displayMetadataWad(data,'showtoroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'moveroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'inline');
+	html += UIFactory["Node"].displayMetadataWad(data,'printroles');
 	$("#"+destid).html(html);
 };
 
@@ -3730,6 +3736,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'graphicerroles',$(node.metadatawad).attr('graphicerroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'moveroles',$(node.metadatawad).attr('moveroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showroles',$(node.metadatawad).attr('showroles'));
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'printroles',$(node.metadatawad).attr('printroles'));
 //	if ($(node.metadatawad).attr('showroles')!='')
 //		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'private',$(node.metadatawad).attr('private'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showtoroles',$(node.metadatawad).attr('showtoroles'));

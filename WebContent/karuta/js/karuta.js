@@ -1978,3 +1978,29 @@ String.prototype.toNoAccents = function(){
 	}
 	return str;
 }
+
+//==============================
+function printSection(eltid)
+//==============================
+{
+	var node_type = UICom.structure.ui[eltid.substring(6)].asmtype;
+	if (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot')
+		window.print();
+	else {
+		$("#wait-window").show();
+		$("#print-window").html("");
+		var divcontent = $(eltid).clone();
+		var ids = $("*[id]", divcontent);
+		$(ids).removeAttr("id");
+		var content = $(divcontent).html();
+		$("#print-window").html(content);
+		$("#main-container").addClass("section2hide");
+		$("#print-window").addClass("section2print");
+		$("#wait-window").hide();
+		
+		window.print();
+		$("#print-window").removeClass("section2print");
+		$("#main-container").removeClass("section2hide");
+		$("#print-window").css("display", "none");
+	}
+}

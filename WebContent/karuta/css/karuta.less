@@ -181,12 +181,17 @@ a, .collapsible {
 	cursor:pointer;
 }
 
-#wait-window-body{
+#wait-window-body,
+#export-window-body{
 	margin-top:4px;
 	font-weight:bold;
 	text-align:center;
 	verticla-align:middle;
 	font-size:14px;
+}
+
+#export-window-body{
+	margin-top:18px;
 }
 
 #navigation_bar .glyphicon{
@@ -1033,6 +1038,7 @@ hr {
 
 .asmUnit .row-node{
 	min-height:100px;
+	border-top:none
 }
 
 .asmStructure .asmStructure .row-node,
@@ -1172,7 +1178,8 @@ textarea {
 	color:inherit;
 }
 
-#wait-window {
+#wait-window,
+#export-window {
 	width:100px;
 	margin-left:-50px;
 	background-color:lightgrey;
@@ -1588,7 +1595,8 @@ button.select-label {
 .evo-palette {
 	margin-right:5px;
 }
-#wait-window {
+#wait-window,
+#export-window {
 	padding:20px;
 	background-color:#F0F0F0;
 	position:fixed;
@@ -3098,26 +3106,60 @@ div.oembedall-container {
 	PRINT STYLESHEET
    ===========================*/
 
-@media print {
-	#saved-window,
-	#navigation-bar,
-	#sub-bar,
-	#sidebar,
-	#wait-window,
-	#edit-window,
-	#info-window,
-	#qrcode-window,
-	.btn-group {
-		display:none !important;
+
+	@media print {
+		@page {
+		    margin: 2cm 2cm;
+			@bottom-right {
+				content: "Page " counter(page) "/" counter(pages);
+			}
+		}
+		
+		* {
+			-webkit-print-color-adjust:exact !important;
+			color-adjust:exact !important;
+			overflow: visible !important;
+			overflow-y : visible !important;
+		}
+		
+		#saved-window,
+		#navigation-bar,
+		#sub-bar,
+		#sidebar,
+		.tooltip,
+		.menus,
+		.buttons,
+		.buttons-menus,
+		.btn-group {
+			display:none !important;
+		}
+	
+		a:after {
+			content:none !important;
+			color:var(--portfolio-link-color);
+	    }
+	
+		img {
+			page-break-inside:avoid !important; 
+			page-break-after:avoid !important;
+		}	
+	
+		.title {
+			page-break-inside:avoid !important; 
+		}
+		table {
+			page-break-after:auto !important;
+		}
+		tr,
+		td {
+			page-break-inside:auto !important;
+			page-break-after:auto !important;
+		}
+		.section2hide {
+			display:none !important;
+		}
+		.section2print {
+			display:block !important;
+		}
 	}
-
-    a:after {
-        content:" (" attr(href) ") ";
-        color:@portfolio-link-color;
-    }
-
-	@page {
-	    margin: 2cm 2cm;
-	}
-
-}
+	

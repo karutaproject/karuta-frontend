@@ -90,6 +90,7 @@ karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - H
 karutaStr['fr']['list-novisible']="Non visible";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
+karutaStr["fr"]["button-print"] = "Imprimer";
 
 //=========================================
 //========== ERRORS =======================
@@ -210,6 +211,7 @@ karutaStr['fr']['export-pdf']="Exporter PDF";
 karutaStr['fr']['export-rtf']="Exporter RTF";
 karutaStr['fr']['export-htm']="Exporter HTML";
 karutaStr['fr']['list-semtags']="Liste des tags sémantiques";
+karutaStr['fr']['printroles']="Rôles - Imprimer";
 
 //=========================================
 //========== ADMIN ========================
