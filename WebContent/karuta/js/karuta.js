@@ -1555,6 +1555,7 @@ function setCSSportfolio(data)
 		changeCss("#sub-bar", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
 		changeCss("#sub-bar .dropdown-menu", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
 		changeCss("#sub-bar .open > a", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
+		changeCss("#sub-bar  a.dropdown-item:hover", "color:"+portfolio_navbar_color+";");
 	}
 	//--------------
 	if ($("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).length>0) {
@@ -1979,21 +1980,25 @@ function getText(semtag,objtype,elttype,data)
 function printSection(eltid)
 //==============================
 {
-	$("#wait-window").show();
-	$("#print-window").html("");
-	var divcontent = $(eltid).clone();
-	var ids = $("*[id]", divcontent);
-	$(ids).removeAttr("id");
-	var content = $(divcontent).html();
-	$("#print-window").html(content);
-    $("#main-container").addClass("section2hide");
-    $("#print-window").addClass("section2print");
-	$("#wait-window").hide();
-	
-    window.print();
-    $("#print-window").removeClass("section2print");
-    $("#main-container").removeClass("section2hide");
-	$("#print-window").css("display", "none");
+	var node_type = UICom.structure.ui[eltid.substring(6)].asmtype;
+	if (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot')
+		window.print();
+	else {
+		$("#wait-window").show();
+		$("#print-window").html("");
+		var divcontent = $(eltid).clone();
+		var ids = $("*[id]", divcontent);
+		$(ids).removeAttr("id");
+		var content = $(divcontent).html();
+		$("#print-window").html(content);
+		$("#main-container").addClass("section2hide");
+		$("#print-window").addClass("section2print");
+		$("#wait-window").hide();
+		
+		window.print();
+		$("#print-window").removeClass("section2print");
+		$("#main-container").removeClass("section2hide");
+		$("#print-window").css("display", "none");
+	}
 }
-
 

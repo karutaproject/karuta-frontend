@@ -1631,7 +1631,7 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		html += "<a class='dropdown-item'  onclick=\"toggleMetadata('visible')\">"+karutaStr[LANG]['show-metainfo']+"</a>";
 		html += "<a class='dropdown-item'  onclick=\"$('#contenu').html('');UICom.structure.ui['"+g_portfolio_rootid+"'].displaySemanticTags('contenu')\">"+karutaStr[LANG]['list-semtags']+"</a>";
 		if(languages.length>1)
-			html += "<a class='dropdown-item'  onclick=\"$('#sub-bar').html(UIFactory.Portfolio.getNavBar('translate',LANGCODE,g_edit,g_portfolioid));UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
+			html += "<a class='dropdown-item'  onclick=\"$('#welcome-bar').hide();$('#sub-bar').html(UIFactory.Portfolio.getNavBar('translate',LANGCODE,g_edit,g_portfolioid))$('#sub-bar').show();;UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
 	}
 	return html;
 };

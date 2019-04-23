@@ -96,6 +96,18 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	}
 
 /* ====================== */
+/*    WELCOME-BAR     */
+/* ====================== */
+
+	#welcome-bar{
+		.welcome-title {
+			text-align:center;
+			width:100%;
+			font-size:30px;
+		}
+	}
+
+/* ====================== */
 /*    BUTTONS - MENUS     */
 /* ====================== */
 
@@ -202,10 +214,13 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 			color:black;
 			background-color:var(--main-background-color);
 		}
+		.row {
+			margin-left:0px;  // bootstrap default -15px;
+		}
 	}
 
 /* ====================== */
-/*      SUBBAR            */
+/*   PORTFOLIO SUBBAR     */
 /* ====================== */
 
 	#sub-bar {
@@ -227,7 +242,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		}
 	}
 
-
+/*
 
 #sub-bar .welcome-title {
     color: var(--welcome-title-color);
@@ -247,7 +262,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	padding:10px;
 	width:100%;
 }
-
+*/
 /* ====================== */
 /*      BREADCRUMB        */
 /* ====================== */
@@ -1209,11 +1224,7 @@ a {
 
 
 
-.page-welcome .welcome-title {
-	text-align:center;
-	width:100%;
-	font-size:30px;
-}
+
 
 
 /* =========== PORTFOLIO-WELCOME-BLOCK ================= */
@@ -2771,3 +2782,63 @@ input[type=submit] {
 .page-welcome .welcome-title {
 	color:var(--welcome-title-color);
 }
+
+/* ===========================
+	PRINT STYLESHEET
+   ===========================*/
+
+	@media print {
+		@page {
+		    margin: 2cm 2cm;
+			@bottom-right {
+				content: "Page " counter(page) "/" counter(pages);
+			}
+		}
+		
+		* {
+			-webkit-print-color-adjust:exact !important;
+			color-adjust:exact !important;
+			overflow: visible !important;
+			overflow-y : visible !important;
+		}
+		
+		#saved-window,
+		#navigation-bar,
+		#sub-bar,
+		#sidebar,
+		.tooltip,
+		.menus,
+		.buttons,
+		.buttons-menus,
+		.btn-group {
+			display:none !important;
+		}
+	
+		a:after {
+			content:none !important;
+			color:var(--portfolio-link-color);
+	    }
+	
+		img {
+			page-break-inside:avoid !important; 
+			page-break-after:avoid !important;
+		}	
+	
+		.title {
+			page-break-inside:avoid !important; 
+		}
+		table {
+			page-break-after:auto !important;
+		}
+		tr,
+		td {
+			page-break-inside:auto !important;
+			page-break-after:auto !important;
+		}
+		.section2hide {
+			display:none !important;
+		}
+		.section2print {
+			display:block !important;
+		}
+	}

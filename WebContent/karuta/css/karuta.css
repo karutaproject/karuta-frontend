@@ -87,6 +87,15 @@ h3 {
 }
 
 /* ====================== */
+/*    WELCOME-BAR     */
+/* ====================== */
+#welcome-bar .welcome-title {
+  text-align: center;
+  width: 100%;
+  font-size: 30px;
+}
+
+/* ====================== */
 /*    BUTTONS - MENUS     */
 /* ====================== */
 .button {
@@ -179,9 +188,12 @@ h3 {
   color: black;
   background-color: var(--main-background-color);
 }
+#portfolio-container .row {
+  margin-left: 0px;
+}
 
 /* ====================== */
-/*      SUBBAR            */
+/*   PORTFOLIO SUBBAR     */
 /* ====================== */
 #sub-bar .navbar {
   background-color: var(--sub-bar-background-color);
@@ -200,25 +212,27 @@ h3 {
   border-color: var(--portfolio-navbar-color);
 }
 
+/*
+
 #sub-bar .welcome-title {
-  color: var(--welcome-title-color);
-  font-size: 120%;
-  text-align: center;
-  width: 100%;
+    color: var(--welcome-title-color);
+    font-size: 120%;
+    text-align: center;
+    width: 100%;
 }
 
 #sub-bar .welcome-line {
-  border-bottom: 1px solid var(--welcome-line-color);
-  margin-left: auto;
-  margin-right: auto;
-  width: 25%;
+    border-bottom: 1px solid var(--welcome-line-color);
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
 }
 
-#sub-bar .welcome-baseline, #sub-bar .welcome-text {
-  padding: 10px;
-  width: 100%;
+#sub-bar  .welcome-baseline, #sub-bar  .welcome-text{
+	padding:10px;
+	width:100%;
 }
-
+*/
 /* ====================== */
 /*      BREADCRUMB        */
 /* ====================== */
@@ -1125,12 +1139,6 @@ h3 {
 }
 
 /* ============================================================ */
-.page-welcome .welcome-title {
-  text-align: center;
-  width: 100%;
-  font-size: 30px;
-}
-
 /* =========== PORTFOLIO-WELCOME-BLOCK ================= */
 .welcome-block {
   margin-left: 0px;
@@ -2749,63 +2757,65 @@ input[type=submit] {
 }
 
 /* ===========================
-	PRINTED VERSION
+	PRINT STYLESHEET
    ===========================*/
-
 @media print {
-	@page {
-	    margin: 2cm 2cm;
-		@bottom-right {
-			content: "Page " counter(page) "/" counter(pages);
-		}
-	}
-	
-    * {
-    	-webkit-print-color-adjust:exact !important;
-    	color-adjust:exact !important;
-		overflow: visible !important;
-		overflow-y : visible !important;
+  @page {
+    margin: 2cm 2cm;
+    @bottom-right {
+      content: "Page " counter(page) "/" counter(pages);
     }
-    
-	#saved-window,
-	#navigation-bar,
-	#sub-bar,
-	#sidebar,
-    .tooltip,
-	.menus,
-	.buttons,
-    .buttons-menus,
-	.btn-group {
-		display:none !important;
-	}
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+  }
 
-    a:after {
-        content:none !important;
-        color:var(--portfolio-link-color);
-    }
+  #saved-window,
+#navigation-bar,
+#sub-bar,
+#sidebar,
+.tooltip,
+.menus,
+.buttons,
+.buttons-menus,
+.btn-group {
+    display: none !important;
+  }
 
-	img {
-		page-break-inside:avoid !important; 
-		page-break-after:avoid !important;
-	}	
+  a:after {
+    content: none !important;
+    color: var(--portfolio-link-color);
+  }
 
-	.title {
-		page-break-inside:avoid !important; 
-	}
-	table {
-		page-break-after:auto !important;
-	}
-	tr,
-	td {
-		page-break-inside:auto !important;
-		page-break-after:auto !important;
-	}
-	.section2hide {
-		display:none !important;
-	}
-	.section2print {
-		display:block !important;
-	}
+  img {
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  .title {
+    page-break-inside: avoid !important;
+  }
+
+  table {
+    page-break-after: auto !important;
+  }
+
+  tr,
+td {
+    page-break-inside: auto !important;
+    page-break-after: auto !important;
+  }
+
+  .section2hide {
+    display: none !important;
+  }
+
+  .section2print {
+    display: block !important;
+  }
 }
 
 /*# sourceMappingURL=karuta.css.map */
