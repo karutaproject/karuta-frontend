@@ -808,6 +808,9 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 			//-------------- css attribute -----------
 			var metadataepm = $(node.metadataepm);
 			var style = "";
+			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'padding-top',true);
+			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
+			style += UIFactory["Node"].displayMetadataEpm(metadataepm,'othercss',false);
 			if (style.length>0 && depth>0)
 				html += " style='"+style+"' ";
 			//----------------------------------
@@ -915,10 +918,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				style = "";
 				if (depth>0) {
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'padding-top',true);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-weight',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-style',false);
-					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'color',false);
+//					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-size',true);
+//					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-weight',false);
+//					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'font-style',false);
+//					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'text-align',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'background-color',false);
 					if (g_userroles[0]!='designer')
@@ -958,7 +961,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				else {
 					if (g_display_type=='standard')
 						html += "<div id='std_node_"+uuid+"' class='node-label col-md-7  same-height'";
-					html += " style='"+style+"'>";
+//					html += " style='"+style+"'";
+					html += ">";
 					if (g_display_type=='header') {
 						html += "<div id='std_node_"+uuid+"' class='node-label col-md-offset-1 col-md-7  same-height'";
 						if (g_userroles[0]!='designer' && semtag=='header')
