@@ -172,6 +172,11 @@ function setConfigurationVariables()
 			g_configVar['list-welcome-image'] = getBackgroundURL('config-list-welcome-image',data);		
 			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data);
 			g_configVar['list-welcome-subtitle'] = getText('config-list-welcome-subtitle','Field','text',data);
+			g_configVar['list-welcome-title-color'] = getText('config-list-welcome-title-color','Color','text',data);
+			g_configVar['list-welcome-title-css'] = getText('config-list-welcome-title-css','Field','text',data);
+			g_configVar['list-welcome-subline-color'] = getText('config-list-welcome-subline-color','Color','text',data);
+			g_configVar['list-welcome-subtitle-color'] = getText('config-list-welcome-subtitle-color','Color','text',data);
+			g_configVar['list-welcome-subtitle-css'] = getText('config-list-welcome-subtitle-css','Field','text',data);
 			//----------------------
 			g_configVar['list-background-color'] = getText('config-list-background-color','Color','text',data);
 			g_configVar['list-element-background-color'] = getText('config-list-element-background-color','Color','text',data);

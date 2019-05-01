@@ -22,11 +22,6 @@ body,
   padding-bottom: 50px;
 }
 
-#edit-window-body {
-  height: 400px;
-  overflow-y: scroll;
-}
-
 /*
 
 html, body, #main-body, #main-container, #global-row, #main-row, {
@@ -67,7 +62,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 }
 */
 /* ====================== 
-     INITIAL INFOS
+     INITIAL COLORS
     used until KARUTA
     has been loaded
    ====================== */
@@ -87,7 +82,25 @@ h3 {
 }
 
 /* ====================== */
-/*    WELCOME-BAR     */
+/*    WEDIT WINDOW        */
+/* ====================== */
+#edit-window-body {
+  height: 400px;
+  overflow-y: scroll;
+}
+
+#edit-window-body-node .btn,
+#edit-window-body-resource .btn,
+.resource .btn {
+  min-height: 34px;
+}
+
+#edit-window-body-resource button.selected-label {
+  min-width: 300px;
+}
+
+/* ====================== */
+/*    WELCOME-BAR         */
 /* ====================== */
 #welcome-bar .welcome-title {
   text-align: center;
@@ -177,7 +190,34 @@ h3 {
   padding: 10px;
   opacity: 0.6;
 }
+#welcome-image .welcome-line {
+  border-bottom: 1px solid var(--welcome-line-color);
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+/*
+
+.page-list .welcome-title {
+    color: var(--welcome-title-color);
+    font-size: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+.page-list .welcome-line {
+    border-bottom: 1px solid var(--welcome-line-color);
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+}
+
+.page-list .welcome-baseline, .page-list .welcome-text{
+	padding:10px;
+	width:100%;
+}
+*/
 /* ====================== */
 /*      PORTFOLIO         */
 /* ====================== */
@@ -205,11 +245,13 @@ h3 {
 #sub-bar a {
   color: var(--portfolio-navbar-link-color);
 }
-#sub-bar .navbar-default,
 #sub-bar .dropdown-menu,
 #sub-bar .open > a {
   background-color: var(--portfolio-navbar-color);
   border-color: var(--portfolio-navbar-color);
+}
+#sub-bar ul.navbar-nav {
+  text-align: right;
 }
 
 /*
@@ -222,7 +264,6 @@ h3 {
 }
 
 #sub-bar .welcome-line {
-    border-bottom: 1px solid var(--welcome-line-color);
     margin-left: auto;
     margin-right: auto;
     width: 25%;
@@ -247,22 +288,38 @@ h3 {
 /* ====================== */
 /*      SIDEBAR           */
 /* ====================== */
+/*
 .panel-default > .panel-heading {
-  background-color: transparent;
+	background-color:transparent;
 }
 
 .panel-default,
 .panel-default > .panel-heading {
-  border-color: transparent;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0);
-  padding-left: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
+	border-color:transparent;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0);
+	padding-left:0px;
+	padding-top:0px;
+	padding-bottom:0px;
 }
-
-.panel-body {
-  padding-top: 0px;
-  padding-bottom: 0px;
+*/
+#sidebar {
+  background-color: var(--portfolio-sidebar-color);
+}
+#sidebar li.selected ul.nested {
+  display: block;
+}
+#sidebar li.selected ul.nested li.selected a {
+  background-image: none;
+  color: #000;
+}
+#sidebar li.nested {
+  text-indent: 15px;
+}
+#sidebar .number {
+  color: #aaa;
+  float: right;
+  font-size: 11px;
+  font-weight: normal;
 }
 
 #sidebar-content {
@@ -271,39 +328,32 @@ h3 {
   padding-left: 0px;
   padding-right: 0px;
 }
-
-.sidebar-item a {
-  width: 100%;
-}
-
-.selected a {
+#sidebar-content .selected a {
   font-weight: bold;
 }
 
 .sidebar-item {
+  border-bottom: 1px solid var(--portfolio-sidebar-separator-color);
   padding-left: 15px;
   padding-top: 8px;
   padding-bottom: 8px;
 }
-
+.sidebar-item a {
+  width: 100%;
+}
 .sidebar-item .sidebar-item {
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
 .sidebar-link {
+  padding-right: 9px;
   color: var(--portfolio-sidebar-link-color);
 }
-
 .sidebar-link a {
   color: var(--portfolio-sidebar-link-color);
 }
-
-#sidebar {
-  background-color: var(--portfolio-sidebar-color);
-}
-
-#sidebar .selected {
+.sidebar-link .selected {
   border-right: 4px solid var(--portfolio-sidebar-selected-border-color);
 }
 
@@ -313,34 +363,12 @@ a.sidebar-link:hover {
   color: var(--portfolio-sidebar-link-selected-color);
 }
 
-.sidebar-item {
-  border-bottom: 1px solid var(--portfolio-sidebar-separator-color);
+/*
+.panel-body{
+	padding-top:0px;
+	padding-bottom:0px;
 }
-
-#sidebar li.selected ul.nested {
-  display: block;
-}
-
-#sidebar li.selected ul.nested li.selected a {
-  background-image: none;
-  color: #000;
-}
-
-#sidebar li.nested {
-  text-indent: 15px;
-}
-
-#sidebar .number {
-  color: #aaa;
-  float: right;
-  font-size: 11px;
-  font-weight: normal;
-}
-
-.sidebar-link {
-  padding-right: 9px;
-}
-
+*/
 /* ====================== */
 /*      MENUBAR           */
 /* ====================== */
@@ -384,20 +412,22 @@ a.sidebar-link:hover {
  * ------ navbar --------
  * -----------------------
  */
-.navbar-default {
-  background-color: var(--navigation-bar-background-color);
-  border-color: var(--navigation-bar-border-color);
+/*
+.navbar-default{
+	background-color:var(--navigation-bar-background-color);
+	border-color:var(--navigation-bar-border-color);
 }
 
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover {
-  background-color: var(--navigation-bar-background-color);
+	background-color:var(--navigation-bar-background-color);
 }
+
 
 .navbar-default .navbar-nav > li > a {
-  color: var(--navigation-bar-color);
+	color:var(--navigation-bar-color);
 }
-
+*/
 /* ====================== */
 /*   PORTFOLIO NAVBAR     */
 /* ====================== */
@@ -414,10 +444,6 @@ a.sidebar-link:hover {
   padding-left: 15px;
 }
 
-#sub-bar ul.navbar-nav {
-  text-align: right;
-}
-
 /* ==================================================================== */
 /*                          PORTFOLIO                                   */
 /* ==================================================================== */
@@ -432,11 +458,6 @@ a.sidebar-link:hover {
   cursor: pointer;
 }
 
-.welcome-line {
-  border-bottom: 1px solid var(--welcome-line-color);
-  background-color: var(--page-title-background-color);
-}
-
 .row-node {
   border-top: 1px solid var(--page-title-background-color);
 }
@@ -444,8 +465,7 @@ a.sidebar-link:hover {
 a {
   color: var(--portfolio-link-color);
 }
-
-a.portfolio-label:hover {
+a .portfolio-label:hover {
   cursor: pointer;
 }
 
@@ -639,29 +659,25 @@ table[name=res-div] {
   border: 1px solid var(--resource-standard-border-color);
 }
 
+.resource-standard {
+  padding-top: 10px;
+}
 .resource-standard .buttons {
   background: var(--resource-standard-buttons-background-color);
   border: 1px solid var(--resource-standard-border-color);
   width: 200px;
 }
-
-.resource-standard {
-  padding-top: 10px;
-}
-
 .resource-standard .node-label {
   margin-top: -6px;
   padding-left: 10px;
   padding-right: 0px;
 }
-
 .resource-standard table {
   widht: 100%;
   margin-left: 5px;
   margin-right: 5px;
 }
-
-.resource-standard .td-resource {
+.resource-standard td-resource {
   width: 80%;
   margin-right: 0px;
   background: white;
@@ -694,11 +710,8 @@ table[name=res-div] {
   margin-top: -10px;
 }
 
-.standard-resource-card {
-  margin: 20px;
-}
-
 .standard-node-card {
+  margin: 20px;
   margin: 20px;
 }
 .standard-node-card .node-model {
@@ -749,11 +762,6 @@ table[name=res-div] {
 /* ============================ */
 /* ============================ */
 /* ============================ */
-.word-counter {
-  margin-right: 10px;
-  margin-top: 5px;
-}
-
 /*
 #edit-window-body-resource .dropdown-menu,
 .Get_Resource .dropdown-menu,
@@ -900,33 +908,8 @@ h3 {
   text-align: center;
 }
 
-.page-list .welcome-title {
-  color: var(--welcome-title-color);
-  font-size: 30px;
-  text-align: center;
-  width: 100%;
-}
-
-.page-list .welcome-line {
-  border-bottom: 1px solid var(--welcome-line-color);
-  margin-left: auto;
-  margin-right: auto;
-  width: 25%;
-}
-
-.page-list .welcome-baseline, .page-list .welcome-text {
-  padding: 10px;
-  width: 100%;
-}
-
 #main-body-list {
   background-color: var(--list-background-color);
-}
-
-.welcome-line {
-  width: 25%;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 #portfoliosgroup-create,
@@ -1181,17 +1164,9 @@ h3 {
 }
 
 /* ============================================== */
-#edit-window-body-node .btn,
-#edit-window-body-resource .btn,
-.resource .btn {
-  min-height: 34px;
-}
-
-#edit-window-body-resource button.selected-label {
-  min-width: 300px;
-}
-
-/* =========== TEXT EDITOR======================= */
+/* ================ */
+/*   TEXT EDITOR    */
+/* ================ */
 .wysihtml5-toolbar i.fas {
   margin-top: 4px;
 }
@@ -1202,6 +1177,11 @@ h3 {
 
 .toomuch {
   color: red;
+}
+
+.word-counter {
+  margin-right: 10px;
+  margin-top: 5px;
 }
 
 /* ============================================== */
