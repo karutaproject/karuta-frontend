@@ -1104,7 +1104,7 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 	var cachable = true;
 	var langcode = LANGCODE;
 	var semtag = 'cnam';
-	var display_code = false;
+	var display_code = true;
 	var display_label = true;
 	var self_code = $(self.code_node).text();
 	//-----Node ordering-------------------------------------------------------
