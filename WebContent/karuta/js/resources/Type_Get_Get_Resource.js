@@ -287,7 +287,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (queryattr_value.indexOf('#')>0)
 				code_parent = semtag_parent;
 			else {
-				var child = $("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent);
+//				var child = $("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent);
+				var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
 				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
 				if (child.length==0 && itself.length>0){
 					code_parent = $($("code",itself)[0]).text();

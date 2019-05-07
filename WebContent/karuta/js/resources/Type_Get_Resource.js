@@ -1146,7 +1146,7 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 			$(select_item_a).click(function (ev){
 				//--------------------------------
 				var code = $(this).attr('code');
-				var display_code = false;
+				var display_code = true;
 				var display_label = true;
 				//--------------------------------
 				var html = "";
