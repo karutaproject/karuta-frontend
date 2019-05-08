@@ -287,7 +287,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (queryattr_value.indexOf('#')>0)
 				code_parent = semtag_parent;
 			else {
-				var child = $("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent);
+//				var child = $("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent);
+				var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
 				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
 				if (child.length==0 && itself.length>0){
 					code_parent = $($("code",itself)[0]).text();
@@ -1376,6 +1377,17 @@ UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,sel
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
 		//---------------------
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#input_"+self.id).attr("value"," ");
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
 			//------------------------------
 			var code = newTableau1[i].code;
@@ -1455,7 +1467,7 @@ UIFactory["Get_Get_Resource"].parseCNAM = function(destid,type,langcode,data,sel
 		var form = $(html);
 		html = "";
 		html += "<div class='auto-complete btn-group roles-choice'>";
-		html += "<input id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>";
+		html += "<input type='text' id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
 		var btn_group = $(html);
@@ -1467,48 +1479,31 @@ UIFactory["Get_Get_Resource"].parseCNAM = function(destid,type,langcode,data,sel
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
 		//---------------------
-		var code = "";
-		var label = "";
 		html = "<li></li>";
 		var select_item = $(html);
-		html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
-		if (display_code)
-			html += "<span class='li-code'>"+code+"</span>";
-		if (display_label)
-			html += "<span class='li-label'>"+label+"</span>";
-		html += "</a>";			
+		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
 		var select_item_a = $(html);
 		$(select_item_a).click(function (ev){
-			//--------------------------------
-			var code = $(this).attr('code');
-			var display_code = false;
-			var display_label = true;
-			//--------------------------------
-			var html = "";
-			if (display_code)
-				html += code+" ";
-			if (display_label)
-				html += $(this).attr("label_fr");
-			$("#input_"+self.id).html(html);
+			$("#input_"+self.id).attr("value"," ");
 			UIFactory["Get_Get_Resource"].update(this,self,langcode);
-			//--------------------------------
 		});
 		$(select_item).append($(select_item_a))
 		$(select).append($(select_item));
+		//---------------------
 		//---------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
 			//------------------------------
 			var code = newTableau1[i].code;
 			semtag = semtag.replace(/:/g, '.');
-			var label = eval("newTableau1[i]."+semtag);
+			var label = eval("newTableau1[i]."+semtag).replace(/"/g, "'"); 
 			html = "<li></li>";
 			var select_item = $(html);
-			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+			html = "<div  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
 			if (display_code)
 				html += "<span class='li-code'>"+code+"</span>";
 			if (display_label)
 				html += "<span class='li-label'>"+label+"</span>";
-			html += "</a>";			
+			html += "</div>";			
 			var select_item_a = $(html);
 			$(select_item_a).click(function (ev){
 				//--------------------------------
@@ -1549,7 +1544,8 @@ UIFactory["Get_Get_Resource"].parseCNAM = function(destid,type,langcode,data,sel
 		var nodes = $("node",data);
 		for ( var i = 0; i < newTableau1.length; ++i) {
 			var code = newTableau1[i].code;
-			var label = newTableau1[i].libelle;
+			semtag = semtag.replace(/:/g, '.');
+			var label = eval("newTableau1[i]."+semtag).replace(/"/g, "'"); 
 			var input = "";
 			//------------------------------
 			input += "<div> <input type='checkbox' portfoliocode='"+portfoliocode+"' name='multiple_"+self.id+"' value='' code='"+code+"' class='multiple-item";
@@ -1586,10 +1582,22 @@ UIFactory["Get_Get_Resource"].parseCNAM = function(destid,type,langcode,data,sel
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
 		//---------------------
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#input_"+self.id).attr("value"," ");
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
 			//------------------------------
 			var code = newTableau1[i].code;
-			var label = newTableau1[i].libelle;
+			semtag = semtag.replace(/:/g, '.');
+			var label = eval("newTableau1[i]."+semtag).replace(/"/g, "'"); 
 			html = "<li></li>";
 			var select_item = $(html);
 			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";

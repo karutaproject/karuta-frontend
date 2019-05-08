@@ -935,8 +935,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-background-color',false);
 					style += UIFactory["Node"].displayMetadataEpm(metadataepm,'inparent-othercss',false);
 				}
-				html += "<div class='row row-node row-node-"+nodetype+"'  style='"+style+"'>";
-//				html += "<div class='row row-node row-node-"+nodetype+"' >";
+//				html += "<div class='row row-node row-node-"+nodetype+"'  style='"+style+"'>";
+				html += "<div class='row row-node row-node-"+nodetype+"' >";// pas de style sinon les boutons ont le style
 				//-------------------- collapsible -------------------
 				if (collapsible=='Y')
 					html += "<div onclick=\"javascript:toggleContent('"+uuid+"')\" class='col-md-1 collapsible'><span id='toggleContent_"+uuid+"' class='button glyphicon glyphicon-expand'></span></div>";
