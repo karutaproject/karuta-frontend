@@ -702,12 +702,12 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			input += "<div> <input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 			input += "' ";
 			for (var j=0; j<languages.length;j++){
-				input += "label_"+languages[j]+"=\""+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
+				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
 			input += "> ";
 			if (display_code)
 				input += code + " ";
-			input +="<span  class='"+code+"'>"+$("label[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
+			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
 			var input_obj = $(input);
 			$(inputs_obj).append(input_obj);
 		}
