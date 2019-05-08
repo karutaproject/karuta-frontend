@@ -1129,11 +1129,23 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
 		//---------------------
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#input_"+self.id).attr("value"," ");
+			UIFactory["Get_Resource"].update(this,self,langcode);
+			//--------------------------------
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
 			//------------------------------
 			var code = newTableau1[i].code;
 			var label = newTableau1[i].intitule;
-			newTableau2.push({'code':code,'libelle':label});
+			newTableau2.push({'code':code,'libelle':code+" - "+label});
 			html = "<li></li>";
 			var select_item = $(html);
 			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
