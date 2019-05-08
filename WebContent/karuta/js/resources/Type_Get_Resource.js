@@ -1136,7 +1136,6 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 		$(select_item_a).click(function (ev){
 			$("#input_"+self.id).attr("value"," ");
 			UIFactory["Get_Resource"].update(this,self,langcode);
-			//--------------------------------
 		});
 		$(select_item).append($(select_item_a))
 		$(select).append($(select_item));
