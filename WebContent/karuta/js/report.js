@@ -1924,8 +1924,12 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 	var xmax = parseInt($(action).attr("xmax"));
 	var ymin = parseInt($(action).attr("ymin"));
 	var ymax = parseInt($(action).attr("ymax"));
-	var xline = makeSVG('line',{'x1':0,'y1':500,'x2':1000,'y2':500,'stroke':'black','stroke-width': 2});
+	if (xyaxis==undefined)
+		xyaxis = 0;
+	if (yxaxis==undefined)
+		yxaxis = 0;
+	var xline = makeSVG('line',{'x1':0,'y1':500+yxaxis,'x2':1000,'y2':500+yxaxis,'stroke':'black','stroke-width': 2});
 	document.getElementById(destid).appendChild(xline);
-	var yline = makeSVG('line',{'x1':500,'y1':0,'x2':500,'y2':1000,'stroke':'black','stroke-width': 2});
+	var yline = makeSVG('line',{'x1':500+xyaxis,'y1':0,'x2':500+xyaxis,'y2':1000,'stroke':'black','stroke-width': 2});
 	document.getElementById(destid).appendChild(yline);
 }
