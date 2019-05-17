@@ -64,7 +64,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	color:var(--portfolio-buttons-color);
 }
 
-
 /*
 .button:hover {
 	box-shadow: 0px 0px 1px var(--portfolio-buttons-color) inset;
@@ -92,12 +91,13 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	}
 
 /* ====================== */
-/*    WEDIT WINDOW        */
+/*     EDIT WINDOW        */
 /* ====================== */
 
 	#edit-window-body {
-		height: 400px;
+//		min-height: 200px;
 		overflow-y: scroll;
+		height:100%;
 	}
 
 	#edit-window-body-node .btn,
@@ -1571,6 +1571,7 @@ hr {
 		padding-top:5px;
 		.input-group-text {
 			border: 0px solid var(--edit-window-border-color);
+			font-size:0.9rem;
 			width:180px;
 		}
 		.input-group {

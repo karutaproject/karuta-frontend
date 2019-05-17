@@ -82,11 +82,11 @@ h3 {
 }
 
 /* ====================== */
-/*    WEDIT WINDOW        */
+/*     EDIT WINDOW        */
 /* ====================== */
 #edit-window-body {
-  height: 400px;
   overflow-y: scroll;
+  height: 100%;
 }
 
 #edit-window-body-node .btn,
@@ -1446,6 +1446,7 @@ hr {
 }
 .metadata .input-group-text {
   border: 0px solid var(--edit-window-border-color);
+  font-size: 0.9rem;
   width: 180px;
 }
 .metadata .input-group {
