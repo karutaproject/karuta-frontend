@@ -1658,7 +1658,7 @@ UIFactory["Portfolio"].callRenameMove = function(portfolioid,langcode,project)
 	if ((USER.creator && !USER.limited)  || USER.admin) {
 		var htmlCodeGroupObj = $("<div class='form-group'></div>")
 		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code <a href='javascript://' id='code_help'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a></label>");
-		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
+		var htmlCodeDivObj = $("<div></div>");
 		var htmlCodeInputObj = $("<input id='code_"+portfolioid+"' type='text' class='form-control' name='input_code' value=\""+self.code_node.text()+"\">");
 		if (project)
 			$(htmlCodeInputObj).change(function (){
@@ -1676,7 +1676,7 @@ UIFactory["Portfolio"].callRenameMove = function(portfolioid,langcode,project)
 	if ((USER.creator && !USER.limited)  || USER.admin) {
 		var htmlLabelGroupObj = $("<div class='form-group'></div>")
 		var htmlLabelLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
-		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
+		var htmlLabelDivObj = $("<div></div>");
 		var htmlLabelInputObj = $("<input id='label_"+portfolioid+"_"+langcode+"' type='text' class='form-control' value=\""+self.label_node[langcode].text()+"\">");
 		if (project)
 			$(htmlLabelInputObj).change(function (){
