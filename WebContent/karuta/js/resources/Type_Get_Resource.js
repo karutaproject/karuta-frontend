@@ -48,6 +48,17 @@ UIFactory["Get_Resource"] = function(node,condition)
 			}
 		}
 	}
+	this.text_node = [];
+	for (var i=0; i<languages.length;i++){
+		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
+		if (this.text_node[i].length==0) {
+			var newelement = createXmlElement("text");
+			$(newelement).attr('lang', languages[i]);
+			$(newelement).remove-attr('xmlns');
+			$("asmResource["+this.clause+"]",node)[0].appendChild(newelement);
+			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
+		}
+	}
 	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	if (this.clause=="xsi_type='Get_Resource'")
 		this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
@@ -58,6 +69,7 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.displayCode = {};
 	this.displayValue = {};
 	this.multiple = "";
+	this.queryattr_value = $("metadata-wad",node).attr('query');;
 };
 
 //==================================
@@ -127,15 +139,20 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
+	var text = this.text_node[langcode].text();
+	if (this.encrypted)
+		text = decrypt(text.substring(3),g_rc4key);
 	var label = this.label_node[langcode].text();
 	if (this.encrypted)
 		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
 	var html = "";
-	html += "<div class='"+cleanCode(code)+" view-div' ";
+	html += "<div class='"+cleanCode(code)+" view-div' style='";
 	if (indashboard)
-		html += " style='background-position:center'";
-	html += ">";
+		html += "background-position:cente;'";
+	if (this.queryattr_value.indexOf("CNAM")>-1)
+		html += "font-weight:bold;"
+	html += "'>";
 	if (code.indexOf("#")>-1)
 		html += cleanCode(code) + " ";
 	if (code.indexOf("%")<0) {
@@ -147,6 +164,15 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	if (code.indexOf("&")>-1)
 		html += " ["+$(this.value_node).text()+ "] ";
 	html += "</div>";
+	html += "<div class='"+cleanCode(code)+"'>";
+	if (code.indexOf("#")>-1)
+		html += cleanCode(code) + " ";
+	if (code.indexOf("%")<0)
+		html += text;
+	if (code.indexOf("&")>-1)
+		html += " ["+$(this.value_node).text()+ "] ";
+	html += "</div>";
+
 	return html;
 };
 
@@ -165,19 +191,33 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
+	var text = this.text_node[langcode].text();
+	if (this.encrypted)
+		text = decrypt(text.substring(3),g_rc4key);
 	var label = this.label_node[langcode].text();
 	if (this.encrypted)
 		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
 	var html = "";
-	html += "<span class='"+cleanCode(code)+"'>";
+	html += "<div class='"+cleanCode(code)+"'"
+	if (this.queryattr_value.indexOf("CNAM")>-1)
+		html += " style='font-weight:bold' "
+	html += ">";
 	if (code.indexOf("#")>-1)
 		html += cleanCode(code) + " ";
 	if (code.indexOf("%")<0)
 		html += label;
 	if (code.indexOf("&")>-1)
 		html += " ["+$(this.value_node).text()+ "] ";
-	html += "</span>";
+	html += "</div>";
+	html += "<div class='"+cleanCode(code)+"'>";
+	if (code.indexOf("#")>-1)
+		html += cleanCode(code) + " ";
+	if (code.indexOf("%")<0)
+		html += text;
+	if (code.indexOf("&")>-1)
+		html += " ["+$(this.value_node).text()+ "] ";
+	html += "</div>";
 	$("#"+dest).html("");
 	$("#"+dest).append($(html));
 };
@@ -190,6 +230,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 {
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
+	var text = "";
 	//---------------------
 	if (itself.encrypted)
 		value = "rc4"+encrypt(value,g_rc4key);
@@ -198,15 +239,52 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 	//---------------------
 	$(itself.value_node[0]).text(value);
 	$(itself.code_node[0]).text(code);
-	for (var i=0; i<languages.length;i++){
-		var label = $(selected_item).attr('label_'+languages[i]);
-		//---------------------
-		if (itself.encrypted)
-			label = "rc4"+encrypt(label,g_rc4key);
-		//---------------------
-		$(itself.label_node[i][0]).text(label);
-	}
-	itself.save();
+	//------------CNAM----------------------------
+	if (itself.queryattr_value.indexOf("CNAM")>-1) {
+		var srce_indx = itself.queryattr_value.lastIndexOf('.');
+		var srce = itself.queryattr_value.substring(srce_indx+1);
+		var semtag_indx = itself.queryattr_value.substring(0,srce_indx).lastIndexOf('.');
+		var semtag = itself.queryattr_value.substring(semtag_indx+1,srce_indx);
+		var target = itself.queryattr_value.substring(srce_indx+1); // label or text
+		var url = serverBCK+"/cnam/";
+		if (code!='') {
+			url+= semtag+"/"+code;
+			$.ajax({
+				type : "GET",
+				dataType : "json",
+				url : url,
+				success : function(data) {
+					text = eval("data."+target).replace(/"/g, "'");
+					//----------------------------------------
+					for (var i=0; i<languages.length;i++){
+						var label = $(selected_item).attr('label_'+languages[i]);
+						//---------------------
+						if (itself.encrypted) {
+							label = "rc4"+encrypt(label,g_rc4key);
+							text = "rc4"+encrypt(text,g_rc4key);
+						}
+						//---------------------
+						$(itself.label_node[i][0]).text(label);
+						$(itself.text_node[i][0]).text(text);
+					}
+					itself.save();
+				}
+			});
+		}
+	} else {
+		for (var i=0; i<languages.length;i++){
+			var label = $(selected_item).attr('label_'+languages[i]);
+			//---------------------
+			if (itself.encrypted) {
+				label = "rc4"+encrypt(label,g_rc4key);
+				text = "rc4"+encrypt(text,g_rc4key);
+			}
+			//---------------------
+			$(itself.label_node[i][0]).text(label);
+			$(itself.text_node[i][0]).text(text);
+		}
+		itself.save();
+		}
 };
 
 //==================================
@@ -220,6 +298,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 	if (type==undefined || type==null)
 		type = $("metadata-wad",this.node).attr('seltype');
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
+	this.queryattr_value = queryattr_value; // update if changed
 	if (this.multiple!=""){
 		multiple_tags = this.multiple.substring(this.multiple.indexOf('/')+1);
 		queryattr_value = this.multiple.substring(0,this.multiple.indexOf('/'));
