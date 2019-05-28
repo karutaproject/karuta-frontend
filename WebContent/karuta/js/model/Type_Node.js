@@ -62,8 +62,10 @@ UIFactory["Node"] = function( node )
 		if (this.asmtype=='asmContext') {
 			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",node);
 			this.resource_type = $(resource).attr("xsi_type");
+			flag_error = 'e';
 			this.resource = new UIFactory[this.resource_type](node);
 		}
+		flag_error = 'f';
 		//------------------------------
 		this.context = $("asmResource[xsi_type='context']",node);
 		this.context_text_node = [];

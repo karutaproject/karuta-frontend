@@ -54,7 +54,6 @@ UIFactory["Get_Resource"] = function(node,condition)
 		if (this.text_node[i].length==0) {
 			var newelement = createXmlElement("text");
 			$(newelement).attr('lang', languages[i]);
-			$(newelement).remove-attr('xmlns');
 			$("asmResource["+this.clause+"]",node)[0].appendChild(newelement);
 			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
 		}
@@ -69,7 +68,7 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.displayCode = {};
 	this.displayValue = {};
 	this.multiple = "";
-	this.queryattr_value = $("metadata-wad",node).attr('query');;
+	this.queryattr_value = $("metadata-wad",node).attr('query');
 };
 
 //==================================
