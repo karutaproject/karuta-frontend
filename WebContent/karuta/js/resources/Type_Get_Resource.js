@@ -240,13 +240,13 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 	$(itself.code_node[0]).text(code);
 	//------------CNAM----------------------------
 	if (itself.queryattr_value.indexOf("CNAM")>-1) {
-		var srce_indx = itself.queryattr_value.lastIndexOf('.');
-		var srce = itself.queryattr_value.substring(srce_indx+1);
-		var semtag_indx = itself.queryattr_value.substring(0,srce_indx).lastIndexOf('.');
-		var semtag = itself.queryattr_value.substring(semtag_indx+1,srce_indx);
-		var target = itself.queryattr_value.substring(srce_indx+1); // label or text
-		var url = serverBCK+"/cnam/";
 		if (code!='') {
+			var srce_indx = itself.queryattr_value.lastIndexOf('.');
+			var srce = itself.queryattr_value.substring(srce_indx+1);
+			var semtag_indx = itself.queryattr_value.substring(0,srce_indx).lastIndexOf('.');
+			var semtag = itself.queryattr_value.substring(semtag_indx+1,srce_indx);
+			var target = itself.queryattr_value.substring(srce_indx+1); // label or text
+			var url = serverBCK+"/cnam/";
 			url+= semtag+"/"+code;
 			$.ajax({
 				type : "GET",
@@ -269,6 +269,14 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 					itself.save();
 				}
 			});
+		} else { // re-init
+			//----------------------------------------
+			for (var i=0; i<languages.length;i++){
+				var label = "";
+				$(itself.label_node[i][0]).text(label);
+				$(itself.text_node[i][0]).text(text);
+			}
+			itself.save();
 		}
 	} else {
 		for (var i=0; i<languages.length;i++){
@@ -1212,8 +1220,19 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
 		var select_item_a = $(html);
 		$(select_item_a).click(function (ev){
-			$("#input_"+self.id).attr("value"," ");
+			//--------------------------------
+			var code = $(this).attr('code');
+			var display_code = true;
+			var display_label = true;
+			//--------------------------------
+			var html = "";
+			if (display_code)
+				html += code+" ";
+			if (display_label)
+				html += $(this).attr("label_fr");
+			$("#input_"+self.id).attr("value",html);
 			UIFactory["Get_Resource"].update(this,self,langcode);
+			//--------------------------------
 		});
 		$(select_item).append($(select_item_a))
 		$(select).append($(select_item));
