@@ -88,10 +88,6 @@ h3 {
   overflow-y: scroll;
   height: 100%;
 }
-#edit-window-body[type=list-menu] {
-  overflow-y: visible;
-  max-height: none;
-}
 
 #edit-window-body-node .btn,
 #edit-window-body-resource .btn,
@@ -101,11 +97,6 @@ h3 {
 
 #edit-window-body-resource button.selected-label {
   min-width: 300px;
-}
-
-.modal-dialog {
-  width: 70%;
-  max-width: none;
 }
 
 /* ====================== */
@@ -1463,7 +1454,6 @@ hr {
   margin-top: 3px;
   border: 1px solid #ced4da;
   border-radius: 0.2rem;
-  max-width: 400px;
 }
 .metadata .input-group .form-control {
   border: 0px solid var(--edit-window-border-color);

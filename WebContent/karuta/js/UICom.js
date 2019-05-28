@@ -185,6 +185,7 @@ var UICom =
 	addRoles: function(node)
 	//=======================================================================
 	{
+		UICom.roles["designer"] = true;
 		UICom.addRole(node,'seenoderoles');
 		UICom.addRole(node,'editresroles');
 		UICom.addRole(node,'delnoderoles');

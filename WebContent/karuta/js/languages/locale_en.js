@@ -442,6 +442,7 @@ karutaStr['en']['email-message']="Message";
 //========== RESOURCES =======================
 //=========================================
 
+karutaStr['en']['asmRoot']="Root";
 karutaStr['en']['asmStructure']="Section";
 karutaStr['en']['asmUnit']="Page";
 karutaStr['en']['asmUnitStructure']="Subsection";

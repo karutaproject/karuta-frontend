@@ -143,13 +143,13 @@ g_report_actions['if-then-else'] = function (destid,action,no,data)
 	if (g_report_actions[tagname](destid,action,no,data)){
 		for (var i=0; i<then_actions.length;i++){
 			var tagname = $(then_actions[i])[0].tagName;
-			g_report_actions[tagname](destid,then_actions[i],no+i.toString(),data);
+			g_report_actions[tagname](destid,then_actions[i],no+'-'+i.toString(),data);
 		};
 	}
 	else {
 		for (var i=0; i<else_actions.length;i++){
 			var tagname = $(else_actions[i])[0].tagName;
-			g_report_actions[tagname](destid,else_actions[i],no+i.toString(),data);
+			g_report_actions[tagname](destid,else_actions[i],no+'-'+i.toString(),data);
 		};
 	}
 }
@@ -178,7 +178,7 @@ g_report_actions['for-each-line'] = function (destid,action,no,data)
 		}
 		for (var i=0; i<actions.length;i++){
 			var tagname = $(actions[i])[0].tagName;
-			g_report_actions[tagname](destid,actions[j],no+j.toString()+i.toString(),data);
+			g_report_actions[tagname](destid,actions[j],no+'-'+j.toString()+'-'+i.toString(),data);
 		}
 	}
 }
@@ -227,7 +227,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 			//----------------------------------
 			for (var i=0; i<actions.length;i++){
 				var tagname = $(actions[i])[0].tagName;
-				g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),nodes[j])
+				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j])
 			}
 			//----------------------------------
 		};
@@ -263,7 +263,7 @@ g_report_actions['loop'] = function (destid,action,no,data)
 		var actions = $(action).children();
 		for (var i=0; i<actions.length;i++){
 			var tagname = $(actions[i])[0].tagName;
-			g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),nodes[j]);
+			g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
 		}
 	};
 }
@@ -282,7 +282,7 @@ g_report_actions['goparent'] = function (destid,action,no,data)
 	//---------------------------
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid,actions[i],no+i.toString(),parent);
+		g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),parent);
 	}
 
 }
@@ -329,13 +329,13 @@ g_report_actions['table'] = function (destid,action,no,data)
 	}
 	//---------------------------
 	var style = $(action).attr("style");
-	var html = "<table id='"+destid+no+"' style='"+style+"'></table>";
+	var html = "<table id='"+destid+'-'+no+"' style='"+style+"'></table>";
 	$("#"+destid).append($(html));
 	//---------------------------
 	var actions = $(action).children();
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+no,actions[i],i.toString(),data);
+		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
 }
 
@@ -352,13 +352,13 @@ g_report_actions['row'] = function (destid,action,no,data)
 	}
 	//---------------------------
 	var style = $(action).attr("style");
-	var html = "<tr id='"+destid+no+"' style='"+style+"'></table>";
+	var html = "<tr id='"+destid+'-'+no+"' style='"+style+"'></table>";
 	$("#"+destid).append($(html));
 	//---------------------------
 	var actions = $(action).children();
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+no,actions[i],i.toString(),data);
+		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
 }
 
@@ -370,10 +370,10 @@ g_report_actions['cell'] = function (destid,action,no,data)
 	var attr_help = $(action).attr("help");
 	var colspan = $(action).attr("colspan");
 
-	var html = "<td id='"+destid+no+"' style='"+style+"' ";
+	var html = "<td id='"+destid+'-'+no+"' style='"+style+"' ";
 	if (colspan!=null && colspan!='0')
 		html += "colspan='"+colspan+"' "
-	html += "><span id='help_"+destid+no+"' class='ihelp'></span>";
+	html += "><span id='help_"+destid+'-'+no+"' class='ihelp'></span>";
 	html += "</td>";
 	$("#"+destid).append($(html));
 	if (attr_help!=undefined && attr_help!="") {
@@ -388,7 +388,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 			help_text = helps[langcode];  // lang1/lang2/...
 		}
 		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
-		$("#help_"+destid+no).html(help);
+		$("#help_"+destid+'-'+no).html(help);
 		$(".popinfo").popover({ 
 		    placement : 'bottom',
 		    container : 'body',
@@ -402,7 +402,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 	var actions = $(action).children();
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+no,actions[i],i.toString(),data);
+		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
 }
 
@@ -454,7 +454,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 					var actions = $(action).children();
 					for (var i=0; i<actions.length;i++){
 						var tagname = $(actions[i])[0].tagName;
-						g_report_actions[tagname](destid,actions[i],no+i.toString(),userid);
+						g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),userid);
 					};
 				}
 					//------------------------------------
@@ -602,7 +602,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 							var actions = $(action).children();
 							for (var i=0; i<actions.length;i++){
 								var tagname = $(actions[i])[0].tagName;
-								g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),data);
+								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
 							};
 						}
 					});
@@ -735,7 +735,7 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 							var actions = $(action).children();
 							for (var i=0; i<actions.length;i++){
 								var tagname = $(actions[i])[0].tagName;
-								g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),data);
+								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
 							};
 							//-----------------------------
 						}
@@ -762,7 +762,7 @@ g_report_actions['username'] = function (destid,action,no,data,is_out_csv)
 			csvseparator = ";";
 		csvline += text + csvseparator;		
 	} else {
-		text = "<span id='"+destid+no+"'>"+text+"</span>";
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
 		$("#"+destid).append($(text));		
 	}
 }
@@ -777,7 +777,7 @@ g_report_actions['firstname'] = function (destid,action,no,data,is_out_csv)
 			csvseparator = ";";
 		csvline += text + csvseparator;		
 	} else {
-		text = "<span id='"+destid+no+"'>"+text+"</span>";
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
 		$("#"+destid).append($(text));		
 	}
 }
@@ -792,7 +792,7 @@ g_report_actions['lastname'] = function (destid,action,no,data,is_out_csv)
 			csvseparator = ";";
 		csvline += text + csvseparator;		
 	} else {
-		text = "<span id='"+destid+no+"'>"+text+"</span>";
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
 		$("#"+destid).append($(text));		
 	}
 }
@@ -808,7 +808,7 @@ g_report_actions['first-lastname'] = function (destid,action,no,data,is_out_csv)
 			csvseparator = ";";
 		csvline += text1 +"-" + text2 + csvseparator;		
 	} else {
-		var text = "<span id='"+destid+no+"'>"+text1 + "&nbsp" +text2 + "</span>";
+		var text = "<span id='"+destid+'-'+no+"'>"+text1 + "&nbsp" +text2 + "</span>";
 		$("#"+destid).append($(text));		
 	}
 }
@@ -1072,7 +1072,7 @@ g_report_actions['csv-line'] = function (destid,action,no,data)
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		var is_out_csv = true;
-		g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),data,is_out_csv);
+		g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data,is_out_csv);
 	};
 	csvreport[csvreport.length]=csvline;
 	$.ajax({
@@ -1696,14 +1696,14 @@ g_report_actions['svg'] = function (destid,action,no,data)
 {
 	var min_height = $(action).attr("min-height");
 	var min_width = $(action).attr("min-width");
-	var html = "<svg id='"+destid+no+"' min-width='"+min_width+"' min-height='"+min_height+"' viewbox='0 0 1000 1000'></svg>";
+	var html = "<svg id='"+destid+'-'+no+"' min-width='"+min_width+"' min-height='"+min_height+"' viewbox='0 0 1000 1000'></svg>";
 	var svg = $(html);
 	$("#"+destid).append(svg);
 	//----------------------------------
 	var actions = $(action).children();
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+no,actions[i],i.toString(),data)
+		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data)
 	}
 }
 

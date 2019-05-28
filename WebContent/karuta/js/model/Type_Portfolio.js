@@ -1185,6 +1185,7 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 UIFactory["Portfolio"].importFile = function(instance)
 //==================================
 {
+	$("#edit-window-body").attr("type","list-menu");
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
@@ -1200,8 +1201,8 @@ UIFactory["Portfolio"].importFile = function(instance)
 	html +="    Select a project ";
 	html +="    <span class='caret'></span>";
 	html +="  </button>";
-	html +="  <ul class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenu1'>";
-	html +="    <li><a href='#'>&nbsp;</a></li>";
+	html +="  <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>";
+	html +="    <a class='dropdown-item' href='#'>&nbsp;</a>";
 	for (var i=0;i<projects_list.length;i++) {
 		var js = "";
 		if (instance) 
@@ -1209,7 +1210,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 		else
 			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','false')";
 		js += ";$('#dropdownMenu1').html('"+projects_list[i].portfoliolabel+"')";
-		html += "<li><a onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a></li>";
+		html += "<a class='dropdown-item' onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a>";
 	}
 	html +="  </ul>";
 	html +="</div><br>";

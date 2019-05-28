@@ -98,6 +98,10 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 //		min-height: 200px;
 		overflow-y: scroll;
 		height:100%;
+		&[type='list-menu'] {
+			overflow-y: visible;
+			max-height:none;
+		}
 	}
 
 	#edit-window-body-node .btn,
@@ -110,6 +114,11 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		button.selected-label {
 			min-width:300px;
 		}
+	}
+
+	.modal-dialog {
+		width:70%;
+		max-width: none;
 	}
 
 /* ====================== */
@@ -1579,6 +1588,7 @@ hr {
 			margin-top:3px;
 			border: 1px solid #ced4da;
 			border-radius: .2rem;
+			max-width:400px;
 			.form-control {
 				border: 0px solid var(--edit-window-border-color);
 			}
@@ -1611,6 +1621,13 @@ hr {
 
 	#metadata-part1 {
 		margin-top:1rem;
+	}
+
+	#metadata-part2 {
+		.dropdown-menu {
+			background-color:white;
+			color:black;
+		}
 	}
 
 /* ====================

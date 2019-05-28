@@ -816,7 +816,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			if (g_userroles[0]=='designer' || USER.admin) {
 				var htmlCodeGroupObj = $("<div class='form-group'></div>")
 				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
-				var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
+				var htmlCodeDivObj = $("<div class='node-code'></div>");
 				var htmlCodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' name='input_code' value=\""+this.code_node.text()+"\">");
 				$(htmlCodeInputObj).change(function (){
 					UIFactory["Node"].update(htmlCodeInputObj,self,langcode);
@@ -829,7 +829,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 				var htmlLabelGroupObj = $("<div class='form-group'></div>")
 				var htmlLabelLabelObj = $("<label for='label_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
-				var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
+				var htmlLabelDivObj = $("<div class='node-label'></div>");
 				var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.label_node[langcode].text()+"\">");
 				$(htmlLabelInputObj).change(function (){
 					UIFactory["Node"].updateLabel(htmlLabelInputObj,self,langcode);
