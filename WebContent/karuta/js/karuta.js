@@ -957,6 +957,15 @@ function decrypt(text,key){
 	}  
 
 //==================================
+function sortJsonOnCode(a,b)
+//==================================
+{
+	a = a.code.toLowerCase();
+	b = b.code.toLowerCase();
+	return (a < b) ? -1 : (a > b) ? 1 : 0;
+}
+
+//==================================
 function sortOn1(a,b)
 //==================================
 {

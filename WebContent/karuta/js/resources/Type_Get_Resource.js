@@ -253,7 +253,10 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 				dataType : "json",
 				url : url,
 				success : function(data) {
-					text = eval("data."+target).replace(/"/g, "'");
+					if (typeof eval("data."+target) === "undefined")
+						text = "";
+					else
+						text = eval("data."+target).replace(/"/g, "'");						
 					//----------------------------------------
 					for (var i=0; i<languages.length;i++){
 						var label = $(selected_item).attr('label_'+languages[i]);
@@ -1194,7 +1197,7 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 	var display_label = true;
 	var self_code = $(self.code_node).text();
 	//-----Node ordering-------------------------------------------------------
-	var newTableau1 = data;
+	var tableau1 = data;
 	//------------------------------------------------------------
 	$('#wait-window').modal('hide');
 	if (type=='select') {
@@ -1236,6 +1239,7 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 		});
 		$(select_item).append($(select_item_a))
 		$(select).append($(select_item));
+		var newTableau1 = tableau1.sort(sortJsonOnCode);
 		//---------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
 			//------------------------------
