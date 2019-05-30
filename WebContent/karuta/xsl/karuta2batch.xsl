@@ -763,7 +763,7 @@
 									</xsl:when>
 									<xsl:when test="$old-select!=''"><xsl:value-of select='$old-select'/></xsl:when>
 									<xsl:when test="$old-tree-select!=''"><xsl:value-of select='$old-tree-select'/></xsl:when>
-									<xsl:otherwise></xsl:otherwise>
+									<xsl:otherwise><xsl:value-of select='$semtag'/></xsl:otherwise>
 								</xsl:choose>
 							</xsl:when>
 							<xsl:otherwise><xsl:value-of select='$uuid'/>.#uuid</xsl:otherwise>
