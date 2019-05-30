@@ -771,6 +771,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		var inputs_obj = $(inputs);
 		//-----------------------
 		for ( var i = 0; i < newTableau1.length; ++i) {
+			var disabled = false;
+			var selectable = true;
 			var input = "";
 			var resource = null;
 			if ($("asmResource",newTableau1[i][1]).length==3)
@@ -786,14 +788,25 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (code.indexOf("@")<0) {
 				display_code = true;
 			}
+			if (code.indexOf("?")>-1) {
+				disabled = true;
+			}
+			if (code.indexOf("!")>-1) {
+				selectable = false;
+			}
 			code = cleanCode(code);
 			//------------------------------
-			input += "<div> <input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
-			input += "' ";
-			for (var j=0; j<languages.length;j++){
-				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+			input += "<div>";
+			if (selectable) {
+				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
+				input += "' ";
+				for (var j=0; j<languages.length;j++){
+					input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+				}
+				if (disabled)
+					input += "disabled";
+				input += "> ";
 			}
-			input += "> ";
 			if (display_code)
 				input += code + " ";
 			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";

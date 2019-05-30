@@ -1763,6 +1763,8 @@ function cleanCode(code)
 	code = removeStr(code,"%");
 	code = removeStr(code,"$");
 	code = removeStr(code,"&");
+	code = removeStr(code,"?");
+	code = removeStr(code,"!");
 	code = removeStr(code,"----");
 	return code;
 }
