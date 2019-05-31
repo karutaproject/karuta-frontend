@@ -433,6 +433,9 @@
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	
+	<xsl:template match="*[metadata/@semantictag='update-resource']">
+	</xsl:template>
+	
 	<xsl:template match="*[metadata/@semantictag='update-field']">
 		<xsl:variable name="select">
 			<xsl:call-template name='get-select'>
