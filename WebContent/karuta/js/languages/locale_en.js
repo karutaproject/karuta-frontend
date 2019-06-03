@@ -103,6 +103,8 @@ karutaStr['en']['error-existing-login']="ERROR - The login already exists or an 
 //========== NODE =====================
 //=========================================
 
+karutaStr['en']['node']="Node";
+karutaStr['en']['node-label']="Node Label";
 karutaStr['en']['label']="Label";
 karutaStr['en']['code']="Code";
 karutaStr['en']['value']="Value";
@@ -172,6 +174,7 @@ karutaStr['en']['private']="Hidden";
 karutaStr['en']['hide-metainfo']="Hide Metadata";
 karutaStr['en']['show-metainfo']="Show Metadata";
 karutaStr['en']['padding-top']="Space Before (in pixels)";
+karutaStr['en']['margin-top']="Space Before (in pixels)";
 karutaStr['en']['background-color']="Background Color";
 karutaStr['en']['moveroles']="Roles - Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
@@ -179,7 +182,7 @@ karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
 karutaStr['en']['menu-type']="Menu Type";
 karutaStr['en']['displayview']="Display View";
-karutaStr['en']['node']="Node Content";
+karutaStr['en']['node-content']="Node Content";
 karutaStr['en']['resource']="Resource";
 karutaStr['en']['metadata']="Metadata";
 karutaStr['en']['css-styles']="CSS Styles";

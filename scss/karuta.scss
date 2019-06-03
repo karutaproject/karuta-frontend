@@ -94,6 +94,10 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 /*     EDIT WINDOW        */
 /* ====================== */
 
+	#edit-window-header.modal-header {
+		display:block;
+	}
+	
 	#edit-window-body {
 //		min-height: 200px;
 		overflow-y: scroll;
@@ -796,7 +800,6 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 			margin-bottom:5px;
 	
 		}
-		margin:20px;
 		.standard-resource-card {
 			margin-left:0px;
 			margin-right:0px;
@@ -818,6 +821,9 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	
 	
 	.standard-node-carddeck {
+		.standard-node-card {
+			margin-top:0px;
+		}
 		.content {
 			padding-left:20px;
 			padding-right:20px;
@@ -1588,7 +1594,7 @@ hr {
 			margin-top:3px;
 			border: 1px solid #ced4da;
 			border-radius: .2rem;
-			max-width:400px;
+			max-width:600px;
 			.form-control {
 				border: 0px solid var(--edit-window-border-color);
 			}

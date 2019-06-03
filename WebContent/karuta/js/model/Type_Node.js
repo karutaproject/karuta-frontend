@@ -381,8 +381,12 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	} else {
 		$("#node_"+this.id).replaceWith(html);
 	}
-	//-------------------- node style -------------------
+	//-------------------- STYLES ---------------------------------------
 	var style = "";
+	//-------------------- node style -------------------
+	style = this.getNodeStyle(uuid);
+	$("#node_"+uuid).attr("style",style);
+	//-------------------- label style -------------------
 	style = this.getLabelStyle(uuid);
 	$("div[name='lbl-div']","#node_"+uuid).attr("style",style);
 	//-------------------- resource style -------------------
@@ -1156,106 +1160,6 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	};
 		
 		
-//----------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-//----------------------- STYLES ---------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-
-
-//==================================================
-UIFactory["Node"].getLabelStyle = function(uuid)
-//==================================================
-{
-	var node = UICom.structure["ui"][uuid];
-	metadataepm = node.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
-	return style;
-}
-
-//==================================================
-UIFactory["Node"].prototype.getLabelStyle = function()
-//==================================================
-{
-	metadataepm = this.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
-	return style;
-}
-
-//==================================================
-UIFactory["Node"].getContentStyle = function(uuid)
-//==================================================
-{
-	var node = UICom.structure["ui"][uuid];
-	metadataepm = node.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
-	return style;
-}
-
-//==================================================
-UIFactory["Node"].getDataContentStyle = function(data)
-//==================================================
-{
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(data,'node-padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(data,'node-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(data,'node-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-color',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-text-align',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-background-color',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-width',true);
-	style += UIFactory.Node.getMetadataEpm(data,'node-height',true);
-	style += UIFactory.Node.getOtherMetadataEpm(data,'node-othercss');
-	return style;
-}
-
-
-//==================================================
-UIFactory["Node"].prototype.getContentStyle = function()
-//==================================================
-{
-	metadataepm = this.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
-	return style;
-}
-
 
 
 //----------------------------------------------------------------------------------------------------------------------------

@@ -103,6 +103,8 @@ karutaStr['fr']['error-existing-login']="ERREUR - Le login existe déjà ou une 
 //========== NODE =========================
 //=========================================
 
+karutaStr['fr']['node']="Noeud";
+karutaStr['fr']['node-label']="Libellé du noeud";
 karutaStr['fr']['label']="Libellé";
 karutaStr['fr']['code']="Code";
 karutaStr['fr']['value']="Valeur";
@@ -172,6 +174,7 @@ karutaStr['fr']['private']="Caché";
 karutaStr['fr']['hide-metainfo']="Cacher metadata";
 karutaStr['fr']['show-metainfo']="Montrer metadata";
 karutaStr['fr']['padding-top']="Espace avant (en pixels)";
+karutaStr['fr']['margin-top']="Espace avant (en pixels)";
 karutaStr['fr']['background-color']="Couleur du fond";
 karutaStr['fr']['moveroles']="Rôles - Déplacer";
 karutaStr['fr']['othercss']="Autres instructions CSS";
@@ -179,7 +182,7 @@ karutaStr['fr']['cssfile']="Fichier CSS";
 karutaStr['fr']['display-type']="Type de présentation";
 karutaStr['fr']['menu-type']="Type de menu";
 karutaStr['fr']['displayview']="Type de vue";
-karutaStr['fr']['node']="Contenu du noeud";
+karutaStr['fr']['node-content']="Contenu du noeud";
 karutaStr['fr']['resource']="Ressource";
 karutaStr['fr']['metadata']="Métadonnées";
 karutaStr['fr']['css-styles']="Styles CSS";

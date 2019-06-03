@@ -84,6 +84,10 @@ h3 {
 /* ====================== */
 /*     EDIT WINDOW        */
 /* ====================== */
+#edit-window-header.modal-header {
+  display: block;
+}
+
 #edit-window-body {
   overflow-y: scroll;
   height: 100%;
@@ -721,7 +725,6 @@ table[name=res-div] {
 
 .standard-node-card {
   margin: 20px;
-  margin: 20px;
 }
 .standard-node-card .node-model {
   margin-bottom: 5px;
@@ -744,6 +747,9 @@ table[name=res-div] {
   padding-top: 0px;
 }
 
+.standard-node-carddeck .standard-node-card {
+  margin-top: 0px;
+}
 .standard-node-carddeck .content {
   padding-left: 20px;
   padding-right: 20px;
@@ -1463,7 +1469,7 @@ hr {
   margin-top: 3px;
   border: 1px solid #ced4da;
   border-radius: 0.2rem;
-  max-width: 400px;
+  max-width: 600px;
 }
 .metadata .input-group .form-control {
   border: 0px solid var(--edit-window-border-color);
