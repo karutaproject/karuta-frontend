@@ -2483,7 +2483,7 @@ function convertCSVLine2json(codes,csvline)
 //-----------------------------------------------------------------------
 //------------------------ Update Node ----------------------------------
 //-----------------------------------------------------------------------
-//---------------------- for backward compatibility ---------------------
+
 
 //=================================================
 g_actions['update-node'] = function updateNode(node)
@@ -2513,20 +2513,20 @@ g_actions['update-node'] = function updateNode(node)
 						text = g_trees[source_treeref][0];
 				}
 				//---------------------------
-				if (type=='Field') {
+				if (type=='Field') {//---------------------- for backward compatibility ---------------------
 					updateField(nodes,node,type,semtag,text);
 				}
-				if (type=='Proxy') {
+				if (type=='Proxy') {//---------------------- for backward compatibility ---------------------
 					updateProxy(nodes,node,type,semtag);
 				}
-				if (type=='Dashboard') {
+				if (type=='Dashboard') {//---------------------- for backward compatibility ---------------------
 					updateDashboard(nodes,node,type,semtag,text);
 				}
 				if (type=='Metadata'){
 					var attribute = $(node).attr("attribute");
 					updateMetada(nodes,node,type,semtag,text,attribute)
 				}
-				if (type=='MetadataInline'){
+				if (type=='MetadataInline'){//---------------------- for backward compatibility ---------------------
 					var attribute = 'inline';
 					updateMetada(nodes,node,type,semtag,text,attribute)
 				}
@@ -2534,24 +2534,24 @@ g_actions['update-node'] = function updateNode(node)
 					var attribute = $(node).attr("attribute");
 					updateMetadawad(nodes,node,type,semtag,text,attribute)
 				}
-				if (type=='MetadatawadQuery') {
+				if (type=='MetadatawadQuery') {//---------------------- for backward compatibility ---------------------
 					var attribute = 'query';
 					updateMetadawad(nodes,node,type,semtag,text,attribute);
 				}
-				if (type=='MetadatawadMenu') {
+				if (type=='MetadatawadMenu') {//---------------------- for backward compatibility ---------------------
 					var attribute = 'menuroles';
 					updateMetadawad(nodes,node,type,semtag,text,attribute);
 				}
-				if (type=='NodeResource') {
+				if (type=='NodeResource') {//---------------------- for backward compatibility ---------------------
 					updateNodeResource(nodes,node);
 				}
-				if (type=='Calendar') {
+				if (type=='Calendar') {//---------------------- for backward compatibility ---------------------
 					updateCalendar(nodes,node,text,semtag);
 				}
-				if (type=='Document') {
+				if (type=='Document') {//---------------------- for backward compatibility ---------------------
 					updateDocument(nodes,node,text,semtag);
 				}
-				if (type=='Rights'){
+				if (type=='Rights'){//---------------------- for backward compatibility ---------------------
 					var rd = $(node).attr("rd");
 					var wr = $(node).attr("wr");
 					var dl = $(node).attr("dl");

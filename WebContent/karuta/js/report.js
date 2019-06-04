@@ -71,6 +71,9 @@ function r_getSelector(select,test)
 	if (selects[1]!="") {
 		jquery +=":has(metadata[semantictag*='"+selects[1]+"'])";
 		filter1 = function(){return $(this).children("metadata[semantictag*='"+selects[1]+"']").length>0};
+	}	else {
+		jquery +=":has(metadata)";
+		filter1 = function(){return $(this).children("metadata").length>0};
 	}
 	var filter2 = test; // test = .has("metadata-wad[submitted='Y']").last()
 	for (fct in jquerySpecificFunctions) {
@@ -876,6 +879,14 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			}
 			if (selector.type=='node label') {
 				text = UICom.structure["ui"][nodeid].getLabel();
+			}
+			if (selector.type=='loginfo') {
+				var lastmodified = UICom.structure["ui"][nodeid].resource.lastmodified_node.text();
+				var user = UICom.structure["ui"][nodeid].resource.user_node.text();
+				try {
+					text = lastmodified+" - user : "+user;
+					}
+				catch(error) {text="/"};
 			}
 			if (selector.type=='node value') {
 				text = UICom.structure["ui"][nodeid].getValue();

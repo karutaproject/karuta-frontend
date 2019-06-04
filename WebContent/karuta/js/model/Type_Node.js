@@ -163,6 +163,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.printroles = ($(node.metadatawad).attr('printroles')==undefined)?'':$(node.metadatawad).attr('printroles');
 	this.privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
+	this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
 	if (this.submitted=='Y') {
 		this.menu = false;
 	}
@@ -892,6 +893,8 @@ UIFactory["Node"].prototype.save = function()
 //==================================
 {
 	UICom.UpdateNode(this.id);
+	if (this.logcode!="")
+		this.log();
 	this.refresh();
 };
 
@@ -1009,6 +1012,60 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 	});
 };
 
+//==================================
+UIFactory["Node"].prototype.log = function()
+//==================================
+{
+	var srceid = this.id;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/code/"+this.logcode,
+		success : function(data) {
+			var destid = $("asmRoot",data).attr("id");
+			var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+srceid;
+			$.ajax({
+				type : "POST",
+				dataType : "text",
+				url : urlS,
+				data : "",
+				success :{
+/**
+ * 		var nodeid = $(nodes[0]).attr('id');
+		var metadata = $("metadata",nodes[0]);
+		$(metadata).attr(attribute,text);
+		var xml = xml2string(metadata[0]);
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			async : false,
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			nodeid : nodeid,
+			semtag : semtag,
+			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
+			success : function(data) {
+				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag);
+				updateMetada(nodes,node,type,semtag,text,attribute)
+			},
+			error : function(data,nodeid,semtag) {
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadata("+this.nodeid+") - semtag="+this.semtag);
+				updateMetada(nodes,node,type,semtag,text,attribute);
+			}
+		});
+
+ */
+				},
+				error : function(jqxhr,textStatus) {
+					alert("Error in Node.log "+textStatus+" : "+jqxhr.responseText);
+				}
+			});
+		}					
+	});
+}
+
+	
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------- SIDEBAR --------------------------------------------------------------------------------------------

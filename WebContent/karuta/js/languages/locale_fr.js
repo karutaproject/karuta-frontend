@@ -217,6 +217,7 @@ karutaStr['fr']['export-rtf']="Exporter RTF";
 karutaStr['fr']['export-htm']="Exporter HTML";
 karutaStr['fr']['list-semtags']="Liste des tags sémantiques";
 karutaStr['fr']['printroles']="Rôles - Imprimer";
+karutaStr['fr']['logcode']="Code du log";
 
 //=========================================
 //========== ADMIN ========================

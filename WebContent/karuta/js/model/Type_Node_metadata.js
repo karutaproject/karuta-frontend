@@ -748,6 +748,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
 		this.displayMetadataWadAttributeEditor('metadata-part2','seltype');
 	}
+	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
 	//----------------------Search----------------------------
 	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
 		html  = "<hr><label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
