@@ -163,15 +163,6 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	if (code.indexOf("&")>-1)
 		html += " ["+$(this.value_node).text()+ "] ";
 	html += "</div>";
-	html += "<div class='"+cleanCode(code)+"'>";
-	if (code.indexOf("#")>-1)
-		html += cleanCode(code) + " ";
-	if (code.indexOf("%")<0)
-		html += text;
-	if (code.indexOf("&")>-1)
-		html += " ["+$(this.value_node).text()+ "] ";
-	html += "</div>";
-
 	return html;
 };
 
