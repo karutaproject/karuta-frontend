@@ -735,7 +735,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 //=======================================================================
 // if srcetag does not exist as semantictag search as code
 {
-	$("#wait-window").modal('show');
+//	$("#wait-window").modal('show');
 	//------------
 	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 	if (srcecode.indexOf('.')<0 && srcecode!='self')  // There is no project, we add the project of the current portfolio

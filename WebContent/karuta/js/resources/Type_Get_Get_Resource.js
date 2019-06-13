@@ -1088,6 +1088,7 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags)
 //==================================
 {
 	$.ajaxSetup({async: false});
+	$("#wait-window").modal('show');
 	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
 	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
@@ -1104,6 +1105,7 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags)
 			param4 = true;
 		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4);
 	}
+	$.ajaxSetup({async: true});
 };
 
 //==================================
