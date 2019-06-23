@@ -160,9 +160,7 @@ function displayKarutaPublic()
 
 	//---------------------------
 	$("#welcome").html(welcome[LANG]);
-	$.ajaxSetup({async: false});
 	//----------------
-	$.ajaxSetup({async: false});
 	loadLanguages(function(data) {
 		getLanguage();
 	});
@@ -172,34 +170,7 @@ function displayKarutaPublic()
 		url : serverBCK+"/direct?i=" + iid,
 		success : function(data) {
 			g_uuid = data;
-			$.ajax({ // get group-role for the user
-				Accept: "application/xml",
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/credential/group/" + g_uuid,
-				success : function(data) {
-					var usergroups = $("group",data);
-					for (var i=0;i<usergroups.length;i++) {
-						g_userroles[i+1] = $("role",usergroups[i]).text();
-					}
-					g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
-				}
-			});
 			//----------------
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/credential",
-				data: "",
-				success : function(data) {
-					USER = new UIFactory["User"]($("user",data));
-				},
-				error : function( jqXHR, textStatus, errorThrown ) {
-					if (jqXHR.status=="401") {
-						window.location = "login.htm?i="+iid+"&lang="+lang;
-					}						
-				}
-			});
 			$(document).click(function(e) {
 			    if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {
 			        $('.popover').hide();
@@ -211,50 +182,77 @@ function displayKarutaPublic()
 				dataType : "text",
 				url : serverBCK_API+"/nodes/node/" + g_uuid  +"/portfolioid",
 				success : function(data) {
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/credential",
+						data: "",
+						success : function(data) {
+							USER = new UIFactory["User"]($("user",data));
+						},
+						error : function( jqXHR, textStatus, errorThrown ) {
+							if (jqXHR.status=="401") {
+								window.location = "login.htm?i="+iid+"&lang="+lang;
+							}						
+						}
+					});
 					g_portfolioid = data;
+					$.ajax({ // get group-role for the user
+						Accept: "application/xml",
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/credential/group/" + g_portfolioid,
+						success : function(data) {
+							var usergroups = $("group",data);
+							for (var i=0;i<usergroups.length;i++) {
+								g_userroles[i+1] = $("role",usergroups[i]).text();
+							}
+							g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
+							$.ajax({
+								type : "GET",
+								dataType : "xml",
+								url : serverBCK_API+"/nodes/node/" + g_uuid,
+								success : function(data) {
+									g_portfolio_current = data;
+									UICom.parseStructure(data);
+									var depth = 99;
+									var rootnode = UICom.structure['ui'][g_uuid];
+									if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
+										depth = 1;
+									setCSSportfolio(data);
+									setLanguage(lang,'publichtm');
+									if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
+										UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
+									$("#contenu").html("<div id='page' uuid='"+g_uuid+"'></div>");
+									var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
+									if (semtag == 'bubble_level1') {
+										$("#main-container").html("");
+										UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'main-container',depth,LANGCODE,true);
+									}
+									else
+										UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
+									var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
+									if (welcomes.length>0){
+										var welcomeid = $(welcomes[0]).attr('id');
+										$("#sidebar_"+welcomeid).click();
+									} else {
+										var root = $("asmRoot",data);
+										var rootid = $(root[0]).attr('id');
+										$("#sidebar_"+rootid).click();
+									}
+								}
+							});
+						}
+					});
 				}
 			});
+			
 			//----------------
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes/node/" + g_uuid,
-				success : function(data) {
-					g_portfolio_current = data;
-					UICom.parseStructure(data);
-					var depth = 99;
-					var rootnode = UICom.structure['ui'][g_uuid];
-					if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
-						depth = 1;
-					setCSSportfolio(data);
-					setLanguage(lang,'publichtm');
-					if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
-						UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
-					$("#contenu").html("<div id='page' uuid='"+g_uuid+"'></div>");
-					var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
-					if (semtag == 'bubble_level1') {
-						$("#main-container").html("");
-						UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'main-container',depth,LANGCODE,true);
-					}
-					else
-						UIFactory['Node'].displayStandard(UICom.structure['tree'][g_uuid],'contenu',depth,LANGCODE,true);
-					var welcomes = $("asmUnit:has(metadata[semantictag*='welcome-unit'])",data);
-					if (welcomes.length>0){
-						var welcomeid = $(welcomes[0]).attr('id');
-						$("#sidebar_"+welcomeid).click();
-					} else {
-						var root = $("asmRoot",data);
-						var rootid = $(root[0]).attr('id');
-						$("#sidebar_"+rootid).click();
-					}
-				}
-			});
 		},
 		error : function( jqXHR, textStatus, errorThrown ) {
 			alert("Get portfolio: "+jqXHR.status + " "+errorThrown)
 		}
 	});
-	$.ajaxSetup({async: true});
 }
 
 
