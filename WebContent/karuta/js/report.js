@@ -233,6 +233,11 @@ function r_processNode(no,xmlDoc,destid,data,line)
 //==================================
 {
 	var select = $(xmlDoc).attr("select");
+	while (select.indexOf("##")>-1) {
+		var select_string = select.substring(select.indexOf("##")+2); // select_string = variable##.....
+		var variable_name = select_string.substring(0,select_string.indexOf("##"));
+		select = select.replace("##"+variable_name+"##", variables[variable_name]);
+	}
 	var test = $(xmlDoc).attr("test");
 	if (select!=undefined) {
 		var selector = r_getSelector(select,test);

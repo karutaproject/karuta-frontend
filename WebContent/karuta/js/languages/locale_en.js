@@ -212,6 +212,7 @@ karutaStr['en']['export-rtf']="Export RTF";
 karutaStr['en']['export-htm']="Export HTML";
 karutaStr['en']['list-semtags']="List of Semantic Tags";
 karutaStr['en']['printroles']="Roles - Print";
+karutaStr['en']['duration']="Link Lifetime";
 
 //=========================================
 //========== ADMIN ========================

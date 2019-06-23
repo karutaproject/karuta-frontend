@@ -149,7 +149,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	html += "<div class='"+cleanCode(code)+" view-div' style='";
 	if (indashboard)
 		html += "background-position:cente;'";
-	if (this.queryattr_value.indexOf("CNAM")>-1)
+	if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
 		html += "font-weight:bold;"
 	html += "'>";
 	if (code.indexOf("#")>-1)
@@ -190,7 +190,7 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 	var code = $(this.code_node).text();
 	var html = "";
 	html += "<div class='"+cleanCode(code)+"'"
-	if (this.queryattr_value.indexOf("CNAM")>-1)
+	if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
 		html += " style='font-weight:bold' "
 	html += ">";
 	if (code.indexOf("#")>-1)
@@ -230,7 +230,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 	$(itself.value_node[0]).text(value);
 	$(itself.code_node[0]).text(code);
 	//------------CNAM----------------------------
-	if (itself.queryattr_value.indexOf("CNAM")>-1) {
+	if (itself.queryattr_value != undefined && itself.queryattr_value.indexOf("CNAM")>-1) {
 		if (code!='') {
 			var srce_indx = itself.queryattr_value.lastIndexOf('.');
 			var srce = itself.queryattr_value.substring(srce_indx+1);

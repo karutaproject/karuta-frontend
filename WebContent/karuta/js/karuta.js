@@ -1036,7 +1036,7 @@ function getSendPublicURL(uuid,shareroles)
 }
 
 //==================================
-function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,sharerole)
+function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole)
 //==================================
 {
 	//---------------------
@@ -1050,10 +1050,14 @@ function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,
 	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
 	var obj = $(send_button);
 	$(obj).click(function (){
-		var email = $("#email").val();
-		var role = "all"
-		if (email!='') {
-			getPublicURL(uuid,email,sharerole,sharewithrole,sharelevel,shareduration,langcode);
+		if (sharetoemail=='?') {
+			sharetoemail = $("#email").val();
+		}
+		if (shareduration=='?') {
+			shareduration = $("#duration").val();
+		}
+		if (sharetoemail!='' && shareduration!='') {
+			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode);
 		}
 	});
 	$("#edit-window-footer").append(obj);
@@ -1062,10 +1066,19 @@ function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,
 
 	var html = "<div class='form-horizontal'>";
 	html += "<div class='form-group'>";
-	html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>";
-	html += "		<div class='col-sm-9'>";
-	html += "			<input id='email' type='text' class='form-control'>";
-	html += "		</div>";
+	if (sharetoemail=='?') {
+		html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>";
+		html += "		<div class='col-sm-9'>";
+		html += "			<input id='email' type='text' class='form-control'>";
+		html += "		</div>";
+	}
+
+	if (shareduration=='?') {
+		html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['shareduration']+"</label>";
+		html += "		<div class='col-sm-9'>";
+		html += "			<input id='duration' type='text' class='form-control'>";
+		html += "		</div>";
+	}
 	html += "</div>";
 	html += "</div>";
 	$("#edit-window-body").html(html);
@@ -1711,7 +1724,8 @@ function setCSSportfolio(data)
 	if ($("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).length>0) {
 		var portfolio_section_title_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).attr("id");
 		var portfolio_section_title_background_color = UICom.structure["ui"][portfolio_section_title_background_color_id].resource.getValue();
-		changeCss(".row-node-asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
+//		changeCss(".row-node-asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
+		changeCss(".asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
 	}
 	// ========================================================================
 }

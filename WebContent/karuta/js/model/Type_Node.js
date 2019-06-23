@@ -605,7 +605,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 	var titleid = $(titles[0]).attr("id");
 	var html = "";
 	html += "<div class='page-welcome'>";
-	html += "<div id='welcome-image' style=\"background-size: 100%;background-repeat:no-repeat;background-image: url('../../../"+serverBCK+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
+	html += "<div id='welcome-image' style=\"background-size: cover;background-repeat:no-repeat;background-image: url('../../../"+serverBCK+"/resources/resource/file/"+imageid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"')\">";
 	if (titles.length>0) {
 		html += "<div class='welcome-box'>";
 		html += "<div class='welcome-subbox'>";
@@ -2974,8 +2974,12 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 		}
 		//------------ delete button ---------------------
 		if ((deletenode || USER.admin || g_userroles[0]=='designer') && node.asmtype != 'asmRoot') {
+			var param1 = g_portfolio_rootid;
+			if (g_portfolio_rootid=='')
+				param1 = $("#page").attr('uuid');
+
 			if (node.asmtype == 'asmStructure' || node.asmtype == 'asmUnit') {
-				html += deleteButton(node.id,node.asmtype,undefined,undefined,"UIFactory.Node.reloadStruct",g_portfolio_rootid,null);
+				html += deleteButton(node.id,node.asmtype,undefined,undefined,"UIFactory.Node.reloadStruct",param1,null);
 			} else {
 				html += deleteButton(node.id,node.asmtype,undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
 			}
@@ -3133,6 +3137,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' )
 						callback = "UIFactory.Node.reloadStruct";
 					var param2 = "'"+g_portfolio_rootid+"'";
+					if (g_portfolio_rootid=='')
+						param2 = "'"+$("#page").attr('uuid')+"'";
 					var param3 = null;
 					var param4 = null;
 					html += "<span class='dropdown dropdown-menu-left dropdown-button'>";
@@ -3174,6 +3180,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' )
 						callback = "UIFactory.Node.reloadStruct";
 					var param2 = "'"+g_portfolio_rootid+"'";
+					if (g_portfolio_rootid=='')
+						param2 = "'"+$("#page").attr('uuid')+"'";
 					var param3 = null;
 					var param4 = null;
 					var i = no_monomenu;
@@ -3269,7 +3277,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					var shareduration = shares[i][4];
 					var sharelabel = shares[i][5];
 					if (shareto!='' && shareroles.indexOf('2world')<0) {
-						if (shareto!='?') {
+						if (shareto!='?' && shareduration!='?') {
 							var sharetoemail = "";
 							var sharetoroles = "";
 							var sharetos = shareto.split(" ");
@@ -3279,6 +3287,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 								else
 									sharetoroles += sharetos[k]+" ";
 							}
+							var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -3286,12 +3295,26 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 									if (labels[j].indexOf(languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
 							}
-						} else{
+						} else {
+							if (shareto!='?') {
+								var sharetoemail = "";
+								var sharetoroles = "";
+								var sharetos = shareto.split(" ");
+								for (var k=0;k<sharetos.length;k++) {
+									if (sharetos[k].indexOf("@")>0)
+										sharetoemail += sharetos[k]+" ";
+									else
+										sharetoroles += sharetos[k]+" ";
+								}
+							} else {
+								sharetoemail = '?';
+							}
+							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
+//							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -3299,7 +3322,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 									if (labels[j].indexOf(languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
 								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
