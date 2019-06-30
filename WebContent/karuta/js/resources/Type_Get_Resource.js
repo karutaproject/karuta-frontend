@@ -146,8 +146,24 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
 	var html = "";
-	if (label.indexOf("resource-")>-1) {
-		html += UICom.structure["ui"][label.substring(9)].resource.getView();		
+	if (label.indexOf("resource:")>-1) {
+		var elts = label.split("|");
+		try {
+			html += UICom.structure["ui"][elts[0].substring(9)].resource.getView();
+		}
+		catch(e) {
+			var semtag = elts[1].substring(7);
+			// search for resource uuid
+			var res_node = $("asmContext:has(metadata[semantictag='"+semtag+"']):has(code:contains('"+code+"'))",g_portfolio_current);
+
+			var resid = $($(res_node)[0]).attr('id');
+			for (var i=0; i<languages.length;i++){
+				this.label_node[i].text('resource:'+resid+'|semtag:'+semtag);
+			}
+			//update get_resource
+			this.save();
+			html += UICom.structure["ui"][resid].resource.getView();
+		}
 	} else {
 		html += "<div class='"+cleanCode(code)+" view-div' style='";
 		if (indashboard)
@@ -636,9 +652,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					html = "<li></li>";
 				}
 				var select_item = $(html);
-				html = "<a  value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+				html = "<a  value='"+semtag+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
 				for (var j=0; j<languages.length;j++){
-					html += "label_"+languages[j]+"=\"resource-"+uuid+"\" ";
+					html += "label_"+languages[j]+"=\"resource:"+uuid + "|semtag:"+semtag+"\" ";
 				}
 				html += ">";
 				
@@ -717,9 +733,12 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
-				if (target=='fileid' || target=='resource')
-					input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
-				else
+				if (target=='fileid' || target=='resource') {
+					if (target=='fileid')
+						input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
+					else
+						input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"\" ";
+				} else 
 					input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
 			if (code!="" && self_code==$('code',resource).text())
@@ -849,9 +868,12 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 				input += "' ";
 				for (var j=0; j<languages.length;j++){
-					if (target=='fileid' || target=='resource')
-						input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
-					else
+					if (target=='fileid' || target=='resource') {
+						if (target=='fileid')
+							input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
+						else
+							input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"\" ";
+					} else 
 						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
 				if (disabled)
