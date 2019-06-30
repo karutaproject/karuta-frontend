@@ -241,6 +241,8 @@ function getNavBar(type,portfolioid,edit)
 		html += "						<li><a href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a></li>";
 		if ((USER.creator && !USER.limited)  && !USER.admin)
 			html += "						<li><a href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a></li>";
+		if (USER.change_name)
+			html += "						<li><a href=\"javascript:UIFactory['User'].callChangeName()\">"+karutaStr[LANG]['change_name']+"</a></li>";
 		html += "					</ul>";
 		html += "				</li>";
 		html += "			</ul>";
