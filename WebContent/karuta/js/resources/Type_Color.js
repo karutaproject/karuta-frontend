@@ -99,7 +99,7 @@ UIFactory["Color"].prototype.getValue = function(dest,type,langcode)
 	var value = $(this.text_node[langcode]).text();
 	if (this.encrypted)
 		value = decrypt(html.substring(3),g_rc4key);
-	if (value.charAt(0) != "#") value = "#"+value;
+//	if (value.charAt(0) != "#") value = "#"+value;
 	return value;
 };
 
@@ -177,7 +177,7 @@ UIFactory["Color"].prototype.getEditor = function(type,langcode,disabled)
 		value = decrypt(value.substring(3),g_rc4key);
 	var obj = $("<div></div>");
 	var obj1 = $("<div style='margin-bottom:30px'></div>");
-	var input = "<input type='text' class='pickcolor form-control' style='width:150px;' ";
+	var input = "<input type='text' class='pickcolor' style='width:150px;' ";
 	if (disabled)
 		input += "disabled='disabled' ";
 	input += "value=\""+value+"\" >";

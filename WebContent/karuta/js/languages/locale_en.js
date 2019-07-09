@@ -37,8 +37,13 @@ karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
 karutaStr["en"]["button-2world"] = "Public URL";
 karutaStr["en"]["button-up"] = "Up";
+karutaStr["en"]["button-reload"] = "Reload Page";
 karutaStr["en"]["button-refresh"] = "Reload Portfolio";
 karutaStr["en"]["button-refresh-report"] = "Reload Report";
+karutaStr["en"]["button-disconnect"] = "Disconnect";
+karutaStr["en"]["button-change-password"] = "To change your password";
+karutaStr["en"]["button-new-window"] = "Open a new tab";
+karutaStr["en"]["button-support"] = "Technical Support";
 karutaStr['en']['Add']="Add";
 karutaStr['en']['AddGroup']="Add a Group";
 karutaStr['en']['confirm-delete']="Do you want to delete? This action cannot be undone.";
@@ -85,6 +90,7 @@ karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Heig
 karutaStr['en']['list-novisible']="Not Visible";
 karutaStr['en']['empty-bin']="Empty bin";
 karutaStr['en']['complex']="Partial Loading";
+karutaStr["en"]["button-print"] = "Print";
 
 //=========================================
 //========== ERRORS =======================
@@ -97,6 +103,8 @@ karutaStr['en']['error-existing-login']="ERROR - The login already exists or an 
 //========== NODE =====================
 //=========================================
 
+karutaStr['en']['node']="Node";
+karutaStr['en']['node-label']="Node Label";
 karutaStr['en']['label']="Label";
 karutaStr['en']['code']="Code";
 karutaStr['en']['value']="Value";
@@ -166,13 +174,15 @@ karutaStr['en']['private']="Hidden";
 karutaStr['en']['hide-metainfo']="Hide Metadata";
 karutaStr['en']['show-metainfo']="Show Metadata";
 karutaStr['en']['padding-top']="Space Before (in pixels)";
+karutaStr['en']['margin-top']="Space Before (in pixels)";
 karutaStr['en']['background-color']="Background Color";
 karutaStr['en']['moveroles']="Roles - Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
 karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
+karutaStr['en']['menu-type']="Menu Type";
 karutaStr['en']['displayview']="Display View";
-karutaStr['en']['node']="Node Content";
+karutaStr['en']['node-content']="Node Content";
 karutaStr['en']['resource']="Resource";
 karutaStr['en']['metadata']="Metadata";
 karutaStr['en']['css-styles']="CSS Styles";
@@ -206,6 +216,8 @@ karutaStr['en']['export-pdf']="Export PDF";
 karutaStr['en']['export-rtf']="Export RTF";
 karutaStr['en']['export-htm']="Export HTML";
 karutaStr['en']['list-semtags']="List of Semantic Tags";
+karutaStr['en']['printroles']="Roles - Print";
+karutaStr['en']['logcode']="Log Code";
 
 //=========================================
 //========== ADMIN ========================
@@ -279,6 +291,8 @@ karutaStr['en']['username-label']="Login";
 karutaStr['en']['firstname-label']="Firstname";
 karutaStr['en']['lastname-label']="Lastname";
 karutaStr['en']['changeOwner']="Change the Owner";
+karutaStr['en']['toggle-mode']="Toggle Edit/Read Mode";
+karutaStr['en']['write-mode']="Edit Mode";
 
 //=========================================
 //========== USERS ========================
@@ -306,6 +320,7 @@ karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['substitute']="Substitution";
 karutaStr['en']['select_user']="Select a User";
 karutaStr['en']['other']="Other";
+karutaStr['en']['delete-temporary-users']="Delete All";
 
 //=========================================
 //========== ROLES ========================
@@ -348,7 +363,7 @@ karutaStr['en']['csv']="Roles - Display CSV";
 karutaStr['en']['pdf']="Roles - Display PDF";
 karutaStr['en']['img']="Rôles - Display Image";
 karutaStr['en']['document-required']="You have to specify a document before to submit !";
-karutaStr['en']['size-upload']="Your file is so big : it must be less than " + maxfilesizeupload + " Mo !";
+karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g_configVar['maxfilesizeupload'] + " Mo !";
 
 //=========================================
 //========== EUROPASS =====================
@@ -431,6 +446,7 @@ karutaStr['en']['email-message']="Message";
 //========== RESOURCES =======================
 //=========================================
 
+karutaStr['en']['asmRoot']="Root";
 karutaStr['en']['asmStructure']="Section";
 karutaStr['en']['asmUnit']="Page";
 karutaStr['en']['asmUnitStructure']="Subsection";

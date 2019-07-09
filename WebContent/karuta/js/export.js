@@ -20,43 +20,24 @@ function export_html()
 	//console.log(Window);
 	
 	// Create hidden div if it doesn't exist
-	$("#wait-window").show();
-	var basehtml = $("html", document);
-	var exportdiv = $('#export_html', basehtml);
-	$(exportdiv).remove();
+	$("#wait-window").modal('show');
 	
-	var exportdiv = $("<div></div>");
-	$(exportdiv).attr('id', 'export_html');
-	$(exportdiv).css("display", "none");
-	$(basehtml).append(exportdiv);
+	var sub_bar = $("#sub-bar").clone();
+	var main_container = $("#main-container").clone();
+
+	$("#export-html").append(sub_bar);
+	$("#export-html").append(main_container);
 	
+	var export_contenu = $("#contenu",$("#export-html"))
+	$(export_contenu).html("");
+	$(export_contenu).attr('id',"export-contenu");
+		
 	// List links on the left
 	var leftsidebar = $('a[id^="sidebar_"]', document);
 	$("#wait-window-body").html(leftsidebar.length+1);
-	// Displaying div
-	var divcontent = $("#contenu");
 
-	/// Make a copy of the main page
-	var body = $("body", document);
-	var bhtml = $(body).html();
-	var exp_left = $("<div></div>");
-	$(exp_left).attr('id', 'export_sidebar');
-	$(exp_left).append(bhtml);
-	$(exportdiv).append(exp_left);
 	
 	var uuid = UICom.rootid;
-	//alert(UICom.rootid);
-	//displayPage('693a328e-1c42-11e6-b652-fa163ebfbd00',1,'standard','0',true)
-	
-	//console.log(leftsidebar);
-	
-	//displayPage('693a328e-1c42-11e6-b652-fa163ebfbd00',1,'standard','0',true)
-	//3 sec delay between click for rendering
-	var printoutput = function( content )
-	{
-//		console.log(content);
-	}
-	
 	// Asking a page to render
 	var clicking = function(link)
 	{
@@ -71,27 +52,19 @@ function export_html()
 			$(ids).removeAttr("id");
 			
 			/// Fetch html content
-			var content = $(divcontent).html();
+			var contenu = $("#contenu").html();
 			var id = $(link).attr("id");
 			/// Create a div for it
-			var divc = $("<div></div>");
-			$(divc).attr('id', 'export_'+id);
-			$(exportdiv).append(divc);
-			
-			$(divc).html(content);
-			
-			/// Put content in
-			printoutput(content);
+			var div_export = $("<div id='export_"+id+"'></div>");
+			$(div_export).html(contenu);
+			$(export_contenu).append(div_export);
 		}
-	
-		//$(link).click();
-		$("#wait-window").show();
+		$("#wait-window").modal('show');
 		displayPage(uuid,1,'standard','0',true)
-	$("#wait-window").show();
-		
+		$("#wait-window").show();	
 		// Delay so everything has time to render
 		setTimeout(printy, 1000);
-		$("#wait-window").show();
+		$("#wait-window").modal('show');
 	}
 	
 	var timer;

@@ -291,7 +291,7 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 					code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 				}
 				if (code.indexOf('----')>-1) {
-					html = "<li class='divider'></li><li></li>";
+					html = "<div class='dropdown-divider'></div>";
 				} else {
 					html = "<li></li>";
 				}

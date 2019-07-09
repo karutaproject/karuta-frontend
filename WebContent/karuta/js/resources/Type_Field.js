@@ -35,6 +35,12 @@ UIFactory["Field"] = function( node )
 	}
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Field']",node));
 	//--------------------
+	if ($("user",$("asmResource[xsi_type='Field']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("user");
+		$("asmResource[xsi_type='Field']",node)[0].appendChild(newelement);
+	}
+	this.user_node = $("user",$("asmResource[xsi_type='Field']",node));
+	//--------------------
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Field']",node));
@@ -65,16 +71,12 @@ UIFactory["Field"].prototype.getAttributes = function(type,langcode)
 	if (this.multilingual!=undefined && !this.multilingual)
 		langcode = 0;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest]=langcode;
-	}
-	//---------------------
 	if (type==null)
 		type = 'default';
 	//---------------------
 	if (type=='default') {
 		result['restype'] = this.type;
-		result['lastmodified'] = this.lastmodified.text();
+		result['lastmodified'] = this.lastmodified_node.text();
 		result['text'] = this.text_node[langcode].text();
 	}
 	return result;
@@ -202,7 +204,11 @@ UIFactory["Field"].prototype.displayEditor = function(dest,type,langcode,disable
 UIFactory["Field"].prototype.save = function()
 //==================================
 {
+	if (UICom.structure.ui[this.id].logcode!="")
+		$(this.user_node).text(USER.firstname+" "+USER.lastname);
 	UICom.UpdateResource(this.id,writeSaved);
+	if (UICom.structure.ui[this.id].logcode!="")
+		UICom.structure.ui[this.id].log();
 	this.refresh();
 };
 

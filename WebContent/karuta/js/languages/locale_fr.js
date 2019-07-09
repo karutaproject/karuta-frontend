@@ -37,8 +37,13 @@ karutaStr["fr"]["button-show"] = "Montrer";
 karutaStr["fr"]["button-hide"] = "Cacher";
 karutaStr["fr"]["button-2world"] = "URL publique";
 karutaStr["fr"]["button-up"] = "Monter";
+karutaStr["fr"]["button-reload"] = "Recharger la page";
 karutaStr["fr"]["button-refresh"] = "Recharger le portfolio";
 karutaStr["fr"]["button-refresh-report"] = "Rafraîchir le rapport";
+karutaStr["fr"]["button-disconnect"] = "Se déconnecter";
+karutaStr["fr"]["button-change-password"] = "Changement de mot de passe";
+karutaStr["fr"]["button-new-window"] = "Ouvrir un nouvel onglet";
+karutaStr["fr"]["button-support"] = "Support technique";
 karutaStr['fr']['Add']="Ajouter";
 karutaStr['fr']['AddGroup']="Ajouter un groupe";
 karutaStr['fr']['confirm-delete']="Voulez-vous vraiment supprimer ? Cette action est irréversible.";
@@ -85,6 +90,7 @@ karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - H
 karutaStr['fr']['list-novisible']="Non visible";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
+karutaStr["fr"]["button-print"] = "Imprimer";
 
 //=========================================
 //========== ERRORS =======================
@@ -97,6 +103,8 @@ karutaStr['fr']['error-existing-login']="ERREUR - Le login existe déjà ou une 
 //========== NODE =========================
 //=========================================
 
+karutaStr['fr']['node']="Noeud";
+karutaStr['fr']['node-label']="Libellé du noeud";
 karutaStr['fr']['label']="Libellé";
 karutaStr['fr']['code']="Code";
 karutaStr['fr']['value']="Valeur";
@@ -166,13 +174,15 @@ karutaStr['fr']['private']="Caché";
 karutaStr['fr']['hide-metainfo']="Cacher metadata";
 karutaStr['fr']['show-metainfo']="Montrer metadata";
 karutaStr['fr']['padding-top']="Espace avant (en pixels)";
+karutaStr['fr']['margin-top']="Espace avant (en pixels)";
 karutaStr['fr']['background-color']="Couleur du fond";
 karutaStr['fr']['moveroles']="Rôles - Déplacer";
 karutaStr['fr']['othercss']="Autres instructions CSS";
 karutaStr['fr']['cssfile']="Fichier CSS";
 karutaStr['fr']['display-type']="Type de présentation";
+karutaStr['fr']['menu-type']="Type de menu";
 karutaStr['fr']['displayview']="Type de vue";
-karutaStr['fr']['node']="Contenu du noeud";
+karutaStr['fr']['node-content']="Contenu du noeud";
 karutaStr['fr']['resource']="Ressource";
 karutaStr['fr']['metadata']="Métadonnées";
 karutaStr['fr']['css-styles']="Styles CSS";
@@ -206,6 +216,8 @@ karutaStr['fr']['export-pdf']="Exporter PDF";
 karutaStr['fr']['export-rtf']="Exporter RTF";
 karutaStr['fr']['export-htm']="Exporter HTML";
 karutaStr['fr']['list-semtags']="Liste des tags sémantiques";
+karutaStr['fr']['printroles']="Rôles - Imprimer";
+karutaStr['fr']['logcode']="Code du log";
 
 //=========================================
 //========== ADMIN ========================
@@ -279,6 +291,8 @@ karutaStr['fr']['username-label']="Login";
 karutaStr['fr']['firstname-label']="Prénom";
 karutaStr['fr']['lastname-label']="Nom";
 karutaStr['fr']['changeOwner']="Changer le propriétaire";
+karutaStr['fr']['toggle-mode']="Changer le mode édition/lecture";
+karutaStr['fr']['write-mode']="Mode édition";
 
 //=========================================
 //========== USERS ========================
@@ -297,7 +311,7 @@ karutaStr['fr']['change_password']="Changer le mot de passe";
 karutaStr['fr']['password']="Mot de passe";
 karutaStr['fr']['new_password']="Nouveau mot de passe";
 karutaStr['fr']['admin']="Admin";
-karutaStr['fr']['designer']="designer";
+karutaStr['fr']['designer']="Créateur";
 karutaStr['fr']['active']="Actif";
 karutaStr['fr']['select_users']="Sélectionner des usagers";
 karutaStr['fr']['projects-admin']="Projets";
@@ -306,6 +320,7 @@ karutaStr['fr']['bin-admin']="Poubelle";
 karutaStr['fr']['substitute']="Substitution";
 karutaStr['fr']['select_user']="Select unusager";
 karutaStr['fr']['other']="Autre";
+karutaStr['fr']['delete-temporary-users']="Supprimer tous";
 
 //=========================================
 //========== ROLES ========================
@@ -348,11 +363,12 @@ karutaStr['fr']['csv']="Rôles - Afficher CSV";
 karutaStr['fr']['pdf']="Rôles - Afficher PDF";
 karutaStr['fr']['img']="Rôles - Afficher Image";
 karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
-karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + maxfilesizeupload + " Mo sont autorisés !";
+karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + g_configVar['maxfilesizeupload'] + " Mo sont autorisés !";
 
 //=========================================
 //========== EUROPASS =====================
 //=========================================
+karutaStr['fr']['Europass']="EUROPASS";
 karutaStr['fr']['mother-tongue']="Langue maternelle";
 karutaStr['fr']['foreign-languages']="Langues étrangères";
 karutaStr['fr']['add-foreign-language']="Ajouter une langue étrangère";
@@ -431,6 +447,7 @@ karutaStr['fr']['email-message']="Message";
 //========== RESOURCES ====================
 //=========================================
 
+karutaStr['fr']['asmRoot']="Root";
 karutaStr['fr']['asmStructure']="Section";
 karutaStr['fr']['asmUnit']="Page";
 karutaStr['fr']['asmUnitStructure']="Sous-section";
@@ -458,9 +475,9 @@ karutaStr['fr']['URLBlock']="URLBlock";
 karutaStr['fr']['ImageBlock']="ImageBlock";
 
 karutaStr['fr']['Item']="Item";
-karutaStr['fr']['GetResource']="GetResource";
-karutaStr['fr']['GetGetResource']="GetGetResource";
-karutaStr['fr']['GetDoubleResource']="GetDoubleResource";
+karutaStr['fr']['Get_Resource']="GetResource";
+karutaStr['fr']['Get_Get_Resource']="GetGetResource";
+karutaStr['fr']['Get_Double_Resource']="GetDoubleResource";
 karutaStr['fr']['Proxy']="Proxy";
 
 karutaStr['fr']['asmColumn']="asmColumn";

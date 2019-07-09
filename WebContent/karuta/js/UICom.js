@@ -66,19 +66,19 @@ var UICom =
 		/// ------------------ Get root node
 		var root = data.querySelector("asmRoot");
 		var name = "asmRoot";
-		if (root.length==0) {
+		if (root==null) {
 			root = data.querySelector("asmStructure");
 			name = "asmStructure";
 		}
-		if (root.length==0){
+		if (root==null) {
 			root = data.querySelector("asmUnit");
 			name = "asmUnit";
 		}
-		if (root.length==0) {
+		if (root==null) {
 			root = data.querySelector("asmUnitStructure");
 			name = "asmUnitStructure";
 		}
-		if (root.length==0) {
+		if (root==null) {
 			root = data.querySelector("asmContext");
 		}
 		//---------------------
@@ -185,6 +185,7 @@ var UICom =
 	addRoles: function(node)
 	//=======================================================================
 	{
+		UICom.roles["designer"] = true;
 		UICom.addRole(node,'seenoderoles');
 		UICom.addRole(node,'editresroles');
 		UICom.addRole(node,'delnoderoles');

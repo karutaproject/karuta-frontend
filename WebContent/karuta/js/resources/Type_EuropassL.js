@@ -53,7 +53,7 @@ UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,par
 		var param4 = writenode;
 		//----------------------------
 		html += "<div class='row'>";
-		html += "<div class='col-md-offset-1 col-md-11'>";
+		html += "<div class='offset-md-1 col-11'>";
 		html += "<span class='mothertongue-label'>"+UICom.structure["ui"][this.mother_tongueid].getLabel('std_node_'+parentid,"none")+"</span>";
 		html += "<span class='mothertongue-value' id='mother_tongue_"+parentid+"'>"+UICom.structure["ui"][this.mother_tongueid].resource.getView('mother_tongue_'+parentid,"span");
 		html +="</span>";
@@ -66,17 +66,18 @@ UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,par
 		html += "</div><!--row-->";
 		//----------------------------
 		html += "<div class='row'>";
-		html += "<div class='col-md-offset-1 col-md-7'>";
+		html += "<div class='offset-md-1 col-7'>";
 		html += "<h5>"+UICom.structure["ui"][this.foreignid].getLabel('std_node_'+parentid,"none")+"</h5>";
 		html += "</div><!--col-->";
 		if (writenode || g_userroles[0]=='designer') {
-			html += "<div class='col-md-4'>";
+			html += "<div class='col--4'>";
 			html += UICom.structure["ui"][this.foreignid].getButtons(null,null,null,false,0,true,menu);
+			html += UICom.structure["ui"][this.foreignid].getMenus(langcode,null,null,false,0,true,menu);
 			html += "</div><!--col-->";
 		}
 		html += "</div><!--row-->";
 		html += "<div class='row row-resource'>";
-		html += "<div class='col-md-offset-1 col-md-10'>";
+		html += "<div class='offset-md-1 col-10'>";
 		html += "<table id='"+destid+"europass_table' class='europass_table'>";
 		html += "<tr class='en-tete'><td class='language_edit'></td><td class='bordure' colspan='2'> "+karutaStr[LANG]['understanding']+" </td><td class='bordure' colspan='2'> "+karutaStr[LANG]['speaking']+" </td><td class='bordure'> "+karutaStr[LANG]['writing']+" </td></tr>";
 		html += "<tr class='en-tete'><td></td><td class='bordure'> "+karutaStr[LANG]['listening']+" </td><td class='bordure'> "+karutaStr[LANG]['reading']+" </td><td class='bordure'> "+karutaStr[LANG]['spoken-interaction']+" </td><td class='bordure'> "+karutaStr[LANG]['spoken-production']+" </td><td class='bordure'> </td></tr>";
@@ -192,32 +193,32 @@ UIFactory["Langue"].prototype.displayEditor = function(destid,type,lang)
 		//---------------------------------------------------------
 		html +="<td id='language_edit_"+this.id+"' class='language_edit' width='150px'></td>";
 		html +="<td class='bordure'><span id='listening_"+this.id+"_edit'>"+UICom.structure["ui"][this.listening_nodeid].resource.getCode("listening_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('listening_edit','"+this.listening_nodeid+"','listening')\" >";
+		html += " <a  class='btn ' onclick=\"javascript:UIFactory.Langue.editSkill('listening_edit','"+this.listening_nodeid+"','listening')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='reading_"+this.id+"_edit'>"+UICom.structure["ui"][this.reading_nodeid].resource.getCode("reading_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('reading_edit','"+this.reading_nodeid+"','reading')\" >";
+		html += " <a  class='btn ' onclick=\"javascript:UIFactory.Langue.editSkill('reading_edit','"+this.reading_nodeid+"','reading')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='spokenInteraction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenInteraction_nodeid].resource.getCode("spokenInteraction_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenInteraction_edit','"+this.spokenInteraction_nodeid+"','spoken-interaction')\" >";
+		html += " <a  class='btn ' onclick=\"javascript:UIFactory.Langue.editSkill('spokenInteraction_edit','"+this.spokenInteraction_nodeid+"','spoken-interaction')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='spokenProduction_"+this.id+"_edit'>"+UICom.structure["ui"][this.spokenProduction_nodeid].resource.getCode("spokenProduction_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('spokenProduction_edit','"+this.spokenProduction_nodeid+"','spoken-production')\" >";
+		html += " <a  class='btn ' onclick=\"javascript:UIFactory.Langue.editSkill('spokenProduction_edit','"+this.spokenProduction_nodeid+"','spoken-production')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td class='bordure'><span id='writing_"+this.id+"_edit'>"+UICom.structure["ui"][this.writing_nodeid].resource.getCode("writing_"+this.id+"_edit")+"</span>";
-		html += " <a  class='btn btn-xs' onclick=\"javascript:UIFactory.Langue.editSkill('writing_edit','"+this.writing_nodeid+"','writing')\" >";
+		html += " <a  class='btn ' onclick=\"javascript:UIFactory.Langue.editSkill('writing_edit','"+this.writing_nodeid+"','writing')\" >";
 		html += karutaStr[LANG]['choose'];
 		html += "</a>";
 		html +="</td>";
 		html +="<td style='text-align:left'>";
-		html += "&nbsp;<a  class='btn btn-xs editbutton' onclick=\"javascript:UICom.structure.ui['"+this.parentid+"'].structured_resource.langues_byid['"+this.id+"'].displayView('"+destid+"','detail',lang,true);$('#collapse"+this.id+"').collapse('show');toggleZoom('"+this.id+"')\" data-title='éditer' rel='tooltip'>";
+		html += "&nbsp;<a  class='btn  editbutton' onclick=\"javascript:UICom.structure.ui['"+this.parentid+"'].structured_resource.langues_byid['"+this.id+"'].displayView('"+destid+"','detail',lang,true);$('#collapse"+this.id+"').collapse('show');toggleZoom('"+this.id+"')\" data-title='éditer' rel='tooltip'>";
 		html += karutaStr[LANG]['quit'];
 		html += "</a>";
 		html +="</td>";
@@ -282,7 +283,7 @@ UIFactory["Langue"].editMothertongue = function(uuid,destid)
 	$("#"+destid).html("");
 	UICom.structure["ui"][uuid].resource.displayEditor("mother_tongue");
 	$("#"+destid).append($(html));
-	var html = "<a  class='btn btn-xs' style='margin-left:5px' onclick=\"UIFactory.Langue.displayMothertongue('"+uuid+"','"+destid+"',true);\">";
+	var html = "<a  class='btn ' style='margin-left:5px' onclick=\"UIFactory.Langue.displayMothertongue('"+uuid+"','"+destid+"',true);\">";
 	html += karutaStr[LANG]['quit'];
 	html += "</a>";
 	$("#"+destid+"_button").append($(html));
