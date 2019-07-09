@@ -2640,11 +2640,14 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 	padding-top:20px;
 }
 
-.public-container .public-row,
-.public-container .col-md-3,   
-.public-container #sidebar{
-	height:100%;
+@media screen and (min-width: 640px) {
+	.public-container .public-row,
+	.public-container .col-md-3,
+	.public-container #sidebar {
+			height:100%;
+	}
 }
+
 
 .public-container .col-md-3{
 	padding-left:0px;
