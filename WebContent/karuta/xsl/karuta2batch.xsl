@@ -433,6 +433,10 @@
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	
+	<xsl:template match="*[metadata/@semantictag='update-resource']">
+			<xsl:apply-templates select='asmUnitStructure'/>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-field']">
 		<xsl:variable name="select">
 			<xsl:call-template name='get-select'>
@@ -540,6 +544,22 @@
 		</update-proxy>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='update-url2unit']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<update-url2unit type='URL2Unit' select="{$select}">
+			<source select="{$source}"/>
+		</update-url2unit>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-dashboard']">
 		<xsl:variable name="select">
 			<xsl:call-template name='get-select'>
@@ -556,6 +576,31 @@
 			<attribute name='text' language-dependent='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+		</update-resource>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-item']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<update-resource type='Item' select="{$select}">
+			<attribute name='code' language-dependent='N'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">code</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+			<attribute name='label' language-dependent='Y'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">libelle</xsl:with-param>
+				</xsl:call-template>
+			</attribute>
+			<attribute name='code' language-dependent='N'>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">value</xsl:with-param>
 				</xsl:call-template>
 			</attribute>
 		</update-resource>

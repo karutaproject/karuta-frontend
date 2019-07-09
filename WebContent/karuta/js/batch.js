@@ -2184,31 +2184,62 @@ g_actions['update-proxy'] = function update_proxy(node)
 	return (ok!=0 && ok == nodes.length);
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- UPDATE-URL2UNIT -----------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
 //=================================================
-function updateProxy(nodes,node,type,semtag)
+g_actions['update-url2unit'] = function update_url2unit(node)
 //=================================================
 {
-	if (nodes.length>0) {
-		var source_select = $("source",node).attr("select");
-		var source_idx = source_select.indexOf(".");
-		var source_treeref = source_select.substring(0,source_idx);
-		var source_semtag = source_select.substring(source_idx+1);
-		//------ search sourceid -------------------
-		var sourceid = $("node",data).attr('id');
-		//------ search targetid -------------------
-		var targetid = $(nodes[0]).attr('id');
-		nodes = nodes.slice(1,nodes.length);
-		$.ajax({
-			async : false,
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
-			success : function(data) {
-				targetid = $("node",data).attr('id');
-				var xml = "<asmResource xsi_type='Proxy'>";
-				xml += "<code>"+sourceid+"</code>";
-				xml += "<value>"+sourceid+"</value>";
-				xml += "</asmResource>";
+	var ok = 0;
+	//------------ Source --------------------
+	var srce_url = getSourceUrl(node);
+	var sources = new Array();
+	var sourceid = "";
+	$.ajax({
+		async : false,
+		type : "GET",
+		dataType : "xml",
+		url : srce_url,
+		success : function(data) {
+			if (this.url.indexOf('/node/')>-1) {  // get by uuid
+				var results = $('*',data);
+				sources[0] = results[0];
+			} else {							// get by code and semtag
+				sources = $("node",data);
+			}
+			sourceid = $(sources[0]).attr('id');
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***SOURCE NOT FOUND <span class='danger'>ERROR</span>");
+		}
+	});
+	//------------ Target --------------------
+	var target_url = getTargetUrl(node);
+	var nodes = new Array();
+	$.ajax({
+		async : false,
+		type : "GET",
+		dataType : "xml",
+		url : target_url,
+		success : function(data) {
+			if (this.url.indexOf('/node/')>-1) {  // get by uuid
+				var results = $('*',data);
+				nodes[0] = results[0];
+			} else {							// get by code and semtag
+				nodes = $("node",data);
+			}
+			for (i=0; i<nodes.length; i++){
+				ok++;
+				var targetid = $(nodes[i]).attr('id');
+				//----- get target ----------------
+				var resource = $("asmResource[xsi_type='URL2Unit']",nodes[i]);
+				$("uuid",resource).text(sourceid);
+				var xml = "<asmResource xsi_type='URL2Unit'>" + $(resource).html() + "</asmResource>";
+				var strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 				//----- update target ----------------
 				$.ajax({
 					type : "PUT",
@@ -2217,22 +2248,25 @@ function updateProxy(nodes,node,type,semtag)
 					data : xml,
 					targetid : targetid,
 					sourceid : sourceid,
-					semtag : semtag,
 					url : serverBCK_API+"/resources/resource/" + targetid,
 					success : function(data) {
-						$("#batch-log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
-						updateupdateProxyResource(nodes,node,type,semtag);
+						$("#batch-log").append("<br>- URL2Unit updated target : "+this.targetid+" - srce: "+this.sourceid);
 						//===========================================================
 					},
 					error : function(data) {
-						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource("+targetid+") - semtag="+semtag);
-						updateProxy(nodes,node,type,semtag);
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update url2unit");
 					}
 				});
 			}
-		});
-	}
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***TARGET NOT FOUND <span class='danger'>ERROR</span> ");
+		}
+	});
+	
+	return (ok!=0 && ok == nodes.length);
 }
+
 //==========================================================================
 //==========================================================================
 //==========================================================================

@@ -261,6 +261,36 @@
 			</xsl:if>
 		</node_resource>
 	</xsl:template>
+	<!-- ================ variable ============================ -->
+	<xsl:template match="*[metadata/@semantictag='report-variable']">
+		<xsl:variable name="varlabel">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="nodetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="todisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
+		<variable>
+			<xsl:if test="not($varlabel='')">
+				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ref='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($select='..')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+		</variable>
+	</xsl:template>	
 	<!-- ================ csv-line ============================ -->
 	<xsl:template match="*[metadata/@semantictag='csv-line']">
 		<csv-line>
@@ -293,10 +323,16 @@
 		<xsl:variable name="semtag">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="urllabel">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='urllabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="select">asmUnit.<xsl:value-of select="$semtag"/></xsl:variable>
 		<url2unit>
 			<xsl:if test="not($select='..')">
 				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($urllabel='')">
+				<xsl:attribute name="urllabel"><xsl:value-of select="$urllabel"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($style='..')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>

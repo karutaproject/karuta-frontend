@@ -31,7 +31,8 @@ function fill_main_page(rootid,role)
 		var parentid = $($(UICom.structure.ui[rootid].node).parent()).attr('id');
 		if ($($(UICom.structure.ui[rootid].node).parent())) {
 			g_portfolioid = parentid;
-			g_complex = portfolios_byid[parentid].complex;
+			if(typeof portfolios_byid[parentid]!='undefined')
+				g_complex = portfolios_byid[parentid].complex;
 			if (typeof g_complex=='undefined' || g_complex==undefined || g_complex.lenght==0)
 				g_complex = false;
 		} else {
@@ -84,7 +85,6 @@ function fill_main_page(rootid,role)
 			UICom.roles = {};
 			g_portfolio_current = data;
 			g_portfolio_rootid = $("asmRoot",data).attr("id");
-			UICom.structure['ui'][g_portfolio_rootid].loaded = true;
 			var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
 			$("body").addClass(root_semantictag);
 			// --------Display Type------------------
@@ -106,7 +106,9 @@ function fill_main_page(rootid,role)
 				$("#csstext").remove();
 			}
 			// --------------------------
+			var g_encrypted = false;
 			UICom.parseStructure(data,true);
+			UICom.structure['ui'][g_portfolio_rootid].loaded = true;
 			if ($("asmUnit:has(metadata[semantictag*='welcome-unit'])",data).length==0 && $("asmRoot:has(metadata[semantictag*='karuta-model'])",data).length>0) {
 				g_welcome_add = true;
 			}

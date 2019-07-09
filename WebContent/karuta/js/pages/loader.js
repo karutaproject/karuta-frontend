@@ -188,6 +188,7 @@ function loadKarutaPage(url)
 		loadJS(url+"/socialnetwork-elgg/js/moment-with-locales.min.js");
 	}
 	//--------------------------------------------------------------
+	loadCSS(url+"/application/css/specific.css");
 
 }
 

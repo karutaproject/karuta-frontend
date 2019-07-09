@@ -71,6 +71,7 @@ UIFactory["User"] = function( node )
 	this.creator = this.designer_node.text()=='1' || this.admin_node.text()=='1';
 	this.limited = this.other_node.text().indexOf('limited')>-1;
 	this.xlimited = this.other_node.text().indexOf('xlimited')>-1;
+	this.change_name = this.other_node.text().indexOf('change-name')>-1;
 	//-----------------------------------
 
 /*
@@ -720,7 +721,7 @@ UIFactory["User"].setPassword = function(userid,value)
 };
 
 //==================================
-UIFactory["User"].changePassword = function(userid,value)
+UIFactory["User"].changePassword = function()
 //==================================
 {
 	var password_old = $("#user_password-old").val();
@@ -777,6 +778,54 @@ UIFactory["User"].changePassword = function(userid,value)
 		}
 	});
 };
+
+//==================================
+UIFactory["User"].changeName = function()
+//==================================
+{
+	USER.firstname = $("#user_firstname").val();
+	USER.lastname = $("#user_lastname").val();
+	var xml = "";
+	xml +="<?xml version='1.0' encoding='UTF-8'?>";
+	xml +="<user>";
+	xml +="	<firstname>"+USER.firstname+"</firstname>";
+	xml +="	<lastname>"+USER.lastname+"</lastname>";
+	xml +="</user>";
+	var url = serverBCK_API+"/users/user/" + USER.id;
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : xml,
+		success : function(data) {
+			alertHTML(karutaStr[LANG]['changed']);
+			$("#navigation-bar").html(getNavBar('list',null));
+			$('#edit-window').modal('hide');
+		}
+	});
+};
+
+//==================================
+UIFactory["User"].callChangeName = function()
+//==================================
+{
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var js2 = "javascript:UIFactory['User'].changeName()";
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Change']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['change_name']);
+	$("#edit-window-type").html("");
+	var html = "";
+	html += "<form id='metadata' class='form-horizontal'>";
+	html += UIFactory["User"].getAttributeCreator("firstname",USER.firstname,false);
+	html += UIFactory["User"].getAttributeCreator("lastname",USER.lastname,false);
+	html += "</form>";
+	$("#edit-window-body").html(html);
+	//--------------------------
+	$('#edit-window').modal('show');
+
+}
 
 //==================================
 UIFactory["User"].callChangePassword = function()

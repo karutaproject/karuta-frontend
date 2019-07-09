@@ -17,6 +17,8 @@ window.onload = function()
 {
 	removeElement("navigation-bar");
 	removeElement("wait-window");
+	removeElement("saved-window");
+	removeElement("export-window");
 	removeElement("collapse-2");
 	/// Fix welcome page
 	var blocks = document.getElementsByClassName("welcome-block");

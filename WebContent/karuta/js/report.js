@@ -43,6 +43,7 @@ jquerySpecificFunctions['.text_not_empty()'] = ".has(\"asmResource[xsi_type!='co
 jquerySpecificFunctions['.text_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > text[lang='#lang#']:empty\")";
 jquerySpecificFunctions['.submitted()'] = ".has(\"metadata-wad[submitted='Y']\")";
 jquerySpecificFunctions['.code_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:empty\")";
+jquerySpecificFunctions['.code_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > code:not(:empty)\")";
 jquerySpecificFunctions['.filename_or_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:not(:empty)\")";
 jquerySpecificFunctions['.filename_or_text_or_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:empty\")";
 jquerySpecificFunctions['.filename_or_text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\",\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\")";
@@ -113,6 +114,8 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 			r_processCell(no+"_"+i,children[i],destid,data,line);
 		if (tagname=="node_resource")
 			r_processNodeResource(children[i],destid,data,line);
+		if (tagname=="variable")
+			r_processVariable(children[i],destid,data,line);
 		if (tagname=="text")
 			r_processText(children[i],destid,data,line);
 		if (tagname=="url2unit")
@@ -161,6 +164,8 @@ function r_report_process(xmlDoc,json)
 			r_processLoop(i,children[i],'report-content');
 		if (tagname=="table")
 			r_processTable(i,children[i],'report-content');
+		if (tagname=="variable")
+			r_processVariable(children[i],'report-content');
 		if (tagname=="europass")
 			r_processEuropass(i,children[i],'report-content');
 		if (tagname=="aggregate")
@@ -205,6 +210,8 @@ function r_processLine(no,xmlDoc,destid,data,line)
 				r_processLoop(no+"_"+i,children[j],destid,data,i);
 			if (tagname=="row")
 				r_processRow(no+"_"+i,children[j],destid,data,i);
+			if (tagname=="variable")
+				r_processVariable(children[i],destid,data,i);
 			if (tagname=="aggregate")
 				r_processAggregate(children[i],destid,data,i);
 			if (tagname=="csv-line")
@@ -226,6 +233,11 @@ function r_processNode(no,xmlDoc,destid,data,line)
 //==================================
 {
 	var select = $(xmlDoc).attr("select");
+	while (select.indexOf("##")>-1) {
+		var select_string = select.substring(select.indexOf("##")+2); // select_string = variable##.....
+		var variable_name = select_string.substring(0,select_string.indexOf("##"));
+		select = select.replace("##"+variable_name+"##", variables[variable_name]);
+	}
 	var test = $(xmlDoc).attr("test");
 	if (select!=undefined) {
 		var selector = r_getSelector(select,test);
@@ -277,6 +289,8 @@ function r_processNode(no,xmlDoc,destid,data,line)
 					r_processWebAxis(children[j],destid,nodes[i],i);
 				if (tagname=="draw-web-line")
 					r_processWebLine(children[j],destid,nodes[i],i);
+				if (tagname=="variable")
+					r_processVariable(children[j],destid,nodes[i],i);
 				if (tagname=="aggregate")
 					r_processAggregate(children[j],destid,nodes[i],i);
 				if (tagname=="goparent")
@@ -335,6 +349,8 @@ function r_processLoop(no,xmlDoc,destid,data,line)
 				r_processWebAxis(children[j],destid,data,i);
 			if (tagname=="draw-web-line")
 				r_processWebLine(children[j],destid,data,i);
+			if (tagname=="variable")
+				r_processVariable(children[j],destid,data,i);
 			if (tagname=="aggregate")
 				r_processAggregate(children[j],destid,data,i);
 			if (tagname=="goparent")
@@ -377,6 +393,8 @@ function r_processGoParent(no,xmlDoc,destid,data,line)
 			r_processWebLine(children[j],destid,parent,i);
 		if (tagname=="aggregate")
 			r_processAggregate(children[j],destid,parent,i);
+		if (tagname=="variable")
+			r_processVariable(children[j],destid,parent,i);
 		if (tagname=="goparent")
 			r_processGoParent(no+"_"+i+"_"+j,children[j],destid,parent,i);
 	}
@@ -556,6 +574,8 @@ function r_processCell(no,xmlDoc,destid,data,line)
 			r_processWebAxis(children[i],'td_'+no,data,line);
 		if (tagname=="draw-web-line")
 			r_processWebLine(children[i],'td_'+no,data,line);
+		if (tagname=="variable")
+			r_processVariable(children[i],'td_'+no,data,line);
 		if (tagname=="aggregate")
 			r_processAggregate(children[i],'td_'+no,data,line);
 		if (tagname=="svg")
@@ -637,6 +657,8 @@ function r_processUsers(no,xmlDoc,destid,data,line)
 					r_processCell(no+"_"+j,children[i],destid,data,line);
 				if (tagname=="node_resource")
 					r_processNodeResource(children[i],destid,data,line);
+				if (tagname=="variable")
+					r_processVariable(children[i],destid,data,line);
 				if (tagname=="jsfunction")
 					r_processJSFunction(children[i],destid,data,line);
 				if (tagname=="draw-web-axis")
@@ -817,6 +839,8 @@ function r_processPortfolios(no,xmlDoc,destid,data,line)
 							r_processNodeResource(children[i],destid,data,line);
 						if (tagname=="jsfunction")
 							r_processJSFunction(children[i],destid,data,line);
+						if (tagname=="variable")
+							r_processVariable(children[i],destid,data,line);
 						if (tagname=="text")
 							r_processText(children[i],destid,data,line);
 						if (tagname=="for-each-node")
@@ -873,6 +897,11 @@ function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
 {
 	UIFactory["Portfolio"].parse(data);
 	var select = $(xmlDoc).attr("select");
+	while (select.indexOf("##")>-1) {
+		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##"));
+		select = select.replace("##"+variable_name+"##", variables[variable_name]);
+	}
 	var value = "";
 	var condition = "";
 	var portfolioid = "";
@@ -971,6 +1000,8 @@ function r_processPortfoliosNodes(no,xmlDoc,destid,data,line)
 							r_processNodeResource(children[i],destid,data,line);
 						if (tagname=="jsfunction")
 							r_processJSFunction(children[i],destid,data,line);
+						if (tagname=="variable")
+							r_processVariable(children[i],destid,data,line);
 						if (tagname=="text")
 							r_processText(children[i],destid,data,line);
 						if (tagname=="for-each-node")
@@ -1009,6 +1040,11 @@ function r_processNodeResource(xmlDoc,destid,data)
 	var prefix_id = "";
 	try {
 		var select = $(xmlDoc).attr("select");
+		while (select.indexOf("##")>-1) {
+			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			select = select.replace("##"+variable_name+"##", variables[variable_name]);
+		}
 		var ref = $(xmlDoc).attr("ref");
 		var editresroles = $(xmlDoc).attr("editresroles");
 		var delnoderoles = $(xmlDoc).attr("delnoderoles");
@@ -1142,6 +1178,81 @@ function r_processNodeResource(xmlDoc,destid,data)
 
 //=============================================================================
 //=============================================================================
+//====================== VARIABLE =============================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+function r_processVariable(xmlDoc,destid,data)
+//==================================
+{
+	var text = "";
+	var style = "";
+	var attr_help = "";
+	var prefix_id = "";
+	try {
+		var varlabel = $(xmlDoc).attr("varlabel");
+		var select = $(xmlDoc).attr("select");
+		while (select.indexOf("##")>-1) {
+			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			select = select.replace("##"+variable_name+"##", variables[variable_name]);
+		}
+		var ref = $(xmlDoc).attr("ref");
+		var selector = r_getSelector(select);
+		var node = $(selector.jquery,data);
+		if (node.length==0) // try the node itself
+			node = $(selector.jquery,data).addBack();
+		if (select.substring(0,2)=="..") // node itself
+			node = data;
+		if (node.length>0 || select.substring(0,1)=="."){
+			var nodeid = $(node).attr("id");
+			//----------------------------
+			var node = UICom.structure["ui"][nodeid];
+			//----------------------------
+			if (selector.type=='resource') {
+				text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+			}
+			if (selector.type=='resource code') {
+				text = UICom.structure["ui"][nodeid].resource.getCode();
+			}
+			if (selector.type=='resource value') {
+				text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
+				prefix_id += "value_";
+			}
+			if (selector.type=='resource label') {
+				text = UICom.structure["ui"][nodeid].resource.getLabel();
+			}
+			if (selector.type=='node label') {
+				text = UICom.structure["ui"][nodeid].getLabel();
+			}
+			if (selector.type=='node value') {
+				text = UICom.structure["ui"][nodeid].getValue();
+			}
+			if (selector.type=='uuid') {
+				text = nodeid;
+			}
+			if (selector.type=='node context') {
+				text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
+				prefix_id += "context_";
+			}
+			if (ref!=undefined && ref!="") {
+				if (aggregates[ref]==undefined)
+					aggregates[ref] = new Array();
+				aggregates[ref][aggregates[ref].length] = text;
+			}
+			//----------------------------
+		}
+	} catch(e){
+		console.log("Error in report:"+e.message);
+		text = "";
+	}
+	//------------------------------
+	variables[varlabel] = text;
+}
+
+//=============================================================================
+//=============================================================================
 //====================== CSV ==================================================
 //=============================================================================
 //=============================================================================
@@ -1164,6 +1275,8 @@ function r_processCsvLine(no,xmlDoc,destid,data,line)
 			r_processNodeResource(children[i],destid,data,line);
 		if (tagname=="csv-value")
 			r_processCsvValue(children[i],destid,data,line);
+		if (tagname=="variable")
+			r_processVariable(children[i],destid,data,line,true);
 		if (tagname=="text")
 			r_processText(children[i],destid,data,line,true);
 		if (tagname=="username")
@@ -1271,6 +1384,11 @@ function r_processCsvValue(xmlDoc,destid,data)
 	var prefix_id = "";
 	try {
 		var select = $(xmlDoc).attr("select");
+		while (select.indexOf("##")>-1) {
+			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			select = select.replace("##"+variable_name+"##", variables[variable_name]);
+		}
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
 		if (node.length==0) // try the node itself
@@ -1381,6 +1499,11 @@ function r_processText(xmlDoc,destid,data,line,is_out_csv)
 {
 	var nodeid = $(data).attr("id");
 	var text = $(xmlDoc).text();
+	while (text.indexOf("##")>-1) {
+		var test_string = text.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##"));
+		text = text.replace("##"+variable_name+"##", variables[variable_name]);
+	}
 	var style = $(xmlDoc).attr("style");
 	var ref = $(xmlDoc).attr("ref");
 	if (ref!=undefined && ref!="") {
@@ -1421,21 +1544,31 @@ function r_processJSFunction(xmlDoc,destid,data)
 function r_processURL2Unit(xmlDoc,destid,data)
 //==================================
 {
-	var nodeid = $(data).attr("id");
 	var targetid = "";
 	var text = "";
+	var label = "";
 	var style = $(xmlDoc).attr("style");
 	var select = $(xmlDoc).attr("select");
-	var selector = r_getSelector(select);
-	var node = $(selector.jquery,data);
-	if (node.length==0) // try the node itself
-		node = $(selector.jquery,data).addBack();
-	if (select.substring(0,2)=="..") // node itself
-		node = data;
-	if (node.length>0 || select.substring(0,1)=="."){
-		var nodeid = $(node).attr("id");
-		targetid = UICom.structure["ui"][nodeid].getUuid();
-		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
+	while (select.indexOf("##")>-1) {
+		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##"));
+		select = select.replace("##"+variable_name+"##", variables[variable_name]);
+	}
+	if (select.indexOf("UUID:")>0) {
+		label = $(xmlDoc).attr("label");
+		targetid = select.substring(select.indexOf(":")+1);
+	} else {
+		var selector = r_getSelector(select);
+		var node = $(selector.jquery,data);
+		if (node.length==0) // try the node itself
+			node = $(selector.jquery,data).addBack();
+		if (select.substring(0,2)=="..") // node itself
+			node = data;
+		if (node.length>0 || select.substring(0,1)=="."){
+			var nodeid = $(node).attr("id");
+			targetid = UICom.structure["ui"][nodeid].getUuid();
+			label = UICom.structure["ui"][nodeid].getLabel(null,'none');
+		}
 	}
 	text = "<span id='"+nodeid+"' class='report-url2unit' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
 	$("#"+destid).append($(text));
@@ -1450,6 +1583,11 @@ function r_processAggregate(aggregate,destid)
 	var ref = $(aggregate).attr("ref");
 	var type = $(aggregate).attr("type");
 	var select = $(aggregate).attr("select");
+	while (select.indexOf("##")>-1) {
+		var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##"));
+		select = select.replace("##"+variable_name+"##", variables[variable_name]);
+	}
 	var text = "";
 	if (type=="sum" && aggregates[select]!=undefined){
 		var sum = 0;

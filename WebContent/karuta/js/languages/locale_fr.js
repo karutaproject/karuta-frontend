@@ -42,6 +42,7 @@ karutaStr["fr"]["button-refresh"] = "Recharger la page";
 karutaStr["fr"]["button-refresh-report"] = "Rafraîchir le rapport";
 karutaStr["fr"]["button-disconnect"] = "Se déconnecter";
 karutaStr["fr"]["button-change-password"] = "Changement de mot de passe";
+karutaStr["fr"]["button-change-name"] = "Changement votre nom";
 karutaStr["fr"]["button-new-window"] = "Ouvrir un nouvel onglet";
 karutaStr["fr"]["button-support"] = "Support technique";
 karutaStr['fr']['Add']="Ajouter";
@@ -90,6 +91,7 @@ karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - H
 karutaStr['fr']['list-novisible']="Non visible";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
+karutaStr["fr"]["button-print"] = "Imprimer";
 
 //=========================================
 //========== ERRORS =======================
@@ -172,7 +174,9 @@ karutaStr['fr']['hide-metainfo']="Cacher metadata";
 karutaStr['fr']['show-metainfo']="Montrer metadata";
 karutaStr['fr']['padding-top']="Espace avant (en pixels)";
 karutaStr['fr']['background-color']="Couleur du fond";
-karutaStr['fr']['moveroles']="Rôles - Déplacer";
+karutaStr['fr']['moveroles']="Rôles - Ordonner";
+karutaStr['fr']['movein']="Déplacer dans";
+karutaStr['fr']['moveinroles']="Rôles - Déplacer";
 karutaStr['fr']['othercss']="Autres instructions CSS";
 karutaStr['fr']['cssfile']="Fichier CSS";
 karutaStr['fr']['display-type']="Type de présentation";
@@ -210,6 +214,8 @@ karutaStr['fr']['export-pdf']="Exporter PDF";
 karutaStr['fr']['export-rtf']="Exporter RTF";
 karutaStr['fr']['export-htm']="Exporter HTML";
 karutaStr['fr']['list-semtags']="Liste des tags sémantiques";
+karutaStr['fr']['printroles']="Rôles - Imprimer";
+karutaStr['fr']['duration']="Durée de vie du lien  (en heures)";
 
 //=========================================
 //========== ADMIN ========================
@@ -298,6 +304,7 @@ karutaStr['fr']['lastname']="Nom";
 karutaStr['fr']['firstname']="Prénom";
 karutaStr['fr']['email']="Courriel";
 karutaStr['fr']['change_password']="Changer le mot de passe";
+karutaStr['fr']['change_name']="Changer vos prénom et nom";
 karutaStr['fr']['password']="Mot de passe";
 karutaStr['fr']['new_password']="Nouveau mot de passe";
 karutaStr['fr']['admin']="Admin";
