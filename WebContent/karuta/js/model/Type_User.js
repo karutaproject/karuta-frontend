@@ -734,18 +734,14 @@ UIFactory["User"].changePassword = function()
 		data: data,
 		success : function(data) {
 			//----------------------------
-			var value2 = null;
-			var username = "";
 			if (userid==null) {
 				userid = USER.id;
 				username = USER.username_node.text();
 			} else {
 				username = Users_byid[userid].username_node.text();
 			}
-			if (value==null){
-				value = $("#user_password-new").val();
-				value2 = $("#user_confirm-password").val();
-			}
+			var value = $("#user_password-new").val();
+			var	value2 = $("#user_confirm-password").val();
 			if (value2 == null || (value2 != null && value2 == value)) {
 				var xml = "";
 				xml +="<?xml version='1.0' encoding='UTF-8'?>";
@@ -754,8 +750,6 @@ UIFactory["User"].changePassword = function()
 				xml +="	<password>"+value+"</password>";
 				xml +="</user>";
 				var url = serverBCK_API+"/users/user/" + userid;
-				if (elgg_installed)
-					user_change_password(value, username);
 				$.ajax({
 					type : "PUT",
 					contentType: "application/xml",

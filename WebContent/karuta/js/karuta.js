@@ -1052,8 +1052,14 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
 	var obj = $(send_button);
 	$(obj).click(function (){
-		if (sharetoemail=='?') {
+		if (sharetoemail.indexOf('?')>-1) {
 			sharetoemail = $("#email").val();
+		}
+		if (sharetoemail.indexOf('+text')>-1) {
+			sharetomessage = $("#message").val();
+		}
+		if (sharetoemail.indexOf('+obj')>-1) {
+			sharetoobj = $("#object").val();
 		}
 		if (shareduration=='?') {
 			shareduration = $("#duration").val();
