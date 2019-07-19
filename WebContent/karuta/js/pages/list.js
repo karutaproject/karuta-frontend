@@ -17,9 +17,9 @@ function getList()
 	if (USER.creator && !USER.limited) {
 		displayProject['portfolios-not-in-project'] = localStorage.getItem('dpportfolios-not-in-project');
 		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
-			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button glyphicon glyphicon-minus'></span></div>";
+			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button fas fa-minus'></span></div>";
 		else
-			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button glyphicon glyphicon-plus'></span></div>";
+			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button fas fa-plus'></span></div>";
 		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
 			html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:block'><div id='portfolios'></div></div>";
 		else
@@ -34,7 +34,7 @@ function getList()
 		if (USER.admin)
 			text2 = karutaStr[LANG]['bin-admin'];
 		html += "<h3 id='bin-label'>"+text2;
-		html += "&nbsp<button class='btn btn-xs' onclick=\"confirmDelPortfolios_EmptyBin()\">";
+		html += "&nbsp<button class='btn ' onclick=\"confirmDelPortfolios_EmptyBin()\">";
 		html += karutaStr[LANG]["empty-bin"];
 		html += "</button>";
 		html += "</h3>";
@@ -53,12 +53,12 @@ function getListSubBar()
 	html += "	<div class='welcome-box'>";
 	html += "		<div class='welcome-subbox'>";
 	html += "			<div id='welcome-title' class='welcome-title'>KARUTA</div>";
-	html += "			<div class='welcome-line'></div>";
+	html += "			<div id='welcome-line' class='welcome-line'></div>";
 	html += "			<div id='welcome-baseline' class='welcome-baseline'>";
 	html += "				OPEN SOURCE PORTFOLIO";
-	html += "			</div><!-- id='welcome-baseline' -->";
-	html += "		</div><!--  class='welcome-subbox' -->";
-	html += "	</div><!--  class='welcome-box' -->";
+	html += "			</div>";
+	html += "		</div>";
+	html += "	</div>";
 	html += "</div>";
 	return html;
 }
@@ -67,8 +67,13 @@ function getListSubBar()
 function setWelcomeTitles()
 //==============================
 {
-	$("#welcome-title").html(welcome4[LANG]);
-	$("#welcome-baseline").html(welcome5[LANG]);
+	$("#welcome-title").html(g_configVar['list-welcome-title']);
+	$("#welcome-title").attr('style', g_configVar['list-welcome-title-css']);
+	$("#welcome-title").css('color',g_configVar['list-welcome-title-color']);
+	$("#welcome-baseline").html(g_configVar['list-welcome-subtitle']);
+	$("#welcome-baseline").attr('style', g_configVar['list-welcome-subtitle-css']);
+	$("#welcome-baseline").css('color',g_configVar['list-welcome-subtitle-color']);
+	$("#welcome-line").css('border-bottom',"1px solid "+g_configVar['list-welcome-subline-color']);
 }
 
 //==============================
@@ -76,16 +81,17 @@ function show_list_page()
 //==============================
 {
 	hideAllPages();
-
 	$("body").removeClass();
 	$("body").addClass("list-page")
-	$("#sub-bar").html(getListSubBar());
+	$("#welcome-bar").html(getListSubBar());
+	$("#welcome-bar").show();
+	$("#sub-bar").hide();
 	setWelcomeTitles();
+	applyListConfiguration();
 	setLanguageMenu("fill_list_page()");
 	$("#refresh").attr("onclick","fill_list_page()");
 	$("#refresh").show();
-//	if (USER.creator)
-		$("#search-portfolio-div").show();
+	$("#search-portfolio-div").show();
 	$("#list-container").show();
 	$('[data-tooltip="true"]').tooltip();
 }
@@ -154,7 +160,7 @@ function fill_list_page()
 				if (USER.admin)
 					text2 = karutaStr[LANG]['bin-admin'];
 				html += "<h3 id='bin-label'>"+text2;
-				html += "&nbsp<button class='btn btn-xs' onclick=\"confirmDelPortfolios_EmptyBin()\">";
+				html += "&nbsp<button class='btn ' onclick=\"confirmDelPortfolios_EmptyBin()\">";
 				html += karutaStr[LANG]["empty-bin"];
 				html += "</button>";
 				html += "</h3>";
@@ -310,10 +316,6 @@ function fill_search_page(code)
 	html += "</div>";
 	if (USER.admin || (USER.creator && !USER.limited) ){
 		$("#menu").html(html);
-		if (demo) {
-			$("#start").html(listinfo[LANG]);
-			$("#start").attr('style','visibility:visible');
-		}
 	}
 	//----------------
 	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
@@ -479,3 +481,21 @@ function toggleProject(uuid) {
 	}
 }
 
+//==============================
+function applyListConfiguration()
+//==============================
+{
+	$('body').css("background-image", g_configVar['list-welcome-image']);
+	$('#list-container').css("background-color", g_configVar['list-background-color']);
+	changeCss(".dropdown-menu,#active,.projects-nb,#usersgroups .usersgroup-users,.usersgroup,.project,#bin,.portfolios-not-in-project,.portfoliosgroup", "background-color:"+g_configVar['list-element-background-color']);
+	changeCss(".dropdown-menu a.dropdown-item:hover", "color:"+g_configVar['list-element-background-color']);
+	changeCss(".warning-list", "color:"+g_configVar['list-element-background-color']);
+	changeCss(".portfolio-row:hover,#main-user .item:hover", "background-color:"+g_configVar['list-element-background-color-complement']);
+	changeCss("#active,.portfolio-row, .row-label", "color:"+g_configVar['list-element-text-color']);
+	changeCss(".dropdown-menu a.dropdown-item:hover", "background-color:"+g_configVar['list-element-text-color']);
+	changeCss("h3,#list-container #refresh,.projects-nb,.number_of_projects_portfolios", "color:"+g_configVar['list-title-color']);
+	changeCss("#list-container .btn,#main-portfoliosgroup .btn,#main-user .btn,#main-usersgroup .btn,#main-exec-batch .btn,#main-exec-report .btn", "background-color:"+g_configVar['list-button-background-color']);
+	changeCss("#list-container .btn", "color:"+g_configVar['list-button-text-color']);
+	changeCss(".number_of_projects_portfolios", "background-color:"+g_configVar['list-element-background-color-complement']);
+	changeCss("", "color:"+g_configVar['list-title-color']);
+}

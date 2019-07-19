@@ -234,6 +234,8 @@ function fill_main_page(rootid,role)
 function display_main_page(rootid,role)
 //==============================
 {
+	$("#sub-bar").show();
+	$("#welcome-bar").hide();
 	fill_main_page(rootid,role);
 	show_main_page(rootid,role);		
 }

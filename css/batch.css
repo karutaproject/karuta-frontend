@@ -1,0 +1,318 @@
+/* ====================
+	Batch Model
+   ====================*/
+.batch {
+  --batch-border-color: #d3d3d3;
+}
+.batch .row {
+  margin-left: 0px;
+}
+.batch .model-node-default {
+  padding: 10px;
+}
+.batch .model-resource-default {
+  margin-top: 5px;
+  min-height: 34px;
+  padding: 10px;
+}
+.batch .model-node-row {
+  padding: 5px;
+}
+.batch .inside-full {
+  padding: 3px;
+}
+.batch .inside-full .form-control {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height: 1.7em;
+}
+.batch .model-node-label .buttons {
+  float: right;
+}
+.batch .model-node-label .menus {
+  float: right;
+  margin-top: -10px;
+}
+.batch .model-resource-label .buttons {
+  float: none;
+}
+.batch .model-resource-label .menus {
+  float: right;
+  margin-top: -10px;
+}
+.batch .node-model {
+  margin-bottom: 5px;
+}
+.batch .collapsible {
+  float: left;
+  margin-right: 5px;
+}
+.batch .card-header {
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+.batch .card-body {
+  padding: 0px;
+}
+
+/*
+.batch input {
+	margin-bottom:0px;
+	height:32px;
+}
+
+
+#batchmodel_list_table td
+{
+	padding:5px;
+	border-top:1px solid #C0C0C0;
+	border-bottom:1px solid #C0C0C0;
+}
+
+.model-content {
+	font-size:14px;
+}
+
+.model-content .asmContext{
+	margin-top:2px;
+}
+
+.batch .collapsible {
+	float:left;
+	margin-right:3px;
+}
+
+.batch .asmUnitStructure{
+	padding:10px;
+}
+
+.batch-comment,
+.batch-comment .collapsible,
+.batch-comment .btn-default,
+.batch-comment a,
+.batch-comment .btn-group .button,
+.batch-comment .form-control {
+	color:lightgrey;
+}
+
+*/
+/* ====================== */
+/*     RESOURCES          */
+/* ====================== */
+.batch .for-each-line {
+  margin-top: 7px;
+  border: 1px solid var(--batch-border-color);
+}
+.batch .for-each-tree {
+  margin-top: 7px;
+  border: 1px solid solid var(--batch-border-color);
+}
+.batch .batch .actions {
+  margin-top: 7px;
+  border: 1px dashed var(--batch-border-color);
+}
+.batch .create-person {
+  margin-top: 7px;
+  border: 1px solid Navy;
+}
+.batch .delete-person {
+  margin-top: 7px;
+  border: 1px solid #46C7C7;
+}
+.batch .inactivate-person {
+  margin-top: 7px;
+  border: 1px solid #63E1FF;
+}
+.batch .activate-person {
+  margin-top: 7px;
+  border: 1px solid #8BFFFF;
+}
+
+.batch .create-tree {
+  margin-top: 7px;
+  border: 1px solid SeaGreen;
+}
+
+.batch .share-tree {
+  margin-top: 7px;
+  border: 1px solid lightGreen;
+}
+
+.batch .unshare-tree {
+  margin-top: 7px;
+  border: 1px solid #ACFA58;
+}
+
+.batch .select-tree {
+  margin-top: 7px;
+  border: 1px solid GreenYellow;
+}
+
+.batch .delete-tree {
+  margin-top: 7px;
+  border: 1px solid Aquamarine;
+}
+
+.batch .set-owner {
+  margin-top: 7px;
+  border: 1px solid #347C17;
+}
+
+/* ------------------------ */
+.batch .create-portfoliogroup {
+  margin-top: 7px;
+  border: 1px solid #AE6929;
+}
+
+.batch .join-portfoliogroup {
+  margin-top: 7px;
+  border: 1px solid #C27D3D;
+}
+
+.batch .leave-portfoliogroup {
+  margin-top: 7px;
+  border: 1px solid #E09B5B;
+}
+
+.batch .share-portfoliogroup {
+  margin-top: 7px;
+  border: 1px solid #F4AF6F;
+}
+
+.batch .unshare-portfoliogroup {
+  margin-top: 7px;
+  border: 1px solid #FFC383;
+}
+
+/* ------------------------ */
+.batch .share-groups {
+  margin-top: 7px;
+  border: 1px solid #85BB65;
+}
+
+/* ------------------------ */
+.batch .share-usergroup {
+  margin-top: 7px;
+  border: 1px solid #46C7C7;
+}
+
+.batch .create-usergroup {
+  margin-top: 7px;
+  border: 1px solid #FFDB58;
+}
+
+.batch .unshare-usergroup {
+  margin-top: 7px;
+  border: 1px solid #46C7C7;
+}
+
+/* ------------------------ */
+.batch .update-resource {
+  margin-top: 7px;
+  border: 1px dotted lightgrey;
+}
+
+.batch .update-field {
+  margin-top: 7px;
+  border: 1px solid #FF895A;
+}
+
+.batch .update-textfield {
+  margin-top: 7px;
+  border: 1px solid #FF9D6E;
+}
+
+.batch .update-dashboard {
+  margin-top: 7px;
+  border: 1px solid #FFB182;
+}
+
+.batch .update-proxy {
+  margin-top: 7px;
+  border: 1px solid #FFC596;
+}
+
+.batch .update-calendar {
+  margin-top: 7px;
+  border: 1px solid #FFCFA0;
+}
+
+.batch .update-document {
+  margin-top: 7px;
+  border: 1px solid #FFD9AA;
+}
+
+/* ------------------------ */
+.batch .update-metadata {
+  margin-top: 7px;
+  border: 1px solid #FAAC58;
+}
+
+.batch .update-metadata-wad {
+  margin-top: 7px;
+  border: 1px solid #FE642E;
+}
+
+.batch .update-metadata-inline {
+  margin-top: 7px;
+  border: 1px solid #FACC2E;
+}
+
+.batch .update-metadata-query {
+  margin-top: 7px;
+  border: 1px solid Moccasin;
+}
+
+.batch .update-metadata-menu {
+  margin-top: 7px;
+  border: 1px solid PeachPuff;
+}
+
+/* ------------------------ */
+.batch .update-node-resource {
+  margin-top: 7px;
+  border: 1px solid #F78181;
+}
+
+.batch .import-node {
+  margin-top: 7px;
+  border: 1px solid Pink;
+}
+
+/* ------------------------ */
+.batch .join-usergroup {
+  margin-top: 7px;
+  border: 1px solid Yellow;
+}
+
+.batch .leave-usergroup {
+  margin-top: 7px;
+  border: 1px solid Orange;
+}
+
+.batch .update-field-byid {
+  margin-top: 7px;
+  border: 1px solid #C35817;
+}
+
+.batch .update-tree-root {
+  margin-top: 7px;
+  border: 1px solid LightCoral;
+}
+
+.batch .if-then-else {
+  margin-top: 7px;
+  border: 1px solid lightgrey;
+}
+
+.batch .if-action,
+.batch .then-part,
+.batch .else-part {
+  margin-bottom: 7px;
+  border: 1px dashed lightgrey;
+}
+
+/*# sourceMappingURL=batch.css.map */

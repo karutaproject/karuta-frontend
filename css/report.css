@@ -158,12 +158,11 @@
   display: none;
 }
 
-/*
 .report .asmNop .row {
-	margin-top:-20px;
-	margin-left: -30px;
+  margin-top: -20px;
+  margin-left: -30px;
 }
-*/
+
 .report-url2unit {
   cursor: pointer;
 }

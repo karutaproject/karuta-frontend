@@ -42,7 +42,7 @@ karutaStr["en"]["button-refresh"] = "Reload Portfolio";
 karutaStr["en"]["button-refresh-report"] = "Reload Report";
 karutaStr["en"]["button-disconnect"] = "Disconnect";
 karutaStr["en"]["button-change-password"] = "To change your password";
-karutaStr["en"]["button-new-window"] = "Open a new tap";
+karutaStr["en"]["button-new-window"] = "Open a new tab";
 karutaStr["en"]["button-support"] = "Technical Support";
 karutaStr['en']['Add']="Add";
 karutaStr['en']['AddGroup']="Add a Group";
@@ -103,6 +103,8 @@ karutaStr['en']['error-existing-login']="ERROR - The login already exists or an 
 //========== NODE =====================
 //=========================================
 
+karutaStr['en']['node']="Node";
+karutaStr['en']['node-label']="Node Label";
 karutaStr['en']['label']="Label";
 karutaStr['en']['code']="Code";
 karutaStr['en']['value']="Value";
@@ -172,6 +174,7 @@ karutaStr['en']['private']="Hidden";
 karutaStr['en']['hide-metainfo']="Hide Metadata";
 karutaStr['en']['show-metainfo']="Show Metadata";
 karutaStr['en']['padding-top']="Space Before (in pixels)";
+karutaStr['en']['margin-top']="Space Before (in pixels)";
 karutaStr['en']['background-color']="Background Color";
 karutaStr['en']['moveroles']="Roles - Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
@@ -179,7 +182,7 @@ karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
 karutaStr['en']['menu-type']="Menu Type";
 karutaStr['en']['displayview']="Display View";
-karutaStr['en']['node']="Node Content";
+karutaStr['en']['node-content']="Node Content";
 karutaStr['en']['resource']="Resource";
 karutaStr['en']['metadata']="Metadata";
 karutaStr['en']['css-styles']="CSS Styles";
@@ -214,6 +217,7 @@ karutaStr['en']['export-rtf']="Export RTF";
 karutaStr['en']['export-htm']="Export HTML";
 karutaStr['en']['list-semtags']="List of Semantic Tags";
 karutaStr['en']['printroles']="Roles - Print";
+karutaStr['en']['logcode']="Log Code";
 
 //=========================================
 //========== ADMIN ========================
@@ -442,6 +446,7 @@ karutaStr['en']['email-message']="Message";
 //========== RESOURCES =======================
 //=========================================
 
+karutaStr['en']['asmRoot']="Root";
 karutaStr['en']['asmStructure']="Section";
 karutaStr['en']['asmUnit']="Page";
 karutaStr['en']['asmUnitStructure']="Subsection";

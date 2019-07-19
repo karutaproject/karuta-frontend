@@ -1,4 +1,116 @@
 
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------- STYLES ---------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+
+//==================================================
+UIFactory["Node"].prototype.getNodeStyle = function()
+//==================================================
+{
+	metadataepm = this.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'nds-margin-top',true);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'nds-othercss');
+	return style;
+}
+
+
+//==================================================
+UIFactory["Node"].getLabelStyle = function(uuid)
+//==================================================
+{
+	var node = UICom.structure["ui"][uuid];
+	metadataepm = node.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].prototype.getLabelStyle = function()
+//==================================================
+{
+	metadataepm = this.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].getContentStyle = function(uuid)
+//==================================================
+{
+	var node = UICom.structure["ui"][uuid];
+	metadataepm = node.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].getDataContentStyle = function(data)
+//==================================================
+{
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(data,'node-padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(data,'node-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(data,'node-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(data,'node-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(data,'node-color',false);
+	style += UIFactory.Node.getMetadataEpm(data,'node-text-align',false);
+	style += UIFactory.Node.getMetadataEpm(data,'node-background-color',false);
+	style += UIFactory.Node.getMetadataEpm(data,'node-width',true);
+	style += UIFactory.Node.getMetadataEpm(data,'node-height',true);
+	style += UIFactory.Node.getOtherMetadataEpm(data,'node-othercss');
+	return style;
+}
+
+
+//==================================================
+UIFactory["Node"].prototype.getContentStyle = function()
+//==================================================
+{
+	metadataepm = this.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
+	return style;
+}
+
+
 
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
@@ -147,6 +259,8 @@ UIFactory["Node"].getMetadataEpm = function(data,attribute,number)
 			html += attribute.substring(8) + value;
 		else if (attribute.indexOf("node-")>-1)
 			html += attribute.substring(5) + ":" + value;
+		else if (attribute.indexOf("nds-")>-1)
+			html += attribute.substring(4) + ":" + value;
 		else if (attribute.indexOf("inparent-")>-1)
 			html += attribute.substring(9) + ":" + value;
 		else
@@ -634,6 +748,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
 		this.displayMetadataWadAttributeEditor('metadata-part2','seltype');
 	}
+	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
 	//----------------------Search----------------------------
 	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
 		html  = "<hr><label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
@@ -693,7 +808,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 };
 
 //---------------------------------------------------------
-//-------------metadata-epm editors -----------------------
+//-------------CSS metadata-epm editors -------------------
 //---------------------------------------------------------
 
 //==================================================
@@ -749,6 +864,8 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 		value = "";
 	var html = "";
 	var attribute_label = attribute;
+	if (attribute.indexOf('nds-')>-1)
+		attribute_label = attribute.substring(4);
 	if (attribute.indexOf('node-')>-1)
 		attribute_label = attribute.substring(5);
 	if (attribute.indexOf('inparent-')>-1)
@@ -838,13 +955,15 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		html += "<form id='metadata-epm' class='metadata'>";
 		html += "	<div id='metadata-epm-root'></div>";
 		html += "	<div id='metadata-epm-part1'></div>"
-		html += "<h4>"+karutaStr[languages[langcode]]['label']+"</h4>";
+		html += "<h4>"+karutaStr[languages[langcode]]['node']+"</h4>";
+		html += "	<div id='metadata-epm-node'></div>";
+		html += "<h4>"+karutaStr[languages[langcode]]['node-label']+"</h4>";
 		html += "	<div id='metadata-epm-label'></div>";
 		if (name=='asmContext') 
 			html += "<hr><h4>"+karutaStr[languages[langcode]]['resource']+"</h4>";
 		else
-			html += "<hr><h4>"+karutaStr[languages[langcode]]['node']+"</h4>";
-		html += "	<div id='metadata-node-resouce'></div>";
+			html += "<h4>"+karutaStr[languages[langcode]]['node-content']+"</h4>";
+		html += "	<div id='metadata-node-resource'></div>";
 		if (name=='asmStructure' || name=='asmUnit') {
 			html += "<hr><h4>"+karutaStr[languages[langcode]]['inparent']+"</h4>";
 			html += "	<div id='metadata-inparent'></div>";
@@ -869,6 +988,9 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 				this.displayMetadataEpmDisplayViewAttributeEditor('metadata-epm-part1','displayview',$(this.metadataepm).attr('displayview'));
 			}
 			//------------------------------------
+			this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-margin-top',$(this.metadataepm).attr('nds-margin-top'));
+			this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-othercss',$(this.metadataepm).attr('nds-othercss'));
+			//------------------------------------
 			this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-weight',$(this.metadataepm).attr('font-weight'));
 			this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-style',$(this.metadataepm).attr('font-style'));
 			this.displayMetadataEpmAttributeEditor('metadata-epm-label','text-align',$(this.metadataepm).attr('text-align'));
@@ -879,14 +1001,14 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 			this.displayMetadataEpmAttributeEditor('metadata-epm-label','background-color',$(this.metadataepm).attr('background-color'));
 		}
 		//----------------------------------
-		this.displayMetadataEpmAttributeEditor('metadata-node-resouce','node-font-weight',$(this.metadataepm).attr('node-font-weight'));
-		this.displayMetadataEpmAttributeEditor('metadata-node-resouce','node-font-style',$(this.metadataepm).attr('node-font-style'));
-		this.displayMetadataEpmAttributeEditor('metadata-node-resouce','node-text-align',$(this.metadataepm).attr('node-text-align'));
-		this.displayMetadataEpmAttributeEditor('metadata-node-resouce','node-font-size',$(this.metadataepm).attr('node-font-size'));
-		this.displayMetadataEpmAttributeEditor('metadata-node-resouce','node-padding-top',$(this.metadataepm).attr('node-padding-top'));
-		this.displayMetadataEpmAttributeEditor('metadata-node-resouce','node-othercss',$(this.metadataepm).attr('node-othercss'));
-		this.displayMetadataEpmAttributeEditor('metadata-node-resouce','node-color',$(this.metadataepm).attr('node-color'));
-		this.displayMetadataEpmAttributeEditor('metadata-node-resouce','node-background-color',$(this.metadataepm).attr('node-background-color'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-font-weight',$(this.metadataepm).attr('node-font-weight'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-font-style',$(this.metadataepm).attr('node-font-style'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-text-align',$(this.metadataepm).attr('node-text-align'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-font-size',$(this.metadataepm).attr('node-font-size'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-padding-top',$(this.metadataepm).attr('node-padding-top'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-othercss',$(this.metadataepm).attr('node-othercss'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-color',$(this.metadataepm).attr('node-color'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-background-color',$(this.metadataepm).attr('node-background-color'));
 	//----------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-inparent','inparent-font-weight',$(this.metadataepm).attr('inparent-font-weight'));
 		this.displayMetadataEpmAttributeEditor('metadata-inparent','inparent-font-style',$(this.metadataepm).attr('inparent-font-style'));

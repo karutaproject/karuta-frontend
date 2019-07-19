@@ -1185,6 +1185,7 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 UIFactory["Portfolio"].importFile = function(instance)
 //==================================
 {
+	$("#edit-window-body").attr("type","list-menu");
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
@@ -1200,8 +1201,8 @@ UIFactory["Portfolio"].importFile = function(instance)
 	html +="    Select a project ";
 	html +="    <span class='caret'></span>";
 	html +="  </button>";
-	html +="  <ul class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenu1'>";
-	html +="    <li><a href='#'>&nbsp;</a></li>";
+	html +="  <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>";
+	html +="    <a class='dropdown-item' href='#'>&nbsp;</a>";
 	for (var i=0;i<projects_list.length;i++) {
 		var js = "";
 		if (instance) 
@@ -1209,7 +1210,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 		else
 			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','false')";
 		js += ";$('#dropdownMenu1').html('"+projects_list[i].portfoliolabel+"')";
-		html += "<li><a onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a></li>";
+		html += "<a class='dropdown-item' onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a>";
 	}
 	html +="  </ul>";
 	html +="</div><br>";
@@ -1631,7 +1632,7 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		html += "<a class='dropdown-item'  onclick=\"toggleMetadata('visible')\">"+karutaStr[LANG]['show-metainfo']+"</a>";
 		html += "<a class='dropdown-item'  onclick=\"$('#contenu').html('');UICom.structure.ui['"+g_portfolio_rootid+"'].displaySemanticTags('contenu')\">"+karutaStr[LANG]['list-semtags']+"</a>";
 		if(languages.length>1)
-			html += "<a class='dropdown-item'  onclick=\"$('#sub-bar').html(UIFactory.Portfolio.getNavBar('translate',LANGCODE,g_edit,g_portfolioid));UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
+			html += "<a class='dropdown-item'  onclick=\"$('#welcome-bar').hide();$('#sub-bar').html(UIFactory.Portfolio.getNavBar('translate',LANGCODE,g_edit,g_portfolioid))$('#sub-bar').show();;UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
 	}
 	return html;
 };
@@ -1658,7 +1659,7 @@ UIFactory["Portfolio"].callRenameMove = function(portfolioid,langcode,project)
 	if ((USER.creator && !USER.limited)  || USER.admin) {
 		var htmlCodeGroupObj = $("<div class='form-group'></div>")
 		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code <a href='javascript://' id='code_help'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a></label>");
-		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
+		var htmlCodeDivObj = $("<div></div>");
 		var htmlCodeInputObj = $("<input id='code_"+portfolioid+"' type='text' class='form-control' name='input_code' value=\""+self.code_node.text()+"\">");
 		if (project)
 			$(htmlCodeInputObj).change(function (){
@@ -1676,7 +1677,7 @@ UIFactory["Portfolio"].callRenameMove = function(portfolioid,langcode,project)
 	if ((USER.creator && !USER.limited)  || USER.admin) {
 		var htmlLabelGroupObj = $("<div class='form-group'></div>")
 		var htmlLabelLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
-		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
+		var htmlLabelDivObj = $("<div></div>");
 		var htmlLabelInputObj = $("<input id='label_"+portfolioid+"_"+langcode+"' type='text' class='form-control' value=\""+self.label_node[langcode].text()+"\">");
 		if (project)
 			$(htmlLabelInputObj).change(function (){

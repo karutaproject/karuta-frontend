@@ -71,6 +71,9 @@ function r_getSelector(select,test)
 	if (selects[1]!="") {
 		jquery +=":has(metadata[semantictag*='"+selects[1]+"'])";
 		filter1 = function(){return $(this).children("metadata[semantictag*='"+selects[1]+"']").length>0};
+	}	else {
+		jquery +=":has(metadata)";
+		filter1 = function(){return $(this).children("metadata").length>0};
 	}
 	var filter2 = test; // test = .has("metadata-wad[submitted='Y']").last()
 	for (fct in jquerySpecificFunctions) {
@@ -143,13 +146,13 @@ g_report_actions['if-then-else'] = function (destid,action,no,data)
 	if (g_report_actions[tagname](destid,action,no,data)){
 		for (var i=0; i<then_actions.length;i++){
 			var tagname = $(then_actions[i])[0].tagName;
-			g_report_actions[tagname](destid,then_actions[i],no+i.toString(),data);
+			g_report_actions[tagname](destid,then_actions[i],no+'-'+i.toString(),data);
 		};
 	}
 	else {
 		for (var i=0; i<else_actions.length;i++){
 			var tagname = $(else_actions[i])[0].tagName;
-			g_report_actions[tagname](destid,else_actions[i],no+i.toString(),data);
+			g_report_actions[tagname](destid,else_actions[i],no+'-'+i.toString(),data);
 		};
 	}
 }
@@ -178,7 +181,7 @@ g_report_actions['for-each-line'] = function (destid,action,no,data)
 		}
 		for (var i=0; i<actions.length;i++){
 			var tagname = $(actions[i])[0].tagName;
-			g_report_actions[tagname](destid,actions[j],no+j.toString()+i.toString(),data);
+			g_report_actions[tagname](destid,actions[j],no+'-'+j.toString()+'-'+i.toString(),data);
 		}
 	}
 }
@@ -227,7 +230,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 			//----------------------------------
 			for (var i=0; i<actions.length;i++){
 				var tagname = $(actions[i])[0].tagName;
-				g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),nodes[j])
+				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j])
 			}
 			//----------------------------------
 		};
@@ -263,7 +266,7 @@ g_report_actions['loop'] = function (destid,action,no,data)
 		var actions = $(action).children();
 		for (var i=0; i<actions.length;i++){
 			var tagname = $(actions[i])[0].tagName;
-			g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),nodes[j]);
+			g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
 		}
 	};
 }
@@ -282,7 +285,7 @@ g_report_actions['goparent'] = function (destid,action,no,data)
 	//---------------------------
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid,actions[i],no+i.toString(),parent);
+		g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),parent);
 	}
 
 }
@@ -329,13 +332,13 @@ g_report_actions['table'] = function (destid,action,no,data)
 	}
 	//---------------------------
 	var style = $(action).attr("style");
-	var html = "<table id='"+destid+no+"' style='"+style+"'></table>";
+	var html = "<table id='"+destid+'-'+no+"' style='"+style+"'></table>";
 	$("#"+destid).append($(html));
 	//---------------------------
 	var actions = $(action).children();
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+no,actions[i],i.toString(),data);
+		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
 }
 
@@ -352,13 +355,13 @@ g_report_actions['row'] = function (destid,action,no,data)
 	}
 	//---------------------------
 	var style = $(action).attr("style");
-	var html = "<tr id='"+destid+no+"' style='"+style+"'></table>";
+	var html = "<tr id='"+destid+'-'+no+"' style='"+style+"'></table>";
 	$("#"+destid).append($(html));
 	//---------------------------
 	var actions = $(action).children();
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+no,actions[i],i.toString(),data);
+		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
 }
 
@@ -370,10 +373,10 @@ g_report_actions['cell'] = function (destid,action,no,data)
 	var attr_help = $(action).attr("help");
 	var colspan = $(action).attr("colspan");
 
-	var html = "<td id='"+destid+no+"' style='"+style+"' ";
+	var html = "<td id='"+destid+'-'+no+"' style='"+style+"' ";
 	if (colspan!=null && colspan!='0')
 		html += "colspan='"+colspan+"' "
-	html += "><span id='help_"+destid+no+"' class='ihelp'></span>";
+	html += "><span id='help_"+destid+'-'+no+"' class='ihelp'></span>";
 	html += "</td>";
 	$("#"+destid).append($(html));
 	if (attr_help!=undefined && attr_help!="") {
@@ -388,7 +391,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 			help_text = helps[langcode];  // lang1/lang2/...
 		}
 		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
-		$("#help_"+destid+no).html(help);
+		$("#help_"+destid+'-'+no).html(help);
 		$(".popinfo").popover({ 
 		    placement : 'bottom',
 		    container : 'body',
@@ -402,7 +405,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 	var actions = $(action).children();
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+no,actions[i],i.toString(),data);
+		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
 }
 
@@ -454,7 +457,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 					var actions = $(action).children();
 					for (var i=0; i<actions.length;i++){
 						var tagname = $(actions[i])[0].tagName;
-						g_report_actions[tagname](destid,actions[i],no+i.toString(),userid);
+						g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),userid);
 					};
 				}
 					//------------------------------------
@@ -602,7 +605,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 							var actions = $(action).children();
 							for (var i=0; i<actions.length;i++){
 								var tagname = $(actions[i])[0].tagName;
-								g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),data);
+								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
 							};
 						}
 					});
@@ -735,7 +738,7 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 							var actions = $(action).children();
 							for (var i=0; i<actions.length;i++){
 								var tagname = $(actions[i])[0].tagName;
-								g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),data);
+								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
 							};
 							//-----------------------------
 						}
@@ -762,7 +765,7 @@ g_report_actions['username'] = function (destid,action,no,data,is_out_csv)
 			csvseparator = ";";
 		csvline += text + csvseparator;		
 	} else {
-		text = "<span id='"+destid+no+"'>"+text+"</span>";
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
 		$("#"+destid).append($(text));		
 	}
 }
@@ -777,7 +780,7 @@ g_report_actions['firstname'] = function (destid,action,no,data,is_out_csv)
 			csvseparator = ";";
 		csvline += text + csvseparator;		
 	} else {
-		text = "<span id='"+destid+no+"'>"+text+"</span>";
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
 		$("#"+destid).append($(text));		
 	}
 }
@@ -792,7 +795,7 @@ g_report_actions['lastname'] = function (destid,action,no,data,is_out_csv)
 			csvseparator = ";";
 		csvline += text + csvseparator;		
 	} else {
-		text = "<span id='"+destid+no+"'>"+text+"</span>";
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
 		$("#"+destid).append($(text));		
 	}
 }
@@ -808,7 +811,7 @@ g_report_actions['first-lastname'] = function (destid,action,no,data,is_out_csv)
 			csvseparator = ";";
 		csvline += text1 +"-" + text2 + csvseparator;		
 	} else {
-		var text = "<span id='"+destid+no+"'>"+text1 + "&nbsp" +text2 + "</span>";
+		var text = "<span id='"+destid+'-'+no+"'>"+text1 + "&nbsp" +text2 + "</span>";
 		$("#"+destid).append($(text));		
 	}
 }
@@ -876,6 +879,14 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			}
 			if (selector.type=='node label') {
 				text = UICom.structure["ui"][nodeid].getLabel();
+			}
+			if (selector.type=='loginfo') {
+				var lastmodified = UICom.structure["ui"][nodeid].resource.lastmodified_node.text();
+				var user = UICom.structure["ui"][nodeid].resource.user_node.text();
+				try {
+					text = lastmodified+" - user : "+user;
+					}
+				catch(error) {text="/"};
 			}
 			if (selector.type=='node value') {
 				text = UICom.structure["ui"][nodeid].getValue();
@@ -1072,7 +1083,7 @@ g_report_actions['csv-line'] = function (destid,action,no,data)
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		var is_out_csv = true;
-		g_report_actions[tagname](destid,actions[i],no+j.toString()+i.toString(),data,is_out_csv);
+		g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data,is_out_csv);
 	};
 	csvreport[csvreport.length]=csvline;
 	$.ajax({
@@ -1696,14 +1707,14 @@ g_report_actions['svg'] = function (destid,action,no,data)
 {
 	var min_height = $(action).attr("min-height");
 	var min_width = $(action).attr("min-width");
-	var html = "<svg id='"+destid+no+"' min-width='"+min_width+"' min-height='"+min_height+"' viewbox='0 0 1000 1000'></svg>";
+	var html = "<svg id='"+destid+'-'+no+"' min-width='"+min_width+"' min-height='"+min_height+"' viewbox='0 0 1000 1000'></svg>";
 	var svg = $(html);
 	$("#"+destid).append(svg);
 	//----------------------------------
 	var actions = $(action).children();
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
-		g_report_actions[tagname](destid+no,actions[i],i.toString(),data)
+		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data)
 	}
 }
 
@@ -1910,4 +1921,26 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 		}
 
 	}
+}
+
+//==================================
+g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
+//==================================
+{
+	var xlegend = $(action).attr("xlegend");
+	var ylegend = $(action).attr("ylegend");
+	var xyaxis = parseInt($(action).attr("xyaxis"));
+	var yxaxis = parseInt($(action).attr("yxaxis"));
+	var xmin = parseInt($(action).attr("xmin"));
+	var xmax = parseInt($(action).attr("xmax"));
+	var ymin = parseInt($(action).attr("ymin"));
+	var ymax = parseInt($(action).attr("ymax"));
+	if (xyaxis==undefined)
+		xyaxis = 0;
+	if (yxaxis==undefined)
+		yxaxis = 0;
+	var xline = makeSVG('line',{'x1':0,'y1':500+yxaxis,'x2':1000,'y2':500+yxaxis,'stroke':'black','stroke-width': 2});
+	document.getElementById(destid).appendChild(xline);
+	var yline = makeSVG('line',{'x1':500+xyaxis,'y1':0,'x2':500+xyaxis,'y2':1000,'stroke':'black','stroke-width': 2});
+	document.getElementById(destid).appendChild(yline);
 }

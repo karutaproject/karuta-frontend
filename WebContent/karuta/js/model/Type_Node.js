@@ -163,6 +163,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.printroles = ($(node.metadatawad).attr('printroles')==undefined)?'':$(node.metadatawad).attr('printroles');
 	this.privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
+	this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
 	if (this.submitted=='Y') {
 		this.menu = false;
 	}
@@ -381,8 +382,12 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	} else {
 		$("#node_"+this.id).replaceWith(html);
 	}
-	//-------------------- node style -------------------
+	//-------------------- STYLES ---------------------------------------
 	var style = "";
+	//-------------------- node style -------------------
+	style = this.getNodeStyle(uuid);
+	$("#node_"+uuid).attr("style",style);
+	//-------------------- label style -------------------
 	style = this.getLabelStyle(uuid);
 	$("div[name='lbl-div']","#node_"+uuid).attr("style",style);
 	//-------------------- resource style -------------------
@@ -816,7 +821,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			if (g_userroles[0]=='designer' || USER.admin) {
 				var htmlCodeGroupObj = $("<div class='form-group'></div>")
 				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
-				var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
+				var htmlCodeDivObj = $("<div class='node-code'></div>");
 				var htmlCodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' name='input_code' value=\""+this.code_node.text()+"\">");
 				$(htmlCodeInputObj).change(function (){
 					UIFactory["Node"].update(htmlCodeInputObj,self,langcode);
@@ -829,7 +834,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 				var htmlLabelGroupObj = $("<div class='form-group'></div>")
 				var htmlLabelLabelObj = $("<label for='label_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
-				var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
+				var htmlLabelDivObj = $("<div class='node-label'></div>");
 				var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.label_node[langcode].text()+"\">");
 				$(htmlLabelInputObj).change(function (){
 					UIFactory["Node"].updateLabel(htmlLabelInputObj,self,langcode);
@@ -888,6 +893,8 @@ UIFactory["Node"].prototype.save = function()
 //==================================
 {
 	UICom.UpdateNode(this.id);
+	if (this.logcode!="")
+		this.log();
 	this.refresh();
 };
 
@@ -1005,6 +1012,60 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 	});
 };
 
+//==================================
+UIFactory["Node"].prototype.log = function()
+//==================================
+{
+	var srceid = this.id;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/code/"+this.logcode,
+		success : function(data) {
+			var destid = $("asmRoot",data).attr("id");
+			var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+srceid;
+			$.ajax({
+				type : "POST",
+				dataType : "text",
+				url : urlS,
+				data : "",
+				success :{
+/**
+ * 		var nodeid = $(nodes[0]).attr('id');
+		var metadata = $("metadata",nodes[0]);
+		$(metadata).attr(attribute,text);
+		var xml = xml2string(metadata[0]);
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			async : false,
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			nodeid : nodeid,
+			semtag : semtag,
+			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
+			success : function(data) {
+				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag);
+				updateMetada(nodes,node,type,semtag,text,attribute)
+			},
+			error : function(data,nodeid,semtag) {
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadata("+this.nodeid+") - semtag="+this.semtag);
+				updateMetada(nodes,node,type,semtag,text,attribute);
+			}
+		});
+
+ */
+				},
+				error : function(jqxhr,textStatus) {
+					alert("Error in Node.log "+textStatus+" : "+jqxhr.responseText);
+				}
+			});
+		}					
+	});
+}
+
+	
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------- SIDEBAR --------------------------------------------------------------------------------------------
@@ -1156,106 +1217,6 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	};
 		
 		
-//----------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-//----------------------- STYLES ---------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-
-
-//==================================================
-UIFactory["Node"].getLabelStyle = function(uuid)
-//==================================================
-{
-	var node = UICom.structure["ui"][uuid];
-	metadataepm = node.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
-	return style;
-}
-
-//==================================================
-UIFactory["Node"].prototype.getLabelStyle = function()
-//==================================================
-{
-	metadataepm = this.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
-	return style;
-}
-
-//==================================================
-UIFactory["Node"].getContentStyle = function(uuid)
-//==================================================
-{
-	var node = UICom.structure["ui"][uuid];
-	metadataepm = node.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
-	return style;
-}
-
-//==================================================
-UIFactory["Node"].getDataContentStyle = function(data)
-//==================================================
-{
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(data,'node-padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(data,'node-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(data,'node-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-color',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-text-align',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-background-color',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-width',true);
-	style += UIFactory.Node.getMetadataEpm(data,'node-height',true);
-	style += UIFactory.Node.getOtherMetadataEpm(data,'node-othercss');
-	return style;
-}
-
-
-//==================================================
-UIFactory["Node"].prototype.getContentStyle = function()
-//==================================================
-{
-	metadataepm = this.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
-	return style;
-}
-
 
 
 //----------------------------------------------------------------------------------------------------------------------------
@@ -1894,7 +1855,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 	var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 	var contentfreenode = ($(node.metadatawad).attr('contentfreenode')==undefined)?'':$(node.metadatawad).attr('contentfreenode');
 	var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-	var metadataepm = $(node.metadataepm);
+	var metadataepm = $(node.metadataepm)[0];
 	//-------------------- test if visible
 	if ( (display=='N' && (g_userroles[0]=='designer'  || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || (showtoroles.indexOf("all")>-1 && !privatevalue) || (showtoroles.containsArrayElt(g_userroles) && !privatevalue) || g_userroles[0]=='designer')) ) {
 		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.containsArrayElt(g_userroles)) || (g_userroles[0]=='designer'  || USER.admin)) {

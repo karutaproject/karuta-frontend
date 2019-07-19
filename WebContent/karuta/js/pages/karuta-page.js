@@ -6,13 +6,20 @@ function initKarutaPage()
 	var html = "";
 	html += "<div id='main-body'>";
 	html += "	<div id='navigation-bar'></div>";
+	html += "	<div id='welcome-bar'></div>";
 	html += "	<div id='sub-bar'></div>";
 	html += "	<div id='main-container'></div>";
-	html += "	<div id='wait-window' class='modal' style='height:100px;'><div id='wait-window-body' class='modal-body'></div>";
+	html += "</div>";
+	html += "<div id='wait-window' class='modal' style='height:100px;'>";
+	html += "	<div id='wait-window-body' class='modal-body'></div>";
 	html += "	<div id='wait-spin'></div>";
-	html += "	</div>";
-	html += "	<div id='post-form' style='display:none'></div>";
-	html += "	<div id='print-window' style='display:none'></div>";
+	html += "</div>";
+	html += "<div id='post-form' style='display:none'></div>";
+	html += "<div id='print-window' style='display:none'></div>";
+	html += "<div id='export-html' style='display:none'></div>";
+	html += "<div id='export-window' style='height:100px;display:none'>";
+	html += "	<div id='export-window-body'></div>";
+	html += "	<div id='export-spin'></div>";
 	html += "</div>";
 	$('body').html(html)
 	//--------------------------
@@ -25,8 +32,8 @@ function initKarutaPage()
 	$('body').append(LangueBox());
 	
 	//--------------------------
-	var target = document.getElementById('wait-spin');
-	var spinner = new Spinner().spin(target);
+	var spinner1 = new Spinner().spin(document.getElementById('wait-spin'));
+	var spinner2 = new Spinner().spin(document.getElementById('export-spin'));
 }
 
 //==============================
@@ -165,6 +172,11 @@ function setConfigurationVariables()
 			g_configVar['list-welcome-image'] = getBackgroundURL('config-list-welcome-image',data);		
 			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data);
 			g_configVar['list-welcome-subtitle'] = getText('config-list-welcome-subtitle','Field','text',data);
+			g_configVar['list-welcome-title-color'] = getText('config-list-welcome-title-color','Color','text',data);
+			g_configVar['list-welcome-title-css'] = getText('config-list-welcome-title-css','Field','text',data);
+			g_configVar['list-welcome-subline-color'] = getText('config-list-welcome-subline-color','Color','text',data);
+			g_configVar['list-welcome-subtitle-color'] = getText('config-list-welcome-subtitle-color','Color','text',data);
+			g_configVar['list-welcome-subtitle-css'] = getText('config-list-welcome-subtitle-css','Field','text',data);
 			//----------------------
 			g_configVar['list-background-color'] = getText('config-list-background-color','Color','text',data);
 			g_configVar['list-element-background-color'] = getText('config-list-element-background-color','Color','text',data);
