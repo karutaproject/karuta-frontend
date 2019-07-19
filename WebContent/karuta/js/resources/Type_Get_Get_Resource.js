@@ -287,7 +287,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (queryattr_value.indexOf('#')>0)
 				code_parent = semtag_parent;
 			else {
-				var child = $("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent);
+//				var child = $("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent);
+				var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
 				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
 				if (child.length==0 && itself.length>0){
 					code_parent = $($("code",itself)[0]).text();
@@ -310,7 +311,49 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			//----------------------
 			var portfoliocode_parent = $("portfoliocode",$("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent)).text();
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
-			if (portfoliocode.indexOf("ROME")<0){
+			if (portfoliocode.indexOf("ROME")>-1){ // ==== ROME =====
+				var self = this;
+				if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+					UIFactory["Get_Get_Resource"].parseROME(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,portfoliocode);
+				else {
+					var url = serverBCK+"/rome/";
+					if (code_parent!='')
+							url+= semtag_parent+"/"+code_parent+"/"+semtag;
+					else
+						url+= semtag;
+					$.ajax({
+						type : "GET",
+						dataType : "json",
+						url : url,
+						success : function(data) {
+							if (cachable)
+								g_Get_Resource_caches[queryattr_value] = data;
+							UIFactory["Get_Get_Resource"].parseROME(destid,type,langcode,data,self,disabled,srce,portfoliocode);
+						}
+					});
+				}
+			} else if (portfoliocode.indexOf("CNAM")>-1){ // ==== CNAM =====
+				var self = this;
+				if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
+					UIFactory["Get_Get_Resource"].parseCNAM(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,portfoliocode,semtag);
+				else {
+					var url = serverBCK+"/cnam/";
+					if (code_parent!='')
+							url+= semtag_parent+"/"+code_parent;
+					else
+						url+= semtag;
+					$.ajax({
+						type : "GET",
+						dataType : "json",
+						url : url,
+						success : function(data) {
+							if (cachable)
+								g_Get_Resource_caches[queryattr_value] = data;
+							UIFactory["Get_Get_Resource"].parseCNAM(destid,type,langcode,data,self,disabled,srce,portfoliocode,semtag);
+						}
+					});
+				}
+			} else { // ==== KARUTA ====
 				var url ="";
 				if (portfoliocode.indexOf('?')!= -1) {
 					if (code_parent.indexOf("@")>-1) {
@@ -353,28 +396,6 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					}
 	
 				});
-			} else { // ==== ROME =====
-				var self = this;
-				if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
-					UIFactory["Get_Get_Resource"].parseROME(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,portfoliocode);
-				else {
-					var url = serverBCK+"/rome/";
-					if (code_parent!='')
-							url+= semtag_parent+"/"+code_parent+"/"+semtag;
-					else
-						url+= semtag;
-					$.ajax({
-						type : "GET",
-						dataType : "json",
-						url : url,
-						success : function(data) {
-							if (cachable)
-								g_Get_Resource_caches[queryattr_value] = data;
-							UIFactory["Get_Get_Resource"].parseROME(destid,type,langcode,data,self,disabled,srce,portfoliocode);
-						}
-					});
-				}
-				
 			}
 /*			var url ="";
 			if (portfoliocode.indexOf('?')!= -1) {
@@ -1067,6 +1088,7 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags)
 //==================================
 {
 	$.ajaxSetup({async: false});
+	$("#wait-window").modal('show');
 	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
 	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
@@ -1083,6 +1105,7 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags)
 			param4 = true;
 		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4);
 	}
+	$.ajaxSetup({async: true});
 };
 
 //==================================
@@ -1356,10 +1379,227 @@ UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,sel
 		html = "<ul class='dropdown-menu' role='menu'></ul>";
 		var select  = $(html);
 		//---------------------
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#input_"+self.id).attr("value"," ");
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
 			//------------------------------
 			var code = newTableau1[i].code;
 			var label = newTableau1[i].libelle;
+			html = "<li></li>";
+			var select_item = $(html);
+			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+			if (display_code)
+				html += "<span class='li-code'>"+code+"</span>";
+			if (display_label)
+				html += "<span class='li-label'>"+label+"</span>";
+			html += "</a>";			
+			var select_item_a = $(html);
+			$(select_item_a).click(function (ev){
+				//--------------------------------
+				var code = $(this).attr('code');
+				var display_code = false;
+				var display_label = true;
+				//--------------------------------
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += $(this).attr("label_fr");
+				$("#input_"+self.id).attr("value",html);
+				UIFactory["Get_Get_Resource"].update(this,self,langcode);
+				//--------------------------------
+			});
+			$(select_item).append($(select_item_a))
+			$(select).append($(select_item));
+			//-------------- update button -----
+			if (code!="" && self_code==code) {
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += label;
+				$("#input_"+self.id).attr("value",html);
+			}
+		}
+		//---------------------
+		$(btn_group).append($(select));
+	}
+}
+
+
+//==================================
+UIFactory["Get_Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,disabled,srce,portfoliocode,semtag) {
+//==================================
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (!self.multilingual)
+		langcode = NONMULTILANGCODE;
+	if (disabled==null)
+		disabled = false;
+	//---------------------
+	if (type==undefined || type==null)
+		type = 'select';
+	//---------------------
+	var cachable = true;
+	var langcode = LANGCODE;
+	var display_code = false;
+	var display_label = true;
+	var self_code = $(self.code_node).text();
+	//-----Node ordering-------------------------------------------------------
+	var newTableau1 = [];
+	if (data.length==undefined)
+		newTableau1 [0] = data;
+	else
+		newTableau1 = data;
+	//------------------------------------------------------------
+	if (type=='select') {
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group roles-choice'>";
+		html += "<input type='text' id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		var onupdate = "UIFactory.Get_Get_Resource.update(input,self)";
+		autocomplete(document.getElementById("input_"+self.id), newTableau1,onupdate,self,langcode);
+		//-------------------------------------------------
+		html = "<ul class='dropdown-menu' role='menu'></ul>";
+		var select  = $(html);
+		//---------------------
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#input_"+self.id).attr("value"," ");
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
+		//---------------------
+		for ( var i = 0; i < newTableau1.length; i++) {
+			//------------------------------
+			var code = newTableau1[i].code;
+			semtag = semtag.replace(/:/g, '.');
+			var label = eval("newTableau1[i]."+semtag).replace(/"/g, "'"); 
+			html = "<li></li>";
+			var select_item = $(html);
+			html = "<div  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";
+			if (display_code)
+				html += "<span class='li-code'>"+code+"</span>";
+			if (display_label)
+				html += "<span class='li-label'>"+label+"</span>";
+			html += "</div>";			
+			var select_item_a = $(html);
+			$(select_item_a).click(function (ev){
+				//--------------------------------
+				var code = $(this).attr('code');
+				var display_code = false;
+				var display_label = true;
+				//--------------------------------
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += $(this).attr("label_fr");
+				$("#input_"+self.id).attr('value',html);
+				UIFactory["Get_Get_Resource"].update(this,self,langcode);
+				//--------------------------------
+			});
+			$(select_item).append($(select_item_a))
+			$(select).append($(select_item));
+			//-------------- update button -----
+			if (code!="" && self_code==code) {
+				var html = "";
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += label;
+				$("#input_"+self.id).attr('value',html);
+			}
+		}
+		//---------------------
+		$(btn_group).append($(select));
+	}
+	//------------------------------------------------------------
+	if (type.indexOf('multiple')>-1) {
+		//------------------------
+		var inputs = "<div class='ROME' id='get_get_multiple' class='multiple'></div>";
+		var inputs_obj = $(inputs);
+		//-----------------------
+		var nodes = $("node",data);
+		for ( var i = 0; i < newTableau1.length; ++i) {
+			var code = newTableau1[i].code;
+			semtag = semtag.replace(/:/g, '.');
+			var label = eval("newTableau1[i]."+semtag).replace(/"/g, "'"); 
+			var input = "";
+			//------------------------------
+			input += "<div> <input type='checkbox' portfoliocode='"+portfoliocode+"' name='multiple_"+self.id+"' value='' code='"+code+"' class='multiple-item";
+			input += "' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"=\""+label+"\" ";
+			}
+			input += "> ";
+			if (display_code)
+				input += code + " ";
+			input +="<span  class='"+code+"'>"+label+"</span></div>";
+			var input_obj = $(input);
+			$(inputs_obj).append(input_obj);
+		}
+		$("#"+destid).append(inputs_obj);
+	}
+	//------------------------------------------------------------
+	if (type=='completion') {
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group roles-choice'>";
+		html += "<input id='input_"+self.id+"' type='text' class='btn btn-default select select-rome' code= '' value=''>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		var onupdate = "UIFactory.Get_Get_Resource.update(inp,self)";
+		autocomplete(document.getElementById("input_"+self.id), newTableau1,onupdate,self,langcode);
+		//===============
+		html = "<ul class='dropdown-menu' role='menu'></ul>";
+		var select  = $(html);
+		//---------------------
+		html = "<li></li>";
+		var select_item = $(html);
+		html = "<a  value='' code='' label_fr='&nbsp;' >&nbsp;</a>";
+		var select_item_a = $(html);
+		$(select_item_a).click(function (ev){
+			$("#input_"+self.id).attr("value"," ");
+			UIFactory["Get_Get_Resource"].update(this,self,langcode);
+		});
+		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
+		for ( var i = 0; i < newTableau1.length; i++) {
+			//------------------------------
+			var code = newTableau1[i].code;
+			semtag = semtag.replace(/:/g, '.');
+			var label = eval("newTableau1[i]."+semtag).replace(/"/g, "'"); 
 			html = "<li></li>";
 			var select_item = $(html);
 			html = "<a  value='' code='"+code+"' class='sel"+code+"' label_fr=\""+label+"\" >";

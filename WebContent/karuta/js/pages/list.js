@@ -110,7 +110,7 @@ function fill_list_page()
 	$("#main-list").html(html);
 //	$.ajaxSetup({async: false});
 	// --- list of users to display name of owner
-	if (USER.admin || (USER.creator && !USER.limited) ){
+	if (USER.admin || USER.creator){
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
@@ -205,6 +205,10 @@ function fill_list_page()
 										alertHTML("Server Error GET active=false: "+textStatus);
 									}
 								});
+							}
+							if (!USER.admin && !USER.creator && portfolios_list.length==1) {
+								var uuid = portfolios_list[0].rootid;
+								display_main_page(uuid);
 							}
 //							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
 //								$("#portfolios-div").hide();
@@ -383,6 +387,7 @@ function loadAndDisplayProjectPortfolios(code)
 {
 	$("#wait-window").show();
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&project="+code,
@@ -402,12 +407,14 @@ function loadProjectPortfolios(portfoliocode,nb,destid,type,langcode)
 //==============================
 {
 	$.ajax({
+		async:false,
+		nb : nb,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&project="+portfoliocode,
 		success : function(data) {
 			UIFactory["Portfolio"].parse_add(data);
-			UIFactory["Portfolio"].displayTree(nb,destid,type,langcode,portfoliocode);
+			UIFactory["Portfolio"].displayTree(this.nb,destid,type,langcode,portfoliocode);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
@@ -456,16 +463,20 @@ function toggleProject(uuid) {
 				displayProject[uuid] = 'open';
 			}
 		} else {
-			if ($("#content-"+uuid).html()=="" || (portfolios_byid[uuid]!= undefined && $(portfolios_byid[uuid].code_node).text()=='karuta') )
-				loadAndDisplayProjectPortfolios($("#content-"+uuid).attr("code"));
-			else {
+			if ($("#content-"+uuid).html()=="" || (portfolios_byid[uuid]!= undefined && $(portfolios_byid[uuid].code_node).text()=='karuta') ){
 				$("#content-"+uuid).show();
 				$("#export-"+uuid).show();
 				$("#remove-"+uuid).show();
 				displayProject[uuid] = 'open';
+				localStorage.setItem('dp'+uuid,'open');
+				loadAndDisplayProjectPortfolios($("#content-"+uuid).attr("code"));
+			} else {
+				$("#content-"+uuid).show();
+				$("#export-"+uuid).show();
+				$("#remove-"+uuid).show();
+				displayProject[uuid] = 'open';
+				localStorage.setItem('dp'+uuid,'open');
 			}
-			localStorage.setItem('dp'+uuid,'open');
-//			Cookies.set('dp'+uuid,'open',{ expires: 60 });
 		}
 	} else {
 		$("#toggleContent_"+uuid).removeClass("glyphicon-minus")

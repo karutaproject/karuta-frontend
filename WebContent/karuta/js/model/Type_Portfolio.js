@@ -1408,38 +1408,6 @@ UIFactory["Portfolio"].removeProject = function(projectid,projectcode)
 	}
 	fill_list_page();
 	$.ajaxSetup({async: true});
-
-/*	//----------------
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1",
-		success : function(data) {
-			var destid = $("div[id='portfolios']");
-			UIFactory["Portfolio"].parse(data);
-			UIFactory["Portfolio"].displayAll('portfolios','list');
-			if ($("#projects").html()=="") {
-				$("#projects-label").hide();
-				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
-			}
-		},		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
-		}
-	});
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=false",
-		success : function(data) {
-			var destid = $("div[id='bin']");
-			UIFactory["Portfolio"].parseBin(data);
-			UIFactory["Portfolio"].displayBin('bin','bin');
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET bin: "+textStatus);
-		}
-	});*/
-	//----------------
 }
 
 //==================================
@@ -1470,37 +1438,6 @@ UIFactory["Portfolio"].restoreProject = function(projectid,projectcode)
 	}
 	fill_list_page();
 	$.ajaxSetup({async: true});
-	//----------------
-/*	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1",
-		success : function(data) {
-			var destid = $("div[id='portfolios']");
-			UIFactory["Portfolio"].parse(data);
-			UIFactory["Portfolio"].displayAll('portfolios','list');
-			if ($("#projects").html()=="") {
-				$("#projects-label").hide();
-				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
-			}
-		},		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
-		}
-	});
-	//----------------
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=false",
-		success : function(data) {
-			var destid = $("div[id='bin']");
-			UIFactory["Portfolio"].parseBin(data);
-			UIFactory["Portfolio"].displayBin('bin','bin');
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET bin: "+textStatus);
-		}
-	});*/
 	//----------------
 }
 

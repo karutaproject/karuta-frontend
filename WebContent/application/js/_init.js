@@ -11,8 +11,8 @@ var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
 //-------- LANGUAGES------------
 var languages = [];
-languages [0] = 'fr';
-languages [1] = 'en';
+languages [0] = 'en';
+languages [1] = 'fr';
 //----------------------------------
 var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
@@ -23,7 +23,7 @@ var maxfilesizeupload = "32"; //Mo
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;
-var karuta_create_account = true;
+var karuta_create_account = false;
 //--------- NAVBAR BRAND ------------------ logo 126 x 34
 var navbar_title = {};
 navbar_title["fr"] = "<img src='"+karuta_url+"/karuta/img/karuta-navbar.jpg'/>";

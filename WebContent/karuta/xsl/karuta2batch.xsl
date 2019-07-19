@@ -433,6 +433,10 @@
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	
+	<xsl:template match="*[metadata/@semantictag='update-resource']">
+			<xsl:apply-templates select='asmUnitStructure'/>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-field']">
 		<xsl:variable name="select">
 			<xsl:call-template name='get-select'>
@@ -538,6 +542,22 @@
 		<update-proxy type='Proxy' select="{$select}">
 			<source select="{$source}"/>
 		</update-proxy>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-url2unit']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<update-url2unit type='URL2Unit' select="{$select}">
+			<source select="{$source}"/>
+		</update-url2unit>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-dashboard']">

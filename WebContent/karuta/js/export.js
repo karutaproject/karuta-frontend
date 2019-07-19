@@ -17,22 +17,12 @@
 // Call it from inside a portfolio
 function export_html()
 {
-	//console.log(Window);
-	
-	// Create hidden div if it doesn't exist
-	$("#wait-window").show();
-	var basehtml = $("html", document);
-	var exportdiv = $('#export_html', basehtml);
-	$(exportdiv).remove();
-	
-	var exportdiv = $("<div></div>");
-	$(exportdiv).attr('id', 'export_html');
-	$(exportdiv).css("display", "none");
-	$(basehtml).append(exportdiv);
-	
+	$("#export-window").show();
+	$("#export-html").html("");
+	var exportdiv= $("#export-html");
 	// List links on the left
 	var leftsidebar = $('a[id^="sidebar_"]', document);
-	$("#wait-window-body").html(leftsidebar.length+1);
+	$("#export-window-body").html(leftsidebar.length+1);
 	// Displaying div
 	var divcontent = $("#contenu");
 
@@ -45,17 +35,6 @@ function export_html()
 	$(exportdiv).append(exp_left);
 	
 	var uuid = UICom.rootid;
-	//alert(UICom.rootid);
-	//displayPage('693a328e-1c42-11e6-b652-fa163ebfbd00',1,'standard','0',true)
-	
-	//console.log(leftsidebar);
-	
-	//displayPage('693a328e-1c42-11e6-b652-fa163ebfbd00',1,'standard','0',true)
-	//3 sec delay between click for rendering
-	var printoutput = function( content )
-	{
-//		console.log(content);
-	}
 	
 	// Asking a page to render
 	var clicking = function(link)
@@ -76,22 +55,15 @@ function export_html()
 			/// Create a div for it
 			var divc = $("<div></div>");
 			$(divc).attr('id', 'export_'+id);
-			$(exportdiv).append(divc);
-			
+			$(exportdiv).append(divc);		
 			$(divc).html(content);
-			
-			/// Put content in
-			printoutput(content);
 		}
-	
-		//$(link).click();
-		$("#wait-window").show();
+		$("#export-window").show();
 		displayPage(uuid,1,'standard','0',true)
-	$("#wait-window").show();
-		
+		$("#export-window").show();		
 		// Delay so everything has time to render
 		setTimeout(printy, 1000);
-		$("#wait-window").show();
+		$("#export-window").show();
 	}
 	
 	var timer;
@@ -104,7 +76,7 @@ function export_html()
 			var item = leftsidebar.slice(0);
 			leftsidebar = leftsidebar.slice(1, leftsidebar.length);
 			clicking(item);
-			$("#wait-window-body").html(leftsidebar.length+1);
+			$("#export-window-body").html(leftsidebar.length+1);
 		}
 		else  // No more link to click
 		{
@@ -122,8 +94,8 @@ function export_html()
 			$("#content",form).val(content);
 			$(form).submit();
 			$(form).remove();
-			$("#wait-window").hide();
-//			$.post("/karuta-backend/export", {pid: g_portfolioid, content: document.documentElement.outerHTML}, function(data){atob(data)});
+			$("#export-html").html("");
+			$("#export-window").hide();
 		}
 	};
 	

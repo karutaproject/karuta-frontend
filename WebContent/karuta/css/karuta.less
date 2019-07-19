@@ -169,24 +169,31 @@ input.select-rome {
     word-wrap: break-word;
     white-space: normal;
     text-align: left;
-    font-size: 12px;
+/*     font-size: 12px;*/
 }
 
 .ROME {
  	height: 400px;
  	overflow-y: scroll;
  }
+
+
 /* ============================================================ */
 a, .collapsible {
 	cursor:pointer;
 }
 
-#wait-window-body{
+#wait-window-body,
+#export-window-body{
 	margin-top:4px;
 	font-weight:bold;
 	text-align:center;
 	verticla-align:middle;
 	font-size:14px;
+}
+
+#export-window-body{
+	margin-top:18px;
 }
 
 #navigation_bar .glyphicon{
@@ -200,7 +207,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 }
 
 #main-container blockquote {
-	font-size: 12px;
+/* 	font-size: 12px;*/
 }
 
 #contenu {
@@ -262,7 +269,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 }
 
 .toggle-content .glyphicon {
-	font-size:12px;
+/*	font-size:12px;  */
 }
 
 #toggleSocialNetwork {
@@ -281,7 +288,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, #main-page {
 #edit-window-body-resource .dropdown-menu,
 .Get_Resource .dropdown-menu,
 .Get_Get_Resource .dropdown-menu {
-	font-size: 12px;
+	font-size: 14px;
 }
 
 
@@ -866,27 +873,26 @@ hr {
 	line-height: 30px;
 }
 
-.asmStructure .asmStructure .title,
-.asmRoot .asmStructure .title {
-	font-size: 12px;
-	font-weight: normal;
-	line-height: 20px;
-}
-
 .asmUnit .title {
 	font-size: 24px;
 	line-height: 30px;
 }
 
+.asmStructure .asmStructure .title,
+.asmRoot .asmStructure .title {
+	font-size: 22px;
+	line-height: 24px;
+}
+
+
 .asmStructure .asmUnit .title,
 .asmRoot .asmUnit .title {
-	font-size: 12px;
-	font-weight: normal;
-	line-height: 20px;
+	font-size: 22px;
+	line-height: 24px;
 }
 
 .asmUnitStructure .title {
-	font-size: 20px;
+	font-size: 18px;
 	line-height: 20px;
 }
 
@@ -901,7 +907,7 @@ hr {
 }
 
 .asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-	font-size: 12px;
+	font-size: 14px;
 	line-height: 20px;
 }
 
@@ -910,9 +916,9 @@ hr {
 .asmUnitStructure .asmUnitStructure .asmContext .title,
 .asmUnitStructure .asmContext .title,
 .asmContext .title {
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: normal;
-	line-height: 16px;
+	line-height: 18px;
 }
 
 /* ==================================================== */
@@ -985,7 +991,7 @@ hr {
 }
 
 .row-resource table{
-	widht:100%;
+	width:100%;
 	margin-left:5px;
 	margin-right:5px;
 }
@@ -1011,7 +1017,6 @@ hr {
 }
 
 .button{
-	font-size: 12px;
 	padding: 5px;
 	cursor:pointer;
 	display: inline-block;
@@ -1035,6 +1040,7 @@ hr {
 
 .asmUnit .row-node{
 	min-height:100px;
+	border-top:none
 }
 
 .asmStructure .asmStructure .row-node,
@@ -1055,7 +1061,7 @@ hr {
 }
 /* ---------------- resource Comments --------------------- */
 .author-date {
-		font-size:11px;
+/* 		font-size:11px;*/
 		font-style:italic;
 }
 
@@ -1083,9 +1089,6 @@ button.delete-portfolio {
 /* -------------------------------------------------- */
 /* Container */
 
-body {
-	font-size: 12px;
-}
 
 #content .texte{
 	text-align:justify;
@@ -1164,7 +1167,7 @@ textarea {
 #sidebar .number {
 	color: #aaa;
 	float: right;
-	font-size: 11px;
+/* 	font-size: 11px;*/
 	font-weight: normal;
 }
 
@@ -1177,7 +1180,8 @@ textarea {
 	color:inherit;
 }
 
-#wait-window {
+#wait-window,
+#export-window {
 	width:100px;
 	margin-left:-50px;
 	background-color:lightgrey;
@@ -1254,7 +1258,6 @@ hr {
 }
 
 #content .comment {
-	font-size: 12px;
 	padding-bottom: 22px;
 	padding-left: 40px;
 }
@@ -1464,7 +1467,7 @@ a.active:over{
 }
 
 .get-radio{
-	font-size:12px;
+/* 	font-size:12px;*/
 }
 #edit-window-body-resource .get-radio,
 .edit-inline .get-radio {
@@ -1512,7 +1515,7 @@ button.select-label {
 	word-wrap: break-word;
 	white-space: normal;
 	text-align:left;
-	font-size:12px;
+/* 	font-size:12px;*/
 }
 
 .dropdown-menu li a{
@@ -1556,7 +1559,7 @@ button.select-label {
    ====================*/
 .annotation-content {
 	margin-top:5px;
-	font-size:12px;
+/* 	font-size:12px;*/
 	font-weight:normal;
 	line-height:14px;
 }
@@ -1586,7 +1589,7 @@ button.select-label {
 }
 .comments {
 	font-style:italic;
-	font-size:11px;
+/* 	font-size:11px;*/
 	font-weight:normal;
 	padding:7px;
 }
@@ -1594,7 +1597,8 @@ button.select-label {
 .evo-palette {
 	margin-right:5px;
 }
-#wait-window {
+#wait-window,
+#export-window {
 	padding:20px;
 	background-color:#F0F0F0;
 	position:fixed;
@@ -2631,11 +2635,19 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 /* ====================
 	PUBLIC SHARED PAGE
    ====================*/
-.public-container .public-row,
-.public-container .col-md-3,   
-.public-container #sidebar{
-	height:100%;
+
+.public-container {
+	padding-top:20px;
 }
+
+@media screen and (min-width: 640px) {
+	.public-container .public-row,
+	.public-container .col-md-3,
+	.public-container #sidebar {
+			height:100%;
+	}
+}
+
 
 .public-container .col-md-3{
 	padding-left:0px;
@@ -2717,7 +2729,7 @@ div.oembedall-container {
 }
 
 .block .btn-group{
-	font-size:12px;
+/* 	font-size:12px;*/
 }
 
 .block .resource-Image{
@@ -3099,22 +3111,60 @@ div.oembedall-container {
 	PRINT STYLESHEET
    ===========================*/
 
-@media print {
-	#saved-window,
-	#navigation-bar,
-	#sub-bar,
-	#sidebar,
-	.btn-group {
-		display:none !important;
+
+	@media print {
+		@page {
+		    margin: 2cm 2cm;
+			@bottom-right {
+				content: "Page " counter(page) "/" counter(pages);
+			}
+		}
+		
+		* {
+			-webkit-print-color-adjust:exact !important;
+			color-adjust:exact !important;
+			overflow: visible !important;
+			overflow-y : visible !important;
+		}
+		
+		#saved-window,
+		#navigation-bar,
+		#sub-bar,
+		#sidebar,
+		.tooltip,
+		.menus,
+		.buttons,
+		.buttons-menus,
+		.btn-group {
+			display:none !important;
+		}
+	
+		a:after {
+			content:none !important;
+			color:var(--portfolio-link-color);
+	    }
+	
+		img {
+			page-break-inside:avoid !important; 
+			page-break-after:avoid !important;
+		}	
+	
+		.title {
+			page-break-inside:avoid !important; 
+		}
+		table {
+			page-break-after:auto !important;
+		}
+		tr,
+		td {
+			page-break-inside:auto !important;
+			page-break-after:auto !important;
+		}
+		.section2hide {
+			display:none !important;
+		}
+		.section2print {
+			display:block !important;
+		}
 	}
-
-    a:after {
-        content:none !important;
-        color:@portfolio-link-color;
-    }
-
-	@page {
-	    margin: 2cm 2cm;
-	}
-
-}
+	
