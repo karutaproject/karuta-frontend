@@ -3270,6 +3270,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 				}
 				if (subitems.length>6)
 					shares[i][6] = subitems[6]; // condition
+				if (subitems.length>7)
+					shares[i][7] = subitems[7]; // keywords : obj and/or mess
 				if (shares[i][0].indexOf(userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
 					displayShare[i] = true;
 				else
@@ -3284,8 +3286,9 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					var sharelevel = shares[i][3];
 					var shareduration = shares[i][4];
 					var sharelabel = shares[i][5];
+					var shareoptions = (shares[i].length>7) ? shares[i][7] : "";
 					if (shareto!='' && shareroles.indexOf('2world')<0) {
-						if (shareto!='?' && shareduration!='?') {
+						if (shareto!='?' && shareduration!='?' && shareoptions!="") {
 							var sharetoemail = "";
 							var sharetoroles = "";
 							var sharetos = shareto.split(" ");
@@ -3319,9 +3322,9 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 										sharetoroles += sharetos[k]+" ";
 								}
 							} else {
-								sharetoemail = '?';
+								sharetoemail = shareto;
 							}
-							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
+							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
 //							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
