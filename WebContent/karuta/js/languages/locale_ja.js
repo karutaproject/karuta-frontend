@@ -210,3 +210,7 @@ karutaStr['ja']['select_groups']="Select Groups";
 karutaStr['ja']['select_portfoliosgroups']="Select Portfolios Groups";
 karutaStr['ja']['create_portfoliosgroup']="Create a Portfolios Group";
 
+karutaStr['ja']['uploaded-by']="Uploaded by";
+karutaStr['ja']['date']="Date";
+karutaStr['ja']['file']="File";
+
