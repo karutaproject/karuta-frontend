@@ -1084,7 +1084,7 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 		html += "		</div>";
 	}
 	if (shareoptions.indexOf('obj')>-1) {
-		html += "		<label for='object' class='col-sm-3 control-label'>"+karutaStr[LANG]['object']+"</label>";
+		html += "		<label for='object' class='col-sm-3 control-label'>"+karutaStr[LANG]['subject']+"</label>";
 		html += "		<div class='col-sm-9'>";
 		html += "			<input id='object' type='text' class='form-control'>";
 		html += "		</div>";

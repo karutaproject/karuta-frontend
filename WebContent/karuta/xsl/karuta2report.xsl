@@ -149,6 +149,11 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</then-part>		
 	</xsl:template>
+	<xsl:template match="*[metadata/@semantictag='else-part']">
+		<else-part>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</else-part>		
+	</xsl:template>
 	<!-- ================ username ============================ -->
 	<xsl:template match="*[metadata/@semantictag='username']">
 		<xsl:variable name="style">
@@ -556,6 +561,11 @@
 	<xsl:template match="*[metadata/@semantictag='show-sharing']">
 		<show-sharing>
 		</show-sharing>
+	</xsl:template>
+	<!-- ================ display-sharing ============================ -->
+	<xsl:template match="*[metadata/@semantictag='display-sharing']">
+		<display-sharing>
+		</display-sharing>
 	</xsl:template>
 	<!-- ================ draw-web-title ============================ -->
 	<xsl:template match="*[metadata/@semantictag='draw-web-title']">

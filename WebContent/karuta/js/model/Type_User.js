@@ -445,6 +445,18 @@ UIFactory["User"].prototype.getRadio = function(attr,value,name,checked,disabled
 	return html;
 };
 
+//==================================
+UIFactory["User"].prototype.getCells = function()
+//==================================
+{
+	var userid = this.id;
+	var firstname = this.firstname_node.text();
+	var lastname = this.lastname_node.text();
+	var username = this.username_node.text();
+	var email = this.email_node.text();
+	var html = "<td>" + username + "</td><td>" + firstname+"</td><td>" + lastname + "</td><td>" + email + "</td>";
+	return html;
+};
 
 //==================================
 UIFactory["User"].edit = function(userid)

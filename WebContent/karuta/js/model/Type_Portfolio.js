@@ -2309,6 +2309,37 @@ UIFactory["Portfolio"].shareGroups = function(portfolioid,type)
 	}
 };
 
+//==================================
+UIFactory["Portfolio"].displaySharedUsers = function(destid,data)
+//==================================
+{
+	var html = "";
+	var groups = $("rrg",data);
+	if (groups.length>0) {
+		var group_labels = [];
+		for (var i=0; i<groups.length; i++) {
+			group_labels[i] = [$("label",groups[i]).text(),$(groups[i]).attr('id'),$("user",groups[i])];
+		}
+		var sorted_groups = group_labels.sort(sortOn1);
+		//--------------------------
+		for (var i=0; i<sorted_groups.length; i++) {
+			var label = sorted_groups[i][0];
+			var groupid = sorted_groups[i][1];
+			var users = sorted_groups[i][2];
+			if (users.length>0){
+				for (var j=0; j<users.length; j++){
+					var userid = $(users[j]).attr('id');
+					if (Users_byid[userid]!=undefined)
+						html += "<td>"+label+"</td>"+Users_byid[userid].getCells();
+				}
+				$("#"+destid).append($(html));
+			}
+		}
+	} else {
+		$("#"+destid).append($(karutaStr[LANG]['noshared']));
+	}
+};
+
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------

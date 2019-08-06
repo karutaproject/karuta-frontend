@@ -61,28 +61,31 @@ function r_replaceVariable(text)
 //==================================
 {
 	var n=0;
+	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
+		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##}"));
+		if (variables[variable_name]!=undefined && variables[variable_name].lenght>0)
+			text = text.replace("{##"+variable_name+"##}", variables[variable_name]);
+		if (aggregates[variable_name]!=undefined && aggregates[variable_name].lenght>0)
+			text = text.replace("{##"+variable_name+"##{", aggregates[variable_name][0]);
+		n++; // to avoid infinite loop
+	}
 	while (text!=undefined && text.indexOf("[##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("[##")+3); // test_string = abcd##variable##efgh.....
 		var variable_name = test_string.substring(0,test_string.indexOf("##]"));
-		if (variables[variable_name]!=undefined)
+		if (variables[variable_name]!=undefined && variables[variable_name].lenght>0)
 			text = text.replace("[##"+variable_name+"##]", variables[variable_name]);
-		if (aggregates[variable_name]!=undefined)
-			if (aggregates[variable_name].length>0)
-				text = text.replace("[##"+variable_name+"##]", aggregates[variable_name][0]);
-			else
-				text = '';
+		if (aggregates[variable_name]!=undefined && aggregates[variable_name].lenght>0)
+			text = text.replace("[##"+variable_name+"##]", aggregates[variable_name][0]);
 		n++; // to avoid infinite loop
 	}
 	while (text!=undefined && text.indexOf("##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("##")+2); // test_string = abcd##variable##efgh.....
 		var variable_name = test_string.substring(0,test_string.indexOf("##"));
-		if (variables[variable_name]!=undefined)
+		if (variables[variable_name]!=undefined && variables[variable_name].lenght>0)
 			text = text.replace("##"+variable_name+"##", variables[variable_name]);
-		if (aggregates[variable_name]!=undefined)
-			if (aggregates[variable_name].length>0)
-				text = text.replace("##"+variable_name+"##", aggregates[variable_name][0]);
-			else
-				text = '';
+		if (aggregates[variable_name]!=undefined && aggregates[variable_name].lenght>0)
+			text = text.replace("##"+variable_name+"##", aggregates[variable_name][0]);
 		n++; // to avoid infinite loop
 	}
 	return text;
@@ -174,8 +177,7 @@ g_report_actions['if-then-else'] = function (destid,action,no,data)
 	var test = $(action).attr("test");
 	if (test!=undefined) 
 		test = r_replaceVariable(test);
-	var then_action = $('then-part',action)[0]; // in case of 
-	var then_actions = $(then_action).children();
+	var then_actions = $('then-part',action).children();
 	var else_actions = $('else-part',action).children();
 	if (eval(test)){
 		for (var i=0; i<then_actions.length;i++){
@@ -323,7 +325,7 @@ g_report_actions['goparent'] = function (destid,action,no,data)
 
 //=============================================================================
 //=============================================================================
-//============================ SHOW-SHARING ===================================
+//============================ SHARING ========================================
 //=============================================================================
 //=============================================================================
 
@@ -340,6 +342,23 @@ g_report_actions['show-sharing'] = function (destid,action,no,data)
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in show-sharing : "+jqxhr.responseText);
+		}
+	});
+}
+
+//==================================
+g_report_actions['display-sharing'] = function (destid,action,no,data)
+//==================================
+{
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid_current,
+		success : function(data) {
+			UIFactory["Portfolio"].displaySharedUsers(destid,data);
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in display-sharing : "+jqxhr.responseText);
 		}
 	});
 }
@@ -613,6 +632,10 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				}
 				if (select.length==0) {
 					condition = true;;
+				}
+				if (select.startsWith("{")) {
+					var toeval = select.substring(1,select.length-1);
+					condition = eval(toeval);
 				}
 				//------------------------------------
 				if (condition){
@@ -899,6 +922,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			}
 			if (selector.type=='node label') {
 				text = UICom.structure["ui"][nodeid].getLabel();
+			}
+			if (selector.type=='node code') {
+				text = UICom.structure["ui"][nodeid].getCode();
 			}
 			if (selector.type=='loginfo') {
 				var lastmodified = UICom.structure["ui"][nodeid].resource.lastmodified_node.text();
@@ -1326,22 +1352,18 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 	if (type=="sum" && aggregates[select]!=undefined){
 		var sum = 0;
 		for (var i=0;i<aggregates[select].length;i++){
-			if (aggregates[select][i]!='' && $.isNumeric(aggregates[select][i])) {
+			if ($.isNumeric(aggregates[select][i]))
 				sum += parseFloat(aggregates[select][i]);
-			}
 		}
 		text = sum;
 	}
 	if (type=="avg" && aggregates[select]!=undefined){
 		var sum = 0;
-		var nb = 0;
 		for (var i=0;i<aggregates[select].length;i++){
-			if (aggregates[select][i]!='' && $.isNumeric(aggregates[select][i])){
+			if ($.isNumeric(aggregates[select][i]))
 				sum += parseFloat(aggregates[select][i]);
-				nb++;
-			}
 		}
-		text = sum/nb;
+		text = sum/aggregates[select].length;
 		if (text.toString().indexOf(".")>-1)
 			text = text.toFixed(2);
 		

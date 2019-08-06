@@ -214,7 +214,7 @@ g_actions['for-each-tree'] = function forEachTree(node)
 
 
 //==================================
-g_report_actions['for-each-user'] = function (node)
+g_actions['for-each-user'] = function (node)
 //==================================
 {
 	var username = getTxtvals($("username",node));
