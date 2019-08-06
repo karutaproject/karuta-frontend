@@ -2046,6 +2046,7 @@ function printSection(eltid)
 	if (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot')
 		window.print();
 	else {
+		/*
 		$("#wait-window").show();
 		$("#print-window").html("");
 		var divcontent = $(eltid).clone();
@@ -2061,5 +2062,58 @@ function printSection(eltid)
 		$("#print-window").removeClass("section2print");
 		$("#main-container").removeClass("section2hide");
 		$("#print-window").css("display", "none");
+		*/
+		printElement(eltid,'main-container');
 	}
 }
+
+//==============================
+function printElement(eltid,eltids2hide)
+//==============================
+{
+	$("#wait-window").show();
+	$("#print-window").html("");
+	var divcontent = $(eltid).clone();
+	var ids = $("*[id]", divcontent);
+	$(ids).removeAttr("id");
+	var content = $(divcontent).html();
+	$("#print-window").html(content);
+	printPopupBox('#print-window',eltids2hide);
+	$("#print-window").css("display", "none");
+
+}
+
+//==============================
+function printPopupBox(eltid,eltids2hide)
+//==============================
+{
+	$("#wait-window").show();
+	var items = eltids2hide.split(";");
+	for (var i=0; i<items.length; i++){
+		$("#"+items[i]).addClass("section2hide");
+	}	
+	$(eltid).addClass("section2print");
+	$("#wait-window").hide();	
+	window.print();
+	$(eltid).removeClass("section2print");
+	for (var i=0; i<items.length; i++){
+		$("#"+items[i]).removeClass("section2hide");
+	}	
+}
+
+//==================================
+function filesReceptionMessage(filename)
+//==================================
+{
+	var message = karutaStr[LANG]['file']+": "+filename;
+	message += "<br/>"+karutaStr[LANG]['uploaded-by']+": "+USER.firstname+" "+USER.lastname;
+	message += "<br/>"+karutaStr[LANG]['date']+": "+new Date().toLocaleString();
+	$('#message-window-body').html(message);
+	var js1 = "javascript:$('#message-window').modal('hide')";
+//	var js2 = "printPopupBox('#message-window','main-container;edit-window')";
+	var js2 = "printElement('#message-window-body','main-container;edit-window;message-window')";
+	var footer = "<div class='buttons'><button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]["button-print"]+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button></div> ";
+	document.getElementById('message-window-footer').innerHTML = footer;
+	$('#message-window').modal('show');
+}
+

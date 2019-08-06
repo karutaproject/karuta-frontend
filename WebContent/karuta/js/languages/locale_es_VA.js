@@ -422,3 +422,7 @@ karutaStr['es_VA']['time']="Tiempo (HH:MM)";
 karutaStr['es_VA']['freq']="Frecuencia";
 karutaStr['es_VA']['execroles']="Roles - Ejecutar";
 karutaStr['es_VA']['exec']="Ejecutar";
+
+karutaStr['es_VA']['uploaded-by']="Uploaded by";
+karutaStr['es_VA']['date']="Date";
+karutaStr['es_VA']['file']="File";

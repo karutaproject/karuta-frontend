@@ -298,6 +298,7 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
 			UIFactory["Document"].update(data.result,uuid,langcode,parent,filename);
 			$("#"+loadedid).html(" <i class='fa fa-check'></i>");
+			filesReceptionMessage(filename);
 		}
     });
 };

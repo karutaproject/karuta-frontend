@@ -483,3 +483,7 @@ karutaStr['fr']['time']="Heure (HH:MM)";
 karutaStr['fr']['freq']="Fréquence";
 karutaStr['fr']['execroles']="Rôles - Exécuter";
 karutaStr['fr']['exec']="Exécuter maintenant";
+
+karutaStr['fr']['uploaded-by']="Téléversé par";
+karutaStr['fr']['date']="Date";
+karutaStr['fr']['file']="Fichier";

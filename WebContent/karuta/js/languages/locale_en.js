@@ -483,6 +483,6 @@ karutaStr['en']['freq']="Frequency";
 karutaStr['en']['execroles']="Roles - Execute";
 karutaStr['en']['exec']="Execute Now";
 
-
-
-
+karutaStr['en']['uploaded-by']="Uploaded by";
+karutaStr['en']['date']="Date";
+karutaStr['en']['file']="File";
