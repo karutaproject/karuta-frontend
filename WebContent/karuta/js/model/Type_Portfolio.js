@@ -159,7 +159,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					if (portfolios.length<50) {
 						$("#export-"+projects_list[number_of_projects-1].uuid).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
 					} else {
-						var html = "";
+						var html2 = "";
 						for (var i=0; i<portfolios.length;i=i+50) {
 							var portfolios2export = "";
 							for (var j=i;j<i+50;j++) {
@@ -170,9 +170,9 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 								}
 							}
 							var exportstr = serverBCK_API+"/portfolios/zip?portfolios="+portfolios2export
-							html += "<li ><a id='export-"+portfolio.id+"-"+i+"' href='"+exportstr+"'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+" - "+i+"</a></li>";
+							html2 += "<li ><a id='export-"+portfolio.id+"-"+i+"' href='"+exportstr+"'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+" - "+i+"</a></li>";
 						}
-						$("#export-li"+projects_list[number_of_projects-1].uuid).replaceWith(html);
+						$("#export-li"+projects_list[number_of_projects-1].uuid).replaceWith(html2);
 					}
 				}
 				var portfolio_label = portfolio.label_node[langcode].text();
@@ -430,7 +430,8 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	var html = "";
 	if (type=='list') {
 		html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
-		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.rootid+"')\" onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+this.code_node.text()+"\"><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
+//		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.rootid+"')\" onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+this.code_node.text()+"\"><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
+		html += "<div class='col-md-3 col-sm-3 col-xs-9' onclick=\"display_main_page('"+this.rootid+"')\"><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
 		if (USER.creator && !USER.limited) {
 			html += "<div class='col-md-2 col-sm-2 hidden-xs'><span class='portfolio-owner' >"+owner+"</span></div>";
 			html += "<div class='col-md-2 col-sm-2 hidden-xs'><span class='portfolio-code' >"+this.code_node.text()+"</span></div>";

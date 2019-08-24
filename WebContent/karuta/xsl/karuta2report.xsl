@@ -149,11 +149,6 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</then-part>		
 	</xsl:template>
-	<xsl:template match="*[metadata/@semantictag='else-part']">
-		<else-part>
-			<xsl:apply-templates select='asmUnitStructure'/>
-		</else-part>		
-	</xsl:template>
 	<!-- ================ username ============================ -->
 	<xsl:template match="*[metadata/@semantictag='username']">
 		<xsl:variable name="style">
@@ -283,9 +278,12 @@
 		</node_resource>
 	</xsl:template>
 	<!-- ================ variable ============================ -->
-	<xsl:template match="*[metadata/@semantictag='variable']">
+	<xsl:template match="*[metadata/@semantictag='report-variable']">
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="varlabel">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="ref">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -300,6 +298,9 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
+		<xsl:variable name="aggregationselect">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregationselect']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="aggregatetype">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregatetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
@@ -307,8 +308,14 @@
 			<xsl:if test="not($ref='')">
 				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
 			</xsl:if>
+			<xsl:if test="not($varlabel='')">
+				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
+			</xsl:if>
 			<xsl:if test="not($select='..')">
 				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($aggregationselect='..')">
+				<xsl:attribute name="aggregationselect"><xsl:value-of select="$aggregationselect"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($style='..')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
