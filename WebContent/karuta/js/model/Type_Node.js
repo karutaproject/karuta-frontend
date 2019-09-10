@@ -314,6 +314,9 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	var div = $("<div></div>");
 	$(div).append($("<br>"));
 	//-----------------------------
+	var editcoderoles = $(this.metadatawad).attr('editcoderoles');
+	if (editcoderoles==undefined)
+		editnoderoles="";
 	var editnoderoles = $(this.metadatawad).attr('editnoderoles');
 	if (editnoderoles==undefined)
 		editnoderoles="";
@@ -321,7 +324,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
 		var query = $(this.metadatawad).attr('query');
 		if (query==undefined || query=='' || this.asmtype=='asmContext'){
-			if (g_userroles[0]=='designer' || USER.admin) {
+			if (g_userroles[0]=='designer' || USER.admin || editcoderoles.containsArrayElt(g_userroles) || editcoderoles.indexOf(this.userrole)>-1 || editcoderoles.indexOf($(USER.username_node).text())>-1) {
 				var htmlCodeGroupObj = $("<div class='form-group'></div>")
 				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
 				var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
@@ -769,6 +772,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
+	var editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'':$(node.metadatawad).attr('editcoderoles');
 	var commentnoderoles = ($(node.metadatawad).attr('commentnoderoles')==undefined)?'':$(node.metadatawad).attr('commentnoderoles');
 	var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
@@ -1405,6 +1409,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
+	var editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'':$(node.metadatawad).attr('editcoderoles');
 	var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
 	var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
@@ -2326,6 +2331,7 @@ UIFactory["Node"].displayModel = function(root,dest,depth,langcode,edit,inline)
 	var collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
+	var editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'':$(node.metadatawad).attr('editcoderoles');
 	var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
 	var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
@@ -2931,6 +2937,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 		userrole = "norole";
 	//------------------------
 	var semantictag =  ($(node.metadata)==undefined || $(node.metadata).attr('semantictag')==undefined)?'': $(node.metadata).attr('semantictag');
+	var editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'none':$(node.metadatawad).attr('editcoderoles');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'none':$(node.metadatawad).attr('editnoderoles');
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'none':$(node.metadatawad).attr('editresroles');
 	var delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'none':$(node.metadatawad).attr('delnoderoles');
@@ -3687,6 +3694,7 @@ UIFactory["Node"].displayMetainfo = function(destid,data)
 	html += UIFactory["Node"].displayMetadataWad(data,'delnoderoles');
 	html += UIFactory["Node"].displayMetadataWad(data,'commentnoderoles');
 	html += UIFactory["Node"].displayMetadataWad(data,'submitroles');
+	html += UIFactory["Node"].displayMetadataWad(data,'editcoderoles');
 	html += UIFactory["Node"].displayMetadataWad(data,'editnoderoles');
 	html += UIFactory["Node"].displayMetadataWad(data,'duplicateroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'incrementroles');
@@ -3763,6 +3771,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitroles',$(node.metadatawad).attr('submitroles'));
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitall',$(node.metadatawad).attr('submitall'),true);
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editcoderoles',$(node.metadatawad).attr('editcoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editnoderoles',$(node.metadatawad).attr('editnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'incrementroles',$(node.metadatawad).attr('incrementroles'));
