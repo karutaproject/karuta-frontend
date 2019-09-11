@@ -2407,8 +2407,8 @@ function getInputsLine(node)
 	var g_json_line = {};
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
-		code = UICom.structure["ui"][inputid].getCode();
-		g_json_line[code] = UICom.structure["ui"][inputid].resource.getView();
+		code = UICom.structure["ui"][inputid].getCode().trim();
+		g_json_line[code] = UICom.structure["ui"][inputid].resource.getView().trim();
 	}
 	return g_json_line;
 };
