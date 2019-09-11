@@ -1262,6 +1262,10 @@ g_actions['update-rights'] = function updateRights(node)
 	var wr = $(node).attr("wr");
 	var dl = $(node).attr("dl");
 	var sb = $(node).attr("sb");
+	var select = $(node).attr("select");
+	var idx = select.lastIndexOf(".");
+	var treeref = select.substring(0,idx);
+	var semtag = select.substring(idx+1);
 	//------------ Target --------------------
 	var url = getTargetUrl(node);
 	//--------------------------------
