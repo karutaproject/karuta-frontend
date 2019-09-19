@@ -1262,6 +1262,10 @@ g_actions['update-rights'] = function updateRights(node)
 	var wr = $(node).attr("wr");
 	var dl = $(node).attr("dl");
 	var sb = $(node).attr("sb");
+	var select = $(node).attr("select");
+	var idx = select.lastIndexOf(".");
+	var treeref = select.substring(0,idx);
+	var semtag = select.substring(idx+1);
 	//------------ Target --------------------
 	var url = getTargetUrl(node);
 	//--------------------------------
@@ -2440,8 +2444,8 @@ function getInputsLine(node)
 	var g_json_line = {};
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
-		code = UICom.structure["ui"][inputid].getCode();
-		g_json_line[code] = UICom.structure["ui"][inputid].resource.getView();
+		code = UICom.structure["ui"][inputid].getCode().trim();
+		g_json_line[code] = UICom.structure["ui"][inputid].resource.getView().trim();
 	}
 	return g_json_line;
 };
