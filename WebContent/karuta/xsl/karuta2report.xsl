@@ -149,6 +149,11 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</then-part>		
 	</xsl:template>
+	<xsl:template match="*[metadata/@semantictag='else-part']">
+		<else-part>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</else-part>		
+	</xsl:template>
 	<!-- ================ username ============================ -->
 	<xsl:template match="*[metadata/@semantictag='username']">
 		<xsl:variable name="style">
