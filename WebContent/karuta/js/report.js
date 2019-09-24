@@ -1404,6 +1404,57 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 	$("#"+destid).append($(text));
 }
 
+//=============================================================================
+//=============================================================================
+//======================== OPERATION ==========================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['operation'] = function (destid,action,no,data)
+//==================================
+{
+	var style = $(action).attr("style");
+	var ref = $(action).attr("ref");
+	ref = r_replaceVariable(ref);
+	var type = $(action).attr("type");
+	var select1 = $(action).attr("select1");
+	var select2 = $(action).attr("select2");
+	select1 = r_replaceVariable(select1);
+	select2 = r_replaceVariable(select2);
+	var result = "";
+	if ( type=="addition" && $.isNumeric(select1) && $.isNumeric(select1) ){
+		result = Number(select1) + Number(select2);
+	}
+	if ( type=="subtraction" && $.isNumeric(select1) && $.isNumeric(select2) ){
+		result = Number(select1) - Number(select2);
+	}
+	if ( type=="multiplication" && $.isNumeric(select1) && $.isNumeric(select2) ){
+		result = Number(select1) * Number(select2);
+	}
+	if ( type=="division" && $.isNumeric(select1) && $.isNumeric(select2) && select2!=0){
+		result = Number(select1) / Number(select2);
+		if (result.toString().indexOf(".")>-1)
+			result = result.toFixed(2);
+	}
+	if ( type=="percentage" && $.isNumeric(select1) && $.isNumeric(select2) && select2!=0){
+		result = Number(select1) / Number(select2) * 100;
+		if (result.toString().indexOf(".")>-1)
+			result = result.toFixed(2);
+	}
+	if (ref!=undefined && ref!="") {
+		if (aggregates[ref]==undefined)
+			aggregates[ref] = new Array();
+		aggregates[ref][aggregates[ref].length] = result;
+	}
+	if (!$.isNumeric(result))
+		result="";
+	if ( type=="percentage")
+		result = result.toString() + "%";
+	result = "<span style='"+style+"'>"+result+"</span>";
+	$("#"+destid).append($(result));
+}
+
 //===============================================================
 //===============================================================
 //===============================================================

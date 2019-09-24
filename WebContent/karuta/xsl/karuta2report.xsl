@@ -563,6 +563,36 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</aggregate>
 	</xsl:template>
+	<!-- ================ operation ============================ -->
+	<xsl:template match="*[metadata/@semantictag='operation']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select1">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationselect1']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select2">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationselect2']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="type">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationtype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<operation>
+			<xsl:if test="not($ref='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
+			<xsl:attribute name="select1"><xsl:value-of select="$select1"/></xsl:attribute>
+			<xsl:attribute name="select2"><xsl:value-of select="$select2"/></xsl:attribute>
+			<xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</operation>
+	</xsl:template>
 	<!-- ================ GoParent ============================ -->
 	<xsl:template match="*[metadata/@semantictag='go-parent']">
 		<goparent>

@@ -316,7 +316,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	//-----------------------------
 	var editcoderoles = $(this.metadatawad).attr('editcoderoles');
 	if (editcoderoles==undefined)
-		editnoderoles="";
+		editcoderoles="";
 	var editnoderoles = $(this.metadatawad).attr('editnoderoles');
 	if (editnoderoles==undefined)
 		editnoderoles="";
