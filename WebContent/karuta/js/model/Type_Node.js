@@ -539,10 +539,12 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
 	//----------- Comments -----------
-	if (this.edit && this.inline && this.writenode)
-		UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
-	else
-		UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+	if (depth>0) {
+		if (this.edit && this.inline && this.writenode)
+			UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+		else
+			UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+	}
 	//--------------------Metadata Info------------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		this.displayMetainfo("metainfo_"+uuid);
