@@ -1077,10 +1077,12 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				$("#get_editor_"+uuid).append(UICom.structure["ui"][uuid].resource.getEditor());
 			}
 			//----------- Comments -----------
-			if (edit && inline && writenode)
-				UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
-			else
-				UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+			if (depth>0) {
+				if (edit && inline && writenode)
+					UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+				else
+					UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+			}
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				if (depth>0 || nodetype == "asmContext") {
@@ -3731,7 +3733,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 		html += "<div id='root-metadata'>"
 		html += UIFactory["Node"].getMetadataDisplayTypeAttributeEditor(node.id,'display-type',$(node.metadata).attr('display-type'));
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'list-novisible',$(node.metadata).attr('list-novisible'),true);
-		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'complex',$(node.metadata).attr('complex'),true);
+//		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'complex',$(node.metadata).attr('complex'),true);
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-pdf',$(node.metadata).attr('export-pdf'),true);
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-rtf',$(node.metadata).attr('export-rtf'),true);
 		html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'export-htm',$(node.metadata).attr('export-htm'),true);
@@ -3772,6 +3774,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitall',$(node.metadatawad).attr('submitall'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editcoderoles',$(node.metadatawad).attr('editcoderoles'));
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editlabelroles',$(node.metadatawad).attr('editlabelroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editnoderoles',$(node.metadatawad).attr('editnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'incrementroles',$(node.metadatawad).attr('incrementroles'));
@@ -3940,6 +3943,8 @@ UIFactory["Node"].updateMetadataWadAttribute = function(nodeid,attribute,value,c
 			$($("metadata-wad",node)[0]).attr('private','Y');
 		else
 			$($("metadata-wad",node)[0]).attr('private','N');
+	if (attribute=='editlabelroles')
+		$($("metadata-wad",node)[0]).attr('editnoderoles',value);
 	//-----------------------------------
 	UICom.UpdateMetaWad(nodeid);
 	if (g_userroles[0]=='designer' || USER.admin) {  
@@ -4058,7 +4063,7 @@ UIFactory["Node"].getMetadataWadAttributeEditor = function(nodeid,attribute,valu
 	}
 	else if (attribute.indexOf('seltype')>-1){
 		html += "  <div class='col-sm-9'>";
-		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='select' ";
+		html += "    <input type='radio' name='"+attribute+"' onchange=\"javascript:UIFactory.Node.updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value='select' ";
 		if (value=='select' || value=='')
 			html +=" checked";
 		html +="> Select";
