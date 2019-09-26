@@ -147,6 +147,9 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 		this.collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
 	this.displayed = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	this.collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
+	this.resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
+	this.nodenopencil = ($(node.metadatawad).attr('nodenopencil')==undefined)?'N':$(node.metadatawad).attr('nodenopencil');
+	this.editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'':$(node.metadatawad).attr('editcoderoles');
 	this.editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
 	this.delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
 	this.commentnoderoles = ($(node.metadatawad).attr('commentnoderoles')==undefined)?'':$(node.metadatawad).attr('commentnoderoles');
@@ -539,7 +542,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
 	//----------- Comments -----------
-	if (depth>0) {
+	if (this.depth>0) {
 		if (this.edit && this.inline && this.writenode)
 			UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
 		else
@@ -1493,7 +1496,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		//------------ edit button ---------------------
 		//if ((!inline && ( (writenode && !incrementroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer' )) || (inline && ((USER.admin || g_userroles[0]=='designer') && (!editnoderoles.containsArrayElt(g_userroles) && !editresroles.containsArrayElt(g_userroles))))) {
 		if (
-					(!this.inline && ( 	(this.writenode && !this.incrementroles.containsArrayElt(g_userroles) && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
+					(!this.inline && ( 	(this.writenode && !this.incrementroles.containsArrayElt(g_userroles) && resnopencil!='Y' && nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
 									|| USER.admin
 									|| g_userroles[0]=='designer' 
 								)

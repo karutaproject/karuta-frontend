@@ -37,11 +37,12 @@ karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
 karutaStr["en"]["button-2world"] = "Public URL";
 karutaStr["en"]["button-up"] = "Up";
-karutaStr["en"]["button-reload"] = "Reload Page";
-karutaStr["en"]["button-refresh"] = "Reload Portfolio";
+karutaStr["en"]["button-relaod"] = "Reload Portfolio";
+karutaStr["en"]["button-refresh"] = "Reload Page";
 karutaStr["en"]["button-refresh-report"] = "Reload Report";
 karutaStr["en"]["button-disconnect"] = "Disconnect";
 karutaStr["en"]["button-change-password"] = "To change your password";
+karutaStr["en"]["button-change-name"] = "Change your name";
 karutaStr["en"]["button-new-window"] = "Open a new tab";
 karutaStr["en"]["button-support"] = "Technical Support";
 karutaStr['en']['Add']="Add";
@@ -103,8 +104,6 @@ karutaStr['en']['error-existing-login']="ERROR - The login already exists or an 
 //========== NODE =====================
 //=========================================
 
-karutaStr['en']['node']="Node";
-karutaStr['en']['node-label']="Node Label";
 karutaStr['en']['label']="Label";
 karutaStr['en']['code']="Code";
 karutaStr['en']['value']="Value";
@@ -120,12 +119,14 @@ karutaStr['en']['semantictag']="Semantic Tag";
 karutaStr['en']['multilingual-node']="Multilingual Node";
 karutaStr['en']['multilingual-resource']="Multilingual Resource";
 karutaStr['en']['seenoderoles']="Roles - See";
+karutaStr['en']['resnopencil']="Resource without pencil ";
 karutaStr['en']['editresroles']="Roles - Edit Resource";
 karutaStr['en']['delnoderoles']="Roles - Delete";
 karutaStr['en']['commentnoderoles']="Roles - Comment";
 karutaStr['en']['annotnoderoles']="Roles - Annotate";
 karutaStr['en']['submitroles']="Roles - Submit";
 karutaStr['en']['submitall']="Submit - Remove all";
+karutaStr['en']['nodenopencil']="Node without Pencil";
 karutaStr['en']['editnoderoles']="Roles - Edit Label";
 karutaStr['en']['editcoderoles']="Roles - Edit Code";
 karutaStr['en']['duplicateroles']="Roles - Duplicate";
@@ -174,15 +175,14 @@ karutaStr['en']['private']="Hidden";
 karutaStr['en']['hide-metainfo']="Hide Metadata";
 karutaStr['en']['show-metainfo']="Show Metadata";
 karutaStr['en']['padding-top']="Space Before (in pixels)";
-karutaStr['en']['margin-top']="Space Before (in pixels)";
 karutaStr['en']['background-color']="Background Color";
-karutaStr['en']['moveroles']="Roles - Move";
+karutaStr['en']['moveroles']="Roles - Ordering";
+karutaStr['en']['movein']="Move in";
+karutaStr['en']['moveinroles']="Roles - Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
 karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
-karutaStr['en']['menu-type']="Menu Type";
-karutaStr['en']['displayview']="Display View";
-karutaStr['en']['node-content']="Node Content";
+karutaStr['en']['node']="Node Content";
 karutaStr['en']['resource']="Resource";
 karutaStr['en']['metadata']="Metadata";
 karutaStr['en']['css-styles']="CSS Styles";
@@ -217,7 +217,9 @@ karutaStr['en']['export-rtf']="Export RTF";
 karutaStr['en']['export-htm']="Export HTML";
 karutaStr['en']['list-semtags']="List of Semantic Tags";
 karutaStr['en']['printroles']="Roles - Print";
-karutaStr['en']['logcode']="Log Code";
+karutaStr['en']['duration']="Link Lifetime";
+karutaStr['en']['seestart']="See - Start Date";
+karutaStr['en']['seefinish']="See - End Date";
 
 //=========================================
 //========== ADMIN ========================
@@ -291,8 +293,6 @@ karutaStr['en']['username-label']="Login";
 karutaStr['en']['firstname-label']="Firstname";
 karutaStr['en']['lastname-label']="Lastname";
 karutaStr['en']['changeOwner']="Change the Owner";
-karutaStr['en']['toggle-mode']="Toggle Edit/Read Mode";
-karutaStr['en']['write-mode']="Edit Mode";
 
 //=========================================
 //========== USERS ========================
@@ -308,6 +308,7 @@ karutaStr['en']['lastname']="Last Name";
 karutaStr['en']['firstname']="First Name";
 karutaStr['en']['email']="Email";
 karutaStr['en']['change_password']="Change Password";
+karutaStr['en']['change_name']="Change Name";
 karutaStr['en']['password']="Password";
 karutaStr['en']['new_password']="New Password";
 karutaStr['en']['admin']="Admin";
@@ -446,7 +447,6 @@ karutaStr['en']['email-message']="Message";
 //========== RESOURCES =======================
 //=========================================
 
-karutaStr['en']['asmRoot']="Root";
 karutaStr['en']['asmStructure']="Section";
 karutaStr['en']['asmUnit']="Page";
 karutaStr['en']['asmUnitStructure']="Subsection";
@@ -487,6 +487,6 @@ karutaStr['en']['freq']="Frequency";
 karutaStr['en']['execroles']="Roles - Execute";
 karutaStr['en']['exec']="Execute Now";
 
-
-
-
+karutaStr['en']['uploaded-by']="Uploaded by";
+karutaStr['en']['date']="Date";
+karutaStr['en']['file']="File";

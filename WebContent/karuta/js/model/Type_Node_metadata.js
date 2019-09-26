@@ -329,6 +329,7 @@ UIFactory["Node"].prototype.displayMetainfo = function(destid)
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'delnoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'commentnoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'submitroles');
+	html += UIFactory.Node.getMetadataInfo(metadatawad,'editcoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'editnoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'duplicateroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'incrementroles');
@@ -525,6 +526,78 @@ UIFactory["Node"].prototype.displayMetadataWadAttributeEditor = function(destid,
 		$("#"+destid).append($(html));
 };
 
+//==================================================
+UIFactory["Node"].prototype.displayMetadataDateAttributeEditor = function(destid,attribute,yes_no,disabled)
+//==================================================
+{
+	var values = null;
+	var value = $(this.metadatawad).attr(attribute);
+	if (value==null || value==undefined || value=='undefined' || value=='')
+		values = ["",""];
+	else
+		values = value.split(" ");
+	//--------------------------
+	var html = "";
+	html += "<div class='input-group '>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<span class='input-group-text' id='"+attribute+this.id+"'>"+karutaStr[languages[LANGCODE]][attribute]+"</span>";
+	html += "	</div>";
+	html += "</div>";
+	var editor = $(html);
+
+	html = "<form class='form-horizontal' role='form'></form>";
+	var form = $(html);
+	//------
+	html = "<input id='d"+attribute+this.id+"' type='text' name='datepicker' class='datepicker form-control' style='width:150px;' nodeid='"+this.id+"' ";
+	if (disabled)
+		html += "disabled='disabled' ";
+	html += "value=\""+values[0]+"\" >";
+	var input1 = $(html);
+	var self = this;
+	$(input1).change(function (){
+		var dvalue = $(this).val();
+		var hvalue = $('#h'+attribute+$(this).attr('nodeid')).val();
+		if (dvalue==""){
+			hvalue = "";
+			$('#h'+attribute+$(this).attr('nodeid')).val(hvalue);
+		}
+		if (dvalue!="" && hvalue=="") {
+			hvalue = "00:00";
+			$('#h'+attribute+$(this).attr('nodeid')).val(hvalue);
+		}
+		UIFactory.Node.updateMetadataWadAttribute($(this).attr('nodeid'),attribute,dvalue+" "+hvalue);
+	});
+	var format = "yyyy/mm/dd";
+	var minViewMode = "days";
+	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
+	$(form).append(input1);
+	$(editor).append(form);
+	//---------------------
+	var hours = ['00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00']
+	html = "	<input id='h"+attribute+this.id+"' type='text' class='form-control'  onchange=\"$('#d"+attribute+this.id+"').change()\" value=\""+values[1]+"\"";
+	if(disabled!=null && disabled)
+		html+= " disabled='disabled' ";			
+	html += ">";
+	if(disabled==null || !disabled) {
+		html += "<div class='input-group-append'>";
+		html += "	<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+		html += "	<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
+//		html += "		<div class='dropdown-menu'>";
+		html += "			<a class='dropdown-item' value='' onclick=\"$('#h"+attribute+this.id+"').val('');$('#d"+attribute+this.id+"').change();\")>&nbsp;</a>";
+		//---------------------
+		for (var i=0;i<hours.length;i++) {
+			html += "		<a  class='dropdown-item' value='"+role+"' onclick=\"$('#h"+attribute+this.id+"').val('"+hours[i]+"');$('#d"+attribute+this.id+"').change();\")>"+hours[i]+"</a>";
+		}
+//		html += "		</div>";
+		html += "	</div>";
+		html += "</div>";
+	}
+	var input2 = $(html);
+	$(editor).append(input2);
+	//---------------------
+	$("#"+destid).append(editor);
+};
+
 //==================================
 UIFactory["Node"].prototype.displayMetadatawWadTextAttributeEditor = function(destid,attribute,type)
 //==================================
@@ -546,6 +619,7 @@ UIFactory["Node"].prototype.displayMetadatawWadTextAttributeEditor = function(de
 	$("#"+nodeid+"_"+attribute).change(function(){UIFactory.Node.updateMetadatawWadTextAttribute(nodeid,attribute);});
 	//---------------------------
 };
+
 
 //==================================
 UIFactory["Node"].prototype.displaySelectRole= function(destid,attribute,yes_no,disabled) 
@@ -686,7 +760,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		resource_type = this.resource.type;
 	if (name=='asmRoot') {
 		this.displayMetadataAttributeEditor('metadata-root','list-novisible',true);
-		this.displayMetadataAttributeEditor('metadata-root','complex',true);
+//		this.displayMetadataAttributeEditor('metadata-root','complex',true);
 		this.displayMetadataAttributeEditor('metadata-root','export-pdf',true);
 		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
 		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);
@@ -709,17 +783,24 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (USER.admin)
 		this.displayRights('metadata-rights');
 	this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
+	this.displayMetadataDateAttributeEditor('metadata-part2','seestart');
+	this.displayMetadataDateAttributeEditor('metadata-part2','seefinish');
 	this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles');
 	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && this.structured_resource==null)	{
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles',false,true);
+		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',true,true);
 	}
-	else
+	else {
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles');
+		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
+	}
 	this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitall',true);
+	this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles');
+	this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
 	this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles');
 	if (semtag=='bubble_level1')
@@ -1054,6 +1135,14 @@ UIFactory["Node"].updateMetadataWadAttribute = function(nodeid,attribute,value,c
 			$($("metadata-wad",node)[0]).attr('private','Y');
 		else
 			$($("metadata-wad",node)[0]).attr('private','N');
+	//-----------------------------------
+	if (attribute=='editcoderoles') {
+		var editnoderoles = ($($("metadata-wad",node)[0]).attr('editnoderoles')==undefined)?'none':$($("metadata-wad",node)[0]).attr('editnoderoles');
+		if (editnoderoles=='none' || editnoderoles=='') {
+			$($("metadata-wad",node)[0]).attr('editnoderoles',value);
+			$("#editnoderoles"+nodeid).attr('value',value);
+		}
+	}
 	//-----------------------------------
 	UICom.UpdateMetaWad(nodeid);
 	if (g_userroles[0]=='designer' || USER.admin) {  
