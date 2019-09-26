@@ -2942,6 +2942,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 	var editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'none':$(node.metadatawad).attr('editcoderoles');
 	var editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'none':$(node.metadatawad).attr('editnoderoles');
 	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'none':$(node.metadatawad).attr('editresroles');
+	var resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
+	var nodenopencil = ($(node.metadatawad).attr('nodenopencil')==undefined)?'N':$(node.metadatawad).attr('nodenopencil');
 	var delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'none':$(node.metadatawad).attr('delnoderoles');
 	var submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
 	var submitall = ($(node.metadatawad).attr('submitall')==undefined)?'none':$(node.metadatawad).attr('submitall');
@@ -2967,6 +2969,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 				writenode = menu; //if submitted menu==false
 		}
 	}
+		
 	//-----------------------------------
 	var html = "<div class='btn-group'>";
 	//-----------------------------------
@@ -2974,7 +2977,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 		//------------ edit button ---------------------
 		//if ((!inline && ( (writenode && !incrementroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer' )) || (inline && ((USER.admin || g_userroles[0]=='designer') && (!editnoderoles.containsArrayElt(g_userroles) && !editresroles.containsArrayElt(g_userroles))))) {
 		if (
-					(!inline && ( 	(writenode && !incrementroles.containsArrayElt(g_userroles))
+					(!inline && ( 	(writenode && !incrementroles.containsArrayElt(g_userroles) && resnopencil!='Y' && nodenopencil!='Y')
 									|| USER.admin
 									|| g_userroles[0]=='designer' 
 								)
@@ -3697,6 +3700,7 @@ UIFactory["Node"].displayMetainfo = function(destid,data)
 	html += UIFactory["Node"].displayMetadataWad(data,'commentnoderoles');
 	html += UIFactory["Node"].displayMetadataWad(data,'submitroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'editcoderoles');
+	html += UIFactory["Node"].displayMetadataWad(data,'editlabelroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'editnoderoles');
 	html += UIFactory["Node"].displayMetadataWad(data,'duplicateroles');
 	html += UIFactory["Node"].displayMetadataWad(data,'incrementroles');
@@ -3766,16 +3770,19 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'delnoderoles',$(node.metadatawad).attr('delnoderoles'));
 	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && node.structured_resource==null)	{
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editresroles',$(node.metadatawad).attr('editresroles'),false,true);
+		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'resnopencil',$(node.metadatawad).attr('resnopencil'),true,true);
 	}
-	else
+	else {
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editresroles',$(node.metadatawad).attr('editresroles'));
+		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'resnopencil',$(node.metadatawad).attr('resnopencil'),true);
+	}
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'commentnoderoles',$(node.metadatawad).attr('commentnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitroles',$(node.metadatawad).attr('submitroles'));
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'submitall',$(node.metadatawad).attr('submitall'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editcoderoles',$(node.metadatawad).attr('editcoderoles'));
-	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editlabelroles',$(node.metadatawad).attr('editlabelroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editnoderoles',$(node.metadatawad).attr('editnoderoles'));
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'nodenopencil',$(node.metadatawad).attr('nodenopencil'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'incrementroles',$(node.metadatawad).attr('incrementroles'));
 	if (semtag=='bubble_level1')
@@ -3943,8 +3950,14 @@ UIFactory["Node"].updateMetadataWadAttribute = function(nodeid,attribute,value,c
 			$($("metadata-wad",node)[0]).attr('private','Y');
 		else
 			$($("metadata-wad",node)[0]).attr('private','N');
-	if (attribute=='editlabelroles')
-		$($("metadata-wad",node)[0]).attr('editnoderoles',value);
+	//-----------------------------------
+	if (attribute=='editcoderoles') {
+		var editnoderoles = ($($("metadata-wad",node)[0]).attr('editnoderoles')==undefined)?'none':$($("metadata-wad",node)[0]).attr('editnoderoles');
+		if (editnoderoles=='none' || editnoderoles=='') {
+			$($("metadata-wad",node)[0]).attr('editnoderoles',value);
+			$("#editnoderoles"+nodeid).attr('value',value);
+		}
+	}
 	//-----------------------------------
 	UICom.UpdateMetaWad(nodeid);
 	if (g_userroles[0]=='designer' || USER.admin) {  
