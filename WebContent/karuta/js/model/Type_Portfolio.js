@@ -170,7 +170,7 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 								}
 							}
 							var exportstr = serverBCK_API+"/portfolios/zip?portfolios="+portfolios2export
-							html2 += "<li ><a id='export-"+portfolio.id+"-"+i+"' href='"+exportstr+"'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+" - "+i+"</a></li>";
+							html2 += "<li ><a id='export-"+portfolio.id+"-"+i+"' href='"+exportstr+"'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+" : "+i+" - "+((i+50<portfolios.length)? i+49:portfolios.length-1) + "</a></li>";
 						}
 						$("#export-li"+projects_list[number_of_projects-1].uuid).replaceWith(html2);
 					}
@@ -207,9 +207,10 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 					html += "<li><a onclick=\"UIFactory['Portfolio'].callChangeOwner('"+portfolio.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["changeOwner"]+"</a></li>";
 					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolio.id+"')\" ><i class='fa fa-share-square-o'></i> "+karutaStr[LANG]["addshare-users"]+"</a></li>";
 					html += "				<li><a onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolio.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a></li>";
-					if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
+					if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open') {
 						html += "			<li id='export-li"+portfolio.id+"'><a id='export-"+portfolio.id+"' href='' style='display:block'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a></li>";
-					else
+						html += "			<li id='archive-li"+portfolio.id+"'><a onclick=\"UIFactory.Portfolio.callArchive('"+portfoliocode+"')\"><i class='fa fa-download'></i> "+karutaStr[LANG]["archive-project"]+"</a></li>";
+					}else
 						html += "			<li id='export-li"+portfolio.id+"'><a id='export-"+portfolio.id+"' href='' style='display:none'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a></li>";
 						html += "			</ul>";
 				} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
@@ -2417,6 +2418,87 @@ UIFactory["Portfolio"].changeOwner = function(portfolioid,langcode)
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in ChangeOwner : "+jqxhr.responseText);
+		}
+	});
+	
+}
+
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
+//----------------------------------- ARCHIVE --------------------------------------
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
+
+//==================================
+UIFactory["Portfolio"].callArchive = function(projectcode,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var js2 = "javascript:UIFactory.Portfolio.archive('"+projectcode+"')";
+	var footer = ""
+	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Save']+"</button>";
+	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['archive-project']+' '+projectcode);
+	var html = "";
+	html += "<div>";
+	html += karutaStr[LANG]['nbeltsperarchive'];
+	html += " : <input name='nbeltsperarchive' type='text'>"
+	html += "</div>";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	//----------------------------------------------------------------
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].archive = function(projectcode,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var nbeltsperarchive = $("input[name='nbeltsperarchive']").val();
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios?active=1&search="+projectcode,
+		success : function(data) {
+			UIFactory["Portfolio"].parse(data);
+			for (var i=1;i<portfolios_list.length+1;i=i+parseInt(nbeltsperarchive)){
+				var uuids = "";
+				for (var j=0;j<nbeltsperarchive;j++){
+					if (j>0)
+						uuids += ",";
+					uuids += portfolios_list[i+j].id;
+				}
+				var html = '<div>Portfolios:'+uuids+"</div>";
+				$("#edit-window-body").append($(html));  //serverBCK_API+"/portfolios/zip?portfolios=
+				$.ajax({
+					async : false,
+					type : "GET",
+					dataType : "xml",
+					url : serverBCK_API+"/portfolios/zip?portfolios="+uuids+"&archive=y",
+					success : function(data) {
+						$("#edit-window-body").append($("<div>saved</div>"));
+					},
+					error : function(jqxhr,textStatus) {
+						alertHTML("Server Error GET active=1: "+textStatus);
+					}
+				});
+			}
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active=1: "+textStatus);
 		}
 	});
 	
