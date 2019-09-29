@@ -219,7 +219,7 @@ karutaStr['en']['list-semtags']="List of Semantic Tags";
 karutaStr['en']['printroles']="Roles - Print";
 karutaStr['en']['duration']="Link Lifetime";
 karutaStr['en']['seestart']="See - Start Date";
-karutaStr['en']['seefinish']="See - End Date";
+karutaStr['en']['seeend']="See - End Date";
 
 //=========================================
 //========== ADMIN ========================
@@ -259,6 +259,8 @@ karutaStr['en']['sharing_with_designers']="Share with Designers";
 karutaStr['en']['unsharing']="Unsharing";
 karutaStr['en']['export']="Export";
 karutaStr['en']['export-project']="Export Project";
+karutaStr['en']['archive-project']="Archive Project";
+karutaStr['en']['nbeltsperarchive']="Number of elements by archive";
 karutaStr['en']['export-with-files']="Export with Files";
 karutaStr['en']['button-duplicate']="Duplicate";
 karutaStr['en']['getPDF']="Create PDF";

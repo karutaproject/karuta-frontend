@@ -325,6 +325,8 @@ UIFactory["Node"].prototype.displayMetainfo = function(destid)
 	if (metadata.getAttribute('semantictag')!=undefined && metadata.getAttribute('semantictag')!="")
 		html += "<span>semantictag:"+metadata.getAttribute('semantictag')+"| </span>";
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'seenoderoles');
+	html += UIFactory.Node.getMetadataInfo(metadatawad,'seestart');
+	html += UIFactory.Node.getMetadataInfo(metadatawad,'seeend');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'editresroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'delnoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'commentnoderoles');
@@ -567,18 +569,22 @@ UIFactory["Node"].prototype.displayMetadataDateAttributeEditor = function(destid
 		}
 		UIFactory.Node.updateMetadataWadAttribute($(this).attr('nodeid'),attribute,dvalue+" "+hvalue);
 	});
-	var format = "yyyy/mm/dd";
+	var format = "yyyy-mm-dd";
 	var minViewMode = "days";
 	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
 	$(form).append(input1);
 	$(editor).append(form);
 	//---------------------
 	var hours = ['00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00']
+	var hoursauto = [];
+	for (var i=0;i<hours.length;i++) {
+		hoursauto[hoursauto.length] = {'libelle':hours[i]}
+	}
 	html = "	<input id='h"+attribute+this.id+"' type='text' class='form-control'  onchange=\"$('#d"+attribute+this.id+"').change()\" value=\""+values[1]+"\"";
 	if(disabled!=null && disabled)
 		html+= " disabled='disabled' ";			
 	html += ">";
-	if(disabled==null || !disabled) {
+/*	if(disabled==null || !disabled) {
 		html += "<div class='input-group-append'>";
 		html += "	<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
 		html += "	<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
@@ -587,15 +593,19 @@ UIFactory["Node"].prototype.displayMetadataDateAttributeEditor = function(destid
 		//---------------------
 		for (var i=0;i<hours.length;i++) {
 			html += "		<a  class='dropdown-item' value='"+role+"' onclick=\"$('#h"+attribute+this.id+"').val('"+hours[i]+"');$('#d"+attribute+this.id+"').change();\")>"+hours[i]+"</a>";
+			hoursauto[hoursauto.length] = {'libelle':hours[i]}
 		}
 //		html += "		</div>";
 		html += "	</div>";
 		html += "</div>";
 	}
+	*/
 	var input2 = $(html);
 	$(editor).append(input2);
 	//---------------------
 	$("#"+destid).append(editor);
+	addautocomplete(document.getElementById('h'+attribute+this.id), hoursauto);
+
 };
 
 //==================================
@@ -634,7 +644,11 @@ UIFactory["Node"].prototype.displaySelectRole= function(destid,attribute,yes_no,
 	var html = "";
 	html += "<div class='input-group '>";
 	html += "	<div class='input-group-prepend'>";
-	html += "		<div class='input-group-text'>"+karutaStr[languages[langcode]][attribute]+"</div>";
+	html += "		<div class='input-group-text'>";
+	html += karutaStr[languages[langcode]][attribute];
+	if (attribute=='seenoderoles')
+		html += "<a data-toggle='collapse' data-target='#see-calendar' aria-expanded='false'>&nbsp;<span class='fa fa-calendar'></span></a>"
+	html += "</div>";
 	html += "	</div>";
 	html += "	<input id='"+attribute+nodeid+"' type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
 	if(disabled!=null && disabled)
@@ -657,6 +671,10 @@ UIFactory["Node"].prototype.displaySelectRole= function(destid,attribute,yes_no,
 	}
 	html += "</div>";
 	$("#"+destid).append($(html));
+	if (attribute=='seenoderoles'){
+		html = "<div id='see-calendar' class='collapse'></div>"
+		$("#"+destid).append($(html));
+	}
 	addautocomplete(document.getElementById(attribute+nodeid), rolesarray);
 
 }
@@ -783,8 +801,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (USER.admin)
 		this.displayRights('metadata-rights');
 	this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
-	this.displayMetadataDateAttributeEditor('metadata-part2','seestart');
-	this.displayMetadataDateAttributeEditor('metadata-part2','seefinish');
+	this.displayMetadataDateAttributeEditor('see-calendar','seestart');
+	this.displayMetadataDateAttributeEditor('see-calendar','seeend');
 	this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles');
 	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && this.structured_resource==null)	{
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles',false,true);
