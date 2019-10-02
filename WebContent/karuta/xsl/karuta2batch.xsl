@@ -24,7 +24,7 @@
 		</if-then-else>
 	</xsl:template>
 	
-	<xsl:template match="*[metadata/@semantictag='if-part']">
+	<xsl:template match="*[metadata/@semantictag='if-action']">
 		<if-part>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</if-part>		
