@@ -326,6 +326,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
 			UIFactory["Image"].update(data.result,uuid,langcode,parent,filename);
 			$("#"+loadedid).html(" <i class='fa fa-check'></i>");
+			filesReceptionMessage(filename);
 		}
 	});
 	var resizeroles = $("metadata-wad",this.node).attr('resizeroles');

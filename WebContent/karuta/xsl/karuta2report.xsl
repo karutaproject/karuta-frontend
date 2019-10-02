@@ -133,6 +133,27 @@
 			</xsl:if>
 		</europass>
 	</xsl:template>
+	<!-- ================ if-then-else ============================ -->
+	<xsl:template match="*[metadata/@semantictag='if-then-else']">
+		<xsl:variable name="test">
+			<xsl:value-of select="./asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<if-then-else>
+			<xsl:attribute name="test"><xsl:value-of select="$test"/></xsl:attribute>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</if-then-else>
+	</xsl:template>
+	
+	<xsl:template match="*[metadata/@semantictag='then-part']">
+		<then-part>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</then-part>		
+	</xsl:template>
+	<xsl:template match="*[metadata/@semantictag='else-part']">
+		<else-part>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</else-part>		
+	</xsl:template>
 	<!-- ================ username ============================ -->
 	<xsl:template match="*[metadata/@semantictag='username']">
 		<xsl:variable name="style">
@@ -263,6 +284,9 @@
 	</xsl:template>
 	<!-- ================ variable ============================ -->
 	<xsl:template match="*[metadata/@semantictag='report-variable']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
 		<xsl:variable name="varlabel">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -279,18 +303,34 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
+		<xsl:variable name="aggregationselect">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregationselect']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="aggregatetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregatetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
 		<variable>
-			<xsl:if test="not($varlabel='')">
-				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
-			</xsl:if>
 			<xsl:if test="not($ref='')">
 				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($varlabel='')">
+				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($select='..')">
 				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
 			</xsl:if>
+			<xsl:if test="not($aggregationselect='..')">
+				<xsl:attribute name="aggregationselect"><xsl:value-of select="$aggregationselect"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($aggregatetype='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$aggregatetype"/></xsl:attribute>
+			</xsl:if>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</variable>
-	</xsl:template>	
+	</xsl:template>
 	<!-- ================ csv-line ============================ -->
 	<xsl:template match="*[metadata/@semantictag='csv-line']">
 		<csv-line>
@@ -323,16 +363,10 @@
 		<xsl:variable name="semtag">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="urllabel">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='urllabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
 		<xsl:variable name="select">asmUnit.<xsl:value-of select="$semtag"/></xsl:variable>
 		<url2unit>
 			<xsl:if test="not($select='..')">
 				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="not($urllabel='')">
-				<xsl:attribute name="urllabel"><xsl:value-of select="$urllabel"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($style='..')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
@@ -529,6 +563,36 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</aggregate>
 	</xsl:template>
+	<!-- ================ operation ============================ -->
+	<xsl:template match="*[metadata/@semantictag='operation']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select1">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationselect1']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select2">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationselect2']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="type">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationtype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<operation>
+			<xsl:if test="not($ref='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
+			<xsl:attribute name="select1"><xsl:value-of select="$select1"/></xsl:attribute>
+			<xsl:attribute name="select2"><xsl:value-of select="$select2"/></xsl:attribute>
+			<xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</operation>
+	</xsl:template>
 	<!-- ================ GoParent ============================ -->
 	<xsl:template match="*[metadata/@semantictag='go-parent']">
 		<goparent>
@@ -539,6 +603,11 @@
 	<xsl:template match="*[metadata/@semantictag='show-sharing']">
 		<show-sharing>
 		</show-sharing>
+	</xsl:template>
+	<!-- ================ display-sharing ============================ -->
+	<xsl:template match="*[metadata/@semantictag='display-sharing']">
+		<display-sharing>
+		</display-sharing>
 	</xsl:template>
 	<!-- ================ draw-web-title ============================ -->
 	<xsl:template match="*[metadata/@semantictag='draw-web-title']">
@@ -613,7 +682,7 @@
 			</xsl:if>
 		</draw-web-axis>
 	</xsl:template>
-		<!-- ================ draw-web-line ============================ -->
+	<!-- ================ draw-web-line ============================ -->
 	<xsl:template match="*[metadata/@semantictag='draw-web-line']">
 		<xsl:variable name="editresroles">
 			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
@@ -679,6 +748,56 @@
 				<xsl:attribute name="max"><xsl:value-of select="$max"/></xsl:attribute>
 			</xsl:if>
 		</draw-web-line>
+	</xsl:template>
+	<!-- ================ draw-xy-axis ============================ -->
+	<xsl:template match="*[metadata/@semantictag='draw-xy-axis']">
+		<xsl:variable name="editresroles">
+			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="xmin">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-xmin']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="xmax">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-xmax']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="ymin">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-ymin']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="ymax">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-ymax']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="legenddisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='legenddisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<draw-xy-axis>
+			<xsl:if test="not(editresroles='')">
+				<xsl:attribute name="editresroles"><xsl:value-of select="$editresroles"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ref='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($xmin='..')">
+				<xsl:attribute name="xmin"><xsl:value-of select="$xmin"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($xmax='..')">
+				<xsl:attribute name="xmax"><xsl:value-of select="$xmax"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ymin='..')">
+				<xsl:attribute name="xmin"><xsl:value-of select="$ymin"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($ymax='..')">
+				<xsl:attribute name="ymax"><xsl:value-of select="$ymax"/></xsl:attribute>
+			</xsl:if>
+		</draw-xy-axis>
 	</xsl:template>
 
 	<!-- ================ asmNop ============================ -->

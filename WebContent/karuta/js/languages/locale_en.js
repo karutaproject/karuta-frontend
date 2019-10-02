@@ -66,7 +66,7 @@ karutaStr['en']['enter-text']="Enter something...";
 karutaStr['en']['not-logged']="You are not connected.";
 karutaStr['en']['translate']="Translate";
 karutaStr['en']['submit']="Submit";
-karutaStr['en']['newpassword']="Forgot password? Send your login:";
+karutaStr['en']['newpassword']="Forgot password?";
 karutaStr['en']['tipnewpassword']="If you can not find our message in your inbox, check your &quot;junk mail&quot; or &quot;spam&quot; folder";
 karutaStr['en']['confirm-password']="Confirm password";
 karutaStr['en']['password-mismatch']="The two passwords do not match.";
@@ -119,12 +119,14 @@ karutaStr['en']['semantictag']="Semantic Tag";
 karutaStr['en']['multilingual-node']="Multilingual Node";
 karutaStr['en']['multilingual-resource']="Multilingual Resource";
 karutaStr['en']['seenoderoles']="Roles - See";
+karutaStr['en']['resnopencil']="Resource without pencil ";
 karutaStr['en']['editresroles']="Roles - Edit Resource";
 karutaStr['en']['delnoderoles']="Roles - Delete";
 karutaStr['en']['commentnoderoles']="Roles - Comment";
 karutaStr['en']['annotnoderoles']="Roles - Annotate";
 karutaStr['en']['submitroles']="Roles - Submit";
 karutaStr['en']['submitall']="Submit - Remove all";
+karutaStr['en']['nodenopencil']="Node without Pencil";
 karutaStr['en']['editnoderoles']="Roles - Edit Label";
 karutaStr['en']['editcoderoles']="Roles - Edit Code";
 karutaStr['en']['duplicateroles']="Roles - Duplicate";
@@ -255,6 +257,8 @@ karutaStr['en']['sharing_with_designers']="Share with Designers";
 karutaStr['en']['unsharing']="Unsharing";
 karutaStr['en']['export']="Export";
 karutaStr['en']['export-project']="Export Project";
+karutaStr['en']['archive-project']="Archive Project";
+karutaStr['en']['nbeltsperarchive']="Number of elements by archive";
 karutaStr['en']['export-with-files']="Export with Files";
 karutaStr['en']['button-duplicate']="Duplicate";
 karutaStr['en']['getPDF']="Create PDF";
@@ -483,6 +487,6 @@ karutaStr['en']['freq']="Frequency";
 karutaStr['en']['execroles']="Roles - Execute";
 karutaStr['en']['exec']="Execute Now";
 
-
-
-
+karutaStr['en']['uploaded-by']="Uploaded by";
+karutaStr['en']['date']="Date";
+karutaStr['en']['file']="File";

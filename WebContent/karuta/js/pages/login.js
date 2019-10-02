@@ -168,10 +168,12 @@ function getNew()
 //==============================
 {
 	var html = "";
-	html += "<p>"+karutaStr[LANG]['newpassword']+"</p>";
+	html += "<a onclick=\"$('#show-newpassword').show()\">"+karutaStr[LANG]['newpassword']+"</a>";
+	html +="<div id='show-newpassword' style='display:none'>"
 	html += "<input id='useridentifier_new' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'/>";
 	html += "<button id='form-send' onclick='javascript:callSend()'>"+karutaStr[LANG]['button-send']+"</button>";
 	html += "<p><br/>"+karutaStr[LANG]['tipnewpassword']+"</p>";
+	html += "</div>"
 	return html;
 }
 

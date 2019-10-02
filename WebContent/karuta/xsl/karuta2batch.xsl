@@ -24,7 +24,7 @@
 		</if-then-else>
 	</xsl:template>
 	
-	<xsl:template match="*[metadata/@semantictag='if-part']">
+	<xsl:template match="*[metadata/@semantictag='if-action']">
 		<if-part>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</if-part>		
@@ -56,6 +56,22 @@
 				<xsl:apply-templates select='asmUnitStructure'/>
 			</actions>
 		</for-each-tree>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='for-each-person']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='personid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<for-each-user id="{$id}">
+			<username>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">username</xsl:with-param>
+				</xsl:call-template>
+			</username>
+			<actions>
+				<xsl:apply-templates select='asmUnitStructure'/>
+			</actions>
+		</for-each-user>
 	</xsl:template>
 
 	<!-- ====================================================================================== -->
@@ -112,7 +128,10 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='delete-person']">
-		<delete-user>
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='user-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+			<delete-user id="{$id}">
 			<identifier>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">identifier</xsl:with-param>
@@ -122,7 +141,10 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='activate-person']">
-		<activate-user>
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='user-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<activate-user id="{$id}">
 			<identifier>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">identifier</xsl:with-param>
@@ -132,7 +154,10 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='inactivate-person']">
-		<inactivate-user>
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='user-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<inactivate-user id="{$id}">
 			<identifier>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">identifier</xsl:with-param>

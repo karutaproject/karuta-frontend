@@ -1038,13 +1038,15 @@ function getSendPublicURL(uuid,shareroles)
 }
 
 //==================================
-function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole)
+function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole,shareoptions)
 //==================================
 {
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	var sharetomessage = "";
+	var sharetoobj = "";
 	$("#edit-window-footer").html("");
 	fillEditBoxBody();
 	$("#edit-window-title").html(karutaStr[LANG]['share-URL']);
@@ -1052,14 +1054,21 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
 	var obj = $(send_button);
 	$(obj).click(function (){
-		if (sharetoemail=='?') {
+		if (sharetoemail.indexOf('?')>-1) {
 			sharetoemail = $("#email").val();
+		}
+		if (shareoptions.indexOf('mess')>-1) {
+			sharetomessage = $("#message").val();
+			sharetomessage = $('<div/>').text(sharetomessage).html();  // encode html
+		}
+		if (shareoptions.indexOf('obj')>-1) {
+			sharetoobj = $("#object").val();
 		}
 		if (shareduration=='?') {
 			shareduration = $("#duration").val();
 		}
 		if (sharetoemail!='' && shareduration!='') {
-			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode);
+			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode,sharetomessage,sharetoobj);
 		}
 	});
 	$("#edit-window-footer").append(obj);
@@ -1074,7 +1083,18 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 		html += "			<input id='email' type='text' class='form-control'>";
 		html += "		</div>";
 	}
-
+	if (shareoptions.indexOf('obj')>-1) {
+		html += "		<label for='object' class='col-sm-3 control-label'>"+karutaStr[LANG]['subject']+"</label>";
+		html += "		<div class='col-sm-9'>";
+		html += "			<input id='object' type='text' class='form-control'>";
+		html += "		</div>";
+	}
+	if (shareoptions.indexOf('mess')>-1) {
+		html += "		<label for='message' class='col-sm-3 control-label'>"+karutaStr[LANG]['message']+"</label>";
+		html += "		<div class='col-sm-9'>";
+		html += "<textarea id='message' class='form-control' expand='false' style='height:300px'></textarea>";
+		html += "		</div>";
+	}
 	if (shareduration=='?') {
 		html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['shareduration']+"</label>";
 		html += "		<div class='col-sm-9'>";
@@ -1084,12 +1104,20 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 	html += "</div>";
 	html += "</div>";
 	$("#edit-window-body").html(html);
+	$("#message").wysihtml5(
+			{
+				toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},
+				"uuid":uuid,
+				"locale":LANG
+			}
+		);
+
 	//--------------------------
 }
 
 
 //==================================
-function getPublicURL(uuid,email,sharerole,role,level,duration,langcode) {
+function getPublicURL(uuid,email,sharerole,role,level,duration,langcode,sharetomessage,sharetoobj) {
 //==================================
 	if (role==null)
 		role = "all";
@@ -1104,7 +1132,7 @@ function getPublicURL(uuid,email,sharerole,role,level,duration,langcode) {
 		contentType: "application/xml",
 		url : urlS,
 		success : function (data){
-			sendEmailPublicURL(data,email,langcode);
+			sendEmailPublicURL(data,email,langcode,sharetomessage,sharetoobj);
 		}
 	});
 }
@@ -1233,7 +1261,7 @@ function getEmail(role,emails) {
 }
 
 //==================================
-function sendEmailPublicURL(encodeddata,email,langcode) {
+function sendEmailPublicURL(encodeddata,email,langcode,sharetomessage,sharetoobj) {
 //==================================
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf('/application/htm/karuta.htm'));
@@ -1245,11 +1273,15 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	message = message.replace("#want-sharing#",karutaStr[LANG]['want-sharing']);
 	message = message.replace("#see#",karutaStr[LANG]['see']);
 	message = message.replace("#do not edit this#",url);
+	message += "&lt;hr&gt;" + sharetomessage;
+	var subject = USER.firstname+" "+USER.lastname+" "+karutaStr[LANG]['want-sharing'];
+	if (sharetoobj!="")
+		subject = sharetoobj;
 	//------------------------------
 	var xml ="<node>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
 	xml +="<recipient>"+email+"</recipient>";
-	xml +="<subject>"+USER.firstname+" "+USER.lastname+" "+karutaStr[LANG]['want-sharing']+"</subject>";
+	xml +="<subject>"+subject+"</subject>";
 	xml +="<message>"+message+"</message>";
 	xml +="<recipient_cc></recipient_cc><recipient_bcc></recipient_bcc>";
 	xml +="</node>";
@@ -2014,6 +2046,7 @@ function printSection(eltid)
 	if (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot')
 		window.print();
 	else {
+		/*
 		$("#wait-window").show();
 		$("#print-window").html("");
 		var divcontent = $(eltid).clone();
@@ -2029,5 +2062,58 @@ function printSection(eltid)
 		$("#print-window").removeClass("section2print");
 		$("#main-container").removeClass("section2hide");
 		$("#print-window").css("display", "none");
+		*/
+		printElement(eltid,'main-container');
 	}
 }
+
+//==============================
+function printElement(eltid,eltids2hide)
+//==============================
+{
+	$("#wait-window").show();
+	$("#print-window").html("");
+	var divcontent = $(eltid).clone();
+	var ids = $("*[id]", divcontent);
+	$(ids).removeAttr("id");
+	var content = $(divcontent).html();
+	$("#print-window").html(content);
+	printPopupBox('#print-window',eltids2hide);
+	$("#print-window").css("display", "none");
+
+}
+
+//==============================
+function printPopupBox(eltid,eltids2hide)
+//==============================
+{
+	$("#wait-window").show();
+	var items = eltids2hide.split(";");
+	for (var i=0; i<items.length; i++){
+		$("#"+items[i]).addClass("section2hide");
+	}	
+	$(eltid).addClass("section2print");
+	$("#wait-window").hide();	
+	window.print();
+	$(eltid).removeClass("section2print");
+	for (var i=0; i<items.length; i++){
+		$("#"+items[i]).removeClass("section2hide");
+	}	
+}
+
+//==================================
+function filesReceptionMessage(filename)
+//==================================
+{
+	var message = karutaStr[LANG]['file']+": "+filename;
+	message += "<br/>"+karutaStr[LANG]['uploaded-by']+": "+USER.firstname+" "+USER.lastname;
+	message += "<br/>"+karutaStr[LANG]['date']+": "+new Date().toLocaleString();
+	$('#message-window-body').html(message);
+	var js1 = "javascript:$('#message-window').modal('hide')";
+//	var js2 = "printPopupBox('#message-window','main-container;edit-window')";
+	var js2 = "printElement('#message-window-body','main-container;edit-window;message-window')";
+	var footer = "<div class='buttons'><button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]["button-print"]+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button></div> ";
+	document.getElementById('message-window-footer').innerHTML = footer;
+	$('#message-window').modal('show');
+}
+

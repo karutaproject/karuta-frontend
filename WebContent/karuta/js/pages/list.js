@@ -206,6 +206,10 @@ function fill_list_page()
 									}
 								});
 							}
+							if (!USER.admin && !USER.creator && portfolios_list.length==1) {
+								var uuid = portfolios_list[0].rootid;
+								display_main_page(uuid);
+							}
 //							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
 //								$("#portfolios-div").hide();
 							$("#wait-window").hide();
