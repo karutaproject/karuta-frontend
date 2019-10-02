@@ -268,7 +268,40 @@ g_actions['create-user'] = function createUser(node)
 		url : url,
 		success : function(data) {
 			userid = data;
+			ok = true;
 			$("#batch-log").append("<br>- user already defined("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+			var xml = "";
+			xml +="<?xml version='1.0' encoding='UTF-8'?>";
+			xml +="<users>";
+			xml +="<user>";
+			xml +="	<username>"+identifier+"</username>";
+			xml +="	<lastname>"+lastname+"</lastname>";
+			xml +="	<firstname>"+firstname+"</firstname>";
+			xml +="	<email>"+email+"</email>";
+			xml +="	<password>"+password+"</password>";
+			xml +="	<active>1</active>";
+			xml +="	<other>"+other+"</other>";
+			xml +="	<admin>0</admin>";
+			xml +="	<designer>"+designer+"</designer>";
+			xml +="</user>";
+			xml +="</users>";
+			var url = serverBCK_API+"/users";
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml; charset=UTF-8",
+				dataType : "xml",
+				url : url,
+				data : xml,
+				success : function(data) {
+					userid = data;
+					ok = true;
+					$("#batch-log").append("<br>- user updated("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in create/update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+				}
+			});
 			},
 		error : function(data) {
 			var xml = "";
@@ -479,7 +512,7 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 			$("#batch-log").append("<br>- usergroup created ("+usergroupid+") - label:"+usergroup);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> - label:"+usergroup);					
+			$("#batch-log").append("<br>- ***<span>ATTENTION</span>already defined - label:"+usergroup);					
 		}
 	});
 	return ok;
@@ -2577,20 +2610,20 @@ g_actions['update-node'] = function updateNode(node)
 						text = g_trees[source_treeref][0];
 				}
 				//---------------------------
-				if (type=='Field') {
+				if (type=='Field') {//---------------------- for backward compatibility ---------------------
 					updateField(nodes,node,type,semtag,text);
 				}
-				if (type=='Proxy') {
+				if (type=='Proxy') {//---------------------- for backward compatibility ---------------------
 					updateProxy(nodes,node,type,semtag);
 				}
-				if (type=='Dashboard') {
+				if (type=='Dashboard') {//---------------------- for backward compatibility ---------------------
 					updateDashboard(nodes,node,type,semtag,text);
 				}
 				if (type=='Metadata'){
 					var attribute = $(node).attr("attribute");
 					updateMetada(nodes,node,type,semtag,text,attribute)
 				}
-				if (type=='MetadataInline'){
+				if (type=='MetadataInline'){//---------------------- for backward compatibility ---------------------
 					var attribute = 'inline';
 					updateMetada(nodes,node,type,semtag,text,attribute)
 				}
@@ -2598,24 +2631,24 @@ g_actions['update-node'] = function updateNode(node)
 					var attribute = $(node).attr("attribute");
 					updateMetadawad(nodes,node,type,semtag,text,attribute)
 				}
-				if (type=='MetadatawadQuery') {
+				if (type=='MetadatawadQuery') {//---------------------- for backward compatibility ---------------------
 					var attribute = 'query';
 					updateMetadawad(nodes,node,type,semtag,text,attribute);
 				}
-				if (type=='MetadatawadMenu') {
+				if (type=='MetadatawadMenu') {//---------------------- for backward compatibility ---------------------
 					var attribute = 'menuroles';
 					updateMetadawad(nodes,node,type,semtag,text,attribute);
 				}
-				if (type=='NodeResource') {
+				if (type=='NodeResource') {//---------------------- for backward compatibility ---------------------
 					updateNodeResource(nodes,node);
 				}
-				if (type=='Calendar') {
+				if (type=='Calendar') {//---------------------- for backward compatibility ---------------------
 					updateCalendar(nodes,node,text,semtag);
 				}
-				if (type=='Document') {
+				if (type=='Document') {//---------------------- for backward compatibility ---------------------
 					updateDocument(nodes,node,text,semtag);
 				}
-				if (type=='Rights'){
+				if (type=='Rights'){//---------------------- for backward compatibility ---------------------
 					var rd = $(node).attr("rd");
 					var wr = $(node).attr("wr");
 					var dl = $(node).attr("dl");
@@ -2849,7 +2882,7 @@ function updateProxy(nodes,node,type,semtag)
 					url : serverBCK_API+"/resources/resource/" + targetid,
 					success : function(data) {
 						$("#batch-log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
-						updateupdateProxyResource(nodes,node,type,semtag);
+						updateProxyResource(nodes,node,type,semtag);
 						//===========================================================
 					},
 					error : function(data) {

@@ -2481,27 +2481,25 @@ UIFactory["Portfolio"].archive = function(projectcode,langcode)
 						uuids += ",";
 					uuids += portfolios_list[i+j].id;
 				}
-				var html = '<div>Portfolios:'+uuids+"</div>";
-				$("#edit-window-body").append($(html));  //serverBCK_API+"/portfolios/zip?portfolios=
 				$.ajax({
 					async : false,
 					type : "GET",
-					dataType : "xml",
+					dataType : "text",
 					url : serverBCK_API+"/portfolios/zip?portfolios="+uuids+"&archive=y",
 					success : function(data) {
-						$("#edit-window-body").append($("<div>saved</div>"));
+						var html = "<div>"+data+"</div>";
+						$("#edit-window-body").append($(html));
 					},
 					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET active=1: "+textStatus);
+						alertHTML("Server Error GET archive: "+textStatus);
 					}
 				});
 			}
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active=1: "+textStatus);
+			alertHTML("Server Error active=1&search: "+textStatus);
 		}
 	});
-	
 }
 
 //----------------------------------------------------------------------------------
