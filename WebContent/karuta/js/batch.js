@@ -2444,6 +2444,7 @@ function get_list_usersgroups()
 //==============================
 {
 	$.ajax({
+		async : false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/usersgroups",
