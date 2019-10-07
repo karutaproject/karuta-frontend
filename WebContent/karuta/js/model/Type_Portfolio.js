@@ -2840,9 +2840,9 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 		}
 	});
 }
-z
+
 //==================================
-UIFactory["Portfolio"].displayListPortfolios = function(userid,firstname,lastname,langcode)
+UIFactory.Portfolio.displayListPortfolios = function(userid,firstname,lastname,langcode)
 //==================================
 {
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);

@@ -323,7 +323,7 @@ karutaStr['en']['substitute']="Substitution";
 karutaStr['en']['select_user']="Select a User";
 karutaStr['en']['other']="Other";
 karutaStr['en']['delete-temporary-users']="Delete All";
-karutaStr['en']['delete-epmty-users']="Delete All";
+karutaStr['en']['delete-empty-users']="Delete selection";
 
 //=========================================
 //========== ROLES ========================

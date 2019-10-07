@@ -227,6 +227,14 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		html += "</button>";
 		html += "</div></td>";
 	}
+	if (type=='empty' && USER.admin) {
+		html = "<td><input type='checkbox' name='empty-user' id='empty"+this.id+"'>&nbsp;"+this.username_node.text() +"</td>";
+		html += "<td><div class='btn-group'>";
+		html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+		html += "<i class='fa fa-trash-o'></i>";
+		html += "</button>";
+		html += "</div></td>";
+	}
 	return html;
 };
 
@@ -911,12 +919,32 @@ UIFactory["User"].getListUserWithoutPortfolio = function()
 UIFactory["User"].displayUserWithoutPortfolio = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<div><button style='display:none' class='btn btn-xs' onclick=\"confirmDelEmptyUsers()\">"+ karutaStr[LANG]["delete-empty-users"] + "</button></div><table id='table_empty_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='empty_users'></tbody></table>");
-	$("#empty_users").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+	$("#"+destid).html("<div><button class='btn btn-xs' onclick=\"confirmDelEmptyUsers()\">"+ karutaStr[LANG]["delete-empty-users"] + "</button></div><table id='table_empty_users' class='tablesorter'><thead><th style='padding-left:20px;'>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='empty_users'></tbody></table>");
+	$("#empty_users").append($("<tr><td><input type='checkbox' name='checkalluserempty'></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersWithoutPortfolio_list.length; i++) {
 		var itemid = destid+"_"+UsersWithoutPortfolio_list[i].id;
 			$("#empty_users").append($("<tr class='item' id='"+itemid+"'></tr>"));
-			$("#"+itemid).html(UsersWithoutPortfolio_list[i].getView(destid,type,lang));
+			$("#"+itemid).html(UsersWithoutPortfolio_list[i].getView(destid,"empty",lang));
 	}
+	$(function () {
+		$('input[name=checkalluserempty]').click(function () {
+	        if ($(this).is(":checked")) {
+	    		$("input[name=empty-user").prop('checked',true);		
+	        } else {
+	    		$("input[name=empty-user").prop('checked',false);		
+	        }
+	    });
+	});
 };
+
+//==================================
+function checkalluserempty() 
+//==================================
+{
+	if( $('input[name=checkalluserempty]').is(':checked') ){
+		$("input[name=empty-user").prop('checked',false);		
+	} else {
+		$("input[name=empty-user").prop('checked',true);
+	}
+}
 
