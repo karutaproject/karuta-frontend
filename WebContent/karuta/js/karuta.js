@@ -1474,6 +1474,24 @@ function toggleSidebarPlus(uuid) { // click on label
 }
 
 //==================================
+function toggleUsersList(list) {
+//==================================
+	if ($("#"+list+"-users-button").hasClass("glyphicon-plus")) {
+		if (list=='empty') {
+			UIFactory.User.getListUserWithoutPortfolio();
+			UIFactory.User.displayUserWithoutPortfolio('empty')
+		}
+		$("#"+list+"-users-button").removeClass("glyphicon-plus");
+		$("#"+list+"-users-button").addClass("glyphicon-minus");
+		$("#"+list).show();
+	} else {
+		$("#"+list+"-users-button").removeClass("glyphicon-minus")
+		$("#"+list+"-users-button").addClass("glyphicon-plus")
+		$("#"+list).hide();
+	}
+}
+
+//==================================
 function changeCss(className, classValue)
 //==================================
 {

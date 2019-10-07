@@ -303,6 +303,7 @@ karutaStr['fr']['create_user']="Ajouter un usager";
 karutaStr['fr']['active_users']="Usagers actifs";
 karutaStr['fr']['inactive_users']="Usagers inactifs";
 karutaStr['fr']['temporary_users']="Usagers temporaires";
+karutaStr['fr']['empty_users']="Usagers sans portfolio";
 karutaStr['fr']['username']="Login";
 karutaStr['fr']['lastname']="Nom";
 karutaStr['fr']['firstname']="Prénom";
@@ -322,6 +323,7 @@ karutaStr['fr']['substitute']="Substitution";
 karutaStr['fr']['select_user']="Select unusager";
 karutaStr['fr']['other']="Autre";
 karutaStr['fr']['delete-temporary-users']="Supprimer tous";
+karutaStr['fr']['delete-empty-users']="Supprimer tous";
 
 
 //=========================================

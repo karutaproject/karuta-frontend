@@ -2840,7 +2840,7 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 		}
 	});
 }
-
+z
 //==================================
 UIFactory["Portfolio"].displayListPortfolios = function(userid,firstname,lastname,langcode)
 //==================================

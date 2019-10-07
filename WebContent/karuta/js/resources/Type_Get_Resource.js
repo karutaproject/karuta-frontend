@@ -171,7 +171,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
 			html += "font-weight:bold;"
 		html += "'>";
-		if (code.indexOf("#")>-1)
+		if (code.indexOf("#")>-1 || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 			html += cleanCode(code) + " ";
 		if (code.indexOf("%")<0) {
 			if (label.indexOf("fileid-")>-1)
@@ -182,6 +182,10 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		if (code.indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
 		html += "</div>";
+		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1){
+			html += text;
+		}
+
 	}
 	return html;
 };
@@ -213,7 +217,7 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 	if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
 		html += " style='font-weight:bold' "
 	html += ">";
-	if (code.indexOf("#")>-1)
+	if (code.indexOf("#")>-1 || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 		html += cleanCode(code) + " ";
 	if (code.indexOf("%")<0)
 		html += label;
@@ -228,6 +232,9 @@ UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 	if (code.indexOf("&")>-1)
 		html += " ["+$(this.value_node).text()+ "] ";
 	html += "</div>";
+	if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1){
+		html += text;
+	}
 	$("#"+dest).html("");
 	$("#"+dest).append($(html));
 };
@@ -1099,7 +1106,7 @@ UIFactory["Get_Resource"].parseROME = function(destid,type,langcode,data,self,di
 	var cachable = true;
 	var langcode = LANGCODE;
 	var semtag = 'rome';
-	var display_code = false;
+	var display_code = true;
 	var display_label = true;
 	var self_code = $(self.code_node).text();
 	//-----Node ordering-------------------------------------------------------
