@@ -509,6 +509,7 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 		success : function(data) {
 			ok = true;
 			var usergroupid = data;
+			get_list_usersgroups();
 			$("#batch-log").append("<br>- usergroup created ("+usergroupid+") - label:"+usergroup);
 		},
 		error : function(data) {
@@ -1476,6 +1477,7 @@ g_actions['create-portfoliogroup'] = function CreatePortfolioGroup(node)
 		success : function(data) {
 			ok = true;
 			var portfoliogroupid = data;
+			get_list_portfoliosgroups();
 			$("#batch-log").append("<br>- portfoliogroup created ("+portfoliogroupid+") - label:"+portfoliogroup);
 		},
 		error : function(data) {
@@ -2415,6 +2417,7 @@ function get_list_portfoliosgroups()
 //==============================
 {
 	$.ajax({
+		async : false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfoliogroups",
