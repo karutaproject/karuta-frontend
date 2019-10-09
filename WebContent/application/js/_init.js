@@ -117,6 +117,12 @@ var elgg_refreshing = 240000; // 240 seconds
 var bubble_installed = true;
 //------ EUROPASS -------------------------------------
 var europass_installed = true;
+//------ EXEC BATCH At USER CREATION ------------------
+var g_execbatch = "";
+var g_execbatchbuttonlabel = [];
+	g_execbatchbuttonlabel['fr'] = "";
+	g_execbatchbuttonlabel['en'] = "";
+//----------------------------------------------------
 
 var karutaStr = new Array();
 
