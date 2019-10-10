@@ -14,7 +14,7 @@
    ======================================================= */
 
 var g_xmlDoc = null;
-var g_json = null;
+var g_json = {};
 var g_trees = {};
 var g_noline = 0;
 var g_actions = [];
@@ -29,7 +29,7 @@ function initBatchVars()
 //==================================
 {
 	g_xmlDoc = null;
-	g_json = null;
+	g_json = {};
 	g_trees = {};
 	g_noline = 0;
 }
@@ -67,7 +67,7 @@ function getTxtvals(node)
 		}
 		str += text;
 	}
-	return str;
+	return str.trim();
 }
 
 //==================================
@@ -127,8 +127,13 @@ function processAll(model_code,portfoliologcode)
 	processListActions(actions_list);
 	$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
 	$.ajaxSetup({async: true});
+	//--------------------
 	if (portfoliologcode!="")
 		saveLog(model_code,portfoliologcode,$("#batch-log").html());
+	//--------------------
+	if (g_execbatch) { // after creation of portfolio
+		window.loacation.reload();
+	}
 }
 
 //=================================================
@@ -285,7 +290,7 @@ g_actions['create-user'] = function createUser(node)
 			xml +="	<designer>"+designer+"</designer>";
 			xml +="</user>";
 			xml +="</users>";
-			var url = serverBCK_API+"/users";
+			var url = serverBCK_API+"/users/user/"+userid;
 			$.ajax({
 				async : false,
 				type : "PUT",
@@ -509,6 +514,7 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 		success : function(data) {
 			ok = true;
 			var usergroupid = data;
+			get_list_usersgroups();
 			$("#batch-log").append("<br>- usergroup created ("+usergroupid+") - label:"+usergroup);
 		},
 		error : function(data) {
@@ -1476,6 +1482,7 @@ g_actions['create-portfoliogroup'] = function CreatePortfolioGroup(node)
 		success : function(data) {
 			ok = true;
 			var portfoliogroupid = data;
+			get_list_portfoliosgroups();
 			$("#batch-log").append("<br>- portfoliogroup created ("+portfoliogroupid+") - label:"+portfoliogroup);
 		},
 		error : function(data) {
@@ -2415,6 +2422,7 @@ function get_list_portfoliosgroups()
 //==============================
 {
 	$.ajax({
+		async : false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfoliogroups",
@@ -2444,6 +2452,7 @@ function get_list_usersgroups()
 //==============================
 {
 	$.ajax({
+		async : false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/usersgroups",
@@ -3102,3 +3111,20 @@ function saveLog(model_code,portfoliologcode,logtext)
 	});
 
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ EXEC BATCH AT USER CREATION ------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function displayExecBatchButton()
+//=================================================
+{
+	var html = "<div id='create-portfolio'>"+g_execbatchbuttonlabel1[LANG]+"</div>";
+	$("#main-list").html(html);
+	initBatchVars();
+	prepareBatch();
+	getModelAndProcess(g_json.model_code);
+}
+
