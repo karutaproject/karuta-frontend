@@ -149,7 +149,7 @@ function fill_list_page()
 			g_nb_trees = parseInt($('portfolios',data).attr('count'));
 			//---------------------------------------------------
 			if (g_nb_trees==0) {
-				if (g_execbatch!=undefined && g_execbatch!=""){
+				if (g_execbatch!=undefined && g_execbatch){
 					$("#search-portfolio-div").hide();
 					$("#refresh").hide();
 					displayExecBatchButton();

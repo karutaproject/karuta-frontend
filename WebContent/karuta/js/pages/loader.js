@@ -75,8 +75,8 @@ function loadKarutaPage(url)
 	//--------------------------------------------------------------
 //	loadJS(url+"/karuta/js/karuta.js");
 //	loadJS(url+"/karuta/js/UICom.js");
-	loadJS(url+"/karuta/js/report.js");
 	loadJS(url+"/karuta/js/batch.js");
+	loadJS(url+"/karuta/js/report.js");
 	//--------------------------------------------------------------
 //	loadJS(url+"/karuta/js/pages/karuta-page.js");
 //	loadJS(url+"/karuta/js/pages/list.js");

@@ -127,11 +127,12 @@ function processAll(model_code,portfoliologcode)
 	processListActions(actions_list);
 	$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
 	$.ajaxSetup({async: true});
+	//--------------------
 	if (portfoliologcode!="")
 		saveLog(model_code,portfoliologcode,$("#batch-log").html());
-	if (g_execbatch) {
-		html = "<div id='see-portfolio' onclick='window.location.reload();'>"+g_execbatchbuttonlabel2[LANG]+"</div>";
-		$("#main-list").html(html);
+	//--------------------
+	if (g_execbatch) { // after creation of portfolio
+		window.location.reload();
 	}
 }
 
@@ -276,7 +277,6 @@ g_actions['create-user'] = function createUser(node)
 			$("#batch-log").append("<br>- user already defined("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 			var xml = "";
 			xml +="<?xml version='1.0' encoding='UTF-8'?>";
-			xml +="<users>";
 			xml +="<user>";
 			xml +="	<username>"+identifier+"</username>";
 			xml +="	<lastname>"+lastname+"</lastname>";
@@ -288,7 +288,6 @@ g_actions['create-user'] = function createUser(node)
 			xml +="	<admin>0</admin>";
 			xml +="	<designer>"+designer+"</designer>";
 			xml +="</user>";
-			xml +="</users>";
 			var url = serverBCK_API+"/users/user/"+userid;
 			$.ajax({
 				async : false,
