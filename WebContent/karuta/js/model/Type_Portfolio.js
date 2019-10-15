@@ -190,9 +190,10 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callChangeOwner('"+portfolio.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["changeOwner"]+"</a>";
 						html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolio.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
 						html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolio.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
-						if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
+						if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open') {
 							html += "			<a class='dropdown-item' id='export-"+portfolio.id+"' href='' style='display:block'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a>";
-						else
+							html += "			<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callArchive('"+portfoliocode+"')\" ><i class='fa fa-download'></i> "+karutaStr[LANG]["archive-project"]+"</a>";
+						} else
 							html += "			<a class='dropdown-item' id='export-"+portfolio.id+"' href='' style='display:none'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a>";
 						html += "			</div>";
 					} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
@@ -2435,6 +2436,84 @@ UIFactory["Portfolio"].changeOwner = function(portfolioid,langcode)
 	
 }
 
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
+//----------------------------------- ARCHIVE --------------------------------------
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
+
+//==================================
+UIFactory["Portfolio"].callArchive = function(projectcode,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var js2 = "javascript:UIFactory.Portfolio.archive('"+projectcode+"')";
+	var footer = ""
+	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Save']+"</button>";
+	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['archive-project']+' '+projectcode);
+	var html = "";
+	html += "<div>";
+	html += karutaStr[LANG]['nbeltsperarchive'];
+	html += " : <input name='nbeltsperarchive' type='text'>"
+	html += "</div>";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	//----------------------------------------------------------------
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].archive = function(projectcode,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var nbeltsperarchive = $("input[name='nbeltsperarchive']").val();
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios?active=1&search="+projectcode,
+		success : function(data) {
+			UIFactory["Portfolio"].parse(data);
+			for (var i=1;i<portfolios_list.length+1;i=i+parseInt(nbeltsperarchive)){
+				var uuids = "";
+				for (var j=0;j<nbeltsperarchive;j++){
+					if (j>0)
+						uuids += ",";
+					uuids += portfolios_list[i+j].id;
+				}
+				$.ajax({
+					async : false,
+					type : "GET",
+					dataType : "text",
+					url : serverBCK_API+"/portfolios/zip?portfolios="+uuids+"&archive=y",
+					success : function(data) {
+						var html = "<div>"+data+"</div>";
+						$("#edit-window-body").append($(html));
+					},
+					error : function(jqxhr,textStatus) {
+						alertHTML("Server Error GET archive: "+textStatus);
+					}
+				});
+			}
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error active=1&search: "+textStatus);
+		}
+	});
+}
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
