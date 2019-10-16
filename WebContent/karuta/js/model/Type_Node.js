@@ -1082,6 +1082,8 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 					UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
 				else
 					UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+			} else {
+				$("#comments_"+uuid).hide();
 			}
 			//----------- help -----------
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
