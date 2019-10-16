@@ -1325,7 +1325,6 @@ function setLanguage(lang,caller) {
 	localStorage.setItem('karuta-language',lang);
 	LANG = lang;
 	console.log("LANG: "+LANG);
-	console.log("karutaStr: "+karutaStr);
 	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
