@@ -8,7 +8,7 @@ karutaStr['fr']['flag-name']="France";
 karutaStr['fr']['new']="Nouvel élément";
 karutaStr['fr']['email']="Courriel";
 karutaStr['fr']['password']="Mot de passe";
-karutaStr['fr']['login']="Entrez!";
+karutaStr['fr']['login']="Connexion";
 //----------------------------------------------------
 karutaStr['fr']['yes']="Oui";
 karutaStr['fr']['no']="Non";

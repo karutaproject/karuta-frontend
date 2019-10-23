@@ -167,7 +167,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	} else {
 		html += "<div class='"+cleanCode(code)+" view-div' style='";
 		if (indashboard)
-			html += "background-position:cente;'";
+			html += "background-position:center;";
 		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
 			html += "font-weight:bold;"
 		html += "'>";

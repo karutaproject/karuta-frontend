@@ -3121,7 +3121,6 @@ function displayExecBatchButton()
 {
 	var html = "";
 	html += "<div class='create-screen'>";
-	html += " <div id='welcome1'><img class='img-responsive' src='../../../CNAM-TEST/karuta/img/logofonbleu.jpg'></div>";
 	html += "<div id='create-label'>"+g_execbatchbuttonlabel1[LANG]+"</div>";
 	html += "</div>";
 	$("#main-list").html(html);
