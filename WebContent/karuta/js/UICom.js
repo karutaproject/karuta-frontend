@@ -165,11 +165,12 @@ var UICom =
 							dataType : "xml",
 							url : serverBCK_API+"/nodes/node/" + targetid + "?resources=true",
 							success : function(data) {
+								proxies_data[targetid] = data;
+								proxies_parent[targetid] = $(current).attr("id");
+								proxies_edit[targetid] = edittargetroles;
+								proxies_nodeid[targetid] = id;
 //								UICom.parseStructure(data,false,$(current).attr("id"));
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
-							},
-							error : function(jqxhr,textStatus) {
-								alertHTML("Error in parseElement - Get_Proxy : "+jqxhr.responseText);
 							}
 						});
 					}

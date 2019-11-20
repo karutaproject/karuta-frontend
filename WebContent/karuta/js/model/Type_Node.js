@@ -3099,7 +3099,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Double_Resource','GetDoubleResource',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4,freenode);
 		//			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Action','Action',databack,callback,param2,param3,param4,freenode);
-		//			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4,freenode);
+					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4,freenode);
 				}
 			}
 			html += "</ul>"; // class='dropdown-menu'
@@ -3758,7 +3758,7 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 		}
 	}
 	if (name=='asmContext') {
-		if (node.resource.type=='Field' || node.resource.type=='TextField' || node.resource.type=='Get_Resource' || node.resource.type=='Get_Get_Resource' || node.resource.type=='Get_Double_Resource')
+		if (node.resource.type=='Field' || node.resource.type=='TextField' || node.resource.type=='Get_Proxy' || node.resource.type=='Get_Resource' || node.resource.type=='Get_Get_Resource' || node.resource.type=='Get_Double_Resource')
 			html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'encrypted',$(node.metadata).attr('encrypted'),true);
 	}
 //	html += UIFactory["Node"].getMetadataAttributeEditor(node.id,'sharedNodeResource',$(node.metadata).attr('sharedNodeResource'),true);
@@ -4238,7 +4238,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	if (node.resource!=null)
 		resource_type = node.resource.type;
 	//----------------------Search----------------------------
-	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
+	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Get_Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
 		html  = "<hr><label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
 		$("#metadata_texts").append($(html));
 		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'query',$(node.metadatawad).attr('query'));

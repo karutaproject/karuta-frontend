@@ -160,9 +160,11 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			for (var i=0; i<languages.length;i++){
 				this.label_node[i].text('resource:'+resid+'|semtag:'+semtag);
 			}
+			if (resid!=undefined) {
 			//update get_resource
 			this.save();
 			html += UICom.structure["ui"][resid].resource.getView();
+			}
 		}
 	} else {
 		html += "<div class='"+cleanCode(code)+" view-div' style='";
