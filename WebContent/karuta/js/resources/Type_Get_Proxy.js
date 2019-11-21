@@ -179,10 +179,10 @@ UIFactory["Get_Proxy"].prototype.displayEditor = function(destid,type,lang)
 //==================================
 {
 	var query = $("metadata-wad",this.node).attr('query');
-	var parts = query.split("/");
-	var queryattr_value = parts[0];
-	var proxy_semtag = parts[1]
-	if (queryattr_value!=undefined && queryattr_value!='') {
+	if (query!=undefined && query!='') {
+		var parts = query.split("/");
+		var queryattr_value = parts[0];
+		var proxy_semtag = parts[1]
 		//------------
 		var srce_indx = queryattr_value.lastIndexOf('.');
 		var srce = queryattr_value.substring(srce_indx+1);
