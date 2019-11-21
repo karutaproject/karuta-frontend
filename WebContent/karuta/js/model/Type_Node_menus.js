@@ -353,7 +353,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		}
 	}
 	//------------- share node button ---------------
-	if (depth>0 && shareroles!='none' && shareroles!='' && g_portfolioid!='') {
+	if (this.depth>0 && this.shareroles!='none' && this.shareroles!='' && g_portfolioid!='') {
 		try {
 			var shares = [];
 			var displayShare = [];

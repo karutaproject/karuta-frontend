@@ -2568,7 +2568,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	//-------------------- MODE READ/EDIT---------------
 	html += "			<li id='toggle-mode' class='nav-item'>";
 	var toggle_mode_class = (g_edit) ? "fas fa-toggle-on":"fas fa-toggle-off";
-	html += "				<span>"+karutaStr[LANG]["write-mode"]+"</span>&nbsp;<a onclick='toggleMode()' data-title='"+karutaStr[LANG]["toggle-mode"]+"' data-tooltip='true' data-placement='bottom'><i id='toggle-mode-icon' class='"+toggle_mode_class+"'></i></a>";
+	html += "				<span>"+karutaStr[LANG]["write-mode"]+"</span>&nbsp;<a onclick='toggleMode()' data-title='"+karutaStr[LANG]["write-mode"]+"' data-tooltip='true' data-placement='bottom'><i id='toggle-mode-icon' class='"+toggle_mode_class+"'></i></a>";
 	html += "			</li>";
 	//-------------------- REFRESH---------------
 	html += "			<li class='nav-item icon'>";

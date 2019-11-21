@@ -92,6 +92,7 @@ karutaStr['fr']['list-novisible']="Non visible";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
 karutaStr["fr"]["button-print"] = "Imprimer";
+karutaStr["fr"]["write-mode"] = "Éditer";
 
 //=========================================
 //========== ERRORS =======================
@@ -138,6 +139,7 @@ karutaStr['fr']['queryGet_Get_Resource']="Recherche <br/><span style='font-size:
 karutaStr['fr']['queryProxy']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mots réservés pour code_portfolio : <i>all</i> et <i>self</i></span>";
 karutaStr['fr']['queryAction']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mots réservés pour code_portfolio : <i>all</i> et <i>self</i></span>";
 karutaStr['fr']['queryGet_Double_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio1.tag_sémantique1.<i>label;</i>code_portfolio2.tag_sémantique2.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
+karutaStr['fr']['queryGet_Proxy']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i>/tag_sémantique_cible";
 karutaStr['fr']['shownoderoles']="Rôles - Montrer";
 karutaStr['fr']['showroles']="Rôles - Montrer à";
 karutaStr['fr']['notifyroles']="Rôles - Notifier à";
@@ -481,6 +483,7 @@ karutaStr['fr']['GetResource']="GetResource";
 karutaStr['fr']['GetGetResource']="GetGetResource";
 karutaStr['fr']['GetDoubleResource']="GetDoubleResource";
 karutaStr['fr']['Proxy']="Proxy";
+karutaStr['fr']['Get_Proxy']="Get_Proxy";
 
 karutaStr['fr']['asmColumn']="asmColumn";
 
