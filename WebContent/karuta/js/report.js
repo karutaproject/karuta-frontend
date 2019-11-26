@@ -1104,6 +1104,9 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					if (selector.type=='node label') {
 						text = UICom.structure["ui"][nodeid].getLabel();
 					}
+					if (selector.type=='node code') {
+						text = UICom.structure["ui"][nodeid].getCode();
+					}
 					if (selector.type=='node value') {
 						text = UICom.structure["ui"][nodeid].getValue();
 					}
