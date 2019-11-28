@@ -183,8 +183,6 @@ function r_report_process(xmlDoc,json)
 function processReportActions(destid,actions,data)
 //=================================================
 {
-	aggregates = {};
-	variables = {};
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid,actions[i],i.toString(),data);
