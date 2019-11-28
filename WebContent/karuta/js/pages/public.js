@@ -222,7 +222,7 @@ function displayKarutaPublic()
 									setCSSportfolio(data);
 									setLanguage(lang,'publichtm');
 									if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
-										UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
+										UIFactory.Node.displaySidebarItem(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
 									$("#contenu").html("<div id='page' uuid='"+g_uuid+"'></div>");
 									var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
 									if (semtag == 'bubble_level1') {
