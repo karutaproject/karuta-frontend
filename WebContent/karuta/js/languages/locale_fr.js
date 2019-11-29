@@ -238,6 +238,7 @@ karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre p
 
 karutaStr['fr']['projects']="Mes projets";
 karutaStr['fr']['portfolios-not-in-project']="Mes portfolios hors projet";
+karutaStr['fr']['portfolios-public']="Portfolios publics";
 karutaStr['fr']['portfolios']="Mes portfolios";
 karutaStr['fr']['portfolio']="Mon portfolio";
 karutaStr['fr']['bin']="Ma poubelle";

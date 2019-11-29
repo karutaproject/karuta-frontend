@@ -239,6 +239,7 @@ karutaStr['en']['help_text_rename']="To move a portfolio to another project, cha
 karutaStr['en']['projects']="My Projects";
 karutaStr['en']['portfolios-not-in-project']="My Portfolios not in a Project";
 karutaStr['en']['portfolios']="My Portfolios";
+karutaStr['en']['portfolios-public']="Public Portfolios";
 karutaStr['en']['portfolio']="My Portfolio";
 karutaStr['en']['bin']="My Bin";
 karutaStr['en']['nogroup']="No Group";

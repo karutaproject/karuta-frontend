@@ -283,7 +283,10 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						if (g_nb_trees==1)
 							$("#portfolios-label").html(karutaStr[LANG]['portfolio']);
 						else
-							$("#portfolios-label").html(karutaStr[LANG]['portfolios']);
+							if (USER.username=='public')
+								$("#portfolios-label").html(karutaStr[LANG]['portfolios-public']);
+							else
+								$("#portfolios-label").html(karutaStr[LANG]['portfolios']);
 				}
 			}
 		}
