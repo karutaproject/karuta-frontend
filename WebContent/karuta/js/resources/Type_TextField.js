@@ -237,7 +237,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	}
 	$("#"+uuid+"_edit_"+langcode+(inline?'inline':'')).wysihtml5(
 		{
-			toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},
+			toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": true,"image": false,"link": false},
 			"uuid":uuid,
 			"locale":LANG,
 			'events': {

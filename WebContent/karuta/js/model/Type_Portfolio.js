@@ -1264,16 +1264,16 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	html +="    Select a project ";
 	html +="    <span class='caret'></span>";
 	html +="  </button>";
-	html +="  <ul class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenu1'>";
-	html +="    <li><a href='#'>&nbsp;</a></li>";
+	html +="  <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>";
+	html +="    <a class='dropdown-item' href='#'>&nbsp;</a>";
 	for (var i=0;i<projects_list.length;i++) {
 		var js = "";
 		if (instance) 
-			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');";
+			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','true')";
 		else
-			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');";
+			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','false')";
 		js += ";$('#dropdownMenu1').html('"+projects_list[i].portfoliolabel+"')";
-		html += "<li><a onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a></li>";
+		html += "<a class='dropdown-item' onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a>";
 	}
 	html +="  </ul>";
 	html +="</div><br>";

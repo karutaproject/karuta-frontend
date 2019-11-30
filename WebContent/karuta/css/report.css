@@ -83,6 +83,11 @@
   border: 1px solid #43BFC7;
 }
 
+.report .report-variable {
+  margin-top: 7px;
+  border: 1px solid Orange;
+}
+
 .report .username {
   margin-top: 7px;
   border: 1px solid #EDE275;

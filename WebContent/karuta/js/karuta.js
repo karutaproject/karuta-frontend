@@ -514,10 +514,9 @@ function imageBox()
 	html += "\n<!-- ==================== image box ==================== -->";
 	html += "\n<div id='image-window' class='modal'>";
 	html += "\n			<div class='modal-content'>";
-	html += "\n				<div id='image-window-body' class='modal-body'>";
-	html += "\n				</div>";
-	html += "\n				<div id='image-window-footer' class='modal-footer' >";
-	html += "\n				</div>";
+	html += "\n				<div id='image-window-header' class='modal-header' ></div>";
+	html += "\n				<div id='image-window-body' class='modal-body'></div>";
+	html += "\n				<div id='image-window-footer' class='modal-footer' ></div>";
 	html += "\n			</div>";
 	html += "\n</div>";
 	html += "\n<!-- ============================================== -->";
@@ -1475,6 +1474,7 @@ function imageHTML(image)
 //==================================
 {
 	var buttons = "<button class='btn' onclick=\"javascript:$('#image-window').modal('hide');\">" + karutaStr[LANG]["Close"] + "</button>";
+	document.getElementById('image-window-header').innerHTML = buttons;
 	document.getElementById('image-window-footer').innerHTML = buttons;
 	$('#image-window-body').html(image);
 	$('#image-window').modal('show');

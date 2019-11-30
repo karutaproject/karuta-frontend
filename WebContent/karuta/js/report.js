@@ -61,20 +61,30 @@ function r_replaceVariable(text)
 //==================================
 {
 	var n=0;
+	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
+		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##}"));
+		if (variables[variable_name]!=undefined)
+			text = text.replace("{##"+variable_name+"##}", variables[variable_name]);
+		if (aggregates[variable_name]!=undefined && aggregates[variable_name].length>0)
+				text = text.replace("{##"+variable_name+"##}", aggregates[variable_name][0]);
+		n++; // to avoid infinite loop
+	}
 	while (text!=undefined && text.indexOf("##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("##")+2); // test_string = abcd##variable##efgh.....
 		var variable_name = test_string.substring(0,test_string.indexOf("##"));
 		if (variables[variable_name]!=undefined)
 			text = text.replace("##"+variable_name+"##", variables[variable_name]);
+		if (aggregates[variable_name]!=undefined && aggregates[variable_name].length>0)
+				text = text.replace("##"+variable_name+"##", aggregates[variable_name][0]);
 		if (text.indexOf("[")>-1) {
 			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
 			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
-			var variable_array1 = text.replace("["+i+"]","");
-			var variable_array2 = r_replaceVariable(variable_array1);
-			if (variables[variable_array2]!=undefined && variables[variable_array2].length>=i)
-				text = variables[variable_array2][i];
-			if (variables[variable_array2]!=undefined && variables[variable_array2].length>=i)
-				text = variables[variable_array2][i];
+			i = r_replaceVariable(i);
+			if (variables[variable_value]!=undefined && variables[variable_value].length>=i)
+				text = variables[variable_value][i];
+			if (aggregates[variable_value]!=undefined && aggregates[variable_value].length>=i)
+				text = aggregates[variable_value][i];
 			}
 		n++; // to avoid infinite loop
 	}
@@ -1085,6 +1095,9 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					if (selector.type=='node value') {
 						text = UICom.structure["ui"][nodeid].getValue();
 					}
+					if (selector.type=='node code') {
+						text = UICom.structure["ui"][nodeid].getCode();
+					}
 					if (selector.type=='uuid') {
 						text = nodeid;
 					}
@@ -1593,9 +1606,9 @@ function html2IMG(contentid)
 //==================================
 {
 	var js1 = "javascript:$('#image-window').modal('hide')";
-	var footer = "";
-	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#image-window-footer").html($(footer));
+	var button = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#image-window-header").html($(button));
+	$("#image-window-footer").html($(button));
 	$("#image-window-body").html("");
 	$("#image-window").modal('show');
 	var svgnode = $("svg",document.getElementById(contentid));
