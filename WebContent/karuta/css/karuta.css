@@ -1400,8 +1400,11 @@ textarea {
   top: 10%;
   left: 5%;
 }
-
-#image-window-body {
+#image-window #image-window-header {
+  display: flex;
+  justify-content: flex-end;
+}
+#image-window #image-window-body {
   padding: 5px;
 }
 

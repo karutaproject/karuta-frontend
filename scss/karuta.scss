@@ -1521,11 +1521,15 @@ textarea {
 		width:90%;
 		top:10%;
 		left:5%;
+		#image-window-header {
+			display :flex;
+			justify-content : flex-end;
+		}
+		#image-window-body {
+			padding:5px;
+		}
 	}
 
-	#image-window-body {
-		padding:5px;
-	}
 
 	#qrcode-window {
 		width:200px;

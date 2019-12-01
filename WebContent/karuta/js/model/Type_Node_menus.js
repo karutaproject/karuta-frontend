@@ -357,7 +357,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		try {
 			var shares = [];
 			var displayShare = [];
-			var items = this.shareroles.split(";");
+			var items = shareroles.split(";");
 			for (var i=0; i<items.length; i++){
 				var subitems = items[i].split(",");
 				shares[i] = [];
@@ -377,6 +377,8 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				}
 				if (subitems.length>6)
 					shares[i][6] = subitems[6]; // condition
+				if (subitems.length>7)
+					shares[i][7] = subitems[7]; // keywords : obj and/or mess
 				if (shares[i][0].indexOf(userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
 					displayShare[i] = true;
 				else
@@ -391,8 +393,9 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					var sharelevel = shares[i][3];
 					var shareduration = shares[i][4];
 					var sharelabel = shares[i][5];
-					if (shareto!='' && this.shareroles.indexOf('2world')<0) {
-						if (shareto!='?') {
+					var shareoptions = (shares[i].length>7) ? shares[i][7] : "";
+					if (shareto!='' && shareroles.indexOf('2world')<0) {
+						if (shareto!='?' && shareduration!='?' && shareoptions!="") {
 							var sharetoemail = "";
 							var sharetoroles = "";
 							var sharetos = shareto.split(" ");
@@ -402,6 +405,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 								else
 									sharetoroles += sharetos[k]+" ";
 							}
+							var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -409,12 +413,26 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 									if (labels[j].indexOf(languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								var js = "sendSharingURL('"+this.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
 							}
-						} else{
+						} else {
+							if (shareto!='?') {
+								var sharetoemail = "";
+								var sharetoroles = "";
+								var sharetos = shareto.split(" ");
+								for (var k=0;k<sharetos.length;k++) {
+									if (sharetos[k].indexOf("@")>0)
+										sharetoemail += sharetos[k]+" ";
+									else
+										sharetoroles += sharetos[k]+" ";
+								}
+							} else {
+								sharetoemail = shareto;
+							}
+							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
+//							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -422,17 +440,16 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 									if (labels[j].indexOf(languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								var js = "getSendSharingURL('"+this.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
 								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
 							}
 						}
 					} else {
-						if (this.shareroles.indexOf('2world')>-1) {
-							html_toadd = "<span id='2world-"+this.id+"'></span>";
+						if (shareroles.indexOf('2world')>-1) {
+							html_toadd = "<span id='2world-"+node.id+"'></span>";
 						} else {
-							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+this.id+"','"+this.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
+							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"','"+shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
 						}
 					}
 					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))

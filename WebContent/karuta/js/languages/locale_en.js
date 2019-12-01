@@ -92,6 +92,8 @@ karutaStr['en']['list-novisible']="Not Visible";
 karutaStr['en']['empty-bin']="Empty bin";
 karutaStr['en']['complex']="Partial Loading";
 karutaStr["en"]["button-print"] = "Print";
+karutaStr["en"]["write-mode"] = "Edit";
+
 
 //=========================================
 //========== ERRORS =======================
@@ -138,6 +140,7 @@ karutaStr['en']['queryGet_Get_Resource']="Search <br/><span style='font-size:sma
 karutaStr['en']['queryProxy']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
 karutaStr['en']['queryAction']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
 karutaStr['en']['queryGet_Double_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code1.semantic_tag1.<i>label;</i>portfolio_code2.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
+karutaStr['en']['queryGet_Proxy']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i>/target_semantic_tag";
 karutaStr['en']['shownoderoles']="Roles - Show";
 karutaStr['en']['showroles']="Roles - Show To";
 karutaStr['en']['notifyroles']="Roles - Notify To";
@@ -480,6 +483,7 @@ karutaStr['en']['GetResource']="GetResource";
 karutaStr['en']['GetGetResource']="GetGetResource";
 karutaStr['en']['GetDoubleResource']="GetDoubleResource";
 karutaStr['en']['Proxy']="Proxy";
+karutaStr['en']['Get_Proxy']="Get_Proxy";
 
 karutaStr['en']['asmColumn']="asmColumn";
 
