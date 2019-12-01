@@ -66,7 +66,7 @@ karutaStr['en']['enter-text']="Enter something...";
 karutaStr['en']['not-logged']="You are not connected.";
 karutaStr['en']['translate']="Translate";
 karutaStr['en']['submit']="Submit";
-karutaStr['en']['newpassword']="Forgot password? Send your login:";
+karutaStr['en']['newpassword']="Forgot password?";
 karutaStr['en']['tipnewpassword']="If you can not find our message in your inbox, check your &quot;junk mail&quot; or &quot;spam&quot; folder";
 karutaStr['en']['confirm-password']="Confirm password";
 karutaStr['en']['password-mismatch']="The two passwords do not match.";
@@ -119,12 +119,14 @@ karutaStr['en']['semantictag']="Semantic Tag";
 karutaStr['en']['multilingual-node']="Multilingual Node";
 karutaStr['en']['multilingual-resource']="Multilingual Resource";
 karutaStr['en']['seenoderoles']="Roles - See";
+karutaStr['en']['resnopencil']="Resource without pencil ";
 karutaStr['en']['editresroles']="Roles - Edit Resource";
 karutaStr['en']['delnoderoles']="Roles - Delete";
 karutaStr['en']['commentnoderoles']="Roles - Comment";
 karutaStr['en']['annotnoderoles']="Roles - Annotate";
 karutaStr['en']['submitroles']="Roles - Submit";
 karutaStr['en']['submitall']="Submit - Remove all";
+karutaStr['en']['nodenopencil']="Node without Pencil";
 karutaStr['en']['editnoderoles']="Roles - Edit Label";
 karutaStr['en']['editcoderoles']="Roles - Edit Code";
 karutaStr['en']['duplicateroles']="Roles - Duplicate";
@@ -136,6 +138,7 @@ karutaStr['en']['queryGet_Get_Resource']="Search <br/><span style='font-size:sma
 karutaStr['en']['queryProxy']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
 karutaStr['en']['queryAction']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
 karutaStr['en']['queryGet_Double_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code1.semantic_tag1.<i>label;</i>portfolio_code2.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
+karutaStr['en']['queryGet_Proxy']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i>/target_semantic_tag";
 karutaStr['en']['shownoderoles']="Roles - Show";
 karutaStr['en']['showroles']="Roles - Show To";
 karutaStr['en']['notifyroles']="Roles - Notify To";
@@ -236,6 +239,7 @@ karutaStr['en']['help_text_rename']="To move a portfolio to another project, cha
 karutaStr['en']['projects']="My Projects";
 karutaStr['en']['portfolios-not-in-project']="My Portfolios not in a Project";
 karutaStr['en']['portfolios']="My Portfolios";
+karutaStr['en']['portfolios-public']="Public Portfolios";
 karutaStr['en']['portfolio']="My Portfolio";
 karutaStr['en']['bin']="My Bin";
 karutaStr['en']['nogroup']="No Group";
@@ -255,6 +259,8 @@ karutaStr['en']['sharing_with_designers']="Share with Designers";
 karutaStr['en']['unsharing']="Unsharing";
 karutaStr['en']['export']="Export";
 karutaStr['en']['export-project']="Export Project";
+karutaStr['en']['archive-project']="Archive Project";
+karutaStr['en']['nbeltsperarchive']="Number of elements by archive";
 karutaStr['en']['export-with-files']="Export with Files";
 karutaStr['en']['button-duplicate']="Duplicate";
 karutaStr['en']['getPDF']="Create PDF";
@@ -299,6 +305,7 @@ karutaStr['en']['create_user']="Add a User";
 karutaStr['en']['active_users']="Active Users";
 karutaStr['en']['inactive_users']="Inactive Users";
 karutaStr['en']['temporary_users']="Temporary Users";
+karutaStr['en']['empty_users']="Users without portfolio";
 karutaStr['en']['username']="Login";
 karutaStr['en']['lastname']="Last Name";
 karutaStr['en']['firstname']="First Name";
@@ -318,6 +325,7 @@ karutaStr['en']['substitute']="Substitution";
 karutaStr['en']['select_user']="Select a User";
 karutaStr['en']['other']="Other";
 karutaStr['en']['delete-temporary-users']="Delete All";
+karutaStr['en']['delete-empty-users']="Delete selection";
 
 //=========================================
 //========== ROLES ========================
@@ -474,6 +482,7 @@ karutaStr['en']['GetResource']="GetResource";
 karutaStr['en']['GetGetResource']="GetGetResource";
 karutaStr['en']['GetDoubleResource']="GetDoubleResource";
 karutaStr['en']['Proxy']="Proxy";
+karutaStr['en']['Get_Proxy']="Get_Proxy";
 
 karutaStr['en']['asmColumn']="asmColumn";
 

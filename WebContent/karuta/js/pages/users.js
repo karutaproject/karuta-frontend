@@ -28,20 +28,22 @@ function fill_list_users()
 	});
 	var html = "";
 	html += "<span id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
-	html += "<h3 id='active-users'>"+karutaStr[LANG]['active_users']+"</h3>";
-	html += "<div  id='active'>";
-	html += "</div>";
-	html += "<h3 id='inactive-users' style='display:none'>"+karutaStr[LANG]['inactive_users']+"</h3>";
-	html += "<div  id='inactive' style='display:none'>";
-	html += "</div>";
+	html += "<h3 id='active-users'><span id='active-users-button' onclick=\"javascript:toggleUsersList('active')\" class='button glyphicon glyphicon-minus'></span>"+karutaStr[LANG]['active_users']+"</h3>";
+	html += "<div  id='active'></div>";
+	
+	html += "<h3 id='inactive-users' style='display:none'><span id='inactive-users-button' onclick=\"javascript:toggleUsersList('inactive')\" class='button glyphicon glyphicon-minus'></span>"+karutaStr[LANG]['inactive_users']+"</h3>";
+	html += "<div  id='inactive' style='display:none'></div>";
+	
 	html += "<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users'];
 	html += "&nbsp<button class='btn btn-xs' onclick=\"confirmDelTemporaryUsers()\">";
 	html += karutaStr[LANG]["delete-temporary-users"];
 	html += "</button>";
 	html += "</h3>";
+	html += "<div  id='temporary'></div>";
+	
+	html += "<h3 id='empty-users'><span id='empty-users-button' onclick=\"javascript:toggleUsersList('empty')\" class='button glyphicon glyphicon-plus'></span>"+karutaStr[LANG]['empty_users']+"</h3>";
+	html += "<div  id='empty' style='display:none'></div>";
 
-	html += "<div  id='temporary'>";
-	html += "</div>";
 	$("#main-user").html(html);
 	$.ajaxSetup({async: false});
 	$.ajax({

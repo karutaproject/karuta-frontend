@@ -8,7 +8,7 @@ karutaStr['fr']['flag-name']="France";
 karutaStr['fr']['new']="Nouvel élément";
 karutaStr['fr']['email']="Courriel";
 karutaStr['fr']['password']="Mot de passe";
-karutaStr['fr']['login']="Identifiez-vous";
+karutaStr['fr']['login']="Connexion";
 //----------------------------------------------------
 karutaStr['fr']['yes']="Oui";
 karutaStr['fr']['no']="Non";
@@ -66,7 +66,7 @@ karutaStr['fr']['enter-text']="Tapez votre texte ...";
 karutaStr['fr']['not-logged']="Vous n'êtes pas connecté.";
 karutaStr['fr']['translate']="Traduire";
 karutaStr['fr']['submit']="Soumettre";
-karutaStr['fr']['newpassword']="Mot de passe oublié? Envoyez votre login :";
+karutaStr['fr']['newpassword']="Mot de passe oublié?";
 karutaStr['fr']['tipnewpassword']="Si vous ne trouvez pas notre message dans votre boîte de réception, vérifiez dans votre dossier «&nbsp;courrier indésirable&nbsp;» ou «&nbsp;spam&nbsp;»";
 karutaStr['fr']['confirm-password']="Confirmez mot de passe";
 karutaStr['fr']['password-mismatch']="Les deux mots de passe ne correspondent pas.";
@@ -119,13 +119,15 @@ karutaStr['fr']['semantictag']="Tag sémantique";
 karutaStr['fr']['multilingual-node']="Noeud multilingue";
 karutaStr['fr']['multilingual-resource']="Ressource multilingue";
 karutaStr['fr']['seenoderoles']="Rôles - Voir";
-karutaStr['fr']['editresroles']="Rôles - Éditer ressource";
+karutaStr['fr']['resnopencil']="Ressource sans crayon ";
+karutaStr['fr']['editresroles']="Rôles - Modifier ressource";
 karutaStr['fr']['delnoderoles']="Rôles - Supprimer";
 karutaStr['fr']['commentnoderoles']="Rôles - Commenter";
 karutaStr['fr']['annotnoderoles']="Rôles - Annoter";
 karutaStr['fr']['submitroles']="Rôles - Soumettre";
-karutaStr['fr']['submitall']="Soumettre - Supprimer tous";
-karutaStr['fr']['editnoderoles']="Rôles - Éditer libellé";
+karutaStr['fr']['submitall']="Soumettre pour tous";
+karutaStr['fr']['nodenopencil']="Noeud sans crayon";
+karutaStr['fr']['editnoderoles']="Rôles - Modifier noeud";
 karutaStr['fr']['editcoderoles']="Rôles - Éditer code";
 karutaStr['fr']['duplicateroles']="Rôles - Dupliquer";
 karutaStr['fr']['editboxtitle']="Titre boîte d'édition";
@@ -136,6 +138,7 @@ karutaStr['fr']['queryGet_Get_Resource']="Recherche <br/><span style='font-size:
 karutaStr['fr']['queryProxy']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mots réservés pour code_portfolio : <i>all</i> et <i>self</i></span>";
 karutaStr['fr']['queryAction']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i><br> Mots réservés pour code_portfolio : <i>all</i> et <i>self</i></span>";
 karutaStr['fr']['queryGet_Double_Resource']="Recherche <br/><span style='font-size:smaller'> code_portfolio1.tag_sémantique1.<i>label;</i>code_portfolio2.tag_sémantique2.<i>label</i><br> Mot réservé pour code_portfolio : <i>self</i></span>";
+karutaStr['fr']['queryGet_Proxy']="Recherche <br/><span style='font-size:smaller'> code_portfolio.tag_sémantique.<i>label</i>/tag_sémantique_cible";
 karutaStr['fr']['shownoderoles']="Rôles - Montrer";
 karutaStr['fr']['showroles']="Rôles - Montrer à";
 karutaStr['fr']['notifyroles']="Rôles - Notifier à";
@@ -235,6 +238,7 @@ karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre p
 
 karutaStr['fr']['projects']="Mes projets";
 karutaStr['fr']['portfolios-not-in-project']="Mes portfolios hors projet";
+karutaStr['fr']['portfolios-public']="Portfolios publics";
 karutaStr['fr']['portfolios']="Mes portfolios";
 karutaStr['fr']['portfolio']="Mon portfolio";
 karutaStr['fr']['bin']="Ma poubelle";
@@ -255,6 +259,8 @@ karutaStr['fr']['sharing_with_designers']="Partager avec des designers";
 karutaStr['fr']['unsharing']="Départager";
 karutaStr['fr']['export']="Exporter";
 karutaStr['fr']['export-project']="Exporter le projet";
+karutaStr['fr']['archive-project']="Archiver le projet";
+karutaStr['fr']['nbeltsperarchive']="Nombre d'éléments par archive";
 karutaStr['fr']['export-with-files']="Exporter avec fichiers";
 karutaStr['fr']['button-duplicate']="Dupliquer";
 karutaStr['fr']['getPDF']="Créer PDF";
@@ -299,6 +305,7 @@ karutaStr['fr']['create_user']="Ajouter un usager";
 karutaStr['fr']['active_users']="Usagers actifs";
 karutaStr['fr']['inactive_users']="Usagers inactifs";
 karutaStr['fr']['temporary_users']="Usagers temporaires";
+karutaStr['fr']['empty_users']="Usagers sans portfolio";
 karutaStr['fr']['username']="Login";
 karutaStr['fr']['lastname']="Nom";
 karutaStr['fr']['firstname']="Prénom";
@@ -318,6 +325,7 @@ karutaStr['fr']['substitute']="Substitution";
 karutaStr['fr']['select_user']="Select unusager";
 karutaStr['fr']['other']="Autre";
 karutaStr['fr']['delete-temporary-users']="Supprimer tous";
+karutaStr['fr']['delete-empty-users']="Supprimer la sélection";
 
 
 //=========================================
@@ -475,6 +483,7 @@ karutaStr['fr']['GetResource']="GetResource";
 karutaStr['fr']['GetGetResource']="GetGetResource";
 karutaStr['fr']['GetDoubleResource']="GetDoubleResource";
 karutaStr['fr']['Proxy']="Proxy";
+karutaStr['fr']['Get_Proxy']="Get_Proxy";
 
 karutaStr['fr']['asmColumn']="asmColumn";
 

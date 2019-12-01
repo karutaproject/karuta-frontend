@@ -276,7 +276,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (query.indexOf('sibling')>-1) {
 				parent = $(this.node).parent();
 			}
-			if (query.indexOf('parent.parent.parent')>-1) {
+			if (query.indexOf('parent.parent.parent.parent.parent')>-1) {
+				parent = $(this.node).parent().parent().parent().parent().parent().parent();
+			} else if (query.indexOf('parent.parent.parent.parent')>-1) {
+				parent = $(this.node).parent().parent().parent().parent().parent();
+			} else if (query.indexOf('parent.parent.parent')>-1) {
 				parent = $(this.node).parent().parent().parent().parent();
 			} else	if (query.indexOf('parent.parent')>-1) {
 				parent = $(this.node).parent().parent().parent();

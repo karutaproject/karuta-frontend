@@ -1038,13 +1038,16 @@ function getSendPublicURL(uuid,shareroles)
 }
 
 //==================================
-function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole)
+function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole,shareoptions)
 //==================================
 {
+	var emailsarray = [];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	var sharetomessage = "";
+	var sharetoobj = "";
 	$("#edit-window-footer").html("");
 	fillEditBoxBody();
 	$("#edit-window-title").html(karutaStr[LANG]['share-URL']);
@@ -1055,17 +1058,18 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 		if (sharetoemail.indexOf('?')>-1) {
 			sharetoemail = $("#email").val();
 		}
-		if (sharetoemail.indexOf('+text')>-1) {
+		if (shareoptions.indexOf('mess')>-1) {
 			sharetomessage = $("#message").val();
+			sharetomessage = $('<div/>').text(sharetomessage).html();  // encode html
 		}
-		if (sharetoemail.indexOf('+obj')>-1) {
+		if (shareoptions.indexOf('obj')>-1) {
 			sharetoobj = $("#object").val();
 		}
 		if (shareduration=='?') {
 			shareduration = $("#duration").val();
 		}
 		if (sharetoemail!='' && shareduration!='') {
-			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode);
+			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode,sharetomessage,sharetoobj);
 		}
 	});
 	$("#edit-window-footer").append(obj);
@@ -1077,10 +1081,21 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 	if (sharetoemail=='?') {
 		html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>";
 		html += "		<div class='col-sm-9'>";
-		html += "			<input id='email' type='text' class='form-control'>";
+		html += "			<input autocomplete='off' id='email' type='text' class='form-control'>";
 		html += "		</div>";
 	}
-
+	if (shareoptions.indexOf('obj')>-1) {
+		html += "		<label for='object' class='col-sm-3 control-label'>"+karutaStr[LANG]['subject']+"</label>";
+		html += "		<div class='col-sm-9'>";
+		html += "			<input id='object' type='text' class='form-control'>";
+		html += "		</div>";
+	}
+	if (shareoptions.indexOf('mess')>-1) {
+		html += "		<label for='message' class='col-sm-3 control-label'>"+karutaStr[LANG]['message']+"</label>";
+		html += "		<div class='col-sm-9'>";
+		html += "<textarea id='message' class='form-control' expand='false' style='height:300px'></textarea>";
+		html += "		</div>";
+	}
 	if (shareduration=='?') {
 		html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['shareduration']+"</label>";
 		html += "		<div class='col-sm-9'>";
@@ -1090,12 +1105,25 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 	html += "</div>";
 	html += "</div>";
 	$("#edit-window-body").html(html);
+	$("#message").wysihtml5(
+			{
+				toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},
+				"uuid":uuid,
+				"locale":LANG
+			}
+		);
+	if (shareoptions.indexOf('emailautocomplete')>-1) {
+		for ( var i = 0; i < UsersActive_list.length; i++) {
+			emailsarray[emailsarray.length] = {'libelle': UsersActive_list[i].email_node.text()};
+		}
+		addautocomplete(document.getElementById('email'), emailsarray);
+	}
 	//--------------------------
 }
 
 
 //==================================
-function getPublicURL(uuid,email,sharerole,role,level,duration,langcode) {
+function getPublicURL(uuid,email,sharerole,role,level,duration,langcode,sharetomessage,sharetoobj) {
 //==================================
 	if (role==null)
 		role = "all";
@@ -1110,7 +1138,7 @@ function getPublicURL(uuid,email,sharerole,role,level,duration,langcode) {
 		contentType: "application/xml",
 		url : urlS,
 		success : function (data){
-			sendEmailPublicURL(data,email,langcode);
+			sendEmailPublicURL(data,email,langcode,sharetomessage,sharetoobj);
 		}
 	});
 }
@@ -1239,7 +1267,7 @@ function getEmail(role,emails) {
 }
 
 //==================================
-function sendEmailPublicURL(encodeddata,email,langcode) {
+function sendEmailPublicURL(encodeddata,email,langcode,sharetomessage,sharetoobj) {
 //==================================
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf('/application/htm/karuta.htm'));
@@ -1251,11 +1279,15 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	message = message.replace("#want-sharing#",karutaStr[LANG]['want-sharing']);
 	message = message.replace("#see#",karutaStr[LANG]['see']);
 	message = message.replace("#do not edit this#",url);
+	message += "&lt;hr&gt;" + sharetomessage;
+	var subject = USER.firstname+" "+USER.lastname+" "+karutaStr[LANG]['want-sharing'];
+	if (sharetoobj!="")
+		subject = sharetoobj;
 	//------------------------------
 	var xml ="<node>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
 	xml +="<recipient>"+email+"</recipient>";
-	xml +="<subject>"+USER.firstname+" "+USER.lastname+" "+karutaStr[LANG]['want-sharing']+"</subject>";
+	xml +="<subject>"+subject+"</subject>";
 	xml +="<message>"+message+"</message>";
 	xml +="<recipient_cc></recipient_cc><recipient_bcc></recipient_bcc>";
 	xml +="</node>";
@@ -1299,7 +1331,6 @@ function setLanguage(lang,caller) {
 	localStorage.setItem('karuta-language',lang);
 	LANG = lang;
 	console.log("LANG: "+LANG);
-	console.log("karutaStr: "+karutaStr);
 	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
@@ -1444,6 +1475,24 @@ function toggleSidebarPlus(uuid) { // click on label
 		$("#toggle_"+uuid).removeClass("glyphicon-plus")
 		$("#toggle_"+uuid).addClass("glyphicon-minus")
 		$("#collapse"+uuid).collapse("show");
+	}
+}
+
+//==================================
+function toggleUsersList(list) {
+//==================================
+	if ($("#"+list+"-users-button").hasClass("glyphicon-plus")) {
+		if (list=='empty') {
+			UIFactory.User.getListUserWithoutPortfolio();
+			UIFactory.User.displayUserWithoutPortfolio('empty')
+		}
+		$("#"+list+"-users-button").removeClass("glyphicon-plus");
+		$("#"+list+"-users-button").addClass("glyphicon-minus");
+		$("#"+list).show();
+	} else {
+		$("#"+list+"-users-button").removeClass("glyphicon-minus")
+		$("#"+list+"-users-button").addClass("glyphicon-plus")
+		$("#"+list).hide();
 	}
 }
 
@@ -2091,3 +2140,76 @@ function filesReceptionMessage(filename)
 	$('#message-window').modal('show');
 }
 
+//==================================
+function addautocomplete(input,arrayOfValues) {
+//==================================
+	var currentFocus;
+	input.addEventListener("input", function(e) {
+		var a, b, i, val = this.value.substring(this.value.lastIndexOf(" ")+1);
+		closeAllLists();
+		if (!val) { return false;}
+	 	currentFocus = -1;
+		a = document.createElement("DIV");
+		a.setAttribute("id", this.id + "autocomplete-list");
+		a.setAttribute("class", "autocomplete-items");
+		this.parentNode.appendChild(a);
+		for (i = 0; i < arrayOfValues.length; i++) {
+			var indexval = arrayOfValues[i].libelle.toUpperCase().indexOf(val.toUpperCase());
+			if (indexval>-1) {
+				b = document.createElement("DIV");
+				b.innerHTML = arrayOfValues[i].libelle.substr(0, indexval);
+				b.innerHTML += "<strong>" + arrayOfValues[i].libelle.substr(indexval,val.length) + "</strong>";
+				b.innerHTML += arrayOfValues[i].libelle.substr(indexval+val.length);
+				b.innerHTML += "<input type='hidden' label=\""+arrayOfValues[i].libelle+"\" >";
+				b.addEventListener("click", function(e) {
+					if (input.value.lastIndexOf(" "))
+						input.value = input.value.substring(0,input.value.lastIndexOf(" ")+1) + $("input",this).attr('label');
+					else
+						input.value = $("input",this).attr('label');
+					$(input).change();
+					closeAllLists();
+				});
+				a.appendChild(b);
+			}
+		}
+	});
+	input.addEventListener("keydown", function(e) {
+		var x = document.getElementById(this.id + "autocomplete-list");
+		if (x) x = x.getElementsByTagName("div");
+		if (e.keyCode == 40) {
+			currentFocus++;
+		addActive(x);
+		} else if (e.keyCode == 38) { //up
+			currentFocus--;
+			addActive(x);
+		} else if (e.keyCode == 13) {
+			e.preventDefault();
+			if (currentFocus > -1) {
+				if (x) x[currentFocus].click();
+			}
+		}
+	});
+	function addActive(x) {
+		if (!x) return false;
+		removeActive(x);
+		if (currentFocus >= x.length) currentFocus = 0;
+		if (currentFocus < 0) currentFocus = (x.length - 1);
+		x[currentFocus].classList.add("autocomplete-active");
+	}
+	function removeActive(x) {
+		for (var i = 0; i < x.length; i++) {
+			x[i].classList.remove("autocomplete-active");
+		}
+	}
+	function closeAllLists(elmnt) {
+		var x = document.getElementsByClassName("autocomplete-items");
+		for (var i = 0; i < x.length; i++) {
+			if (elmnt != x[i] && elmnt != input) {
+				x[i].parentNode.removeChild(x[i]);
+			}
+		}
+	}
+	document.addEventListener("click", function (e) {
+		closeAllLists(e.target);
+	});
+}

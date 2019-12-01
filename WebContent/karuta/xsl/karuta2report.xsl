@@ -149,6 +149,11 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</then-part>		
 	</xsl:template>
+	<xsl:template match="*[metadata/@semantictag='else-part']">
+		<else-part>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</else-part>		
+	</xsl:template>
 	<!-- ================ username ============================ -->
 	<xsl:template match="*[metadata/@semantictag='username']">
 		<xsl:variable name="style">
@@ -278,9 +283,12 @@
 		</node_resource>
 	</xsl:template>
 	<!-- ================ variable ============================ -->
-	<xsl:template match="*[metadata/@semantictag='variable']">
+	<xsl:template match="*[metadata/@semantictag='report-variable']">
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="varlabel">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='varlabel']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="ref">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -295,6 +303,9 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
+		<xsl:variable name="aggregationselect">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregationselect']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="aggregatetype">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregatetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
@@ -302,8 +313,14 @@
 			<xsl:if test="not($ref='')">
 				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
 			</xsl:if>
+			<xsl:if test="not($varlabel='')">
+				<xsl:attribute name="varlabel"><xsl:value-of select="$varlabel"/></xsl:attribute>
+			</xsl:if>
 			<xsl:if test="not($select='..')">
 				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($aggregationselect='..')">
+				<xsl:attribute name="aggregationselect"><xsl:value-of select="$aggregationselect"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($style='..')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
@@ -384,6 +401,9 @@
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="countvar">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
@@ -391,10 +411,13 @@
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
 			</xsl:if>
+			<xsl:if test="not($countvar='')">
+				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
+			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-person>
 	</xsl:template>
-	<!-- ================ for-each-person ============================ -->
+	<!-- ================ loop ============================ -->
 	<xsl:template match="*[metadata/@semantictag='loop']">
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -429,6 +452,9 @@
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="countvar">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
@@ -441,6 +467,9 @@
 		<for-each-portfolio select='{$select}'>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($countvar='')">
+				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not(sortag='')">
 				<xsl:attribute name="sortag"><xsl:value-of select="$sortag"/></xsl:attribute>
@@ -455,6 +484,9 @@
 	<xsl:template match="*[metadata/@semantictag='for-each-portfolios-nodes']">
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="countvar">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
@@ -471,6 +503,9 @@
 		<for-each-portfolios-nodes select='{$select}'>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($countvar='')">
+				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not(sortag='')">
 				<xsl:attribute name="sortag"><xsl:value-of select="$sortag"/></xsl:attribute>
@@ -489,9 +524,15 @@
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="countvar">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<for-each-line>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($countvar='')">
+				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-line>
@@ -500,6 +541,9 @@
 	<xsl:template match="*[metadata/@semantictag='for-each-node']">
 		<xsl:variable name="ref-init">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref-init']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="countvar">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="nodetype">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
@@ -514,6 +558,9 @@
 		<for-each-node>
 			<xsl:if test="not($ref-init='')">
 				<xsl:attribute name="ref-init"><xsl:value-of select="$ref-init"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($countvar='')">
+				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
 			</xsl:if>
 			<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
 			<xsl:attribute name="test"><xsl:value-of select="$test"/></xsl:attribute>
@@ -546,6 +593,36 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</aggregate>
 	</xsl:template>
+	<!-- ================ operation ============================ -->
+	<xsl:template match="*[metadata/@semantictag='operation']">
+		<xsl:variable name="style">
+			<xsl:call-template name="style"/>
+		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select1">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationselect1']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select2">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationselect2']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="type">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='operationtype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<operation>
+			<xsl:if test="not($ref='')">
+				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			</xsl:if>
+			<xsl:attribute name="select1"><xsl:value-of select="$select1"/></xsl:attribute>
+			<xsl:attribute name="select2"><xsl:value-of select="$select2"/></xsl:attribute>
+			<xsl:attribute name="type"><xsl:value-of select="$type"/></xsl:attribute>
+			<xsl:if test="not($style='..')">
+				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:apply-templates select='asmUnitStructure'/>
+		</operation>
+	</xsl:template>
 	<!-- ================ GoParent ============================ -->
 	<xsl:template match="*[metadata/@semantictag='go-parent']">
 		<goparent>
@@ -556,6 +633,11 @@
 	<xsl:template match="*[metadata/@semantictag='show-sharing']">
 		<show-sharing>
 		</show-sharing>
+	</xsl:template>
+	<!-- ================ display-sharing ============================ -->
+	<xsl:template match="*[metadata/@semantictag='display-sharing']">
+		<display-sharing>
+		</display-sharing>
 	</xsl:template>
 	<!-- ================ draw-web-title ============================ -->
 	<xsl:template match="*[metadata/@semantictag='draw-web-title']">
