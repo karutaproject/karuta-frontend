@@ -2964,6 +2964,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 	var submitted = ($(node.metadatawad).attr('submitted')==undefined)?'N':$(node.metadatawad).attr('submitted');
 	var submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
 	var menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
+	var menulabels = ($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels');
 	var showroles = ($(node.metadatawad).attr('showroles')==undefined)?'none':$(node.metadatawad).attr('showroles');
 	var moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'none':$(node.metadatawad).attr('moveroles');
 	var moveinroles = ($(node.metadatawad).attr('moveinroles')==undefined)?'none':$(node.metadatawad).attr('moveinroles');
@@ -3123,6 +3124,16 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 		var no_monomenu = 0;
 		try {
 			if ((depth>0 || node.asmtype == 'asmUnitStructure') && menuroles != undefined && menuroles.length>10 && (menuroles.indexOf(userrole)>-1 || (menuroles.containsArrayElt(g_userroles) && menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
+				//--------------------------------
+				var mlabels = [];
+				var labelitems = menulabels.split(";");
+				for (var i=0; i<labelitems.length; i++){
+					var subitems = labelitems[i].split(",");
+					mlabels[i] = [];
+					mlabels[i][0] = subitems[0]; // label
+					mlabels[i][1] = subitems[1]; // roles
+				}
+				//--------------------------------
 				var menus = [];
 				var displayMenu = false;
 				var items = menuroles.split(";");
@@ -3177,11 +3188,39 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					var param4 = null;
 					html += "<span class='dropdown dropdown-menu-left dropdown-button'>";
 					//-----------------------
-					html += "<span class='dropdown-toggle'  data-toggle='dropdown' id='specific_"+node.id+"'> ";
-					html += " <span class='button text-button'>"+karutaStr[languages[langcode]]['menu']+"<span class='caret'></span> </span>";
-					html += "</span>";
+					html += "	<span class='dropdown-toggle'  data-toggle='dropdown' id='specific_"+node.id+"'> ";
+					html += "		<span class='button text-button'>";
+					//-----------
+					if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
+						for (var i=0; i<mlabels.length; i++){
+							if (mlabels[i][1].indexOf(userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
+								var titles = [];
+								var title = "";
+								try {
+									titles = mlabels[i][0].split("/");
+									if (mlabels[i][0].indexOf("@")>-1) { // lang@fr/lang@en/...
+										for (var j=0; j<titles.length; j++){
+											if (titles[j].indexOf("@"+languages[langcode])>-1)
+												title = titles[j].substring(0,titles[j].indexOf("@"));
+										}
+									} else { // lang1/lang2/...
+										title = titles[langcode];  // lang1/lang2/...
+									}
+								} catch(e){
+									title = mlabels[i][0];
+								}
+								html += title;
+							}
+						}
+					} else {
+							html += karutaStr[languages[langcode]]['menu'];
+					}
+					//-----------
+					html += "			<span class='caret'></span>";
+					html += "		</span>";
+					html += "	</span>";
 					//-----------------------
-					html += "<ul class='dropdown-menu dropdown-menu-right specific-menu' aria-labelledby='specific_"+node.id+"'>";
+					html += "	<ul class='dropdown-menu dropdown-menu-right specific-menu' aria-labelledby='specific_"+node.id+"'>";
 					for (var i=0; i<menus.length; i++){
 						if (menus[i][0]=="#line") {
 							html += "<hr>";
@@ -3205,7 +3244,7 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 								html += UIFactory["Node"].getSpecificMenu(node.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
 						}
 					}
-					html += "</ul>"; // class='dropdown-menu'
+					html += "	</ul>"; // class='dropdown-menu'
 					html += "</span><!-- class='dropdown -->";
 				}
 				if (displayMenu && monomenu) {
@@ -4279,6 +4318,7 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 	}
 	//----------------------Menu----------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
+		//-----------------------
 		html  = "<hr><label>"+karutaStr[languages[langcode]]['menuroles'];
 		if (languages.length>1){
 			var first = true;
@@ -4294,6 +4334,23 @@ UIFactory["Node"].displayMetadataTextsEditor = function(node,type,langcode)
 		html += karutaStr[languages[langcode]]['menuroles3']+"</label>";
 		$("#metadata_texts").append($(html));
 		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'menuroles',$(node.metadatawad).attr('menuroles'));
+		//-----------------------
+		html  = "<hr><label>"+karutaStr[languages[langcode]]['menulabels'];
+		if (languages.length>1){
+			var first = true;
+			for (var i=0; i<languages.length;i++){
+				if (!first)
+					html += "/";
+				html += karutaStr[languages[i]]['menulabels2'];
+				first = false;
+			}
+		} else {
+			html += karutaStr[languages[langcode]]['menulabels2'];
+		}
+		html += karutaStr[languages[langcode]]['menulabels3']+"</label>";
+		$("#metadata_texts").append($(html));
+		UIFactory["Node"].displayMetadatawWadTextAttributeEditor('metadata_texts',node.id,'menulabels',$(node.metadatawad).attr('menulabels'));
+		//-----------------------
 	}
 	//------------------------Help-------------------------
 	html = "<br><hr><label>"+karutaStr[languages[langcode]]['help'];
