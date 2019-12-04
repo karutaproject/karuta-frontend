@@ -94,7 +94,6 @@ karutaStr['en']['complex']="Partial Loading";
 karutaStr["en"]["button-print"] = "Print";
 karutaStr["en"]["write-mode"] = "Edit";
 
-
 //=========================================
 //========== ERRORS =======================
 //=========================================
@@ -152,6 +151,9 @@ karutaStr['en']['veriffunction']="Check Function";
 karutaStr['en']['menuroles']="Menus<br/><span style='font-size:smaller'> portfolio_code,semantic_tag,";
 karutaStr['en']['menuroles2']="label@en";
 karutaStr['en']['menuroles3']=",roles[;other menu]</span>";
+karutaStr['en']['menulabels']="Menu Button Text<br/><span style='font-size:smaller'>";
+karutaStr['en']['menulabels2']="label@en";
+karutaStr['en']['menulabels3']=",roles[;other label]</span>";
 karutaStr['en']['help']="Information <br/><span style='font-size:smaller'>";
 karutaStr['en']['help2']="Text in English@en";
 karutaStr['en']['help3']="</span>";

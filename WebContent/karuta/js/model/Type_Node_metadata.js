@@ -874,6 +874,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	}
 	//----------------------Menu----------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
+		//-----------------------
 		html  = "<hr><label>"+karutaStr[languages[langcode]]['menuroles'];
 		if (languages.length>1){
 			var first = true;
@@ -889,6 +890,23 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		html += karutaStr[languages[langcode]]['menuroles3']+"</label>";
 		$('#metadata_texts').append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menuroles');
+		//-----------------------
+		html  = "<hr><label>"+karutaStr[languages[langcode]]['menulabels'];
+		if (languages.length>1){
+			var first = true;
+			for (var i=0; i<languages.length;i++){
+				if (!first)
+					html += "/";
+				html += karutaStr[languages[i]]['menulabels2'];
+				first = false;
+			}
+		} else {
+			html += karutaStr[languages[langcode]]['menulabels2'];
+		}
+		html += karutaStr[languages[langcode]]['menulabels3']+"</label>";
+		$("#metadata_texts").append($(html));
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menuroles');
+		//-----------------------
 	}
 	//------------------------Help-------------------------
 	html = "<br><hr><label>"+karutaStr[languages[langcode]]['help'];
