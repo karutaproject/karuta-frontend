@@ -159,7 +159,7 @@ var UICom =
 						});
 					}
 					if (resource_type=='Get_Proxy') {
-						var targetid = $("code",$("asmResource[xsi_type='Get_Proxy']",child)).text();
+						var targetid = $("value",$("asmResource[xsi_type='Get_Proxy']",child)).text();
 						var edittargetroles = ($("metadata-wad",child).attr('edittargetroles')==undefined)?'none':$("metadata-wad",child).attr('edittargetroles');
 						$.ajax({
 							type : "GET",
