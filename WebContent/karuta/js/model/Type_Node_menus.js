@@ -205,7 +205,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		if ((this.depth>0 || this.asmtype == 'asmUnitStructure') && this.menuroles != undefined && this.menuroles.length>10 && (this.menuroles.indexOf(userrole)>-1 || (this.menuroles.containsArrayElt(g_userroles) && this.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
 			//--------------------------------
 			var mlabels = [];
-			var labelitems = menulabels.split(";");
+			var labelitems = this.menulabels.split(";");
 			for (var i=0; i<labelitems.length; i++){
 				var subitems = labelitems[i].split(",");
 				mlabels[i] = [];
@@ -392,7 +392,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		try {
 			var shares = [];
 			var displayShare = [];
-			var items = shareroles.split(";");
+			var items = this.shareroles.split(";");
 			for (var i=0; i<items.length; i++){
 				var subitems = items[i].split(",");
 				shares[i] = [];
@@ -429,7 +429,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					var shareduration = shares[i][4];
 					var sharelabel = shares[i][5];
 					var shareoptions = (shares[i].length>7) ? shares[i][7] : "";
-					if (shareto!='' && shareroles.indexOf('2world')<0) {
+					if (shareto!='' && this.shareroles.indexOf('2world')<0) {
 						if (shareto!='?' && shareduration!='?' && shareoptions!="") {
 							var sharetoemail = "";
 							var sharetoroles = "";
@@ -440,7 +440,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 								else
 									sharetoroles += sharetos[k]+" ";
 							}
-							var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
+							var js = "sendSharingURL('"+this.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -466,7 +466,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 							} else {
 								sharetoemail = shareto;
 							}
-							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
+							var js = "getSendSharingURL('"+this.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
 //							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
@@ -481,10 +481,10 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 							}
 						}
 					} else {
-						if (shareroles.indexOf('2world')>-1) {
-							html_toadd = "<span id='2world-"+node.id+"'></span>";
+						if (this.shareroles.indexOf('2world')>-1) {
+							html_toadd = "<span id='2world-"+this.id+"'></span>";
 						} else {
-							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"','"+shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
+							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+this.id+"','"+this.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
 						}
 					}
 					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))
