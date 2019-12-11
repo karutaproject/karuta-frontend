@@ -33,7 +33,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
   cursor: pointer;
   float: left;
   margin-right: 5px;
-  margin-top: 3px;
+  margin-top: 1px;
   color: var(--portfolio-buttons-color);
 }
 
@@ -146,10 +146,6 @@ h3 {
   overflow-y: auto;
   width: 100%;
 }
-#edit-window-body .dropdown-toggle {
-  border: 1px solid var(--edit-window-border-color);
-}
-
 /* ====================== */
 /*      NAVBAR            */
 /* ====================== */
@@ -491,12 +487,18 @@ a .portfolio-label:hover {
   background-color: var(--page-title-background-color);
   min-height: 6.25rem;
 }
+.asmRoot > div[name=lbl-div] .title,
+.asmStructure > div[name=lbl-div] .title,
+.asmUnit > div[name=lbl-div] .title {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
 .asmRoot > div[name=lbl-div] .title-subline,
 .asmStructure > div[name=lbl-div] .title-subline,
 .asmUnit > div[name=lbl-div] .title-subline {
   border-bottom: 1px solid var(--page-title-subline-color);
-  margin-top: 0.625rem;
   width: 50px;
+  margin-left: 0.2rem;
 }
 
 .asmRoot .asmStructure > div[name=lbl-div],
@@ -518,59 +520,49 @@ a .portfolio-label:hover {
 /* ====================== */
 /*     SECTION TITLES     */
 /* ====================== */
-.asmStructure .label-node:hover {
+.standard .asmStructure .label-node:hover {
   cursor: pointer;
 }
-
-.asmRoot .title {
+.standard .asmRoot .title {
   font-size: 1.5rem;
   line-height: 1.875rem;
 }
-
-.asmStructure .title {
+.standard .asmStructure .title {
   font-size: 1.5rem;
   line-height: 1.875rem;
 }
-
-.asmStructure .asmStructure .title,
-.asmRoot .asmStructure .title {
+.standard .asmStructure .asmStructure .title,
+.standard .asmRoot .asmStructure .title {
   font-size: 1.2rem;
   font-weight: normal;
 }
-
-.asmUnit .title {
+.standard .asmUnit .title {
   font-size: 1.5rem;
   line-height: 1.875rem;
 }
-
-.asmStructure .asmUnit .title,
-.asmRoot .asmUnit .title {
+.standard .asmStructure .asmUnit .title,
+.standard .asmRoot .asmUnit .title {
   font-size: 1.25rem;
   font-weight: normal;
   line-height: 1.5rem;
 }
-
-.asmUnitStructure .title {
+.standard .asmUnitStructure .title {
   font-size: 1.25rem;
   line-height: 1.5rem;
 }
-
-.asmUnitStructure .asmUnitStructure .title {
+.standard .asmUnitStructure .asmUnitStructure .title {
   font-size: 1rem;
   line-height: 1.25rem;
 }
-
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+.standard .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
-
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+.standard .asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
   font-size: 0.75rem;
   line-height: 1.25rem;
 }
-
-.resource-label .title {
+.standard .resource-label .title {
   font-size: inherit;
 }
 
@@ -771,6 +763,23 @@ table[name=res-div] {
 
 .resource-node-label .title {
   font-size: 0.875rem;
+}
+
+.node-model {
+  margin-bottom: 10px;
+}
+.node-model .menus {
+  margin-top: -8px;
+}
+
+.model .inside-full {
+  padding: 2px;
+}
+.model .inside-full .title {
+  margin-top: 6px;
+}
+.model div[name=cnt-div] {
+  margin-left: 15px;
 }
 
 /* ============================ */
@@ -1465,7 +1474,7 @@ hr {
 .metadata .input-group-text {
   border: 0px solid var(--edit-window-border-color);
   font-size: 0.9rem;
-  width: 180px;
+  width: 250px;
 }
 .metadata .input-group {
   margin-bottom: 3px;
@@ -1635,9 +1644,18 @@ hr {
   border: 1px solid #ced4da;
 }
 
+.get-radio {
+  margin-bottom: 2px;
+}
+
 .radio-div {
+  float: left;
+  padding: 5px;
+}
+
+.radio-label {
   display: inline-block;
-  width: fit-content;
+  max-width: 90%;
 }
 
 button.selected-label {
@@ -1684,11 +1702,16 @@ button.selected-label {
   background-color: transparent;
 }
 
-.metainfo {
+.metainfo,
+.cssinfo {
   color: #808080;
   font-size: 10px;
   font-weight: normal;
   display: none;
+}
+
+.report .cssinfo {
+  display: block;
 }
 
 #header .metainfo {
@@ -1767,7 +1790,7 @@ table.tablesorter th.restore {
 	Role Rights
    ====================*/
 #rights {
-  margin-left: 180px;
+  margin-left: 250px;
   border: 1px solid lightgrey;
 }
 #rights td {

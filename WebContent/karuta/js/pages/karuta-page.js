@@ -91,8 +91,11 @@ function displayKarutaPage()
 			//-------------------------------
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML(karutaStr[LANG]['not-logged']);
-			window.location="login.htm?lang="+LANG;
+			loadLanguages(function() {
+				getLanguage();
+				alertHTML(karutaStr[LANG]['not-logged']);
+				window.location="login.htm?lang="+LANG;
+			});
 		}
 	});
 	$.ajaxSetup({async: true});

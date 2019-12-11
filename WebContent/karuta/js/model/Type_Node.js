@@ -425,6 +425,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		this.displayMetainfo("metainfo_"+uuid);
 	}
+	this.displayMetaEpmInfo("cssinfo_"+uuid);
 	//-------------------------------------------------
 }
 
@@ -552,6 +553,11 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	//--------------------Metadata Info------------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		this.displayMetainfo("metainfo_"+uuid);
+	}
+	this.displayMetaEpmInfo("cssinfo_"+uuid);
+	//--------------------Portfolio code------------------------------------------
+	if ((g_userroles[0]=='reporter' || g_userroles[0]=='designer' || USER.admin) && nodetype=='asmRoot') {
+		$("#portfoliocode_"+uuid).html(this.getCode());
 	}
 	//----------------- hide lbl-div if empty ------------------------------------
 	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
@@ -884,7 +890,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	//------------- write resource type in the upper right corner ----------------
 	if (g_userroles[0]=='designer' || USER.admin){
 		if (this.asmtype=='asmContext')
-			$("#edit-window-type").html(karutaStr[languages[LANGCODE]][this.resource.type]);
+			$("#edit-window-type").html(karutaStr[languages[LANGCODE]][this.resource_type]);
 		else
 			$("#edit-window-type").html(karutaStr[languages[LANGCODE]][this.asmtype]);
 	} else {
@@ -1807,7 +1813,8 @@ UIFactory["Node"].displayBlocks = function(root,dest,depth,langcode,edit,inline,
 				}
 				$('#column_'+blockid).append($(html));
 				if (g_userroles[0]=='designer' || USER.admin) {  
-					UIFactory["Node"].displayMetainfo("metainfo_"+blockid,childnode.node);
+					UIFactory.Node.displayMetainfo("metainfo_"+blockid,childnode.node);
+					UIFactory.Node.displayMetaEpmInfos("cssinfo_"+blockid,childnode.node);
 				}
 				//-----------------------------------------------------------------------------
 				if (childnode.structured_resource.type="ImageBlock") {
