@@ -534,7 +534,7 @@ UIFactory["Node"].prototype.displayMetadataWadAttributeEditor = function(destid,
 		html+= "></div>";
 	}
 	else if (attribute.indexOf('seltype')>-1){
-		var choices = [{code:'select',label:'Select'},{code:'radio',label:'Radio'},{code:'click',label:'click'},{code:'completion',label:'Auto-complete'}];
+		var choices = [{code:'select',label:'Select'},{code:'radio',label:'Radio'},{code:'click',label:'Click'},{code:'completion',label:'Auto-complete'}];
 		html += "<div class='input-group '>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+this.id+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";
