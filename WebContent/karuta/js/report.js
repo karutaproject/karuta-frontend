@@ -1504,12 +1504,12 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 				url : urlS,
 				success : function(data) {
 					g_dashboard_models[model_code] = data;
-					try {
+//					try {
 						r_processPortfolio(0,data,destid,node,0);
-					}
-					catch(err) {
-						alertHTML("Error in Dashboard : " + err.message);
-					}
+//					}
+//					catch(err) {
+//						alertHTML("Error in Dashboard : " + err.message);
+//					}
 					$("#wait-window").hide();
 					$("#wait-window").modal('hide');
 				}

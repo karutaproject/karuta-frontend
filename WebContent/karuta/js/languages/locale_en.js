@@ -229,6 +229,7 @@ karutaStr['en']['printroles']="Roles - Print";
 karutaStr['en']['duration']="Link Lifetime";
 karutaStr['en']['seestart']="See - Start Date";
 karutaStr['en']['seeend']="See - End Date";
+karutaStr['fr']['logcode']="Log - Code";
 
 //=========================================
 //========== ADMIN ========================

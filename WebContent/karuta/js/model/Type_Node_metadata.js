@@ -339,7 +339,7 @@ UIFactory["Node"].prototype.displayMetainfo = function(destid)
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'display');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'menuroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'notifyroles');
-	html += UIFactory.Node.getMetadataInfo(metadatawad,'graphicerroles');
+//	html += UIFactory.Node.getMetadataInfo(metadatawad,'graphicerroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'resizeroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'edittargetroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'showroles');
@@ -865,7 +865,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','edittargetroles');
 	if (name=='asmContext' && this.resource.type=='Image')
 		this.displayMetadataWadAttributeEditor('metadata-part2','resizeroles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
+//	this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','moveroles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','showroles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','printroles');
@@ -875,6 +875,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	this.displayMetadataWadAttributeEditor('metadata-part2','editboxtitle');
 	if (name=='asmContext' && this.resource.type=='TextField')
 		this.displayMetadataWadAttributeEditor('metadata-part2','maxword');
+	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
 	//--------------------------------------
 	this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
 	if (name=='asmUnitStructure')
@@ -885,7 +886,6 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
 		this.displayMetadataWadAttributeEditor('metadata-part2','seltype');
 	}
-	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
 	//----------------------Search----------------------------
 	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
 		html  = "<label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
