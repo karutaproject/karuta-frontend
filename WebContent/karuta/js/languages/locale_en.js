@@ -94,7 +94,6 @@ karutaStr['en']['complex']="Partial Loading";
 karutaStr["en"]["button-print"] = "Print";
 karutaStr["en"]["write-mode"] = "Edit";
 
-
 //=========================================
 //========== ERRORS =======================
 //=========================================
@@ -152,6 +151,9 @@ karutaStr['en']['veriffunction']="Check Function";
 karutaStr['en']['menuroles']="Menus<br/><span style='font-size:smaller'> portfolio_code,semantic_tag,";
 karutaStr['en']['menuroles2']="label@en";
 karutaStr['en']['menuroles3']=",roles[;other menu]</span>";
+karutaStr['en']['menulabels']="Menu Button Text<br/><span style='font-size:smaller'>";
+karutaStr['en']['menulabels2']="label@en";
+karutaStr['en']['menulabels3']=",roles[;other label]</span>";
 karutaStr['en']['help']="Information <br/><span style='font-size:smaller'>";
 karutaStr['en']['help2']="Text in English@en";
 karutaStr['en']['help3']="</span>";
@@ -166,6 +168,8 @@ karutaStr['en']['width']="Width";
 karutaStr['en']['height']="Height";
 karutaStr['en']['public']="Public";
 karutaStr['en']['text-align']="Alignment";
+karutaStr['en']['displayview']="Display View";
+karutaStr['en']['margin-top']="Margin Top (px)";
 karutaStr['en']['sharedResource']="Shared Resource";
 karutaStr['en']['sharedNodeResource']="Shared Node Resource";
 karutaStr['en']['resizeroles']="Roles - Resize Image";
@@ -185,7 +189,9 @@ karutaStr['en']['moveinroles']="Roles - Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
 karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
-karutaStr['en']['node']="Node Content";
+karutaStr['en']['node']="Node";
+karutaStr['en']['node-content']="Node Content";
+karutaStr['en']['node-label']="Node Label";
 karutaStr['en']['resource']="Resource";
 karutaStr['en']['metadata']="Metadata";
 karutaStr['en']['css-styles']="CSS Styles";
@@ -223,6 +229,7 @@ karutaStr['en']['printroles']="Roles - Print";
 karutaStr['en']['duration']="Link Lifetime";
 karutaStr['en']['seestart']="See - Start Date";
 karutaStr['en']['seeend']="See - End Date";
+karutaStr['fr']['logcode']="Log - Code";
 
 //=========================================
 //========== ADMIN ========================
@@ -479,9 +486,9 @@ karutaStr['en']['URLBlock']="URLBlock";
 karutaStr['en']['ImageBlock']="ImageBlock";
 
 karutaStr['en']['Item']="Item";
-karutaStr['en']['GetResource']="GetResource";
-karutaStr['en']['GetGetResource']="GetGetResource";
-karutaStr['en']['GetDoubleResource']="GetDoubleResource";
+karutaStr['en']['Get_Resource']="Get_Resource";
+karutaStr['en']['Get_Get_Resource']="Get_Get_Resource";
+karutaStr['en']['Get_DoubleResource']="Get_DoubleResource";
 karutaStr['en']['Proxy']="Proxy";
 karutaStr['en']['Get_Proxy']="Get_Proxy";
 

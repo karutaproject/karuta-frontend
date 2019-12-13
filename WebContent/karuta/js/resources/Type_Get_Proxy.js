@@ -138,7 +138,7 @@ UIFactory["Get_Proxy"].update = function(selected_item,itself,lang,type)
 			dataType : "xml",
 			url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
 			success : function(data) {
-				UIFactory["Get_Proxy"].update2(data,itself,lang,type);
+				UIFactory["Get_Proxy"].update2(data,itself,lang,type,code);
 			}
 		});
 	}
@@ -154,7 +154,7 @@ UIFactory["Get_Proxy"].update = function(selected_item,itself,lang,type)
 
 };
 //==================================
-UIFactory["Get_Proxy"].update2 = function(data,itself,lang,type)
+UIFactory["Get_Proxy"].update2 = function(data,itself,lang,type,code)
 //==================================
 {
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
@@ -164,7 +164,6 @@ UIFactory["Get_Proxy"].update2 = function(data,itself,lang,type)
 		resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[0]); 
 	else
 		resource = $("asmResource[xsi_type='nodeRes']",nodes[0]);
-	var code = $(nodes[0]).attr("id");
 	$(itself.code_node).text(code);
 	for (var j=0; j<languages.length;j++){
 		var label = $("label[lang='"+languages[j]+"']",resource).text();

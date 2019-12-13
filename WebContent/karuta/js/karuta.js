@@ -1350,9 +1350,11 @@ function toggleMetadata(state) {
 //==================================
 	if (state=='hidden') {
 		changeCss(".metainfo", "display:none;");
+		changeCss(".cssinfo", "display:none;");
 		g_visible = 'hidden';
 	} else {
 		changeCss(".metainfo", "display:block;");
+		changeCss(".cssinfo", "display:block;");
 		g_visible = 'visible';
 	}
 	localStorage.setItem('metadata',g_visible);

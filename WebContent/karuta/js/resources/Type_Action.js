@@ -111,7 +111,7 @@ UIFactory["Action"].prototype.getView = function(dest,type,langcode)
 };
 
 //==================================
-UIFactory["Action"].prototype.displayView = function(dest,type,lang)
+UIFactory["Action"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
 	//---------------------

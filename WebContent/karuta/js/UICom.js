@@ -105,7 +105,7 @@ var UICom =
 						addnode = false;
 					}
 					if (addnode) {
-						UICom.structure["tree"][parentid].node.appendChild(root[0]);
+						UICom.structure["tree"][parentid].node.appendChild(root);
 					}
 				}
 			}
@@ -153,23 +153,23 @@ var UICom =
 								proxies_parent[targetid] = $(current).attr("id");
 								proxies_edit[targetid] = edittargetroles;
 								proxies_nodeid[targetid] = id;
-//								UICom.parseStructure(data,false,$(current).attr("id"));
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
 							}
 						});
 					}
 					if (resource_type=='Get_Proxy') {
-						var targetid = $("code",$("asmResource[xsi_type='Get_Proxy']",child)).text();
+						var targetid = $("value",$("asmResource[xsi_type='Get_Proxy']",child)).text();
+						var edittargetroles = ($("metadata-wad",child).attr('edittargetroles')==undefined)?'none':$("metadata-wad",child).attr('edittargetroles');
 						$.ajax({
 							type : "GET",
 							dataType : "xml",
 							url : serverBCK_API+"/nodes/node/" + targetid + "?resources=true",
 							success : function(data) {
-//								UICom.parseStructure(data,false,$(current).attr("id"));
+								proxies_data[targetid] = data;
+								proxies_parent[targetid] = $(current).attr("id");
+								proxies_edit[targetid] = edittargetroles;
+								proxies_nodeid[targetid] = id;
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
-							},
-							error : function(jqxhr,textStatus) {
-								alertHTML("Error in parseElement - Get_Proxy : "+jqxhr.responseText);
 							}
 						});
 					}

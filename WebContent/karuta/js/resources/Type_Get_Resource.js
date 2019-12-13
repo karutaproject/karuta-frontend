@@ -274,8 +274,8 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		
 		} else {	// ==== KARUTA =====
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
-				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
+//			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+//				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
 			if (portfoliocode=='self') {
 				portfoliocode = selfcode;
 				cachable = false;
@@ -512,6 +512,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		
 	}
 	//------------------------------------------------------------
+	//------------------------------------------------------------
 	if (type.indexOf('radio')>-1) {
 		//----------------- null value to erase
 		if (resettable) {
@@ -556,7 +557,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			}
 			code = cleanCode(code);
 			//------------------------------
-			input += "<input type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
+			input += "<div class='radio-div'><input type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
@@ -567,8 +568,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			}
 			if (code!="" && self_code==$('code',resource).text())
 				input += " checked ";
-			input += ">&nbsp;&nbsp;";
-			input += "<div  class='sel"+code+" radio-div'>"
+			input += "></div>";
+			input += "<div  class='sel"+code+" radio-label'>"
 			if (display_code)
 				input += code + " ";
 			if (display_label){

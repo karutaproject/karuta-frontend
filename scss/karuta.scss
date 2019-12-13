@@ -41,7 +41,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		cursor:pointer;
 		float:left;
 		margin-right:5px;
-		margin-top: 3px;
+		margin-top: 1px;
 		color:var(--portfolio-buttons-color);
 	}
 
@@ -168,7 +168,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 			width:100%;
 		}
 		.dropdown-toggle{
-			border: 1px solid var(--edit-window-border-color);
+//			border: 1px solid var(--edit-window-border-color);
 		}
 	}
 
@@ -546,10 +546,14 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	.asmUnit>div[name=lbl-div] {
 		background-color:var(--page-title-background-color);
 		min-height:6.25rem;
+		.title {
+			margin-bottom:0.5rem;
+			font-size:1.5rem;
+		}
 		.title-subline {
 			border-bottom:1px solid var(--page-title-subline-color);
-			margin-top:0.625rem;
 			width:50px;
+			margin-left:0.2rem;
 		}
 	}
 
@@ -571,65 +575,66 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 /*     SECTION TITLES     */
 /* ====================== */
 
-	.asmStructure .label-node:hover{
-		cursor:pointer;
-	}
-
-	.asmRoot .title {
-		font-size: 1.5rem;
-		line-height: 1.875rem;
-	}
+	.standard {
+		.asmStructure .label-node:hover{
+			cursor:pointer;
+		}
 	
+		.asmRoot .title {
+			font-size: 1.5rem;
+			line-height: 1.875rem;
+		}
+		
+		
+		.asmStructure .title {
+			font-size: 1.5rem;
+			line-height: 1.875rem;
+		}
+		
+		.asmStructure .asmStructure .title,
+		.asmRoot .asmStructure .title {
+			font-size: 1.2rem;
+			font-weight: normal;
+		}
+		
+		.asmUnit .title {
+			font-size: 1.5rem;
+			line-height: 1.875rem;
+		}
+		
+		.asmStructure .asmUnit .title,
+		.asmRoot .asmUnit .title {
+			font-size: 1.25rem;
+			font-weight: normal;
+			line-height: 1.5rem;
+		}
+		
+		.asmUnitStructure .title {
+			font-size: 1.25rem;
+			line-height: 1.5rem;
+		}
+		
+		.asmUnitStructure .asmUnitStructure .title {
+			font-size: 1rem;
+			line-height: 1.25rem;
+		}
+		
+		.asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+			font-size: 0.875rem;
+			line-height: 1.25rem;
+		}
+		
+		.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+			font-size: 0.75rem;
+			line-height: 1.25rem;
+		}
 	
-	.asmStructure .title {
-		font-size: 1.5rem;
-		line-height: 1.875rem;
-	}
-	
-	.asmStructure .asmStructure .title,
-	.asmRoot .asmStructure .title {
-		font-size: 1.2rem;
-		font-weight: normal;
-	}
-	
-	.asmUnit .title {
-		font-size: 1.5rem;
-		line-height: 1.875rem;
-	}
-	
-	.asmStructure .asmUnit .title,
-	.asmRoot .asmUnit .title {
-		font-size: 1.25rem;
-		font-weight: normal;
-		line-height: 1.5rem;
-	}
-	
-	.asmUnitStructure .title {
-		font-size: 1.25rem;
-		line-height: 1.5rem;
-	}
-	
-	.asmUnitStructure .asmUnitStructure .title {
-		font-size: 1rem;
-		line-height: 1.25rem;
-	}
-	
-	.asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-		font-size: 0.875rem;
-		line-height: 1.25rem;
-	}
-	
-	.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-		font-size: 0.75rem;
-		line-height: 1.25rem;
-	}
-
-	.resource-label {
-		.title {
-			font-size:inherit;
+		.resource-label {
+			.title {
+				font-size:inherit;
+			}
 		}
 	}
-
 
 /* ========================= */
 /*     VUE  STANDARD         */
@@ -848,7 +853,25 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 		font-size:0.875rem;
 	}
 
+	.node-model {
+		margin-bottom:10px;
+		.menus {
+			margin-top:-8px;
+		}
+	}
 
+	.model {
+		.inside-full {
+			padding:2px;
+			.title {
+				margin-top:6px;
+			}
+		}
+		div[name=cnt-div] {
+			margin-left:15px;
+		}
+	}
+	
 /* ============================ */
 /* ============================ */
 /* ============================ */
@@ -1591,7 +1614,7 @@ hr {
 		.input-group-text {
 			border: 0px solid var(--edit-window-border-color);
 			font-size:0.9rem;
-			width:180px;
+			width:250px;
 		}
 		.input-group {
 			margin-bottom:3px;
@@ -1770,12 +1793,21 @@ hr {
 
 }
 
-	.radio-div {
+	.get-radio {
+		margin-bottom:2px;	
+	}
+
+	.radio-div{
+		float:left;
+		padding:5px;
+	}
+
+	.radio-label {
 		display:inline-block;
 //		margin-left: 25px;
 //		margin-top: -19px;
 //		margin-bottom:2px;
-		width:fit-content;
+		max-width:90%;
 	}
 
 button.selected-label {
@@ -1825,11 +1857,16 @@ button.selected-label {
 	background-color:transparent;
 }
 
-.metainfo {
+.metainfo,
+.cssinfo {
 	color: #808080;
 	font-size: 10px;
 	font-weight: normal;
 	display:none;
+}
+
+.report .cssinfo {
+	display:block
 }
 
 #header .metainfo {
@@ -1915,7 +1952,7 @@ table.tablesorter th.restore {
    ====================*/
 
 #rights {
-	margin-left:180px;
+	margin-left:250px;
 	border: 1px solid lightgrey;
 	td{
 		padding:5px;

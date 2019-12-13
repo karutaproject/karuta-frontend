@@ -1,6 +1,12 @@
 /* ====================
 	Report Model
    ====================*/
+.portfoliocode {
+  margin-left: 10px;
+  font-style: italic;
+  font-size: 1rem;
+}
+
 .report-comment,
 .report-comment .collapsible,
 .report-comment .btn-default,
@@ -110,11 +116,12 @@
   min-height: 100px;
 }
 
-.report .select {
-  padding-left: 0px;
-  border-left: 0px solid lightGrey;
+/*
+.report .select{
+	padding-left:0px;
+	border-left:0px solid lightGrey;
 }
-
+*/
 .report .select select,
 .report .select input {
   margin-bottom: 0px;

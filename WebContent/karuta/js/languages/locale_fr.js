@@ -151,6 +151,9 @@ karutaStr['fr']['veriffunction']="Fonction de vérification";
 karutaStr['fr']['menuroles']="Menus<br/><span style='font-size:smaller'> code_portfolio,tag_sémantique,";
 karutaStr['fr']['menuroles2']="libellé@fr";
 karutaStr['fr']['menuroles3']=",rôles[;autre menu]</span>";
+karutaStr['fr']['menulabels']="Texte Bouton Menu<br/><span style='font-size:smaller'>";
+karutaStr['fr']['menulabels2']="libellé@fr";
+karutaStr['fr']['menulabels3']=",rôles[;autre libellé]</span>";
 karutaStr['fr']['help']="Information <br/><span style='font-size:smaller'>";
 karutaStr['fr']['help2']="texte en français@fr";
 karutaStr['fr']['help3']="</span>";
@@ -165,6 +168,8 @@ karutaStr['fr']['width']="Largeur";
 karutaStr['fr']['height']="Hauteur";
 karutaStr['fr']['public']="Public";
 karutaStr['fr']['text-align']="Alignement";
+karutaStr['fr']['displayview']="Type d'affichage";
+karutaStr['fr']['margin-top']="Marge supérieure (px)";
 karutaStr['fr']['sharedResource']="Ressource partagée";
 karutaStr['fr']['sharedNodeResource']="Ress. du noeud partagée";
 karutaStr['fr']['resizeroles']="Rôles - Changer taille img";
@@ -184,7 +189,9 @@ karutaStr['fr']['moveinroles']="Rôles - Déplacer";
 karutaStr['fr']['othercss']="Autres instructions CSS";
 karutaStr['fr']['cssfile']="Fichier CSS";
 karutaStr['fr']['display-type']="Type de présentation";
-karutaStr['fr']['node']="Contenu du noeud";
+karutaStr['fr']['node']="Noeud";
+karutaStr['fr']['node-content']="Contenu du noeud";
+karutaStr['fr']['node-label']="Libellé du noeud";
 karutaStr['fr']['resource']="Ressource";
 karutaStr['fr']['metadata']="Métadonnées";
 karutaStr['fr']['css-styles']="Styles CSS";
@@ -222,6 +229,7 @@ karutaStr['fr']['printroles']="Rôles - Imprimer";
 karutaStr['fr']['duration']="Durée de vie du lien  (en heures)";
 karutaStr['fr']['seestart']="Voir - Date début";
 karutaStr['fr']['seeend']="Voir - Date fin";
+karutaStr['fr']['logcode']="Log - Code";
 
 //=========================================
 //========== ADMIN ========================
@@ -479,9 +487,9 @@ karutaStr['fr']['URLBlock']="URLBlock";
 karutaStr['fr']['ImageBlock']="ImageBlock";
 
 karutaStr['fr']['Item']="Item";
-karutaStr['fr']['GetResource']="GetResource";
-karutaStr['fr']['GetGetResource']="GetGetResource";
-karutaStr['fr']['GetDoubleResource']="GetDoubleResource";
+karutaStr['fr']['Get_Resource']="Get_Resource";
+karutaStr['fr']['Get_Get_Resource']="Get_Get_Resource";
+karutaStr['fr']['Get_DoubleResource']="Get_DoubleResource";
 karutaStr['fr']['Proxy']="Proxy";
 karutaStr['fr']['Get_Proxy']="Get_Proxy";
 

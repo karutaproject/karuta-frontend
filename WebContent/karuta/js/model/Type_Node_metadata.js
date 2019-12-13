@@ -339,7 +339,7 @@ UIFactory["Node"].prototype.displayMetainfo = function(destid)
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'display');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'menuroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'notifyroles');
-	html += UIFactory.Node.getMetadataInfo(metadatawad,'graphicerroles');
+//	html += UIFactory.Node.getMetadataInfo(metadatawad,'graphicerroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'resizeroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'edittargetroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'showroles');
@@ -355,24 +355,62 @@ UIFactory["Node"].displayMetainfo = function(destid,data)  // for backward compa
 //==================================================
 {
 	var uuid = data.getAttribute("id");
-	UICom.structure["ui"][uuid].displayMetainfo(destid);
+	UICom.structure.ui[uuid].displayMetainfo(destid);
+};
+
+//==================================================
+UIFactory["Node"].prototype.displayMetaEpmInfo = function(destid)
+//==================================================
+{
+	var data = this.node;
+	var html = "";
+	html += UIFactory.Node.getMetadataEpmInfo(data,'cssclass');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'displayview');
+	//------------------------------------
+	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-margin-top');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-othercss');
+	//------------------------------------
+	html += UIFactory.Node.getMetadataEpmInfo(data,'node-font-weight');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'node-font-style');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'node-text-align');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'node-font-size');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'node-font-weight');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'node-color');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'node-padding-top');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'node-background-color');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'node-othercss');
+	//------------------------------------
+	html += UIFactory.Node.getMetadataEpmInfo(data,'font-weight');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'font-style');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'text-align');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'font-size');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'font-weight');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'color');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'padding-top');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'background-color');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'othercss');
+	//------------------------------------
+	html += UIFactory.Node.getMetadataEpmInfo(data,'inparent-font-weight');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'inparent-font-style');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'inparent-text-align');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'inparent-font-size');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'inparent-font-weight');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'inparent-color');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'inparent-padding-top');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'inparent-background-color');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'inparent-othercss');
+	//------------------------------------
+	if (html!="")
+		html = "CSS - " + html;
+	$("#"+destid).html(html);
 };
 
 //==================================================
 UIFactory["Node"].prototype.displayMetaEpmInfos = function(destid,data)
 //==================================================
 {
-	var html = "";
-	html += UIFactory["Node"].getMetadataEpmInfo(data,'node-font-weight');
-	html += UIFactory["Node"].getMetadataEpmInfo(data,'node-font-style');
-	html += UIFactory["Node"].getMetadataEpmInfo(data,'node-text-align');
-	html += UIFactory["Node"].getMetadataEpmInfo(data,'node-font-size');
-	html += UIFactory["Node"].getMetadataEpmInfo(data,'node-font-weight');
-	html += UIFactory["Node"].getMetadataEpmInfo(data,'node-color');
-	html += UIFactory["Node"].getMetadataEpmInfo(data,'node-padding-top');
-	html += UIFactory["Node"].getMetadataEpmInfo(data,'node-background-color');
-	html += UIFactory["Node"].getMetadataEpmInfo(data,'node-othercss');
-	$("#"+destid).html(html);
+	var uuid = data.getAttribute("id");
+	UICom.structure.ui[uuid].displayMetaEpmInfo(destid);
 };
 
 
@@ -496,7 +534,7 @@ UIFactory["Node"].prototype.displayMetadataWadAttributeEditor = function(destid,
 		html+= "></div>";
 	}
 	else if (attribute.indexOf('seltype')>-1){
-		var choices = [{code:'select',label:'Select'},{code:'radio',label:'Radio'},{code:'click',label:'click'},{code:'completion',label:'Auto-complete'}];
+		var choices = [{code:'select',label:'Select'},{code:'radio',label:'Radio'},{code:'click',label:'Click'},{code:'completion',label:'Auto-complete'}];
 		html += "<div class='input-group '>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+this.id+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";
@@ -662,7 +700,7 @@ UIFactory["Node"].prototype.displaySelectRole= function(destid,attribute,yes_no,
 		html += "			<a class='dropdown-item' value='' onclick=\"$('#"+attribute+nodeid+"').val('');$('#"+attribute+nodeid+"').change();\")>&nbsp;</a>";
 		//---------------------
 		for (role in UICom.roles) {
-			html += "		<a  class='dropdown-item' value='"+role+"' onclick=\"$('#"+attribute+nodeid+"').attr('value','"+role+"');$('#"+attribute+nodeid+"').change();\")>"+role+"</a>";
+			html += "		<a  class='dropdown-item' value='"+role+"' onclick=\"var v=$('#"+attribute+nodeid+"').val();$('#"+attribute+nodeid+"').val(v+' "+role+"');$('#"+attribute+nodeid+"').change();\")>"+role+"</a>";
 			rolesarray[rolesarray.length] = {'libelle':role};
 		}
 //		html += "		</div>";
@@ -827,7 +865,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','edittargetroles');
 	if (name=='asmContext' && this.resource.type=='Image')
 		this.displayMetadataWadAttributeEditor('metadata-part2','resizeroles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
+//	this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','moveroles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','showroles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','printroles');
@@ -837,6 +875,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	this.displayMetadataWadAttributeEditor('metadata-part2','editboxtitle');
 	if (name=='asmContext' && this.resource.type=='TextField')
 		this.displayMetadataWadAttributeEditor('metadata-part2','maxword');
+	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
 	//--------------------------------------
 	this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
 	if (name=='asmUnitStructure')
@@ -847,16 +886,15 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
 		this.displayMetadataWadAttributeEditor('metadata-part2','seltype');
 	}
-	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
 	//----------------------Search----------------------------
 	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
-		html  = "<hr><label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
+		html  = "<label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','query');
 	}
 	//----------------------Share----------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
-		html  = "<hr><label>"+karutaStr[languages[langcode]]['shareroles'];
+		html  = "<label>"+karutaStr[languages[langcode]]['shareroles'];
 		if (languages.length>1){
 			var first = true;
 			for (var i=0; i<languages.length;i++){
@@ -874,7 +912,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	}
 	//----------------------Menu----------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
-		html  = "<hr><label>"+karutaStr[languages[langcode]]['menuroles'];
+		//-----------------------
+		html  = "<label>"+karutaStr[languages[langcode]]['menuroles'];
 		if (languages.length>1){
 			var first = true;
 			for (var i=0; i<languages.length;i++){
@@ -889,9 +928,26 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		html += karutaStr[languages[langcode]]['menuroles3']+"</label>";
 		$('#metadata_texts').append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menuroles');
+		//-----------------------
+		html  = "<label>"+karutaStr[languages[langcode]]['menulabels'];
+		if (languages.length>1){
+			var first = true;
+			for (var i=0; i<languages.length;i++){
+				if (!first)
+					html += "/";
+				html += karutaStr[languages[i]]['menulabels2'];
+				first = false;
+			}
+		} else {
+			html += karutaStr[languages[langcode]]['menulabels2'];
+		}
+		html += karutaStr[languages[langcode]]['menulabels3']+"</label>";
+		$("#metadata_texts").append($(html));
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menuroles');
+		//-----------------------
 	}
 	//------------------------Help-------------------------
-	html = "<br><hr><label>"+karutaStr[languages[langcode]]['help'];
+	html = "<br><label>"+karutaStr[languages[langcode]]['help'];
 	if (languages.length>1){
 		var first = true;
 		for (var i=0; i<languages.length;i++){
@@ -1043,6 +1099,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid)
 //==================================================
 {
+	var name = this.asmtype;
 	var userrole = $(this.node).attr('role');
 	if (userrole==undefined || userrole=='')
 		userrole = "norole";
@@ -1054,25 +1111,22 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		html += "<form id='metadata-epm' class='metadata'>";
 		html += "	<div id='metadata-epm-root'></div>";
 		html += "	<div id='metadata-epm-part1'></div>"
-		html += "<h4>"+karutaStr[languages[langcode]]['node']+"</h4>";
+		html += "<h5>"+karutaStr[languages[langcode]]['node']+"</h5>";
 		html += "	<div id='metadata-epm-node'></div>";
-		html += "<h4>"+karutaStr[languages[langcode]]['node-label']+"</h4>";
+		html += "<h5>"+karutaStr[languages[langcode]]['node-label']+"</h5>";
 		html += "	<div id='metadata-epm-label'></div>";
 		if (name=='asmContext') 
-			html += "<hr><h4>"+karutaStr[languages[langcode]]['resource']+"</h4>";
+			html += "<hr><h5>"+karutaStr[languages[langcode]]['resource']+"</h5>";
 		else
-			html += "<h4>"+karutaStr[languages[langcode]]['node-content']+"</h4>";
+			html += "<h5>"+karutaStr[languages[langcode]]['node-content']+"</h5>";
 		html += "	<div id='metadata-node-resource'></div>";
 		if (name=='asmStructure' || name=='asmUnit') {
-			html += "<hr><h4>"+karutaStr[languages[langcode]]['inparent']+"</h4>";
+			html += "<hr><h5>"+karutaStr[languages[langcode]]['inparent']+"</h5>";
 			html += "	<div id='metadata-inparent'></div>";
 		}
 		html += "</form>";
 		$("#"+destid).append($(html));
-		//---------------------------------------------------
-		//---------------------
-		var name = this.asmtype;
-			//----------------------------------
+		//----------------------------------
 		if (USER.admin || g_userroles[0]=='designer' || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(userrole)>-1) {
 			if (name=='asmRoot') {
 				this.displayMetadataDisplayTypeAttributeEditor('metadata-epm-root','display-type');
@@ -1108,7 +1162,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-othercss',$(this.metadataepm).attr('node-othercss'));
 		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-color',$(this.metadataepm).attr('node-color'));
 		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-background-color',$(this.metadataepm).attr('node-background-color'));
-	//----------------------------------
+		//----------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-inparent','inparent-font-weight',$(this.metadataepm).attr('inparent-font-weight'));
 		this.displayMetadataEpmAttributeEditor('metadata-inparent','inparent-font-style',$(this.metadataepm).attr('inparent-font-style'));
 		this.displayMetadataEpmAttributeEditor('metadata-inparent','inparent-text-align',$(this.metadataepm).attr('inparent-text-align'));
@@ -1181,7 +1235,7 @@ UIFactory["Node"].updateMetadataEpmAttribute = function(nodeid,attribute,value,c
 		refresh = false;
 	UICom.UpdateMetaEpm(nodeid,refresh);
 	if (g_userroles[0]=='designer' || USER.admin) {  
-		UICom.structure["ui"][nodeid].displayMetaEpmInfos("metaepm_"+nodeid);
+		UICom.structure["ui"][nodeid].displayMetaEpmInfo("metaepm_"+nodeid);
 	}
 
 };
@@ -1210,7 +1264,7 @@ UIFactory["Node"].updateMetadataEpmSelectAttribute = function(nodeid,attribute,s
 	$($("metadata-epm",node)[0]).attr(attribute,value);
 	UICom.UpdateMetaEpm(nodeid,refresh);
 	if (g_userroles[0]=='designer' || USER.admin) {  
-		UICom.structure["ui"][nodeid].displayMetaEpmInfos("metaepm_"+nodeid);
+		UICom.structure["ui"][nodeid].displayMetaEpmInfo("metaepm_"+nodeid);
 	}
 };
 

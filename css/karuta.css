@@ -1665,7 +1665,8 @@ button.selected-label {
   background-color: transparent;
 }
 
-.metainfo {
+.metainfo,
+.cssinfo {
   color: #808080;
   font-size: 10px;
   font-weight: normal;

@@ -203,6 +203,16 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 	var no_monomenu = 0;
 	try {
 		if ((this.depth>0 || this.asmtype == 'asmUnitStructure') && this.menuroles != undefined && this.menuroles.length>10 && (this.menuroles.indexOf(userrole)>-1 || (this.menuroles.containsArrayElt(g_userroles) && this.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
+			//--------------------------------
+			var mlabels = [];
+			var labelitems = this.menulabels.split(";");
+			for (var i=0; i<labelitems.length; i++){
+				var subitems = labelitems[i].split(",");
+				mlabels[i] = [];
+				mlabels[i][0] = subitems[0]; // label
+				mlabels[i][1] = subitems[1]; // roles
+			}
+			//--------------------------------
 			var menus = [];
 			var displayMenu = false;
 			var items = this.menuroles.split(";");
@@ -254,7 +264,32 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				//-----------------------
 				html += "<div class='dropdown'>";
 				html += "	<button class='btn dropdown-toggle' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-				html += 		karutaStr[languages[langcode]]['menu'];
+				//-----------
+				if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
+					for (var i=0; i<mlabels.length; i++){
+						if (mlabels[i][1].indexOf(userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
+							var titles = [];
+							var title = "";
+							try {
+								titles = mlabels[i][0].split("/");
+								if (mlabels[i][0].indexOf("@")>-1) { // lang@fr/lang@en/...
+									for (var j=0; j<titles.length; j++){
+										if (titles[j].indexOf("@"+languages[langcode])>-1)
+											title = titles[j].substring(0,titles[j].indexOf("@"));
+									}
+								} else { // lang1/lang2/...
+									title = titles[langcode];  // lang1/lang2/...
+								}
+							} catch(e){
+								title = mlabels[i][0];
+							}
+							html += title;
+						}
+					}
+				} else {
+						html += karutaStr[languages[langcode]]['menu'];
+				}
+				//-----------
 				html += "	</button>";
 				html += "	<div class='dropdown-menu dropdown-menu-right' aria-labelledby='specific_"+this.id+"'>";
 				//-----------------------
@@ -357,7 +392,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		try {
 			var shares = [];
 			var displayShare = [];
-			var items = shareroles.split(";");
+			var items = this.shareroles.split(";");
 			for (var i=0; i<items.length; i++){
 				var subitems = items[i].split(",");
 				shares[i] = [];
@@ -394,7 +429,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					var shareduration = shares[i][4];
 					var sharelabel = shares[i][5];
 					var shareoptions = (shares[i].length>7) ? shares[i][7] : "";
-					if (shareto!='' && shareroles.indexOf('2world')<0) {
+					if (shareto!='' && this.shareroles.indexOf('2world')<0) {
 						if (shareto!='?' && shareduration!='?' && shareoptions!="") {
 							var sharetoemail = "";
 							var sharetoroles = "";
@@ -405,7 +440,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 								else
 									sharetoroles += sharetos[k]+" ";
 							}
-							var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
+							var js = "sendSharingURL('"+this.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -431,7 +466,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 							} else {
 								sharetoemail = shareto;
 							}
-							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
+							var js = "getSendSharingURL('"+this.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
 //							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
@@ -446,10 +481,10 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 							}
 						}
 					} else {
-						if (shareroles.indexOf('2world')>-1) {
-							html_toadd = "<span id='2world-"+node.id+"'></span>";
+						if (this.shareroles.indexOf('2world')>-1) {
+							html_toadd = "<span id='2world-"+this.id+"'></span>";
 						} else {
-							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"','"+shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
+							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+this.id+"','"+this.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
 						}
 					}
 					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))
