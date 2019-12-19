@@ -103,7 +103,7 @@ UIFactory["Proxy"].prototype.getView = function(dest,type,langcode)
 };
 
 //==================================
-UIFactory["Proxy"].prototype.displayView = function(dest,type,lang)
+UIFactory["Proxy"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
 	//---------------------

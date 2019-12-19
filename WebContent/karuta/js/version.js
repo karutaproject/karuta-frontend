@@ -1,5 +1,5 @@
-var karuta_version = "2.4.1-b5";
-var karuta_date = "2019-11-28";
+var karuta_version = "2.4.1-b6";
+var karuta_date = "2019-12-04";
 
 var karuta_backend_version = "?";
 var karuta_backend_date = "?";
