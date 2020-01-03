@@ -35,6 +35,7 @@ UIFactory["Calendar"] = function( node )
 	//--------------------
 	this.minViewMode_node = $("minViewMode",$("asmResource[xsi_type='Calendar']",node));
 	this.text_node = [];
+	this.user_node = $("user",$("asmResource[xsi_type='Field']",node));
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
 		if (this.text_node[i].length==0) {
@@ -242,7 +243,11 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 UIFactory["Calendar"].prototype.save = function()
 //==================================
 {
+	if (UICom.structure.ui[this.id].logcode!="")
+		$(this.user_node).text(USER.firstname+" "+USER.lastname);
 	UICom.UpdateResource(this.id,writeSaved);
+	if (UICom.structure.ui[this.id].logcode!="")
+		UICom.structure.ui[this.id].log();
 	this.refresh();
 };
 

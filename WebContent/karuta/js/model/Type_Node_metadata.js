@@ -841,10 +841,13 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
 	this.displayMetadataDateAttributeEditor('see-calendar','seestart');
 	this.displayMetadataDateAttributeEditor('see-calendar','seeend');
-	this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles');
+	if (name=='asmRoot')
+		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles',false,true);
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles');
 	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && this.structured_resource==null)	{
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles',false,true);
-		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',true,true);
+		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',false,true);
 	}
 	else {
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles');
@@ -857,8 +860,14 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
-	this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles');
+	if (name=='asmRoot')
+		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles',false,true);
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles');
+	if (name=='asmRoot')
+		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',false,true);
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles');
 	if (semtag=='bubble_level1')
 		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles');
 	if (this.resource_type=='Proxy')
@@ -866,7 +875,10 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (name=='asmContext' && this.resource.type=='Image')
 		this.displayMetadataWadAttributeEditor('metadata-part2','resizeroles');
 //	this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','moveroles');
+	if (name=='asmRoot')
+		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles',false,true);
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','showroles');
 	this.displayMetadataWadAttributeEditor('metadata-part2','printroles');
 //	if ($(this.metadatawad).attr('showroles')!='')
