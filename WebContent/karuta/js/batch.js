@@ -2232,7 +2232,7 @@ g_actions['update-proxy'] = function update_proxy(node)
 			if (sources.length>1) {
 				for (var i=0;i<sources.length;i++){
 					var semtag = $("metadata",sources[i]).attr('semantictag');
-					if (semtag.indexOf('proxy-')>-1)
+					if (semtag.indexOf('proxy-')<0)
 						sourceid = $(sources[i]).attr('id');
 				}
 			} else
