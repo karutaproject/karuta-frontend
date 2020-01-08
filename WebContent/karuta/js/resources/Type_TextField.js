@@ -249,6 +249,15 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 				'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},
 				'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},
 				'blur': function(){clearInterval(currentTexfieldInterval);}
+			},
+			parserRules: {
+				classes: {
+					"style": 1,
+					"class": 1
+				}
+			},
+			tags: {
+				span: {}
 			}
 		}
 	);
@@ -315,7 +324,7 @@ function getFirstWords(html,nb) {
 //==================================
 function markFirstWords(html,nb) {
 //==================================
-	var text = html.replace("<span class='toomuch'><i>","").replace("</i></span><!--toomuch-->","").replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	var text = html.replace("<span class='toomuch'><i style='color:red'>","").replace("</i></span><!--toomuch-->","").replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
 	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
 	var tableIndex = [];
 	var end = 0;
@@ -323,5 +332,5 @@ function markFirstWords(html,nb) {
 		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
 		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
 	}
-	return html.substring(0,tableIndex[tableOfWords.length-1].end) + "<span class='toomuch'><i>" + html.substring(tableIndex[tableOfWords.length-1].end)+"</i></span><!--toomuch-->";
+	return html.substring(0,tableIndex[tableOfWords.length-1].end) + "<span class='toomuch'><i style='color:red'>" + html.substring(tableIndex[tableOfWords.length-1].end)+"</i></span><!--toomuch-->";
 }

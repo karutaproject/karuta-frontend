@@ -230,59 +230,13 @@ h3 {
 /* ====================== */
 /*      PORTFOLIO         */
 /* ====================== */
-#portfolio-container {
-  background-color: var(--main-background-color);
-}
 #portfolio-container .dropdown-menu {
   color: black;
-  background-color: var(--main-background-color);
 }
 #portfolio-container .row {
   margin-left: 0px;
 }
 
-/* ====================== */
-/*   PORTFOLIO SUBBAR     */
-/* ====================== */
-#sub-bar .navbar {
-  background-color: var(--sub-bar-background-color);
-  color: var(--sub-bar-color);
-}
-#sub-bar .icon {
-  margin-top: 4px;
-}
-#sub-bar a {
-  color: var(--portfolio-navbar-link-color);
-}
-#sub-bar .dropdown-menu,
-#sub-bar .open > a {
-  background-color: var(--portfolio-navbar-color);
-  border-color: var(--portfolio-navbar-color);
-}
-#sub-bar ul.navbar-nav {
-  text-align: right;
-}
-
-/*
-
-#sub-bar .welcome-title {
-    color: var(--welcome-title-color);
-    font-size: 120%;
-    text-align: center;
-    width: 100%;
-}
-
-#sub-bar .welcome-line {
-    margin-left: auto;
-    margin-right: auto;
-    width: 25%;
-}
-
-#sub-bar  .welcome-baseline, #sub-bar  .welcome-text{
-	padding:10px;
-	width:100%;
-}
-*/
 /* ====================== */
 /*      BREADCRUMB        */
 /* ====================== */
@@ -297,35 +251,13 @@ h3 {
 /* ====================== */
 /*      SIDEBAR           */
 /* ====================== */
-/*
-.panel-default > .panel-heading {
-	background-color:transparent;
-}
-
-.panel-default,
-.panel-default > .panel-heading {
-	border-color:transparent;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0);
-	padding-left:0px;
-	padding-top:0px;
-	padding-bottom:0px;
-}
-*/
-#sidebar {
-  background-color: var(--portfolio-sidebar-color);
-}
 #sidebar li.selected ul.nested {
   display: block;
-}
-#sidebar li.selected ul.nested li.selected a {
-  background-image: none;
-  color: #000;
 }
 #sidebar li.nested {
   text-indent: 15px;
 }
 #sidebar .number {
-  color: #aaa;
   float: right;
   font-size: 11px;
   font-weight: normal;
@@ -342,7 +274,6 @@ h3 {
 }
 
 .sidebar-item {
-  border-bottom: 1px solid var(--portfolio-sidebar-separator-color);
   padding-left: 15px;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -357,21 +288,7 @@ h3 {
 
 .sidebar-link {
   padding-right: 9px;
-  color: var(--portfolio-sidebar-link-color);
 }
-.sidebar-link a {
-  color: var(--portfolio-sidebar-link-color);
-}
-.sidebar-link .selected {
-  border-right: 4px solid var(--portfolio-sidebar-selected-border-color);
-}
-
-.selected a,
-.sidebar-link a:hover,
-a.sidebar-link:hover {
-  color: var(--portfolio-sidebar-link-selected-color);
-}
-
 /*
 .panel-body{
 	padding-top:0px;
