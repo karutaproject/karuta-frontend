@@ -2229,7 +2229,14 @@ g_actions['update-proxy'] = function update_proxy(node)
 			} else {							// get by code and semtag
 				sources = $("node",data);
 			}
-			sourceid = $(sources[0]).attr('id');
+			if (sources.length>1) {
+				for (var i=0;i<sources.length;i++){
+					var semtag = $("metadata",sources[i]).attr('semantictag');
+					if (semtag.indexOf('proxy-')>-1)
+						sourceid = $(sources[i]).attr('id');
+				}
+			} else
+				sourceid = $(sources[0]).attr('id');
 		},
 		error : function(data) {
 			$("#batch-log").append("<br>- ***SOURCE NOT FOUND <span class='danger'>ERROR</span>");
