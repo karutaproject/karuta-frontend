@@ -1602,8 +1602,9 @@ function setCSSportfolio(data)
 	//-----------NAVBAR------------------------------------
 	var portfolio_navbar_color = g_configVar['config-portfolio-navbar-background-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-navbar-background-color'])",data).length>0) {
-		var portfolio_navbar_id = $("asmContext:has(metadata[semantictag='portfolio-navbar-background-color'])",data).attr("id");
-		portfolio_navbar_color = UICom.structure["ui"][portfolio_navbar_id].resource.getValue();
+		portfolio_navbar_color = getText('portfolio-navbar-background-color','Color','text',data);
+//		var portfolio_navbar_id = $("asmContext:has(metadata[semantictag='portfolio-navbar-background-color'])",data).attr("id");
+//		portfolio_navbar_color = UICom.structure["ui"][portfolio_navbar_id].resource.getValue();
 	}
 	changeCss("#sub-bar", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
 	changeCss("#sub-bar .dropdown-menu", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
@@ -1612,8 +1613,7 @@ function setCSSportfolio(data)
 	//-----------
 	var portfolio_navbar_link_color = g_configVar['config-portfolio-navbar-text-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).length>0) {
-		var portfolio_navbar_text_id = $("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).attr("id");
-		portfolio_navbar_text_color = UICom.structure["ui"][portfolio_navbar_text_id].resource.getValue();
+		portfolio_navbar_text_color = getText('portfolio-navbar-link','Color','text',data);
 	}
 	changeCss("#sub-bar a", "color:"+portfolio_navbar_link_color+";");
 	changeCss("#toggle-mode", "color:"+portfolio_navbar_link_color+";");
@@ -1621,23 +1621,20 @@ function setCSSportfolio(data)
 	//-----------SIDEBAR------------------------------------
 	var portfolio_sidebar_color = g_configVar['config-sidebar-background-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).length>0) {
-		var portfolio_sidebar_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).attr("id");
-		portfolio_sidebar_color = UICom.structure["ui"][portfolio_sidebar_id].resource.getValue();
+		portfolio_sidebar_color = getText('portfolio-sidebar','Color','text',data);
 	}
 	changeCss("#sidebar", "background-color:"+portfolio_sidebar_color+";");
 	//--------------------------------
 	var portfolio_sidebar_link_color = g_configVar['config-sidebar-text-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).length>0) {
-		var portfolio_sidebar_link_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).attr("id");
-		portfolio_sidebar_link_color = UICom.structure["ui"][portfolio_sidebar_link_id].resource.getValue();
+		portfolio_sidebar_link_color = getText('portfolio-sidebar-link','Color','text',data);
 	}
 	changeCss(".sidebar-link", "color:"+portfolio_sidebar_link_color+";padding-right:9px;");
 	changeCss(".sidebar-link a", "color:"+portfolio_sidebar_link_color+";");
 	//--------------------------------
 	var portfolio_sidebar_link_selected_color = g_configVar['config-sidebar-selected-text-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).length>0) {
-		var portfolio_sidebar_link_selected_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).attr("id");
-		portfolio_sidebar_link_selected_color = UICom.structure["ui"][portfolio_sidebar_link_selected_id].resource.getValue();								
+		portfolio_sidebar_link_selected_color = getText('portfolio-sidebar-link-selected','Color','text',data);						
 	}
 	changeCss(".selected a", "color:"+portfolio_sidebar_link_selected_color+";font-weight:bold;");
 	changeCss(".sidebar-link a:hover", "color:"+portfolio_sidebar_link_selected_color+";");
@@ -1645,15 +1642,13 @@ function setCSSportfolio(data)
 	//--------------------------------
 	var portfolio_sidebar_selected_border_color = g_configVar['config-sidebar-selected-border-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-selected-border'])",data).length>0) {
-		var portfolio_sidebar_selected_border_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-selected-border'])",data).attr("id");
-		portfolio_sidebar_selected_border_color = UICom.structure["ui"][portfolio_sidebar_selected_border_id].resource.getValue();
+		portfolio_sidebar_selected_border_color = getText('portfolio-sidebar-selected-border','Color','text',data);
 	}
 	changeCss("#sidebar .selected", "border-right:4px solid "+portfolio_sidebar_selected_border_color+";");
 	//--------------------------------
 	var portfolio_sidebar_separator_color = g_configVar['config-sidebar-separator-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).length>0) {
-		var portfolio_sidebar_separator_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).attr("id");
-		portfolio_sidebar_separator_color = UICom.structure["ui"][portfolio_sidebar_separator_id].resource.getValue();								
+		portfolio_sidebar_separator_color = getText('portfolio-sidebar-separator','Color','text',data);								
 	}
 	changeCss(".sidebar-item", "border-bottom:1px solid "+portfolio_sidebar_separator_color+";");
 	changeCss(".sidebar-item .sidebar-item", "border-bottom:0px solid "+portfolio_sidebar_separator_color+";");
