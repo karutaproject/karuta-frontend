@@ -867,7 +867,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (name=='asmRoot')
 		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',false,true);
 	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles');
+		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',true);
 	if (semtag=='bubble_level1')
 		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles');
 	if (this.resource_type=='Proxy')
@@ -889,7 +889,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','maxword');
 	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
 	//--------------------------------------
-	this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
+	if (name!='asmRoot')
+		this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
 	if (name=='asmUnitStructure')
 		this.displayMetadataWadAttributeEditor('metadata-part2','collapsible',true);
 	if (name=='asmContext' && this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL' && this.resource.type!='Oembed')

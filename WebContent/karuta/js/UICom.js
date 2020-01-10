@@ -361,6 +361,7 @@ var UICom =
 		$(resource).removeAttr("contextid");
 		$(resource).removeAttr("modified");
 		var data = xml2string(resource);
+		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 		var urlS = serverBCK_API+'/resources/resource/'+uuid;
 		if (delfile!=null && delfile)
 			urlS += "?delfile=true";
@@ -369,7 +370,7 @@ var UICom =
 			dataType : "text",
 			contentType: "application/xml",
 			url : urlS,
-			data : data,
+			data : strippeddata,
 			success : function (data){
 				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 				if (cb1!=undefined && jQuery.isFunction(cb1))
@@ -403,8 +404,8 @@ var UICom =
 			$(res).removeAttr("contextid");
 			$(res).removeAttr("modified");
 			var type = $(res).attr("xsi_type");
-			data = xml2string(res);
-			strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			var data = xml2string(res);
+			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 			/// nodeRes content
 			if( "nodeRes" == type ) {
 				UICom.query("PUT",serverBCK_API+'/nodes/node/'+uuid+'/noderesource',writeSaved,"text",strippeddata);

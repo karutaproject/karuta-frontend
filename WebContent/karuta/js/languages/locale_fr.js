@@ -230,6 +230,7 @@ karutaStr['fr']['duration']="Durée de vie du lien (en heures)";
 karutaStr['fr']['seestart']="Voir - Date début";
 karutaStr['fr']['seeend']="Voir - Date fin";
 karutaStr['fr']['logcode']="Code Log";
+karutaStr['fr']['alt']="Texte alternatif";
 
 //=========================================
 //========== ADMIN ========================
