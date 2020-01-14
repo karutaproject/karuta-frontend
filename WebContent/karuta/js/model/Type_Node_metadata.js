@@ -807,6 +807,10 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	html += "</form>";
 	$("#"+destid).append($(html));
 	//---------------------------------------------------
+	var rights = this.getRights(this.id);
+	var roles = $("role",rights);
+	var model = roles.length==0;
+	//---------------------------------------------------
 	var name = this.asmtype;
 	var semtag =  ($("metadata",this.node)[0]==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
 	if (semtag==undefined) // for backward compatibility - node without semantic tag
@@ -838,14 +842,17 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	}
 	if (USER.admin)
 		this.displayRights('metadata-rights');
-	this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles',false,true);
 	this.displayMetadataDateAttributeEditor('see-calendar','seestart');
 	this.displayMetadataDateAttributeEditor('see-calendar','seeend');
-	if (name=='asmRoot')
+	if (name=='asmRoot' || !model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles',false,true);
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles');
-	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && this.structured_resource==null)	{
+	if ((!model || name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && this.structured_resource==null)	{
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles',false,true);
 		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',false,true);
 	}
@@ -853,37 +860,61 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles');
 		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
 	}
-	this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
-	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure')
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles',false,true);
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles',false,true);
+	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitall',true);
-	this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
-	if (name=='asmRoot')
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles',false,true);
+	
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles',false,true);
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',false,true);
+	if (name=='asmRoot' || !model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles',false,true);
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles');
-	if (name=='asmRoot')
+	if (name=='asmRoot' || !model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',false,true);
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',true);
-	if (semtag=='bubble_level1')
+	if (semtag=='bubble_level1' && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles');
-	if (this.resource_type=='Proxy')
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles',false,true);
+	if (this.resource_type=='Proxy' && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','edittargetroles');
-	if (name=='asmContext' && this.resource.type=='Image')
+	if (name=='asmContext' && this.resource.type=='Image' && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','resizeroles');
 //	this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
-	if (name=='asmRoot')
+	if (name=='asmRoot' || !model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles',false,true);
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','showroles');
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','showroles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','showroles',false,true);
 	this.displayMetadataWadAttributeEditor('metadata-part2','printroles');
 //	if ($(this.metadatawad).attr('showroles')!='')
 //		this.displayMetadataWadAttributeEditor(this.id,'private',$(this.metadatawad).attr('private'),true);
-	this.displayMetadataWadAttributeEditor('metadata-part2','showtoroles');
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','showtoroles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','showtoroles',false,true);
 	this.displayMetadataWadAttributeEditor('metadata-part2','editboxtitle');
 	if (name=='asmContext' && this.resource.type=='TextField')
 		this.displayMetadataWadAttributeEditor('metadata-part2','maxword');
