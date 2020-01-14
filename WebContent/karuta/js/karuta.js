@@ -1634,7 +1634,7 @@ function setCSSportfolio(data)
 	//--------------------------------
 	var portfolio_sidebar_link_selected_color = g_configVar['config-sidebar-selected-text-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).length>0) {
-		portfolio_sidebar_link_selected_color = getText('portfolio-sidebar-link-selected','Color','text',data);						
+		portfolio_sidebar_link_selected_color = getText('portfolio-sidebar-link-selected','Color','text',data);
 	}
 	changeCss(".selected a", "color:"+portfolio_sidebar_link_selected_color+";font-weight:bold;");
 	changeCss(".sidebar-link a:hover", "color:"+portfolio_sidebar_link_selected_color+";");
@@ -1648,23 +1648,23 @@ function setCSSportfolio(data)
 	//--------------------------------
 	var portfolio_sidebar_separator_color = g_configVar['config-sidebar-separator-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).length>0) {
-		portfolio_sidebar_separator_color = getText('portfolio-sidebar-separator','Color','text',data);								
+		portfolio_sidebar_separator_color = getText('portfolio-sidebar-separator','Color','text',data);
 	}
 	changeCss(".sidebar-item", "border-bottom:1px solid "+portfolio_sidebar_separator_color+";");
 	changeCss(".sidebar-item .sidebar-item", "border-bottom:0px solid "+portfolio_sidebar_separator_color+";");
 
 
 	//-----------PORTFOLIO COLORS------------------------------------
+	var page_title_background_color = g_configVar['config-page-title-background-color'];
 	if ($("asmContext:has(metadata[semantictag='page-title-background-color'])",data).length>0) {
-		var page_title_background_color_id = $("asmContext:has(metadata[semantictag='page-title-background-color'])",data).attr("id");
-		var page_title_background_color = UICom.structure["ui"][page_title_background_color_id].resource.getValue();
-		changeCss(".welcome-line,.row-node-asmRoot,.row-node-asmStructure,.row-node-asmUnit", "background-color:"+page_title_background_color+";");
-		changeCss(".row-node", "border-top:1px solid "+page_title_background_color+";");
+		page_title_background_color = getText('page-title-background-color','Color','text',data);
 	}
+	changeCss(".welcome-line,.row-node-asmRoot,.row-node-asmStructure,.row-node-asmUnit", "background-color:"+page_title_background_color+";");
+	changeCss(".row-node", "border-top:1px solid "+page_title_background_color+";");
 	//--------------------------------
+	var text_color = g_configVar['config-text-color'];
 	if ($("asmContext:has(metadata[semantictag='text-color'])",data).length>0) {
-		var text_color_id = $("asmContext:has(metadata[semantictag='text-color'])",data).attr("id");
-		var text_color = UICom.structure["ui"][text_color_id].resource.getValue();
+		text_color = getText('text-color','Color','text',data);
 		changeCss("#contenu", "color:"+text_color+";");
 	}
 	//--------------------------------
