@@ -61,9 +61,11 @@ UIFactory["Node"] = function( node )
 		this.resource_type = null;
 		this.resource = null;
 		if (this.asmtype=='asmContext') {
+			flag_error = 'e';
 			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",node);
 			this.resource_type = $(resource).attr("xsi_type");
 			this.resource = new UIFactory[this.resource_type](node);
+			flag_error = 'f';
 		}
 		//------------------------------
 		this.context = $("asmResource[xsi_type='context']",node);
@@ -1037,32 +1039,6 @@ UIFactory["Node"].prototype.log = function()
 				url : urlS,
 				data : "",
 				success :{
-/**
- * 		var nodeid = $(nodes[0]).attr('id');
-		var metadata = $("metadata",nodes[0]);
-		$(metadata).attr(attribute,text);
-		var xml = xml2string(metadata[0]);
-		nodes = nodes.slice(1,nodes.length);
-		$.ajax({
-			async : false,
-			type : "PUT",
-			contentType: "application/xml",
-			dataType : "text",
-			data : xml,
-			nodeid : nodeid,
-			semtag : semtag,
-			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
-			success : function(data) {
-				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag);
-				updateMetada(nodes,node,type,semtag,text,attribute)
-			},
-			error : function(data,nodeid,semtag) {
-				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadata("+this.nodeid+") - semtag="+this.semtag);
-				updateMetada(nodes,node,type,semtag,text,attribute);
-			}
-		});
-
- */
 				},
 				error : function(jqxhr,textStatus) {
 					alert("Error in Node.log "+textStatus+" : "+jqxhr.responseText);
@@ -1496,9 +1472,8 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 	//-----------------------------------
 	if (this.edit) {
 		//------------ edit button ---------------------
-		//if ((!inline && ( (writenode && !incrementroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer' )) || (inline && ((USER.admin || g_userroles[0]=='designer') && (!editnoderoles.containsArrayElt(g_userroles) && !editresroles.containsArrayElt(g_userroles))))) {
 		if (
-					(!this.inline && ( 	(this.writenode && !this.incrementroles.containsArrayElt(g_userroles) && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
+					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
 									|| USER.admin
 									|| g_userroles[0]=='designer' 
 								)

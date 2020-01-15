@@ -263,7 +263,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			if (displayMenu && !monomenu) {
 				//-----------------------
 				html += "<div class='dropdown'>";
-				html += "	<button class='btn dropdown-toggle' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+				html += "	<button class='btn dropdown-toggle add-button' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 				//-----------
 				if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
 					for (var i=0; i<mlabels.length; i++){

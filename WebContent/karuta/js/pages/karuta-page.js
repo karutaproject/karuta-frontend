@@ -169,6 +169,8 @@ function setConfigurationVariables()
 			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
 			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data);
+			g_configVar['navbar-display-mailto'] = getText('navbar-display-mailto','Get_Resource','value',data);
+			g_configVar['navbar-display-language'] = getText('navbar-display-language','Get_Resource','value',data);
 			//----------------------
 			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
 			//----------------------
@@ -188,6 +190,17 @@ function setConfigurationVariables()
 			g_configVar['list-title-color'] = getText('config-list-title-color','Color','text',data);
 			g_configVar['list-button-background-color'] = getText('config-list-button-background-color','Color','text',data);
 			g_configVar['list-button-text-color'] = getText('config-list-button-text-color','Color','text',data);
+			//--------- Portfolios which have not configuration page -------------
+			g_configVar['config-portfolio-navbar-background-color'] = getText('config-portfolio-navbar-background-color','Color','text',data);
+			g_configVar['config-portfolio-navbar-text-color'] = getText('config-portfolio-navbar-text-color','Color','text',data);
+			g_configVar['config-portfolio-navbar-list-color'] = getText('config-portfolio-navbar-list-color','Color','text',data);
+			//----------
+			g_configVar['config-sidebar-background-color'] = getText('config-sidebar-background-color','Color','text',data);
+			g_configVar['config-sidebar-text-color'] = getText('config-sidebar-text-color','Color','text',data);
+			g_configVar['config-sidebar-selected-text-color'] = getText('config-sidebar-selected-text-color','Color','text',data);
+			g_configVar['config-sidebar-separator-color'] = getText('config-sidebar-separator-color','Color','text',data);
+			g_configVar['config-sidebar-selected-border-color'] = getText('config-sidebar-selected-border-color','Color','text',data);
+			
 		}
 	});
 }

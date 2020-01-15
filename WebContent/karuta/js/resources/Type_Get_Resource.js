@@ -373,13 +373,18 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				else
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 				//------------------------------
+				var value = $('value',resource).text();
 				var code = $('code',resource).text();
 				var display_code = false;
 				var display_label = true;
+				var display_value = false;
 				if (code.indexOf("$")>-1) 
 					display_label = false;
 				if (code.indexOf("@")<0) {
 					display_code = true;
+				}
+				if (code.indexOf("!")>-1) {
+					display_value = true;
 				}
 				code = cleanCode(code);
 				//------------------------------
@@ -395,6 +400,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					html += ">";
 					if (display_code)
 						html += "<span class='li-code'>"+code+"</span>";
+					if (display_value)
+						html += "<span class='li-value'>"+value+"</span>";
 					if (display_label)
 						html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
 					html += "</a>";
