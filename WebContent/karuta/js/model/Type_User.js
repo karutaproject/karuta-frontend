@@ -262,7 +262,7 @@ UIFactory["User"].getAttributeEditor = function(userid,attribute,value)
 	html += "  <label class='col-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
 	html += "  <div class='col-9'><input class='form-control'";
 	html += " type='text'";
-	html += " onchange=\"javascript:UIFactory['User'].update('"+userid+"','"+attribute+"',this.value)\" value='"+value+"' ></div>";
+	html += " onchange=\"javascript:UIFactory['User'].update('"+userid+"','"+attribute+"',this.value)\" value=\""+value+"\" ></div>";
 	html += "</div>";
 	return html;
 };
@@ -352,7 +352,7 @@ UIFactory["User"].getAttributeCreator = function(attribute,value,pwd)
 		html += " type='password'";
 	else
 		html += " type='text'";
-	html += " value='"+value+"' ></div>";
+	html += " value=\""+value+"\" ></div>";
 	html += "</div>";
 	return html;
 };
