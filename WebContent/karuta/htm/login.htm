@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Karuta Welcome</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+	<link rel="icon" type="image/png" href="../img/faviconK.png" />
+	<!-- =============================================================== -->
+	<script src="../../application/js/_init.js"></script>
+	<!-- =============================================================== -->
+	<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css"></link>
+	<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css"></link>
+	<!--link rel="stylesheet" type="text/css" href="../../other/font-awesome/css/all.css"></link-->
+	<!-- ================ LESS ======================================== -->
+	<script>
+		var karuta_config = "../../../"+appliname+"/application/css/color.less";
+		less = {
+			globalVars: {
+				'KARUTA-CONFIG': "'"+karuta_config+"'"
+			}
+		};
+	</script>
+	<link rel="stylesheet/less" type='text/css' href='../../karuta/css/welcome.less'></link>
+	<script src="../../other/js/less.min.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/karuta.js"></script>
+	<script src="../../karuta/js/UICom.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/model/Type_Portfolio.js"></script>
+	<script src="../../karuta/js/model/Type_Node.js"></script>
+	<script src="../../karuta/js/model/Type_User.js"></script>
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/version.js"></script>
+	<link rel='stylesheet' type='text/css' href='../../application/css/specific.css'></link>
+	<!-- =============================================================== -->		
+	<script src="../..//other/js/jquery-1.10.2.min.js"></script>
+	<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
+	<!-- =============================================================== -->
+	<!--script src="../../other/js/jquery.ui.touch-punch.min.js"></script-->
+	<!-- =============================================================== -->
+	<script src="../../karuta/js/pages/login.js"></script>
+	<!-- =============================================================== -->
+	<link rel='stylesheet' type='text/css' href='../../application/css/specific.css'/>
+	<!-- =============================================================== -->
+	<script>
+		$(window).load(function() {
+			displayKarutaLogin();
+		});
+	</script>
+</head>
+<body class="welcome">
+	<script>document.write(alertBox());</script>
+</body>
+</html>

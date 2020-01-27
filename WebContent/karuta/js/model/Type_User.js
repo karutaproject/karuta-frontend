@@ -18,6 +18,7 @@ var USER = null; // global variable: current user object
 var Users_byid = {};
 var UsersActive_list = [];
 var UsersInactive_list = [];
+var UsersWithoutPortfolio_list = [];
 
 /// Check namespace existence
 if( UIFactory === undefined )
@@ -36,6 +37,7 @@ UIFactory["User"] = function( node )
 	this.node = node;
 	this.firstname = $("firstname",node).text();
 	this.lastname = $("lastname",node).text();
+	this.email = $("email",node).text();
 	this.username = $("username",node).text();
 	this.username_node = $("username",node);
 	this.firstname_node = $("firstname",node);
@@ -226,6 +228,14 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		html += "</button>";
 		html += "</div></td>";
 	}
+	if (type=='empty' && USER.admin) {
+		html = "<td><input type='checkbox' name='empty-user' id='empty"+this.id+"'>&nbsp;"+this.username_node.text() +"</td>";
+		html += "<td><div class='btn-group'>";
+		html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+		html += "<i class='fa fa-trash-o'></i>";
+		html += "</button>";
+		html += "</div></td>";
+	}
 	return html;
 };
 
@@ -263,7 +273,7 @@ UIFactory["User"].getAttributeEditor = function(userid,attribute,value)
 	html += "  <label class='col-sm-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
 	html += "  <div class='col-sm-9'><input class='form-control'";
 	html += " type='text'";
-	html += " onchange=\"javascript:UIFactory['User'].update('"+userid+"','"+attribute+"',this.value)\" value='"+value+"' ></div>";
+	html += " onchange=\"javascript:UIFactory['User'].update('"+userid+"','"+attribute+"',this.value)\" value=\""+value+"\" ></div>";
 	html += "</div>";
 	return html;
 };
@@ -353,7 +363,7 @@ UIFactory["User"].getAttributeCreator = function(attribute,value,pwd)
 		html += " type='password'";
 	else
 		html += " type='text'";
-	html += " value='"+value+"' ></div>";
+	html += " value=\""+value+"\" ></div>";
 	html += "</div>";
 	return html;
 };
@@ -880,3 +890,62 @@ UIFactory["User"].deleteTemporaryUsers = function()
 	$.ajaxSetup({async: true});
 	//----------------
 }
+
+//==================================
+UIFactory["User"].getListUserWithoutPortfolio = function() 
+//==================================
+{
+	for (var i=0; i<UsersActive_list.length; i++) {
+		if(UsersActive_list[i].id>3)
+			$.ajax({
+				async : false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfolios?active=1&userid="+UsersActive_list[i].id,
+				userid : userid,
+				success : function(data) {
+					var nb_portfolios = parseInt($('portfolios',data).attr('count'));
+					if (nb_portfolios==0){
+						UsersWithoutPortfolio_list[UsersWithoutPortfolio_list.length] = UsersActive_list[i];
+					}
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Server Error GET getListUserWithoutPortfolio: "+textStatus);
+				}
+			});
+	}
+}
+
+//==================================
+UIFactory["User"].displayUserWithoutPortfolio = function(destid,type,lang)
+//==================================
+{
+	$("#"+destid).html("<div><button class='btn btn-xs' onclick=\"confirmDelEmptyUsers()\">"+ karutaStr[LANG]["delete-empty-users"] + "</button></div><table id='table_empty_users' class='tablesorter'><thead><th style='padding-left:20px;'>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='empty_users'></tbody></table>");
+	$("#empty_users").append($("<tr><td><input type='checkbox' name='checkalluserempty'></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+	for ( var i = 0; i < UsersWithoutPortfolio_list.length; i++) {
+		var itemid = destid+"_"+UsersWithoutPortfolio_list[i].id;
+			$("#empty_users").append($("<tr class='item' id='"+itemid+"'></tr>"));
+			$("#"+itemid).html(UsersWithoutPortfolio_list[i].getView(destid,"empty",lang));
+	}
+	$(function () {
+		$('input[name=checkalluserempty]').click(function () {
+	        if ($(this).is(":checked")) {
+	    		$("input[name=empty-user").prop('checked',true);		
+	        } else {
+	    		$("input[name=empty-user").prop('checked',false);		
+	        }
+	    });
+	});
+};
+
+//==================================
+function checkalluserempty() 
+//==================================
+{
+	if( $('input[name=checkalluserempty]').is(':checked') ){
+		$("input[name=empty-user").prop('checked',false);		
+	} else {
+		$("input[name=empty-user").prop('checked',true);
+	}
+}
+

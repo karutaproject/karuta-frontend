@@ -62,7 +62,6 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
-			console.log("PARSED USER:"+USER);
 			$.ajax({
 				type : "GET",
 				dataType : "xml",

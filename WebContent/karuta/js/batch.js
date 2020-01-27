@@ -14,7 +14,7 @@
    ======================================================= */
 
 var g_xmlDoc = null;
-var g_json = null;
+var g_json = {};
 var g_trees = {};
 var g_noline = 0;
 var g_actions = [];
@@ -29,7 +29,7 @@ function initBatchVars()
 //==================================
 {
 	g_xmlDoc = null;
-	g_json = null;
+	g_json = {};
 	g_trees = {};
 	g_noline = 0;
 }
@@ -67,7 +67,7 @@ function getTxtvals(node)
 		}
 		str += text;
 	}
-	return str;
+	return str.trim();
 }
 
 //==================================
@@ -127,8 +127,13 @@ function processAll(model_code,portfoliologcode)
 	processListActions(actions_list);
 	$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
 	$.ajaxSetup({async: true});
+	//--------------------
 	if (portfoliologcode!="")
 		saveLog(model_code,portfoliologcode,$("#batch-log").html());
+	//--------------------
+	if (g_execbatch) { // after creation of portfolio
+		window.location.reload();
+	}
 }
 
 //=================================================
@@ -268,7 +273,38 @@ g_actions['create-user'] = function createUser(node)
 		url : url,
 		success : function(data) {
 			userid = data;
+			ok = true;
 			$("#batch-log").append("<br>- user already defined("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+			var xml = "";
+			xml +="<?xml version='1.0' encoding='UTF-8'?>";
+			xml +="<user>";
+			xml +="	<username>"+identifier+"</username>";
+			xml +="	<lastname>"+lastname+"</lastname>";
+			xml +="	<firstname>"+firstname+"</firstname>";
+			xml +="	<email>"+email+"</email>";
+			xml +="	<password>"+password+"</password>";
+			xml +="	<active>1</active>";
+			xml +="	<other>"+other+"</other>";
+			xml +="	<admin>0</admin>";
+			xml +="	<designer>"+designer+"</designer>";
+			xml +="</user>";
+			var url = serverBCK_API+"/users/user/"+userid;
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml; charset=UTF-8",
+				dataType : "xml",
+				url : url,
+				data : xml,
+				success : function(data) {
+					userid = data;
+					ok = true;
+					$("#batch-log").append("<br>- user updated("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in create/update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+				}
+			});
 			},
 		error : function(data) {
 			var xml = "";
@@ -476,10 +512,11 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 		success : function(data) {
 			ok = true;
 			var usergroupid = data;
+			get_list_usersgroups();
 			$("#batch-log").append("<br>- usergroup created ("+usergroupid+") - label:"+usergroup);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> - label:"+usergroup);					
+			$("#batch-log").append("<br>- ***<span>ATTENTION</span>already defined - label:"+usergroup);					
 		}
 	});
 	return ok;
@@ -1443,6 +1480,7 @@ g_actions['create-portfoliogroup'] = function CreatePortfolioGroup(node)
 		success : function(data) {
 			ok = true;
 			var portfoliogroupid = data;
+			get_list_portfoliosgroups();
 			$("#batch-log").append("<br>- portfoliogroup created ("+portfoliogroupid+") - label:"+portfoliogroup);
 		},
 		error : function(data) {
@@ -2191,7 +2229,14 @@ g_actions['update-proxy'] = function update_proxy(node)
 			} else {							// get by code and semtag
 				sources = $("node",data);
 			}
-			sourceid = $(sources[0]).attr('id');
+			if (sources.length>1) {
+				for (var i=0;i<sources.length;i++){
+					var semtag = $("metadata",sources[i]).attr('semantictag');
+					if (semtag.indexOf('proxy-')<0)
+						sourceid = $(sources[i]).attr('id');
+				}
+			} else
+				sourceid = $(sources[0]).attr('id');
 		},
 		error : function(data) {
 			$("#batch-log").append("<br>- ***SOURCE NOT FOUND <span class='danger'>ERROR</span>");
@@ -2382,6 +2427,7 @@ function get_list_portfoliosgroups()
 //==============================
 {
 	$.ajax({
+		async : false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfoliogroups",
@@ -2411,6 +2457,7 @@ function get_list_usersgroups()
 //==============================
 {
 	$.ajax({
+		async : false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/usersgroups",
@@ -2577,20 +2624,20 @@ g_actions['update-node'] = function updateNode(node)
 						text = g_trees[source_treeref][0];
 				}
 				//---------------------------
-				if (type=='Field') {
+				if (type=='Field') {//---------------------- for backward compatibility ---------------------
 					updateField(nodes,node,type,semtag,text);
 				}
-				if (type=='Proxy') {
+				if (type=='Proxy') {//---------------------- for backward compatibility ---------------------
 					updateProxy(nodes,node,type,semtag);
 				}
-				if (type=='Dashboard') {
+				if (type=='Dashboard') {//---------------------- for backward compatibility ---------------------
 					updateDashboard(nodes,node,type,semtag,text);
 				}
 				if (type=='Metadata'){
 					var attribute = $(node).attr("attribute");
 					updateMetada(nodes,node,type,semtag,text,attribute)
 				}
-				if (type=='MetadataInline'){
+				if (type=='MetadataInline'){//---------------------- for backward compatibility ---------------------
 					var attribute = 'inline';
 					updateMetada(nodes,node,type,semtag,text,attribute)
 				}
@@ -2598,24 +2645,24 @@ g_actions['update-node'] = function updateNode(node)
 					var attribute = $(node).attr("attribute");
 					updateMetadawad(nodes,node,type,semtag,text,attribute)
 				}
-				if (type=='MetadatawadQuery') {
+				if (type=='MetadatawadQuery') {//---------------------- for backward compatibility ---------------------
 					var attribute = 'query';
 					updateMetadawad(nodes,node,type,semtag,text,attribute);
 				}
-				if (type=='MetadatawadMenu') {
+				if (type=='MetadatawadMenu') {//---------------------- for backward compatibility ---------------------
 					var attribute = 'menuroles';
 					updateMetadawad(nodes,node,type,semtag,text,attribute);
 				}
-				if (type=='NodeResource') {
+				if (type=='NodeResource') {//---------------------- for backward compatibility ---------------------
 					updateNodeResource(nodes,node);
 				}
-				if (type=='Calendar') {
+				if (type=='Calendar') {//---------------------- for backward compatibility ---------------------
 					updateCalendar(nodes,node,text,semtag);
 				}
-				if (type=='Document') {
+				if (type=='Document') {//---------------------- for backward compatibility ---------------------
 					updateDocument(nodes,node,text,semtag);
 				}
-				if (type=='Rights'){
+				if (type=='Rights'){//---------------------- for backward compatibility ---------------------
 					var rd = $(node).attr("rd");
 					var wr = $(node).attr("wr");
 					var dl = $(node).attr("dl");
@@ -2849,7 +2896,7 @@ function updateProxy(nodes,node,type,semtag)
 					url : serverBCK_API+"/resources/resource/" + targetid,
 					success : function(data) {
 						$("#batch-log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
-						updateupdateProxyResource(nodes,node,type,semtag);
+						updateProxyResource(nodes,node,type,semtag);
 						//===========================================================
 					},
 					error : function(data) {
@@ -3069,3 +3116,23 @@ function saveLog(model_code,portfoliologcode,logtext)
 	});
 
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ EXEC BATCH AT USER CREATION ------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function displayExecBatchButton()
+//=================================================
+{
+	var html = "";
+	html += "<div class='create-screen'>";
+	html += "<div id='create-label'>"+g_execbatchbuttonlabel1[LANG]+"</div>";
+	html += "</div>";
+	$("#main-list").html(html);
+	initBatchVars();
+	prepareBatch();
+	getModelAndProcess(g_json.model_code);
+}
+

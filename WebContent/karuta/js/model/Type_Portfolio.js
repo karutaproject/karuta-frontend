@@ -283,7 +283,10 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						if (g_nb_trees==1)
 							$("#portfolios-label").html(karutaStr[LANG]['portfolio']);
 						else
-							$("#portfolios-label").html(karutaStr[LANG]['portfolios']);
+							if (USER.username=='public')
+								$("#portfolios-label").html(karutaStr[LANG]['portfolios-public']);
+							else
+								$("#portfolios-label").html(karutaStr[LANG]['portfolios']);
 				}
 			}
 		}
@@ -2481,27 +2484,25 @@ UIFactory["Portfolio"].archive = function(projectcode,langcode)
 						uuids += ",";
 					uuids += portfolios_list[i+j].id;
 				}
-				var html = '<div>Portfolios:'+uuids+"</div>";
-				$("#edit-window-body").append($(html));  //serverBCK_API+"/portfolios/zip?portfolios=
 				$.ajax({
 					async : false,
 					type : "GET",
-					dataType : "xml",
+					dataType : "text",
 					url : serverBCK_API+"/portfolios/zip?portfolios="+uuids+"&archive=y",
 					success : function(data) {
-						$("#edit-window-body").append($("<div>saved</div>"));
+						var html = "<div>"+data+"</div>";
+						$("#edit-window-body").append($(html));
 					},
 					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET active=1: "+textStatus);
+						alertHTML("Server Error GET archive: "+textStatus);
 					}
 				});
 			}
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active=1: "+textStatus);
+			alertHTML("Server Error active=1&search: "+textStatus);
 		}
 	});
-	
 }
 
 //----------------------------------------------------------------------------------
@@ -2844,7 +2845,7 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 }
 
 //==================================
-UIFactory["Portfolio"].displayListPortfolios = function(userid,firstname,lastname,langcode)
+UIFactory.Portfolio.displayListPortfolios = function(userid,firstname,lastname,langcode)
 //==================================
 {
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);

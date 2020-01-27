@@ -91,6 +91,16 @@ function callCAS()
 	window.location = locationURL;
 }
 
+//==================================
+function callOpenid()
+//==================================
+{
+	var url = window.location.href;
+	var serverURL = url.substring(0,url.lastIndexOf(appliname+"/")-1);
+	var locationURL = openid_url+"?client_id=";
+	window.location = locationURL;
+}
+
 //==============================
 function callSubmit(encrypt_url,lang)
 //==============================
@@ -154,6 +164,13 @@ function getLogin(encrypt_url,lang)
 	html += "<div id='connection-cas' style='display:none'>";
 	html += "<h5>Connexion avec un compte universitaire (CAS)</h5>";
 	html += "<button class='button-login' onclick='javascript:callCAS()'>"+karutaStr[LANG]['login']+"</button>";
+	html += "<h5>Connexion hors compte universitaire</h5>";
+	html += "</div>";
+
+	html += "<div id='connection-openid' style='display:none'>";
+	html += "<img width='200px' src='../../karuta/img/microsoft-logo.png'/>"
+	html += "<h5>Vous avez un compte Microsoft</h5>";
+	html += "<button class='button-login' onclick='javascript:callOpenid()'>"+karutaStr[LANG]['login']+"</button>";
 	html += "<h5>Connexion hors compte universitaire</h5>";
 	html += "</div>";
 
@@ -228,12 +245,15 @@ function displayKarutaLogin()
 		$("#navigation_bar").html(getNavBar('login',null));
 		$("#login").html(getLogin(encrypt_url,lang));
 		$("#useridentifier").focus();
-		$("#newpassword").html(getNew());
+		if (typeof myVar != 'undefined' && karuta_forgot_password)
+			$("#newpassword").html(getNew());
 		if(karuta_create_account)
 			$("#newaccount").html(getNewAccount());
 		if (typeof cas_url != 'undefined' &&cas_url!="")
 			$("#connection-cas").show();
-		});
+		if (typeof openid_url != 'undefined' &&openid_url!="")
+			$("#connection-openid").show();
+	});
 	$('#password').keypress(function(e) {
 		var code= (e.keyCode ? e.keyCode : e.which);
 		if (code == 13)

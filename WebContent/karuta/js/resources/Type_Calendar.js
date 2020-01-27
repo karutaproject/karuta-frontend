@@ -62,6 +62,13 @@ UIFactory["Calendar"] = function( node )
 			}
 		}
 	}
+	//--------------------
+	if ($("utc",$("asmResource[xsi_type='Calendar']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("utc");
+		$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
+	}
+	this.utc = $("utc",$("asmResource[xsi_type='Calendar']",node))
+	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
 };
@@ -137,7 +144,7 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	//---------------------
 	var html = "<form class='form-horizontal' role='form'></form>";
 	var form = $(html);
-	//------
+	//-----------------------------------------
 	html = "<input type='text' name='datepicker' class='datepicker form-control' style='width:150px;' ";
 	if (disabled)
 		html += "disabled='disabled' ";
@@ -146,6 +153,7 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	var self = this;
 	$(input1).change(function (){
 		$(self.text_node[langcode]).text($(this).val());
+//		$(self.utc).text($(this).datepicker('getTime'));
 		UIFactory["Calendar"].update(self,langcode);
 	});
 	var format = $(this.format_node[langcode]).text();
@@ -155,8 +163,11 @@ UIFactory["Calendar"].prototype.getEditor = function(type,langcode,disabled)
 	if (minViewMode.length==0)
 		minViewMode = "days";
 	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
+	$(input1).datepicker().on('changeDate', function (ev) {
+		$(self.utc).text(ev.date.getTime());
+	});
 	$(form).append(input1);
-	//------
+	//-----------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin){
 		var group2 = $("<div class='form-group calendar-format'><label class='col-sm-3 control-label'>Diplay Format</label></div>");
 		var div2 = $("<div class='col-sm-9'></div>");
@@ -237,3 +248,59 @@ UIFactory["Calendar"].prototype.refresh = function()
 	};
 
 };
+
+//============================================================
+//============================================================
+//============================================================
+//============================================================
+
+//==================================
+function importAndSetDateToday(parentid,label,srce,part_semtag,calendar_semtag)
+//==================================
+{
+	$.ajaxSetup({async: false});
+	var databack = true;
+	var callback = UIFactory.Calendar.updateaddedpart;
+	importBranch(parentid,srce,part_semtag,databack,callback,calendar_semtag);
+};
+
+
+//==================================
+UIFactory["Calendar"].updateaddedpart = function(data,calendar_semtag)
+//==================================
+{
+	var partid = data;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes/node/"+partid,
+		success : function(data) {
+			var node = $("asmContext:has(metadata[semantictag='"+calendar_semtag+"'])",data);
+			if (node.length==0)
+				node = $( ":root",data ); //node itself
+			var nodeid = $(node).attr('id');
+			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
+			//---------------------------
+			var resource = $("asmResource[xsi_type='Calendar']",node);
+			var today = new Date();
+			var label = today.toLocaleString().substring(0,10);
+			var utc = today.getTime();
+			$("text[lang='"+LANG+"']",resource).text(label);
+			$("utc",resource).text(utc);
+			var data = "<asmResource xsi_type='Calendar'>" + $(resource).html() + "</asmResource>";
+			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//---------------------------
+			$.ajax({
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				url : url_resource,
+				success : function(data) {
+						UIFactory.Node.reloadUnit();
+				}
+			});
+		}
+	});
+}
+

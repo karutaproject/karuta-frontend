@@ -29,9 +29,13 @@ var portfolioid_current = null;
 var g_report_actions = {};
 
 var jquerySpecificFunctions = {};
+jquerySpecificFunctions['.sortUTC()'] = ".sort(function(a, b){ return $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jquerySpecificFunctions['.invsortUTC()'] = ".sort(function(a, b){ return $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
 jquerySpecificFunctions['.sortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.sortResource(#'] = ".sort(function(a, b){ return $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.invsortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
+jquerySpecificFunctions['.sortNodeLabel()'] = ".sort(function(a, b){ return $(\"label[lang='#lang#']\",$(\"asmResource[xsi_type='nodeRes']\",$(a))).text() > $(\"label[lang='#lang#']\",$(\"asmResource[xsi_type='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jquerySpecificFunctions['.invsortNodeLabel()'] = ".sort(function(a, b){ return $(\"label[lang='#lang#']\",$(\"asmResource[xsi_type='nodeRes']\",$(a))).text() > $(\"label[lang='#lang#']\",$(\"asmResource[xsi_type='nodeRes']\",$(b))).text() ? -1 : 1; })";
 jquerySpecificFunctions['.sort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
 jquerySpecificFunctions['.invsort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? -1 : 1; })";
 jquerySpecificFunctions['.filename_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\")";
@@ -91,6 +95,17 @@ function r_replaceVariable(text)
 		if (text.indexOf("[")>-1) {
 			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
 			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
+			i = r_replaceVariable(i);
+			var variable_array1 = text.replace("["+i+"]","");
+//			var variable_array2 = r_replaceVariable(variable_array1);
+			if (variables[variable_value]!=undefined && variables[variable_value].length>=i)
+				text = variables[variable_value][i];
+			if (aggregates[variable_value]!=undefined && aggregates[variable_value].length>=i)
+				text = aggregates[variable_value][i];
+			}
+/*		if (text.indexOf("[")>-1) {
+			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
 			var variable_array1 = text.replace("["+i+"]","");
 			var variable_array2 = r_replaceVariable(variable_array1);
 			if (variables[variable_array2]!=undefined && variables[variable_array2].length>=i)
@@ -98,6 +113,7 @@ function r_replaceVariable(text)
 			if (aggregates[variable_array2]!=undefined && aggregates[variable_array2].length>=i)
 				text = aggregates[variable_array2][i];
 			}
+*/
 		n++; // to avoid infinite loop
 	}
 	return text;
@@ -215,12 +231,16 @@ g_report_actions['if-then-else'] = function (destid,action,no,data)
 g_report_actions['for-each-line'] = function (destid,action,no,data)
 //==================================
 {
+	var countvar = $(action).attr("countvar");
 	var ref_init = $(action).attr("ref-init");
 	//---------------------
 	var actions = $(action).children();
 	$("#line-number").html('0');
 	$("#number_lines").html(json.lines.length);
 	for (var j=0; j<json.lines.length; j++){
+		if (countvar!=undefined) {
+			variables[countvar] = j;
+		}
 		if (ref_init!=undefined) {
 			$("#line-number").html(j+1);
 			ref_init = r_replaceVariable(ref_init);
@@ -247,6 +267,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	var test = $(action).attr("test");
+	var countvar = $(action).attr("countvar");
 	if (test!=undefined) 
 		test = r_replaceVariable(test);
 	if (select!=undefined) {
@@ -263,6 +284,10 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 		//---------------------------
 		var actions = $(action).children();
 		for (var j=0; j<nodes.length;j++){
+			//----------------------------------
+			if (countvar!=undefined) {
+				variables[countvar] = j;
+			}
 			//----------------------------------
 			var ref_init = $(action).attr("ref-init");
 			if (ref_init!=undefined) {
@@ -405,7 +430,7 @@ g_report_actions['table'] = function (destid,action,no,data)
 			aggregates[ref_inits[k]] = new Array();
 	}
 	//---------------------------
-	var style = $(action).attr("style");
+	var style = r_replaceVariable($(action).attr("style"));
 	var html = "<table id='"+destid+'-'+no+"' style='"+style+"'></table>";
 	$("#"+destid).append($(html));
 	//---------------------------
@@ -429,7 +454,7 @@ g_report_actions['row'] = function (destid,action,no,data)
 			aggregates[ref_inits[k]] = new Array();
 	}
 	//---------------------------
-	var style = $(action).attr("style");
+	var style = r_replaceVariable($(action).attr("style"));
 	var html = "<tr id='"+destid+'-'+no+"' style='"+style+"'></table>";
 	$("#"+destid).append($(html));
 	//---------------------------
@@ -444,7 +469,7 @@ g_report_actions['row'] = function (destid,action,no,data)
 g_report_actions['cell'] = function (destid,action,no,data)
 //==================================
 {
-	var style = $(action).attr("style");
+	var style = r_replaceVariable($(action).attr("style"));
 	var attr_help = $(action).attr("help");
 	var colspan = $(action).attr("colspan");
 
@@ -494,6 +519,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 g_report_actions['for-each-person'] = function (destid,action,no,data)
 //==================================
 {
+	var countvar = $(action).attr("countvar");
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -510,6 +536,9 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 					value = eval("json.lines["+line+"]."+select.substring(9));
 			var condition = false;
 			for ( var j = 0; j < UsersActive_list.length; j++) {
+				if (countvar!=undefined) {
+					variables[countvar] = j;
+				}
 				//------------------------------------
 				var ref_init = $(action).attr("ref-init");
 				if (ref_init!=undefined) {
@@ -548,6 +577,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 //==================================
 {
+	var countvar = $(action).attr("countvar");
 	var ref_init = $(action).attr("ref-init");
 	if (ref_init!=undefined) {
 		ref_init = r_replaceVariable(ref_init);
@@ -633,6 +663,9 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 			}
 			//----------------------------------
 			for ( var j = 0; j < portfolios_list.length; j++) {
+				if (countvar!=undefined) {
+					variables[countvar] = j;
+				}
 				var code = portfolios_list[j].code_node.text();
 				//------------------------------------
 				if (select.indexOf("code*=")>-1) {
@@ -698,6 +731,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 //==================================
 {
+	var countvar = $(action).attr("countvar");
 	var userid = data;
 	if (userid==null)
 		userid = USER.id;
@@ -770,6 +804,9 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 			}
 			//----------------------------------
 			for ( var j = 0; j < portfolios_list.length; j++) {
+				if (countvar!=undefined) {
+					variables[countvar] = j;
+				}
 				//------------------------------------
 				var code = portfolios_list[j].code_node.text();
 				if (select.indexOf("code*=")>-1) {
@@ -907,7 +944,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 		ref = r_replaceVariable(ref);
 		var editresroles = $(action).attr("editresroles");
 		var delnoderoles = $(action).attr("delnoderoles");
-		style = $(action).attr("style");
+		style = r_replaceVariable($(action).attr("style"));
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
 		if (node.length==0) // try the node itself
@@ -1104,6 +1141,9 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					if (selector.type=='node label') {
 						text = UICom.structure["ui"][nodeid].getLabel();
 					}
+					if (selector.type=='node code') {
+						text = UICom.structure["ui"][nodeid].getCode();
+					}
 					if (selector.type=='node value') {
 						text = UICom.structure["ui"][nodeid].getValue();
 					}
@@ -1290,7 +1330,7 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 	var nodeid = $(data).attr("id");
 	var text = $(action).text();
 	text = r_replaceVariable(text);
-	var style = $(action).attr("style");
+	var style = r_replaceVariable($(action).attr("style"));
 	var ref = $(action).attr("ref");
 	if (ref!=undefined && ref!="") {
 		ref = r_replaceVariable(ref);
@@ -1338,7 +1378,7 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 	var nodeid = $(data).attr("id");
 	var targetid = "";
 	var text = "";
-	var style = $(action).attr("style");
+	var style = r_replaceVariable($(action).attr("style"));
 	var select = $(action).attr("select");
 	select = r_replaceVariable(select);
 	var selector = r_getSelector(select);
@@ -1367,7 +1407,7 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 g_report_actions['aggregate'] = function (destid,action,no,data)
 //==================================
 {
-	var style = $(action).attr("style");
+	var style = r_replaceVariable($(action).attr("style"));
 	var ref = $(action).attr("ref");
 	ref = r_replaceVariable(ref);
 	var type = $(action).attr("type");
@@ -1414,7 +1454,7 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 g_report_actions['operation'] = function (destid,action,no,data)
 //==================================
 {
-	var style = $(action).attr("style");
+	var style = r_replaceVariable($(action).attr("style"));
 	var ref = $(action).attr("ref");
 	ref = r_replaceVariable(ref);
 	var type = $(action).attr("type");

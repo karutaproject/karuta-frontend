@@ -1041,6 +1041,7 @@ function getSendPublicURL(uuid,shareroles)
 function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole,shareoptions)
 //==================================
 {
+	var emailsarray = [];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -1080,7 +1081,7 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 	if (sharetoemail=='?') {
 		html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>";
 		html += "		<div class='col-sm-9'>";
-		html += "			<input id='email' type='text' class='form-control'>";
+		html += "			<input autocomplete='off' id='email' type='text' class='form-control'>";
 		html += "		</div>";
 	}
 	if (shareoptions.indexOf('obj')>-1) {
@@ -1111,7 +1112,12 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 				"locale":LANG
 			}
 		);
-
+	if (shareoptions.indexOf('emailautocomplete')>-1) {
+		for ( var i = 0; i < UsersActive_list.length; i++) {
+			emailsarray[emailsarray.length] = {'libelle': UsersActive_list[i].email_node.text()};
+		}
+		addautocomplete(document.getElementById('email'), emailsarray);
+	}
 	//--------------------------
 }
 
@@ -1325,7 +1331,6 @@ function setLanguage(lang,caller) {
 	localStorage.setItem('karuta-language',lang);
 	LANG = lang;
 	console.log("LANG: "+LANG);
-	console.log("karutaStr: "+karutaStr);
 	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
@@ -1470,6 +1475,24 @@ function toggleSidebarPlus(uuid) { // click on label
 		$("#toggle_"+uuid).removeClass("glyphicon-plus")
 		$("#toggle_"+uuid).addClass("glyphicon-minus")
 		$("#collapse"+uuid).collapse("show");
+	}
+}
+
+//==================================
+function toggleUsersList(list) {
+//==================================
+	if ($("#"+list+"-users-button").hasClass("glyphicon-plus")) {
+		if (list=='empty') {
+			UIFactory.User.getListUserWithoutPortfolio();
+			UIFactory.User.displayUserWithoutPortfolio('empty')
+		}
+		$("#"+list+"-users-button").removeClass("glyphicon-plus");
+		$("#"+list+"-users-button").addClass("glyphicon-minus");
+		$("#"+list).show();
+	} else {
+		$("#"+list+"-users-button").removeClass("glyphicon-minus")
+		$("#"+list+"-users-button").addClass("glyphicon-plus")
+		$("#"+list).hide();
 	}
 }
 
@@ -2117,3 +2140,76 @@ function filesReceptionMessage(filename)
 	$('#message-window').modal('show');
 }
 
+//==================================
+function addautocomplete(input,arrayOfValues) {
+//==================================
+	var currentFocus;
+	input.addEventListener("input", function(e) {
+		var a, b, i, val = this.value.substring(this.value.lastIndexOf(" ")+1);
+		closeAllLists();
+		if (!val) { return false;}
+	 	currentFocus = -1;
+		a = document.createElement("DIV");
+		a.setAttribute("id", this.id + "autocomplete-list");
+		a.setAttribute("class", "autocomplete-items");
+		this.parentNode.appendChild(a);
+		for (i = 0; i < arrayOfValues.length; i++) {
+			var indexval = arrayOfValues[i].libelle.toUpperCase().indexOf(val.toUpperCase());
+			if (indexval>-1) {
+				b = document.createElement("DIV");
+				b.innerHTML = arrayOfValues[i].libelle.substr(0, indexval);
+				b.innerHTML += "<strong>" + arrayOfValues[i].libelle.substr(indexval,val.length) + "</strong>";
+				b.innerHTML += arrayOfValues[i].libelle.substr(indexval+val.length);
+				b.innerHTML += "<input type='hidden' label=\""+arrayOfValues[i].libelle+"\" >";
+				b.addEventListener("click", function(e) {
+					if (input.value.lastIndexOf(" "))
+						input.value = input.value.substring(0,input.value.lastIndexOf(" ")+1) + $("input",this).attr('label');
+					else
+						input.value = $("input",this).attr('label');
+					$(input).change();
+					closeAllLists();
+				});
+				a.appendChild(b);
+			}
+		}
+	});
+	input.addEventListener("keydown", function(e) {
+		var x = document.getElementById(this.id + "autocomplete-list");
+		if (x) x = x.getElementsByTagName("div");
+		if (e.keyCode == 40) {
+			currentFocus++;
+		addActive(x);
+		} else if (e.keyCode == 38) { //up
+			currentFocus--;
+			addActive(x);
+		} else if (e.keyCode == 13) {
+			e.preventDefault();
+			if (currentFocus > -1) {
+				if (x) x[currentFocus].click();
+			}
+		}
+	});
+	function addActive(x) {
+		if (!x) return false;
+		removeActive(x);
+		if (currentFocus >= x.length) currentFocus = 0;
+		if (currentFocus < 0) currentFocus = (x.length - 1);
+		x[currentFocus].classList.add("autocomplete-active");
+	}
+	function removeActive(x) {
+		for (var i = 0; i < x.length; i++) {
+			x[i].classList.remove("autocomplete-active");
+		}
+	}
+	function closeAllLists(elmnt) {
+		var x = document.getElementsByClassName("autocomplete-items");
+		for (var i = 0; i < x.length; i++) {
+			if (elmnt != x[i] && elmnt != input) {
+				x[i].parentNode.removeChild(x[i]);
+			}
+		}
+	}
+	document.addEventListener("click", function (e) {
+		closeAllLists(e.target);
+	});
+}
