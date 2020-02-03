@@ -2,9 +2,7 @@
 	Batch Model
    ====================*/
 
-
 .batch {
-	--batch-border-color : #d3d3d3;
 	.row {
 		margin-left:0px;
 	}
@@ -65,278 +63,257 @@
 }
 
 
-/*
-.batch input {
-	margin-bottom:0px;
-	height:32px;
-}
-
-
-#batchmodel_list_table td
-{
-	padding:5px;
-	border-top:1px solid #C0C0C0;
-	border-bottom:1px solid #C0C0C0;
-}
-
-.model-content {
-	font-size:14px;
-}
-
-.model-content .asmContext{
-	margin-top:2px;
-}
-
-.batch .collapsible {
-	float:left;
-	margin-right:3px;
-}
-
-.batch .asmUnitStructure{
-	padding:10px;
-}
-
-.batch-comment,
-.batch-comment .collapsible,
-.batch-comment .btn-default,
-.batch-comment a,
-.batch-comment .btn-group .button,
-.batch-comment .form-control {
-	color:lightgrey;
-}
-
-*/
-/* ====================== */
-/*     RESOURCES          */
-/* ====================== */
-		
-
+/* ============================= */
+/*     COMPONENTS COLORS         */
+/* ============================= */
 
 .batch {
-	.for-each-line{
-		margin-top:7px;
-		border:1px solid var(--batch-border-color);
-	}
-	.for-each-tree {
-		margin-top:7px;
-		border:1px solid solid var(--batch-border-color);
-	}
-	.batch .actions {
-		margin-top:7px;
-		border:1px dashed var(--batch-border-color);
-	}
-	//----- person ---
+	--batch-person-color : #63e1ff;
+	--batch-tree-color : lightGreen;
+	--batch-portfoliogroup-color : #1cb01c;
+	--batch-usergroup-color : #00a3cc;
+	--batch-node-color : #e09b5b;
+	--batch-metadata-color : yellow;
+	--batch-resource-color : orange;
+	--batch-uuid-color : #ff66ff;
+	--batch-instruction-color : #990000;
+
+	//----- PERSON ---
 	.create-person {
 		margin-top:7px;
-		border:1px solid Navy ;
+		border:1px solid var(--batch-person-color) ;
 	}
 	.delete-person {
 		margin-top:7px;
-		border:1px solid #46C7C7 ;
+		border:1px solid var(--batch-person-color);
 	}
 	.inactivate-person {
 		margin-top:7px;
-		border:1px solid #63E1FF ;
+		border:1px solid var(--batch-person-color);
 	}
 	.activate-person {
 		margin-top:7px;
-		border:1px solid #8BFFFF ;
+		border:1px solid var(--batch-person-color);
 	}
-}
 
+	//----- TREE ---
+	.create-tree{
+		margin-top:7px;
+		border:1px solid var(--batch-tree-color);
+	}
+	
+	.share-tree{
+		margin-top:7px;
+		border:1px solid var(--batch-tree-color);
+	}
+	
+	.unshare-tree{
+		margin-top:7px;
+		border:1px solid var(--batch-tree-color);
+	}
+	
+	.select-tree{
+		margin-top:7px;
+		border:1px solid var(--batch-tree-color);
+	}
+	
+	.delete-tree{
+		margin-top:7px;
+		border:1px solid var(--batch-tree-color);
+	}
+	.re-instantiate-tree{
+		margin-top:7px;
+		border:1px solid var(--batch-tree-color);
+	}
+	.set-owner {
+		margin-top:7px;
+		border:1px solid var(--batch-tree-color);
+	}
+	.update-tree-root {
+		margin-top:7px;
+		border:1px solid var(--batch-tree-color);
+	}
 
+	//----- PORTFOLIOGROUP ---
+	.create-portfoliogroup{
+		margin-top:7px;
+		border:1px solid var(--batch-portfoliogroup-color);
+	}
+	
+	.join-portfoliogroup{
+		margin-top:7px;
+		border:1px solid var(--batch-portfoliogroup-color);
+	}
+	
+	.leave-portfoliogroup{
+		margin-top:7px;
+		border:1px solid var(--batch-portfoliogroup-color);
+	}
+	
+	.share-portfoliogroup{
+		margin-top:7px;
+		border:1px solid var(--batch-portfoliogroup-color);
+	}
+	
+	.unshare-portfoliogroup{
+		margin-top:7px;
+		border:1px solid var(--batch-portfoliogroup-color);
+	}
 
-.batch .create-tree{
-	margin-top:7px;
-	border:1px solid SeaGreen ;
-}
+	//----- USERGROUP ---	
+	.create-usergroup{
+		margin-top:7px;
+		border:1px solid var(--batch-usergroup-color);
+	}
+	.share-usergroup{
+		margin-top:7px;
+		border:1px solid var(--batch-usergroup-color);
+	}
+	.unshare-usergroup{
+		margin-top:7px;
+		border:1px solid var(--batch-usergroup-color);
+	}
+	.join-usergroup {
+		margin-top:7px;
+		border:1px solid var(--batch-usergroup-color);
+	}
+	
+	.leave-usergroup {
+		margin-top:7px;
+		border:1px solid var(--batch-usergroup-color);
+	}
+	.share-groups{
+		margin-top:7px;
+		border:1px solid var(--batch-usergroup-color);
+	}
 
-.batch .share-tree{
-	margin-top:7px;
-	border:1px solid lightGreen ;
-}
+	//----- NODE ---	
+	.update-node-resource {
+		margin-top:7px;
+		border:1px var(--batch-node-color);
+	}
+	.import-node {
+		margin-top:7px;
+		border:1px solid var(--batch-node-color);
+	}
+	.delete-node {
+		margin-top:7px;
+		border:1px solid var(--batch-node-color);
+	}
+	.moveup-node {
+		margin-top:7px;
+		border:1px solid var(--batch-node-color);
+	}
 
-.batch .unshare-tree{
-	margin-top:7px;
-	border:1px solid #ACFA58 ;
-}
+	//----- METADATA ---
+	.update-metadata {
+		margin-top:7px;
+		border:1px solid var(--batch-metadata-color);
+	}
+	.update-metadata-wad {
+		margin-top:7px;
+		border:1px solid var(--batch-metadata-color);
+	}
+	.update-metadata-inline {
+		margin-top:7px;
+		border:1px solid var(--batch-metadata-color);
+	}
+	.update-metadata-query {
+		margin-top:7px;
+		border:1px solid var(--batch-metadata-color);
+	}
+	.update-metadata-menu {
+		margin-top:7px;
+		border:1px solid var(--batch-metadata-color);
+	}
+	.update-rights {
+		margin-top:7px;
+		border:1px solid var(--batch-metadata-color);
+	}
 
-.batch .select-tree{
-	margin-top:7px;
-	border:1px solid GreenYellow ;
-}
+	//----- UUID ---
+	.update-field-byid {
+		margin-top:7px;
+		border:1px solid  var(--batch-uuid-color);
+	}
+	.delete-node-byid {
+		margin-top:7px;
+		border:1px solid  var(--batch-uuid-color);
+	}
+	.reset-document-byid {
+		margin-top:7px;
+		border:1px solid  var(--batch-uuid-color);
+	}
 
-.batch .delete-tree{
-	margin-top:7px;
-	border:1px solid Aquamarine ;
-}
+	//----- RESOURCE ---
+	.update-resource {
+		margin-top:7px;
+		border:1px dashed var(--batch-resource-color);
+	}
+	.update-field {
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-textfield {
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-dashboard {
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-proxy{
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-calendar{
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-document{
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-proxy{
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-url2unit{
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-update-dashboard{
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-update-item{
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
 
-.batch .set-owner {
-	margin-top:7px;
-	border:1px solid #347C17;
-}
-
-/* ------------------------ */
-
-.batch .create-portfoliogroup{
-	margin-top:7px;
-	border:1px solid #AE6929;
-}
-
-.batch .join-portfoliogroup{
-	margin-top:7px;
-	border:1px solid #C27D3D ;
-}
-
-.batch .leave-portfoliogroup{
-	margin-top:7px;
-	border:1px solid #E09B5B ;
-}
-
-.batch .share-portfoliogroup{
-	margin-top:7px;
-	border:1px solid #F4AF6F ;
-}
-
-.batch .unshare-portfoliogroup{
-	margin-top:7px;
-	border:1px solid #FFC383 ;
-}
-
-/* ------------------------ */
-
-.batch .share-groups{
-	margin-top:7px;
-	border:1px solid #85BB65 ;
-}
-
-/* ------------------------ */
-
-.batch .share-usergroup{
-	margin-top:7px;
-	border:1px solid #46C7C7 ;
-}
-
-.batch .create-usergroup{
-	margin-top:7px;
-	border:1px solid #FFDB58 ;
-}
-
-.batch .unshare-usergroup{
-	margin-top:7px;
-	border:1px solid #46C7C7 ;
-}
-
-/* ------------------------ */
-
-.batch .update-resource {
-	margin-top:7px;
-	border:1px dotted lightgrey;
-}
-
-.batch .update-field {
-	margin-top:7px;
-	border:1px solid #FF895A;
-}
-
-.batch .update-textfield {
-	margin-top:7px;
-	border:1px solid #FF9D6E;
-}
-
-.batch .update-dashboard {
-	margin-top:7px;
-	border:1px solid #FFB182;
-}
-
-.batch .update-proxy{
-	margin-top:7px;
-	border:1px solid #FFC596;
-}
-
-.batch .update-calendar{
-	margin-top:7px;
-	border:1px solid #FFCFA0;
-}
-
-.batch .update-document{
-	margin-top:7px;
-	border:1px solid #FFD9AA;
-}
-
-/* ------------------------ */
-.batch .update-metadata {
-	margin-top:7px;
-	border:1px solid #FAAC58;
-}
-
-.batch .update-metadata-wad {
-	margin-top:7px;
-	border:1px solid #FE642E;
-}
-
-.batch .update-metadata-inline {
-	margin-top:7px;
-	border:1px solid #FACC2E;
-}
-
-
-.batch .update-metadata-query {
-	margin-top:7px;
-	border:1px solid Moccasin ;
-}
-
-.batch .update-metadata-menu {
-	margin-top:7px;
-	border:1px solid PeachPuff ;
-}
-
-/* ------------------------ */
-
-.batch .update-node-resource {
-	margin-top:7px;
-	border:1px solid #F78181;
-}
-
-
-.batch .import-node {
-	margin-top:7px;
-	border:1px solid Pink ;
-}
-
-/* ------------------------ */
-
-.batch .join-usergroup {
-	margin-top:7px;
-	border:1px solid Yellow ;
-}
-
-.batch .leave-usergroup {
-	margin-top:7px;
-	border:1px solid Orange ;
-}
-
-.batch .update-field-byid {
-	margin-top:7px;
-	border:1px solid  #C35817;
-}
-
-
-.batch .update-tree-root {
-	margin-top:7px;
-	border:1px solid LightCoral  ;
-}
-
-.batch .if-then-else {
-	margin-top:7px;
-	border:1px solid lightgrey;
-}
-
-.batch .if-action,
-.batch .then-part,
-.batch .else-part {
-	margin-bottom:7px;
-	border:1px dashed lightgrey;
+	//----- INSTRUCTION ---
+	.for-each-line{
+		margin-top:7px;
+		border:1px dashed var(--batch-instruction-color);
+	}
+	.for-each-tree {
+		margin-top:7px;
+		border:1px dashed solid var(--batch-instruction-color);
+	}
+	.actions {
+		margin-top:7px;
+		border:1px dashed var(--batch-instruction-color);
+	}
+	.if-then-else {
+		margin-top:7px;
+		border:1px solid var(--batch-instruction-color);
+	}
+	.if-action,
+	.then-part,
+	.else-part {
+		margin-bottom:7px;
+		border:1px dashed var(--batch-instruction-color);
+	}
 }
 
 

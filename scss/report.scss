@@ -30,91 +30,7 @@
 	padding:10px;
 }
 
-.report .for-each-person{
-	margin-top:7px;
-	border:1px solid lightGrey;
-}
 
-.report .for-each-line{
-	margin-top:7px;
-	border:1px solid lightGrey;
-}
-
-.report .for-each-portfolio{
-	margin-top:7px;
-	border:1px solid lightGrey ;
-}
-
-.report .for-each-node{
-	margin-top:7px;
-	border:1px solid lightGrey ;
-}
-
-.report .loop{
-	margin-top:7px;
-	border:1px solid #16A085 ;
-}
-.report .go-parent{
-	margin-top:7px;
-	border:1px solid lightGrey ;
-}
-
-.report .model-table {
-	margin-top:7px;
-	border:2px solid Navy;
-}
-
-.report .model-europass {
-	margin-top:7px;
-	border:2px solid #386bc1;
-}
-
-.report .model-row {
-	margin-top:7px;
-	border:2px solid SeaGreen;
-}
-
-.report .model-cell {
-	margin-top:7px;
-	border:2px solid Crimson;
-}
-
-.report .csv-line {
-	margin-top:7px;
-	border:2px solid #307D7E;
-}
-
-.report .csv-value {
-	margin-top:7px;
-	border:1px solid #43BFC7;
-}
-
-.report .report-variable {
-	margin-top:7px;
-	border:1px solid Orange;
-}
-
-.report .username {
-	margin-top:7px;
-	border:1px solid #EDE275;
-}
-
-.report .draw-web-title,
-.report .draw-web-line,
-.report .draw-web-axis,
-.report .node_resource,
-.report .text,
-.report .url2unit,
-.report .aggregate{
-	margin-top:7px;
-	border:1px dashed lightGrey;
-	margin-bottom:5px;
-}
-
-.report .draw-web-title,
-.report .draw-web-axis{
-	min-height:100px;
-}
 /*
 .report .select{
 	padding-left:0px;
@@ -184,3 +100,125 @@
 	margin-top:10px;
 }
 
+/* ============================= */
+/*     COMPONENTS COLORS         */
+/* ============================= */
+
+.report {
+	--report-loop-color : #46c7c7;
+	--report-instruction-color : orange;
+	--report-display-color : #8bffff;
+	--report-varop-color : #f08080;
+	--report-csv-color : #307D7E;
+	--report-sharing-color : #C0C0C0;
+	--report-svg-color : #52D017;
+
+	// LOOP
+	.for-each-person,
+	.for-each-line,
+	.for-each-portfolio,
+	.for-each-portfolios-nodes,
+	.for-each-node,
+	.loop
+	{
+		margin-top:7px;
+		border: 2px solid var(--batch-loop-color);
+	}
+
+	// INSTRUCTION
+	.go-parent,
+	.if-then-else,
+	.then-part,
+	.else-part
+	{
+		margin-top:7px;
+		border: 2px solid var(--batch-instruction-color);
+	}
+
+	// TABLE - ROW - CELL
+	.model-table {
+		margin-top:7px;
+		border:2px solid Navy;
+	}
+	.model-row {
+		margin-top:7px;
+		border:2px solid SeaGreen;
+	}
+	.model-cell {
+		margin-top:7px;
+		border:2px solid Crimson;
+	}
+
+	// EUROPASS
+	.model-europass {
+		margin-top:7px;
+		border:2px solid #386bc1;
+	}
+
+	// DISPLAY
+	.username,
+	.firstname,
+	.lastname,
+	.firstname-lastname,
+	.text,
+	.node-resource,
+	.url2unit
+	{
+		margin-top:7px;
+		border: 1px solid var(--batch-display-color);		
+	}
+
+	// VAROP
+	.report-variable,
+	.aggregate,
+	.operation
+	{
+		margin-top:7px;
+		border:1px solid var(--batch-varop-color);
+	}
+
+	// CSV
+	.csv-line {
+		margin-top:7px;
+		border:2px solid var(--batch-instruction-color);
+	}
+	.csv-value {
+		margin-top:7px;
+		border:1px solid var(--batch-instruction-color);
+	}
+
+	// SVG
+	.model-svg {
+		margin-top:7px;
+		border:2px solid var(--batch-svg-color);
+	}
+	.draw-web-title,
+	.draw-web-line,
+	.draw-web-axis,
+	.draw-xy-axis
+	{
+		margin-top:7px;
+		border:1px solid var(--batch-svg-color);
+	}
+	
+	// SHARING
+	.show-sharing,
+	.dislay-sharing
+	{
+		margin-top:7px;
+		border:1px solid var(--batch-sharing-color);
+	}
+}
+
+
+
+
+
+
+
+
+
+.report .draw-web-title,
+.report .draw-web-axis{
+	min-height:100px;
+}
