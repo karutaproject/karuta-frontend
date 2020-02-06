@@ -564,7 +564,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			}
 			code = cleanCode(code);
 			//------------------------------
-			input += "<div class='radio-div'><input type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
+			input += "<input class='radio-div' type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
@@ -575,7 +575,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			}
 			if (code!="" && self_code==$('code',resource).text())
 				input += " checked ";
-			input += "></div>";
+			input += ">";
 			input += "<div  class='sel"+code+" radio-label'>"
 			if (display_code)
 				input += code + " ";

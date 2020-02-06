@@ -1593,132 +1593,6 @@ function setVariables(data)
 		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].getLabel(null,'none')] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().text;
 	}
 }
-//==================================
-function setCSSportfolio(data)
-//==================================
-{
-	// ================================= CSS Portfolio ========================
-	
-	//-----------NAVBAR------------------------------------
-	var portfolio_navbar_color = g_configVar['config-portfolio-navbar-background-color'];
-	if ($("asmContext:has(metadata[semantictag='portfolio-navbar-background-color'])",data).length>0) {
-		portfolio_navbar_color = getText('portfolio-navbar-background-color','Color','text',data);
-//		var portfolio_navbar_id = $("asmContext:has(metadata[semantictag='portfolio-navbar-background-color'])",data).attr("id");
-//		portfolio_navbar_color = UICom.structure["ui"][portfolio_navbar_id].resource.getValue();
-	}
-	changeCss("#sub-bar", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
-	changeCss("#sub-bar .dropdown-menu", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
-	changeCss("#sub-bar .open > a", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
-	changeCss("#sub-bar  a.dropdown-item:hover", "color:"+portfolio_navbar_color+";");
-	//-----------
-	var portfolio_navbar_link_color = g_configVar['config-portfolio-navbar-text-color'];
-	if ($("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).length>0) {
-		portfolio_navbar_text_color = getText('portfolio-navbar-link','Color','text',data);
-	}
-	changeCss("#sub-bar a", "color:"+portfolio_navbar_link_color+";");
-	changeCss("#toggle-mode", "color:"+portfolio_navbar_link_color+";");
-	
-	//-----------SIDEBAR------------------------------------
-	var portfolio_sidebar_color = g_configVar['config-sidebar-background-color'];
-	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).length>0) {
-		portfolio_sidebar_color = getText('portfolio-sidebar','Color','text',data);
-	}
-	changeCss("#sidebar", "background-color:"+portfolio_sidebar_color+";");
-	//--------------------------------
-	var portfolio_sidebar_link_color = g_configVar['config-sidebar-text-color'];
-	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).length>0) {
-		portfolio_sidebar_link_color = getText('portfolio-sidebar-link','Color','text',data);
-	}
-	changeCss(".sidebar-link", "color:"+portfolio_sidebar_link_color+";padding-right:9px;");
-	changeCss(".sidebar-link a", "color:"+portfolio_sidebar_link_color+";");
-	//--------------------------------
-	var portfolio_sidebar_link_selected_color = g_configVar['config-sidebar-selected-text-color'];
-	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).length>0) {
-		portfolio_sidebar_link_selected_color = getText('portfolio-sidebar-link-selected','Color','text',data);
-	}
-	changeCss(".selected a", "color:"+portfolio_sidebar_link_selected_color+";font-weight:bold;");
-	changeCss(".sidebar-link a:hover", "color:"+portfolio_sidebar_link_selected_color+";");
-	changeCss("a.sidebar-link:hover", "color:"+portfolio_sidebar_link_selected_color+";");
-	//--------------------------------
-	var portfolio_sidebar_selected_border_color = g_configVar['config-sidebar-selected-border-color'];
-	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-selected-border'])",data).length>0) {
-		portfolio_sidebar_selected_border_color = getText('portfolio-sidebar-selected-border','Color','text',data);
-	}
-	changeCss("#sidebar .selected", "border-right:4px solid "+portfolio_sidebar_selected_border_color+";");
-	//--------------------------------
-	var portfolio_sidebar_separator_color = g_configVar['config-sidebar-separator-color'];
-	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).length>0) {
-		portfolio_sidebar_separator_color = getText('portfolio-sidebar-separator','Color','text',data);
-	}
-	changeCss(".sidebar-item", "border-bottom:1px solid "+portfolio_sidebar_separator_color+";");
-	changeCss(".sidebar-item .sidebar-item", "border-bottom:0px solid "+portfolio_sidebar_separator_color+";");
-
-
-	//-----------PORTFOLIO COLORS------------------------------------
-	var page_title_background_color = g_configVar['config-page-title-background-color'];
-	if ($("asmContext:has(metadata[semantictag='page-title-background-color'])",data).length>0) {
-		page_title_background_color = getText('page-title-background-color','Color','text',data);
-	}
-	changeCss(".welcome-line,.row-node-asmRoot,.row-node-asmStructure,.row-node-asmUnit", "background-color:"+page_title_background_color+";");
-	changeCss(".row-node", "border-top:1px solid "+page_title_background_color+";");
-	//--------------------------------
-	var text_color = g_configVar['config-text-color'];
-	if ($("asmContext:has(metadata[semantictag='text-color'])",data).length>0) {
-		text_color = getText('text-color','Color','text',data);
-		changeCss("#contenu", "color:"+text_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).length>0) {
-		var section_separator_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).attr("id");
-		var section_separator_color = UICom.structure["ui"][section_separator_color_id].resource.getValue();
-		changeCss(".row-node", "border-top:1px solid "+section_separator_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).length>0) {
-		var page_title_subline_color_id = $("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).attr("id");
-		var page_title_subline_color = UICom.structure["ui"][page_title_subline_color_id].resource.getValue();
-		changeCss(".row-node-asmRoot .title-subline,.row-node-asmStructure .title-subline,.row-node-asmUnit .title-subline", "border-bottom:1px solid "+page_title_subline_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
-		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
-		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
-		changeCss(".menus,.collapsible,.dropdownn-toggle, .createreport .button,.btn-group .button, .menus button, .menus a.button", "color:"+portfolio_buttons_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
-		var portfolio_buttons_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).attr("id");
-		var portfolio_buttons_background_color = UICom.structure["ui"][portfolio_buttons_background_color_id].resource.getValue();
-		changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "border:1px solid "+portfolio_buttons_background_color+";");
-		changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "background:"+portfolio_buttons_background_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).length>0) {
-		var portfolio_link_color_id = $("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).attr("id");
-		var portfolio_link_color = UICom.structure["ui"][portfolio_link_color_id].resource.getValue();
-		changeCss("a", "color:"+portfolio_link_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).length>0) {
-		var portfolio_section_title_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).attr("id");
-		var portfolio_section_title_background_color = UICom.structure["ui"][portfolio_section_title_background_color_id].resource.getValue();
-		changeCss(".row-node-asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
-	}
-
-	//-----------WELCOME------------------------------------
-	if ($("asmContext:has(metadata[semantictag='welcome-title-color'])",data).length>0) {
-		var welcome_title_color_id = $("asmContext:has(metadata[semantictag='welcome-title-color'])",data).attr("id");
-		var welcome_title_color = UICom.structure["ui"][welcome_title_color_id].resource.getValue();
-		changeCss(".page-welcome .welcome-title", "color:"+welcome_title_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='welcome-line-color'])",data).length>0) {
-		var welcome_line_color_id = $("asmContext:has(metadata[semantictag='welcome-line-color'])",data).attr("id");
-		var welcome_line_color = UICom.structure["ui"][welcome_line_color_id].resource.getValue();
-		changeCss(".welcome-line", "border-bottom:1px solid "+welcome_line_color+";width:25%;margin-left:auto;margin-right:auto;");
-	}
-	// ========================================================================
-}
 
 //==============================
 function logout()
@@ -2035,7 +1909,12 @@ function getContentStyle(semtag,data)
 function getText(semtag,objtype,elttype,data)
 //==============================
 {
-	return 	$(elttype+"[lang="+LANG+"]",$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	var result = "";
+	if (elttype=='value' || elttype=='code') // not language dependent
+		result = $(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	else
+		result = $(elttype+"[lang="+LANG+"]",$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	return result;
 }
 
 //==============================

@@ -194,13 +194,25 @@ function setConfigurationVariables()
 			g_configVar['config-portfolio-navbar-background-color'] = getText('config-portfolio-navbar-background-color','Color','text',data);
 			g_configVar['config-portfolio-navbar-text-color'] = getText('config-portfolio-navbar-text-color','Color','text',data);
 			g_configVar['config-portfolio-navbar-list-color'] = getText('config-portfolio-navbar-list-color','Color','text',data);
+
 			//----------
 			g_configVar['config-sidebar-background-color'] = getText('config-sidebar-background-color','Color','text',data);
 			g_configVar['config-sidebar-text-color'] = getText('config-sidebar-text-color','Color','text',data);
 			g_configVar['config-sidebar-selected-text-color'] = getText('config-sidebar-selected-text-color','Color','text',data);
 			g_configVar['config-sidebar-separator-color'] = getText('config-sidebar-separator-color','Color','text',data);
 			g_configVar['config-sidebar-selected-border-color'] = getText('config-sidebar-selected-border-color','Color','text',data);
-			
+
+			//----------
+			g_configVar['config-page-title-background-color'] = getText('config-page-title-background-color','Color','text',data);
+			g_configVar['config-text-color'] = getText('config-text-color','Color','text',data);
+			g_configVar['config-page-title-subline-color'] = getText('config-page-title-subline-color','Color','text',data);
+			g_configVar['config-portfolio-buttons-color'] = getText('config-portfolio-buttons-color','Color','text',data);
+			g_configVar['config-portfolio-buttons-background-color'] = getText('config-portfolio-buttons-background-color','Color','text',data);
+			g_configVar['config-portfolio-link-color'] = getText('config-portfolio-link-color','Color','text',data);
+			g_configVar['config-portfolio-section-title-background-color'] = getText('config-portfolio-section-title-background-color','Color','text',data);
+			g_configVar['config-portfolio-section-separator-color'] = getText('config-portfolio-section-separator-color','Color','text',data);
+			g_configVar['config-portfolio-resource-border-color'] = getText('config-portfolio-resource-border-color','Color','text',data);
+
 		}
 	});
 }
