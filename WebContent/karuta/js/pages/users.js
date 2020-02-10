@@ -28,12 +28,12 @@ function fill_list_users()
 	});
 	var html = "";
 	html += "<span id='user-create' class='btn' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
-	html += "<h3 id='active-users'>"+karutaStr[LANG]['active_users']+"</h3>";
-	html += "<div  id='active'>";
-	html += "</div>";
-	html += "<h3 id='inactive-users' style='display:none'>"+karutaStr[LANG]['inactive_users']+"</h3>";
-	html += "<div  id='inactive' style='display:none'>";
-	html += "</div>";
+	html += "<h3 id='active-users'><span id='active-users-button' onclick=\"javascript:toggleUsersList('active')\" class='button fa fa-minus'></span>"+karutaStr[LANG]['active_users']+"</h3>";
+	html += "<div  id='active'></div>";
+	
+	html += "<h3 id='inactive-users' style='display:none'><span id='inactive-users-button' onclick=\"javascript:toggleUsersList('inactive')\" class='button fa fa-minus'></span>"+karutaStr[LANG]['inactive_users']+"</h3>";
+	html += "<div  id='inactive' style='display:none'></div>";
+
 	html += "<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users'];
 	html += "&nbsp<button class='btn ' onclick=\"confirmDelTemporaryUsers()\">";
 	html += karutaStr[LANG]["delete-temporary-users"];
@@ -42,6 +42,10 @@ function fill_list_users()
 
 	html += "<div  id='temporary'>";
 	html += "</div>";
+
+	html += "<h3 id='empty-users'><span id='empty-users-button' onclick=\"javascript:toggleUsersList('empty')\" class='button fa fa-plus'></span>"+karutaStr[LANG]['empty_users']+"</h3>";
+	html += "<div  id='empty' style='display:none'></div>";
+
 	$("#main-user").html(html);
 	$.ajaxSetup({async: false});
 	$.ajax({
@@ -137,4 +141,22 @@ function getSearchUser()
 	html += "	<span class='input-group-btn'><button id='search-button-lastname' type='button' onclick='searchUser()' class='btn'><span class='glyphicon glyphicon-search'></span></button></span>";
 	html += "</div><!-- /input-group -->";
 	return html;
+}
+
+//==================================
+function toggleUsersList(list) {
+//==================================
+	if ($("#"+list+"-users-button").hasClass("fa-plus")) {
+		if (list=='empty') {
+			UIFactory.User.getListUserWithoutPortfolio();
+			UIFactory.User.displayUserWithoutPortfolio('empty')
+		}
+		$("#"+list+"-users-button").removeClass("fa-plus");
+		$("#"+list+"-users-button").addClass("fa-minus");
+		$("#"+list).show();
+	} else {
+		$("#"+list+"-users-button").removeClass("fa-minus")
+		$("#"+list+"-users-button").addClass("fa-plus")
+		$("#"+list).hide();
+	}
 }

@@ -18,6 +18,7 @@ var USER = null; // global variable: current user object
 var Users_byid = {};
 var UsersActive_list = [];
 var UsersInactive_list = [];
+var UsersWithoutPortfolio_list = [];
 
 /// Check namespace existence
 if( UIFactory === undefined )
@@ -72,41 +73,6 @@ UIFactory["User"] = function( node )
 	this.limited = this.other_node.text().indexOf('limited')>-1;
 	this.xlimited = this.other_node.text().indexOf('xlimited')>-1;
 	//-----------------------------------
-
-/*
-	// For compatibility
-	var xml=0;
-	if( node.selector != null )
-		{ xml = node[0].outerHTML; }
-	else
-		{ xml = node; }
-
-	var parser = new DOMParser();
-	var xmlDoc = parser.parseFromString(xml,"text/xml");
-	var p = xmlDoc.querySelector("user");
-	this.id = p.getAttribute("id");
-	this.node = xmlDoc;
-	this.attributes = {};
-	this.display = {};
-	var cds = p.children;
-	for( var i=0; i<cds.length; i++ )
-		{
-		var c = cds[i];
-		var nn = c.nodeName;
-		var nc = c.textContent;
-		this[nn] = nc;
-		// For compatibility
-		this[nn+"_node"] = c;
-		this.attributes[nn] = c;
-	}
-	//-----------------------------------
-	// setting flags
-	this.admin = this.admin == "1";
-	this.creator = this.designer == "1" || this.admin;
-	this.limited = this.other.indexOf('limited')>-1;
-	this.xlimited = this.other.indexOf('xlimited')>-1;
-	//-----------------------------------
-*/
 };
 
 
@@ -817,3 +783,63 @@ UIFactory["User"].deleteTemporaryUsers = function()
 	$.ajaxSetup({async: true});
 	//----------------
 }
+
+
+//==================================
+UIFactory["User"].getListUserWithoutPortfolio = function() 
+//==================================
+{
+	for (var i=0; i<UsersActive_list.length; i++) {
+		if(UsersActive_list[i].id>3)
+			$.ajax({
+				async : false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfolios?active=1&userid="+UsersActive_list[i].id,
+				userid : userid,
+				success : function(data) {
+					var nb_portfolios = parseInt($('portfolios',data).attr('count'));
+					if (nb_portfolios==0){
+						UsersWithoutPortfolio_list[UsersWithoutPortfolio_list.length] = UsersActive_list[i];
+					}
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Server Error GET getListUserWithoutPortfolio: "+textStatus);
+				}
+			});
+	}
+}
+
+//==================================
+UIFactory["User"].displayUserWithoutPortfolio = function(destid,type,lang)
+//==================================
+{
+	$("#"+destid).html("<div><button class='btn btn-xs' onclick=\"confirmDelEmptyUsers()\">"+ karutaStr[LANG]["delete-empty-users"] + "</button></div><table id='table_empty_users' class='tablesorter'><thead><th style='padding-left:20px;'>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='empty_users'></tbody></table>");
+	$("#empty_users").append($("<tr><td><input type='checkbox' name='checkalluserempty'></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+	for ( var i = 0; i < UsersWithoutPortfolio_list.length; i++) {
+		var itemid = destid+"_"+UsersWithoutPortfolio_list[i].id;
+			$("#empty_users").append($("<tr class='item' id='"+itemid+"'></tr>"));
+			$("#"+itemid).html(UsersWithoutPortfolio_list[i].getView(destid,"empty",lang));
+	}
+	$(function () {
+		$('input[name=checkalluserempty]').click(function () {
+	        if ($(this).is(":checked")) {
+	    		$("input[name=empty-user").prop('checked',true);		
+	        } else {
+	    		$("input[name=empty-user").prop('checked',false);		
+	        }
+	    });
+	});
+};
+
+//==================================
+function checkalluserempty() 
+//==================================
+{
+	if( $('input[name=checkalluserempty]').is(':checked') ){
+		$("input[name=empty-user").prop('checked',false);		
+	} else {
+		$("input[name=empty-user").prop('checked',true);
+	}
+}
+
