@@ -434,6 +434,24 @@ function countProjectPortfolios(uuid)
 	});
 }
 
+//==============================
+function getSearch()
+//==============================
+{
+	var html = "";
+	html += "<div id='search' class='input-group'>";
+	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"' onchange='javascript:hideArchiveSearch()'>";
+	html += "	<div class='input-group-append'>";
+	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><i class='fas fa-search'></i></button>";
+	if (USER.creator && !USER.limited)  {
+		html += "		<a id='archive-button' href='' class='btn' disabled='true'><i style='margin-top:4px' class='fas fa-download'></i></a>";
+		html += "		<button id='remove-button' type='button' disabled='true' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fas fa-trash'></i></button>";
+	}
+	html += "	</div>";
+	html += "</div>";
+	return html;
+}
+
 //==================================
 function searchPortfolio()
 //==================================

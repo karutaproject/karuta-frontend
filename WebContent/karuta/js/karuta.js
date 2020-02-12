@@ -1614,7 +1614,6 @@ function hideAllPages()
 //==============================
 {
 	$("#search-portfolio-div").hide();
-	$("#search-user-div").hide();
 	$("#list-container").hide();
 	$("#main-portfoliosgroup").hide();
 	$("#portfolio-container").hide();

@@ -10,7 +10,6 @@ function show_list_users()
 	$("#sub-bar").html("");
 	setLanguageMenu("fill_list_users()");
 	$("#refresh").attr("onclick","fill_list_users()");
-	$("#search-user-div").show();
 	$("#refresh").show();
 	$("#main-user").show();
 }
@@ -20,14 +19,16 @@ function fill_list_users()
 //==============================
 {
 	setLanguageMenu("fill_list_users()");
-	$("#search-user-div").html(getSearchUser()); // we erase code if any
-	$("#search-user-input").keypress(function(f) {
-		var code= (f.keyCode ? f.keyCode : f.which);
-		if (code == 13)
-			searchUser();
-	});
 	var html = "";
-	html += "<span id='user-create' class='btn' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
+	html += "<div id='user-header' class='row'>";
+	html += "	<div class='col-2'>";
+	html += "		<div class='btn' id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</div>";
+	html += "	</div>";
+	html += "	<div class='col-9 search' id='search-user-div'></div>";
+	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></i></div>";
+	html += "</div>";
+
+
 	html += "<h3 id='active-users'><span id='active-users-button' onclick=\"javascript:toggleUsersList('active')\" class='button fa fa-minus'></span>"+karutaStr[LANG]['active_users']+"</h3>";
 	html += "<div  id='active'></div>";
 	
@@ -47,6 +48,12 @@ function fill_list_users()
 	html += "<div  id='empty' style='display:none'></div>";
 
 	$("#main-user").html(html);
+	$("#search-user-div").html(getSearchUser()); // we erase code if any
+	$("#search-user-input").keypress(function(f) {
+		var code= (f.keyCode ? f.keyCode : f.which);
+		if (code == 13)
+			searchUser();
+	});
 	$.ajaxSetup({async: false});
 	$.ajax({
 		type : "GET",
@@ -82,7 +89,14 @@ function fill_search_users(value,type)
 //==============================
 {
 	var html = "";
-	html += "<span id='user-create' class='btn' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</span>";
+	html += "<div id='user-header' class='row'>";
+	html += "	<div class='col-2'>";
+	html += "		<div class='btn' id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</div>";
+	html += "	</div>";
+	html += "	<div class='col-9 search' id='search-user-div'></div>";
+	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></i></div>";
+	html += "</div>";
+
 	html += "<h3 id='active-users'>"+karutaStr[LANG]['active_users']+"</h3>";
 	html += "<div  id='active'>";
 	html += "</div>";
@@ -129,16 +143,18 @@ function getSearchUser()
 {
 	var html = "";
 	html += "<div id='search-user' class='input-group'>";
-	html += "<div class='input-group-btn'>";
-	html += "<button id='search-choice' value='username' type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span id='search-input-label'>"+karutaStr[LANG]['username-label']+"</span> <span class='caret'></span></button>";
-	html += "<ul class='dropdown-menu'>";
-	html += "<li><a href='#' onclick=\"$('#search-choice').attr('value','username');$('#search-input-label').html('"+karutaStr[LANG]['username-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-username-label']+"')\">"+karutaStr[LANG]['username-label']+"</a></li>";
-	html += "<li><a href='#' onclick=\"$('#search-choice').attr('value','firstname');$('#search-input-label').html('"+karutaStr[LANG]['firstname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-firstname-label']+"')\">"+karutaStr[LANG]['firstname-label']+"</a></li>";
-	html += "<li><a href='#' onclick=\"$('#search-choice').attr('value','lastname');$('#search-input-label').html('"+karutaStr[LANG]['lastname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-lastname-label']+"')\">"+karutaStr[LANG]['lastname-label']+"</a></li>";
-	html += "</ul>";
-	html += "</div><!-- /btn-group -->";
+	html += "<div class='input-group-prepend'>";
+	html += "<button id='search-choice' value='username' type='button' class='btn dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span id='search-input-label'>"+karutaStr[LANG]['username-label']+"</span> <span class='caret'></span></button>";
+	html += "<div class='dropdown-menu'>";
+	html += "<a href='#' class='dropdown-item' onclick=\"$('#search-choice').attr('value','username');$('#search-input-label').html('"+karutaStr[LANG]['username-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-username-label']+"')\">"+karutaStr[LANG]['username-label']+"</a>";
+	html += "<a href='#' class='dropdown-item' onclick=\"$('#search-choice').attr('value','firstname');$('#search-input-label').html('"+karutaStr[LANG]['firstname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-firstname-label']+"')\">"+karutaStr[LANG]['firstname-label']+"</a>";
+	html += "<a href='#' class='dropdown-item' onclick=\"$('#search-choice').attr('value','lastname');$('#search-input-label').html('"+karutaStr[LANG]['lastname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-lastname-label']+"')\">"+karutaStr[LANG]['lastname-label']+"</a>";
+	html += "</div>";
+	html += "</div><!-- /input-group-prepend -->";
 	html += "<input type='text' id='search-user-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-username-label']+"'>";
-	html += "	<span class='input-group-btn'><button id='search-button-lastname' type='button' onclick='searchUser()' class='btn'><span class='glyphicon glyphicon-search'></span></button></span>";
+	html += "<div class='input-group-append'>";
+	html += "<button id='search-button-lastname' type='button' onclick='searchUser()' class='btn'><i class='fas fa-search'></i></button>";
+	html += "</div><!-- /btn-group -->";
 	html += "</div><!-- /input-group -->";
 	return html;
 }

@@ -536,6 +536,73 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 }
 
 //=============================================================================
+//============================= USER ==========================================
+//======================  username firstname lastname =========================
+//=============================firstname-lastname==============================
+//=============================================================================
+
+//==================================
+g_report_actions['username'] = function (destid,action,no,data,is_out_csv)
+//==================================
+{
+	var text = USER.username;
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+}
+
+//==================================
+g_report_actions['firstname'] = function (destid,action,no,data,is_out_csv)
+//==================================
+{
+	var text = USER.firstname;
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+}
+
+//==================================
+g_report_actions['lastname'] = function (destid,action,no,data,is_out_csv)
+//==================================
+{
+	var text = USER.lastname;
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+}
+
+//==================================
+g_report_actions['first-lastname'] = function (destid,action,no,data,is_out_csv)
+//==================================
+{
+	var text1 = USER.firstname;
+	var text2 = USER.lastname;
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text1 +"-" + text2 + csvseparator;		
+	} else {
+		var text = "<span id='"+destid+'-'+no+"'>"+text1 + "&nbsp" +text2 + "</span>";
+		$("#"+destid).append($(text));		
+	}
+}
+
+//=============================================================================
 //=============================================================================
 //======================FOR-EACH-PORTFOLIO ====================================
 //=============================================================================
@@ -822,73 +889,6 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 			}
 		}
 	});
-}
-
-//=============================================================================
-//============================= USER ==========================================
-//======================  username firstname lastname =========================
-//=============================firstname-lastname==============================
-//=============================================================================
-
-//==================================
-g_report_actions['username'] = function (destid,action,no,data,is_out_csv)
-//==================================
-{
-	var text = USER.username;
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	} else {
-		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
-		$("#"+destid).append($(text));		
-	}
-}
-
-//==================================
-g_report_actions['firstname'] = function (destid,action,no,data,is_out_csv)
-//==================================
-{
-	var text = USER.firstname;
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	} else {
-		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
-		$("#"+destid).append($(text));		
-	}
-}
-
-//==================================
-g_report_actions['lastname'] = function (destid,action,no,data,is_out_csv)
-//==================================
-{
-	var text = USER.lastname;
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	} else {
-		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
-		$("#"+destid).append($(text));		
-	}
-}
-
-//==================================
-g_report_actions['first-lastname'] = function (destid,action,no,data,is_out_csv)
-//==================================
-{
-	var text1 = USER.firstname;
-	var text2 = USER.lastname;
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text1 +"-" + text2 + csvseparator;		
-	} else {
-		var text = "<span id='"+destid+'-'+no+"'>"+text1 + "&nbsp" +text2 + "</span>";
-		$("#"+destid).append($(text));		
-	}
 }
 
 //=============================================================================

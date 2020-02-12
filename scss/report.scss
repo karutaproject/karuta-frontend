@@ -122,7 +122,7 @@
 	.loop
 	{
 		margin-top:7px;
-		border: 2px solid var(--batch-loop-color);
+		border: 2px solid var(--report-loop-color);
 	}
 
 	// INSTRUCTION
@@ -132,7 +132,7 @@
 	.else-part
 	{
 		margin-top:7px;
-		border: 2px solid var(--batch-instruction-color);
+		border: 2px solid var(--report-instruction-color);
 	}
 
 	// TABLE - ROW - CELL
@@ -161,11 +161,12 @@
 	.lastname,
 	.firstname-lastname,
 	.text,
-	.node-resource,
-	.url2unit
+	.node_resource,
+	.url2unit,
+	.model-qrcode
 	{
 		margin-top:7px;
-		border: 1px solid var(--batch-display-color);		
+		border: 1px solid var(--report-display-color);		
 	}
 
 	// VAROP
@@ -174,23 +175,23 @@
 	.operation
 	{
 		margin-top:7px;
-		border:1px solid var(--batch-varop-color);
+		border:1px solid var(--report-varop-color);
 	}
 
 	// CSV
 	.csv-line {
 		margin-top:7px;
-		border:2px solid var(--batch-instruction-color);
+		border:2px solid var(--report-instruction-color);
 	}
 	.csv-value {
 		margin-top:7px;
-		border:1px solid var(--batch-instruction-color);
+		border:1px solid var(--report-instruction-color);
 	}
 
 	// SVG
 	.model-svg {
 		margin-top:7px;
-		border:2px solid var(--batch-svg-color);
+		border:2px solid var(--report-svg-color);
 	}
 	.draw-web-title,
 	.draw-web-line,
@@ -198,7 +199,7 @@
 	.draw-xy-axis
 	{
 		margin-top:7px;
-		border:1px solid var(--batch-svg-color);
+		border:1px solid var(--report-svg-color);
 	}
 	
 	// SHARING
@@ -206,7 +207,7 @@
 	.dislay-sharing
 	{
 		margin-top:7px;
-		border:1px solid var(--batch-sharing-color);
+		border:1px solid var(--report-sharing-color);
 	}
 }
 

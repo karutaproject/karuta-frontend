@@ -56,12 +56,11 @@ function displayKarutaPage()
 			var html = "";
 			html += "	<div id='list-container' class='container-fluid'></div>";
 			html += "	<div id='portfolio-container' role='all' style='display:none'></div>";
-			html += "	<div id='search-user-div' class='search' style='display:none'></div>";
 			html += "	<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-user' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-usersgroup' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-exec-batch' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-exec-report' class='col-md-12' style='display:none'></div>";
+			html += "	<div id='main-user' class='container-fluid' style='display:none'></div>";
+			html += "	<div id='main-usersgroup' class='container-fluid' style='display:none'></div>";
+			html += "	<div id='main-exec-batch' class='container-fluid' style='display:none'></div>";
+			html += "	<div id='main-exec-report' class='container-fluid' style='display:none'></div>";
 			html += "</div>";
 			$("#main-container").html(html);
 			$.ajax({
@@ -100,24 +99,6 @@ function displayKarutaPage()
 	});
 	$.ajaxSetup({async: true});
 	$('[data-tooltip="true"]').tooltip();
-}
-
-//==============================
-function getSearch()
-//==============================
-{
-	var html = "";
-	html += "<div id='search' class='input-group'>";
-	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"' onchange='javascript:hideArchiveSearch()'>";
-	html += "	<div class='input-group-append'>";
-	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><i class='fas fa-search'></i></button>";
-	if (USER.creator && !USER.limited)  {
-		html += "		<a id='archive-button' href='' class='btn' disabled='true'><i style='margin-top:4px' class='fas fa-download'></i></a>";
-		html += "		<button id='remove-button' type='button' disabled='true' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fas fa-trash'></i></button>";
-	}
-	html += "	</div>";
-	html += "</div>";
-	return html;
 }
 
 //==============================
