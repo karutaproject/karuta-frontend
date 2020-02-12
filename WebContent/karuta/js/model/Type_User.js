@@ -481,6 +481,18 @@ UIFactory["User"].confirmRemove = function(userid,from_page)
 };
 
 //==================================
+UIFactory["User"].confirmRemoveUsers = function(from_page) 
+//==================================
+{
+	var js_remove = "UIFactory.User.removeUsers('"+from_page+"')";
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:"+js_remove+";$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+};
+
+//==================================
 UIFactory["User"].remove = function(userid,from_page) 
 //==================================
 {
@@ -784,6 +796,31 @@ UIFactory["User"].deleteTemporaryUsers = function()
 	//----------------
 }
 
+//==================================
+UIFactory["User"].removeUsers = function() 
+//==================================
+{
+	$("#wait-window").show();
+	//----------------
+	$.ajaxSetup({async: false});
+	for (var i=0;i<UsersActive_list.length;i++){
+		var userid = $(UsersActive_list[i]).attr("id");
+		var url = serverBCK_API+"/users/user/" + userid;
+		$.ajax({
+			type : "DELETE",
+			dataType : "text",
+			url : url,
+			data : "",
+			success : function(data) {
+			}
+		});
+	}
+	$("#wait-window").hide();
+	$.ajaxSetup({async: true});
+	fill_list_users();
+	$("#refresh").click();
+	//----------------
+}
 
 //==================================
 UIFactory["User"].getListUserWithoutPortfolio = function() 

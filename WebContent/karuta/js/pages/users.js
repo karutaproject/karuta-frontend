@@ -147,7 +147,7 @@ function getSearchUser()
 	html += "	<input type='text' id='search-user-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-username-label']+"'>";
 	html += "	<div class='input-group-append'>";
 	html += "		<button id='search-button-lastname' type='button' onclick='searchUser()' class='btn'><i class='fas fa-search'></i></button>";
-	html += "		<button id='rembutton' type='button' disabled='true' onclick=\"UIFactory['User'].removeUsers()\" class='btn'><i class='fas fa-trash'></i></button>";
+	html += "		<button id='rembutton' type='button' disabled='true' onclick=\"UIFactory.User.confirmRemoveUsers()\" class='btn'><i class='fas fa-trash'></i></button>";
 	html += "	</div><!-- /input-group-append -->";
 	html += "</div><!-- /input-group -->";
 	return html;
