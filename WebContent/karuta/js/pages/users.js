@@ -25,27 +25,29 @@ function fill_list_users()
 	html += "		<div class='btn' id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</div>";
 	html += "	</div>";
 	html += "	<div class='col-9 search' id='search-user-div'></div>";
-	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></i></div>";
+	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-tooltip='true' data-placement='bottom'></i></div>";
 	html += "</div>";
 
 
-	html += "<h3 id='active-users'><span id='active-users-button' onclick=\"javascript:toggleUsersList('active')\" class='button fa fa-minus'></span>"+karutaStr[LANG]['active_users']+"</h3>";
-	html += "<div  id='active'></div>";
+	html += "<div id='user-body'>";
+	html += "	<h3 id='active-users'><span id='active-users-button' onclick=\"javascript:toggleUsersList('active')\" class='button fa fa-minus'></span>"+karutaStr[LANG]['active_users']+"</h3>";
+	html += "	<div  id='active'></div>";
 	
-	html += "<h3 id='inactive-users' style='display:none'><span id='inactive-users-button' onclick=\"javascript:toggleUsersList('inactive')\" class='button fa fa-minus'></span>"+karutaStr[LANG]['inactive_users']+"</h3>";
-	html += "<div  id='inactive' style='display:none'></div>";
+	html += "	<h3 id='inactive-users' style='display:none'><span id='inactive-users-button' onclick=\"javascript:toggleUsersList('inactive')\" class='button fa fa-minus'></span>"+karutaStr[LANG]['inactive_users']+"</h3>";
+	html += "	<div  id='inactive' style='display:none'></div>";
 
-	html += "<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users'];
-	html += "&nbsp<button class='btn ' onclick=\"confirmDelTemporaryUsers()\">";
-	html += karutaStr[LANG]["delete-temporary-users"];
-	html += "</button>";
-	html += "</h3>";
+	html += "	<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users'];
+	html += "		&nbsp<button class='btn ' onclick=\"confirmDelTemporaryUsers()\">";
+	html += 		karutaStr[LANG]["delete-temporary-users"];
+	html += "		</button>";
+	html += "	</h3>";
 
-	html += "<div  id='temporary'>";
-	html += "</div>";
+	html += "	<div  id='temporary'></div>";
 
-	html += "<h3 id='empty-users'><span id='empty-users-button' onclick=\"javascript:toggleUsersList('empty')\" class='button fa fa-plus'></span>"+karutaStr[LANG]['empty_users']+"</h3>";
-	html += "<div  id='empty' style='display:none'></div>";
+	html += "	<h3 id='empty-users'><span id='empty-users-button' onclick=\"javascript:toggleUsersList('empty')\" class='button fa fa-plus'></span>"+karutaStr[LANG]['empty_users']+"</h3>";
+	html += "	<div  id='empty' style='display:none'></div>";
+
+	html += "</div><!-- #user-body -->";
 
 	$("#main-user").html(html);
 	$("#search-user-div").html(getSearchUser()); // we erase code if any
@@ -89,21 +91,12 @@ function fill_search_users(value,type)
 //==============================
 {
 	var html = "";
-	html += "<div id='user-header' class='row'>";
-	html += "	<div class='col-2'>";
-	html += "		<div class='btn' id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</div>";
-	html += "	</div>";
-	html += "	<div class='col-9 search' id='search-user-div'></div>";
-	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></i></div>";
-	html += "</div>";
-
 	html += "<h3 id='active-users'>"+karutaStr[LANG]['active_users']+"</h3>";
-	html += "<div  id='active'>";
-	html += "</div>";
+	html += "<div  id='active'></div>";
 	html += "<h3 id='inactive-users'>"+karutaStr[LANG]['inactive_users']+"</h3>";
-	html += "<div  id='inactive'>";
-	html += "</div>";
-	$("#main-user").html(html);
+	html += "<div  id='inactive'></div>";
+	$("#user-body").html(html);
+	$("#rembutton").removeAttr('disabled');
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -143,18 +136,19 @@ function getSearchUser()
 {
 	var html = "";
 	html += "<div id='search-user' class='input-group'>";
-	html += "<div class='input-group-prepend'>";
-	html += "<button id='search-choice' value='username' type='button' class='btn dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span id='search-input-label'>"+karutaStr[LANG]['username-label']+"</span> <span class='caret'></span></button>";
-	html += "<div class='dropdown-menu'>";
-	html += "<a href='#' class='dropdown-item' onclick=\"$('#search-choice').attr('value','username');$('#search-input-label').html('"+karutaStr[LANG]['username-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-username-label']+"')\">"+karutaStr[LANG]['username-label']+"</a>";
-	html += "<a href='#' class='dropdown-item' onclick=\"$('#search-choice').attr('value','firstname');$('#search-input-label').html('"+karutaStr[LANG]['firstname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-firstname-label']+"')\">"+karutaStr[LANG]['firstname-label']+"</a>";
-	html += "<a href='#' class='dropdown-item' onclick=\"$('#search-choice').attr('value','lastname');$('#search-input-label').html('"+karutaStr[LANG]['lastname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-lastname-label']+"')\">"+karutaStr[LANG]['lastname-label']+"</a>";
-	html += "</div>";
-	html += "</div><!-- /input-group-prepend -->";
-	html += "<input type='text' id='search-user-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-username-label']+"'>";
-	html += "<div class='input-group-append'>";
-	html += "<button id='search-button-lastname' type='button' onclick='searchUser()' class='btn'><i class='fas fa-search'></i></button>";
-	html += "</div><!-- /btn-group -->";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<button id='search-choice' value='username' type='button' class='btn dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span id='search-input-label'>"+karutaStr[LANG]['username-label']+"</span> <span class='caret'></span></button>";
+	html += "		<div class='dropdown-menu'>";
+	html += "			<a href='#' class='dropdown-item' onclick=\"$('#search-choice').attr('value','username');$('#search-input-label').html('"+karutaStr[LANG]['username-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-username-label']+"')\">"+karutaStr[LANG]['username-label']+"</a>";
+	html += "			<a href='#' class='dropdown-item' onclick=\"$('#search-choice').attr('value','firstname');$('#search-input-label').html('"+karutaStr[LANG]['firstname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-firstname-label']+"')\">"+karutaStr[LANG]['firstname-label']+"</a>";
+	html += "			<a href='#' class='dropdown-item' onclick=\"$('#search-choice').attr('value','lastname');$('#search-input-label').html('"+karutaStr[LANG]['lastname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-lastname-label']+"')\">"+karutaStr[LANG]['lastname-label']+"</a>";
+	html += "		</div>";
+	html += "	</div><!-- /input-group-prepend -->";
+	html += "	<input type='text' id='search-user-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-username-label']+"'>";
+	html += "	<div class='input-group-append'>";
+	html += "		<button id='search-button-lastname' type='button' onclick='searchUser()' class='btn'><i class='fas fa-search'></i></button>";
+	html += "		<button id='rembutton' type='button' disabled='true' onclick=\"UIFactory['User'].removeUsers()\" class='btn'><i class='fas fa-trash'></i></button>";
+	html += "	</div><!-- /input-group-append -->";
 	html += "</div><!-- /input-group -->";
 	return html;
 }
