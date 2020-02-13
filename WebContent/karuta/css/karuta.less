@@ -13,7 +13,7 @@ body {
 }
 .asmRoot .row-node-asmStructure .title-subline,
 .asmStructure .asmStructure .row-node-asmStructure .title-subline,
-.asmStructure .row-node-asmUnit  .title-subline{
+.asmStructure .row-node-asmUnit .title-subline {
 	border-bottom:0px solid white;
 }
 
@@ -42,7 +42,7 @@ body {
 .list-usersgroups,
 .list-users,
 .exec_report,
-.exec_batch{
+.exec_batch {
 	background-color:@list-background-color;
 }
 
@@ -1734,37 +1734,31 @@ table.tablesorter th.restore {
 	min-height:34px;
 }
 
-.report .asmUnitStructure{
+.report .asmUnitStructure {
 	padding:10px;
 }
 
-.report .for-each-person{
+.report .for-each-person,
+.report .for-each-line,
+.report .for-each-portfolio,
+.report .for-each-node,
+.report .for-each-portfolios-nodes,
+.report .loop {
 	margin-top:7px;
-	border:1px solid lightgrey;
+	border:2px solid #46c7c7;
 }
 
-.report .for-each-line{
+.report .go-parent,
+.report .if-then-else {
 	margin-top:7px;
-	border:1px solid lightgrey;
+	border:2px solid orange;
 }
 
-.report .for-each-portfolio{
+.report .if-part,
+.report .else-part {
 	margin-top:7px;
-	border:1px solid lightgrey ;
-}
-
-.report .for-each-node{
-	margin-top:7px;
-	border:1px solid lightgrey ;
-}
-
-.report .loop{
-	margin-top:7px;
-	border:1px solid #16A085 ;
-}
-.report .go-parent{
-	margin-top:7px;
-	border:1px solid lightgrey ;
+	border:1px solid orange;
+	margin-bottom:5px;
 }
 
 .report .model-table {
@@ -1787,11 +1781,6 @@ table.tablesorter th.restore {
 	border:2px solid Crimson;
 }
 
-.report .report-variable {
-	margin-top:7px;
-	border:1px solid Orange;
-}
-
 .report .csv-line {
 	margin-top:7px;
 	border:2px solid #307D7E;
@@ -1799,38 +1788,56 @@ table.tablesorter th.restore {
 
 .report .csv-value {
 	margin-top:7px;
-	border:1px solid #43BFC7;
+	border:1px solid #307D7E;
 }
 
-.report .username {
+.report .node_resource,
+.report .text,
+.report .url2unit,
+.report .username,
+.report .firstname,
+.report .lastname,
+.report .firstname-lastname,
+.report .show-sharing,
+.report .model-qrcode {
 	margin-top:7px;
-	border:1px solid #EDE275;
+	border:1px solid #8bffff;
+	margin-bottom:5px;
+}
+
+.report .model-svg {
+	margin-top:7px;
+	border:2px solid yellowgreen;
 }
 
 .report .draw-web-title,
 .report .draw-web-line,
-.report .draw-web-axis,
-.report .node_resource,
-.report .text,
-.report .url2unit,
-.report .aggregate{
+.report .draw-web-axis {
 	margin-top:7px;
-	border:1px dashed lightgrey;
+	border:1px solid yellowgreen;
 	margin-bottom:5px;
 }
 
 .report .draw-web-title,
-.report .draw-web-axis{
+.report .draw-web-axis {
 	min-height:100px;
 }
 
-.report .select{
+.report .aggregate,
+.report .operation,
+.report .report-variable {
+	margin-top:7px;
+	border:1px dashed lightcoral;
+	margin-bottom:5px;
+}
+
+.report .select {
 	padding-left:0px;
 	border-left:0px solid lightgrey;
 }
 
 .report .select select,
-.report .select input{
+.report .select input {
 	margin-bottom:0px;
 }
 
@@ -1897,8 +1904,7 @@ table.tablesorter th.restore {
 	Batch Model
    ====================*/
 
-#batchmodel_list_table td
-{
+#batchmodel_list_table td {
 	padding:5px;
 	border-top:1px solid #C0C0C0;
 	border-bottom:1px solid #C0C0C0;
@@ -1917,7 +1923,7 @@ table.tablesorter th.restore {
 	margin-right:3px;
 }
 
-.batch .asmUnitStructure{
+.batch .asmUnitStructure {
 	padding:10px;
 }
 
@@ -1931,14 +1937,19 @@ table.tablesorter th.restore {
 }
 /* ------------------------ */
 
-.batch .for-each-line{
+.batch .for-each-line,
+.batch .for-each-tree,
+.batch .for-each-person,
+.batch .if-action,
+.batch .then-part,
+.batch .else-part {
 	margin-top:7px;
-	border:1px solid lightgrey;
+	border:1px dashed crimson;
 }
 
-.batch .for-each-tree {
+.batch .if-then-else {
 	margin-top:7px;
-	border:1px solid lightgrey;
+	border:1px solid crimson;
 }
 
 .batch .actions {
@@ -1948,24 +1959,12 @@ table.tablesorter th.restore {
 
 /* ------------------------ */
 
-.batch .create-person {
-	margin-top:7px;
-	border:1px solid Navy ;
-}
-
-.batch .delete-person {
-	margin-top:7px;
-	border:1px solid #46C7C7 ;
-}
-
-.batch .inactivate-person {
-	margin-top:7px;
-	border:1px solid #63E1FF ;
-}
-
+.batch .create-person,
+.batch .delete-person,
+.batch .inactivate-person,
 .batch .activate-person {
 	margin-top:7px;
-	border:1px solid #8BFFFF ;
+	border:1px solid #63e1ff;
 }
 
 /* ------------------------ */
@@ -2002,133 +2001,67 @@ table.tablesorter th.restore {
 	width:220px;
 }
 
-.batch .create-tree{
+.batch .create-tree,
+.batch .share-tree,
+.batch .unshare-tree,
+.batch .select-tree,
+.batch .delete-tree,
+.batch .re-instantiate-tree,
+.batch .set-owner,
+.batch .update-tree-root {
 	margin-top:7px;
-	border:1px solid SeaGreen ;
-}
-
-.batch .share-tree{
-	margin-top:7px;
-	border:1px solid lightGreen ;
-}
-
-.batch .unshare-tree{
-	margin-top:7px;
-	border:1px solid #ACFA58 ;
-}
-
-.batch .select-tree{
-	margin-top:7px;
-	border:1px solid GreenYellow ;
-}
-
-.batch .delete-tree{
-	margin-top:7px;
-	border:1px solid Aquamarine ;
-}
-
-.batch .set-owner {
-	margin-top:7px;
-	border:1px solid #347C17;
+	border:1px solid lightGreen;
 }
 
 /* ------------------------ */
 
-.batch .create-portfoliogroup{
+.batch .create-portfoliogroup,
+.batch .join-portfoliogroup,
+.batch .leave-portfoliogroup,
+.batch .share-portfoliogroup,
+.batch .unshare-portfoliogroup {
 	margin-top:7px;
-	border:1px solid #AE6929;
-}
-
-.batch .join-portfoliogroup{
-	margin-top:7px;
-	border:1px solid #C27D3D ;
-}
-
-.batch .leave-portfoliogroup{
-	margin-top:7px;
-	border:1px solid #E09B5B ;
-}
-
-.batch .share-portfoliogroup{
-	margin-top:7px;
-	border:1px solid #F4AF6F ;
-}
-
-.batch .unshare-portfoliogroup{
-	margin-top:7px;
-	border:1px solid #FFC383 ;
+	border:1px solid #1cb01c;
 }
 
 /* ------------------------ */
 
-.batch .share-groups{
+.batch .share-usergroup,
+.batch .create-usergroup,
+.batch .unshare-usergroup,
+.batch .join-usergroup,
+.batch .leave-usergroup,
+.batch .share-groups {
 	margin-top:7px;
-	border:1px solid #85BB65 ;
+	border:1px solid #00a3cc;
 }
-
-/* ------------------------ */
-
-.batch .share-usergroup{
-	margin-top:7px;
-	border:1px solid #46C7C7 ;
-}
-
-.batch .create-usergroup{
-	margin-top:7px;
-	border:1px solid #FFDB58 ;
-}
-
-.batch .unshare-usergroup{
-	margin-top:7px;
-	border:1px solid #46C7C7 ;
-}
+ 
 
 /* ------------------------ */
 
 .batch .update-resource {
 	margin-top:7px;
-	border:1px dotted lightgrey;
+	border:1px dashed orange;
 }
 
-.batch .update-field {
+.batch .update-field,
+.batch .update-textfield,
+.batch .update-dashboard,
+.batch .update-proxy,
+.batch .update-calendar,
+.batch .update-document,
+.batch .update-item,
+.batch .update-url2unit {
 	margin-top:7px;
-	border:1px solid #FF895A;
-}
-
-.batch .update-textfield {
-	margin-top:7px;
-	border:1px solid #FF9D6E;
-}
-
-.batch .update-dashboard {
-	margin-top:7px;
-	border:1px solid #FFB182;
-}
-
-.batch .update-proxy{
-	margin-top:7px;
-	border:1px solid #FFC596;
-}
-
-.batch .update-calendar{
-	margin-top:7px;
-	border:1px solid #FFCFA0;
-}
-
-.batch .update-document{
-	margin-top:7px;
-	border:1px solid #FFD9AA;
+	border:1px solid orange;
 }
 
 /* ------------------------ */
-.batch .update-metadata {
+.batch .update-metadata,
+.batch .update-metadata-wad,
+.batch .update-rights {
 	margin-top:7px;
-	border:1px solid #FAAC58;
-}
-
-.batch .update-metadata-wad {
-	margin-top:7px;
-	border:1px solid #FE642E;
+	border:1px solid yellow;
 }
 
 .batch .update-metadata-inline {
@@ -2136,72 +2069,47 @@ table.tablesorter th.restore {
 	border:1px solid #FACC2E;
 }
 
-
 .batch .update-metadata-query {
 	margin-top:7px;
-	border:1px solid Moccasin ;
+	border:1px solid Moccasin;
 }
 
 .batch .update-metadata-menu {
 	margin-top:7px;
-	border:1px solid PeachPuff ;
+	border:1px solid PeachPuff;
 }
 
 /* ------------------------ */
 
-.batch .update-node-resource {
+.batch .update-node-resource,
+.batch .import-node,
+.batch .moveup-node,
+.batch .delete-node {
 	margin-top:7px;
-	border:1px solid #F78181;
-}
-
-
-.batch .import-node {
-	margin-top:7px;
-	border:1px solid Pink ;
+	border:1px solid #e09b5b;
 }
 
 /* ------------------------ */
 
-.batch .join-usergroup {
+.batch .uuid-components {
 	margin-top:7px;
-	border:1px solid Yellow ;
+	border:1px dashed #ff66ff;
 }
 
-.batch .leave-usergroup {
+.batch .update-field-byid,
+.batch .reset-document-byid,
+.batch .delete-node-byid {
 	margin-top:7px;
-	border:1px solid Orange ;
-}
-
-.batch .update-field-byid {
-	margin-top:7px;
-	border:1px solid  #C35817;
-}
-
-
-.batch .update-tree-root {
-	margin-top:7px;
-	border:1px solid LightCoral  ;
+	border:1px solid #ff66ff;
 }
 
 .batch .model_button {
-	float:right
+	float:right;
 }
 
 .batch input {
 	margin-bottom:0px;
 	height:32px;
-}
-
-.batch .if-then-else {
-	margin-top:7px;
-	border:1px solid lightgrey;
-}
-
-.batch .if-action,
-.batch .then-part,
-.batch .else-part {
-	margin-bottom:7px;
-	border:1px dashed lightgrey;
 }
 
 
