@@ -27,6 +27,7 @@ var dashboard_current = null;
 var portfolioid_current = null;
 
 var g_report_actions = {};
+var g_report_users = {};
 
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sortUTC()'] = ".sort(function(a, b){ return $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
@@ -267,7 +268,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 			//----------------------------------
 			for (var i=0; i<actions.length;i++){
 				var tagname = $(actions[i])[0].tagName;
-				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j])
+				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
 			}
 			//----------------------------------
 		};
@@ -488,51 +489,67 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 //==================================
 {
 	var countvar = $(action).attr("countvar");
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/users",
-		success : function(data) {
-			UIFactory["User"].parse(data);
-			var select = $(action).attr("select");
-			select = r_replaceVariable(select);
-			var value = "";
-			if (select.indexOf("username=")>-1)
-				if (select.indexOf("'")>-1)
-					value = select.substring(10,select.length-1);  // inside quote
-				else
-					value = eval("json.lines["+line+"]."+select.substring(9));
-			var condition = false;
-			for ( var j = 0; j < UsersActive_list.length; j++) {
-				if (countvar!=undefined) {
-					variables[countvar] = j;
+	var select = $(action).attr("select");
+	if (select=="#logged_user") {
+		userid = USER.id;
+		var actions = $(action).children();
+		for (var i=0; i<actions.length;i++){
+			var tagname = $(actions[i])[0].tagName;
+			g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),userid);
+		};
+	} else {
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/users",
+			success : function(data) {
+				UIFactory["User"].parse(data);
+				select = r_replaceVariable(select);
+				var attribute = "";
+				var value = "";
+				var comparator = "";
+				if (select.indexOf("=")>-1){
+					attribute = select.substring(0,select.indexOf("="));
+					value = select.substring(select.indexOf("=")+1);
+					comparator = "=";
 				}
-				//------------------------------------
-				var ref_init = $(action).attr("ref-init");
-				if (ref_init!=undefined) {
-					ref_init = r_replaceVariable(ref_init);
-					var ref_inits = ref_init.split("/"); // ref1/ref2/...
-					for (var i=0;i<ref_inits.length;i++)
-						aggregates[ref_inits[i]] = new Array();
+				if (select.indexOf("*=")>-1) {
+					attribute = select.substring(0,select.indexOf("*="));
+					value = select.substring(select.indexOf("*=")+2);
+					comparator = "*=";
 				}
-				//------------------------------------
-				var username = UsersActive_list[j].username_node.text();
-				if (select.indexOf("username=")>-1) {
-					condition = username.indexOf(value)>-1;
-				}
-				//------------------------------------
-				if (condition){
-					userid = UsersActive_list[j].id;
-					var actions = $(action).children();
-					for (var i=0; i<actions.length;i++){
-						var tagname = $(actions[i])[0].tagName;
-						g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),userid);
-					};
-				}
+				var condition = false;
+				for ( var j = 0; j < UsersActive_list.length; j++) {
+					if (countvar!=undefined) {
+						variables[countvar] = j;
+					}
 					//------------------------------------
+					var ref_init = $(action).attr("ref-init");
+					if (ref_init!=undefined) {
+						ref_init = r_replaceVariable(ref_init);
+						var ref_inits = ref_init.split("/"); // ref1/ref2/...
+						for (var i=0;i<ref_inits.length;i++)
+							aggregates[ref_inits[i]] = new Array();
+					}
+					//------------------------------------
+					if (comparator=="=")
+						condition = $(UsersActive_list[j].attributes[attribute]).text() == value;
+					if (comparator=="*=")
+						condition = $(UsersActive_list[j].attributes[attribute]).text().indexOf(value)>-1;
+					//------------------------------------
+					if (condition){
+						userid = UsersActive_list[j].id;
+						var actions = $(action).children();
+						for (var i=0; i<actions.length;i++){
+							var tagname = $(actions[i])[0].tagName;
+							g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
+						};
+					}
+						//------------------------------------
+				}
 			}
-		}
-	});
+		});
+	}
 }
 
 //=============================================================================
@@ -542,10 +559,10 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 //=============================================================================
 
 //==================================
-g_report_actions['username'] = function (destid,action,no,data,is_out_csv)
+g_report_actions['username'] = function (destid,action,no,userid,is_out_csv)
 //==================================
 {
-	var text = USER.username;
+	var text = Users_byid[userid].username;
 	if (is_out_csv!=null && is_out_csv) {
 		if (typeof csvseparator == 'undefined') // for backward compatibility
 			csvseparator = ";";
@@ -557,10 +574,10 @@ g_report_actions['username'] = function (destid,action,no,data,is_out_csv)
 }
 
 //==================================
-g_report_actions['firstname'] = function (destid,action,no,data,is_out_csv)
+g_report_actions['firstname'] = function (destid,action,no,userid,is_out_csv)
 //==================================
 {
-	var text = USER.firstname;
+	var text = Users_byid[userid].firstname;
 	if (is_out_csv!=null && is_out_csv) {
 		if (typeof csvseparator == 'undefined') // for backward compatibility
 			csvseparator = ";";
@@ -572,10 +589,10 @@ g_report_actions['firstname'] = function (destid,action,no,data,is_out_csv)
 }
 
 //==================================
-g_report_actions['lastname'] = function (destid,action,no,data,is_out_csv)
+g_report_actions['lastname'] = function (destid,action,no,userid,is_out_csv)
 //==================================
 {
-	var text = USER.lastname;
+	var text = Users_byid[userid].lastname;
 	if (is_out_csv!=null && is_out_csv) {
 		if (typeof csvseparator == 'undefined') // for backward compatibility
 			csvseparator = ";";
@@ -587,11 +604,11 @@ g_report_actions['lastname'] = function (destid,action,no,data,is_out_csv)
 }
 
 //==================================
-g_report_actions['first-lastname'] = function (destid,action,no,data,is_out_csv)
+g_report_actions['firstname-lastname'] = function (destid,action,no,userid,is_out_csv)
 //==================================
 {
-	var text1 = USER.firstname;
-	var text2 = USER.lastname;
+	var text1 = Users_byid[userid].firstname;
+	var text2 = Users_byid[userid].lastname;
 	if (is_out_csv!=null && is_out_csv) {
 		if (typeof csvseparator == 'undefined') // for backward compatibility
 			csvseparator = ";";
