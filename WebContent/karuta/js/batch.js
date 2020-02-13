@@ -20,6 +20,7 @@ var g_noline = 0;
 var g_actions = [];
 var g_actions_list = [];
 var g_current_node_uuid = null;
+var g_users = {};
 //-----------------------
 
 
@@ -226,7 +227,7 @@ g_actions['for-each-user'] = function (node)
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/users?username="+value,
+		url : serverBCK_API+"/users?username="+username,
 		success : function(data) {
 			UIFactory["User"].parse(data);
 			for ( var j = 0; j < UsersActive_list.length; j++) {
@@ -353,6 +354,9 @@ g_actions['delete-user'] = function deleteUser(node)
 {
 	var ok = false;
 	var identifier = getTxtvals($("identifier",node));
+	var userref = $(node).attr("select");
+	if (userref!=="")
+		identifier = g_users[userref];
 	//---- get userid ----------
 	var userid = "";
 	var url = serverBCK_API+"/users/user/username/"+identifier;
@@ -390,6 +394,9 @@ g_actions['inactivate-user'] = function inactivateUser(node)
 {
 	var ok = false;
 	var identifier = getTxtvals($("identifier",node));
+	var userref = $(node).attr("select");
+	if (userref!=="")
+		identifier = g_users[userref];
 	//---- get userid ----------
 	var userid = "";
 	var url = serverBCK_API+"/users/user/username/"+identifier;
@@ -444,6 +451,9 @@ g_actions['activate-user'] = function activateUser(node)
 {
 	var ok = false;
 	var identifier = getTxtvals($("identifier",node));
+	var userref = $(node).attr("select");
+	if (userref!=="")
+		identifier = g_users[userref];
 	//---- get userid ----------
 	var userid = "";
 	var url = serverBCK_API+"/users/user/username/"+identifier;

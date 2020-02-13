@@ -128,10 +128,10 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='delete-person']">
-		<xsl:variable name="id">
+		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='user-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-			<delete-user id="{$id}">
+			<delete-user select="{$select}">
 			<identifier>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">identifier</xsl:with-param>
@@ -141,10 +141,10 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='activate-person']">
-		<xsl:variable name="id">
+		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='user-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<activate-user id="{$id}">
+		<activate-user select="{$select}">
 			<identifier>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">identifier</xsl:with-param>
@@ -154,10 +154,10 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='inactivate-person']">
-		<xsl:variable name="id">
+		<xsl:variable name="select">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='user-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<inactivate-user id="{$id}">
+		<inactivate-user select="{$select}">
 			<identifier>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">identifier</xsl:with-param>

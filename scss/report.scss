@@ -110,7 +110,7 @@
 	--report-display-color : #8bffff;
 	--report-varop-color : #f08080;
 	--report-csv-color : #307D7E;
-	--report-sharing-color : #C0C0C0;
+	--report-sharing-color : #386bc1;
 	--report-svg-color : #52D017;
 
 	// LOOP
@@ -150,7 +150,8 @@
 	}
 
 	// EUROPASS
-	.model-europass {
+	.model-europass,
+	.model-qrcode {
 		margin-top:7px;
 		border:2px solid #386bc1;
 	}
@@ -162,8 +163,7 @@
 	.firstname-lastname,
 	.text,
 	.node_resource,
-	.url2unit,
-	.model-qrcode
+	.url2unit
 	{
 		margin-top:7px;
 		border: 1px solid var(--report-display-color);		
