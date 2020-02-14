@@ -167,51 +167,51 @@ function setCSSportfolio(data)
 	var text_color = g_configVar['config-text-color'];
 	if ($("asmContext:has(metadata[semantictag='text-color'])",data).length>0) {
 		text_color = getText('text-color','Color','text',data);
-		changeCss("#contenu", "color:"+text_color+";");
 	}
+	changeCss("#contenu", "color:"+text_color+";");
 	//--------------------------------
 	var section_separator_color = g_configVar['config-portfolio-section-separator-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).length>0) {
 		section_separator_color = getText('portfolio-section-separator-color','Color','text',data);
-		changeCss(".row-node", "border-top:1px solid "+section_separator_color+";");
 	}
+	changeCss(".row-node", "border-top:1px solid "+section_separator_color+";");
 	//--------------------------------
 	var page_title_subline_color = g_configVar['config-page-title-subline-color'];
 	if ($("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).length>0) {
 		page_title_subline_color = getText('page-title-subline-color','Color','text',data);
-		changeCss(".row-node-asmRoot .title-subline,.row-node-asmStructure .title-subline,.row-node-asmUnit .title-subline", "border-bottom:1px solid "+page_title_subline_color+";");
 	}
+	changeCss(".row-node-asmRoot .title-subline,.row-node-asmStructure .title-subline,.row-node-asmUnit .title-subline", "border-bottom:1px solid "+page_title_subline_color+";");
 	//--------------------------------
 	var portfolio_buttons_color = g_configVar['config-portfolio-buttons-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		portfolio_buttons_color = getText('portfolio-buttons-color','Color','text',data);
-		changeCss(".menus,.collapsible,.dropdownn-toggle, .createreport .button,.btn-group .button, .menus button, .menus a.button", "color:"+portfolio_buttons_color+";");
 	}
+	changeCss(".menus,.collapsible,.dropdownn-toggle, .createreport .button,.btn-group .button, .menus button, .menus a.button", "color:"+portfolio_buttons_color+";");
 	//--------------------------------
 	var portfolio_buttons_background_color = g_configVar['config-portfolio-buttons-background-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
 		portfolio_buttons_background_color = getText('portfolio-buttons-background-color','Color','text',data);
-		changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "border:1px solid "+portfolio_buttons_background_color+";");
-		changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "background:"+portfolio_buttons_background_color+";");
 	}
+	changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "border:1px solid "+portfolio_buttons_background_color+";");
+	changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "background:"+portfolio_buttons_background_color+";");
 	//--------------------------------
 	var portfolio_link_color = g_configVar['config-portfolio-link-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).length>0) {
 		portfolio_link_color = getText('portfolio-link-color','Color','text',data);
-		changeCss("a", "color:"+portfolio_link_color+";");
 	}
+	changeCss("a", "color:"+portfolio_link_color+";");
 	//--------------------------------
 	var portfolio_section_title_background_color = g_configVar['config-portfolio-section-title-background-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).length>0) {
 		portfolio_section_title_background_color = getText('portfolio-section-title-background-color','Color','text',data);
-		changeCss(".row-node-asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
 	}
+	changeCss(".row-node-asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
 	//--------------------------------
 	var portfolio_resource_border_color = g_configVar['config-portfolio-resource-border-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-resource-border-color'])",data).length>0) {
 		portfolio_resource_border_color = getText('portfolio-resource-border-color','Color','text',data);
-		changeCss("table[name=res-div]", "border: 1px solid "+portfolio_resource_border_color+";");
 	}
+	changeCss("table[name=res-div]", "border: 1px solid "+portfolio_resource_border_color+";");
 
 	//-----------WELCOME------------------------------------
 	if ($("asmContext:has(metadata[semantictag='welcome-title-color'])",data).length>0) {
@@ -225,6 +225,76 @@ function setCSSportfolio(data)
 		var welcome_line_color = UICom.structure["ui"][welcome_line_color_id].resource.getValue();
 		changeCss(".welcome-line", "border-bottom:1px solid "+welcome_line_color+";width:25%;margin-left:auto;margin-right:auto;");
 	}
+	//-----------SVG------------------------------------
+	var svg_web0_color = g_configVar['config-svg-web0-color'];
+	if ($("asmContext:has(metadata[semantictag='svg-web0-color'])",data).length>0) {
+		svg_web0_color = getText('config-svg-web0-color','Color','text',data);
+	}
+	changeCss(".svg-web-line0", "stroke: "+svg_web0_color+";");
+	changeCss(".svg-web-value0", "stroke: "+svg_web0_color+";");
+	//--------------------------------
+	var svg_web1_color = g_configVar['config-svg-web1-color'];
+	if ($("asmContext:has(metadata[semantictag='svg-web1-color'])",data).length>1) {
+		svg_web1_color = getText('config-svg-web1-color','Color','text',data);
+	}
+	changeCss(".svg-web-line1", "stroke: "+svg_web1_color+";");
+	changeCss(".svg-web-value1", "stroke: "+svg_web1_color+";");
+	//--------------------------------
+	var svg_web2_color = g_configVar['config-svg-web2-color'];
+	if ($("asmContext:has(metadata[semantictag='svg-web2-color'])",data).length>2) {
+		svg_web2_color = getText('config-svg-web2-color','Color','text',data);
+	}
+	changeCss(".svg-web-line2", "stroke: "+svg_web2_color+";");
+	changeCss(".svg-web-value2", "stroke: "+svg_web2_color+";");
+	//--------------------------------
+	var svg_web3_color = g_configVar['config-svg-web3-color'];
+	if ($("asmContext:has(metadata[semantictag='svg-web3-color'])",data).length>3) {
+		svg_web3_color = getText('config-svg-web3-color','Color','text',data);
+	}
+	changeCss(".svg-web-line3", "stroke: "+svg_web3_color+";");
+	changeCss(".svg-web-value3", "stroke: "+svg_web3_color+";");
+	//--------------------------------
+	var svg_web4_color = g_configVar['config-svg-web4-color'];
+	if ($("asmContext:has(metadata[semantictag='svg-web4-color'])",data).length>4) {
+		svg_web4_color = getText('config-svg-web4-color','Color','text',data);
+	}
+	changeCss(".svg-web-line4", "stroke: "+svg_web4_color+";");
+	changeCss(".svg-web-value4", "stroke: "+svg_web4_color+";");
+	//--------------------------------
+	var svg_web5_color = g_configVar['config-svg-web5-color'];
+	if ($("asmContext:has(metadata[semantictag='svg-web5-color'])",data).length>5) {
+		svg_web5_color = getText('config-svg-web5-color','Color','text',data);
+	}
+	changeCss(".svg-web-line5", "stroke: "+svg_web5_color+";");
+	changeCss(".svg-web-value5", "stroke: "+svg_web5_color+";");
+	//--------------------------------
+	var svg_web6_color = g_configVar['config-svg-web6-color'];
+	if ($("asmContext:has(metadata[semantictag='svg-web6-color'])",data).length>6) {
+		svg_web6_color = getText('config-svg-web6-color','Color','text',data);
+	}
+	changeCss(".svg-web-line6", "stroke: "+svg_web6_color+";");
+	changeCss(".svg-web-value6", "stroke: "+svg_web6_color+";");
+	//--------------------------------
+	var svg_web7_color = g_configVar['config-svg-web7-color'];
+	if ($("asmContext:has(metadata[semantictag='svg-web7-color'])",data).length>7) {
+		svg_web7_color = getText('config-svg-web7-color','Color','text',data);
+	}
+	changeCss(".svg-web-line7", "stroke: "+svg_web7_color+";");
+	changeCss(".svg-web-value7", "stroke: "+svg_web7_color+";");
+	//--------------------------------
+	var svg_web8_color = g_configVar['config-svg-web8-color'];
+	if ($("asmContext:has(metadata[semantictag='svg-web8-color'])",data).length>8) {
+		svg_web8_color = getText('config-svg-web8-color','Color','text',data);
+	}
+	changeCss(".svg-web-line8", "stroke: "+svg_web8_color+";");
+	changeCss(".svg-web-value8", "stroke: "+svg_web8_color+";");
+	//--------------------------------
+	var svg_web9_color = g_configVar['config-svg-web9-color'];
+	if ($("asmContext:has(metadata[semantictag='svg-web9-color'])",data).length>9) {
+		svg_web9_color = getText('config-svg-web9-color','Color','text',data);
+	}
+	changeCss(".svg-web-line9", "stroke: "+svg_web9_color+";");
+	changeCss(".svg-web-value9", "stroke: "+svg_web9_color+";");
 	// ========================================================================
 }
 //==================================
