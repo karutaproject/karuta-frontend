@@ -203,7 +203,7 @@ function setCSSportfolio(data)
 	//--------------------------------
 	var portfolio_section_title_background_color = g_configVar['config-portfolio-section-title-background-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).length>0) {
-		portfolio_section_title_background_color = UICom.structure["ui"][portfolio_section_title_background_color_id].resource.getValue();
+		portfolio_section_title_background_color = getText('portfolio-section-title-background-color','Color','text',data);
 		changeCss(".row-node-asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
 	}
 	//--------------------------------

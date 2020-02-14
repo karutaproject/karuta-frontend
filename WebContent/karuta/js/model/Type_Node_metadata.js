@@ -406,7 +406,7 @@ UIFactory["Node"].prototype.displayMetaEpmInfo = function(destid)
 };
 
 //==================================================
-UIFactory["Node"].prototype.displayMetaEpmInfos = function(destid,data)
+UIFactory["Node"].displayMetaEpmInfos = function(destid,data)
 //==================================================
 {
 	var uuid = data.getAttribute("id");

@@ -106,7 +106,7 @@
   --report-display-color: #8bffff;
   --report-varop-color: #f08080;
   --report-csv-color: #307D7E;
-  --report-sharing-color: #C0C0C0;
+  --report-sharing-color: #386bc1;
   --report-svg-color: #52D017;
 }
 .report .for-each-person,
@@ -137,7 +137,8 @@
   margin-top: 7px;
   border: 2px solid Crimson;
 }
-.report .model-europass {
+.report .model-europass,
+.report .model-qrcode {
   margin-top: 7px;
   border: 2px solid #386bc1;
 }
@@ -147,8 +148,7 @@
 .report .firstname-lastname,
 .report .text,
 .report .node_resource,
-.report .url2unit,
-.report .model-qrcode {
+.report .url2unit {
   margin-top: 7px;
   border: 1px solid var(--report-display-color);
 }

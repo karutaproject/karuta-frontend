@@ -215,7 +215,7 @@ g_report_actions['for-each-line'] = function (destid,action,no,data)
 			ref_init = r_replaceVariable(ref_init);
 			var ref_inits = ref_init.split("/"); // ref1/ref2/...
 			for (var k=0;k<ref_inits.length;k++)
-				aggregates[ref_inits[k]] = new Array();
+				variables[ref_inits[k]] = new Array();
 		}
 		for (var i=0; i<actions.length;i++){
 			var tagname = $(actions[i])[0].tagName;
@@ -263,7 +263,7 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 				ref_init = r_replaceVariable(ref_init);
 				var ref_inits = ref_init.split("/"); // ref1/ref2/...
 				for (var k=0;k<ref_inits.length;k++)
-					aggregates[ref_inits[k]] = new Array();
+					variables[ref_inits[k]] = new Array();
 			}
 			//----------------------------------
 			for (var i=0; i<actions.length;i++){
@@ -309,7 +309,7 @@ g_report_actions['loop'] = function (destid,action,no,data)
 			ref_init = r_replaceVariable(ref_init);
 			var ref_inits = ref_init.split("/"); // ref1/ref2/...
 			for (var k=0;k<ref_inits.length;k++)
-				aggregates[ref_inits[k]] = new Array();
+				variables[ref_inits[k]] = new Array();
 		}
 		//---------------------------
 		var actions = $(action).children();
@@ -396,7 +396,7 @@ g_report_actions['table'] = function (destid,action,no,data)
 		ref_init = r_replaceVariable(ref_init);
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
 		for (var k=0;k<ref_inits.length;k++)
-			aggregates[ref_inits[k]] = new Array();
+			variables[ref_inits[k]] = new Array();
 	}
 	//---------------------------
 	var style = r_replaceVariable($(action).attr("style"));
@@ -420,7 +420,7 @@ g_report_actions['row'] = function (destid,action,no,data)
 		ref_init = r_replaceVariable(ref_init);
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
 		for (var k=0;k<ref_inits.length;k++)
-			aggregates[ref_inits[k]] = new Array();
+			variables[ref_inits[k]] = new Array();
 	}
 	//---------------------------
 	var style = r_replaceVariable($(action).attr("style"));
@@ -529,7 +529,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 						ref_init = r_replaceVariable(ref_init);
 						var ref_inits = ref_init.split("/"); // ref1/ref2/...
 						for (var i=0;i<ref_inits.length;i++)
-							aggregates[ref_inits[i]] = new Array();
+							variables[ref_inits[i]] = new Array();
 					}
 					//------------------------------------
 					if (comparator=="=")
@@ -635,7 +635,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 		ref_init = r_replaceVariable(ref_init);
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
 		for (var i=0;i<ref_inits.length;i++)
-			aggregates[ref_inits[i]] = new Array();
+			variables[ref_inits[i]] = new Array();
 	}
 	if (userid==null)
 		userid = USER.id;
@@ -880,7 +880,7 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 						ref_init = r_replaceVariable(ref_init);
 						var ref_inits = ref_init.split("/"); // ref1/ref2/...
 						for (var i=0;i<ref_inits.length;i++)
-							aggregates[ref_inits[i]] = new Array();
+							variables[ref_inits[i]] = new Array();
 					}
 					//--------------------------------
 					$.ajax({
@@ -992,9 +992,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			}
 			if (ref!=undefined && ref!="") {
 				ref = r_replaceVariable(ref);
-				if (aggregates[ref]==undefined)
-					aggregates[ref] = new Array();
-				aggregates[ref][aggregates[ref].length] = text;
+				if (variables[ref]==undefined)
+					variables[ref] = new Array();
+				variables[ref][variables[ref].length] = text;
 			}
 			text = "<span id='dashboard_"+prefix_id+nodeid+"' style='"+style+"'>"+text+"</span>";
 			if (writenode) {
@@ -1067,30 +1067,30 @@ g_report_actions['variable'] = function (destid,action,no,data)
 		if (aggregatetype!=undefined && aggregatetype!="") {
 			var select = $(action).attr("aggregationselect");
 			select = r_replaceVariable(select);
-			if (aggregatetype=="sum" && aggregates[select]!=undefined){
+			if (aggregatetype=="sum" && variables[select]!=undefined){
 				var sum = 0;
-				for (var i=0;i<aggregates[select].length;i++){
-					if ($.isNumeric(aggregates[select][i]))
-						sum += parseFloat(aggregates[select][i]);
+				for (var i=0;i<variables[select].length;i++){
+					if ($.isNumeric(variables[select][i]))
+						sum += parseFloat(variables[select][i]);
 				}
 				text = sum;
 			}
-			if (aggregatetype=="avg" && aggregates[select]!=undefined){
+			if (aggregatetype=="avg" && variables[select]!=undefined){
 				var sum = 0;
-				for (var i=0;i<aggregates[select].length;i++){
-					if ($.isNumeric(aggregates[select][i]))
-						sum += parseFloat(aggregates[select][i]);
+				for (var i=0;i<variables[select].length;i++){
+					if ($.isNumeric(variables[select][i]))
+						sum += parseFloat(variables[select][i]);
 				}
-				text = sum/aggregates[select].length;
+				text = sum/variables[select].length;
 				if (text.toString().indexOf(".")>-1)
 					text = text.toFixed(2);
 				
 			}
 			if (ref!=undefined && ref!="") {
 				ref = r_replaceVariable(ref);
-				if (aggregates[ref]==undefined)
-					aggregates[ref] = new Array();
-				aggregates[ref][aggregates[ref].length] = text;
+				if (variables[ref]==undefined)
+					variables[ref] = new Array();
+				variables[ref][variables[ref].length] = text;
 			}
 			if (!$.isNumeric(text))
 				text="";
@@ -1152,9 +1152,9 @@ g_report_actions['variable'] = function (destid,action,no,data)
 	//------------------------------
 	variables[varlabel] = text;
 	if (ref!=undefined && ref!="") {
-		if (aggregates[ref]==undefined)
-			aggregates[ref] = new Array();
-		aggregates[ref][aggregates[ref].length] = text;
+		if (variables[ref]==undefined)
+			variables[ref] = new Array();
+		variables[ref][variables[ref].length] = text;
 	}
 }
 
@@ -1319,9 +1319,9 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 	var ref = $(action).attr("ref");
 	if (ref!=undefined && ref!="") {
 		ref = r_replaceVariable(ref);
-		if (aggregates[ref]==undefined)
-			aggregates[ref] = new Array();
-		aggregates[ref][aggregates[ref].length] = text;
+		if (variables[ref]==undefined)
+			variables[ref] = new Array();
+		variables[ref][variables[ref].length] = text;
 	}
 	//-----------------
 	if (is_out_csv!=null && is_out_csv) {
@@ -1399,29 +1399,29 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	select = r_replaceVariable(select);
 	var text = "";
-	if (type=="sum" && aggregates[select]!=undefined){
+	if (type=="sum" && variables[select]!=undefined){
 		var sum = 0;
-		for (var i=0;i<aggregates[select].length;i++){
-			if ($.isNumeric(aggregates[select][i]))
-				sum += parseFloat(aggregates[select][i]);
+		for (var i=0;i<variables[select].length;i++){
+			if ($.isNumeric(variables[select][i]))
+				sum += parseFloat(variables[select][i]);
 		}
 		text = sum;
 	}
-	if (type=="avg" && aggregates[select]!=undefined){
+	if (type=="avg" && variables[select]!=undefined){
 		var sum = 0;
-		for (var i=0;i<aggregates[select].length;i++){
-			if ($.isNumeric(aggregates[select][i]))
-				sum += parseFloat(aggregates[select][i]);
+		for (var i=0;i<variables[select].length;i++){
+			if ($.isNumeric(variables[select][i]))
+				sum += parseFloat(variables[select][i]);
 		}
-		text = sum/aggregates[select].length;
+		text = sum/variables[select].length;
 		if (text.toString().indexOf(".")>-1)
 			text = text.toFixed(2);
 		
 	}
 	if (ref!=undefined && ref!="") {
-		if (aggregates[ref]==undefined)
-			aggregates[ref] = new Array();
-		aggregates[ref][aggregates[ref].length] = text;
+		if (variables[ref]==undefined)
+			variables[ref] = new Array();
+		variables[ref][variables[ref].length] = text;
 	}
 	if (!$.isNumeric(text))
 		text="";
@@ -1468,9 +1468,9 @@ g_report_actions['operation'] = function (destid,action,no,data)
 			result = result.toFixed(2);
 	}
 	if (ref!=undefined && ref!="") {
-		if (aggregates[ref]==undefined)
-			aggregates[ref] = new Array();
-		aggregates[ref][aggregates[ref].length] = result;
+		if (variables[ref]==undefined)
+			variables[ref] = new Array();
+		variables[ref][variables[ref].length] = result;
 	}
 	if (!$.isNumeric(result))
 		result="";
@@ -1953,8 +1953,8 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 	var pos = $(action).attr("pos");
 	if (pos==undefined)
 		pos = 0;
-	if (pos > no)
-		no = pos;
+//	if (pos > no)
+//		no = pos;
 	var html = "";
 	if (select!=undefined) {
 		while (select.indexOf("##")>-1) {
@@ -2008,10 +2008,10 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 				}
 			}
 			if (i>0 && points[i-1].value!=null && points[i].value!=null)
-				drawLine(destid,points[i-1].value,points[i-1].angle,points[i].value,points[i].angle,svgcenter,'svg-web-line'+no);
+				drawLine(destid,points[i-1].value,points[i-1].angle,points[i].value,points[i].angle,svgcenter,'svg-web-line'+pos);
 		}
 		if (points[i-1].value!=null && points[0].value!=null)
-			drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+no);
+			drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+pos);
 		// draw legend
 		if (legendselect!=undefined) {
 			var selector = r_getSelector(legendselect,null);
@@ -2043,7 +2043,7 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 					text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
 				}
 			};
-			var line = makeSVG('line',{'x1':10,'y1':975-20*no,'x2':10,'y2':975-20*no,'class':'svg-web-value'+no});
+			var line = makeSVG('line',{'x1':10,'y1':975-20*no,'x2':10,'y2':975-20*no,'class':'svg-web-value'+pos});
 //			var line = makeSVG('line',{'x1':10,'y1':25+20*no,'x2':10,'y2':25+20*no,'class':'svg-web-value'+no});
 			document.getElementById(destid).appendChild(line);
 			var svgtext = makeSVG('text',{'x':20,'y':980-20*no,'font-size':svgfontsize,'font-family':svgfontname},text);
