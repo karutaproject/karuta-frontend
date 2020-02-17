@@ -61,9 +61,11 @@ UIFactory["Node"] = function( node )
 		this.resource_type = null;
 		this.resource = null;
 		if (this.asmtype=='asmContext') {
+			flag_error = 'e';
 			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",node);
 			this.resource_type = $(resource).attr("xsi_type");
 			this.resource = new UIFactory[this.resource_type](node);
+			flag_error = 'f';
 		}
 		//------------------------------
 		this.context = $("asmResource[xsi_type='context']",node);
@@ -147,6 +149,9 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 		this.collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
 	this.displayed = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 	this.collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
+	this.resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
+	this.nodenopencil = ($(node.metadatawad).attr('nodenopencil')==undefined)?'N':$(node.metadatawad).attr('nodenopencil');
+	this.editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'':$(node.metadatawad).attr('editcoderoles');
 	this.editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
 	this.delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
 	this.commentnoderoles = ($(node.metadatawad).attr('commentnoderoles')==undefined)?'':$(node.metadatawad).attr('commentnoderoles');
@@ -186,6 +191,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
 	this.incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
 	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
+	this.menulabels = ($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels');
 	if (this.resource!=undefined || this.resource!=null)
 		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
 }
@@ -319,12 +325,12 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 				}
 			}
 			//-------------------------------------------------------
-			$('a[data-toggle=tooltip]').tooltip({html:true});
+			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 			$(".pickcolor").colorpicker();
 			//----------------------------
 		}
 		$('[data-toggle="popover"]').popover();
-		$('[data-tooltip="true"]').tooltip();
+		$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 	} //---- end of visible
 };
 
@@ -421,6 +427,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		this.displayMetainfo("metainfo_"+uuid);
 	}
+	this.displayMetaEpmInfo("cssinfo_"+uuid);
 	//-------------------------------------------------
 }
 
@@ -539,13 +546,20 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
 	//----------- Comments -----------
-	if (this.edit && this.inline && this.writenode)
-		UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
-	else
-		UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+	if (this.depth>0) {
+		if (this.edit && this.inline && this.writenode)
+			UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+		else
+			UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+	}
 	//--------------------Metadata Info------------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		this.displayMetainfo("metainfo_"+uuid);
+	}
+	this.displayMetaEpmInfo("cssinfo_"+uuid);
+	//--------------------Portfolio code------------------------------------------
+	if ((g_userroles[0]=='reporter' || g_userroles[0]=='designer' || USER.admin) && nodetype=='asmRoot') {
+		$("#portfoliocode_"+uuid).html(this.getCode());
 	}
 	//----------------- hide lbl-div if empty ------------------------------------
 	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
@@ -878,7 +892,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	//------------- write resource type in the upper right corner ----------------
 	if (g_userroles[0]=='designer' || USER.admin){
 		if (this.asmtype=='asmContext')
-			$("#edit-window-type").html(karutaStr[languages[LANGCODE]][this.resource.type]);
+			$("#edit-window-type").html(karutaStr[languages[LANGCODE]][this.resource_type]);
 		else
 			$("#edit-window-type").html(karutaStr[languages[LANGCODE]][this.asmtype]);
 	} else {
@@ -925,12 +939,7 @@ UIFactory["Node"].prototype.refresh = function()
 	};
 
 	for (dest3 in this.display_node) {
-		if (this.display_node[dest3].display=="standard"){
-			this.displayNode(this.display_node[dest3].type,this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent,this.display_node[dest3].parent,this.display_node[dest3].menu,this.display_node[dest3].inblock,true);
-		}
-		if (this.display_node[dest3].display=="block"){
-			UIFactory["Node"].displayBlock(this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent);
-		}
+		this.displayNode(this.display_node[dest3].type,this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent,this.display_node[dest3].parent,this.display_node[dest3].menu,this.display_node[dest3].inblock,true);
 	};
 
 	for (dest4 in this.display_context) {
@@ -1030,32 +1039,6 @@ UIFactory["Node"].prototype.log = function()
 				url : urlS,
 				data : "",
 				success :{
-/**
- * 		var nodeid = $(nodes[0]).attr('id');
-		var metadata = $("metadata",nodes[0]);
-		$(metadata).attr(attribute,text);
-		var xml = xml2string(metadata[0]);
-		nodes = nodes.slice(1,nodes.length);
-		$.ajax({
-			async : false,
-			type : "PUT",
-			contentType: "application/xml",
-			dataType : "text",
-			data : xml,
-			nodeid : nodeid,
-			semtag : semtag,
-			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
-			success : function(data) {
-				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag);
-				updateMetada(nodes,node,type,semtag,text,attribute)
-			},
-			error : function(data,nodeid,semtag) {
-				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadata("+this.nodeid+") - semtag="+this.semtag);
-				updateMetada(nodes,node,type,semtag,text,attribute);
-			}
-		});
-
- */
 				},
 				error : function(jqxhr,textStatus) {
 					alert("Error in Node.log "+textStatus+" : "+jqxhr.responseText);
@@ -1489,9 +1472,8 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 	//-----------------------------------
 	if (this.edit) {
 		//------------ edit button ---------------------
-		//if ((!inline && ( (writenode && !incrementroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer' )) || (inline && ((USER.admin || g_userroles[0]=='designer') && (!editnoderoles.containsArrayElt(g_userroles) && !editresroles.containsArrayElt(g_userroles))))) {
 		if (
-					(!this.inline && ( 	(this.writenode && !this.incrementroles.containsArrayElt(g_userroles) && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
+					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
 									|| USER.admin
 									|| g_userroles[0]=='designer' 
 								)
@@ -1806,7 +1788,8 @@ UIFactory["Node"].displayBlocks = function(root,dest,depth,langcode,edit,inline,
 				}
 				$('#column_'+blockid).append($(html));
 				if (g_userroles[0]=='designer' || USER.admin) {  
-					UIFactory["Node"].displayMetainfo("metainfo_"+blockid,childnode.node);
+					UIFactory.Node.displayMetainfo("metainfo_"+blockid,childnode.node);
+					UIFactory.Node.displayMetaEpmInfos("cssinfo_"+blockid,childnode.node);
 				}
 				//-----------------------------------------------------------------------------
 				if (childnode.structured_resource.type="ImageBlock") {
@@ -2209,8 +2192,9 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				}
 			}
 			// ==============================================================================
-			$('a[data-toggle=tooltip]').tooltip({html:true});
-			$('[data-tooltip="true"]').tooltip();
+$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
+			$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 			$(".pickcolor").colorpicker();
 			//----------------------------
 		}
@@ -2276,7 +2260,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 		html = "<a  class='fas fa-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-tooltip='true' data-placement='bottom'></a>";
 		$("#welcome-edit").html(html);
 	}
-	$('[data-tooltip="true"]').tooltip();
+	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 
 

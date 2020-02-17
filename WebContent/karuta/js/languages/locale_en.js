@@ -37,11 +37,12 @@ karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
 karutaStr["en"]["button-2world"] = "Public URL";
 karutaStr["en"]["button-up"] = "Up";
-karutaStr["en"]["button-reload"] = "Reload Page";
-karutaStr["en"]["button-refresh"] = "Reload Portfolio";
+karutaStr["en"]["button-relaod"] = "Reload Portfolio";
+karutaStr["en"]["button-refresh"] = "Reload Page";
 karutaStr["en"]["button-refresh-report"] = "Reload Report";
 karutaStr["en"]["button-disconnect"] = "Disconnect";
 karutaStr["en"]["button-change-password"] = "To change your password";
+karutaStr["en"]["button-change-name"] = "Change your name";
 karutaStr["en"]["button-new-window"] = "Open a new tab";
 karutaStr["en"]["button-support"] = "Technical Support";
 karutaStr['en']['Add']="Add";
@@ -65,7 +66,7 @@ karutaStr['en']['enter-text']="Enter something...";
 karutaStr['en']['not-logged']="You are not connected.";
 karutaStr['en']['translate']="Translate";
 karutaStr['en']['submit']="Submit";
-karutaStr['en']['newpassword']="Forgot password? Send your login:";
+karutaStr['en']['newpassword']="Forgot password?";
 karutaStr['en']['tipnewpassword']="If you can not find our message in your inbox, check your &quot;junk mail&quot; or &quot;spam&quot; folder";
 karutaStr['en']['confirm-password']="Confirm password";
 karutaStr['en']['password-mismatch']="The two passwords do not match.";
@@ -91,6 +92,7 @@ karutaStr['en']['list-novisible']="Not Visible";
 karutaStr['en']['empty-bin']="Empty bin";
 karutaStr['en']['complex']="Partial Loading";
 karutaStr["en"]["button-print"] = "Print";
+karutaStr["en"]["write-mode"] = "Edit";
 
 //=========================================
 //========== ERRORS =======================
@@ -103,8 +105,6 @@ karutaStr['en']['error-existing-login']="ERROR - The login already exists or an 
 //========== NODE =====================
 //=========================================
 
-karutaStr['en']['node']="Node";
-karutaStr['en']['node-label']="Node Label";
 karutaStr['en']['label']="Label";
 karutaStr['en']['code']="Code";
 karutaStr['en']['value']="Value";
@@ -119,16 +119,18 @@ karutaStr['en']['help-label']="Information";
 karutaStr['en']['semantictag']="Semantic Tag";
 karutaStr['en']['multilingual-node']="Multilingual Node";
 karutaStr['en']['multilingual-resource']="Multilingual Resource";
-karutaStr['en']['seenoderoles']="Roles - See";
-karutaStr['en']['editresroles']="Roles - Edit Resource";
-karutaStr['en']['delnoderoles']="Roles - Delete";
-karutaStr['en']['commentnoderoles']="Roles - Comment";
-karutaStr['en']['annotnoderoles']="Roles - Annotate";
-karutaStr['en']['submitroles']="Roles - Submit";
-karutaStr['en']['submitall']="Submit - Remove all";
-karutaStr['en']['editnoderoles']="Roles - Edit Label";
-karutaStr['en']['editcoderoles']="Roles - Edit Code";
-karutaStr['en']['duplicateroles']="Roles - Duplicate";
+karutaStr['en']['seenoderoles']="See";
+karutaStr['en']['resnopencil']="Resource without pencil ";
+karutaStr['en']['editresroles']="Edit Resource";
+karutaStr['en']['delnoderoles']="Delete";
+karutaStr['en']['commentnoderoles']="Comment";
+karutaStr['en']['annotnoderoles']="Annotate";
+karutaStr['en']['submitroles']="Submit";
+karutaStr['en']['submitall']="Submit For All Roles";
+karutaStr['en']['nodenopencil']="Node without Pencil";
+karutaStr['en']['editnoderoles']="Edit Label";
+karutaStr['en']['editcoderoles']="Edit Code";
+karutaStr['en']['duplicateroles']="Duplicate";
 karutaStr['en']['editboxtitle']="Editing Box Title";
 karutaStr['en']['queryGet_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
 karutaStr['en']['query']=karutaStr['en']['queryGet_Resource'];
@@ -137,10 +139,11 @@ karutaStr['en']['queryGet_Get_Resource']="Search <br/><span style='font-size:sma
 karutaStr['en']['queryProxy']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
 karutaStr['en']['queryAction']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
 karutaStr['en']['queryGet_Double_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code1.semantic_tag1.<i>label;</i>portfolio_code2.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
-karutaStr['en']['shownoderoles']="Roles - Show";
-karutaStr['en']['showroles']="Roles - Show To";
-karutaStr['en']['notifyroles']="Roles - Notify To";
-karutaStr['en']['graphicerroles']="Roles - Graphicer";
+karutaStr['en']['queryGet_Proxy']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i>/target_semantic_tag";
+karutaStr['en']['shownoderoles']="Show";
+karutaStr['en']['showroles']="Show To";
+karutaStr['en']['notifyroles']="Notify To";
+karutaStr['en']['graphicerroles']="Graphicer";
 karutaStr['en']['contentfreenode']="Free Posit. Container";
 karutaStr['en']['freenode']="Free Positioning";
 karutaStr['en']['display']="Visible";
@@ -148,6 +151,9 @@ karutaStr['en']['veriffunction']="Check Function";
 karutaStr['en']['menuroles']="Menus<br/><span style='font-size:smaller'> portfolio_code,semantic_tag,";
 karutaStr['en']['menuroles2']="label@en";
 karutaStr['en']['menuroles3']=",roles[;other menu]</span>";
+karutaStr['en']['menulabels']="Menu Button Text<br/><span style='font-size:smaller'>";
+karutaStr['en']['menulabels2']="label@en";
+karutaStr['en']['menulabels3']=",roles[;other label]</span>";
 karutaStr['en']['help']="Information <br/><span style='font-size:smaller'>";
 karutaStr['en']['help2']="Text in English@en";
 karutaStr['en']['help3']="</span>";
@@ -162,27 +168,30 @@ karutaStr['en']['width']="Width";
 karutaStr['en']['height']="Height";
 karutaStr['en']['public']="Public";
 karutaStr['en']['text-align']="Alignment";
+karutaStr['en']['displayview']="Display View";
+karutaStr['en']['margin-top']="Margin Top (px)";
 karutaStr['en']['sharedResource']="Shared Resource";
 karutaStr['en']['sharedNodeResource']="Shared Node Resource";
-karutaStr['en']['resizeroles']="Roles - Resize Image";
+karutaStr['en']['resizeroles']="Resize Image";
 karutaStr['en']['img-size']="Image Size";
 karutaStr['en']['inline']="Inline Editing";
-karutaStr['en']['edittargetroles']="Roles - Edit Proxy Target";
-karutaStr['en']['showroles']="Roles - Show/Hide";
-karutaStr['en']['showtoroles']="Roles - Show To";
+karutaStr['en']['edittargetroles']="Edit Proxy Target";
+karutaStr['en']['showroles']="Show/Hide";
+karutaStr['en']['showtoroles']="Show To";
 karutaStr['en']['private']="Hidden";
 karutaStr['en']['hide-metainfo']="Hide Metadata";
 karutaStr['en']['show-metainfo']="Show Metadata";
 karutaStr['en']['padding-top']="Space Before (in pixels)";
-karutaStr['en']['margin-top']="Space Before (in pixels)";
 karutaStr['en']['background-color']="Background Color";
-karutaStr['en']['moveroles']="Roles - Move";
+karutaStr['en']['moveroles']="Ordering";
+karutaStr['en']['movein']="Move in";
+karutaStr['en']['moveinroles']="Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
 karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
-karutaStr['en']['menu-type']="Menu Type";
-karutaStr['en']['displayview']="Display View";
+karutaStr['en']['node']="Node";
 karutaStr['en']['node-content']="Node Content";
+karutaStr['en']['node-label']="Node Label";
 karutaStr['en']['resource']="Resource";
 karutaStr['en']['metadata']="Metadata";
 karutaStr['en']['css-styles']="CSS Styles";
@@ -197,27 +206,31 @@ karutaStr['en']['shareroles3']="[,condition][;other sharing]";
 karutaStr['en']['submitted']="Submitted on ";
 karutaStr['en']['notsubmitted']="Not Submitted";
 karutaStr['en']['collapsible']="Collapsible";
-karutaStr['en']['incrementroles']="Rôles - Increment only";
+karutaStr['en']['incrementroles']="Increment only";
 karutaStr['en']['hide-button']="Hide Edit Buttons";
 karutaStr['en']['show-button']="Show Edit Buttons";
 karutaStr['en']['share']="Share";
-karutaStr['en']['sharetoroles']="Roles - Send to";
-karutaStr['en']['sharetoemail']="Email - Send to";
+karutaStr['en']['sharetoroles']="Send";
+karutaStr['en']['sharetoemail']="Send to";
 karutaStr['en']['sharelabel']="Button Label";
 karutaStr['en']['sharelevel']="Sharing Level 0--4";
 karutaStr['en']['shareduration']="Link Validity (in hours)";
-karutaStr['en']['sharewithrole']="Role - Recepient";
+karutaStr['en']['sharewithrole']="Recipient";
 karutaStr['en']['maxchar']="Chars - Max Number";
 karutaStr['en']['maxword']="Words - Max number";
 karutaStr['en']['maxword-alert']="You exceeded the limit of number of words. Extra wors will not be saved."
 karutaStr['en']['csstext']="CSS";
-karutaStr['en']['seeqrcoderoles']="Roles - See QR Code and URL";
+karutaStr['en']['seeqrcoderoles']="See QR Code and URL";
 karutaStr['en']['export-pdf']="Export PDF";
 karutaStr['en']['export-rtf']="Export RTF";
 karutaStr['en']['export-htm']="Export HTML";
 karutaStr['en']['list-semtags']="List of Semantic Tags";
-karutaStr['en']['printroles']="Roles - Print";
+karutaStr['en']['printroles']="Print";
+karutaStr['en']['duration']="Link Lifetime";
+karutaStr['en']['seestart']="See - Start Date";
+karutaStr['en']['seeend']="See - End Date";
 karutaStr['en']['logcode']="Log Code";
+karutaStr['en']['alt']="Alternate Text";
 
 //=========================================
 //========== ADMIN ========================
@@ -243,8 +256,8 @@ karutaStr['en']['bin']="My Bin";
 karutaStr['en']['nogroup']="No Group";
 karutaStr['en']['karuta.model']="Create a Portfolio Model";
 karutaStr['en']['code_portfolio']="Portfolio Code";
-karutaStr['en']['import_portfolio']="Import a Model .xml";
-karutaStr['en']['import_zip']="Import a Model/Project .zip";
+karutaStr['en']['import_portfolio']="Import a Model (.xml)";
+karutaStr['en']['import_zip']="Import a Model or Project (.zip)";
 karutaStr['en']['instantiate_portfolio']="Instantiate a Portfolio";
 karutaStr['en']['button-instantiate']="Instantiate";
 karutaStr['en']['unshare']="Unshare";
@@ -257,6 +270,8 @@ karutaStr['en']['sharing_with_designers']="Share with Designers";
 karutaStr['en']['unsharing']="Unsharing";
 karutaStr['en']['export']="Export";
 karutaStr['en']['export-project']="Export Project";
+karutaStr['en']['archive-project']="Archive Project";
+karutaStr['en']['nbeltsperarchive']="Number of elements by archive";
 karutaStr['en']['export-with-files']="Export with Files";
 karutaStr['en']['button-duplicate']="Duplicate";
 karutaStr['en']['getPDF']="Create PDF";
@@ -265,11 +280,11 @@ karutaStr['en']['getWebsite']="Export Website";
 karutaStr['en']['owner']="Owner";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";
-karutaStr['en']['import_instance']="Import a Portfolio Instance .xml";
+karutaStr['en']['import_instance']="Import a Portfolio Instance (.xml)";
 karutaStr['en']['remove-selection']="Move to Bin";
 karutaStr['en']['delete-selection']="Delete";
-karutaStr['en']['import_zip_instance']="Import a Portfolio/Project Instance .zip";
-karutaStr['en']['rename-move']="Rename/Move";
+karutaStr['en']['import_zip_instance']="Import a Portfolio or Project Instance (.zip)";
+karutaStr['en']['rename-move']="Rename or Move";
 karutaStr['en']['rename']="Rename";
 karutaStr['en']['karuta.batch']="Create a Batch";
 karutaStr['en']['karuta.batch-form']="Create a Batch Form Model";
@@ -291,8 +306,6 @@ karutaStr['en']['username-label']="Login";
 karutaStr['en']['firstname-label']="Firstname";
 karutaStr['en']['lastname-label']="Lastname";
 karutaStr['en']['changeOwner']="Change the Owner";
-karutaStr['en']['toggle-mode']="Toggle Edit/Read Mode";
-karutaStr['en']['write-mode']="Edit Mode";
 
 //=========================================
 //========== USERS ========================
@@ -303,11 +316,13 @@ karutaStr['en']['create_user']="Add a User";
 karutaStr['en']['active_users']="Active Users";
 karutaStr['en']['inactive_users']="Inactive Users";
 karutaStr['en']['temporary_users']="Temporary Users";
+karutaStr['en']['empty_users']="Users without Portfolio";
 karutaStr['en']['username']="Login";
 karutaStr['en']['lastname']="Last Name";
 karutaStr['en']['firstname']="First Name";
 karutaStr['en']['email']="Email";
 karutaStr['en']['change_password']="Change Password";
+karutaStr['en']['change_name']="Change Name";
 karutaStr['en']['password']="Password";
 karutaStr['en']['new_password']="New Password";
 karutaStr['en']['admin']="Admin";
@@ -321,6 +336,7 @@ karutaStr['en']['substitute']="Substitution";
 karutaStr['en']['select_user']="Select a User";
 karutaStr['en']['other']="Other";
 karutaStr['en']['delete-temporary-users']="Delete All";
+karutaStr['en']['delete-empty-users']="Delete Selection";
 
 //=========================================
 //========== ROLES ========================
@@ -384,7 +400,6 @@ karutaStr['en']['writing']="WRITING";
 //========== BUBBLE MAP ===================
 //=========================================
 karutaStr['en']['leave-edit-mode']="Leave Edit Mode";
-karutaStr['en']['BubbleMap']="Bubble Map";
 karutaStr['en']['bubble-label']="Label";
 karutaStr['en']['bubble-links']="Links";
 karutaStr['en']['bubble-information']="Information";
@@ -446,7 +461,6 @@ karutaStr['en']['email-message']="Message";
 //========== RESOURCES =======================
 //=========================================
 
-karutaStr['en']['asmRoot']="Root";
 karutaStr['en']['asmStructure']="Section";
 karutaStr['en']['asmUnit']="Page";
 karutaStr['en']['asmUnitStructure']="Subsection";
@@ -472,12 +486,15 @@ karutaStr['en']['BatchForm']="BatchForm";
 karutaStr['en']['DocumentBlock']="DocumentBlock";
 karutaStr['en']['URLBlock']="URLBlock";
 karutaStr['en']['ImageBlock']="ImageBlock";
+karutaStr['en']['BubbleMap']="Bubble Map";
+karutaStr['en']['Europass']="Europass";
 
 karutaStr['en']['Item']="Item";
-karutaStr['en']['GetResource']="GetResource";
-karutaStr['en']['GetGetResource']="GetGetResource";
-karutaStr['en']['GetDoubleResource']="GetDoubleResource";
+karutaStr['en']['Get_Resource']="Get_Resource";
+karutaStr['en']['Get_Get_Resource']="Get_Get_Resource";
+karutaStr['en']['Get_Double_Resource']="Get_Double_Resource";
 karutaStr['en']['Proxy']="Proxy";
+karutaStr['en']['Get_Proxy']="Get_Proxy";
 
 karutaStr['en']['asmColumn']="asmColumn";
 
@@ -487,6 +504,6 @@ karutaStr['en']['freq']="Frequency";
 karutaStr['en']['execroles']="Roles - Execute";
 karutaStr['en']['exec']="Execute Now";
 
-
-
-
+karutaStr['en']['uploaded-by']="Uploaded by";
+karutaStr['en']['date']="Date";
+karutaStr['en']['file']="File";

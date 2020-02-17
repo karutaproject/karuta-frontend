@@ -117,8 +117,7 @@ UIFactory["Proxy"].prototype.displayView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
-	var html = this.label_node[langcode].text();
-	$("#"+dest).html(html);
+	$(dest).html(this.label_node[langcode].text());
 };
 
 

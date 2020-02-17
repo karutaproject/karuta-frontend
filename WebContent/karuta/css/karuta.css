@@ -33,7 +33,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
   cursor: pointer;
   float: left;
   margin-right: 5px;
-  margin-top: 3px;
+  margin-top: 1px;
   color: var(--portfolio-buttons-color);
 }
 
@@ -146,10 +146,6 @@ h3 {
   overflow-y: auto;
   width: 100%;
 }
-#edit-window-body .dropdown-toggle {
-  border: 1px solid var(--edit-window-border-color);
-}
-
 /* ====================== */
 /*      NAVBAR            */
 /* ====================== */
@@ -183,6 +179,10 @@ h3 {
 /* ====================== */
 /*    LIST- WELCOME       */
 /* ====================== */
+.portfolio-label {
+  cursor: pointer;
+}
+
 #welcome-image {
   padding-top: 50px;
   width: 100%;
@@ -212,6 +212,7 @@ h3 {
 
 /*
 
+
 .page-list .welcome-title {
     color: var(--welcome-title-color);
     font-size: 30px;
@@ -234,59 +235,13 @@ h3 {
 /* ====================== */
 /*      PORTFOLIO         */
 /* ====================== */
-#portfolio-container {
-  background-color: var(--main-background-color);
-}
 #portfolio-container .dropdown-menu {
   color: black;
-  background-color: var(--main-background-color);
 }
 #portfolio-container .row {
   margin-left: 0px;
 }
 
-/* ====================== */
-/*   PORTFOLIO SUBBAR     */
-/* ====================== */
-#sub-bar .navbar {
-  background-color: var(--sub-bar-background-color);
-  color: var(--sub-bar-color);
-}
-#sub-bar .icon {
-  margin-top: 4px;
-}
-#sub-bar a {
-  color: var(--portfolio-navbar-link-color);
-}
-#sub-bar .dropdown-menu,
-#sub-bar .open > a {
-  background-color: var(--portfolio-navbar-color);
-  border-color: var(--portfolio-navbar-color);
-}
-#sub-bar ul.navbar-nav {
-  text-align: right;
-}
-
-/*
-
-#sub-bar .welcome-title {
-    color: var(--welcome-title-color);
-    font-size: 120%;
-    text-align: center;
-    width: 100%;
-}
-
-#sub-bar .welcome-line {
-    margin-left: auto;
-    margin-right: auto;
-    width: 25%;
-}
-
-#sub-bar  .welcome-baseline, #sub-bar  .welcome-text{
-	padding:10px;
-	width:100%;
-}
-*/
 /* ====================== */
 /*      BREADCRUMB        */
 /* ====================== */
@@ -301,35 +256,13 @@ h3 {
 /* ====================== */
 /*      SIDEBAR           */
 /* ====================== */
-/*
-.panel-default > .panel-heading {
-	background-color:transparent;
-}
-
-.panel-default,
-.panel-default > .panel-heading {
-	border-color:transparent;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0);
-	padding-left:0px;
-	padding-top:0px;
-	padding-bottom:0px;
-}
-*/
-#sidebar {
-  background-color: var(--portfolio-sidebar-color);
-}
 #sidebar li.selected ul.nested {
   display: block;
-}
-#sidebar li.selected ul.nested li.selected a {
-  background-image: none;
-  color: #000;
 }
 #sidebar li.nested {
   text-indent: 15px;
 }
 #sidebar .number {
-  color: #aaa;
   float: right;
   font-size: 11px;
   font-weight: normal;
@@ -346,7 +279,6 @@ h3 {
 }
 
 .sidebar-item {
-  border-bottom: 1px solid var(--portfolio-sidebar-separator-color);
   padding-left: 15px;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -361,21 +293,7 @@ h3 {
 
 .sidebar-link {
   padding-right: 9px;
-  color: var(--portfolio-sidebar-link-color);
 }
-.sidebar-link a {
-  color: var(--portfolio-sidebar-link-color);
-}
-.sidebar-link .selected {
-  border-right: 4px solid var(--portfolio-sidebar-selected-border-color);
-}
-
-.selected a,
-.sidebar-link a:hover,
-a.sidebar-link:hover {
-  color: var(--portfolio-sidebar-link-selected-color);
-}
-
 /*
 .panel-body{
 	padding-top:0px;
@@ -491,12 +409,18 @@ a .portfolio-label:hover {
   background-color: var(--page-title-background-color);
   min-height: 6.25rem;
 }
+.asmRoot > div[name=lbl-div] .title,
+.asmStructure > div[name=lbl-div] .title,
+.asmUnit > div[name=lbl-div] .title {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
 .asmRoot > div[name=lbl-div] .title-subline,
 .asmStructure > div[name=lbl-div] .title-subline,
 .asmUnit > div[name=lbl-div] .title-subline {
   border-bottom: 1px solid var(--page-title-subline-color);
-  margin-top: 0.625rem;
   width: 50px;
+  margin-left: 0.2rem;
 }
 
 .asmRoot .asmStructure > div[name=lbl-div],
@@ -518,59 +442,49 @@ a .portfolio-label:hover {
 /* ====================== */
 /*     SECTION TITLES     */
 /* ====================== */
-.asmStructure .label-node:hover {
+.standard .asmStructure .label-node:hover {
   cursor: pointer;
 }
-
-.asmRoot .title {
+.standard .asmRoot .title {
   font-size: 1.5rem;
   line-height: 1.875rem;
 }
-
-.asmStructure .title {
+.standard .asmStructure .title {
   font-size: 1.5rem;
   line-height: 1.875rem;
 }
-
-.asmStructure .asmStructure .title,
-.asmRoot .asmStructure .title {
+.standard .asmStructure .asmStructure .title,
+.standard .asmRoot .asmStructure .title {
   font-size: 1.2rem;
   font-weight: normal;
 }
-
-.asmUnit .title {
+.standard .asmUnit .title {
   font-size: 1.5rem;
   line-height: 1.875rem;
 }
-
-.asmStructure .asmUnit .title,
-.asmRoot .asmUnit .title {
+.standard .asmStructure .asmUnit .title,
+.standard .asmRoot .asmUnit .title {
   font-size: 1.25rem;
   font-weight: normal;
   line-height: 1.5rem;
 }
-
-.asmUnitStructure .title {
+.standard .asmUnitStructure .title {
   font-size: 1.25rem;
   line-height: 1.5rem;
 }
-
-.asmUnitStructure .asmUnitStructure .title {
+.standard .asmUnitStructure .asmUnitStructure .title {
   font-size: 1rem;
   line-height: 1.25rem;
 }
-
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+.standard .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
-
-.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
+.standard .asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
   font-size: 0.75rem;
   line-height: 1.25rem;
 }
-
-.resource-label .title {
+.standard .resource-label .title {
   font-size: inherit;
 }
 
@@ -773,6 +687,23 @@ table[name=res-div] {
   font-size: 0.875rem;
 }
 
+.node-model {
+  margin-bottom: 10px;
+}
+.node-model .menus {
+  margin-top: -8px;
+}
+
+.model .inside-full {
+  padding: 2px;
+}
+.model .inside-full .title {
+  margin-top: 6px;
+}
+.model div[name=cnt-div] {
+  margin-left: 15px;
+}
+
 /* ============================ */
 /* ============================ */
 /* ============================ */
@@ -828,10 +759,6 @@ h3 {
 /* ====================== */
 /*     PAGE LIST          */
 /* ====================== */
-#list-container #list-header {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
 #list-container .btn {
   background-color: var(--list-button-background-color);
   color: var(--list-button-color);
@@ -928,8 +855,7 @@ h3 {
 }
 
 #portfoliosgroup-create,
-#usersgroup-create,
-#user-create {
+#usersgroup-create {
   color: var(--list-button-color);
   background-color: var(--list-button-background-color);
   margin-top: 20px;
@@ -1192,6 +1118,7 @@ h3 {
 
 .toomuch {
   color: red;
+  text-decoration: line-through;
 }
 
 .word-counter {
@@ -1400,8 +1327,11 @@ textarea {
   top: 10%;
   left: 5%;
 }
-
-#image-window-body {
+#image-window #image-window-header {
+  display: flex;
+  justify-content: flex-end;
+}
+#image-window #image-window-body {
   padding: 5px;
 }
 
@@ -1462,7 +1392,7 @@ hr {
 .metadata .input-group-text {
   border: 0px solid var(--edit-window-border-color);
   font-size: 0.9rem;
-  width: 180px;
+  width: 250px;
 }
 .metadata .input-group {
   margin-bottom: 3px;
@@ -1632,9 +1562,18 @@ hr {
   border: 1px solid #ced4da;
 }
 
+.get-radio {
+  margin-bottom: 2px;
+}
+
 .radio-div {
+  float: left;
+  padding: 5px;
+}
+
+.radio-label {
   display: inline-block;
-  width: fit-content;
+  max-width: 90%;
 }
 
 button.selected-label {
@@ -1681,11 +1620,16 @@ button.selected-label {
   background-color: transparent;
 }
 
-.metainfo {
+.metainfo,
+.cssinfo {
   color: #808080;
   font-size: 10px;
   font-weight: normal;
   display: none;
+}
+
+.report .cssinfo {
+  display: block;
 }
 
 #header .metainfo {
@@ -1698,7 +1642,6 @@ button.selected-label {
 
 .comments {
   font-style: italic;
-  font-size: 11px;
   font-weight: normal;
   padding: 7px;
 }
@@ -1764,7 +1707,7 @@ table.tablesorter th.restore {
 	Role Rights
    ====================*/
 #rights {
-  margin-left: 180px;
+  margin-left: 250px;
   border: 1px solid lightgrey;
 }
 #rights td {
@@ -2297,6 +2240,17 @@ select.Y2, option[value=Y2] {
 /* ====================
 	BLOCK
    ====================*/
+.DocumentBlock .content,
+.ImageBlock .content,
+.URLBlock .content {
+  display: none;
+}
+.DocumentBlock .resource-label,
+.ImageBlock .resource-label,
+.URLBlock .resource-label {
+  visibility: hidden;
+}
+
 :root {
   --block-height:220px;
   --block-img-height:218px;
@@ -2438,7 +2392,6 @@ div.oembedall-container {
 }
 
 #archive-button,
-#remove-button,
 #search-button {
   background-color: var(--list-button-background-color);
   color: var(--list-button-color);
@@ -2476,23 +2429,23 @@ div.oembedall-container {
    ===========================*/
 #search-user {
   float: right;
-  margin-top: 5px;
-  width: 460px;
-  margin-right: 20px;
+  width: 80%;
 }
 
 #search-choice {
   width: 100px;
 }
 
+/*
 #search-button-username,
 #search-button-firstname,
-#search-button-lastname {
-  height: 34px;
-  background-color: var(--list-button-background-color);
-  color: var(--list-button-color);
+#search-button-lastname
+{
+	height:34px;
+	background-color:var(--list-button-background-color);
+	color:var(--list-button-color);
 }
-
+*/
 /* ===========================
 	SVG
    ===========================*/
@@ -2530,89 +2483,89 @@ div.oembedall-container {
 }
 
 .svg-web-line2 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web2-color);
   stroke-width: 1;
 }
 
 .svg-web-value2 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web2-color);
   stroke-width: 7;
   stroke-linecap: round;
 }
 
 .svg-web-line3 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web3-color);
   stroke-width: 1;
 }
 
 .svg-web-value3 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web3-color);
   stroke-width: 7;
   stroke-linecap: round;
 }
 
 .svg-web-line4 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web4-color);
   stroke-width: 1;
 }
 
 .svg-web-value4 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web4-color);
   stroke-width: 7;
   stroke-linecap: round;
 }
 
 .svg-web-line5 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web5-color);
   stroke-width: 1;
 }
 
 .svg-web-value5 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web5-color);
   stroke-width: 7;
   stroke-linecap: round;
 }
 
 .svg-web-line6 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web6-color);
   stroke-width: 1;
 }
 
 .svg-web-value6 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web6-color);
   stroke-width: 7;
   stroke-linecap: round;
 }
 
 .svg-web-line7 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web7-color);
   stroke-width: 1;
 }
 
 .svg-web-value7 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web7-color);
   stroke-width: 7;
   stroke-linecap: round;
 }
 
 .svg-web-line8 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web8-color);
   stroke-width: 1;
 }
 
 .svg-web-value8 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web8-color);
   stroke-width: 7;
   stroke-linecap: round;
 }
 
 .svg-web-line9 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web9-color);
   stroke-width: 1;
 }
 
 .svg-web-value9 {
-  stroke: var(--svg-web1-color);
+  stroke: var(--svg-web9-color);
   stroke-width: 7;
   stroke-linecap: round;
 }

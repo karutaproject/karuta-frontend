@@ -204,7 +204,8 @@ function displayOnePage()
 						if (type=='model'){
 							UIFactory['Node'].displayModel(UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
 						}
-						$('a[data-toggle=tooltip]').tooltip({html:true});
+						$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
 						//---------------------------
 						if (g_display_type=="standard")
 							loadLanguages();

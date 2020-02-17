@@ -26,6 +26,7 @@
 									"			<div><a id='label_node_#uuid#' class='label-libelle'></a><span id='help_#uuid#' class='ihelp'></span></div>" +
 									"			<div id='comments_#uuid#' class='comments'></div><!-- comments -->" +
 									"			<div id='metainfo_#uuid#' class='metainfo'></div><!-- metainfo -->" +
+									"			<div id='cssinfo_#uuid#' class='cssinfo'></div><!-- cssinfo -->" +
 									"		</div>" +
 									"		<div class='col-md-4'><span id='buttons-#uuid#' class='buttons'></span><span id='menus-#uuid#' class='menus'></span></div>" +
 									"	</div>" +
@@ -38,6 +39,7 @@
 								"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 								"		<div id='comments_#uuid#' class='comments'></div>" +
 								"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
+								"		<div id='cssinfo_#uuid#' class='cssinfo'></div><!-- cssinfo -->" +
 								"	</div>" +
 								"	<div class='col-md-4'><span id='buttons-#uuid#' class='buttons'></span><span id='menus-#uuid#' class='menus'></span></div>" +
 								" </div>" +
@@ -56,6 +58,7 @@
 									"		<div class='col-md-4'><span id='buttons-#uuid#' class='buttons'></span></div>" +
 									"	</div><!-- row -->" +
 									"	<div class='row'><div id='metainfo_#uuid#' class='col-md-offset-1 col-md-10 metainfo'></div></div>" +
+									"	<div id='cssinfo_#uuid#' class='cssinfo'></div><!-- cssinfo -->" +
 									"	<div id='extra_#uuid#' class='extra'></div>" +
 									"</div>";
 
@@ -69,6 +72,7 @@
 												"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 												"			<div id='comments_#uuid#' class='comments'></div>" +
 												"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
+												"			<div id='cssinfo_#uuid#' class='cssinfo'></div><!-- cssinfo -->" +
 												"		</div>" +
 												"	</div>" +
 												"</div>";
@@ -79,8 +83,10 @@
 											"		<div id='std_node_#uuid#' class='node-label'>" +
 											"			<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
 											"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
+											"			<div id='portfoliocode_#uuid#' class='portfoliocode'></div>" +
 											"			<div id='comments_#uuid#' class='comments'></div>" +
 											"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
+											"			<div id='cssinfo_#uuid#' class='cssinfo'></div><!-- cssinfo -->" +
 											"		</div>" +
 											"	</div>" +
 											"	<div id='content-#uuid#' name='cnt-div' class='content' ><\div>" +
@@ -93,6 +99,7 @@
 											"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 											"		<div id='comments_#uuid#' class='comments'></div>" +
 											"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
+											"		<div id='cssinfo_#uuid#' class='cssinfo'></div><!-- cssinfo -->" +
 											"	</div>" +
 											"	<div class='col-4'><span id='buttons-#uuid#' class='buttons'></span><span id='menus-#uuid#' class='menus'></span></div>" +
 											" </div>" +
@@ -116,6 +123,7 @@
 //												"		</div>" +
 												"	</div><!-- row -->" +
 												"	<div class='row'><div id='metainfo_#uuid#' class='offset-md-1 col-md-10 metainfo'></div></div>" +
+												"	<div class='row'><div id='cssinfo_#uuid#' class='offset-md-1 col-md-10 cssinfo'></div></div>" +
 												"	<div id='content-#uuid#' name='cnt-div' class='content' ><\div>" +
 												"	<div id='extra_#uuid#' class='extra'></div>" +
 												"</div>";
@@ -131,6 +139,7 @@
 												"	</div>" +
 												"	<div id='comments_#uuid#' class='comments'></div>" +
 												"	<div id='metainfo_#uuid#' class='metainfo'></div></div>" +
+												"	<div id='cssinfo_#uuid#' class='cssinfo'></div></div>" +
 												"	<div id='content-#uuid#' name='cnt-div' class='content' ><\div>" +
 												"	<div id='extra_#uuid#' class='extra'></div>" +
 												"</div>";
@@ -163,6 +172,7 @@
 									 "	</div>" +
 									 "</div>" +
 									 "<div id='metainfo_#uuid#' class='metainfo'></div>" +
+									 "<div id='cssinfo_#uuid#' class='cssinfo'></div></div>" +
 									 "<div id='extra_#uuid#'  class='extra-xlarge'></div>" +
 									 "</div>";
 	//====================================================================
@@ -176,6 +186,7 @@
 												"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 												"			<div id='comments_#uuid#' class='comments'></div>" +
 												"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
+												"			<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 												"		</div>" +
 												 "	</div>" +
 												"	<div id='content-#uuid#' name='cnt-div' class='content card-deck' ></div>" +
@@ -189,6 +200,7 @@
 											"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 											"			<div id='comments_#uuid#' class='comments'></div>" +
 											"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
+											"			<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 											"		</div>" +
 											 "	</div>" +
 											 "	<div id='content-#uuid#' name='cnt-div' class='card-body content'></div>" +
@@ -203,6 +215,7 @@
 													"			<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 													"			<div id='comments_#uuid#' class='comments'></div>" +
 													"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
+													"			<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 													"		</div>" +
 													"	</div>" +
 													"	<div class='card-body' name='res-div'>" +
@@ -222,11 +235,12 @@
 												 " 		<div id='extra_#uuid#'  class='extra-xlarge'></div>" +
 												 "	</div>" +
 												 " <div id='metainfo_#uuid#' class='metainfo'></div>" +
+												 " <div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 												 "</div>";
 ///====================================================================
 //====================================================================
 //====================================================================
-	//====================================================================
+//====================================================================
 	displayHTML["standard-resource-Image-IMG-Label"]  =	"<div id='node_#uuid#' class='card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 													"	<img id='resource_#uuid#' class='card-img' src=''></img>" +
 													"	<div id='std_node_#uuid#' name='lbl-div' class='card-img-overlay'>" +
@@ -249,6 +263,7 @@
 												"	</div>" +
 												"</div>" +
 												"<div id='metainfo_#uuid#' class='metainfo'></div>" +
+												"<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 												"<div id='extra_#uuid#'  class='extra-xlarge'></div>" +
 												"</div>";
 //====================================================================
@@ -260,8 +275,10 @@
 								"	<div id='std_node_#uuid#' class='model-node-label'>" +
 								"		<div id='menus-#uuid#' class='menus'/><div id='buttons-#uuid#' class='buttons'/>" +
 								"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
+								"		<div id='portfoliocode_#uuid#' class='portfoliocode'></div>" +
 								"		<div id='comments_#uuid#' class='comments'></div>" +
 								"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
+								"		<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 								"	</div>" +
 								" </div>" +
 								" <div id='content-#uuid#' name='cnt-div' class='content #row#' ><\div>" +
@@ -280,12 +297,13 @@
 											"				</td>" +
 											"				<td class='td-buttons'><span id='menus-#uuid#' class='menus'/><span id='buttons-#uuid#' class='buttons' /></td>" +
 											"			</tr></table>" +
-											"		</div><!-- col-8 -->" +
+											"		</div>" +
 											"	</div>" +
 											"	<div id='metainfo_#uuid#' class='metainfo'></div>" +
+											"	<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 											"</div>";
 
-	displayHTML["model-resource-default"] = model_resource.replace("#col-a#","col-2").replace("#col-b#","col-8")
+	displayHTML["model-resource-default"] = model_resource.replace("#col-a#","col-2").replace("#col-b#","col-10")
 	
 	displayHTML["model-node-card"] =	"<div id='node_#uuid#' class=' card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype#'>" +
 										" <div id='sub_node_#uuid#' name='lbl-div' class='card-header node-model' >" +
@@ -295,6 +313,7 @@
 										"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 										"		<div id='comments_#uuid#' class='comments'></div>" +
 										"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
+										"		<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 										"	</div>" +
 										" </div>" +
 										"	<div class='card-body' name='res-div'>" +
@@ -310,6 +329,7 @@
 										"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 										"		<div id='comments_#uuid#' class='comments'></div>" +
 										"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
+										"		<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 										"	</div>" +
 										" </div>" +
 										"	<div class='card-body' name='res-div'>" +
@@ -338,6 +358,7 @@
 					"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 					"		<div id='comments_#uuid#' class='comments'></div>" +
 					"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
+					"		<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 					"	</div>" +
 					"	<div><span id='buttons-#uuid#' class='buttons'></span><span id='menus-#uuid#' class='menus'><span></div>" +
 					"</div>" +

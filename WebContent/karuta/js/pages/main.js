@@ -126,7 +126,8 @@ function fill_main_page(rootid,role)
 			setVariables(data);
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
-			$('a[data-toggle=tooltip]').tooltip({html:true});
+			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
 			// --------------------------
 			if (g_display_type=="standard" || g_display_type=="basic") {
 				if (USER.creator)

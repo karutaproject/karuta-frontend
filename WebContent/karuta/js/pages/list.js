@@ -93,7 +93,7 @@ function show_list_page()
 	$("#refresh").show();
 	$("#search-portfolio-div").show();
 	$("#list-container").show();
-	$('[data-tooltip="true"]').tooltip();
+	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 
 //==============================
@@ -136,11 +136,11 @@ function fill_list_page()
 		html += "	<div class='dropdown-menu' aria-labelledby='list-menu'>";
 		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].createProject()\" >"+karutaStr[LANG]['create_project']+"</a>";
 		html += "		<div class='dropdown-divider'></div>";
-		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].importFile()\" >"+karutaStr[LANG]['import_portfolio']+"</a>";
-		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].importZip()\" >"+karutaStr[LANG]['import_zip']+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importFile()\" >"+karutaStr[LANG]['import_portfolio']+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importZip()\" >"+karutaStr[LANG]['import_zip']+"</a>";
 		html += "		<div class='dropdown-divider'></div>";
-		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" >"+karutaStr[LANG]['import_instance']+"</a>";
-		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importFile(true)\" >"+karutaStr[LANG]['import_instance']+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a>";
 		html += "	</div>";
 		html += "</div>";
 		$("#menu").html(html);
@@ -434,6 +434,24 @@ function countProjectPortfolios(uuid)
 	});
 }
 
+//==============================
+function getSearch()
+//==============================
+{
+	var html = "";
+	html += "<div id='search' class='input-group'>";
+	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"' onchange='javascript:hideArchiveSearch()'>";
+	html += "	<div class='input-group-append'>";
+	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><i class='fas fa-search'></i></button>";
+	if (USER.creator && !USER.limited)  {
+		html += "		<a id='archive-button' href='' class='btn' disabled='true'><i style='margin-top:4px' class='fas fa-download'></i></a>";
+		html += "		<button id='remove-button' type='button' disabled='true' onclick=\"UIFactory['Portfolio'].removePortfolios()\" class='btn'><i class='fas fa-trash'></i></button>";
+	}
+	html += "	</div>";
+	html += "</div>";
+	return html;
+}
+
 //==================================
 function searchPortfolio()
 //==================================
@@ -487,15 +505,15 @@ function applyListConfiguration()
 {
 	$('body').css("background-image", g_configVar['list-welcome-image']);
 	$('#list-container').css("background-color", g_configVar['list-background-color']);
-	changeCss(".dropdown-menu,#active,.projects-nb,#usersgroups .usersgroup-users,.usersgroup,.project,#bin,.portfolios-not-in-project,.portfoliosgroup", "background-color:"+g_configVar['list-element-background-color']);
-	changeCss(".dropdown-menu a.dropdown-item:hover", "color:"+g_configVar['list-element-background-color']);
-	changeCss(".warning-list", "color:"+g_configVar['list-element-background-color']);
-	changeCss(".portfolio-row:hover,#main-user .item:hover", "background-color:"+g_configVar['list-element-background-color-complement']);
-	changeCss("#active,.portfolio-row, .row-label", "color:"+g_configVar['list-element-text-color']);
-	changeCss(".dropdown-menu a.dropdown-item:hover", "background-color:"+g_configVar['list-element-text-color']);
-	changeCss("h3,#list-container #refresh,.projects-nb,.number_of_projects_portfolios", "color:"+g_configVar['list-title-color']);
+	changeCss("#list-container .dropdown-menu,#active,.projects-nb,#usersgroups .usersgroup-users,.usersgroup,.project,#bin,.portfolios-not-in-project,.portfoliosgroup", "background-color:"+g_configVar['list-element-background-color']);
+	changeCss("#list-container .dropdown-menu a.dropdown-item:hover", "color:"+g_configVar['list-element-background-color']);
+	changeCss("#list-container .warning-list", "color:"+g_configVar['list-element-background-color']);
+	changeCss("#list-container .portfolio-row:hover,#main-user .item:hover", "background-color:"+g_configVar['list-element-background-color-complement']);
+	changeCss("#list-container #active,.portfolio-row, .row-label", "color:"+g_configVar['list-element-text-color']);
+	changeCss("#list-container .dropdown-menu a.dropdown-item:hover", "background-color:"+g_configVar['list-element-text-color']);
+	changeCss("#list-container h3,#list-container #refresh,.projects-nb,.number_of_projects_portfolios", "color:"+g_configVar['list-title-color']);
 	changeCss("#list-container .btn,#main-portfoliosgroup .btn,#main-user .btn,#main-usersgroup .btn,#main-exec-batch .btn,#main-exec-report .btn", "background-color:"+g_configVar['list-button-background-color']);
 	changeCss("#list-container .btn", "color:"+g_configVar['list-button-text-color']);
-	changeCss(".number_of_projects_portfolios", "background-color:"+g_configVar['list-element-background-color-complement']);
+	changeCss("#list-container .number_of_projects_portfolios", "background-color:"+g_configVar['list-element-background-color-complement']);
 	changeCss("", "color:"+g_configVar['list-title-color']);
 }

@@ -152,7 +152,7 @@ UIFactory["TextField"].prototype.update = function(langcode)
 	var words = $.trim(newValue).split(' ');
 	if (this.maxword>0 && countWords(newValue)>this.maxword) {
 		alertHTML(karutaStr[languages[langcode]]['maxword-alert']+"<br>"+markFirstWords(newValue,this.maxword));
-//		newValue = getFirstWords(newValue,this.maxword);
+		newValue = markFirstWords(newValue,this.maxword);
 		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).val(newValue);
 		$("#"+this.id+"_edit_"+langcode+(this.inline?'inline':'')).data("wysihtml5").editor.setValue(newValue);
 	}
@@ -206,6 +206,10 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (type==null)
 		type = 'default';
 	//---------------------
+	this.inline = ($("metadata",this.node).attr('inline')=='Y') ? true : false;
+	if (this.inline==undefined)
+		this.inline = false;
+	//---------------------
 	var text = "";
 	if (this.encrypted){
 		var cipher = $(this.text_node[langcode]).text().substring(3);
@@ -217,7 +221,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	var uuid = this.id;
 	var html = "";
 	if (type=='default') {
-		html += "<button id='button_"+this.id+"' class='glyphicon glyphicon-resize-full' style='height:24px;float:right;' onclick=\"UIFactory.TextField.toggleExpand('"+this.id+"','"+langcode+"')\"></button>";
+//		html += "<button id='button_"+this.id+"' class='glyphicon glyphicon-resize-full' style='height:24px;float:right;' onclick=\"UIFactory.TextField.toggleExpand('"+this.id+"','"+langcode+"')\"></button>";
 		html += "<div id='div_"+this.id+"'><span id='counter_"+this.id+"' class='word-counter' style='float:right'></span><textarea id='"+this.id+"_edit_"+langcode+(inline?'inline':'')+"' class='form-control' expand='false' style='height:300px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
 		if (disabled)
 			html += "disabled='disabled' ";
@@ -237,7 +241,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	}
 	$("#"+uuid+"_edit_"+langcode+(inline?'inline':'')).wysihtml5(
 		{
-			toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},
+			toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": true,"image": false,"link": false},
 			"uuid":uuid,
 			"locale":LANG,
 			'events': {
@@ -245,6 +249,15 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 				'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},
 				'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},
 				'blur': function(){clearInterval(currentTexfieldInterval);}
+			},
+			parserRules: {
+				classes: {
+					"style": 1,
+					"class": 1
+				}
+			},
+			tags: {
+				span: {}
 			}
 		}
 	);
@@ -290,7 +303,7 @@ UIFactory["TextField"].prototype.refresh = function()
 //==================================
 function countWords(html) {
 //==================================
-	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	var text = html.replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g," " );
 	return text.trim().split( /\s+/ ).length;
 }
 
@@ -311,7 +324,7 @@ function getFirstWords(html,nb) {
 //==================================
 function markFirstWords(html,nb) {
 //==================================
-	var text = html.replace("<span class='toomuch'>","").replace("</span><!--toomuch-->","").replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
+	var text = html.replace("<span class='toomuch'><i style='color:red'>","").replace("</i></span><!--toomuch-->","").replace(/(<([^>]+)>)/ig," ").replace(/(&lt;([^&gt;]+)&gt;)/ig," ").replace( /[^\w ]/g, "" );
 	var tableOfWords = text.trim().split( /\s+/ ).slice(0,nb);
 	var tableIndex = [];
 	var end = 0;
@@ -319,5 +332,5 @@ function markFirstWords(html,nb) {
 		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
 		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
 	}
-	return html.substring(0,tableIndex[tableOfWords.length-1].end) + "<span class='toomuch'>" + html.substring(tableIndex[tableOfWords.length-1].end)+"</span><!--toomuch-->";
+	return html.substring(0,tableIndex[tableOfWords.length-1].end) + "<span class='toomuch'><i style='color:red'>" + html.substring(tableIndex[tableOfWords.length-1].end)+"</i></span><!--toomuch-->";
 }

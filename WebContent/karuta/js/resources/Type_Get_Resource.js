@@ -274,8 +274,8 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		
 		} else {	// ==== KARUTA =====
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
-				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
+//			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+//				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
 			if (portfoliocode=='self') {
 				portfoliocode = selfcode;
 				cachable = false;
@@ -373,13 +373,18 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				else
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 				//------------------------------
+				var value = $('value',resource).text();
 				var code = $('code',resource).text();
 				var display_code = false;
 				var display_label = true;
+				var display_value = false;
 				if (code.indexOf("$")>-1) 
 					display_label = false;
 				if (code.indexOf("@")<0) {
 					display_code = true;
+				}
+				if (code.indexOf("!")>-1) {
+					display_value = true;
 				}
 				code = cleanCode(code);
 				//------------------------------
@@ -395,6 +400,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					html += ">";
 					if (display_code)
 						html += "<span class='li-code'>"+code+"</span>";
+					if (display_value)
+						html += "<span class='li-value'>"+value+"</span>";
 					if (display_label)
 						html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
 					html += "</a>";
@@ -512,6 +519,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		
 	}
 	//------------------------------------------------------------
+	//------------------------------------------------------------
 	if (type.indexOf('radio')>-1) {
 		//----------------- null value to erase
 		if (resettable) {
@@ -556,7 +564,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			}
 			code = cleanCode(code);
 			//------------------------------
-			input += "<input type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
+			input += "<input class='radio-div' type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
@@ -567,8 +575,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			}
 			if (code!="" && self_code==$('code',resource).text())
 				input += " checked ";
-			input += ">&nbsp;&nbsp;";
-			input += "<div  class='sel"+code+" radio-div'>"
+			input += ">";
+			input += "<div  class='sel"+code+" radio-label'>"
 			if (display_code)
 				input += code + " ";
 			if (display_label){
@@ -662,6 +670,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		//-----------------------
 		for ( var i = 0; i < newTableau1.length; ++i) {
 			var input = "";
+			//------------------------------
 			var resource = null;
 			if ($("asmResource",newTableau1[i][1]).length==3)
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
@@ -669,27 +678,49 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			//------------------------------
 			var code = $('code',resource).text();
+			var selectable = true;
+			var disabled = false;
 			var display_code = false;
 			var display_label = true;
-			if (code.indexOf("$")>-1) 
+			//------------------------
+			if (code.indexOf("$")>-1){ 
 				display_label = false;
+			}
 			if (code.indexOf("@")<0) {
 				display_code = true;
 			}
+			if (code.indexOf("?")>-1) {
+				disabled = true;
+			}
+			if (code.indexOf("!")>-1) {
+				selectable = false;
+			}
 			code = cleanCode(code);
 			//------------------------------
-			input += "<div> <input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
-			input += "' ";
-			for (var j=0; j<languages.length;j++){
-				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+			input += "<div>";
+			if (selectable) {
+				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
+				input += "' ";
+				for (var j=0; j<languages.length;j++){
+					if (target=='fileid' || target=='resource') {
+						if (target=='fileid')
+							input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
+						else
+							input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"\" ";
+					} else 
+						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+				}
+				if (disabled)
+					input += "disabled";
+				input += "> ";
 			}
-			input += "> ";
 			if (display_code)
 				input += code + " ";
 			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
 			var input_obj = $(input);
 			$(inputs_obj).append(input_obj);
 		}
+		//------------------------------
 		$("#"+destid).append(inputs_obj);
 	}
 	//------------------------------------------------------------

@@ -155,16 +155,16 @@ function getNavBar(type,portfolioid,edit)
 	html += "			<ul class='mr-auto navbar-nav'>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	if (type=='login') {
-		html += "			<li class='nav-item icon'><a class='nav-link' href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></i></a></li>";
+		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></i></a></li>";
 	} else {
-		html += "			<li class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
-		html += "			<li class='nav-item icon'><a class='nav-link' href='javascript:displayTechSupportForm()' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-envelope'></i></a></li>";
+		html += "			<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
+		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='javascript:displayTechSupportForm()' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-envelope'></i></a></li>";
 	}
 //	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
 	if (languages.length>1) 
 		if(type=="create_account") {
-			html += "			<ul class='nav navbar-nav'>";
+			html += "			<ul id='navbar-language' class='nav navbar-nav'>";
 			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
 			html += "					<ul class='dropdown-menu'>";
 			for (var i=0; i<languages.length;i++) {
@@ -174,7 +174,7 @@ function getNavBar(type,portfolioid,edit)
 			html += "				</li>";
 			html += "			</ul>";
 		} else {
-			html += "	<li class='nav-item dropdown'>";
+			html += "	<li id='navbar-language' class='nav-item dropdown'>";
 			html += "		<a class='nav-link dropdown-toggle' href='#' id='languageDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 			html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
 			html += "		</a>";
@@ -189,7 +189,7 @@ function getNavBar(type,portfolioid,edit)
 	//-----------------ACTIONS-------------------------------
 	if (type!='login' && USER!=undefined) {
 		if (USER.admin || (USER.creator && !USER.limited) ) {
-			html += "		<li class='nav-item dropdown'>";
+			html += "		<li id='navbar-actions' class='nav-item dropdown'>";
 			html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 			html += "				Actions";
 			html += "			</a>";
@@ -514,10 +514,9 @@ function imageBox()
 	html += "\n<!-- ==================== image box ==================== -->";
 	html += "\n<div id='image-window' class='modal'>";
 	html += "\n			<div class='modal-content'>";
-	html += "\n				<div id='image-window-body' class='modal-body'>";
-	html += "\n				</div>";
-	html += "\n				<div id='image-window-footer' class='modal-footer' >";
-	html += "\n				</div>";
+	html += "\n				<div id='image-window-header' class='modal-header' ></div>";
+	html += "\n				<div id='image-window-body' class='modal-body'></div>";
+	html += "\n				<div id='image-window-footer' class='modal-footer' ></div>";
 	html += "\n			</div>";
 	html += "\n</div>";
 	html += "\n<!-- ============================================== -->";
@@ -577,50 +576,6 @@ function confirmDel(uuid,type,parentid,destid,callback,param1,param2)
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
 	buttons += "<button class='btn btn-danger' onclick=\"javascript:deleteandhidewindow('"+uuid+"','"+type+"','"+parentid+"','"+destid+"',"+callback+",'"+param1+"','"+param2+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
-}
-
-//=======================================================================
-function confirmDelPortfolio(uuid) 
-// =======================================================================
-{
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.del('"+uuid+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
-}
-
-//=======================================================================
-function confirmDelProject(uuid,projectcode) 
-// =======================================================================
-{
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.delProject('"+uuid+"','"+projectcode+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
-}
-
-//=======================================================================
-function confirmDelPortfolios_EmptyBin() 
-// =======================================================================
-{
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.emptyBin()\">" + karutaStr[LANG]["button-delete"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
-}
-
-//=======================================================================
-function confirmDelTemporaryUsers() 
-// =======================================================================
-{
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.User.deleteTemporaryUsers()\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
@@ -1006,13 +961,16 @@ function getSendPublicURL(uuid,shareroles)
 }
 
 //==================================
-function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,sharerole)
+function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole,shareoptions)
 //==================================
 {
+	var emailsarray = [];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	var sharetomessage = "";
+	var sharetoobj = "";
 	$("#edit-window-footer").html("");
 	fillEditBoxBody();
 	$("#edit-window-title").html(karutaStr[LANG]['share-URL']);
@@ -1020,10 +978,21 @@ function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,
 	var send_button = "<button id='send_button' class='btn'>"+karutaStr[LANG]['button-send']+"</button>";
 	var obj = $(send_button);
 	$(obj).click(function (){
-		var email = $("#email").val();
-		var role = "all"
-		if (email!='') {
-			getPublicURL(uuid,email,sharerole,sharewithrole,sharelevel,shareduration,langcode);
+		if (sharetoemail.indexOf('?')>-1) {
+			sharetoemail = $("#email").val();
+		}
+		if (shareoptions.indexOf('mess')>-1) {
+			sharetomessage = $("#message").val();
+			sharetomessage = $('<div/>').text(sharetomessage).html();  // encode html
+		}
+		if (shareoptions.indexOf('obj')>-1) {
+			sharetoobj = $("#object").val();
+		}
+		if (shareduration=='?') {
+			shareduration = $("#duration").val();
+		}
+		if (sharetoemail!='' && shareduration!='') {
+			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode,sharetomessage,sharetoobj);
 		}
 	});
 	$("#edit-window-footer").append(obj);
@@ -1032,13 +1001,46 @@ function getSendSharingURL(uuid,sharewithrole,langcode,sharelevel,shareduration,
 
 	var html = "<div class='form-horizontal'>";
 	html += "<div class='form-group'>";
-	html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>";
-	html += "		<div class='col-sm-9'>";
-	html += "			<input id='email' type='text' class='form-control'>";
-	html += "		</div>";
+	if (sharetoemail=='?') {
+		html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['email']+"</label>";
+		html += "		<div class='col-sm-9'>";
+		html += "			<input autocomplete='off' id='email' type='text' class='form-control'>";
+		html += "		</div>";
+	}
+	if (shareoptions.indexOf('obj')>-1) {
+		html += "		<label for='object' class='col-sm-3 control-label'>"+karutaStr[LANG]['subject']+"</label>";
+		html += "		<div class='col-sm-9'>";
+		html += "			<input id='object' type='text' class='form-control'>";
+		html += "		</div>";
+	}
+	if (shareoptions.indexOf('mess')>-1) {
+		html += "		<label for='message' class='col-sm-3 control-label'>"+karutaStr[LANG]['message']+"</label>";
+		html += "		<div class='col-sm-9'>";
+		html += "<textarea id='message' class='form-control' expand='false' style='height:300px'></textarea>";
+		html += "		</div>";
+	}
+	if (shareduration=='?') {
+		html += "		<label for='email' class='col-sm-3 control-label'>"+karutaStr[LANG]['shareduration']+"</label>";
+		html += "		<div class='col-sm-9'>";
+		html += "			<input id='duration' type='text' class='form-control'>";
+		html += "		</div>";
+	}
 	html += "</div>";
 	html += "</div>";
 	$("#edit-window-body").html(html);
+	$("#message").wysihtml5(
+			{
+				toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},
+				"uuid":uuid,
+				"locale":LANG
+			}
+		);
+	if (shareoptions.indexOf('emailautocomplete')>-1) {
+		for ( var i = 0; i < UsersActive_list.length; i++) {
+			emailsarray[emailsarray.length] = {'libelle': UsersActive_list[i].email_node.text()};
+		}
+		addautocomplete(document.getElementById('email'), emailsarray);
+	}
 	//--------------------------
 }
 
@@ -1304,9 +1306,11 @@ function toggleMetadata(state) {
 //==================================
 	if (state=='hidden') {
 		changeCss(".metainfo", "display:none;");
+		changeCss(".cssinfo", "display:none;");
 		g_visible = 'hidden';
 	} else {
 		changeCss(".metainfo", "display:block;");
+		changeCss(".cssinfo", "display:block;");
 		g_visible = 'visible';
 	}
 	localStorage.setItem('metadata',g_visible);
@@ -1428,6 +1432,7 @@ function imageHTML(image)
 //==================================
 {
 	var buttons = "<button class='btn' onclick=\"javascript:$('#image-window').modal('hide');\">" + karutaStr[LANG]["Close"] + "</button>";
+	document.getElementById('image-window-header').innerHTML = buttons;
 	document.getElementById('image-window-footer').innerHTML = buttons;
 	$('#image-window-body').html(image);
 	$('#image-window').modal('show');
@@ -1544,123 +1549,6 @@ function setVariables(data)
 		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].getLabel(null,'none')] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().text;
 	}
 }
-//==================================
-function setCSSportfolio(data)
-//==================================
-{
-	// ================================= CSS Portfolio ========================
-	if ($("asmContext:has(metadata[semantictag='portfolio-navbar'])",data).length>0) {
-		var portfolio_navbar_id = $("asmContext:has(metadata[semantictag='portfolio-navbar'])",data).attr("id");
-		var portfolio_navbar_color = UICom.structure["ui"][portfolio_navbar_id].resource.getValue();
-		changeCss("#sub-bar", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
-		changeCss("#sub-bar .dropdown-menu", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
-		changeCss("#sub-bar .open > a", "background-color:"+portfolio_navbar_color+";border-color:"+portfolio_navbar_color+";");
-		changeCss("#sub-bar  a.dropdown-item:hover", "color:"+portfolio_navbar_color+";");
-	}
-	//--------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).length>0) {
-		var portfolio_navbar_link_id = $("asmContext:has(metadata[semantictag='portfolio-navbar-link'])",data).attr("id");
-		var portfolio_navbar_link_color = UICom.structure["ui"][portfolio_navbar_link_id].resource.getValue();
-		changeCss("#sub-bar a", "color:"+portfolio_navbar_link_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).length>0) {
-		var portfolio_sidebar_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar'])",data).attr("id");
-		var portfolio_sidebar_color = UICom.structure["ui"][portfolio_sidebar_id].resource.getValue();
-		changeCss("#sidebar", "background-color:"+portfolio_sidebar_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).length>0) {
-		var portfolio_sidebar_link_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link'])",data).attr("id");
-		var portfolio_sidebar_link_color = UICom.structure["ui"][portfolio_sidebar_link_id].resource.getValue();
-		changeCss(".sidebar-link", "color:"+portfolio_sidebar_link_color+";padding-right:9px;");
-		changeCss(".sidebar-link a", "color:"+portfolio_sidebar_link_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).length>0) {
-		var portfolio_sidebar_link_selected_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-link-selected'])",data).attr("id");
-		var portfolio_sidebar_link_selected_color = UICom.structure["ui"][portfolio_sidebar_link_selected_id].resource.getValue();								
-		changeCss(".selected a", "color:"+portfolio_sidebar_link_selected_color+";font-weight:bold;");
-		changeCss(".sidebar-link a:hover", "color:"+portfolio_sidebar_link_selected_color+";");
-		changeCss("a.sidebar-link:hover", "color:"+portfolio_sidebar_link_selected_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-selected-border'])",data).length>0) {
-		var portfolio_sidebar_selected_border_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-selected-border'])",data).attr("id");
-		portfolio_sidebar_selected_border_color = UICom.structure["ui"][portfolio_sidebar_selected_border_id].resource.getValue();
-		changeCss("#sidebar .selected", "border-right:4px solid "+portfolio_sidebar_selected_border_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).length>0) {
-		var portfolio_sidebar_separator_id = $("asmContext:has(metadata[semantictag='portfolio-sidebar-separator'])",data).attr("id");
-		var portfolio_sidebar_separator_color = UICom.structure["ui"][portfolio_sidebar_separator_id].resource.getValue();								
-		changeCss(".sidebar-item", "border-bottom:1px solid "+portfolio_sidebar_separator_color+";");
-		changeCss(".sidebar-item .sidebar-item", "border-bottom:0px solid "+portfolio_sidebar_separator_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='welcome-title-color'])",data).length>0) {
-		var welcome_title_color_id = $("asmContext:has(metadata[semantictag='welcome-title-color'])",data).attr("id");
-		var welcome_title_color = UICom.structure["ui"][welcome_title_color_id].resource.getValue();
-		changeCss(".page-welcome .welcome-title", "color:"+welcome_title_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='welcome-line-color'])",data).length>0) {
-		var welcome_line_color_id = $("asmContext:has(metadata[semantictag='welcome-line-color'])",data).attr("id");
-		var welcome_line_color = UICom.structure["ui"][welcome_line_color_id].resource.getValue();
-		changeCss(".welcome-line", "border-bottom:1px solid "+welcome_line_color+";width:25%;margin-left:auto;margin-right:auto;");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='page-title-background-color'])",data).length>0) {
-		var page_title_background_color_id = $("asmContext:has(metadata[semantictag='page-title-background-color'])",data).attr("id");
-		var page_title_background_color = UICom.structure["ui"][page_title_background_color_id].resource.getValue();
-		changeCss(".welcome-line,.row-node-asmRoot,.row-node-asmStructure,.row-node-asmUnit", "background-color:"+page_title_background_color+";");
-		changeCss(".row-node", "border-top:1px solid "+page_title_background_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='text-color'])",data).length>0) {
-		var text_color_id = $("asmContext:has(metadata[semantictag='text-color'])",data).attr("id");
-		var text_color = UICom.structure["ui"][text_color_id].resource.getValue();
-		changeCss("#contenu", "color:"+text_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).length>0) {
-		var section_separator_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).attr("id");
-		var section_separator_color = UICom.structure["ui"][section_separator_color_id].resource.getValue();
-		changeCss(".row-node", "border-top:1px solid "+section_separator_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).length>0) {
-		var page_title_subline_color_id = $("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).attr("id");
-		var page_title_subline_color = UICom.structure["ui"][page_title_subline_color_id].resource.getValue();
-		changeCss(".row-node-asmRoot .title-subline,.row-node-asmStructure .title-subline,.row-node-asmUnit .title-subline", "border-bottom:1px solid "+page_title_subline_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
-		var portfolio_buttons_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).attr("id");
-		var portfolio_buttons_color = UICom.structure["ui"][portfolio_buttons_color_id].resource.getValue();
-		changeCss(".menus,.collapsible,.dropdownn-toggle, .createreport .button,.btn-group .button, .menus button, .menus a.button", "color:"+portfolio_buttons_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
-		var portfolio_buttons_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).attr("id");
-		var portfolio_buttons_background_color = UICom.structure["ui"][portfolio_buttons_background_color_id].resource.getValue();
-		changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "border:1px solid "+portfolio_buttons_background_color+";");
-		changeCss(".resource-standard .buttons,.extra-standard .csv-button,.extra-standard .pdf-button", "background:"+portfolio_buttons_background_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).length>0) {
-		var portfolio_link_color_id = $("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).attr("id");
-		var portfolio_link_color = UICom.structure["ui"][portfolio_link_color_id].resource.getValue();
-		changeCss("a", "color:"+portfolio_link_color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).length>0) {
-		var portfolio_section_title_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).attr("id");
-		var portfolio_section_title_background_color = UICom.structure["ui"][portfolio_section_title_background_color_id].resource.getValue();
-		changeCss(".row-node-asmUnitStructure", "background:"+portfolio_section_title_background_color+";");
-	}
-	// ========================================================================
-}
 
 //==============================
 function logout()
@@ -1682,7 +1570,6 @@ function hideAllPages()
 //==============================
 {
 	$("#search-portfolio-div").hide();
-	$("#search-user-div").hide();
 	$("#list-container").hide();
 	$("#main-portfoliosgroup").hide();
 	$("#portfolio-container").hide();
@@ -1937,6 +1824,10 @@ function applyNavbarConfiguration()
 {
 	$('#navbar-brand-logo').html(g_configVar['navbar-brand-logo']);
 	$("#navbar-brand-logo").attr("style",g_configVar['navbar-brand-logo-style']);
+	if (g_configVar['navbar-display-mailto']=='0')
+		$("#navbar-mailto").hide();
+	if (g_configVar['navbar-display-language']=='0')
+		$("#navbar-language").hide();
 	changeCss('.navbar-light .navbar-nav .nav-link', 'color:'+g_configVar['navbar-text-color']);
 }
 
@@ -1973,7 +1864,12 @@ function getContentStyle(semtag,data)
 function getText(semtag,objtype,elttype,data)
 //==============================
 {
-	return 	$(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	var result = "";
+	if (elttype=='value' || elttype=='code') // not language dependent
+		result = $(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	else
+		result = $(elttype+"[lang="+LANG+"]",$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	return result;
 }
 
 //==============================
@@ -2002,3 +1898,76 @@ function printSection(eltid)
 	}
 }
 
+//==================================
+function addautocomplete(input,arrayOfValues) {
+//==================================
+	var currentFocus;
+	input.addEventListener("input", function(e) {
+		var a, b, i, val = this.value.substring(this.value.lastIndexOf(" ")+1);
+		closeAllLists();
+		if (!val) { return false;}
+	 	currentFocus = -1;
+		a = document.createElement("DIV");
+		a.setAttribute("id", this.id + "autocomplete-list");
+		a.setAttribute("class", "autocomplete-items");
+		this.parentNode.appendChild(a);
+		for (i = 0; i < arrayOfValues.length; i++) {
+			var indexval = arrayOfValues[i].libelle.toUpperCase().indexOf(val.toUpperCase());
+			if (indexval>-1) {
+				b = document.createElement("DIV");
+				b.innerHTML = arrayOfValues[i].libelle.substr(0, indexval);
+				b.innerHTML += "<strong>" + arrayOfValues[i].libelle.substr(indexval,val.length) + "</strong>";
+				b.innerHTML += arrayOfValues[i].libelle.substr(indexval+val.length);
+				b.innerHTML += "<input type='hidden' label=\""+arrayOfValues[i].libelle+"\" >";
+				b.addEventListener("click", function(e) {
+					if (input.value.lastIndexOf(" "))
+						input.value = input.value.substring(0,input.value.lastIndexOf(" ")+1) + $("input",this).attr('label');
+					else
+						input.value = $("input",this).attr('label');
+					$(input).change();
+					closeAllLists();
+				});
+				a.appendChild(b);
+			}
+		}
+	});
+	input.addEventListener("keydown", function(e) {
+		var x = document.getElementById(this.id + "autocomplete-list");
+		if (x) x = x.getElementsByTagName("div");
+		if (e.keyCode == 40) {
+			currentFocus++;
+		addActive(x);
+		} else if (e.keyCode == 38) { //up
+			currentFocus--;
+			addActive(x);
+		} else if (e.keyCode == 13) {
+			e.preventDefault();
+			if (currentFocus > -1) {
+				if (x) x[currentFocus].click();
+			}
+		}
+	});
+	function addActive(x) {
+		if (!x) return false;
+		removeActive(x);
+		if (currentFocus >= x.length) currentFocus = 0;
+		if (currentFocus < 0) currentFocus = (x.length - 1);
+		x[currentFocus].classList.add("autocomplete-active");
+	}
+	function removeActive(x) {
+		for (var i = 0; i < x.length; i++) {
+			x[i].classList.remove("autocomplete-active");
+		}
+	}
+	function closeAllLists(elmnt) {
+		var x = document.getElementsByClassName("autocomplete-items");
+		for (var i = 0; i < x.length; i++) {
+			if (elmnt != x[i] && elmnt != input) {
+				x[i].parentNode.removeChild(x[i]);
+			}
+		}
+	}
+	document.addEventListener("click", function (e) {
+		closeAllLists(e.target);
+	});
+}

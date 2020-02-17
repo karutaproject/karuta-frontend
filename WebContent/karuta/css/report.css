@@ -1,6 +1,12 @@
 /* ====================
 	Report Model
    ====================*/
+.portfoliocode {
+  margin-left: 10px;
+  font-style: italic;
+  font-size: 1rem;
+}
+
 .report-comment,
 .report-comment .collapsible,
 .report-comment .btn-default,
@@ -23,93 +29,12 @@
   padding: 10px;
 }
 
-.report .for-each-person {
-  margin-top: 7px;
-  border: 1px solid lightGrey;
+/*
+.report .select{
+	padding-left:0px;
+	border-left:0px solid lightGrey;
 }
-
-.report .for-each-line {
-  margin-top: 7px;
-  border: 1px solid lightGrey;
-}
-
-.report .for-each-portfolio {
-  margin-top: 7px;
-  border: 1px solid lightGrey;
-}
-
-.report .for-each-node {
-  margin-top: 7px;
-  border: 1px solid lightGrey;
-}
-
-.report .loop {
-  margin-top: 7px;
-  border: 1px solid #16A085;
-}
-
-.report .go-parent {
-  margin-top: 7px;
-  border: 1px solid lightGrey;
-}
-
-.report .model-table {
-  margin-top: 7px;
-  border: 2px solid Navy;
-}
-
-.report .model-europass {
-  margin-top: 7px;
-  border: 2px solid #386bc1;
-}
-
-.report .model-row {
-  margin-top: 7px;
-  border: 2px solid SeaGreen;
-}
-
-.report .model-cell {
-  margin-top: 7px;
-  border: 2px solid Crimson;
-}
-
-.report .csv-line {
-  margin-top: 7px;
-  border: 2px solid #307D7E;
-}
-
-.report .csv-value {
-  margin-top: 7px;
-  border: 1px solid #43BFC7;
-}
-
-.report .username {
-  margin-top: 7px;
-  border: 1px solid #EDE275;
-}
-
-.report .draw-web-title,
-.report .draw-web-line,
-.report .draw-web-axis,
-.report .node_resource,
-.report .text,
-.report .url2unit,
-.report .aggregate {
-  margin-top: 7px;
-  border: 1px dashed lightGrey;
-  margin-bottom: 5px;
-}
-
-.report .draw-web-title,
-.report .draw-web-axis {
-  min-height: 100px;
-}
-
-.report .select {
-  padding-left: 0px;
-  border-left: 0px solid lightGrey;
-}
-
+*/
 .report .select select,
 .report .select input {
   margin-bottom: 0px;
@@ -170,6 +95,97 @@
 
 .dashboard-buttons {
   margin-top: 10px;
+}
+
+/* ============================= */
+/*     COMPONENTS COLORS         */
+/* ============================= */
+.report {
+  --report-loop-color: #46c7c7;
+  --report-instruction-color: orange;
+  --report-display-color: #8bffff;
+  --report-varop-color: #f08080;
+  --report-csv-color: #307D7E;
+  --report-sharing-color: #386bc1;
+  --report-svg-color: #52D017;
+}
+.report .for-each-person,
+.report .for-each-line,
+.report .for-each-portfolio,
+.report .for-each-portfolios-nodes,
+.report .for-each-node,
+.report .loop {
+  margin-top: 7px;
+  border: 2px solid var(--report-loop-color);
+}
+.report .go-parent,
+.report .if-then-else,
+.report .then-part,
+.report .else-part {
+  margin-top: 7px;
+  border: 2px solid var(--report-instruction-color);
+}
+.report .model-table {
+  margin-top: 7px;
+  border: 2px solid Navy;
+}
+.report .model-row {
+  margin-top: 7px;
+  border: 2px solid SeaGreen;
+}
+.report .model-cell {
+  margin-top: 7px;
+  border: 2px solid Crimson;
+}
+.report .model-europass,
+.report .model-qrcode {
+  margin-top: 7px;
+  border: 2px solid #386bc1;
+}
+.report .username,
+.report .firstname,
+.report .lastname,
+.report .firstname-lastname,
+.report .text,
+.report .node_resource,
+.report .url2unit {
+  margin-top: 7px;
+  border: 1px solid var(--report-display-color);
+}
+.report .report-variable,
+.report .aggregate,
+.report .operation {
+  margin-top: 7px;
+  border: 1px solid var(--report-varop-color);
+}
+.report .csv-line {
+  margin-top: 7px;
+  border: 2px solid var(--report-instruction-color);
+}
+.report .csv-value {
+  margin-top: 7px;
+  border: 1px solid var(--report-instruction-color);
+}
+.report .model-svg {
+  margin-top: 7px;
+  border: 2px solid var(--report-svg-color);
+}
+.report .draw-web-title,
+.report .draw-web-line,
+.report .draw-web-axis,
+.report .draw-xy-axis {
+  margin-top: 7px;
+  border: 1px solid var(--report-svg-color);
+}
+.report .show-sharing,
+.report .dislay-sharing {
+  margin-top: 7px;
+  border: 1px solid var(--report-sharing-color);
+}
+
+.report .draw-web-title,
+.report .draw-web-axis {
+  min-height: 100px;
 }
 
 /*# sourceMappingURL=report.css.map */

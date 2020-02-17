@@ -203,6 +203,16 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 	var no_monomenu = 0;
 	try {
 		if ((this.depth>0 || this.asmtype == 'asmUnitStructure') && this.menuroles != undefined && this.menuroles.length>10 && (this.menuroles.indexOf(userrole)>-1 || (this.menuroles.containsArrayElt(g_userroles) && this.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
+			//--------------------------------
+			var mlabels = [];
+			var labelitems = this.menulabels.split(";");
+			for (var i=0; i<labelitems.length; i++){
+				var subitems = labelitems[i].split(",");
+				mlabels[i] = [];
+				mlabels[i][0] = subitems[0]; // label
+				mlabels[i][1] = subitems[1]; // roles
+			}
+			//--------------------------------
 			var menus = [];
 			var displayMenu = false;
 			var items = this.menuroles.split(";");
@@ -253,8 +263,33 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			if (displayMenu && !monomenu) {
 				//-----------------------
 				html += "<div class='dropdown'>";
-				html += "	<button class='btn dropdown-toggle' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-				html += 		karutaStr[languages[langcode]]['menu'];
+				html += "	<button class='btn dropdown-toggle add-button' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+				//-----------
+				if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
+					for (var i=0; i<mlabels.length; i++){
+						if (mlabels[i][1].indexOf(userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
+							var titles = [];
+							var title = "";
+							try {
+								titles = mlabels[i][0].split("/");
+								if (mlabels[i][0].indexOf("@")>-1) { // lang@fr/lang@en/...
+									for (var j=0; j<titles.length; j++){
+										if (titles[j].indexOf("@"+languages[langcode])>-1)
+											title = titles[j].substring(0,titles[j].indexOf("@"));
+									}
+								} else { // lang1/lang2/...
+									title = titles[langcode];  // lang1/lang2/...
+								}
+							} catch(e){
+								title = mlabels[i][0];
+							}
+							html += title;
+						}
+					}
+				} else {
+						html += karutaStr[languages[langcode]]['menu'];
+				}
+				//-----------
 				html += "	</button>";
 				html += "	<div class='dropdown-menu dropdown-menu-right' aria-labelledby='specific_"+this.id+"'>";
 				//-----------------------
@@ -377,6 +412,8 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				}
 				if (subitems.length>6)
 					shares[i][6] = subitems[6]; // condition
+				if (subitems.length>7)
+					shares[i][7] = subitems[7]; // keywords : obj and/or mess
 				if (shares[i][0].indexOf(userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
 					displayShare[i] = true;
 				else
@@ -391,8 +428,9 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					var sharelevel = shares[i][3];
 					var shareduration = shares[i][4];
 					var sharelabel = shares[i][5];
+					var shareoptions = (shares[i].length>7) ? shares[i][7] : "";
 					if (shareto!='' && this.shareroles.indexOf('2world')<0) {
-						if (shareto!='?') {
+						if (shareto!='?' && shareduration!='?' && shareoptions!="") {
 							var sharetoemail = "";
 							var sharetoroles = "";
 							var sharetos = shareto.split(" ");
@@ -402,6 +440,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 								else
 									sharetoroles += sharetos[k]+" ";
 							}
+							var js = "sendSharingURL('"+this.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -409,12 +448,26 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 									if (labels[j].indexOf(languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								var js = "sendSharingURL('"+this.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
 							}
-						} else{
+						} else {
+							if (shareto!='?') {
+								var sharetoemail = "";
+								var sharetoroles = "";
+								var sharetos = shareto.split(" ");
+								for (var k=0;k<sharetos.length;k++) {
+									if (sharetos[k].indexOf("@")>0)
+										sharetoemail += sharetos[k]+" ";
+									else
+										sharetoroles += sharetos[k]+" ";
+								}
+							} else {
+								sharetoemail = shareto;
+							}
+							var js = "getSendSharingURL('"+this.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
+//							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -422,7 +475,6 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 									if (labels[j].indexOf(languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								var js = "getSendSharingURL('"+this.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
 								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
