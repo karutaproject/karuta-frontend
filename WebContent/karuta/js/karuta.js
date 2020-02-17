@@ -1483,8 +1483,10 @@ function toggleUsersList(list) {
 //==================================
 	if ($("#"+list+"-users-button").hasClass("glyphicon-plus")) {
 		if (list=='empty') {
+			$("#wait-window").show();
 			UIFactory.User.getListUserWithoutPortfolio();
 			UIFactory.User.displayUserWithoutPortfolio('empty')
+			$("#wait-window").hide();
 		}
 		$("#"+list+"-users-button").removeClass("glyphicon-plus");
 		$("#"+list+"-users-button").addClass("glyphicon-minus");

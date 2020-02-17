@@ -315,6 +315,7 @@ karutaStr['en']['create_user']="Add a User";
 karutaStr['en']['active_users']="Active Users";
 karutaStr['en']['inactive_users']="Inactive Users";
 karutaStr['en']['temporary_users']="Temporary Users";
+karutaStr['en']['empty_users']="Users without portfolio";
 karutaStr['en']['username']="Login";
 karutaStr['en']['lastname']="Last Name";
 karutaStr['en']['firstname']="First Name";
@@ -334,6 +335,8 @@ karutaStr['en']['substitute']="Substitution";
 karutaStr['en']['select_user']="Select a User";
 karutaStr['en']['other']="Other";
 karutaStr['en']['delete-temporary-users']="Delete All";
+karutaStr['en']['delete-empty-users']="Delete Selection";
+
 
 //=========================================
 //========== ROLES ========================
