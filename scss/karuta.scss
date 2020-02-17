@@ -213,6 +213,10 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 /*    LIST- WELCOME       */
 /* ====================== */
 
+	.portfolio-label {
+		cursor: pointer;
+	}
+
 	#welcome-image {
 		padding-top:50px;
 		width: 100%;
@@ -241,6 +245,7 @@ html, body, #main-body, #main-container, #global-row, #main-row, {
 	}
 
 /*
+
 
 .page-list .welcome-title {
     color: var(--welcome-title-color);
@@ -2298,6 +2303,18 @@ select.Y2, option[value="Y2"] {color: #fff; background: green;}
 /* ====================
 	BLOCK
    ====================*/
+	.DocumentBlock,
+	.ImageBlock,
+	.URLBlock {
+		.content {
+			display:none;
+		}
+		.resource-label {
+			visibility : hidden;
+		}
+	}
+
+
 
 :root{
 	--block-height:220px;

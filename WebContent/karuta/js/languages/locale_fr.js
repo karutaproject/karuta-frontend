@@ -400,7 +400,6 @@ karutaStr['fr']['writing']="ÉCRIRE";
 //========== BUBBLE MAP ===================
 //=========================================
 karutaStr['fr']['leave-edit-mode']="Quitter le mode d'édition";
-karutaStr['fr']['BubbleMap']="Bubble Map";
 karutaStr['fr']['bubble-label']="Libellé";
 karutaStr['fr']['bubble-links']="Liens";
 karutaStr['fr']['bubble-information']="Information";
@@ -487,11 +486,13 @@ karutaStr['fr']['BatchForm']="BatchForm";
 karutaStr['fr']['DocumentBlock']="DocumentBlock";
 karutaStr['fr']['URLBlock']="URLBlock";
 karutaStr['fr']['ImageBlock']="ImageBlock";
+karutaStr['fr']['BubbleMap']="Bubble Map";
+karutaStr['fr']['Europass']="Europass";
 
 karutaStr['fr']['Item']="Item";
 karutaStr['fr']['Get_Resource']="Get_Resource";
 karutaStr['fr']['Get_Get_Resource']="Get_Get_Resource";
-karutaStr['fr']['Get_DoubleResource']="Get_DoubleResource";
+karutaStr['fr']['Get_Double_Resource']="Get_Double_Resource";
 karutaStr['fr']['Proxy']="Proxy";
 karutaStr['fr']['Get_Proxy']="Get_Proxy";
 

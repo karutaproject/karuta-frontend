@@ -212,6 +212,20 @@ function setCSSportfolio(data)
 		portfolio_resource_border_color = getText('portfolio-resource-border-color','Color','text',data);
 	}
 	changeCss("table[name=res-div]", "border: 1px solid "+portfolio_resource_border_color+";");
+	//---------Portfolio Menu-----------------------
+	var portfolio_menu_background_color = g_configVar['config-portfolio-menu-background-color'];
+	if ($("asmContext:has(metadata[semantictag='portfolio-menu-background-color'])",data).length>0) {
+		portfolio_menu_background_color = getText('portfolio-menu-background-color','Color','text',data);
+	}
+	var portfolio_menu_text_color = g_configVar['config-portfolio-menu-text-color'];
+	if ($("asmContext:has(metadata[semantictag='portfolio-menu-text-color'])",data).length>0) {
+		portfolio_menu_text_color = getText('portfolio-menu-text-color','Color','text',data);
+	}
+	changeCss("#portfolio-container .dropdown-menu ", "background-color:"+portfolio_menu_background_color);
+	changeCss("#portfolio-container .dropdown-menu", "color:"+portfolio_menu_text_color);
+	changeCss("#portfolio-container .dropdown-menu a.dropdown-item:hover", "background-color:"+portfolio_menu_text_color);
+	changeCss("#portfolio-container .dropdown-menu a.dropdown-item:hover", "color:"+portfolio_menu_background_color);
+	//--------------------------------
 
 	//-----------WELCOME------------------------------------
 	if ($("asmContext:has(metadata[semantictag='welcome-title-color'])",data).length>0) {
@@ -610,7 +624,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	var html = "";
 	if (type=='list') {
 		html += "<div class='col-1 d-none d-md-block'></div>";
-		html += "<div class='col-10 col-md-4' onclick=\"display_main_page('"+this.rootid+"')\" onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+this.code_node.text()+"\"><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
+		html += "<div class='portfolio-label col-10 col-md-4' onclick=\"display_main_page('"+this.rootid+"')\" onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+this.code_node.text()+"\"><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
 		if (USER.creator && !USER.limited) {
 			html += "<div class='col-1 d-none d-md-block'><span class='portfolio-owner' >"+owner+"</span></div>";
 			html += "<div class='col-3 d-none d-md-block'><span class='portfolio-code' >"+this.code_node.text()+"</span></div>";
@@ -3107,3 +3121,37 @@ UIFactory["Portfolio"].displayListPortfolios = function(userid,firstname,lastnam
 	$('#edit-window').modal('show')
 	//--------------------------
 }
+
+//=======================================================================
+function confirmDelPortfolio(uuid) 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.del('"+uuid+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
+//=======================================================================
+function confirmDelProject(uuid,projectcode) 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.delProject('"+uuid+"','"+projectcode+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
+//=======================================================================
+function confirmDelPortfolios_EmptyBin() 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.emptyBin()\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+

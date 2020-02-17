@@ -179,6 +179,10 @@ h3 {
 /* ====================== */
 /*    LIST- WELCOME       */
 /* ====================== */
+.portfolio-label {
+  cursor: pointer;
+}
+
 #welcome-image {
   padding-top: 50px;
   width: 100%;
@@ -207,6 +211,7 @@ h3 {
 }
 
 /*
+
 
 .page-list .welcome-title {
     color: var(--welcome-title-color);
@@ -2235,6 +2240,17 @@ select.Y2, option[value=Y2] {
 /* ====================
 	BLOCK
    ====================*/
+.DocumentBlock .content,
+.ImageBlock .content,
+.URLBlock .content {
+  display: none;
+}
+.DocumentBlock .resource-label,
+.ImageBlock .resource-label,
+.URLBlock .resource-label {
+  visibility: hidden;
+}
+
 :root {
   --block-height:220px;
   --block-img-height:218px;

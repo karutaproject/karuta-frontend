@@ -580,50 +580,6 @@ function confirmDel(uuid,type,parentid,destid,callback,param1,param2)
 	$('#delete-window').modal('show');
 }
 
-//=======================================================================
-function confirmDelPortfolio(uuid) 
-// =======================================================================
-{
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.del('"+uuid+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
-}
-
-//=======================================================================
-function confirmDelProject(uuid,projectcode) 
-// =======================================================================
-{
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.delProject('"+uuid+"','"+projectcode+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
-}
-
-//=======================================================================
-function confirmDelPortfolios_EmptyBin() 
-// =======================================================================
-{
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.emptyBin()\">" + karutaStr[LANG]["button-delete"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
-}
-
-//=======================================================================
-function confirmDelTemporaryUsers() 
-// =======================================================================
-{
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.User.deleteTemporaryUsers()\">" + karutaStr[LANG]["button-delete"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
-}
-
 //==================================
 function getURLParameter(sParam) {
 //==================================

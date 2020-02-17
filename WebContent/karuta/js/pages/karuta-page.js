@@ -193,6 +193,11 @@ function setConfigurationVariables()
 			g_configVar['config-portfolio-section-title-background-color'] = getText('config-portfolio-section-title-background-color','Color','text',data);
 			g_configVar['config-portfolio-section-separator-color'] = getText('config-portfolio-section-separator-color','Color','text',data);
 			g_configVar['config-portfolio-resource-border-color'] = getText('config-portfolio-resource-border-color','Color','text',data);
+
+			//----------
+			g_configVar['config-portfolio-menu-background-color'] = getText('config-portfolio-menu-background-color','Color','text',data);
+			g_configVar['config-portfolio-menu-text-color'] = getText('config-portfolio-menu-text-color','Color','text',data);
+
 			//-----SVG----
 			g_configVar['config-svg-web0-color'] = getText('config-svg-web0-color','Color','text',data);
 			g_configVar['config-svg-web1-color'] = getText('config-svg-web1-color','Color','text',data);

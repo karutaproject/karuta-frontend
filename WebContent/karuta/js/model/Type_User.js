@@ -191,6 +191,14 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		html += "</button>";
 		html += "</div></td>";
 	}
+	if (type=='empty' && USER.admin) {
+		html = "<td><input type='checkbox' name='empty-user' id='empty"+this.id+"'>&nbsp;"+this.username_node.text() +"</td>";
+		html += "<td><div class='btn-group'>";
+		html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+		html += "<i class='fas fa-trash'></i>";
+		html += "</button>";
+		html += "</div></td>";
+	}
 	return html;
 };
 
@@ -826,6 +834,7 @@ UIFactory["User"].removeUsers = function()
 UIFactory["User"].getListUserWithoutPortfolio = function() 
 //==================================
 {
+	UsersWithoutPortfolio_list = [];
 	for (var i=0; i<UsersActive_list.length; i++) {
 		if(UsersActive_list[i].id>3)
 			$.ajax({
@@ -880,3 +889,40 @@ function checkalluserempty()
 	}
 }
 
+//=======================================================================
+function confirmDelTemporaryUsers() 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.User.deleteTemporaryUsers()\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
+//=======================================================================
+function confirmDelEmptyUsers() 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.User.deleteEmptyUsers()\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
+//==================================
+UIFactory["User"].deleteEmptyUsers = function() 
+//==================================
+{
+	$("#wait-window").show();
+	//----------------
+	$.ajaxSetup({async: false});
+	for (var i=0;i<UsersWithoutPortfolio_list.length;i++){
+		var userid = UsersWithoutPortfolio_list[i].id;
+		UIFactory.User.remove(userid); 
+	}
+	$("#wait-window").hide();
+	$.ajaxSetup({async: true});
+	//----------------
+}
