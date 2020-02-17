@@ -949,3 +949,30 @@ function checkalluserempty()
 	}
 }
 
+//=======================================================================
+function confirmDelEmptyUsers() 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.User.deleteEmptyUsers()\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
+//==================================
+UIFactory["User"].deleteEmptyUsers = function() 
+//==================================
+{
+	$("#wait-window").show();
+	//----------------
+	$.ajaxSetup({async: false});
+	for (var i=0;i<UsersWithoutPortfolio_list.length;i++){
+		var userid = UsersWithoutPortfolio_list[i].id;
+		UIFactory.User.remove(userid); 
+	}
+	$("#wait-window").hide();
+	$.ajaxSetup({async: true});
+	//----------------
+}
+
