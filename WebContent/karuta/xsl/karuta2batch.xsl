@@ -104,19 +104,34 @@
 		</xsl:variable>
 		<create-user>
 			<identifier>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">identifier</xsl:with-param>
+				</xsl:call-template>
 				<txtval select='{$identifier}'/>
 			</identifier>
 			<firstname>
 				<txtval select='{$firstname}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">firstname</xsl:with-param>
+				</xsl:call-template>
 			</firstname>
 			<lastname>
 				<txtval select='{$lastname}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">lastname</xsl:with-param>
+				</xsl:call-template>
 			</lastname>
 			<email>
 				<txtval select='{$email}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">email</xsl:with-param>
+				</xsl:call-template>
 			</email>
 			<password>
 				<txtval select='{$password}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">password</xsl:with-param>
+				</xsl:call-template>
 			</password>
 			<other>
 				<txtval><xsl:value-of select="$other"/></txtval>

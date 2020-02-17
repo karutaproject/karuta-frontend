@@ -987,7 +987,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		}
 		html += karutaStr[languages[langcode]]['menulabels3']+"</label>";
 		$("#metadata_texts").append($(html));
-		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menuroles');
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menulabels');
 		//-----------------------
 	}
 	//------------------------Help-------------------------

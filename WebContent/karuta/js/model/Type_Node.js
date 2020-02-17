@@ -325,12 +325,12 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 				}
 			}
 			//-------------------------------------------------------
-			$('a[data-toggle=tooltip]').tooltip({html:true});
+			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 			$(".pickcolor").colorpicker();
 			//----------------------------
 		}
 		$('[data-toggle="popover"]').popover();
-		$('[data-tooltip="true"]').tooltip();
+		$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 	} //---- end of visible
 };
 
@@ -2192,8 +2192,9 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 				}
 			}
 			// ==============================================================================
-			$('a[data-toggle=tooltip]').tooltip({html:true});
-			$('[data-tooltip="true"]').tooltip();
+$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
+			$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 			$(".pickcolor").colorpicker();
 			//----------------------------
 		}
@@ -2259,7 +2260,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 		html = "<a  class='fas fa-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-tooltip='true' data-placement='bottom'></a>";
 		$("#welcome-edit").html(html);
 	}
-	$('[data-tooltip="true"]').tooltip();
+	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 
 

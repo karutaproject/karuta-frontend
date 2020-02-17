@@ -83,7 +83,8 @@
 		<!-- =============================================================== -->		
 		<script src="../../karuta/js/resources/Type_EuropassL.js"></script>
 		<!-- =============================================================== -->
-		<link rel='stylesheet' type='text/css' href='../../application/css/specific.css'></link>
+		<link rel='stylesheet' type='text/css' href='../css/specific.css'></link>
+		<script src="../js/specific.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../other/js/jquery-3.3.1.min.js"></script>
 		<script src="../../other/js/popper.min.js"></script>
@@ -131,6 +132,9 @@
 			window.onload = function() {
 				displayKarutaPage();
 			};
+			$('[data-toggle="tooltip"]').tooltip({
+			    trigger : 'hover'
+			})  // to avoid tooltip when button is clicked
 		</script>
 	</body>
 

@@ -186,7 +186,7 @@ function setCSSportfolio(data)
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-color'])",data).length>0) {
 		portfolio_buttons_color = getText('portfolio-buttons-color','Color','text',data);
 	}
-	changeCss(".menus,.collapsible,.dropdownn-toggle, .createreport .button,.btn-group .button, .menus button, .menus a.button", "color:"+portfolio_buttons_color+";");
+//	changeCss(".menus,.collapsible,.dropdownn-toggle, .createreport .button,.btn-group .button, .menus button, .menus a.button", "color:"+portfolio_buttons_color+";");
 	//--------------------------------
 	var portfolio_buttons_background_color = g_configVar['config-portfolio-buttons-background-color'];
 	if ($("asmContext:has(metadata[semantictag='portfolio-buttons-background-color'])",data).length>0) {
@@ -346,7 +346,8 @@ UIFactory["Portfolio"].displayAll = function(dest,type,langcode)
 	//--------------------------------------
 	if (!USER.creator)
 		$("#portfolios-nb").hide();
-	$('[data-toggle=tooltip]').tooltip();
+	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
 };
 
 
@@ -754,7 +755,8 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	}
 
 	//---------------------------------------
-	$('a[data-toggle=tooltip]').tooltip({html:true});
+	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
 };
 
 //======================
@@ -916,7 +918,8 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 			UIFactory["Portfolio"].parse_add(data);
 			$("#sidebar").html("");
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.root);
-			$('a[data-toggle=tooltip]').tooltip({html:true});
+			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
 		}
 	});
 };
@@ -1546,7 +1549,8 @@ UIFactory["Portfolio"].remove = function(portfolioid)
 			}
 			UIFactory["Portfolio"].displayAll('portfolios','list');
 			UIFactory["Portfolio"].displayBin('bin','bin');
-			$('[data-toggle=tooltip]').tooltip();
+			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in remove : "+jqxhr.responseText);
@@ -1801,7 +1805,8 @@ UIFactory["Portfolio"].del = function(portfolioid)
 			}
 			if ($("#bin").length>0) { // not a batch call
 				UIFactory["Portfolio"].displayBin('bin','bin');
-				$('[data-toggle=tooltip]').tooltip();
+				$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
 			}
 		},
 		error : function(jqxhr,textStatus) {

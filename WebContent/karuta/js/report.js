@@ -1491,7 +1491,7 @@ function refresh_report(dashboard_current)
 {
 	$("#"+dashboard_current).html("");
 	r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
-	$('[data-tooltip="true"]').tooltip();
+	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 
 //==================================

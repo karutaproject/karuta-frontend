@@ -133,7 +133,7 @@ function processAll(model_code,portfoliologcode)
 		saveLog(model_code,portfoliologcode,$("#batch-log").html());
 	//--------------------
 	if (g_execbatch) { // after creation of portfolio
-		window.loacation.reload();
+		window.location.reload();
 	}
 }
 

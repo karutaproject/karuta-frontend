@@ -93,7 +93,7 @@ function show_list_page()
 	$("#refresh").show();
 	$("#search-portfolio-div").show();
 	$("#list-container").show();
-	$('[data-tooltip="true"]').tooltip();
+	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 
 //==============================

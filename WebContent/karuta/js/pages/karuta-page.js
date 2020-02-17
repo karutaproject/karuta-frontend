@@ -75,13 +75,15 @@ function displayKarutaPage()
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
-					$("a[data-tooltip='true']").tooltip({html:true});
+					$("a[data-tooltip='true']").tooltip({html: true, trigger: 'hover'});
+
 					applyNavbarConfiguration();
 				},
 				error : function(jqxhr,textStatus) {
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
-					$("a[data-tooltip='true']").tooltip({html:true});
+					$("a[data-tooltip='true']").tooltip({html: true, trigger: 'hover'});
+
 					getAndApplyMainConfiguration();
 				}
 			});
@@ -98,7 +100,7 @@ function displayKarutaPage()
 		}
 	});
 	$.ajaxSetup({async: true});
-	$('[data-tooltip="true"]').tooltip();
+	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 
 //==============================
