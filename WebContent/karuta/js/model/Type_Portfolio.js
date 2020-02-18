@@ -600,9 +600,9 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	if (semtag.indexOf('karuta-components')>-1)
 		tree_type='<span class="fa fa-wrench" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-model')>-1)
-		tree_type='<span class="fas fa-file" aria-hidden="true"></span>';
-	if (semtag.indexOf('karuta-instance')>-1)
 		tree_type='<span class="far fa-file" aria-hidden="true"></span>';
+	if (semtag.indexOf('karuta-instance')>-1)
+		tree_type='<span class="fas fa-file" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-report')>-1)
 		tree_type='<span class="fas fa-chart-line" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-batch')>-1)
@@ -615,6 +615,12 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		tree_type='<span class="fab fa-wpforms" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-dashboard')>-1)
 		tree_type='<span class="fa fa-line-chart" aria-hidden="true"></span>';
+	//---------------------
+	var rights = this.root.getRights(this.rootid);
+	var roles = $("role",rights);
+	var model = roles.length==0;
+	if (!model)
+		tree_type += '<span class="fas fa-file" aria-hidden="true"></span>';
 	//---------------------
 	var owner = (Users_byid[this.ownerid]==null) ? "":Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
 	//---------------------

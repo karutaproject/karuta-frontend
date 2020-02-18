@@ -840,7 +840,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
 			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
 	}
-	if (USER.admin)
+	if (USER.admin && !model)
 		this.displayRights('metadata-rights');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
