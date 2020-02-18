@@ -562,7 +562,12 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 g_report_actions['username'] = function (destid,action,no,userid,is_out_csv)
 //==================================
 {
-	var text = Users_byid[userid].username;
+	var text ="";
+	if (userid!=null)
+		text = Users_byid[userid].username;
+	else
+		text = USER.username;
+	//----------------
 	if (is_out_csv!=null && is_out_csv) {
 		if (typeof csvseparator == 'undefined') // for backward compatibility
 			csvseparator = ";";
@@ -577,7 +582,12 @@ g_report_actions['username'] = function (destid,action,no,userid,is_out_csv)
 g_report_actions['firstname'] = function (destid,action,no,userid,is_out_csv)
 //==================================
 {
-	var text = Users_byid[userid].firstname;
+	var text ="";
+	if (userid!=null)
+		text = Users_byid[userid].firstname;
+	else
+		text = USER.firstname;
+	//----------------
 	if (is_out_csv!=null && is_out_csv) {
 		if (typeof csvseparator == 'undefined') // for backward compatibility
 			csvseparator = ";";
@@ -592,7 +602,12 @@ g_report_actions['firstname'] = function (destid,action,no,userid,is_out_csv)
 g_report_actions['lastname'] = function (destid,action,no,userid,is_out_csv)
 //==================================
 {
-	var text = Users_byid[userid].lastname;
+	var text ="";
+	if (userid!=null)
+		text = Users_byid[userid].lastname;
+	else
+		text = USER.lastname;
+	//----------------
 	if (is_out_csv!=null && is_out_csv) {
 		if (typeof csvseparator == 'undefined') // for backward compatibility
 			csvseparator = ";";
@@ -607,8 +622,18 @@ g_report_actions['lastname'] = function (destid,action,no,userid,is_out_csv)
 g_report_actions['firstname-lastname'] = function (destid,action,no,userid,is_out_csv)
 //==================================
 {
-	var text1 = Users_byid[userid].firstname;
-	var text2 = Users_byid[userid].lastname;
+	var text1 ="";
+	if (userid!=null)
+		text1 = Users_byid[userid].firstname;
+	else
+		text1 = USER.firstname;
+	//----------------
+	var text2 ="";
+	if (userid!=null)
+		text2 = Users_byid[userid].lastname;
+	else
+		text2 = USER.lastname;
+	//----------------
 	if (is_out_csv!=null && is_out_csv) {
 		if (typeof csvseparator == 'undefined') // for backward compatibility
 			csvseparator = ";";
@@ -1640,9 +1665,9 @@ function html2IMG(contentid)
 //==================================
 {
 	var js1 = "javascript:$('#image-window').modal('hide')";
-	var footer = "";
-	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#image-window-footer").html($(footer));
+	var buttons = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#image-window-header").html($(buttons));
+	$("#image-window-footer").html($(buttons));
 	$("#image-window-body").html("");
 	$("#image-window").modal('show');
 	var svgnode = $("svg",document.getElementById(contentid));
@@ -1656,18 +1681,7 @@ function html2IMG(contentid)
 		svg += xml2string(htmlnode);
 		svg += "</foreignObject>";
 		svg += "</svg>";
-//		alert(svg);
 		var htmlcanvas = "<canvas id='canvas' width='400' height='400'></canvas>"
-/*		$("image-window-body").html(htmlcanvas)
-		rasterizeHTML.drawHTML(xml2string(htmlnode),canvas);
-		var DOMURL = window.URL || window.webkitURL || window;
-		var svgobj = new Blob([svg], {type: 'image/svg+xml'});
-		var url = DOMURL.createObjectURL(svgobj);
-		var img = document.createElement('img');
-		img.src = url;
-		document.getElementById("image-window-body").appendChild(img);
-*/
-
 		html2canvas(htmlnode).then(function(canvas) {
 			var src_img = canvas.toDataURL();
 			var img = document.createElement('img');

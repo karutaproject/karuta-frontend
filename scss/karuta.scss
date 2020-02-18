@@ -4,6 +4,15 @@
 /*     DEFAULT VALUES     */
 /* ====================== */
 
+blockquote { // Bootstrap _reboot.scss overides user agent stylesheet
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 40px;
+    margin-inline-end: 40px;
+}
+
+
 // ----General font size ---------------
 	body,
 	.form-control,
