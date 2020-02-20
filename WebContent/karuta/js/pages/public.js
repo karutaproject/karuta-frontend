@@ -200,11 +200,6 @@ function displayKarutaPublic()
 					}						
 				}
 			});
-			$(document).click(function(e) {
-			    if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {
-			        $('.popover').hide();
-			    }
-			});
 			//----------------
 			$.ajax({
 				type : "GET",
@@ -254,6 +249,11 @@ function displayKarutaPublic()
 		},
 		error : function( jqXHR, textStatus, errorThrown ) {
 			alert("Get portfolio: "+jqXHR.status + " "+errorThrown)
+		}
+	});
+	$(document).click(function(e) {
+		if (!$(e.target).is('.tooltip')) {
+			$('.tooltip').hide();
 		}
 	});
 	$.ajaxSetup({async: true});

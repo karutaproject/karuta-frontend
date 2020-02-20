@@ -233,6 +233,26 @@ UIFactory["Node"].prototype.displayRights = function(destid)
 	$("#"+destid).append($(html));
 }
 
+//==================================
+UIFactory["Node"].displayIfModel = function(rootid)
+//==================================
+{
+	var rights = null;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes/node/"+rootid+"/rights",
+		success : function(data) {
+			rights = data;
+			var roles = $("role",rights);
+			var model = roles.length==0;
+			if (!model)
+				$("#instance_"+rooid).html('<span class="fas fa-file" aria-hidden="true"></span>');
+
+		}
+	});
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------

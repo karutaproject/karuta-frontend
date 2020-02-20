@@ -20,7 +20,8 @@ function fill_exec_report()
 //==============================
 {
 	setLanguageMenu("fill_exec_report()");
-	var html = "";
+	var html = "<br/>";
+	html += "<i onclick='fill_exec_report()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
 	html += "<h2 id='report' class='line'>KARUTA - <span id='report-title-page'></span></h2>";
 	html += "<h4 class='line'><span class='badge'>1</span> <span id='report-title-1'></span></h4>";
 	html += "<div id='report-csv_file_upload' style='margin-left:20px'></div>";
@@ -70,10 +71,20 @@ function fill_exec_report()
 function display_exec_report()
 //==============================
 {
+	$("#welcome-bar").hide();
 	if ($("#report").length) {
 		show_exec_report();
 	} else {
 		fill_exec_report();
 		show_exec_report();
 	}
+	//=====================================================
+	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+	$(document).click(function(e) {
+		if (!$(e.target).is('.tooltip')) {
+			$('.tooltip').hide();
+		}
+	});
+	//=====================================================
+
 }

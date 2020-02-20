@@ -265,6 +265,7 @@ function setLoginConfigurationVariables()
 			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
 			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data);
+			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data);
 			//---------- Login -------------
 			g_configVar['login-background-image'] = getBackgroundURL('config-login-background-image',data);
 			g_configVar['login-background-color'] = getText('config-login-background-color','Color','text',data);

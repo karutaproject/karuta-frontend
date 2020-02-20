@@ -13,7 +13,7 @@ function getList()
 	html += "<div id='projects'></div>";
 	html += "<div id='portfolios-div'>";
 	html += "<h3 id='portfolios-not-in-project'><span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span></h3>";
-	html += "	<div class='row portfolios-not-in-project'>";
+	html += "	<div class='portfolios-not-in-project'>";
 	if (USER.creator && !USER.limited) {
 		displayProject['portfolios-not-in-project'] = localStorage.getItem('dpportfolios-not-in-project');
 		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
@@ -21,11 +21,11 @@ function getList()
 		else
 			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button fas fa-plus'></span></div>";
 		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
-			html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:block'><div id='portfolios'></div></div>";
+			html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:block'></div>";
 		else
-			html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:none'><div id='portfolios'></div></div>";
+			html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:none'></div>";
 	} else {
-		html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:block'><div id='portfolios'></div></div>";		
+		html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:block'></div>";		
 	}
 	html += "</div>";  // <div class='row portfolios-not-in-project'>
 	html += "</div>"; // <div id='portfolios-div'>
@@ -67,13 +67,16 @@ function getListSubBar()
 function setWelcomeTitles()
 //==============================
 {
+	var root = document.documentElement;
+	root.style.setProperty('--list-welcome-title-color',g_configVar['list-welcome-title-color']);
+	root.style.setProperty('--list-welcome-subtitle-color',g_configVar['list-welcome-subtitle-color']);
+	root.style.setProperty('--list-welcome-subline-color',g_configVar['list-welcome-subline-color']);
+	root.style.setProperty('--list-welcome-box-border-color',g_configVar['list-welcome-box-border-color']);
+	root.style.setProperty('--list-welcome-box-background-color',g_configVar['list-welcome-box-background-color']);
 	$("#welcome-title").html(g_configVar['list-welcome-title']);
 	$("#welcome-title").attr('style', g_configVar['list-welcome-title-css']);
-	$("#welcome-title").css('color',g_configVar['list-welcome-title-color']);
 	$("#welcome-baseline").html(g_configVar['list-welcome-subtitle']);
 	$("#welcome-baseline").attr('style', g_configVar['list-welcome-subtitle-css']);
-	$("#welcome-baseline").css('color',g_configVar['list-welcome-subtitle-color']);
-	$("#welcome-line").css('border-bottom',"1px solid "+g_configVar['list-welcome-subline-color']);
 }
 
 //==============================
@@ -114,7 +117,7 @@ function fill_list_page()
 	html += "<div id='list-header' class='row'>";
 	html += "	<div id='menu' class='col-1'></div>";
 	html += "	<div id='search-portfolio-div' class='col-10'>" + getSearch() + "</div>";
-	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_page()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-tooltip='true' data-placement='bottom'></i></div>";
+	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_page()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
 	html += "</div>";
 	html += "<div id='list'></div>";
 	$("#list-container").html(html);
@@ -211,7 +214,7 @@ function fill_list_page()
 									}
 								});
 							}
-							if ($("#portfolios").html()=="" && $("#portfolios-nb").html()=="")
+							if ($("#content-portfolios-not-in-project").html()=="" && $("#portfolios-nb").html()=="")
 								$("#portfolios-div").hide();
 							$("#wait-window").hide();
 						},
@@ -286,13 +289,8 @@ function fill_search_page(code)
 //	$.ajaxSetup({async: true});
 	g_sum_trees = 0;
 	$("#wait-window").show();
-	var html = "";
-	html += "<div class='projects'>";
-	html += "	<div id='menu'></div>";
-	html += "	<div id='list'></div>";
-	html += "</div>";
-	$("#list-container").html(html);
-	// --- list of users to display name of owner
+	$("#menu").html("");
+// --- list of users to display name of owner
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -301,22 +299,6 @@ function fill_search_page(code)
 			UIFactory["User"].parse(data);
 		}
 	});
-	//---------------------------------------------
-	html  = "<div class='dropdown dropdown-button'>";
-	html += "<span id='list-menu' class='button' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'><span class='glyphicon glyphicon-menu-hamburger'></span>&nbsp;Menu</span>";
-	html += "<ul class='dropdown-menu' role='menu' aria-labelledby='list-menu'>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].createProject()\" >"+karutaStr[LANG]['create_project']+"</a></li>";
-	html += "<hr>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile()\" >"+karutaStr[LANG]['import_portfolio']+"</a></li>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip()\" >"+karutaStr[LANG]['import_zip']+"</a></li>";
-	html += "<hr>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importFile(true)\" >"+karutaStr[LANG]['import_instance']+"</a></li>";
-	html += "<li><a onclick=\"javascript:UIFactory['Portfolio'].importZip(true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a></li>";
-	html += "</ul>";
-	html += "</div>";
-	if (USER.admin || (USER.creator && !USER.limited) ){
-		$("#menu").html(html);
-	}
 	//----------------
 	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
 	$.ajax({
@@ -335,7 +317,7 @@ function fill_search_page(code)
 			}
 			if (this.code!=""){
 				showArchiveSearch();
-				if ($("#portfolios").html()=="")
+				if ($("#content-portfolios-not-in-project").html()=="")
 					$("#portfolios-div").hide();
 			}
 			else {
@@ -351,13 +333,15 @@ function fill_search_page(code)
 						var destid = $("div[id='bin']");
 						UIFactory["Portfolio"].parseBin(data);
 						UIFactory["Portfolio"].displayBin('bin','bin');
+						$("#wait-window").hide();
 					},
 					error : function(jqxhr,textStatus) {
 						alertHTML("Server Error GET bin: "+textStatus);
+						$("#wait-window").hide();
 					}
 				});
-			}
-			$("#wait-window").hide();
+			} else
+				$("#wait-window").hide();
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
@@ -467,7 +451,7 @@ function toggleProject(uuid) {
 		$("#toggleContent_"+uuid).removeClass("fa-plus");
 		$("#toggleContent_"+uuid).addClass("fa-minus");
 		if (uuid=="portfolios-not-in-project") {
-			if ($("#portfolios").html()=="") {
+			if ($("#content-portfolios-not-in-project").html()=="") {
 				loadAndDisplayProjectPortfolios("false");
 				$("#content-"+uuid).show();
 			} else {
@@ -503,17 +487,14 @@ function toggleProject(uuid) {
 function applyListConfiguration()
 //==============================
 {
-	$('body').css("background-image", g_configVar['list-welcome-image']);
-	$('#list-container').css("background-color", g_configVar['list-background-color']);
-	changeCss("#list-container .dropdown-menu,#active,.projects-nb,#usersgroups .usersgroup-users,.usersgroup,.project,#bin,.portfolios-not-in-project,.portfoliosgroup", "background-color:"+g_configVar['list-element-background-color']);
-	changeCss("#list-container .dropdown-menu a.dropdown-item:hover", "color:"+g_configVar['list-element-background-color']);
-	changeCss("#list-container .warning-list", "color:"+g_configVar['list-element-background-color']);
-	changeCss("#list-container .portfolio-row:hover,#main-user .item:hover", "background-color:"+g_configVar['list-element-background-color-complement']);
-	changeCss("#list-container #active,.portfolio-row, .row-label", "color:"+g_configVar['list-element-text-color']);
-	changeCss("#list-container .dropdown-menu a.dropdown-item:hover", "background-color:"+g_configVar['list-element-text-color']);
-	changeCss("#list-container h3,#list-container #refresh,.projects-nb,.number_of_projects_portfolios", "color:"+g_configVar['list-title-color']);
-	changeCss("#list-container .btn,#main-portfoliosgroup .btn,#main-user .btn,#main-usersgroup .btn,#main-exec-batch .btn,#main-exec-report .btn", "background-color:"+g_configVar['list-button-background-color']);
-	changeCss("#list-container .btn", "color:"+g_configVar['list-button-text-color']);
-	changeCss("#list-container .number_of_projects_portfolios", "background-color:"+g_configVar['list-element-background-color-complement']);
-	changeCss("", "color:"+g_configVar['list-title-color']);
+	$('.list-page #main-body').css("background-image", g_configVar['list-welcome-image']);
+	var root = document.documentElement;
+	root.style.setProperty('--list-background-color',g_configVar['list-background-color']);
+	root.style.setProperty('--list-menu-background-color',g_configVar['list-menu-background-color']);
+	root.style.setProperty('--list-menu-text-color',g_configVar['list-menu-text-color']);
+	root.style.setProperty('--list-element-text-color',g_configVar['list-element-text-color']);
+	root.style.setProperty('--list-element-background-color',g_configVar['list-element-background-color']);
+	root.style.setProperty('--list-element-background-color-complement',g_configVar['list-element-background-color-complement']);
+	root.style.setProperty('--list-title-color',g_configVar['list-title-color']);
+	root.style.setProperty('--list-button-background-color',g_configVar['list-button-background-color']);
 }

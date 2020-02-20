@@ -25,7 +25,7 @@ function fill_list_users()
 	html += "		<div class='btn' id='user-create' onclick=\"UIFactory['User'].callCreate()\" >"+karutaStr[LANG]['create_user']+"</div>";
 	html += "	</div>";
 	html += "	<div class='col-9 search' id='search-user-div'></div>";
-	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-tooltip='true' data-placement='bottom'></i></div>";
+	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
 	html += "</div>";
 
 

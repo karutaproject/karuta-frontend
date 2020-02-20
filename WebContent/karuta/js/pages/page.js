@@ -222,8 +222,8 @@ function displayOnePage()
 		}
 	});
 	$(document).click(function(e) {
-	    if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {
-	        $('.popover').hide();
+	    if (!$(e.target).is('.tooltip')) {
+	        $('.tooltip').hide();
 	    }
 	});
 	$.ajaxSetup({async: true});
