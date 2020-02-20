@@ -190,7 +190,7 @@
 	//----- NODE ---	
 	.update-node-resource {
 		margin-top:7px;
-		border:1px var(--batch-node-color);
+		border:1px solid var(--batch-node-color);
 	}
 	.import-node {
 		margin-top:7px;
@@ -232,14 +232,12 @@
 	}
 
 	//----- UUID ---
-	.update-field-byid {
+	.uuid-components {
 		margin-top:7px;
-		border:1px solid  var(--batch-uuid-color);
+		border:1px dashed  var(--batch-uuid-color);
 	}
-	.delete-node-byid {
-		margin-top:7px;
-		border:1px solid  var(--batch-uuid-color);
-	}
+	.update-field-byid,
+	.delete-node-byid,
 	.reset-document-byid {
 		margin-top:7px;
 		border:1px solid  var(--batch-uuid-color);
@@ -282,24 +280,15 @@
 		margin-top:7px;
 		border:1px solid var(--batch-resource-color);
 	}
-	.update-update-dashboard{
-		margin-top:7px;
-		border:1px solid var(--batch-resource-color);
-	}
-	.update-update-item{
+	.update-item{
 		margin-top:7px;
 		border:1px solid var(--batch-resource-color);
 	}
 
 	//----- INSTRUCTION ---
-	.for-each-line{
-		margin-top:7px;
-		border:1px dashed var(--batch-instruction-color);
-	}
-	.for-each-tree {
-		margin-top:7px;
-		border:1px dashed solid var(--batch-instruction-color);
-	}
+	.for-each-line,
+	.for-each-tree,
+	.for-each-person,
 	.actions {
 		margin-top:7px;
 		border:1px dashed var(--batch-instruction-color);

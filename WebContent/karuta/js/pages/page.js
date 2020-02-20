@@ -204,7 +204,8 @@ function displayOnePage()
 						if (type=='model'){
 							UIFactory['Node'].displayModel(UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
 						}
-						$('a[data-toggle=tooltip]').tooltip({html:true});
+						$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
 						//---------------------------
 						if (g_display_type=="standard")
 							loadLanguages();
@@ -221,8 +222,8 @@ function displayOnePage()
 		}
 	});
 	$(document).click(function(e) {
-	    if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {
-	        $('.popover').hide();
+	    if (!$(e.target).is('.tooltip')) {
+	        $('.tooltip').hide();
 	    }
 	});
 	$.ajaxSetup({async: true});

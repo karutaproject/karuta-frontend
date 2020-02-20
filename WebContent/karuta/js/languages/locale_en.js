@@ -316,6 +316,7 @@ karutaStr['en']['create_user']="Add a User";
 karutaStr['en']['active_users']="Active Users";
 karutaStr['en']['inactive_users']="Inactive Users";
 karutaStr['en']['temporary_users']="Temporary Users";
+karutaStr['en']['empty_users']="Users without Portfolio";
 karutaStr['en']['username']="Login";
 karutaStr['en']['lastname']="Last Name";
 karutaStr['en']['firstname']="First Name";
@@ -335,6 +336,7 @@ karutaStr['en']['substitute']="Substitution";
 karutaStr['en']['select_user']="Select a User";
 karutaStr['en']['other']="Other";
 karutaStr['en']['delete-temporary-users']="Delete All";
+karutaStr['en']['delete-empty-users']="Delete Selection";
 
 //=========================================
 //========== ROLES ========================
@@ -398,7 +400,6 @@ karutaStr['en']['writing']="WRITING";
 //========== BUBBLE MAP ===================
 //=========================================
 karutaStr['en']['leave-edit-mode']="Leave Edit Mode";
-karutaStr['en']['BubbleMap']="Bubble Map";
 karutaStr['en']['bubble-label']="Label";
 karutaStr['en']['bubble-links']="Links";
 karutaStr['en']['bubble-information']="Information";
@@ -485,11 +486,13 @@ karutaStr['en']['BatchForm']="BatchForm";
 karutaStr['en']['DocumentBlock']="DocumentBlock";
 karutaStr['en']['URLBlock']="URLBlock";
 karutaStr['en']['ImageBlock']="ImageBlock";
+karutaStr['en']['BubbleMap']="Bubble Map";
+karutaStr['en']['Europass']="Europass";
 
 karutaStr['en']['Item']="Item";
 karutaStr['en']['Get_Resource']="Get_Resource";
 karutaStr['en']['Get_Get_Resource']="Get_Get_Resource";
-karutaStr['en']['Get_DoubleResource']="Get_DoubleResource";
+karutaStr['en']['Get_Double_Resource']="Get_Double_Resource";
 karutaStr['en']['Proxy']="Proxy";
 karutaStr['en']['Get_Proxy']="Get_Proxy";
 

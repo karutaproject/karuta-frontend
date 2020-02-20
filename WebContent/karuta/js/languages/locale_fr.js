@@ -316,6 +316,7 @@ karutaStr['fr']['create_user']="Ajouter un usager";
 karutaStr['fr']['active_users']="Usagers actifs";
 karutaStr['fr']['inactive_users']="Usagers inactifs";
 karutaStr['fr']['temporary_users']="Usagers temporaires";
+karutaStr['fr']['empty_users']="Usagers sans portfolio";
 karutaStr['fr']['username']="Login";
 karutaStr['fr']['lastname']="Nom";
 karutaStr['fr']['firstname']="Prénom";
@@ -335,7 +336,7 @@ karutaStr['fr']['substitute']="Substitution";
 karutaStr['fr']['select_user']="Select unusager";
 karutaStr['fr']['other']="Autre";
 karutaStr['fr']['delete-temporary-users']="Supprimer tous";
-
+karutaStr['fr']['delete-empty-users']="Supprimer la sélection";
 
 //=========================================
 //========== ROLES ========================
@@ -347,7 +348,7 @@ karutaStr['fr']['select_role']="Sélectionner un rôle";
 //========== BATCH ========================
 //=========================================
 
-karutaStr['fr']['batch']="Exécuter un script de batch <span class='badge'>Utiliser Firefox pour suivre l'exécution du batch</span>";
+karutaStr['fr']['batch']="Exécuter un script de batch <span style='font-size:70%' class='badge badge-secondary'>Utiliser Firefox pour suivre l'exécution du batch</span>";
 karutaStr['fr']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['fr']['process_csv']="Exécuter";
 karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
@@ -399,7 +400,6 @@ karutaStr['fr']['writing']="ÉCRIRE";
 //========== BUBBLE MAP ===================
 //=========================================
 karutaStr['fr']['leave-edit-mode']="Quitter le mode d'édition";
-karutaStr['fr']['BubbleMap']="Bubble Map";
 karutaStr['fr']['bubble-label']="Libellé";
 karutaStr['fr']['bubble-links']="Liens";
 karutaStr['fr']['bubble-information']="Information";
@@ -486,11 +486,13 @@ karutaStr['fr']['BatchForm']="BatchForm";
 karutaStr['fr']['DocumentBlock']="DocumentBlock";
 karutaStr['fr']['URLBlock']="URLBlock";
 karutaStr['fr']['ImageBlock']="ImageBlock";
+karutaStr['fr']['BubbleMap']="Bubble Map";
+karutaStr['fr']['Europass']="Europass";
 
 karutaStr['fr']['Item']="Item";
 karutaStr['fr']['Get_Resource']="Get_Resource";
 karutaStr['fr']['Get_Get_Resource']="Get_Get_Resource";
-karutaStr['fr']['Get_DoubleResource']="Get_DoubleResource";
+karutaStr['fr']['Get_Double_Resource']="Get_Double_Resource";
 karutaStr['fr']['Proxy']="Proxy";
 karutaStr['fr']['Get_Proxy']="Get_Proxy";
 

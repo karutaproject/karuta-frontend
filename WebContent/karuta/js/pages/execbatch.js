@@ -22,14 +22,15 @@ function fill_exec_batch()
 {
 	setLanguageMenu("fill_exec_batch()");
 	initBatchVars();
-	var html = "";
+	var html = "<br/>";
+	html += "<i onclick='fill_exec_batch()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
 	html += "<h2 id='batch' class='line'>KARUTA - <span id='batch-title-page'></span></h2>";
-	html += "<h4 class='line'><span class='badge'>1</span> <span id='batch-title-1'></span></h4>";
+	html += "<h4 class='line'><span class='badge badge-secondary'>1</span> <span id='batch-title-1'></span></h4>";
 	html += "<div id='batch-csv_file_upload' style='margin-left:20px'></div>";
 	html += "<div style='margin-left:20px'> <span id='batch-title-3'></span>&nbsp;<input style='width:300px' id='batch-model_code' type='text'></input>&nbsp;<span class='button' onclick='javascript:processCode()'>ok</span></div>";
 	html += "<div id='batch-model_description' style='margin-left:20px'></div>";
 	html += "<div id='batch-csv_file_upload2' style='margin-left:20px'></div>";
-	html += "<h4 class='line'><span class='badge'>2</span> <span id='batch-title-2'></span></h4>";
+	html += "<h4 class='line'><span class='badge badge-secondary'>2</span> <span id='batch-title-2'></span></h4>";
 	html += "<div id='batch-process_button' style='margin-left:20px'></div>";
 	html += "<div id='batch-log' style='margin-left:20px;margin-top:20px'></div>";
 	$("#main-exec-batch").html(html);
@@ -82,10 +83,20 @@ function fill_exec_batch()
 function display_exec_batch()
 //==============================
 {
+	$("#welcome-bar").hide();
 	if ($("#batch").length) {
 		show_exec_batch();
 	} else {
 		fill_exec_batch();
 		show_exec_batch();
 	}
+	//=====================================================
+	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+	$(document).click(function(e) {
+		if (!$(e.target).is('.tooltip')) {
+			$('.tooltip').hide();
+		}
+	});
+	//=====================================================
+
 }

@@ -163,7 +163,7 @@
 }
 .batch .update-node-resource {
   margin-top: 7px;
-  border: 1px var(--batch-node-color);
+  border: 1px solid var(--batch-node-color);
 }
 .batch .import-node {
   margin-top: 7px;
@@ -201,14 +201,12 @@
   margin-top: 7px;
   border: 1px solid var(--batch-metadata-color);
 }
-.batch .update-field-byid {
+.batch .uuid-components {
   margin-top: 7px;
-  border: 1px solid var(--batch-uuid-color);
+  border: 1px dashed var(--batch-uuid-color);
 }
-.batch .delete-node-byid {
-  margin-top: 7px;
-  border: 1px solid var(--batch-uuid-color);
-}
+.batch .update-field-byid,
+.batch .delete-node-byid,
 .batch .reset-document-byid {
   margin-top: 7px;
   border: 1px solid var(--batch-uuid-color);
@@ -249,22 +247,13 @@
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }
-.batch .update-update-dashboard {
+.batch .update-item {
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }
-.batch .update-update-item {
-  margin-top: 7px;
-  border: 1px solid var(--batch-resource-color);
-}
-.batch .for-each-line {
-  margin-top: 7px;
-  border: 1px dashed var(--batch-instruction-color);
-}
-.batch .for-each-tree {
-  margin-top: 7px;
-  border: 1px dashed solid var(--batch-instruction-color);
-}
+.batch .for-each-line,
+.batch .for-each-tree,
+.batch .for-each-person,
 .batch .actions {
   margin-top: 7px;
   border: 1px dashed var(--batch-instruction-color);

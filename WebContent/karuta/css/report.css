@@ -69,6 +69,14 @@
   border-top: 1px solid lightGrey;
 }
 
+.zebra-table .createreport td {
+  padding: 5px;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-top: none;
+}
+
 .createreport ul {
   margin-bottom: 0px;
 }
@@ -106,7 +114,7 @@
   --report-display-color: #8bffff;
   --report-varop-color: #f08080;
   --report-csv-color: #307D7E;
-  --report-sharing-color: #C0C0C0;
+  --report-alone-color: #386bc1;
   --report-svg-color: #52D017;
 }
 .report .for-each-person,
@@ -116,14 +124,14 @@
 .report .for-each-node,
 .report .loop {
   margin-top: 7px;
-  border: 2px solid var(--batch-loop-color);
+  border: 2px solid var(--report-loop-color);
 }
 .report .go-parent,
 .report .if-then-else,
 .report .then-part,
 .report .else-part {
   margin-top: 7px;
-  border: 2px solid var(--batch-instruction-color);
+  border: 2px solid var(--report-instruction-color);
 }
 .report .model-table {
   margin-top: 7px;
@@ -139,47 +147,48 @@
 }
 .report .model-europass {
   margin-top: 7px;
-  border: 2px solid #386bc1;
+  border: 2px solid var(--report-alone-color);
 }
 .report .username,
 .report .firstname,
 .report .lastname,
 .report .firstname-lastname,
 .report .text,
-.report .node-resource,
-.report .url2unit {
+.report .node_resource,
+.report .url2unit,
+.report .model-qrcode {
   margin-top: 7px;
-  border: 1px solid var(--batch-display-color);
+  border: 1px solid var(--report-display-color);
 }
 .report .report-variable,
 .report .aggregate,
 .report .operation {
   margin-top: 7px;
-  border: 1px solid var(--batch-varop-color);
+  border: 1px solid var(--report-varop-color);
 }
 .report .csv-line {
   margin-top: 7px;
-  border: 2px solid var(--batch-instruction-color);
+  border: 2px solid var(--report-instruction-color);
 }
 .report .csv-value {
   margin-top: 7px;
-  border: 1px solid var(--batch-instruction-color);
+  border: 1px solid var(--report-instruction-color);
 }
 .report .model-svg {
   margin-top: 7px;
-  border: 2px solid var(--batch-svg-color);
+  border: 2px solid var(--report-svg-color);
 }
 .report .draw-web-title,
 .report .draw-web-line,
 .report .draw-web-axis,
 .report .draw-xy-axis {
   margin-top: 7px;
-  border: 1px solid var(--batch-svg-color);
+  border: 1px solid var(--report-svg-color);
 }
 .report .show-sharing,
 .report .dislay-sharing {
   margin-top: 7px;
-  border: 1px solid var(--batch-sharing-color);
+  border: 2px solid var(--report-alone-color);
 }
 
 .report .draw-web-title,

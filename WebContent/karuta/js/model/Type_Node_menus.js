@@ -132,7 +132,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 					var url = window.location.href;
 					var serverURL = url.substring(0,url.lastIndexOf('karuta')-1);
 					url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
-					$("#2world-"+uuid).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-tooltip='true' data-placement='bottom'></a> ");
+					$("#2world-"+uuid).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-toggle='tooltip' data-placement='bottom'></a> ");
 				}
 			});
 		}
@@ -484,7 +484,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 						if (this.shareroles.indexOf('2world')>-1) {
 							html_toadd = "<span id='2world-"+this.id+"'></span>";
 						} else {
-							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+this.id+"','"+this.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-tooltip='true' data-placement='bottom'></span>";
+							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+this.id+"','"+this.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 						}
 					}
 					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))

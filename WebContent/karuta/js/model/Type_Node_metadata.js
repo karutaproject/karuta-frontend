@@ -233,6 +233,26 @@ UIFactory["Node"].prototype.displayRights = function(destid)
 	$("#"+destid).append($(html));
 }
 
+//==================================
+UIFactory["Node"].displayIfModel = function(rootid)
+//==================================
+{
+	var rights = null;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes/node/"+rootid+"/rights",
+		success : function(data) {
+			rights = data;
+			var roles = $("role",rights);
+			var model = roles.length==0;
+			if (!model)
+				$("#instance_"+rooid).html('<span class="fas fa-file" aria-hidden="true"></span>');
+
+		}
+	});
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
@@ -406,7 +426,7 @@ UIFactory["Node"].prototype.displayMetaEpmInfo = function(destid)
 };
 
 //==================================================
-UIFactory["Node"].prototype.displayMetaEpmInfos = function(destid,data)
+UIFactory["Node"].displayMetaEpmInfos = function(destid,data)
 //==================================================
 {
 	var uuid = data.getAttribute("id");
@@ -840,7 +860,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
 			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
 	}
-	if (USER.admin)
+	if (USER.admin && !model)
 		this.displayRights('metadata-rights');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
@@ -987,7 +1007,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		}
 		html += karutaStr[languages[langcode]]['menulabels3']+"</label>";
 		$("#metadata_texts").append($(html));
-		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menuroles');
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menulabels');
 		//-----------------------
 	}
 	//------------------------Help-------------------------

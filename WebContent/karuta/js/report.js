@@ -27,6 +27,7 @@ var dashboard_current = null;
 var portfolioid_current = null;
 
 var g_report_actions = {};
+var g_report_users = {};
 
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sortUTC()'] = ".sort(function(a, b){ return $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
@@ -214,7 +215,7 @@ g_report_actions['for-each-line'] = function (destid,action,no,data)
 			ref_init = r_replaceVariable(ref_init);
 			var ref_inits = ref_init.split("/"); // ref1/ref2/...
 			for (var k=0;k<ref_inits.length;k++)
-				aggregates[ref_inits[k]] = new Array();
+				variables[ref_inits[k]] = new Array();
 		}
 		for (var i=0; i<actions.length;i++){
 			var tagname = $(actions[i])[0].tagName;
@@ -262,12 +263,12 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 				ref_init = r_replaceVariable(ref_init);
 				var ref_inits = ref_init.split("/"); // ref1/ref2/...
 				for (var k=0;k<ref_inits.length;k++)
-					aggregates[ref_inits[k]] = new Array();
+					variables[ref_inits[k]] = new Array();
 			}
 			//----------------------------------
 			for (var i=0; i<actions.length;i++){
 				var tagname = $(actions[i])[0].tagName;
-				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j])
+				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
 			}
 			//----------------------------------
 		};
@@ -308,7 +309,7 @@ g_report_actions['loop'] = function (destid,action,no,data)
 			ref_init = r_replaceVariable(ref_init);
 			var ref_inits = ref_init.split("/"); // ref1/ref2/...
 			for (var k=0;k<ref_inits.length;k++)
-				aggregates[ref_inits[k]] = new Array();
+				variables[ref_inits[k]] = new Array();
 		}
 		//---------------------------
 		var actions = $(action).children();
@@ -395,7 +396,7 @@ g_report_actions['table'] = function (destid,action,no,data)
 		ref_init = r_replaceVariable(ref_init);
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
 		for (var k=0;k<ref_inits.length;k++)
-			aggregates[ref_inits[k]] = new Array();
+			variables[ref_inits[k]] = new Array();
 	}
 	//---------------------------
 	var style = r_replaceVariable($(action).attr("style"));
@@ -419,7 +420,7 @@ g_report_actions['row'] = function (destid,action,no,data)
 		ref_init = r_replaceVariable(ref_init);
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
 		for (var k=0;k<ref_inits.length;k++)
-			aggregates[ref_inits[k]] = new Array();
+			variables[ref_inits[k]] = new Array();
 	}
 	//---------------------------
 	var style = r_replaceVariable($(action).attr("style"));
@@ -488,51 +489,159 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 //==================================
 {
 	var countvar = $(action).attr("countvar");
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/users",
-		success : function(data) {
-			UIFactory["User"].parse(data);
-			var select = $(action).attr("select");
-			select = r_replaceVariable(select);
-			var value = "";
-			if (select.indexOf("username=")>-1)
-				if (select.indexOf("'")>-1)
-					value = select.substring(10,select.length-1);  // inside quote
-				else
-					value = eval("json.lines["+line+"]."+select.substring(9));
-			var condition = false;
-			for ( var j = 0; j < UsersActive_list.length; j++) {
-				if (countvar!=undefined) {
-					variables[countvar] = j;
+	var select = $(action).attr("select");
+	if (select=="#logged_user") {
+		userid = USER.id;
+		var actions = $(action).children();
+		for (var i=0; i<actions.length;i++){
+			var tagname = $(actions[i])[0].tagName;
+			g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),userid);
+		};
+	} else {
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/users",
+			success : function(data) {
+				UIFactory["User"].parse(data);
+				select = r_replaceVariable(select);
+				var attribute = "";
+				var value = "";
+				var comparator = "";
+				if (select.indexOf("=")>-1){
+					attribute = select.substring(0,select.indexOf("="));
+					value = select.substring(select.indexOf("=")+1);
+					comparator = "=";
 				}
-				//------------------------------------
-				var ref_init = $(action).attr("ref-init");
-				if (ref_init!=undefined) {
-					ref_init = r_replaceVariable(ref_init);
-					var ref_inits = ref_init.split("/"); // ref1/ref2/...
-					for (var i=0;i<ref_inits.length;i++)
-						aggregates[ref_inits[i]] = new Array();
+				if (select.indexOf("*=")>-1) {
+					attribute = select.substring(0,select.indexOf("*="));
+					value = select.substring(select.indexOf("*=")+2);
+					comparator = "*=";
 				}
-				//------------------------------------
-				var username = UsersActive_list[j].username_node.text();
-				if (select.indexOf("username=")>-1) {
-					condition = username.indexOf(value)>-1;
-				}
-				//------------------------------------
-				if (condition){
-					userid = UsersActive_list[j].id;
-					var actions = $(action).children();
-					for (var i=0; i<actions.length;i++){
-						var tagname = $(actions[i])[0].tagName;
-						g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),userid);
-					};
-				}
+				var condition = false;
+				for ( var j = 0; j < UsersActive_list.length; j++) {
+					if (countvar!=undefined) {
+						variables[countvar] = j;
+					}
 					//------------------------------------
+					var ref_init = $(action).attr("ref-init");
+					if (ref_init!=undefined) {
+						ref_init = r_replaceVariable(ref_init);
+						var ref_inits = ref_init.split("/"); // ref1/ref2/...
+						for (var i=0;i<ref_inits.length;i++)
+							variables[ref_inits[i]] = new Array();
+					}
+					//------------------------------------
+					if (comparator=="=")
+						condition = $(UsersActive_list[j].attributes[attribute]).text() == value;
+					if (comparator=="*=")
+						condition = $(UsersActive_list[j].attributes[attribute]).text().indexOf(value)>-1;
+					//------------------------------------
+					if (condition){
+						userid = UsersActive_list[j].id;
+						var actions = $(action).children();
+						for (var i=0; i<actions.length;i++){
+							var tagname = $(actions[i])[0].tagName;
+							g_report_actions[tagname](destid,actions[i],no+j.toString()+'-'+i.toString(),userid);
+						};
+					}
+						//------------------------------------
+				}
 			}
-		}
-	});
+		});
+	}
+}
+
+//=============================================================================
+//============================= USER ==========================================
+//======================  username firstname lastname =========================
+//=============================firstname-lastname==============================
+//=============================================================================
+
+//==================================
+g_report_actions['username'] = function (destid,action,no,userid,is_out_csv)
+//==================================
+{
+	var text ="";
+	if (userid!=null)
+		text = Users_byid[userid].username;
+	else
+		text = USER.username;
+	//----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+}
+
+//==================================
+g_report_actions['firstname'] = function (destid,action,no,userid,is_out_csv)
+//==================================
+{
+	var text ="";
+	if (userid!=null)
+		text = Users_byid[userid].firstname;
+	else
+		text = USER.firstname;
+	//----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+}
+
+//==================================
+g_report_actions['lastname'] = function (destid,action,no,userid,is_out_csv)
+//==================================
+{
+	var text ="";
+	if (userid!=null)
+		text = Users_byid[userid].lastname;
+	else
+		text = USER.lastname;
+	//----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text + csvseparator;		
+	} else {
+		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
+		$("#"+destid).append($(text));		
+	}
+}
+
+//==================================
+g_report_actions['firstname-lastname'] = function (destid,action,no,userid,is_out_csv)
+//==================================
+{
+	var text1 ="";
+	if (userid!=null)
+		text1 = Users_byid[userid].firstname;
+	else
+		text1 = USER.firstname;
+	//----------------
+	var text2 ="";
+	if (userid!=null)
+		text2 = Users_byid[userid].lastname;
+	else
+		text2 = USER.lastname;
+	//----------------
+	if (is_out_csv!=null && is_out_csv) {
+		if (typeof csvseparator == 'undefined') // for backward compatibility
+			csvseparator = ";";
+		csvline += text1 +"-" + text2 + csvseparator;		
+	} else {
+		var text = "<span id='"+destid+'-'+no+"'>"+text1 + "&nbsp" +text2 + "</span>";
+		$("#"+destid).append($(text));		
+	}
 }
 
 //=============================================================================
@@ -551,7 +660,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 		ref_init = r_replaceVariable(ref_init);
 		var ref_inits = ref_init.split("/"); // ref1/ref2/...
 		for (var i=0;i<ref_inits.length;i++)
-			aggregates[ref_inits[i]] = new Array();
+			variables[ref_inits[i]] = new Array();
 	}
 	if (userid==null)
 		userid = USER.id;
@@ -796,7 +905,7 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 						ref_init = r_replaceVariable(ref_init);
 						var ref_inits = ref_init.split("/"); // ref1/ref2/...
 						for (var i=0;i<ref_inits.length;i++)
-							aggregates[ref_inits[i]] = new Array();
+							variables[ref_inits[i]] = new Array();
 					}
 					//--------------------------------
 					$.ajax({
@@ -822,73 +931,6 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 			}
 		}
 	});
-}
-
-//=============================================================================
-//============================= USER ==========================================
-//======================  username firstname lastname =========================
-//=============================firstname-lastname==============================
-//=============================================================================
-
-//==================================
-g_report_actions['username'] = function (destid,action,no,data,is_out_csv)
-//==================================
-{
-	var text = USER.username;
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	} else {
-		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
-		$("#"+destid).append($(text));		
-	}
-}
-
-//==================================
-g_report_actions['firstname'] = function (destid,action,no,data,is_out_csv)
-//==================================
-{
-	var text = USER.firstname;
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	} else {
-		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
-		$("#"+destid).append($(text));		
-	}
-}
-
-//==================================
-g_report_actions['lastname'] = function (destid,action,no,data,is_out_csv)
-//==================================
-{
-	var text = USER.lastname;
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text + csvseparator;		
-	} else {
-		text = "<span id='"+destid+'-'+no+"'>"+text+"</span>";
-		$("#"+destid).append($(text));		
-	}
-}
-
-//==================================
-g_report_actions['first-lastname'] = function (destid,action,no,data,is_out_csv)
-//==================================
-{
-	var text1 = USER.firstname;
-	var text2 = USER.lastname;
-	if (is_out_csv!=null && is_out_csv) {
-		if (typeof csvseparator == 'undefined') // for backward compatibility
-			csvseparator = ";";
-		csvline += text1 +"-" + text2 + csvseparator;		
-	} else {
-		var text = "<span id='"+destid+'-'+no+"'>"+text1 + "&nbsp" +text2 + "</span>";
-		$("#"+destid).append($(text));		
-	}
 }
 
 //=============================================================================
@@ -975,13 +1017,13 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			}
 			if (ref!=undefined && ref!="") {
 				ref = r_replaceVariable(ref);
-				if (aggregates[ref]==undefined)
-					aggregates[ref] = new Array();
-				aggregates[ref][aggregates[ref].length] = text;
+				if (variables[ref]==undefined)
+					variables[ref] = new Array();
+				variables[ref][variables[ref].length] = text;
 			}
 			text = "<span id='dashboard_"+prefix_id+nodeid+"' style='"+style+"'>"+text+"</span>";
 			if (writenode) {
-				text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-tooltip='true' data-placement='bottom'></span>";
+				text += "<span class='button glyphicon glyphicon-pencil' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			}
 			if (deletenode) {
 				var type = UICom.structure["ui"][nodeid].asmtype;
@@ -1050,30 +1092,30 @@ g_report_actions['variable'] = function (destid,action,no,data)
 		if (aggregatetype!=undefined && aggregatetype!="") {
 			var select = $(action).attr("aggregationselect");
 			select = r_replaceVariable(select);
-			if (aggregatetype=="sum" && aggregates[select]!=undefined){
+			if (aggregatetype=="sum" && variables[select]!=undefined){
 				var sum = 0;
-				for (var i=0;i<aggregates[select].length;i++){
-					if ($.isNumeric(aggregates[select][i]))
-						sum += parseFloat(aggregates[select][i]);
+				for (var i=0;i<variables[select].length;i++){
+					if ($.isNumeric(variables[select][i]))
+						sum += parseFloat(variables[select][i]);
 				}
 				text = sum;
 			}
-			if (aggregatetype=="avg" && aggregates[select]!=undefined){
+			if (aggregatetype=="avg" && variables[select]!=undefined){
 				var sum = 0;
-				for (var i=0;i<aggregates[select].length;i++){
-					if ($.isNumeric(aggregates[select][i]))
-						sum += parseFloat(aggregates[select][i]);
+				for (var i=0;i<variables[select].length;i++){
+					if ($.isNumeric(variables[select][i]))
+						sum += parseFloat(variables[select][i]);
 				}
-				text = sum/aggregates[select].length;
+				text = sum/variables[select].length;
 				if (text.toString().indexOf(".")>-1)
 					text = text.toFixed(2);
 				
 			}
 			if (ref!=undefined && ref!="") {
 				ref = r_replaceVariable(ref);
-				if (aggregates[ref]==undefined)
-					aggregates[ref] = new Array();
-				aggregates[ref][aggregates[ref].length] = text;
+				if (variables[ref]==undefined)
+					variables[ref] = new Array();
+				variables[ref][variables[ref].length] = text;
 			}
 			if (!$.isNumeric(text))
 				text="";
@@ -1135,9 +1177,9 @@ g_report_actions['variable'] = function (destid,action,no,data)
 	//------------------------------
 	variables[varlabel] = text;
 	if (ref!=undefined && ref!="") {
-		if (aggregates[ref]==undefined)
-			aggregates[ref] = new Array();
-		aggregates[ref][aggregates[ref].length] = text;
+		if (variables[ref]==undefined)
+			variables[ref] = new Array();
+		variables[ref][variables[ref].length] = text;
 	}
 }
 
@@ -1302,9 +1344,9 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 	var ref = $(action).attr("ref");
 	if (ref!=undefined && ref!="") {
 		ref = r_replaceVariable(ref);
-		if (aggregates[ref]==undefined)
-			aggregates[ref] = new Array();
-		aggregates[ref][aggregates[ref].length] = text;
+		if (variables[ref]==undefined)
+			variables[ref] = new Array();
+		variables[ref][variables[ref].length] = text;
 	}
 	//-----------------
 	if (is_out_csv!=null && is_out_csv) {
@@ -1382,29 +1424,29 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	select = r_replaceVariable(select);
 	var text = "";
-	if (type=="sum" && aggregates[select]!=undefined){
+	if (type=="sum" && variables[select]!=undefined){
 		var sum = 0;
-		for (var i=0;i<aggregates[select].length;i++){
-			if ($.isNumeric(aggregates[select][i]))
-				sum += parseFloat(aggregates[select][i]);
+		for (var i=0;i<variables[select].length;i++){
+			if ($.isNumeric(variables[select][i]))
+				sum += parseFloat(variables[select][i]);
 		}
 		text = sum;
 	}
-	if (type=="avg" && aggregates[select]!=undefined){
+	if (type=="avg" && variables[select]!=undefined){
 		var sum = 0;
-		for (var i=0;i<aggregates[select].length;i++){
-			if ($.isNumeric(aggregates[select][i]))
-				sum += parseFloat(aggregates[select][i]);
+		for (var i=0;i<variables[select].length;i++){
+			if ($.isNumeric(variables[select][i]))
+				sum += parseFloat(variables[select][i]);
 		}
-		text = sum/aggregates[select].length;
+		text = sum/variables[select].length;
 		if (text.toString().indexOf(".")>-1)
 			text = text.toFixed(2);
 		
 	}
 	if (ref!=undefined && ref!="") {
-		if (aggregates[ref]==undefined)
-			aggregates[ref] = new Array();
-		aggregates[ref][aggregates[ref].length] = text;
+		if (variables[ref]==undefined)
+			variables[ref] = new Array();
+		variables[ref][variables[ref].length] = text;
 	}
 	if (!$.isNumeric(text))
 		text="";
@@ -1451,9 +1493,9 @@ g_report_actions['operation'] = function (destid,action,no,data)
 			result = result.toFixed(2);
 	}
 	if (ref!=undefined && ref!="") {
-		if (aggregates[ref]==undefined)
-			aggregates[ref] = new Array();
-		aggregates[ref][aggregates[ref].length] = result;
+		if (variables[ref]==undefined)
+			variables[ref] = new Array();
+		variables[ref][variables[ref].length] = result;
 	}
 	if (!$.isNumeric(result))
 		result="";
@@ -1474,7 +1516,7 @@ function refresh_report(dashboard_current)
 {
 	$("#"+dashboard_current).html("");
 	r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
-	$('[data-tooltip="true"]').tooltip();
+	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 
 //==================================
@@ -1623,9 +1665,9 @@ function html2IMG(contentid)
 //==================================
 {
 	var js1 = "javascript:$('#image-window').modal('hide')";
-	var footer = "";
-	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#image-window-footer").html($(footer));
+	var buttons = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#image-window-header").html($(buttons));
+	$("#image-window-footer").html($(buttons));
 	$("#image-window-body").html("");
 	$("#image-window").modal('show');
 	var svgnode = $("svg",document.getElementById(contentid));
@@ -1639,18 +1681,7 @@ function html2IMG(contentid)
 		svg += xml2string(htmlnode);
 		svg += "</foreignObject>";
 		svg += "</svg>";
-//		alert(svg);
 		var htmlcanvas = "<canvas id='canvas' width='400' height='400'></canvas>"
-/*		$("image-window-body").html(htmlcanvas)
-		rasterizeHTML.drawHTML(xml2string(htmlnode),canvas);
-		var DOMURL = window.URL || window.webkitURL || window;
-		var svgobj = new Blob([svg], {type: 'image/svg+xml'});
-		var url = DOMURL.createObjectURL(svgobj);
-		var img = document.createElement('img');
-		img.src = url;
-		document.getElementById("image-window-body").appendChild(img);
-*/
-
 		html2canvas(htmlnode).then(function(canvas) {
 			var src_img = canvas.toDataURL();
 			var img = document.createElement('img');
@@ -1936,8 +1967,8 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 	var pos = $(action).attr("pos");
 	if (pos==undefined)
 		pos = 0;
-	if (pos > no)
-		no = pos;
+//	if (pos > no)
+//		no = pos;
 	var html = "";
 	if (select!=undefined) {
 		while (select.indexOf("##")>-1) {
@@ -1991,10 +2022,10 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 				}
 			}
 			if (i>0 && points[i-1].value!=null && points[i].value!=null)
-				drawLine(destid,points[i-1].value,points[i-1].angle,points[i].value,points[i].angle,svgcenter,'svg-web-line'+no);
+				drawLine(destid,points[i-1].value,points[i-1].angle,points[i].value,points[i].angle,svgcenter,'svg-web-line'+pos);
 		}
 		if (points[i-1].value!=null && points[0].value!=null)
-			drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+no);
+			drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+pos);
 		// draw legend
 		if (legendselect!=undefined) {
 			var selector = r_getSelector(legendselect,null);
@@ -2026,7 +2057,7 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 					text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
 				}
 			};
-			var line = makeSVG('line',{'x1':10,'y1':975-20*no,'x2':10,'y2':975-20*no,'class':'svg-web-value'+no});
+			var line = makeSVG('line',{'x1':10,'y1':975-20*no,'x2':10,'y2':975-20*no,'class':'svg-web-value'+pos});
 //			var line = makeSVG('line',{'x1':10,'y1':25+20*no,'x2':10,'y2':25+20*no,'class':'svg-web-value'+no});
 			document.getElementById(destid).appendChild(line);
 			var svgtext = makeSVG('text',{'x':20,'y':980-20*no,'font-size':svgfontsize,'font-family':svgfontname},text);
