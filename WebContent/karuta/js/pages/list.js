@@ -10,36 +10,23 @@ function getList()
 		text2 = karutaStr[LANG]['portfolios-admin'];
 	}
 	html += "<h3><span id='projects-label'>"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span></h3>";
+	html += "<div id='folder-portfolios'></div>";
+	html += "<div id='gutter'></div>";
 	html += "<div id='projects'></div>";
 	html += "<div id='portfolios-div'>";
-	html += "<h3 id='portfolios-not-in-project'><span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span></h3>";
-	html += "	<div class='portfolios-not-in-project'>";
-	if (USER.creator && !USER.limited) {
-		displayProject['portfolios-not-in-project'] = localStorage.getItem('dpportfolios-not-in-project');
-		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
-			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button fas fa-minus'></span></div>";
-		else
-			html += "		<div onclick=\"javascript:toggleProject('portfolios-not-in-project')\"><span id='toggleContent_portfolios-not-in-project' class='button fas fa-plus'></span></div>";
-		if (displayProject['portfolios-not-in-project']!=undefined && displayProject['portfolios-not-in-project']=='open')
-			html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:block'></div>";
-		else
-			html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:none'></div>";
-	} else {
-		html += "	<div class='project-content' id='content-portfolios-not-in-project' style='display:block'></div>";		
-	}
-	html += "</div>";  // <div class='row portfolios-not-in-project'>
-	html += "</div>"; // <div id='portfolios-div'>
+	html += "<h3 id='portfolios-not-in-project'>";
+	html += "	<span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span>";
+	html += "	<button class='btn ' onclick=\"loadAndDisplayFolderContent('folder-portfolios','false');\">"+ karutaStr[LANG]["see"] + "</button>";
+	html += "</h3>";
 	if (USER.admin || (USER.creator && !USER.limited) ) {
 		var text2 = karutaStr[LANG]['bin'];
 		if (USER.admin)
 			text2 = karutaStr[LANG]['bin-admin'];
-		html += "<h3 id='bin-label'>"+text2;
-		html += "&nbsp<button class='btn ' onclick=\"confirmDelPortfolios_EmptyBin()\">";
-		html += karutaStr[LANG]["empty-bin"];
-		html += "</button>";
+		html += "<h3 id='bin-label'>"+text2+"&nbsp";
+//		html += "<button class='btn ' onclick=\"confirmDelPortfolios_EmptyBin()\">"+ karutaStr[LANG]["empty-bin"] + "</button>";
+		html += "<button class='btn ' onclick=\"UIFactory.Portfolio.displayBin('folder-portfolios','bin');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see-bin"] + "</button>";
 		html += "</h3>";
-		html += "<div  id='bin'>";
-		html += "</div>";
+//		html += "<div  id='bin'></div>";
 	}
 	return html;
 }
@@ -67,16 +54,18 @@ function getListSubBar()
 function setWelcomeTitles()
 //==============================
 {
-	var root = document.documentElement;
-	root.style.setProperty('--list-welcome-title-color',g_configVar['list-welcome-title-color']);
-	root.style.setProperty('--list-welcome-subtitle-color',g_configVar['list-welcome-subtitle-color']);
-	root.style.setProperty('--list-welcome-subline-color',g_configVar['list-welcome-subline-color']);
-	root.style.setProperty('--list-welcome-box-border-color',g_configVar['list-welcome-box-border-color']);
-	root.style.setProperty('--list-welcome-box-background-color',g_configVar['list-welcome-box-background-color']);
-	$("#welcome-title").html(g_configVar['list-welcome-title']);
-	$("#welcome-title").attr('style', g_configVar['list-welcome-title-css']);
-	$("#welcome-baseline").html(g_configVar['list-welcome-subtitle']);
-	$("#welcome-baseline").attr('style', g_configVar['list-welcome-subtitle-css']);
+	if (g_configVar['list-welcome-title-color']!=undefined) { //configuration portfolio has been read
+		var root = document.documentElement;
+		root.style.setProperty('--list-welcome-title-color',g_configVar['list-welcome-title-color']);
+		root.style.setProperty('--list-welcome-subtitle-color',g_configVar['list-welcome-subtitle-color']);
+		root.style.setProperty('--list-welcome-subline-color',g_configVar['list-welcome-subline-color']);
+		root.style.setProperty('--list-welcome-box-border-color',g_configVar['list-welcome-box-border-color']);
+		root.style.setProperty('--list-welcome-box-background-color',g_configVar['list-welcome-box-background-color']);
+		$("#welcome-title").html(g_configVar['list-welcome-title']);
+		$("#welcome-title").attr('style', g_configVar['list-welcome-title-css']);
+		$("#welcome-baseline").html(g_configVar['list-welcome-subtitle']);
+		$("#welcome-baseline").attr('style', g_configVar['list-welcome-subtitle-css']);
+	}
 }
 
 //==============================
@@ -178,7 +167,7 @@ function fill_list_page()
 						success : function(data) {
 							var destid = $("div[id='bin']");
 							UIFactory["Portfolio"].parseBin(data);
-							UIFactory["Portfolio"].displayBin('bin','bin');
+//							UIFactory["Portfolio"].displayBin('bin','bin');
 						},
 						error : function(jqxhr,textStatus) {
 							alertHTML("Server Error GET active=false: "+textStatus);
@@ -207,7 +196,7 @@ function fill_list_page()
 									success : function(data) {
 										var destid = $("div[id='bin']");
 										UIFactory["Portfolio"].parseBin(data);
-										UIFactory["Portfolio"].displayBin('bin','bin');
+//										UIFactory["Portfolio"].displayBin('bin','bin');
 									},
 									error : function(jqxhr,textStatus) {
 										alertHTML("Server Error GET active=false: "+textStatus);
@@ -216,6 +205,8 @@ function fill_list_page()
 							}
 							if ($("#content-portfolios-not-in-project").html()=="" && $("#portfolios-nb").html()=="")
 								$("#portfolios-div").hide();
+							if ($("#folder-portfolios").html()=="")
+								$("#folder-portfolios").hide();
 							$("#wait-window").hide();
 						},
 						error : function(jqxhr,textStatus) {
@@ -233,7 +224,6 @@ function fill_list_page()
 							UIFactory["Portfolio"].parse(data);
 							$("#list").html(getList());
 							UIFactory["Portfolio"].displayAll('portfolios','list');
-							$("#wait-window").hide();
 							if (USER.admin || (USER.creator && !USER.limited) ) {
 								$.ajax({
 									type : "GET",
@@ -242,13 +232,16 @@ function fill_list_page()
 									success : function(data) {
 										var destid = $("div[id='bin']");
 										UIFactory["Portfolio"].parseBin(data);
-										UIFactory["Portfolio"].displayBin('bin','bin');
+//										UIFactory["Portfolio"].displayBin('bin','bin');
 									},
 									error : function(jqxhr,textStatus) {
 										alertHTML("Server Error GET active=false: "+textStatus);
 									}
 								});
 							}
+							if ($("#folder-portfolios").html()=="")
+								$("#folder-portfolios").hide();
+							$("#wait-window").hide();
 						},
 						error : function(jqxhr,textStatus) {
 							alertHTML("Server Error GET active=1&project=true: "+textStatus);
@@ -319,6 +312,8 @@ function fill_search_page(code)
 				showArchiveSearch();
 				if ($("#content-portfolios-not-in-project").html()=="")
 					$("#portfolios-div").hide();
+				if ($("#folder-portfolios").html()=="")
+					$("#folder-portfolios").hide();
 			}
 			else {
 				hideArchiveSearch();
@@ -400,6 +395,23 @@ function loadProjectPortfolios(portfoliocode,nb,destid,type,langcode)
 	});
 }
 
+//==============================
+function loadFolderContent(dest,portfoliocode)
+//==============================
+{
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios?active=1&project="+portfoliocode,
+		success : function(data) {
+			UIFactory["Portfolio"].parse_add(data);
+			UIFactory["Portfolio"].displayFolderContent(dest,portfoliocode);
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active: "+textStatus);
+		}
+	});
+}
 
 //==============================
 function countProjectPortfolios(uuid)
@@ -468,7 +480,6 @@ function toggleProject(uuid) {
 				displayProject[uuid] = 'open';
 			}
 			localStorage.setItem('dp'+uuid,'open');
-//			Cookies.set('dp'+uuid,'open',{ expires: 60 });
 		}
 	} else {
 		$("#toggleContent_"+uuid).removeClass("fa-minus")
@@ -479,7 +490,6 @@ function toggleProject(uuid) {
 		displayProject[uuid] = 'closed';
 		if (uuid!="portfolios-not-in-project")
 			localStorage.setItem('dp'+uuid,'closed');
-//			Cookies.set('dp'+uuid,'closed',{ expires: 60 });
 	}
 }
 
@@ -487,14 +497,16 @@ function toggleProject(uuid) {
 function applyListConfiguration()
 //==============================
 {
-	$('.list-page #main-body').css("background-image", g_configVar['list-welcome-image']);
-	var root = document.documentElement;
-	root.style.setProperty('--list-background-color',g_configVar['list-background-color']);
-	root.style.setProperty('--list-menu-background-color',g_configVar['list-menu-background-color']);
-	root.style.setProperty('--list-menu-text-color',g_configVar['list-menu-text-color']);
-	root.style.setProperty('--list-element-text-color',g_configVar['list-element-text-color']);
-	root.style.setProperty('--list-element-background-color',g_configVar['list-element-background-color']);
-	root.style.setProperty('--list-element-background-color-complement',g_configVar['list-element-background-color-complement']);
-	root.style.setProperty('--list-title-color',g_configVar['list-title-color']);
-	root.style.setProperty('--list-button-background-color',g_configVar['list-button-background-color']);
+	if (g_configVar['list-welcome-image']!=undefined) { // configuration has been read
+		$('.list-page #main-body').css("background-image", g_configVar['list-welcome-image']);
+		var root = document.documentElement;
+		root.style.setProperty('--list-background-color',g_configVar['list-background-color']);
+		root.style.setProperty('--list-menu-background-color',g_configVar['list-menu-background-color']);
+		root.style.setProperty('--list-menu-text-color',g_configVar['list-menu-text-color']);
+		root.style.setProperty('--list-element-text-color',g_configVar['list-element-text-color']);
+		root.style.setProperty('--list-element-background-color',g_configVar['list-element-background-color']);
+		root.style.setProperty('--list-element-background-color-complement',g_configVar['list-element-background-color-complement']);
+		root.style.setProperty('--list-title-color',g_configVar['list-title-color']);
+		root.style.setProperty('--list-button-background-color',g_configVar['list-button-background-color']);
+	}
 }

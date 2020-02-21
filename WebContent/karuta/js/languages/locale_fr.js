@@ -90,6 +90,7 @@ karutaStr['fr']['menu']="Menu";
 karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - Hauteur : 220<br>&nbsp; - Largeur : 800 divisé par le nombre de colonnes<br>&nbsp;";
 karutaStr['fr']['list-novisible']="Non visible";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
+karutaStr['fr']['see-bin']="Voir la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
 karutaStr["fr"]["button-print"] = "Imprimer";
 karutaStr["fr"]["write-mode"] = "Éditer";
@@ -507,3 +508,10 @@ karutaStr['fr']['exec']="Exécuter maintenant";
 karutaStr['fr']['uploaded-by']="Téléversé par";
 karutaStr['fr']['date']="Date";
 karutaStr['fr']['file']="Fichier";
+
+//=========================================
+//========== LOGIN ====================
+//=========================================
+
+karutaStr['fr']['connection-cas1']="Connexion avec un compte universitaire";
+karutaStr['fr']['connection-cas2']="Connexion hors compte universitaire";

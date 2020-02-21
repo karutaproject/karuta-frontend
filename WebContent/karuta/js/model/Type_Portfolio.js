@@ -24,6 +24,8 @@ var number_of_projects_portfolios = 0;
 var number_of_portfolios = 0;
 var number_of_bins = 0;
 var loadedProjects = {};
+var loadedFolders = {};
+var currentDisplayedFolderCode = "";
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -93,6 +95,7 @@ UIFactory["Portfolio"] = function( node )
 	this.display = {};
 	this.groups = [];
 	this.roles = [];
+	this.rights = this.root.getRights(this.rootid);
 };
 
 //=======================================================================
@@ -105,6 +108,7 @@ function setConfigColor(data,root,configname)
 	}
 	root.style.setProperty("--"+configname,color);
 }
+
 //==================================
 function setCSSportfolio(data)
 //==================================
@@ -169,7 +173,7 @@ UIFactory["Portfolio"].displayAll = function(dest,type,langcode)
 	g_sum_trees = 0;
 	$("#projects").html($(""));
 	$("#content-portfolios-not-in-project").html($(""));
-	UIFactory["Portfolio"].displayTree(0,null,type,langcode,null);
+	UIFactory["Portfolio"].displayFolder(0,null,type,langcode,null);
 	//--------------------------------------
 	if (number_of_projects==0) {
 		$("#projects-label").hide();
@@ -235,9 +239,9 @@ UIFactory["Portfolio"].displayTree = function(nb,dest,type,langcode,parentcode)
 						html += "			<div class='dropdown-menu  dropdown-menu-right'>";
 						html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
 						if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
-							html += "			<a class='dropdown-item' id='remove-"+portfolio.id+"' href='' style='display:block' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+							html += "			<a class='dropdown-item' id='remove-"+portfolio.id+"' style='display:block' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
 						else
-							html += "			<a class='dropdown-item' id='remove-"+portfolio.id+"' href='' style='display:none' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+							html += "			<a class='dropdown-item' id='remove-"+portfolio.id+"' style='display:none' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
 						html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callChangeOwner('"+portfolio.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["changeOwner"]+"</a>";
 						html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolio.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
 						html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolio.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
@@ -377,7 +381,7 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 				else
 					html += "	<div class='project-content' id='content-"+portfolio.id+"' style='display:none'></div>";
 				html += "</div><!-- class='project'-->"
-				$("#bin").append($(html));
+				$("#folder-portfolios").append($(html));
 				UIFactory["Portfolio"].displayComments('comments_'+portfolio.id,portfolio);
 				nb++;
 				UIFactory["Portfolio"].displayBinTree(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
@@ -389,7 +393,7 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 				}
 				else {
 					number_of_bins++;
-					$("#bin").append($("<div class='row portfolio-row' id='portfolio_"+portfolio.id+"'></div>"));
+					$("#folder-portfolios").append($("<div class='row portfolio-row' id='portfolio_"+portfolio.id+"'></div>"));
 				}
 				$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type,langcode,parentcode,owner));
 				nb++;
@@ -405,15 +409,17 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 }
 	
 //==================================
-UIFactory["Portfolio"].displayBin = function(destid,type,langcode)
+UIFactory["Portfolio"].displayBin = function(dest,type,langcode)
 //==================================
 {
-	$("#bin").html("");
-	UIFactory["Portfolio"].displayBinTree(0,null,type,langcode);
+	$("#"+dest).html("");
+	UIFactory.Portfolio.displayBinTree(0,dest,type,langcode);
 	if (bin_list.length==0 || number_of_bins==0)
 		$("#bin-label").hide();
-	else
+	else {
 		$("#bin-label").show();
+		$("#folder-portfolios").show();
+	}
 };
 
 //==================================
@@ -450,8 +456,8 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	if (semtag.indexOf('karuta-dashboard')>-1)
 		tree_type='<span class="fa fa-line-chart" aria-hidden="true"></span>';
 	//---------------------
-	var rights = this.root.getRights(this.rootid);
-	var roles = $("role",rights);
+//	var rights = this.root.getRights(this.rootid);
+	var roles = $("role",this.rights);
 	var model = roles.length==0;
 	if (!model)
 		tree_type += '<span class="fas fa-file" aria-hidden="true"></span>';
@@ -1469,36 +1475,7 @@ UIFactory["Portfolio"].removeProject = function(projectid,projectcode)
 	fill_list_page();
 	$.ajaxSetup({async: true});
 
-/*	//----------------
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1",
-		success : function(data) {
-			var destid = $("div[id='portfolios']");
-			UIFactory["Portfolio"].parse(data);
-			UIFactory["Portfolio"].displayAll('portfolios','list');
-			if ($("#projects").html()=="") {
-				$("#projects-label").hide();
-				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
-			}
-		},		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
-		}
-	});
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=false",
-		success : function(data) {
-			var destid = $("div[id='bin']");
-			UIFactory["Portfolio"].parseBin(data);
-			UIFactory["Portfolio"].displayBin('bin','bin');
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET bin: "+textStatus);
-		}
-	});*/
+
 	//----------------
 }
 
@@ -1531,37 +1508,7 @@ UIFactory["Portfolio"].restoreProject = function(projectid,projectcode)
 	fill_list_page();
 	$.ajaxSetup({async: true});
 	//----------------
-/*	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1",
-		success : function(data) {
-			var destid = $("div[id='portfolios']");
-			UIFactory["Portfolio"].parse(data);
-			UIFactory["Portfolio"].displayAll('portfolios','list');
-			if ($("#projects").html()=="") {
-				$("#projects-label").hide();
-				$("#portfolios-label").html(karutaStr[LANG]['portfolios-without-project']);
-			}
-		},		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
-		}
-	});
-	//----------------
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=false",
-		success : function(data) {
-			var destid = $("div[id='bin']");
-			UIFactory["Portfolio"].parseBin(data);
-			UIFactory["Portfolio"].displayBin('bin','bin');
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET bin: "+textStatus);
-		}
-	});*/
-	//----------------
+
 }
 
 //==================================
@@ -3000,3 +2947,162 @@ function confirmDelPortfolios_EmptyBin()
 	$('#delete-window').modal('show');
 }
 
+//==================================
+UIFactory["Portfolio"].displayFolder = function(nb,dest,type,langcode,parentcode)
+//==================================
+{
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (nb<portfolios_list.length) {
+		if (portfolios_list[nb]==null) { // has been removed
+			nb++;
+			UIFactory["Portfolio"].displayFolder(nb,dest,type,langcode,parentcode);
+		} else {
+			var portfolio = portfolios_list[nb];
+			if (dest!=null) {
+				portfolio.display[dest] = langcode;
+			}
+			//---------------------
+			var html = "";
+			var portfoliocode = portfolio.code_node.text();
+			var owner = (Users_byid[portfolio.ownerid]==null) ? "":Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
+			if (portfolio.semantictag!= undefined && portfolio.semantictag.indexOf('karuta-project')>-1 && portfoliocode!='karuta.project'){
+					if (number_of_projects>0) {
+						$("#export-"+projects_list[number_of_projects-1].uuid).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
+					}
+					var portfolio_label = portfolio.label_node[langcode].text();
+					if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
+						portfolio_label = '- no label in '+languages[langcode]+' -';
+					//-------------------- PROJECT ----------------------
+					projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
+					projects_list[number_of_projects].portfolios += portfolio.id;
+					number_of_projects_portfolios = 0;
+					html += "<div id='project_"+portfolio.id+"' class='project'>";
+					html += "	<div class='row row-label'>";
+//					if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
+//						html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-1'><i id='toggleContent_"+portfolio.id+"' class='button fas fa-minus'></i></div>";
+//					else
+//						html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-1'><i id='toggleContent_"+portfolio.id+"' class='button fas fa-plus'></i></div>";
+					html += "		<div id='portfoliolabel_"+portfolio.id+"' onclick=\"javascript:loadAndDisplayFolderContent('folder-portfolios','"+portfoliocode+"')\" class='project-label col-8'>"+portfolio_label+"&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span></div>";
+
+					html += "		</div>";
+					html += "	</div>";
+					html += "</div><!-- class='project'-->"
+					if (!loadedFolders[portfoliocode] && g_nb_trees>100 && localStorage.getItem('currentDisplayedFolderCode')==portfoliocode) {
+						loadFolderContent('folder-portfolios',portfoliocode);
+					}
+					$("#projects").append($(html));
+					countProjectPortfolios(projects_list[number_of_projects].uuid);
+					number_of_projects ++;
+					nb++;
+					if (nb<portfolios_list.length)
+						UIFactory["Portfolio"].displayFolder(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
+			} else {
+				nb++;
+				if (nb<portfolios_list.length)
+					UIFactory["Portfolio"].displayFolder(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
+			}
+
+		}
+	}
+}
+
+//==================================
+loadAndDisplayFolderContent = function(dest,parentcode,langcode)
+//==================================
+{
+	$("#wait-window").show();
+	if (!loadedFolders[parentcode])
+		loadFolderContent('folder-portfolios',parentcode);
+	else
+		UIFactory.Portfolio.displayFolderContent(dest,parentcode,langcode);
+}
+
+//==================================
+UIFactory["Portfolio"].displayFolderContent = function(dest,parentcode,langcode)
+//==================================
+{
+	$("#folder-portfolios").show();
+	localStorage.setItem('currentDisplayedFolderCode',parentcode);
+	loadedFolders[parentcode] = true;
+	$("#"+dest).html("");
+	var type = "list";
+	if (langcode==null)
+		langcode = LANGCODE;
+	for (var i=0; i<portfolios_list.length;i++){
+		var portfolio = portfolios_list[i];
+		//---------------------
+		var html = "";
+		var portfoliocode = portfolio.code_node.text();
+		var owner = (Users_byid[portfolio.ownerid]==null) ? "":Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
+		if (portfoliocode==parentcode){
+			var portfolio_label = portfolio.label_node[langcode].text();
+			if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
+				portfolio_label = '- no label in '+languages[langcode]+' -';
+			//-------------------- PROJECT ----------------------
+			projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
+			displayProject[portfolio.id] = localStorage.getItem('dp'+portfolio.id);
+//			displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
+			projects_list[number_of_projects].portfolios += portfolio.id;
+			number_of_projects_portfolios = 0;
+			html += "<div id='project_"+portfolio.id+"' class='project'>";
+			html += "	<div class='row row-label'>";
+			html += "		<div class='col-1'/>";
+			html += "		<div class='col-4 project-label' id='portfoliolabel_"+portfolio.id+"' >"+portfolio_label+"</div>";
+			html += "		<div class='col-2 d-none d-md-block project-label'>"+owner+"</div>";
+			html += "		<div class='col-3 d-none d-sm-block comments' id='project-comments_"+$(portfolios_byid[portfolio.id].root).attr("id")+"'> </div><!-- comments -->";
+			html += "		<div class='col-1'>";
+			//------------ buttons ---------------
+			html += "			<div class='dropdown portfolio-menu'>";
+			if (USER.admin || (portfolio.owner=='Y' && !USER.xlimited)) {
+				html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
+				html += "			<div class='dropdown-menu  dropdown-menu-right'>";
+				html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
+				html += "			<a class='dropdown-item' id='remove-"+portfolio.id+"' style='display:block' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+				html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callChangeOwner('"+portfolio.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["changeOwner"]+"</a>";
+				html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolio.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
+				html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolio.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
+				html += "			<a class='dropdown-item' id='export-"+portfolio.id+"' href='' style='display:block'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a>";
+				html += "			<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callArchive('"+portfoliocode+"')\" ><i class='fa fa-download'></i> "+karutaStr[LANG]["archive-project"]+"</a>";
+				html += "			</div>";
+			} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
+				html += "			<button  data-toggle='dropdown' class='btn   dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
+			}
+			html += "			</div><!-- class='btn-group' -->";
+			//---------------------------------------
+			html += "		</div><!-- class='col-1' -->";
+			html += "		<div class='col-1'>";
+			//------------------------ menu-burger
+			if (USER.admin || (USER.creator && !USER.limited) ) {
+				html += "			<div class='dropdown portfolio-menu'>";
+				html += "				<button  class='btn dropdown-toggle' data-toggle='dropdown'></button>";
+				html += "				<ul class='dropdown-menu dropdown-menu-right' role='menu'>";
+				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.model')\" >"+karutaStr[LANG]['karuta.model']+"</a>";
+				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.rubrics')\" >"+karutaStr[LANG]['karuta.rubrics']+"</a>";
+				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.parts')\" >"+karutaStr[LANG]['karuta.parts']+"</a>";
+				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.report')\" >"+karutaStr[LANG]['karuta.report']+"</a>";
+				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch')\" >"+karutaStr[LANG]['karuta.batch']+"</a>";
+				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch-form')\" >"+karutaStr[LANG]['karuta.batch-form']+"</a>";
+				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].create('"+portfoliocode+"')\" >"+karutaStr[LANG]['create_tree']+"</a>";
+				html += "				</ul>";
+				html += "			</div>";
+			}
+			//------------------------end menu-burger
+			html += "		</div><!-- class='col-1' -->";
+			html += "	</div><!-- class='row' -->";
+			html += "</div><!-- class='project'-->"
+			$("#"+dest).append($(html));
+		} else {
+			//-------------------- PORTFOLIO ----------------------
+			var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
+			if ((parentcode!= null && portfolio_parentcode==parentcode) || (portfolio_parentcode=="" && parentcode=='false' && portfolio.semantictag.indexOf('karuta-project')<0)) {
+				$("#"+dest).append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"'></div>"));
+				if (!portfolio.notvisible || (USER.creator && !USER.limited) )
+					$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type,langcode,parentcode,owner));
+			}
+		}
+		$(window).scrollTop(0);
+		$("#wait-window").hide();
+	}
+}

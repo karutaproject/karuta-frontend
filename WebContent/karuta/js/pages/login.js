@@ -98,9 +98,9 @@ function getLogin(encrypt_url,lang)
 {
 	var html = "";
 	html += "<div id='connection-cas' style='display:none'>";
-	html += "<h5>Connexion avec un compte universitaire (CAS)</h5>";
+	html += "<h5>"+karutaStr[LANG]['connection-cas1']+"</h5>";
 	html += "<button class='button-login' onclick='javascript:callCAS()'>"+karutaStr[LANG]['login']+"</button>";
-	html += "<h5>Connexion hors compte universitaire</h5>";
+	html += "<h5>"+karutaStr[LANG]['connection-cas2']+"</h5>";
 	html += "</div>";
 
 	html += "<input id='useridentifier' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'>";
@@ -110,7 +110,7 @@ function getLogin(encrypt_url,lang)
 }
 
 //==============================
-function getNew()
+function getNewPassword()
 //==============================
 {
 	var html = "";
@@ -203,40 +203,47 @@ if (lang==null)
 function applyLoginConfiguration()
 //==============================
 {
+	var root = document.documentElement;
 	//========================================
 	$('body').css("background-image", g_configVar['login-background-image']);
 	//========================================
 	$('#welcome1').html(g_configVar['login-logo']);
 	$("#welcome1").attr("style",g_configVar['login-logo_style']);
 	//---------------------
-	$('#welcome2').html(g_configVar['login-subtitle']);
-	$("#welcome2").attr("style",g_configVar['login-subtitle-style']);
+	if (g_configVar['login-subtitle']!=undefined) {
+		$('#welcome2').html(g_configVar['login-subtitle']);
+		$("#welcome2").attr("style",g_configVar['login-subtitle-style']);
+	} else 
+		$('#welcome2').html(welcome2[LANG]);
 	//---------------------
-	$('#welcome3').html(g_configVar['login-subtext']);
-	$("#welcome3").attr("style",g_configVar['login-subtext-style']);
+	if (g_configVar['login-subtext']!=undefined) {
+		$('#welcome3').html(g_configVar['login-subtext']);
+		$("#welcome3").attr("style",g_configVar['login-subtext-style']);
+	} else 
+		$('#welcome3').html(welcome3[LANG]);
 	//---------------------
-	$('#form-signin').css("background-color",g_configVar['login-background-color']);
-	$('#form-signin').css("color",g_configVar['login-text-color']);
-	$('button.button-login').css("background-color",g_configVar['login-button-color']);
-	$('button.button-login').css("color",g_configVar['login-button-text-color']);
+	setConfigLoginColor(root,'login-background-color');
+	setConfigLoginColor(root,'login-text-color');
+	setConfigLoginColor(root,'login-button-background-color');
+	setConfigLoginColor(root,'login-button-text-color');
 	//========================================
-	if (g_configVar['login-new-password-display']=="0")
+	if (g_configVar['login-new-password-display']=="1") {
+		$('#newpassword').html(getNewPassword());
+		setConfigLoginColor(root,'login-new-password-background-color');
+		setConfigLoginColor(root,'login-new-password-text-color');
+		setConfigLoginColor(root,'login-new-password-button-background-color');
+		setConfigLoginColor(root,'login-new-password-button-text-color');
+	} else
 		$('#newpassword').hide();
-	else {
-		$('#newpassword').css("background-color",g_configVar['login-new-password-background-color']);
-		$('#newpassword').css("color",g_configVar['login-new-password-text-color']);
-		$('#form-send').css("background-color",g_configVar['login-new-password-button-color']);
-		$('#form-send').css("color",g_configVar['login-new-password-button-text-color']);
-	}
 	//========================================
-	if (g_configVar['login-new-account-display']=="0")
+	if (g_configVar['login-new-account-display']=="1") {
+		$('#newaccount').html(getNewAccount());
+		setConfigLoginColor(root,'login-new-account-background-color');
+		setConfigLoginColor(root,'login-new-account-text-color');
+		setConfigLoginColor(root,'login-new-account-button-background-color');
+		setConfigLoginColor(root,'login-new-account-button-text-color');
+	} else
 		$('#newaccount').hide();
-	else {
-		$('#newaccount').css("background-color",g_configVar['login-new-account-background-color']);
-		$('#newaccount').css("color",g_configVar['login-new-account-text-color']);
-		$('#form-send').css("background-color",g_configVar['login-new-account-button-color']);
-		$('#form-send').css("color",g_configVar['login-new-account-button-text-color']);
-	}
 }
 
 //==============================
@@ -276,20 +283,30 @@ function setLoginConfigurationVariables()
 			g_configVar['login-subtext'] = getText('config-login-subtext','Field','text',data);
 			g_configVar['login-subtext-style'] = getContentStyle('config-login-subtext',data);
 			g_configVar['login-text-color'] = getText('config-login-text-color','Color','text',data);
-			g_configVar['login-button-color'] = getText('config-login-button-color','Color','text',data);
+			g_configVar['login-button-background-color'] = getText('config-login-button-background-color','Color','text',data);
 			g_configVar['login-button-text-color'] = getText('config-login-button-text-color','Color','text',data);
 			//-----------New Password ----------
 			g_configVar['login-new-password-display'] = getText('config-login-new-password-display','Get_Resource','value',data);
 			g_configVar['login-new-password-background-color'] = getText('config-login-new-password-background-color','Color','text',data);
 			g_configVar['login-new-password-text-color'] = getText('config-login-new-password-text-color','Color','text',data);
-			g_configVar['login-new-password-button-color'] = getText('config-login-new-password-button-color','Color','text',data);
+			g_configVar['login-new-password-button-background-color'] = getText('config-login-new-password-button-background-color','Color','text',data);
 			g_configVar['login-new-password-button-text-color'] = getText('config-login-new-password-button-text-color','Color','text',data);
 			//------------New Account ---------
 			g_configVar['login-new-account-display'] = getText('config-login-new-account-display','Get_Resource','value',data);
 			g_configVar['login-new-account-background-color'] = getText('config-login-new-account-background-color','Color','text',data);
 			g_configVar['login-new-account-text-color'] = getText('config-login-new-account-text-color','Color','text',data);
-			g_configVar['login-new-account-button-color'] = getText('config-login-new-account-button-color','Color','text',data);
+			g_configVar['login-new-account-button-background-color'] = getText('config-login-new-account-button-background-color','Color','text',data);
 			g_configVar['login-new-account-button-text-color'] = getText('config-login-new-account-button-text-color','Color','text',data);
 		}
 	});
 }
+
+//=======================================================================
+function setConfigLoginColor(root,configname) 
+// =======================================================================
+{
+	var color = g_configVar[configname];
+	if (color!=undefined)
+		root.style.setProperty("--"+configname,color);
+}
+
