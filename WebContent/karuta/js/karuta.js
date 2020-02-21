@@ -1829,8 +1829,10 @@ function applyNavbarConfiguration()
 	if (g_configVar['navbar-display-language']=='0')
 		$("#navbar-language").hide();
 	var root = document.documentElement;
-	root.style.setProperty('--navbar-background-color', g_configVar['navbar-background-color']);
-	root.style.setProperty('--navbar-text-color', g_configVar['navbar-text-color']);
+	if (g_configVar['navbar-background-color']!=undefined)
+		root.style.setProperty('--navbar-background-color', g_configVar['navbar-background-color']);
+	if (g_configVar['navbar-text-color']!=undefined)
+		root.style.setProperty('--navbar-text-color', g_configVar['navbar-text-color']);
 }
 
 //==============================
@@ -1973,3 +1975,4 @@ function addautocomplete(input,arrayOfValues) {
 		closeAllLists(e.target);
 	});
 }
+

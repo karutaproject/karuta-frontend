@@ -88,9 +88,6 @@ body,
 /* ====================== */
 /*     LIST CONTAINER     */
 /* ====================== */
-#list-container {
-  background-color: var(--list-background-color);
-}
 #list-container .portfolios-not-in-project,
 #list-container .projects-nb,
 #list-container .portfolios-nb,
@@ -114,6 +111,10 @@ body,
   background-color: var(--list-element-background-color);
 }
 #list-container .dropdown-menu {
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+#list-container .dropdown-menu a.dropdown-item {
   color: var(--list-menu-text-color);
   background-color: var(--list-menu-background-color);
 }
@@ -142,6 +143,39 @@ body,
   margin-left: 5px;
   color: var(--list-title-color);
   background-color: var(--list-element-background-color-complement);
+}
+
+#projects {
+  width: calc(25% - 1px);
+  margin-bottom: 10px;
+}
+
+#folder-portfolios {
+  margin-top: 2px;
+  padding-bottom: 5px;
+  width: calc(75% - 1px);
+  float: right;
+  background-color: var(--list-element-background-color);
+}
+#folder-portfolios .project-label {
+  cursor: none;
+  font-weight: bold;
+}
+#folder-portfolios .row-label {
+  padding-bottom: 5px;
+}
+#folder-portfolios .project {
+  border-bottom: 1px solid var(--list-element-text-color);
+  margin-bottom: 10px;
+}
+
+#gutter {
+  width: 2px;
+  float: right;
+}
+
+.project-label {
+  cursor: pointer;
 }
 
 #main-portfoliosgroup .btn, #main-user .btn, #main-usersgroup .btn, #main-exec-batch .btn, #main-exec-report .btn {
@@ -1310,34 +1344,35 @@ hr {
 /* ====================== */
 /*         LOGIN          */
 /* ====================== */
+/*
 .login {
-  margin-top: 200px;
-  text-align: center;
-  width: 100%;
+	margin-top:200px;
+	text-align:center;
+	width:100%;
 }
 
 .login span {
-  text-align: right;
-  display: inline-block;
-  width: 100px;
-  margin-right: 10px;
+	text-align:right;
+	display: inline-block;
+	width:100px;
+	margin-right:10px;
 }
-
 .login div {
-  margin-bottom: 15px;
+	margin-bottom:15px;
 }
 
 .login .newpwd {
-  font-size: 90%;
-  width: 320px;
-  text-align: justify;
+	font-size:90%;
+	width:320px;
+	text-align:justify;
 }
 
 .login .check {
-  vertical-align: middle;
-  height: 50px;
+	vertical-align:middle;
+	height:50px;
 }
 
+*/
 .select-label .btn {
   border: 1px solid #ced4da;
 }
@@ -1457,13 +1492,6 @@ table.tablesorter th.restore {
   border-width: 5px;
 }
 
-/*
-.rowContext {
-	border-top:1px solid #C0C0C0;
-	margin-top:5px;
-	padding-top: 5px;
-}
-*/
 .specific-menu {
   width: 220px;
 }
@@ -1488,11 +1516,11 @@ table.tablesorter th.restore {
    ====================*/
 #rights {
   margin-left: 250px;
-  border: 1px solid lightgrey;
+  border: 1px solid #D3D3D3;
 }
 #rights td {
   padding: 5px;
-  border: 1px solid lightgrey;
+  border: 1px solid #D3D3D3;
 }
 
 /* ====================
@@ -1500,7 +1528,7 @@ table.tablesorter th.restore {
    ====================*/
 .lang {
   padding: 5px;
-  background-color: lightgrey;
+  background-color: #D3D3D3;
 }
 
 /* ====================

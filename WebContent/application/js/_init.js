@@ -34,10 +34,16 @@ g_configVar['login-new-account-display'] = "0";
 g_configVar['navbar-brand-logo'] = "<img src='"+karuta_url+"/karuta/img/logofonblanc.jpg'/>";
 //-----------LOGIN PAGE -----------------------
 g_configVar['login-logo'] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
+var welcome2 = {};			//  Welcome title
+welcome2["fr"] = "BIENVENUE DANS KARUTA 3.0";
+welcome2["en"] = "WELCOME TO KARUTA 3.0";
+var welcome3 = {}; 			//  Welcome sub-title
+welcome3["fr"] = "PORTFOLIO OPEN SOURCE";
+welcome3["en"] = "OPEN SOURCE PORTFOLIO";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA 3.0 alpha";
-	welcome4["en"] = "WELCOME TO KARUTA 3.0 alpha";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 3.0";
+	welcome4["en"] = "WELCOME TO KARUTA 3.0";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";

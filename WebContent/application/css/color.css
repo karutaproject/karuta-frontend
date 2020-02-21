@@ -4,13 +4,18 @@
 	--navbar-text-color:#45bbf8;
 	
 	/* ========== login page =============== */
-	--login-color:#09bbd9;
-	--button-login-background-color:black;
-	--button-login-color:white;
-	--button-login-color-hover:#e0006d;
-	--form-send-background-color:#b9da00;
-	--form-send-background-color-hover:#e0006d;
-	
+	--login-background-color:#09bbd9;
+	--login-text-color:#ffffff;
+	--login-button-background-color:#c4d014;
+	--login-button-text-color:#000000;
+	--login-new-password-background-color: #cc2072;
+	--login-new-password-text-color: #000000;
+	--login-new-password-button-background-color: #edb81b;
+	--login-new-password-button-text-color: #000000;
+	--login-new-account-background-color: #ffc000;
+	--login-new-account-text-color: #ff0000;
+	--login-new-account-button-background-color: #cc2072;
+	--login-new-account-button-text-color: #ffff00;
 	
 	/* ========== list configuration =============== */
 	--list-welcome-title-color:white;
@@ -19,12 +24,14 @@
 	--list-welcome-box-background-color:black;
 	--list-welcome-box-border-color:white;
 
-	--list-title-color:black;
+	--list-title-color: white;
 	--list-menu-text-color:white;
-	--list-menu-backgound-color:#073765;
+	--list-menu-background-color:#073765;
+	--list-element-background-color: #00274e;
+	--list-element-background-color-complement:#073765;
 	--list-element-text-color:white;
 	--list-background-color:#073765;
-	--list-background-color-complement:#00274e;
+	--list-background-color-complement:#073765;
 	--list-button-background-color:black;
 	--list-button-text-color:white;
 	
