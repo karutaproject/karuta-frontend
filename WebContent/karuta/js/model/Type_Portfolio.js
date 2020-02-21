@@ -3043,7 +3043,6 @@ UIFactory["Portfolio"].displayFolderContent = function(dest,parentcode,langcode)
 			//-------------------- PROJECT ----------------------
 			projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
 			displayProject[portfolio.id] = localStorage.getItem('dp'+portfolio.id);
-//			displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
 			projects_list[number_of_projects].portfolios += portfolio.id;
 			number_of_projects_portfolios = 0;
 			html += "<div id='project_"+portfolio.id+"' class='project'>";
@@ -3093,6 +3092,20 @@ UIFactory["Portfolio"].displayFolderContent = function(dest,parentcode,langcode)
 			html += "	</div><!-- class='row' -->";
 			html += "</div><!-- class='project'-->"
 			$("#"+dest).append($(html));
+			//----------------------
+			var portfolio_list = "";
+			for (var j=0; j<portfolios_list.length;j++){
+				var portfolio1 = portfolios_list[j];
+				var portfoliocode1 = portfolio1.code_node.text();
+				var portfolio_parentcode1 = portfoliocode1.substring(0,portfoliocode1.indexOf("."));
+				if ((parentcode!= null && portfolio_parentcode1==parentcode) || portfoliocode1==parentcode) {
+					portfolio_list += "," + portfolio1.id;
+				}
+			}
+			if (portfolio_list.length>0)
+				portfolio_list = portfolio_list.substring(1);
+			$("#export-"+portfolio.id).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+portfolio_list);
+			//----------------------
 		} else {
 			//-------------------- PORTFOLIO ----------------------
 			var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));

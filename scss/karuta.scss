@@ -194,13 +194,19 @@
 	
 
 //========================================================
-#main-portfoliosgroup .btn,#main-user .btn,#main-usersgroup .btn,#main-exec-batch .btn,#main-exec-report .btn {background-color: var(--list-button-background-color);}
+#main-portfoliosgroup .btn,
+#main-user .btn,#main-usersgroup .btn,
+#main-exec-batch .btn,
+#main-exec-report .btn {
+	background-color: var(--list-button-background-color);
+}
 
 
 
 #main-user .item:hover{
-			background-color: var(--list-element-background-color-complement);
-		}
+	background-color: var(--list-element-background-color-complement);
+}
+	
 	
 	#active,
 	#usersgroups .usersgroup-users,
@@ -476,10 +482,11 @@
 		#refresh-portfolio {
 			padding-left: 15px;
 		}
+		.navbar-brand {
+			cursor:pointer;
+		}
 	}
 
-
-	
 
 /* ==================================================================== */
 /*                          PORTFOLIO                                   */
@@ -728,12 +735,6 @@
 	min-height: 34px;
 }
 
-		.resource-standard .extra .csv-button,
-		.resource-standard .extra .pdf-button {
-			background: var(--portfolio-buttons-background-color);
-			border:1px solid var(--portfolio-resource-border-color);
-		}
-
 	.resource-standard {
 		padding-top:10px;
 		.buttons{
@@ -759,6 +760,11 @@
 			padding-left:0px;
 			padding-right:0px;
 			margin-left:0px;
+		}
+		.extra .csv-button,
+		.extra .pdf-button {
+			background: var(--portfolio-buttons-background-color);
+			border:1px solid var(--portfolio-resource-border-color);
 		}
 	}
 
@@ -868,13 +874,7 @@
 /* ============================ */
 /* ============================ */
 
-/*
-#edit-window-body-resource .dropdown-menu,
-.Get_Resource .dropdown-menu,
-.Get_Get_Resource .dropdown-menu {
-	font-size: 12px;
-}
-*/
+
 /* ====================== */
 /*     ROME               */
 /* ====================== */

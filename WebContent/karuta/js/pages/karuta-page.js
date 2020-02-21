@@ -1,3 +1,7 @@
+karutaStr['fr'] = new Array();
+karutaStr['en'] = new Array();
+plugin_resources = new Array();
+
 //==============================
 function initKarutaPage()
 //==============================
@@ -214,6 +218,18 @@ function setConfigurationVariables()
 			g_configVar['svg-web8-color'] = getText('config-svg-web8-color','Color','text',data);
 			g_configVar['svg-web9-color'] = getText('config-svg-web9-color','Color','text',data);
 
+			//----- Load Plugins
+			var jsfile_nodes = [];
+			jsfile_nodes = $("asmContext:has(metadata[semantictag='plugin-file-js'])",data);
+			for (var i=0; i<jsfile_nodes.length; i++){
+				var fileid = $(jsfile_nodes[i]).attr("id");
+				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+				$.ajax({
+					url: url,
+					dataType: "script",
+				});
+			}
+			
 		}
 	});
 }

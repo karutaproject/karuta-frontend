@@ -178,7 +178,10 @@ body,
   cursor: pointer;
 }
 
-#main-portfoliosgroup .btn, #main-user .btn, #main-usersgroup .btn, #main-exec-batch .btn, #main-exec-report .btn {
+#main-portfoliosgroup .btn,
+#main-user .btn, #main-usersgroup .btn,
+#main-exec-batch .btn,
+#main-exec-report .btn {
   background-color: var(--list-button-background-color);
 }
 
@@ -436,6 +439,9 @@ body,
 #sub-bar #refresh-portfolio {
   padding-left: 15px;
 }
+#sub-bar .navbar-brand {
+  cursor: pointer;
+}
 
 /* ==================================================================== */
 /*                          PORTFOLIO                                   */
@@ -655,12 +661,6 @@ table[name=res-div] {
   min-height: 34px;
 }
 
-.resource-standard .extra .csv-button,
-.resource-standard .extra .pdf-button {
-  background: var(--portfolio-buttons-background-color);
-  border: 1px solid var(--portfolio-resource-border-color);
-}
-
 .resource-standard {
   padding-top: 10px;
 }
@@ -687,6 +687,11 @@ table[name=res-div] {
   padding-left: 0px;
   padding-right: 0px;
   margin-left: 0px;
+}
+.resource-standard .extra .csv-button,
+.resource-standard .extra .pdf-button {
+  background: var(--portfolio-buttons-background-color);
+  border: 1px solid var(--portfolio-resource-border-color);
 }
 
 .standard-resource-Image-Img-Label .title {
@@ -783,13 +788,6 @@ table[name=res-div] {
 /* ============================ */
 /* ============================ */
 /* ============================ */
-/*
-#edit-window-body-resource .dropdown-menu,
-.Get_Resource .dropdown-menu,
-.Get_Get_Resource .dropdown-menu {
-	font-size: 12px;
-}
-*/
 /* ====================== */
 /*     ROME               */
 /* ====================== */

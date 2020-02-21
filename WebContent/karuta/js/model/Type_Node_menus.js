@@ -184,9 +184,9 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4);
 		html += "<hr>";
-		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4);
-		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4);
-		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','ImageBlock','ImageBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-other-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-other-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-other-resources','ImageBlock','ImageBlock',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-bubbles','bubble_level1','BubbleMap',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'europass.parts','EuropassL','Europass',databack,callback,param2,param3,param4);
 		html += "<hr>";
@@ -195,6 +195,13 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Get_Resource','Get_Get_Resource',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Double_Resource','Get_Double_Resource',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4);
+		//--------------------------------
+		if (plugin_resources.length>0){
+			html += "<hr>";
+			for (var i=0; i<plugin_resources.length; i++) {
+				html += UIFactory.Node.getItemMenu(this.id,plugin_resources[i].location,plugin_resources[i].tag,plugin_resources[i].label,databack,callback,param2,param3,param4);
+			}
+		}
 		//--------------------------------
 		html += "	</div>"; // class='dropdown-menu'
 		html += "</div>"; // class='dropdown'

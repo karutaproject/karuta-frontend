@@ -1,6 +1,5 @@
 
 
-karutaStr['fr'] = new Array();
 //----------------------------------------------------
 karutaStr['fr']['language']="Français";
 karutaStr['fr']['flag-name']="France";
