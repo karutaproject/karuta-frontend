@@ -90,6 +90,7 @@ body,
 /* ====================== */
 #list-container .portfolios-not-in-project,
 #list-container .projects-nb,
+#list-container .bin-nb,
 #list-container .portfolios-nb,
 #list-container .project {
   background-color: var(--list-element-background-color);
@@ -97,6 +98,10 @@ body,
 #list-container .btn {
   background-color: var(--list-button-background-color);
   color: var(--list-button-text-color);
+}
+#list-container .list-btn {
+  line-height: 1.1;
+  margin-left: 5px;
 }
 #list-container #bin-label {
   margin-top: 5px;
@@ -109,6 +114,14 @@ body,
 #list-container #bin {
   padding: 5px;
   background-color: var(--list-element-background-color);
+}
+#list-container #projects .project {
+  margin-top: 10px;
+  padding: 7px;
+  background-color: var(--list-element-background-color);
+}
+#list-container #projects .active {
+  background-color: var(--list-menu-background-color);
 }
 #list-container .dropdown-menu {
   color: var(--list-menu-text-color);
@@ -165,8 +178,12 @@ body,
   padding-bottom: 5px;
 }
 #folder-portfolios .project {
-  border-bottom: 1px solid var(--list-element-text-color);
+  padding: 7px;
+  background-color: var(--list-button-background-color);
   margin-bottom: 10px;
+}
+#folder-portfolios .project .btn {
+  background-color: var(--list-element-background-color);
 }
 
 #gutter {
@@ -938,7 +955,6 @@ h3 {
 
 #usersgroups .usersgroup-users,
 .usersgroup,
-.project,
 .portfolios-not-in-project,
 .portfoliosgroup {
   margin-top: 10px;

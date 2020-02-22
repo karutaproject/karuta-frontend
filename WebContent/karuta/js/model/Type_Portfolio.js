@@ -2979,20 +2979,17 @@ UIFactory["Portfolio"].displayFolder = function(nb,dest,type,langcode,parentcode
 					projects_list[number_of_projects].portfolios += portfolio.id;
 					number_of_projects_portfolios = 0;
 					html += "<div id='project_"+portfolio.id+"' class='project'>";
-					html += "	<div class='row row-label'>";
-//					if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
-//						html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-1'><i id='toggleContent_"+portfolio.id+"' class='button fas fa-minus'></i></div>";
-//					else
-//						html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-1'><i id='toggleContent_"+portfolio.id+"' class='button fas fa-plus'></i></div>";
-					html += "		<div id='portfoliolabel_"+portfolio.id+"' onclick=\"javascript:loadAndDisplayFolderContent('folder-portfolios','"+portfoliocode+"')\" class='project-label col-8'>"+portfolio_label+"&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span></div>";
-
+					html += "	<div class='row-label'>";
+					html += "		<div id='portfoliolabel_"+portfolio.id+"' onclick=\"javascript:loadAndDisplayFolderContent('folder-portfolios','"+portfoliocode+"');$('.project').removeClass('active');$('#project_"+portfolio.id+"').addClass('active');\" class='project-label'>"+portfolio_label+"&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span></div>";
 					html += "		</div>";
 					html += "	</div>";
 					html += "</div><!-- class='project'-->"
+					$("#projects").append($(html));
 					if (!loadedFolders[portfoliocode] && g_nb_trees>100 && localStorage.getItem('currentDisplayedFolderCode')==portfoliocode) {
 						loadFolderContent('folder-portfolios',portfoliocode);
+						$('.project').removeClass('active');
+						$("#project_"+portfolio.id).addClass('active');
 					}
-					$("#projects").append($(html));
 					countProjectPortfolios(projects_list[number_of_projects].uuid);
 					number_of_projects ++;
 					nb++;

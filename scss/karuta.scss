@@ -104,6 +104,7 @@
 //		background-color: var(--list-background-color);
 		.portfolios-not-in-project,
 		.projects-nb,
+		.bin-nb,
 		.portfolios-nb,
 		.project {
 			background-color: var(--list-element-background-color);
@@ -111,6 +112,10 @@
 		.btn  {
 			background-color:var(--list-button-background-color);
 			color:var(--list-button-text-color);
+		}
+		.list-btn {
+			line-height:1.1;
+			margin-left:5px;
 		}
 		#bin-label{
 			margin-top:5px;
@@ -123,6 +128,16 @@
 		#bin {
 			padding:5px;
 			background-color: var(--list-element-background-color);
+		}
+		#projects {
+			.project {
+				margin-top:10px;
+				padding:7px;
+				background-color:var(--list-element-background-color);
+			}
+			.active {
+				background-color: var(--list-menu-background-color);
+			}
 		}
 		.dropdown-menu {
 			color: var(--list-menu-text-color);
@@ -177,9 +192,14 @@
 		}
 		.row-label {
 			padding-bottom:5px;
-		}.project {
-			border-bottom : 1px solid var(--list-element-text-color);
+		}
+		.project {
+			padding:7px;
+			background-color : var(--list-button-background-color);
 			margin-bottom : 10px;
+			.btn {
+				background-color: var(--list-element-background-color);
+			}
 		}
 	}
 	#gutter {
@@ -1044,7 +1064,6 @@
 
 	#usersgroups .usersgroup-users,
 	.usersgroup,
-	.project,
 	.portfolios-not-in-project,
 	.portfoliosgroup {
 		margin-top:10px;

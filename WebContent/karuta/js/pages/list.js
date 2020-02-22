@@ -9,24 +9,25 @@ function getList()
 		text1 = karutaStr[LANG]['projects-admin'];
 		text2 = karutaStr[LANG]['portfolios-admin'];
 	}
-	html += "<h3><span id='projects-label'>"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span></h3>";
+	html += "<h3><span id='projects-label'>"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span>";
+	html +="<button class='btn list-btn' onclick='UIFactory.Portfolio.createProject()'>"+karutaStr[LANG]['create_project']+"</button>";
+	html += "</h3>";
+
 	html += "<div id='folder-portfolios'></div>";
 	html += "<div id='gutter'></div>";
 	html += "<div id='projects'></div>";
 	html += "<div id='portfolios-div'>";
 	html += "<h3 id='portfolios-not-in-project'>";
 	html += "	<span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span>";
-	html += "	<button class='btn ' onclick=\"loadAndDisplayFolderContent('folder-portfolios','false');\">"+ karutaStr[LANG]["see"] + "</button>";
+	html += "	<button class='btn list-btn' onclick=\"loadAndDisplayFolderContent('folder-portfolios','false');\">"+ karutaStr[LANG]["see"] + "</button>";
 	html += "</h3>";
 	if (USER.admin || (USER.creator && !USER.limited) ) {
 		var text2 = karutaStr[LANG]['bin'];
 		if (USER.admin)
 			text2 = karutaStr[LANG]['bin-admin'];
-		html += "<h3 id='bin-label'>"+text2+"&nbsp";
-//		html += "<button class='btn ' onclick=\"confirmDelPortfolios_EmptyBin()\">"+ karutaStr[LANG]["empty-bin"] + "</button>";
-		html += "<button class='btn ' onclick=\"UIFactory.Portfolio.displayBin('folder-portfolios','bin');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see-bin"] + "</button>";
+		html += "<h3 id='bin-label'>"+text2+"&nbsp<span class='bin-nb badge' id='bin-nb'></span>";
+		html += "<button class='btn list-btn' onclick=\"UIFactory.Portfolio.displayBin('folder-portfolios','bin');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see-bin"] + "</button>";
 		html += "</h3>";
-//		html += "<div  id='bin'></div>";
 	}
 	return html;
 }
@@ -126,8 +127,8 @@ function fill_list_page()
 		html  = "<div class='dropdown'>";
 		html += "	<button id='list-menu' class='btn dropdown-toggle' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'>&nbsp;Menu</button>";
 		html += "	<div class='dropdown-menu' aria-labelledby='list-menu'>";
-		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].createProject()\" >"+karutaStr[LANG]['create_project']+"</a>";
-		html += "		<div class='dropdown-divider'></div>";
+//		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory['Portfolio'].createProject()\" >"+karutaStr[LANG]['create_project']+"</a>";
+//		html += "		<div class='dropdown-divider'></div>";
 		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importFile()\" >"+karutaStr[LANG]['import_portfolio']+"</a>";
 		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importZip()\" >"+karutaStr[LANG]['import_zip']+"</a>";
 		html += "		<div class='dropdown-divider'></div>";
@@ -194,9 +195,12 @@ function fill_list_page()
 									dataType : "xml",
 									url : serverBCK_API+"/portfolios?active=false",
 									success : function(data) {
-										var destid = $("div[id='bin']");
+										var nb_portfolios = parseInt($('portfolios',data).attr('count'));
+										if (nb_portfolios==0)
+											$("#bin-label").hide();
+										else
+											$("#bin-nb").html(nb_portfolios);
 										UIFactory["Portfolio"].parseBin(data);
-//										UIFactory["Portfolio"].displayBin('bin','bin');
 									},
 									error : function(jqxhr,textStatus) {
 										alertHTML("Server Error GET active=false: "+textStatus);
@@ -230,9 +234,13 @@ function fill_list_page()
 									dataType : "xml",
 									url : serverBCK_API+"/portfolios?active=false",
 									success : function(data) {
+										var nb_portfolios = parseInt($('portfolios',data).attr('count'));
+										if (nb_portfolios==0)
+											$("#bin-label").hide();
+										else
+											$("#bin-nb").html(nb_portfolios);
 										var destid = $("div[id='bin']");
 										UIFactory["Portfolio"].parseBin(data);
-//										UIFactory["Portfolio"].displayBin('bin','bin');
 									},
 									error : function(jqxhr,textStatus) {
 										alertHTML("Server Error GET active=false: "+textStatus);
