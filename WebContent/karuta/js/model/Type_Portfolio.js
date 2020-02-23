@@ -412,7 +412,9 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 UIFactory["Portfolio"].displayBin = function(dest,type,langcode)
 //==================================
 {
-	$("#"+dest).html("");
+	var text2 = karutaStr[LANG]['bin'];
+	var html = "<h3  class='bin-label'>"+text2+"&nbsp<button class='btn list-btn' onclick=\"confirmDelPortfolios_EmptyBin()\">"+karutaStr[LANG]["empty-bin"]+"</button></h3>";
+	$("#"+dest).html($(html));
 	UIFactory.Portfolio.displayBinTree(0,dest,type,langcode);
 	if (bin_list.length==0 || number_of_bins==0)
 		$("#bin-label").hide();
@@ -3024,6 +3026,12 @@ UIFactory["Portfolio"].displayFolderContent = function(dest,parentcode,langcode)
 	localStorage.setItem('currentDisplayedFolderCode',parentcode);
 	loadedFolders[parentcode] = true;
 	$("#"+dest).html("");
+	var html = "";
+	if (parentcode=='false') {
+		var text2 = karutaStr[LANG]['portfolios-not-in-project'];
+		html = "<h3  class='bin-label'>"+text2+"</h3>";
+	}
+	$("#"+dest).html($(html));
 	var type = "list";
 	if (langcode==null)
 		langcode = LANGCODE;

@@ -177,13 +177,17 @@
 
 	//=============================
 	#projects {
-		width:calc(25% - 1px);
+		width:calc(25% - 2px);
 		margin-bottom:10px;
 	}
+	#gutter {
+		width:4px;
+		float:right;
+	}
 	#folder-portfolios {
+		width:calc(75% - 2px);
 		margin-top:2px;
 		padding-bottom:5px;
-		width:calc(75% - 1px);
 		float:right;
 		background-color: var(--list-element-background-color);
 		.project-label{
@@ -193,23 +197,20 @@
 		.row-label {
 			padding-bottom:5px;
 		}
-		.project {
+		.project,
+		h3.bin-label {
 			padding:7px;
 			background-color : var(--list-button-background-color);
+			color : var(--list-element-text-color);
 			margin-bottom : 10px;
 			.btn {
 				background-color: var(--list-element-background-color);
 			}
 		}
 	}
-	#gutter {
-		width:2px;
-		float:right;
-	}
 	.project-label {
 		cursor: pointer;
 	}
-
 	//=============================
 	
 

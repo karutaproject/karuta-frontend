@@ -19,14 +19,14 @@ function getList()
 	html += "<div id='portfolios-div'>";
 	html += "<h3 id='portfolios-not-in-project'>";
 	html += "	<span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span>";
-	html += "	<button class='btn list-btn' onclick=\"loadAndDisplayFolderContent('folder-portfolios','false');\">"+ karutaStr[LANG]["see"] + "</button>";
+	html += "	<button class='btn list-btn' onclick=\"loadAndDisplayFolderContent('folder-portfolios','false');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
 	html += "</h3>";
 	if (USER.admin || (USER.creator && !USER.limited) ) {
 		var text2 = karutaStr[LANG]['bin'];
 		if (USER.admin)
 			text2 = karutaStr[LANG]['bin-admin'];
 		html += "<h3 id='bin-label'>"+text2+"&nbsp<span class='bin-nb badge' id='bin-nb'></span>";
-		html += "<button class='btn list-btn' onclick=\"UIFactory.Portfolio.displayBin('folder-portfolios','bin');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see-bin"] + "</button>";
+		html += "<button class='btn list-btn' onclick=\"UIFactory.Portfolio.displayBin('folder-portfolios','bin');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see-bin"] + "</button>";
 		html += "</h3>";
 	}
 	return html;
