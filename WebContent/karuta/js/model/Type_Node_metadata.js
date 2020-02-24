@@ -829,7 +829,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	//---------------------------------------------------
 	var rights = this.getRights(this.id);
 	var roles = $("role",rights);
-	var model = roles.length==0;
+	var model = roles.length<3;
 	//---------------------------------------------------
 	var name = this.asmtype;
 	var semtag =  ($("metadata",this.node)[0]==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');

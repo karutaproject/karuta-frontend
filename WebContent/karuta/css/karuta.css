@@ -90,6 +90,7 @@ body,
 /* ====================== */
 #list-container .portfolios-not-in-project,
 #list-container .projects-nb,
+#list-container .bin-nb,
 #list-container .portfolios-nb,
 #list-container .project {
   background-color: var(--list-element-background-color);
@@ -97,6 +98,10 @@ body,
 #list-container .btn {
   background-color: var(--list-button-background-color);
   color: var(--list-button-text-color);
+}
+#list-container .list-btn {
+  line-height: 1.1;
+  margin-left: 5px;
 }
 #list-container #bin-label {
   margin-top: 5px;
@@ -109,6 +114,14 @@ body,
 #list-container #bin {
   padding: 5px;
   background-color: var(--list-element-background-color);
+}
+#list-container #projects .project {
+  margin-top: 10px;
+  padding: 7px;
+  background-color: var(--list-element-background-color);
+}
+#list-container #projects .active {
+  background-color: var(--list-menu-background-color);
 }
 #list-container .dropdown-menu {
   color: var(--list-menu-text-color);
@@ -146,14 +159,19 @@ body,
 }
 
 #projects {
-  width: calc(25% - 1px);
+  width: calc(25% - 2px);
   margin-bottom: 10px;
 }
 
+#gutter {
+  width: 4px;
+  float: right;
+}
+
 #folder-portfolios {
+  width: calc(75% - 2px);
   margin-top: 2px;
   padding-bottom: 5px;
-  width: calc(75% - 1px);
   float: right;
   background-color: var(--list-element-background-color);
 }
@@ -164,21 +182,26 @@ body,
 #folder-portfolios .row-label {
   padding-bottom: 5px;
 }
-#folder-portfolios .project {
-  border-bottom: 1px solid var(--list-element-text-color);
+#folder-portfolios .project,
+#folder-portfolios h3.bin-label {
+  padding: 7px;
+  background-color: var(--list-button-background-color);
+  color: var(--list-element-text-color);
   margin-bottom: 10px;
 }
-
-#gutter {
-  width: 2px;
-  float: right;
+#folder-portfolios .project .btn,
+#folder-portfolios h3.bin-label .btn {
+  background-color: var(--list-element-background-color);
 }
 
 .project-label {
   cursor: pointer;
 }
 
-#main-portfoliosgroup .btn, #main-user .btn, #main-usersgroup .btn, #main-exec-batch .btn, #main-exec-report .btn {
+#main-portfoliosgroup .btn,
+#main-user .btn, #main-usersgroup .btn,
+#main-exec-batch .btn,
+#main-exec-report .btn {
   background-color: var(--list-button-background-color);
 }
 
@@ -436,6 +459,9 @@ body,
 #sub-bar #refresh-portfolio {
   padding-left: 15px;
 }
+#sub-bar .navbar-brand {
+  cursor: pointer;
+}
 
 /* ==================================================================== */
 /*                          PORTFOLIO                                   */
@@ -655,12 +681,6 @@ table[name=res-div] {
   min-height: 34px;
 }
 
-.resource-standard .extra .csv-button,
-.resource-standard .extra .pdf-button {
-  background: var(--portfolio-buttons-background-color);
-  border: 1px solid var(--portfolio-resource-border-color);
-}
-
 .resource-standard {
   padding-top: 10px;
 }
@@ -687,6 +707,11 @@ table[name=res-div] {
   padding-left: 0px;
   padding-right: 0px;
   margin-left: 0px;
+}
+.resource-standard .extra .csv-button,
+.resource-standard .extra .pdf-button {
+  background: var(--portfolio-buttons-background-color);
+  border: 1px solid var(--portfolio-resource-border-color);
 }
 
 .standard-resource-Image-Img-Label .title {
@@ -783,13 +808,6 @@ table[name=res-div] {
 /* ============================ */
 /* ============================ */
 /* ============================ */
-/*
-#edit-window-body-resource .dropdown-menu,
-.Get_Resource .dropdown-menu,
-.Get_Get_Resource .dropdown-menu {
-	font-size: 12px;
-}
-*/
 /* ====================== */
 /*     ROME               */
 /* ====================== */
@@ -940,7 +958,6 @@ h3 {
 
 #usersgroups .usersgroup-users,
 .usersgroup,
-.project,
 .portfolios-not-in-project,
 .portfoliosgroup {
   margin-top: 10px;
