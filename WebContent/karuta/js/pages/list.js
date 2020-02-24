@@ -19,7 +19,7 @@ function getList()
 	html += "<div id='portfolios-div'>";
 	html += "<h3 id='portfolios-not-in-project'>";
 	html += "	<span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span>";
-	html += "	<button class='btn list-btn' onclick=\"loadAndDisplayFolderContent('folder-portfolios','false');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
+	html += "	<button class='btn list-btn' onclick=\"loadAnddisplayProjectContent('folder-portfolios','false');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
 	html += "</h3>";
 	if (USER.admin || (USER.creator && !USER.limited) ) {
 		var text2 = karutaStr[LANG]['bin'];
@@ -404,7 +404,7 @@ function loadProjectPortfolios(portfoliocode,nb,destid,type,langcode)
 }
 
 //==============================
-function loadFolderContent(dest,portfoliocode)
+function loadProjectContent(dest,portfoliocode)
 //==============================
 {
 	$.ajax({
@@ -413,7 +413,7 @@ function loadFolderContent(dest,portfoliocode)
 		url : serverBCK_API+"/portfolios?active=1&project="+portfoliocode,
 		success : function(data) {
 			UIFactory["Portfolio"].parse_add(data);
-			UIFactory["Portfolio"].displayFolderContent(dest,portfoliocode);
+			UIFactory["Portfolio"].displayProjectContent(dest,portfoliocode);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
