@@ -172,6 +172,15 @@
 			color: var(--list-title-color);
 			background-color: var(--list-element-background-color-complement);
 		}
+		h3.bin-label {
+			padding:7px;
+			background-color : var(--list-button-background-color);
+			color : var(--list-element-text-color);
+			margin-bottom : 10px;
+			.btn {
+				background-color: var(--list-element-background-color);
+			}
+		}
 	}
 
 	//=============================
@@ -179,11 +188,11 @@
 		width:calc(25% - 2px);
 		margin-bottom:10px;
 	}
-	#gutter {
+	#gutter-project {
 		width:4px;
 		float:right;
 	}
-	#folder-portfolios {
+	#project-portfolios {
 		width:calc(75% - 2px);
 		margin-top:2px;
 		padding-bottom:5px;
@@ -196,8 +205,7 @@
 		.row-label {
 			padding-bottom:5px;
 		}
-		.project,
-		h3.bin-label {
+		.project {
 			padding:7px;
 			background-color : var(--list-button-background-color);
 			color : var(--list-element-text-color);
@@ -207,8 +215,42 @@
 			}
 		}
 	}
+
 	.project-label {
 		cursor: pointer;
+	}
+
+	//=============================
+	#folders {
+		width:calc(25% - 2px);
+		margin-bottom:10px;
+	}
+	#gutter-folder {
+		width:4px;
+		float:right;
+	}
+	#folder-portfolios {
+		width:calc(75% - 2px);
+		margin-top:2px;
+		padding-bottom:5px;
+		float:right;
+		background-color: var(--list-element-background-color);
+		.folder-label{
+			cursor:none;
+			font-weight:bold;
+		}
+		.row-label {
+			padding-bottom:5px;
+		}
+		.folder {
+			padding:7px;
+			background-color : var(--list-button-background-color);
+			color : var(--list-element-text-color);
+			margin-bottom : 10px;
+			.btn {
+				background-color: var(--list-element-background-color);
+			}
+		}
 	}
 
 /* ====================== */
