@@ -101,7 +101,6 @@
 /* ====================== */
 
 	#list-container {
-//		background-color: var(--list-background-color);
 		.portfolios-not-in-project,
 		.projects-nb,
 		.bin-nb,
@@ -211,12 +210,27 @@
 	.project-label {
 		cursor: pointer;
 	}
-	//=============================
-	
+
+/* ====================== */
+/*     PAGE USERS         */
+/* ====================== */
+
+	#main-user {
+		.btn {
+			background-color: var(--list-button-background-color);
+		}
+		#active {
+			padding:10px;
+			background-color: var(--list-element-background-color);
+		}
+		.item:hover{
+			background-color: var(--list-element-background-color-complement);
+		}
+	}
 
 //========================================================
 #main-portfoliosgroup .btn,
-#main-user .btn,#main-usersgroup .btn,
+#main-usersgroup .btn,
 #main-exec-batch .btn,
 #main-exec-report .btn {
 	background-color: var(--list-button-background-color);
@@ -224,9 +238,6 @@
 
 
 
-#main-user .item:hover{
-	background-color: var(--list-element-background-color-complement);
-}
 	
 	
 	#active,
@@ -941,16 +952,6 @@
 
 
 
-/* ====================== */
-/*     PAGE USERS         */
-/* ====================== */
-
-	#active {
-		padding:10px;
-	}
-	#main-user .item:hover {
-		background-color:var(--list-background-color-complement);
-	}
 
 /* ====================== */
 /*     PAGE USERGROUP     */
