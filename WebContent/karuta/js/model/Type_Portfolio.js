@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2018 - ePortfolium - Licensed under the
+	Copyright 2020 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -23,7 +23,6 @@ var number_of_projects = 0;
 var number_of_projects_portfolios = 0;
 var number_of_portfolios = 0;
 var number_of_bins = 0;
-var loadedProjects = {};
 var loadedProjects = {};
 var currentDisplayedFolderCode = "";
 /// Check namespace existence
@@ -381,7 +380,7 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 				else
 					html += "	<div class='project-content' id='content-"+portfolio.id+"' style='display:none'></div>";
 				html += "</div><!-- class='project'-->"
-				$("#folder-portfolios").append($(html));
+				$("#project-portfolios").append($(html));
 				UIFactory["Portfolio"].displayComments('comments_'+portfolio.id,portfolio);
 				nb++;
 				UIFactory["Portfolio"].displayBinTree(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
@@ -393,7 +392,7 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 				}
 				else {
 					number_of_bins++;
-					$("#folder-portfolios").append($("<div class='row portfolio-row' id='portfolio_"+portfolio.id+"'></div>"));
+					$("#project-portfolios").append($("<div class='row portfolio-row' id='portfolio_"+portfolio.id+"'></div>"));
 				}
 				$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type,langcode,parentcode,owner));
 				nb++;
@@ -420,7 +419,7 @@ UIFactory["Portfolio"].displayBin = function(dest,type,langcode)
 		$("#bin-label").hide();
 	else {
 		$("#bin-label").show();
-		$("#folder-portfolios").show();
+		$("#project-portfolios").show();
 	}
 };
 
@@ -549,6 +548,7 @@ UIFactory["Portfolio"].getAdminPortfolioMenu = function(gid,self,semtag)
 	html += "</div><!-- class='dropdown' -->";
 	return html;
 }
+
 //======================
 UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 //======================
@@ -2988,13 +2988,13 @@ UIFactory["Portfolio"].displayProject = function(nb,dest,type,langcode,parentcod
 					number_of_projects_portfolios = 0;
 					html += "<div id='project_"+portfolio.id+"' class='project'>";
 					html += "	<div class='row-label'>";
-					html += "		<div id='portfoliolabel_"+portfolio.id+"' onclick=\"javascript:loadAnddisplayProjectContent('folder-portfolios','"+portfoliocode+"');$('.project').removeClass('active');$('#project_"+portfolio.id+"').addClass('active');\" class='project-label'>"+portfolio_label+"&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span></div>";
+					html += "		<div id='portfoliolabel_"+portfolio.id+"' onclick=\"javascript:loadAnddisplayProjectContent('project-portfolios','"+portfoliocode+"');$('.project').removeClass('active');$('#project_"+portfolio.id+"').addClass('active');\" class='project-label'>"+portfolio_label+"&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span></div>";
 					html += "		</div>";
 					html += "	</div>";
 					html += "</div><!-- class='project'-->"
 					$("#projects").append($(html));
 					if (!loadedProjects[portfoliocode] && g_nb_trees>100 && localStorage.getItem('currentDisplayedFolderCode')==portfoliocode) {
-						loadProjectContent('folder-portfolios',portfoliocode);
+						loadProjectContent('project-portfolios',portfoliocode);
 						$('.project').removeClass('active');
 						$("#project_"+portfolio.id).addClass('active');
 					}
@@ -3019,7 +3019,7 @@ loadAnddisplayProjectContent = function(dest,parentcode,langcode)
 {
 	$("#wait-window").show();
 	if (!loadedProjects[parentcode])
-		loadProjectContent('folder-portfolios',parentcode);
+		loadProjectContent('project-portfolios',parentcode);
 	else
 		UIFactory.Portfolio.displayProjectContent(dest,parentcode,langcode);
 }
@@ -3028,7 +3028,7 @@ loadAnddisplayProjectContent = function(dest,parentcode,langcode)
 UIFactory["Portfolio"].displayProjectContent = function(dest,parentcode,langcode)
 //==================================
 {
-	$("#folder-portfolios").show();
+	$("#project-portfolios").show();
 	localStorage.setItem('currentDisplayedFolderCode',parentcode);
 	loadedProjects[parentcode] = true;	$("#"+dest).html("");
 	var html = "";

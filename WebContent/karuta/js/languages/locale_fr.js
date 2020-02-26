@@ -248,6 +248,7 @@ karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre p
 //========== PORTFOLIOS ===================
 //=========================================
 
+karutaStr['fr']['folders']="Mes dossiers";
 karutaStr['fr']['projects']="Mes projets";
 karutaStr['fr']['portfolios-not-in-project']="Portfolios hors projet";
 karutaStr['fr']['portfolios']="Mes portfolios";
@@ -291,6 +292,7 @@ karutaStr['fr']['karuta.batch-form']="Créer un modèle de formulaire batch";
 karutaStr['fr']['karuta.report']="Créer un rapport";
 karutaStr['fr']['create_tree']="Créer un arbre vide";
 karutaStr['fr']['create_project']="Créer un projet";
+karutaStr['fr']['create_folder']="Créer un dossier";
 karutaStr['fr']['karuta.rubrics']="Créer un référentiel";
 karutaStr['fr']['karuta.parts']="Créer des composantes";
 karutaStr['fr']['welcome-add']="Ajouter la page de bienvenue";
@@ -329,6 +331,7 @@ karutaStr['fr']['admin']="Admin";
 karutaStr['fr']['designer']="Créateur";
 karutaStr['fr']['active']="Actif";
 karutaStr['fr']['select_users']="Sélectionner des usagers";
+karutaStr['fr']['folders-admin']="Dossiers";
 karutaStr['fr']['projects-admin']="Projets";
 karutaStr['fr']['portfolios-admin']="Portfolios";
 karutaStr['fr']['bin-admin']="Poubelle";

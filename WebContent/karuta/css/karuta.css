@@ -157,13 +157,60 @@ body,
   color: var(--list-title-color);
   background-color: var(--list-element-background-color-complement);
 }
+#list-container h3.bin-label {
+  padding: 7px;
+  background-color: var(--list-button-background-color);
+  color: var(--list-element-text-color);
+  margin-bottom: 10px;
+}
+#list-container h3.bin-label .btn {
+  background-color: var(--list-element-background-color);
+}
 
 #projects {
   width: calc(25% - 2px);
   margin-bottom: 10px;
 }
 
-#gutter {
+#gutter-project {
+  width: 4px;
+  float: right;
+}
+
+#project-portfolios {
+  width: calc(75% - 2px);
+  margin-top: 2px;
+  padding-bottom: 5px;
+  float: right;
+  background-color: var(--list-element-background-color);
+}
+#project-portfolios .project-label {
+  cursor: none;
+  font-weight: bold;
+}
+#project-portfolios .row-label {
+  padding-bottom: 5px;
+}
+#project-portfolios .project {
+  padding: 7px;
+  background-color: var(--list-button-background-color);
+  color: var(--list-element-text-color);
+  margin-bottom: 10px;
+}
+#project-portfolios .project .btn {
+  background-color: var(--list-element-background-color);
+}
+
+.project-label {
+  cursor: pointer;
+}
+
+#folders {
+  width: calc(25% - 2px);
+  margin-bottom: 10px;
+}
+
+#gutter-folder {
   width: 4px;
   float: right;
 }
@@ -175,38 +222,42 @@ body,
   float: right;
   background-color: var(--list-element-background-color);
 }
-#folder-portfolios .project-label {
+#folder-portfolios .folder-label {
   cursor: none;
   font-weight: bold;
 }
 #folder-portfolios .row-label {
   padding-bottom: 5px;
 }
-#folder-portfolios .project,
-#folder-portfolios h3.bin-label {
+#folder-portfolios .folder {
   padding: 7px;
   background-color: var(--list-button-background-color);
   color: var(--list-element-text-color);
   margin-bottom: 10px;
 }
-#folder-portfolios .project .btn,
-#folder-portfolios h3.bin-label .btn {
+#folder-portfolios .folder .btn {
   background-color: var(--list-element-background-color);
 }
 
-.project-label {
-  cursor: pointer;
+/* ====================== */
+/*     PAGE USERS         */
+/* ====================== */
+#main-user .btn {
+  background-color: var(--list-button-background-color);
+}
+#main-user #active {
+  padding: 10px;
+  background-color: var(--list-element-background-color);
+}
+#main-user .item:hover {
+  background-color: var(--list-element-background-color-complement);
 }
 
 #main-portfoliosgroup .btn,
-#main-user .btn, #main-usersgroup .btn,
+#main-usersgroup .btn,
 #main-exec-batch .btn,
 #main-exec-report .btn {
   background-color: var(--list-button-background-color);
-}
-
-#main-user .item:hover {
-  background-color: var(--list-element-background-color-complement);
 }
 
 #active,
@@ -847,17 +898,6 @@ h3 {
   font-size: 120%;
   font-weight: bold;
   color: var(--list-title-color);
-}
-
-/* ====================== */
-/*     PAGE USERS         */
-/* ====================== */
-#active {
-  padding: 10px;
-}
-
-#main-user .item:hover {
-  background-color: var(--list-background-color-complement);
 }
 
 /* ====================== */
