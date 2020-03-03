@@ -9,6 +9,10 @@ blockquote {
   margin-inline-end: 40px;
 }
 
+.btn-default {
+  border-color: #ccc;
+}
+
 body,
 .form-control,
 .btn {
@@ -270,6 +274,10 @@ body,
 /* ====================== */
 /*     EDIT WINDOW        */
 /* ====================== */
+#edit-window a {
+  cursor: pointer;
+}
+
 #edit-window-header.modal-header {
   display: block;
 }
@@ -531,7 +539,7 @@ body,
   border-top: 1px solid var(--portfolio-section-separator-color);
 }
 #portfolio-container a {
-  color: var(--portfolio-link-color);
+  cursor: pointer;
 }
 #portfolio-container a .portfolio-label:hover {
   cursor: pointer;
@@ -541,7 +549,10 @@ body,
 }
 #portfolio-container .dropdown-menu {
   background-color: var(--portfolio-menu-background-color);
-  color: var(--portfolio-menu-test-color);
+  color: var(--portfolio-menu-text-color);
+}
+#portfolio-container .dropdown-menu a.dropdown-item {
+  color: var(--portfolio-menu-text-color);
 }
 #portfolio-container .dropdown-menu a.dropdown-item:hover {
   background-color: var(--portfolio-menu-text-color);
@@ -561,9 +572,6 @@ body,
 #portfolio-container .btn-group .button,
 #portfolio-container .menus,
 #portfolio-container .add-button {
-  color: var(--portfolio-buttons-color);
-}
-#portfolio-container .menus a.text-button {
   color: var(--portfolio-buttons-color);
 }
 

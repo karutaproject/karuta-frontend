@@ -12,6 +12,9 @@
 		margin-inline-end: 40px;
 	}
 
+	.btn-default {
+		border-color: #ccc;
+	}
 
 	// ----General font size ---------------
 	body,
@@ -43,7 +46,6 @@
 		box-shadow: none;
 		opacity: .65;
 	}
-
 
 
 
@@ -292,11 +294,17 @@
 /* ====================== */
 /*     EDIT WINDOW        */
 /* ====================== */
+	#edit-window {
+		a {
+			cursor:pointer;
+		}
+	}
 
 	#edit-window-header.modal-header {
 		display:block;
 	}
 	
+
 	#edit-window-body {
 //		min-height: 200px;
 		overflow-y: scroll;
@@ -582,7 +590,8 @@
 			border-top:1px solid var(--portfolio-section-separator-color);
 		}
 		a {
-			color:var(--portfolio-link-color);
+			cursor:pointer;
+//			color:var(--portfolio-link-color);
 			.portfolio-label:hover {
 				cursor:pointer;
 			}
@@ -592,7 +601,10 @@
 		}
 		.dropdown-menu {
 			background-color: var(--portfolio-menu-background-color);
-			color: var(--portfolio-menu-test-color);
+			color: var(--portfolio-menu-text-color);
+			a.dropdown-item {
+				color: var(--portfolio-menu-text-color);
+			}
 			a.dropdown-item:hover {
 				background-color: var(--portfolio-menu-text-color);
 				color: var(--portfolio-menu-background-color);
@@ -614,11 +626,11 @@
 		.add-button {
 			color:var(--portfolio-buttons-color);
 		}
-		.menus {
-			a.text-button {
-				color:var(--portfolio-buttons-color);
-			}
-		}
+//		.menus {
+//			a.text-button {
+//				color:var(--portfolio-buttons-color);
+//			}
+//		}
 
 	}
 

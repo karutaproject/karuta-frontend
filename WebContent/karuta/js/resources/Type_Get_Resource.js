@@ -782,44 +782,45 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				//------------------------------
 				if ($('code',resource).text().indexOf('----')>-1) {
 					html = "<div class='dropdown-divider'></div>";
+					select_item = $(html);
 				} else {
-					html = "<li></li>";
-				}
-				var select_item = $(html);
-				html = "<a  value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
-				for (var j=0; j<languages.length;j++){
-					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
-				}
-				html += ">";
-				if (display_code)
-					html += "<span class='li-code'>"+code+"</span>";
-				if (display_label)
-					html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
-				html += "</a>";			
-				var select_item_a = $(html);
-				$(select_item_a).click(function (ev){
-					//--------------------------------
-					var code = $(this).attr('code');
-					var display_code = false;
-					var display_label = true;
-					if (code.indexOf("$")>-1) 
-						display_label = false;
-					if (code.indexOf("@")<0) {
-						display_code = true;
+					html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+					for (var j=0; j<languages.length;j++){
+						html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 					}
-					code = cleanCode(code);
-					//--------------------------------
-					var html = "";
+					html += ">";
 					if (display_code)
-						html += code+" ";
+						html += "<span class='li-code'>"+code+"</span>";
+					if (display_value)
+						html += "<span class='li-value'>"+value+"</span>";
 					if (display_label)
-						html += $(this).attr("label_"+languages[langcode]);
-					$("#button_"+self.id).attr("value",html);
-					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
-					UIFactory["Get_Resource"].update(this,self,langcode);
-					//--------------------------------
-				});
-				$(select_item).append($(select_item_a))
+						html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
+					html += "</a>";
+					select_item = $(html);
+					$(select_item).click(function (ev){
+						//--------------------------------
+						var code = $(this).attr('code');
+						var display_code = false;
+						var display_label = true;
+						if (code.indexOf("$")>-1) 
+							display_label = false;
+						if (code.indexOf("@")<0) {
+							display_code = true;
+						}
+						code = cleanCode(code);
+						//--------------------------------
+						var html = "";
+						if (display_code)
+							html += code+" ";
+						if (display_label)
+							html += $(this).attr("label_"+languages[langcode]);
+						$("#button_"+self.id).html(html);
+						$("#button_"+self.id).attr("value",html);
+						$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+						UIFactory["Get_Resource"].update(this,self,langcode);
+						//--------------------------------
+					});
+				}
 				//-------------- update button -----
 				if (code!="" && self_code==$('code',resource).text()) {
 					var html = "";
@@ -827,6 +828,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 						html += code+" ";
 					if (display_label)
 						html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+					$("#button_"+self.id).html(html);
 					$("#button_"+self.id).attr("value",html);
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 				}
