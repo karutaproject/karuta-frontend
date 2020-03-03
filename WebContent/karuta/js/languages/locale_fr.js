@@ -164,8 +164,8 @@ karutaStr['fr']['color']="Couleur de la police";
 karutaStr['fr']['cssclass']="Classe CSS";
 karutaStr['fr']['top']="Position - Haut";
 karutaStr['fr']['left']="Position - Gauche";
-karutaStr['fr']['width']="Largeur";
-karutaStr['fr']['height']="Hauteur";
+karutaStr['fr']['width']="Largeur (en pixels)";
+karutaStr['fr']['height']="Hauteur (en pixels)";
 karutaStr['fr']['public']="Public";
 karutaStr['fr']['text-align']="Alignement";
 karutaStr['fr']['displayview']="Type d'affichage";
@@ -231,6 +231,7 @@ karutaStr['fr']['seestart']="Voir - Date début";
 karutaStr['fr']['seeend']="Voir - Date fin";
 karutaStr['fr']['logcode']="Code Log";
 karutaStr['fr']['alt']="Texte alternatif";
+karutaStr['fr']['node-comment']="Commentaires du noeud";
 
 //=========================================
 //========== ADMIN ========================

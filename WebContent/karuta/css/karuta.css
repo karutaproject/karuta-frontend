@@ -310,7 +310,7 @@ body,
 /*    BUTTONS - MENUS     */
 /* ====================== */
 .button {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   padding: 5px;
   cursor: pointer;
   display: inline-block;

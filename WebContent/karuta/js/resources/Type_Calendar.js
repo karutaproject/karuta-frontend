@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2018 - ePortfolium - Licensed under the
+	Copyright 2020 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -35,7 +35,6 @@ UIFactory["Calendar"] = function( node )
 	//--------------------
 	this.minViewMode_node = $("minViewMode",$("asmResource[xsi_type='Calendar']",node));
 	this.text_node = [];
-	this.user_node = $("user",$("asmResource[xsi_type='Field']",node));
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
 		if (this.text_node[i].length==0) {
@@ -63,6 +62,13 @@ UIFactory["Calendar"] = function( node )
 			}
 		}
 	}
+	//--------------------
+	if ($("utc",$("asmResource[xsi_type='Calendar']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("utc");
+		$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
+	}
+	this.utc = $("utc",$("asmResource[xsi_type='Calendar']",node))
+	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
 };
@@ -175,6 +181,9 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 	if (minViewMode.length==0)
 		minViewMode = "days";
 	$(input1).datepicker({minViewMode:minViewMode,format:format,language:LANG});
+	$(input1).datepicker().on('changeDate', function (ev) {
+		$(self.utc).text(ev.date.getTime());
+	});
 	$(form).append(input1);
 	//------
 	if (g_userroles[0]=='designer' || USER.admin){
@@ -239,15 +248,12 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 	$("#"+dest).append(form);
 };
 
+
 //==================================
 UIFactory["Calendar"].prototype.save = function()
 //==================================
 {
-	if (UICom.structure.ui[this.id].logcode!="")
-		$(this.user_node).text(USER.firstname+" "+USER.lastname);
 	UICom.UpdateResource(this.id,writeSaved);
-	if (UICom.structure.ui[this.id].logcode!="")
-		UICom.structure.ui[this.id].log();
 	this.refresh();
 };
 
@@ -256,7 +262,63 @@ UIFactory["Calendar"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		this.displayView(dest,null,this.display[dest])
+		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
 
 };
+
+//============================================================
+//============================================================
+//============================================================
+//============================================================
+
+//==================================
+function importAndSetDateToday(parentid,label,srce,part_semtag,calendar_semtag)
+//==================================
+{
+	$.ajaxSetup({async: false});
+	var databack = true;
+	var callback = UIFactory.Calendar.updateaddedpart;
+	importBranch(parentid,srce,part_semtag,databack,callback,calendar_semtag);
+};
+
+
+//==================================
+UIFactory["Calendar"].updateaddedpart = function(data,calendar_semtag)
+//==================================
+{
+	var partid = data;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes/node/"+partid,
+		success : function(data) {
+			var node = $("asmContext:has(metadata[semantictag='"+calendar_semtag+"'])",data);
+			if (node.length==0)
+				node = $( ":root",data ); //node itself
+			var nodeid = $(node).attr('id');
+			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
+			//---------------------------
+			var resource = $("asmResource[xsi_type='Calendar']",node);
+			var today = new Date();
+			var label = today.toLocaleString().substring(0,10);
+			var utc = today.getTime();
+			$("text[lang='"+LANG+"']",resource).text(label);
+			$("utc",resource).text(utc);
+			var data = "<asmResource xsi_type='Calendar'>" + $(resource).html() + "</asmResource>";
+			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//---------------------------
+			$.ajax({
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				url : url_resource,
+				success : function(data) {
+						UIFactory.Node.reloadUnit();
+				}
+			});
+		}
+	});
+}
+

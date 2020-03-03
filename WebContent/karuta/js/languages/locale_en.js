@@ -164,8 +164,8 @@ karutaStr['en']['color']="Font Color";
 karutaStr['en']['cssclass']="CSS Class";
 karutaStr['en']['top']="Position - Top";
 karutaStr['en']['left']="Position - Left";
-karutaStr['en']['width']="Width";
-karutaStr['en']['height']="Height";
+karutaStr['en']['width']="Width (in pixels)";
+karutaStr['en']['height']="Height (in pixels)";
 karutaStr['en']['public']="Public";
 karutaStr['en']['text-align']="Alignment";
 karutaStr['en']['displayview']="Display View";
@@ -231,6 +231,7 @@ karutaStr['en']['seestart']="See - Start Date";
 karutaStr['en']['seeend']="See - End Date";
 karutaStr['en']['logcode']="Log Code";
 karutaStr['en']['alt']="Alternate Text";
+karutaStr['en']['node-comment']="Node Comments";
 
 //=========================================
 //========== ADMIN ========================
