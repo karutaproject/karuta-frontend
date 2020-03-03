@@ -16,7 +16,7 @@ function getList()
 
 	html += "<div id='folder-portfolios'></div>";
 	html += "<div id='gutter-folder'></div>";
-	html += "<div id='folders'></div>";
+	html += "<div id='folders' class='tree portfolio'></div>";
 
 	//--------------------PROJECTS---------------------------------------
 	html += "<h3><span id='projects-label'>"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span>";
