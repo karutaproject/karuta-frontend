@@ -12,7 +12,7 @@ function loadAndDisplayFolderContent2(dest,uuid,langcode) {
 }
 
 //==================================
-function loadAndDisplayFolderContentPage(dest,uuid,page,langcode) {
+function loadAndDisplayFolderContent(dest,uuid,page,langcode) {
 //==================================
 	//loadAndDisplayFolderContent('folder-portfolios','LA-test');
 	//loadAndDisplayFolderContent2('collapse_projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c');

@@ -1,12 +1,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	style="-navbar-background-color: #ffffff; - -navbar-text-color: #c3d014; - -list-welcome-title-color: #ffffff; - -list-welcome-subtitle-color: #c3d012; - -list-welcome-subline-color: #09bbd9; - -list-welcome-box-border-color: #ffffff; - -list-welcome-box-background-color: #000000; - -list-background-color: transparent; - -list-menu-background-color: #c3d014; - -list-menu-text-color: #ffffff; - -list-element-text-color: #ffffff; - -list-element-background-color: #00b0f0; - -list-element-background-color-complement: #0070c0; - -list-title-color: #c3d014; - -list-button-background-color: #c3d014;">
+	style="-navbar-background-color: #ffffff; - -navbar-text-color: #c3d014; - -list-welcome-title-color: #ffffff; - -list-welcome-subtitle-color: #c3d012; - -list-welcome-subline-color: #09bbd9; - -list-welcome-closeSign-border-color: #ffffff; - -list-welcome-closeSign-background-color: #000000; - -list-background-color: transparent; - -list-menu-background-color: #c3d014; - -list-menu-text-color: #ffffff; - -list-element-text-color: #ffffff; - -list-element-background-color: #00b0f0; - -list-element-background-color-complement: #0070c0; - -list-title-color: #c3d014; - -list-button-background-color: #c3d014;">
 <head>
 <title>Karuta</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"
 	shrink-to-fit="no">
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-<link rel='stylesheet' type='text/css' href='css/tree.css'></link>
-<script src="js/tree.js"></script>
 <link rel="icon" type="image/png"
 	href="../../application/img/faviconK.png">
 <script src="../js/_init.js"></script>
@@ -83,6 +81,7 @@
 <script src="../../karuta/js/model/Type_User.js"></script>
 <script src="../../karuta/js/model/Type_UsersGroup.js"></script>
 <script src="../../karuta/js/model/Type_PortfoliosGroup.js"></script>
+<script src="../../karuta/js/model/Type_Folder.js"></script>
 <!-- =============================================================== -->
 <script src="../../karuta/js/version.js"></script>
 <!-- =============================================================== -->
@@ -91,6 +90,10 @@
 <!-- =============================================================== -->
 <script src="../../other/html2canvas/html2canvas.js"></script>
 <script src="../../other/html2canvas/html2canvas.svg.js"></script>
+<!-- =============================================================== -->
+<script src="../../karuta/js/languages/locale_fr.js"></script>
+<script src="../../karuta/js/languages/locale_en.js"></script>
+
 <style type="text/css">
 .cufon-canvas {
 	text-indent: 0
@@ -106,7 +109,7 @@
 		line-height: 1px
 	}
 	.cufon-canvas .cufon-alt {
-		display: -moz-inline-box;
+		display: -moz-inline-closeSign;
 		display: inline-block;
 		width: 0;
 		height: 0;
@@ -280,8 +283,8 @@
 		</div>
 		<div id="welcome-bar">
 			<div id="welcome-image">
-				<div class="welcome-box">
-					<div class="welcome-subbox">
+				<div class="welcome-closeSign">
+					<div class="welcome-subcloseSign">
 						<div id="welcome-title" class="welcome-title"
 							style="font-size: 40px;">BIENVENUE DANS KARUTA 3.0</div>
 						<div id="welcome-line" class="welcome-line"></div>
@@ -342,23 +345,23 @@
 				</div>
 				<div id="list">
 					<h3>
-						<span id="projects-label">Mes projets</span>&nbsp;<span
-							class="projects-nb badge" id="projects-nb">3</span>
+						<span id="folders-label">Mes projets</span>&nbsp;<span
+							class="folders-nb badge" id="folders-nb">3</span>
 						<button class="btn list-btn"
-							onclick="UIFactory.Portfolio.createProject()">Créer un
+							onclick="UIFactory.Portfolio.createFolder()">Créer un
 							projet</button>
 					</h3>
 					<div id="folder-portfolios" style="">
-						<div id="content-project_b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c"
-							class="project">
+						<div id="content-folder_b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c"
+							class="folder">
 							<div class="row row-label">
 								<div class="col-1"></div>
-								<div class="col-4 project-label"
+								<div class="col-4 folder-label"
 									id="portfoliolabel_b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">LA-test</div>
-								<div class="col-2 d-none d-md-block project-label">Lan Anh
+								<div class="col-2 d-none d-md-block folder-label">Lan Anh
 									Dinh</div>
 								<div class="col-3 d-none d-sm-block comments"
-									id="project-comments_92052dd8-46b3-11ea-b2a2-fa163ebfbd00">
+									id="folder-comments_92052dd8-46b3-11ea-b2a2-fa163ebfbd00">
 								</div>
 								<!-- comments -->
 								<div class="col-1">
@@ -372,7 +375,7 @@
 												class="fa fa-edit"></i> Déplacer</a> <a class="dropdown-item"
 												id="remove-b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c"
 												style="display: block"
-												onclick="UIFactory['Portfolio'].removeProject('b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','LA-test')"><i
+												onclick="UIFactory['Portfolio'].removeFolder('b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','LA-test')"><i
 												class="far fa-trash-alt"></i> Supprimer</a> <a
 												class="dropdown-item"
 												onclick="UIFactory['Portfolio'].callChangeOwner('b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c')"><i
@@ -432,27 +435,27 @@
 						</div>
 						<!-- class='navbar-pages'-->
 						<div id="navbar-pages-top" class="navbar-pages">
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',3);selectElts('portfoliofolder-pageindex',['pre-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-pre-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_pre-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">< Précédent</span>
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',1);selectElts('portfoliofolder-pageindex',['1-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-1-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_1-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">1</span>
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',2);selectElts('portfoliofolder-pageindex',['2-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-2-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_2-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">2</span>
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',3);selectElts('portfoliofolder-pageindex',['3-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-3-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_3-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">3</span>
-						<span class="portfoliofolder-pageindex0">...</span>
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',10);selectElts('portfoliofolder-pageindex',['10-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-10-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_10-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">10</span>
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',10);selectElts('portfoliofolder-pageindex',['next-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-next-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_next-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">Suivant ></span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',3);selectElts('folder-pageindex',['pre-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-pre-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_pre-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">< Précédent</span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',1);selectElts('folder-pageindex',['1-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-1-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_1-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">1</span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',2);selectElts('folder-pageindex',['2-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-2-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_2-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">2</span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',3);selectElts('folder-pageindex',['3-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-3-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_3-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">3</span>
+						<span class="folder-pageindex0">...</span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',10);selectElts('folder-pageindex',['10-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-10-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_10-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">10</span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',10);selectElts('folder-pageindex',['next-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-next-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_next-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">Suivant ></span>
 						</div>
-						<!-- class='project'-->
+						<!-- class='folder'-->
 						<div id="folder-portfolios-pages">
 							<div class="row portfolio-row"
 								id="portfolio_1666805d-e770-4721-bb56-aa43c139dac4">
@@ -628,131 +631,131 @@
 						</div>
 						<!-- class='navbar-pages-bottom'-->
 						<div id="navbar-pages-bottom" class="navbar-pages">
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',3);selectElts('portfoliofolder-pageindex',['pre-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-pre-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_bottom-pre-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">< Précédent</span>
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',1);selectElts('portfoliofolder-pageindex',['1-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-1-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_bottom-1-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">1</span>
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',2);selectElts('portfoliofolder-pageindex',['2-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-2-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_bottom-2-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">2</span>
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',3);selectElts('portfoliofolder-pageindex',['3-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-3-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_bottom-3-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">3</span>
-						<span class="portfoliofolder-pageindex0">...</span>
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',10);selectElts('portfoliofolder-pageindex',['10-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-10-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_bottom-10-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">10</span>
-						<span class="portfoliofolder-pageindex"
-									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',10);selectElts('portfoliofolder-pageindex',['next-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-next-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
-									id="portfoliofolder-pageindex_bottom-next-projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">Suivant ></span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',3);selectElts('folder-pageindex',['pre-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-pre-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_bottom-pre-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">< Précédent</span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',1);selectElts('folder-pageindex',['1-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-1-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_bottom-1-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">1</span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',2);selectElts('folder-pageindex',['2-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-2-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_bottom-2-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">2</span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',3);selectElts('folder-pageindex',['3-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-3-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_bottom-3-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">3</span>
+						<span class="folder-pageindex0">...</span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',10);selectElts('folder-pageindex',['10-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-10-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_bottom-10-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">10</span>
+						<span class="folder-pageindex"
+									onclick="javascript:loadAndDisplayFolderContentPage('folder-portfolios-pages','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c',10);selectElts('folder-pageindex',['next-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','bottom-next-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c']);"
+									id="folder-pageindex_bottom-next-folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">Suivant ></span>
 						</div>
 					</div>
-					<div id="gutter"></div>
-					<div id="projects" class="tree portfolio">
+					<div id="gutter-folder"></div>
+					<div id="folders" class="tree portfolio">
 						<!-- class='treeNode'-->
-						<div id="project_c9fcda5b-e2aa-4a0c-b892-a821cb7f6723"
-							class="treeNode project">
+						<div id="folder_c9fcda5b-e2aa-4a0c-b892-a821cb7f6723"
+							class="treeNode folder">
 							<div class="row-label">
-								<span id="toggle_projectc9fcda5b-e2aa-4a0c-b892-a821cb7f6723"
-									class="box"
-									onclick="javascript:toggleElt('box','check-box','projectc9fcda5b-e2aa-4a0c-b892-a821cb7f6723');loadAndDisplayFolderChildren('collapse_projectc9fcda5b-e2aa-4a0c-b892-a821cb7f6723','c9fcda5b-e2aa-4a0c-b892-a821cb7f6723');">
+								<span id="toggle_folderc9fcda5b-e2aa-4a0c-b892-a821cb7f6723"
+									class="closeSign"
+									onclick="javascript:toggleElt('closeSign','openSign','folderc9fcda5b-e2aa-4a0c-b892-a821cb7f6723');loadAndDisplayFolderChildren('collapse_folderc9fcda5b-e2aa-4a0c-b892-a821cb7f6723','c9fcda5b-e2aa-4a0c-b892-a821cb7f6723');">
 								</span>
 								<span id="portfoliolabel_c9fcda5b-e2aa-4a0c-b892-a821cb7f6723"
-									onclick="javascript:toggleOpenElt('box','check-box','projectc9fcda5b-e2aa-4a0c-b892-a821cb7f6723');loadAndDisplayFolderChildren('collapse_projectc9fcda5b-e2aa-4a0c-b892-a821cb7f6723','c9fcda5b-e2aa-4a0c-b892-a821cb7f6723');loadAndDisplayFolderContent2('folder-portfolios','Demo1');selectElt('project','c9fcda5b-e2aa-4a0c-b892-a821cb7f6723');"
-									class="project-label"> Démo portfolio 1&nbsp;<span
-									class="number_of_projects_portfolios badge"
-									id="number_of_projects_portfolios_c9fcda5b-e2aa-4a0c-b892-a821cb7f6723">2</span>
+									onclick="javascript:toggleOpenElt('closeSign','openSign','folderc9fcda5b-e2aa-4a0c-b892-a821cb7f6723');loadAndDisplayFolderChildren('collapse_folderc9fcda5b-e2aa-4a0c-b892-a821cb7f6723','c9fcda5b-e2aa-4a0c-b892-a821cb7f6723');loadAndDisplayFolderContent2('folder-portfolios','Demo1');selectElt('folder','folder_c9fcda5b-e2aa-4a0c-b892-a821cb7f6723');"
+									class="folder-label"> Démo portfolio 1&nbsp;<span
+									class="number_of_folders badge"
+									id="number_of_folders_c9fcda5b-e2aa-4a0c-b892-a821cb7f6723">2</span>
 								</span>
 							</div>
-							<div id="collapse_projectc9fcda5b-e2aa-4a0c-b892-a821cb7f6723"
+							<div id="collapse_folderc9fcda5b-e2aa-4a0c-b892-a821cb7f6723"
 								class="nested">
-								<div id="project_demo1-2" class="treeNode project">
+								<div id="folder_demo1-2" class="treeNode folder">
 									<div class="row-label">
 										<span id="portfoliolabel_demo1-2"
-											onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','Demo1-2');selectElt('project','demo1-2');"
-											class="project-label"> Démo portfolio 1 -
+											onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','Demo1-2');selectElt('folder','folder_demo1-2');"
+											class="folder-label"> Démo portfolio 1 -
 											LA-test&nbsp;<span
-											class="number_of_projects_portfolios badge"
-											id="number_of_projects_portfolios_demo1-2">6</span>
+											class="number_of_folders badge"
+											id="number_of_folders_demo1-2">6</span>
 										</span>
 									</div>
 								</div>
 							</div>
 						</div>
 						<!-- class='treeNode'-->
-						<div id="project_b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c"
-							class="treeNode project">
+						<div id="folder_b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c"
+							class="treeNode folder">
 							<div class="row-label">
-								<span id="toggle_projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c"
-									class="box"
-									onclick="javascript:toggleElt('box','check-box','projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c');loadAndDisplayFolderChildren('collapse_projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c');">
+								<span id="toggle_folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c"
+									class="closeSign"
+									onclick="javascript:toggleElt('closeSign','openSign','folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c');loadAndDisplayFolderChildren('collapse_folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c');">
 								</span>
 								<span id="portfoliolabel_b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c"
-									onclick="javascript:toggleOpenElt('box','check-box','projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c');loadAndDisplayFolderContent2('folder-portfolios','LA-test');selectElt('project','b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c');"
-									class="project-label"> LA-test&nbsp;<span
-									class="number_of_projects_portfolios badge"
-									id="number_of_projects_portfolios_b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">3</span>
+									onclick="javascript:toggleOpenElt('closeSign','openSign','folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c');loadAndDisplayFolderContent2('folder-portfolios','LA-test');selectElt('folder','folder_b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c');"
+									class="folder-label"> LA-test&nbsp;<span
+									class="number_of_folders badge"
+									id="number_of_folders_b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">3</span>
 									<span
 									class="number_of_portfolios badge badge-primary"
 									id="number_of_portfolios_b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c">100</span>
 								</span>
 							</div>
-							<div id="collapse_projectb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c"
+							<div id="collapse_folderb0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c"
 								class="nested">
-								<div id="project_1" class="treeNode project">
+								<div id="folder_1" class="treeNode folder">
 									<div class="row-label">
-										<span id="toggle_project1"
-										class="box"
-										onclick="javascript:toggleElt('box','check-box','project1');loadAndDisplayFolderChildren('collapse_project1','1');">
+										<span id="toggle_folder1"
+										class="closeSign"
+										onclick="javascript:toggleElt('closeSign','openSign','folder1');loadAndDisplayFolderChildren('collapse_folder1','1');">
 										</span>
 										<span id="portfoliolabel_1"
-											onclick="javascript:toggleOpenElt('box','check-box','project1');loadAndDisplayFolderContent2('folder-portfolios','LA-test1');selectElt('project','1');"
-											class="project-label"> LA-test1&nbsp;<span
-											class="number_of_projects_portfolios badge"
-											id="number_of_projects_portfolios_1">6</span>
+											onclick="javascript:toggleOpenElt('closeSign','openSign','folder1');loadAndDisplayFolderContent2('folder-portfolios','LA-test1');selectElt('folder','folder_1');"
+											class="folder-label"> LA-test1&nbsp;<span
+											class="number_of_folders badge"
+											id="number_of_folders_1">6</span>
 										</span>
 									</div>
-									<div id="collapse_project1"
+									<div id="collapse_folder1"
 										class="nested">
-										<div id="project_1-1" class="treeNode project">
+										<div id="folder_1-1" class="treeNode folder">
 											<div class="row-label">
-												<span id="toggle_project1-1"
-												class="box"
-												onclick="javascript:toggleElt('box','check-box','project1-1');loadAndDisplayFolderChildren('collapse_project1-1','1-1');">
+												<span id="toggle_folder1-1"
+												class="closeSign"
+												onclick="javascript:toggleElt('closeSign','openSign','folder1-1');loadAndDisplayFolderChildren('collapse_folder1-1','1-1');">
 												</span>
 												<span id="portfoliolabel_1-1"
-													onclick="javascript:toggleOpenElt('box','check-box','project1-1');loadAndDisplayFolderContent2('folder-portfolios','LA-test1-1');selectElt('project','1-1');"
-													class="project-label"> LA-test1-1&nbsp;<span
-													class="number_of_projects_portfolios badge"
-													id="number_of_projects_portfolios_1-1">6</span>
+													onclick="javascript:toggleOpenElt('closeSign','openSign','folder1-1');loadAndDisplayFolderContent2('folder-portfolios','LA-test1-1');selectElt('folder','folder_1-1');"
+													class="folder-label"> LA-test1-1&nbsp;<span
+													class="number_of_folders badge"
+													id="number_of_folders_1-1">6</span>
 												</span>
 											</div>
-											<div id="collapse_project1-1"
+											<div id="collapse_folder1-1"
 												class="nested">
-												<div id="project_1-1-1" class="treeNode project">
+												<div id="folder_1-1-1" class="treeNode folder">
 													<div class="row-label">
-														<span id="toggle_project1-1-1"
-														class="box"
-														onclick="javascript:toggleElt('box','check-box','project1-1-1');loadAndDisplayFolderChildren('collapse_project1-1-1','1-1-1');">
+														<span id="toggle_folder1-1-1"
+														class="closeSign"
+														onclick="javascript:toggleElt('closeSign','openSign','folder1-1-1');loadAndDisplayFolderChildren('collapse_folder1-1-1','1-1-1');">
 														</span>
 														<span id="portfoliolabel_1-1-1"
-															onclick="javascript:toggleOpenElt('box','check-box','project1-1-1');loadAndDisplayFolderContent2('folder-portfolios','LA-test1-1-1');selectElt('project','1-1-1');"
-															class="project-label"> LA-test1-1-1&nbsp;<span
-															class="number_of_projects_portfolios badge"
-															id="number_of_projects_portfolios_1-1-1">6</span>
+															onclick="javascript:toggleOpenElt('closeSign','openSign','folder1-1-1');loadAndDisplayFolderContent2('folder-portfolios','LA-test1-1-1');selectElt('folder','folder_1-1-1');"
+															class="folder-label"> LA-test1-1-1&nbsp;<span
+															class="number_of_folders badge"
+															id="number_of_folders_1-1-1">6</span>
 														</span>
 													</div>
 												</div>
 		
-												<div id="project_1-1-2" class="treeNode project">
+												<div id="folder_1-1-2" class="treeNode folder">
 													<div class="row-label">
 														<span id="portfoliolabel_1-1-2"
-															onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test1-1-2');selectElt('project','1-1-2');"
-															class="project-label"> LA-test1-1-2&nbsp;<span
-															class="number_of_projects_portfolios badge"
-															id="number_of_projects_portfolios_1-1-2">6</span>
+															onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test1-1-2');selectElt('folder','folder_1-1-2');"
+															class="folder-label"> LA-test1-1-2&nbsp;<span
+															class="number_of_folders badge"
+															id="number_of_folders_1-1-2">6</span>
 														</span>
 													</div>
 												</div>
@@ -760,56 +763,56 @@
 
 										</div>
 
-										<div id="project_1-2" class="treeNode project">
+										<div id="folder_1-2" class="treeNode folder">
 											<div class="row-label">
 												<span id="portfoliolabel_1-2"
-													onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test1-2');selectElt('project','1-2');"
-													class="project-label"> LA-test1-2&nbsp;<span
-													class="number_of_projects_portfolios badge"
-													id="number_of_projects_portfolios_1-2">6</span>
+													onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test1-2');selectElt('folder','folder_1-2');"
+													class="folder-label"> LA-test1-2&nbsp;<span
+													class="number_of_folders badge"
+													id="number_of_folders_1-2">6</span>
 												</span>
 											</div>
 										</div>
 									</div>
 									
 								</div>
-								<div id="project_2" class="treeNode project">
+								<div id="folder_2" class="treeNode folder">
 									<div class="row-label">
-										<span id="toggle_project2"
-										class="box"
-										onclick="javascript:toggleElt('box','check-box','project2');loadAndDisplayFolderChildren('collapse_project2','2');">
+										<span id="toggle_folder2"
+										class="closeSign"
+										onclick="javascript:toggleElt('closeSign','openSign','folder2');loadAndDisplayFolderChildren('collapse_folder2','2');">
 										</span>
 										<span id="portfoliolabel_2"
-											onclick="javascript:toggleOpenElt('box','check-box','project2');loadAndDisplayFolderContent2('folder-portfolios','LA-test2');selectElt('project','2');"
-											class="project-label"> LA-test2&nbsp;<span
-											class="number_of_projects_portfolios badge"
-											id="number_of_projects_portfolios_2">6</span>
+											onclick="javascript:toggleOpenElt('closeSign','openSign','folder2');loadAndDisplayFolderContent2('folder-portfolios','LA-test2');selectElt('folder','folder_2');"
+											class="folder-label"> LA-test2&nbsp;<span
+											class="number_of_folders badge"
+											id="number_of_folders_2">6</span>
 										</span>
 									</div>
-									<div id="collapse_project2"
+									<div id="collapse_folder2"
 										class="nested">
-										<div id="project_2-1" class="treeNode project">
+										<div id="folder_2-1" class="treeNode folder">
 											<div class="row-label">
-												<span id="toggle_project2-1"
-												class="box"
-												onclick="javascript:toggleElt('box','check-box','project2-1');loadAndDisplayFolderChildren('collapse_project2-1','2-1');">
+												<span id="toggle_folder2-1"
+												class="closeSign"
+												onclick="javascript:toggleElt('closeSign','openSign','folder2-1');loadAndDisplayFolderChildren('collapse_folder2-1','2-1');">
 												</span>
 												<span id="portfoliolabel_2-1"
-													onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test2-1');selectElt('project','2-1');"
-													class="project-label"> LA-test2-1&nbsp;<span
-													class="number_of_projects_portfolios badge"
-													id="number_of_projects_portfolios_2-1">6</span>
+													onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test2-1');selectElt('folder','folder_2-1');"
+													class="folder-label"> LA-test2-1&nbsp;<span
+													class="number_of_folders badge"
+													id="number_of_folders_2-1">6</span>
 												</span>
 											</div>
 										</div>
 
-										<div id="project_2-2" class="treeNode project">
+										<div id="folder_2-2" class="treeNode folder">
 											<div class="row-label">
 												<span id="portfoliolabel_2-2"
-													onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test2-2');selectElt('project','2-2');"
-													class="project-label"> LA-test2-2&nbsp;<span
-													class="number_of_projects_portfolios badge"
-													id="number_of_projects_portfolios_2-2">6</span>
+													onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test2-2');selectElt('folder','folder_2-2');"
+													class="folder-label"> LA-test2-2&nbsp;<span
+													class="number_of_folders badge"
+													id="number_of_folders_2-2">6</span>
 												</span>
 											</div>
 										</div>
@@ -820,60 +823,60 @@
 							</div><!-- class='nested'-->
 						</div>
 						<!-- class='treeNode'-->
-						<div id="project_5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7"
-							class="treeNode project">
+						<div id="folder_5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7"
+							class="treeNode folder">
 							<div class="row-label">
-								<span id="toggle_project5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7"
-									class="box"
-									onclick="javascript:toggleElt('box','check-box','project5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7');loadAndDisplayFolderChildren('collapse_project5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7','5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7');">
+								<span id="toggle_folder5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7"
+									class="closeSign"
+									onclick="javascript:toggleElt('closeSign','openSign','folder5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7');loadAndDisplayFolderChildren('collapse_folder5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7','5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7');">
 								</span>
 								<span id="portfoliolabel_5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7"
-									onclick="javascript:toggleOpenElt('box','check-box','project5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7');loadAndDisplayFolderContent2('folder-portfolios','LesGrandsAuteurs');selectElt('project','5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7');"
-									class="project-label">
+									onclick="javascript:toggleOpenElt('closeSign','openSign','folder5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7');loadAndDisplayFolderContent2('folder-portfolios','LesGrandsAuteurs');selectElt('folder','folder_5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7');"
+									class="folder-label">
 									LesGrandsAuteurs&nbsp;<span
-										class="number_of_projects_portfolios badge"
-										id="number_of_projects_portfolios_5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7">5</span>
+										class="number_of_folders badge"
+										id="number_of_folders_5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7">5</span>
 								</span>
 							</div>
-							<div id="collapse_project5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7"
+							<div id="collapse_folder5f1c75c8-c903-4d2f-b0a7-e97e6e5f7cf7"
 								class="nested">
-								<div id="project_3" class="treeNode project">
+								<div id="folder_3" class="treeNode folder">
 									<div class="row-label">
-										<span id="toggle_project3"
-										class="box"
-										onclick="javascript:toggleElt('box','check-box','project3');loadAndDisplayFolderChildren('collapse_project3','3');">
+										<span id="toggle_folder3"
+										class="closeSign"
+										onclick="javascript:toggleElt('closeSign','openSign','folder3');loadAndDisplayFolderChildren('collapse_folder3','3');">
 										</span>
 										<span id="portfoliolabel_3"
-											onclick="javascript:toggleOpenElt('box','check-box','project3');loadAndDisplayFolderContent2('folder-portfolios','LA-test3');selectElt('project','3');"
-											class="project-label"> LA-test3&nbsp;<span
-											class="number_of_projects_portfolios badge"
-											id="number_of_projects_portfolios_3">6</span>
+											onclick="javascript:toggleOpenElt('closeSign','openSign','folder3');loadAndDisplayFolderContent2('folder-portfolios','LA-test3');selectElt('folder','folder_3');"
+											class="folder-label"> LA-test3&nbsp;<span
+											class="number_of_folders badge"
+											id="number_of_folders_3">6</span>
 										</span>
 									</div>
-									<div id="collapse_project3"
+									<div id="collapse_folder3"
 										class="nested">
-										<div id="project_3-1" class="treeNode project">
+										<div id="folder_3-1" class="treeNode folder">
 											<div class="row-label">
-												<span id="toggle_project3-1"
-												class="box"
-												onclick="javascript:toggleElt('box','check-box','project3-1');loadAndDisplayFolderChildren('collapse_project3-1','2-1');">
+												<span id="toggle_folder3-1"
+												class="closeSign"
+												onclick="javascript:toggleElt('closeSign','openSign','folder3-1');loadAndDisplayFolderChildren('collapse_folder3-1','2-1');">
 												</span>
 												<span id="portfoliolabel_3-1"
-													onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test3-1');selectElt('project','3-1');"
-													class="project-label"> LA-test3-1&nbsp;<span
-													class="number_of_projects_portfolios badge"
-													id="number_of_projects_portfolios_3-1">6</span>
+													onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test3-1');selectElt('folder','folder_3-1');"
+													class="folder-label"> LA-test3-1&nbsp;<span
+													class="number_of_folders badge"
+													id="number_of_folders_3-1">6</span>
 												</span>
 											</div>
 										</div>
 
-										<div id="project_3-2" class="treeNode project">
+										<div id="folder_3-2" class="treeNode folder">
 											<div class="row-label">
 												<span id="portfoliolabel_3-2"
-													onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test3-2');selectElt('project','3-2');"
-													class="project-label"> LA-test3-2&nbsp;<span
-													class="number_of_projects_portfolios badge"
-													id="number_of_projects_portfolios_3-2">6</span>
+													onclick="javascript:loadAndDisplayFolderContent2('folder-portfolios','LA-test3-2');selectElt('folder','folder_3-2');"
+													class="folder-label"> LA-test3-2&nbsp;<span
+													class="number_of_folders badge"
+													id="number_of_folders_3-2">6</span>
 												</span>
 											</div>
 										</div>
@@ -889,7 +892,7 @@
 						<h3 id="bin-label" style="">
 							Poubelle&nbsp;<span class="bin-nb badge" id="bin-nb"></span>
 							<button class="btn list-btn"
-								onclick="UIFactory.Portfolio.displayBin('folder-portfolios','bin');$(window).scrollTop(0);$('.project').removeClass('active');">Voir
+								onclick="UIFactory.Portfolio.displayBin('folder-portfolios','bin');$(window).scrollTop(0);$('.folder').removeClass('active');">Voir
 								la poubelle</button>
 						</h3>
 					</div>
@@ -917,62 +920,62 @@
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-0-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(0deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(0deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-1-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(30deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(30deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-2-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(60deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(60deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-3-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(90deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(90deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-4-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(120deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(120deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-5-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(150deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(150deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-6-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(180deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(180deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-7-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(210deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(210deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-8-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(240deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(240deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-9-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(270deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(270deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-10-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(300deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(300deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-11-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(330deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(330deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 			</div>
 		</div>
@@ -989,62 +992,62 @@
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-0-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(0deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(0deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-1-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(30deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(30deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-2-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(60deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(60deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-3-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(90deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(90deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-4-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(120deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(120deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-5-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(150deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(150deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-6-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(180deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(180deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-7-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(210deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(210deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-8-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(240deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(240deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-9-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(270deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(270deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-10-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(300deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(300deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 				<div
 					style="position: absolute; top: -2px; opacity: 0.25; animation: 1s linear 0s infinite normal none running opacity-100-25-11-12;">
 					<div
-						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(330deg) translate(10px); border-radius: 2px;"></div>
+						style="position: absolute; width: 12px; height: 5px; background: rgb(0, 0, 0) none repeat scroll 0% 0%; closeSign-shadow: rgba(0, 0, 0, 0.1) 0px 0px 1px; transform-origin: left center 0px; transform: rotate(330deg) translate(10px); border-radius: 2px;"></div>
 				</div>
 			</div>
 		</div>
@@ -1129,10 +1132,14 @@
 	<!-- ============================================== -->
 
 	<script>
-		//	navigateTrees("box","check-box","nested","active");
-		//	navigateTrees("project","check-box","nested","active");
+	Users_byid = {};
+	var test_data_user = "<users><user id='1' ><username>root</username><firstname>root</firstname><lastname></lastname><email/><admin>1</admin><designer>0</designer><active>1</active><substitute>0</substitute><other></other></user>";
+	test_data_user += "<user id='20' ><username>la</username><firstname>Lan Anh</firstname><lastname>Dinh</lastname><email>tlanh.dinh@gmail.com</email><admin>0</admin><designer>1</designer><active>1</active><substitute>0</substitute><other></other></user>";
+	test_data_user += "</users>";
+	UIFactory["User"].parse(test_data_user);
+	USER = Users_byid['20'];
+	loadFolderStruct();
 	</script>
-
 
 </body>
 </html>
