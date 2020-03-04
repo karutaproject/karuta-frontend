@@ -107,9 +107,6 @@ body,
   line-height: 1.1;
   margin-left: 5px;
 }
-#list-container #bin-label {
-  margin-top: 5px;
-}
 #list-container .portfolio-menu .btn {
   height: 25px;
   padding-left: 9px;
@@ -171,23 +168,31 @@ body,
   background-color: var(--list-element-background-color);
 }
 
-#projects {
-  width: calc(25% - 2px);
-  margin-bottom: 10px;
+#list {
+  margin-top: 20px;
 }
 
-#gutter-project {
-  width: 4px;
+#list-leftside {
+  width: calc(25% - 5px);
+  margin-bottom: 10px;
+}
+#list-leftside h3 {
+  margin-top: 20px;
+}
+
+#gutter {
+  width: 10px;
   float: right;
 }
 
-#project-portfolios {
-  width: calc(75% - 2px);
+#list-rightside {
+  width: calc(75% - 5px);
   margin-top: 2px;
   padding-bottom: 5px;
   float: right;
   background-color: var(--list-element-background-color);
 }
+
 #project-portfolios .project-label {
   cursor: none;
   font-weight: bold;
@@ -209,23 +214,6 @@ body,
   cursor: pointer;
 }
 
-#folders {
-  width: calc(25% - 2px);
-  margin-bottom: 10px;
-}
-
-#gutter-folder {
-  width: 4px;
-  float: right;
-}
-
-#folder-portfolios {
-  width: calc(75% - 2px);
-  margin-top: 2px;
-  padding-bottom: 5px;
-  float: right;
-  background-color: var(--list-element-background-color);
-}
 #folder-portfolios .folder-label {
   cursor: none;
   font-weight: bold;

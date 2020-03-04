@@ -249,7 +249,6 @@ karutaStr['en']['help_text_rename']="To move a portfolio to another project, cha
 //========== PORTFOLIOS ===================
 //=========================================
 
-karutaStr['en']['folders']="My Folders";
 karutaStr['en']['projects']="My Projects";
 karutaStr['en']['portfolios-not-in-project']="My Portfolios not in a Project";
 karutaStr['en']['portfolios']="My Portfolios";
@@ -293,7 +292,6 @@ karutaStr['en']['karuta.batch-form']="Create a Batch Form Model";
 karutaStr['en']['karuta.report']="Create a Report";
 karutaStr['en']['create_tree']="Create an Empty Tree";
 karutaStr['en']['create_project']="Create a Project";
-karutaStr['en']['create_folder']="Create a Folder";
 karutaStr['en']['karuta.rubrics']="Create Rubrics";
 karutaStr['en']['karuta.parts']="Create Components";
 karutaStr['en']['welcome-add']="Add the Welcome Page";
@@ -309,6 +307,18 @@ karutaStr['en']['username-label']="Login";
 karutaStr['en']['firstname-label']="Firstname";
 karutaStr['en']['lastname-label']="Lastname";
 karutaStr['en']['changeOwner']="Change the Owner";
+
+//=========================================
+//========== FOLDERS ======================
+//=========================================
+
+karutaStr['en']['folders']="My Folders";
+karutaStr['en']['folders-admin']="Folders";
+
+karutaStr['en']['next']="Next >";
+karutaStr['en']['prev']="< Prev";
+karutaStr['en']['karuta.folder']="Create a portfolio folder";
+karutaStr['en']['create_folder']="Create a Folder";
 
 //=========================================
 //========== USERS ========================
@@ -332,7 +342,6 @@ karutaStr['en']['admin']="Admin";
 karutaStr['en']['designer']="Creator";
 karutaStr['en']['active']="Active";
 karutaStr['en']['select_users']="Select Users";
-karutaStr['en']['folders-admin']="Folders";
 karutaStr['en']['projects-admin']="Projects";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";

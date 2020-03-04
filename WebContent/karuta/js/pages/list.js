@@ -3,46 +3,55 @@ function getList()
 //==============================
 {
 	var html = "";
+	var text0 = karutaStr[LANG]['folders'];
 	var text1 = karutaStr[LANG]['projects'];
 	var text2 = karutaStr[LANG]['portfolios-not-in-project'];
 	if (USER.admin) {
+		text0 = karutaStr[LANG]['folders-admin'];
 		text1 = karutaStr[LANG]['projects-admin'];
 		text2 = karutaStr[LANG]['portfolios-admin'];
 	}
-	//--------------------FOLDERS---------------------------------------
-	html += "<h3><span id='folders-label'>"+text1+"</span>&nbsp<span class='folders-nb badge' id='folders-nb'></span>";
-	html +="	<button class='btn list-btn' onclick='UIFactory.Folder.createfolder()'>"+karutaStr[LANG]['create_folder']+"</button>";
-	html += "</h3>";
+	html += "<div id='gutter'></div>";
+	html += "<div id='list-rightside'>";
+	//-----------------------------------------------------------
+		html += "<div id='folder-portfolios'></div>";
+		html += "<div id='project-portfolios'></div>";
+	//-----------------------------------------------------------
+	html += "</div><!--div id='list-rightside'-->";
 
-	html += "<div id='folder-portfolios'></div>";
-	html += "<div id='gutter-folder'></div>";
-	html += "<div id='folders' class='tree portfolio'></div>";
-
-	//--------------------PROJECTS---------------------------------------
-	html += "<h3><span id='projects-label'>"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span>";
-	html +="	<button class='btn list-btn' onclick='UIFactory.Portfolio.createProject()'>"+karutaStr[LANG]['create_project']+"</button>";
-	html += "</h3>";
-
-	html += "<div id='project-portfolios'></div>";
-	html += "<div id='gutter-project'></div>";
-	html += "<div id='projects'></div>";
-	
-	//--------------------PORTFOLIOS--------------------------------------
-	html += "<h3 id='portfolios-not-in-project'>";
-	html += "	<span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span>";
-	html += "	<button class='btn list-btn' onclick=\"loadAnddisplayProjectContent('project-portfolios','false');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
-	html += "</h3>";
-
-	//---------------------BIN-------------------------------------
-if (USER.admin || (USER.creator && !USER.limited) ) {
-		var text2 = karutaStr[LANG]['bin'];
-		if (USER.admin)
-			text2 = karutaStr[LANG]['bin-admin'];
-		html += "<h3 id='bin-label'>"+text2+"&nbsp<span class='bin-nb badge' id='bin-nb'></span>";
-		html += "<button class='btn list-btn' onclick=\"UIFactory.Portfolio.displayBin('project-portfolios','bin');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see-bin"] + "</button>";
+	html += "<div id='list-leftside'>";
+		//--------------------FOLDERS---------------------------------------
+		html += "<h3><span id='folders-label'>"+text0+"</span>&nbsp<span class='folders-nb badge' id='folders-nb'></span>";
+		html +="	<button class='btn list-btn' onclick='UIFactory.Folder.createfolder()'>"+karutaStr[LANG]['create_folder']+"</button>";
 		html += "</h3>";
-	}
-//-----------------------------------------------------------
+		html += "<div id='folders' class='tree portfolio'></div>";
+	
+	
+		//--------------------PROJECTS---------------------------------------
+		html += "<h3><span id='projects-label'>"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span>";
+		html +="	<button class='btn list-btn' onclick='UIFactory.Portfolio.createProject()'>"+karutaStr[LANG]['create_project']+"</button>";
+		html += "</h3>";
+		html += "<div id='projects'></div>";
+	
+		
+		//--------------------PORTFOLIOS--------------------------------------
+		html += "<h3 id='portfolios-not-in-project'>";
+		html += "	<span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span>";
+		html += "	<button class='btn list-btn' onclick=\"loadAnddisplayProjectContent('project-portfolios','false');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
+		html += "</h3>";
+	
+		//---------------------BIN-------------------------------------
+		if (USER.admin || (USER.creator && !USER.limited) ) {
+			var text2 = karutaStr[LANG]['bin'];
+			if (USER.admin)
+				text2 = karutaStr[LANG]['bin-admin'];
+			html += "<h3 id='bin-label'>"+text2+"&nbsp<span class='bin-nb badge' id='bin-nb'></span>";
+			html += "<button class='btn list-btn' onclick=\"UIFactory.Portfolio.displayBin('project-portfolios','bin');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see-bin"] + "</button>";
+			html += "</h3>";
+		}
+		//-----------------------------------------------------------
+	html += "</div><!--div id='list-leftside'-->";
+
 	return html;
 }
 
@@ -151,6 +160,7 @@ function fill_list_page()
 	}
 	
 	//--------------------FOLDERS-------------------------
+	loadFolderStruct();
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
