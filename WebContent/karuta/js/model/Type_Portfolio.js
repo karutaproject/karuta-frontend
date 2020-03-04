@@ -94,7 +94,10 @@ UIFactory["Portfolio"] = function( node )
 	this.display = {};
 	this.groups = [];
 	this.roles = [];
-	this.rights = this.root.getRights(this.rootid);
+	if (this.semantictag.indexOf("karuta-project")>-1)
+		this.rights = "";
+	else
+		this.rights = this.root.getRights(this.rootid);
 };
 
 //=======================================================================
