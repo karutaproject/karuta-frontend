@@ -118,9 +118,6 @@
 			line-height:1.1;
 			margin-left:5px;
 		}
-		#bin-label{
-			margin-top:5px;
-		}
 		.portfolio-menu .btn{
 			height:25px;
 			padding-left:9px;
@@ -186,20 +183,33 @@
 	}
 
 	//=============================
-	#projects {
-		width:calc(25% - 2px);
-		margin-bottom:10px;
+	#list {
+	  margin-top: 20px;
 	}
-	#gutter-project {
-		width:4px;
-		float:right;
+
+	#list-leftside {
+	  width: calc(25% - 5px);
+	  margin-bottom: 10px;
+	  h3 {
+	  	margin-top:20px;
+	  }
 	}
+
+	#gutter {
+	  width: 10px;
+	  float: right;
+	}
+	
+	#list-rightside {
+	  width: calc(75% - 5px);
+	  margin-top: 2px;
+	  padding-bottom: 5px;
+	  float: right;
+	  background-color: var(--list-element-background-color);
+	}
+	//=============================
+
 	#project-portfolios {
-		width:calc(75% - 2px);
-		margin-top:2px;
-		padding-bottom:5px;
-		float:right;
-		background-color: var(--list-element-background-color);
 		.project-label{
 			cursor:none;
 			font-weight:bold;
@@ -223,20 +233,7 @@
 	}
 
 	//=============================
-	#folders {
-		width:calc(25% - 2px);
-		margin-bottom:10px;
-	}
-	#gutter-folder {
-		width:4px;
-		float:right;
-	}
 	#folder-portfolios {
-		width:calc(75% - 2px);
-		margin-top:2px;
-		padding-bottom:5px;
-		float:right;
-		background-color: var(--list-element-background-color);
 		.folder-label{
 			cursor:none;
 			font-weight:bold;
@@ -338,7 +335,7 @@
 /* ====================== */
 
 	.button{
-		font-size: 0.75rem;
+		font-size: 0.90rem;
 		padding: 5px;
 		cursor:pointer;
 		display: inline-block;

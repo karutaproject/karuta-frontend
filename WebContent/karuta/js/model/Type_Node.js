@@ -1227,7 +1227,8 @@ UIFactory["Node"].displayComments = function(destid,node,type,langcode)
 		//---------------------
 		var uuid = node.id;
 		var text = $(UICom.structure['ui'][uuid].context_text_node[langcode]).text();
-		html += "<div>"+text+"</div>";
+		var style = UIFactory.Node.getCommentStyle(uuid);
+		html += "<div style='"+style+"'>"+text+"</div>";
 		if (text.length)
 			$("#"+destid).append($(html));
 		else

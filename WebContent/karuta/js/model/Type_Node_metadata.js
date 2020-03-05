@@ -110,7 +110,32 @@ UIFactory["Node"].prototype.getContentStyle = function()
 	return style;
 }
 
+//==================================================
+UIFactory["Node"].getCommentStyle = function(uuid)
+//==================================================
+{
+	var node = UICom.structure["ui"][uuid];
+	metadataepm = node.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-color',false);
+	return style;
+}
 
+//==================================================
+UIFactory["Node"].prototype.getCommentStyle = function()
+//==================================================
+{
+	metadataepm = this.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-color',false);
+	return style;
+}
 
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
@@ -283,6 +308,8 @@ UIFactory["Node"].getMetadataEpm = function(data,attribute,number)
 			html += attribute.substring(4) + ":" + value;
 		else if (attribute.indexOf("inparent-")>-1)
 			html += attribute.substring(9) + ":" + value;
+		else if (attribute.indexOf("comment-")>-1)
+			html += attribute.substring(8) + ":" + value;
 		else
 			html += attribute + ":" + value;
 		if (attribute.indexOf("font-size")>-1 && number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
@@ -1089,6 +1116,8 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 		attribute_label = attribute.substring(5);
 	if (attribute.indexOf('inparent-')>-1)
 		attribute_label = attribute.substring(9);
+	if (attribute.indexOf('comment-')>-1)
+		attribute_label = attribute.substring(8);
 	if (attribute.indexOf('font-weight')>-1){
 		var choices = [{code:'normal',label:'Normal'},{code:'bold',label:'Bold'}];
 		html += "<div class='input-group '>";
@@ -1188,6 +1217,8 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 			html += "<hr><h5>"+karutaStr[languages[langcode]]['inparent']+"</h5>";
 			html += "	<div id='metadata-inparent'></div>";
 		}
+		html += "<h5>"+karutaStr[languages[langcode]]['node-comment']+"</h5>";
+		html += "	<div id='metadata-node-comment'></div>";
 		html += "</form>";
 		$("#"+destid).append($(html));
 		//----------------------------------
@@ -1235,6 +1266,11 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		this.displayMetadataEpmAttributeEditor('metadata-inparent','inparent-color',$(this.metadataepm).attr('inparent-color'));
 		this.displayMetadataEpmAttributeEditor('metadata-inparent','inparent-background-color',$(this.metadataepm).attr('inparent-background-color'));
 		this.displayMetadataEpmAttributeEditor('metadata-inparent','inparent-othercss',$(this.metadataepm).attr('inparent-othercss'));
+		//----------------------------------
+		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-weight',$(this.metadataepm).attr('comment-font-weight'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-style',$(this.metadataepm).attr('comment-font-style'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-color',$(this.metadataepm).attr('comment-color'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-size',$(this.metadataepm).attr('comment-font-size'));
 	}
 };
 

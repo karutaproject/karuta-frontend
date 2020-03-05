@@ -448,10 +448,11 @@ g_report_actions['cell'] = function (destid,action,no,data)
 //==================================
 {
 	var style = r_replaceVariable($(action).attr("style"));
+	var cssclass = r_replaceVariable($(action).attr("class"));
 	var attr_help = $(action).attr("help");
 	var colspan = $(action).attr("colspan");
 
-	var html = "<td id='"+destid+'-'+no+"' style='"+style+"' ";
+	var html = "<td id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'";
 	if (colspan!=null && colspan!='0')
 		html += "colspan='"+colspan+"' "
 	html += "><span id='help_"+destid+'-'+no+"' class='ihelp'></span>";
