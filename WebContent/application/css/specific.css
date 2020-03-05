@@ -37,6 +37,7 @@ body {
   -moz-user-select: none; /* Firefox 2+ */
   -ms-user-select: none; /* IE 10+ */
   user-select: none;
+  display: none;
 }
 
 .closeSign::before {
@@ -55,6 +56,10 @@ body {
 
 .tree .active {
   display: block;
+}
+
+.tree .toggledNode {
+  display: inline-block;
 }
 
 .user .closeSign::before, .user .openSign::before {
@@ -154,8 +159,3 @@ body {
   background-color: var(--list-element-background-color-complement);
 }
 
-.active .number_of_folders {
-  margin-left: 5px;
-  color: var(--list-element-text-color);
-  background-color: var(--list-element-background-color);
-}

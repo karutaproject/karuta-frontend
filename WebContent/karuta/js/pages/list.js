@@ -22,7 +22,7 @@ function getList()
 	html += "<div id='list-leftside'>";
 		//--------------------FOLDERS---------------------------------------
 		html += "<h3><span id='folders-label'>"+text0+"</span>&nbsp<span class='folders-nb badge' id='folders-nb'></span>";
-		html +="	<button class='btn list-btn' onclick='UIFactory.Folder.createfolder()'>"+karutaStr[LANG]['create_folder']+"</button>";
+		html +="	<button class='btn list-btn' onclick='UIFactory.Folder.createFolder()'>"+karutaStr[LANG]['create_folder']+"</button>";
 		html += "</h3>";
 		html += "<div id='folders' class='tree portfolio'></div>";
 	
