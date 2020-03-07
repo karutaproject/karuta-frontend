@@ -159,3 +159,9 @@ body {
   background-color: var(--list-element-background-color-complement);
 }
 
+#list-container .folder-menu .btn {
+  height: 25px;
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
