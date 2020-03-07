@@ -2859,8 +2859,8 @@ UIFactory["Portfolio"].displayProject = function(nb,dest,type,langcode,parentcod
 					$("#"+dest).append($(html));
 					if (!loadedProjects[portfoliocode] && g_nb_trees>100 && localStorage.getItem('currentDisplayedFolderCode')==portfoliocode) {
 						loadProjectContent('project-portfolios',portfoliocode);
-						$('.project').removeClass('active');
-						$("#project_"+portfolio.id).addClass('active');
+						$(".row-label").removeClass('active');
+						$("#label_"+portfolio.id).addClass('active');
 					}
 					countProjectPortfolios(projects_list[number_of_projects].uuid);
 					number_of_projects ++;
@@ -2885,6 +2885,7 @@ toggleProjectContent = function(portfolioid,portfoliocode)
 		$(".row-label").removeClass('active');
 		$("#project-portfolios").html("");
 		$("#project-portfolios").hide();
+		localStorage.setItem('currentDisplayedFolderCode','none');
 	} else {
 		$("#folder-portfolios").html("");
 		$("#folder-portfolios").hide();
@@ -2892,6 +2893,7 @@ toggleProjectContent = function(portfolioid,portfoliocode)
 		loadAnddisplayProjectContent('project-portfolios',portfoliocode);
 		$(".row-label").removeClass('active');
 		$("#label_"+portfolioid).addClass('active');
+		localStorage.setItem('currentDisplayedFolderCode',portfoliocode);
 	}
 }
 
@@ -2911,7 +2913,6 @@ UIFactory["Portfolio"].displayProjectContent = function(dest,parentcode,langcode
 //==================================
 {
 	$("#project-portfolios").show();
-	localStorage.setItem('currentDisplayedFolderCode',parentcode);
 	loadedProjects[parentcode] = true;
 	$("#"+dest).html("");
 	var html = "";
@@ -2937,7 +2938,7 @@ UIFactory["Portfolio"].displayProjectContent = function(dest,parentcode,langcode
 //			projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
 //			projects_list[number_of_projects].portfolios += portfolio.id;
 //			number_of_projects_portfolios = 0;
-			html += "<div id='projectcontent_"+portfolio.id+"' class='project'>";
+			html += "<div id='projectcontent_"+portfolio.id+"' class='project-header'>";
 			html += "	<div class='row row-label'>";
 			html += "		<div class='col-1'/>";
 			html += "		<div class='col-4 project-label' id='portfoliolabel_"+portfolio.id+"' >"+portfolio_label+"</div>";

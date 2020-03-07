@@ -103,6 +103,7 @@
 /* ====================== */
 
 	#list-container {
+		#project-portfolios,
 		.portfolios-not-in-project,
 		.projects-nb,
 		.bin-nb,
@@ -114,7 +115,7 @@
 			color:var(--list-button-text-color);
 		}
 		.list-btn {
-			line-height:1.1;
+			line-height:1;
 			margin-left:5px;
 		}
 		.portfolio-menu .btn{
@@ -127,11 +128,6 @@
 			background-color: var(--list-element-background-color);
 		}
 		#projects {
-			.project {
-				margin-top:10px;
-				padding:7px;
-				background-color:var(--list-element-background-color);
-			}
 			.active {
 				background-color: var(--list-menu-background-color);
 			}
@@ -159,6 +155,15 @@
 		.project .row-label,
 		.portfolios-not-in-project {
 			color: var(--list-element-text-color);
+		}
+		.project .row-label {
+				margin-top:10px;
+				padding:7px;
+				background-color:var(--list-element-background-color);
+		}
+		.project-header {
+				padding:7px;
+				background-color:var(--list-menu-background-color);
 		}
 		h3,
 		#refresh,
@@ -200,11 +205,10 @@
 	}
 	
 	#list-rightside {
-	  width: calc(75% - 5px);
-	  margin-top: 2px;
-	  padding-bottom: 5px;
-	  float: right;
-	  background-color: var(--list-element-background-color);
+		width: calc(75% - 5px);
+		margin-top: 2px;
+		padding-bottom: 5px;
+		float: right;
 	}
 	//=============================
 

@@ -93,6 +93,7 @@ body,
 /* ====================== */
 /*     LIST CONTAINER     */
 /* ====================== */
+#list-container #project-portfolios,
 #list-container .portfolios-not-in-project,
 #list-container .projects-nb,
 #list-container .bin-nb,
@@ -104,7 +105,7 @@ body,
   color: var(--list-button-text-color);
 }
 #list-container .list-btn {
-  line-height: 1.1;
+  line-height: 1;
   margin-left: 5px;
 }
 #list-container .portfolio-menu .btn {
@@ -114,11 +115,6 @@ body,
 }
 #list-container #bin {
   padding: 5px;
-  background-color: var(--list-element-background-color);
-}
-#list-container #projects .project {
-  margin-top: 10px;
-  padding: 7px;
   background-color: var(--list-element-background-color);
 }
 #list-container #projects .active {
@@ -147,6 +143,15 @@ body,
 #list-container .project .row-label,
 #list-container .portfolios-not-in-project {
   color: var(--list-element-text-color);
+}
+#list-container .project .row-label {
+  margin-top: 10px;
+  padding: 7px;
+  background-color: var(--list-element-background-color);
+}
+#list-container .project-header {
+  padding: 7px;
+  background-color: var(--list-menu-background-color);
 }
 #list-container h3,
 #list-container #refresh,
@@ -190,7 +195,6 @@ body,
   margin-top: 2px;
   padding-bottom: 5px;
   float: right;
-  background-color: var(--list-element-background-color);
 }
 
 #project-portfolios .project-label {
