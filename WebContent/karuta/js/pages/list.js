@@ -28,10 +28,10 @@ function getList()
 	
 	
 		//--------------------PROJECTS---------------------------------------
-		html += "<h3><span id='projects-label'>"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span>";
-		html +="	<button class='btn list-btn' onclick='UIFactory.Portfolio.createProject()'>"+karutaStr[LANG]['create_project']+"</button>";
-		html += "</h3>";
-		html += "<div id='projects'></div>";
+//		html += "<h3><span id='projects-label'>"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span>";
+//		html +="	<button class='btn list-btn' onclick='UIFactory.Portfolio.createProject()'>"+karutaStr[LANG]['create_project']+"</button>";
+//		html += "</h3>";
+//		html += "<div id='projects'></div>";
 	
 		
 		//--------------------PORTFOLIOS--------------------------------------
@@ -160,7 +160,7 @@ function fill_list_page()
 	}
 	
 	//--------------------FOLDERS-------------------------
-	loadFolderStruct();
+	loadFolder("folders","0");
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -251,6 +251,7 @@ function fill_list_page()
 			$("#wait-window").hide();
 		}
 	});
+	
 	//------------------------ BIN --------------------------------
 	if (USER.admin || (USER.creator && !USER.limited) ) {
 		$.ajax({

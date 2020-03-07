@@ -1990,7 +1990,7 @@ function toggleElt(closeSign,openSign,eltid) { // click on open/closeSign
 	var elt = document.getElementById("toggle_"+eltid);
 	elt.classList.toggle(openSign);
 	elt = document.getElementById("collapse_"+eltid);
-	elt.classList.toggle('active');
+	elt.classList.toggle('open');
 	if ($("#toggle_"+eltid).hasClass(openSign))
 	{
 		localStorage.setItem('sidebar'+eltid,'open');
@@ -2007,7 +2007,7 @@ function toggleOpenElt(closeSign,openSign,eltid)
 	if (cookie == "closed") {
 		localStorage.setItem('sidebar'+eltid,'open');
 		document.getElementById("toggle_"+eltid).classList.add('openSign');
-		document.getElementById("collapse_"+eltid).classList.add('active');
+		document.getElementById("collapse_"+eltid).classList.add('open');
 	}
 }
 

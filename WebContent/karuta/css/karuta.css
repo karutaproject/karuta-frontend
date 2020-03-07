@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* ====================== */
 /*     DEFAULT VALUES     */
 /* ====================== */
@@ -95,8 +96,7 @@ body,
 #list-container .portfolios-not-in-project,
 #list-container .projects-nb,
 #list-container .bin-nb,
-#list-container .portfolios-nb,
-#list-container .project {
+#list-container .portfolios-nb {
   background-color: var(--list-element-background-color);
 }
 #list-container .btn {
@@ -228,6 +228,124 @@ body,
   margin-bottom: 10px;
 }
 #folder-portfolios .folder .btn {
+  background-color: var(--list-element-background-color);
+}
+
+.tree {
+  margin: 0;
+  padding: 0;
+}
+.tree .treeNode {
+  margin: 0;
+  line-height: 2em;
+  position: relative;
+}
+.tree .nested {
+  display: none;
+  margin-left: 1em;
+  position: relative;
+}
+.tree .nested .treeNode:last-child:before {
+  background: #fff;
+  height: auto;
+  top: 1em;
+  bottom: 0;
+}
+.tree .open {
+  display: block;
+}
+.tree .folder {
+  margin-top: 5px;
+  padding-bottom: 5px;
+}
+.tree .row-label {
+  background-color: var(--list-element-background-color);
+  color: var(--list-element-text-color);
+  padding: 5px;
+}
+.tree .folders-nb {
+  background-color: var(--list-element-background-color);
+}
+
+.closeSign {
+  cursor: pointer;
+  -webkit-user-select: none;
+  /* Safari 3.1+ */
+  -moz-user-select: none;
+  /* Firefox 2+ */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+}
+
+.closeSign::before {
+  content: "▶";
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.openSign::before {
+  content: "▼";
+}
+
+.portfolio .closeSign::before,
+.portfolio .openSign::before {
+  color: var(--list-element-text-color);
+}
+
+#list-container .folders-nb {
+  color: var(--list-title-color);
+}
+
+.folder-label {
+  cursor: pointer;
+}
+
+#list-container .folders-nb {
+  color: var(--list-title-color);
+}
+
+.folder-content {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--list-background-color);
+}
+
+#folder-portfolios .folder,
+#list-container #folders .active {
+  background-color: var(--list-menu-background-color);
+}
+
+#list-container .folder-row {
+  margin-left: 1px;
+  margin-right: 1px;
+  color: var(--list-element-text-color);
+}
+
+#list-container .folder-row:hover {
+  background-color: var(--list-element-background-color-complement);
+}
+
+#folder-portfolios-pages .folder-label {
+  cursor: none;
+  font-weight: normal;
+}
+
+.number_of_items {
+  margin-left: 5px;
+  background-color: var(--list-element-text-color);
+  color: var(--list-element-background-color);
+}
+
+.number_of_folders {
+  margin-left: 5px;
+  color: var(--list-element-text-color);
+  background-color: var(--list-element-background-color-complement);
+}
+
+.active .number_of_folders {
+  margin-left: 5px;
+  color: var(--list-element-text-color);
   background-color: var(--list-element-background-color);
 }
 
@@ -921,10 +1039,6 @@ h3 {
 #selectform-projects .row,
 #main-user {
   margin-top: 2px;
-}
-
-#main-container .row-label {
-  background-color: initial;
 }
 
 #refresh {
