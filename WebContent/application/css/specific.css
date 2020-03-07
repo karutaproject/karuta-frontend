@@ -1,3 +1,38 @@
 body {
 	font-family: Raleway,"Open Sans",sans-serif;
 }
+
+
+
+
+.user .closeSign::before, .user .openSign::before {
+  color: black;
+}
+
+.navbar-pages {
+  text-align: center;
+  padding: 0.5em 0em;
+  color: var(--list-title-color);
+  background-color: var(--list-element-background-color-complement);
+}
+
+.navbar-pages .active {
+  cursor: none;
+  font-style: italic;
+  font-weight: bold;
+  border: 0px solid #999;
+  display: inline;
+}
+
+.pageindex {
+  padding: 0.2em 0.5em;
+  margin: 0 0.2em;
+  cursor: pointer;
+  border: 1px solid #999;
+}
+
+.pageindex0 {
+  padding: 0.2em 0.5em;
+}
+
+/*-----------*/
