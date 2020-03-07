@@ -157,13 +157,18 @@
 			color: var(--list-element-text-color);
 		}
 		.project .row-label {
-				margin-top:10px;
-				padding:7px;
-				background-color:var(--list-element-background-color);
+			margin-top:10px;
+			padding:7px;
+			background-color:var(--list-element-background-color);
 		}
 		.project-header {
-				padding:7px;
-				background-color:var(--list-menu-background-color);
+			padding:7px;
+			background-color:var(--list-menu-background-color);
+			color:var(--list-button-text-color);
+			.btn  {
+				background-color:var(--list-element-background-color);
+//				color:var(--list-button-text-color);
+			}
 		}
 		h3,
 		#refresh,

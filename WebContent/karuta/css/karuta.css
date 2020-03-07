@@ -152,6 +152,10 @@ body,
 #list-container .project-header {
   padding: 7px;
   background-color: var(--list-menu-background-color);
+  color: var(--list-button-text-color);
+}
+#list-container .project-header .btn {
+  background-color: var(--list-element-background-color);
 }
 #list-container h3,
 #list-container #refresh,
