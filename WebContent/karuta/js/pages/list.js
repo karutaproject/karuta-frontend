@@ -14,17 +14,17 @@ function getList()
 	html += "<div id='gutter'></div>";
 	html += "<div id='list-rightside'>";
 	//-----------------------------------------------------------
-		html += "<div id='folder-portfolios'></div>";
+//		html += "<div id='folder-portfolios'></div>";
 		html += "<div id='project-portfolios'></div>";
 	//-----------------------------------------------------------
 	html += "</div><!--div id='list-rightside'-->";
 
 	html += "<div id='list-leftside'>";
 		//--------------------FOLDERS---------------------------------------
-		html += "<h3><span id='folders-label'>"+text0+"</span>&nbsp<span class='folders-nb badge' id='folders-nb'></span>";
-		html +="	<button class='btn list-btn' onclick='UIFactory.Folder.createFolder()'>"+karutaStr[LANG]['create_folder']+"</button>";
-		html += "</h3>";
-		html += "<div id='folders' class='tree portfolio'></div>";
+//		html += "<h3><span id='folders-label'>"+text0+"</span>&nbsp<span class='folders-nb badge' id='folders-nb'></span>";
+//		html +="	<button class='btn list-btn' onclick='UIFactory.Folder.createfolder()'>"+karutaStr[LANG]['create_folder']+"</button>";
+//		html += "</h3>";
+//		html += "<div id='folders' class='tree portfolio'></div>";
 	
 	
 		//--------------------PROJECTS---------------------------------------
@@ -159,8 +159,8 @@ function fill_list_page()
 		$("#menu").html(html);
 	}
 	
-	//--------------------FOLDERS-------------------------
-	loadFolderStruct();
+/*	//--------------------FOLDERS-------------------------
+	loadFolder("folders","0");
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -178,8 +178,7 @@ function fill_list_page()
 			$("#wait-window").hide();
 		}
 	});
-
-	//-------------------For backward compatibility--------------------------
+*/
 	var url1 =  serverBCK_API+"/portfolios?active=1&count=true";
 	$.ajax({
 		type : "GET",
@@ -217,7 +216,7 @@ function fill_list_page()
 					success : function(data) {
 						var nb_projects = parseInt($('portfolios',data).attr('count'))-1;
 						UIFactory["Portfolio"].parse(data);
-						UIFactory["Portfolio"].displayAll('portfolios','list');
+						UIFactory["Portfolio"].displayAll('projects','list');
 						if ($("#project-portfolios").html()=="")
 							$("#project-portfolios").hide();
 						$("#wait-window").hide();
@@ -251,6 +250,7 @@ function fill_list_page()
 			$("#wait-window").hide();
 		}
 	});
+	
 	//------------------------ BIN --------------------------------
 	if (USER.admin || (USER.creator && !USER.limited) ) {
 		$.ajax({
