@@ -175,6 +175,17 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 			html += "</div></td>";
 		}
 	}
+	if (type=='list2') {
+		html = "<div class='col-2 col-md-3'><span class='firstname'>"+this.firstname_node.text()+"</span></div>";
+		html += "<div class='col-3 d-none d-md-block'><span class='lastname'>"+this.lastname_node.text()+"</span></div>";
+		html += "<div class='col-3  col-md-3'><span class='username'>("+this.username_node.text()+")</span></div>";
+		//------------ buttons ---------------
+		html += "<div class='col-3'>";
+		if (USER.admin){
+			html += this.getAdminUserMenu(gid);
+		}
+		html += "</div><!-- class='col' -->";
+	}
 	if (type=='firstname-lastname') {
 		html = this.firstname_node.text() + " " + this.lastname_node.text();
 	}
