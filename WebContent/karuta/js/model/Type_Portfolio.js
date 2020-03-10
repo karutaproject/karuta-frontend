@@ -15,6 +15,8 @@
 	
 var portfolios_byid = {};
 var portfolios_list = [];
+var searched_portfolios_list = [];
+var searched_bin_portfolios_list = [];
 var projects_list = [];
 var bin_byid = {};
 var bin_list = [];
@@ -24,7 +26,7 @@ var number_of_projects_portfolios = 0;
 var number_of_portfolios = 0;
 var number_of_bins = 0;
 var loadedProjects = {};
-var currentDisplayedFolderCode = "";
+var currentDisplayedPrjectCode = "";
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -219,7 +221,7 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 //				displayProject[portfolio.id] = Cookies.get('dp'+portfolio.id);
 				number_of_bins ++;
 				html += "<div id='project_"+portfolio.id+"' class='project'>";
-				html += "	<div class='row row-label'>";
+				html += "	<div class='row portfolio-label'>";
 				if (displayProject[portfolio.id]!=undefined && displayProject[portfolio.id]=='open')
 					html += "		<div onclick=\"javascript:toggleProject('"+portfolio.id+"')\" class='col-md-1 col-xs-1'><span id='toggleContent_"+portfolio.id+"' class='button fas fa-minus'></span></div>";
 				else
@@ -230,7 +232,7 @@ UIFactory["Portfolio"].displayBinTree = function(nb,dest,type,langcode,parentcod
 				html += "		<div class='col-md-1 col-xs-1'>";
 				//------------ buttons ---------------
 				html += "<div class='btn-group'>";
-				html += "<button class='btn ' onclick=\"UIFactory['Portfolio'].restoreProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
+				html += "<button class='btn ' onclick=\"UIFactory.Portfolio.restoreProject('"+portfolio.id+"','"+portfolio.code_node.text()+"');searchPortfolio();\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
 				html += "<i class='fas fa-trash-restore'></i>";
 				html += "</button>";
 				html += " <button class='btn ' onclick=\"confirmDelProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
@@ -360,7 +362,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 				html += "<div class='col-md-2 col-sm-2 hidden-xs'>"+this.date_modified.substring(0,10)+"</div>";
 			html += "<div class='col-md-2 col-sm-2 col-xs-3'>";
 			html += "<div class='btn-group portfolio-menu'>";
-			html += "<button class='btn' onclick=\"UIFactory['Portfolio'].restore('"+this.id+"')\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
+			html += "<button class='btn' onclick=\"UIFactory.Portfolio.restore('"+this.id+"')\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
 			html += "<i class='fas fa-trash-restore'></i>";
 			html += "</button>";
 			html += " <button class='btn' onclick=\"confirmDelPortfolio('"+this.id+"')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
@@ -692,6 +694,39 @@ UIFactory["Portfolio"].parse_add = function(data)
 	var newTableau1 = tableau1.sort(sortOn1);
 	for (var i=0; i<newTableau1.length; i++){
 		portfolios_list[i] = portfolios_byid[newTableau1[i][1]]
+	}
+};
+
+//==================================
+UIFactory["Portfolio"].parse_search = function(data,type) 
+//==================================
+{
+	if (type!=null && type=="bin")
+		searched_bin_portfolios_list = [];
+	else
+		searched_portfolios_list = [];
+	var tableau1 = [];
+	var uuid = "";
+	var items = $("portfolio",data);
+	for ( var i = 0; i < items.length; i++) {
+		try {
+			uuid = $(items[i]).attr('id');
+			if (portfolios_byid[uuid]==undefined)
+				portfolios_byid[uuid] = new UIFactory["Portfolio"](items[i]);
+			var code = portfolios_byid[uuid].code_node.text();
+			if (code.indexOf(".")<0)
+				code += ".";
+			tableau1[tableau1.length] = [portfolios_byid[uuid].code_node.text(),uuid];
+		} catch(e) {
+			alertHTML("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
+		}
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
+	for (var i=0; i<newTableau1.length; i++){
+		if (type!=null && type=="bin")
+			searched_bin_portfolios_list[i] = portfolios_byid[newTableau1[i][1]];
+		else
+			searched_portfolios_list[i] = portfolios_byid[newTableau1[i][1]];
 	}
 };
 
@@ -1270,7 +1305,7 @@ UIFactory["Portfolio"].remove = function(portfolioid)
 };
 
 //==================================
-UIFactory["Portfolio"].restore = function(portfolioid) 
+UIFactory["Portfolio"].restoreXXX = function(portfolioid) 
 //==================================
 {
 	var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?active=true";
@@ -1304,6 +1339,26 @@ UIFactory["Portfolio"].restore = function(portfolioid)
 			}
 			UIFactory["Portfolio"].displayBin('bin','bin');
 			UIFactory["Portfolio"].displayAll('portfolios','list');
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in restore : "+jqxhr.responseText);
+		}
+	});
+};
+
+//==================================
+UIFactory["Portfolio"].restore = function(portfolioid)
+//==================================
+{
+	var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?active=true";
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : "",
+		success : function(data) {
+			searchPortfolio();
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in restore : "+jqxhr.responseText);
@@ -2690,6 +2745,35 @@ UIFactory["Portfolio"].removePortfolios = function()
 }
 
 //==================================
+UIFactory["Portfolio"].removeSearchedPortfolios = function() 
+//==================================
+{
+	$("#wait-window").show();
+	//----------------
+	$.ajaxSetup({async: false});
+	for (var i=0;i<searched_portfolios_list.length;i++){
+		var uuid = searched_portfolios_list[i].id;
+		var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "?active=false";
+		$.ajax({
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			url : url,
+			data : "",
+			success : function(data) {
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error in removePortfolios : "+jqxhr.responseText);
+			}
+		});
+	}
+	searchPortfolio();
+	$("#wait-window").hide();
+	$.ajaxSetup({async: true});
+	//----------------
+}
+
+//==================================
 UIFactory["Portfolio"].emptyBin = function() 
 //==================================
 {
@@ -2857,7 +2941,7 @@ UIFactory["Portfolio"].displayProject = function(nb,dest,type,langcode,parentcod
 					html += "	</div>";
 					html += "</div><!-- class='project'-->"
 					$("#"+dest).append($(html));
-					if (!loadedProjects[portfoliocode] && g_nb_trees>100 && localStorage.getItem('currentDisplayedFolderCode')==portfoliocode) {
+					if (!loadedProjects[portfoliocode] && localStorage.getItem('currentDisplayedProjectCode')==portfoliocode) {
 						loadProjectContent('project-portfolios',portfoliocode);
 						$(".row-label").removeClass('active');
 						$("#label_"+portfolio.id).addClass('active');
@@ -2882,18 +2966,14 @@ toggleProjectContent = function(portfolioid,portfoliocode)
 //==================================
 {
 	if ($("#label_"+portfolioid).hasClass('active')) {
-		$(".row-label").removeClass('active');
-		$("#project-portfolios").html("");
-		$("#project-portfolios").hide();
-		localStorage.setItem('currentDisplayedFolderCode','none');
+		cleanList();
+		localStorage.setItem('currentDisplayedProjectCode','none');
 	} else {
-		$("#folder-portfolios").html("");
-		$("#folder-portfolios").hide();
-		$(".folder").removeClass('active');
+		cleanList();
 		loadAnddisplayProjectContent('project-portfolios',portfoliocode);
 		$(".row-label").removeClass('active');
 		$("#label_"+portfolioid).addClass('active');
-		localStorage.setItem('currentDisplayedFolderCode',portfoliocode);
+		localStorage.setItem('currentDisplayedProjectCode',portfoliocode);
 	}
 }
 

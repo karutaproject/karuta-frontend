@@ -109,6 +109,7 @@
 		.bin-nb,
 		.portfolios-nb {
 			background-color: var(--list-element-background-color);
+			padding-bottom:7px;
 		}
 		.btn  {
 			background-color:var(--list-button-background-color);
@@ -189,6 +190,18 @@
 				background-color: var(--list-element-background-color);
 			}
 		}
+		.project-content {
+			.col-md-1{
+				border-right: 1px solid var(--list-element-text-color);
+			}
+//			border-left: 1px solid var(--list-element-text-color);
+//			.portfolio-row:first-child .col-md-1{
+//				border-top: 1px solid var(--list-element-text-color);
+//			}
+//			.portfolio-row:last-child .col-md-1{
+//				border-bottom: 1px solid var(--list-element-text-color);
+//			}
+		}
 	}
 
 	//=============================
@@ -227,11 +240,11 @@
 		}
 		.project {
 			padding:7px;
-			background-color : var(--list-button-background-color);
+//			background-color : var(--list-button-background-color);
 			color : var(--list-element-text-color);
 			margin-bottom : 10px;
 			.btn {
-				background-color: var(--list-element-background-color);
+//				background-color: var(--list-element-background-color);
 			}
 		}
 	}
@@ -258,6 +271,32 @@
 				background-color: var(--list-element-background-color);
 			}
 		}
+	}
+
+	//=============================
+	#searched-portfolios-content {
+		background-color: var(--list-element-background-color);
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+
+	#searched-portfolios-header {
+		color : var(--list-element-text-color);
+		background-color: var(--list-button-background-color);
+		padding:7px;
+	}
+
+	#searched-bin-portfolios-content {
+		background-color: var(--list-element-background-color);
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+
+	#searched-bin-portfolios-header {
+		color : var(--list-element-text-color);
+		background-color: var(--list-button-background-color);
+		padding:7px;
+		margin-top:5px;
 	}
 
 	//=============================
@@ -1257,8 +1296,7 @@
 }
 
 .portfoliosgroup-content,
-.usersgroup-content,
-.project-content {
+.usersgroup-content {
 	margin-top:10px;
 	padding-top:10px;
 	border-top:1px solid var(--list-background-color);
