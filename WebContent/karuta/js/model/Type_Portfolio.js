@@ -173,9 +173,9 @@ UIFactory["Portfolio"].displayAll = function(dest,type,langcode)
 	number_of_portfolios = 0;
 	number_of_bins = 0;
 	g_sum_trees = 0;
-	$("#projects").html($(""));
+	$("#"+dest).html($(""));
 	$("#content-portfolios-not-in-project").html($(""));
-	UIFactory.Portfolio.displayProject(0,null,type,langcode,null);
+	UIFactory.Portfolio.displayProject(0,dest,type,langcode,null);
 	//--------------------------------------
 	if (number_of_projects==0) {
 		$("#projects-label").hide();
@@ -2850,27 +2850,27 @@ UIFactory["Portfolio"].displayProject = function(nb,dest,type,langcode,parentcod
 					projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
 					projects_list[number_of_projects].portfolios += portfolio.id;
 					number_of_projects_portfolios = 0;
-					html += "<div id='project_"+portfolio.id+"' class='project'>";
-					html += "	<div class='row-label'>";
+					html += "<div id='project_"+portfolio.id+"' class='project folder'>";
+					html += "	<div id='label_"+portfolio.id+"' class='row-label'>";
 					html += "		<div id='portfoliolabel_"+portfolio.id+"' onclick=\"toggleProjectContent('"+portfolio.id+"','"+portfoliocode+"')\" class='project-label'>"+portfolio_label+"&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span></div>";
 					html += "		</div>";
 					html += "	</div>";
 					html += "</div><!-- class='project'-->"
-					$("#projects").append($(html));
+					$("#"+dest).append($(html));
 					if (!loadedProjects[portfoliocode] && g_nb_trees>100 && localStorage.getItem('currentDisplayedFolderCode')==portfoliocode) {
 						loadProjectContent('project-portfolios',portfoliocode);
-						$('.project').removeClass('active');
-						$("#project_"+portfolio.id).addClass('active');
+						$(".row-label").removeClass('active');
+						$("#label_"+portfolio.id).addClass('active');
 					}
 					countProjectPortfolios(projects_list[number_of_projects].uuid);
 					number_of_projects ++;
 					nb++;
 					if (nb<portfolios_list.length)
-						UIFactory["Portfolio"].displayProject(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
+						UIFactory["Portfolio"].displayProject(nb,dest,type,langcode,portfoliocode);
 			} else {
 				nb++;
 				if (nb<portfolios_list.length)
-					UIFactory["Portfolio"].displayProject(nb,'content-'+portfolio.id,type,langcode,portfoliocode);
+					UIFactory["Portfolio"].displayProject(nb,dest,type,langcode,portfoliocode);
 			}
 
 		}
@@ -2881,18 +2881,19 @@ UIFactory["Portfolio"].displayProject = function(nb,dest,type,langcode,parentcod
 toggleProjectContent = function(portfolioid,portfoliocode)
 //==================================
 {
-	if ($("#project_"+portfolioid).hasClass('active')) {
-		$(".project").removeClass('active');
+	if ($("#label_"+portfolioid).hasClass('active')) {
+		$(".row-label").removeClass('active');
 		$("#project-portfolios").html("");
 		$("#project-portfolios").hide();
+		localStorage.setItem('currentDisplayedFolderCode','none');
 	} else {
 		$("#folder-portfolios").html("");
 		$("#folder-portfolios").hide();
 		$(".folder").removeClass('active');
-		$(".project").removeClass('active');
 		loadAnddisplayProjectContent('project-portfolios',portfoliocode);
-		$(".project").removeClass('active');
-		$("#project_"+portfolioid).addClass('active');
+		$(".row-label").removeClass('active');
+		$("#label_"+portfolioid).addClass('active');
+		localStorage.setItem('currentDisplayedFolderCode',portfoliocode);
 	}
 }
 
@@ -2912,8 +2913,8 @@ UIFactory["Portfolio"].displayProjectContent = function(dest,parentcode,langcode
 //==================================
 {
 	$("#project-portfolios").show();
-	localStorage.setItem('currentDisplayedFolderCode',parentcode);
-	loadedProjects[parentcode] = true;	$("#"+dest).html("");
+	loadedProjects[parentcode] = true;
+	$("#"+dest).html("");
 	var html = "";
 	if (parentcode=='false') {
 		var text2 = karutaStr[LANG]['portfolios-not-in-project'];
@@ -2937,7 +2938,7 @@ UIFactory["Portfolio"].displayProjectContent = function(dest,parentcode,langcode
 //			projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
 //			projects_list[number_of_projects].portfolios += portfolio.id;
 //			number_of_projects_portfolios = 0;
-			html += "<div id='projectcontent_"+portfolio.id+"' class='project'>";
+			html += "<div id='projectcontent_"+portfolio.id+"' class='project-header'>";
 			html += "	<div class='row row-label'>";
 			html += "		<div class='col-1'/>";
 			html += "		<div class='col-4 project-label' id='portfoliolabel_"+portfolio.id+"' >"+portfolio_label+"</div>";
