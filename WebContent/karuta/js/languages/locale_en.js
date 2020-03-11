@@ -110,7 +110,7 @@ karutaStr['en']['code']="Code";
 karutaStr['en']['value']="Value";
 karutaStr['en']['edit']="Edit";
 karutaStr['en']['comments']="Additional Information";
-karutaStr['en']['help-label']="Information";
+karutaStr['en']['help-label']="Help";
 
 //=========================================
 //========== METADATA =====================
