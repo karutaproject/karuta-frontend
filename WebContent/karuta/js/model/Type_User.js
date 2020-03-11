@@ -134,7 +134,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	if (type==null)
 		type = 'list';
 	var html = "";
-	if (type=='list') {
+	if (type=='list0') {
 		html = "<td style='padding-left:4px;padding-right:4px'>"+this.firstname_node.text() + "</td><td style='padding-left:4px;padding-right:4px'>" + this.lastname_node.text()+ "</td><td style='padding-left:4px;padding-right:4px'> (" + this.username_node.text() + ")</td>";
 		if (USER.admin){
 			html += "<td><div class='btn-group'>";
@@ -175,7 +175,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 			html += "</div></td>";
 		}
 	}
-	if (type=='list2') {
+	if (type=='list') {
 		html = "<div class='col-2 col-md-3'><span class='firstname'>"+this.firstname_node.text()+"</span></div>";
 		html += "<div class='col-3 d-none d-md-block'><span class='lastname'>"+this.lastname_node.text()+"</span></div>";
 		html += "<div class='col-3  col-md-3'><span class='username'>("+this.username_node.text()+")</span></div>";
