@@ -110,7 +110,7 @@ karutaStr['en']['code']="Code";
 karutaStr['en']['value']="Value";
 karutaStr['en']['edit']="Edit";
 karutaStr['en']['comments']="Additional Information";
-karutaStr['en']['help-label']="Information";
+karutaStr['en']['help-label']="Help";
 
 //=========================================
 //========== METADATA =====================
@@ -154,7 +154,7 @@ karutaStr['en']['menuroles3']=",roles[;other menu]</span>";
 karutaStr['en']['menulabels']="Menu Button Text<br/><span style='font-size:smaller'>";
 karutaStr['en']['menulabels2']="label@en";
 karutaStr['en']['menulabels3']=",roles[;other label]</span>";
-karutaStr['en']['help']="Information <br/><span style='font-size:smaller'>";
+karutaStr['en']['help']="Bubble Help <br/><span style='font-size:smaller'>";
 karutaStr['en']['help2']="Text in English@en";
 karutaStr['en']['help3']="</span>";
 karutaStr['en']['font-size']="Font Size (px)";

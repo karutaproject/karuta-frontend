@@ -110,7 +110,7 @@ karutaStr['fr']['code']="Code";
 karutaStr['fr']['value']="Valeur";
 karutaStr['fr']['edit']="Édition";
 karutaStr['fr']['comments']="Information complémentaire";
-karutaStr['fr']['help-label']="Information";
+karutaStr['fr']['help-label']="Aide";
 
 //=========================================
 //========== METADATA =====================
@@ -151,10 +151,10 @@ karutaStr['fr']['veriffunction']="Fonction de vérification";
 karutaStr['fr']['menuroles']="Menus<br/><span style='font-size:smaller'> code_portfolio,tag_sémantique,";
 karutaStr['fr']['menuroles2']="libellé@fr";
 karutaStr['fr']['menuroles3']=",rôles[;autre menu]</span>";
-karutaStr['fr']['menulabels']="Texte Bouton Menu<br/><span style='font-size:smaller'>";
+karutaStr['fr']['menulabels']="Texte bouton Menu<br/><span style='font-size:smaller'>";
 karutaStr['fr']['menulabels2']="libellé@fr";
 karutaStr['fr']['menulabels3']=",rôles[;autre libellé]</span>";
-karutaStr['fr']['help']="Information <br/><span style='font-size:smaller'>";
+karutaStr['fr']['help']="Bulle d'aide <br/><span style='font-size:smaller'>";
 karutaStr['fr']['help2']="texte en français@fr";
 karutaStr['fr']['help3']="</span>";
 karutaStr['fr']['font-size']="Taille police (px)";
@@ -172,7 +172,7 @@ karutaStr['fr']['displayview']="Type d'affichage";
 karutaStr['fr']['margin-top']="Marge supérieure (px)";
 karutaStr['fr']['sharedResource']="Ressource partagée";
 karutaStr['fr']['sharedNodeResource']="Ress. du noeud partagée";
-karutaStr['fr']['resizeroles']="Modifier taille imgage";
+karutaStr['fr']['resizeroles']="Modifier taille image";
 karutaStr['fr']['img-size']="Taille image";
 karutaStr['fr']['inline']="Édition en place";
 karutaStr['fr']['edittargetroles']="Éditer cible proxy";

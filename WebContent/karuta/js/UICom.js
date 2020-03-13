@@ -15,6 +15,7 @@
 
 var proxies_parent = {};
 var proxies_edit = {};
+var proxies_delete = {};
 var proxies_nodeid = {};
 var proxies_data = {};
 if( UIFactory === undefined )
@@ -144,6 +145,7 @@ var UICom =
 					if (resource_type=='Proxy') {
 						var targetid = $("code",$("asmResource[xsi_type='Proxy']",child)).text();
 						var edittargetroles = ($("metadata-wad",child).attr('edittargetroles')==undefined)?'none':$("metadata-wad",child).attr('edittargetroles');
+						var delnoderoles = ($("metadata-wad",child).attr('delnoderoles')==undefined)?'none':$("metadata-wad",child).attr('delnoderoles');
 						$.ajax({
 							type : "GET",
 							dataType : "xml",
@@ -152,6 +154,7 @@ var UICom =
 								proxies_data[targetid] = data;
 								proxies_parent[targetid] = $(current).attr("id");
 								proxies_edit[targetid] = edittargetroles;
+								proxies_delete[targetid] = delnoderoles;
 								proxies_nodeid[targetid] = id;
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
 							}
@@ -160,6 +163,7 @@ var UICom =
 					if (resource_type=='Get_Proxy') {
 						var targetid = $("value",$("asmResource[xsi_type='Get_Proxy']",child)).text();
 						var edittargetroles = ($("metadata-wad",child).attr('edittargetroles')==undefined)?'none':$("metadata-wad",child).attr('edittargetroles');
+						var delnoderoles = ($("metadata-wad",child).attr('delnoderoles')==undefined)?'none':$("metadata-wad",child).attr('delnoderoles');
 						$.ajax({
 							type : "GET",
 							dataType : "xml",
@@ -168,6 +172,7 @@ var UICom =
 								proxies_data[targetid] = data;
 								proxies_parent[targetid] = $(current).attr("id");
 								proxies_edit[targetid] = edittargetroles;
+								proxies_delete[targetid] = delnoderoles;
 								proxies_nodeid[targetid] = id;
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
 							}

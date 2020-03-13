@@ -413,6 +413,11 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 		if (this.menu)
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
+	//----------------delete control on proxy parent ------------
+	if (proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
+		var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
+		$("#buttons-"+uuid).html(html);
+	}
 	//----------------- hide lbl-div if empty ------------------------------------
 //	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
 //		$("div[name='lbl-div']","#node_"+uuid).hide();
@@ -542,6 +547,11 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		$("#buttons-"+uuid).html(buttons);
 		if (this.menu)
 			this.displayMenus("#menus-"+uuid,langcode);
+	}
+	//----------------delete control on proxy parent ------------
+	if (proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
+		var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
+		$("#buttons-"+uuid).html(html);
 	}
 	//----------- Comments -----------
 	if (this.depth>0) {

@@ -2071,3 +2071,33 @@ function displayPagesNavbar(nb_index,id,langcode,pageindex,index_class,callback,
 	}
 	selectElts(index_class,selected_list);
 }
+
+//==================================
+function replaceVariable(text)
+//==================================
+{
+	var n=0;
+	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
+		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##}"));
+		if (g_variables[variable_name]!=undefined)
+			text = text.replace("{##"+variable_name+"##}", g_variables[variable_name]);
+		n++; // to avoid infinite loop
+	}
+	while (text!=undefined && text.indexOf("##")>-1 && n<100) {
+		var test_string = text.substring(text.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##"));
+		if (g_variables[variable_name]!=undefined)
+			text = text.replace("##"+variable_name+"##", g_variables[variable_name]);
+		if (text.indexOf("[")>-1) {
+			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
+			i = replaceVariable(i);
+			var variable_array1 = text.replace("["+i+"]","");
+			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
+				text = g_variables[variable_value][i];
+			}
+		n++; // to avoid infinite loop
+	}
+	return text;
+}
