@@ -825,20 +825,25 @@ function loadAndDisplayUsersFolderContent(dest,id,langcode,type) {
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (usersfolders_byid[id].nb_folders > 0){
-		loadAndDisplayUsersFolderStruct('collapse_usersfolder_'+id,id,langcode)
-	}
-	toggleOpenElt('closeSign','openSign','usersfolder_'+id);
-	var index_class = "userspageindex";
-	UIFactory["UsersFolder"].displayFolderContent(dest,id,langcode,index_class);
-	selectElt('usersfolder','usersfolder_'+id);
-	var dest_page = dest + '-pages';
-	var list = usersfolders_byid[id].chidren_list[usersfolders_byid[id].pageindex];
-	if (list==undefined||list==null){
-		loadUsersFolderContent(dest_page,id,langcode,type,index_class);		
-	}
-	else {
-		usersfolders_byid[id].displayFolderContentPage(dest_page,type,langcode,index_class);		
+	if (id=="0" && usersfolders_byid[id]==undefined) {
+		$("#folder-users").html("<div id='active'>");
+		fill_list_usersOLD();
+	} else {
+		if (usersfolders_byid[id].nb_folders > 0){
+			loadAndDisplayUsersFolderStruct('collapse_usersfolder_'+id,id,langcode)
+		}
+		toggleOpenElt('closeSign','openSign','usersfolder_'+id);
+		var index_class = "userspageindex";
+		UIFactory["UsersFolder"].displayFolderContent(dest,id,langcode,index_class);
+		selectElt('usersfolder','usersfolder_'+id);
+		var dest_page = dest + '-pages';
+		var list = usersfolders_byid[id].chidren_list[usersfolders_byid[id].pageindex];
+		if (list==undefined||list==null){
+			loadUsersFolderContent(dest_page,id,langcode,type,index_class);		
+		}
+		else {
+			usersfolders_byid[id].displayFolderContentPage(dest_page,type,langcode,index_class);		
+		}
 	}
 	$(window).scrollTop(0);
 	$("#wait-window").hide();
@@ -997,65 +1002,8 @@ function confirmDelObject(id,type)
 	$('#delete-window').modal('show');
 }
 
-//*** à déplacer dans langguages *.js
-karutaStr['fr']['users-folders']="Dossiers d'usagers";
-karutaStr['fr']['users-in-rootfolder']="Usagers dans le dossier racine";
-//---------------
-karutaStr['en']['users-folders']="Users Folders";
-karutaStr['en']['users-in-rootfolder']="Users in root folder";
 
 //*** à déplacer pour remplacer dans users.js
-//==============================
-function getUsersList()
-//==============================
-{
-	var html = "";
-	var text0 = karutaStr[LANG]['folders'];
-	html += "<div id='gutter'></div>";
-	html += "<div id='userslist-rightside'>";
-	//-----------------------------------------------------------
-	html += "<div id='folder-users'></div>";
-	//-----------------------------------------------------------
-	html += "</div><!--div id='userslist-rightside'-->";
-
-	html += "<div id='userslist-leftside'>";
-	//--------------------FOLDERS---------------------------------------
-	html += "<div id='usersfolders' class='tree user'>";
-	html += "<h3 id='usersfolder_root' class='treeNode'>";
-	html += "<span id='toggle_usersfolder_root' class='closeSign toggledNode' onclick=\"javascript:loadAndDisplayUsersFolderStruct('collapse_usersfolder_root','root');\"></span>";
-	html += "<span id='usersfolders-label' class='folder-label'>"+text0+"</span>&nbsp<span class='badge number_of_folders' id='number_of_usersfoldersroot'></span>";
-	html += "</h3>";
-	html += "<div id='collapse_usersfolder_root' class='nested'></div>";
-	html += "</div><!--div id='usersfolders'-->";
-
-	//--------------------USERS--------------------------------------
-	var text1 = karutaStr[LANG]['users-in-rootfolder'];
-	html += "<h3 id='users-in-rootfolder'>";
-	html += "	<span id='users-label'>"+text1+"</span>&nbsp<span class='users-nb badge' id='users-nb'></span>";
-	html += "	<button class='btn list-btn' onclick=\"loadAndDisplayUsersFolderContent('folder-users','0');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see"] + "</button>";
-	html += "</h3>";
-	html += "<div id='collapse_usersfolder_0' class='nested'></div>";
-
-	if (USER.admin) {
-		//---------------------BIN-------------------------------------
-		var text2 = karutaStr[LANG]['bin']+" - "+karutaStr[LANG]['inactive_users'];
-		html += "<h3 id='bin-usersfolders-label' class='treeNode'>"+text2+"&nbsp<span class='bin-nb badge' id='bin-usersfolders-nb'></span>";
-		html += "<button class='btn list-btn' onclick=\"UIFactory.UsersFolder.displayBin('folder-users','bin');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see-bin"] + "</button>";
-		html += "</h3>";
-	}
-	//-----------------------------------------------------------
-	var text3 = karutaStr[LANG]['temporary_users'];
-	html += "	<h3 id='temporary-users' style='display:none'>"+text3;
-	html += "		&nbsp<button class='btn list-btn' onclick=\"confirmDelTemporaryUsers()\">";
-	html += 		karutaStr[LANG]["delete-temporary-users"];
-	html += "		</button>";
-	html += "	</h3>";
-	
-	//-----------------------------------------------------------
-	html += "</div><!--div id='userslist-leftside'-->";
-
-	return html;
-}
 
 //==============================
 function getUsersList2()
@@ -1105,118 +1053,10 @@ function getUsersList2()
 	return html;
 }
 
-//==============================
-function fill_list_users()
-//==============================
-{
-	setLanguageMenu("fill_list_users()");
-	var html = "";
-	html += "<div id='user-header' class='row'>";
-	html += "	<div class='col-1'>";
-	html += "<div class='folder-label btn' title='"+karutaStr[LANG]['create_user']+"'><i class='fas fa-user-plus' id='user-create' onclick=\"javascript:UIFactory['User'].callCreate();\"></i></div>";
-	html += "	</div>";
-	html += "	<div class='col-1'>";
-	html += "<div class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"javascript:UIFactory['UsesFolder'].callCreate();\"></i></div>";
-	html += "	</div>";
-	html += "	<div class='col-9 search' id='search-user-div'></div>";
-	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
-	html += "</div>";
-	html += "<div id='user-body'>"+getUsersList()+"</div>";
 
-	$("#main-user").html(html);
-	$("#search-user-div").html(getSearchUser()); // we erase code if any
-	$("#search-user-input").keypress(function(f) {
-		var code= (f.keyCode ? f.keyCode : f.which);
-		if (code == 13)
-			searchUser();
-	});
-	initRoots();
-	/*
-	$.ajaxSetup({async: false});
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/credential",
-		data: "",
-		success : function(data) {
-			USER = new UIFactory["User"]($("user",data));
-//			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('users',null));$("#menu").html(getMenu());$("#list").html(getListUsers());});
-			//----------------
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/usersfolders?active=1",
-				success : function(data) {
-					UIFactory["UsersFolder"].parse(data,'root');
-					UIFactory["UsersFolder"].displayTree('active','list');
-				}
-			});
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/usersfolders?active=0",
-				success : function(data) {
-					UIFactory["UsersFolder"].parse(data,'bin');
-				}
-			});
-			//----------------
-		},
-		error : function(jqxhr,textStatus) {
-			loadLanguages(function(data) {alertHTML(karutaStr[LANG]['not-logged']);});
-			window.location="login.htm?lang="+LANG;
-
-		}
-	});
-	$.ajaxSetup({async: true});
-	*/
-//	loadUsersFolderStruct('root');
-	
-}
 
 //à déplacer dans Type_User.js
-//======================
-UIFactory["User"].prototype.getAdminUserMenu = function(gid)
-//======================
-{	
-	var html = "";
-	html += "<div class='btn-group'>";
-	if (gid==null) {
-		html += " <button class='btn ' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
-		html += "<span class='fas fa-pencil-alt' aria-hidden='true'></span>";
-		html += "</button>";
-		if (this.username_node.text()!='root' && this.username_node.text()!='public' && this.username_node.text()!='sys_public') {
-			html += "<button class='btn ' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-			html += "<i class='fa fa-trash-alt'></i>";
-			html += "</button>";
-		} else {
-			html += "<button class='btn ' disabled='true'>";
-			html += "<i class='fa fa-trash-alt'></i>";
-			html += "</button>";
-		}
-	} else {
-		html += "<button class='btn ' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-		html += "<span class='fas fa-trash-alt'></span>";
-		html += "</button>";				
-	}
-	//----------------------------------
-	html += "<button class='btn ' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
-	if (this.username_node.text()!='root' && this.username_node.text()!='public') {
-		html += ">";
-	} else {
-		html += " disabled='true'>";
-	}
-	html += "<i class='fa fa-users fa-lg' ></i>";
-	html += "</button>";
-	//----------------------------------
-	if (this.username_node.text()!='root' && this.username_node.text()!='public') {
-		html += "<button class='btn ' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
-		html += "<i class='fa fa-file' ></i>";
-		html += "</button>";
-	}
-	//----------------------------------
-	html += "</div>";
-	return html;
-}
+
 
 // à déplacer dans karuta-page.js
 function initRoots()

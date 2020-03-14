@@ -244,6 +244,8 @@ karutaStr['fr']['list_roles']="Rôles";
 karutaStr['fr']['list_groups']="Groupes";
 karutaStr['fr']['create-test-user']="Créer un utilisateur test";
 karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre projet, changez le code de projet (partie avant le point)";
+karutaStr['fr']['users-folders']="Dossiers";
+karutaStr['fr']['users-in-rootfolder']="Usagers hors dossier";
 
 //=========================================
 //========== PORTFOLIOS ===================
