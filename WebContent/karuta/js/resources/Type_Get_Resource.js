@@ -515,6 +515,57 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			}
 		}
 		//---------------------
+		if (target=='resource') {
+			for ( var i = 0; i < newTableau1.length; i++) {
+				var uuid = $(newTableau1[i][1]).attr('id');
+				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]);
+				//------------------------------
+				var code = $('code',resource).text();
+				var display_code = false;
+				var display_label = true;
+				if (code.indexOf("$")>-1) 
+					display_label = false;
+				if (code.indexOf("@")<0) {
+					display_code = true;
+				}
+				code = cleanCode(code);
+				//------------------------------
+				if ($('code',resource).text().indexOf('----')>-1) {
+					html = "<li class='divider'></li><li></li>";
+				} else {
+					html = "<li></li>";
+				}
+				var select_item = $(html);
+				html = "<a  value='"+semtag+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+				for (var j=0; j<languages.length;j++){
+					html += "label_"+languages[j]+"=\"resource:"+uuid + "|semtag:"+semtag+"\" ";
+				}
+				html += ">";
+				
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += UICom.structure["ui"][uuid].resource.getView(null,'span');
+				var select_item_a = $(html);
+				$(select_item_a).click(function (ev){
+					$("#button_"+self.id).html(UICom.structure["ui"][$(this).attr("label_"+languages[langcode]).substring(7)].resource.getView());
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					UIFactory["Get_Resource"].update(this,self,langcode);
+				});
+				$(select_item).append($(select_item_a))
+				$(select).append($(select_item));
+				//-------------- update button -----
+				if (code!="" && self_code==$('code',resource).text()) {
+					var html = "";
+					if (display_code)
+						html += code+" ";
+					if (display_label)
+						html += UICom.structure["ui"][uuid].resource.getView(null,'span');
+					$("#button_"+self.id).html(html);
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+				}
+			}
+		}		//---------------------
 		$(btn_group).append($(select));
 		
 	}

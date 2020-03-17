@@ -21,36 +21,17 @@ function fill_list_users()
 	setLanguageMenu("fill_list_users()");
 	var html = "";
 	html += "<div id='user-header' class='row'>";
-	html += "	<div class='col-1'>";
+	html += "	<div id='create-user-button' class='col-1'>";
 	html += "<div class='folder-label btn' title='"+karutaStr[LANG]['create_user']+"'><i class='fas fa-user-plus' id='user-create' onclick=\"javascript:UIFactory['User'].callCreate();\"></i></div>";
 	html += "	</div>";
-	html += "	<div class='col-1'>";
+	html += "	<div id='create-folder-button' class='col-1'>";
 	html += "<div class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"javascript:UIFactory['UsesFolder'].callCreate();\"></i></div>";
 	html += "	</div>";
 	html += "	<div class='col-9 search' id='search-user-div'></div>";
 	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
 	html += "</div>";
-	html += "<div id='user-body'>"+getUsersList()+"</div>";
-
-	$("#main-user").html(html);
-	$("#search-user-div").html(getSearchUser()); // we erase code if any
-	$("#search-user-input").keypress(function(f) {
-		var code= (f.keyCode ? f.keyCode : f.which);
-		if (code == 13)
-			searchUser();
-	});
-	initRoots();
-	
-//	loadUsersFolderStruct('root');
-	
-}
-
-//==============================
-function getUsersList()
-//==============================
-{
-	var html = "";
-	var text0 = karutaStr[LANG]['folders'];
+	html += "<div id='user-body'>";
+	var text0 = 
 	html += "<div id='gutter'></div>";
 	html += "<div id='userslist-rightside'>";
 	//-----------------------------------------------------------
@@ -59,28 +40,34 @@ function getUsersList()
 	html += "</div><!--div id='userslist-rightside'-->";
 
 	html += "<div id='userslist-leftside'>";
-	//--------------------FOLDERS---------------------------------------
+	//--------------------FOLDERS V3---------------------------------------
 	html += "<div id='usersfolders' class='tree user'>";
 	html += "<h3 id='usersfolder_root' class='treeNode'>";
-	html += "<span id='toggle_usersfolder_root' class='closeSign toggledNode' onclick=\"javascript:loadAndDisplayUsersFolderStruct('collapse_usersfolder_root','root');\"></span>";
-	html += "<span id='usersfolders-label' class='folder-label'>"+text0+"</span>&nbsp<span class='badge number_of_folders' id='number_of_usersfoldersroot'></span>";
+//	html += "<span id='toggle_usersfolder_root' class='closeSign toggledNode' onclick=\"javascript:loadAndDisplayUsersFolderStruct('collapse_usersfolder_root','root');\"></span>";
+	html += "<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['active_users']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
 	html += "</h3>";
-	html += "<div id='collapse_usersfolder_root' class='nested'></div>";
+	html += "<div id='usersfolder_active' class=''></div>";
 	html += "</div><!--div id='usersfolders'-->";
 
-	//--------------------USERS--------------------------------------
-	var text1 = karutaStr[LANG]['users-in-rootfolder'];
-	html += "<h3 id='users-in-rootfolder'>";
-	html += "	<span id='users-label'>"+text1+"</span>&nbsp<span class='users-nb badge' id='users-nb'></span>";
+	//--------------------USERS V2--------------------------------------
+	html += "<h3 id='users-in-rootfolder' style='display:none'>";
+	html += "	<span id='users-label'>"+karutaStr[LANG]['active_users']+"</span>&nbsp<span class='users-nb badge' id='users-nb'></span>";
 	html += "	<button class='btn list-btn' onclick=\"loadAndDisplayUsersFolderContent('folder-users','0');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see"] + "</button>";
 	html += "</h3>";
-	html += "<div id='collapse_usersfolder_0' class='nested'></div>";
+	html += "<div id='usersfolder_0' class='xxxnested'></div>";
 
 	if (USER.admin) {
-		//---------------------BIN-------------------------------------
-		var text2 = karutaStr[LANG]['bin']+" - "+karutaStr[LANG]['inactive_users'];
-		html += "<h3 id='bin-usersfolders-label' class='treeNode'>"+text2+"&nbsp<span class='bin-nb badge' id='bin-usersfolders-nb'></span>";
-		html += "<button class='btn list-btn' onclick=\"UIFactory.UsersFolder.displayBin('folder-users','bin');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see-bin"] + "</button>";
+		//---------------------BIN V3-------------------------------------
+		html += "<div id='bin-usersfolders' class='tree user'>";
+		html += "<h3 id='usersfolder_bin' class='treeNode'>";
+		html += "<span id='bin-usersfolders-label' class='folder-label'>"+karutaStr[LANG]['inactive_users']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
+		html += "</h3>";
+		html += "<div id='usersfolder_inactive' class=''></div>";
+		html += "</div><!--div id='bin-usersfolders'-->";
+		//---------------------BIN V2-------------------------------------
+		html += "<h3 id='users-in-bin'  style='display:none'>";
+		html += "<span id='bin-usersfolders-label' class='treeNode'>"+karutaStr[LANG]['inactive_users']+"</span>&nbsp<span class='bin-nb badge' id='nb_folders_inactive'></span>";
+		html += "<button class='btn list-btn' onclick=\"loadAndDisplayUsersFolderContent('folder-users','1');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see"] + "</button>";
 		html += "</h3>";
 	}
 	//-----------------------------------------------------------
@@ -94,7 +81,20 @@ function getUsersList()
 	//-----------------------------------------------------------
 	html += "</div><!--div id='userslist-leftside'-->";
 
-	return html;
+	html += "</div><!--div id='user-body'-->";
+
+	$("#main-user").html(html);
+	$("#search-user-div").html(getSearchUser()); // we erase code if any
+	$("#search-user-input").keypress(function(f) {
+		var code= (f.keyCode ? f.keyCode : f.which);
+		if (code == 13)
+			searchUser();
+	});
+	
+	initUsersFolders();
+	loadUsersFolderStruct('usersfolder_active','active');  // active users
+	loadUsersFolderStruct('usersfolder_inactive','inactive');  // inactive users
+	
 }
 
 //==============================
@@ -195,7 +195,6 @@ function fill_list_usersOLD()
 		data: "",
 		success : function(data) {
 			USER = new UIFactory["User"]($("user",data));
-//			loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('users',null));$("#menu").html(getMenu());$("#list").html(getListUsers());});
 			//----------------
 			$.ajax({
 				type : "GET",

@@ -1,3 +1,4 @@
+/*
 body {
 	font-family: Raleway,"Open Sans",sans-serif;
 }
@@ -5,9 +6,9 @@ body {
 
 .closeSign {
   cursor: pointer;
-  -webkit-user-select: none; /* Safari 3.1+ */
-  -moz-user-select: none; /* Firefox 2+ */
-  -ms-user-select: none; /* IE 10+ */
+  -webkit-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none; 
   user-select: none;
   display: none;
   line-height: 0.5em;
@@ -94,8 +95,6 @@ body {
   padding: 0.2em 0.5em;
 }
 
-/*-----------*/
-/*---------------*/
 #main-user .folders-nb {
   color: var(--list-title-color);
 }
@@ -142,7 +141,7 @@ body {
   color: var(--list-element-text-color);
   background-color: var(--list-element-background-color-complement);
 }
-*/
+
 #main-user .folder-menu .btn {
   height: 25px;
   padding-left: 9px;
@@ -153,4 +152,4 @@ body {
 #main-user #usersfolders .active {
   background-color: var(--list-menu-background-color);
 }
-
+*/

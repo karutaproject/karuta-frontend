@@ -2015,7 +2015,7 @@ function toggleOpenElt(closeSign,openSign,eltid)
 function selectElt(type,uuid)
 { // click on label
 //==================================
-	$('.'+type).removeClass('active');
+	$('.active').removeClass('active');
 //	$('#'+uuid).addClass('active');
 	document.getElementById(uuid).classList.add('active');
 }
@@ -2042,21 +2042,21 @@ function displayPagesNavbar(nb_index,id,langcode,pageindex,index_class,callback,
 	var max_next = Math.min((pageindex+nbPagesIndexStep), nb_index);
 	var str1, srt2;
 	if (1 < min_prev) {
-		str1 = "<span class='"+index_class+"' onclick=\"javascript:"+callback+"('"+param1+"','"+param2+"','"+id+"',"+langcode+","+(pageindex-1)+",'"+index_class+"');\" id='"+index_class+i+"_";
+		str1 = "<span class='"+index_class+" badge' onclick=\"javascript:"+callback+"('"+param1+"','"+param2+"','"+id+"',"+langcode+","+(pageindex-1)+",'"+index_class+"');\" id='"+index_class+i+"_";
 		str2 = "'>"+karutaStr[LANG]["prev"]+"</span><span class='"+index_class+"0'>...</span>";
 		for (var j=0;j<pagegNavbar_list.length;j++) {
 			html[j] += str1+pagegNavbar_list[j]+str2;
 		}
 	}
 	for (var i=min_prev;i<=max_next;i++) {
-		str1 = "<span class='"+index_class+"' onclick=\"javascript:"+callback+"('"+param1+"','"+param2+"','"+id+"',"+langcode+","+i+",'"+index_class+"');\" id='"+index_class+i+"_";
+		str1 = "<span class='"+index_class+" badge' onclick=\"javascript:"+callback+"('"+param1+"','"+param2+"','"+id+"',"+langcode+","+i+",'"+index_class+"');\" id='"+index_class+i+"_";
 		str2 = "'>"+i+"</span>";
 		for (var j=0;j<pagegNavbar_list.length;j++) {
 			html[j] += str1+pagegNavbar_list[j]+str2;
 		}
 	}
 	if (max_next < nb_index) {
-		str1 = "<span class='"+index_class+"0'>...</span><span class='"+index_class+"' onclick=\"javascript:"+callback+"('"+param1+"','"+param2+"','"+id+"',"+langcode+","+(pageindex+1)+",'"+index_class+"');\" id='"+index_class+i+"_";
+		str1 = "<span class='"+index_class+"0 badge'>...</span><span class='"+index_class+"' onclick=\"javascript:"+callback+"('"+param1+"','"+param2+"','"+id+"',"+langcode+","+(pageindex+1)+",'"+index_class+"');\" id='"+index_class+i+"_";
 		str2 = "'>"+karutaStr[LANG]["next"]+"</span>";
 		for (var j=0;j<pagegNavbar_list.length;j++) {
 			html[j] += str1+pagegNavbar_list[j]+str2;

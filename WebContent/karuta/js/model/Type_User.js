@@ -177,14 +177,25 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	}
 	if (type=='list') {
 		html = "<td class='firstname'>"+this.firstname_node.text()+"</td>";
-		html += "<td class='lastname'>"+this.lastname_node.text()+"</tdv>";
+		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
 		html += "<td class='username'>("+this.username_node.text()+")</td>";
 		//------------ buttons ---------------
-		html += "<td>";
+		html += "<td class='user-buttons'>";
 		if (USER.admin){
 			html += this.getAdminUserMenu(gid);
 		}
 		html += "</td>";
+	}
+	if (type=='list2') {
+		html = "<div class='col-3 firstname'>"+this.firstname_node.text()+"</div>";
+		html += "<div class='col-3 lastname'>"+this.lastname_node.text()+"</div>";
+		html += "<div class='col-3 username'>("+this.username_node.text()+")</div>";
+		//------------ buttons ---------------
+		html += "<div class='col-2 user-buttons'>";
+		if (USER.admin){
+			html += this.getAdminUserMenu(gid);
+		}
+		html += "</div>";
 	}
 	if (type=='firstname-lastname') {
 		html = this.firstname_node.text() + " " + this.lastname_node.text();
@@ -946,37 +957,37 @@ UIFactory["User"].prototype.getAdminUserMenu = function(gid)
 	var html = "";
 	html += "<div class='btn-group'>";
 	if (gid==null) {
-		html += " <button class='btn ' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
-		html += "<span class='fas fa-pencil-alt' aria-hidden='true'></span>";
-		html += "</button>";
+		html += " <span class='button btn' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
+		html += "<span class='fas fa-pencil-alt'/>";
+		html += "</span>";
 		if (this.username_node.text()!='root' && this.username_node.text()!='public' && this.username_node.text()!='sys_public') {
-			html += "<button class='btn ' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-			html += "<i class='fa fa-trash-alt'></i>";
-			html += "</button>";
+			html += "<span class='button btn' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+			html += "<span class='fa fa-trash-alt'/>";
+			html += "</span>";
 		} else {
-			html += "<button class='btn ' disabled='true'>";
-			html += "<i class='fa fa-trash-alt'></i>";
-			html += "</button>";
+			html += "<span class='button btn' disabled='true'>";
+			html += "<span class='fa fa-trash-alt'/>";
+			html += "</span>";
 		}
 	} else {
-		html += "<button class='btn ' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
-		html += "<span class='fas fa-trash-alt'></span>";
-		html += "</button>";				
+		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+		html += "<span class='fa fa-trash-alt'/>";
+		html += "</span>";				
 	}
 	//----------------------------------
-	html += "<button class='btn ' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
+	html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
 	if (this.username_node.text()!='root' && this.username_node.text()!='public') {
 		html += ">";
 	} else {
 		html += " disabled='true'>";
 	}
-	html += "<i class='fa fa-users fa-lg' ></i>";
-	html += "</button>";
+	html += "<span class='fa fa-users fa-lg'/>";
+	html += "</span>";
 	//----------------------------------
 	if (this.username_node.text()!='root' && this.username_node.text()!='public') {
-		html += "<button class='btn ' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
-		html += "<i class='fa fa-file' ></i>";
-		html += "</button>";
+		html += "<span class='button btn' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
+		html += "<span class='fa fa-file'/>";
+		html += "</span>";
 	}
 	//----------------------------------
 	html += "</div>";

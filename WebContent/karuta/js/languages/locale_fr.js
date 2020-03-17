@@ -200,7 +200,7 @@ karutaStr['fr']['encrypted']="Encrypter la ressource";
 karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
 karutaStr['fr']['seltype']="Présentation ";
-karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> rôle qui partage,rôle destinataire,rôles et/ou courriels,niveau (0-4),durée de vie du lien (en heures),";
+karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> rôle qui partage,rôle visiteur,rôles et/ou courriels destinataires,niveau (0-4),durée de vie du lien (en heures),";
 karutaStr['fr']['shareroles2']="libellé du bouton@fr";
 karutaStr['fr']['shareroles3']="[,condition][;autre partage]";
 karutaStr['fr']['submitted']="Soumis le ";

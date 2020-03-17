@@ -50,7 +50,7 @@ function toggleOpenElt(closeSign,openSign,eltid)
 function selectElt(type,uuid)
 { // click on label
 //==================================
-	$('.'+type).removeClass('active');
+	$('.active').removeClass('active');
 	$('#'+type+'_'+uuid).addClass('active');
 }
 

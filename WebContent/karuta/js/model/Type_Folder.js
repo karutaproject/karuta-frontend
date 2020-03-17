@@ -18,7 +18,7 @@ var folders_list = [];
 var currentDisplayedFolderId = null;
 var rootfolder_userid = null;
 var binfolder_userid = null;
-var pagegNavbar_list = ["top","bottom"];
+//var pagegNavbar_list = ["top","bottom"];
 var number_of_folders = 0;
 var loadedFolders = {};
 

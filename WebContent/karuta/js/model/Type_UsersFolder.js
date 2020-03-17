@@ -18,7 +18,7 @@ var usersfolders_list = [];
 var bin_usersfolder_list = [];
 var currentDisplayedUsersFolderId = null;
 var root_usersfolder = '0';
-//var pagegNavbar_list = ["top","bottom"];
+var pagegNavbar_list = ["top","bottom"];
 var number_of_usersfolders = 0;
 /// Check namespace existence
 if( UIFactory === undefined )
@@ -58,12 +58,12 @@ UIFactory["UsersFolder"] = function(node)
 		this.ownerid = $(node).attr('ownerid');
 	else
 		this.ownerid = null;
-	if ($(node).attr('count')!=undefined) {
-		this.nb_folders = $(node).attr('count');		
+	if ($(node).attr('nb_folders')!=undefined) {
+		this.nb_folders = $(node).attr('nb_folders');		
 	} else this.nb_folders = 0;
-	if ($(node).attr('nb_children')!=undefined) {
-		this.nb_children = $(node).attr('nb_children');
-	} else this.nb_children = 0;
+	if ($(node).attr('nb_users')!=undefined) {
+		this.nb_users = $(node).attr('nb_users');
+	} else this.nb_users = 0;
 	this.loadedStruct = false;
 	this.folders_list = [];
 	this.loadedFolder = false;
@@ -109,7 +109,7 @@ UIFactory["UsersFolder"].displayTree = function(dest,type,langcode,parentid)
 		html += list[i].getTreeNodeView(dest,type,langcode);
 	}
 	document.getElementById(dest).innerHTML = html;
-	document.getElementById('number_of_usersfolders'+usersfolders_byid[parentid].id).innerHTML = usersfolders_byid[parentid].nb_folders;
+	document.getElementById('nb_folders_'+usersfolders_byid[parentid].id).innerHTML = usersfolders_byid[parentid].nb_folders;
 }
 
 //==================================
@@ -120,15 +120,17 @@ UIFactory["UsersFolder"].prototype.getTreeNodeView = function(dest,type,langcode
 	var folder_label = this.label_node[langcode].text();
 	var html = "";
 	if (type=='list') {
-		html += "<div id='usersfolder_"+this.id+"' class='treeNode usersfolder'>";
-		html += "	<div class='row-label folder-row'>";
-		html += "		<span id='toggle_usersfolder_"+this.id+"' class='closeSign";
+		html += "<div  class='treeNode usersfolder'>";
+		html += "	<div id='usersfolder_"+this.id+"' class='row-label folder-row'>";
 		if (this.nb_folders>0){
+			html += "		<span id='toggle_usersfolder_"+this.id+"' class='closeSign";
 			html += " toggledNode";
+			html += "' onclick=\"javascript:loadAndDisplayUsersFolderStruct('collapse_usersfolder_"+this.id+"','"+this.id+"');\"></span>";
+		} else {
+			html += "<span class='no-toggledNode'>&nbsp;</span>"
 		}
-		html += "' onclick=\"javascript:loadAndDisplayUsersFolderStruct('collapse_usersfolder_"+this.id+"','"+this.id+"');\"></span>";
-		html += "		<span id='treenode-usersfolderlabel_"+this.id+"' onclick=\"javascript:loadAndDisplayUsersFolderContent('folder-users','"+this.id+"');\" class='folder-label'>"+folder_label+"&nbsp;</span><span class='badge number_of_folders' id='number_of_usersfolders"+this.id+"'>"+this.nb_folders+"</span>";
-		html += "&nbsp;<span class='badge number_of_items' id='number_of_usersfolder_items_"+this.id+"'>"+this.nb_children+"</span>";
+		html += "		<span id='treenode-usersfolderlabel_"+this.id+"' onclick=\"javascript:loadAndDisplayUsersFolderContent('folder-users','"+this.id+"');\" class='folder-label'>"+folder_label+"&nbsp;</span><span class='badge number_of_folders' id='nb_folders_"+this.id+"'>"+this.nb_folders+"</span>";
+		html += "&nbsp;<span class='badge number_of_items' id='number_of_usersfolder_items_"+this.id+"'>"+this.nb_users+"</span>";
 		html += "	</div>";
 		html += "	<div id='collapse_usersfolder_"+this.id+"' class='nested'></div>";
 		html += "</div><!-- class='usersfolder'-->";
@@ -150,7 +152,7 @@ UIFactory["UsersFolder"].prototype.getTreeNodeView = function(dest,type,langcode
 		}
 		html += "' onclick=\"javascript:loadAndDisplayUsersFolderStruct('collapse_select-usersfolder_"+this.id+"','"+this.id+"');\"></span>";
 		html += "		<span id='treenode-usersfolderlabel_"+this.id+"' onclick=\"javascript:loadAndDisplayUsersFolderContent('select-folder-users','"+this.id+"');\" class='folder-label'>"+folder_label+"&nbsp;</span><span class='badge number_of_folders' id='select-number_of_usersfolders"+this.id+"'>"+this.nb_folders+"</span>";
-		html += "&nbsp;<span class='badge number_of_items' id='select-number_of_usersfolder_items_"+this.id+"'>"+this.nb_children+"</span>";
+		html += "&nbsp;<span class='badge number_of_items' id='select-number_of_usersfolder_items_"+this.id+"'>"+this.nb_users+"</span>";
 		html += "	</div>";
 		html += "	<div id='collapse_select-usersfolder_"+this.id+"' class='nested'></div>";
 		html += "</div><!-- id='select-usersfolder_...'-->";
@@ -177,7 +179,7 @@ UIFactory["UsersFolder"].displayFolderContent = function(dest,id,langcode,index_
 	var folder_label = usersfolder.label_node[langcode].text();
 	if (folder_label==undefined || folder_label=='' || folder_label=='&nbsp;')
 		folder_label = '- no label in '+languages[langcode]+' -';
-	html += "<div id='content-usersfolder_"+usersfolder.id+"' class='usersfolder'>";
+	html += "<div id='content-usersfolder_"+usersfolder.id+"' class='usersfolder-header'>";
 	html += "	<div class='row row-label'>";
 	html += "		<div class='col-1'/>";
 	html += "		<div class='col-4 folder-label' id='usersfolderlabel_"+usersfolder.id+"' >"+folder_label+"</div>";
@@ -204,8 +206,8 @@ UIFactory["UsersFolder"].displayFolderContent = function(dest,id,langcode,index_
 	html += "	</div><!-- class='row' -->";
 	html += "</div><!-- class='usersfolder'-->";
 	//----------------------
-	html += "<div id='"+index_class+pagegNavbar_list[0]+"' class='navbar-pages'>";
-	html += "</div><!-- class='navbar-pages'-->";
+//	html += "<div id='"+index_class+pagegNavbar_list[0]+"' class='navbar-pages'>";
+//	html += "</div><!-- class='navbar-pages'-->";
 	// ----------------------
 	html += "<div id='folder-users-pages' class='usersfolder-pages'>";
 	html += "</div><!-- class='usersfolder-pages'-->";
@@ -226,18 +228,23 @@ UIFactory["UsersFolder"].prototype.displayFolderContentPage = function(dest,type
 		langcode = LANGCODE;
 	if (type==undefined || type==null)
 		type = 'list';
-
-	var list = this.chidren_list[this.pageindex];
-	//---------------------
 	var html = "";
-	for (var i=0; i<list.length;i++){
-		var item = list[i]['obj'];
-		if("USERSFOLDER"==list[i]['type']) {
+
+	var list = this.folders_list;
+	if (list!=undefined) {
+		for (var i=0; i<list.length;i++){
+			var item = list[i];
 			var destid = dest+"_item-usersfolder_"+item.id;
 			html += "<div class='row item item-folder' id='"+destid+"'>";
 			html += item.getView(destid+item.id,type,langcode);
 			html += "</div>";
-		} else {
+		}
+	}
+	html += "<hr/>"
+	var list = this.chidren_list[this.pageindex];
+	if (list!=undefined) {
+	for (var i=0; i<list.length;i++){
+			var item = list[i]['obj'];
 			var destid = dest+"_item-user_"+item.id;
 			html += "<div class='row item item-user' id='"+destid+"'>";
 			html += item.getView(destid,'list2',langcode);
@@ -245,9 +252,12 @@ UIFactory["UsersFolder"].prototype.displayFolderContentPage = function(dest,type
 		}
 	}
 	$("#"+dest).html($(html));
-	var nb_index = Math.ceil((this.nb_children)/nbItem_par_page);
+	var nb_index = Math.ceil((this.nb_users)/nbItem_par_page);
 	if (nb_index>1) {
 		displayPagesNavbar(nb_index,this.id,langcode,parseInt(this.pageindex),index_class,'loadAndDisplayUsersFolderContentPage',dest,"list");		
+		$(".navbar-pages").show();
+	} else {
+		$(".navbar-pages").hide();
 	}
 	$(window).scrollTop(0);
 }
@@ -733,89 +743,55 @@ function loadAndDisplayUsersFolderStruct(dest,id,langcode) {
 function loadUsersFolderStruct(dest,id,langcode)
 //==============================
 {
-/*
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/usersfolders/usersfolder/"+id+"/children?type=FOLDER&count=true",
-		success : function(data) {
-			UIFactory["UsersFolder"].parse_add(data);
-			UIFactory["UsersFolder"].displayTree(dest,'list',langcode,id);
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
+	if (karuta_backend_version.startsWith("x2.")) {
+		$("#usersfolders").hide();
+		$("#bin-usersfolders").hide();
+		$("#create-folder-button").hide();
+		$("#users-in-rootfolder").show();
+		$("#users-in-bin").show();
+//		$("#users-label").html("<span>"+karutaStr[LANG]["active_users"]+"</span>");
+//		$("#bin-usersfolders-label").html("<span>"+karutaStr[LANG]["inactive_users"]+"</span>");
+	} else {
+		if (id=="active") { //root folder
+			var data = "<usersfolders id='active' nb_folders='3' nb_users='0'>"
+				+"<usersfolder id='1' nb_folders='0' nb_users='3' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>System Users</label><label lang='fr'>Usagers Système</label></usersfolder>"
+				+"<usersfolder id='2' nb_folders='3' nb_users='7' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Folder 2</label><label lang='fr'>Dossier 2</label></usersfolder>"
+				+"<usersfolder id='3' nb_folders='2' nb_users='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3</code><label lang='en'>Folder 3</label><label lang='fr'>Dossier 3</label></usersfolder>"
+				+"</userfolders>";
+			
 		}
-	});
-	*/
-		
-		//===== test data
-		var test_dataFolders= "<usersfolders count='3'>"
-				+"<usersfolder id='1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>Folder 1</label><label lang='fr'>Dossier 1</label></usersfolder>"
-				+"<usersfolder id='2' count='3' nb_children='52' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Folder 2</label><label lang='fr'>Dossier 2</label></usersfolder>"
-				+"<usersfolder id='3' count='2' nb_children='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3</code><label lang='en'>Folder 3</label><label lang='fr'>Dossier 3</label></usersfolder>"
-				+"</usersfolders>";
-		var test_dataFoldersStruct_byid = {};
-		test_dataFoldersStruct_byid['root']= "<usersfolders count='3'>"
-			+"<usersfolder id='1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>Folder 1</label><label lang='fr'>Dossier 1</label></usersfolder>"
-			+"<usersfolder id='2' count='3' nb_children='52' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Folder 2</label><label lang='fr'>Dossier 2</label></usersfolder>"
-			+"<usersfolder id='3' count='2' nb_children='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3</code><label lang='en'>Folder 3</label><label lang='fr'>Dossier 3</label></usersfolder>"
-			+"</usersfolders>";
-		test_dataFoldersStruct_byid['bin']= "<usersfolders count='3'>"
-			+"<usersfolder id='4' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder4</code><label lang='en'>Folder 4</label><label lang='fr'>Dossier 4</label></usersfolder>"
-			+"<usersfolder id='5' count='3' nb_children='52' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder5</code><label lang='en'>Folder 5</label><label lang='fr'>Dossier 5</label></usersfolder>"
-			+"<usersfolder id='6' count='2' nb_children='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder6</code><label lang='en'>Folder 6</label><label lang='fr'>Dossier 6</label></usersfolder>"
-			+"</usersfolders>";
-		test_dataFoldersStruct_byid['1']= "<usersfolder id='1.1' count='0' nb_children='0' modified='2019-12-02 12:19:02.0' ownerid='20'>"
-				+"<code>folder1.1</code>"
-				+"<label lang='en'>Folder 1.1</label>"
-				+"<label lang='fr'>Dossier 1.1</label>"
-				+"</usersfolder>";
-		test_dataFoldersStruct_byid['2']= "<usersfolders>"
-				+"<usersfolder id='2.1' count='2' nb_children='6' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1</code><label lang='en'>Folder 2.1</label><label lang='fr'>Dossier 2.1</label></usersfolder>"
-				+"<usersfolder id='2.2' count='0' nb_children='1' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.2</code><label lang='en'>Folder 2.2</label><label lang='fr'>Dossier 2.2</label></usersfolder>"
-				+"<usersfolder id='2.3' count='1' nb_children='1' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.3</code><label lang='en'>Folder 2.3</label><label lang='fr'>Dossier 2.3</label></usersfolder>"
-				+"</usersfolders>";
-		test_dataFoldersStruct_byid['2.1']= "<usersfolders>"
-			+"<usersfolder id='2.1.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1.1</code><label lang='en'>Folder 2.1.1</label><label lang='fr'>Dossier 2.1.1</label></usersfolder>"
-			+"<usersfolder id='2.1.2' count='1' nb_children='1' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1.2</code><label lang='en'>Folder 2.1.2</label><label lang='fr'>Dossier 2.1.2</label></usersfolder>"
-			+"</usersfolders>";
-		test_dataFoldersStruct_byid['2.1.1']= "<usersfolders></usersfolders>";
-		test_dataFoldersStruct_byid['2.3']= "<usersfolders>"
-			+"<usersfolder id='2.3.1' count='1' nb_children='6' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.3.1</code><label lang='en'>Folder 2.3.1</label><label lang='fr'>Dossier 2.3.1</label></usersfolder>"
-			+"</usersfolders>";
-		test_dataFoldersStruct_byid['2.3.1']= "<usersfolders>"
-			+"<usersfolder id='2.3.1.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.3.1.1</code><label lang='en'>Folder 2.3.1</label><label lang='fr'>Dossier 2.3.1</label></usersfolder>"
-			+"</usersfolders>";
-		test_dataFoldersStruct_byid['2.1.2']= "<usersfolders>"
-			+"<usersfolder id='2.1.2.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1.2.1</code><label lang='en'>Folder 2.1.2.1</label><label lang='fr'>Dossier 2.1.2.1</label></usersfolder>"
-			+"</usersfolders>";
-		test_dataFoldersStruct_byid['2.1.2.1']= "<usersfolders></usersfolders>";
-		test_dataFoldersStruct_byid['2.1.2.1']= "<usersfolders>"
-			+"</usersfolders>";
-		test_dataFoldersStruct_byid['3']= "<usersfolders>"
-				+"<usersfolder id='3.1' count='2' nb_children='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3.1</code><label lang='en'>Folder 3.1</label><label lang='fr'>Dossier 3.1</label></usersfolder>"
-				+"<usersfolder id='3.2' count='0' nb_children='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3.2</code><label lang='en'>Folder 3.2</label><label lang='fr'>Dossier 3.2</label></usersfolder>"
-				+"</usersfolders>";
-		test_dataFoldersStruct_byid['3.1']= "<usersfolders>"
-			+"<usersfolder id='3.1.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3.1.1</code><label lang='en'>Folder 3.1.1</label><label lang='fr'>Dossier 3.1.1</label></usersfolder>"
-			+"<usersfolder id='3.1.2' count='0' nb_children='1' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3.1.2</code><label lang='en'>Folder 3.1.2</label><label lang='fr'>Dossier 3.1.2</label></usersfolder>"
-			+"</usersfolders>";
-		test_dataFoldersStruct_byid['3.2']= "<usersfolders></usersfolders>";
-		test_dataFoldersStruct_byid['3.1.1']= "<usersfolders></usersfolders>";
-		test_dataFoldersStruct_byid['3.1.2']= "<usersfolders></usersfolders>";
-		//==================================
-	var data = null;
-	number_of_usersfolders = 3;
-	if (id==undefined||id==null) {
-		data=test_dataFolders;
-		UIFactory["UsersFolder"].parse(data);
-		UIFactory["UsersFolder"].displayAll('usersfolders','list');
+		if (id=="2") { 
+			var data = "<usersfolders id='2' nb_folders='3' nb_users='0'>"
+				+"<usersfolder id='2.1' nb_folders='0' nb_users='5' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>System Users</label><label lang='fr'>dossier2.1</label></usersfolder>"
+				+"<usersfolder id='2.2' nb_folders='3' nb_users='52' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Folder 2</label><label lang='fr'>Dossier 2.2</label></usersfolder>"
+				+"<usersfolder id='2.3' nb_folders='2' nb_users='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3</code><label lang='en'>Folder 3</label><label lang='fr'>Dossier 2.3</label></usersfolder>"
+				+"</userfolders>";
+			
+		}
+		if (id=="inactive") { //bin folder
+			var data = "<usersfolders d='inactive' nb_folders='0' nb_users='1'>"
+					+"<usersfolder id='4' nb_folders='2' nb_users='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3</code><label lang='en'>Folder 3</label><label lang='fr'>Dossier 3</label></usersfolder>"
+					+"</userfolders>";
+			
+		}
+		UIFactory["UsersFolder"].parseStructure(data,id);
+		UIFactory["UsersFolder"].displayTree(dest,'list',langcode,id);
 	}
-	else {
-		data = test_dataFoldersStruct_byid[id];
-		UIFactory["UsersFolder"].parseStructure(data,id); 
-		UIFactory["UsersFolder"].displayTree(dest,'list',langcode,id);		
+/*		$.ajax({
+			id : id,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/folder/usersfolder/"+id+"?type=structure",
+			success : function(data) {
+				UIFactory["UsersFolder"].parse_add(data);
+				UIFactory["UsersFolder"].displayTree(dest,'list',langcode,id);
+			},
+			error : function(jqxhr,textStatus) {
+			}
+		});
 	}
+*/
+
 }
 
 //==================================
@@ -826,15 +802,18 @@ function loadAndDisplayUsersFolderContent(dest,id,langcode,type) {
 		langcode = LANGCODE;
 	//---------------------
 	if (id=="0" && usersfolders_byid[id]==undefined) {
-		$("#folder-users").html("<div id='active'>");
+		$("#folder-users").html("<div id='active'></div>");
+		fill_list_usersOLD();
+	} else if (id=="1" && usersfolders_byid[id]==undefined) {
+		$("#folder-users").html("<div id='inactive'></div>");
 		fill_list_usersOLD();
 	} else {
 		if (usersfolders_byid[id].nb_folders > 0){
 			loadAndDisplayUsersFolderStruct('collapse_usersfolder_'+id,id,langcode)
 		}
 		toggleOpenElt('closeSign','openSign','usersfolder_'+id);
-		var index_class = "userspageindex";
-		UIFactory["UsersFolder"].displayFolderContent(dest,id,langcode,index_class);
+		var index_class = 1;
+		UIFactory.UsersFolder.displayFolderContent(dest,id,langcode,index_class);
 		selectElt('usersfolder','usersfolder_'+id);
 		var dest_page = dest + '-pages';
 		var list = usersfolders_byid[id].chidren_list[usersfolders_byid[id].pageindex];
@@ -856,7 +835,7 @@ function loadAndDisplayUsersFolderContentPage(dest,type,id,langcode,pageindex,in
 	usersfolders_byid[id].pageindex = ""+pageindex;
 	var list = usersfolders_byid[id].chidren_list[usersfolders_byid[id].pageindex];
 	if (list==undefined||list==null)
-		loadUsersFolderContent(dest,id,langcode,type,index_class);
+		loadUsersFolderContent(dest,id,langcode,type,pageindex);
 	else {
 		usersfolders_byid[id].displayFolderContentPage(dest,type,langcode,index_class);		
 	}
@@ -868,11 +847,40 @@ function loadUsersFolderContent(dest,id,langcode,type,index_class)
 //==============================
 {
 	var pageindex = usersfolders_byid[id].pageindex;
+	var nb_users = usersfolders_byid[id].nb_users;
+	var data = "";
+	if (id=='1' && index_class==1) {
+		data =  "<usersfolder id='1' nb_folders='0' nb_users='3'>";
+		data += "<user id='1'><username>root</username><firstname>root</firstname><lastname></lastname><admin>1</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user>";
+		data += "<user id='2'><username>sys_public</username><firstname>System public account (users with account)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user>";
+		data += "<user id='3'><username>public</username><firstname>Public account (World)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user>";
+		data += "</usersfolder>";
+	}
+	if (id=='2') {
+		if (index_class==1) {
+		data =  "<usersfolder id='2' nb_folders='3' nb_users='7'>";
+		data += "<user id='4'><username>olivier</username><firstname>Olivier</firstname><lastname>Gerbé</lastname><admin>0</admin><designer>0</designer><email>olivier.gerbe@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user>";
+		data += "<user id='5'><username>saint-exupery@litterature.fr</username><firstname>Antoine</firstname><lastname>de Saint-Exupéry</lastname><admin>0</admin><designer>0</designer><email>saint-exupery@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
+		data += "<user id='6'><username>beaudelaire@litterature.fr</username><firstname>Charles</firstname><lastname>Beaudelaire</lastname><admin>0</admin><designer>0</designer><email>beaudelaire@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
+		data += "<user id='7'><username>hugo@litterature.fr</username><firstname>Victor</firstname><lastname>Hugo</lastname><admin>0</admin><designer>0</designer><email>hugo@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
+		data += "</usersfolder>";
+		}
+		if (index_class==2) {
+			data =  "<usersfolder id='2' nb_folders='3' nb_users='7'>";
+			data += "<user id='8'><username>flaubert@litterature.fr</username><firstname>Gustave</firstname><lastname>Flaubert</lastname><admin>0</admin><designer>0</designer><email>flaubert@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
+			data += "<user id='9'><username>maupassant@litterature.fr</username><firstname>Guy</firstname><lastname>de Maupassant</lastname><admin>0</admin><designer>0</designer><email>maupassant@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
+			data += "<user id='10'><username>camus@litterature.fr</username><firstname>Albert</firstname><lastname>Camus</lastname><admin>0</admin><designer>0</designer><email>camus@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
+			data += "</usersfolder>";
+		}
+	}
+	UIFactory.UsersFolder.parseChildren(data,id); 
+	usersfolders_byid[id].displayFolderContentPage(dest,type,langcode,index_class);
+
 /*
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/usersfolders/usersfolder/"+id+"/children?r="+pageindex+"&limit=100&count=true",
+		url : serverBCK_API+"/usersfolders/usersfolder/"+id+"?type=children&r="+pageindex+"&limit=100",
 		success : function(data) {
 			UIFactory["UsersFolder"].parseChildren(data,id); 
 			usersfolders_byid[id].displayFolderContentPage(dest,type,langcode,index_class);		
@@ -881,109 +889,8 @@ function loadUsersFolderContent(dest,id,langcode,type,index_class)
 			alertHTML("Server Error GET active: "+textStatus);
 		}
 	});
-	*/
-	//===== test data
-	var test_dataFolders= "<usersfolder id='0' count='3' nb_children='3' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'>"
-		+"<code>userid</code>"
-		+"<label lang='en'>Folder userid</label>"
-		+"<label lang='fr'>Dossier userid</label>"
-			+"<usersfolders count='3'>"
-			+"<usersfolder id='1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>Folder 1</label><label lang='fr'>Dossier 1</label></usersfolder>"
-			+"<usersfolder id='2' count='2' nb_children='6' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Folder 2</label><label lang='fr'>Dossier 2</label></usersfolder>"
-			+"<usersfolder id='3' count='2' nb_children='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3</code><label lang='en'>Folder 3</label><label lang='fr'>Dossier 3</label></usersfolder>"
-			+"</usersfolders>"
-			+"</usersfolder>";
-	var test_dataFolders_byid = {};
-	test_dataFolders_byid['1']= {};
-	test_dataFolders_byid['2']= {};
-	test_dataFolders_byid['3']= {};
-	test_dataFolders_byid['2.1']= {};
-	test_dataFolders_byid['2.2']= {};
-	test_dataFolders_byid['2.1.1']= {};
-	test_dataFolders_byid['2.1.2']= {};
-	test_dataFolders_byid['2.3']= {};
-	test_dataFolders_byid['2.3.1']= {};
-	test_dataFolders_byid['2.3.1.1']= {};
-	test_dataFolders_byid['3.1']= {};
-	test_dataFolders_byid['3.2']= {};
-	test_dataFolders_byid['3.1.1']= {};
-	test_dataFolders_byid['3.1.2']= {};
 	
-	test_dataFolders_byid['1']['1']= "<children pageindex='1' count='4'>"
-		+"<user id='1'><username>root</username><firstname>root</firstname><lastname></lastname><admin>1</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='2'><username>sys_public</username><firstname>System public account (users with account)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='3'><username>public</username><firstname>Public account (World)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='4'><username>olivier</username><firstname>Olivier</firstname><lastname>Gerbé</lastname><admin>0</admin><designer>0</designer><email>olivier.gerbe@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='5'><username>saint-exupery@litterature.fr</username><firstname>Antoine</firstname><lastname>de Saint-Exupéry</lastname><admin>0</admin><designer>0</designer><email>saint-exupery@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='6'><username>beaudelaire@litterature.fr</username><firstname>Charles</firstname><lastname>Beaudelaire</lastname><admin>0</admin><designer>0</designer><email>beaudelaire@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='7'><username>hugo@litterature.fr</username><firstname>Victor</firstname><lastname>Hugo</lastname><admin>0</admin><designer>0</designer><email>hugo@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='8'><username>flaubert@litterature.fr</username><firstname>Gustave</firstname><lastname>Flaubert</lastname><admin>0</admin><designer>0</designer><email>flaubert@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='9'><username>maupassant@litterature.fr</username><firstname>Guy</firstname><lastname>de Maupassant</lastname><admin>0</admin><designer>0</designer><email>maupassant@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='10'><username>camus@litterature.fr</username><firstname>Albert</firstname><lastname>Camus</lastname><admin>0</admin><designer>0</designer><email>camus@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='11'><username>dumas@litterature.fr</username><firstname>Alexandre</firstname><lastname>Dumas</lastname><admin>0</admin><designer>0</designer><email>dumas@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='12'><username>crush@bulles.ca</username><firstname>Crush</firstname><lastname>LaTortue</lastname><admin>0</admin><designer>0</designer><email>crush@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='13'><username>nemo@bulles.ca</username><firstname>Némo</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>nemo@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='14'><username>adm-ateliers</username><firstname>Administrateur</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='16'><username>ens-ateliers</username><firstname>Enseignant</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email>ens@courriel.ca</email><active>1</active><substitute>0</substitute><other>xlimited</other></user><user id='17'><username>doris@bulles.ca</username><firstname>Doris</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>doris@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='18'><username>eric.giraudin@gmail.com</username><firstname>Eric</firstname><lastname>Giraudin</lastname><admin>0</admin><designer>1</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='19'><username>eric.duquenoy@univ-littoral.fr</username><firstname>Éric</firstname><lastname>Duquenoy</lastname><admin>0</admin><designer>1</designer><email>eric.duquenoy@univ-littoral.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='20'><username>la</username><firstname>Lan Anh</firstname><lastname>Dinh</lastname><admin>0</admin><designer>1</designer><email>tlanh.dinh@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='22'><username>nobry</username><firstname>Nobry</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='38'><username>01-etudiant</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='39'><username>01-tuteur</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='40'><username>01-designer</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>1</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='41'><username>cecilekaya</username><firstname>Cécile</firstname><lastname>KAYA</lastname><admin>0</admin><designer>0</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other>undefined</other></user><user id='42'><username>prototype</username><firstname></firstname><lastname>prototype</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user>"
-		+	"<portfolio id='6c2dcd99-5831-45eb-82b4-3f68812bbe54' root_node_id='8cd1122b-4c3a-11ea-b2a2-fa163ebfbd00' owner='Y'  ownerid='20' modified='2020-02-10 14:21:34.0'><asmRoot id='8cd1122b-4c3a-11ea-b2a2-fa163ebfbd00'><metadata-wad csstext='' menuroles='' seenoderoles='all' /><metadata-epm displayview='' /><metadata display-type='standard' export-htm='Y' export-pdf='Y' export-rtf='Y' menu-type='vertical' multilingual-node='Y' semantictag='root karuta-model' sharedNode='N' sharedResource='N' /><code>LA-test.Model-instance</code><label/><description/><semanticTag>root karuta-model</semanticTag><asmResource id='8cd5e087-4c3a-11ea-b2a2-fa163ebfbd00' contextid='8cd1122b-4c3a-11ea-b2a2-fa163ebfbd00' xsi_type='nodeRes'><code>LA-test.Model-instance</code><label lang='fr'>Instance de Modèle</label><label lang='en'>Modèle</label></asmResource><asmResource id='8cd4a925-4c3a-11ea-b2a2-fa163ebfbd00' contextid='8cd1122b-4c3a-11ea-b2a2-fa163ebfbd00' xsi_type='context'><text lang='fr'/><text lang='en'/></asmResource></asmRoot></portfolio><portfolio id='1666805d-e770-4721-bb56-aa43c139dac4' root_node_id='a28b65ec-46b3-11ea-b2a2-fa163ebfbd00' owner='Y'  ownerid='20' modified='2020-02-19 00:50:22.0'><asmRoot id='a28b65ec-46b3-11ea-b2a2-fa163ebfbd00'><metadata-wad csstext='' menuroles='' seenoderoles='all' /><metadata-epm displayview='' /><metadata display-type='standard' export-htm='Y' export-pdf='Y' export-rtf='Y' menu-type='vertical' multilingual-node='Y' semantictag='root karuta-model' sharedNode='N' sharedResource='N' /><code>LA-test.Model</code><label/><description/><semanticTag>root karuta-model</semanticTag><asmResource id='a28f40aa-46b3-11ea-b2a2-fa163ebfbd00' contextid='a28b65ec-46b3-11ea-b2a2-fa163ebfbd00' xsi_type='nodeRes'><code>LA-test.Model</code><label lang='fr'>Modèle</label><label lang='en'>Modèle</label></asmResource><asmResource id='a28e7f2d-46b3-11ea-b2a2-fa163ebfbd00' contextid='a28b65ec-46b3-11ea-b2a2-fa163ebfbd00' xsi_type='context'><text lang='fr'/><text lang='en'/></asmResource></asmRoot></portfolio><portfolio id='0ff0f973-8686-4d8a-a0e9-7fbfb75f6f5c' root_node_id='1a2a928c-519d-11ea-b5a9-fa163ebfbd00' owner='Y'  ownerid='20' modified='2020-02-14 16:30:44.0'><asmRoot id='1a2a928c-519d-11ea-b5a9-fa163ebfbd00'><metadata-wad csstext='' menuroles='' seenoderoles='all' /><metadata-epm displayview='' /><metadata display-type='standard' menu-type='vertical' multilingual-node='Y' semantictag='root karuta-model' sharedNode='N' sharedResource='N' /><code>LA-test.model2</code><label/><description/><semanticTag>root karuta-model</semanticTag><asmResource id='1a2ca031-519d-11ea-b5a9-fa163ebfbd00' contextid='1a2a928c-519d-11ea-b5a9-fa163ebfbd00' xsi_type='nodeRes'><code>LA-test.model2</code><label lang='fr'>Modèle 2</label><label lang='en'>Modèle 2</label></asmResource><asmResource id='1a2c139b-519d-11ea-b5a9-fa163ebfbd00' contextid='1a2a928c-519d-11ea-b5a9-fa163ebfbd00' xsi_type='context'><text lang='fr'/><text lang='en'/></asmResource></asmRoot></portfolio><portfolio id='b0454ab3-1e8c-4b9e-8ab4-a6a6b966f26c' root_node_id='92052dd8-46b3-11ea-b2a2-fa163ebfbd00' owner='Y'  ownerid='20' modified='2020-01-23 15:28:56.0'><asmRoot id='92052dd8-46b3-11ea-b2a2-fa163ebfbd00'><metadata-wad commentnoderoles='designer' seenoderoles='all' /><metadata-epm/><metadata multilingual-node='Y' semantictag='root karuta-project' sharedNode='N' sharedResource='N' /><code>LA-test</code><label/><description/><semanticTag>root karuta-project</semanticTag><asmResource id='92067ab9-46b3-11ea-b2a2-fa163ebfbd00' contextid='92052dd8-46b3-11ea-b2a2-fa163ebfbd00' xsi_type='nodeRes'><code>LA-test</code><label lang='fr'>LA-test</label><label lang='en'>LA-test</label></asmResource><asmResource id='92061c43-46b3-11ea-b2a2-fa163ebfbd00' contextid='92052dd8-46b3-11ea-b2a2-fa163ebfbd00' xsi_type='context'><text lang='en'/><text lang='fr'/></asmResource></asmRoot></portfolio>"		
-		+"</children>";
-	test_dataFolders_byid['2']['1']= "<children pageindex='1' count='7'>"
-		+"<user id='1'><username>root</username><firstname>root</firstname><lastname></lastname><admin>1</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='2'><username>sys_public</username><firstname>System public account (users with account)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='3'><username>public</username><firstname>Public account (World)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='4'><username>olivier</username><firstname>Olivier</firstname><lastname>Gerbé</lastname><admin>0</admin><designer>0</designer><email>olivier.gerbe@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='5'><username>saint-exupery@litterature.fr</username><firstname>Antoine</firstname><lastname>de Saint-Exupéry</lastname><admin>0</admin><designer>0</designer><email>saint-exupery@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='6'><username>beaudelaire@litterature.fr</username><firstname>Charles</firstname><lastname>Beaudelaire</lastname><admin>0</admin><designer>0</designer><email>beaudelaire@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='7'><username>hugo@litterature.fr</username><firstname>Victor</firstname><lastname>Hugo</lastname><admin>0</admin><designer>0</designer><email>hugo@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='8'><username>flaubert@litterature.fr</username><firstname>Gustave</firstname><lastname>Flaubert</lastname><admin>0</admin><designer>0</designer><email>flaubert@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='9'><username>maupassant@litterature.fr</username><firstname>Guy</firstname><lastname>de Maupassant</lastname><admin>0</admin><designer>0</designer><email>maupassant@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='10'><username>camus@litterature.fr</username><firstname>Albert</firstname><lastname>Camus</lastname><admin>0</admin><designer>0</designer><email>camus@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='11'><username>dumas@litterature.fr</username><firstname>Alexandre</firstname><lastname>Dumas</lastname><admin>0</admin><designer>0</designer><email>dumas@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='12'><username>crush@bulles.ca</username><firstname>Crush</firstname><lastname>LaTortue</lastname><admin>0</admin><designer>0</designer><email>crush@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='13'><username>nemo@bulles.ca</username><firstname>Némo</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>nemo@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='14'><username>adm-ateliers</username><firstname>Administrateur</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='16'><username>ens-ateliers</username><firstname>Enseignant</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email>ens@courriel.ca</email><active>1</active><substitute>0</substitute><other>xlimited</other></user><user id='17'><username>doris@bulles.ca</username><firstname>Doris</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>doris@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='18'><username>eric.giraudin@gmail.com</username><firstname>Eric</firstname><lastname>Giraudin</lastname><admin>0</admin><designer>1</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='19'><username>eric.duquenoy@univ-littoral.fr</username><firstname>Éric</firstname><lastname>Duquenoy</lastname><admin>0</admin><designer>1</designer><email>eric.duquenoy@univ-littoral.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='20'><username>la</username><firstname>Lan Anh</firstname><lastname>Dinh</lastname><admin>0</admin><designer>1</designer><email>tlanh.dinh@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='22'><username>nobry</username><firstname>Nobry</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='38'><username>01-etudiant</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='39'><username>01-tuteur</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='40'><username>01-designer</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>1</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='41'><username>cecilekaya</username><firstname>Cécile</firstname><lastname>KAYA</lastname><admin>0</admin><designer>0</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other>undefined</other></user><user id='42'><username>prototype</username><firstname></firstname><lastname>prototype</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user>"
-		+"<usersfolder id='2.1' count='2' nb_children='6' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1</code><label lang='en'>Folder 2.1</label><label lang='fr'>Dossier 2.1</label></usersfolder>"
-		+"<usersfolder id='2.2' count='0' nb_children='1' owner='Y'  ownerid='20' modified='2020-02-02 12:19:02.0'><code>folder2.2</code><label lang='en'>Folder 2.2</label><label lang='fr'>Dossier 2.2</label></usersfolder>"
-		+"<usersfolder id='2.3' count='1' nb_children='1' owner='Y'  ownerid='20' modified='2020-01-02 12:19:02.0'><code>folder2.3</code><label lang='en'>Folder 2.3</label><label lang='fr'>Dossier 2.3</label></usersfolder>"
-		+"</children>";
-	test_dataFolders_byid['2']['2']= "<children pageindex='2' count='5'>"
-		+"<user id='1'><username>root</username><firstname>root</firstname><lastname></lastname><admin>1</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='2'><username>sys_public</username><firstname>System public account (users with account)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='3'><username>public</username><firstname>Public account (World)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='4'><username>olivier</username><firstname>Olivier</firstname><lastname>Gerbé</lastname><admin>0</admin><designer>0</designer><email>olivier.gerbe@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='5'><username>saint-exupery@litterature.fr</username><firstname>Antoine</firstname><lastname>de Saint-Exupéry</lastname><admin>0</admin><designer>0</designer><email>saint-exupery@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='6'><username>beaudelaire@litterature.fr</username><firstname>Charles</firstname><lastname>Beaudelaire</lastname><admin>0</admin><designer>0</designer><email>beaudelaire@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='7'><username>hugo@litterature.fr</username><firstname>Victor</firstname><lastname>Hugo</lastname><admin>0</admin><designer>0</designer><email>hugo@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='8'><username>flaubert@litterature.fr</username><firstname>Gustave</firstname><lastname>Flaubert</lastname><admin>0</admin><designer>0</designer><email>flaubert@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='9'><username>maupassant@litterature.fr</username><firstname>Guy</firstname><lastname>de Maupassant</lastname><admin>0</admin><designer>0</designer><email>maupassant@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='10'><username>camus@litterature.fr</username><firstname>Albert</firstname><lastname>Camus</lastname><admin>0</admin><designer>0</designer><email>camus@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='11'><username>dumas@litterature.fr</username><firstname>Alexandre</firstname><lastname>Dumas</lastname><admin>0</admin><designer>0</designer><email>dumas@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='12'><username>crush@bulles.ca</username><firstname>Crush</firstname><lastname>LaTortue</lastname><admin>0</admin><designer>0</designer><email>crush@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='13'><username>nemo@bulles.ca</username><firstname>Némo</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>nemo@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='14'><username>adm-ateliers</username><firstname>Administrateur</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='16'><username>ens-ateliers</username><firstname>Enseignant</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email>ens@courriel.ca</email><active>1</active><substitute>0</substitute><other>xlimited</other></user><user id='17'><username>doris@bulles.ca</username><firstname>Doris</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>doris@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='18'><username>eric.giraudin@gmail.com</username><firstname>Eric</firstname><lastname>Giraudin</lastname><admin>0</admin><designer>1</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='19'><username>eric.duquenoy@univ-littoral.fr</username><firstname>Éric</firstname><lastname>Duquenoy</lastname><admin>0</admin><designer>1</designer><email>eric.duquenoy@univ-littoral.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='20'><username>la</username><firstname>Lan Anh</firstname><lastname>Dinh</lastname><admin>0</admin><designer>1</designer><email>tlanh.dinh@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='22'><username>nobry</username><firstname>Nobry</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='38'><username>01-etudiant</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='39'><username>01-tuteur</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='40'><username>01-designer</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>1</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='41'><username>cecilekaya</username><firstname>Cécile</firstname><lastname>KAYA</lastname><admin>0</admin><designer>0</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other>undefined</other></user><user id='42'><username>prototype</username><firstname></firstname><lastname>prototype</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user>"
-		+"<usersfolder id='2.1' count='2' nb_children='6' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1</code><label lang='en'>Folder 2.1</label><label lang='fr'>Dossier 2.1</label></usersfolder>"
-		+"</children>";
-	test_dataFolders_byid['2']['3']= "<children pageindex='3' count='2'>"
-		+"<usersfolder id='2.2' count='0' nb_children='1' owner='Y'  ownerid='20' modified='2020-02-02 12:19:02.0'><code>folder2.2</code><label lang='en'>Folder 2.2</label><label lang='fr'>Dossier 2.2</label></usersfolder>"
-		+"<usersfolder id='2.3' count='1' nb_children='1' owner='Y'  ownerid='20' modified='2020-01-02 12:19:02.0'><code>folder2.3</code><label lang='en'>Folder 2.3</label><label lang='fr'>Dossier 2.3</label></usersfolder>"
-		+"</children>";
-	test_dataFolders_byid['2']['4']= "<children pageindex='4' count='5'>"
-		+"<user id='1'><username>root</username><firstname>root</firstname><lastname></lastname><admin>1</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='2'><username>sys_public</username><firstname>System public account (users with account)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='3'><username>public</username><firstname>Public account (World)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='4'><username>olivier</username><firstname>Olivier</firstname><lastname>Gerbé</lastname><admin>0</admin><designer>0</designer><email>olivier.gerbe@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='5'><username>saint-exupery@litterature.fr</username><firstname>Antoine</firstname><lastname>de Saint-Exupéry</lastname><admin>0</admin><designer>0</designer><email>saint-exupery@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='6'><username>beaudelaire@litterature.fr</username><firstname>Charles</firstname><lastname>Beaudelaire</lastname><admin>0</admin><designer>0</designer><email>beaudelaire@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='7'><username>hugo@litterature.fr</username><firstname>Victor</firstname><lastname>Hugo</lastname><admin>0</admin><designer>0</designer><email>hugo@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='8'><username>flaubert@litterature.fr</username><firstname>Gustave</firstname><lastname>Flaubert</lastname><admin>0</admin><designer>0</designer><email>flaubert@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='9'><username>maupassant@litterature.fr</username><firstname>Guy</firstname><lastname>de Maupassant</lastname><admin>0</admin><designer>0</designer><email>maupassant@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='10'><username>camus@litterature.fr</username><firstname>Albert</firstname><lastname>Camus</lastname><admin>0</admin><designer>0</designer><email>camus@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='11'><username>dumas@litterature.fr</username><firstname>Alexandre</firstname><lastname>Dumas</lastname><admin>0</admin><designer>0</designer><email>dumas@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='12'><username>crush@bulles.ca</username><firstname>Crush</firstname><lastname>LaTortue</lastname><admin>0</admin><designer>0</designer><email>crush@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='13'><username>nemo@bulles.ca</username><firstname>Némo</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>nemo@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='14'><username>adm-ateliers</username><firstname>Administrateur</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='16'><username>ens-ateliers</username><firstname>Enseignant</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email>ens@courriel.ca</email><active>1</active><substitute>0</substitute><other>xlimited</other></user><user id='17'><username>doris@bulles.ca</username><firstname>Doris</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>doris@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='18'><username>eric.giraudin@gmail.com</username><firstname>Eric</firstname><lastname>Giraudin</lastname><admin>0</admin><designer>1</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='19'><username>eric.duquenoy@univ-littoral.fr</username><firstname>Éric</firstname><lastname>Duquenoy</lastname><admin>0</admin><designer>1</designer><email>eric.duquenoy@univ-littoral.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='20'><username>la</username><firstname>Lan Anh</firstname><lastname>Dinh</lastname><admin>0</admin><designer>1</designer><email>tlanh.dinh@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='22'><username>nobry</username><firstname>Nobry</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='38'><username>01-etudiant</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='39'><username>01-tuteur</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='40'><username>01-designer</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>1</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='41'><username>cecilekaya</username><firstname>Cécile</firstname><lastname>KAYA</lastname><admin>0</admin><designer>0</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other>undefined</other></user><user id='42'><username>prototype</username><firstname></firstname><lastname>prototype</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user>"
-		+"<usersfolder id='2.1' count='2' nb_children='6' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1</code><label lang='en'>Folder 2.1</label><label lang='fr'>Dossier 2.1</label></usersfolder>"
-		+"</children>";
-	test_dataFolders_byid['2']['5']= "<children pageindex='5' count='2'>"
-		+"<usersfolder id='2.2' count='0' nb_children='1' owner='Y'  ownerid='20' modified='2020-02-02 12:19:02.0'><code>folder2.2</code><label lang='en'>Folder 2.2</label><label lang='fr'>Dossier 2.2</label></usersfolder>"
-		+"<usersfolder id='2.3' count='1' nb_children='1' owner='Y'  ownerid='20' modified='2020-01-02 12:19:02.0'><code>folder2.3</code><label lang='en'>Folder 2.3</label><label lang='fr'>Dossier 2.3</label></usersfolder>"
-		+"</children>";
-	test_dataFolders_byid['2']["6"]= "<children pageindex='6' count='5'>"
-		+"<user id='1'><username>root</username><firstname>root</firstname><lastname></lastname><admin>1</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='2'><username>sys_public</username><firstname>System public account (users with account)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='3'><username>public</username><firstname>Public account (World)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='4'><username>olivier</username><firstname>Olivier</firstname><lastname>Gerbé</lastname><admin>0</admin><designer>0</designer><email>olivier.gerbe@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='5'><username>saint-exupery@litterature.fr</username><firstname>Antoine</firstname><lastname>de Saint-Exupéry</lastname><admin>0</admin><designer>0</designer><email>saint-exupery@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='6'><username>beaudelaire@litterature.fr</username><firstname>Charles</firstname><lastname>Beaudelaire</lastname><admin>0</admin><designer>0</designer><email>beaudelaire@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='7'><username>hugo@litterature.fr</username><firstname>Victor</firstname><lastname>Hugo</lastname><admin>0</admin><designer>0</designer><email>hugo@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='8'><username>flaubert@litterature.fr</username><firstname>Gustave</firstname><lastname>Flaubert</lastname><admin>0</admin><designer>0</designer><email>flaubert@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='9'><username>maupassant@litterature.fr</username><firstname>Guy</firstname><lastname>de Maupassant</lastname><admin>0</admin><designer>0</designer><email>maupassant@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='10'><username>camus@litterature.fr</username><firstname>Albert</firstname><lastname>Camus</lastname><admin>0</admin><designer>0</designer><email>camus@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='11'><username>dumas@litterature.fr</username><firstname>Alexandre</firstname><lastname>Dumas</lastname><admin>0</admin><designer>0</designer><email>dumas@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='12'><username>crush@bulles.ca</username><firstname>Crush</firstname><lastname>LaTortue</lastname><admin>0</admin><designer>0</designer><email>crush@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='13'><username>nemo@bulles.ca</username><firstname>Némo</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>nemo@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='14'><username>adm-ateliers</username><firstname>Administrateur</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='16'><username>ens-ateliers</username><firstname>Enseignant</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email>ens@courriel.ca</email><active>1</active><substitute>0</substitute><other>xlimited</other></user><user id='17'><username>doris@bulles.ca</username><firstname>Doris</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>doris@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='18'><username>eric.giraudin@gmail.com</username><firstname>Eric</firstname><lastname>Giraudin</lastname><admin>0</admin><designer>1</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='19'><username>eric.duquenoy@univ-littoral.fr</username><firstname>Éric</firstname><lastname>Duquenoy</lastname><admin>0</admin><designer>1</designer><email>eric.duquenoy@univ-littoral.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='20'><username>la</username><firstname>Lan Anh</firstname><lastname>Dinh</lastname><admin>0</admin><designer>1</designer><email>tlanh.dinh@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='22'><username>nobry</username><firstname>Nobry</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='38'><username>01-etudiant</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='39'><username>01-tuteur</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='40'><username>01-designer</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>1</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='41'><username>cecilekaya</username><firstname>Cécile</firstname><lastname>KAYA</lastname><admin>0</admin><designer>0</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other>undefined</other></user><user id='42'><username>prototype</username><firstname></firstname><lastname>prototype</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user>"
-		+"<usersfolder id='2.1' count='2' nb_children='6' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1</code><label lang='en'>Folder 2.1</label><label lang='fr'>Dossier 2.1</label></usersfolder>"
-		+"</children>";
-	test_dataFolders_byid['2.1']['1']= "<usersfolders pageindex='1' count='2'>"
-		+"<usersfolder id='2.1.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1.1</code><label lang='en'>Folder 2.1.1</label><label lang='fr'>Dossier 2.1.1</label></usersfolder>"
-		+"<usersfolder id='2.1.2' count='1' nb_children='1' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1.2</code><label lang='en'>Folder 2.1.2</label><label lang='fr'>Dossier 2.1.2</label></usersfolder>"
-		+"</usersfolders>";
-	test_dataFolders_byid['2.1.1']['1']= "<children>"
-		+"<user id='1'><username>root</username><firstname>root</firstname><lastname></lastname><admin>1</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user>"
-		+"</children>";
-	test_dataFolders_byid['2.1.2']['1']= "<usersfolders pageindex='1' count='1'>"
-		+"<usersfolder id='2.1.2.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1.2.1</code><label lang='en'>Folder 2.1.2.1</label><label lang='fr'>Dossier 2.1.2.1</label></usersfolder>"
-		+"</usersfolders>";
-	test_dataFolders_byid['2.3']['1']= "<usersfolders pageindex='1' count='1'>"
-		+"<usersfolder id='2.3.1' count='1' nb_children='6' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.3.1</code><label lang='en'>Folder 2.3.1</label><label lang='fr'>Dossier 2.3.1</label></usersfolder>"
-		+"</usersfolders>";
-	test_dataFolders_byid['2.3.1']['1']= "<usersfolders pageindex='1' count='1'>"
-		+"<usersfolder id='2.3.1.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.3.1.1</code><label lang='en'>Folder 2.3.1.1</label><label lang='fr'>Dossier 2.3.1</label></usersfolder>"
-		+"</usersfolders>";
-	test_dataFolders_byid['2.1.2']['1']= "<usersfolders pageindex='1' count='1'>"
-		+"<usersfolder id='2.1.2.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2.1.2.1</code><label lang='en'>Folder 2.1.2.1</label><label lang='fr'>Dossier 2.1.2.1</label></usersfolder>"
-		+"</usersfolders>";
-	test_dataFolders_byid['3']['1']= "<usersfolder id='3' count='2' nb_children='2' owner='Y'  ownerid='20' modified='2020-01-12 12:19:02.0'>"
-			+"<code>folder3</code>"
-			+"<label lang='en'>Folder 3</label>"
-			+"<label lang='fr'>Dossier 3</label>"
-			+"<usersfolders>"
-			+"<usersfolder id='3.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3.1</code><label lang='en'>Folder 3.1</label><label lang='fr'>Dossier 3.1</label></usersfolder>"
-			+"<usersfolder id='3.2' count='2' nb_children='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3.2</code><label lang='en'>Folder 3.2</label><label lang='fr'>Dossier 3.2</label></usersfolder>"
-			+"</usersfolders>"
-			+"</usersfolder>";
-	test_dataFolders_byid['3']['1']= "<children pageindex='1' count='2'>"
-		+"<usersfolder id='3.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2020-01-02 12:19:02.0'><code>folder3.1</code><label lang='en'>Folder 3.1</label><label lang='fr'>Dossier 3.1</label></usersfolder>"
-		+"<usersfolder id='3.2' count='2' nb_children='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3.2</code><label lang='en'>Folder 3.2</label><label lang='fr'>Dossier 3.2</label></usersfolder>"
-		+"</children>";
-	test_dataFolders_byid['3.1']['1']= "<usersfolders pageindex='1' count='2'>"
-		+"<usersfolder id='3.1.1' count='0' nb_children='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3.1.1</code><label lang='en'>Folder 3.1.1</label><label lang='fr'>Dossier 3.1.1</label></usersfolder>"
-		+"<usersfolder id='3.1.2' count='0' nb_children='4' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3.1.2</code><label lang='en'>Folder 3.1.2</label><label lang='fr'>Dossier 3.1.2</label></usersfolder>"
-		+"</usersfolders>";
-	test_dataFolders_byid['3.1.1']['1']= "<children>"
-		+"</children>";
-	test_dataFolders_byid['3.1.2']['1']= "<children pageindex='1' count='4'>"
-		+"<user id='1'><username>root</username><firstname>root</firstname><lastname></lastname><admin>1</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='2'><username>sys_public</username><firstname>System public account (users with account)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='3'><username>public</username><firstname>Public account (World)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user><user id='4'><username>olivier</username><firstname>Olivier</firstname><lastname>Gerbé</lastname><admin>0</admin><designer>0</designer><email>olivier.gerbe@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='5'><username>saint-exupery@litterature.fr</username><firstname>Antoine</firstname><lastname>de Saint-Exupéry</lastname><admin>0</admin><designer>0</designer><email>saint-exupery@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='6'><username>beaudelaire@litterature.fr</username><firstname>Charles</firstname><lastname>Beaudelaire</lastname><admin>0</admin><designer>0</designer><email>beaudelaire@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='7'><username>hugo@litterature.fr</username><firstname>Victor</firstname><lastname>Hugo</lastname><admin>0</admin><designer>0</designer><email>hugo@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='8'><username>flaubert@litterature.fr</username><firstname>Gustave</firstname><lastname>Flaubert</lastname><admin>0</admin><designer>0</designer><email>flaubert@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='9'><username>maupassant@litterature.fr</username><firstname>Guy</firstname><lastname>de Maupassant</lastname><admin>0</admin><designer>0</designer><email>maupassant@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='10'><username>camus@litterature.fr</username><firstname>Albert</firstname><lastname>Camus</lastname><admin>0</admin><designer>0</designer><email>camus@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='11'><username>dumas@litterature.fr</username><firstname>Alexandre</firstname><lastname>Dumas</lastname><admin>0</admin><designer>0</designer><email>dumas@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='12'><username>crush@bulles.ca</username><firstname>Crush</firstname><lastname>LaTortue</lastname><admin>0</admin><designer>0</designer><email>crush@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='13'><username>nemo@bulles.ca</username><firstname>Némo</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>nemo@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='14'><username>adm-ateliers</username><firstname>Administrateur</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='16'><username>ens-ateliers</username><firstname>Enseignant</firstname><lastname>Promising</lastname><admin>0</admin><designer>1</designer><email>ens@courriel.ca</email><active>1</active><substitute>0</substitute><other>xlimited</other></user><user id='17'><username>doris@bulles.ca</username><firstname>Doris</firstname><lastname>LePoisson</lastname><admin>0</admin><designer>0</designer><email>doris@bulles.ca</email><active>1</active><substitute>0</substitute><other></other></user><user id='18'><username>eric.giraudin@gmail.com</username><firstname>Eric</firstname><lastname>Giraudin</lastname><admin>0</admin><designer>1</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='19'><username>eric.duquenoy@univ-littoral.fr</username><firstname>Éric</firstname><lastname>Duquenoy</lastname><admin>0</admin><designer>1</designer><email>eric.duquenoy@univ-littoral.fr</email><active>1</active><substitute>0</substitute><other></other></user><user id='20'><username>la</username><firstname>Lan Anh</firstname><lastname>Dinh</lastname><admin>0</admin><designer>1</designer><email>tlanh.dinh@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user><user id='22'><username>nobry</username><firstname>Nobry</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email></email><active>1</active><substitute>0</substitute><other></other></user><user id='38'><username>01-etudiant</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='39'><username>01-tuteur</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>0</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='40'><username>01-designer</username><firstname>lili</firstname><lastname>Marlene</lastname><admin>0</admin><designer>1</designer><email>iei</email><active>1</active><substitute>0</substitute><other></other></user><user id='41'><username>cecilekaya</username><firstname>Cécile</firstname><lastname>KAYA</lastname><admin>0</admin><designer>0</designer><email>eric.giraudin@gmail.com</email><active>1</active><substitute>0</substitute><other>undefined</other></user><user id='42'><username>prototype</username><firstname></firstname><lastname>prototype</lastname><admin>0</admin><designer>1</designer><email></email><active>1</active><substitute>0</substitute><other></other></user>"
-		+"</children>";
-	var data = null;
-	data = test_dataFolders_byid[id][""+pageindex];
-	UIFactory["UsersFolder"].parseChildren(data,id); 
-	usersfolders_byid[id].displayFolderContentPage(dest,type,langcode,index_class);		
+*/
 }
 
 /*=======================================*/
@@ -1055,18 +962,15 @@ function getUsersList2()
 
 
 
-//à déplacer dans Type_User.js
-
-
-// à déplacer dans karuta-page.js
-function initRoots()
+//==============================
+function initUsersFolders()
 //==============================
 {
-	var data = "<usersfolder id='root' count='0' nb_children='0' owner='Y'  ownerid='1'><code>1</code><label lang='en'>"+karutaStr['en']['folders']+"</label><label lang='fr'>"+karutaStr['fr']['folders']+"</label></usersfolder>";
-	usersfolders_byid['root'] = new UIFactory["UsersFolder"](data);
-	data = "<usersfolder id='bin' count='0' nb_children='0' owner='Y'  ownerid='1'><code>temporary</code><label lang='en'>"+karutaStr['en']['temporary_users']+"</label><label lang='fr'>"+karutaStr['fr']['temporary']+"</label></usersfolder>";
+	var data = "<usersfolder id='active' nb_folder='0' nb_user='0' owner='Y'  ownerid='1'><code>1</code><label lang='en'>"+karutaStr['en']['folders']+"</label><label lang='fr'>"+karutaStr['fr']['folders']+"</label></usersfolder>";
+	usersfolders_byid['active'] = new UIFactory["UsersFolder"](data);
+	data = "<usersfolder id='bin' nb_folders='0' nb_users='0' owner='Y'  ownerid='1'><code>temporary</code><label lang='en'>"+karutaStr['en']['temporary_users']+"</label><label lang='fr'>"+karutaStr['fr']['temporary']+"</label></usersfolder>";
 	usersfolders_byid['temporary'] = new UIFactory["UsersFolder"](data);
-	data = "<usersfolder id='bin' count='0' nb_children='0' owner='Y'  ownerid='1'><code>1</code><label lang='en'>"+karutaStr['en']['bin']+" - "+karutaStr['en']['inactive_users']+"</label><label lang='fr'>"+karutaStr['fr']['bin']+" - "+karutaStr['fr']['inactive_users']+"</label></usersfolder>";
-	usersfolders_byid['bin'] = new UIFactory["UsersFolder"](data);
+	data = "<usersfolder id='inactive' nb_folders='0' nb_users='0' owner='Y'  ownerid='1'><code>1</code><label lang='en'>"+karutaStr['en']['bin']+" - "+karutaStr['en']['inactive_users']+"</label><label lang='fr'>"+karutaStr['fr']['bin']+" - "+karutaStr['fr']['inactive_users']+"</label></usersfolder>";
+	usersfolders_byid['inactive'] = new UIFactory["UsersFolder"](data);
 }
 

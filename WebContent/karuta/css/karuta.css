@@ -268,9 +268,9 @@ body,
   padding: 0;
 }
 .tree .treeNode {
-  margin: 0;
   line-height: 2em;
   position: relative;
+  margin-top: 5px;
 }
 .tree .nested {
   display: none;
@@ -384,15 +384,94 @@ body,
 /* ====================== */
 /*     PAGE USERS         */
 /* ====================== */
+#userslist-leftside {
+  width: calc(25% - 5px);
+  margin-bottom: 10px;
+}
+#userslist-leftside h3 {
+  margin-top: 20px;
+}
+#userslist-leftside .active {
+  background-color: var(--list-button-background-color);
+}
+
+#userslist-rightside {
+  width: calc(75% - 5px);
+  margin-top: 2px;
+  padding-bottom: 5px;
+  float: right;
+}
+
 #main-user .btn {
   background-color: var(--list-button-background-color);
 }
-#main-user #active {
+#main-user #active,
+#main-user #inactive {
   padding: 10px;
-  background-color: var(--list-element-background-color);
 }
 #main-user .item:hover {
   background-color: var(--list-element-background-color-complement);
+}
+#main-user .no-toggledNode {
+  margin-left: 15px;
+}
+#main-user h3 {
+  color: var(--list-title-color);
+}
+
+#table_users,
+#table_unusers {
+  width: 100%;
+  color: var(--list-element-text-color);
+  background-color: var(--list-element-background-color);
+}
+#table_users td,
+#table_unusers td {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+#table_users thead,
+#table_unusers thead {
+  background-color: var(--list-button-background-color);
+}
+#table_users thead th,
+#table_unusers thead th {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 5px;
+}
+
+#folder-users {
+  color: var(--list-element-text-color);
+  background-color: var(--list-element-background-color);
+}
+#folder-users .usersfolder-header {
+  padding: 7px;
+  background-color: var(--list-menu-background-color);
+  color: var(--list-button-text-color);
+}
+#folder-users .usersfolder-header .btn {
+  background-color: var(--list-element-background-color);
+}
+#folder-users .item-user {
+  margin-left: 1px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+#folder-users .item-folder {
+  margin-left: 1px;
+}
+
+.navbar-pages {
+  background-color: var(--list-button-background-color);
+  padding: 5px;
+}
+.navbar-pages .badge {
+  margin-left: 5px;
+  background-color: var(--list-element-background-color);
+  cursor: pointer;
 }
 
 #main-portfoliosgroup .btn,
@@ -402,7 +481,6 @@ body,
   background-color: var(--list-button-background-color);
 }
 
-#active,
 #usersgroups .usersgroup-users,
 .usersgroup,
 .portfoliosgroup {

@@ -307,10 +307,9 @@
 		margin:0;
 		padding:0;
 		.treeNode{
-			margin:0;
-//			padding:0 1em;
 			line-height:2em;
 			position:relative;
+			margin-top:5px;
 		}
 		.nested{
 			display: none;
@@ -426,16 +425,90 @@
 /*     PAGE USERS         */
 /* ====================== */
 
+	#userslist-leftside {
+		width: calc(25% - 5px);
+		margin-bottom: 10px;
+		h3 {
+			margin-top:20px;
+		}
+		.active {
+			background-color: var(--list-button-background-color);
+		}
+	}
+	
+	#userslist-rightside {
+		width: calc(75% - 5px);
+		margin-top: 2px;
+		padding-bottom: 5px;
+		float: right;
+	}
+
 	#main-user {
 		.btn {
 			background-color: var(--list-button-background-color);
 		}
-		#active {
+		#active,
+		#inactive {
 			padding:10px;
-			background-color: var(--list-element-background-color);
 		}
 		.item:hover{
 			background-color: var(--list-element-background-color-complement);
+		}
+		.no-toggledNode {
+			margin-left:15px;
+		}
+		h3 {
+			color: var(--list-title-color);
+		}
+	}
+
+	#table_users,
+	#table_unusers {
+		width:100%;
+		color : var(--list-element-text-color);
+		background-color: var(--list-element-background-color);
+		td {
+			padding-top:2px;
+			padding-bottom:2px;
+			padding-left:5px;
+			padding-right:5px;
+		}
+		thead {
+			background-color: var(--list-button-background-color);
+			th {
+			padding-top:7px;
+			padding-bottom:7px;
+			padding-left:5px;
+			}
+		}
+	}
+	#folder-users {
+		color : var(--list-element-text-color);
+		background-color: var(--list-element-background-color);
+		.usersfolder-header {
+			padding:7px;
+			background-color:var(--list-menu-background-color);
+			color:var(--list-button-text-color);
+			.btn  {
+				background-color:var(--list-element-background-color);
+			}
+		}
+		.item-user {
+			margin-left:1px;
+			margin-top:2px;
+			margin-bottom:2px;
+		}
+		.item-folder {
+			margin-left:1px;
+		}
+	}
+	.navbar-pages {
+		background-color: var(--list-button-background-color);
+		padding:5px;
+		.badge {
+			margin-left:5px;
+			background-color: var(--list-element-background-color);
+			cursor: pointer;
 		}
 	}
 
@@ -451,7 +524,6 @@
 
 	
 	
-	#active,
 	#usersgroups .usersgroup-users,
 	.usersgroup,
 	.portfoliosgroup {
