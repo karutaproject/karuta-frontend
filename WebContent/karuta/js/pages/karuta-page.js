@@ -22,7 +22,7 @@ function initKarutaPage()
 	html += "</div>";
 	html += "<div id='export-html' style='display:none'></div>";
 //	html += "<div id='print-window' style='display:none'></div>";
-	$('body').html(html)
+	$('body').append(html)
 	//--------------------------
 	$('body').append(EditBox());
 	$('body').append(DeleteBox());
