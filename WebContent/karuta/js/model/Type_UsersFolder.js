@@ -113,6 +113,30 @@ UIFactory["UsersFolder"].displayTree = function(dest,type,langcode,parentid)
 }
 
 //==================================
+function dragFolder(ev)
+//==================================
+{
+	ev.dataTransfer.setData("text", ev.target.id);
+}
+
+//==================================
+function allowDropFolder(ev)
+//==================================
+{
+	ev.preventDefault();
+}
+
+//==================================
+function dropFolder(ev)
+//==================================
+{
+	ev.preventDefault();
+	var folderid = ev.dataTransfer.getData("text");
+	var newparentid = ev.target.id.substring(ev.target.id.lastIndexOf('_')+1);
+	UIFactory.UsersFolder.moveto(folderid,newparentid)
+}
+
+//==================================
 UIFactory["UsersFolder"].prototype.getTreeNodeView = function(dest,type,langcode)
 //==================================
 {
@@ -120,7 +144,7 @@ UIFactory["UsersFolder"].prototype.getTreeNodeView = function(dest,type,langcode
 	var folder_label = this.label_node[langcode].text();
 	var html = "";
 	if (type=='list') {
-		html += "<div  class='treeNode usersfolder'>";
+		html += "<div id='"+this.id+"' class='treeNode usersfolder' draggable='true' ondragstart='dragFolder(event)' ondrop=dropFolder(event)' ondragover='allowDropFolder(event)'>";
 		html += "	<div id='usersfolder_"+this.id+"' class='row-label folder-row'>";
 		if (this.nb_folders>0){
 			html += "		<span id='toggle_usersfolder_"+this.id+"' class='closeSign";
@@ -181,18 +205,18 @@ UIFactory["UsersFolder"].displayFolderContent = function(dest,id,langcode,index_
 		folder_label = '- no label in '+languages[langcode]+' -';
 	html += "<div id='content-usersfolder_"+usersfolder.id+"' class='usersfolder-header'>";
 	html += "	<div class='row row-label'>";
-	html += "		<div class='col-1'/>";
 	html += "		<div class='col-4 folder-label' id='usersfolderlabel_"+usersfolder.id+"' >"+folder_label+"</div>";
 	html += "		<div class='col-2 d-none d-md-block folder-label'>"+owner+"</div>";
 	html += "		<div class='col-3 d-none d-sm-block comments' id='usersfolder-comments_"+usersfolder.date_modified.substring(0,10)+"'> </div><!-- comments -->";
 	html += "		<div class='col-1'>";
 	//------------ buttons ---------------
-	html += UIFactory.UsersFolder.getAdminMenu(usersfolder,false);
+	if (usersfolder.code!="#system-user#")
+		html += UIFactory.UsersFolder.getAdminMenu(usersfolder,false);
 	//---------------------------------------
 	html += "		</div><!-- class='col-1' -->";
 	html += "		<div class='col-1'>";
 	//------------------------ menu-burger
-	if (USER.admin || (USER.creator && !USER.limited) ) {
+	if (usersfolder.code!="#system-user#" && (USER.admin || (USER.creator && !USER.limited) )) {
 		html += "			<div class='dropdown folder-menu'>";
 		html += "				<button  class='btn dropdown-toggle' data-toggle='dropdown'></button>";
 		html += "				<ul class='dropdown-menu dropdown-menu-right' role='menu'>";
@@ -240,7 +264,6 @@ UIFactory["UsersFolder"].prototype.displayFolderContentPage = function(dest,type
 			html += "</div>";
 		}
 	}
-	html += "<hr/>"
 	var list = this.chidren_list[this.pageindex];
 	if (list!=undefined) {
 	for (var i=0; i<list.length;i++){
@@ -363,6 +386,29 @@ UIFactory["UsersFolder"].prototype.getSelector = function(attr,value,name,checkb
 };
 
 //==================================
+UIFactory["UsersFolder"].moveto = function(folderid,newparentid) 
+//==================================
+{
+	var url = serverBCK_API+"/folder/usersfolder/" + folderid + "?newparentid="+newparentid;
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : "",
+		success : function(data) {
+			UIFactory["UsersFolder"].displayAll('usersfolders','list');
+			UIFactory["UsersFolder"].displayBin('bin','bin');
+			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
+
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in remove : "+jqxhr.responseText);
+		}
+	});
+};
+
+//==================================
 UIFactory["UsersFolder"].remove = function(id) 
 //==================================
 {
@@ -389,7 +435,7 @@ UIFactory["UsersFolder"].remove = function(id)
 UIFactory["UsersFolder"].restore = function(id) 
 //==================================
 {
-	var url = serverBCK_API+"/usersfolders/usersfolder/" + id + "?active=1";
+	var url = serverBCK_API+"/folder/usersfolder/" + id + "?active=1";
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -491,20 +537,17 @@ UIFactory["UsersFolder"].rename = function(itself,langcode,list)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	var oldcode = $(itself.code);
 	var code = $.trim($("#code_"+itself.id).val());
-	//---------- test if new code already exists
 	$(itself.code_node).text(code);
 	itself.code = code;
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
 	$(itself.label_node[langcode]).text(label);
 	var xml = "";
-	xml +="		<usersfolder>";
-	xml +="			<code>"+code+"</code>";
+	xml +="<usersfolder><code>"+code+"</code>";
 	for (var i=0; i<languages.length;i++){
-		xml +="			<label lang='"+languages[i]+"'>"+$(itself.label_node[i]).text()+"</label>";	
+		xml +="<label lang='"+languages[i]+"'>"+$(itself.label_node[i]).text()+"</label>";	
 	}
-	xml +="		</usersfolder>";
+	xml +="</usersfolder>";
 	strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 	var callback = function () {
 		$("#treenode-usersfolderlabel_"+itself.id).html($(label));
@@ -514,8 +557,9 @@ UIFactory["UsersFolder"].rename = function(itself,langcode,list)
 			$("#usersfolderlabel_"+itself.id).html($(label));
 		}
 	};
-	UICom.query("PUT",serverBCK_API+'/usersfolders/usersfolder/'+itself.id+'',callback,"text",strippeddata);
+	UICom.query("PUT",serverBCK_API+'/folder/usersfolder/'+itself.id+'',callback,"text",strippeddata);
 };
+
 
 //==================================
 UIFactory["UsersFolder"].prototype.update = function(node)
@@ -549,8 +593,9 @@ UIFactory["UsersFolder"].prototype.update = function(node)
 	this.node = current_node;
 }
 
+
 //==================================
-UIFactory["UsersFolder"].createFolder = function()
+UIFactory["UsersFolder"].callCreateFolder = function(parentid)
 //==================================
 {
 	$("#edit-window-title").html(karutaStr[LANG]['create_folder']);
@@ -562,25 +607,7 @@ UIFactory["UsersFolder"].createFolder = function()
 		var code = $("#code").val();
 		var label = $("#label").val();
 		if (code!='' && label!='') {
-			var url = serverBCK_API+"/usersfolders";
-			var data = "<usersfolder<code>"+code+"</code><label lang='"+LANG+"'>"+label+"</label></usersfolder>";
-			$.ajax({
-				type : "POST",
-				contentType: "application/xml",
-				dataType : "xml/text",
-				url : url,
-				data : data,
-				success : function(data) {
-					$("#refresh").click();
-					//--------------------------
-					$('#edit-window').modal('hide');
-				},
-				error : function(jqxhr,textStatus) {
-					alertHTML("Error : "+jqxhr.responseText);
-					//--------------------------
-					$('#edit-window').modal('hide');
-				}
-			});
+			UIFactory.UsersFolder.createFolder(parentid,code,label);
 		} else {
 			if (code=='')
 				alertHTML(karutaStr[LANG]['code-not-null']);
@@ -612,10 +639,42 @@ UIFactory["UsersFolder"].createFolder = function()
 };
 
 //==================================
+UIFactory["UsersFolder"].createFolder = function(parentid,code,label)
+//==================================
+{
+	if (code!='' && label!='') {
+		var url = serverBCK_API+"/folder/usersfolders/"+parentid;
+		var data = "<usersfolder><code>"+code+"</code><label lang='fr'>"+label+"</label><label lang='en'>"+label+"</label></usersfolder>";
+		$.ajax({
+			type : "POST",
+			contentType: "application/xml",
+			dataType : "xml/text",
+			url : url,
+			data : data,
+			success : function(data) {
+				$("#refresh").click();
+				//--------------------------
+				$('#edit-window').modal('hide');
+			},
+			error : function(jqxhr,textStatus) {
+				alertHTML("Error : "+jqxhr.responseText);
+				//--------------------------
+				$('#edit-window').modal('hide');
+			}
+		});
+	} else {
+		if (code=='')
+			alertHTML(karutaStr[LANG]['code-not-null']);
+		if (label=='')
+			alertHTML(karutaStr[LANG]['label-not-null']);
+	}
+};
+
+//==================================
 UIFactory["UsersFolder"].del = function(id) 
 //==================================
 {
-	var url = serverBCK_API+"/usersfolders/usersfolder/" + id;
+	var url = serverBCK_API+"/folder/usersfolder/" + id;
 	$.ajax({
 		type : "DELETE",
 		contentType: "application/xml",
@@ -767,8 +826,8 @@ function loadUsersFolderStruct(dest,id,langcode)
 		//-------- Simulation ---------
 		if (id=="active") { //root folder
 			var data = "<usersfolders id='active' nb_folders='3' nb_users='0'>"
-				+"<usersfolder id='1' nb_folders='0' nb_users='3' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>System Users</label><label lang='fr'>Usagers Système</label></usersfolder>"
-				+"<usersfolder id='2' nb_folders='1' nb_users='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Folder 2</label><label lang='fr'>Dossier 2</label></usersfolder>"
+				+"<usersfolder id='1' nb_folders='0' nb_users='3' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>#system-user#</code><label lang='en'>System Users</label><label lang='fr'>Usagers Système</label></usersfolder>"
+				+"<usersfolder id='2' nb_folders='1' nb_users='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Folder 2</label><label lang='fr'>Usagers</label></usersfolder>"
 				+"</userfolders>";
 			
 		}
@@ -779,8 +838,7 @@ function loadUsersFolderStruct(dest,id,langcode)
 			
 		}
 		if (id=="inactive") { //bin folder
-			var data = "<usersfolders d='inactive' nb_folders='0' nb_users='1'>"
-					+"<usersfolder id='4' nb_folders='2' nb_users='2' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder3</code><label lang='en'>Folder 3</label><label lang='fr'>Dossier 3</label></usersfolder>"
+			var data = "<usersfolders d='inactive' nb_folders='0' nb_users='0'>"
 					+"</userfolders>";
 			
 		}
@@ -969,7 +1027,7 @@ function initUsersFolders()
 {
 	var data = "<usersfolder id='active' nb_folder='0' nb_user='0' owner='Y'  ownerid='1'><code>1</code><label lang='en'>"+karutaStr['en']['folders']+"</label><label lang='fr'>"+karutaStr['fr']['folders']+"</label></usersfolder>";
 	usersfolders_byid['active'] = new UIFactory["UsersFolder"](data);
-	data = "<usersfolder id='bin' nb_folders='0' nb_users='0' owner='Y'  ownerid='1'><code>temporary</code><label lang='en'>"+karutaStr['en']['temporary_users']+"</label><label lang='fr'>"+karutaStr['fr']['temporary']+"</label></usersfolder>";
+	data = "<usersfolder id='temporary' nb_folders='0' nb_users='0' owner='Y'  ownerid='1'><code>temporary</code><label lang='en'>"+karutaStr['en']['temporary_users']+"</label><label lang='fr'>"+karutaStr['fr']['temporary']+"</label></usersfolder>";
 	usersfolders_byid['temporary'] = new UIFactory["UsersFolder"](data);
 	data = "<usersfolder id='inactive' nb_folders='0' nb_users='0' owner='Y'  ownerid='1'><code>1</code><label lang='en'>"+karutaStr['en']['bin']+" - "+karutaStr['en']['inactive_users']+"</label><label lang='fr'>"+karutaStr['fr']['bin']+" - "+karutaStr['fr']['inactive_users']+"</label></usersfolder>";
 	usersfolders_byid['inactive'] = new UIFactory["UsersFolder"](data);

@@ -21,10 +21,10 @@ function fill_list_users()
 	setLanguageMenu("fill_list_users()");
 	var html = "";
 	html += "<div id='user-header' class='row'>";
-	html += "	<div id='create-user-button' class='col-1'>";
-	html += "<div class='folder-label btn' title='"+karutaStr[LANG]['create_user']+"'><i class='fas fa-user-plus' id='user-create' onclick=\"javascript:UIFactory['User'].callCreate();\"></i></div>";
-	html += "	</div>";
-	html += "	<div class='col-9 search' id='search-user-div'></div>";
+//	html += "	<div id='create-user-button' class='col-1'>";
+//	html += "<div class='folder-label btn' title='"+karutaStr[LANG]['create_user']+"'><i class='fas fa-user-plus' id='user-create' onclick=\"javascript:UIFactory['User'].callCreate();\"></i></div>";
+//	html += "	</div>";
+	html += "<div class='col-9 search' id='search-user-div'></div>";
 	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
 	html += "</div>";
 	html += "<div id='user-body'>";
@@ -43,7 +43,7 @@ function fill_list_users()
 	html += "<h4 id='usersfolder_root'>";
 	html += "<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
 	html += "	<span id='create-folder-button' class='col-1'>";
-	html += "<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"javascript:UIFactory['UsesFolder'].callCreate();\"></i></span>";
+	html += "<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersFolder.callCreateFolder('active');\"></i></span>";
 	html += "	</span>";
 	html += "</h4>";
 	html += "<div id='usersfolder_active' class=''></div>";

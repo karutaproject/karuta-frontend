@@ -426,6 +426,32 @@ body,
 #main-user h3, #main-user h4 {
   color: var(--list-title-color);
 }
+#main-user .navbar-pages {
+  background-color: var(--list-button-background-color);
+  padding: 5px;
+}
+#main-user .navbar-pages .badge {
+  margin-left: 5px;
+  background-color: var(--list-element-background-color);
+  cursor: pointer;
+}
+#main-user .dropdown-menu {
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+#main-user .dropdown-menu a.dropdown-item {
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+#main-user .dropdown-menu a.dropdown-item:hover {
+  color: var(--list-menu-background-color);
+  background-color: var(--list-menu-text-color);
+}
+#main-user .folder-menu .btn {
+  height: 25px;
+  padding-left: 9px;
+  padding-right: 9px;
+}
 
 #table_users,
 #table_unusers {
@@ -451,6 +477,10 @@ body,
   padding-left: 5px;
 }
 
+#folder-users-pages {
+  padding-top: 5px;
+}
+
 #folder-users {
   color: var(--list-element-text-color);
   background-color: var(--list-element-background-color);
@@ -471,16 +501,11 @@ body,
 }
 #folder-users .item-folder {
   margin-left: 1px;
+  margin-bottom: 2px;
 }
 
-.navbar-pages {
-  background-color: var(--list-button-background-color);
-  padding: 5px;
-}
-.navbar-pages .badge {
-  margin-left: 5px;
-  background-color: var(--list-element-background-color);
-  cursor: pointer;
+#user-header {
+  color: var(--list-element-text-color);
 }
 
 #create-folder-button {

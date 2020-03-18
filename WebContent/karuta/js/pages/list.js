@@ -590,6 +590,7 @@ function getSearch()
 function searchPortfolio()
 //==================================
 {
+	cleanList();
 	var code = $("#search-input").val();
 	if (code!="")
 		fill_search_page(code);
