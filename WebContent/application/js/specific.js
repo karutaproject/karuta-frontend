@@ -23,5 +23,4 @@ function prepareBatch()
 	};
 }//----------------------------------------------------
 
-var nbItem_par_page = 4;
 var nbPagesIndexStep = 2;

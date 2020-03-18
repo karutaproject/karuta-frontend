@@ -64,7 +64,7 @@
 	#welcome-bar {
 		padding-top:50px;
 		width: 100%;
-		height: 250px;
+		height: 200px;
 		.welcome-box {
 			margin-left:auto;
 			margin-right:auto;
@@ -90,11 +90,19 @@
 			width:100%;
 			text-align:center;
 			color: var(--list-welcome-title-color);
-			font-size:40px;
+			font-size:2em;
 		}
 		.welcome-baseline {
 			color: var(--list-welcome-subtitle-color);
-			font-size:24px;
+			font-size:1.5em;
+		}
+		@media only screen and (max-width: 320px) {
+			.welcome-title {
+				font-size: 1em;
+			}
+			.welcome-baseline {
+				font-size: 0.75em;
+			}
 		}
 	}
 
@@ -457,7 +465,7 @@
 		.no-toggledNode {
 			margin-left:15px;
 		}
-		h3 {
+		h3,h4 {
 			color: var(--list-title-color);
 		}
 	}
@@ -491,6 +499,7 @@
 			color:var(--list-button-text-color);
 			.btn  {
 				background-color:var(--list-element-background-color);
+				height:25px;
 			}
 		}
 		.item-user {
@@ -512,6 +521,9 @@
 		}
 	}
 
+	#create-folder-button {
+		color : var(--list-element-text-color);
+	}
 //========================================================
 #main-portfoliosgroup .btn,
 #main-usersgroup .btn,

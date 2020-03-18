@@ -161,6 +161,7 @@ function setConfigurationVariables()
 			g_configVar['navbar-display-language'] = getText('navbar-display-language','Get_Resource','value',data);
 			//----------------------
 			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
+			g_configVar['maxuserlist'] = getText('config-maxuserlist','Field','text',data);
 			//----------------------
 			g_configVar['list-welcome-image'] = getBackgroundURL('config-list-welcome-image',data);		
 			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data);

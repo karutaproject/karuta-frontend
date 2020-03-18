@@ -27,6 +27,7 @@ var LANG = languages[LANGCODE]; //default value
 var audiovideohtml5 = true;
 var g_configVar = {}; //list of configuration variables
 g_configVar['maxfilesizeupload'] = '32';
+g_configVar['maxuserlist'] = '4';
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;

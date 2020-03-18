@@ -24,9 +24,6 @@ function fill_list_users()
 	html += "	<div id='create-user-button' class='col-1'>";
 	html += "<div class='folder-label btn' title='"+karutaStr[LANG]['create_user']+"'><i class='fas fa-user-plus' id='user-create' onclick=\"javascript:UIFactory['User'].callCreate();\"></i></div>";
 	html += "	</div>";
-	html += "	<div id='create-folder-button' class='col-1'>";
-	html += "<div class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"javascript:UIFactory['UsesFolder'].callCreate();\"></i></div>";
-	html += "	</div>";
 	html += "	<div class='col-9 search' id='search-user-div'></div>";
 	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
 	html += "</div>";
@@ -42,10 +39,13 @@ function fill_list_users()
 	html += "<div id='userslist-leftside'>";
 	//--------------------FOLDERS V3---------------------------------------
 	html += "<div id='usersfolders' class='tree user'>";
-	html += "<h3 id='usersfolder_root' class='treeNode'>";
-//	html += "<span id='toggle_usersfolder_root' class='closeSign toggledNode' onclick=\"javascript:loadAndDisplayUsersFolderStruct('collapse_usersfolder_root','root');\"></span>";
-	html += "<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['active_users']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
-	html += "</h3>";
+	html += "<h3 id='usersfolder_root'>"+karutaStr[LANG]['active_users']+"</h3>";
+	html += "<h4 id='usersfolder_root'>";
+	html += "<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
+	html += "	<span id='create-folder-button' class='col-1'>";
+	html += "<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"javascript:UIFactory['UsesFolder'].callCreate();\"></i></span>";
+	html += "	</span>";
+	html += "</h4>";
 	html += "<div id='usersfolder_active' class=''></div>";
 	html += "</div><!--div id='usersfolders'-->";
 

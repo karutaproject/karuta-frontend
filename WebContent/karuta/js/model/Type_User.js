@@ -964,10 +964,6 @@ UIFactory["User"].prototype.getAdminUserMenu = function(gid)
 			html += "<span class='button btn' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 			html += "<span class='fa fa-trash-alt'/>";
 			html += "</span>";
-		} else {
-			html += "<span class='button btn' disabled='true'>";
-			html += "<span class='fa fa-trash-alt'/>";
-			html += "</span>";
 		}
 	} else {
 		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
