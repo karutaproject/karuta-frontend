@@ -452,8 +452,10 @@
 	}
 
 	#main-user {
+		color : var(--list-element-text-color);
 		.btn {
 			background-color: var(--list-button-background-color);
+			color : var(--list-element-text-color);
 		}
 		#active,
 		#inactive {
@@ -545,7 +547,7 @@
 	}
 
 	#user-header{
-		color : var(--list-element-text-color);
+//		color : var(--list-element-text-color);
 	}
 
 	#create-folder-button {
@@ -1308,10 +1310,7 @@
 /* ====================== */
 
 #usersgroups .row,
-#list .row,
-#bin .row,
-#selectform-projects .row,
-#main-user  {
+#selectform-projects .row, {
 	margin-top:2px;
 //	color:var(--list-button-color);
 }
@@ -1373,8 +1372,7 @@
 
 
 #main-portfoliosgroup .btn,
-#main-usersgroup .btn,
-#main-user .btn {
+#main-usersgroup .btn {
 	background-color:var(--list-button-background-color);
 	color:var(--list-button-color);
 }

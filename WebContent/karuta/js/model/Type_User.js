@@ -123,6 +123,15 @@ UIFactory["User"].prototype.getEmail = function()
 }
 
 //==================================
+function dragUser(ev)
+//==================================
+{
+	ev.dataTransfer.setData("id", ev.target.id.substring(ev.target.id.lastIndexOf('_')+1));
+	ev.dataTransfer.setData("type", "user");
+}
+
+
+//==================================
 UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 //==================================
 {

@@ -410,8 +410,12 @@ body,
   float: right;
 }
 
+#main-user {
+  color: var(--list-element-text-color);
+}
 #main-user .btn {
   background-color: var(--list-button-background-color);
+  color: var(--list-element-text-color);
 }
 #main-user #active,
 #main-user #inactive {
@@ -502,10 +506,6 @@ body,
 #folder-users .item-folder {
   margin-left: 1px;
   margin-bottom: 2px;
-}
-
-#user-header {
-  color: var(--list-element-text-color);
 }
 
 #create-folder-button {
@@ -1182,10 +1182,7 @@ h3 {
 
 /* ====================== */
 #usersgroups .row,
-#list .row,
-#bin .row,
-#selectform-projects .row,
-#main-user {
+#selectform-projects .row {
   margin-top: 2px;
 }
 
@@ -1234,8 +1231,7 @@ h3 {
 }
 
 #main-portfoliosgroup .btn,
-#main-usersgroup .btn,
-#main-user .btn {
+#main-usersgroup .btn {
   background-color: var(--list-button-background-color);
   color: var(--list-button-color);
 }

@@ -6,15 +6,15 @@ var appliname = 'karuta3.0';
 var karutaname = 'karuta3.0'; // to share the same 'karuta-core' with multiple front-end
 var karuta_url = '../../../' + karutaname;
 var bckname = '3.0';
-//var bckname = '-new';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
-//var serverBCK_API = "../../../karuta-backend"+bckname+"/api";
 var cas_url = "";
-//---------------------------------
-var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report";  // report registration server
-var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report servervar serverBCK_REG = "";  // report registration server
-//----------------------------------
+var new_bck = false;
+if (new_bck) {
+	bckname = '-new';
+	serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
+	serverBCK_API = "../../../karuta-backend"+bckname+"/api";
+}
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';

@@ -917,40 +917,52 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles',false,true);
 	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitall',true);
+	//-----------------------------------------
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles');
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles',false,true);
-	
+	//-----------------------------------------
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles');
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles',false,true);
+	//-----------------------------------------
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',false,true);
+	//-----------------------------------------
 	if (name=='asmRoot' || !model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles',false,true);
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles');
+	//-----------------------------------------
 	if (name=='asmRoot' || !model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',false,true);
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',true);
+	//-----------------------------------------
 	if (semtag=='bubble_level1' && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles');
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles',false,true);
+	//-----------------------------------------
 	if (this.resource_type=='Proxy' && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','edittargetroles');
+	//-----------------------------------------
 	if (name=='asmContext' && this.resource.type=='Image' && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','resizeroles');
 //	this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
+	//-----------------------------------------
 	if (name=='asmRoot' || !model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles',false,true);
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles');
+	//-----------------------------------------
+	this.displayMetadataWadAttributeEditor('metadata-part2','moveinroles');
+	this.displayMetadataWadAttributeEditor('metadata-part2','movein');
+	//-----------------------------------------
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','showroles');
 	else

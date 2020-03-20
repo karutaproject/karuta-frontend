@@ -90,11 +90,16 @@ function fill_list_users()
 		if (code == 13)
 			searchUser();
 	});
-	
-	initUsersFolders();
-	loadUsersFolderStruct('usersfolder_active','active');  // active users
-	loadUsersFolderStruct('usersfolder_inactive','inactive');  // inactive users
-	
+	if (karuta_backend_version.startsWith("x2.")) {
+		$("#usersfolders").hide();
+		$("#bin-usersfolders").hide();
+		$("#users-in-rootfolder").show();
+		$("#users-in-bin").show();
+	} else {
+		initUsersFolders();
+		loadAndDisplayUsersFolderStruct('usersfolder_active','active');  // active users
+		loadAndDisplayUsersFolderStruct('usersfolder_inactive','inactive');  // inactive users
+	}
 }
 
 //==============================
@@ -202,8 +207,8 @@ function fill_list_usersOLD()
 				url : serverBCK_API+"/users",
 				success : function(data) {
 					UIFactory["User"].parse(data);
-					UIFactory["User"].displayActive('active','list');
-					UIFactory["User"].displayInactive('inactive','list');
+					UIFactory["User"].displayActive('folder-users-active','list');
+					UIFactory["User"].displayInactive('folder-users-inactive','list');
 				}
 			});
 			//----------------

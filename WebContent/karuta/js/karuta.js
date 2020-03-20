@@ -235,7 +235,7 @@ function getNavBar(type,portfolioid,edit)
 		html += "				<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
 		html += "					<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
 		html += " 				</a>";
-		html += "				<div class='dropdown-menu' aria-labelledby='userDropdown'>";
+		html += "				<div class='dropdown-menu dropdown-menu-right' aria-labelledby='userDropdown'>";
 		html += "					<a class='dropdown-item' href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a>";
 		if ((USER.creator && !USER.limited)  && !USER.admin)
 			html += "				<a class='dropdown-item' href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a>";

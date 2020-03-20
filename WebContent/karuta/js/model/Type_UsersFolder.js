@@ -20,6 +20,7 @@ var currentDisplayedUsersFolderId = null;
 var root_usersfolder = '0';
 var pagegNavbar_list = ["top","bottom"];
 var number_of_usersfolders = 0;
+var folder_last_drop = "";
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -116,7 +117,8 @@ UIFactory["UsersFolder"].displayTree = function(dest,type,langcode,parentid)
 function dragFolder(ev)
 //==================================
 {
-	ev.dataTransfer.setData("text", ev.target.id);
+	ev.dataTransfer.setData("id", ev.target.id.substring(ev.target.id.lastIndexOf('_')+1));
+	ev.dataTransfer.setData("type", "folder");
 }
 
 //==================================
@@ -131,9 +133,23 @@ function dropFolder(ev)
 //==================================
 {
 	ev.preventDefault();
-	var folderid = ev.dataTransfer.getData("text");
-	var newparentid = ev.target.id.substring(ev.target.id.lastIndexOf('_')+1);
-	UIFactory.UsersFolder.moveto(folderid,newparentid)
+	var id = ev.dataTransfer.getData("id");
+	var type = ev.dataTransfer.getData("type");
+	var folderid = ev.target.id.substring(ev.target.id.lastIndexOf('_')+1);
+	var current_drop = id+"/"+folderid;
+	if (current_drop!=folder_last_drop) {
+		folder_last_drop = current_drop;
+		if (type="folder"&& current_drop!=folder_last_drop) {
+			
+			alert("moveFolder:"+id+" -> "+folderid);
+			UIFactory.UsersFolder.moveFolder(id,folderid);
+		}
+		if (type="user") {
+			alert("USER moveto:"+id+" -> "+folderid);
+			UIFactory.UsersFolder.moveUser(folderid,id);
+		}
+	}
+
 }
 
 //==================================
@@ -144,8 +160,8 @@ UIFactory["UsersFolder"].prototype.getTreeNodeView = function(dest,type,langcode
 	var folder_label = this.label_node[langcode].text();
 	var html = "";
 	if (type=='list') {
-		html += "<div id='"+this.id+"' class='treeNode usersfolder' draggable='true' ondragstart='dragFolder(event)' ondrop=dropFolder(event)' ondragover='allowDropFolder(event)'>";
-		html += "	<div id='usersfolder_"+this.id+"' class='row-label folder-row'>";
+		html += "<div id='"+this.id+"' class='treeNode usersfolder'>";
+		html += "	<div id='usersfolder_"+this.id+"' class='row-label folder-row'  draggable='true' ondragstart='dragFolder(event)' ondrop='dropFolder(event)' ondragover='allowDropFolder(event)'>";
 		if (this.nb_folders>0){
 			html += "		<span id='toggle_usersfolder_"+this.id+"' class='closeSign";
 			html += " toggledNode";
@@ -236,7 +252,7 @@ UIFactory["UsersFolder"].displayFolderContent = function(dest,id,langcode,index_
 	html += "<div id='folder-users-pages' class='usersfolder-pages'>";
 	html += "</div><!-- class='usersfolder-pages'-->";
 	// ----------------------
-	html += "<div id='"+index_class+pagegNavbar_list[1]+"' class='navbar-pages'>";
+	html += "<div id='navbar-pages' class='navbar-pages'>";
 	html += "</div><!-- class='navbar-pages'-->";
 	//----------------------
 
@@ -244,7 +260,7 @@ UIFactory["UsersFolder"].displayFolderContent = function(dest,id,langcode,index_
 }
 
 //==================================
-UIFactory["UsersFolder"].prototype.displayFolderContentPage = function(dest,type,langcode,index_class)
+UIFactory["UsersFolder"].prototype.displayFolderContentPage = function(dest,type)
 //==================================
 {
 	$("#"+dest).html("");
@@ -269,7 +285,7 @@ UIFactory["UsersFolder"].prototype.displayFolderContentPage = function(dest,type
 	for (var i=0; i<list.length;i++){
 			var item = list[i]['obj'];
 			var destid = dest+"_item-user_"+item.id;
-			html += "<div class='row item item-user' id='"+destid+"'>";
+			html += "<div class='row item item-user' id='"+destid+"' draggable='true' ondragstart='dragUser(event)'>";
 			html += item.getView(destid,'list2',langcode);
 			html += "</div>";
 		}
@@ -277,7 +293,7 @@ UIFactory["UsersFolder"].prototype.displayFolderContentPage = function(dest,type
 	$("#"+dest).html($(html));
 	var nb_index = Math.ceil((this.nb_users)/g_configVar['maxuserlist']);
 	if (nb_index>1) {
-		displayPagesNavbar(nb_index,this.id,langcode,parseInt(this.pageindex),index_class,'loadAndDisplayUsersFolderContentPage',dest,"list");
+		displayUserPagesNavbar('navbar-pages',nb_index,this.id,parseInt(this.pageindex));
 		$(".navbar-pages").show();
 	} else {
 		$(".navbar-pages").hide();
@@ -386,7 +402,7 @@ UIFactory["UsersFolder"].prototype.getSelector = function(attr,value,name,checkb
 };
 
 //==================================
-UIFactory["UsersFolder"].moveto = function(folderid,newparentid) 
+UIFactory["UsersFolder"].moveFolder = function(folderid,newparentid) 
 //==================================
 {
 	var url = serverBCK_API+"/folder/usersfolder/" + folderid + "?newparentid="+newparentid;
@@ -403,10 +419,32 @@ UIFactory["UsersFolder"].moveto = function(folderid,newparentid)
 
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Error in remove : "+jqxhr.responseText);
+			alertHTML("Error in moveFolder : "+jqxhr.responseText);
 		}
 	});
 };
+
+//==================================
+UIFactory["UsersFolder"].moveUser = function(folderid,userid) 
+//==================================
+{
+	var url = serverBCK_API+"/folder/usersfolder/" + folderid + "?adduser="+userid;
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : "",
+		success : function(data) {
+			loadAndDisplayUsersFolderStruct('usersfolder_active','active',true);  // active users
+			loadAndDisplayUsersFolderStruct('usersfolder_inactive','inactive',true);  // inactive users
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in moveUser : "+jqxhr.responseText);
+		}
+	});
+};
+
 
 //==================================
 UIFactory["UsersFolder"].remove = function(id) 
@@ -420,10 +458,8 @@ UIFactory["UsersFolder"].remove = function(id)
 		url : url,
 		data : "",
 		success : function(data) {
-			UIFactory["UsersFolder"].displayAll('usersfolders','list');
-			UIFactory["UsersFolder"].displayBin('bin','bin');
-			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
-
+			loadAndDisplayUsersFolderStruct('usersfolder_active','active',true);  // active users
+			loadAndDisplayUsersFolderStruct('usersfolder_inactive','inactive',true);  // inactive users
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in remove : "+jqxhr.responseText);
@@ -786,14 +822,19 @@ UIFactory["UsersFolder"].parseChildren = function(data,parentid)
 //----------------------------------------------------------------------------------
 
 //==================================
-function loadAndDisplayUsersFolderStruct(dest,id,langcode) {
+function loadAndDisplayUsersFolderStruct(dest,id,langcode,reload) {
 //==================================
 	$("#wait-window").show();
-	toggleElt('closeSign','openSign','usersfolder_'+id);
-	if (!usersfolders_byid[id].loadedStruct)
+	if (reload==null)
+		reload = false;
+	if (id!="active" && id!="inactive")
+		toggleElt('closeSign','openSign','usersfolder_'+id);
+	if (!usersfolders_byid[id].loadedStruct || reload) {
 		loadUsersFolderStruct(dest,id,langcode);
+		UIFactory.UsersFolder.displayTree(dest,'list',langcode,id);
+	}
 	else {
-//		UIFactory.Folder.displayTree(dest,'list',langcode,id);
+		UIFactory.UsersFolder.displayTree(dest,'list',langcode,id);
 	}
 	$("#wait-window").hide();
 }
@@ -802,50 +843,40 @@ function loadAndDisplayUsersFolderStruct(dest,id,langcode) {
 function loadUsersFolderStruct(dest,id,langcode)
 //==============================
 {
-	if (karuta_backend_version.startsWith("x2.")) {
-		$("#usersfolders").hide();
-		$("#bin-usersfolders").hide();
-		$("#create-folder-button").hide();
-		$("#users-in-rootfolder").show();
-		$("#users-in-bin").show();
-	} else {
-		/*
-		$.ajax({
-			id : id,
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/folder/usersfolder/"+id+"?type=structure",
-			success : function(data) {
-					UIFactory["UsersFolder"].parseStructure(data,id);
-					UIFactory["UsersFolder"].displayTree(dest,'list',langcode,id);
-			},
-			error : function(jqxhr,textStatus) {
-			}
-		});
-		 */
-		//-------- Simulation ---------
-		if (id=="active") { //root folder
-			var data = "<usersfolders id='active' nb_folders='3' nb_users='0'>"
-				+"<usersfolder id='1' nb_folders='0' nb_users='3' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>#system-user#</code><label lang='en'>System Users</label><label lang='fr'>Usagers Système</label></usersfolder>"
-				+"<usersfolder id='2' nb_folders='1' nb_users='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Folder 2</label><label lang='fr'>Usagers</label></usersfolder>"
-				+"</userfolders>";
-			
+	/*
+	$.ajax({
+		id : id,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/folder/usersfolder/"+id+"?type=structure",
+		success : function(data) {
+				UIFactory["UsersFolder"].parseStructure(data,id);
+				UIFactory["UsersFolder"].displayTree(dest,'list',langcode,id);
+		},
+		error : function(jqxhr,textStatus) {
 		}
-		if (id=="2") { 
-			var data = "<usersfolders id='2' nb_folders='3' nb_users='0'>"
-				+"<usersfolder id='2.1' nb_folders='0' nb_users='7' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>System Users</label><label lang='fr'>dossier2.1</label></usersfolder>"
-				+"</userfolders>";
-			
-		}
-		if (id=="inactive") { //bin folder
-			var data = "<usersfolders d='inactive' nb_folders='0' nb_users='0'>"
-					+"</userfolders>";
-			
-		}
-		UIFactory["UsersFolder"].parseStructure(data,id);
-		UIFactory["UsersFolder"].displayTree(dest,'list',langcode,id);
+	});
+	 */
+	//-------- Simulation ---------
+	if (id=="active") { //root folder
+		var data = "<usersfolders id='active' nb_folders='3' nb_users='0'>"
+			+"<usersfolder id='1' nb_folders='0' nb_users='3' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>#system-user#</code><label lang='en'>System Users</label><label lang='fr'>Usagers Système</label></usersfolder>"
+			+"<usersfolder id='2' nb_folders='1' nb_users='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Folder 2</label><label lang='fr'>Usagers</label></usersfolder>"
+			+"</userfolders>";
+		
 	}
-
+	if (id=="2") { 
+		var data = "<usersfolders id='2' nb_folders='3' nb_users='0'>"
+			+"<usersfolder id='2.1' nb_folders='0' nb_users='7' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>System Users</label><label lang='fr'>dossier2.1</label></usersfolder>"
+			+"</userfolders>";
+		
+	}
+	if (id=="inactive") { //bin folder
+		var data = "<usersfolders d='inactive' nb_folders='0' nb_users='0'>"
+				+"</userfolders>";
+		
+	}
+	UIFactory["UsersFolder"].parseStructure(data,id);
 }
 
 //==================================
@@ -856,10 +887,10 @@ function loadAndDisplayUsersFolderContent(dest,id,langcode,type) {
 		langcode = LANGCODE;
 	//---------------------
 	if (id=="0" && usersfolders_byid[id]==undefined) {
-		$("#folder-users").html("<div id='active'></div>");
+		$("#folder-users").html("<div id='folder-users-active'></div>");
 		fill_list_usersOLD();
 	} else if (id=="1" && usersfolders_byid[id]==undefined) {
-		$("#folder-users").html("<div id='inactive'></div>");
+		$("#folder-users").html("<div id='folder-users-inactive'></div>");
 		fill_list_usersOLD();
 	} else {
 		if (usersfolders_byid[id].nb_folders > 0){
@@ -883,24 +914,25 @@ function loadAndDisplayUsersFolderContent(dest,id,langcode,type) {
 }
 
 //==================================
-function loadAndDisplayUsersFolderContentPage(dest,type,id,langcode,pageindex,index_class) {
+function loadAndDisplayUsersFolderContentPage(dest,type,folderid,pageindex) {
 //==================================
 	$("#wait-window").show();
-	usersfolders_byid[id].pageindex = ""+pageindex;
-	var list = usersfolders_byid[id].chidren_list[usersfolders_byid[id].pageindex];
-	if (list==undefined||list==null)
-		loadUsersFolderContent(dest,id,langcode,type,pageindex);
-	else {
-		usersfolders_byid[id].displayFolderContentPage(dest,type,langcode,index_class);		
+	usersfolders_byid[folderid].pageindex = ""+pageindex;
+	var list = usersfolders_byid[folderid].chidren_list[usersfolders_byid[folderid].pageindex];
+	if (list==undefined||list==null) {
+		loadUsersFolderContent(dest,folderid);
+		usersfolders_byid[folderid].displayFolderContentPage(dest,type);
+	} else {
+		usersfolders_byid[folderid].displayFolderContentPage(dest,type);
 	}
 	$("#wait-window").hide();
 }
 
 //==============================
-function loadUsersFolderContent(dest,id,type,langcode,index_class)
+function loadUsersFolderContent(dest,folderid)
 //==============================
 {
-	var pageindex = usersfolders_byid[id].pageindex;
+	var pageindex = usersfolders_byid[folderid].pageindex;
 	/*
 	$.ajax({
 		type : "GET",
@@ -918,18 +950,18 @@ function loadUsersFolderContent(dest,id,type,langcode,index_class)
 	 */
 	//---------Simulation---------------
 	var data = "";
-	if (id=='1' && pageindex==1) {
+	if (folderid=='1' && pageindex==1) {
 		data =  "<usersfolder id='1' nb_folders='0' nb_users='3'>";
 		data += "<user id='1'><username>root</username><firstname>root</firstname><lastname></lastname><admin>1</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user>";
 		data += "<user id='2'><username>sys_public</username><firstname>System public account (users with account)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user>";
 		data += "<user id='3'><username>public</username><firstname>Public account (World)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user>";
 		data += "</usersfolder>";
 	}
-	if (id=='2' && pageindex==1) {
+	if (folderid=='2' && pageindex==1) {
 		data =  "<usersfolder id='1' nb_folders='1' nb_users='0'>";
 		data += "</usersfolder>";
 	}
-	if (id=='2.1') {
+	if (folderid=='2.1') {
 		if (pageindex==1) {
 		data =  "<usersfolder id='2.1' nb_folders='0' nb_users='7'>";
 		data += "<user id='4'><username>olivier</username><firstname>Olivier</firstname><lastname>Gerbé</lastname><admin>0</admin><designer>0</designer><email>olivier.gerbe@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user>";
@@ -946,10 +978,7 @@ function loadUsersFolderContent(dest,id,type,langcode,index_class)
 			data += "</usersfolder>";
 		}
 	}
-	UIFactory.UsersFolder.parseChildren(data,id); 
-	usersfolders_byid[id].displayFolderContentPage(dest,type,langcode,index_class);
-
-
+	UIFactory.UsersFolder.parseChildren(data,folderid);
 }
 
 /*=======================================*/
@@ -1015,7 +1044,6 @@ function getUsersList2()
 	html += "	</h3>";
 	//-----------------------------------------------------------
 	html += "</div><!--div id='userslist-leftside'-->";
-
 	return html;
 }
 
@@ -1042,8 +1070,9 @@ function initUsersFolders()
 //=====================================================================================================
 
 //==================================
-function toggleElt(closeSign,openSign,eltid) { // click on open/closeSign
+function toggleElt(closeSign,openSign,eltid)
 //==================================
+{ // click on open/closeSign
 	var elt = document.getElementById("toggle_"+eltid);
 	elt.classList.toggle(openSign);
 	elt = document.getElementById("collapse_"+eltid);
@@ -1058,8 +1087,8 @@ function toggleElt(closeSign,openSign,eltid) { // click on open/closeSign
 
 //==================================
 function toggleOpenElt(closeSign,openSign,eltid)
-{ // click on label
 //==================================
+{ // click on label
 	var cookie = localStorage.getItem('sidebar'+eltid);
 	if (cookie == "closed") {
 		localStorage.setItem('sidebar'+eltid,'open');
@@ -1070,8 +1099,8 @@ function toggleOpenElt(closeSign,openSign,eltid)
 
 //==================================
 function selectElt(type,uuid)
-{ // click on label
 //==================================
+{ // click on label
 	$('.active').removeClass('active');
 //	$('#'+uuid).addClass('active');
 	document.getElementById(uuid).classList.add('active');
@@ -1079,17 +1108,23 @@ function selectElt(type,uuid)
 
 //==================================
 function selectElts(type,list)
-{ // click on label
 //==================================
+{ // click on label
 	$('.'+type).removeClass('active');
 	for (var i=0;i<list.length;i++) {
 		$('#'+list[i]).addClass('active');
 	}
 }
 //==================================
-function displayPagesNavbar(nb_index,id,langcode,pageindex,index_class,callback,param1,param2)
-{
+function displayUserPagesNavbar(dest,nb_index,folderid,pageindex)
 //==================================
+{
+	var html = "";
+	for (var i=1;i<=nb_index;i++) {
+		html += "<span class='badge' onclick=\"loadAndDisplayUsersFolderContentPage('"+dest+"','list','"+folderid+"','"+i+"')\">"+i+"</span>";
+	}
+	$("#"+dest).html(html);
+	/* javascript:loadAndDisplayUsersFolderContentPage('folder-users-pages','list','2.1',0,2,'1');
 	var html = [];
 	for (var i=0;i<pagegNavbar_list.length;i++) {
 		html[i] = "";
@@ -1127,5 +1162,6 @@ function displayPagesNavbar(nb_index,id,langcode,pageindex,index_class,callback,
 		selected_list[i] = index_class+pageindex+"_"+pagegNavbar_list[i];
 	}
 	selectElts(index_class,selected_list);
+	*/
 }
 
