@@ -191,11 +191,15 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		//------------ buttons ---------------
 		html += "<td class='user-buttons'>";
 		if (USER.admin){
-			html += this.getAdminUserMenu(gid);
+			html += this.getAdminUserMenu('list');
 		}
 		html += "</td>";
 	}
 	if (type=='list2') {
+		html = "<div class='col-5 firstname'>"+this.firstname_node.text()+"</div>";
+		html += "<div class='col-5 lastname'>"+this.lastname_node.text()+"</div>";
+	}
+	if (type=='list1') {
 		html = "<div class='col-3 firstname'>"+this.firstname_node.text()+"</div>";
 		html += "<div class='col-3 lastname'>"+this.lastname_node.text()+"</div>";
 		html += "<div class='col-3 username'>("+this.username_node.text()+")</div>";
@@ -203,6 +207,16 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		html += "<div class='col-2 user-buttons'>";
 		if (USER.admin){
 			html += this.getAdminUserMenu(gid);
+		}
+		html += "</div>";
+	}
+	if (type=='list3') {
+		html = "<div class='col-5 firstname'>"+this.firstname_node.text()+"</div>";
+		html += "<div class='col-5 lastname'>"+this.lastname_node.text()+"</div>";
+		//------------ buttons ---------------
+		html += "<div class='col-1 user-buttons'>";
+		if (USER.admin){
+			html += this.getAdminUserMenu('list3');
 		}
 		html += "</div>";
 	}
@@ -960,12 +974,12 @@ UIFactory["User"].deleteEmptyUsers = function()
 }
 
 //======================
-UIFactory["User"].prototype.getAdminUserMenu = function(gid)
+UIFactory["User"].prototype.getAdminUserMenu = function(type)
 //======================
 {	
 	var html = "";
 	html += "<div class='btn-group'>";
-	if (gid==null) {
+	if (type==null) {
 		html += " <span class='button btn' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
 		html += "<span class='fas fa-pencil-alt'/>";
 		html += "</span>";
@@ -975,24 +989,27 @@ UIFactory["User"].prototype.getAdminUserMenu = function(gid)
 			html += "</span>";
 		}
 	} else {
-		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+type+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 		html += "<span class='fa fa-trash-alt'/>";
 		html += "</span>";				
 	}
 	//----------------------------------
-	html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
-	if (this.username_node.text()!='root' && this.username_node.text()!='public') {
-		html += ">";
-	} else {
-		html += " disabled='true'>";
-	}
-	html += "<span class='fa fa-users fa-lg'/>";
-	html += "</span>";
-	//----------------------------------
-	if (this.username_node.text()!='root' && this.username_node.text()!='public') {
-		html += "<span class='button btn' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
-		html += "<span class='fa fa-file'/>";
+	if (type!='list3') {
+		//----------------------------------
+		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
+		if (this.username_node.text()!='root' && this.username_node.text()!='public') {
+			html += ">";
+		} else {
+			html += " disabled='true'>";
+		}
+		html += "<span class='fa fa-users fa-lg'/>";
 		html += "</span>";
+		//----------------------------------
+		if (this.username_node.text()!='root' && this.username_node.text()!='public') {
+			html += "<span class='button btn' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
+			html += "<span class='fa fa-file'/>";
+			html += "</span>";
+		}
 	}
 	//----------------------------------
 	html += "</div>";

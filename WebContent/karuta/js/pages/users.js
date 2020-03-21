@@ -97,8 +97,8 @@ function fill_list_users()
 		$("#users-in-bin").show();
 	} else {
 		initUsersFolders();
-		loadAndDisplayUsersFolderStruct('usersfolder_active','active');  // active users
-		loadAndDisplayUsersFolderStruct('usersfolder_inactive','inactive');  // inactive users
+		UIFactory.UsersFolder.loadAndDisplayStruct('usersfolder_active','active',true,'list1');  // active users
+		UIFactory.UsersFolder.loadAndDisplayStruct('usersfolder_inactive','inactive',true,'list1');  // inactive users
 	}
 }
 

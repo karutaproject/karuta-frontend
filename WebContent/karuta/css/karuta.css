@@ -392,26 +392,24 @@ body,
 /* ====================== */
 /*     PAGE USERS         */
 /* ====================== */
-#userslist-leftside {
+#main-user {
+  color: var(--list-element-text-color);
+}
+#main-user #userslist-leftside {
   width: calc(25% - 5px);
   margin-bottom: 10px;
 }
-#userslist-leftside h3 {
+#main-user #userslist-leftside h3 {
   margin-top: 20px;
 }
-#userslist-leftside .active {
+#main-user #userslist-leftside .active {
   background-color: var(--list-button-background-color);
 }
-
-#userslist-rightside {
+#main-user #userslist-rightside {
   width: calc(75% - 5px);
   margin-top: 2px;
   padding-bottom: 5px;
   float: right;
-}
-
-#main-user {
-  color: var(--list-element-text-color);
 }
 #main-user .btn {
   background-color: var(--list-button-background-color);
@@ -436,8 +434,13 @@ body,
 }
 #main-user .navbar-pages .badge {
   margin-left: 5px;
-  background-color: var(--list-element-background-color);
+  background-color: var(--list-button-background-color);
   cursor: pointer;
+  border: 1px solid var(--list-element-text-color);
+}
+#main-user .navbar-pages .badge.active {
+  background-color: var(--list-element-background-color);
+  border: 1px solid var(--list-element-background-color);
 }
 #main-user .dropdown-menu {
   color: var(--list-menu-text-color);
@@ -510,6 +513,114 @@ body,
 
 #create-folder-button {
   color: var(--list-element-text-color);
+}
+
+/* ====================== */
+/*     PAGE USERSGROUPS   */
+/* ====================== */
+#main-usersgroup {
+  color: var(--list-element-text-color);
+}
+#main-usersgroup #usergroupslist-leftside {
+  width: calc(20% - 7px);
+  margin-bottom: 10px;
+}
+#main-usersgroup #usergroupslist-leftside h3 {
+  margin-top: 20px;
+}
+#main-usersgroup #usergroupslist-leftside .active {
+  background-color: var(--list-button-background-color);
+}
+#main-usersgroup #usergroupslist-rightside {
+  width: calc(30% - 7px);
+  margin-top: 2px;
+  padding-bottom: 5px;
+  float: right;
+}
+#main-usersgroup #userslist-leftside {
+  float: right;
+  width: calc(20% - 7px);
+  margin-bottom: 10px;
+}
+#main-usersgroup #userslist-leftside .active {
+  background-color: var(--list-button-background-color);
+}
+#main-usersgroup #userslist-rightside {
+  width: calc(30% - 7px);
+  margin-top: 2px;
+  padding-bottom: 5px;
+  float: right;
+}
+#main-usersgroup .btn {
+  background-color: var(--list-button-background-color);
+  color: var(--list-element-text-color);
+}
+#main-usersgroup #active,
+#main-usersgroup #inactive {
+  padding: 10px;
+}
+#main-usersgroup .item:hover {
+  background-color: var(--list-element-background-color-complement);
+}
+#main-usersgroup .no-toggledNode {
+  margin-left: 15px;
+}
+#main-usersgroup h3, #main-usersgroup h4 {
+  color: var(--list-title-color);
+}
+#main-usersgroup .navbar-pages {
+  background-color: var(--list-button-background-color);
+  padding: 5px;
+}
+#main-usersgroup .navbar-pages .badge {
+  margin-left: 5px;
+  background-color: var(--list-button-background-color);
+  cursor: pointer;
+  border: 1px solid var(--list-element-text-color);
+}
+#main-usersgroup .navbar-pages .badge.active {
+  background-color: var(--list-element-background-color);
+  border: 1px solid var(--list-element-background-color);
+}
+#main-usersgroup .dropdown-menu {
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+#main-usersgroup .dropdown-menu a.dropdown-item {
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+#main-usersgroup .dropdown-menu a.dropdown-item:hover {
+  color: var(--list-menu-background-color);
+  background-color: var(--list-menu-text-color);
+}
+#main-usersgroup .folder-menu .btn {
+  height: 25px;
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
+#group-users {
+  color: var(--list-element-text-color);
+  background-color: var(--list-element-background-color);
+}
+#group-users .usersgroup-header {
+  padding: 7px;
+  background-color: var(--list-menu-background-color);
+  color: var(--list-button-text-color);
+}
+#group-users .usersgroup-header .btn {
+  background-color: var(--list-element-background-color);
+  height: 25px;
+}
+#group-users .item-user {
+  margin-left: 1px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+#group-users .item-folder {
+  margin-left: 1px;
+  margin-bottom: 2px;
 }
 
 #main-portfoliosgroup .btn,

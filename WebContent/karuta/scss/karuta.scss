@@ -433,25 +433,25 @@
 /*     PAGE USERS         */
 /* ====================== */
 
-	#userslist-leftside {
-		width: calc(25% - 5px);
-		margin-bottom: 10px;
-		h3 {
-			margin-top:20px;
-		}
-		.active {
-			background-color: var(--list-button-background-color);
-		}
-	}
-	
-	#userslist-rightside {
-		width: calc(75% - 5px);
-		margin-top: 2px;
-		padding-bottom: 5px;
-		float: right;
-	}
 
 	#main-user {
+		#userslist-leftside {
+			width: calc(25% - 5px);
+			margin-bottom: 10px;
+			h3 {
+				margin-top:20px;
+			}
+			.active {
+				background-color: var(--list-button-background-color);
+			}
+		}
+		
+		#userslist-rightside {
+			width: calc(75% - 5px);
+			margin-top: 2px;
+			padding-bottom: 5px;
+			float: right;
+		}
 		color : var(--list-element-text-color);
 		.btn {
 			background-color: var(--list-button-background-color);
@@ -475,8 +475,13 @@
 			padding:5px;
 			.badge {
 				margin-left:5px;
-				background-color: var(--list-element-background-color);
+				background-color: var(--list-button-background-color);
 				cursor: pointer;
+				border: 1px solid var(--list-element-text-color);
+			}
+			.badge.active {
+				background-color: var(--list-element-background-color);
+				border: 1px solid var(--list-element-background-color);
 			}
 		}
 		.dropdown-menu {
@@ -553,7 +558,118 @@
 	#create-folder-button {
 		color : var(--list-element-text-color);
 	}
+
+/* ====================== */
+/*     PAGE USERSGROUPS   */
+/* ====================== */
+
+
+	#main-usersgroup {
+		color : var(--list-element-text-color);
+		#usergroupslist-leftside {
+			width: calc(20% - 7px);
+			margin-bottom: 10px;
+			h3 {
+				margin-top:20px;
+			}
+			.active {
+				background-color: var(--list-button-background-color);
+			}
+		}
+		#usergroupslist-rightside {
+			width: calc(30% - 7px);
+			margin-top: 2px;
+			padding-bottom: 5px;
+			float: right;
+		}
+		#userslist-leftside {
+			float: right;
+			width: calc(20% - 7px);
+			margin-bottom: 10px;
+			.active {
+				background-color: var(--list-button-background-color);
+			}
+		}
+		#userslist-rightside {
+			width: calc(30% - 7px);
+			margin-top: 2px;
+			padding-bottom: 5px;
+			float: right;
+		}
+		.btn {
+			background-color: var(--list-button-background-color);
+			color : var(--list-element-text-color);
+		}
+		#active,
+		#inactive {
+			padding:10px;
+		}
+		.item:hover{
+			background-color: var(--list-element-background-color-complement);
+		}
+		.no-toggledNode {
+			margin-left:15px;
+		}
+		h3,h4 {
+			color: var(--list-title-color);
+		}
+		.navbar-pages {
+			background-color: var(--list-button-background-color);
+			padding:5px;
+			.badge {
+				margin-left:5px;
+				background-color: var(--list-button-background-color);
+				cursor: pointer;
+				border: 1px solid var(--list-element-text-color);
+			}
+			.badge.active {
+				background-color: var(--list-element-background-color);
+				border: 1px solid var(--list-element-background-color);
+			}
+		}
+		.dropdown-menu {
+			color: var(--list-menu-text-color);
+			background-color: var(--list-menu-background-color);
+			a.dropdown-item {
+				color: var(--list-menu-text-color);
+				background-color: var(--list-menu-background-color);
+			}
+			a.dropdown-item:hover {
+				color: var(--list-menu-background-color);
+				background-color: var(--list-menu-text-color);
+			}
+		}
+		.folder-menu .btn{
+			height:25px;
+			padding-left:9px;
+			padding-right:9px;
+		}
+	}
+	#group-users {
+		color : var(--list-element-text-color);
+		background-color: var(--list-element-background-color);
+		.usersgroup-header {
+			padding:7px;
+			background-color:var(--list-menu-background-color);
+			color:var(--list-button-text-color);
+			.btn  {
+				background-color:var(--list-element-background-color);
+				height:25px;
+			}
+		}
+		.item-user {
+			margin-left:1px;
+			margin-top:2px;
+			margin-bottom:2px;
+		}
+		.item-folder {
+			margin-left:1px;
+			margin-bottom:2px;
+		}
+	}
+
 //========================================================
+
 #main-portfoliosgroup .btn,
 #main-usersgroup .btn,
 #main-exec-batch .btn,
