@@ -580,6 +580,17 @@ function confirmDel(uuid,type,parentid,destid,callback,param1,param2)
 	$('#delete-window').modal('show');
 }
 
+//=======================================================================
+function confirmDelObject(id,type) 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');UIFactory."+type+".del('"+uuid+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
 //==================================
 function getURLParameter(sParam) {
 //==================================
@@ -1596,6 +1607,8 @@ function cleanCode(code)
 	code = removeStr(code,"%");
 	code = removeStr(code,"$");
 	code = removeStr(code,"&");
+	code = removeStr(code,"!");
+	code = removeStr(code,"?");
 	code = removeStr(code,"----");
 	return code;
 }
@@ -2005,4 +2018,57 @@ function replaceVariable(text)
 		n++; // to avoid infinite loop
 	}
 	return text;
+}
+
+//=====================================================================================================
+//=====================================================================================================
+//============================== TREE MANAGEMENT ====================================================
+//=====================================================================================================
+//=====================================================================================================
+
+//==================================
+function toggleElt(closeSign,openSign,eltid)
+//==================================
+{ // click on open/closeSign
+	var elt = document.getElementById("toggle_"+eltid);
+	elt.classList.toggle(openSign);
+	elt = document.getElementById("collapse_"+eltid);
+	elt.classList.toggle('open');
+	if ($("#toggle_"+eltid).hasClass(openSign))
+	{
+		localStorage.setItem('sidebar'+eltid,'open');
+	} else {
+		localStorage.setItem('sidebar'+eltid,'closed');
+	}
+}
+
+//==================================
+function toggleOpenElt(closeSign,openSign,eltid)
+//==================================
+{ // click on label
+	var cookie = localStorage.getItem('sidebar'+eltid);
+	if (cookie == "closed") {
+		localStorage.setItem('sidebar'+eltid,'open');
+		document.getElementById("toggle_"+eltid).classList.add('openSign');
+		document.getElementById("collapse_"+eltid).classList.add('open');
+	}
+}
+
+//==================================
+function selectElt(type,uuid)
+//==================================
+{ // click on label
+	$('.'+type).removeClass('active');
+	$('#'+uuid).addClass('active');
+//	document.getElementById(uuid).classList.add('active');
+}
+
+//==================================
+function selectElts(type,list)
+//==================================
+{ // click on label
+	$('.'+type).removeClass('active');
+	for (var i=0;i<list.length;i++) {
+		$('#'+list[i]).addClass('active');
+	}
 }

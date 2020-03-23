@@ -2134,7 +2134,8 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
-	if (Users_byid.length>0) { // users loaded
+	UIFactory.UsersGroup.displaySelectMultiple('sharing_users');
+	/*	if (Users_byid.length>0) { // users loaded
 		UIFactory["User"].displaySelectMultipleActive('sharing_users');
 		//--------------------------
 		$.ajax({
@@ -2173,6 +2174,7 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 			}
 		});
 	}
+	*/
 	//----------------------------------------------------------------
 	$.ajax({
 		type : "GET",
@@ -2264,7 +2266,7 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
-	if (UsersGroups_byid.length>0) { // users groups loaded
+	if (usersgroups_list.length>0) { // users groups loaded
 		UIFactory["UsersGroup"].displaySelectMultipleWithUsersList('sharing_usersgroups');
 		$.ajax({
 			type : "GET",

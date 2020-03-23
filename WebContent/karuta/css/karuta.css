@@ -488,25 +488,25 @@ body,
   padding-top: 5px;
 }
 
-#folder-users {
+.folder-users {
   color: var(--list-element-text-color);
   background-color: var(--list-element-background-color);
 }
-#folder-users .usersfolder-header {
+.folder-users .usersfolder-header {
   padding: 7px;
   background-color: var(--list-menu-background-color);
   color: var(--list-button-text-color);
 }
-#folder-users .usersfolder-header .btn {
+.folder-users .usersfolder-header .btn {
   background-color: var(--list-element-background-color);
   height: 25px;
 }
-#folder-users .item-user {
+.folder-users .item-user {
   margin-left: 1px;
   margin-top: 2px;
   margin-bottom: 2px;
 }
-#folder-users .item-folder {
+.folder-users .item-folder {
   margin-left: 1px;
   margin-bottom: 2px;
 }
@@ -599,6 +599,44 @@ body,
   padding-left: 9px;
   padding-right: 9px;
 }
+#main-usersgroup .usersgroup {
+  padding: 10px;
+  margin-top: 5px;
+  color: var(--list-element-text-color);
+  background-color: var(--list-element-background-color);
+}
+#main-usersgroup .usersgroup .usersgroup-header {
+  padding: 7px;
+  background-color: var(--list-menu-background-color);
+  color: var(--list-button-text-color);
+}
+#main-usersgroup .usersgroup .usersgroup-header .btn {
+  background-color: var(--list-element-background-color);
+  height: 25px;
+  padding-left: 9px;
+  padding-right: 9px;
+}
+#main-usersgroup .usersgroup .item-user {
+  margin-left: 1px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+#main-usersgroup .usersgroup .item-folder {
+  margin-left: 1px;
+  margin-bottom: 2px;
+}
+#main-usersgroup .usersgroup table {
+  width: 100%;
+}
+#main-usersgroup .usersgroup .plus-minus {
+  width: 20px;
+}
+#main-usersgroup .usersgroup .usersgroup-label {
+  width: 50%;
+}
+#main-usersgroup .usersgroup .usersgroup-content {
+  padding: 5px;
+}
 
 #group-users {
   color: var(--list-element-text-color);
@@ -624,18 +662,20 @@ body,
 }
 
 #main-portfoliosgroup .btn,
-#main-usersgroup .btn,
 #main-exec-batch .btn,
 #main-exec-report .btn {
   background-color: var(--list-button-background-color);
 }
 
-#usersgroups .usersgroup-users,
-.usersgroup,
-.portfoliosgroup {
-  background-color: var(--list-element-background-color);
-}
+/*
 
+
+	#usersgroups .usersgroup-users,
+	.usersgroup,
+	.portfoliosgroup {
+		background-color: var(--list-element-background-color);
+	}
+*/
 /* ====================== */
 /*     EDIT WINDOW        */
 /* ====================== */
@@ -1274,15 +1314,6 @@ h3 {
 }
 
 /* ====================== */
-/*     PAGE USERGROUP     */
-/* ====================== */
-.usersgroup .btn {
-  height: 25px;
-  padding-left: 9px;
-  padding-right: 9px;
-}
-
-/* ====================== */
 /*  PAGE PORTFOLIOGROUP   */
 /* ====================== */
 .portfoliosgroup .btn {
@@ -1292,11 +1323,6 @@ h3 {
 }
 
 /* ====================== */
-#usersgroups .row,
-#selectform-projects .row {
-  margin-top: 2px;
-}
-
 #refresh {
   font-size: 150%;
   float: right;
@@ -1313,41 +1339,44 @@ h3 {
   background-color: var(--list-background-color);
 }
 
+/*
 #portfoliosgroup-create,
 #usersgroup-create {
-  color: var(--list-button-color);
-  background-color: var(--list-button-background-color);
-  margin-top: 20px;
-  padding: 4px 15px;
-  font-size: 14px;
-  display: inline-block;
-  cursor: pointer;
-  border-radius: 3px;
+	color:var(--list-button-color);
+	background-color:var(--list-button-background-color);
+	margin-top:20px;
+	padding:4px 15px;
+	font-size:14px;
+	display:inline-block;
+	cursor:pointer;
+	border-radius:3px;
 }
+
+
 
 #main-portfoliosgroup .dropdown-menu li a,
 #main-usersgroup .dropdown-menu li a,
 #menu .dropdown-menu li a,
 #list .dropdown-menu li a {
-  background-color: var(--list-button-background-color);
-  color: var(--list-button-color);
+	background-color:var(--list-button-background-color);
+	color:var(--list-button-color);
 }
 
 #main-portfoliosgroup .dropdown-menu li a:hover,
 #main-usersgroup .dropdown-menu li a:hover,
 #menu .dropdown-menu li a:hover,
 #list .dropdown-menu li a:hover {
-  background-color: lightgrey;
-  color: var(--list-button-background-color);
+	background-color:lightgrey;
+	color:var(--list-button-background-color);
 }
+
 
 #main-portfoliosgroup .btn,
 #main-usersgroup .btn {
-  background-color: var(--list-button-background-color);
-  color: var(--list-button-color);
+	background-color:var(--list-button-background-color);
+	color:var(--list-button-color);
 }
 
-/*
 #portfoliosgroups a,
 #usersgroups a,
 #projects a,
@@ -1355,80 +1384,84 @@ h3 {
 #bin a {
 	color:var(--list-button-color);
 }
-*/
-.portfolios-not-in-project {
-  margin-left: 0px;
-  margin-right: 0px;
+
+.portfolios-not-in-project{
+	margin-left:0px;
+	margin-right:0px;
 }
 
-#usersgroups .usersgroup-users,
-.usersgroup,
-.portfolios-not-in-project,
-.portfoliosgroup {
-  margin-top: 10px;
-  padding: 7px;
-  background-color: var(--list-background-color-complement);
-}
+
+	#usersgroups .usersgroup-users,
+	.usersgroup,
+	.portfolios-not-in-project,
+	.portfoliosgroup {
+		margin-top:10px;
+		padding:7px;
+		background-color:var(--list-background-color-complement);
+	}
 
 .usersgroup-users .inactive {
-  text-decoration: line-through;
+	text-decoration: line-through;
 }
 
 .portfoliosgroup-content,
 .usersgroup-content {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid var(--list-background-color);
+	margin-top:10px;
+	padding-top:10px;
+	border-top:1px solid var(--list-background-color);
 }
 
 .dropdown-menu {
-  z-index: 10000;
+  	z-index: 10000;	
 }
 
 #main-portfoliosgroup .dropdown-menu,
 #main-usersgroup .dropdown-menu,
 #list .dropdown-menu,
 .project-menu .dropdown-menu {
-  min-width: 250px;
-  margin-right: -10px;
+	min-width:250px;
+	margin-right:-10px;
 }
+
+
+
+
 
 #portfoliosgroups .row,
 #usersgroups .row,
 #projects .row,
 #portfolios .row,
-#bin .row {
-  margin-top: 2px;
+#bin .row  {
+	margin-top:2px;
 }
 
 #portfoliosgroups .row:hover {
-  background-color: var(--list-background-color);
+	background-color:var(--list-background-color);
 }
 
 #portfoliosgroups .row-label:hover {
-  background-color: initial;
+	background-color:initial;
 }
 
 #usersgroups .item:hover {
-  background-color: var(--list-background-color);
+	background-color:var(--list-background-color);
 }
-
 #usersgroups table {
-  color: var(--list-button-color);
+	color:var(--list-button-color);
 }
 
 #main-exec-batch,
 #main-exec-report {
-  color: var(--list-icon-section-color);
+		color:var(--list-icon-section-color);
 }
 
 #main-exec-batch .button,
 #main-exec-report .button {
-  border: 1px solid var(--list-icon-section-color);
-  border-radius: 3px;
-  margin-left: 5px;
+	border: 1px solid var(--list-icon-section-color);
+	border-radius:3px;
+	margin-left:5px;
 }
-
+*/
 /* =========#adding_portfolios================================ */
 #adding_portfolios .project {
   background-color: #eee;

@@ -383,7 +383,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				if (code.indexOf("@")<0) {
 					display_code = true;
 				}
-				if (code.indexOf("!")>-1) {
+				if (code.indexOf("?")>-1) {
 					display_value = true;
 				}
 				code = cleanCode(code);

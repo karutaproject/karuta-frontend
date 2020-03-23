@@ -2478,11 +2478,11 @@ function get_usergroupid(groupname)
 //==============================
 {
 	var groupid = null;
-	if (UsersGroups_list.length==0)
+	if (usersgroups_list.length==0)
 		get_list_usersgroups();
-	for (var i=0;i<UsersGroups_list.length;i++){
-		if (UsersGroups_list[i].label==groupname){
-			groupid = UsersGroups_list[i].id;
+	for (var i=0;i<usersgroups_list.length;i++){
+		if (usersgroups_list[i].label==groupname){
+			groupid = usersgroups_list[i].id;
 			break;
 		}
 	}
