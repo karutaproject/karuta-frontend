@@ -1,6 +1,5 @@
 
 
-karutaStr['en'] = new Array();
 //----------------------------------------------------
 karutaStr['en']['language']="English";
 karutaStr['en']['flag-name']="United-Kingdom";
@@ -90,6 +89,7 @@ karutaStr['en']['menu']="Menu";
 karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Height : 220<br>&nbsp; - Width : 800 divided by number of columns<br>&nbsp;";
 karutaStr['en']['list-novisible']="Not Visible";
 karutaStr['en']['empty-bin']="Empty bin";
+karutaStr['en']['see-bin']="See Bin";
 karutaStr['en']['complex']="Partial Loading";
 karutaStr["en"]["button-print"] = "Print";
 karutaStr["en"]["write-mode"] = "Edit";
@@ -110,7 +110,7 @@ karutaStr['en']['code']="Code";
 karutaStr['en']['value']="Value";
 karutaStr['en']['edit']="Edit";
 karutaStr['en']['comments']="Additional Information";
-karutaStr['en']['help-label']="Information";
+karutaStr['en']['help-label']="Help";
 
 //=========================================
 //========== METADATA =====================
@@ -154,7 +154,7 @@ karutaStr['en']['menuroles3']=",roles[;other menu]</span>";
 karutaStr['en']['menulabels']="Menu Button Text<br/><span style='font-size:smaller'>";
 karutaStr['en']['menulabels2']="label@en";
 karutaStr['en']['menulabels3']=",roles[;other label]</span>";
-karutaStr['en']['help']="Information <br/><span style='font-size:smaller'>";
+karutaStr['en']['help']="Bubble Help <br/><span style='font-size:smaller'>";
 karutaStr['en']['help2']="Text in English@en";
 karutaStr['en']['help3']="</span>";
 karutaStr['en']['font-size']="Font Size (px)";
@@ -164,8 +164,8 @@ karutaStr['en']['color']="Font Color";
 karutaStr['en']['cssclass']="CSS Class";
 karutaStr['en']['top']="Position - Top";
 karutaStr['en']['left']="Position - Left";
-karutaStr['en']['width']="Width";
-karutaStr['en']['height']="Height";
+karutaStr['en']['width']="Width (in pixels)";
+karutaStr['en']['height']="Height (in pixels)";
 karutaStr['en']['public']="Public";
 karutaStr['en']['text-align']="Alignment";
 karutaStr['en']['displayview']="Display View";
@@ -231,6 +231,7 @@ karutaStr['en']['seestart']="See - Start Date";
 karutaStr['en']['seeend']="See - End Date";
 karutaStr['en']['logcode']="Log Code";
 karutaStr['en']['alt']="Alternate Text";
+karutaStr['en']['node-comment']="Node Comments";
 
 //=========================================
 //========== ADMIN ========================
@@ -243,6 +244,8 @@ karutaStr['en']['list_roles']="Roles";
 karutaStr['en']['list_groups']="Groups";
 karutaStr['en']['create-test-user']="Create a Test User";
 karutaStr['en']['help_text_rename']="To move a portfolio to another project, change the project code (part before the dot)";
+karutaStr['en']['users-folders']="Users Folders";
+karutaStr['en']['users-in-rootfolder']="Users not in folders";
 
 //=========================================
 //========== PORTFOLIOS ===================
@@ -306,6 +309,18 @@ karutaStr['en']['username-label']="Login";
 karutaStr['en']['firstname-label']="Firstname";
 karutaStr['en']['lastname-label']="Lastname";
 karutaStr['en']['changeOwner']="Change the Owner";
+
+//=========================================
+//========== FOLDERS ======================
+//=========================================
+
+karutaStr['en']['folders']="My Folders";
+karutaStr['en']['folders-admin']="Folders";
+
+karutaStr['en']['next']="Next >";
+karutaStr['en']['prev']="< Prev";
+karutaStr['en']['karuta.folder']="Create a portfolio folder";
+karutaStr['en']['create_folder']="Create a Folder";
 
 //=========================================
 //========== USERS ========================

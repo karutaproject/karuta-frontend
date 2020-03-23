@@ -22,3 +22,5 @@ function prepareBatch()
 		"motdepasse" : ""
 	};
 }//----------------------------------------------------
+
+var nbPagesIndexStep = 2;

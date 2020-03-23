@@ -1,3 +1,7 @@
+karutaStr['fr'] = new Array();
+karutaStr['en'] = new Array();
+plugin_resources = new Array();
+
 //==============================
 function initKarutaPage()
 //==============================
@@ -75,14 +79,14 @@ function displayKarutaPage()
 					karuta_fileserver_date = $("date",$("#fileserver",data)).text();
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
-					$("a[data-tooltip='true']").tooltip({html: true, trigger: 'hover'});
+					$("a[data-toggle='tooltip']").tooltip({html: true, trigger: 'hover'});
 
 					applyNavbarConfiguration();
 				},
 				error : function(jqxhr,textStatus) {
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
-					$("a[data-tooltip='true']").tooltip({html: true, trigger: 'hover'});
+					$("a[data-toggle='tooltip']").tooltip({html: true, trigger: 'hover'});
 
 					getAndApplyMainConfiguration();
 				}
@@ -152,10 +156,12 @@ function setConfigurationVariables()
 			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
 			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data);
+			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data);
 			g_configVar['navbar-display-mailto'] = getText('navbar-display-mailto','Get_Resource','value',data);
 			g_configVar['navbar-display-language'] = getText('navbar-display-language','Get_Resource','value',data);
 			//----------------------
 			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
+			g_configVar['maxuserlist'] = getText('config-maxuserlist','Field','text',data);
 			//----------------------
 			g_configVar['list-welcome-image'] = getBackgroundURL('config-list-welcome-image',data);		
 			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data);
@@ -165,6 +171,8 @@ function setConfigurationVariables()
 			g_configVar['list-welcome-subline-color'] = getText('config-list-welcome-subline-color','Color','text',data);
 			g_configVar['list-welcome-subtitle-color'] = getText('config-list-welcome-subtitle-color','Color','text',data);
 			g_configVar['list-welcome-subtitle-css'] = getText('config-list-welcome-subtitle-css','Field','text',data);
+			g_configVar['list-welcome-box-border-color'] = getText('config-list-welcome-box-border-color','Color','text',data);
+			g_configVar['list-welcome-box-background-color'] = getText('config-list-welcome-box-background-color','Color','text',data);
 			//----------------------
 			g_configVar['list-background-color'] = getText('config-list-background-color','Color','text',data);
 			g_configVar['list-element-background-color'] = getText('config-list-element-background-color','Color','text',data);
@@ -173,38 +181,56 @@ function setConfigurationVariables()
 			g_configVar['list-title-color'] = getText('config-list-title-color','Color','text',data);
 			g_configVar['list-button-background-color'] = getText('config-list-button-background-color','Color','text',data);
 			g_configVar['list-button-text-color'] = getText('config-list-button-text-color','Color','text',data);
+			g_configVar['list-menu-background-color'] = getText('config-list-menu-background-color','Color','text',data);
+			g_configVar['list-menu-text-color'] = getText('config-list-menu-text-color','Color','text',data);
 			//--------- Portfolios which have not configuration page -------------
-			g_configVar['config-portfolio-navbar-background-color'] = getText('config-portfolio-navbar-background-color','Color','text',data);
-			g_configVar['config-portfolio-navbar-text-color'] = getText('config-portfolio-navbar-text-color','Color','text',data);
-			g_configVar['config-portfolio-navbar-list-color'] = getText('config-portfolio-navbar-list-color','Color','text',data);
+			g_configVar['portfolio-navbar-background-color'] = getText('config-portfolio-navbar-background-color','Color','text',data);
+			g_configVar['portfolio-navbar-text-color'] = getText('config-portfolio-navbar-text-color','Color','text',data);
+			//----------
+			g_configVar['portfolio-sidebar-background-color'] = getText('config-portfolio-sidebar-background-color','Color','text',data);
+			g_configVar['portfolio-sidebar-text-color'] = getText('config-portfolio-sidebar-text-color','Color','text',data);
+			g_configVar['portfolio-sidebar-selected-text-color'] = getText('config-portfolio-sidebar-selected-text-color','Color','text',data);
+			g_configVar['portfolio-sidebar-separator-color'] = getText('config-portfolio-sidebar-separator-color','Color','text',data);
+			g_configVar['portfolio-sidebar-selected-border-color'] = getText('config-portfolio-sidebar-selected-border-color','Color','text',data);
+			//----------
+			g_configVar['page-title-background-color'] = getText('config-page-title-background-color','Color','text',data);
+			g_configVar['page-title-subline-color'] = getText('config-page-title-subline-color','Color','text',data);
+			g_configVar['portfolio-text-color'] = getText('config-portfolio-text-color','Color','text',data);
+			g_configVar['portfolio-buttons-color'] = getText('config-portfolio-buttons-color','Color','text',data);
+			g_configVar['portfolio-buttons-background-color'] = getText('config-portfolio-buttons-background-color','Color','text',data);
+			g_configVar['portfolio-link-color'] = getText('config-portfolio-link-color','Color','text',data);
+			g_configVar['portfolio-section-title-background-color'] = getText('config-portfolio-section-title-background-color','Color','text',data);
+			g_configVar['portfolio-section-separator-color'] = getText('config-portfolio-section-separator-color','Color','text',data);
+			g_configVar['portfolio-resource-border-color'] = getText('config-portfolio-resource-border-color','Color','text',data);
 
 			//----------
-			g_configVar['config-sidebar-background-color'] = getText('config-sidebar-background-color','Color','text',data);
-			g_configVar['config-sidebar-text-color'] = getText('config-sidebar-text-color','Color','text',data);
-			g_configVar['config-sidebar-selected-text-color'] = getText('config-sidebar-selected-text-color','Color','text',data);
-			g_configVar['config-sidebar-separator-color'] = getText('config-sidebar-separator-color','Color','text',data);
-			g_configVar['config-sidebar-selected-border-color'] = getText('config-sidebar-selected-border-color','Color','text',data);
-
-			//----------
-			g_configVar['config-page-title-background-color'] = getText('config-page-title-background-color','Color','text',data);
-			g_configVar['config-text-color'] = getText('config-text-color','Color','text',data);
-			g_configVar['config-page-title-subline-color'] = getText('config-page-title-subline-color','Color','text',data);
-			g_configVar['config-portfolio-buttons-color'] = getText('config-portfolio-buttons-color','Color','text',data);
-			g_configVar['config-portfolio-buttons-background-color'] = getText('config-portfolio-buttons-background-color','Color','text',data);
-			g_configVar['config-portfolio-link-color'] = getText('config-portfolio-link-color','Color','text',data);
-			g_configVar['config-portfolio-section-title-background-color'] = getText('config-portfolio-section-title-background-color','Color','text',data);
-			g_configVar['config-portfolio-section-separator-color'] = getText('config-portfolio-section-separator-color','Color','text',data);
-			g_configVar['config-portfolio-resource-border-color'] = getText('config-portfolio-resource-border-color','Color','text',data);
-
-			//----------
-			g_configVar['config-portfolio-menu-background-color'] = getText('config-portfolio-menu-background-color','Color','text',data);
-			g_configVar['config-portfolio-menu-text-color'] = getText('config-portfolio-menu-text-color','Color','text',data);
+			g_configVar['portfolio-menu-background-color'] = getText('config-portfolio-menu-background-color','Color','text',data);
+			g_configVar['portfolio-menu-text-color'] = getText('config-portfolio-menu-text-color','Color','text',data);
 
 			//-----SVG----
-			g_configVar['config-svg-web0-color'] = getText('config-svg-web0-color','Color','text',data);
-			g_configVar['config-svg-web1-color'] = getText('config-svg-web1-color','Color','text',data);
-			g_configVar['config-svg-web2-color'] = getText('config-svg-web2-color','Color','text',data);
+			g_configVar['svg-web0-color'] = getText('config-svg-web0-color','Color','text',data);
+			g_configVar['svg-web1-color'] = getText('config-svg-web1-color','Color','text',data);
+			g_configVar['svg-web2-color'] = getText('config-svg-web2-color','Color','text',data);
+			g_configVar['svg-web3-color'] = getText('config-svg-web3-color','Color','text',data);
+			g_configVar['svg-web4-color'] = getText('config-svg-web4-color','Color','text',data);
+			g_configVar['svg-web5-color'] = getText('config-svg-web5-color','Color','text',data);
+			g_configVar['svg-web6-color'] = getText('config-svg-web6-color','Color','text',data);
+			g_configVar['svg-web7-color'] = getText('config-svg-web7-color','Color','text',data);
+			g_configVar['svg-web8-color'] = getText('config-svg-web8-color','Color','text',data);
+			g_configVar['svg-web9-color'] = getText('config-svg-web9-color','Color','text',data);
 
+			//----- Load Plugins
+			var jsfile_nodes = [];
+			jsfile_nodes = $("asmContext:has(metadata[semantictag='plugin-file-js'])",data);
+			for (var i=0; i<jsfile_nodes.length; i++){
+				var fileid = $(jsfile_nodes[i]).attr("id");
+				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+				$.ajax({
+					url: url,
+					dataType: "script",
+				});
+			}
+			
 		}
 	});
 }

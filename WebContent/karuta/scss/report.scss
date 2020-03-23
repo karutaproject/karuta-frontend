@@ -72,6 +72,14 @@
 	border-top:1px solid lightGrey;
 }
 
+.zebra-table .createreport td {
+	padding:5px;
+	border-left: none;
+	border-right:none;
+	border-bottom:none;
+	border-top:none;
+}
+
 .createreport ul {
 	margin-bottom:0px;
 }
@@ -110,7 +118,7 @@
 	--report-display-color : #8bffff;
 	--report-varop-color : #f08080;
 	--report-csv-color : #307D7E;
-	--report-sharing-color : #386bc1;
+	--report-alone-color : #386bc1;
 	--report-svg-color : #52D017;
 
 	// LOOP
@@ -150,10 +158,9 @@
 	}
 
 	// EUROPASS
-	.model-europass,
-	.model-qrcode {
+	.model-europass {
 		margin-top:7px;
-		border:2px solid #386bc1;
+		border:2px solid var(--report-alone-color);
 	}
 
 	// DISPLAY
@@ -163,7 +170,8 @@
 	.firstname-lastname,
 	.text,
 	.node_resource,
-	.url2unit
+	.url2unit,
+	.model-qrcode
 	{
 		margin-top:7px;
 		border: 1px solid var(--report-display-color);		
@@ -207,7 +215,7 @@
 	.dislay-sharing
 	{
 		margin-top:7px;
-		border:1px solid var(--report-sharing-color);
+		border:2px solid var(--report-alone-color);
 	}
 }
 

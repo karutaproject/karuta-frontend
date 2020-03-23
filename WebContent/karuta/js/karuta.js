@@ -155,10 +155,10 @@ function getNavBar(type,portfolioid,edit)
 	html += "			<ul class='mr-auto navbar-nav'>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	if (type=='login') {
-		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'></i></a></li>";
+		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
 	} else {
-		html += "			<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
-		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='javascript:displayTechSupportForm()' data-title='"+karutaStr[LANG]["technical_support"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-envelope'></i></a></li>";
+		html += "			<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
+		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='javascript:displayTechSupportForm()' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope'></i></a></li>";
 	}
 //	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
@@ -224,7 +224,7 @@ function getNavBar(type,portfolioid,edit)
 		if (type!='login' && USER!=undefined) {
 			if (USER.admin || (USER.creator && !USER.limited) ) {
 				html += "	<li class='nav-item icon'>";
-				html += "		<a class='nav-link' href='"+window.location+"' target='_blank' data-title='"+karutaStr[LANG]["button-new-window"]+"' data-tooltip='true' data-placement='bottom'><i class='far fa-clone'></i></a>";
+				html += "		<a class='nav-link' href='"+window.location+"' target='_blank' data-title='"+karutaStr[LANG]["button-new-window"]+"' data-toggle='tooltip' data-placement='bottom'><i class='far fa-clone'></i></a>";
 				html += "	</li>";
 			}
 		} 
@@ -232,10 +232,10 @@ function getNavBar(type,portfolioid,edit)
 		html += "			<ul class='navbar-nav'>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<li class='nav-item dropdown'>";
-		html += "				<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-tooltip='true' data-placement='bottom'>";
+		html += "				<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
 		html += "					<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
 		html += " 				</a>";
-		html += "				<div class='dropdown-menu' aria-labelledby='userDropdown'>";
+		html += "				<div class='dropdown-menu dropdown-menu-right' aria-labelledby='userDropdown'>";
 		html += "					<a class='dropdown-item' href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a>";
 		if ((USER.creator && !USER.limited)  && !USER.admin)
 			html += "				<a class='dropdown-item' href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a>";
@@ -243,7 +243,7 @@ function getNavBar(type,portfolioid,edit)
 		html += "			</li>";
 		//-----------------LOGOUT-----------------------------------------
 		html += "			<li class='nav-item icon'>";
-		html += "				<a class='nav-link' onclick='logout()' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-tooltip='true' data-placement='bottom'><i class='fas fa-sign-out-alt'></i></a>";
+		html += "				<a class='nav-link' onclick='logout()' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-sign-out-alt'></i></a>";
 		html += "			</li>";
 	}
 	html += "			</ul>";
@@ -420,7 +420,7 @@ function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
 {
 	var html = "";
 	html += "\n<!-- ==================== Delete Button ==================== -->";
-	html += "<i id='del-"+uuid+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-tooltip='true' data-placement='bottom'></i>";
+	html += "<i id='del-"+uuid+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom'></i>";
 	return html;
 }
 
@@ -1828,7 +1828,11 @@ function applyNavbarConfiguration()
 		$("#navbar-mailto").hide();
 	if (g_configVar['navbar-display-language']=='0')
 		$("#navbar-language").hide();
-	changeCss('.navbar-light .navbar-nav .nav-link', 'color:'+g_configVar['navbar-text-color']);
+	var root = document.documentElement;
+	if (g_configVar['navbar-background-color']!=undefined)
+		root.style.setProperty('--navbar-background-color', g_configVar['navbar-background-color']);
+	if (g_configVar['navbar-text-color']!=undefined)
+		root.style.setProperty('--navbar-text-color', g_configVar['navbar-text-color']);
 }
 
 //==============================
@@ -1970,4 +1974,35 @@ function addautocomplete(input,arrayOfValues) {
 	document.addEventListener("click", function (e) {
 		closeAllLists(e.target);
 	});
+}
+
+
+//==================================
+function replaceVariable(text)
+//==================================
+{
+	var n=0;
+	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
+		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##}"));
+		if (g_variables[variable_name]!=undefined)
+			text = text.replace("{##"+variable_name+"##}", g_variables[variable_name]);
+		n++; // to avoid infinite loop
+	}
+	while (text!=undefined && text.indexOf("##")>-1 && n<100) {
+		var test_string = text.substring(text.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+		var variable_name = test_string.substring(0,test_string.indexOf("##"));
+		if (g_variables[variable_name]!=undefined)
+			text = text.replace("##"+variable_name+"##", g_variables[variable_name]);
+		if (text.indexOf("[")>-1) {
+			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
+			i = replaceVariable(i);
+			var variable_array1 = text.replace("["+i+"]","");
+			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
+				text = g_variables[variable_value][i];
+			}
+		n++; // to avoid infinite loop
+	}
+	return text;
 }

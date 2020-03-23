@@ -9,10 +9,12 @@ var bckname = '3.0';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
-//---------------------------------
-var serverBCK_REG = "https://savoie.hec.ca/karuta-backend2.3/report";  // report registration server
-var serverBCK_REP = "https://savoie.hec.ca/karuta-backend2.3/report"; // report servervar serverBCK_REG = "";  // report registration server
-//----------------------------------
+var new_bck = false;
+if (new_bck) {
+	bckname = '-new';
+	serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
+	serverBCK_API = "../../../karuta-backend"+bckname+"/api";
+}
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';
@@ -25,6 +27,7 @@ var LANG = languages[LANGCODE]; //default value
 var audiovideohtml5 = true;
 var g_configVar = {}; //list of configuration variables
 g_configVar['maxfilesizeupload'] = '32';
+g_configVar['maxuserlist'] = '4';
 //----------------------------------
 var technical_support = ""; // email of technical support
 var demo = false;
@@ -34,10 +37,16 @@ g_configVar['login-new-account-display'] = "0";
 g_configVar['navbar-brand-logo'] = "<img src='"+karuta_url+"/karuta/img/logofonblanc.jpg'/>";
 //-----------LOGIN PAGE -----------------------
 g_configVar['login-logo'] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
+var welcome2 = {};			//  Welcome title
+welcome2["fr"] = "BIENVENUE DANS KARUTA 3.0";
+welcome2["en"] = "WELCOME TO KARUTA 3.0";
+var welcome3 = {}; 			//  Welcome sub-title
+welcome3["fr"] = "PORTFOLIO OPEN SOURCE";
+welcome3["en"] = "OPEN SOURCE PORTFOLIO";
 //---------MAIN PAGE-------------------------
 var welcome4 = {};			//  Welcome title
-	welcome4["fr"] = "BIENVENUE DANS KARUTA 3.0 alpha";
-	welcome4["en"] = "WELCOME TO KARUTA 3.0 alpha";
+	welcome4["fr"] = "BIENVENUE DANS KARUTA 3.0";
+	welcome4["en"] = "WELCOME TO KARUTA 3.0";
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";

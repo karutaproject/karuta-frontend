@@ -13,13 +13,13 @@
 	permissions and limitations under the License.
    ======================================================= */
 	
-var usersgroups_byid = {};
-var usersgroups_list = [];
-var bin_UsersGroup_list = [];
-var currentDisplayedUsersGroupId = null;
-var root_UsersGroup = '0';
+var usersfolders_byid = {};
+var usersfolders_list = [];
+var bin_usersfolder_list = [];
+var currentDisplayedUsersFolderId = null;
+var root_usersfolder = '0';
 var pagegNavbar_list = ["top","bottom"];
-var number_of_usersgroups = 0;
+var number_of_usersfolders = 0;
 var folder_last_drop = "";
 /// Check namespace existence
 if( UIFactory === undefined )
@@ -29,7 +29,7 @@ if( UIFactory === undefined )
 
 /// Define our type
 //==================================
-UIFactory["UsersGroup"] = function(node)
+UIFactory["UsersFolder"] = function(node)
 //==================================
 {
 	this.id = $(node).attr('id');
@@ -75,18 +75,18 @@ UIFactory["UsersGroup"] = function(node)
 
 /*
 //==================================
-UIFactory["UsersGroup"].displayAll = function(dest,type,langcode)
+UIFactory["UsersFolder"].displayAll = function(dest,type,langcode)
 //==================================
 {
 	number_of_bins = 0;
-	$("#usersgroups").html($(""));
-	UIFactory["UsersGroup"].displayTree(dest,type,langcode);
-	number_of_usersgroups = usersgroups_list.length;
+	$("#usersfolders").html($(""));
+	UIFactory["UsersFolder"].displayTree(dest,type,langcode);
+	number_of_usersfolders = usersfolders_list.length;
 	//--------------------------------------
-	if (number_of_usersgroups==0) {
-		$("#usersgroups-label").hide();
+	if (number_of_usersfolders==0) {
+		$("#usersfolders-label").hide();
 	} else {
-		$("#usersgroups-nb").html(number_of_usersgroups);
+		$("#usersfolders-nb").html(number_of_usersfolders);
 	}
 	//--------------------------------------
 	//--------------------------------------
@@ -98,20 +98,20 @@ UIFactory["UsersGroup"].displayAll = function(dest,type,langcode)
 */
 
 //==================================
-UIFactory["UsersGroup"].displayTree = function(dest,folderid,type)
+UIFactory["UsersFolder"].displayTree = function(dest,folderid,type)
 //==================================
 {
 	var folder_list = [];
 //	if (folderid==undefined || folderid==null)
-//		folder_list = usersgroups_list;
+//		folder_list = usersfolders_list;
 //	else
-		folder_list = usersgroups_byid[folderid].folders_list;
+		folder_list = usersfolders_byid[folderid].folders_list;
 	var html="";
 	for (var i = 0; i < folder_list.length; i++) {
 		html += folder_list[i].getTreeNodeView(dest,type);
 	}
 	document.getElementById(dest).innerHTML = html;
-//	document.getElementById('nb_folders_'+usersgroups_byid[folderid].id).innerHTML = usersgroups_byid[folderid].nb_folders;
+	document.getElementById('nb_folders_'+usersfolders_byid[folderid].id).innerHTML = usersfolders_byid[folderid].nb_folders;
 }
 
 //==================================
@@ -143,18 +143,18 @@ function dropFolder(ev)
 		if (type="folder"&& current_drop!=folder_last_drop) {
 			
 			alert("moveFolder:"+id+" -> "+folderid);
-			UIFactory.UsersGroup.moveFolder(id,folderid);
+			UIFactory.UsersFolder.moveFolder(id,folderid);
 		}
 		if (type="user") {
 			alert("USER moveto:"+id+" -> "+folderid);
-			UIFactory.UsersGroup.moveUser(folderid,id);
+			UIFactory.UsersFolder.moveUser(folderid,id);
 		}
 	}
 
 }
 
 //==================================
-UIFactory["UsersGroup"].prototype.getTreeNodeView = function(dest,type,langcode)
+UIFactory["UsersFolder"].prototype.getTreeNodeView = function(dest,type,langcode)
 //==================================
 {
 	if (langcode==undefined || langcode==null)
@@ -162,21 +162,21 @@ UIFactory["UsersGroup"].prototype.getTreeNodeView = function(dest,type,langcode)
 	//---------------------	
 	var folder_label = this.label_node[langcode].text();
 	var html = "";
-	if (type=='list') {
-		html += "<div id='"+this.id+"' class='treeNode UsersGroup'>";
-		html += "	<div id='UsersGroup_"+this.id+"' class='row-label folder-row'  draggable='true' ondragstart='dragFolder(event)' ondrop='dropFolder(event)' ondragover='allowDropFolder(event)'>";
+	if (type=='list2' || type=='list1') {
+		html += "<div id='"+this.id+"' class='treeNode usersfolder'>";
+		html += "	<div id='usersfolder_"+this.id+"' class='row-label folder-row'  draggable='true' ondragstart='dragFolder(event)' ondrop='dropFolder(event)' ondragover='allowDropFolder(event)'>";
 		if (this.nb_folders>0){
-			html += "		<span id='toggle_UsersGroup_"+this.id+"' class='closeSign";
+			html += "		<span id='toggle_usersfolder_"+this.id+"' class='closeSign";
 			html += " toggledNode";
-			html += "' onclick=\"UIFactory.UsersGroup.loadAndDisplayStruct('collapse_UsersGroup_"+this.id+"','"+this.id+"');\"></span>";
+			html += "' onclick=\"UIFactory.UsersFolder.loadAndDisplayStruct('collapse_usersfolder_"+this.id+"','"+this.id+"',false,'"+type+"');\"></span>";
 		} else {
 			html += "<span class='no-toggledNode'>&nbsp;</span>"
 		}
-		html += "		<span id='treenode-UsersGrouplabel_"+this.id+"' onclick=\"loadAndDisplayUsersGroupContent('group-users','"+this.id+"');\" class='folder-label'>"+folder_label+"&nbsp;</span><span class='badge number_of_folders' id='nb_folders_"+this.id+"'>"+this.nb_folders+"</span>";
-		html += "&nbsp;<span class='badge number_of_items' id='number_of_UsersGroup_items_"+this.id+"'>"+this.nb_users+"</span>";
+		html += "		<span id='treenode-usersfolderlabel_"+this.id+"' onclick=\"UIFactory.UsersFolder.loadAndDisplayContent('folder-users','"+this.id+"',false,'"+type+"');\" class='folder-label'>"+folder_label+"&nbsp;</span><span class='badge number_of_folders' id='nb_folders_"+this.id+"'>"+this.nb_folders+"</span>";
+		html += "&nbsp;<span class='badge number_of_items' id='number_of_usersfolder_items_"+this.id+"'>"+this.nb_users+"</span>";
 		html += "	</div>";
-		html += "	<div id='collapse_UsersGroup_"+this.id+"' class='nested'></div>";
-		html += "</div><!-- class='UsersGroup'-->";
+		html += "	<div id='collapse_usersfolder_"+this.id+"' class='nested'></div>";
+		html += "</div><!-- class='usersfolder'-->";
 	}
 	if (type=='select1' || type=='select') {
 		var html = "<input name='"+name+"' value='"+gid+"' type=";
@@ -187,67 +187,93 @@ UIFactory["UsersGroup"].prototype.getTreeNodeView = function(dest,type,langcode)
 		if (attr!=null && value!=null)
 			html += " "+attr+"='"+value+"'";
 		html += "> "+label+" </input>";
-		html += "<div id='select-UsersGroup_"+this.id+"' class='treeNode select-folder'>";
+		html += "<div id='select-usersfolder_"+this.id+"' class='treeNode select-folder'>";
 		html += "	<div class='row-label'>";
-		html += "		<span id='toggle_select-UsersGroup_"+this.id+"' class='closeSign";
+		html += "		<span id='toggle_select-usersfolder_"+this.id+"' class='closeSign";
 		if (this.nb_folders>0){
 			html += " toggledNode";
 		}
-		html += "' onclick=\"UIFactory.UsersGroup.loadAndDisplayStruct('collapse_select-UsersGroup_"+this.id+"','"+this.id+"');\"></span>";
-		html += "		<span id='treenode-UsersGrouplabel_"+this.id+"' onclick=\"loadAndDisplayUsersGroupContent('select-folder-users','"+this.id+"');\" class='folder-label'>"+folder_label+"&nbsp;</span><span class='badge number_of_folders' id='select-number_of_usersgroups"+this.id+"'>"+this.nb_folders+"</span>";
-		html += "&nbsp;<span class='badge number_of_items' id='select-number_of_UsersGroup_items_"+this.id+"'>"+this.nb_users+"</span>";
+		html += "' onclick=\"UIFactory.UsersFolder.loadAndDisplayStruct('collapse_select-usersfolder_"+this.id+"','"+this.id+"',false,'"+type+"');\"></span>";
+		html += "		<span id='treenode-usersfolderlabel_"+this.id+"' onclick=\"UIFactory.UsersFolder.loadAndDisplayContent('select-folder-users','"+this.id+"',false,'"+type+"');\" class='folder-label'>"+folder_label+"&nbsp;</span><span class='badge number_of_folders' id='select-number_of_usersfolders"+this.id+"'>"+this.nb_folders+"</span>";
+		html += "&nbsp;<span class='badge number_of_items' id='select-number_of_usersfolder_items_"+this.id+"'>"+this.nb_users+"</span>";
 		html += "	</div>";
-		html += "	<div id='collapse_select-UsersGroup_"+this.id+"' class='nested'></div>";
-		html += "</div><!-- id='select-UsersGroup_...'-->";
+		html += "	<div id='collapse_select-usersfolder_"+this.id+"' class='nested'></div>";
+		html += "</div><!-- id='select-usersfolder_...'-->";
 	}
 	return html;
 }
 
 //==================================
-UIFactory["UsersGroup"].displayFolderContentHeader = function(dest,id,langcode)
+UIFactory["UsersFolder"].displayFolderContentHeader = function(dest,id,type,langcode)
 //==================================
 {
 	if (langcode==undefined || langcode==null)
 		langcode = LANGCODE;
 	//---------------------	
 	$("#"+dest).show();
-	localStorage.setItem('currentDisplayedUsersGroup',id);
+	localStorage.setItem('currentDisplayedUsersFolder',id);
 	$("#"+dest).html("");
-	var type = "list";
 	if (langcode==null)
 		langcode = LANGCODE;
-	var UsersGroup = usersgroups_byid[id];
+	var usersfolder = usersfolders_byid[id];
 	//---------------------
 	var html = "";
-
-	var folder_label = UsersGroup.label_node[langcode].text();
-	if (folder_label==undefined || folder_label=='' || folder_label=='&nbsp;')
-		folder_label = '- no label in '+languages[langcode]+' -';
-	html += "<div id='content-UsersGroup_"+UsersGroup.id+"' class='usersgroup-header'>";
-	html += "	<div class='row row-label'>";
-	html += "		<div class='col-10 folder-label' id='UsersGrouplabel_"+UsersGroup.id+"' >"+folder_label+"</div>";
-	html += "		<div class='col-1'>";
-	//------------------------ menu-burger
-	if (UsersGroup.code!="#system-user#" && (USER.admin || (USER.creator && !USER.limited) )) {
-		html += "			<div class='dropdown folder-menu'>";
-		html += "				<button  class='btn dropdown-toggle' data-toggle='dropdown'></button>";
-		html += "				<ul class='dropdown-menu dropdown-menu-right' role='menu'>";
-		html += "					<a class='dropdown-item' onclick=\"UIFactory['UsesFolder'].callCreate();\" >"+karutaStr[LANG]['create_usergroup']+"</a>";
-		html += "				</ul>";
-		html += "			</div>";
+	var foldercode = usersfolder.code;
+	if (type=='list1') {
+		var owner = (Users_byid[usersfolder.ownerid]==null) ? "":Users_byid[usersfolder.ownerid].getView(null,'firstname-lastname',null);
+	
+		var folder_label = usersfolder.label_node[langcode].text();
+		if (folder_label==undefined || folder_label=='' || folder_label=='&nbsp;')
+			folder_label = '- no label in '+languages[langcode]+' -';
+		html += "<div id='content-usersfolder_"+usersfolder.id+"' class='usersfolder-header'>";
+		html += "	<div class='row row-label'>";
+		html += "		<div class='col-4 folder-label' id='usersfolderlabel_"+usersfolder.id+"' >"+folder_label+"</div>";
+		html += "		<div class='col-2 d-none d-md-block folder-label'>"+owner+"</div>";
+		html += "		<div class='col-3 d-none d-sm-block comments' id='usersfolder-comments_"+usersfolder.date_modified.substring(0,10)+"'> </div><!-- comments -->";
+		html += "		<div class='col-1'>";
+		//------------ buttons ---------------
+		if (usersfolder.code!="#system-user#")
+			html += UIFactory.UsersFolder.getAdminMenu(usersfolder,false);
+		//---------------------------------------
+		html += "		</div><!-- class='col-1' -->";
+		html += "		<div class='col-1'>";
+		//------------------------ menu-burger
+		if (usersfolder.code!="#system-user#" && (USER.admin || (USER.creator && !USER.limited) )) {
+			html += "			<div class='dropdown folder-menu'>";
+			html += "				<button  class='btn dropdown-toggle' data-toggle='dropdown'></button>";
+			html += "				<ul class='dropdown-menu dropdown-menu-right' role='menu'>";
+			html += "					<a class='dropdown-item' onclick=\"UIFactory['User'].callCreate();\" >"+karutaStr[LANG]['create_user']+"</a>";
+			html += "					<a class='dropdown-item' onclick=\"UIFactory['UsesFolder'].callCreate();\" >"+karutaStr[LANG]['create_folder']+"</a>";
+			html += "				</ul>";
+			html += "			</div>";
+		}
+		//------------------------end menu-burger
+		html += "		</div><!-- class='col-1' -->";
+		html += "	</div><!-- class='row' -->";
+		html += "</div><!-- class='usersfolder'-->";
+		//----------------------
+	//	html += "<div id='"+index_class+pagegNavbar_list[0]+"' class='navbar-pages'>";
+	//	html += "</div><!-- class='navbar-pages'-->";
+		// ----------------------
 	}
-	//------------------------end menu-burger
-	html += "		</div><!-- class='col-1' -->";
-	html += "	</div><!-- class='row' -->";
-	html += "</div><!-- class='UsersGroup'-->";
-	//----------------------
-//	html += "<div id='"+index_class+pagegNavbar_list[0]+"' class='navbar-pages'>";
-//	html += "</div><!-- class='navbar-pages'-->";
+	if (type=='list2') {
+		var owner = (Users_byid[usersfolder.ownerid]==null) ? "":Users_byid[usersfolder.ownerid].getView(null,'firstname-lastname',null);
+	
+		var folder_label = usersfolder.label_node[langcode].text();
+		if (folder_label==undefined || folder_label=='' || folder_label=='&nbsp;')
+			folder_label = '- no label in '+languages[langcode]+' -';
+		html += "<div id='content-usersfolder_"+usersfolder.id+"' class='usersfolder-header'>";
+		html += "	<div class='row row-label'>";
+		html += "		<div class='col-10 folder-label' id='usersfolderlabel_"+usersfolder.id+"' >"+folder_label+"</div>";
+		html += "		</div>";
+		html += "	</div><!-- class='row' -->";
+		html += "</div><!-- class='usersfolder'-->";
+		//------------ buttons ---------------
+	}
+	html += "<div id='folder-users-pages' class='usersfolder-pages'>";
+	html += "</div><!-- class='usersfolder-pages'-->";
 	// ----------------------
-	html += "<div id='group-users-pages' class='UsersGroup-pages'>";
-	html += "</div><!-- class='UsersGroup-pages'-->";
-	// ----------------------
-	html += "<div id='group-navbar-pages' class='navbar-pages'>";
+	html += "<div id='navbar-pages' class='navbar-pages'>";
 	html += "</div><!-- class='navbar-pages'-->";
 	//----------------------
 
@@ -255,7 +281,7 @@ UIFactory["UsersGroup"].displayFolderContentHeader = function(dest,id,langcode)
 }
 
 //==================================
-UIFactory["UsersGroup"].prototype.displayFolderContentPage = function(dest,type,langcode)
+UIFactory["UsersFolder"].prototype.displayFolderContentPage = function(dest,type,langcode)
 //==================================
 {
 	$("#"+dest).html("");
@@ -269,7 +295,7 @@ UIFactory["UsersGroup"].prototype.displayFolderContentPage = function(dest,type,
 	if (list!=undefined) {
 		for (var i=0; i<list.length;i++){
 			var item = list[i];
-			var destid = dest+"_item-UsersGroup_"+item.id;
+			var destid = dest+"_item-usersfolder_"+item.id;
 			html += "<div class='row item item-folder' id='"+destid+"'>";
 			html += item.getView(destid+item.id,type,langcode);
 			html += "</div>";
@@ -281,23 +307,23 @@ UIFactory["UsersGroup"].prototype.displayFolderContentPage = function(dest,type,
 			var item = list[i]['obj'];
 			var destid = dest+"_item-user_"+item.id;
 			html += "<div class='row item item-user' id='"+destid+"' draggable='true' ondragstart='dragUser(event)'>";
-			html += item.getView(destid,'list3',langcode);
+			html += item.getView(destid,type,langcode);
 			html += "</div>";
 		}
 	}
 	$("#"+dest).html($(html));
 	var nb_index = Math.ceil((this.nb_users)/g_configVar['maxuserlist']);
 	if (nb_index>1) {
-		displayGroupPagesNavbar(dest,nb_index,this.id,parseInt(this.pageindex));
-		$("#group-navbar-pages").show();
+		displayUserPagesNavbar(dest,nb_index,this.id,parseInt(this.pageindex),type);
+		$(".navbar-pages").show();
 	} else {
-		$("#group-navbar-pages").hide();
+		$(".navbar-pages").hide();
 	}
 	$(window).scrollTop(0);
 }
 
 //==================================
-UIFactory["UsersGroup"].prototype.getView = function(dest,type,langcode)
+UIFactory["UsersFolder"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
 	if (dest!=null) {
@@ -311,17 +337,53 @@ UIFactory["UsersGroup"].prototype.getView = function(dest,type,langcode)
 	var owner = (Users_byid[this.ownerid]==null) ? "":Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
 	var tree_type='<span class="fa fa-folder" aria-hidden="true"></span>';
 	var html = "";
-	if (type=='list') {
-		html += "<div class='folder-label col-8' title=\""+this.code+"\" class='folder-label' >"+folder_label+" "+tree_type+"</div>";
+	if (type=='list1') {
+		html += "<div class='folder-label col-10 col-md-4' title=\""+this.code+"\" class='folder-label' >"+folder_label+" "+tree_type+"</div>";
 		if (USER.creator && !USER.limited) {
-			html += "<div class='col-3'><span class='UsersGroup-code' >"+this.code+"</span></div>";
+			html += "<div class='col-2 d-none d-md-block'><span class='usersfolder-owner' >"+owner+"</span></div>";
+			html += "<div class='col-3 d-none d-md-block'><span class='usersfolder-code' >"+this.code+"</span></div>";
+		}
+		if (this.date_modified!=null)
+			html += "<div class='col-2 d-none d-md-block'>"+this.date_modified.substring(0,10)+"</div>";
+		//------------ buttons ---------------
+		html += "<div class='col-1'>";
+		if (USER.admin || (this.owner=='Y') || (USER.creator && !USER.limited)) {
+			html += UIFactory.UsersFolder.getAdminMenu(this,true);
+		}
+		html += "</div><!-- class='col' -->";
+		//------------------------------------
+	}
+	if (type=='list2') {
+		html += "<div class='folder-label col-10 col-md-4' title=\""+this.code+"\" class='folder-label' >"+folder_label+" "+tree_type+"</div>";
+		if (USER.creator && !USER.limited) {
+			html += "<div class='col-3 d-none d-md-block'><span class='usersfolder-code' >"+this.code+"</span></div>";
+		}
+	}
+	if (type=='bin') {
+		if (USER.admin || (USER.creator && !USER.limited) ){
+			html += "<div class='col-md-1 col-sm-1 hidden-xs'></div>";
+			html += "<div class='col-md-3 col-sm-3 col-xs-9'><a class='folder-label' >"+folder_label+"</a> "+tree_type+"</div>";
+			html += "<div class='col-md-2 col-sm-2 hidden-xs '><a class='usersfolder-owner' >"+owner+"</a></div>";
+			html += "<div class='col-md-2 col-sm-2 hidden-xs' >"+this.code+"</a></div>";
+			if (this.date_modified!=null)
+				html += "<div class='col-md-2 col-sm-2 hidden-xs'>"+this.date_modified.substring(0,10)+"</div>";
+			html += "<div class='col-md-2 col-sm-2 col-xs-3'>";
+			html += "<div class='btn-group folder-menu'>";
+			html += "<button class='btn' onclick=\"UIFactory['UsersFolder'].restore('"+this.id+"')\" data-toggle='tooltip' data-placement='right' data-title='"+karutaStr[LANG]["button-restore"]+"'>";
+			html += "<i class='fas fa-trash-restore'></i>";
+			html += "</button>";
+			html += " <button class='btn' onclick=\"confirmDelObject('"+this.id+"','UsersFolder')\" data-toggle='tooltip' data-placement='top' data-title='"+karutaStr[LANG]["button-delete"]+"'>";
+			html += "<i class='fa fa-times'></i>";
+			html += "</button>";
+			html += "</div>";
+			html += "</div><!-- class='col-md-2' -->";
 		}
 	}
 	if (type=='select') {
 		if (USER.admin || (USER.creator && !USER.limited) ){
 			html += "<div class='col-md-1 col-xs-1'>"+this.getSelector(null,null,'select_folders',true)+"</div>";
 			html += "<div class='col-md-3 col-sm-5 col-xs-7'><a class='folder-label' >"+folder_label+"</a> "+tree_type+"</div>";
-			html += "<div class='col-md-3 hidden-sm hidden-xs '><a class='UsersGroup-owner' >"+owner+"</a></div>";
+			html += "<div class='col-md-3 hidden-sm hidden-xs '><a class='usersfolder-owner' >"+owner+"</a></div>";
 			html += "<div class='col-md-3 col-sm-2 hidden-xs' >"+this.code+"</a></div>";
 			html += "<div class='col-md-1 col-xs-2'>"+this.date_modified.substring(0,10)+"</div>";
 		}
@@ -330,17 +392,17 @@ UIFactory["UsersGroup"].prototype.getView = function(dest,type,langcode)
 }
 
 //======================
-UIFactory["UsersGroup"].getAdminMenu = function(self,list)
+UIFactory["UsersFolder"].getAdminMenu = function(self,list)
 //======================
 {	
 	var html = "";
 	html += "<div class='dropdown folder-menu'>";
 	if (USER.admin) {
-		html += "	<button id='dropdown-UsersGroup"+self.id+"' data-toggle='dropdown' class='btn dropdown-toggle'></button>";
-		html += "	<div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdown-UsersGroup"+self.id+"'>";
-		html += "		<a class='dropdown-item' onclick=\"UIFactory.UsersGroup.callRename('"+self.id+"',null,"+list+")\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
-		html += "		<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].callMove('"+self.id+"')\" ><i class='button fas fa-random'></i> "+karutaStr[LANG]['move']+"</a>";
-		html += "		<a class='dropdown-item' id='remove-"+self.id+"' style='display:block' onclick=\"UIFactory['UsersGroup'].remove('"+self.id+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+		html += "	<button id='dropdown-usersfolder"+self.id+"' data-toggle='dropdown' class='btn dropdown-toggle'></button>";
+		html += "	<div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdown-usersfolder"+self.id+"'>";
+		html += "		<a class='dropdown-item' onclick=\"UIFactory.UsersFolder.callRename('"+self.id+"',null,"+list+")\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"UIFactory['UsersFolder'].callMove('"+self.id+"')\" ><i class='button fas fa-random'></i> "+karutaStr[LANG]['move']+"</a>";
+		html += "		<a class='dropdown-item' id='remove-"+self.id+"' style='display:block' onclick=\"UIFactory['UsersFolder'].remove('"+self.id+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
 		html += "	</div>";
 	} else {
 		html += "	<button  data-toggle='dropdown' class='btn dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";		
@@ -350,7 +412,7 @@ UIFactory["UsersGroup"].getAdminMenu = function(self,list)
 }
 
 //==================================
-UIFactory["UsersGroup"].prototype.getSelector = function(attr,value,name,checkbox)
+UIFactory["UsersFolder"].prototype.getSelector = function(attr,value,name,checkbox)
 //==================================
 {
 	var gid = this.id;
@@ -367,10 +429,10 @@ UIFactory["UsersGroup"].prototype.getSelector = function(attr,value,name,checkbo
 };
 
 //==================================
-UIFactory["UsersGroup"].moveFolder = function(folderid,newparentid) 
+UIFactory["UsersFolder"].moveFolder = function(folderid,newparentid) 
 //==================================
 {
-	var url = serverBCK_API+"/folder/UsersGroup/" + folderid + "?newparentid="+newparentid;
+	var url = serverBCK_API+"/folder/usersfolder/" + folderid + "?newparentid="+newparentid;
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -378,8 +440,8 @@ UIFactory["UsersGroup"].moveFolder = function(folderid,newparentid)
 		url : url,
 		data : "",
 		success : function(data) {
-			UIFactory["UsersGroup"].displayAll('usersgroups','list');
-			UIFactory["UsersGroup"].displayBin('bin','bin');
+			UIFactory["UsersFolder"].displayAll('usersfolders','list');
+			UIFactory["UsersFolder"].displayBin('bin','bin');
 			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 
 		},
@@ -390,10 +452,10 @@ UIFactory["UsersGroup"].moveFolder = function(folderid,newparentid)
 };
 
 //==================================
-UIFactory["UsersGroup"].moveUser = function(folderid,userid) 
+UIFactory["UsersFolder"].moveUser = function(folderid,userid) 
 //==================================
 {
-	var url = serverBCK_API+"/folder/UsersGroup/" + folderid + "?adduser="+userid;
+	var url = serverBCK_API+"/folder/usersfolder/" + folderid + "?adduser="+userid;
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
@@ -401,7 +463,8 @@ UIFactory["UsersGroup"].moveUser = function(folderid,userid)
 		url : url,
 		data : "",
 		success : function(data) {
-			UIFactory.UsersGroup.loadAndDisplayStruct('usergroups_active','active',true);  // active users
+			UIFactory.UsersFolder.loadAndDisplayStruct('usersfolder_active','active',true);  // active users
+			UIFactory.UsersFolder.loadAndDisplayStruct('usersfolder_inactive','inactive',true);  // inactive users
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in moveUser : "+jqxhr.responseText);
@@ -410,9 +473,71 @@ UIFactory["UsersGroup"].moveUser = function(folderid,userid)
 };
 
 
+//==================================
+UIFactory["UsersFolder"].remove = function(id) 
+//==================================
+{
+	var url = serverBCK_API+"/usersfolders/usersfolder/" + id + "?active=0";
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : "",
+		success : function(data) {
+			UIFactory.UsersFolder.loadAndDisplayStruct('usersfolder_active','active',true);  // active users
+			UIFactory.UsersFolder.loadAndDisplayStruct('usersfolder_inactive','inactive',true);  // inactive users
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in remove : "+jqxhr.responseText);
+		}
+	});
+};
 
 //==================================
-UIFactory["UsersGroup"].callRename = function(id,langcode,list)
+UIFactory["UsersFolder"].restore = function(id) 
+//==================================
+{
+	var url = serverBCK_API+"/folder/usersfolder/" + id + "?active=1";
+	$.ajax({
+		type : "PUT",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : "",
+		success : function(data) {
+			for (var i=0;i<bin_list.length;i++){
+				if (bin_list[i]!=null && bin_list[i].id==id) {
+					usersfolders_list[usersfolders_list.length] = bin_list[i];
+					usersfolders_byid[id] = bin_list[i];
+					bin_list[i] = null;
+					//---- sort portfolios_list ---
+					var tableau1 = new Array();
+					for (var k=0; k<usersfolders_list.length; k++){
+						if (usersfolders_list[k]!=null){
+						tableau1[tableau1.length] = [usersfolders_list[k].code_node.text(),usersfolders_list[k].id];
+						}
+					}
+					var newTableau1 = tableau1.sort(sortOn1);
+					usersfolders_list = [];
+					for (var l=0; l<newTableau1.length; l++){
+						usersfolders_list[l] = usersfolders_byid[newTableau1[l][1]]
+					}
+					//-----------------------------
+					break;
+				}
+			}
+			UIFactory["UsersFolder"].displayBin('bin','bin');
+			UIFactory["UsersFolder"].displayAll('usersfolders','list');
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in restore : "+jqxhr.responseText);
+		}
+	});
+};
+
+//==================================
+UIFactory["UsersFolder"].callRename = function(id,langcode,list)
 //==================================
 {
 	//---------------------
@@ -421,7 +546,7 @@ UIFactory["UsersGroup"].callRename = function(id,langcode,list)
 	//---------------------
 	var js1 = "$('#edit-window').modal('hide')";
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	var self = usersgroups_byid[id];
+	var self = usersfolders_byid[id];
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(karutaStr[LANG]['rename']);
 	var div = $("<div></div>");
@@ -433,7 +558,7 @@ UIFactory["UsersGroup"].callRename = function(id,langcode,list)
 		var htmlCodeDivObj = $("<div class='col-sm-9'></div>");
 		var htmlCodeInputObj = $("<input id='code_"+id+"' type='text' class='form-control' name='input_code' value=\""+self.code+"\">");
 		$(htmlCodeInputObj).change(function (){
-			UIFactory["UsersGroup"].rename(self,langcode,list);
+			UIFactory["UsersFolder"].rename(self,langcode,list);
 		});
 		$(htmlCodeDivObj).append($(htmlCodeInputObj));
 		$(htmlCodeGroupObj).append($(htmlCodeLabelObj));
@@ -446,7 +571,7 @@ UIFactory["UsersGroup"].callRename = function(id,langcode,list)
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 		var htmlLabelInputObj = $("<input id='label_"+portfolioid+"_"+langcode+"' type='text' class='form-control' value=\""+self.label_node[langcode].text()+"\">");
 		$(htmlLabelInputObj).change(function (){
-			UIFactory["UsersGroup"].rename(self,langcode,list);
+			UIFactory["UsersFolder"].rename(self,langcode,list);
 		});
 		$(htmlLabelDivObj).append($(htmlLabelInputObj));
 		$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
@@ -468,7 +593,7 @@ UIFactory["UsersGroup"].callRename = function(id,langcode,list)
 };
 
 //==================================
-UIFactory["UsersGroup"].rename = function(itself,langcode,list)
+UIFactory["UsersFolder"].rename = function(itself,langcode,list)
 //==================================
 {
 	//---------------------
@@ -481,26 +606,26 @@ UIFactory["UsersGroup"].rename = function(itself,langcode,list)
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
 	$(itself.label_node[langcode]).text(label);
 	var xml = "";
-	xml +="<UsersGroup><code>"+code+"</code>";
+	xml +="<usersfolder><code>"+code+"</code>";
 	for (var i=0; i<languages.length;i++){
 		xml +="<label lang='"+languages[i]+"'>"+$(itself.label_node[i]).text()+"</label>";	
 	}
-	xml +="</UsersGroup>";
+	xml +="</usersfolder>";
 	strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 	var callback = function () {
-		$("#treenode-UsersGrouplabel_"+itself.id).html($(label));
+		$("#treenode-usersfolderlabel_"+itself.id).html($(label));
 		if (list)
-			$("#item-UsersGroup_"+itself.id).html($(itself.getView('item-UsersGroup_'+itself.id,'list')));
+			$("#item-usersfolder_"+itself.id).html($(itself.getView('item-usersfolder_'+itself.id,'list')));
 		else {
-			$("#UsersGrouplabel_"+itself.id).html($(label));
+			$("#usersfolderlabel_"+itself.id).html($(label));
 		}
 	};
-	UICom.query("PUT",serverBCK_API+'/folder/UsersGroup/'+itself.id+'',callback,"text",strippeddata);
+	UICom.query("PUT",serverBCK_API+'/folder/usersfolder/'+itself.id+'',callback,"text",strippeddata);
 };
 
 
 //==================================
-UIFactory["UsersGroup"].prototype.update = function(node)
+UIFactory["UsersFolder"].prototype.update = function(node)
 //==================================
 {
 	var current_node = this.node;
@@ -533,7 +658,7 @@ UIFactory["UsersGroup"].prototype.update = function(node)
 
 
 //==================================
-UIFactory["UsersGroup"].callCreateFolder = function(parentid)
+UIFactory["UsersFolder"].callCreateFolder = function(parentid)
 //==================================
 {
 	$("#edit-window-title").html(karutaStr[LANG]['create_folder']);
@@ -545,7 +670,7 @@ UIFactory["UsersGroup"].callCreateFolder = function(parentid)
 		var code = $("#code").val();
 		var label = $("#label").val();
 		if (code!='' && label!='') {
-			UIFactory.UsersGroup.createFolder(parentid,code,label);
+			UIFactory.UsersFolder.createFolder(parentid,code,label);
 		} else {
 			if (code=='')
 				alertHTML(karutaStr[LANG]['code-not-null']);
@@ -577,12 +702,12 @@ UIFactory["UsersGroup"].callCreateFolder = function(parentid)
 };
 
 //==================================
-UIFactory["UsersGroup"].createFolder = function(parentid,code,label)
+UIFactory["UsersFolder"].createFolder = function(parentid,code,label)
 //==================================
 {
 	if (code!='' && label!='') {
-		var url = serverBCK_API+"/folder/usersgroups/"+parentid;
-		var data = "<UsersGroup><code>"+code+"</code><label lang='fr'>"+label+"</label><label lang='en'>"+label+"</label></UsersGroup>";
+		var url = serverBCK_API+"/folder/usersfolders/"+parentid;
+		var data = "<usersfolder><code>"+code+"</code><label lang='fr'>"+label+"</label><label lang='en'>"+label+"</label></usersfolder>";
 		$.ajax({
 			type : "POST",
 			contentType: "application/xml",
@@ -609,10 +734,10 @@ UIFactory["UsersGroup"].createFolder = function(parentid,code,label)
 };
 
 //==================================
-UIFactory["UsersGroup"].del = function(id) 
+UIFactory["UsersFolder"].del = function(id) 
 //==================================
 {
-	var url = serverBCK_API+"/folder/UsersGroup/" + id;
+	var url = serverBCK_API+"/folder/usersfolder/" + id;
 	$.ajax({
 		type : "DELETE",
 		contentType: "application/xml",
@@ -621,19 +746,19 @@ UIFactory["UsersGroup"].del = function(id)
 		data : "",
 		success : function(data) {
 			var pos_item = 0;
-			for (var i=0;i<bin_UsersGroup_list.length;i++){
-				if (bin_UsersGroup_list[i]!=null && bin_UsersGroup_list[i].id==id) {
-					bin_UsersGroup_list[i] = null;
+			for (var i=0;i<bin_usersfolder_list.length;i++){
+				if (bin_usersfolder_list[i]!=null && bin_usersfolder_list[i].id==id) {
+					bin_usersfolder_list[i] = null;
 					pos_item = i;
 					break;
 				}
 			}
-			var new_length = bin_UsersGroup_list.length-1;
+			var new_length = bin_usersfolder_list.length-1;
 			for (var i=pos_item;i<new_length;i++){
-				bin_UsersGroup_list[i] = bin_UsersGroup_list[i+1];
+				bin_usersfolder_list[i] = bin_usersfolder_list[i+1];
 			}
 			if ($("#bin").length>0) { // not a batch call
-				UIFactory["UsersGroup"].displayBin('bin','bin');
+				UIFactory["UsersFolder"].displayBin('bin','bin');
 				$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 
 			}
@@ -645,52 +770,52 @@ UIFactory["UsersGroup"].del = function(id)
 };
 
 //==================================
-UIFactory["UsersGroup"].parse = function(data) 
+UIFactory["UsersFolder"].parse = function(data) 
 //==================================
 {
-	usersgroups_byid = {};
-	usersgroups_list = [];		
-	var items = $("UsersGroup",data);
+	usersfolders_byid = {};
+	usersfolders_list = [];		
+	var items = $("usersfolder",data);
 	var tableau1 = new Array();
 	for (var i = 0; i < items.length; i++) {
 		var id = $(items[i]).attr('id');
-		usersgroups_byid[id] = new UIFactory["UsersGroup"](items[i]);
-		var code = usersgroups_byid[id].code;
+		usersfolders_byid[id] = new UIFactory["UsersFolder"](items[i]);
+		var code = usersfolders_byid[id].code;
 		tableau1[i] = [code,id];
 	}
 	var newTableau1 = tableau1.sort(sortOn1);
 	for (var i=0; i<newTableau1.length; i++){
-		usersgroups_list[i] = usersgroups_byid[newTableau1[i][1]]
+		usersfolders_list[i] = usersfolders_byid[newTableau1[i][1]]
 	}
 };
 
 //==================================
-UIFactory["UsersGroup"].parseStructure = function(data,parentid) 
+UIFactory["UsersFolder"].parseStructure = function(data,parentid) 
 //==================================
 {
-	var items = $("UsersGroup",data);
+	var items = $("usersfolder",data);
 	var tableau1 = new Array();
 	for (var i = 0; i < items.length; i++) {
 		var id = $(items[i]).attr('id');
-		if (usersgroups_byid[id]==undefined){
-			usersgroups_byid[id] = new UIFactory["UsersGroup"](items[i]);
+		if (usersfolders_byid[id]==undefined){
+			usersfolders_byid[id] = new UIFactory["UsersFolder"](items[i]);
 		} else
-			usersgroups_byid[id].update(items[i]);			
-		var code = usersgroups_byid[id].code;
+			usersfolders_byid[id].update(items[i]);			
+		var code = usersfolders_byid[id].code;
 		tableau1[i] = [code,id];
 	}
-	if (usersgroups_byid[parentid]!=undefined){
+	if (usersfolders_byid[parentid]!=undefined){
 		var newTableau1 = tableau1.sort(sortOn1);
 		for (var i=0; i<newTableau1.length; i++){
-			usersgroups_byid[parentid].folders_list[i] = usersgroups_byid[newTableau1[i][1]]
+			usersfolders_byid[parentid].folders_list[i] = usersfolders_byid[newTableau1[i][1]]
 		}
-		usersgroups_byid[parentid].loadedStruct = true;
-		usersgroups_byid[parentid].nb_folders = usersgroups_byid[parentid].folders_list.length;
+		usersfolders_byid[parentid].loadedStruct = true;
+		usersfolders_byid[parentid].nb_folders = usersfolders_byid[parentid].folders_list.length;
 	}
 };
 
 //==================================
-UIFactory["UsersGroup"].parseChildren = function(data,parentid) 
+UIFactory["UsersFolder"].parseChildren = function(data,parentid) 
 //==================================
 {
 	var children = $(data).children();
@@ -699,15 +824,15 @@ UIFactory["UsersGroup"].parseChildren = function(data,parentid)
 	for( var i=0; i<children.length; ++i ) {
 		var child = children[i];
 		var tagname = $(child)[0].tagName;
-		if("UsersGroup"==tagname || "USER"==tagname) {
+		if("USERSFOLDER"==tagname || "USER"==tagname) {
 			var id = $(child).attr("id");
 			list[i] = {};
 			list[i]['type'] = tagname;
-			if("UsersGroup"==tagname) {
-				if (usersgroups_byid[id]==undefined)
-					usersgroups_byid[id] = new UIFactory["UsersGroup"](child);
-				else usersgroups_byid[id].update(child);
-				list[i]['obj'] = usersgroups_byid[id];
+			if("USERSFOLDER"==tagname) {
+				if (usersfolders_byid[id]==undefined)
+					usersfolders_byid[id] = new UIFactory["UsersFolder"](child);
+				else usersfolders_byid[id].update(child);
+				list[i]['obj'] = usersfolders_byid[id];
 			} else {
 				if (Users_byid[id]==undefined)
 					Users_byid[id] = new UIFactory["User"](child);
@@ -716,7 +841,7 @@ UIFactory["UsersGroup"].parseChildren = function(data,parentid)
 			}
 		}
 	}
-	usersgroups_byid[parentid].chidren_list[usersgroups_byid[parentid].pageindex] = list;
+	usersfolders_byid[parentid].chidren_list[usersfolders_byid[parentid].pageindex] = list;
 };
 
 //----------------------------------------------------------------------------------
@@ -724,26 +849,25 @@ UIFactory["UsersGroup"].parseChildren = function(data,parentid)
 //----------------------------------------------------------------------------------
 
 //==================================
-UIFactory["UsersGroup"].loadAndDisplayStruct = function(dest,folderid,reload)
+UIFactory.UsersFolder.loadAndDisplayStruct = function (dest,folderid,reload,type) {
 //==================================
- {
 	$("#wait-window").show();
 	if (reload==null)
 		reload = false;
-	if (folderid!="grouproot")
-		toggleElt('closeSign','openSign','UsersGroup_'+folderid);
-	if (!usersgroups_byid[folderid].loadedStruct || reload) {
-		loadUsersGroupStruct(dest,folderid);
-		UIFactory.UsersGroup.displayTree(dest,folderid,'list');
+	if (folderid!="active" && folderid!="inactive")
+		toggleElt('closeSign','openSign','usersfolder_'+folderid);
+	if (!usersfolders_byid[folderid].loadedStruct || reload) {
+		loadUsersFolderStruct(dest,folderid);
+		UIFactory.UsersFolder.displayTree(dest,folderid,type);
 	}
 	else {
-		UIFactory.UsersGroup.displayTree(dest,folderid,'list')
+		UIFactory.UsersFolder.displayTree(dest,folderid,type)
 	}
 	$("#wait-window").hide();
 }
 
 //==============================
-function loadUsersGroupStruct(dest,id)
+function loadUsersFolderStruct(dest,id)
 //==============================
 {
 	/*
@@ -751,59 +875,65 @@ function loadUsersGroupStruct(dest,id)
 		id : id,
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/folder/UsersGroup/"+id+"?type=structure",
+		url : serverBCK_API+"/folder/usersfolder/"+id+"?type=structure",
 		success : function(data) {
-			UIFactory.UsersGroup.parseStructure(data,id);
+				UIFactory["UsersFolder"].parseStructure(data,id);
+				UIFactory["UsersFolder"].displayTree(dest,'list',langcode,id);
 		},
 		error : function(jqxhr,textStatus) {
 		}
 	});
 	 */
 	//-------- Simulation ---------
-	if (id=="grouproot") { //root folder
-		var data = "<usersgroups id='active' nb_folders='3' nb_users='0'>"
-			+"<usersgroup id='1' nb_folders='0' nb_users='3' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>Enseignants</label><label lang='fr'>Enseignants</label></usersgroup>"
-			+"<usersgroup id='2' nb_folders='1' nb_users='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Étudiants</label><label lang='fr'>Étudiants</label></usersgroup>"
+	if (id=="active") { //root folder
+		var data = "<usersfolders id='active' nb_folders='3' nb_users='0'>"
+			+"<usersfolder id='1' nb_folders='0' nb_users='3' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>#system-user#</code><label lang='en'>System Users</label><label lang='fr'>Usagers Système</label></usersfolder>"
+			+"<usersfolder id='2' nb_folders='1' nb_users='0' owner='Y'  ownerid='20' modified='2019-12-02 12:19:02.0'><code>folder2</code><label lang='en'>Folder 2</label><label lang='fr'>Usagers</label></usersfolder>"
 			+"</userfolders>";
 		
 	}
 	if (id=="2") { 
-		var data = "<usersgroups id='2' nb_folders='3' nb_users='0'>"
-			+"<UsersGroup id='2.1' nb_folders='0' nb_users='7' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>2020</label><label lang='fr'>Cohorte 2020</label></UsersGroup>"
+		var data = "<usersfolders id='2' nb_folders='3' nb_users='0'>"
+			+"<usersfolder id='2.1' nb_folders='0' nb_users='7' owner='Y'  ownerid='1' modified='2019-12-02 12:19:02.0'><code>folder1</code><label lang='en'>System Users</label><label lang='fr'>dossier2.1</label></usersfolder>"
 			+"</userfolders>";
 		
 	}
-	UIFactory.UsersGroup.parseStructure(data,id);
+	if (id=="inactive") { //bin folder
+		var data = "<usersfolders d='inactive' nb_folders='0' nb_users='0'>"
+				+"</userfolders>";
+		
+	}
+	UIFactory["UsersFolder"].parseStructure(data,id);
 }
 
 //==================================
-function loadAndDisplayUsersGroupContent(dest,folderid) {
+UIFactory.UsersFolder.loadAndDisplayContent = function (dest,folderid,reload,type) {
 //==================================
 	$("#wait-window").show();
 	//---------------------
-	if (folderid=="0" && usersgroups_byid[folderid]==undefined) {
+	if (folderid=="0" && usersfolders_byid[folderid]==undefined) {
 		$("#folder-users").html("<div id='folder-users-active'></div>");
 		fill_list_usersOLD();
-	} else if (folderid=="1" && usersgroups_byid[folderid]==undefined) {
+	} else if (folderid=="1" && usersfolders_byid[folderid]==undefined) {
 		$("#folder-users").html("<div id='folder-users-inactive'></div>");
 		fill_list_usersOLD();
 	} else {
 		//--------Folders------------------
-		if (usersgroups_byid[folderid].nb_folders > 0){
-			UIFactory.UsersGroup.loadAndDisplayStruct('collapse_UsersGroup_'+folderid,folderid)
+		if (usersfolders_byid[folderid].nb_folders > 0){
+			UIFactory.UsersFolder.loadAndDisplayStruct('collapse_usersfolder_'+folderid,folderid,reload,type)
 		}
-		toggleOpenElt('closeSign','openSign','UsersGroup_'+folderid);
-		UIFactory.UsersGroup.displayFolderContentHeader(dest,folderid);
-		selectElt('UsersGroup','UsersGroup_'+folderid);
+		toggleOpenElt('closeSign','openSign','usersfolder_'+folderid);
+		UIFactory.UsersFolder.displayFolderContentHeader(dest,folderid,type);
+		selectElt('usersfolder','usersfolder_'+folderid);
 		//--------Portfolios-------------------
 		var dest_page = dest + '-pages';
-		var list = usersgroups_byid[folderid].chidren_list[usersgroups_byid[folderid].pageindex];
+		var list = usersfolders_byid[folderid].chidren_list[usersfolders_byid[folderid].pageindex];
 		if (list==undefined||list==null){
-			loadUsersGroupContent(dest_page,folderid);
-			usersgroups_byid[folderid].displayFolderContentPage(dest_page,'list');
+			loadUsersFolderContent(dest_page,folderid);
+			usersfolders_byid[folderid].displayFolderContentPage(dest_page,type);
 		}
 		else {
-			usersgroups_byid[folderid].displayFolderContentPage(dest_page,'list');
+			usersfolders_byid[folderid].displayFolderContentPage(dest_page,type);
 		}
 		//-------------------------------
 	}
@@ -812,33 +942,33 @@ function loadAndDisplayUsersGroupContent(dest,folderid) {
 }
 
 //==================================
-function loadAndDisplayUsersGroupContentPage(dest,folderid,type,pageindex) {
+function loadAndDisplayUsersFolderContentPage(dest,folderid,type,pageindex) {
 //==================================
 	$("#wait-window").show();
-	usersgroups_byid[folderid].pageindex = ""+pageindex;
-	var list = usersgroups_byid[folderid].chidren_list[usersgroups_byid[folderid].pageindex];
+	usersfolders_byid[folderid].pageindex = ""+pageindex;
+	var list = usersfolders_byid[folderid].chidren_list[usersfolders_byid[folderid].pageindex];
 	if (list==undefined||list==null) {
-		loadUsersGroupContent(dest,folderid);
-		usersgroups_byid[folderid].displayFolderContentPage(dest,type);
+		loadUsersFolderContent(dest,folderid);
+		usersfolders_byid[folderid].displayFolderContentPage(dest,type);
 	} else {
-		usersgroups_byid[folderid].displayFolderContentPage(dest,type);
+		usersfolders_byid[folderid].displayFolderContentPage(dest,type);
 	}
 	$("#wait-window").hide();
 }
 
 //==============================
-function loadUsersGroupContent(dest,folderid)
+function loadUsersFolderContent(dest,folderid)
 //==============================
 {
-	var pageindex = usersgroups_byid[folderid].pageindex;
+	var pageindex = usersfolders_byid[folderid].pageindex;
 	/*
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/folder/UsersGroup/"+id+"?type=children&r="+pageindex+"&limit="+g_configVar['maxuserlist'],
+		url : serverBCK_API+"/folder/usersfolder/"+id+"?type=children&r="+pageindex+"&limit="+g_configVar['maxuserlist'],
 		success : function(data) {
-			UIFactory.UsersGroup.parseChildren(data,id); 
-			usersgroups_byid[id].displayFolderContentPage(dest,type,langcode,index_class);
+			UIFactory.UsersFolder.parseChildren(data,id); 
+			usersfolders_byid[id].displayFolderContentPage(dest,type,langcode,index_class);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
@@ -849,34 +979,34 @@ function loadUsersGroupContent(dest,folderid)
 	//---------Simulation---------------
 	var data = "";
 	if (folderid=='1' && pageindex==1) {
-		data =  "<usersgroup id='1' nb_folders='0' nb_users='3'>";
+		data =  "<usersfolder id='1' nb_folders='0' nb_users='3'>";
 		data += "<user id='1'><username>root</username><firstname>root</firstname><lastname></lastname><admin>1</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user>";
 		data += "<user id='2'><username>sys_public</username><firstname>System public account (users with account)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user>";
 		data += "<user id='3'><username>public</username><firstname>Public account (World)</firstname><lastname></lastname><admin>0</admin><designer>0</designer><email>null</email><active>1</active><substitute>0</substitute><other></other></user>";
-		data += "</usersgroup>";
+		data += "</usersfolder>";
 	}
 	if (folderid=='2' && pageindex==1) {
-		data =  "<usersgroup id='1' nb_folders='1' nb_users='0'>";
-		data += "</usersgroup>";
+		data =  "<usersfolder id='1' nb_folders='1' nb_users='0'>";
+		data += "</usersfolder>";
 	}
 	if (folderid=='2.1') {
 		if (pageindex==1) {
-		data =  "<usersgroup id='2.1' nb_folders='0' nb_users='7'>";
+		data =  "<usersfolder id='2.1' nb_folders='0' nb_users='7'>";
 		data += "<user id='4'><username>olivier</username><firstname>Olivier</firstname><lastname>Gerbé</lastname><admin>0</admin><designer>0</designer><email>olivier.gerbe@gmail.com</email><active>1</active><substitute>0</substitute><other></other></user>";
 		data += "<user id='5'><username>saint-exupery@litterature.fr</username><firstname>Antoine</firstname><lastname>de Saint-Exupéry</lastname><admin>0</admin><designer>0</designer><email>saint-exupery@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
 		data += "<user id='6'><username>beaudelaire@litterature.fr</username><firstname>Charles</firstname><lastname>Beaudelaire</lastname><admin>0</admin><designer>0</designer><email>beaudelaire@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
 		data += "<user id='7'><username>hugo@litterature.fr</username><firstname>Victor</firstname><lastname>Hugo</lastname><admin>0</admin><designer>0</designer><email>hugo@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
-		data += "</UsersGroup>";
+		data += "</usersfolder>";
 		}
 		if (pageindex==2) {
-			data =  "<usersgroup id='2.1' nb_folders='0' nb_users='7'>";
+			data =  "<usersfolder id='2.1' nb_folders='0' nb_users='7'>";
 			data += "<user id='8'><username>flaubert@litterature.fr</username><firstname>Gustave</firstname><lastname>Flaubert</lastname><admin>0</admin><designer>0</designer><email>flaubert@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
 			data += "<user id='9'><username>maupassant@litterature.fr</username><firstname>Guy</firstname><lastname>de Maupassant</lastname><admin>0</admin><designer>0</designer><email>maupassant@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
 			data += "<user id='10'><username>camus@litterature.fr</username><firstname>Albert</firstname><lastname>Camus</lastname><admin>0</admin><designer>0</designer><email>camus@litterature.fr</email><active>1</active><substitute>0</substitute><other></other></user>";
-			data += "</UsersGroup>";
+			data += "</usersfolder>";
 		}
 	}
-	UIFactory.UsersGroup.parseChildren(data,folderid);
+	UIFactory.UsersFolder.parseChildren(data,folderid);
 }
 
 /*=======================================*/
@@ -915,22 +1045,22 @@ function getUsersList2()
 
 	html += "<div id='userslist-leftside'>";
 	//--------------------FOLDERS---------------------------------------
-	html += "<h3><i class='far fa-address-book fa-lg' ></i><span id='usersgroups-label'>"+text0+"</span>&nbsp<span class='folders-nb badge' id='usersgroups-nb'></span>";
-	html +="	<button class='btn list-btn' onclick='UIFactory.UsersGroup.createFolder()'>"+karutaStr[LANG]['create_folder']+"</button>";
+	html += "<h3><i class='far fa-address-book fa-lg' ></i><span id='usersfolders-label'>"+text0+"</span>&nbsp<span class='folders-nb badge' id='usersfolders-nb'></span>";
+	html +="	<button class='btn list-btn' onclick='UIFactory.UsersFolder.createFolder()'>"+karutaStr[LANG]['create_folder']+"</button>";
 	html += "</h3>";
-	html += "<div id='usersgroups' class='tree user'></div>";
+	html += "<div id='usersfolders' class='tree user'></div>";
 
 	//--------------------USERS--------------------------------------
 	html += "<h3 id='users-in-rootfolder'>";
 	html += "	<span id='users-label'>"+text1+"</span>&nbsp<span class='users-nb badge' id='users-nb'></span>";
-	html += "	<button class='btn list-btn' onclick=\"loadAndDisplayUsersGroupContent('folder-users','0');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
+	html += "	<button class='btn list-btn' onclick=\"UIFactory.UsersFolder.loadAndDisplayContent('folder-users','0');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
 	html += "</h3>";
 
 	if (USER.admin) {
 		//---------------------BIN-------------------------------------
 		var text2 = karutaStr[LANG]['bin']+" - "+karutaStr[LANG]['inactive_users'];
-		html += "<h3 id='bin-usersgroups-label'>"+text2+"&nbsp<span class='bin-nb badge' id='bin-usersgroups-nb'></span>";
-		html += "<button class='btn list-btn' onclick=\"UIFactory.UsersGroup.displayBin('folder-users','bin');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see-bin"] + "</button>";
+		html += "<h3 id='bin-usersfolders-label'>"+text2+"&nbsp<span class='bin-nb badge' id='bin-usersfolders-nb'></span>";
+		html += "<button class='btn list-btn' onclick=\"UIFactory.UsersFolder.displayBin('folder-users','bin');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see-bin"] + "</button>";
 		html += "</h3>";
 	}
 	//-----------------------------------------------------------
@@ -948,11 +1078,15 @@ function getUsersList2()
 
 
 //==============================
-function initusersgroups()
+function initUsersFolders()
 //==============================
 {
-	var data = "<UsersGroup id='grouproot' nb_folder='0' nb_user='0' owner='Y'  ownerid='1'><code>1</code><label lang='en'>"+karutaStr['en']['list_usersgroups']+"</label><label lang='fr'>"+karutaStr['fr']['list_usersgroups']+"</label></UsersGroup>";
-	usersgroups_byid['grouproot'] = new UIFactory["UsersGroup"](data);
+	var data = "<usersfolder id='active' nb_folder='0' nb_user='0' owner='Y'  ownerid='1'><code>1</code><label lang='en'>"+karutaStr['en']['folders']+"</label><label lang='fr'>"+karutaStr['fr']['folders']+"</label></usersfolder>";
+	usersfolders_byid['active'] = new UIFactory["UsersFolder"](data);
+	data = "<usersfolder id='temporary' nb_folders='0' nb_users='0' owner='Y'  ownerid='1'><code>temporary</code><label lang='en'>"+karutaStr['en']['temporary_users']+"</label><label lang='fr'>"+karutaStr['fr']['temporary']+"</label></usersfolder>";
+	usersfolders_byid['temporary'] = new UIFactory["UsersFolder"](data);
+	data = "<usersfolder id='inactive' nb_folders='0' nb_users='0' owner='Y'  ownerid='1'><code>1</code><label lang='en'>"+karutaStr['en']['bin']+" - "+karutaStr['en']['inactive_users']+"</label><label lang='fr'>"+karutaStr['fr']['bin']+" - "+karutaStr['fr']['inactive_users']+"</label></usersfolder>";
+	usersfolders_byid['inactive'] = new UIFactory["UsersFolder"](data);
 }
 
 //=====================================================================================================
@@ -964,7 +1098,53 @@ function initusersgroups()
 //=====================================================================================================
 
 //==================================
-function displayGroupPagesNavbar(dest,nb_index,folderid,pageindex)
+function toggleElt(closeSign,openSign,eltid)
+//==================================
+{ // click on open/closeSign
+	var elt = document.getElementById("toggle_"+eltid);
+	elt.classList.toggle(openSign);
+	elt = document.getElementById("collapse_"+eltid);
+	elt.classList.toggle('open');
+	if ($("#toggle_"+eltid).hasClass(openSign))
+	{
+		localStorage.setItem('sidebar'+eltid,'open');
+	} else {
+		localStorage.setItem('sidebar'+eltid,'closed');
+	}
+}
+
+//==================================
+function toggleOpenElt(closeSign,openSign,eltid)
+//==================================
+{ // click on label
+	var cookie = localStorage.getItem('sidebar'+eltid);
+	if (cookie == "closed") {
+		localStorage.setItem('sidebar'+eltid,'open');
+		document.getElementById("toggle_"+eltid).classList.add('openSign');
+		document.getElementById("collapse_"+eltid).classList.add('open');
+	}
+}
+
+//==================================
+function selectElt(type,uuid)
+//==================================
+{ // click on label
+	$('.active').removeClass('active');
+//	$('#'+uuid).addClass('active');
+	document.getElementById(uuid).classList.add('active');
+}
+
+//==================================
+function selectElts(type,list)
+//==================================
+{ // click on label
+	$('.'+type).removeClass('active');
+	for (var i=0;i<list.length;i++) {
+		$('#'+list[i]).addClass('active');
+	}
+}
+//==================================
+function displayUserPagesNavbar(dest,nb_index,folderid,pageindex,type)
 //==================================
 {
 	var html = "";
@@ -972,11 +1152,10 @@ function displayGroupPagesNavbar(dest,nb_index,folderid,pageindex)
 		html += "<span class='badge";
 		if (i==pageindex)
 			html += " active";
-		html += "' onclick=\"loadAndDisplayUsersGroupContentPage('"+dest+"','"+folderid+"','list','"+i+"')\">"+i+"</span>";
+		html += "' onclick=\"loadAndDisplayUsersFolderContentPage('"+dest+"','"+folderid+"','"+type+"','"+i+"')\">"+i+"</span>";
 	}
-	$("#group-navbar-pages").html(html);
-	
-	/* javascript:loadAndDisplayUsersGroupContentPage('folder-users-pages','list','2.1',0,2,'1');
+	$("#navbar-pages").html(html);
+	/* javascript:loadAndDisplayUsersFolderContentPage('folder-users-pages','list','2.1',0,2,'1');
 	var html = [];
 	for (var i=0;i<pagegNavbar_list.length;i++) {
 		html[i] = "";

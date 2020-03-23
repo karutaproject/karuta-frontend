@@ -32,9 +32,9 @@ function fill_main_page(rootid,role)
 		var parentid = $($(UICom.structure.ui[rootid].node).parent()).attr('id');
 		if ($($(UICom.structure.ui[rootid].node).parent())) {
 			g_portfolioid = parentid;
-			g_complex = portfolios_byid[parentid].complex;
-			if (typeof g_complex=='undefined' || g_complex==undefined || g_complex.lenght==0)
-				g_complex = false;
+//			g_complex = portfolios_byid[parentid].complex;
+//			if (typeof g_complex=='undefined' || g_complex==undefined || g_complex.lenght==0)
+//				g_complex = false;
 		} else {
 			rootid = g_portfolio_rootid;
 		}
@@ -126,7 +126,6 @@ function fill_main_page(rootid,role)
 			setVariables(data);
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
-			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 
 			// --------------------------
 			if (g_display_type=="standard" || g_display_type=="basic") {
@@ -184,51 +183,13 @@ function fill_main_page(rootid,role)
 	});
 	$.ajaxSetup({async: false});
 	//=====================================================
+	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 	$(document).click(function(e) {
-		if (!$(e.target).is('.icon-info-sign, .popover-title, .popover-content')) {
-			$('.popover').hide();
+		if (!$(e.target).is('.tooltip')) {
+			$('.tooltip').hide();
 		}
 	});
-	$(document).keyup(function(e){
-		var div = $('div.free-selected');
-		if (div.length>0) {
-			var nodeid = $(div).attr('id').substring(5);
-			console.log(nodeid);
-			var pos = $(div).position();
-			var divtop = pos.top;
-			var divleft = pos.left;
-			switch (e.which) {
-				case 37:
-					$(div).stop().animate({
-						left: '-=1'
-					}); //left arrow key
-					divleft -= 1;
-					UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',divleft);
-					break;
-				case 38:
-					$(div).stop().animate({
-					top: '-=1'
-					}); //up arrow key
-					divtop -= 1;
-					UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',divright);
-					break;
-				case 39:
-					$(div).stop().animate({
-					left: '+=1'
-					}); //right arrow key
-					divleft += 1;
-					UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'left',divleft);
-					break;
-				case 40:
-					$(div).stop().animate({
-					top: '+=1'
-					}); //bottom arrow key
-					divtop += 1;
-					UIFactory["Node"].updateMetadataEpmAttribute(nodeid,'top',divright);
-					break;
-			};
-		}
-	});
+	//=====================================================
 }
 
 //==============================

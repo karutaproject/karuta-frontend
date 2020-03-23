@@ -1,6 +1,5 @@
 
 
-karutaStr['fr'] = new Array();
 //----------------------------------------------------
 karutaStr['fr']['language']="Français";
 karutaStr['fr']['flag-name']="France";
@@ -90,6 +89,7 @@ karutaStr['fr']['menu']="Menu";
 karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - Hauteur : 220<br>&nbsp; - Largeur : 800 divisé par le nombre de colonnes<br>&nbsp;";
 karutaStr['fr']['list-novisible']="Non visible";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
+karutaStr['fr']['see-bin']="Voir la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
 karutaStr["fr"]["button-print"] = "Imprimer";
 karutaStr["fr"]["write-mode"] = "Éditer";
@@ -110,7 +110,7 @@ karutaStr['fr']['code']="Code";
 karutaStr['fr']['value']="Valeur";
 karutaStr['fr']['edit']="Édition";
 karutaStr['fr']['comments']="Information complémentaire";
-karutaStr['fr']['help-label']="Information";
+karutaStr['fr']['help-label']="Aide";
 
 //=========================================
 //========== METADATA =====================
@@ -151,10 +151,10 @@ karutaStr['fr']['veriffunction']="Fonction de vérification";
 karutaStr['fr']['menuroles']="Menus<br/><span style='font-size:smaller'> code_portfolio,tag_sémantique,";
 karutaStr['fr']['menuroles2']="libellé@fr";
 karutaStr['fr']['menuroles3']=",rôles[;autre menu]</span>";
-karutaStr['fr']['menulabels']="Texte Bouton Menu<br/><span style='font-size:smaller'>";
+karutaStr['fr']['menulabels']="Texte bouton Menu<br/><span style='font-size:smaller'>";
 karutaStr['fr']['menulabels2']="libellé@fr";
 karutaStr['fr']['menulabels3']=",rôles[;autre libellé]</span>";
-karutaStr['fr']['help']="Information <br/><span style='font-size:smaller'>";
+karutaStr['fr']['help']="Bulle d'aide <br/><span style='font-size:smaller'>";
 karutaStr['fr']['help2']="texte en français@fr";
 karutaStr['fr']['help3']="</span>";
 karutaStr['fr']['font-size']="Taille police (px)";
@@ -164,15 +164,15 @@ karutaStr['fr']['color']="Couleur de la police";
 karutaStr['fr']['cssclass']="Classe CSS";
 karutaStr['fr']['top']="Position - Haut";
 karutaStr['fr']['left']="Position - Gauche";
-karutaStr['fr']['width']="Largeur";
-karutaStr['fr']['height']="Hauteur";
+karutaStr['fr']['width']="Largeur (en pixels)";
+karutaStr['fr']['height']="Hauteur (en pixels)";
 karutaStr['fr']['public']="Public";
 karutaStr['fr']['text-align']="Alignement";
 karutaStr['fr']['displayview']="Type d'affichage";
 karutaStr['fr']['margin-top']="Marge supérieure (px)";
 karutaStr['fr']['sharedResource']="Ressource partagée";
 karutaStr['fr']['sharedNodeResource']="Ress. du noeud partagée";
-karutaStr['fr']['resizeroles']="Modifier taille imgage";
+karutaStr['fr']['resizeroles']="Modifier taille image";
 karutaStr['fr']['img-size']="Taille image";
 karutaStr['fr']['inline']="Édition en place";
 karutaStr['fr']['edittargetroles']="Éditer cible proxy";
@@ -200,7 +200,7 @@ karutaStr['fr']['encrypted']="Encrypter la ressource";
 karutaStr['fr']['get_rc4key']="Des parties de ce document sont encryptées.\nPremière visite : Choisissez une phrase clé.\nVisites suivantes : Tapez votre phrase clé.";
 karutaStr['fr']['error_rc4key']="Erreur de phrase clé.";
 karutaStr['fr']['seltype']="Présentation ";
-karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> rôle qui partage,rôle destinataire,rôles et/ou courriels,niveau (0-4),durée de vie du lien (en heures),";
+karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> rôle qui partage,rôle visiteur,rôles et/ou courriels destinataires,niveau (0-4),durée de vie du lien (en heures),";
 karutaStr['fr']['shareroles2']="libellé du bouton@fr";
 karutaStr['fr']['shareroles3']="[,condition][;autre partage]";
 karutaStr['fr']['submitted']="Soumis le ";
@@ -231,6 +231,7 @@ karutaStr['fr']['seestart']="Voir - Date début";
 karutaStr['fr']['seeend']="Voir - Date fin";
 karutaStr['fr']['logcode']="Code Log";
 karutaStr['fr']['alt']="Texte alternatif";
+karutaStr['fr']['node-comment']="Commentaires du noeud";
 
 //=========================================
 //========== ADMIN ========================
@@ -243,16 +244,19 @@ karutaStr['fr']['list_roles']="Rôles";
 karutaStr['fr']['list_groups']="Groupes";
 karutaStr['fr']['create-test-user']="Créer un utilisateur test";
 karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre projet, changez le code de projet (partie avant le point)";
+karutaStr['fr']['users-folders']="Dossiers";
+karutaStr['fr']['users-groups']="Groupes";
+karutaStr['fr']['users-in-rootfolder']="Usagers hors dossier";
 
 //=========================================
 //========== PORTFOLIOS ===================
 //=========================================
 
 karutaStr['fr']['projects']="Mes projets";
-karutaStr['fr']['portfolios-not-in-project']="Mes portfolios hors projet";
+karutaStr['fr']['portfolios-not-in-project']="Portfolios hors projet";
 karutaStr['fr']['portfolios']="Mes portfolios";
 karutaStr['fr']['portfolio']="Mon portfolio";
-karutaStr['fr']['bin']="Ma poubelle";
+karutaStr['fr']['bin']="Poubelle";
 karutaStr['fr']['nogroup']="Aucun groupe associé";
 karutaStr['fr']['karuta.model']="Créer un modèle de portfolio";
 karutaStr['fr']['code_portfolio']="Code du portfolio";
@@ -308,6 +312,18 @@ karutaStr['fr']['lastname-label']="Nom";
 karutaStr['fr']['changeOwner']="Changer le propriétaire";
 
 //=========================================
+//========== FOLDERS ======================
+//=========================================
+
+karutaStr['fr']['folders']="Mes dossiers";
+karutaStr['fr']['folders-admin']="Dossiers";
+
+karutaStr['fr']['next']="Suivant >";
+karutaStr['fr']['prev']="< Précédent";
+karutaStr['fr']['karuta.folder']="Créer un dossier de portfolios";
+karutaStr['fr']['create_folder']="Créer un dossier";
+
+//=========================================
 //========== USERS ========================
 //=========================================
 
@@ -348,7 +364,7 @@ karutaStr['fr']['select_role']="Sélectionner un rôle";
 //========== BATCH ========================
 //=========================================
 
-karutaStr['fr']['batch']="Exécuter un script de batch <span class='badge'>Utiliser Firefox pour suivre l'exécution du batch</span>";
+karutaStr['fr']['batch']="Exécuter un script de batch <span style='font-size:70%' class='badge badge-secondary'>Utiliser Firefox pour suivre l'exécution du batch</span>";
 karutaStr['fr']['upload_csv']="Téléverser un fichier CSV";
 karutaStr['fr']['process_csv']="Exécuter";
 karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
@@ -507,3 +523,10 @@ karutaStr['fr']['exec']="Exécuter maintenant";
 karutaStr['fr']['uploaded-by']="Téléversé par";
 karutaStr['fr']['date']="Date";
 karutaStr['fr']['file']="Fichier";
+
+//=========================================
+//========== LOGIN ====================
+//=========================================
+
+karutaStr['fr']['connection-cas1']="Connexion avec un compte universitaire";
+karutaStr['fr']['connection-cas2']="Connexion hors compte universitaire";

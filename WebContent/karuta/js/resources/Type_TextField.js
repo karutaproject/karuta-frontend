@@ -332,5 +332,5 @@ function markFirstWords(html,nb) {
 		end += html.substring(end).indexOf(tableOfWords[i])+tableOfWords[tableOfWords.length-1].length;
 		tableIndex[tableIndex.length] = {'s':tableOfWords[i], 'end':end};
 	}
-	return html.substring(0,tableIndex[tableOfWords.length-1].end) + "<span class='toomuch'><i style='color:red'>" + html.substring(tableIndex[tableOfWords.length-1].end)+"</i></span><!--toomuch-->";
+	return html.substring(0,tableIndex[tableOfWords.length-1].end) + "<i style='color:red;text-decoration: line-through;'>" + html.substring(tableIndex[tableOfWords.length-1].end)+"</i>";
 }
