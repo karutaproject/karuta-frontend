@@ -310,6 +310,8 @@ karutaStr['fr']['username-label']="Login";
 karutaStr['fr']['firstname-label']="Prénom";
 karutaStr['fr']['lastname-label']="Nom";
 karutaStr['fr']['changeOwner']="Changer le propriétaire";
+karutaStr['fr']['add-configpage']="Ajouter la nouvelle page de configuration";
+karutaStr['fr']['add-newwelcomepage']="Ajouter la nouvelle page de bienvenue";
 
 //=========================================
 //========== FOLDERS ======================

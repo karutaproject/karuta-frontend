@@ -137,7 +137,7 @@ function getNavBar(type,portfolioid,edit)
 	var html = "";
 	html += "	<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
 	html += "		<a id='navbar-brand-logo' href='#' class='navbar-brand'>";
-	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/>";
+	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/logofonblanc.jpg'/>";
 	html +="		</a>";
 	if (type!='login') {
 		html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
@@ -658,6 +658,27 @@ function displayPage(uuid,depth,type,langcode) {
 			UICom.structure["ui"][uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
 	}
+	var semtag = UICom.structure.ui[uuid].semantictag;
+	if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
+		html = "<a  class='fas fa-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-toggle='tooltip' data-placement='bottom'></a>";
+		$("#welcome-edit").html(html);
+		var rootid = $(UICom.root.node).attr('id');
+		var databack = false;
+		var callback = "UIFactory.Node.reloadStruct";
+		var param2 = "'"+g_portfolio_rootid+"'";
+		var param3 = null;
+		var param4 = null;
+		html = "			<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		html += karutaStr[LANG]['Add'];
+		html += "			</a>";
+		html += "			<div class='dropdown-menu'>";
+		html += "				<a class='dropdown-item' onclick=\"importBranch('"+rootid+"','karuta.model','configuration-unit',"+databack+","+callback+","+param2+","+param3+","+param4+");\">"+karutaStr[LANG]['add-configpage']+"</a>";
+		html += "				<a class='dropdown-item' onclick=\"importBranch('"+rootid+"','karuta.model','WELCOME',"+databack+","+callback+","+param2+","+param3+","+param4+");\">"+karutaStr[LANG]['add-newwelcomepage']+"</a>";
+		html += "			</div>";
+		$("#welcome-add").html(html);
+	}
+	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
+
 	$("#wait-window").modal('hide');
 }
 

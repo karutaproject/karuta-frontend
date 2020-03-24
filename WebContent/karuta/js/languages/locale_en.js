@@ -245,6 +245,7 @@ karutaStr['en']['list_groups']="Groups";
 karutaStr['en']['create-test-user']="Create a Test User";
 karutaStr['en']['help_text_rename']="To move a portfolio to another project, change the project code (part before the dot)";
 karutaStr['en']['users-folders']="Users Folders";
+karutaStr['en']['users-groups']="Groups";
 karutaStr['en']['users-in-rootfolder']="Users not in folders";
 
 //=========================================
@@ -309,6 +310,8 @@ karutaStr['en']['username-label']="Login";
 karutaStr['en']['firstname-label']="Firstname";
 karutaStr['en']['lastname-label']="Lastname";
 karutaStr['en']['changeOwner']="Change the Owner";
+karutaStr['en']['add-configpage']="Add new Configuration Page";
+karutaStr['en']['add-newwelcomepage']="Add new Welcome Page";
 
 //=========================================
 //========== FOLDERS ======================

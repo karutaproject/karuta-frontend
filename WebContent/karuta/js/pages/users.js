@@ -20,7 +20,7 @@ function fill_list_users(type)
 {
 	setLanguageMenu("fill_list_users()");
 	if (type==null)
-		type="";
+		type="list1";
 	var html = "";
 	html += "<div id='user-header' class='row'>";
 //	html += "	<div id='create-user-button' class='col-1'>";

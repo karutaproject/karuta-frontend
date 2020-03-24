@@ -854,9 +854,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	html += "</form>";
 	$("#"+destid).append($(html));
 	//---------------------------------------------------
-	var rights = this.getRights(this.id);
-	var roles = $("role",rights);
-	var model = roles.length<3;
+	var model = Object.keys(UICom.roles).length<3;
 	//---------------------------------------------------
 	var name = this.asmtype;
 	var semtag =  ($("metadata",this.node)[0]==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
@@ -887,7 +885,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
 			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
 	}
-	if (USER.admin && !model)
+	if (USER.admin && Object.keys(UICom.roles).length>2)
 		this.displayRights('metadata-rights');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');

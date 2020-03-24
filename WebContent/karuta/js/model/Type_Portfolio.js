@@ -2537,18 +2537,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "		<ul class='ml-auto navbar-nav'>";
 	//-------------------- WELCOME PAGE EDIT -----------
 	html += "		<li id='welcome-edit'></li>";
-	if (g_welcome_add && g_designerrole && g_userroles[0]=='designer'){
-		html += "	<li id='welcome-add'>";
-		var databack = false;
-		var callback = "UIFactory['Node'].reloadStruct";
-		var param2 = "'"+g_portfolio_rootid+"'";
-		var param3 = null;
-		var param4 = null;
-		html += "		<a href='#xxx' onclick=\"javascript:importBranch('"+rootid+"','karuta.model','welcome-unit',"+databack+","+callback+","+param2+","+param3+","+param4+");alertHTML('"+karutaStr[LANG]['welcome-added']+"')\">";
-		html += karutaStr[LANG]['welcome-add'];
-		html += "		</a>";
-		html += "	</li>";
-	}
+	html += "		<li id='welcome-add' class='nav-item dropdown'></li>";
 	//-------------------- ACTIONS----------------------
 	var actions = UIFactory.Portfolio.getActions(portfolioid);
 	if (actions!='') {

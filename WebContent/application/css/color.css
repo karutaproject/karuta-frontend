@@ -38,16 +38,15 @@
 	/* ========== portfolio ==========*/
 	--portfolio-navbar-background-color:black;
 	--portfolio-navbar-text-color:#ffffff;
-	
 	--portfolio-sidebar-background-color : #073765;
 	--portfolio-sidebar-text-color:#ffffff;
 	--portfolio-sidebar-selected-border-color:#09bbd9;
 	--portfolio-sidebar-link-selected-color:#09bbd9;
 	--portfolio-sidebar-separator-color:#08a4bf;
 	
-	--page-title-background-color': #d8d8d8;
-	--page-title-subline-color': #09bbd9;
-	--portfolio-text-color': #333;
+	--page-title-background-color: #d8d8d8;
+	--page-title-subline-color: #09bbd9;
+	--portfolio-text-color: #333;
 	--portfolio-section-separator-color: #d8d8d8;
 	--portfolio-link-color:#337ab7;
 	--portfolio-section-title-background-color: #ffffff;

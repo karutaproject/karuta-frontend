@@ -87,8 +87,6 @@ function displayKarutaPage()
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
 					$("a[data-toggle='tooltip']").tooltip({html: true, trigger: 'hover'});
-
-					getAndApplyMainConfiguration();
 				}
 			});
 			//-------------------------------

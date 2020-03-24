@@ -16,6 +16,10 @@
 		border-color: #ccc;
 	}
 
+	body {
+		background-color: var(--list-background-color);
+	}
+
 	// ----General font size ---------------
 	body,
 	.form-control,
@@ -528,6 +532,7 @@
 	}
 
 	.folder-users {
+		margin-top:20px;
 		color : var(--list-element-text-color);
 		background-color: var(--list-element-background-color);
 		.usersfolder-header {
@@ -1029,6 +1034,9 @@
 		.navbar-brand {
 			cursor:pointer;
 		}
+		#welcome-edit{
+			padding-top:9px;
+		}
 	}
 
 
@@ -1073,6 +1081,7 @@
 			}
 		}
 		.row {
+			margin-right:0px;  // bootstrap default -15px;
 			margin-left:0px;  // bootstrap default -15px;
 		}
 		.collapsible {
@@ -1221,7 +1230,7 @@
 	}
 
 	.td-buttons {
-		background-color: var(--portfolio-resource-border-color);
+		background-color: var(--portfolio-buttons-background-color);
 		width: 200px;
 		.buttons {
 			float:none;
@@ -1469,12 +1478,21 @@
 
 
 
+/* ====================== */
+/*     EXEC BATCH         */
+/* ====================== */
+#main-exec-batch,
+#main-exec-report {
+	min-height:300px;
+	color : var(--list-title-color);
+	.button,
+	.badge {
+		background-color:var(--list-button-background-color);
+		color: var(--list-element-text-color);
+	}
+}
 
 /* ====================== */
-#main-exec-batch .btn,
-#main-exec-report .btn {
-	background-color: var(--list-button-background-color);
-}
 
 
 
@@ -1611,17 +1629,7 @@
 	color:var(--list-button-color);
 }
 
-#main-exec-batch,
-#main-exec-report {
-		color:var(--list-icon-section-color);
-}
 
-#main-exec-batch .button,
-#main-exec-report .button {
-	border: 1px solid var(--list-icon-section-color);
-	border-radius:3px;
-	margin-left:5px;
-}
 */
 /* =========#adding_portfolios================================ */
 

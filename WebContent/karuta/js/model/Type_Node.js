@@ -2277,7 +2277,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 		html = "<a  class='fas fa-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-toggle='tooltip' data-placement='bottom'></a>";
 		$("#welcome-edit").html(html);
 	}
-	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
+	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
 }
 
 

@@ -14,6 +14,10 @@ if (new_bck) {
 	bckname = '-new';
 	serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 	serverBCK_API = "../../../karuta-backend"+bckname+"/api";
+	appliname = 'karuta3.0-new';
+	karutaname = 'karuta3.0-new'; // to share the same 'karuta-core' with multiple front-end
+	karuta_url = '../../../' + karutaname;
+
 }
 //-------- LANGUAGES------------
 var languages = [];
