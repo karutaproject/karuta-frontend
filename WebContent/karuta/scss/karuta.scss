@@ -246,9 +246,6 @@
 			cursor:none;
 			font-weight:bold;
 		}
-		.row-label {
-			padding-bottom:5px;
-		}
 		.project {
 			padding:7px;
 //			background-color : var(--list-button-background-color);
@@ -2123,7 +2120,7 @@ button.selected-label {
 .comments {
 	font-style:italic;
 	font-weight:normal;
-	padding:7px;
+//	padding:7px;
 }
 
 .evo-palette {

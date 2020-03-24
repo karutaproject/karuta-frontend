@@ -3075,10 +3075,9 @@ UIFactory["Portfolio"].displayProjectContent = function(dest,parentcode,langcode
 				portfolio_label = '- no label in '+languages[langcode]+' -';
 			html += "<div id='projectcontent_"+portfolio.id+"' class='project-header'>";
 			html += "	<div class='row row-label'>";
-			html += "		<div class='col-1'/>";
 			html += "		<div class='col-4 project-label' id='portfoliolabel_"+portfolio.id+"' >"+portfolio_label+"</div>";
 			html += "		<div class='col-2 d-none d-md-block project-label'>"+owner+"</div>";
-			html += "		<div class='col-3 d-none d-sm-block comments' id='project-comments_"+$(portfolios_byid[portfolio.id].root).attr("id")+"'> </div><!-- comments -->";
+			html += "		<div class='col-4 d-none d-sm-block comments' id='project-comments_"+$(portfolios_byid[portfolio.id].root).attr("id")+"'> </div><!-- comments -->";
 			html += "		<div class='col-1'>";
 			//------------ buttons ---------------
 			html += "			<div class='dropdown portfolio-menu'>";
@@ -3121,6 +3120,7 @@ UIFactory["Portfolio"].displayProjectContent = function(dest,parentcode,langcode
 			html += "</div><!-- class='project'-->"
 			$("#"+dest).append($(html));
 			//----------------------
+			UIFactory["Portfolio"].displayComments('project-comments_'+$(portfolios_byid[portfolio.id].root).attr("id"),portfolio);
 			var portfolio_list = "";
 			for (var j=0; j<portfolios_list.length;j++){
 				var portfolio1 = portfolios_list[j];

@@ -116,6 +116,7 @@ UIFactory["Image"] = function( node )
 	}
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	this.display = {};
+	this.displayType = {};
 };
 
 //==================================
@@ -163,6 +164,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (dest!=null) {
 		this.display[dest]=langcode;
+		this.displayType[dest]=type;
 	}
 	if (type==null)
 		type='default';
@@ -220,7 +222,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='editor'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100' "+alt+" />";		
+		html += "<img uuid='edit-img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100' "+alt+" />";		
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='block') {
@@ -402,7 +404,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var html ="";
-	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,null,langcode)+"</span> ";
+	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,'editor',langcode)+"</span> ";
 	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html +=" <div id='divfileupload_"+this.id+"_"+langcode+"' >";
 	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
@@ -556,6 +558,6 @@ UIFactory["Image"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
-		this.displayView(dest,null,this.display[dest]);
+		this.displayView(dest,this.displayType[dest],this.display[dest]);
 	};		
 };

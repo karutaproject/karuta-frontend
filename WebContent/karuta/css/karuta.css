@@ -220,9 +220,6 @@ body,
   cursor: none;
   font-weight: bold;
 }
-#project-portfolios .row-label {
-  padding-bottom: 5px;
-}
 #project-portfolios .project {
   padding: 7px;
   color: var(--list-element-text-color);
@@ -1945,7 +1942,6 @@ button.selected-label {
 .comments {
   font-style: italic;
   font-weight: normal;
-  padding: 7px;
 }
 
 .evo-palette {

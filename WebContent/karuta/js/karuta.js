@@ -154,7 +154,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='mr-auto navbar-nav'>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
-	if (type=='login') {
+	if (type=='login' || type=="create_account") {
 		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
 	} else {
 		html += "			<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
@@ -162,32 +162,23 @@ function getNavBar(type,portfolioid,edit)
 	}
 //	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
-	if (languages.length>1) 
-		if(type=="create_account") {
-			html += "			<ul id='navbar-language' class='nav navbar-nav'>";
-			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
-			html += "					<ul class='dropdown-menu'>";
-			for (var i=0; i<languages.length;i++) {
-				html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getInputs());\"><img width='20px;' src='"+karuta_url+"./karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
-			}
-			html += "					</ul>";
-			html += "				</li>";
-			html += "			</ul>";
-		} else {
-			html += "	<li id='navbar-language' class='nav-item dropdown'>";
-			html += "		<a class='nav-link dropdown-toggle' href='#' id='languageDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-			html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
-			html += "		</a>";
-			html += "		<div class='dropdown-menu' aria-labelledby='languageDropdown'>";
-			if(type=="login")
-				html += getLanguageMenu("displayKarutaLogin();");
-			else
-				html += getLanguageMenu("setWelcomeTitles();fill_list_page();$('#navigation-bar').html(getNavBar('list',null));$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
-			html += "		</div>";
-			html += "	</li>";
-			}
+	if (languages.length>1) {
+		html += "	<li id='navbar-language' class='nav-item dropdown'>";
+		html += "		<a class='nav-link dropdown-toggle' href='#' id='languageDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
+		html += "		</a>";
+		html += "		<div class='dropdown-menu' aria-labelledby='languageDropdown'>";
+		if(type=="login")
+			html += getLanguageMenu("displayKarutaLogin();");
+		else if(type=="create_account")
+			html += getLanguageMenu("displayKarutaCreateAccount();");
+		else
+			html += getLanguageMenu("setWelcomeTitles();fill_list_page();$('#navigation-bar').html(getNavBar('list',null));$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
+		html += "		</div>";
+		html += "	</li>";
+	}
 	//-----------------ACTIONS-------------------------------
-	if (type!='login' && USER!=undefined) {
+	if (type!='login' && type!='create_account' &&USER!=undefined) {
 		if (USER.admin || (USER.creator && !USER.limited) ) {
 			html += "		<li id='navbar-actions' class='nav-item dropdown'>";
 			html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
@@ -222,7 +213,7 @@ function getNavBar(type,portfolioid,edit)
 			html += "		</li>";
 		}
 		//-----------------NEW WINDOW-----------------------------------------
-		if (type!='login' && USER!=undefined) {
+		if (type!='login' && type!='create_account' && USER!=undefined) {
 			if (USER.admin || (USER.creator && !USER.limited) ) {
 				html += "	<li class='nav-item icon'>";
 				html += "		<a class='nav-link' href='"+window.location+"' target='_blank' data-title='"+karutaStr[LANG]["button-new-window"]+"' data-toggle='tooltip' data-placement='bottom'><i class='far fa-clone'></i></a>";
