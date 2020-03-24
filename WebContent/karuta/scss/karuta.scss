@@ -707,25 +707,41 @@
 		}
 	}
 
-//========================================================
+/* ====================== */
+/*  PAGE PORTFOLIOGROUP   */
+/* ====================== */
 
-#main-portfoliosgroup .btn,
-//#main-usersgroup .btn,
-#main-exec-batch .btn,
-#main-exec-report .btn {
-	background-color: var(--list-button-background-color);
-}
-
-
-/*
-	
-	
-	#usersgroups .usersgroup-users,
-	.usersgroup,
-	.portfoliosgroup {
-		background-color: var(--list-element-background-color);
+	#main-portfoliosgroup {
+		color: var(--list-element-text-color);
+		.btn {
+			color: var(--list-element-text-color);
+			padding-left:9px;
+			padding-right:9px;
+			background-color: var(--list-element-background-color);
+		}
+		.portfoliosgroup{
+			margin-top:5px;
+			background-color:var(--list-menu-background-color);
+			.btn {
+				height:25px;
+			}
+			.row-label {
+				padding:5px;
+			}
+		}
+		.portfoliosgroup-content {
+			background-color: var(--list-element-background-color);
+			.btn {
+				background-color: var(--list-button-background-color);
+			}
+			.row {
+				padding:5px;
+			}
+		}
 	}
-*/
+
+
+
 /* ====================== */
 /*     EDIT WINDOW        */
 /* ====================== */
@@ -1442,17 +1458,12 @@
 
 
 
-/* ====================== */
-/*  PAGE PORTFOLIOGROUP   */
-/* ====================== */
-
-	.portfoliosgroup .btn {
-		height:25px;
-		padding-left:9px;
-		padding-right:9px;
-	}
 
 /* ====================== */
+#main-exec-batch .btn,
+#main-exec-report .btn {
+	background-color: var(--list-button-background-color);
+}
 
 
 

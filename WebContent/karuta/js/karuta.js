@@ -197,20 +197,21 @@ function getNavBar(type,portfolioid,edit)
 			html += "				<a class='dropdown-item' onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</a>";
 			//-----------------
 			if (USER.admin) {
-				if ($("#main-portfoliosgroup").length && $("#main-portfoliosgroup").html()!="")
-					html += "		<a class='dropdown-item' onclick='show_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a>";
-				else
-					html += "		<a class='dropdown-item' onclick='display_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a>";
-				//-----------------
 				if ($("#main-user").length && $("#main-user").html()!="")
 					html += "		<a class='dropdown-item' onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a>";
 				else
 					html += "		<a class='dropdown-item' onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</a>";
 				//-----------------
+				if ($("#main-portfoliosgroup").length && $("#main-portfoliosgroup").html()!="")
+					html += "		<a class='dropdown-item' onclick='show_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a>";
+				else
+					html += "		<a class='dropdown-item' onclick='display_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a>";
+				//-----------------
 				if ($("#main-usersgroup").length && $("#main-usersgroup").html()!="")
 					html += "		<a class='dropdown-item' onclick='show_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a>";
 				else
 					html += "		<a class='dropdown-item' onclick='display_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a>";
+				//-----------------
 				if (typeof specificmenus!='undefined' &&  specificmenus)
 					html += specificmenushtml();
 			}

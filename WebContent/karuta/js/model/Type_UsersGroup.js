@@ -1120,7 +1120,7 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type,lang)
 			html += "			<div class='dropdown-menu  dropdown-menu-right'>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
-//			html += "				<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].callAddUsers('"+this.id+"')\" ><i class='fa fa-user-plus'></i> "+karutaStr[LANG]["add_users"]+"</a>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].callAddUsers('"+this.id+"')\" ><i class='fa fa-user-plus'></i> "+karutaStr[LANG]["add_users"]+"</a>";
 			html += "			</div>";
 		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
 			html += "			<button data-toggle='dropdown' class='btn dropdown-toggle' aria-expanded='false' style='visibility:hidden'></button>";
@@ -1310,8 +1310,7 @@ UIFactory["UsersGroup"].addUsers = function(gid)
 			url : url2,
 			data : "",
 			success : function(data) {
-				var group_type = "UsersGroup";
-				toggleGroup(group_type,gid,'UIFactory.UsersGroup.displayUsers','list',null);
+				display_list_usersgroups();
 			},
 			error : function(jqxhr,textStatus) {
 				alertHTML("Error : "+jqxhr.responseText);

@@ -2134,8 +2134,8 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
-	UIFactory.UsersGroup.displaySelectMultiple('sharing_users');
-	/*	if (Users_byid.length>0) { // users loaded
+//	UIFactory.UsersGroup.displaySelectMultiple('sharing_users');
+		if (Users_byid.length>0) { // users loaded
 		UIFactory["User"].displaySelectMultipleActive('sharing_users');
 		//--------------------------
 		$.ajax({
@@ -2174,7 +2174,7 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 			}
 		});
 	}
-	*/
+	
 	//----------------------------------------------------------------
 	$.ajax({
 		type : "GET",

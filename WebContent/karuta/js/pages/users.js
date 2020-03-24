@@ -54,7 +54,7 @@ function fill_list_users(type)
 	//--------------------USERS V2--------------------------------------
 	html += "<h3 id='users-in-rootfolder' style='display:none'>";
 	html += "	<span id='users-label'>"+karutaStr[LANG]['active_users']+"</span>&nbsp<span class='users-nb badge' id='users-nb'></span>";
-	html += "	<button class='btn list-btn' onclick=\"UIFactory.UsersFolder.loadAndDisplayContent('folder-users','0');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see"] + "</button>";
+	html += "	<button class='btn list-btn' onclick=\"fill_list_usersOLD('active');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see"] + "</button>";
 	html += "</h3>";
 	html += "<div id='usersfolder_0' class='xxxnested'></div>";
 
@@ -69,7 +69,7 @@ function fill_list_users(type)
 		//---------------------BIN V2-------------------------------------
 		html += "<h3 id='users-in-bin'  style='display:none'>";
 		html += "<span id='bin-usersfolders-label' class='treeNode'>"+karutaStr[LANG]['inactive_users']+"</span>&nbsp<span class='bin-nb badge' id='nb_folders_inactive'></span>";
-		html += "<button class='btn list-btn' onclick=\"UIFactory.UsersFolder.loadAndDisplayContent('folder-users','1');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see"] + "</button>";
+		html += "<button class='btn list-btn' onclick=\"fill_list_usersOLD('inactive');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see"] + "</button>";
 		html += "</h3>";
 	}
 	//-----------------------------------------------------------
@@ -92,11 +92,16 @@ function fill_list_users(type)
 		if (code == 13)
 			searchUser();
 	});
-	if (karuta_backend_version.startsWith("x2.")) {
+	if (karuta_backend_version.startsWith("2.")) {
 		$("#usersfolders").hide();
 		$("#bin-usersfolders").hide();
 		$("#users-in-rootfolder").show();
 		$("#users-in-bin").show();
+//		} else if (folderid=="1" && usersfolders_byid[folderid]==undefined) {
+//			$("#folder-users").html("<div id='folder-users-inactive'></div>");
+//			fill_list_usersOLD();
+//		}
+
 	} else {
 		initUsersFolders();
 		UIFactory.UsersFolder.loadAndDisplayStruct('usersfolder_active','active',true,type);  // active users
@@ -194,7 +199,7 @@ function toggleUsersList(list) {
 }
 
 //==============================
-function fill_list_usersOLD()
+function fill_list_usersOLD(type)
 //==============================
 {
 	$.ajax({
@@ -211,8 +216,10 @@ function fill_list_usersOLD()
 				url : serverBCK_API+"/users",
 				success : function(data) {
 					UIFactory["User"].parse(data);
-					UIFactory["User"].displayActive('folder-users-active','list');
-					UIFactory["User"].displayInactive('folder-users-inactive','list');
+					if (type=='active')
+						UIFactory["User"].displayActive('list1-folder-users','list');
+					else
+						UIFactory["User"].displayInactive('list1-folder-users','list');
 				}
 			});
 			//----------------

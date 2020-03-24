@@ -895,13 +895,6 @@ UIFactory.UsersFolder.loadAndDisplayContent = function (dest,folderid,reload,typ
 	$("#wait-window").show();
 	//---------------------
 	localStorage.setItem(type,folderid);
-	if (folderid=="0" && usersfolders_byid[folderid]==undefined) {
-		$("#folder-users").html("<div id='folder-users-active'></div>");
-		fill_list_usersOLD();
-	} else if (folderid=="1" && usersfolders_byid[folderid]==undefined) {
-		$("#folder-users").html("<div id='folder-users-inactive'></div>");
-		fill_list_usersOLD();
-	} else {
 		//--------Folders------------------
 		if (usersfolders_byid[folderid].nb_folders > 0){
 			UIFactory.UsersFolder.loadAndDisplayStruct('collapse_usersfolder_'+folderid,folderid,reload,type)
@@ -920,7 +913,6 @@ UIFactory.UsersFolder.loadAndDisplayContent = function (dest,folderid,reload,typ
 			usersfolders_byid[folderid].displayFolderContentPage(dest_page,type);
 		}
 		//-------------------------------
-	}
 	$(window).scrollTop(0);
 	$("#wait-window").hide();
 }

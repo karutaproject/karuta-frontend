@@ -661,21 +661,38 @@ body,
   margin-bottom: 2px;
 }
 
-#main-portfoliosgroup .btn,
-#main-exec-batch .btn,
-#main-exec-report .btn {
+/* ====================== */
+/*  PAGE PORTFOLIOGROUP   */
+/* ====================== */
+#main-portfoliosgroup {
+  color: var(--list-element-text-color);
+}
+#main-portfoliosgroup .btn {
+  color: var(--list-element-text-color);
+  padding-left: 9px;
+  padding-right: 9px;
+  background-color: var(--list-element-background-color);
+}
+#main-portfoliosgroup .portfoliosgroup {
+  margin-top: 5px;
+  background-color: var(--list-menu-background-color);
+}
+#main-portfoliosgroup .portfoliosgroup .btn {
+  height: 25px;
+}
+#main-portfoliosgroup .portfoliosgroup .row-label {
+  padding: 5px;
+}
+#main-portfoliosgroup .portfoliosgroup-content {
+  background-color: var(--list-element-background-color);
+}
+#main-portfoliosgroup .portfoliosgroup-content .btn {
   background-color: var(--list-button-background-color);
 }
+#main-portfoliosgroup .portfoliosgroup-content .row {
+  padding: 5px;
+}
 
-/*
-
-
-	#usersgroups .usersgroup-users,
-	.usersgroup,
-	.portfoliosgroup {
-		background-color: var(--list-element-background-color);
-	}
-*/
 /* ====================== */
 /*     EDIT WINDOW        */
 /* ====================== */
@@ -1314,15 +1331,11 @@ h3 {
 }
 
 /* ====================== */
-/*  PAGE PORTFOLIOGROUP   */
-/* ====================== */
-.portfoliosgroup .btn {
-  height: 25px;
-  padding-left: 9px;
-  padding-right: 9px;
+#main-exec-batch .btn,
+#main-exec-report .btn {
+  background-color: var(--list-button-background-color);
 }
 
-/* ====================== */
 #refresh {
   font-size: 150%;
   float: right;
