@@ -52,6 +52,7 @@ function fill_list_users(type)
 	html += "</div><!--div id='usersfolders'-->";
 
 	//--------------------USERS V2--------------------------------------
+	html += "<div id='user-create' onclick='UIFactory.User.callCreate()'>"+karutaStr[LANG]['create_user']+"</div>";
 	html += "<h3 id='users-in-rootfolder' style='display:none'>";
 	html += "	<span id='users-label'>"+karutaStr[LANG]['active_users']+"</span>&nbsp<span class='users-nb badge' id='users-nb'></span>";
 	html += "	<button class='btn list-btn' onclick=\"fill_list_usersOLD('active');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see"] + "</button>";

@@ -989,7 +989,7 @@ UIFactory["User"].prototype.getAdminUserMenu = function(type,gid)
 {	
 	var html = "";
 	html += "<div class='btn-group'>";
-	if (type==null) {
+	if (type=='list') {
 		html += " <span class='button btn' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
 		html += "<span class='fas fa-pencil-alt'/>";
 		html += "</span>";
@@ -999,14 +999,14 @@ UIFactory["User"].prototype.getAdminUserMenu = function(type,gid)
 			html += "</span>";
 		}
 	}
-	if (type=='list' || type=="list-ondrop") {
+	if (type=="list-ondrop") {
 		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 		html += "<span class='fa fa-trash-alt'/>";
 		html += "</span>";				
 	}
 
 	//----------------------------------
-	if (type!='list3' && type!='list' && type!="list-ondrop") {
+	if (type!='list3' && type!="list-ondrop") {
 		//----------------------------------
 		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
 		if (this.username_node.text()!='root' && this.username_node.text()!='public') {

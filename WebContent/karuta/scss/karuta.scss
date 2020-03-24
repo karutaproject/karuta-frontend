@@ -154,8 +154,7 @@
 			}
 		}
 		.portfolio-row {
-			margin-left: 1px;
-			margin-right: 1px;
+			margin: 2px;
 			color: var(--list-element-text-color);
 			&:hover {
 				background-color: var(--list-element-background-color-complement);
@@ -684,6 +683,18 @@
 			}
 		}
 	}
+
+	#user-create {
+		color : var(--list-element-text-color);
+		background-color: var(--list-button-background-color);
+		margin-top: 20px;
+		padding: 4px 15px;
+		font-size: 14px;
+		display: inline-block;
+		cursor: pointer;
+		border-radius: 3px;
+	}
+
 	#group-users {
 		color : var(--list-element-text-color);
 		background-color: var(--list-element-background-color);
