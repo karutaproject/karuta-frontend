@@ -365,6 +365,7 @@
 		content: "\25BC"; 
 	}
 
+/*
 .portfolio .closeSign::before,
 .portfolio .openSign::before{
   color: var(--list-element-text-color);
@@ -428,6 +429,23 @@
   background-color: var(--list-element-background-color);
 }
 
+	
+.oembedall-closehide{
+	display:none;
+}
+
+
+div.oembedall-container {
+	margin-top:-10px;
+}
+
+
+.thereismore {
+	position:relative;
+	top:-10px;
+}
+
+*/
 
 /* ====================== */
 /*     PAGE USERS         */
@@ -777,6 +795,14 @@
 			overflow-y: visible;
 			max-height:none;
 		}
+		.dropdown-menu{
+			max-height:350px;
+			overflow-y:auto;
+			width:100%;
+		}
+		.dropdown-toggle{
+//			border: 1px solid var(--edit-window-border-color);
+		}
 	}
 
 	#edit-window-body-node .btn,
@@ -795,7 +821,6 @@
 		width:70%;
 		max-width: none;
 	}
-
 
 /* ====================== */
 /*    BUTTONS - MENUS     */
@@ -819,18 +844,6 @@
 		}
 	}
 	
-	/* --- EDIT-WINDOW -----*/
-	
-	#edit-window-body{
-		.dropdown-menu{
-			max-height:350px;
-			overflow-y:auto;
-			width:100%;
-		}
-		.dropdown-toggle{
-//			border: 1px solid var(--edit-window-border-color);
-		}
-	}
 
 /* ====================== */
 /*      NAVBAR            */
@@ -1101,6 +1114,10 @@
 //		}
 
 	}
+	
+	.chkbox-report {
+		display:none;
+	}
 
 	.standard-struct-default {
 		cursor:pointer;
@@ -1247,7 +1264,7 @@
 		}
 	}
 
-/*  --- node --- */
+	/*  --- node --- */
 
 
 	.node-header {
@@ -1269,25 +1286,25 @@
 		padding-right:20px;
 	}
 
-.content .resource-standard .title-subline {
-	border-bottom:0px solid var(--page-title-subline-color);
-	margin-top:0px;
-}
-
-.inside-full {
-	padding:5px;
-	margin-top: 0;
-	margin-bottom: 0;
-	min-height: 34px;
-}
-
-.inside-full-height {
-	padding-top:5px;
-	padding-bottom:7px;
-	margin-top: 0;
-	margin-bottom: 0;
-	min-height: 34px;
-}
+	.content .resource-standard .title-subline {
+		border-bottom:0px solid var(--page-title-subline-color);
+		margin-top:0px;
+	}
+	
+	.inside-full {
+		padding:5px;
+		margin-top: 0;
+		margin-bottom: 0;
+		min-height: 34px;
+	}
+	
+	.inside-full-height {
+		padding-top:5px;
+		padding-bottom:7px;
+		margin-top: 0;
+		margin-bottom: 0;
+		min-height: 34px;
+	}
 
 	.resource-standard {
 		padding-top:10px;
@@ -1338,7 +1355,7 @@
 		}
 	}
 
-/*------ CARD --------*/
+	/*------ CARD --------*/
 
 	.card-header {
 		.buttons { 
@@ -1478,16 +1495,16 @@
 /* ====================== */
 /*     EXEC BATCH         */
 /* ====================== */
-#main-exec-batch,
-#main-exec-report {
-	min-height:300px;
-	color : var(--list-title-color);
-	.button,
-	.badge {
-		background-color:var(--list-button-background-color);
-		color: var(--list-element-text-color);
+	#main-exec-batch,
+	#main-exec-report {
+		min-height:300px;
+		color : var(--list-title-color);
+		.button,
+		.badge {
+			background-color:var(--list-button-background-color);
+			color: var(--list-element-text-color);
+		}
 	}
-}
 
 /* ====================== */
 
@@ -1500,13 +1517,6 @@
 //		margin-right:20%;
 		cursor:pointer;
 	}
-
-
-
-#welcome-baseline{
-	color:var(--welcome-subtitle-color);
-	text-align:center;
-}
 
 
 #main-body-list {
@@ -2088,7 +2098,18 @@ button.selected-label {
 	margin-top:20px;
 }
 
+/* ====================
+	REPORT
+   ====================*/
 
+	.report {
+		.cssinfo {
+			display:block;
+		}
+		.chkbox-report {
+			display:in-line;
+		}
+	}
 
 /* ====================
 	divers
@@ -2106,9 +2127,6 @@ button.selected-label {
 	display:none;
 }
 
-.report .cssinfo {
-	display:block
-}
 
 #header .metainfo {
 	min-height:14px;
@@ -2594,142 +2612,7 @@ table.tablesorter th.restore {
 	height:100%;
 }
 
-/* ====================
-	BLOCK
-   ====================*/
-	.DocumentBlock,
-	.ImageBlock,
-	.URLBlock {
-		.content {
-			display:none;
-		}
-		.resource-label {
-			visibility : hidden;
-		}
-	}
 
-
-
-:root{
-	--block-height:220px;
-	--block-img-height:218px;
-	}
-
-.oembedall-closehide{
-	display:none;
-}
-
-.block .buttons-menus{
-	float:right;
-	margin-top:2px;
-}
-
-div.oembedall-container {
-	margin-top:-10px;
-}
-
-.asmBlockContainer:first-of-type {
-	margin-top:20px;
-}
-.asmBlockContainer .col-md-12 {
-	padding-left:0px;
-	padding-right:0px;
-}  
-
-.block {
-	height:var(--block-height);
-	border: 1px lightGrey solid;
-	margin-bottom:20px;
-}
-
-.block .asmnode {
-	margin-top:0px;
-}
-
-.ProxyBlock a,
-.DocumentBlock a,
-.URLBlock a {
-	color: inherit;
-	text-align:center;
-}
-
-//----------------------
-.block .ProxyBlock,
-.block .ImageBlock,
-.block .DocumentBlock,
-.block .URLBlock,
-//----------------------
-.ImageBlock .ImageBlock,
-.DocumentBlock .DocumentBlock,
-.URLBlock .URLBlock {
-	height:var(--block-img-height);
-	text-align:center;
-	background-repeat: no-repeat;
-	background-position: center center;
-//	background-size: cover;
-}
-
-.block .btn-group{
-	font-size:12px;
-}
-
-.block .resource-Image{
-	display: inline-block;
-	overflow:hidden;
-	height:var(--block-img-height);
-	text-align:center;
-	width:100%;
-	position:relative;
-}
-
-
-//----------------------
-.block .docblock-title,
-.block .no-document .docblock-title,
-//----------------------
-.URLBlock .no-document .docblock-title,
-.URLBlock .docblock-title,
-.DocumentBlock .no-document .docblock-title,
-.DocumentBlock .docblock-title {
-	display: inline-block;
-	margin-top:90px;
-	margin-left:10px;
-	margin-right:10px;
-	padding-left:10px;
-	padding-right:10px;
-	background-color:white;
-	opacity: 0.8;
-	-moz-box-shadow: 10px 10px 5px #888;
-	-webkit-box-shadow: 10px 10px 5px #888;
-	box-shadow: 10px 10px 5px #888;
-	font-size:16px;
-}
-
-.block .asmUnitStructure{
-	height:var(--block-height);
-}
-
-.block .resource-TextField{
-	padding:7px;
-	overflow:hidden;
-	height:var(--block-img-height);
-}
-
-.block .resource-Oembed{
-	height:var(--block-img-height);
-}
-
-
-.block .oembedall-container div:last-child {
-	display:none;
-}
-
-
-
-.thereismore {
-	position:relative;
-	top:-10px;
-}
 /* ===========================
 	DASHBOARD CSV PDF BUTTONS
    ===========================*/
@@ -2754,14 +2637,14 @@ div.oembedall-container {
 		width:80%;
 	}
 
-
+/*
 #archive-button,
 #search-button {
 	background-color:var(--list-button-background-color);
 	color:var(--list-button-color);
 }
 
-/*
+
 #search-label {
 	float:right;
 	color:var(--list-icon-section-color);
@@ -2769,13 +2652,13 @@ div.oembedall-container {
 	height:34px;
 	margin-top:5px;
 }
-*/
+
 
 
 #list {
 	padding-bottom:10px;
 }
-
+*/
 
 
 
@@ -2992,8 +2875,7 @@ div.oembedall-container {
 
 /* ===========================
 	USER PORTFOLIO LIST
-   ===========================*/
-
+   ===========================
 #displayListPortfolios td {
 	padding : 5px;
 }
@@ -3006,6 +2888,7 @@ div.oembedall-container {
 	font-weight:900;
 	text-transform: uppercase;
 }
+*/
 
 /* ===========================
 	autocomplete
@@ -3045,47 +2928,6 @@ div.oembedall-container {
 	/*when navigating through the items using the arrow keys:*/
 	background-color: DodgerBlue !important; 
 	color: #ffffff; 
-	}
-
-/* ===========================
-	For backward compatibility
-   ===========================*/
-
-	.page-welcome #welcome-image {
-		padding-top: 50px;
-		width: 100%;
-		height: 250px;
-		.welcome-box {
-			margin-left:auto;
-			margin-right:auto;
-			width:50%;
-			min-width:200px;
-			padding:3px;
-			border:1px solid var(--list-welcome-box-border-color);
-		}
-		.welcome-subbox {
-			width:100%;
-			height:100%;
-			background-color:var(--list-welcome-box-background-color);
-			padding:10px;
-			opacity: 0.6;
-		}
-		.welcome-line {
-			border-bottom: 1px solid var(--list-welcome-subline-color);
-			width:25%;
-			margin-left:auto;
-			margin-right:auto;
-		}
-		.welcome-title {
-			width:100%;
-			text-align:center;
-			color: var(--list-welcome-title-color);
-			font-size:40px;
-		}
-		.welcome-baseline {
-			color: var(--list-welcome-subtitle-color);
-			font-size:24px;
-		}
 	}
 
 /* ===========================
@@ -3147,3 +2989,170 @@ div.oembedall-container {
 			display:block !important;
 		}
 	}
+
+
+/* =================================================================================================
+   ============================	For backward compatibility  ========================================
+   =================================================================================================*/
+
+	.page-welcome {
+		#welcome-image {
+			padding-top: 50px;
+			width: 100%;
+			height: 245px;
+			.welcome-box {
+				margin-left:auto;
+				margin-right:auto;
+				width:50%;
+				min-width:200px;
+				padding:3px;
+				border:1px solid var(--list-welcome-box-border-color);
+			}
+			.welcome-subbox {
+				width:100%;
+				height:100%;
+				background-color:var(--list-welcome-box-background-color);
+				padding:10px;
+				opacity: 0.6;
+			}
+			.welcome-line {
+				border-bottom: 1px solid var(--list-welcome-subline-color);
+				width:25%;
+				margin-left:auto;
+				margin-right:auto;
+			}
+			.welcome-title {
+				width:100%;
+				text-align:center;
+				color: var(--list-welcome-title-color);
+				font-size:40px;
+			}
+			.welcome-baseline {
+				color: var(--list-welcome-subtitle-color);
+				font-size:24px;
+			}
+		}
+	}
+
+/* ====================
+	BLOCK
+   ====================*/
+	.DocumentBlock,
+	.ImageBlock,
+	.URLBlock {
+		.content {
+			display:none;
+		}
+		.resource-label {
+			visibility : hidden;
+		}
+	}
+
+
+
+	:root{
+		--block-height:220px;
+		--block-img-height:218px;
+	}
+
+	.asmBlockContainer:first-of-type {
+		margin-top:20px;
+	}
+	.asmBlockContainer .col-md-12 {
+		padding-left:0px;
+		padding-right:0px;
+	}  
+
+	.block .buttons-menus{
+		float:right;
+		margin-top:2px;
+	}
+
+	.block {
+		height:var(--block-height);
+		border: 1px lightGrey solid;
+		margin-bottom:20px;
+	}
+
+	.block .asmnode {
+		margin-top:0px;
+	}
+
+	.ProxyBlock a,
+	.DocumentBlock a,
+	.URLBlock a {
+		color: inherit;
+		text-align:center;
+	}
+	
+	//----------------------
+	.block .ProxyBlock,
+	.block .ImageBlock,
+	.block .DocumentBlock,
+	.block .URLBlock,
+	//----------------------
+	.ImageBlock .ImageBlock,
+	.DocumentBlock .DocumentBlock,
+	.URLBlock .URLBlock {
+		height:var(--block-img-height);
+		text-align:center;
+		background-repeat: no-repeat;
+		background-position: center center;
+	//	background-size: cover;
+	}
+
+	.block .btn-group{
+		font-size:12px;
+	}
+	
+	.block .resource-Image{
+		display: inline-block;
+		overflow:hidden;
+		height:var(--block-img-height);
+		text-align:center;
+		width:100%;
+		position:relative;
+	}
+
+
+	//----------------------
+	.block .docblock-title,
+	.block .no-document .docblock-title,
+	//----------------------
+	.URLBlock .no-document .docblock-title,
+	.URLBlock .docblock-title,
+	.DocumentBlock .no-document .docblock-title,
+	.DocumentBlock .docblock-title {
+		display: inline-block;
+		margin-top:90px;
+		margin-left:10px;
+		margin-right:10px;
+		padding-left:10px;
+		padding-right:10px;
+		background-color:white;
+		opacity: 0.8;
+		-moz-box-shadow: 10px 10px 5px #888;
+		-webkit-box-shadow: 10px 10px 5px #888;
+		box-shadow: 10px 10px 5px #888;
+		font-size:16px;
+	}
+	
+	.block .asmUnitStructure{
+		height:var(--block-height);
+	}
+	
+	.block .resource-TextField{
+		padding:7px;
+		overflow:hidden;
+		height:var(--block-img-height);
+	}
+	
+	.block .resource-Oembed{
+		height:var(--block-img-height);
+	}
+	
+	
+	.block .oembedall-container div:last-child {
+		display:none;
+	}
+	

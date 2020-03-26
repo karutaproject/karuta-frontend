@@ -99,7 +99,7 @@ UIFactory["Node"] = function( node )
 			this.structured_resource = new UIFactory[this.xsi_type](node);
 		}
 		//------------------------------
-		this.loaded = !(g_complex); // if not complex all nodes are loaded
+//		this.loaded = !(g_complex); // if not complex all nodes are loaded
 	}
 	catch(err) {
 		alertHTML("UIFactory['Node']--flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype);
@@ -537,6 +537,9 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	if (!gotView)
 		label_html += " "+ this.getView('std_node_'+uuid);
 	$("#label_node_"+uuid).html(label_html);
+	//--------- chckbox comment in report--------------
+	var html_chckbox = "<span class='chkbox-report'>&nbsp;<input type='checkbox' onchange=\"toggleCommentreport('"+uuid+"')\">&nbsp;Comment<span>";
+	$("div[class='title']","#label_node_"+uuid).append(html_chckbox);
 	//-------------- buttons --------------------------
 	if (edit) {
 		if (this.semtag.indexOf("bubble_level1")>-1)

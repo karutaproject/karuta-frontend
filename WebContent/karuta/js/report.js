@@ -409,7 +409,8 @@ g_report_actions['table'] = function (destid,action,no,data)
 	}
 	//---------------------------
 	var style = r_replaceVariable($(action).attr("style"));
-	var html = "<table id='"+destid+'-'+no+"' style='"+style+"'></table>";
+	var cssclass = r_replaceVariable($(action).attr("class"));
+	var html = "<table id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></table>";
 	$("#"+destid).append($(html));
 	//---------------------------
 	var actions = $(action).children();
@@ -433,7 +434,8 @@ g_report_actions['row'] = function (destid,action,no,data)
 	}
 	//---------------------------
 	var style = r_replaceVariable($(action).attr("style"));
-	var html = "<tr id='"+destid+'-'+no+"' style='"+style+"'></table>";
+	var cssclass = r_replaceVariable($(action).attr("class"));
+	var html = "<tr id='"+destid+'-'+no+"' style='"+style+"' class='"+cssclass+"'></table>";
 	$("#"+destid).append($(html));
 	//---------------------------
 	var actions = $(action).children();
@@ -1351,6 +1353,7 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 	var text = $(action).text();
 	text = r_replaceVariable(text);
 	var style = r_replaceVariable($(action).attr("style"));
+	var cssclass = r_replaceVariable($(action).attr("class"));
 	var ref = $(action).attr("ref");
 	if (ref!=undefined && ref!="") {
 		ref = r_replaceVariable(ref);
@@ -1365,7 +1368,7 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 		csvline += text + csvseparator;		
 	}
 	//-----------------
-	text = "<span id='txt"+nodeid+"' style='"+style+"'>"+text+"</span>";
+	text = "<span id='txt"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
 	$("#"+destid).append($(text));
 }
 
@@ -1399,6 +1402,7 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 	var targetid = "";
 	var text = "";
 	var style = r_replaceVariable($(action).attr("style"));
+	var cssclass = r_replaceVariable($(action).attr("class"));
 	var select = $(action).attr("select");
 	select = r_replaceVariable(select);
 	var selector = r_getSelector(select);
@@ -1412,7 +1416,7 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 		targetid = UICom.structure["ui"][nodeid].getUuid();
 		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
 	}
-	text = "<span id='"+nodeid+"' style='"+style+"' class='report-url2unit' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
+	text = "<span id='"+nodeid+"' style='"+style+"' class='report-url2unit "+cssclass+"' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
 }
@@ -1428,6 +1432,7 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 //==================================
 {
 	var style = r_replaceVariable($(action).attr("style"));
+	var cssclass = r_replaceVariable($(action).attr("class"));
 	var ref = $(action).attr("ref");
 	ref = r_replaceVariable(ref);
 	var type = $(action).attr("type");
@@ -1460,7 +1465,7 @@ g_report_actions['aggregate'] = function (destid,action,no,data)
 	}
 	if (!$.isNumeric(text))
 		text="";
-	text = "<span style='"+style+"'>"+text+"</span>";
+	text = "<span style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
 	$("#"+destid).append($(text));
 }
 
@@ -1475,6 +1480,7 @@ g_report_actions['operation'] = function (destid,action,no,data)
 //==================================
 {
 	var style = r_replaceVariable($(action).attr("style"));
+	var cssclass = r_replaceVariable($(action).attr("class"));
 	var ref = $(action).attr("ref");
 	ref = r_replaceVariable(ref);
 	var type = $(action).attr("type");
@@ -1511,7 +1517,7 @@ g_report_actions['operation'] = function (destid,action,no,data)
 		result="";
 	if ( type=="percentage")
 		result = result.toString() + "%";
-	result = "<span style='"+style+"'>"+result+"</span>";
+	result = "<span style='"+style+"' class='"+cssclass+"'>"+result+"</span>";
 	$("#"+destid).append($(result));
 }
 

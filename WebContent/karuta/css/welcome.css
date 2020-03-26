@@ -39,9 +39,6 @@ body {
   border-radius: 4px;
   cursor: pointer;
   display: inline-block;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.42857;
   margin-bottom: 0;
   padding: 6px 12px;
   text-align: center;
@@ -73,7 +70,7 @@ body {
   text-align: center;
 }
 #newpassword input[type=text] {
-  font-size: 16px;
+  margin-top: 15px;
   height: auto;
   margin-bottom: 15px;
   padding: 7px 9px;
@@ -112,9 +109,6 @@ body {
   border-radius: 4px;
   cursor: pointer;
   display: inline-block;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.42857;
   margin-bottom: 0;
   padding: 6px 12px;
   text-align: center;

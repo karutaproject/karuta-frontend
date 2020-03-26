@@ -17,7 +17,6 @@ if (new_bck) {
 	appliname = 'karuta3.0-new';
 	karutaname = 'karuta3.0-new'; // to share the same 'karuta-core' with multiple front-end
 	karuta_url = '../../../' + karutaname;
-
 }
 //-------- LANGUAGES------------
 var languages = [];

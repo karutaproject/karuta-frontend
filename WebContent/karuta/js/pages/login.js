@@ -114,7 +114,7 @@ function getNewPassword()
 //==============================
 {
 	var html = "";
-	html += "<a onclick=\"$('#show-newpassword').show()\">"+karutaStr[LANG]['newpassword']+"</a>";
+	html += "<a onclick=\"$('#show-newpassword').show()\" style='cursor:pointer'>"+karutaStr[LANG]['newpassword']+"</a>";
 	html +="<div id='show-newpassword' style='display:none'>"
 	html += "<input id='useridentifier_new' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'/>";
 	html += "<button id='form-send' onclick='javascript:callSend()'>"+karutaStr[LANG]['button-send']+"</button>";
