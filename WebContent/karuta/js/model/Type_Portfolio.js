@@ -3157,6 +3157,7 @@ function setCSSportfolio(data)
 	setConfigColor(data,root,'svg-web9-color');
 	// ========================================================================
 }
+
 //==================================
 function setCSSportfolioOLD(data)
 //==================================

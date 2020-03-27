@@ -378,7 +378,7 @@ karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
 karutaStr['fr']['report']="Exécuter un script de rapport";
 karutaStr['fr']['upload_csv_or_code']="Téléverser un fichier CSV ou Saisir un code de modèle";
 karutaStr['fr']['model_code']="Code du modèle";
-
+karutaStr['fr']['report-elt-disabled'] = "désactivé"
 //=========================================
 //========== RESOURCE =====================
 //=========================================

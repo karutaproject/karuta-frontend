@@ -538,7 +538,10 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		label_html += " "+ this.getView('std_node_'+uuid);
 	$("#label_node_"+uuid).html(label_html);
 	//--------- chckbox comment in report--------------
-	var html_chckbox = "<span class='chkbox-report'>&nbsp;<input type='checkbox' onchange=\"toggleCommentreport('"+uuid+"')\">&nbsp;Comment<span>";
+	var html_chckbox = "<span class='chkbox-report'>&nbsp;<input ";
+	if (this.semantictag.indexOf('comments')>-1)
+		html_chckbox += "checked=true";
+	html_chckbox += " type='checkbox' onchange=\"UIFactory.Node.toggleCommentReport('"+uuid+"',this)\">&nbsp;"+karutaStr[LANG]['report-elt-disabled']+"<span>";
 	$("div[class='title']","#label_node_"+uuid).append(html_chckbox);
 	//-------------- buttons --------------------------
 	if (edit) {
@@ -1661,7 +1664,22 @@ UIFactory['Node'].loadStructure = function(uuid)
 	$.ajaxSetup({async: true});
 };
 
+//==================================================
+UIFactory['Node'].toggleCommentReport = function(uuid,input)
+//==================================================
+{
+	var semantictag = UICom.structure["ui"][uuid].semantictag;
+	if (input.checked) {
+		semantictag += ' comments';
+		$("#node_"+uuid).addClass('comments');
+	}
+	else {
+		semantictag = semantictag.substring(0,semantictag.indexOf('comments')-1)
+		$("#node_"+uuid).removeClass('comments');
+	}
+	UIFactory["Node"].updateMetadataAttribute(UICom.structure["ui"][uuid].id,'semantictag',semantictag);
 
+}
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //------------------------ getBubbleView -------------------------------------------------------------------------------------

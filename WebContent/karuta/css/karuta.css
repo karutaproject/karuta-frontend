@@ -1040,6 +1040,13 @@ div.oembedall-container {
 }
 
 /* ====================== */
+/*     RESOURCE         */
+/* ====================== */
+.url_editor .form-horizontal {
+  margin-top: 20px;
+}
+
+/* ====================== */
 /*     FIRST NODE         */
 /* ====================== */
 .asmRoot > div[name=lbl-div],
@@ -1510,60 +1517,25 @@ h3 {
 
 */
 /* =========#adding_portfolios================================ */
+/*
 #adding_portfolios .project {
-  background-color: #eee;
+	background-color:#eee;
 }
 
 #adding_portfolios .project-content {
-  border-top: 1px solid grey;
+	border-top: 1px solid grey;
 }
 
 #adding_portfolios .row-label,
 #adding_portfolios .row {
-  color: #333;
+	color: #333;
 }
 
 #adding_portfolios .project-content .row:hover {
-  background-color: #ddd;
+	background-color: #ddd;
 }
-
+*/
 /* ============================================================ */
-/* =========== PORTFOLIO-WELCOME-BLOCK ================= */
-.welcome-block {
-  margin-left: 0px;
-  margin-right: 0px;
-}
-
-.welcome-block .welcome-title {
-  font-size: 1.5rem;
-  text-align: center;
-  width: 100%;
-  padding-bottom: 5px;
-}
-
-.welcome-block .welcome-block .welcome-title {
-  font-size: 18px;
-}
-
-.welcome-block .image {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.page-welcome .welcome-baseline,
-.page-welcome .welcome-text {
-  padding: 10px;
-  width: 100%;
-}
-
-.welcome-block .col-md-6,
-.welcome-block .col-md-4,
-.welcome-block .col-md-3,
-.welcome-block .col-md-2,
-.welcome-block .col-md-1 {
-  height: 100%;
-}
-
 /* =========== PORTFOLIO-WELCOME EDIT MODE ================= */
 .standard .welcome-block {
   margin-left: 20px;
@@ -1925,10 +1897,6 @@ button.selected-label {
   background-color: #DCDCDC;
 }
 
-.url_editor .form-horizontal {
-  margin-top: 20px;
-}
-
 /* ====================
 	REPORT
    ====================*/
@@ -1936,7 +1904,20 @@ button.selected-label {
   display: block;
 }
 .report .chkbox-report {
-  display: in-line;
+  display: inline;
+  float: right;
+  margin-right: 20px;
+}
+.report .asmRoot > div[name=lbl-div] .chkbox-report {
+  display: none;
+}
+.report .comments,
+.report .comments .form-control,
+.report .comments .btn,
+.report .comments .cssinfo {
+  font-style: italic;
+  font-weight: normal;
+  color: #aaaaaa;
 }
 
 /* ====================
@@ -1980,28 +1961,6 @@ table.tablesorter th.restore {
   width: 35px;
 }
 
-.passwordbyroot {
-  background-color: white;
-  text-shadow: 0px 0px 5px red;
-  letter-spacing: 2px;
-}
-
-/* ====================
-	partage
-   ====================*/
-.partage td {
-  padding: 3px;
-}
-
-.ajout-mani hr.asmUnitStructure {
-  margin-top: 20px;
-  border-width: 5px;
-}
-
-.specific-menu {
-  width: 220px;
-}
-
 /* ====================
 	Badges
    ====================*/
@@ -2035,67 +1994,6 @@ table.tablesorter th.restore {
 .lang {
   padding: 5px;
   background-color: #D3D3D3;
-}
-
-/* ====================
-	DisplayType : header
-   ====================*/
-#main-header {
-  background-color: white;
-  margin-top: 51px;
-  z-index: 1000;
-}
-
-#header {
-  min-height: 150px;
-  padding-top: 4px;
-}
-
-.header-container {
-  margin-top: 250px;
-}
-
-.header-menu {
-  /*	border-top:1px solid lightgrey;  */
-  /*	margin-top:10px; */
-}
-
-/*
-#header .row {
-	height:44px;
-}*/
-/* ====================
-	Document/Image/URL
-   ====================*/
-.resource-Image {
-  display: inline-block;
-  min-height: 25px;
-  min-width: 50px;
-  padding: 0px;
-  overflow: hidden;
-}
-
-.doc-up,
-.url-up {
-  padding-top: 5px;
-  height: 60%;
-  background-color: white;
-  width: 100%;
-}
-
-.doc-bottom,
-.url-bottom {
-  height: 40%;
-  width: 100%;
-  text-align: center;
-  border-top: 1px lightgrey solid;
-  font-size: 10pt;
-  display: table;
-}
-
-.doc-bottom span, .url-bottom span {
-  display: table-cell;
-  vertical-align: middle;
 }
 
 /* ====================
@@ -2420,6 +2318,12 @@ select.Y2, option[value=Y2] {
 .europass_table td.buttons {
   width: 50px;
 }
+.europass_table .language_edit {
+  width: 20%;
+}
+.europass_table .language_edit button {
+  height: 30px;
+}
 
 #langues-detail h5 {
   height: 30px;
@@ -2434,21 +2338,15 @@ select.Y2, option[value=Y2] {
   min-width: 50px;
   padding: 1px;
 }
-
 .EuropassL .select {
   padding: 1px 5px;
 }
 
-.langue button,
-.europass_table .language_edit button {
+.langue button {
   height: 30px;
 }
 
-.europass_table .language_edit {
-  width: 20%;
-}
-
-.europass_table .select-language .li-code {
+.select-language .li-code {
   width: 30px;
   font-family: Monaco, Consolas, monospace;
 }
@@ -2956,6 +2854,41 @@ td {
 .page-welcome #welcome-image .welcome-baseline {
   color: var(--list-welcome-subtitle-color);
   font-size: 24px;
+}
+.page-welcome .welcome-baseline,
+.page-welcome .welcome-text {
+  padding: 10px;
+  width: 100%;
+}
+
+/* =========== PORTFOLIO-WELCOME-BLOCK ================= */
+.welcome-block {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.welcome-block .welcome-title {
+  font-size: 1.5rem;
+  text-align: center;
+  width: 100%;
+  padding-bottom: 5px;
+}
+
+.welcome-block .welcome-block .welcome-title {
+  font-size: 18px;
+}
+
+.welcome-block .image {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.welcome-block .col-md-6,
+.welcome-block .col-md-4,
+.welcome-block .col-md-3,
+.welcome-block .col-md-2,
+.welcome-block .col-md-1 {
+  height: 100%;
 }
 
 /* ====================

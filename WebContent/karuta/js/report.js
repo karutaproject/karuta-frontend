@@ -676,14 +676,24 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 	}
 	if (userid==null)
 		userid = USER.id;
+	var searchvalue = "";
+	var select = $(action).attr("select");
+	select = r_replaceVariable(select);
+	if (select.indexOf("code*=")>-1) {
+		if (select.indexOf("'")>-1)
+			searchvalue = select.substring(7,select.length-1);  // inside quote
+		else if (select.indexOf("//")>-1)
+			searchvalue = eval("json."+select.substring(8));
+		else
+			searchvalue = eval("json.lines["+line+"]."+select.substring(6));
+	}
+
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&user="+userid,
+		url : serverBCK_API+"/portfolios?active=1&search="+searchvalue,
 		success : function(data) {
 			UIFactory["Portfolio"].parse(data);
-			var select = $(action).attr("select");
-			select = r_replaceVariable(select);
 			var value = "";
 			var condition = "";
 			var portfolioid = "";
