@@ -470,14 +470,16 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 	if (type=='select') {
 		var selected_value = "";
 		//--------------------------------
-		var html = "<div class='btn-group choice-group'>";
-		html += "<button type='button' class='btn btn-default select select-label' id='button_"+self.id+"'>&nbsp;</button>";
+		var html = "";
+		html += "<div class='btn-group select-label'>";		
+		html += "	<button type='button' class='btn select selected-label' id='button_"+self.id+"'>&nbsp;</button>";
 		html += "<button type='button' onclick=\"UIFactory.Get_Get_Resource.reloadIfInLine('"+self.id+"','"+destid+"','"+type+"','"+langcode+"')\" class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
 		html += "</div>";
 		var btn_group = $(html);
 		$("#"+destid).append($(btn_group));
 		//--------------------------------
-		html = "<div id='dropdown-"+self.id+"' class='dropdown-menu dropdown-menu-right'></div>";
+		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
+//		html = "<div id='dropdown-"+self.id+"' class='dropdown-menu dropdown-menu-right'></div>";
 		var select  = $(html);
 		//----------------- null value to erase
 		html = "<a class='dropdown-item' value='' code='' ";
@@ -511,46 +513,45 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			}
 			code = cleanCode(code);
 			//------------------------------
+			var select_item = null;
 			if ($('code',resource).text().indexOf('----')>-1) {
 				html = "<div class='dropdown-divider'></div>";
+				select_item = $(html);
 			} else {
-				html = "<li></li>";
-			}
-			var select_item = $(html);
-			html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
-			for (var j=0; j<languages.length;j++){
-				html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
-			}
-			html += ">";
-			if (display_code)
-				html += "<span class='li-code'>"+code+"</span>";
-			if (display_label)
-				html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
-			html += "</a>";
-			var select_item_a = $(html);
-			$(select_item_a).click(function (ev){
-				//--------------------------------
-				var code = $(this).attr('code');
-				var display_code = false;
-				var display_label = true;
-				if (code.indexOf("$")>-1) 
-					display_label = false;
-				if (code.indexOf("@")<0) {
-					display_code = true;
+				html = "<a class='dropdown-item sel"+code+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
+				for (var j=0; j<languages.length;j++){
+					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
-				code = cleanCode(code);
-				//--------------------------------
-				var html = "";
+				html += ">";
 				if (display_code)
-					html += code+" ";
+					html += "<span class='li-code'>"+code+"</span>";
 				if (display_label)
-					html += $(this).attr("label_"+languages[langcode]);
-				$("#button_"+self.id).html(html);
-				$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
-				UIFactory["Get_Get_Resource"].update(this,self,langcode);
-				//--------------------------------
-			});
-			$(select_item).append($(select_item_a))
+					html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
+				html += "</a>";
+				var select_item = $(html);
+				$(select_item).click(function (ev){
+					//--------------------------------
+					var code = $(this).attr('code');
+					var display_code = false;
+					var display_label = true;
+					if (code.indexOf("$")>-1) 
+						display_label = false;
+					if (code.indexOf("@")<0) {
+						display_code = true;
+					}
+					code = cleanCode(code);
+					//--------------------------------
+					var html = "";
+					if (display_code)
+						html += code+" ";
+					if (display_label)
+						html += $(this).attr("label_"+languages[langcode]);
+					$("#button_"+self.id).html(html);
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					UIFactory["Get_Get_Resource"].update(this,self,langcode);
+					//--------------------------------
+				});
+			}
 			//-------------- update button -----
 			if (code!="" && self_code==$('code',resource).text()) {
 				var html = "";

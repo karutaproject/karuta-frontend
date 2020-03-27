@@ -749,6 +749,10 @@ div.oembedall-container {
   overflow-y: auto;
   width: 100%;
 }
+#edit-window-body .dropdown-item {
+  white-space: inherit;
+}
+
 #edit-window-body-node .btn,
 #edit-window-body-resource .btn,
 .resource .btn {

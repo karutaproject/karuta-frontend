@@ -803,6 +803,9 @@ div.oembedall-container {
 		.dropdown-toggle{
 //			border: 1px solid var(--edit-window-border-color);
 		}
+		.dropdown-item {
+			white-space:inherit;
+		}
 	}
 
 	#edit-window-body-node .btn,
