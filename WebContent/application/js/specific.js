@@ -1,6 +1,6 @@
 //------ EXEC BATCH AT USER CREATION ------------------
 var g_execbatch = false;
-var g_execbatchbuttonlabel1 = [];
+var g_execbatchbuttonlabel1 = {};
 	g_execbatchbuttonlabel1['fr'] = "Patience! Création de votre portfolio ...";
 var g_json = {};
 
@@ -23,4 +23,3 @@ function prepareBatch()
 	};
 }//----------------------------------------------------
 
-var nbPagesIndexStep = 2;

@@ -173,6 +173,15 @@
 			padding:7px;
 			background-color:var(--list-element-background-color);
 		}
+		#bin-content {
+			.row-label {
+				margin-left:5px;
+				margin-right:5px;
+			}
+			.row {
+				color:var(--list-element-text-color);
+			}
+		}
 		.project-header {
 			padding:7px;
 			background-color:var(--list-menu-background-color);
@@ -196,7 +205,6 @@
 			padding:7px;
 			background-color : var(--list-button-background-color);
 			color : var(--list-element-text-color);
-			margin-bottom : 10px;
 			.btn {
 				background-color: var(--list-element-background-color);
 			}
@@ -247,12 +255,10 @@
 			font-weight:bold;
 		}
 		.project {
-			padding:7px;
-//			background-color : var(--list-button-background-color);
+//			padding:7px;
 			color : var(--list-element-text-color);
-			margin-bottom : 10px;
+//			margin-bottom : 10px;
 			.btn {
-//				background-color: var(--list-element-background-color);
 			}
 		}
 	}
@@ -780,6 +786,14 @@ div.oembedall-container {
 		a {
 			cursor:pointer;
 		}
+		.modal-dialog {
+			width:70%;
+			max-width: none;
+			min-height:100%;
+			.modal-content {
+				min-height:500px;
+			}
+		}
 	}
 
 	#edit-window-header.modal-header {
@@ -820,10 +834,6 @@ div.oembedall-container {
 		}
 	}
 
-	.modal-dialog {
-		width:70%;
-		max-width: none;
-	}
 
 /* ====================== */
 /*    BUTTONS - MENUS     */
@@ -1134,7 +1144,10 @@ div.oembedall-container {
 		margin-top:20px;
 	}
 
-
+	.li-code,
+	.li-value {
+		margin-right:5px;
+	}
 
 /* ====================== */
 /*     FIRST NODE         */
@@ -2920,7 +2933,7 @@ table.tablesorter th.restore {
 				width:100%;
 				text-align:center;
 				color: var(--list-welcome-title-color);
-				font-size:40px;
+				font-size:25px;
 			}
 			.welcome-baseline {
 				color: var(--list-welcome-subtitle-color);

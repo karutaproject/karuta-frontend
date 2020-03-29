@@ -494,6 +494,22 @@ UIFactory["User"].edit = function(userid)
 };
 
 //==================================
+UIFactory.User.loadUsers = function() 
+//==================================
+{
+	$.ajaxSetup({async: false});
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/users",
+		success : function(data) {
+			UIFactory["User"].parse(data);
+		}
+	});
+	$.ajaxSetup({async: true});
+}
+
+//==================================
 UIFactory["User"].parse = function(data) 
 //==================================
 {
@@ -528,6 +544,61 @@ UIFactory["User"].parse = function(data)
 	for (var i=0; i<newTableau2.length; i++){
 		UsersInactive_list[i] = Users_byid[newTableau2[i][2]];
 	}
+};
+
+//==================================
+UIFactory.User.loadUserAndDisplay = function(userid,dest,type) 
+//==================================
+{
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/users/user/"+userid,
+		success : function(data) {
+			UIFactory.User.parse_add(data,dest,type);
+		}
+	});
+}
+
+//==================================
+UIFactory["User"].parse_add = function(data,dest,type) 
+//==================================
+{
+	var tableau1 = new Array();
+	var tableau2 = new Array();
+	for ( var i = 0; i < UsersActive_list.length; i++) {
+		if (UsersActive_list[i]!=null)
+			tableau1[tableau1.length] = [UsersActive_list[i].lastname,UsersActive_list[i].firstname,UsersActive_list[i].id];
+	}	
+	for ( var i = 0; i < UsersInactive_list.length; i++) {
+		if (UsersInactive_list[i]!=null)
+			tableau2[tableau2.length] = [UsersInactive_list[i].lastname,UsersInactive_list[i].firstname,UsersInactive_list[i].id];
+	}	
+	UsersActive_list = [];
+	var user = $(":root",data);
+	var userid = $(user).attr('id');
+	Users_byid[userid] = new UIFactory["User"](user);
+	var lastname = Users_byid[userid].lastname;
+	if (lastname=="")
+		lastname = " ";
+	var firstname = Users_byid[userid].firstname;
+	if ($("active",$(user)).text() == "1") {  // active user
+		tableau1[tableau1.length] = [lastname,firstname,userid];
+	}
+	else { // inactive user
+		tableau2[tableau2.length] = [lastname,firstname,userid];
+	}
+	var newTableau1 = tableau1.sort(sortOn1_2);
+	for (var i=0; i<newTableau1.length; i++){
+		UsersActive_list[i] = Users_byid[newTableau1[i][2]];
+	}
+	var newTableau2 = tableau2.sort(sortOn1);
+	for (var i=0; i<newTableau2.length; i++){
+		UsersInactive_list[i] = Users_byid[newTableau2[i][2]];
+	}
+	var html = (Users_byid[userid]==null) ? "":Users_byid[userid].getView(null,type,null);
+	$("#"+dest).html(html);
+
 };
 
 //==================================

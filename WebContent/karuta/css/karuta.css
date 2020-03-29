@@ -161,6 +161,13 @@ body,
   padding: 7px;
   background-color: var(--list-element-background-color);
 }
+#list-container #bin-content .row-label {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+#list-container #bin-content .row {
+  color: var(--list-element-text-color);
+}
 #list-container .project-header {
   padding: 7px;
   background-color: var(--list-menu-background-color);
@@ -183,7 +190,6 @@ body,
   padding: 7px;
   background-color: var(--list-button-background-color);
   color: var(--list-element-text-color);
-  margin-bottom: 10px;
 }
 #list-container h3.bin-label .btn {
   background-color: var(--list-element-background-color);
@@ -221,9 +227,7 @@ body,
   font-weight: bold;
 }
 #project-portfolios .project {
-  padding: 7px;
   color: var(--list-element-text-color);
-  margin-bottom: 10px;
 }
 .project-label {
   cursor: pointer;
@@ -731,6 +735,14 @@ div.oembedall-container {
 #edit-window a {
   cursor: pointer;
 }
+#edit-window .modal-dialog {
+  width: 70%;
+  max-width: none;
+  min-height: 100%;
+}
+#edit-window .modal-dialog .modal-content {
+  min-height: 500px;
+}
 
 #edit-window-header.modal-header {
   display: block;
@@ -761,11 +773,6 @@ div.oembedall-container {
 
 #edit-window-body-resource button.selected-label {
   min-width: 300px;
-}
-
-.modal-dialog {
-  width: 70%;
-  max-width: none;
 }
 
 /* ====================== */
@@ -1048,6 +1055,11 @@ div.oembedall-container {
 /* ====================== */
 .url_editor .form-horizontal {
   margin-top: 20px;
+}
+
+.li-code,
+.li-value {
+  margin-right: 5px;
 }
 
 /* ====================== */
@@ -2853,7 +2865,7 @@ td {
   width: 100%;
   text-align: center;
   color: var(--list-welcome-title-color);
-  font-size: 40px;
+  font-size: 25px;
 }
 .page-welcome #welcome-image .welcome-baseline {
   color: var(--list-welcome-subtitle-color);
