@@ -4,6 +4,12 @@
 /*     DEFAULT VALUES     */
 /* ====================== */
 
+	:root {
+		/* ========== navbar =============== */
+		--font-family : Verdana;
+		--font-size-coeff : 0.9;
+	}
+
 	blockquote { // Bootstrap _reboot.scss overides user agent stylesheet
 		display: block;
 		margin-block-start: 1em;
@@ -17,6 +23,8 @@
 	}
 
 	body {
+		font-family :var(--font-family);
+		font-size :calc(var(--font-size-coeff) * 1rem);
 		background-color: var(--list-background-color);
 	}
 
@@ -24,15 +32,15 @@
 	body,
 	.form-control,
 	.btn {
-		font-family: "Open Sans",sans-serif;
-		font-size: 0.8rem;
+		font-family: var(--font-family);
+		font-size: calc(var(--font-size-coeff) * 0.8rem);
 	}
 	
 	@media (min-width: 768px) {  
 		body,
 		.form-control,
 		.btn {
-			font-size: 1rem;
+			font-size: calc(var(--font-size-coeff) * 1rem);
 		}
 	}
 // --------------------------------------
@@ -94,18 +102,19 @@
 			width:100%;
 			text-align:center;
 			color: var(--list-welcome-title-color);
-			font-size:2em;
+			font-size:200%;
 		}
 		.welcome-baseline {
 			color: var(--list-welcome-subtitle-color);
-			font-size:1.5em;
+			font-size:150%;
+			text-align: center;
 		}
 		@media only screen and (max-width: 320px) {
 			.welcome-title {
-				font-size: 1em;
+				font-size: 100%;
 			}
 			.welcome-baseline {
-				font-size: 0.75em;
+				font-size: 75%;
 			}
 		}
 	}
@@ -715,7 +724,7 @@ div.oembedall-container {
 		background-color: var(--list-button-background-color);
 		margin-top: 20px;
 		padding: 4px 15px;
-		font-size: 14px;
+		font-size: calc(var(--font-size-coeff) * 1rem);
 		display: inline-block;
 		cursor: pointer;
 		border-radius: 3px;
@@ -840,7 +849,7 @@ div.oembedall-container {
 /* ====================== */
 
 	.button{
-		font-size: 0.90rem;
+		font-size: calc(var(--font-size-coeff) * 0.9rem);
 		padding: 5px;
 		cursor:pointer;
 		display: inline-block;
@@ -852,7 +861,7 @@ div.oembedall-container {
 			float:left;
 		}
 		a.text-button {
-			font-size:1rem;
+			font-size:calc(var(--font-size-coeff) * 1rem);
 			margin-top:2px;
 		}
 	}
@@ -914,7 +923,7 @@ div.oembedall-container {
 		border-top:1px solid #F0F0F0;
 		padding-left:20px;
 		padding-right:15px;
-		font-size:0.875rem;
+		font-size:calc(var(--font-size-coeff) * 0.875rem);
 		background-color:#FBFBFB;
 	}
 
@@ -968,7 +977,7 @@ div.oembedall-container {
 		}
 		.number {
 			float: right;
-			font-size: 11px;
+			font-size: calc(var(--font-size-coeff) * 0.9rem);
 			font-weight: normal;
 		}
 		.selected{
@@ -1049,7 +1058,7 @@ div.oembedall-container {
 			color:var(--portfolio-navbar-text-color);
 		}
 		#toggle-mode-icon {
-			font-size:1.1rem;
+			font-size:calc(var(--font-size-coeff) * 1.1rem);
 		}
 		#refresh-portfolio {
 			padding-left: 15px;
@@ -1128,7 +1137,7 @@ div.oembedall-container {
 
 	}
 	
-	.chkbox-report {
+	.chkbox-comments {
 		display:none;
 	}
 
@@ -1161,7 +1170,7 @@ div.oembedall-container {
 		min-height:6.25rem;
 		.title {
 			margin-bottom:0.5rem;
-			font-size:1.5rem;
+			font-size:calc(var(--font-size-coeff) * 1.5rem);
 		}
 		.title-subline {
 			border-bottom:1px solid var(--page-title-subline-color);
@@ -1194,51 +1203,51 @@ div.oembedall-container {
 		}
 	
 		.asmRoot .title {
-			font-size: 1.5rem;
+			font-size: calc(var(--font-size-coeff) * 1.5rem);
 			line-height: 1.875rem;
 		}
 		
 		
 		.asmStructure .title {
-			font-size: 1.5rem;
+			font-size: calc(var(--font-size-coeff) * 1.5rem);
 			line-height: 1.875rem;
 		}
 		
 		.asmStructure .asmStructure .title,
 		.asmRoot .asmStructure .title {
-			font-size: 1.2rem;
+			font-size: calc(var(--font-size-coeff) * 1.2rem);
 			font-weight: normal;
 		}
 		
 		.asmUnit .title {
-			font-size: 1.5rem;
+			font-size: calc(var(--font-size-coeff) * 1.5rem);
 			line-height: 1.875rem;
 		}
 		
 		.asmStructure .asmUnit .title,
 		.asmRoot .asmUnit .title {
-			font-size: 1.25rem;
+			font-size: calc(var(--font-size-coeff) * 1.25rem);
 			font-weight: normal;
 			line-height: 1.5rem;
 		}
 		
 		.asmUnitStructure .title {
-			font-size: 1.25rem;
+			font-size: calc(var(--font-size-coeff) * 1.25rem);
 			line-height: 1.5rem;
 		}
 		
 		.asmUnitStructure .asmUnitStructure .title {
-			font-size: 1rem;
+			font-size: calc(var(--font-size-coeff) * 1rem);
 			line-height: 1.25rem;
 		}
 		
 		.asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-			font-size: 0.875rem;
+			font-size: calc(var(--font-size-coeff) * 0.875rem);
 			line-height: 1.25rem;
 		}
 		
 		.asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-			font-size: 0.75rem;
+			font-size: calc(var(--font-size-coeff) * 0.75rem);
 			line-height: 1.25rem;
 		}
 	
@@ -1438,10 +1447,10 @@ div.oembedall-container {
 /* ====================== */	
 
 	.model-node-label .title{
-		font-size:1rem;
+		font-size:calc(var(--font-size-coeff) * 1rem);
 	}
 	.resource-node-label .title{
-		font-size:0.875rem;
+		font-size:calc(var(--font-size-coeff) * 0.875rem);
 	}
 
 	.node-model {
@@ -1507,7 +1516,7 @@ div.oembedall-container {
 	};
 
 	.warning-list{
-		font-size:120%;
+		font-size:calc(var(--font-size-coeff) * 1.2rem);
 		font-weight:bold;
 		color:var(--list-title-color);
 	}
@@ -1534,7 +1543,7 @@ div.oembedall-container {
 
 
 	#refresh {
-		font-size:150%;
+		font-size:calc(var(--font-size-coeff) * 1.5rem);
 		float:right;
 		margin-top:12px;
 //		margin-right:20%;
@@ -1793,7 +1802,7 @@ hr {
 }
 /* ---------------- resource Comments --------------------- */
 .author-date {
-		font-size:11px;
+		font-size:calc(var(--font-size-coeff) * 0.9rem);
 		font-style:italic;
 }
 
@@ -1907,7 +1916,7 @@ hr {
 }
 
 #content .comment {
-	font-size: 12px;
+	font-size: calc(var(--font-size-coeff) * 1rem);
 	padding-bottom: 22px;
 	padding-left: 40px;
 }
@@ -1921,7 +1930,7 @@ hr {
 		padding-top:5px;
 		.input-group-text {
 			border: 0px solid var(--edit-window-border-color);
-			font-size:0.9rem;
+			font-size:calc(var(--font-size-coeff) * 0.9rem);
 			width:250px;
 		}
 		.input-group {
@@ -1941,7 +1950,7 @@ hr {
 			margin-left:10px;
 		}
 		.seltype-radio {
-			font-size:90%;
+			font-size:calc(var(--font-size-coeff) * 0.9rem);
 			margin-top:5px;
 		}
 		.seltype-radio::nth-child(2) {
@@ -2088,12 +2097,12 @@ button.selected-label {
 		.cssinfo {
 			display:block;
 		}
-		.chkbox-report {
+		.chkbox-comments {
 			display:inline;
 			float:right;
 			margin-right:20px;
 		}
-		.asmRoot>div[name=lbl-div] .chkbox-report {
+		.asmRoot>div[name=lbl-div] .chkbox-comments {
 			display:none;
 		}
 		.comments,
@@ -2104,6 +2113,12 @@ button.selected-label {
 			font-weight:normal;
 			color:#aaaaaa;
 		}
+	.ref-init {
+		.resource {
+			border: 1px solid #ced4da;
+			border-radius: .25rem;
+		}
+	}
 	}
 
 /* ====================
@@ -2117,7 +2132,7 @@ button.selected-label {
 .metainfo,
 .cssinfo {
 	color: #808080;
-	font-size: 10px;
+	font-size: calc(var(--font-size-coeff) * 0.8rem);
 	font-weight: normal;
 	display:none;
 }
@@ -2321,7 +2336,7 @@ table.tablesorter th.restore {
    ====================*/
 
 	.receiver_SendEmail{
-		font-size:12pt;
+		font-size:calc(var(--font-size-coeff) * 1rem);
 		margin-bottom:20px;
 		background-color: lightgrey;
 		padding: 5px;
@@ -2417,11 +2432,11 @@ table.tablesorter th.restore {
 	
 	.select-language .li-code{
 		width:30px;
-		font-family:Monaco, Consolas, monospace;
+		font-family:var(--font-family);
 	}
 	
 	.mothertongue-label {
-		font-size:14px;
+		font-size:120%;
 		font-weight: 500;
 	}
 	
@@ -2933,11 +2948,11 @@ table.tablesorter th.restore {
 				width:100%;
 				text-align:center;
 				color: var(--list-welcome-title-color);
-				font-size:25px;
+				font-size:160%
 			}
 			.welcome-baseline {
 				color: var(--list-welcome-subtitle-color);
-				font-size:24px;
+				font-size:150%
 			}
 		}
 		.welcome-baseline,
@@ -2956,14 +2971,14 @@ table.tablesorter th.restore {
 	
 	
 	.welcome-block .welcome-title {
-		font-size:1.5rem;
+		font-size:150%;
 		text-align:center;
 		width:100%;
 		padding-bottom:5px;
 	}
 	
 	.welcome-block .welcome-block .welcome-title {
-		font-size:18px;
+		font-size:130%
 	}
 	
 	.welcome-block .image{
@@ -3050,7 +3065,7 @@ table.tablesorter th.restore {
 	}
 
 	.block .btn-group{
-		font-size:12px;
+		font-size:100%;
 	}
 	
 	.block .resource-Image{
@@ -3082,7 +3097,7 @@ table.tablesorter th.restore {
 		-moz-box-shadow: 10px 10px 5px #888;
 		-webkit-box-shadow: 10px 10px 5px #888;
 		box-shadow: 10px 10px 5px #888;
-		font-size:16px;
+		font-size:120%;
 	}
 	
 	.block .asmUnitStructure{

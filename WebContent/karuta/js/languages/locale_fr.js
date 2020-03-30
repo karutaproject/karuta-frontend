@@ -93,6 +93,8 @@ karutaStr['fr']['see-bin']="Voir la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
 karutaStr["fr"]["button-print"] = "Imprimer";
 karutaStr["fr"]["write-mode"] = "Éditer";
+karutaStr["fr"]["button-increase"] = "Augmenter la taille des caractères";
+karutaStr["fr"]["button-decrease"] = "Diminuer la taille des caractères";
 
 //=========================================
 //========== ERRORS =======================

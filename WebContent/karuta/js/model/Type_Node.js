@@ -537,11 +537,11 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	if (!gotView)
 		label_html += " "+ this.getView('std_node_'+uuid);
 	$("#label_node_"+uuid).html(label_html);
-	//--------- chckbox comment in report--------------
-	var html_chckbox = "<span class='chkbox-report'>&nbsp;<input ";
+	//--------- chckbox comment in report/batch--------------
+	var html_chckbox = "<span class='chkbox-comments'>&nbsp;<input ";
 	if (this.semantictag.indexOf('comments')>-1)
 		html_chckbox += "checked=true";
-	html_chckbox += " type='checkbox' onchange=\"UIFactory.Node.toggleCommentReport('"+uuid+"',this)\">&nbsp;"+karutaStr[LANG]['report-elt-disabled']+"<span>";
+	html_chckbox += " type='checkbox' onchange=\"UIFactory.Node.toggleComment('"+uuid+"',this)\">&nbsp;"+karutaStr[LANG]['report-elt-disabled']+"<span>";
 	$("div[class='title']","#label_node_"+uuid).append(html_chckbox);
 	//-------------- buttons --------------------------
 	if (edit) {
@@ -1665,7 +1665,7 @@ UIFactory['Node'].loadStructure = function(uuid)
 };
 
 //==================================================
-UIFactory['Node'].toggleCommentReport = function(uuid,input)
+UIFactory['Node'].toggleComment = function(uuid,input)
 //==================================================
 {
 	var semantictag = UICom.structure["ui"][uuid].semantictag;

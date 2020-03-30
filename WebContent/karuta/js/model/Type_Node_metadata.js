@@ -854,7 +854,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	html += "</form>";
 	$("#"+destid).append($(html));
 	//---------------------------------------------------
-	var model = Object.keys(UICom.roles).length<3;
+	var model = portfolios_byid[g_portfolioid].model;
 	//---------------------------------------------------
 	var name = this.asmtype;
 	var semtag =  ($("metadata",this.node)[0]==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');

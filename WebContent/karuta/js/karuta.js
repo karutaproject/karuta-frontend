@@ -27,6 +27,7 @@ var portfolioid = null;
 var g_userrole = "";
 var g_userroles = [];
 var g_portfolioid = "";
+var g_model = "";
 //var g_complex = false;
 var g_designerrole = false;
 var g_rc4key = "";
@@ -222,6 +223,12 @@ function getNavBar(type,portfolioid,edit)
 		} 
 		html += "			</ul>";
 		html += "			<ul class='navbar-nav'>";
+		html += "	<li class='nav-item icon'>";
+		html += "		<a class='nav-link' onclick='increaseFontSize()' data-title='"+karutaStr[LANG]["button-increase"]+"' data-toggle='tooltip' data-placement='bottom' style='padding-top:.21rem;'><i style='font-size:120%' class='fa fa-font'></i></a>";
+		html += "	</li>";
+		html += "	<li class='nav-item icon'>";
+		html += "		<a class='nav-link' onclick='decreaseFontSize()' data-title='"+karutaStr[LANG]["button-decrease"]+"' data-toggle='tooltip' data-placement='bottom'><i style='font-size:80%' class='fa fa-font'></i></a>";
+		html += "	</li>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<li class='nav-item dropdown'>";
 		html += "				<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
@@ -1859,6 +1866,21 @@ function applyNavbarConfiguration()
 		root.style.setProperty('--navbar-background-color', g_configVar['navbar-background-color']);
 	if (g_configVar['navbar-text-color']!=undefined)
 		root.style.setProperty('--navbar-text-color', g_configVar['navbar-text-color']);
+}
+
+//==============================
+function applyKarutaConfiguration()
+//==============================
+{
+	var root = document.documentElement;
+	if (g_configVar['font-standard']!=undefined && g_configVar['font-standard']!="")
+		root.style.setProperty('--font-family',g_configVar['font-standard']);
+	if (g_configVar['font-size-coeff']!=undefined && g_configVar['font-size-coeff']!="") 
+		root.style.setProperty('--font-size-coeff',g_configVar['font-size-coeff']);
+	if (g_configVar['font-google']!=undefined && g_configVar['font-google']!="") {
+		$("#font-family").attr("href","https://fonts.googleapis.com/css?family="+g_configVar['font-google']);
+		root.style.setProperty('--font-family',g_configVar['font-google']);
+	}
 }
 
 //==============================

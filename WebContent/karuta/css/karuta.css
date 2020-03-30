@@ -2,6 +2,12 @@
 /* ====================== */
 /*     DEFAULT VALUES     */
 /* ====================== */
+:root {
+  /* ========== navbar =============== */
+  --font-family: Verdana;
+  --font-size-coeff: 0.9;
+}
+
 blockquote {
   display: block;
   margin-block-start: 1em;
@@ -15,21 +21,23 @@ blockquote {
 }
 
 body {
+  font-family: var(--font-family);
+  font-size: calc(var(--font-size-coeff) * 1rem);
   background-color: var(--list-background-color);
 }
 
 body,
 .form-control,
 .btn {
-  font-family: "Open Sans", sans-serif;
-  font-size: 0.8rem;
+  font-family: var(--font-family);
+  font-size: calc(var(--font-size-coeff) * 0.8rem);
 }
 
 @media (min-width: 768px) {
   body,
 .form-control,
 .btn {
-    font-size: 1rem;
+    font-size: calc(var(--font-size-coeff) * 1rem);
   }
 }
 #contenu {
@@ -87,18 +95,19 @@ body,
   width: 100%;
   text-align: center;
   color: var(--list-welcome-title-color);
-  font-size: 2em;
+  font-size: 200%;
 }
 #welcome-bar .welcome-baseline {
   color: var(--list-welcome-subtitle-color);
-  font-size: 1.5em;
+  font-size: 150%;
+  text-align: center;
 }
 @media only screen and (max-width: 320px) {
   #welcome-bar .welcome-title {
-    font-size: 1em;
+    font-size: 100%;
   }
   #welcome-bar .welcome-baseline {
-    font-size: 0.75em;
+    font-size: 75%;
   }
 }
 
@@ -668,7 +677,7 @@ div.oembedall-container {
   background-color: var(--list-button-background-color);
   margin-top: 20px;
   padding: 4px 15px;
-  font-size: 14px;
+  font-size: calc(var(--font-size-coeff) * 1rem);
   display: inline-block;
   cursor: pointer;
   border-radius: 3px;
@@ -779,7 +788,7 @@ div.oembedall-container {
 /*    BUTTONS - MENUS     */
 /* ====================== */
 .button {
-  font-size: 0.9rem;
+  font-size: calc(var(--font-size-coeff) * 0.9rem);
   padding: 5px;
   cursor: pointer;
   display: inline-block;
@@ -790,7 +799,7 @@ div.oembedall-container {
   float: left;
 }
 .menus a.text-button {
-  font-size: 1rem;
+  font-size: calc(var(--font-size-coeff) * 1rem);
   margin-top: 2px;
 }
 
@@ -846,7 +855,7 @@ div.oembedall-container {
   border-top: 1px solid #F0F0F0;
   padding-left: 20px;
   padding-right: 15px;
-  font-size: 0.875rem;
+  font-size: calc(var(--font-size-coeff) * 0.875rem);
   background-color: #FBFBFB;
 }
 
@@ -899,7 +908,7 @@ div.oembedall-container {
 }
 #sidebar-content .number {
   float: right;
-  font-size: 11px;
+  font-size: calc(var(--font-size-coeff) * 0.9rem);
   font-weight: normal;
 }
 #sidebar-content .selected {
@@ -976,7 +985,7 @@ div.oembedall-container {
   color: var(--portfolio-navbar-text-color);
 }
 #sub-bar #toggle-mode-icon {
-  font-size: 1.1rem;
+  font-size: calc(var(--font-size-coeff) * 1.1rem);
 }
 #sub-bar #refresh-portfolio {
   padding-left: 15px;
@@ -1042,7 +1051,7 @@ div.oembedall-container {
   color: var(--portfolio-buttons-color);
 }
 
-.chkbox-report {
+.chkbox-comments {
   display: none;
 }
 
@@ -1075,7 +1084,7 @@ div.oembedall-container {
 .asmStructure > div[name=lbl-div] .title,
 .asmUnit > div[name=lbl-div] .title {
   margin-bottom: 0.5rem;
-  font-size: 1.5rem;
+  font-size: calc(var(--font-size-coeff) * 1.5rem);
 }
 .asmRoot > div[name=lbl-div] .title-subline,
 .asmStructure > div[name=lbl-div] .title-subline,
@@ -1108,42 +1117,42 @@ div.oembedall-container {
   cursor: pointer;
 }
 .standard .asmRoot .title {
-  font-size: 1.5rem;
+  font-size: calc(var(--font-size-coeff) * 1.5rem);
   line-height: 1.875rem;
 }
 .standard .asmStructure .title {
-  font-size: 1.5rem;
+  font-size: calc(var(--font-size-coeff) * 1.5rem);
   line-height: 1.875rem;
 }
 .standard .asmStructure .asmStructure .title,
 .standard .asmRoot .asmStructure .title {
-  font-size: 1.2rem;
+  font-size: calc(var(--font-size-coeff) * 1.2rem);
   font-weight: normal;
 }
 .standard .asmUnit .title {
-  font-size: 1.5rem;
+  font-size: calc(var(--font-size-coeff) * 1.5rem);
   line-height: 1.875rem;
 }
 .standard .asmStructure .asmUnit .title,
 .standard .asmRoot .asmUnit .title {
-  font-size: 1.25rem;
+  font-size: calc(var(--font-size-coeff) * 1.25rem);
   font-weight: normal;
   line-height: 1.5rem;
 }
 .standard .asmUnitStructure .title {
-  font-size: 1.25rem;
+  font-size: calc(var(--font-size-coeff) * 1.25rem);
   line-height: 1.5rem;
 }
 .standard .asmUnitStructure .asmUnitStructure .title {
-  font-size: 1rem;
+  font-size: calc(var(--font-size-coeff) * 1rem);
   line-height: 1.25rem;
 }
 .standard .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-  font-size: 0.875rem;
+  font-size: calc(var(--font-size-coeff) * 0.875rem);
   line-height: 1.25rem;
 }
 .standard .asmUnitStructure .asmUnitStructure .asmUnitStructure .asmUnitStructure .title {
-  font-size: 0.75rem;
+  font-size: calc(var(--font-size-coeff) * 0.75rem);
   line-height: 1.25rem;
 }
 .standard .resource-label .title {
@@ -1322,11 +1331,11 @@ table[name=res-div] {
 /*         MODEL          */
 /* ====================== */
 .model-node-label .title {
-  font-size: 1rem;
+  font-size: calc(var(--font-size-coeff) * 1rem);
 }
 
 .resource-node-label .title {
-  font-size: 0.875rem;
+  font-size: calc(var(--font-size-coeff) * 0.875rem);
 }
 
 .node-model {
@@ -1386,7 +1395,7 @@ h3 {
 }
 
 .warning-list {
-  font-size: 120%;
+  font-size: calc(var(--font-size-coeff) * 1.2rem);
   font-weight: bold;
   color: var(--list-title-color);
 }
@@ -1409,7 +1418,7 @@ h3 {
 
 /* ====================== */
 #refresh {
-  font-size: 150%;
+  font-size: calc(var(--font-size-coeff) * 1.5rem);
   float: right;
   margin-top: 12px;
   cursor: pointer;
@@ -1643,7 +1652,7 @@ hr {
 
 /* ---------------- resource Comments --------------------- */
 .author-date {
-  font-size: 11px;
+  font-size: calc(var(--font-size-coeff) * 0.9rem);
   font-style: italic;
 }
 
@@ -1749,7 +1758,7 @@ hr {
 }
 
 #content .comment {
-  font-size: 12px;
+  font-size: calc(var(--font-size-coeff) * 1rem);
   padding-bottom: 22px;
   padding-left: 40px;
 }
@@ -1762,7 +1771,7 @@ hr {
 }
 .metadata .input-group-text {
   border: 0px solid var(--edit-window-border-color);
-  font-size: 0.9rem;
+  font-size: calc(var(--font-size-coeff) * 0.9rem);
   width: 250px;
 }
 .metadata .input-group {
@@ -1782,7 +1791,7 @@ hr {
   margin-left: 10px;
 }
 .metadata .seltype-radio {
-  font-size: 90%;
+  font-size: calc(var(--font-size-coeff) * 0.9rem);
   margin-top: 5px;
 }
 .metadata .seltype-radio::nth-child(2) {
@@ -1919,12 +1928,12 @@ button.selected-label {
 .report .cssinfo {
   display: block;
 }
-.report .chkbox-report {
+.report .chkbox-comments {
   display: inline;
   float: right;
   margin-right: 20px;
 }
-.report .asmRoot > div[name=lbl-div] .chkbox-report {
+.report .asmRoot > div[name=lbl-div] .chkbox-comments {
   display: none;
 }
 .report .comments,
@@ -1934,6 +1943,10 @@ button.selected-label {
   font-style: italic;
   font-weight: normal;
   color: #aaaaaa;
+}
+.report .ref-init .resource {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
 }
 
 /* ====================
@@ -1946,7 +1959,7 @@ button.selected-label {
 .metainfo,
 .cssinfo {
   color: #808080;
-  font-size: 10px;
+  font-size: calc(var(--font-size-coeff) * 0.8rem);
   font-weight: normal;
   display: none;
 }
@@ -2280,7 +2293,7 @@ select.Y2, option[value=Y2] {
 	SendEmail
    ====================*/
 .receiver_SendEmail {
-  font-size: 12pt;
+  font-size: calc(var(--font-size-coeff) * 1rem);
   margin-bottom: 20px;
   background-color: lightgrey;
   padding: 5px;
@@ -2364,11 +2377,11 @@ select.Y2, option[value=Y2] {
 
 .select-language .li-code {
   width: 30px;
-  font-family: Monaco, Consolas, monospace;
+  font-family: var(--font-family);
 }
 
 .mothertongue-label {
-  font-size: 14px;
+  font-size: 120%;
   font-weight: 500;
 }
 
@@ -2865,11 +2878,11 @@ td {
   width: 100%;
   text-align: center;
   color: var(--list-welcome-title-color);
-  font-size: 25px;
+  font-size: 160%;
 }
 .page-welcome #welcome-image .welcome-baseline {
   color: var(--list-welcome-subtitle-color);
-  font-size: 24px;
+  font-size: 150%;
 }
 .page-welcome .welcome-baseline,
 .page-welcome .welcome-text {
@@ -2884,14 +2897,14 @@ td {
 }
 
 .welcome-block .welcome-title {
-  font-size: 1.5rem;
+  font-size: 150%;
   text-align: center;
   width: 100%;
   padding-bottom: 5px;
 }
 
 .welcome-block .welcome-block .welcome-title {
-  font-size: 18px;
+  font-size: 130%;
 }
 
 .welcome-block .image {
@@ -2971,7 +2984,7 @@ td {
 }
 
 .block .btn-group {
-  font-size: 12px;
+  font-size: 100%;
 }
 
 .block .resource-Image {
@@ -3000,7 +3013,7 @@ td {
   -moz-box-shadow: 10px 10px 5px #888;
   -webkit-box-shadow: 10px 10px 5px #888;
   box-shadow: 10px 10px 5px #888;
-  font-size: 16px;
+  font-size: 120%;
 }
 
 .block .asmUnitStructure {

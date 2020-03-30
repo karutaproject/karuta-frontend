@@ -52,6 +52,7 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			setConfigurationVariables();
+			applyKarutaConfiguration();
 			loadLanguages(function() {
 				getLanguage();
 			});
@@ -129,7 +130,55 @@ function hideArchiveSearch()
 	$("#remove-button").prop('disabled', true);
 }
 
+//==============================
+function applyNavbarConfiguration()
+//==============================
+{
+	$('#navbar-brand-logo').html(g_configVar['navbar-brand-logo']);
+	$("#navbar-brand-logo").attr("style",g_configVar['navbar-brand-logo-style']);
+	if (g_configVar['navbar-display-mailto']=='0')
+		$("#navbar-mailto").hide();
+	if (g_configVar['navbar-display-language']=='0')
+		$("#navbar-language").hide();
+	var root = document.documentElement;
+	if (g_configVar['navbar-background-color']!=undefined)
+		root.style.setProperty('--navbar-background-color', g_configVar['navbar-background-color']);
+	if (g_configVar['navbar-text-color']!=undefined)
+		root.style.setProperty('--navbar-text-color', g_configVar['navbar-text-color']);
+}
 
+//==============================
+function applyKarutaConfiguration()
+//==============================
+{
+	var root = document.documentElement;
+	if (g_configVar['font-standard']!=undefined && g_configVar['font-standard']!="")
+		root.style.setProperty('--font-family',g_configVar['font-standard']);
+	if (g_configVar['font-size-coeff']!=undefined && g_configVar['font-size-coeff']!="") 
+		root.style.setProperty('--font-size-coeff',g_configVar['font-size-coeff']);
+	if (g_configVar['font-google']!=undefined && g_configVar['font-google']!="") {
+		$("#font-family").attr("href","https://fonts.googleapis.com/css?family="+g_configVar['font-google']);
+		root.style.setProperty('--font-family',g_configVar['font-google']);
+	}
+}
+
+//==============================
+function increaseFontSize()
+//==============================
+{
+	var root = document.documentElement;
+	var coeffsize = root.style.getPropertyValue('--font-size-coeff') * 1.1;	
+	root.style.setProperty('--font-size-coeff',coeffsize);
+}
+
+//==============================
+function decreaseFontSize()
+//==============================
+{
+	var root = document.documentElement;
+	var coeffsize = root.style.getPropertyValue('--font-size-coeff') * 0.9;	
+	root.style.setProperty('--font-size-coeff',coeffsize);
+}
 
 //==============================
 function setConfigurationVariables()
@@ -160,6 +209,10 @@ function setConfigurationVariables()
 			//----------------------
 			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
 			g_configVar['maxuserlist'] = getText('config-maxuserlist','Field','text',data);
+			//----------------------
+			g_configVar['font-standard'] = getText('config-font-standard','Field','text',data);
+			g_configVar['font-google'] = getText('config-font-google','Field','text',data);
+			g_configVar['font-size-coeff'] = getText('config-font-size-coeff','Field','text',data);
 			//----------------------
 			g_configVar['list-welcome-image'] = getBackgroundURL('config-list-welcome-image',data);		
 			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data);

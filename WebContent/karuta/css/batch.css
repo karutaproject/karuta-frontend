@@ -44,15 +44,24 @@
   float: left;
   margin-right: 5px;
 }
-.batch .card-header {
-  padding-left: 5px;
-  padding-top: 5px;
-  padding-right: 5px;
-  padding-bottom: 0px;
-  margin-bottom: 0px;
+.batch .chkbox-comments {
+  display: inline;
+  float: right;
+  margin-right: 20px;
 }
-.batch .card-body {
-  padding: 0px;
+.batch .asmRoot > div[name=lbl-div] .chkbox-comments {
+  display: none;
+}
+.batch .comments,
+.batch .comments .form-control,
+.batch .comments .btn,
+.batch .comments .cssinfo {
+  font-style: italic;
+  font-weight: normal;
+  color: #aaaaaa;
+}
+.batch .project-template {
+  display: none;
 }
 
 /* ============================= */
@@ -85,7 +94,8 @@
   margin-top: 7px;
   border: 1px solid var(--batch-person-color);
 }
-.batch .create-tree {
+.batch .create-tree,
+.batch .create-project {
   margin-top: 7px;
   border: 1px solid var(--batch-tree-color);
 }

@@ -93,6 +93,8 @@ karutaStr['en']['see-bin']="See Bin";
 karutaStr['en']['complex']="Partial Loading";
 karutaStr["en"]["button-print"] = "Print";
 karutaStr["en"]["write-mode"] = "Edit";
+karutaStr["en"]["button-increase"] = "Increase Character Size";
+karutaStr["en"]["button-decrease"] = "Decrease Character Size";
 
 //=========================================
 //========== ERRORS =======================

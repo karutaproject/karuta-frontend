@@ -72,6 +72,41 @@ function getTxtvals(node)
 }
 
 //==================================
+function getvarvals(node)
+//==================================
+{
+	var str = "";
+	if ($("varval",node).length>0) {
+		var txtvarval = $("varval",node).text();
+		var items = txtvarval.split(" ");
+		for (var i=0; i<items.length; i++){
+			var text = "";
+			if (items[i]!=undefined && items[i]!="") {
+				var fct = null;
+				if (items[i].indexOf('function(')>-1) {
+					fct = items[i].substring(9,items[i].indexOf(','))
+					items[i] = items[i].substring(items[i].indexOf(',')+1,items[i].indexOf(')'))
+				}
+				if (items[i].indexOf("//")>-1)
+					text = eval("g_json."+items[i].substring(2));
+				else if (items[i].indexOf("/")>-1)
+					text = eval("g_json.lines["+g_noline+"]."+items[i].substring(1));
+				else if (items[i].indexOf("'")>-1)
+					text = items[i].substring(items[i].indexOf("'")+1,items[i].lastIndexOf("'")-1)
+				if (fct!=null)
+					text = eval(fct+"('"+text+"')");
+				if (text.indexOf('numline()')>-1) {
+					text = text.replace(/numline()/g,g_noline);
+					text = eval(text);
+				}
+			}
+			str += text;
+		}
+	}
+	return str.trim();
+}
+
+//==================================
 function getTargetUrl(node)
 //==================================
 {
@@ -528,7 +563,7 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 			$("#batch-log").append("<br>- usergroup created ("+usergroupid+") - label:"+usergroup);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span>ATTENTION</span>already defined - label:"+usergroup);					
+			$("#batch-log").append("<br>- ***<span>ATTENTION</span>already defined - label:"+usergroup);
 		}
 	});
 	return ok;
@@ -728,7 +763,9 @@ g_actions['create-tree'] = function createTree(node)
 //=================================================
 {
 	var ok = false;
-	var code = getTxtvals($("code",node));
+	var code = getvarvals($("code",node));
+	if (code=="")
+		code = getTxtvals($("code",node));
 	var treeref = $(node).attr('id');
 	if (code!="") {
 		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
@@ -748,7 +785,9 @@ g_actions['create-tree'] = function createTree(node)
 				g_trees[treeref] = portfolio;
 			},
 			error : function(data) {
-				var label = getTxtvals($("label",node));
+				var label = getvarvals($("label",node));
+				if (label=="")
+					label = getTxtvals($("label",node));
 				var template = getTxtvals($("template",node));
 				//----- create tree from template -----
 				var portfolioid = "";
@@ -1496,7 +1535,7 @@ g_actions['create-portfoliogroup'] = function CreatePortfolioGroup(node)
 			$("#batch-log").append("<br>- portfoliogroup created ("+portfoliogroupid+") - label:"+portfoliogroup);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in create-portfoliogroup - label:"+portfoliogroup);					
+			$("#batch-log").append("<br>- ***<span>ATTENTION</span>already defined - label:"+portfoliogroup);
 		}
 	});
 	return ok;

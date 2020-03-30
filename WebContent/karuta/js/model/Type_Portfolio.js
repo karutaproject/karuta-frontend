@@ -26,7 +26,6 @@ var number_of_projects_portfolios = 0;
 var number_of_portfolios = 0;
 var number_of_bins = 0;
 var loadedProjects = {};
-var currentDisplayedPrjectCode = "";
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -101,8 +100,8 @@ UIFactory["Portfolio"] = function( node )
 		this.rights = "";
 	else
 		this.rights = this.root.getRights(this.rootid);
+	this.model = $("role",this.rights).length==0;
 };
-
 
 //==================================
 UIFactory["Portfolio"].getLogicalMetadataAttribute= function(node,attribute)
