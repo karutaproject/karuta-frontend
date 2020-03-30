@@ -807,17 +807,20 @@ div.oembedall-container {
 /*      NAVBAR            */
 /* ====================== */
 #navigation-bar,
-.navbar-light .navbar-nav .nav-link {
+.navbar-light .navbar-nav .nav-link,
+.navbar-light .navbar-nav .nav-link:hover {
   color: var(--navbar-text-color);
   background-color: var(--navbar-background-color);
 }
 #navigation-bar .dropdown-menu,
-.navbar-light .navbar-nav .nav-link .dropdown-menu {
+.navbar-light .navbar-nav .nav-link .dropdown-menu,
+.navbar-light .navbar-nav .nav-link:hover .dropdown-menu {
   background-color: var(--navbar-text-color);
   color: var(--navbar-background-color);
 }
 #navigation-bar .dropdown-item:hover,
-.navbar-light .navbar-nav .nav-link .dropdown-item:hover {
+.navbar-light .navbar-nav .nav-link .dropdown-item:hover,
+.navbar-light .navbar-nav .nav-link:hover .dropdown-item:hover {
   background-color: var(--navbar-background-color);
   color: var(--navbar-text-color);
 }

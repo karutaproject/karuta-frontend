@@ -55,6 +55,8 @@ function getTxtvals(node)
 			}
 			if (select.indexOf("//")>-1)
 				text = eval("g_json."+select.substring(2));
+			else if (select.indexOf("/")>-1)
+				text = eval("g_json."+select.substring(1));
 			else
 				text = eval("g_json.lines["+g_noline+"]."+select);
 			if (fct!=null)
@@ -78,21 +80,21 @@ function getvarvals(node)
 	var str = "";
 	if ($("varval",node).length>0) {
 		var txtvarval = $("varval",node).text();
-		var items = txtvarval.split(" ");
+		var items = txtvarval.split("\\");
 		for (var i=0; i<items.length; i++){
 			var text = "";
 			if (items[i]!=undefined && items[i]!="") {
 				var fct = null;
 				if (items[i].indexOf('function(')>-1) {
-					fct = items[i].substring(9,items[i].indexOf(','))
-					items[i] = items[i].substring(items[i].indexOf(',')+1,items[i].indexOf(')'))
+					fct = items[i].substring(9,items[i].indexOf(','));
+					items[i] = items[i].substring(items[i].indexOf(',')+1,items[i].indexOf(')'));
 				}
 				if (items[i].indexOf("//")>-1)
 					text = eval("g_json."+items[i].substring(2));
 				else if (items[i].indexOf("/")>-1)
 					text = eval("g_json.lines["+g_noline+"]."+items[i].substring(1));
-				else if (items[i].indexOf("'")>-1)
-					text = items[i].substring(items[i].indexOf("'")+1,items[i].lastIndexOf("'")-1)
+				else 
+					text = items[i];
 				if (fct!=null)
 					text = eval(fct+"('"+text+"')");
 				if (text.indexOf('numline()')>-1) {
@@ -563,7 +565,7 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 			$("#batch-log").append("<br>- usergroup created ("+usergroupid+") - label:"+usergroup);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span>ATTENTION</span>already defined - label:"+usergroup);
+			$("#batch-log").append("<br>- ***<span>ATTENTION</span> already defined - label:"+usergroup);
 		}
 	});
 	return ok;
@@ -1535,7 +1537,7 @@ g_actions['create-portfoliogroup'] = function CreatePortfolioGroup(node)
 			$("#batch-log").append("<br>- portfoliogroup created ("+portfoliogroupid+") - label:"+portfoliogroup);
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span>ATTENTION</span>already defined - label:"+portfoliogroup);
+			$("#batch-log").append("<br>- ***<span>ATTENTION</span> already defined - label:"+portfoliogroup);
 		}
 	});
 	return ok;
@@ -2563,7 +2565,7 @@ function getInputsLine(node)
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
 		code = UICom.structure["ui"][inputid].getCode().trim();
-		g_json_line[code] = UICom.structure["ui"][inputid].resource.getView().trim();
+		g_json_line[code] = UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim();
 	}
 	return g_json_line;
 };

@@ -551,6 +551,7 @@ UIFactory.User.loadUserAndDisplay = function(userid,dest,type)
 //==================================
 {
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/users/user/"+userid,

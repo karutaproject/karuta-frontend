@@ -3153,97 +3153,121 @@ UIFactory.Portfolio.displayProjectContent = function(dest,parentcode,langcode)
 		html = "<h3  class='bin-label'>"+text2+"</h3>";
 	}
 	$("#"+dest).html($(html));
-	var type = "list";
 	if (langcode==null)
 		langcode = LANGCODE;
 	for (var i=0; i<portfolios_list.length;i++){
 		var portfolio = portfolios_list[i];
 		//---------------------
 		var html = "";
-		var owner = "";
-		if (Users_byid[portfolio.ownerid]==null)
-			UIFactory.User.loadUserAndDisplay(portfolio.ownerid,'owner_'+portfolio.id,'firstname-lastname');
-		else
-			owner = (Users_byid[portfolio.ownerid]==null) ? "":Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
+		var ownerName = "";
 		var portfoliocode = portfolio.code_node.text();
 		if (portfoliocode==parentcode){
 			//-------------------- PROJECT ----------------------
-			var portfolio_label = portfolio.label_node[langcode].text();
-			if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
-				portfolio_label = '- no label in '+languages[langcode]+' -';
-			html += "<div id='projectcontent_"+portfolio.id+"' class='project-header'>";
-			html += "	<div class='row row-label'>";
-			html += "		<div class='col-4 project-label' id='portfoliolabel_"+portfolio.id+"' >"+portfolio_label+"</div>";
-			html += "		<div id='owner_"+portfolio.id+"' class='col-2 d-none d-md-block project-label'>"+owner+"</div>";
-			html += "		<div class='col-4 d-none d-sm-block comments' id='project-comments_"+$(portfolios_byid[portfolio.id].root).attr("id")+"'> </div><!-- comments -->";
-			html += "		<div class='col-1'>";
-			//------------ buttons ---------------
-			html += "			<div class='dropdown portfolio-menu'>";
-			if (USER.admin || (portfolio.owner=='Y' && !USER.xlimited)) {
-				html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
-				html += "			<div class='dropdown-menu  dropdown-menu-right'>";
-				html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
-				html += "			<a class='dropdown-item' id='remove-"+portfolio.id+"' style='display:block' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
-				html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callChangeOwner('"+portfolio.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["changeOwner"]+"</a>";
-				html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolio.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
-				html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolio.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
-				html += "			<a class='dropdown-item' id='export-"+portfolio.id+"' href='' style='display:block'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a>";
-				html += "			<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callArchive('"+portfoliocode+"')\" ><i class='fa fa-download'></i> "+karutaStr[LANG]["archive-project"]+"</a>";
-				html += "			</div>";
-			} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
-				html += "			<button  data-toggle='dropdown' class='btn   dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
+			if (Users_byid[portfolio.ownerid]==null) {
+				UIFactory.User.loadUserAndDisplay(portfolio.ownerid,'owner_'+portfolio.id,'firstname-lastname');
 			}
-			html += "			</div><!-- class='btn-group' -->";
-			//---------------------------------------
-			html += "		</div><!-- class='col-1' -->";
-			html += "		<div class='col-1'>";
-			//------------------------ menu-burger
-			if (USER.admin || (USER.creator && !USER.limited) ) {
-				html += "			<div class='dropdown portfolio-menu'>";
-				html += "				<button  class='btn dropdown-toggle' data-toggle='dropdown'></button>";
-				html += "				<ul class='dropdown-menu dropdown-menu-right' role='menu'>";
-				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.model')\" >"+karutaStr[LANG]['karuta.model']+"</a>";
-				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.rubrics')\" >"+karutaStr[LANG]['karuta.rubrics']+"</a>";
-				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.parts')\" >"+karutaStr[LANG]['karuta.parts']+"</a>";
-				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.report')\" >"+karutaStr[LANG]['karuta.report']+"</a>";
-				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch')\" >"+karutaStr[LANG]['karuta.batch']+"</a>";
-				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch-form')\" >"+karutaStr[LANG]['karuta.batch-form']+"</a>";
-				html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].create('"+portfoliocode+"')\" >"+karutaStr[LANG]['create_tree']+"</a>";
-				html += "				</ul>";
-				html += "			</div>";
+			else {
+				ownerName = (Users_byid[portfolio.ownerid]==null) ? "":Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
 			}
-			//------------------------end menu-burger
-			html += "		</div><!-- class='col-1' -->";
-			html += "	</div><!-- class='row' -->";
-			html += "</div><!-- class='project'-->"
-			$("#"+dest).append($(html));
-			//----------------------
-			UIFactory["Portfolio"].displayComments('project-comments_'+$(portfolios_byid[portfolio.id].root).attr("id"),portfolio);
-			var portfolio_list = "";
-			for (var j=0; j<portfolios_list.length;j++){
-				var portfolio1 = portfolios_list[j];
-				var portfoliocode1 = portfolio1.code_node.text();
-				var portfolio_parentcode1 = portfoliocode1.substring(0,portfoliocode1.indexOf("."));
-				if ((parentcode!= null && portfolio_parentcode1==parentcode) || portfoliocode1==parentcode) {
-					portfolio_list += "," + portfolio1.id;
-				}
-			}
-			if (portfolio_list.length>0)
-				portfolio_list = portfolio_list.substring(1);
-			$("#export-"+portfolio.id).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+portfolio_list);
-			//----------------------
+			UIFactory.Portfolio.displayProjectItem(dest,portfolio,ownerName,parentcode,langcode);
 		} else {
 			//-------------------- PORTFOLIO ----------------------
 			var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
-			if ((parentcode!= null && portfolio_parentcode==parentcode) || (parentcode=='false' && portfolio.semantictag.indexOf('karuta-project')<0)) {
-				$("#"+dest).append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
-				if (!portfolio.notvisible || (USER.creator && !USER.limited) )
-					$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type,langcode,parentcode,owner));
-			}
+			if ((parentcode!= null && portfolio_parentcode==parentcode) || (parentcode=='false' && portfolio_parentcode=="" && portfolio.semantictag.indexOf('karuta-project')<0))
+				if (!portfolio.notvisible || (USER.creator && !USER.limited) ) {
+					if (Users_byid[portfolio.ownerid]==null) {
+						UIFactory.User.loadUserAndDisplay(portfolio.ownerid,'owner_'+portfolio.id,'firstname-lastname');
+					}
+					else {
+						ownerName = (Users_byid[portfolio.ownerid]==null) ? "":Users_byid[portfolio.ownerid].getView(null,'firstname-lastname',null);
+					}
+					UIFactory.Portfolio.displayProjectPortfolio(dest,portfolio,ownerName,parentcode,langcode);
+				}
 		}
 		$(window).scrollTop(0);
 		$("#wait-window").hide();
 	}
+}
+
+//==================================
+UIFactory.Portfolio.displayProjectPortfolio = function(dest,portfolio,ownerName,parentcode,langcode)
+//==================================
+{
+	var type = "list";
+	$("#"+dest).append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
+	$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type,langcode,parentcode,ownerName));
+}
+//==================================
+UIFactory.Portfolio.displayProjectItem = function(dest,portfolio,ownerName,parentcode,langcode)
+//==================================
+{
+	var html = "";
+	//-------------------- PROJECT ----------------------
+	var portfoliocode = portfolio.code_node.text();
+	var portfolio_label = portfolio.label_node[langcode].text();
+	if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
+		portfolio_label = '- no label in '+languages[langcode]+' -';
+	html += "<div id='projectcontent_"+portfolio.id+"' class='project-header'>";
+	html += "	<div class='row row-label'>";
+	html += "		<div class='col-4 project-label' id='portfoliolabel_"+portfolio.id+"' >"+portfolio_label+"</div>";
+	html += "		<div id='owner_"+portfolio.id+"' class='col-2 d-none d-md-block project-label'>"+ownerName+"</div>";
+	html += "		<div class='col-4 d-none d-sm-block comments' id='project-comments_"+$(portfolios_byid[portfolio.id].root).attr("id")+"'> </div><!-- comments -->";
+	html += "		<div class='col-1'>";
+	//------------ buttons ---------------
+	html += "			<div class='dropdown portfolio-menu'>";
+	if (USER.admin || (portfolio.owner=='Y' && !USER.xlimited)) {
+		html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
+		html += "			<div class='dropdown-menu  dropdown-menu-right'>";
+		html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callRename('"+portfolio.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
+		html += "			<a class='dropdown-item' id='remove-"+portfolio.id+"' style='display:block' onclick=\"UIFactory['Portfolio'].removeProject('"+portfolio.id+"','"+portfolio.code_node.text()+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+		html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callChangeOwner('"+portfolio.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["changeOwner"]+"</a>";
+		html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsers('"+portfolio.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
+		html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+portfolio.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
+		html += "			<a class='dropdown-item' id='export-"+portfolio.id+"' href='' style='display:block'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a>";
+		html += "			<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callArchive('"+portfoliocode+"')\" ><i class='fa fa-download'></i> "+karutaStr[LANG]["archive-project"]+"</a>";
+		html += "			</div>";
+	} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
+		html += "			<button  data-toggle='dropdown' class='btn   dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
+	}
+	html += "			</div><!-- class='btn-group' -->";
+	//---------------------------------------
+	html += "		</div><!-- class='col-1' -->";
+	html += "		<div class='col-1'>";
+	//------------------------ menu-burger
+	if (USER.admin || (USER.creator && !USER.limited) ) {
+		html += "			<div class='dropdown portfolio-menu'>";
+		html += "				<button  class='btn dropdown-toggle' data-toggle='dropdown'></button>";
+		html += "				<ul class='dropdown-menu dropdown-menu-right' role='menu'>";
+		html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.model')\" >"+karutaStr[LANG]['karuta.model']+"</a>";
+		html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.rubrics')\" >"+karutaStr[LANG]['karuta.rubrics']+"</a>";
+		html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.parts')\" >"+karutaStr[LANG]['karuta.parts']+"</a>";
+		html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.report')\" >"+karutaStr[LANG]['karuta.report']+"</a>";
+		html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch')\" >"+karutaStr[LANG]['karuta.batch']+"</a>";
+		html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].createTree('"+portfoliocode+"','karuta.batch-form')\" >"+karutaStr[LANG]['karuta.batch-form']+"</a>";
+		html += "					<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].create('"+portfoliocode+"')\" >"+karutaStr[LANG]['create_tree']+"</a>";
+		html += "				</ul>";
+		html += "			</div>";
+	}
+	//------------------------end menu-burger
+	html += "		</div><!-- class='col-1' -->";
+	html += "	</div><!-- class='row' -->";
+	html += "</div><!-- class='project'-->"
+	$("#"+dest).append($(html));
+	//----------------------
+	UIFactory["Portfolio"].displayComments('project-comments_'+$(portfolios_byid[portfolio.id].root).attr("id"),portfolio);
+	var portfolio_list = "";
+	for (var j=0; j<portfolios_list.length;j++){
+		var portfolio1 = portfolios_list[j];
+		var portfoliocode1 = portfolio1.code_node.text();
+		var portfolio_parentcode1 = portfoliocode1.substring(0,portfoliocode1.indexOf("."));
+		if ((parentcode!= null && portfolio_parentcode1==parentcode) || portfoliocode1==parentcode) {
+			portfolio_list += "," + portfolio1.id;
+		}
+	}
+	if (portfolio_list.length>0)
+		portfolio_list = portfolio_list.substring(1);
+	$("#export-"+portfolio.id).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+portfolio_list);
+	//----------------------
 }
 
 //==================================

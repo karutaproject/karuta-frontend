@@ -424,9 +424,9 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 //		$("div[name='lbl-div']","#node_"+uuid).hide();
 	//----------- Comments -----------
 	if (this.edit && this.inline && this.writenode)
-		UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+		UIFactory.Node.displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
 	else
-		UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+		UIFactory.Node.displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
 	//--------------------Metadata Info------------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		this.displayMetainfo("metainfo_"+uuid);
@@ -1668,7 +1668,7 @@ UIFactory['Node'].loadStructure = function(uuid)
 UIFactory['Node'].toggleComment = function(uuid,input)
 //==================================================
 {
-	var semantictag = UICom.structure["ui"][uuid].semantictag;
+	var semantictag = UICom.structure.ui[uuid].semantictag;
 	if (input.checked) {
 		semantictag += ' comments';
 		$("#node_"+uuid).addClass('comments');
@@ -1677,7 +1677,7 @@ UIFactory['Node'].toggleComment = function(uuid,input)
 		semantictag = semantictag.substring(0,semantictag.indexOf('comments')-1)
 		$("#node_"+uuid).removeClass('comments');
 	}
-	UIFactory["Node"].updateMetadataAttribute(UICom.structure["ui"][uuid].id,'semantictag',semantictag);
+	UIFactory["Node"].updateMetadataAttribute(UICom.structure.ui[uuid].id,'semantictag',semantictag);
 
 }
 //----------------------------------------------------------------------------------------------------------------------------

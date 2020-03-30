@@ -872,7 +872,8 @@ div.oembedall-container {
 /* ====================== */
 
 	#navigation-bar,
-	.navbar-light .navbar-nav .nav-link {
+	.navbar-light .navbar-nav .nav-link,
+	.navbar-light .navbar-nav .nav-link:hover {
 		color: var(--navbar-text-color);
 		background-color: var(--navbar-background-color);
 		.dropdown-menu {

@@ -131,6 +131,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	if (this.encrypted)
 		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
+	if (type=='batchform')
+		return label;
 	var html = "";
 	html += "<div class='"+cleanCode(code)+" view-div' ";
 	if (indashboard)

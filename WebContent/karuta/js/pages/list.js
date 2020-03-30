@@ -46,7 +46,7 @@ function getList()
 		//--------------------PORTFOLIOS--------------------------------------
 		html += "<h3 id='portfolios-not-in-project'>";
 		html += "	<span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span>";
-		html += "	<button class='btn list-btn' onclick=\"loadAndDisplayProjectContent('project-portfolios','false');$(window).scrollTop(0);$('.project').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
+		html += "	<button class='btn list-btn' onclick=\"loadAndDisplayProjectContent('project-portfolios','false');$(window).scrollTop(0);$('.active').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
 		html += "</h3>";
 	
 		//---------------------BIN-------------------------------------
@@ -384,7 +384,7 @@ function cleanList()
 	$("#searched-portfolios-content").hide();
 	$("#searched-bin-portfolios-header").hide();
 	$("#searched-bin-portfolios-content").hide();
-	$(".row-label").removeClass('active');
+	$(".active").removeClass('active');
 }
 
 
