@@ -1671,10 +1671,12 @@ UIFactory['Node'].toggleComment = function(uuid,input)
 	var semantictag = UICom.structure.ui[uuid].semantictag;
 	if (input.checked) {
 		semantictag += ' comments';
+		UICom.structure.ui[uuid].semantictag = semantictag;
 		$("#node_"+uuid).addClass('comments');
 	}
 	else {
 		semantictag = semantictag.substring(0,semantictag.indexOf('comments')-1)
+		UICom.structure.ui[uuid].semantictag = semantictag;
 		$("#node_"+uuid).removeClass('comments');
 	}
 	UIFactory["Node"].updateMetadataAttribute(UICom.structure.ui[uuid].id,'semantictag',semantictag);
