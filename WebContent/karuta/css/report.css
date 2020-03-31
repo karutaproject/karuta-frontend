@@ -21,7 +21,7 @@
 .report .comments .cssinfo {
   font-style: italic;
   font-weight: normal;
-  color: #aaaaaa;
+  color: var(--report-comment-color);
 }
 
 .report .ref-init .resource {

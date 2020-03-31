@@ -11,7 +11,7 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 {	// note: #xxx is to avoid to scroll to the top of the page
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<a class='button text-button' href='#xxx' onclick=\"";
+	var html = "<a class='button text-button' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
 		html += items[0] +"('"+parentid+"','"+title+"'";
@@ -42,7 +42,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 {	// note: #xxx is to avoid to scroll to the top of the page
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<a class='dropdown-item button text-button' href='#xxx' onclick=\"";
+	var html = "<a class='dropdown-item button text-button' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
 		html += items[0] +"('"+parentid+"','"+title+"'";

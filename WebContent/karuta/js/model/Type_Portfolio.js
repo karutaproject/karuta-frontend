@@ -3173,7 +3173,7 @@ UIFactory.Portfolio.displayProjectContent = function(dest,parentcode,langcode)
 		} else {
 			//-------------------- PORTFOLIO ----------------------
 			var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
-			if ((parentcode!= null && portfolio_parentcode==parentcode) || (parentcode=='false' && portfolio_parentcode=="" && portfolio.semantictag.indexOf('karuta-project')<0))
+			if ((parentcode!= null && portfolio_parentcode==parentcode) || (parentcode=='false'  && portfolio.semantictag.indexOf('karuta-project')<0))
 				if (!portfolio.notvisible || (USER.creator && !USER.limited) ) {
 					if (Users_byid[portfolio.ownerid]==null) {
 						UIFactory.User.loadUserAndDisplay(portfolio.ownerid,'owner_'+portfolio.id,'firstname-lastname');

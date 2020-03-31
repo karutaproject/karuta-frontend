@@ -359,7 +359,6 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			//----------------------
 			var portfoliocode_parent = $("portfoliocode",$("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent)).text();
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
-			if (portfoliocode.indexOf("ROME")<0){
 				var url ="";
 				if (portfoliocode.indexOf('?')!= -1) {
 					if (code_parent.indexOf("@")>-1) {
@@ -402,29 +401,6 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					}
 	
 				});
-			} else { // ==== ROME =====
-				var self = this;
-				if (cachable && g_Get_Resource_caches[queryattr_value]!=undefined && g_Get_Resource_caches[queryattr_value]!="")
-					UIFactory["Get_Get_Resource"].parseROME(destid,type,langcode,g_Get_Resource_caches[queryattr_value],self,disabled,srce,portfoliocode);
-				else {
-					var url = serverBCK+"/rome/";
-					if (code_parent!='')
-							url+= semtag_parent+"/"+code_parent+"/"+semtag;
-					else
-						url+= semtag;
-					$.ajax({
-						type : "GET",
-						dataType : "json",
-						url : url,
-						success : function(data) {
-							if (cachable)
-								g_Get_Resource_caches[queryattr_value] = data;
-							UIFactory["Get_Get_Resource"].parseROME(destid,type,langcode,data,self,disabled,srce,portfoliocode);
-						}
-					});
-				}
-				
-			}
 
 		} catch(e) { alertHTML(e);
 			// do nothing - error in the search attribute
@@ -1226,7 +1202,7 @@ function import_ggmultiple(parentid,title,query,partcode,get_get_resource_semtag
 	getgetResource.displayEditor("get-get-resource-node");
 	$('#edit-window').modal('show');
 }
-
+/*
 //==================================
 UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,self,disabled,srce,portfoliocode) {
 //==================================
@@ -1373,3 +1349,5 @@ UIFactory["Get_Get_Resource"].parseROME = function(destid,type,langcode,data,sel
 		$(btn_group).append($(select));
 	}
 }
+
+*/
