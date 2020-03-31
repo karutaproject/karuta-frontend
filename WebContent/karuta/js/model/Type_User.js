@@ -83,9 +83,9 @@ UIFactory["User"] = function( node )
 UIFactory["User"].displayActive = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_users'></tbody></table>");
+	$("#"+destid).html("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["designer"]+"/"+karutaStr[LANG]["admin"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_users'></tbody></table>");
 	$("#temporary").html("<table id='temp_users'></table>");
-	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var itemid = destid+"_"+UsersActive_list[i].id;
 		var login = UsersActive_list[i].username_node.text();
@@ -187,6 +187,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	if (type=='list') {
 		html = "<td class='firstname'>"+this.firstname_node.text()+"</td>";
 		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
+		html += "<td class='creator'>"+this.designer_node.text()+" / "+this.admin_node.text()+"</td>";
 		html += "<td class='username'>("+this.username_node.text()+")</td>";
 		//------------ buttons ---------------
 		html += "<td class='user-buttons'>";

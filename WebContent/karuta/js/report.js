@@ -1220,7 +1220,7 @@ g_report_actions['csv-line'] = function (destid,action,no,data)
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		var is_out_csv = true;
-		g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data,is_out_csv);
+		g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),data,is_out_csv);
 	};
 	csvreport[csvreport.length]=csvline;
 	$.ajax({
@@ -1244,7 +1244,7 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 	var attr_help = "";
 	var prefix_id = "";
 	try {
-		var select = $(xmlDoc).attr("select");
+		var select = $(action).attr("select");
 		while (select.indexOf("##")>-1) {
 			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
 			var variable_name = test_string.substring(0,test_string.indexOf("##"));
