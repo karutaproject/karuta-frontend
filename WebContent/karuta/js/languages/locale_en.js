@@ -95,6 +95,8 @@ karutaStr["en"]["button-print"] = "Print";
 karutaStr["en"]["write-mode"] = "Edit";
 karutaStr["en"]["button-increase"] = "Increase Character Size";
 karutaStr["en"]["button-decrease"] = "Decrease Character Size";
+karutaStr["en"]["copy"] = "Copy";
+karutaStr["en"]["copied"] = "Copied";
 
 //=========================================
 //========== ERRORS =======================
@@ -398,6 +400,7 @@ karutaStr['en']['dashboard-code']="Dashboard Code";
 karutaStr['en']['report-code']="Report Code";
 karutaStr['en']['csv']="Roles - Display CSV";
 karutaStr['en']['pdf']="Roles - Display PDF";
+karutaStr['en']['rtf']="Rôles - Display RTF";
 karutaStr['en']['img']="Rôles - Display Image";
 karutaStr['en']['document-required']="You have to specify a document before to submit !";
 karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g_configVar['maxfilesizeupload'] + " Mo !";

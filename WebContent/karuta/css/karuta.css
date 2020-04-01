@@ -161,14 +161,17 @@ body,
 #list-container .portfolio-row:hover {
   background-color: var(--list-element-background-color-complement);
 }
-#list-container .project .row-label,
 #list-container .portfolios-not-in-project {
   color: var(--list-element-text-color);
 }
 #list-container .project .row-label {
   margin-top: 10px;
   padding: 7px;
+  color: var(--list-element-text-color);
   background-color: var(--list-element-background-color);
+}
+#list-container .project .row-label:hover {
+  background-color: var(--list-element-background-color-complement);
 }
 #list-container #bin-content .row-label {
   margin-left: 5px;
@@ -205,6 +208,35 @@ body,
 }
 #list-container .project-content .col-md-1 {
   border-right: 1px solid var(--list-element-text-color);
+}
+#list-container .copy-button .tooltiptext {
+  font-family: var(--font-family);
+  display: none;
+  background-color: #555;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+#list-container .copy-button .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+#list-container .copy-button:hover .tooltiptext {
+  display: in-line;
+  opacity: 1;
 }
 
 #list {

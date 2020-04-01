@@ -2107,3 +2107,35 @@ function selectElts(type,list)
 		$('#'+list[i]).addClass('active');
 	}
 }
+
+//=====================================================================================================
+//=====================================================================================================
+//============================== COPY CLIPBOARD =======================================================
+//=====================================================================================================
+//=====================================================================================================
+
+//==================================
+function copyInclipboad(id) 
+//==================================
+{
+	var element = document.getElementById("pcode_"+id);
+	var textArea = document.createElement("textarea");
+	textArea.value = element.textContent;
+	document.body.appendChild(textArea);
+	textArea.select();
+	document.execCommand("Copy");
+	textArea.remove();
+	$(element).tooltip('hide');
+	$(element).attr('title', karutaStr[LANG]['copied'] +" : "+element.textContent);
+	$(element).tooltip('show');
+}
+
+//==================================
+function outCopy(id)
+//==================================
+{
+	var element = document.getElementById("pcode_"+id);
+	$(element).tooltip('hide');
+	$(element).attr('title', karutaStr[LANG]['copy'] +" : "+element.textContent);
+}
+

@@ -173,8 +173,8 @@ UIFactory["Langue"].prototype.displayView = function(destid,type,langcode,edit)
 		if (edit && type=='detail') {
 			html +="<td class='buttons' style='text-align:left'>";
 			html +="	<div class='btn-group' style='margin-left:3px;'>";
-			html += "		<span onclick=\"UICom.structure.ui['"+this.parentid+"'].structured_resource.langues_byid['"+this.id+"'].displayEditor('"+destid+"');\" class='button glyphicon glyphicon-pencil' aria-hidden='true'></span>";
-			html += "		<span onclick=\"confirmDel('"+this.id+"','Langue')\" class='button glyphicon glyphicon-remove' aria-hidden='true'></span>";
+			html += "		<span onclick=\"UICom.structure.ui['"+this.parentid+"'].structured_resource.langues_byid['"+this.id+"'].displayEditor('"+destid+"');\" class='button fas fa-pencil-alt' aria-hidden='true'></span>";
+			html += "		<span onclick=\"confirmDel('"+this.id+"','Langue')\" class='button fas fa-trash-alt' aria-hidden='true'></span>";
 			html +="	</div>";
 			html +="</td>";
 		}
@@ -272,7 +272,7 @@ UIFactory["Langue"].displayMothertongue = function(uuid,destid,edit)
 	
 	var html = UICom.structure["ui"][uuid].resource.getView("mother_tongue","span");
 	$("#"+destid).html(html);
-	html = "<span  onclick=\"UIFactory.Langue.editMothertongue('"+g_mother_tongueid+"','mother_tongue');\" class='button glyphicon glyphicon-pencil' aria-hidden='true'></span>";
+	html = "<span  onclick=\"UIFactory.Langue.editMothertongue('"+g_mother_tongueid+"','mother_tongue');\" class='button fas fa-pencil-alt' aria-hidden='true'></span>";
 	$("#"+destid+"_button").html($(html));
 };
 

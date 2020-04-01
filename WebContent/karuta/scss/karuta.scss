@@ -173,14 +173,17 @@
 				background-color: var(--list-element-background-color-complement);
 			}
 		}
-		.project .row-label,
 		.portfolios-not-in-project {
 			color: var(--list-element-text-color);
 		}
 		.project .row-label {
 			margin-top:10px;
 			padding:7px;
+			color: var(--list-element-text-color);
 			background-color:var(--list-element-background-color);
+			&:hover {
+				background-color: var(--list-element-background-color-complement);
+			}
 		}
 		#bin-content {
 			.row-label {
@@ -229,6 +232,39 @@
 //			.portfolio-row:last-child .col-md-1{
 //				border-bottom: 1px solid var(--list-element-text-color);
 //			}
+		}
+		.copy-button .tooltiptext {
+			font-family: var(--font-family);
+			display:none;
+//			width: 140px;
+			background-color: #555;
+//			color: #fff;
+			text-align: center;
+			border-radius: 6px;
+			padding: 5px;
+			position: absolute;
+			z-index: 1;
+			bottom: 150%;
+			left: 50%;
+			margin-left: -75px;
+			opacity: 0;
+			transition: opacity 0.3s;
+		}
+
+		.copy-button .tooltiptext::after {
+			content: "";
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			margin-left: -5px;
+			border-width: 5px;
+			border-style: solid;
+			border-color: #555 transparent transparent transparent;
+		}
+
+		.copy-button:hover .tooltiptext {
+			display:in-line;
+			opacity: 1;
 		}
 	}
 

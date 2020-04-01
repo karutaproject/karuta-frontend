@@ -471,7 +471,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 		} else { // lang1/lang2/...
 			help_text = helps[langcode];  // lang1/lang2/...
 		}
-		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
+		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
 		$("#help_"+destid+'-'+no).html(help);
 		$(".popinfo").popover({ 
 		    placement : 'bottom',
@@ -2038,7 +2038,7 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 		};
 		for (var i=0; i<nodes.length;i++){
 			if (points[i].value!=null)
-				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+no);
+				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+pos);
 			if (no==0 && pos==0){
 				for (var j=0;j<=Math.abs(max-min);j++) {
 					if (j>0)

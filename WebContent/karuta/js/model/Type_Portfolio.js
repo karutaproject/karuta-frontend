@@ -54,7 +54,7 @@ UIFactory["Portfolio"] = function( node )
 	this.semantictag = $("metadata",node).attr('semantictag');
 	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.notvisible = ($("metadata",node).attr('list-novisible')=='Y') ? true : false;
-	this.complex = ($("metadata",node).attr('complex')=='Y') ? true : false;
+//	this.complex = ($("metadata",node).attr('complex')=='Y') ? true : false;
 	if (this.complex==undefined)
 		this.complex = false;
 	//------------------------------
@@ -122,10 +122,23 @@ function dragPortfolio(ev)
 }
 
 //==================================
-function allowDropPortfolio(ev)
+function ondragoverPortfolio(ev)
 //==================================
 {
 	ev.preventDefault();
+	var root = document.documentElement;
+	var bckcolor = root.style.getPropertyValue('--list-element-background-color-complement');
+	event.target.style.backgroundColor = bckcolor;
+}
+
+//==================================
+function ondragleavePortfolio(ev)
+//==================================
+{
+	ev.preventDefault();
+	var root = document.documentElement;
+	var bckcolor = root.style.getPropertyValue('--list-element-background-color');
+	event.target.style.backgroundColor = bckcolor;
 }
 
 //==================================
@@ -133,6 +146,9 @@ function dropPortfolio(ev)
 //==================================
 {
 	ev.preventDefault();
+	var root = document.documentElement;
+	var bckcolor = root.getPropertyValue('--list-element-background-color');
+	event.target.style.backgroundColor = bckcolor;
 	var portfolioid = ev.dataTransfer.getData("text");
 	var projectid = ev.target.id.substring(ev.target.id.lastIndexOf('_')+1);
 	var portfoliocode = portfolios_byid[portfolioid].code_node.text();
@@ -209,7 +225,7 @@ UIFactory["Portfolio"].displayProject = function(portfolio,dest,type,langcode,pa
 		projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
 		projects_list[number_of_projects].portfolios += portfolio.id;
 		number_of_projects_portfolios = 0;
-		html += "<div id='project_"+portfolio.id+"' class='project folder' ondrop='dropPortfolio(event)' ondragover='allowDropPortfolio(event)'>";
+		html += "<div id='project_"+portfolio.id+"' class='project folder' ondrop='dropPortfolio(event)' ondragover='ondragoverPortfolio(event)' ondragleave='ondragleavePortfolio(event)'>";
 		html += "	<div id='label_"+portfolio.id+"' class='row-label'>";
 		html += "		<span id='projectlabel_"+portfolio.id+"' onclick=\"UIFactory.Portfolio.toggleProjectContent('"+portfolio.id+"','"+portfoliocode+"')\" class='project-label'>"+portfolio_label+"</span>&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span>";
 		html += "		&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span>";
@@ -364,10 +380,16 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	//---------------------
 	var html = "";
 	if (type=='list') {
-		html += "<div class='portfolio-label col-10 col-md-4' onclick=\"display_main_page('"+this.rootid+"')\" onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\""+this.code_node.text()+"\"><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
+		html += "<div class='portfolio-label col-10 col-md-4' onclick=\"display_main_page('"+this.rootid+"')\" ><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
 		if (USER.creator && !USER.limited) {
-			html += "<div id='owner_"+this.id+"' class='col-2 d-none d-md-block'><span class='portfolio-owner' >"+owner+"</span></div>";
-			html += "<div class='col-3 d-none d-md-block'><span class='portfolio-code' >"+this.code_node.text()+"</span></div>";
+			html += "<div id='owner_"+this.id+"' class='col-1 d-none d-md-block'><span class='portfolio-owner' >"+owner+"</span></div>";
+			html += "<div class='col-4 d-none d-md-block'>";
+			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
+			html += " <span class='copy-button fas fa-clipboard' ";
+			html += "   onclick=\"copyInclipboad('"+this.id+"')\" ";
+			html += "   onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + karutaStr[LANG]['copy'] +" : "+this.code_node.text()+"\" ";
+			html += "   onmouseout=\"outCopy('"+this.id+"')\">";
+			html += "</div>";
 		}
 		if (this.date_modified!=null)
 			html += "<div class='col-2 d-none d-md-block' onclick=\"display_main_page('"+this.rootid+"')\">"+this.date_modified.substring(0,10)+"</div>";
@@ -1632,7 +1654,7 @@ UIFactory["Portfolio"].callRenameMove = function(portfolioid,langcode,project)
 	$(div).append($(htmlFormObj));
 	if ((USER.creator && !USER.limited)  || USER.admin) {
 		var htmlCodeGroupObj = $("<div class='form-group'></div>")
-		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code <a href='javascript://' id='code_help'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a></label>");
+		var htmlCodeLabelObj = $("<label for='code_"+portfolioid+"' class='col-sm-3 control-label'>Code <a href='javascript://' id='code_help'><span style='font-size:12px' class='fas fa-question-circle'></span></a></label>");
 		var htmlCodeDivObj = $("<div></div>");
 		var htmlCodeInputObj = $("<input id='code_"+portfolioid+"' type='text' class='form-control' name='input_code' value=\""+self.code_node.text()+"\">");
 		if (project)
@@ -2781,11 +2803,11 @@ UIFactory["Portfolio"].prototype.getTreeType = function()
 	if (semtag.indexOf('karuta-report')>-1)
 		tree_type='<span class="fa fa-line-chart" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-batch')>-1)
-		tree_type='<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>';
+		tree_type='<span class="fas fa-cog" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-project')>-1)
 		tree_type='<span class="fa fa-folder-o" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-rubric')>-1)
-		tree_type='<span class="glyphicon glyphicon-list" aria-hidden="true"></span>';
+		tree_type='<span class="fas fa-list" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-dashboard')>-1)
 //		tree_type='<span class="fa fa-dashboard" aria-hidden="true"></span>';
 		tree_type='<span class="fa fa-line-chart" aria-hidden="true"></span>';
