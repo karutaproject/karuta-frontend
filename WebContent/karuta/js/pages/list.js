@@ -165,6 +165,14 @@ function fill_list_page()
 			nb_projects = parseInt($('portfolios',data).attr('count'))-1;
 			UIFactory["Portfolio"].parse(data);
 			UIFactory["Portfolio"].displayProjects('projects','list');
+			//--------------------------------------
+			if (number_of_projects==0 && !USER.admin && !USER.creator) {
+				$("#projects-label").hide();
+			} else {
+				$("#projects-nb").html(number_of_projects);
+			}
+			//--------------------------------------
+			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 			if ($("#project-portfolios").html()=="")
 				$("#project-portfolios").hide();
 			$("#wait-window").hide();
@@ -202,7 +210,7 @@ function fill_list_page()
 								}
 							}
 							if (nb_visibleportfolios>0)
-								if (nb_visibleportfolios>1)
+								if (nb_visibleportfolios>1 || USER.admin || USER.creator)
 									loadAndDisplayProjectContent('project-portfolios','false');
 								else
 									display_main_page(portfolios_byid[visibleid].rootid);

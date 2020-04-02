@@ -172,15 +172,6 @@ UIFactory["Portfolio"].displayProjects = function(dest,type,langcode)
 			UIFactory.Portfolio.displayProject(portfolio,dest,type,langcode);
 		}
 	}
-	//--------------------------------------
-	if (number_of_projects==0) {
-		$("#projects-label").hide();
-	} else {
-		$("#projects-nb").html(number_of_projects);
-	}
-	//--------------------------------------
-	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
-
 };
 
 //==================================
