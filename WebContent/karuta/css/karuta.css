@@ -198,12 +198,12 @@ body,
   color: var(--list-title-color);
   background-color: var(--list-element-background-color-complement);
 }
-#list-container h3.bin-label {
+#list-container h3.projectcontent-label {
   padding: 7px;
   background-color: var(--list-button-background-color);
   color: var(--list-element-text-color);
 }
-#list-container h3.bin-label .btn {
+#list-container h3.projectcontent-label .btn {
   background-color: var(--list-element-background-color);
 }
 #list-container .project-content .col-md-1 {
@@ -1049,6 +1049,7 @@ div.oembedall-container {
   border-top: 1px solid var(--portfolio-section-separator-color);
 }
 #portfolio-container a {
+  color: var(--portfolio-buttons-color);
   cursor: pointer;
 }
 #portfolio-container a .portfolio-label:hover {

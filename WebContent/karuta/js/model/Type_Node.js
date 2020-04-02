@@ -538,7 +538,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		label_html += " "+ this.getView('std_node_'+uuid);
 	$("#label_node_"+uuid).html(label_html);
 	//--------- chckbox comment in report/batch--------------
-	var html_chckbox = "<span class='chkbox-comments'>&nbsp;<input ";
+	var html_chckbox = "<span class='chkbox-comments x"+this.semantictag+" '>&nbsp;<input ";
 	if (this.semantictag.indexOf('comments')>-1)
 		html_chckbox += "checked=true";
 	html_chckbox += " type='checkbox' onchange=\"UIFactory.Node.toggleComment('"+uuid+"',this)\">&nbsp;"+karutaStr[LANG]['report-elt-disabled']+"<span>";

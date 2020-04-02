@@ -251,13 +251,14 @@ karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre p
 karutaStr['fr']['users-folders']="Dossiers";
 karutaStr['fr']['users-groups']="Groupes";
 karutaStr['fr']['users-in-rootfolder']="Usagers hors dossier";
+karutaStr['fr']['and-content']="et son contenu.";
 
 //=========================================
 //========== PORTFOLIOS ===================
 //=========================================
 
 karutaStr['fr']['projects']="Mes projets";
-karutaStr['fr']['portfolios-not-in-project']="Portfolios hors projet";
+karutaStr['fr']['portfolios-not-in-project']="Portfolios";
 karutaStr['fr']['portfolios']="Mes portfolios";
 karutaStr['fr']['portfolio']="Mon portfolio";
 karutaStr['fr']['bin']="Poubelle";

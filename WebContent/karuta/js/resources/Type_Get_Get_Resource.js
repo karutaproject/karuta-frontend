@@ -61,6 +61,7 @@ UIFactory["Get_Get_Resource"] = function( node,condition)
 		this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	else // asmUnitStructure - Get_Get_Resource
 		this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
+	this.inline = ($("metadata",node).attr('inline')=='Y') ? true : false;
 	this.display = {};
 	this.displayValue = {};
 	this.displayCode = {};
@@ -585,12 +586,13 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			}
 			code = cleanCode(code);
 			//------------------------------
-			input += "<div class='radio-div'><input type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
-			if (disabled)
-				input +="disabled='disabled' ";
+			input += "<div class='radio-div' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
 			for (var j=0; j<languages.length;j++){
 				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 			}
+			input += "><input type='radio' name='radio_"+self.id+"' ";
+			if (disabled)
+				input +="disabled='disabled' ";
 			if (code!="" && self_code==$('code',resource).text())
 				input += " checked ";
 			input += "></div>";

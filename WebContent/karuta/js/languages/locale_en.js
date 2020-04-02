@@ -251,6 +251,7 @@ karutaStr['en']['help_text_rename']="To move a portfolio to another project, cha
 karutaStr['en']['users-folders']="Users Folders";
 karutaStr['en']['users-groups']="Groups";
 karutaStr['en']['users-in-rootfolder']="Users not in folders";
+karutaStr['en']['and-content']="and its content.";
 
 //=========================================
 //========== PORTFOLIOS ===================

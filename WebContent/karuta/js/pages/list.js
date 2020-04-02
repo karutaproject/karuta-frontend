@@ -23,8 +23,6 @@ function getList()
 		}
 		html += "</div>";
 		html += "<div id='searched-portfolios-content' style='display:none'></div>";
-		html += "<div id='searched-bin-portfolios-header' style='display:none'>Poubelle</div>";
-		html += "<div id='searched-bin-portfolios-content' style='display:none'></div>";
 	//-----------------------------------------------------------
 	html += "</div><!--div id='list-rightside'-->";
 
@@ -37,7 +35,7 @@ function getList()
 	
 	
 		//--------------------PROJECTS---------------------------------------
-		html += "<h3><span id='projects-label'>"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span>";
+		html += "<h3 id='projects-label'><span >"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span>";
 		html +="	<button class='btn list-btn' onclick='UIFactory.Portfolio.createProject()'>"+karutaStr[LANG]['create_project']+"</button>";
 		html += "</h3>";
 		html += "<div id='projects'></div>";
@@ -46,19 +44,9 @@ function getList()
 		//--------------------PORTFOLIOS--------------------------------------
 		html += "<h3 id='portfolios-not-in-project'>";
 		html += "	<span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span>";
-		html += "	<button class='btn list-btn' onclick=\"loadAndDisplayProjectContent('project-portfolios','false');$(window).scrollTop(0);$('.active').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
+		html += "	<button id='see-portfolios' class='btn list-btn' onclick=\"loadAndDisplayProjectContent('project-portfolios','false');$(window).scrollTop(0);$('.active').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
 		html += "</h3>";
 	
-		//---------------------BIN-------------------------------------
-		if (USER.admin || (USER.creator && !USER.limited) ) {
-			var text2 = karutaStr[LANG]['bin'];
-			if (USER.admin)
-				text2 = karutaStr[LANG]['bin-admin'];
-			html += "<h3 id='bin-label'>"+text2+"&nbsp<span class='bin-nb badge' id='bin-nb'></span>";
-			html += "<button class='btn list-btn' onclick=\"cleanList();UIFactory.Portfolio.loadAndDisplayBin('project-portfolios','bin');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see-bin"] + "</button>";
-			html += "</h3>";
-		}
-		//-----------------------------------------------------------
 	html += "</div><!--div id='list-leftside'-->";
 
 	return html;
@@ -156,7 +144,7 @@ function fill_list_page()
 		});*/
 		//-------- menu -------------------------------------
 		html  = "<div class='dropdown'>";
-		html += "	<button id='list-menu' class='btn dropdown-toggle' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'>&nbsp;Menu</button>";
+		html += "	<button id='list-menu' class='btn dropdown-toggle' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'>&nbsp;"+karutaStr[LANG]['import']+"</button>";
 		html += "	<div class='dropdown-menu' aria-labelledby='list-menu'>";
 		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importFile()\" >"+karutaStr[LANG]['import_portfolio']+"</a>";
 		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importZip()\" >"+karutaStr[LANG]['import_zip']+"</a>";
@@ -195,50 +183,52 @@ function fill_list_page()
 			nb_portfolios = parseInt($('portfolios',data).attr('count'));
 			if (nb_portfolios==0)
 				$("#portfolios-div").hide();
-			else
+			else {
 				$("#portfolios-nb").html(nb_portfolios);
+				if (number_of_projects == 0) {
+					$("#see-portfolios").hide();
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/portfolios?active=1&project=false",
+						success : function(data) {
+							UIFactory["Portfolio"].parse_add(data);
+							var nb_visibleportfolios = 0;
+							var visibleid = "";
+							for (var i=0;i<portfolios_list.length;i++){
+								if (portfolios_list[i].visible) {
+									nb_visibleportfolios++;
+									visibleid = portfolios_list[i].id;
+								}
+							}
+							if (nb_visibleportfolios>0)
+								if (nb_visibleportfolios>1)
+									loadAndDisplayProjectContent('project-portfolios','false');
+								else
+									display_main_page(portfolios_byid[visibleid].rootid);
+						},
+						error : function(jqxhr,textStatus) {
+							alertHTML("Server Error GET active: "+textStatus);
+						}
+					});
+				}
+			}
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active=1&project=false: "+textStatus);
 			$("#wait-window").hide();
 		}
 	});
-
-	
-	//------------------------ BIN --------------------------------
-	if (USER.admin || (USER.creator && !USER.limited) ) {
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/portfolios?active=false&count=true",
-			success : function(data) {
-				number_of_bins = parseInt($('portfolios',data).attr('count'));
-				if (number_of_bins==0)
-					$("#bin-label").hide();
-				else
-					$("#bin-nb").html(number_of_bins);
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Server Error GET active=false: "+textStatus);
-			}
-		});
-	}
-
-//	$.ajaxSetup({async: true});
 }
 
 //==============================
 function fill_search_page(code)
 //==============================
 {
-	searched_bin_portfolios_list = [];
 	searched_portfolios_list = [];
 	$("#searched-portfolios-header").hide();
-	$("#searched-bin-portfolios-header").hide();
 	$("#searched-portfolios-content").hide();
-	$("#searched-bin-portfolios-content").hide();
 	$("#searched-portfolios-content").html("");
-	$("#searched-bin-portfolios-content").html("");
 	g_sum_trees = 0;
 	$("#wait-window").show();
 	$("#menu").html("");
@@ -273,7 +263,7 @@ function fill_search_page(code)
 			for (var i=0;i<searched_portfolios_list.length;i++){
 				var portfolio = searched_portfolios_list[i];
 				$("#searched-portfolios-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"'></div>"));
-				if (!portfolio.notvisible || (USER.creator && !USER.limited) )
+				if (portfolio.visible || (USER.creator && !USER.limited) )
 					$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,'list'));
 			}
 			var archive_href = serverBCK_API+"/portfolios/zip?portfolios=";
@@ -283,36 +273,6 @@ function fill_search_page(code)
 				archive_href += searched_portfolios_list[i].id;
 			}
 			$("#archive-button").attr("href",archive_href);
-			//-------------------------------
-			if (USER.admin || (USER.creator && !USER.limited) ) {
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : serverBCK_API+"/portfolios?active=false&search="+code,
-					success : function(data) {
-						var nb = parseInt($('portfolios',data).attr('count'));
-						if (nb>0) {
-							$("#searched-bin-portfolios-header").show();
-							$("#searched-bin-portfolios-content").show();
-						}
-						UIFactory["Portfolio"].parse_search(data,'bin');
-						//-------------------------------
-
-						for (var i=0;i<searched_bin_portfolios_list.length;i++){
-							var portfolio = searched_bin_portfolios_list[i];
-							$("#searched-bin-portfolios-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"'></div>"));
-							if (!portfolio.notvisible || (USER.creator && !USER.limited) )
-								$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,'bin'));
-						}
-						$("#wait-window").hide();
-					},
-					error : function(jqxhr,textStatus) {
-						alertHTML("Server Error GET bin: "+textStatus);
-						$("#wait-window").hide();
-					}
-				});
-			} else
-				$("#wait-window").hide();
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
@@ -382,8 +342,6 @@ function cleanList()
 	$("#project-portfolios").hide();
 	$("#searched-portfolios-header").hide();
 	$("#searched-portfolios-content").hide();
-	$("#searched-bin-portfolios-header").hide();
-	$("#searched-bin-portfolios-content").hide();
 	$(".active").removeClass('active');
 }
 

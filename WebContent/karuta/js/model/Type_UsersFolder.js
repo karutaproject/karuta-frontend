@@ -475,47 +475,6 @@ UIFactory["UsersFolder"].remove = function(id)
 	});
 };
 
-//==================================
-UIFactory["UsersFolder"].restore = function(id) 
-//==================================
-{
-	var url = serverBCK_API+"/folder/usersfolder/" + id + "?active=1";
-	$.ajax({
-		type : "PUT",
-		contentType: "application/xml",
-		dataType : "text",
-		url : url,
-		data : "",
-		success : function(data) {
-			for (var i=0;i<bin_list.length;i++){
-				if (bin_list[i]!=null && bin_list[i].id==id) {
-					usersfolders_list[usersfolders_list.length] = bin_list[i];
-					usersfolders_byid[id] = bin_list[i];
-					bin_list[i] = null;
-					//---- sort portfolios_list ---
-					var tableau1 = new Array();
-					for (var k=0; k<usersfolders_list.length; k++){
-						if (usersfolders_list[k]!=null){
-						tableau1[tableau1.length] = [usersfolders_list[k].code_node.text(),usersfolders_list[k].id];
-						}
-					}
-					var newTableau1 = tableau1.sort(sortOn1);
-					usersfolders_list = [];
-					for (var l=0; l<newTableau1.length; l++){
-						usersfolders_list[l] = usersfolders_byid[newTableau1[l][1]]
-					}
-					//-----------------------------
-					break;
-				}
-			}
-			UIFactory["UsersFolder"].displayBin('bin','bin');
-			UIFactory["UsersFolder"].displayAll('usersfolders','list');
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Error in restore : "+jqxhr.responseText);
-		}
-	});
-};
 
 //==================================
 UIFactory["UsersFolder"].callRename = function(id,langcode,list)

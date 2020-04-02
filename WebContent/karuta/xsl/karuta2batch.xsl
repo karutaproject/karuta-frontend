@@ -187,7 +187,7 @@
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	
-	<xsl:template match="*[metadata/@semantictag='create-tree']">
+	<xsl:template match="*[metadata/@semantictag='create-tree' or metadata/@semantictag='create-project']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>

@@ -213,7 +213,7 @@
 			color: var(--list-title-color);
 			background-color: var(--list-element-background-color-complement);
 		}
-		h3.bin-label {
+		h3.projectcontent-label {
 			padding:7px;
 			background-color : var(--list-button-background-color);
 			color : var(--list-element-text-color);
@@ -1129,8 +1129,8 @@ div.oembedall-container {
 			border-top:1px solid var(--portfolio-section-separator-color);
 		}
 		a {
+			color: var(--portfolio-buttons-color);
 			cursor:pointer;
-//			color:var(--portfolio-link-color);
 			.portfolio-label:hover {
 				cursor:pointer;
 			}

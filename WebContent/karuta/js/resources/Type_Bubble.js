@@ -268,7 +268,7 @@ UIFactory["Bubble"].getPublicURL = function(mapid,sharerole)
 		mapid : mapid,
 		success : function (data){
 			var url = window.location.href;
-			var serverURL = url.substring(0,url.indexOf("/karuta"));
+			var serverURL = url.substring(0,url.lastIndexOf(appliname)+appliname.length);
 			map_url = serverURL+"/application/htm/public.htm?i="+data;
 			$("#qrcode-image").qrcode({text:map_url,size:100,background: 'white'});
 			var text = document.getElementById("qrcode-image").toDataURL("image/jpeg");
