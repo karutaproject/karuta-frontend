@@ -116,7 +116,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 			}
 			if (subitems.length>6)
 				shares[i][6] = subitems[6]; // condition
-			if (shares[i][0].indexOf(userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+			if (shares[i][0].indexOf(this.userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
 				displayShare[i] = true;
 			else
 				displayShare[i] = false;
@@ -210,7 +210,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 	//------------- specific menu button ---------------
 	var no_monomenu = 0;
 	try {
-		if ((this.depth>0 || this.asmtype == 'asmUnitStructure') && this.menuroles != undefined && this.menuroles.length>10 && (this.menuroles.indexOf(userrole)>-1 || (this.menuroles.containsArrayElt(g_userroles) && this.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
+		if ((this.depth>0 || this.asmtype == 'asmUnitStructure') && this.menuroles != undefined && this.menuroles.length>10 && (this.menuroles.indexOf(this.userrole)>-1 || (this.menuroles.containsArrayElt(g_userroles) && this.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
 			//--------------------------------
 			var mlabels = [];
 			var labelitems = this.menulabels.split(";");
@@ -249,9 +249,9 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					var variable_name = test_string.substring(0,test_string.indexOf("##"));
 					menus[i][0] = menus[i][0].replace("##"+variable_name+"##", g_variables[variable_name]);
 				}
-				if (menus[i][3].indexOf(userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
+				if (menus[i][3].indexOf(this.userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
 					if (menus[i][4]==""){
-						displayMenu = true;  // userrole may be included in semantictag
+						displayMenu = true;  // this.userrole may be included in semantictag
 						no_monomenu = i;
 					}
 					else if(eval(menus[i][4])){
@@ -263,7 +263,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			//--------------------------------
 			var nbmenus = 0;
 			for (var i=0; i<menus.length; i++){
-				if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
 						nbmenus++;
 			}
 			var monomenu = (nbmenus==1);
@@ -275,7 +275,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				//-----------
 				if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
 					for (var i=0; i<mlabels.length; i++){
-						if (mlabels[i][1].indexOf(userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
+						if (mlabels[i][1].indexOf(this.userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
 							var titles = [];
 							var title = "";
 							try {
@@ -327,7 +327,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 						} catch(e){
 							title = menus[i][2];
 						}
-						if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+						if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
 							html += UIFactory["Node"].getSpecificMenu(this.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
 					}
 				}
@@ -360,7 +360,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				} catch(e){
 					title = menus[i][2];
 				}
-				if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
 					html += UIFactory["Node"].getSingleMenu(this.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
 				//------------------
 			}
@@ -375,7 +375,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				|| USER.admin
 				|| g_userroles[0]=='designer'
 				|| ( g_userroles[1]=='designer' && this.submitroles.indexOf(g_userroles[0])>-1)
-				|| this.submitroles.indexOf(userrole)>-1 )))
+				|| this.submitroles.indexOf(this.userrole)>-1 )))
 		{
 			html += "<span id='submit-"+this.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+this.id+"'";
 			if (this.submitall=='Y')
@@ -422,7 +422,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					shares[i][6] = subitems[6]; // condition
 				if (subitems.length>7)
 					shares[i][7] = subitems[7]; // keywords : obj and/or mess
-				if (shares[i][0].indexOf(userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+				if (shares[i][0].indexOf(this.userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
 					displayShare[i] = true;
 				else
 					displayShare[i] = false;

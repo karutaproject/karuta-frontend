@@ -452,7 +452,7 @@ UIFactory["Portfolio"].displayMenu = function(destid,type,langcode,edit,tree)
 		$("#"+destid).html(html);
 	}
 };
-
+/*
 //======================
 UIFactory["Portfolio"].displayNodes = function(destid,tree,semtag,langcode,edit)
 //======================
@@ -462,7 +462,7 @@ UIFactory["Portfolio"].displayNodes = function(destid,tree,semtag,langcode,edit)
 	var depth = 99;
 	UIFactory['Node'].displayNode('standard',UICom.structure['tree'][rootnodeid],destid,depth,langcode,edit);
 };
-
+*/
 
 /// Editor
 //==================================

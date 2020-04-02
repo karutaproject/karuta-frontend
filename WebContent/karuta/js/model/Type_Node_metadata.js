@@ -1203,12 +1203,9 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 //==================================================
 {
 	var name = this.asmtype;
-	var userrole = $(this.node).attr('role');
-	if (userrole==undefined || userrole=='')
-		userrole = "norole";
 	var editnoderoles = ($(this.metadatawad).attr('editnoderoles')==undefined)?'none':$(this.metadatawad).attr('editnoderoles');
 	var graphicerroles = ($(this.metadatawad).attr('graphicerroles')==undefined)?'none':$(this.metadatawad).attr('graphicerroles');
-	if (USER.admin || g_userroles[0]=='designer' || graphicerroles.containsArrayElt(g_userroles) || graphicerroles.indexOf(userrole)>-1) {
+	if (USER.admin || g_userroles[0]=='designer' || graphicerroles.containsArrayElt(g_userroles) || graphicerroles.indexOf(this.userrole)>-1) {
 		var langcode = LANGCODE;
 		var html = "";
 		html += "<form id='metadata-epm' class='metadata'>";
@@ -1232,7 +1229,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		html += "</form>";
 		$("#"+destid).append($(html));
 		//----------------------------------
-		if (USER.admin || g_userroles[0]=='designer' || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(userrole)>-1) {
+		if (USER.admin || g_userroles[0]=='designer' || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1) {
 			if (name=='asmRoot') {
 				this.displayMetadataDisplayTypeAttributeEditor('metadata-epm-root','display-type');
 				this.displayMetadataMenuTypeAttributeEditor('metadata-epm-root','menu-type');
