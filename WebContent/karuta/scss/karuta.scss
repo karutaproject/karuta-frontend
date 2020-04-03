@@ -1166,6 +1166,25 @@ div.oembedall-container {
 		.add-button {
 			color:var(--portfolio-buttons-color);
 		}
+		.main-roles {
+			font-size:70%;
+			margin-left:5px;
+			td {
+				border: 1px solid gray;
+				padding:3px;
+			}
+		}
+		.node-type {
+			font-size:90%;
+			font-style:italic;
+		}
+		.semtag-line-header {
+			margin-bottom:2px;
+		}
+		.semtag-value {
+			color:white;
+			background-color:#aaa;
+		}
 //		.menus {
 //			a.text-button {
 //				color:var(--portfolio-buttons-color);

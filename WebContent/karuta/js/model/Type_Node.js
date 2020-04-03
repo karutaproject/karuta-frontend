@@ -107,95 +107,6 @@ UIFactory["Node"] = function( node )
 };
 
 
-//==============================================================================
-//==============================================================================
-//==============================================================================
-UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock)
-//==============================================================================
-//==============================================================================
-//==============================================================================
-{
-	this.depth = depth;
-	if (edit==null || edit==undefined)
-		this.edit = false;
-	else
-		this.edit = edit;
-	if (inline==null || inline==undefined)
-		this.inline = false;
-	else
-		this.inline = inline
-	if (menu==null || menu==undefined)
-		this.menu = true;
-	else
-		this.menu = menu;
-	if (inblock==null || inblock==undefined)
-		this.inblock = false;
-	else
-		this.inblock = inblock;
-	this.parent = parent;
-	//-----------------------------
-	var data = this.node;
-	var uuid = this.id;
-	var node = UICom.structure["ui"][uuid];
-	// ---- store info to redisplay after change ---
-	//------------------metadata----------------------------
-	this.nodetype = $(data).prop("nodeName"); // name of the xml tag
-	this.writenode = ($(node.node).attr('write')=='Y')? true:false;
-	this.semtag =  ($("metadata",data)[0]==undefined || $($("metadata",data)[0]).attr('semantictag')==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
-	this.collapsed = 'N';
-	if (!g_designerrole)
-		this.collapsed = (sessionStorage.getItem('collapsed'+uuid)==undefined)?'N':sessionStorage.getItem('collapsed'+uuid);
-	else
-		this.collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
-	this.displayed = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
-	this.collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
-	this.resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
-	this.nodenopencil = ($(node.metadatawad).attr('nodenopencil')==undefined)?'N':$(node.metadatawad).attr('nodenopencil');
-	this.editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'':$(node.metadatawad).attr('editcoderoles');
-	this.editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
-	this.delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
-	this.commentnoderoles = ($(node.metadatawad).attr('commentnoderoles')==undefined)?'':$(node.metadatawad).attr('commentnoderoles');
-	this.showroles = ($(node.metadatawad).attr('showroles')==undefined)?'':$(node.metadatawad).attr('showroles');
-	this.showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
-	this.editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
-	this.inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
-	if (this.inline_metadata=='Y')
-		this.inline = true;
-	this.seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
-	this.shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
-	this.seeqrcoderoles = ($(node.metadatawad).attr('seeqrcoderoles')==undefined)?'':$(node.metadatawad).attr('seeqrcoderoles');
-	this.moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'':$(node.metadatawad).attr('moveroles');
-	this.moveinroles = ($(node.metadatawad).attr('moveinroles')==undefined)?'none':$(node.metadatawad).attr('moveinroles');
-	this.printroles = ($(node.metadatawad).attr('printroles')==undefined)?'':$(node.metadatawad).attr('printroles');
-	this.privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
-	this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
-	if (this.submitted=='Y') {
-		this.menu = false;
-	}
-	this.cssclass = ($(node.metadataepm).attr('cssclass')==undefined)?'':$(node.metadataepm).attr('cssclass');
-	this.displayview = ($(node.metadataepm).attr('displayview')==undefined)?'':$(node.metadataepm).attr('displayview');
-	//-------------------- test if visible
-	this.visible =  ( this.displayed=='N' && (g_userroles[0]=='designer'  || USER.admin)
-				|| ( this.displayed=='Y' && ( this.seenoderoles.indexOf(USER.username)>-1 
-									|| this.seenoderoles.indexOf("all")>-1 
-									|| this.seenoderoles.containsArrayElt(g_userroles) 
-									|| (this.showtoroles.indexOf("all")>-1 && !this.privatevalue) 
-									|| (this.showtoroles.containsArrayElt(g_userroles) && !this.privatevalue) 
-									|| g_userroles[0]=='designer')
-					)
-				);
-	this.submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
-	this.submitall = ($(node.metadatawad).attr('submitall')==undefined)?'none':$(node.metadatawad).attr('submitall');
-	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'N':$(node.metadatawad).attr('submitted');
-	this.submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
-	this.duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
-	this.incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
-	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
-	this.menulabels = ($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels');
-	if (this.resource!=undefined || this.resource!=null)
-		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
-}
 
 //==============================================================================
 //==============================================================================
@@ -1711,40 +1622,6 @@ UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
 	html += "<div id='bubble_display_"+this.id+"' class='bubble_display'></div>";
 	return html;
 };
-
-//----------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-//--------------------------- displaySemanticTags ----------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-
-//==================================
-UIFactory["Node"].prototype.displaySemanticTags = function(destid,langcode)
-//==================================
-{
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var semtag = this.semantictag; //		this.semantictag = $("metadata",node).attr('semantictag');
-	var label = this.getLabel(null,'none',langcode);
-	var html ="";
-	html += "<div class='semtag-line'>";
-	html += "	<div class='semtag-line-header'>";
-	html += "		<span class='semtag-label'>"+label+"</span>";
-	html += "		<span class='badge semtag-value'>"+semtag+"</span>";
-	html += "	</div>";
-	html += "	<div id='content-"+this.id+"' class='semtag-line-content'></div>";
-	html += "</div>";
-	$('#'+destid).append($(html));
-	var children = $(this.node).children();
-	for (var i=0;i<children.length;i++){
-		var tagname = $(children[i])[0].tagName;
-		if (tagname=="asmStructure" || tagname=="asmUnit" || tagname=="asmUnitStructure" || tagname=="asmContext")
-			UICom.structure.ui[$(children[i]).attr('id')].displaySemanticTags("content-"+this.id,langcode);
-	}
-};
-
 
 
 //=======================================================================================================================================

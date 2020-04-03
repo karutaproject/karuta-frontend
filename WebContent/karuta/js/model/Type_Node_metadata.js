@@ -1,4 +1,97 @@
 
+
+
+
+//==============================================================================
+//==============================================================================
+//==============================================================================
+UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock)
+//==============================================================================
+//==============================================================================
+//==============================================================================
+{
+	this.depth = depth;
+	if (edit==null || edit==undefined)
+		this.edit = false;
+	else
+		this.edit = edit;
+	if (inline==null || inline==undefined)
+		this.inline = false;
+	else
+		this.inline = inline
+	if (menu==null || menu==undefined)
+		this.menu = true;
+	else
+		this.menu = menu;
+	if (inblock==null || inblock==undefined)
+		this.inblock = false;
+	else
+		this.inblock = inblock;
+	this.parent = parent;
+	//-----------------------------
+	var data = this.node;
+	var uuid = this.id;
+	var node = UICom.structure["ui"][uuid];
+	// ---- store info to redisplay after change ---
+	//------------------metadata----------------------------
+	this.nodetype = $(data).prop("nodeName"); // name of the xml tag
+	this.writenode = ($(node.node).attr('write')=='Y')? true:false;
+	this.semtag =  ($("metadata",data)[0]==undefined || $($("metadata",data)[0]).attr('semantictag')==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
+	this.collapsed = 'N';
+	if (!g_designerrole)
+		this.collapsed = (sessionStorage.getItem('collapsed'+uuid)==undefined)?'N':sessionStorage.getItem('collapsed'+uuid);
+	else
+		this.collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
+	this.displayed = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+	this.collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
+	this.resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
+	this.nodenopencil = ($(node.metadatawad).attr('nodenopencil')==undefined)?'N':$(node.metadatawad).attr('nodenopencil');
+	this.editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'':$(node.metadatawad).attr('editcoderoles');
+	this.editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
+	this.delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
+	this.commentnoderoles = ($(node.metadatawad).attr('commentnoderoles')==undefined)?'':$(node.metadatawad).attr('commentnoderoles');
+	this.showroles = ($(node.metadatawad).attr('showroles')==undefined)?'':$(node.metadatawad).attr('showroles');
+	this.showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
+	this.editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
+	this.inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
+	if (this.inline_metadata=='Y')
+		this.inline = true;
+	this.seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
+	this.shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
+	this.seeqrcoderoles = ($(node.metadatawad).attr('seeqrcoderoles')==undefined)?'':$(node.metadatawad).attr('seeqrcoderoles');
+	this.moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'':$(node.metadatawad).attr('moveroles');
+	this.moveinroles = ($(node.metadatawad).attr('moveinroles')==undefined)?'none':$(node.metadatawad).attr('moveinroles');
+	this.printroles = ($(node.metadatawad).attr('printroles')==undefined)?'':$(node.metadatawad).attr('printroles');
+	this.privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
+	this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
+	if (this.submitted=='Y') {
+		this.menu = false;
+	}
+	this.cssclass = ($(node.metadataepm).attr('cssclass')==undefined)?'':$(node.metadataepm).attr('cssclass');
+	this.displayview = ($(node.metadataepm).attr('displayview')==undefined)?'':$(node.metadataepm).attr('displayview');
+	//-------------------- test if visible
+	this.visible =  ( this.displayed=='N' && (g_userroles[0]=='designer'  || USER.admin)
+				|| ( this.displayed=='Y' && ( this.seenoderoles.indexOf(USER.username)>-1 
+									|| this.seenoderoles.indexOf("all")>-1 
+									|| this.seenoderoles.containsArrayElt(g_userroles) 
+									|| (this.showtoroles.indexOf("all")>-1 && !this.privatevalue) 
+									|| (this.showtoroles.containsArrayElt(g_userroles) && !this.privatevalue) 
+									|| g_userroles[0]=='designer')
+					)
+				);
+	this.submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
+	this.submitall = ($(node.metadatawad).attr('submitall')==undefined)?'none':$(node.metadatawad).attr('submitall');
+	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'N':$(node.metadatawad).attr('submitted');
+	this.submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
+	this.duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
+	this.incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
+	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
+	this.menulabels = ($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels');
+	if (this.resource!=undefined || this.resource!=null)
+		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
+}
+
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------- STYLES ---------------------------------------------------------------------------------------------
@@ -285,6 +378,236 @@ UIFactory["Node"].displayIfModel = function(rootid)
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 
+
+//==================================================
+UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
+//==================================================
+{
+	var langcode = LANGCODE;
+	var html = "";
+	html += "<form id='metadata' class='metadata'>";
+	html += "	<div id='metadata-root'></div>";
+	html += "	<div id='metadata-part1'></div>"
+	html += "	<h4>"+karutaStr[LANG]['metadata']+"</h4>";
+	html += "	<div id='metadata-rights'></div>";
+	html += "	<div id='metadata-part2'></div>";
+	html += "	<div id='metadata_texts'></div>";
+	html += "</form>";
+	$("#"+destid).append($(html));
+	//---------------------------------------------------
+	var model = portfolios_byid[g_portfolioid].model;
+	//---------------------------------------------------
+	var name = this.asmtype;
+	var semtag =  ($("metadata",this.node)[0]==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
+	if (semtag==undefined) // for backward compatibility - node without semantic tag
+		semtag = '';
+	var resource_type = "";
+	if (this.resource!=null)
+		resource_type = this.resource.type;
+	if (name=='asmRoot') {
+		this.displayMetadataAttributeEditor('metadata-root','list-novisible',true);
+//		this.displayMetadataAttributeEditor('metadata-root','complex',true);
+		this.displayMetadataAttributeEditor('metadata-root','export-pdf',true);
+		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
+		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);
+		this.displayMetadataAttributeEditor('metadata-root','public',true);
+	}
+	if (name=='asmContext' && this.resource.type=='Proxy')
+		this.displayMetadataAttributeEditor('metadata-part1','semantictag',false,true);
+	else
+		this.displayMetadataAttributeEditor('metadata-part1','semantictag');
+	if (languages.length>1) { // multilingual application
+		this.displayMetadataAttributeEditor('metadata-part1','multilingual-node',true);
+		if (name=='asmContext') {
+			this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true);
+		}
+	}
+	if (name=='asmContext') {
+		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
+			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
+	}
+	if (USER.admin && Object.keys(UICom.roles).length>2)
+		this.displayRights('metadata-rights');
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles',false,true);
+	this.displayMetadataDateAttributeEditor('see-calendar','seestart');
+	this.displayMetadataDateAttributeEditor('see-calendar','seeend');
+	if (name=='asmRoot' || !model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles',false,true);
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles');
+	if ((!model || name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && this.structured_resource==null)	{
+		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles',false,true);
+		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',false,true);
+	}
+	else {
+		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles');
+		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
+	}
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles',false,true);
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles',false,true);
+	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','submitall',true);
+	//-----------------------------------------
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles',false,true);
+	//-----------------------------------------
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles',false,true);
+	//-----------------------------------------
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',false,true);
+	//-----------------------------------------
+	if (name=='asmRoot' || !model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles',false,true);
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles');
+	//-----------------------------------------
+	if (name=='asmRoot' || !model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',false,true);
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',true);
+	//-----------------------------------------
+	if (semtag=='bubble_level1' && model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles',false,true);
+	//-----------------------------------------
+	if (this.resource_type=='Proxy' && model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','edittargetroles');
+	//-----------------------------------------
+	if (name=='asmContext' && this.resource.type=='Image' && model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','resizeroles');
+//	this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
+	//-----------------------------------------
+	if (name=='asmRoot' || !model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles',false,true);
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles');
+	//-----------------------------------------
+	this.displayMetadataWadAttributeEditor('metadata-part2','moveinroles');
+	this.displayMetadataWadAttributeEditor('metadata-part2','movein');
+	//-----------------------------------------
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','showroles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','showroles',false,true);
+//	if ($(this.metadatawad).attr('showroles')!='')
+//		this.displayMetadataWadAttributeEditor(this.id,'private',$(this.metadatawad).attr('private'),true);
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','showtoroles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','showtoroles',false,true);
+	this.displayMetadataWadAttributeEditor('metadata-part2','printroles');
+//	this.displayMetadataWadAttributeEditor('metadata-part2','editboxtitle');
+	if (name=='asmContext' && this.resource.type=='TextField')
+		this.displayMetadataWadAttributeEditor('metadata-part2','maxword');
+	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
+	//--------------------------------------
+	if (name!='asmRoot')
+		this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
+	if (name=='asmUnitStructure')
+		this.displayMetadataWadAttributeEditor('metadata-part2','collapsible',true);
+	if (name=='asmContext' && this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL' && this.resource.type!='Oembed')
+		this.displayMetadataAttributeEditor('metadata-part2','inline',true);
+//	this.displayMetadataWadAttributeEditor(this.id,'veriffunction',$(this.metadatawad).attr('veriffunction'));
+	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
+		this.displayMetadataWadAttributeEditor('metadata-part2','seltype');
+	}
+	//----------------------Edit Box Title----------------------------
+		html  = "<label>"+karutaStr[languages[langcode]]['editboxtitle']+"</label>";
+		$("#metadata_texts").append($(html));
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','editboxtitle');
+	//----------------------Search----------------------------
+	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
+		html  = "<label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
+		$("#metadata_texts").append($(html));
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','query');
+	}
+	//----------------------Share----------------------------
+	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
+		html  = "<label>"+karutaStr[languages[langcode]]['shareroles'];
+		if (languages.length>1){
+			var first = true;
+			for (var i=0; i<languages.length;i++){
+				if (!first)
+					html += "/";
+				html += karutaStr[languages[i]]['shareroles2'];
+				first = false;
+			}
+		} else {
+			html += karutaStr[languages[langcode]]['shareroles2'];
+		}
+		html += karutaStr[languages[langcode]]['shareroles3']+"</label>";
+		$('#metadata_texts').append($(html));
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','shareroles');
+	}
+	//----------------------Menu----------------------------
+	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
+		//-----------------------
+		html  = "<label>"+karutaStr[languages[langcode]]['menuroles'];
+		if (languages.length>1){
+			var first = true;
+			for (var i=0; i<languages.length;i++){
+				if (!first)
+					html += "/";
+				html += karutaStr[languages[i]]['menuroles2'];
+				first = false;
+			}
+		} else {
+			html += karutaStr[languages[langcode]]['menuroles2'];
+		}
+		html += karutaStr[languages[langcode]]['menuroles3']+"</label>";
+		$('#metadata_texts').append($(html));
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menuroles');
+		//-----------------------
+		html  = "<label>"+karutaStr[languages[langcode]]['menulabels'];
+		if (languages.length>1){
+			var first = true;
+			for (var i=0; i<languages.length;i++){
+				if (!first)
+					html += "/";
+				html += karutaStr[languages[i]]['menulabels2'];
+				first = false;
+			}
+		} else {
+			html += karutaStr[languages[langcode]]['menulabels2'];
+		}
+		html += karutaStr[languages[langcode]]['menulabels3']+"</label>";
+		$("#metadata_texts").append($(html));
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menulabels');
+		//-----------------------
+	}
+	//------------------------Help-------------------------
+	html = "<br><label>"+karutaStr[languages[langcode]]['help'];
+	if (languages.length>1){
+		var first = true;
+		for (var i=0; i<languages.length;i++){
+			if (!first)
+				html += "/";
+			html += karutaStr[languages[i]]['help2'];
+			first = false;
+		}
+	}
+	html += karutaStr[languages[langcode]]['help3']+"</label>";
+	$('#metadata_texts').append($(html));
+	this.displayMetadatawWadTextAttributeEditor('metadata_texts','help');
+};
+
 //---------------------------------------------------------
 //--------- styles getters to display nodes ---------------
 //---------------------------------------------------------
@@ -331,9 +654,76 @@ UIFactory["Node"].getOtherMetadataEpm = function(data,attribute)
 	}	return html;
 };
 
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//--------------------------- displaySemanticTags ----------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+
+//==================================
+UIFactory["Node"].prototype.displaySemanticTags = function(destid,langcode)
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (this.seenoderoles==null)
+		this.setMetadata();
+	//---------------------
+	var semtag = this.semantictag; //		this.semantictag = $("metadata",node).attr('semantictag');
+	var label = this.getLabel(null,'none',langcode);
+	var type = (this.resource_type==null)? this.asmtype : this.resource_type;
+	var html ="";
+	html += "<div class='semtag-line'>";
+	html += "	<div class='semtag-line-header'>";
+	html += "		<span class='semtag-label'>"+label+"</span>";
+	html += "		<span class='node-type'> "+type+" </span>";
+	html += "		<span class='badge badge-pill semtag-value'>"+semtag+"</span>";
+	html += "	</div>";
+	html += "	<div class='roles-line' id='roles-line_"+this.id+"'></div>";
+	html += "	<div id='content-"+this.id+"' class='semtag-line-content'></div>";
+	html += "</div>";
+	$('#'+destid).append($(html));
+	this.displayMainRoles("roles-line_"+this.id);
+	var children = $(this.node).children();
+	for (var i=0;i<children.length;i++){
+			var tagname = $(children[i])[0].tagName;
+			if (tagname=="asmStructure" || tagname=="asmUnit" || tagname=="asmUnitStructure" || tagname=="asmContext") {
+				var child = UICom.structure.ui[$(children[i]).attr('id')];
+				if (child.semantictag!='welcome-unit' && child.semantictag!='configuration-unit' && child.semantictag!='WELCOME')
+					child.displaySemanticTags("content-"+this.id,langcode);
+			}
+	}
+};
+
+//==================================================
+UIFactory["Node"].prototype.displayMainRoles = function(destid)
+//==================================================
+{
+	var html = "";
+	html += "<table class='main-roles'>";
+	html += "	<tr>";
+	html += "		<td>"+karutaStr[LANG]['seenoderoles']+"</td>"
+	html += "		<td>"+karutaStr[LANG]['editresroles']+"</td>"
+	html += "		<td>"+karutaStr[LANG]['delnoderoles']+"</td>"
+	html += "		<td>"+karutaStr[LANG]['editnoderoles']+"</td>"
+	html += "	</tr>";
+	html += "	<tr>";
+	html += "		<td>"+this.seenoderoles+"</td>"
+	html += "		<td>"+this.editresroles+"</td>"
+	html += "		<td>"+this.delnoderoles+"</td>"
+	html += "		<td>"+this.editnoderoles+"</td>"
+	html += "</tr>";
+	html += "</table>";
+	$("#"+destid).html(html);
+
+}
+
 //---------------------------------------------------------
 //--------------------- display metainfo ------------------
 //---------------------------------------------------------
+
 
 //==================================================
 UIFactory["Node"].getMetadataInfo = function(data,attribute)
@@ -838,230 +1228,6 @@ function addautocomplete(input,arrayOfValues) {
 	});
 }
 
-//==================================================
-UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
-//==================================================
-{
-	var langcode = LANGCODE;
-	var html = "";
-	html += "<form id='metadata' class='metadata'>";
-	html += "	<div id='metadata-root'></div>";
-	html += "	<div id='metadata-part1'></div>"
-	html += "	<h4>"+karutaStr[LANG]['metadata']+"</h4>";
-	html += "	<div id='metadata-rights'></div>";
-	html += "	<div id='metadata-part2'></div>";
-	html += "	<div id='metadata_texts'></div>";
-	html += "</form>";
-	$("#"+destid).append($(html));
-	//---------------------------------------------------
-	var model = portfolios_byid[g_portfolioid].model;
-	//---------------------------------------------------
-	var name = this.asmtype;
-	var semtag =  ($("metadata",this.node)[0]==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
-	if (semtag==undefined) // for backward compatibility - node without semantic tag
-		semtag = '';
-	var resource_type = "";
-	if (this.resource!=null)
-		resource_type = this.resource.type;
-	if (name=='asmRoot') {
-		this.displayMetadataAttributeEditor('metadata-root','list-novisible',true);
-//		this.displayMetadataAttributeEditor('metadata-root','complex',true);
-		this.displayMetadataAttributeEditor('metadata-root','export-pdf',true);
-		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
-		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);
-		this.displayMetadataAttributeEditor('metadata-root','public',true);
-	}
-	if (name=='asmContext' && this.resource.type=='Proxy')
-		this.displayMetadataAttributeEditor('metadata-part1','semantictag',false,true);
-	else
-		this.displayMetadataAttributeEditor('metadata-part1','semantictag');
-	if (languages.length>1) { // multilingual application
-		this.displayMetadataAttributeEditor('metadata-part1','multilingual-node',true);
-		if (name=='asmContext') {
-			this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true);
-		}
-	}
-	if (name=='asmContext') {
-		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
-			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
-	}
-	if (USER.admin && Object.keys(UICom.roles).length>2)
-		this.displayRights('metadata-rights');
-	if (model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles',false,true);
-	this.displayMetadataDateAttributeEditor('see-calendar','seestart');
-	this.displayMetadataDateAttributeEditor('see-calendar','seeend');
-	if (name=='asmRoot' || !model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles',false,true);
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles');
-	if ((!model || name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && this.structured_resource==null)	{
-		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles',false,true);
-		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',false,true);
-	}
-	else {
-		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles');
-		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
-	}
-	if (model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles',false,true);
-	if (model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles',false,true);
-	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','submitall',true);
-	//-----------------------------------------
-	if (model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','editcoderoles',false,true);
-	//-----------------------------------------
-	if (model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles',false,true);
-	//-----------------------------------------
-	if (model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',false,true);
-	//-----------------------------------------
-	if (name=='asmRoot' || !model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles',false,true);
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles');
-	//-----------------------------------------
-	if (name=='asmRoot' || !model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',false,true);
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',true);
-	//-----------------------------------------
-	if (semtag=='bubble_level1' && model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles',false,true);
-	//-----------------------------------------
-	if (this.resource_type=='Proxy' && model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','edittargetroles');
-	//-----------------------------------------
-	if (name=='asmContext' && this.resource.type=='Image' && model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','resizeroles');
-//	this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
-	//-----------------------------------------
-	if (name=='asmRoot' || !model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles',false,true);
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles');
-	//-----------------------------------------
-	this.displayMetadataWadAttributeEditor('metadata-part2','moveinroles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','movein');
-	//-----------------------------------------
-	if (model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','showroles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','showroles',false,true);
-//	if ($(this.metadatawad).attr('showroles')!='')
-//		this.displayMetadataWadAttributeEditor(this.id,'private',$(this.metadatawad).attr('private'),true);
-	if (model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','showtoroles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','showtoroles',false,true);
-	this.displayMetadataWadAttributeEditor('metadata-part2','printroles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','editboxtitle');
-	if (name=='asmContext' && this.resource.type=='TextField')
-		this.displayMetadataWadAttributeEditor('metadata-part2','maxword');
-	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
-	//--------------------------------------
-	if (name!='asmRoot')
-		this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
-	if (name=='asmUnitStructure')
-		this.displayMetadataWadAttributeEditor('metadata-part2','collapsible',true);
-	if (name=='asmContext' && this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL' && this.resource.type!='Oembed')
-		this.displayMetadataAttributeEditor('metadata-part2','inline',true);
-//	this.displayMetadataWadAttributeEditor(this.id,'veriffunction',$(this.metadatawad).attr('veriffunction'));
-	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
-		this.displayMetadataWadAttributeEditor('metadata-part2','seltype');
-	}
-	//----------------------Search----------------------------
-	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
-		html  = "<label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
-		$("#metadata_texts").append($(html));
-		this.displayMetadatawWadTextAttributeEditor('metadata_texts','query');
-	}
-	//----------------------Share----------------------------
-	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
-		html  = "<label>"+karutaStr[languages[langcode]]['shareroles'];
-		if (languages.length>1){
-			var first = true;
-			for (var i=0; i<languages.length;i++){
-				if (!first)
-					html += "/";
-				html += karutaStr[languages[i]]['shareroles2'];
-				first = false;
-			}
-		} else {
-			html += karutaStr[languages[langcode]]['shareroles2'];
-		}
-		html += karutaStr[languages[langcode]]['shareroles3']+"</label>";
-		$('#metadata_texts').append($(html));
-		this.displayMetadatawWadTextAttributeEditor('metadata_texts','shareroles');
-	}
-	//----------------------Menu----------------------------
-	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
-		//-----------------------
-		html  = "<label>"+karutaStr[languages[langcode]]['menuroles'];
-		if (languages.length>1){
-			var first = true;
-			for (var i=0; i<languages.length;i++){
-				if (!first)
-					html += "/";
-				html += karutaStr[languages[i]]['menuroles2'];
-				first = false;
-			}
-		} else {
-			html += karutaStr[languages[langcode]]['menuroles2'];
-		}
-		html += karutaStr[languages[langcode]]['menuroles3']+"</label>";
-		$('#metadata_texts').append($(html));
-		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menuroles');
-		//-----------------------
-		html  = "<label>"+karutaStr[languages[langcode]]['menulabels'];
-		if (languages.length>1){
-			var first = true;
-			for (var i=0; i<languages.length;i++){
-				if (!first)
-					html += "/";
-				html += karutaStr[languages[i]]['menulabels2'];
-				first = false;
-			}
-		} else {
-			html += karutaStr[languages[langcode]]['menulabels2'];
-		}
-		html += karutaStr[languages[langcode]]['menulabels3']+"</label>";
-		$("#metadata_texts").append($(html));
-		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menulabels');
-		//-----------------------
-	}
-	//------------------------Help-------------------------
-	html = "<br><label>"+karutaStr[languages[langcode]]['help'];
-	if (languages.length>1){
-		var first = true;
-		for (var i=0; i<languages.length;i++){
-			if (!first)
-				html += "/";
-			html += karutaStr[languages[i]]['help2'];
-			first = false;
-		}
-	}
-	html += karutaStr[languages[langcode]]['help3']+"</label>";
-	$('#metadata_texts').append($(html));
-	this.displayMetadatawWadTextAttributeEditor('metadata_texts','help');
-};
 
 //---------------------------------------------------------
 //-------------CSS metadata-epm editors -------------------

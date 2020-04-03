@@ -1086,6 +1086,25 @@ div.oembedall-container {
 #portfolio-container .add-button {
   color: var(--portfolio-buttons-color);
 }
+#portfolio-container .main-roles {
+  font-size: 70%;
+  margin-left: 5px;
+}
+#portfolio-container .main-roles td {
+  border: 1px solid gray;
+  padding: 3px;
+}
+#portfolio-container .node-type {
+  font-size: 90%;
+  font-style: italic;
+}
+#portfolio-container .semtag-line-header {
+  margin-bottom: 2px;
+}
+#portfolio-container .semtag-value {
+  color: white;
+  background-color: #aaa;
+}
 
 .chkbox-comments {
   display: none;
