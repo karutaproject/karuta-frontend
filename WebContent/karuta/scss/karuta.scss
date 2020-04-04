@@ -124,7 +124,7 @@
 /* ====================== */
 
 	#list-container {
-		#project-portfolios,
+		.porfolios-content,
 		.portfolios-not-in-project,
 		.projects-nb,
 		.bin-nb,
@@ -265,6 +265,41 @@
 		.copy-button:hover .tooltiptext {
 			display:in-line;
 			opacity: 1;
+		}
+		.portfolio-card{
+			margin-top:15px;
+			border:none;
+			width:200px;
+			flex:none;
+			.portfolio-label{
+				cursor:pointer;
+			}
+			.card-header {
+				background-color:var(--list-menu-background-color);
+				color:var(--list-button-text-color);
+				padding:3px;
+			}
+			.card-body {
+				color:var(--list-button-text-color);
+				background-color: var(--list-element-background-color);
+			}
+			.card-footer {
+				background-color:var(--list-menu-background-color);
+				color:var(--list-button-text-color);
+				text-align:center;
+				font-size:80%;
+				padding:0px;
+			}
+			.card-button {
+				float:right;
+				.btn{
+					background-color:var(--list-element-background-color);
+					margin:3px;
+				}
+			}
+		}
+		.portfolios-deck-header {
+			margin-bottom:5px;
 		}
 	}
 

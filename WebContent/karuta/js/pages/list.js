@@ -16,6 +16,7 @@ function getList()
 	//-----------------------------------------------------------
 //		html += "<div id='folder-portfolios'></div>";
 		html += "<div id='project-portfolios'></div>";
+		html += "<div id='card-deck-portfolios'></div>";
 		html += "<div id='searched-portfolios-header' style='display:none'>Portfolios";
 		if (USER.creator && !USER.limited)  {
 			html += "		<a id='archive-button' href='' class='btn' style='float:right'><i class='fas fa-download' ></i></a>";
@@ -210,10 +211,15 @@ function fill_list_page()
 								}
 							}
 							if (nb_visibleportfolios>0)
-								if (nb_visibleportfolios>1 || USER.admin || USER.creator)
-									loadAndDisplayProjectContent('project-portfolios','false');
+								if (USER.admin || USER.creator)
+									loadAndDisplayProjectContent('project-portfolios','false','card-admin');
 								else
-									display_main_page(portfolios_byid[visibleid].rootid);
+									if (nb_visibleportfolios>9)
+										loadAndDisplayProjectContent('project-portfolios','false','list');
+									else if (nb_visibleportfolios>1)
+										loadAndDisplayProjectContent('card-deck-portfolios','false','card');
+									else
+										display_main_page(portfolios_byid[visibleid].rootid);
 						},
 						error : function(jqxhr,textStatus) {
 							alertHTML("Server Error GET active: "+textStatus);

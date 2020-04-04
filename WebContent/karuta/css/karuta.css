@@ -114,7 +114,7 @@ body,
 /* ====================== */
 /*     LIST CONTAINER     */
 /* ====================== */
-#list-container #project-portfolios,
+#list-container .porfolios-content,
 #list-container .portfolios-not-in-project,
 #list-container .projects-nb,
 #list-container .bin-nb,
@@ -237,6 +237,41 @@ body,
 #list-container .copy-button:hover .tooltiptext {
   display: in-line;
   opacity: 1;
+}
+#list-container .portfolio-card {
+  margin-top: 15px;
+  border: none;
+  width: 200px;
+  flex: none;
+}
+#list-container .portfolio-card .portfolio-label {
+  cursor: pointer;
+}
+#list-container .portfolio-card .card-header {
+  background-color: var(--list-menu-background-color);
+  color: var(--list-button-text-color);
+  padding: 3px;
+}
+#list-container .portfolio-card .card-body {
+  color: var(--list-button-text-color);
+  background-color: var(--list-element-background-color);
+}
+#list-container .portfolio-card .card-footer {
+  background-color: var(--list-menu-background-color);
+  color: var(--list-button-text-color);
+  text-align: center;
+  font-size: 80%;
+  padding: 0px;
+}
+#list-container .portfolio-card .card-button {
+  float: right;
+}
+#list-container .portfolio-card .card-button .btn {
+  background-color: var(--list-element-background-color);
+  margin: 3px;
+}
+#list-container .portfolios-deck-header {
+  margin-bottom: 5px;
 }
 
 #list {

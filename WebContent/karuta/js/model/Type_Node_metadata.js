@@ -446,10 +446,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles');
 		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
 	}
-	if (model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles',false,true);
+	this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
 	else
