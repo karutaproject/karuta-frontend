@@ -130,37 +130,6 @@ function hideArchiveSearch()
 	$("#remove-button").prop('disabled', true);
 }
 
-//==============================
-function applyNavbarConfiguration()
-//==============================
-{
-	$('#navbar-brand-logo').html(g_configVar['navbar-brand-logo']);
-	$("#navbar-brand-logo").attr("style",g_configVar['navbar-brand-logo-style']);
-	if (g_configVar['navbar-display-mailto']=='0')
-		$("#navbar-mailto").hide();
-	if (g_configVar['navbar-display-language']=='0')
-		$("#navbar-language").hide();
-	var root = document.documentElement;
-	if (g_configVar['navbar-background-color']!=undefined)
-		root.style.setProperty('--navbar-background-color', g_configVar['navbar-background-color']);
-	if (g_configVar['navbar-text-color']!=undefined)
-		root.style.setProperty('--navbar-text-color', g_configVar['navbar-text-color']);
-}
-
-//==============================
-function applyKarutaConfiguration()
-//==============================
-{
-	var root = document.documentElement;
-	if (g_configVar['font-standard']!=undefined && g_configVar['font-standard']!="")
-		root.style.setProperty('--font-family',g_configVar['font-standard']);
-	if (g_configVar['font-size-coeff']!=undefined && g_configVar['font-size-coeff']!="") 
-		root.style.setProperty('--font-size-coeff',g_configVar['font-size-coeff']);
-	if (g_configVar['font-google']!=undefined && g_configVar['font-google']!="") {
-		$("#font-family").attr("href","https://fonts.googleapis.com/css?family="+g_configVar['font-google']);
-		root.style.setProperty('--font-family',g_configVar['font-google']);
-	}
-}
 
 //==============================
 function increaseFontSize()

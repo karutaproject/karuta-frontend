@@ -280,8 +280,16 @@
 				padding:3px;
 			}
 			.card-body {
+				padding:3px;
 				color:var(--list-button-text-color);
 				background-color: var(--list-element-background-color);
+				.portfolio-code,
+				.owner {
+					font-size:80%;
+				}
+			.comments {
+				border-bottom: 1px solid var(--list-button-text-color);
+			}
 			}
 			.card-footer {
 				background-color:var(--list-menu-background-color);
@@ -1455,11 +1463,6 @@ div.oembedall-container {
 			padding-right:0px;
 			margin-left:0px;
 		}
-		.extra .csv-button,
-		.extra .pdf-button {
-			background: var(--portfolio-buttons-background-color);
-			border:1px solid var(--portfolio-resource-border-color);
-		}
 	}
 
 	.standard-resource-Image-Img-Label {
@@ -1518,7 +1521,7 @@ div.oembedall-container {
 	
 	.standard-node-carddeck {
 		.standard-node-card {
-			margin-top:0px;
+//			margin-top:5px;
 		}
 		.content {
 			padding-left:20px;
@@ -1563,6 +1566,23 @@ div.oembedall-container {
 		}
 	}
 	
+	/* ===========================
+	DASHBOARD CSV PDF BUTTONS
+   ===========================*/
+
+	.csv-button,
+	.pdf-button,
+	.img-button {
+		background: var(--portfolio-buttons-background-color);
+		border:1px solid var(--portfolio-resource-border-color);
+		float:left;
+		height:34px;
+		text-align:center;
+		padding-top:7px;
+		display:in-line;
+	}
+
+
 /* ============================ */
 /* ============================ */
 /* ============================ */
@@ -2626,19 +2646,6 @@ table.tablesorter th.restore {
 	height:100%;
 }
 
-
-/* ===========================
-	DASHBOARD CSV PDF BUTTONS
-   ===========================*/
-
-	.csv-button,
-	.pdf-button {
-		float:left;
-		height:34px;
-		text-align:center;
-		padding-top:7px;
-		display:in-line;
-	}
 
 
 

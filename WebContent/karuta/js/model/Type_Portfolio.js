@@ -266,7 +266,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	var roles = $("role",this.rights);
 	var model = roles.length==0;
 	if (!model)
-		tree_type += '<span class="fas fa-file" aria-hidden="true"></span>';
+		tree_type = '<span class="fas fa-file" aria-hidden="true"></span>';
 	//---------------------
 	var portfolio_label = this.label_node[langcode].text();
 	if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
@@ -309,15 +309,17 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	}
 	if (type=='card-admin') {
 		html += "<div class='card-header' >";
-		html += "	<a class='portfolio-label' onclick=\"display_main_page('"+this.rootid+"')\" >"+portfolio_label+"</a> "+tree_type+"</div>"
+		html += tree_type + " <a class='portfolio-label' onclick=\"display_main_page('"+this.rootid+"')\" >"+portfolio_label+"</a></div>"
 		html += "	</div>";
 		html += "<div class='card-body' >";
-		html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
+		if (this.context_text_node[langcode].text()!="")
+			html += "<div class='comments' >"+this.context_text_node[langcode].text()+"</div>";
+		html += "<div id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text();
 		html += " <span class='copy-button fas fa-clipboard' ";
 		html += "   onclick=\"copyInclipboad('"+this.id+"')\" ";
 		html += "   onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + karutaStr[LANG]['copy'] +" : "+this.code_node.text()+"\" ";
 		html += "   onmouseout=\"outCopy('"+this.id+"')\">";
-		html += "</span>";
+		html += "</span></div>";
 		html += "	<div id='owner_"+this.id+"' class='owner'></div>";
 		html += "</div>";
 		html += "<div class='card-footer' >";

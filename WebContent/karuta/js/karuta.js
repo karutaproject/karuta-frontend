@@ -1874,12 +1874,12 @@ function applyKarutaConfiguration()
 {
 	var root = document.documentElement;
 	if (g_configVar['font-standard']!=undefined && g_configVar['font-standard']!="")
-		root.style.setProperty('--font-family',g_configVar['font-standard']);
+		root.style.setProperty('--font-family',g_configVar['font-standard'] + ", Helvetica, Arial, sans-serif");
 	if (g_configVar['font-size-coeff']!=undefined && g_configVar['font-size-coeff']!="") 
 		root.style.setProperty('--font-size-coeff',g_configVar['font-size-coeff']);
 	if (g_configVar['font-google']!=undefined && g_configVar['font-google']!="") {
 		$("#font-family").attr("href","https://fonts.googleapis.com/css?family="+g_configVar['font-google']);
-		root.style.setProperty('--font-family',g_configVar['font-google']);
+		root.style.setProperty('--font-family',g_configVar['font-google'] + ", Helvetica, Arial, sans-serif");
 	}
 }
 

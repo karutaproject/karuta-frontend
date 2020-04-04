@@ -253,8 +253,16 @@ body,
   padding: 3px;
 }
 #list-container .portfolio-card .card-body {
+  padding: 3px;
   color: var(--list-button-text-color);
   background-color: var(--list-element-background-color);
+}
+#list-container .portfolio-card .card-body .portfolio-code,
+#list-container .portfolio-card .card-body .owner {
+  font-size: 80%;
+}
+#list-container .portfolio-card .card-body .comments {
+  border-bottom: 1px solid var(--list-button-text-color);
 }
 #list-container .portfolio-card .card-footer {
   background-color: var(--list-menu-background-color);
@@ -1349,11 +1357,6 @@ table[name=res-div] {
   padding-right: 0px;
   margin-left: 0px;
 }
-.resource-standard .extra .csv-button,
-.resource-standard .extra .pdf-button {
-  background: var(--portfolio-buttons-background-color);
-  border: 1px solid var(--portfolio-resource-border-color);
-}
 
 .standard-resource-Image-Img-Label .title {
   font-size: inherit;
@@ -1402,9 +1405,6 @@ table[name=res-div] {
   padding-top: 0px;
 }
 
-.standard-node-carddeck .standard-node-card {
-  margin-top: 0px;
-}
 .standard-node-carddeck .content {
   padding-left: 20px;
   padding-right: 20px;
@@ -1443,6 +1443,21 @@ table[name=res-div] {
 }
 .model div[name=cnt-div] {
   margin-left: 15px;
+}
+
+/* ===========================
+DASHBOARD CSV PDF BUTTONS
+  ===========================*/
+.csv-button,
+.pdf-button,
+.img-button {
+  background: var(--portfolio-buttons-background-color);
+  border: 1px solid var(--portfolio-resource-border-color);
+  float: left;
+  height: 34px;
+  text-align: center;
+  padding-top: 7px;
+  display: in-line;
 }
 
 /* ============================ */
@@ -2566,18 +2581,6 @@ select.Y2, option[value=Y2] {
 
 .asmColumn {
   height: 100%;
-}
-
-/* ===========================
-	DASHBOARD CSV PDF BUTTONS
-   ===========================*/
-.csv-button,
-.pdf-button {
-  float: left;
-  height: 34px;
-  text-align: center;
-  padding-top: 7px;
-  display: in-line;
 }
 
 /* ===========================
