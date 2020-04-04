@@ -572,7 +572,6 @@ div.oembedall-container {
 #table_unusers {
   width: 100%;
   color: var(--list-element-text-color);
-  background-color: var(--list-element-background-color);
 }
 #table_users td,
 #table_unusers td {
@@ -592,6 +591,11 @@ div.oembedall-container {
   padding-left: 5px;
 }
 
+#list_users,
+#list_unuses {
+  background-color: var(--list-element-background-color);
+}
+
 #folder-users-pages {
   padding-top: 5px;
 }
@@ -599,7 +603,6 @@ div.oembedall-container {
 .folder-users {
   margin-top: 20px;
   color: var(--list-element-text-color);
-  background-color: var(--list-element-background-color);
 }
 .folder-users .usersfolder-header {
   padding: 7px;
@@ -618,6 +621,10 @@ div.oembedall-container {
 .folder-users .item-folder {
   margin-left: 1px;
   margin-bottom: 2px;
+}
+
+#list1-folder-users-pages {
+  background-color: var(--list-element-background-color);
 }
 
 #create-folder-button {
@@ -653,6 +660,18 @@ div.oembedall-container {
 }
 #main-usersgroup #userslist-leftside .active {
   background-color: var(--list-button-background-color);
+}
+#main-usersgroup #usergroup-userslist-leftside.V2 {
+  float: right;
+  width: calc(50% - 7px);
+  margin-bottom: 10px;
+}
+#main-usersgroup #usergroup-userslist-leftside.V2 .active {
+  background-color: var(--list-button-background-color);
+}
+#main-usersgroup #list-users-active {
+  background-color: var(--list-element-background-color);
+  padding: 15px;
 }
 #main-usersgroup #userslist-rightside {
   width: calc(30% - 7px);

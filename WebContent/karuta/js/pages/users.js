@@ -93,16 +93,12 @@ function fill_list_users(type)
 		if (code == 13)
 			searchUser();
 	});
-	if (karuta_backend_version.startsWith("2.")) {
+	if (karuta_backend_version.startsWith("2x.")) {
 		$("#usersfolders").hide();
 		$("#bin-usersfolders").hide();
 		$("#users-in-rootfolder").show();
 		$("#users-in-bin").show();
-//		} else if (folderid=="1" && usersfolders_byid[folderid]==undefined) {
-//			$("#folder-users").html("<div id='folder-users-inactive'></div>");
-//			fill_list_usersOLD();
-//		}
-
+		fill_list_usersOLD('list1-folder-users','active','list');
 	} else {
 		initUsersFolders();
 		UIFactory.UsersFolder.loadAndDisplayStruct('usersfolder_active','active',true,type);  // active users
@@ -200,9 +196,11 @@ function toggleUsersList(list) {
 }
 
 //==============================
-function fill_list_usersOLD(type)
+function fill_list_usersOLD(dest,type,viewtype)
 //==============================
 {
+	if (viewtype==null)
+		viewtype = "list";
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -215,12 +213,13 @@ function fill_list_usersOLD(type)
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/users",
+				viewtype : viewtype,
 				success : function(data) {
 					UIFactory["User"].parse(data);
 					if (type=='active')
-						UIFactory["User"].displayActive('list1-folder-users','list');
+						UIFactory["User"].displayActive(dest,this.viewtype);
 					else
-						UIFactory["User"].displayInactive('list1-folder-users','list');
+						UIFactory["User"].displayInactive(dest,this.viewtype);
 				}
 			});
 			//----------------

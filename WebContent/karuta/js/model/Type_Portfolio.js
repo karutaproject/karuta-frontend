@@ -110,6 +110,12 @@ UIFactory["Portfolio"].getLogicalMetadataAttribute= function(node,attribute)
 	return val;
 	}
 
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------ DRAG AND DROP -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
 //==================================
 function dragPortfolio(ev)
 //==================================
@@ -154,69 +160,11 @@ function dropPortfolio(ev)
 	UIFactory.Portfolio.renamePortfolioCode(portfolios_byid[portfolioid],newportfoliocode)
 }
 
-/// Display
-
-//==================================
-UIFactory["Portfolio"].displayProjects = function(dest,type,langcode)
-//==================================
-{
-	loadedProjects = {};
-	projects_list = [];
-	number_of_projects = 0;
-	number_of_portfolios = 0;
-	g_sum_trees = 0;
-	$("#"+dest).html($(""));
-	$("#content-portfolios-not-in-project").html($(""));
-	for (var i=0;i<portfolios_list.length;i++) {
-		if (portfolios_list[i]!=null) {
-			var portfolio = portfolios_list[i];
-			UIFactory.Portfolio.displayProject(portfolio,dest,type,langcode);
-		}
-	}
-};
-
-//==================================
-UIFactory["Portfolio"].displayProject = function(portfolio,dest,type,langcode,parentcode)
-//==================================
-{
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (dest!=null) {
-		portfolio.displayLabel["projectlabel_"+portfolio.id] = langcode;
-	}
-	//---------------------
-	var html = "";
-	var portfoliocode = portfolio.code_node.text();
-	if (portfolio.semantictag!= undefined && portfolio.semantictag.indexOf('karuta-project')>-1 && portfoliocode!='karuta.project'){
-		if (number_of_projects>0) {
-			$("#export-"+projects_list[number_of_projects-1].uuid).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
-		}
-		var portfolio_label = portfolio.label_node[langcode].text();
-		if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
-			portfolio_label = '- no label in '+languages[langcode]+' -';
-		//-------------------- PROJECT ----------------------
-		projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
-		projects_list[number_of_projects].portfolios += portfolio.id;
-		number_of_projects_portfolios = 0;
-		html += "<div id='project_"+portfolio.id+"' class='project folder' ondrop='dropPortfolio(event)' ondragover='ondragoverPortfolio(event)' ondragleave='ondragleavePortfolio(event)'";
-		html += "  data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + portfoliocode+"\" >";
-		html += "	<div id='label_"+portfolio.id+"' class='row-label'>";
-		html += "		<span id='projectlabel_"+portfolio.id+"' onclick=\"UIFactory.Portfolio.toggleProjectContent('"+portfolio.id+"','"+portfoliocode+"')\" class='project-label'>"+portfolio_label+"</span>&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span>";
-		html += "		&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span>";
-		html += "	</div>";
-		html += "	</div>";
-		html += "</div><!-- class='project'-->"
-		$("#"+dest).append($(html));
-		if (!loadedProjects[portfoliocode] && localStorage.getItem('currentDisplayedProjectCode')==portfoliocode) {
-			UIFactory.Portfolio.loadProjectContent('project-portfolios',portfoliocode);
-			$(".row-label").removeClass('active');
-			$("#label_"+portfolio.id).addClass('active');
-		}
-		UIFactory.Portfolio.countProjectPortfolios(projects_list[number_of_projects].uuid);
-		number_of_projects++;
-	}
-}
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------ DISPLAY -----------------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
 
 //==================================
 UIFactory["Portfolio"].prototype.displayOwner = function(dest)
@@ -522,27 +470,6 @@ UIFactory["Portfolio"].prototype.getEditor = function(type,lang)
 	return obj;
 };
 
-//==================================
-UIFactory["Portfolio"].prototype.setOwner = function(newuserid)
-//==================================
-{
-	var uuid = this.id;
-	var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "/setOwner/"+newuserid;
-	$.ajax({
-		type : "PUT",
-		contentType: "application/xml",
-		dataType : "text",
-		url : url,
-		data : "",
-		success : function(data) {
-			fill_list_page();
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Error in restore : "+jqxhr.responseText);
-		}
-	});
-};
-
 
 //==================================
 UIFactory["Portfolio"].load = function(portfolioid,level) 
@@ -769,53 +696,6 @@ UIFactory["Portfolio"].createTree = function(parentcode,typecode)
 			code = parentcode + "." + code;
 			var uuid = UIFactory["Portfolio"].getid_bycode(typecode,false); 
 			UIFactory["Portfolio"].copy_rename(uuid,code,true,label,'root');
-		}
-	});
-	$("#edit-window-footer").append(obj);
-	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
-	$("#edit-window-footer").append($(footer));
-
-	var html = "<div class='form-horizontal'>";
-	html += "<div class='form-group'>";
-	html += "		<label for='codetree' class='col-sm-3 control-label'>Code</label>";
-	html += "		<div class='col-sm-9'>";
-	html += "			<input id='codetree' type='text' class='form-control'>";
-	html += "		</div>";
-	html += "</div>";
-	html += "<div class='form-group'>";
-	html += "		<label for='labeltree' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>";
-	html += "		<div class='col-sm-9'>";
-	html += "			<input id='labeltree' type='text' class='form-control'>";
-	html += "		</div>";
-	html += "</div>";
-	html += "</div>";
-	$("#edit-window-body").html(html);
-	//--------------------------
-	$('#edit-window').modal('show');
-};
-
-
-
-//==================================
-UIFactory["Portfolio"].createProject = function()
-//==================================
-{
-	$("#edit-window-title").html(karutaStr[LANG]['create_project']);
-	$("#edit-window-footer").html("");
-	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var create_button = "<button id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</button>";
-	var obj = $(create_button);
-	$(obj).click(function (){
-		var code = $("#codetree").val();
-		var label = $("#labeltree").val();
-		if (code!='' && label!='') {
-			var uuid = UIFactory["Portfolio"].getid_bycode("karuta.project",false); 
-			UIFactory["Portfolio"].copy_rename(uuid,code,true,label,'karuta-project');
-		} else {
-			if (code=='')
-				alertHTML(karutaStr[LANG]['code-not-null']);
-			if (label=='')
-				alertHTML(karutaStr[LANG]['label-not-null']);
 		}
 	});
 	$("#edit-window-footer").append(obj);
@@ -1207,88 +1087,6 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	$('#edit-window').modal('show');
 };
 
-
-
-//==================================
-UIFactory["Portfolio"].removeProject = function(projectid,projectcode) 
-//==================================
-{
-	//----------------
-	$.ajaxSetup({async: false});
-	for (var i=0;i<portfolios_list.length;i++){
-		var portfoliocode = portfolios_list[i].code_node.text();
-		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
-		if (projectcode==prefix || projectcode==portfoliocode) {
-			var uuid = portfolios_list[i].id;
-			var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "?active=false";
-			$.ajax({
-				type : "PUT",
-				contentType: "application/xml",
-				dataType : "text",
-				url : url,
-				data : "",
-				success : function(data) {
-				},
-				error : function(jqxhr,textStatus) {
-					alertHTML("Error in restore : "+jqxhr.responseText);
-				}
-			});
-		}
-	}
-	fill_list_page();
-	$.ajaxSetup({async: true});
-}
-
-//==================================
-UIFactory["Portfolio"].delProject = function(projectid,projectcode) 
-//==================================
-{
-	$.ajaxSetup({async: false});
-	//----------------
-	for (var i=0;i<portfolios_list.length;i++){
-		var portfoliocode = portfolios_list[i].code_node.text();
-		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
-		if (projectcode==prefix || projectcode==portfoliocode) {
-			var uuid = portfolios_list[i].id;
-			var url = serverBCK_API+"/portfolios/portfolio/" + uuid;
-			$.ajax({
-				type : "DELETE",
-				contentType: "application/xml",
-				dataType : "xml",
-				url : url,
-				data : "",
-				success : function(data) {
-				},
-				error : function(jqxhr,textStatus) {
-					alertHTML("Error in del : "+jqxhr.responseText);
-				}
-			});
-		}
-	}
-	//--------we load the projects-----------------------
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&project=true",
-		success : function(data) {
-			nb_projects = parseInt($('portfolios',data).attr('count'))-1;
-			UIFactory["Portfolio"].parse(data);
-			$("#project-portfolios").html("");
-			UIFactory["Portfolio"].displayProjects('projects','list');
-			if ($("#project-portfolios").html()=="")
-				$("#project-portfolios").hide();
-			$("#wait-window").hide();
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active=1&project=true: "+textStatus);
-			$("#wait-window").hide();
-		}
-	});
-	//----------------
-	$.ajaxSetup({async: true});
-}
-
-
 //==================================
 UIFactory["Portfolio"].del = function(portfolioid) 
 //==================================
@@ -1301,7 +1099,7 @@ UIFactory["Portfolio"].del = function(portfolioid)
 		url : url,
 		data : "",
 		success : function(data) {
-			//--------we load the projects-----------------------
+			//--------we reload the projects-----------------------
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -1595,73 +1393,6 @@ UIFactory["Portfolio"].renamePortfolioCode = function(itself,code,langcode)
 	}
 };
 
-//==================================
-UIFactory["Portfolio"].renameProject = function(itself,langcode) 
-//==================================
-{
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var oldprojectcode = $(itself.code_node).text();
-	var newprojectcode = $.trim($("#code_"+itself.id).val());
-	//---------- test if new code already exists
-	var exist = false;
-	for (var i=0;i<portfolios_list.length;i++) {
-		if (oldprojectcode!=newprojectcode && newprojectcode==portfolios_list[i].code_node.text())
-			exist = true;
-	}
-	//-----------------------
-	if (!exist) {
-		var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
-		$(itself.label_node[langcode]).text(label);
-		if (newprojectcode!=oldprojectcode) {
-			for (var i=0;i<portfolios_list.length;i++){
-				var newportfoliocode = "";
-				var portfoliocode = portfolios_list[i].code_node.text();
-				var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
-				if (oldprojectcode==prefix || oldprojectcode==portfoliocode) {
-					if (prefix=="" || oldprojectcode==portfoliocode)
-						newportfoliocode = newprojectcode;
-					else
-						newportfoliocode = newprojectcode + portfoliocode.substring(portfoliocode.indexOf('.'));
-					portfolios_list[i].code_node.text(newportfoliocode); // update local code
-					var xml = "";
-					xml +="		<asmResource xsi_type='nodeRes'>";
-					xml +="			<code>"+newportfoliocode+"</code>";
-					if (prefix=="")
-						for (var j=0; j<languages.length;j++){
-							xml +="			<label lang='"+languages[j]+"'>"+$(itself.label_node[j]).text()+"</label>";	
-						}
-					else // label not changed
-						for (var j=0; j<languages.length;j++){
-							xml +="			<label lang='"+languages[j]+"'>"+$(portfolios_list[i].label_node[j]).text()+"</label>";	
-						}
-					xml +="		</asmResource>";
-					strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-					$("#portfolio_"+portfolios_list[i].id).html($(portfolios_list[i].getPortfolioView('portfolio_'+portfolios_list[i].id,'list')));
-					portfolios_list[i].displayOwner('owner_'+portfolios_list[i].id);
-					UICom.query("PUT",serverBCK_API+'/nodes/node/'+portfolios_list[i].rootid+'/noderesource',null,"text",strippeddata);
-				}
-			}
-		} else {
-			var xml = "";
-			xml +="		<asmResource xsi_type='nodeRes'>";
-			xml +="			<code>"+oldprojectcode+"</code>";
-			for (var j=0; j<languages.length;j++){
-				xml +="			<label lang='"+languages[j]+"'>"+$(itself.label_node[j]).text()+"</label>";	
-			}
-			xml +="		</asmResource>";
-			strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-			$("#portfoliolabel_"+itself.id).html($(itself.label_node[langcode]).text());
-			UICom.query("PUT",serverBCK_API+'/nodes/node/'+itself.rootid+'/noderesource',null,"text",strippeddata);
-		}
-	} else {
-		alertHTML(karutaStr[LANG]['existing-code']);
-		$("#code_"+itself.id).val(oldprojectcode);
-	}
-	itself.refresh();
-}
 
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
@@ -2124,7 +1855,7 @@ UIFactory["Portfolio"].shareGroups = function(portfolioid,type)
 
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------
+//------------------------ CHANGE OWNER --------------------------------------------
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
 
@@ -2202,6 +1933,7 @@ UIFactory["Portfolio"].changeOwner = function(portfolioid,langcode)
 	});
 	
 }
+
 
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
@@ -2544,35 +2276,6 @@ UIFactory["Portfolio"].prototype.getTreeType = function()
 };
 
 //==================================
-UIFactory["Portfolio"].removePortfolios = function() 
-//==================================
-{
-	$("#wait-window").show();
-	//----------------
-	$.ajaxSetup({async: false});
-	for (var i=0;i<portfolios_list.length;i++){
-		var uuid = portfolios_list[i].id;
-		var url = serverBCK_API+"/portfolios/portfolio/" + uuid + "?active=false";
-		$.ajax({
-			type : "PUT",
-			contentType: "application/xml",
-			dataType : "text",
-			url : url,
-			data : "",
-			success : function(data) {
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error in removePortfolios : "+jqxhr.responseText);
-			}
-		});
-	}
-	searchPortfolio();
-	$("#wait-window").hide();
-	$.ajaxSetup({async: true});
-	//----------------
-}
-
-//==================================
 UIFactory["Portfolio"].removeSearchedPortfolios = function() 
 //==================================
 {
@@ -2689,27 +2392,250 @@ UIFactory["Portfolio"].confirmDelPortfolio = function (uuid)
 	$('#delete-window').modal('show');
 }
 
-//=======================================================================
-UIFactory["Portfolio"].confirmDelProject = function (uuid,projectcode) 
-// =======================================================================
+//==================================
+UIFactory["Portfolio"].prototype.refresh = function()
+//==================================
 {
-	var portfolio = portfolios_byid[uuid];
-	var portfoliocode = portfolio.code_node.text();
-	var portfolio_label = portfolio.label_node[LANGCODE].text();
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"] + "<br>" + karutaStr[LANG]["code"]+ " : " + portfoliocode + "<br>" + karutaStr[LANG]["label"]+ " : " +portfolio_label + "<br>" + karutaStr[LANG]["and-content"];
-	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.delProject('"+uuid+"','"+projectcode+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
-	document.getElementById('delete-window-footer').innerHTML = buttons;
-	$('#delete-window').modal('show');
+	for (dest1 in this.displayLabel) {
+		var portfolio_label = this.label_node[LANGCODE].text();
+		$("#"+dest1).html(portfolio_label);
+	};
+	for (dest2 in this.display) {
+		$("#"+dest2).html(this.getPortfolioView(null,this.display[dest2],null));
+	};
+
+};
+
+
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
+//--------------------- PROJECTS ---------------------------------------------------
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
+
+//==================================
+UIFactory["Portfolio"].renameProject = function(itself,langcode) 
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	var oldprojectcode = $(itself.code_node).text();
+	var newprojectcode = $.trim($("#code_"+itself.id).val());
+	//---------- test if new code already exists
+	var exist = false;
+	for (var i=0;i<portfolios_list.length;i++) {
+		if (oldprojectcode!=newprojectcode && newprojectcode==portfolios_list[i].code_node.text())
+			exist = true;
+	}
+	//-----------------------
+	if (!exist) {
+		var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
+		$(itself.label_node[langcode]).text(label);
+		if (newprojectcode!=oldprojectcode) {
+			for (var i=0;i<portfolios_list.length;i++){
+				var newportfoliocode = "";
+				var portfoliocode = portfolios_list[i].code_node.text();
+				var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
+				if (oldprojectcode==prefix || oldprojectcode==portfoliocode) {
+					if (prefix=="" || oldprojectcode==portfoliocode)
+						newportfoliocode = newprojectcode;
+					else
+						newportfoliocode = newprojectcode + portfoliocode.substring(portfoliocode.indexOf('.'));
+					portfolios_list[i].code_node.text(newportfoliocode); // update local code
+					var xml = "";
+					xml +="		<asmResource xsi_type='nodeRes'>";
+					xml +="			<code>"+newportfoliocode+"</code>";
+					if (prefix=="")
+						for (var j=0; j<languages.length;j++){
+							xml +="			<label lang='"+languages[j]+"'>"+$(itself.label_node[j]).text()+"</label>";	
+						}
+					else // label not changed
+						for (var j=0; j<languages.length;j++){
+							xml +="			<label lang='"+languages[j]+"'>"+$(portfolios_list[i].label_node[j]).text()+"</label>";	
+						}
+					xml +="		</asmResource>";
+					strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+					$("#portfolio_"+portfolios_list[i].id).html($(portfolios_list[i].getPortfolioView('portfolio_'+portfolios_list[i].id,'list')));
+					portfolios_list[i].displayOwner('owner_'+portfolios_list[i].id);
+					UICom.query("PUT",serverBCK_API+'/nodes/node/'+portfolios_list[i].rootid+'/noderesource',null,"text",strippeddata);
+				}
+			}
+		} else {
+			var xml = "";
+			xml +="		<asmResource xsi_type='nodeRes'>";
+			xml +="			<code>"+oldprojectcode+"</code>";
+			for (var j=0; j<languages.length;j++){
+				xml +="			<label lang='"+languages[j]+"'>"+$(itself.label_node[j]).text()+"</label>";	
+			}
+			xml +="		</asmResource>";
+			strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			$("#portfoliolabel_"+itself.id).html($(itself.label_node[langcode]).text());
+			UICom.query("PUT",serverBCK_API+'/nodes/node/'+itself.rootid+'/noderesource',null,"text",strippeddata);
+		}
+	} else {
+		alertHTML(karutaStr[LANG]['existing-code']);
+		$("#code_"+itself.id).val(oldprojectcode);
+	}
+	itself.refresh();
 }
 
+//==================================
+UIFactory["Portfolio"].delProject = function(projectid,projectcode) 
+//==================================
+{
+	$.ajaxSetup({async: false});
+	//----------------
+	for (var i=0;i<portfolios_list.length;i++){
+		var portfoliocode = portfolios_list[i].code_node.text();
+		var prefix = (portfoliocode.indexOf('.')<0) ? "" : portfoliocode.substring(0,portfoliocode.indexOf('.'));
+		if (projectcode==prefix || projectcode==portfoliocode) {
+			var uuid = portfolios_list[i].id;
+			var url = serverBCK_API+"/portfolios/portfolio/" + uuid;
+			$.ajax({
+				type : "DELETE",
+				contentType: "application/xml",
+				dataType : "xml",
+				url : url,
+				data : "",
+				success : function(data) {
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error in del : "+jqxhr.responseText);
+				}
+			});
+		}
+	}
+	//--------we load the projects-----------------------
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios?active=1&project=true",
+		success : function(data) {
+			nb_projects = parseInt($('portfolios',data).attr('count'))-1;
+			UIFactory["Portfolio"].parse(data);
+			$("#project-portfolios").html("");
+			UIFactory["Portfolio"].displayProjects('projects','list');
+			if ($("#project-portfolios").html()=="")
+				$("#project-portfolios").hide();
+			$("#wait-window").hide();
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active=1&project=true: "+textStatus);
+			$("#wait-window").hide();
+		}
+	});
+	//----------------
+	$.ajaxSetup({async: true});
+}
 
-//----------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------
+//==================================
+UIFactory["Portfolio"].createProject = function()
+//==================================
+{
+	$("#edit-window-title").html(karutaStr[LANG]['create_project']);
+	$("#edit-window-footer").html("");
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var create_button = "<button id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</button>";
+	var obj = $(create_button);
+	$(obj).click(function (){
+		var code = $("#codetree").val();
+		var label = $("#labeltree").val();
+		if (code!='' && label!='') {
+			var uuid = UIFactory["Portfolio"].getid_bycode("karuta.project",false); 
+			UIFactory["Portfolio"].copy_rename(uuid,code,true,label,'karuta-project');
+		} else {
+			if (code=='')
+				alertHTML(karutaStr[LANG]['code-not-null']);
+			if (label=='')
+				alertHTML(karutaStr[LANG]['label-not-null']);
+		}
+	});
+	$("#edit-window-footer").append(obj);
+	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	$("#edit-window-footer").append($(footer));
 
+	var html = "<div class='form-horizontal'>";
+	html += "<div class='form-group'>";
+	html += "		<label for='codetree' class='col-sm-3 control-label'>Code</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='codetree' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "<div class='form-group'>";
+	html += "		<label for='labeltree' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='labeltree' type='text' class='form-control'>";
+	html += "		</div>";
+	html += "</div>";
+	html += "</div>";
+	$("#edit-window-body").html(html);
+	//--------------------------
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["Portfolio"].displayProjects = function(dest,type,langcode)
+//==================================
+{
+	loadedProjects = {};
+	projects_list = [];
+	number_of_projects = 0;
+	number_of_portfolios = 0;
+	g_sum_trees = 0;
+	$("#"+dest).html($(""));
+	$("#content-portfolios-not-in-project").html($(""));
+	for (var i=0;i<portfolios_list.length;i++) {
+		if (portfolios_list[i]!=null) {
+			var portfolio = portfolios_list[i];
+			UIFactory.Portfolio.displayProject(portfolio,dest,type,langcode);
+		}
+	}
+};
+
+//==================================
+UIFactory["Portfolio"].displayProject = function(portfolio,dest,type,langcode,parentcode)
+//==================================
+{
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (dest!=null) {
+		portfolio.displayLabel["projectlabel_"+portfolio.id] = langcode;
+	}
+	//---------------------
+	var html = "";
+	var portfoliocode = portfolio.code_node.text();
+	if (portfolio.semantictag!= undefined && portfolio.semantictag.indexOf('karuta-project')>-1 && portfoliocode!='karuta.project'){
+		if (number_of_projects>0) {
+			$("#export-"+projects_list[number_of_projects-1].uuid).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+projects_list[number_of_projects-1].portfolios);
+		}
+		var portfolio_label = portfolio.label_node[langcode].text();
+		if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')
+			portfolio_label = '- no label in '+languages[langcode]+' -';
+		//-------------------- PROJECT ----------------------
+		projects_list[number_of_projects] = {"uuid":portfolio.id,"portfoliocode":portfoliocode,"portfoliolabel":portfolio_label,"portfolios":""};
+		projects_list[number_of_projects].portfolios += portfolio.id;
+		number_of_projects_portfolios = 0;
+		html += "<div id='project_"+portfolio.id+"' class='project folder' ondrop='dropPortfolio(event)' ondragover='ondragoverPortfolio(event)' ondragleave='ondragleavePortfolio(event)'";
+		html += "  data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + portfoliocode+"\" >";
+		html += "	<div id='label_"+portfolio.id+"' class='row-label'>";
+		html += "		<span id='projectlabel_"+portfolio.id+"' onclick=\"UIFactory.Portfolio.toggleProjectContent('"+portfolio.id+"','"+portfoliocode+"')\" class='project-label'>"+portfolio_label+"</span>&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span>";
+		html += "		&nbsp;<span class='number_of_projects_portfolios badge' id='number_of_projects_portfolios_"+portfolio.id+"'></span>";
+		html += "	</div>";
+		html += "	</div>";
+		html += "</div><!-- class='project'-->"
+		$("#"+dest).append($(html));
+		if (!loadedProjects[portfoliocode] && localStorage.getItem('currentDisplayedProjectCode')==portfoliocode) {
+			UIFactory.Portfolio.loadProjectContent('project-portfolios',portfoliocode);
+			$(".row-label").removeClass('active');
+			$("#label_"+portfolio.id).addClass('active');
+		}
+		UIFactory.Portfolio.countProjectPortfolios(projects_list[number_of_projects].uuid);
+		number_of_projects++;
+	}
+}
 //==================================
 function toggleProject(uuid) {
 //==================================
@@ -2981,19 +2907,20 @@ UIFactory.Portfolio.displayProjectItem = function(dest,portfolio,parentcode,type
 	//----------------------
 }
 
-//==================================
-UIFactory["Portfolio"].prototype.refresh = function()
-//==================================
-{
-	for (dest1 in this.displayLabel) {
-		var portfolio_label = this.label_node[LANGCODE].text();
-		$("#"+dest1).html(portfolio_label);
-	};
-	for (dest2 in this.display) {
-		$("#"+dest2).html(this.getPortfolioView(null,this.display[dest2],null));
-	};
 
-};
+//=======================================================================
+UIFactory["Portfolio"].confirmDelProject = function (uuid,projectcode) 
+// =======================================================================
+{
+	var portfolio = portfolios_byid[uuid];
+	var portfoliocode = portfolio.code_node.text();
+	var portfolio_label = portfolio.label_node[LANGCODE].text();
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"] + "<br>" + karutaStr[LANG]["code"]+ " : " + portfoliocode + "<br>" + karutaStr[LANG]["label"]+ " : " +portfolio_label + "<br>" + karutaStr[LANG]["and-content"];
+	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:$('#delete-window').modal('hide');UIFactory.Portfolio.delProject('"+uuid+"','"+projectcode+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
 
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------

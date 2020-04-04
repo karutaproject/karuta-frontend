@@ -19,7 +19,7 @@ var Users_byid = {};
 var UsersActive_list = [];
 var UsersInactive_list = [];
 var UsersWithoutPortfolio_list = [];
-
+var nb_users_page = 7;
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -77,15 +77,25 @@ UIFactory["User"] = function( node )
 };
 
 
+//==================================
+function dragUser(ev)
+//==================================
+{
+	ev.dataTransfer.setData("id", ev.target.id.substring(ev.target.id.lastIndexOf('_')+1));
+	ev.dataTransfer.setData("type", "user");
+}
+
+
 /// Display
 
 //==================================
 UIFactory["User"].displayActive = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th></th><th></th></thead><tbody id='list_users'></tbody></table>");
+	$("#"+destid).html("<h3>"+karutaStr[LANG]["active_users"]+"</h3>");
+	$("#"+destid).append("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th></th><th></th></thead><tbody id='list_users'></tbody></table>");
 	$("#temporary").html("<table id='temp_users'></table>");
-	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var itemid = destid+"_"+UsersActive_list[i].id;
 		var login = UsersActive_list[i].username_node.text();
@@ -104,7 +114,8 @@ UIFactory["User"].displayActive = function(destid,type,lang)
 UIFactory["User"].displayInactive = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<table id='table_unusers' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
+	$("#"+destid).html("<h3>"+karutaStr[LANG]["inactive_users"]+"</h3>");
+	$("#"+destid).append("<table id='table_unusers' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
 	$("#list_unusers").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersInactive_list.length; i++) {
 		$('#inactive-users').show();
@@ -116,18 +127,71 @@ UIFactory["User"].displayInactive = function(destid,type,lang)
 };
 
 //==================================
+UIFactory["User"].displayActiveForUserGroup = function(dest,viewtype,index,nb_index)
+//==================================
+{
+	if (index==null)
+		index = 0;
+	if (nb_index==null)
+		nb_index = 1;
+	if (UsersActive_list.length<3)
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/users",
+			viewtype : viewtype,
+			success : function(data) {
+				UIFactory["User"].parse(data);
+				nb_index = Math.ceil((UsersActive_list.length)/nb_users_page);
+				UIFactory.User.displayActiveForUserGroupIndexed(dest,viewtype,index,nb_index);
+			}
+		});
+	else {
+		nb_index = Math.ceil((UsersActive_list.length)/nb_users_page);
+		UIFactory.User.displayActiveForUserGroupIndexed(dest,viewtype,index,nb_index);
+	}
+};
+
+//==================================
+UIFactory.User.displayPagesNavbar = function (dest,viewtype,index,nb_index)
+//==================================
+{
+	var html = "";
+	for (var i=1;i<=nb_index;i++) {
+		html += "<span class='badge";
+		if (i==index*1+1)
+			html += " active";
+		html += "' onclick=\"UIFactory.User.displayActiveForUserGroup('"+dest+"','"+viewtype+"','"+(i-1)+"')\">"+i+"</span>";
+	}
+	$("#usegroup-users-navbar-pages").html(html);
+}
+
+//==================================
+UIFactory["User"].displayActiveForUserGroupIndexed = function(dest,viewtype,index,nb_index)
+//==================================
+{
+	var html = "";
+	$("#"+dest).html($(html));
+	var first = index * nb_users_page;
+	var last = ((index*1+1) * nb_users_page);
+	if (last>UsersActive_list.length)
+		last = UsersActive_list.length;
+	for (var i=first; i<last;i++){
+		var item = UsersActive_list[i];
+		var destid = dest+"_item-user_"+item.id;
+		html += "<div class='row item item-user' id='"+destid+"' draggable='true' ondragstart='dragUser(event)'>";
+		html += item.getView(destid,'list3');
+		html += "</div>";
+	}
+	$("#"+dest).html($(html));
+	UIFactory.User.displayPagesNavbar(dest,viewtype,index,nb_index);
+}
+
+//==================================
 UIFactory["User"].prototype.getEmail = function()
 //==================================
 {
 	return this.email_node.text();
-}
-
-//==================================
-function dragUser(ev)
-//==================================
-{
-	ev.dataTransfer.setData("id", ev.target.id.substring(ev.target.id.lastIndexOf('_')+1));
-	ev.dataTransfer.setData("type", "user");
 }
 
 

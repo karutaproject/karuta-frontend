@@ -1112,8 +1112,8 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type,lang)
 		type = 'list';
 	var html = "";
 	if (type=='list-header') {
-		html += "	<div class='usersgroup-header'>";
-		html += "		<span class='usersgroup-label'>"+this.label+"</span>";
+		html += "	<div id='aa_"+this.id+"' class='usersgroup-header' ondrop='dropUserGroup(event)' ondragover='allowDropUserGroup(event)'>";
+		html += "		<span id='bb_"+this.id+"' class='usersgroup-label' ondrop='dropUserGroup(event)' ondragover='allowDropUserGroup(event)'>"+this.label+"</span>";
 		//------------ buttons ---------------
 		if (USER.admin) {
 			html += "			<button data-toggle='dropdown' class='btn dropdown-toggle' aria-expanded='false' style='float:right'></button>";
@@ -1143,7 +1143,7 @@ UIFactory["UsersGroup"].displayUsersGroup = function(gid,destid,type,lang)
 	localStorage.setItem('currentDisplayedUserGroup',gid);
 	selectElt('usersgroup','usersgroup_'+gid);
 	var html = "";
-	html += "<div id='group-users-header_"+gid+"'></div>";
+	html += "<div id='group-users-header_"+gid+"' ondrop='dropUserGroup(event)' ondragover='allowDropUserGroup(event)'></div>";
 	html += "<div id='group-users-content_"+gid+"' ondrop='dropUserGroup(event)' ondragover='allowDropUserGroup(event)'></div>";
 	$("#"+destid).html(html);
 	//--------------------------

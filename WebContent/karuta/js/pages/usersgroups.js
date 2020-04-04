@@ -23,8 +23,8 @@ function fill_list_usersgroups(type)
 	html += "<div id='usergroup-header' class='row'>";
 	html += "</div>";
 	html += "<div id='usergroup-body'>";
-	//-----------------------------------------------------------
-	html += "	<div id='userslist-leftside' style='visibility:hidden'>";
+	//----------------------------V3-------------------------------
+	html += "	<div id='usergroup-userslist-leftside' class='V3' style='display:none'>";
 	html += "		<div id='usersfolders' class='tree user'>";
 	html += "			<h3 id='usersfolder_root'>"+karutaStr[LANG]['active_users']+"</h3>";
 	html += "			<h4 id='usersfolder_root'>";
@@ -36,13 +36,21 @@ function fill_list_usersgroups(type)
 	//-----------------------------------------------------------
 	html += "	<div id='gutter'>&nbsp;</div>";
 	//-----------------------------------------------------------
-	html += "	<div id='userslist-rightside'  style='visibility:hidden'>";
+	html += "	<div id='usergroup-userslist-rightside'  style='display:none'>";
 	html += "		<div id='"+type+"-folder-users' class='folder-users'></div>";
 	html += "	</div><!--div id='userslist-rightside'-->";
+	//----------------------------V2-------------------------------
+	html += "	<div id='usergroup-userslist-leftside' class='V2' style='display:none'>";
+	html += "		<h3 id='usersfolder_root'>"+karutaStr[LANG]['active_users']+"</h3>";
+	html += "		<div id='list-users-active' class=''></div>";
+	html += "<div id='usegroup-users-navbar-pages' class='navbar-pages'></div>";
+	html += "	</div><!--div id='userslist-leftside'-->";
 	//-----------------------------------------------------------
 	//-----------------------------------------------------------
 	//-----------------------------------------------------------
 	html += "	<div id='gutter'>&nbsp;</div>";
+	//-----------------------------------------------------------
+	//-----------------------------------------------------------
 	//-----------------------------------------------------------
 	html += "	<div id='usergroupslist-rightside'>";
 	html += "		<div id='group-users'>";
@@ -68,6 +76,7 @@ function fill_list_usersgroups(type)
 	$("#main-usersgroup").html(html);
 
 	if (karuta_backend_version.startsWith("2.")) {
+		$(".V2").show();
 		$("#group-create").attr("onclick","UIFactory.UsersGroup.callCreate()");
 		$.ajaxSetup({async: false});
 		$.ajax({
@@ -86,6 +95,7 @@ function fill_list_usersgroups(type)
 			}
 		});
 		$.ajaxSetup({async: true});
+		UIFactory.User.displayActiveForUserGroup('list-users-active','list-forusergroup');
 	} else {
 		$("#group-create").attr("onclick","UIFactory.Usersgroup.callCreategroup('active'");
 		$("#userslist-leftside").css('visibility', 'visible');
