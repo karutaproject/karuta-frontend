@@ -406,7 +406,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		resource_type = this.resource.type;
 	if (name=='asmRoot') {
 		this.displayMetadataAttributeEditor('metadata-root','list-novisible',true);
-//		this.displayMetadataAttributeEditor('metadata-root','complex',true);
+		this.displayMetadataAttributeEditor('metadata-root','invisible',true);
 		this.displayMetadataAttributeEditor('metadata-root','export-pdf',true);
 		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
 		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);

@@ -88,6 +88,7 @@ karutaStr['fr']['quit']="Quitter";
 karutaStr['fr']['menu']="Menu";
 karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - Hauteur : 220<br>&nbsp; - Largeur : 800 divisé par le nombre de colonnes<br>&nbsp;";
 karutaStr['fr']['list-novisible']="Non visible";
+karutaStr['fr']['invisible']="Invisible - excepté pour root";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
 karutaStr['fr']['see-bin']="Voir la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";

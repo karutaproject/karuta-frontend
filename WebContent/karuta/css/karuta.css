@@ -503,17 +503,17 @@ div.oembedall-container {
 #main-user {
   color: var(--list-element-text-color);
 }
-#main-user #userslist-leftside {
+#main-user #user-leftside {
   width: calc(25% - 5px);
   margin-bottom: 10px;
 }
-#main-user #userslist-leftside h3 {
+#main-user #user-leftside h3 {
   margin-top: 20px;
 }
-#main-user #userslist-leftside .active {
+#main-user #user-leftside .active {
   background-color: var(--list-button-background-color);
 }
-#main-user #userslist-rightside {
+#main-user #user-rightside {
   width: calc(75% - 5px);
   margin-top: 2px;
   padding-bottom: 5px;
@@ -2635,11 +2635,6 @@ select.Y2, option[value=Y2] {
 /* ===========================
 	SEARCH USER
    ===========================*/
-#search-user {
-  float: right;
-  width: 80%;
-}
-
 #search-choice {
   width: 100px;
 }

@@ -143,7 +143,7 @@ UIFactory["UsersFolder"].prototype.getTreeNodeView = function(dest,type,langcode
 	//---------------------	
 	var folder_label = this.label_node[langcode].text();
 	var html = "";
-	if (type=='list2' || type=='list1' || type=='list-forusergroup') {
+	if (type=='list-user' || type=='list1' || type=='list-forusergroup') {
 		html += "<div id='"+this.id+"' class='treeNode usersfolder'>";
 		html += "	<div id='usersfolder_"+this.id+"' class='row-label folder-row usersfolder'  draggable='true' ondragstart='dragFolder(event)' ondrop='dropFolder(event)' ondragover='allowDropFolder(event)'>";
 //		if (this.nb_folders>0){
@@ -1007,3 +1007,63 @@ UIFactory.UsersFolder.displayPagesNavbar = function (dest,nb_index,folderid,page
 	*/
 }
 
+//==================================
+UIFactory.UsersFolder.loadAndDisplayFolders = function (dest,type)
+//==================================
+{
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta-folders.folder-"+USER.username+"?resources=true";
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			UICom.parseStructure(data,true);
+			var root = $("asmRoot",data)[0];
+			UIFactory.UsersFolder.displayFoldersTree(root,dest,type);
+		}
+	});
+}
+
+//==================================
+UIFactory.UsersFolder.displayFoldersTree = function (node,dest,type)
+//==================================
+{
+	var children = $(node).children();
+	for (var i=0;i<children.length;i++){
+		var child = children[i];
+		var childid = $(child).attr('id');
+		var nodename = $(child).prop("nodeName"); // name of the xml tag
+		if (nodename=='asmUnitStructure') {
+			UIFactory.UsersFolder.displayTreeNodeView(dest,childid,type);
+			UIFactory.UsersFolder.displayFoldersTree(child,'treecontent_'+childid,type);
+		}
+	}
+
+
+}
+
+//==================================
+UIFactory.UsersFolder.displayTreeNodeView = function(dest,nodeid,type)
+//==================================
+{
+	var folder = UICom.structure["ui"][nodeid];
+	folder.display[dest] = type;
+	//---------------------	
+	var folder_code = folder.code_node.text();
+	var folder_label = folder.label_node[LANGCODE].text();
+	var nbfolders = $("code",$("asmContext:has(metadata[semantictag='nb-folders'])",folder.node)).text();
+	var nbchildren = $("code",$("asmContext:has(metadata[semantictag='nb-children'])",folder.node)).text();
+	var html = "";
+	if (type=='list-user' || type=='list-forusergroup') {
+		html += "<div eltid='"+nodeid+"' class='treeNode usersfolder'>";
+		html += "	<div id='usersfolder_"+nodeid+"' class='row-label folder-row usersfolder'  draggable='true' ondragstart='dragFolder(event)' ondrop='dropFolder(event)' ondragover='allowDropFolder(event)'>";
+			html += "<span class='no-toggledNode'>&nbsp;</span>"
+		html += "		<span id='treenode-usersfolderlabel_"+this.id+"' onclick=\"UIFactory.UsersFolder.loadAndDisplayContent('"+type+"-folder-users','"+nodeid+"',false,'"+type+"');\" class='folder-label'>"+folder_label+"&nbsp;</span>";
+		html += "	&nbsp;<span class='badge number_of_items' id='number_of_usersfolder_items_"+nodeid+"'>"+nbfolders+"</span>";
+		html += "	</div>";
+		html += "	<div id='treecontent_"+nodeid+"' class='nested'></div>";
+		html += "</div><!-- class='usersfolder'-->";
+	}
+	$("#"+dest).append(html);
+}

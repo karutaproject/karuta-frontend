@@ -51,7 +51,7 @@ UIFactory["Portfolio"] = function( node )
 	this.semantictag = $("metadata",node).attr('semantictag');
 	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.visible = ($("metadata",node).attr('list-novisible')=='Y') ? false : true;
-//	this.complex = ($("metadata",node).attr('complex')=='Y') ? true : false;
+	this.invisible = ($("metadata",node).attr('invisible')=='Y') ? true : false;
 	if (this.complex==undefined)
 		this.complex = false;
 	//------------------------------

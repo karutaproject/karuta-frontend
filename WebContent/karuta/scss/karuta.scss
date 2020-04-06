@@ -547,7 +547,7 @@ div.oembedall-container {
 
 
 	#main-user {
-		#userslist-leftside {
+		#user-leftside {
 			width: calc(25% - 5px);
 			margin-bottom: 10px;
 			h3 {
@@ -558,7 +558,7 @@ div.oembedall-container {
 			}
 		}
 		
-		#userslist-rightside {
+		#user-rightside {
 			width: calc(75% - 5px);
 			margin-top: 2px;
 			padding-bottom: 5px;
@@ -2707,8 +2707,8 @@ table.tablesorter th.restore {
 
 
 #search-user {
-	float:right;
-	width:80%;
+//	float:right;
+//	width:80%;
 }
 
 #search-choice {

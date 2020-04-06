@@ -22,88 +22,49 @@ function fill_list_users(type)
 	if (type==null)
 		type="list1";
 	var html = "";
-	html += "<div id='user-header' class='row'>";
-//	html += "	<div id='create-user-button' class='col-1'>";
-//	html += "<div class='folder-label btn' title='"+karutaStr[LANG]['create_user']+"'><i class='fas fa-user-plus' id='user-create' onclick=\"javascript:UIFactory['User'].callCreate();\"></i></div>";
-//	html += "	</div>";
-	html += "<div class='col-9 search' id='search-user-div'></div>";
-	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
-	html += "</div>";
 	html += "<div id='user-body'>";
-	var text0 = 
+	//-----------------------------------------------------------
 	html += "<div class='gutter'></div>";
-	html += "<div id='userslist-rightside' class='userslist-rightside'>";
 	//-----------------------------------------------------------
-	html += "<div id='"+type+"-folder-users' class='folder-users'></div>";
+	html += "<div id='user-rightside'>";
+	html += "	<div id='search-user' class='search'>";
+	html += "		<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
+	html += "	</div>";
+	html += "	<div id='user-title-rightside' class='title'></div>";
+	html += "	<div id='user-header-rightside' class='header'></div>";
+	html += "	<div id='user-content1-rightside' class='content1-rightside'></div>";
+	html += "	<div id='user-navbar-pages-top-rightside' class='navbar-pages' style='display:none'></div>";
+	html += "	<div id='user-content2-rightside' class='content2-rightside'></div>";
+	html += "	<div id='user-navbar-pages-bottom-rightside' class='navbar-pages' style='display:none'></div>";
+	html += "</div>";
 	//-----------------------------------------------------------
-	html += "</div><!--div id='userslist-rightside'-->";
-
-	html += "<div id='userslist-leftside' class='userslist-leftside'>";
-	//--------------------FOLDERS V3---------------------------------------
-	html += "<div id='usersfolders' class='tree user'>";
-	html += "<h3 id='usersfolder_root'>"+karutaStr[LANG]['active_users']+"</h3>";
-	html += "<h4 id='usersfolder_root'>";
-	html += "<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
-	html += "	<span id='create-folder-button' class='col-1'>";
-	html += "<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersFolder.callCreateFolder('active');\"></i></span>";
-	html += "	</span>";
-	html += "</h4>";
-	html += "<div id='usersfolder_active' class=''></div>";
-	html += "</div><!--div id='usersfolders'-->";
-
-	//--------------------USERS V2--------------------------------------
-	html += "<div id='user-create' onclick='UIFactory.User.callCreate()'>"+karutaStr[LANG]['create_user']+"</div>";
-	html += "<h3 id='users-in-rootfolder' style='display:none'>";
-	html += "	<span id='users-label'>"+karutaStr[LANG]['active_users']+"</span>&nbsp<span class='users-nb badge' id='users-nb'></span>";
-	html += "	<button class='btn list-btn' onclick=\"fill_list_usersOLD('active');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see"] + "</button>";
-	html += "</h3>";
-	html += "<div id='usersfolder_0' class='xxxnested'></div>";
-
-	if (USER.admin) {
-		//---------------------BIN V3-------------------------------------
-		html += "<div id='bin-usersfolders' class='tree user'>";
-		html += "<h3 id='usersfolder_bin' class='treeNode'>";
-		html += "<span id='bin-usersfolders-label' class='folder-label'>"+karutaStr[LANG]['inactive_users']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
-		html += "</h3>";
-		html += "<div id='usersfolder_inactive' class=''></div>";
-		html += "</div><!--div id='bin-usersfolders'-->";
-		//---------------------BIN V2-------------------------------------
-		html += "<h3 id='users-in-bin'  style='display:none'>";
-		html += "<span id='bin-usersfolders-label' class='treeNode'>"+karutaStr[LANG]['inactive_users']+"</span>&nbsp<span class='bin-nb badge' id='nb_folders_inactive'></span>";
-		html += "<button class='btn list-btn' onclick=\"fill_list_usersOLD('inactive');$(window).scrollTop(0);\">"+ karutaStr[LANG]["see"] + "</button>";
-		html += "</h3>";
-	}
-	//-----------------------------------------------------------
-	var text3 = karutaStr[LANG]['temporary_users'];
-	html += "	<h3 id='temporary-users' style='display:none'>"+text3;
+	html += "<div id='user-leftside'>";
+	html += "	<h3 id='user-title-leftside'>"+karutaStr[LANG]['active_users']+"</h3>";
+	html += "	<h4 id='user-header-leftside'>";
+	html += "		<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
+	html += "		<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersFolder.callCreateFolder('active');\"></i></span>";
+	html += "	</h4>";
+	html += "	<div id='user-content1-leftside' class='content1-leftside tree'></div>";
+	html += "	<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users'];
 	html += "		&nbsp<button class='btn list-btn' onclick=\"confirmDelTemporaryUsers()\">";
 	html += 		karutaStr[LANG]["delete-temporary-users"];
 	html += "		</button>";
 	html += "	</h3>";
-	
-	//-----------------------------------------------------------
+	html += "	<div id='user-content2-leftside' class='content2-leftside'></div>";
 	html += "</div><!--div id='userslist-leftside'-->";
-
+	//-----------------------------------------------------------
 	html += "</div><!--div id='user-body'-->";
 
 	$("#main-user").html(html);
-	$("#search-user-div").html(getSearchUser()); // we erase code if any
+	$("#search-user").html(getSearchUser()); // we erase code if any
 	$("#search-user-input").keypress(function(f) {
 		var code= (f.keyCode ? f.keyCode : f.which);
 		if (code == 13)
 			searchUser();
 	});
-	if (karuta_backend_version.startsWith("2x.")) {
-		$("#usersfolders").hide();
-		$("#bin-usersfolders").hide();
-		$("#users-in-rootfolder").show();
-		$("#users-in-bin").show();
-		fill_list_usersOLD('list1-folder-users','active','list');
-	} else {
-		initUsersFolders();
-		UIFactory.UsersFolder.loadAndDisplayStruct('usersfolder_active','active',true,type);  // active users
-		UIFactory.UsersFolder.loadAndDisplayStruct('usersfolder_inactive','inactive',true,type);  // inactive users
-	}
+	
+//	UIFactory.UsersFolder.loadAndDisplayFolders('user-content1-leftside','list-user');
+	fill_list_usersOLD('user-content1-rightside','active','list')
 }
 
 //==============================
@@ -124,7 +85,6 @@ function fill_search_users(value,type)
 		success : function(data) {
 			UIFactory["User"].parse(data);
 			UIFactory["User"].displayActive('active','list');
-			UIFactory["User"].displayInactive('inactive','list');
 		}
 	});
 }
