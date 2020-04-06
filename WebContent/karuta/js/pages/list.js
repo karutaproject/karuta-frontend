@@ -165,7 +165,11 @@ function fill_list_page()
 		html += "</div>";
 		$("#menu").html(html);
 	}
-	
+//	UIFactory.PortfolioFolder.loadAndDisplayFolders('portfolio-content1-leftside','list');
+	loadAndDisplayPortfolioFolders('portfolio-content1-leftside','portfolio');
+	$("#wait-window").hide();
+
+/*
 	//--------we load the projects-----------------------
 	$.ajax({
 		type : "GET",
@@ -192,6 +196,7 @@ function fill_list_page()
 			$("#wait-window").hide();
 		}
 	});
+
 	//--------we count how many portfolios are outside projects-----------------------
 	$.ajax({
 		type : "GET",
@@ -242,6 +247,7 @@ function fill_list_page()
 			$("#wait-window").hide();
 		}
 	});
+*/
 }
 
 //==============================

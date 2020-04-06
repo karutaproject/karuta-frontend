@@ -39,14 +39,15 @@ UIFactory["UsersFolder"] = function(node)
 	//------------------------------
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
-		this.label_node[i] = $("label[lang='"+languages[i]+"']",node);
+		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
 		if (this.label_node[i].length==0) {
 			var newElement = createXmlElement("label");
 			$(newElement).attr('lang', languages[i]);
-			$(newElement).text(karutaStr[languages[languages[i]],'new']);
-			$(node)[0].appendChild(newElement);
-			this.label_node[i] = $("label[lang='"+languages[i]+"']",node);
+			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newElement);
+			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node)[0]);
 		}
+		if (this.label_node[i].text()=="" && (this.asmtype=="asmRoot" || this.asmtype=="asmStructure" || this.asmtype=="asmUnit" ))
+			this.label_node[i].text("&nbsp;"); // to be able to edit it
 	}
 	//------------------------------
 	this.attributes = {};

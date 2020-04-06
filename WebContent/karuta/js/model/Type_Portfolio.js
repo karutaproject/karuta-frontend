@@ -2586,10 +2586,10 @@ UIFactory["Portfolio"].displayProjects = function(dest,type,langcode)
 	g_sum_trees = 0;
 	$("#"+dest).html($(""));
 	$("#content-portfolios-not-in-project").html($(""));
-	for (var i=0;i<portfolios_list.length;i++) {
-		if (portfolios_list[i]!=null) {
-			var portfolio = portfolios_list[i];
-			UIFactory.Portfolio.displayProject(portfolio,dest,type,langcode);
+	var list = portfolios_list; // portfolios_list is modified if a folder is loaded
+	for (var i=0;i<list.length;i++) {
+		if (list[i]!=null) {
+			UIFactory.Portfolio.displayProject(list[i],dest,type,langcode);
 		}
 	}
 };
@@ -2799,8 +2799,8 @@ UIFactory.Portfolio.displayProjectContent = function(dest,parentcode,type)
 	else
 		$("#portfolio-content1-rightside").html("<div class='porfolios-content' id='porfolios-content'></div>");
 
-	for (var i=0; i<portfolios_list.length;i++){
-		var portfolio = portfolios_list[i];
+	for (var j=0; j<portfolios_list.length;j++){
+		var portfolio = portfolios_list[j];
 		var portfoliocode = portfolio.code_node.text();
 		if (portfoliocode==parentcode){
 			//-------------------- PROJECT ----------------------
