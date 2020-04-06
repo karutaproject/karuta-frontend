@@ -1,5 +1,5 @@
 //==============================
-function getList()
+function xxxgetList()
 //==============================
 {
 	var html = "";
@@ -117,32 +117,41 @@ function fill_list_page()
 	setLanguageMenu("fill_list_page()");
 	$("#wait-window").show();
 	//--------------------------
-	$("#search-portfolio-div").html(getSearch()); // we erase code if any
-	$("#search-input").keypress(function(f) {
-		var code= (f.keyCode ? f.keyCode : f.which);
-		if (code == 13)
-			searchPortfolio();
-	});
-	//--------------------------
 	var html = "";
-	html += "<div id='list-header' class='row'>";
-	html += "	<div id='menu' class='col-1'></div>";
-	html += "	<div id='search-portfolio-div' class='col-10'>" + getSearch() + "</div>";
-	html += "	<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_page()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
+	//-----------------------------------------------------------
+	html += "<div id='portfolio-body'>";
+	//------------------------------------------
+//	html += "	<div class='gutter'></div>";
+	//------------------------------------------
+	html += "	<div id='portfolio-rightside'>";
+	html += "		<div id='search-portfolio' class='search'></div>";
+	html += "		<div id='portfolio-title-rightside' class='title'></div>";
+	html += "		<div id='portfolio-header-rightside' class='header'></div>";
+	html += "		<div id='portfolio-content1-rightside' class='content1-rightside'></div>";
+	html += "		<div id='portfolio-navbar-pages-top-rightside' class='navbar-pages' style='display:none'></div>";
+	html += "		<div id='portfolio-content2-rightside' class='content2-rightside'></div>";
+	html += "		<div id='portfolio-navbar-pages-bottom-rightside' class='navbar-pages' style='display:none'></div>";
+	html += "	</div>";
+	//------------------------------------------
+	html += "	<div id='portfolio-leftside'>";
+	html += "		<div id='menu'></div>";
+	html += "		<h3 id='portfolio-title-leftside'>"+karutaStr[LANG]['folders'];+"</h3>";
+	html += "		<h4 id='portfolio-header-leftside'>";
+	html += "			<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
+	html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersFolder.callCreateFolder('active');\"></i></span>";
+	html += "		</h4>";
+	html += "		<div id='portfolio-content1-leftside' class='content1-leftside tree'></div>";
+	html += "		<div id='portfolio-content2-leftside' class='content2-leftside'></div>";
+	html += "	</div>";
+	//------------------------------------------
 	html += "</div>";
-	html += "<div id='list'>"+getList()+"</div>";
+	//-----------------------------------------------------------
 	$("#list-container").html(html);
+
+	displaySearch("search-portfolio");
+	
 	//---------------------------------------------
 	if (USER.admin || USER.creator ){
-		// --- list of users to display name of owner
-/*		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/users",
-			success : function(data) {
-				UIFactory["User"].parse(data);
-			}
-		});*/
 		//-------- menu -------------------------------------
 		html  = "<div class='dropdown'>";
 		html += "	<button id='list-menu' class='btn dropdown-toggle' data-toggle='dropdown' type='button' aria-haspopup='true' aria-expanded='false'>&nbsp;"+karutaStr[LANG]['import']+"</button>";
@@ -165,7 +174,7 @@ function fill_list_page()
 		success : function(data) {
 			nb_projects = parseInt($('portfolios',data).attr('count'))-1;
 			UIFactory["Portfolio"].parse(data);
-			UIFactory["Portfolio"].displayProjects('projects','list');
+			UIFactory["Portfolio"].displayProjects('portfolio-content1-leftside','list');
 			//--------------------------------------
 			if (number_of_projects==0 && !USER.admin && !USER.creator) {
 				$("#projects-label").hide();
@@ -308,17 +317,22 @@ function display_list_page()
 }
 
 //==============================
-function getSearch()
+function displaySearch(dest)
 //==============================
 {
 	var html = "";
 	html += "<div id='search' class='input-group'>";
-	html += "	<input id='search-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"'>";
+	html += "	<input id='search-portfolio-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"'>";
 	html += "	<div class='input-group-append'>";
 	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><i class='fas fa-search'></i></button>";
 	html += "	</div>";
 	html += "</div>";
-	return html;
+	$("#"+dest).html(html);
+	$("#search-portfolio-input").keypress(function(f) {
+		var code= (f.keyCode ? f.keyCode : f.which);
+		if (code == 13)
+			searchPortfolio();
+	});
 }
 
 //==================================

@@ -124,6 +124,29 @@
 /* ====================== */
 
 	#list-container {
+		#portfolio-leftside {
+			width: calc(25% - 5px);
+			margin-bottom: 10px;
+			h3 {
+				margin-top:20px;
+			}
+			.active {
+				background-color: var(--list-button-background-color);
+			}
+		}
+	
+		#gutter {
+		  width: 10px;
+		  float: right;
+		}
+		
+		#portfolio-rightside {
+			width: calc(75% - 5px);
+			margin-top: 2px;
+			padding-bottom: 5px;
+			float: right;
+		}
+
 		.porfolios-content,
 		.portfolios-not-in-project,
 		.projects-nb,
@@ -185,15 +208,6 @@
 				background-color: var(--list-element-background-color-complement);
 			}
 		}
-		#bin-content {
-			.row-label {
-				margin-left:5px;
-				margin-right:5px;
-			}
-			.row {
-				color:var(--list-element-text-color);
-			}
-		}
 		.project-header {
 			padding:7px;
 			background-color:var(--list-menu-background-color);
@@ -204,6 +218,7 @@
 			}
 		}
 		h3,
+		h4,
 		#refresh,
 		.projects-nb {
 			color: var(--list-title-color);
@@ -316,25 +331,6 @@
 	  margin-top: 20px;
 	}
 
-	#list-leftside {
-	  width: calc(25% - 5px);
-	  margin-bottom: 10px;
-	  h3 {
-	  	margin-top:20px;
-	  }
-	}
-
-	#gutter {
-	  width: 10px;
-	  float: right;
-	}
-	
-	#list-rightside {
-		width: calc(75% - 5px);
-		margin-top: 2px;
-		padding-bottom: 5px;
-		float: right;
-	}
 	//=============================
 
 	#project-portfolios {
@@ -2672,8 +2668,9 @@ table.tablesorter th.restore {
    ===========================*/
 
 	#search {
-		float:right;
-		width:80%;
+		margin-bottom:20px;
+//		float:right;
+//		width:80%;
 	}
 
 /*

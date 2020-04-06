@@ -20,49 +20,43 @@ function fill_list_users(type)
 {
 	setLanguageMenu("fill_list_users()");
 	if (type==null)
-		type="list1";
+		type="list";
 	var html = "";
+	//-----------------------------------------------------------
 	html += "<div id='user-body'>";
-	//-----------------------------------------------------------
-	html += "<div class='gutter'></div>";
-	//-----------------------------------------------------------
-	html += "<div id='user-rightside'>";
-	html += "	<div id='search-user' class='search'>";
-	html += "		<div class='col-1'><i class='fas fa-sync-alt' onclick='fill_list_users()' id='refresh' class='fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-refresh"]+"' data-toggle='tooltip' data-placement='bottom'></i></div>";
+	//------------------------------------------
+//	html += "	<div class='gutter'></div>";
+	//------------------------------------------
+	html += "	<div id='user-rightside'>";
+	html += "		<div id='search-user' class='search'></div>";
+	html += "		<div id='user-title-rightside' class='title'></div>";
+	html += "		<div id='user-header-rightside' class='header'></div>";
+	html += "		<div id='user-content1-rightside' class='content1-rightside'></div>";
+	html += "		<div id='user-navbar-pages-top-rightside' class='navbar-pages' style='display:none'></div>";
+	html += "		<div id='user-content2-rightside' class='content2-rightside'></div>";
+	html += "		<div id='user-navbar-pages-bottom-rightside' class='navbar-pages' style='display:none'></div>";
 	html += "	</div>";
-	html += "	<div id='user-title-rightside' class='title'></div>";
-	html += "	<div id='user-header-rightside' class='header'></div>";
-	html += "	<div id='user-content1-rightside' class='content1-rightside'></div>";
-	html += "	<div id='user-navbar-pages-top-rightside' class='navbar-pages' style='display:none'></div>";
-	html += "	<div id='user-content2-rightside' class='content2-rightside'></div>";
-	html += "	<div id='user-navbar-pages-bottom-rightside' class='navbar-pages' style='display:none'></div>";
-	html += "</div>";
-	//-----------------------------------------------------------
-	html += "<div id='user-leftside'>";
-	html += "	<h3 id='user-title-leftside'>"+karutaStr[LANG]['active_users']+"</h3>";
-	html += "	<h4 id='user-header-leftside'>";
-	html += "		<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
-	html += "		<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersFolder.callCreateFolder('active');\"></i></span>";
-	html += "	</h4>";
-	html += "	<div id='user-content1-leftside' class='content1-leftside tree'></div>";
-	html += "	<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users'];
-	html += "		&nbsp<button class='btn list-btn' onclick=\"confirmDelTemporaryUsers()\">";
-	html += 		karutaStr[LANG]["delete-temporary-users"];
-	html += "		</button>";
-	html += "	</h3>";
-	html += "	<div id='user-content2-leftside' class='content2-leftside'></div>";
-	html += "</div><!--div id='userslist-leftside'-->";
-	//-----------------------------------------------------------
+	//------------------------------------------
+	html += "	<div id='user-leftside'>";
+	html += "		<h3 id='user-title-leftside'>"+karutaStr[LANG]['active_users']+"</h3>";
+	html += "		<h4 id='user-header-leftside'>";
+	html += "			<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
+	html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersFolder.callCreateFolder('active');\"></i></span>";
+	html += "		</h4>";
+	html += "		<div id='user-content1-leftside' class='content1-leftside tree'></div>";
+	html += "		<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users'];
+	html += "			&nbsp<button class='btn list-btn' onclick=\"confirmDelTemporaryUsers()\">";
+	html += 			karutaStr[LANG]["delete-temporary-users"];
+	html += "			</button>";
+	html += "		</h3>";
+	html += "		<div id='user-content2-leftside' class='content2-leftside'></div>";
+	html += "	</div><!--div id='userslist-leftside'-->";
+	//------------------------------------------
 	html += "</div><!--div id='user-body'-->";
+	//-----------------------------------------------------------
 
 	$("#main-user").html(html);
-	$("#search-user").html(getSearchUser()); // we erase code if any
-	$("#search-user-input").keypress(function(f) {
-		var code= (f.keyCode ? f.keyCode : f.which);
-		if (code == 13)
-			searchUser();
-	});
-	
+	displaySearchUser("search-user");
 //	UIFactory.UsersFolder.loadAndDisplayFolders('user-content1-leftside','list-user');
 	fill_list_usersOLD('user-content1-rightside','active','list')
 }
@@ -113,7 +107,7 @@ function searchUser()
 }
 
 //==============================
-function getSearchUser()
+function displaySearchUser(dest)
 //==============================
 {
 	var html = "";
@@ -132,7 +126,12 @@ function getSearchUser()
 	html += "		<button id='rembutton' type='button' disabled='true' onclick=\"UIFactory.User.confirmRemoveUsers()\" class='btn'><i class='fas fa-trash'></i></button>";
 	html += "	</div><!-- /input-group-append -->";
 	html += "</div><!-- /input-group -->";
-	return html;
+	$("#"+dest).html(html);
+	$("#search-user-input").keypress(function(f) {
+		var code= (f.keyCode ? f.keyCode : f.which);
+		if (code == 13)
+			searchUser();
+	});
 }
 
 //==================================

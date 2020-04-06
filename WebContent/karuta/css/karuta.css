@@ -114,6 +114,26 @@ body,
 /* ====================== */
 /*     LIST CONTAINER     */
 /* ====================== */
+#list-container #portfolio-leftside {
+  width: calc(25% - 5px);
+  margin-bottom: 10px;
+}
+#list-container #portfolio-leftside h3 {
+  margin-top: 20px;
+}
+#list-container #portfolio-leftside .active {
+  background-color: var(--list-button-background-color);
+}
+#list-container #gutter {
+  width: 10px;
+  float: right;
+}
+#list-container #portfolio-rightside {
+  width: calc(75% - 5px);
+  margin-top: 2px;
+  padding-bottom: 5px;
+  float: right;
+}
 #list-container .porfolios-content,
 #list-container .portfolios-not-in-project,
 #list-container .projects-nb,
@@ -173,13 +193,6 @@ body,
 #list-container .project .row-label:hover {
   background-color: var(--list-element-background-color-complement);
 }
-#list-container #bin-content .row-label {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-#list-container #bin-content .row {
-  color: var(--list-element-text-color);
-}
 #list-container .project-header {
   padding: 7px;
   background-color: var(--list-menu-background-color);
@@ -189,6 +202,7 @@ body,
   background-color: var(--list-element-background-color);
 }
 #list-container h3,
+#list-container h4,
 #list-container #refresh,
 #list-container .projects-nb {
   color: var(--list-title-color);
@@ -284,26 +298,6 @@ body,
 
 #list {
   margin-top: 20px;
-}
-
-#list-leftside {
-  width: calc(25% - 5px);
-  margin-bottom: 10px;
-}
-#list-leftside h3 {
-  margin-top: 20px;
-}
-
-#gutter {
-  width: 10px;
-  float: right;
-}
-
-#list-rightside {
-  width: calc(75% - 5px);
-  margin-top: 2px;
-  padding-bottom: 5px;
-  float: right;
 }
 
 #project-portfolios .project-label {
@@ -2606,8 +2600,7 @@ select.Y2, option[value=Y2] {
 	SEARCH PORTFOLIO
    ===========================*/
 #search {
-  float: right;
-  width: 80%;
+  margin-bottom: 20px;
 }
 
 /*

@@ -2792,19 +2792,19 @@ UIFactory.Portfolio.displayProjectContent = function(dest,parentcode,type)
 		var text2 = karutaStr[LANG]['portfolios-not-in-project'];
 		html = "<h3  class='projectcontent-label'>"+text2+"</h3>";
 	}
-	$("#"+dest).html($(html));
+	$("#portfolio-title-rightside").html($(html));
 	var langcode = LANGCODE;
 	if (type=='card' || type=='card-admin')
-		$("#"+dest).append("<div id='porfolios-header'></div><div class='card-deck' id='porfolios-deck'></div>");
+		$("#portfolio-content1-rightside").html("<div class='card-deck' id='porfolios-deck'></div>");
 	else
-		$("#"+dest).append("<div id='porfolios-header'></div><div class='porfolios-content' id='porfolios-content'></div>");
+		$("#portfolio-content1-rightside").html("<div class='porfolios-content' id='porfolios-content'></div>");
 
 	for (var i=0; i<portfolios_list.length;i++){
 		var portfolio = portfolios_list[i];
 		var portfoliocode = portfolio.code_node.text();
 		if (portfoliocode==parentcode){
 			//-------------------- PROJECT ----------------------
-			UIFactory.Portfolio.displayProjectItem(dest,portfolio,parentcode,type,langcode);
+			UIFactory.Portfolio.displayProjectItem('portfolio-header-rightside',portfolio,parentcode,type,langcode);
 		} else {
 			//-------------------- PORTFOLIO ----------------------
 			var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
@@ -2887,7 +2887,7 @@ UIFactory.Portfolio.displayProjectItem = function(dest,portfolio,parentcode,type
 	html += "		</div><!-- class='col-1' -->";
 	html += "	</div><!-- class='row' -->";
 	html += "</div><!-- class='project'-->";
-	$("#porfolios-header").append($(html));
+	$("#portfolio-header-rightside").html($(html));
 	//---------------------
 	portfolio.displayOwner('owner_'+portfolio.id);
 	//---------------------
