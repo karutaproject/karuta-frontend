@@ -437,6 +437,32 @@
 		}
 	}
 
+	.no-toggledNode {
+		margin-left:0.8rem;
+	}
+
+	.nbfolders {
+			margin-left:5px;
+			color: var(--list-title-color);
+			background-color: var(--list-element-background-color-complement);
+	}
+
+	.nbchildren {
+			margin-left:5px;
+			background-color: var(--list-title-color);
+			color: var(--list-element-background-color-complement);
+	}
+
+	.active {
+		.nbfolders {
+			background-color: var(--list-title-color);
+			color: var(--list-element-background-color-complement);
+		}
+		.nbchildren {
+			color: var(--list-title-color);
+			background-color: var(--list-element-background-color-complement);
+		}
+	}
 	.closeSign {
 		cursor: pointer;
 		-webkit-user-select: none; /* Safari 3.1+ */
@@ -448,7 +474,6 @@
 	.closeSign::before {
 		content: "\25B6";
 		display: inline-block;
-		 margin-right: 6px;
 	}
 
 	.openSign::before {
@@ -571,9 +596,6 @@ div.oembedall-container {
 		}
 		.item:hover{
 			background-color: var(--list-element-background-color-complement);
-		}
-		.no-toggledNode {
-			margin-left:15px;
 		}
 		h3,h4 {
 			color: var(--list-title-color);
@@ -1667,12 +1689,13 @@ div.oembedall-container {
 
 
 
-	#refresh {
+	.refresh {
 		font-size:calc(var(--font-size-coeff) * 1.5rem);
 		float:right;
-		margin-top:12px;
-//		margin-right:20%;
+		margin-bottom:12px;
+		margin-right:10px;
 		cursor:pointer;
+		color:var(--list-button-background-color);
 	}
 
 

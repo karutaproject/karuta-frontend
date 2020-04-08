@@ -496,8 +496,14 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles');
 	//-----------------------------------------
-	this.displayMetadataWadAttributeEditor('metadata-part2','moveinroles');
-	this.displayMetadataWadAttributeEditor('metadata-part2','movein');
+	if (name=='asmRoot') {
+		this.displayMetadataWadAttributeEditor('metadata-part2','moveinroles',false,true);
+		this.displayMetadataWadAttributeEditor('metadata-part2','movein',false,true);
+		}
+	else {
+		this.displayMetadataWadAttributeEditor('metadata-part2','moveinroles');
+		this.displayMetadataWadAttributeEditor('metadata-part2','movein');
+	}
 	//-----------------------------------------
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','showroles');

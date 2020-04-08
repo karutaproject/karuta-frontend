@@ -162,7 +162,7 @@ function displayKarutaLogin()
 		$("#navigation-bar").html(getNavBar('login',null));
 		$("#login").html(getLogin(encrypt_url,lang));
 		$("#useridentifier").focus();
-		if (typeof cas_url != 'undefined' &&cas_url!="")
+		if (typeof cas_url != 'undefined' && cas_url!="")
 			$("#connection-cas").show();
 		applyNavbarConfiguration();
 		applyLoginConfiguration();

@@ -97,7 +97,7 @@ UIFactory["UsersFolder"].displayTree = function(dest,folderid,type)
 }
 
 //==================================
-function dragFolder(ev)
+function dragUserFolder(ev)
 //==================================
 {
 	ev.dataTransfer.setData("id", ev.target.id.substring(ev.target.id.lastIndexOf('_')+1));
@@ -105,14 +105,14 @@ function dragFolder(ev)
 }
 
 //==================================
-function allowDropFolder(ev)
+function allowDropUserFolder(ev)
 //==================================
 {
 	ev.preventDefault();
 }
 
 //==================================
-function dropFolder(ev)
+function dropUserFolder(ev)
 //==================================
 {
 	ev.preventDefault();
@@ -1012,7 +1012,7 @@ UIFactory.UsersFolder.displayPagesNavbar = function (dest,nb_index,folderid,page
 UIFactory.UsersFolder.loadAndDisplayFolders = function (dest,type)
 //==================================
 {
-	var url = serverBCK_API+"/portfolios/portfolio/code/karuta-folders.folder-"+USER.username+"?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/code/karut--folders.folder-"+USER.username+"?resources=true";
 	$.ajax({
 		async: false,
 		type : "GET",

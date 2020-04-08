@@ -389,6 +389,31 @@ body,
   background-color: var(--list-element-background-color);
 }
 
+.no-toggledNode {
+  margin-left: 0.8rem;
+}
+
+.nbfolders {
+  margin-left: 5px;
+  color: var(--list-title-color);
+  background-color: var(--list-element-background-color-complement);
+}
+
+.nbchildren {
+  margin-left: 5px;
+  background-color: var(--list-title-color);
+  color: var(--list-element-background-color-complement);
+}
+
+.active .nbfolders {
+  background-color: var(--list-title-color);
+  color: var(--list-element-background-color-complement);
+}
+.active .nbchildren {
+  color: var(--list-title-color);
+  background-color: var(--list-element-background-color-complement);
+}
+
 .closeSign {
   cursor: pointer;
   -webkit-user-select: none;
@@ -403,7 +428,6 @@ body,
 .closeSign::before {
   content: "▶";
   display: inline-block;
-  margin-right: 6px;
 }
 
 .openSign::before {
@@ -523,9 +547,6 @@ div.oembedall-container {
 }
 #main-user .item:hover {
   background-color: var(--list-element-background-color-complement);
-}
-#main-user .no-toggledNode {
-  margin-left: 15px;
 }
 #main-user h3, #main-user h4 {
   color: var(--list-title-color);
@@ -1535,11 +1556,13 @@ h3 {
 }
 
 /* ====================== */
-#refresh {
+.refresh {
   font-size: calc(var(--font-size-coeff) * 1.5rem);
   float: right;
-  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-right: 10px;
   cursor: pointer;
+  color: var(--list-button-background-color);
 }
 
 #main-body-list {

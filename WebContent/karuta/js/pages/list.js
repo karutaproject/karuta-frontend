@@ -1,57 +1,3 @@
-//==============================
-function xxxgetList()
-//==============================
-{
-	var html = "";
-	var text0 = karutaStr[LANG]['folders'];
-	var text1 = karutaStr[LANG]['projects'];
-	var text2 = karutaStr[LANG]['portfolios-not-in-project'];
-	if (USER.admin) {
-		text0 = karutaStr[LANG]['folders-admin'];
-		text1 = karutaStr[LANG]['projects-admin'];
-		text2 = karutaStr[LANG]['portfolios-admin'];
-	}
-	html += "<div id='gutter'></div>";
-	html += "<div id='list-rightside'>";
-	//-----------------------------------------------------------
-//		html += "<div id='folder-portfolios'></div>";
-		html += "<div id='project-portfolios'></div>";
-		html += "<div id='card-deck-portfolios'></div>";
-		html += "<div id='searched-portfolios-header' style='display:none'>Portfolios";
-		if (USER.creator && !USER.limited)  {
-			html += "		<a id='archive-button' href='' class='btn' style='float:right'><i class='fas fa-download' ></i></a>";
-			html += "		<button id='remove-button' type='button' onclick=\"UIFactory['Portfolio'].removeSearchedPortfolios()\" class='btn' style='float:right'><i class='fas fa-trash'></i></button>";
-		}
-		html += "</div>";
-		html += "<div id='searched-portfolios-content' style='display:none'></div>";
-	//-----------------------------------------------------------
-	html += "</div><!--div id='list-rightside'-->";
-
-	html += "<div id='list-leftside'>";
-		//--------------------FOLDERS---------------------------------------
-//		html += "<h3><span id='folders-label'>"+text0+"</span>&nbsp<span class='folders-nb badge' id='folders-nb'></span>";
-//		html +="	<button class='btn list-btn' onclick='UIFactory.Folder.createfolder()'>"+karutaStr[LANG]['create_folder']+"</button>";
-//		html += "</h3>";
-//		html += "<div id='folders' class='tree portfolio'></div>";
-	
-	
-		//--------------------PROJECTS---------------------------------------
-		html += "<h3 id='projects-label'><span >"+text1+"</span>&nbsp<span class='projects-nb badge' id='projects-nb'></span>";
-		html +="	<button class='btn list-btn' onclick='UIFactory.Portfolio.createProject()'>"+karutaStr[LANG]['create_project']+"</button>";
-		html += "</h3>";
-		html += "<div id='projects'></div>";
-	
-		
-		//--------------------PORTFOLIOS--------------------------------------
-		html += "<h3 id='portfolios-not-in-project'>";
-		html += "	<span id='portfolios-label'>"+text2+"</span>&nbsp<span class='portfolios-nb badge' id='portfolios-nb'></span>";
-		html += "	<button id='see-portfolios' class='btn list-btn' onclick=\"loadAndDisplayProjectContent('project-portfolios','false');$(window).scrollTop(0);$('.active').removeClass('active');\">"+ karutaStr[LANG]["see"] + "</button>";
-		html += "</h3>";
-	
-	html += "</div><!--div id='list-leftside'-->";
-
-	return html;
-}
 
 //==============================
 function getListSubBar()
@@ -103,8 +49,6 @@ function show_list_page()
 	setWelcomeTitles();
 	applyListConfiguration();
 	setLanguageMenu("fill_list_page()");
-	$("#refresh").attr("onclick","fill_list_page()");
-	$("#refresh").show();
 	$("#search-portfolio-div").show();
 	$("#list-container").show();
 	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
@@ -114,8 +58,8 @@ function show_list_page()
 function fill_list_page()
 //==============================
 {
-	setLanguageMenu("fill_list_page()");
 	$("#wait-window").show();
+	setLanguageMenu("fill_list_page()");
 	//--------------------------
 	var html = "";
 	//-----------------------------------------------------------
@@ -124,6 +68,7 @@ function fill_list_page()
 //	html += "	<div class='gutter'></div>";
 	//------------------------------------------
 	html += "	<div id='portfolio-rightside'>";
+	html += "		<div id='refresh-portfolio' class='refresh fas fa-sync-alt' onclick='fill_list_page()'></div>";
 	html += "		<div id='search-portfolio' class='search'></div>";
 	html += "		<div id='portfolio-title-rightside' class='title'></div>";
 	html += "		<div id='portfolio-header-rightside' class='header'></div>";
@@ -138,7 +83,7 @@ function fill_list_page()
 	html += "		<h3 id='portfolio-title-leftside'>"+karutaStr[LANG]['folders'];+"</h3>";
 	html += "		<h4 id='portfolio-header-leftside'>";
 	html += "			<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
-	html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersFolder.callCreateFolder('active');\"></i></span>";
+	html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"javascript:UIFactory.Portfolio.createProject();\"></i></span>";
 	html += "		</h4>";
 	html += "		<div id='portfolio-content1-leftside' class='content1-leftside tree'></div>";
 	html += "		<div id='portfolio-content2-leftside' class='content2-leftside'></div>";
@@ -165,89 +110,15 @@ function fill_list_page()
 		html += "</div>";
 		$("#menu").html(html);
 	}
-//	UIFactory.PortfolioFolder.loadAndDisplayFolders('portfolio-content1-leftside','list');
-	loadAndDisplayPortfolioFolders('portfolio-content1-leftside','portfolio');
-	$("#wait-window").hide();
+//	UIFactory.PortfolioFolder.loadAndDisplayFolders('portfolio-content1-leftside','portfolio');
 
-/*
-	//--------we load the projects-----------------------
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&project=true",
-		success : function(data) {
-			nb_projects = parseInt($('portfolios',data).attr('count'))-1;
-			UIFactory["Portfolio"].parse(data);
-			UIFactory["Portfolio"].displayProjects('portfolio-content1-leftside','list');
-			//--------------------------------------
-			if (number_of_projects==0 && !USER.admin && !USER.creator) {
-				$("#projects-label").hide();
-			} else {
-				$("#projects-nb").html(number_of_projects);
-			}
-			//--------------------------------------
-			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
-			if ($("#project-portfolios").html()=="")
-				$("#project-portfolios").hide();
-			$("#wait-window").hide();
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active=1&project=true: "+textStatus);
-			$("#wait-window").hide();
-		}
-	});
 
+	//--------we load the folders-----------------------
+	UIFactory.PortfolioFolder.loadAndDisplayFolders('portfolio-content1-leftside','list');
 	//--------we count how many portfolios are outside projects-----------------------
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&project=false&count=true",
-		success : function(data) {
-			nb_portfolios = parseInt($('portfolios',data).attr('count'));
-			if (nb_portfolios==0)
-				$("#portfolios-div").hide();
-			else {
-				$("#portfolios-nb").html(nb_portfolios);
-				if (number_of_projects == 0) {
-					$("#see-portfolios").hide();
-					$.ajax({
-						type : "GET",
-						dataType : "xml",
-						url : serverBCK_API+"/portfolios?active=1&project=false",
-						success : function(data) {
-							UIFactory["Portfolio"].parse_add(data);
-							var nb_visibleportfolios = 0;
-							var visibleid = "";
-							for (var i=0;i<portfolios_list.length;i++){
-								if (portfolios_list[i].visible) {
-									nb_visibleportfolios++;
-									visibleid = portfolios_list[i].id;
-								}
-							}
-							if (nb_visibleportfolios>0)
-								if (USER.admin || USER.creator)
-									loadAndDisplayProjectContent('project-portfolios','false','card-admin');
-								else
-									if (nb_visibleportfolios>9)
-										loadAndDisplayProjectContent('project-portfolios','false','list');
-									else if (nb_visibleportfolios>1)
-										loadAndDisplayProjectContent('card-deck-portfolios','false','card');
-									else
-										display_main_page(portfolios_byid[visibleid].rootid);
-						},
-						error : function(jqxhr,textStatus) {
-							alertHTML("Server Error GET active: "+textStatus);
-						}
-					});
-				}
-			}
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active=1&project=false: "+textStatus);
-			$("#wait-window").hide();
-		}
-	});
-*/
+	UIFactory["PortfolioFolder"].loadPortfolios('portfolio-content1-rightside','list');
+
+	
 }
 
 //==============================

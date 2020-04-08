@@ -121,44 +121,9 @@ function dragPortfolio(ev)
 //==================================
 {
 	var portfolioid = ev.target.id.substring(ev.target.id.lastIndexOf('_')+1);
-	ev.dataTransfer.setData("text", portfolioid);
+	ev.dataTransfer.setData("uuid", portfolioid);
 }
 
-//==================================
-function ondragoverPortfolio(ev)
-//==================================
-{
-	ev.preventDefault();
-	var root = document.documentElement;
-	var bckcolor = root.style.getPropertyValue('--list-element-background-color-complement');
-	event.target.style.backgroundColor = bckcolor;
-}
-
-//==================================
-function ondragleavePortfolio(ev)
-//==================================
-{
-	ev.preventDefault();
-	var root = document.documentElement;
-	var bckcolor = root.style.getPropertyValue('--list-element-background-color');
-	event.target.style.backgroundColor = bckcolor;
-}
-
-//==================================
-function dropPortfolio(ev)
-//==================================
-{
-	ev.preventDefault();
-	var root = document.documentElement;
-	var bckcolor = root.style.getPropertyValue('--list-element-background-color');
-	event.target.style.backgroundColor = bckcolor;
-	var portfolioid = ev.dataTransfer.getData("text");
-	var projectid = ev.target.id.substring(ev.target.id.lastIndexOf('_')+1);
-	var portfoliocode = portfolios_byid[portfolioid].code_node.text();
-	var projectcode = portfolios_byid[projectid].code_node.text();
-	var newportfoliocode = projectcode + portfoliocode.substring(portfoliocode.indexOf('.'));
-	UIFactory.Portfolio.renamePortfolioCode(portfolios_byid[portfolioid],newportfoliocode)
-}
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------

@@ -2062,19 +2062,17 @@ function replaceVariable(text)
 //=====================================================================================================
 
 //==================================
-function toggleElt(closeSign,openSign,eltid)
+function toggleElt(closeSign,openSign,eltid,type)
 //==================================
 { // click on open/closeSign
-	var elt = document.getElementById("toggle_"+eltid);
+	var elt = document.getElementById(type+"-toggle_"+eltid);
 	elt.classList.toggle(openSign);
-	elt = document.getElementById("collapse_"+eltid);
+	elt = document.getElementById(type+"treecontent_"+eltid);
 	elt.classList.toggle('open');
-	if ($("#toggle_"+eltid).hasClass(openSign))
-	{
-		localStorage.setItem('sidebar'+eltid,'open');
-	} else {
-		localStorage.setItem('sidebar'+eltid,'closed');
-	}
+	if ($("#"+type+"-toggle_"+eltid).hasClass(openSign))
+		localStorage.setItem(type+"-toggle_"+eltid,'open');
+	else
+		localStorage.setItem(type+"-toggle_"+eltid,'closed');
 }
 
 //==================================

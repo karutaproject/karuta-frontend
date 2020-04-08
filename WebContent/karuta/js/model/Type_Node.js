@@ -714,6 +714,7 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	writeSaved(itself.id);
 };
 
+
 //==================================
 UIFactory["Node"].prototype.getNodeLabelEditor = function(type,langcode)
 //==================================
