@@ -75,7 +75,6 @@ function fill_exec_batch()
 	$("#batch-title-2").html(karutaStr[LANG]['process_csv']);
 	$("#batch-title-3").html(karutaStr[LANG]['model_code']);
 	//------------------------------
-	demo = false; //to avoid reload
 }
 
 //==============================

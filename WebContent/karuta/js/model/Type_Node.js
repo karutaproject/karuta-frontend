@@ -803,7 +803,7 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 	var cssclass = ($(node.metadataepm).attr('cssclass')==undefined)?'':$(node.metadataepm).attr('cssclass');
 	//-------------------- test if visible
 	if ( (display=='N' && (g_userroles[0]=='designer'  || USER.admin)) || (display=='Y' && (seenoderoles.indexOf(USER.username)>-1 || seenoderoles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || (showtoroles.indexOf("all")>-1 && !privatevalue) || (showtoroles.containsArrayElt(g_userroles) && !privatevalue) || g_userroles[0]=='designer')) ) {
-		if (node.resource==null || node.resource.type!='Proxy' || node.resource.type!='Get_Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.containsArrayElt(g_userroles)) || (g_userroles[0]=='designer'  || USER.admin)) {
+		if (node.resource==null || node.resource.type!='Proxy' || (node.resource.type=='Proxy' && writenode && editresroles.containsArrayElt(g_userroles)) || (g_userroles[0]=='designer'  || USER.admin)) {
 			var readnode = true; // if we got the node the node is readable
 			if (g_designerrole)
 				readnode = (g_userroles[0]=='designer' || seenoderoles.indexOf(USER.username_node.text())>-1 || seenoderoles.containsArrayElt(g_userroles) || (showtoroles.containsArrayElt(g_userroles) && !privatevalue) || seenoderoles.indexOf('all')>-1)? true : false;
@@ -917,6 +917,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				//-------------- buttons --------------------------
 				html += "<td id='buttons-"+uuid+"' class='buttons same-height'>";
 				html += "<div class='inside-full-height'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu)+"</div>";
+				//----------------delete control on proxy parent ------------
+				if (proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
+					html += "<div class='btn-group'>" + deleteButton(proxies_nodeid[targetid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null) + "</div>";
+				}
 				html += "</td>";
 				//--------------------------------------------------
 				html += "</tr></table>";
@@ -1013,6 +1017,10 @@ UIFactory["Node"].displayStandard = function(root,dest,depth,langcode,edit,inlin
 				html += UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu);
 				if (node.xsi_type == "BatchForm") {
 					html += node.structured_resource.getButtons();
+				}
+				//----------------delete control on proxy parent ------------
+				if (proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
+					html += "<div class='btn-group'>" + deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null) + "</div>";
 				}
 				html += "</div><!-- col-md-3  -->";
 				html += "</div><!-- row -->";
@@ -3111,8 +3119,8 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Get_Resource','GetGetResource',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Double_Resource','GetDoubleResource',databack,callback,param2,param3,param4,freenode);
 					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4,freenode);
-		//			html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Action','Action',databack,callback,param2,param3,param4,freenode);
-					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4,freenode);
+//					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Action','Action',databack,callback,param2,param3,param4,freenode);
+//					html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4,freenode);
 				}
 			}
 			html += "</ul>"; // class='dropdown-menu'
@@ -3837,22 +3845,22 @@ UIFactory["Node"].getMetadataAttributesEditor = function(node,type,langcode)
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editnoderoles',$(node.metadatawad).attr('editnoderoles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'nodenopencil',$(node.metadatawad).attr('nodenopencil'),true);
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'duplicateroles',$(node.metadatawad).attr('duplicateroles'));
-	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'incrementroles',$(node.metadatawad).attr('incrementroles'));
+//	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'incrementroles',$(node.metadatawad).attr('incrementroles'));
 	if (semtag=='bubble_level1')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'seeqrcoderoles',$(node.metadatawad).attr('seeqrcoderoles'));
 	if (node.resource_type=='Proxy')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'edittargetroles',$(node.metadatawad).attr('edittargetroles'));
 	if (name=='asmContext' && node.resource.type=='Image')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'resizeroles',$(node.metadatawad).attr('resizeroles'));
-	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'graphicerroles',$(node.metadatawad).attr('graphicerroles'));
+//	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'graphicerroles',$(node.metadatawad).attr('graphicerroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'moveroles',$(node.metadatawad).attr('moveroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'moveinroles',$(node.metadatawad).attr('moveinroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'movein',$(node.metadatawad).attr('movein'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showroles',$(node.metadatawad).attr('showroles'));
+	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showtoroles',$(node.metadatawad).attr('showtoroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'printroles',$(node.metadatawad).attr('printroles'));
 //	if ($(node.metadatawad).attr('showroles')!='')
 //		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'private',$(node.metadatawad).attr('private'),true);
-	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'showtoroles',$(node.metadatawad).attr('showtoroles'));
 	html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'editboxtitle',$(node.metadatawad).attr('editboxtitle'));
 	if (name=='asmContext' && node.resource.type=='TextField')
 		html += UIFactory["Node"].getMetadataWadAttributeEditor(node.id,'maxword',$(node.metadatawad).attr('maxword'));

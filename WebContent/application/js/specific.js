@@ -1,3 +1,5 @@
+document.write("<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'/>");
+
 //------ EXEC BATCH AT USER CREATION ------------------
 var g_execbatch = false;
 var g_execbatchbuttonlabel1 = [];
@@ -8,17 +10,12 @@ var g_json = {};
 function prepareBatch()
 //=======================
 {
-	// ---- global variables ---------
-	g_json['model_code'] = "batch-creation";
-	g_json['cohorteCode'] = "A2019";
-	g_json['cohorteLibelle'] = "Automne 2019";
-	// ---- local variables ---------
+	g_json['model_code'] = "modeles.batch-creation";
 	g_json['lines'] = [];
 	g_json.lines[0] =
 	{
-		"courriel" : USER.email,
-		"nom" : USER.lastname,
-		"prenom" : USER.firstname,
-		"motdepasse" : ""
+		"auditeurCourriel" : USER.email,
+		"auditeurNomFamille" : USER.lastname,
+		"auditeurPrenom" : USER.firstname,
 	};
 }//----------------------------------------------------

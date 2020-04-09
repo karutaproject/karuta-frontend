@@ -33,9 +33,15 @@ jquerySpecificFunctions['.sortUTC()'] = ".sort(function(a, b){ return $(\"utc\",
 jquerySpecificFunctions['.invsortUTC()'] = ".sort(function(a, b){ return $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
 jquerySpecificFunctions['.sortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.sortResource(#'] = ".sort(function(a, b){ return $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jquerySpecificFunctions['.sortResourceValue()'] = ".sort(function(a, b){ return $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jquerySpecificFunctions['.sortResourceCode()'] = ".sort(function(a, b){ return $(\"code\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"code\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.invsortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
+jquerySpecificFunctions['.invsortResourceValue()'] = ".sort(function(a, b){ return $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
+jquerySpecificFunctions['.invsortResourceCode()'] = ".sort(function(a, b){ return $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
 jquerySpecificFunctions['.sortNodeLabel()'] = ".sort(function(a, b){ return $(\"label[lang='#lang#']\",$(\"asmResource[xsi_type='nodeRes']\",$(a))).text() > $(\"label[lang='#lang#']\",$(\"asmResource[xsi_type='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jquerySpecificFunctions['.sortNodeCode()'] = ".sort(function(a, b){ return $(\"code\",$(\"asmResource[xsi_type='nodeRes']\",$(a))).text() > $(\"code\",$(\"asmResource[xsi_type='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.invsortNodeLabel()'] = ".sort(function(a, b){ return $(\"label[lang='#lang#']\",$(\"asmResource[xsi_type='nodeRes']\",$(a))).text() > $(\"label[lang='#lang#']\",$(\"asmResource[xsi_type='nodeRes']\",$(b))).text() ? -1 : 1; })";
+jquerySpecificFunctions['.invsortNodeCode()'] = ".sort(function(a, b){ return $(\"code\",$(\"asmResource[xsi_type='nodeRes']\",$(a))).text() > $(\"code\",$(\"asmResource[xsi_type='nodeRes']\",$(b))).text() ? -1 : 1; })";
 jquerySpecificFunctions['.sort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? 1 : -1; })";
 jquerySpecificFunctions['.invsort()'] = ".sort(function(a, b){ return $(a).text() < $(b).text() ? -1 : 1; })";
 jquerySpecificFunctions['.filename_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty)\")";
@@ -1188,7 +1194,7 @@ g_report_actions['csv-line'] = function (destid,action,no,data)
 	for (var i=0; i<actions.length;i++){
 		var tagname = $(actions[i])[0].tagName;
 		var is_out_csv = true;
-		g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data,is_out_csv);
+		g_report_actions[tagname](destid,actions[i],no+'-'+i.toString(),data,is_out_csv);
 	};
 	csvreport[csvreport.length]=csvline;
 	$.ajax({
@@ -1212,7 +1218,7 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 	var attr_help = "";
 	var prefix_id = "";
 	try {
-		var select = $(xmlDoc).attr("select");
+		var select = $(action).attr("select");
 		while (select.indexOf("##")>-1) {
 			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
 			var variable_name = test_string.substring(0,test_string.indexOf("##"));

@@ -542,6 +542,8 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			html += ">";
 			if (display_code)
 				html += "<span class='li-code'>"+code+"</span>";
+			if (display_value)
+				html += "<span class='li-value'>"+value+"</span>";
 			if (display_label)
 				html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
 			html += "</a>";
@@ -555,6 +557,9 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 					display_label = false;
 				if (code.indexOf("@")<0) {
 					display_code = true;
+				}
+				if (code.indexOf("?")>-1) {
+					display_value = true;
 				}
 				code = cleanCode(code);
 				//--------------------------------
