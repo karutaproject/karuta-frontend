@@ -1,6 +1,6 @@
 //----------------------------------
 var application_version = "2.0";
-var application_date = "2017-10-30";
+var application_date = "2020-04-09";
 //----------------------------------
 var appliname = 'karuta';
 var karutaname = 'karuta'; // to share the same 'karuta-core' with multiple front-end
@@ -9,7 +9,6 @@ var bckname = '';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
-var openid_url = "";
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'en';
@@ -23,7 +22,6 @@ var audiovideohtml5 = true;
 var maxfilesizeupload = "32"; //Mo
 //----------------------------------
 var technical_support = ""; // email of technical support
-var demo = false;
 var karuta_create_account = false;
 //--------- NAVBAR BRAND ------------------ logo 126 x 34
 var navbar_title = {};
@@ -69,46 +67,7 @@ g_sendEmailPublicURL_message +="&lt;/div&gt;";
 g_sendEmailPublicURL_message += "Karuta Team";
 g_sendEmailPublicURL_message +="&lt;/div&gt;";
 //----------------------------------------------
-var specificmenus = false;
 var csvseparator = ";";
-
-//==============================
-var asynccount = [];
-var asynccb = [];
-function loadJS(url, group, cb)
-//==============================
-{
-	var bin = "";	// Default group
-	if( group != null ) bin = group;
-	var execCB = function(){
-		asynccount[bin]--;
-		console.log("Count "+bin+" "+asynccount[bin]);
-		if( asynccount[bin] == 0 && typeof asynccb[bin] !== "undefined" )
-		{
-			var c = asynccb[bin];
-			asynccb[bin] = null;
-			console.log("Running CB "+bin);
-			c();
-		}
-	};
-
-	if( asynccb[bin] == null && typeof cb !== "undefined" )
-	{
-		console.log("Defining CB "+asynccount[bin]+" "+bin);
-		asynccb[bin] = cb;
-	}
-	if( asynccount[bin] == null ) asynccount[bin] = 0;
-	asynccount[bin]++;
-
-	var script = document.createElement('script');
-	script.type = 'text/javascript';
-	script.async = true;
-//	script.defer = true;
-	script.src = url;
-	script.onload = execCB;
-	document.getElementsByTagName('head')[0].appendChild(script);
-//	document.write("<script src='"+url+"'></script>");
-};
 
 //------ ELGG SOCIAL NETWORK ----------------------------
 var elgg_installed = false;
@@ -121,6 +80,3 @@ var europass_installed = true;
 
 var karutaStr = new Array();
 
-var date = new Date();
-var time = date.getMinutes() +":"+ date.getSeconds();
-console.log("End init at: "+time);

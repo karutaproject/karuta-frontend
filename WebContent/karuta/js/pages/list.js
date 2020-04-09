@@ -134,10 +134,6 @@ function fill_list_page()
 	html += "</div>";
 	if (USER.admin || (USER.creator && !USER.limited) ){
 		$("#menu").html(html);
-		if (demo) {
-			$("#start").html(listinfo[LANG]);
-			$("#start").attr('style','visibility:visible');
-		}
 	}
 	//----------------
 	var url1 =  serverBCK_API+"/portfolios?active=1&count=true";
@@ -320,10 +316,6 @@ function fill_search_page(code)
 	html += "</div>";
 	if (USER.admin || (USER.creator && !USER.limited) ){
 		$("#menu").html(html);
-		if (demo) {
-			$("#start").html(listinfo[LANG]);
-			$("#start").attr('style','visibility:visible');
-		}
 	}
 	//----------------
 	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
