@@ -89,7 +89,6 @@ karutaStr['fr']['quit']="Quitter";
 karutaStr['fr']['menu']="Menu";
 karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - Hauteur : 220<br>&nbsp; - Largeur : 800 divisé par le nombre de colonnes<br>&nbsp;";
 karutaStr['fr']['list-novisible']="Non visible";
-karutaStr['fr']['invisible']="Invisible - excepté pour root";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
 karutaStr['fr']['see-bin']="Voir la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
@@ -259,11 +258,9 @@ karutaStr['fr']['and-content']="et son contenu.";
 //========== PORTFOLIOS ===================
 //=========================================
 
-karutaStr['fr']['projects']="Mes projets";
 karutaStr['fr']['portfolios-not-in-project']="Portfolios";
-karutaStr['fr']['portfolios']="Mes portfolios";
+karutaStr['fr']['portfolios']="Portfolios";
 karutaStr['fr']['portfolio']="Mon portfolio";
-karutaStr['fr']['bin']="Poubelle";
 karutaStr['fr']['nogroup']="Aucun groupe associé";
 karutaStr['fr']['karuta.model']="Créer un modèle de portfolio";
 karutaStr['fr']['code_portfolio']="Code du portfolio";
@@ -324,13 +321,15 @@ karutaStr['fr']['add-newwelcomepage']="Ajouter la nouvelle page de bienvenue";
 //========== FOLDERS ======================
 //=========================================
 
-karutaStr['fr']['folders']="Mes dossiers";
-karutaStr['fr']['folders-admin']="Dossiers";
+karutaStr['fr']['folders']="Dossiers";
 
 karutaStr['fr']['next']="Suivant >";
 karutaStr['fr']['prev']="< Précédent";
 karutaStr['fr']['karuta.folder']="Créer un dossier de portfolios";
 karutaStr['fr']['create_folder']="Créer un dossier";
+karutaStr['fr']['create_subfolder']="Créer un sous-dossier";
+karutaStr['fr']['parent_code']="Code du parent";
+karutaStr['fr']['folder_code']="Code du dossier";
 
 //=========================================
 //========== USERS ========================

@@ -59,6 +59,10 @@
 		opacity: .65;
 	}
 
+	#main-body {
+		min-height:98vh;
+	}
+
 
 
 
@@ -135,6 +139,12 @@
 			}
 		}
 	
+		.content1-leftside,
+		.content2-rightside {
+			overflow: auto;
+			max-height: 100vh;
+		}
+	
 		#gutter {
 		  width: 10px;
 		  float: right;
@@ -155,6 +165,10 @@
 			background-color: var(--list-element-background-color);
 			padding-bottom:7px;
 		}
+		.porfolios-content:empty {
+			visibility:hidden;
+		}
+		
 		.btn  {
 			background-color:var(--list-button-background-color);
 			color:var(--list-button-text-color);
@@ -208,7 +222,7 @@
 				background-color: var(--list-element-background-color-complement);
 			}
 		}
-		.project-header {
+		.folder-header {
 			padding:7px;
 			background-color:var(--list-menu-background-color);
 			color:var(--list-button-text-color);
@@ -371,11 +385,19 @@
 		}
 	}
 
+	#search-portfolio-input{
+		height:45px;
+	}
+
 	//=============================
-	#searched-portfolios-content {
+	.portfolios-content {
 		background-color: var(--list-element-background-color);
 		padding-top: 5px;
 		padding-bottom: 5px;
+	}
+
+	.content1-rightside {
+		margin-bottom:2px;
 	}
 
 	#searched-portfolios-header {
@@ -455,7 +477,7 @@
 
 	.active {
 		.nbfolders {
-			background-color: var(--list-title-color);
+			background-color: var(--list-element-background-color);
 			color: var(--list-element-background-color-complement);
 		}
 		.nbchildren {
@@ -1698,10 +1720,6 @@ div.oembedall-container {
 		color:var(--list-button-background-color);
 	}
 
-
-#main-body-list {
-	background-color:var(--list-background-color);
-}
 
 
 

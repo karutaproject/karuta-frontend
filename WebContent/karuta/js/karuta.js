@@ -2136,4 +2136,3 @@ function outCopy(id)
 	$(element).tooltip('hide');
 	$(element).attr('title', karutaStr[LANG]['copy'] +" : "+element.textContent);
 }
-

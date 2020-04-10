@@ -80,12 +80,17 @@ function fill_list_page()
 	//------------------------------------------
 	html += "	<div id='portfolio-leftside'>";
 	html += "		<div id='menu'></div>";
-	html += "		<h3 id='portfolio-title-leftside'>"+karutaStr[LANG]['folders'];+"</h3>";
-	html += "		<h4 id='portfolio-header-leftside'>";
-	html += "			<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
-	html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"javascript:UIFactory.Portfolio.createProject();\"></i></span>";
-	html += "		</h4>";
+	html += "		<h3 class='portfolio-title-leftside'>";
+	html += "			<span id='folders-label' class='folder-label'>"+karutaStr[LANG]['folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
+	if (USER.admin || (USER.creator && !USER.xlimited)){
+		html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.PortfolioFolder.createFolder();\"></i></span>";
+	}
+	html += "		</h3>";
 	html += "		<div id='portfolio-content1-leftside' class='content1-leftside tree'></div>";
+	html += "		<h3 id='portfolios-title' class='portfolio-title-leftside'>";
+	html += "			<span id='portfolios-label' class='folder-label'>"+karutaStr[LANG]['portfolios']+"</span>&nbsp<span class='badge number_of_portfolios' id='portfolios-nb'></span>";
+	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "		</h3>";
 	html += "		<div id='portfolio-content2-leftside' class='content2-leftside'></div>";
 	html += "	</div>";
 	//------------------------------------------
@@ -93,7 +98,7 @@ function fill_list_page()
 	//-----------------------------------------------------------
 	$("#list-container").html(html);
 
-	displaySearch("search-portfolio");
+	displayPortfolioSearch("search-portfolio");
 	
 	//---------------------------------------------
 	if (USER.admin || USER.creator ){
@@ -110,15 +115,10 @@ function fill_list_page()
 		html += "</div>";
 		$("#menu").html(html);
 	}
-//	UIFactory.PortfolioFolder.loadAndDisplayFolders('portfolio-content1-leftside','portfolio');
-
 
 	//--------we load the folders-----------------------
 	UIFactory.PortfolioFolder.loadAndDisplayFolders('portfolio-content1-leftside','list');
-	//--------we count how many portfolios are outside projects-----------------------
-	UIFactory["PortfolioFolder"].loadPortfolios('portfolio-content1-rightside','list');
-
-	
+	UIFactory.PortfolioFolder.checkPortfolios();
 }
 
 //==============================
@@ -126,45 +126,34 @@ function fill_search_page(code)
 //==============================
 {
 	searched_portfolios_list = [];
-	$("#searched-portfolios-header").hide();
-	$("#searched-portfolios-content").hide();
-	$("#searched-portfolios-content").html("");
-	g_sum_trees = 0;
+	
+	$("#portfolio-header-rightside").html("");
+	$("#portfolio-content1-rightside").html("");
+	$("#portfolio-content2-rightside").html("");
 	$("#wait-window").show();
 	$("#menu").html("");
-// --- list of users to display name of owner
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/users",
-		success : function(data) {
-			UIFactory["User"].parse(data);
-		}
-	});
-	//-------------------------------
-	$("#project-portfolios").html("");
-	$(".row-label").removeClass('active');
-	localStorage.setItem('currentDisplayedProjecCode','none');
+	cleanList();
 	//----------------
-	var url1 = serverBCK_API+"/portfolios?active=1&search="+code;
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : url1,
+		url : serverBCK_API+"/portfolios?active=1&search="+code,
 		code : code,
 		success : function(data) {
 			var nb = parseInt($('portfolios',data).attr('count'));
-			if (nb>0) {
-				$("#searched-portfolios-header").show();
-				$("#searched-portfolios-content").show();
-			}
 			UIFactory["Portfolio"].parse_search(data);
+			$("#portfolio-content2-rightside").html($("<div id='searched-portfolios-content' class='portfolios-content'></div>"));
+			$("#portfolio-content1-rightside").html($("<div id='searched-folders-content' class='portfolios-content'></div>"));
 			//-------------------------------
 			for (var i=0;i<searched_portfolios_list.length;i++){
 				var portfolio = searched_portfolios_list[i];
-				$("#searched-portfolios-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"'></div>"));
-				if (portfolio.visible || (USER.creator && !USER.limited) )
+				if (portfolio.visible || (USER.creator && !USER.limited) ) {
+					if (portfolio.semantictag.indexOf('karuta-project')>-1)
+						$("#searched-folders-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"'></div>"));
+					else
+						$("#searched-portfolios-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"'></div>"));
 					$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,'list'));
+				}
 			}
 			var archive_href = serverBCK_API+"/portfolios/zip?portfolios=";
 			for (var i = 0; i < searched_portfolios_list.length; i++) {
@@ -172,7 +161,10 @@ function fill_search_page(code)
 					archive_href += ","
 				archive_href += searched_portfolios_list[i].id;
 			}
+			$("#archive-button").removeAttr("disabled");
 			$("#archive-button").attr("href",archive_href);
+			$("#remove-button").prop("disabled",false);
+			$("#wait-window").hide();
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
@@ -194,7 +186,7 @@ function display_list_page()
 }
 
 //==============================
-function displaySearch(dest)
+function displayPortfolioSearch(dest)
 //==============================
 {
 	var html = "";
@@ -202,6 +194,8 @@ function displaySearch(dest)
 	html += "	<input id='search-portfolio-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"'>";
 	html += "	<div class='input-group-append'>";
 	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><i class='fas fa-search'></i></button>";
+	html +="		<a id='archive-button' href='' disabled='true' class='btn'><i class='fas fa-download'></i></button>";
+	html +="		<button id='remove-button' type='button' disabled='true' onclick='UIFactory.Portfolio.removeSearchedPortfolios()' class='btn'><i class='fas fa-trash'></i></button>";
 	html += "	</div>";
 	html += "</div>";
 	$("#"+dest).html(html);
@@ -217,7 +211,7 @@ function searchPortfolio()
 //==================================
 {
 	cleanList();
-	var code = $("#search-input").val();
+	var code = $("#search-portfolio-input").val();
 	if (code!="")
 		fill_search_page(code);
 }

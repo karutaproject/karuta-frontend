@@ -1177,11 +1177,11 @@ UIFactory["PortfoliosGroup"].prototype.getSharingRoleEditor = function(destid,ca
 	}
 	//--------------------------
 	if (this.roles.length>0) {
-		var js = "javascript:";
+		var js = "";
 		if (callFunction!=null) {
 			js += callFunction+";";
 		}
-		js += "$('input:checkbox').removeAttr('checked')";
+		js += "$('input:checkbox').prop('checked', false);";
 		var first = true;
 		for (var i=0; i<this.roles.length; i++) {
 			if (this.roles[i]!="user") {

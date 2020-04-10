@@ -1,174 +1,47 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>Create a Karuta account</title>
-	<meta http-equiv="X-UA-Compatible" content="IE=9">
+	<title>Karuta - Create Account</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-	<link rel="icon" type="image/png" href="../../karuta/img/favicon.png" />
+	<link rel="icon" type="image/png" href="../img/faviconK.png" />
+	<link rel="icon" type="image/png" href="../../application/img/faviconK.png"></link>
+		<script src="../../application/js/_init.js"></script>
 	<!-- =============================================================== -->
-	<link rel="stylesheet" type="text/css" href="../../other/bootstrap/css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css" />
-	<link rel="stylesheet" type="text/css" href="../../other/css/font-awesome/css/font-awesome.min.css" />
-	<link rel="stylesheet" type="text/css" href="../../other/colorpicker/css/evol.colorpicker.css" />
-	<link rel="stylesheet" type="text/css" href="../../karuta/css/welcome.css">
-	<!-- =========================================== -->
-	<link rel="stylesheet" href="../../application/css/specific.css" />
+	<link rel="stylesheet" type="text/css" href="../../other/bootstrap-4.4.0-dist/css/bootstrap.min.css"></link>
+	<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css"></link>
+	<link rel="stylesheet" type="text/css" href="../../other/font-awesome/css/all.css"></link>
 	<!-- =============================================================== -->
-	<script src="../../other/js/jquery-1.10.2.js"></script>
-	<script src="../../other/js/jquery-ui-1.10.3.custom.min.js"></script>
-	<script src="../../other/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../../other/js/jquery.ui.touch-punch.min.js"></script>
+	<link rel='stylesheet' type='text/css' href='../../application/css/color.css'></link>
+	<link rel='stylesheet' type='text/css' href='../../karuta/css/karuta.css'></link>
+	<link rel='stylesheet' type='text/css' href='../../karuta/css/welcome.css'></link>
 	<!-- =============================================================== -->
-	<script src="../../other/js/jquery_hotkeys.js"></script>
-	<script src="../../other/js/JQueryRC4.js"></script>
-	<!-- =========================================== -->
-	<script src="../../other/colorpicker/js/evol.colorpicker.min.js"></script>
+	<script src="../../other/js/jquery-3.3.1.min.js"></script>
+	<script src="../../other/js/popper.min.js"></script>
+	<script src="../../other/bootstrap-4.4.0-dist/js/bootstrap.min.js"></script>
 	<!-- =============================================================== -->
 	<script src="../../karuta/js/karuta.js"></script>
 	<script src="../../karuta/js/UICom.js"></script>
-	<script src="../../karuta/js/report.js"></script>
-	<!-- =============================================================== -->
-	<script src="../../karuta/js/model/Type_Portfolio.js"></script>
-	<script src="../../karuta/js/model/Type_Node.js"></script>
-	<script src="../../karuta/js/model/Type_User.js"></script>
-	<!-- =============================================================== -->
-	<link type="text/css" href="../../other/lightbox/css/lightbox.css" rel="stylesheet" />
-	<script src="../../other/lightbox/js/lightbox-2.6.min.js"></script>
-	<!-- =============================================================== -->
-	<link type="text/css" href="../../other/jplayer/jplayer.blue.monday.css" rel="stylesheet" />
-	<script src="../../other/jplayer/jquery.jplayer.min.js"></script>
-	<!-- =============================================================== -->
-	<script src="../../other/js/jquery.ui.widget.js"></script>
-	<script src="../../other/js/jquery.iframe-transport.js"></script>
-	<script src="../../other/js/jquery.fileupload.js"></script>
-	<!-- =============================================================== -->
-	<link rel="stylesheet" href="../../other/oembed/jquery.oembed.css"/>
-	<script src="../../other/oembed/jquery.oembed.js"></script>
-	<!-- =============================================================== -->
-	<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-	<script src="../../other/bootstrap-datepicker/bootstrap-datepicker.fr.js"></script>
-	<link rel="stylesheet" href="../../other/bootstrap-datepicker/datepicker.css" />
-	<!-- =============================================================== -->
-	<script src="../../other/js/js.cookie.js"></script>
-	<!-- =============================================================== -->
-	<script src="../../application/js/_init.js"></script>
 	<!-- =============================================================== -->
 	<script src="../../karuta/js/version.js"></script>
-
-	<script language='javascript'>
-	//==============================
-	function callSubmit()
-	//==============================
-	{
-		var ok = true;
-		var useridentifier = $("#useridentifier").val();
-		var firstname = $("#firstname").val();
-		var lastname = $("#lastname").val();
-		var password = $("#password").val();
-		if (useridentifier==""){
-			alert("email is required");
-			ok =false;
-		}
-		if (lastname==""){
-			alert("lastname is required");
-			ok =false;
-		}
-		if (firstname==""){
-			alert("firstname is required");
-			ok =false;
-		}
-		if (ok) {
-			var xml = "";
-			xml +="<?xml version='1.0' encoding='UTF-8'?>";
-			xml +="<users>";
-			xml +="<user>";
-			xml +="	<username>"+useridentifier+"</username>";
-			xml +="	<lastname>"+lastname+"</lastname>";
-			xml +="	<firstname>"+firstname+"</firstname>";
-			xml +="	<email>"+useridentifier+"</email>";
-			xml +="</user>";
-			xml +="</users>";
-			var url = "../../../"+serverBCK+"/register";
-			$.ajax({
-				type : "POST",
-				contentType: "application/xml",
-				dataType : "text",
-				url : url,
-				data : xml,
-				success : function(data) {
-					alert(karutaStr[LANG]['password-sent']);
-					window.location="login.htm";
-				}
-			});
-		}
-	}
-		
-		//==============================
-		function getInputs()
-		//==============================
-		{
-			var html = "";
-			html += "<input id='useridentifier' class='form-control' placeholder='"+karutaStr[LANG]['email']+"' type='text'>";
-			html += "<input id='firstname' class='form-control' placeholder='"+karutaStr[LANG]['firstname']+"' type='text'>";
-			html += "<input id='lastname' class='form-control' placeholder='"+karutaStr[LANG]['lastname']+"' type='text'>";
-			html += "<br><button class='btn btn-large btn-primary' onclick='javascript:callSubmit()'>"+karutaStr[LANG]['create_account']+"</button>";
-			return html;
-		}
-
-		//------------------------------
-		var lang = getURLParameter('lang');
-		if (lang!=null) {
-			LANG = lang;
-			for (var i=0; i<languages.length;i++){
-				if (languages[i]==lang)
-					LANGCODE = i;
-			}
-		}
-		//------------------------------
-	</script></head>
-	<body>
-
-		<div id='navigation_bar'></div>
-		<div class="container" style='margin-top:60px;'>
-			<div class='row-fluid'>
-				<div class='col-md-5'>
-					<h2 id="welcome1">KARUTA</h2>
-					<h4 id="welcome2"></h4>
-					<div id="welcome3"></div>
-					<h2 id="welcome4" style='font-size:250%;margin-top:20px;'></h2>
-				</div>
-				<div class='col-md-7'>
-					<div class="form-signin" id="login"></div>
-				</div>
-			</div>
-		</div>
-
-		<script language='javascript'>
-			//------------------------------
-			$(window).load(function() {
-				if (typeof welcome1 != 'undefined') {
-					$("#welcome1").html(welcome1[LANG]);
-					$("#welcome2").html(welcome2[LANG]);
-					$("#welcome3").html(welcome3[LANG]);
-				}
-//				$.ajaxSetup({async: false});
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : serverBCK+"/version",
-					data: "",
-					success : function(data) {		
-						karuta_backend_version = $("number",$("#backend",data)).text();
-						karuta_backend_date = $("date",$("#backend",data)).text();
-						karuta_fileserver_version = $("number",$("#fileserver",data)).text();
-						karuta_fileserver_date = $("date",$("#fileserver",data)).text();
-					}
-				});
-				loadLanguages(function(data) {$("#navigation_bar").html(getNavBar('create_account',null));$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);});
-			});
-			//------------------------------
-		</script>
-
-	</body>
+	<script src="../../karuta/js/pages/karuta-page.js"></script>
+	<script src="../../karuta/js/pages/createaccount.js"></script>
+	<script src="../../karuta/js/pages/users.js"></script>
+	<!-- =========================== For configuration ================= -->
+	<script src="../../karuta/js/model/Type_Node.js"></script>
+	<script src="../../karuta/js/resources/Type_Field.js"></script>
+	<script src="../../karuta/js/resources/Type_Image.js"></script>
+	<script src="../../karuta/js/model/Type_Node_metadata.js"></script>
+	<script src="../../karuta/js/resources/Type_Color.js"></script>
+	<script src="../../karuta/js/resources/Type_Get_Resource.js"></script>
+	<!-- =============================================================== -->
+	<script>
+		window.addEventListener("load", function() {
+			displayKarutaCreateAccount();
+		});
+	</script>
+</head>
+<body class="welcome">
+	<script>document.write(alertBox());</script>
+</body>
 </html>

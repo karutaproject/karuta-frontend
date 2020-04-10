@@ -51,9 +51,6 @@ UIFactory["Portfolio"] = function( node )
 	this.semantictag = $("metadata",node).attr('semantictag');
 	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.visible = ($("metadata",node).attr('list-novisible')=='Y') ? false : true;
-	this.invisible = ($("metadata",node).attr('invisible')=='Y') ? true : false;
-	if (this.complex==undefined)
-		this.complex = false;
 	//------------------------------
 	this.export_pdf = UIFactory.Portfolio.getLogicalMetadataAttribute(node,"export-pdf");
 	this.export_rtf = UIFactory.Portfolio.getLogicalMetadataAttribute(node,"export-rtf");
@@ -121,7 +118,12 @@ function dragPortfolio(ev)
 //==================================
 {
 	var portfolioid = ev.target.id.substring(ev.target.id.lastIndexOf('_')+1);
+	var parentid = ev.target.getAttribute('parentid');
+	var index = ev.target.getAttribute('index');
 	ev.dataTransfer.setData("uuid", portfolioid);
+	ev.dataTransfer.setData("type", 'portfolio');
+	ev.dataTransfer.setData("parentid", parentid);
+	ev.dataTransfer.setData("index", index);
 }
 
 
@@ -1351,7 +1353,7 @@ UIFactory["Portfolio"].renamePortfolioCode = function(itself,code,langcode)
 		}
 		xml +="</asmResource>";
 		strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-		var callback = fill_list_page;
+		var callback = null;
 		UICom.query("PUT",serverBCK_API+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
 	} else {
 		alertHTML(karutaStr[LANG]['existing-code']);
@@ -1382,11 +1384,11 @@ UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,da
 		}
 		var sorted_groups = group_labels.sort(sortOn1);
 		//--------------------------
-		var js = "javascript:";
+		var js = "";
 		if (callFunction!=null) {
 			js += callFunction+";";
 		}
-		js += "$('input:checkbox').removeAttr('checked')";
+		js += "$('input:checkbox').prop('checked', false);";
 		var first = true;
 		var dest = "";
 		for (var i=0; i<sorted_groups.length; i++) {
@@ -2495,50 +2497,6 @@ UIFactory["Portfolio"].delProject = function(projectid,projectcode)
 	$.ajaxSetup({async: true});
 }
 
-//==================================
-UIFactory["Portfolio"].createProject = function()
-//==================================
-{
-	$("#edit-window-title").html(karutaStr[LANG]['create_project']);
-	$("#edit-window-footer").html("");
-	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var create_button = "<button id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</button>";
-	var obj = $(create_button);
-	$(obj).click(function (){
-		var code = $("#codetree").val();
-		var label = $("#labeltree").val();
-		if (code!='' && label!='') {
-			var uuid = UIFactory["Portfolio"].getid_bycode("karuta.project",false); 
-			UIFactory["Portfolio"].copy_rename(uuid,code,true,label,'karuta-project');
-		} else {
-			if (code=='')
-				alertHTML(karutaStr[LANG]['code-not-null']);
-			if (label=='')
-				alertHTML(karutaStr[LANG]['label-not-null']);
-		}
-	});
-	$("#edit-window-footer").append(obj);
-	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
-	$("#edit-window-footer").append($(footer));
-
-	var html = "<div class='form-horizontal'>";
-	html += "<div class='form-group'>";
-	html += "		<label for='codetree' class='col-sm-3 control-label'>Code</label>";
-	html += "		<div class='col-sm-9'>";
-	html += "			<input id='codetree' type='text' class='form-control'>";
-	html += "		</div>";
-	html += "</div>";
-	html += "<div class='form-group'>";
-	html += "		<label for='labeltree' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>";
-	html += "		<div class='col-sm-9'>";
-	html += "			<input id='labeltree' type='text' class='form-control'>";
-	html += "		</div>";
-	html += "</div>";
-	html += "</div>";
-	$("#edit-window-body").html(html);
-	//--------------------------
-	$('#edit-window').modal('show');
-};
 
 //==================================
 UIFactory["Portfolio"].displayProjects = function(dest,type,langcode)

@@ -54,6 +54,10 @@ body,
   opacity: 0.65;
 }
 
+#main-body {
+  min-height: 98vh;
+}
+
 /* ====================== */
 /*    LIST- WELCOME       */
 /* ====================== */
@@ -124,6 +128,11 @@ body,
 #list-container #portfolio-leftside .active {
   background-color: var(--list-button-background-color);
 }
+#list-container .content1-leftside,
+#list-container .content2-rightside {
+  overflow: auto;
+  max-height: 100vh;
+}
 #list-container #gutter {
   width: 10px;
   float: right;
@@ -141,6 +150,9 @@ body,
 #list-container .portfolios-nb {
   background-color: var(--list-element-background-color);
   padding-bottom: 7px;
+}
+#list-container .porfolios-content:empty {
+  visibility: hidden;
 }
 #list-container .btn {
   background-color: var(--list-button-background-color);
@@ -193,12 +205,12 @@ body,
 #list-container .project .row-label:hover {
   background-color: var(--list-element-background-color-complement);
 }
-#list-container .project-header {
+#list-container .folder-header {
   padding: 7px;
   background-color: var(--list-menu-background-color);
   color: var(--list-button-text-color);
 }
-#list-container .project-header .btn {
+#list-container .folder-header .btn {
   background-color: var(--list-element-background-color);
 }
 #list-container h3,
@@ -328,10 +340,18 @@ body,
   background-color: var(--list-element-background-color);
 }
 
-#searched-portfolios-content {
+#search-portfolio-input {
+  height: 45px;
+}
+
+.portfolios-content {
   background-color: var(--list-element-background-color);
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.content1-rightside {
+  margin-bottom: 2px;
 }
 
 #searched-portfolios-header {
@@ -406,7 +426,7 @@ body,
 }
 
 .active .nbfolders {
-  background-color: var(--list-title-color);
+  background-color: var(--list-element-background-color);
   color: var(--list-element-background-color-complement);
 }
 .active .nbchildren {
@@ -1563,10 +1583,6 @@ h3 {
   margin-right: 10px;
   cursor: pointer;
   color: var(--list-button-background-color);
-}
-
-#main-body-list {
-  background-color: var(--list-background-color);
 }
 
 /*
