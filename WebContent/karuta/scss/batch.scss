@@ -50,15 +50,79 @@
 		float:left;
 		margin-right:5px;
 	}
-	.card-header {
-		padding-left: 5px;
-		padding-top: 5px;
-		padding-right: 5px;
-		padding-bottom: 0px;
-		margin-bottom: 0px;
+	span.chkbox-comments.xcreate-person,
+	span.chkbox-comments.xdelete-person,
+	span.chkbox-comments.xinactivate-person,
+	span.chkbox-comments.xactivate-person,
+	span.chkbox-comments.xcreate-tree,
+	span.chkbox-comments.xcreate-project,
+	span.chkbox-comments.xshare-tree,
+	span.chkbox-comments.xunshare-tree,
+	span.chkbox-comments.xselect-tree,
+	span.chkbox-comments.xdelete-tree,
+	span.chkbox-comments.xre-instantiate-tree,
+	span.chkbox-comments.xset-owner,
+	span.chkbox-comments.xupdate-tree-root,
+	span.chkbox-comments.xcreate-portfoliogroup,
+	span.chkbox-comments.xjoin-portfoliogroup,
+	span.chkbox-comments.xleave-portfoliogroup,
+	span.chkbox-comments.xshare-portfoliogroup,
+	span.chkbox-comments.xunshare-portfoliogroup,
+	span.chkbox-comments.xcreate-usergroup,
+	span.chkbox-comments.xshare-usergroup,
+	span.chkbox-comments.xunshare-usergroup,
+	span.chkbox-comments.xjoin-usergroup,
+	span.chkbox-comments.xleave-usergroup,
+	span.chkbox-comments.xshare-groups,
+	span.chkbox-comments.xupdate-node-resource,
+	span.chkbox-comments.ximport-node,
+	span.chkbox-comments.xdelete-node,
+	span.chkbox-comments.xmoveup-node,
+	span.chkbox-comments.xupdate-metadata,
+	span.chkbox-comments.xupdate-metadata-wad,
+	span.chkbox-comments.xupdate-metadata-inline,
+	span.chkbox-comments.xupdate-metadata-query,
+	span.chkbox-comments.xupdate-metadata-menu,
+	span.chkbox-comments.xupdate-rights,
+	span.chkbox-comments.xuuid-components,
+	span.chkbox-comments.xupdate-field-byid,
+	span.chkbox-comments.xdelete-node-byid,
+	span.chkbox-comments.xreset-document-byid,
+	span.chkbox-comments.xupdate-resource,
+	span.chkbox-comments.xupdate-field,
+	span.chkbox-comments.xupdate-textfield,
+	span.chkbox-comments.xupdate-dashboard,
+	span.chkbox-comments.xupdate-proxy,
+	span.chkbox-comments.xupdate-calendar,
+	span.chkbox-comments.xupdate-document,
+	span.chkbox-comments.xupdate-proxy,
+	span.chkbox-comments.xupdate-url2unit,
+	span.chkbox-comments.xupdate-item,
+	span.chkbox-comments.xfor-each-line,
+	span.chkbox-comments.xfor-each-tree,
+	span.chkbox-comments.xfor-each-person,
+	span.chkbox-comments.xactions,
+	span.chkbox-comments.xif-then-else,
+	span.chkbox-comments.xif-action,
+	span.chkbox-comments.xthen-part,
+	span.chkbox-comments.xelse-part {
+			display: inline;
+			float: right;
+			margin-right: 20px;
 	}
-	.card-body {
-		padding:0px;
+	.asmRoot > div[name=lbl-div] .chkbox-comments {
+		display: none;
+	}
+	.comments,
+	.comments .form-control,
+	.comments .btn,
+	.comments .cssinfo {
+		font-style: italic;
+		font-weight: normal;
+		color: #aaaaaa;
+	}
+	.project-template {
+		display:none;
 	}
 }
 
@@ -97,7 +161,8 @@
 	}
 
 	//----- TREE ---
-	.create-tree{
+	.create-tree,
+	.create-project {
 		margin-top:7px;
 		border:1px solid var(--batch-tree-color);
 	}

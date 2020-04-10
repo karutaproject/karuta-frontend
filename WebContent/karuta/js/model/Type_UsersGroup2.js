@@ -14,7 +14,7 @@
    ======================================================= */
 	
 var UsersGroups_byid = {};
-var UsersGroups_list = [];
+var usersgroups_list = [];
 var currentDisplayedUsersGroupId = null;
 var number_of_usersgroups = 0;
 /// Check namespace existence
@@ -78,7 +78,7 @@ UIFactory["UsersGroup"].displayAll = function(dest,type,langcode)
 {
 	$("#usersgroups").html($(""));
 	UIFactory["UsersGroup"].displayTree(dest,type,langcode);
-	number_of_usersgroups = UsersGroups_list.length;
+	number_of_usersgroups = usersgroups_list.length;
 	//--------------------------------------
 	if (number_of_usersgroups==0) {
 		$("#usersgroups-label").hide();
@@ -101,7 +101,7 @@ UIFactory["UsersGroup"].displayTree = function(dest,type,langcode,parentid)
 		langcode = LANGCODE;
 	var list = [];
 	if (parentid==undefined || parentid==null)
-		list = UsersGroups_list;
+		list = usersgroups_list;
 	else list = UsersGroups_byid[parentid].groups_list;
 	var html="";
 	for (var i = 0; i < list.length; i++) {
@@ -539,7 +539,7 @@ UIFactory["UsersGroup"].parse = function(data)
 //==================================
 {
 	UsersGroups_byid = {};
-	UsersGroups_list = [];		
+	usersgroups_list = [];		
 	var items = $("group",data);
 	var tableau1 = new Array();
 	for (var i = 0; i < items.length; i++) {
@@ -550,7 +550,7 @@ UIFactory["UsersGroup"].parse = function(data)
 	}
 	var newTableau1 = tableau1.sort(sortOn1);
 	for (var i=0; i<newTableau1.length; i++){
-		UsersGroups_list[i] = UsersGroups_byid[newTableau1[i][1]]
+		usersgroups_list[i] = UsersGroups_byid[newTableau1[i][1]]
 	}
 };
 

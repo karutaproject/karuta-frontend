@@ -44,15 +44,79 @@
   float: left;
   margin-right: 5px;
 }
-.batch .card-header {
-  padding-left: 5px;
-  padding-top: 5px;
-  padding-right: 5px;
-  padding-bottom: 0px;
-  margin-bottom: 0px;
+.batch span.chkbox-comments.xcreate-person,
+.batch span.chkbox-comments.xdelete-person,
+.batch span.chkbox-comments.xinactivate-person,
+.batch span.chkbox-comments.xactivate-person,
+.batch span.chkbox-comments.xcreate-tree,
+.batch span.chkbox-comments.xcreate-project,
+.batch span.chkbox-comments.xshare-tree,
+.batch span.chkbox-comments.xunshare-tree,
+.batch span.chkbox-comments.xselect-tree,
+.batch span.chkbox-comments.xdelete-tree,
+.batch span.chkbox-comments.xre-instantiate-tree,
+.batch span.chkbox-comments.xset-owner,
+.batch span.chkbox-comments.xupdate-tree-root,
+.batch span.chkbox-comments.xcreate-portfoliogroup,
+.batch span.chkbox-comments.xjoin-portfoliogroup,
+.batch span.chkbox-comments.xleave-portfoliogroup,
+.batch span.chkbox-comments.xshare-portfoliogroup,
+.batch span.chkbox-comments.xunshare-portfoliogroup,
+.batch span.chkbox-comments.xcreate-usergroup,
+.batch span.chkbox-comments.xshare-usergroup,
+.batch span.chkbox-comments.xunshare-usergroup,
+.batch span.chkbox-comments.xjoin-usergroup,
+.batch span.chkbox-comments.xleave-usergroup,
+.batch span.chkbox-comments.xshare-groups,
+.batch span.chkbox-comments.xupdate-node-resource,
+.batch span.chkbox-comments.ximport-node,
+.batch span.chkbox-comments.xdelete-node,
+.batch span.chkbox-comments.xmoveup-node,
+.batch span.chkbox-comments.xupdate-metadata,
+.batch span.chkbox-comments.xupdate-metadata-wad,
+.batch span.chkbox-comments.xupdate-metadata-inline,
+.batch span.chkbox-comments.xupdate-metadata-query,
+.batch span.chkbox-comments.xupdate-metadata-menu,
+.batch span.chkbox-comments.xupdate-rights,
+.batch span.chkbox-comments.xuuid-components,
+.batch span.chkbox-comments.xupdate-field-byid,
+.batch span.chkbox-comments.xdelete-node-byid,
+.batch span.chkbox-comments.xreset-document-byid,
+.batch span.chkbox-comments.xupdate-resource,
+.batch span.chkbox-comments.xupdate-field,
+.batch span.chkbox-comments.xupdate-textfield,
+.batch span.chkbox-comments.xupdate-dashboard,
+.batch span.chkbox-comments.xupdate-proxy,
+.batch span.chkbox-comments.xupdate-calendar,
+.batch span.chkbox-comments.xupdate-document,
+.batch span.chkbox-comments.xupdate-proxy,
+.batch span.chkbox-comments.xupdate-url2unit,
+.batch span.chkbox-comments.xupdate-item,
+.batch span.chkbox-comments.xfor-each-line,
+.batch span.chkbox-comments.xfor-each-tree,
+.batch span.chkbox-comments.xfor-each-person,
+.batch span.chkbox-comments.xactions,
+.batch span.chkbox-comments.xif-then-else,
+.batch span.chkbox-comments.xif-action,
+.batch span.chkbox-comments.xthen-part,
+.batch span.chkbox-comments.xelse-part {
+  display: inline;
+  float: right;
+  margin-right: 20px;
 }
-.batch .card-body {
-  padding: 0px;
+.batch .asmRoot > div[name=lbl-div] .chkbox-comments {
+  display: none;
+}
+.batch .comments,
+.batch .comments .form-control,
+.batch .comments .btn,
+.batch .comments .cssinfo {
+  font-style: italic;
+  font-weight: normal;
+  color: #aaaaaa;
+}
+.batch .project-template {
+  display: none;
 }
 
 /* ============================= */
@@ -85,7 +149,8 @@
   margin-top: 7px;
   border: 1px solid var(--batch-person-color);
 }
-.batch .create-tree {
+.batch .create-tree,
+.batch .create-project {
   margin-top: 7px;
   border: 1px solid var(--batch-tree-color);
 }

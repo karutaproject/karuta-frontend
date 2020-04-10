@@ -155,15 +155,6 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		else
 			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
 	}
-	if (type=='free-positioning'){
-		if ($(this.filename_node[langcode]).text()!="") {
-			var filename = $(this.filename_node[langcode]).text();
-			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-			//alertHTML(extension);
-			html = "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><div class='doc-up'><p style='text-align:center;'>"+$(this.filename_node[langcode]).text()+"</p></div><div class='doc-bottom'><span>Document</span></div></a>";
-		} else
-			html = "<div class='doc-up'><p style='text-align:center;'>"+karutaStr[LANG]['no-document']+"</p></div><div class='doc-bottom'><span>Document</span></div>";
-	}
 	if (type=='icon-url-label'){
 		if ($(this.filename_node[langcode]).text()!=""){
 			var filename = $(this.filename_node[langcode]).text();
@@ -227,15 +218,6 @@ UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' style='width:25px'> "+$(this.filename_node[langcode]).text()+"</a>";
 		else
 			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
-	}
-	if (type=='free-positioning'){
-		if ($(this.filename_node[langcode]).text()!="") {
-			var filename = $(this.filename_node[langcode]).text();
-			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-			//alertHTML(extension);
-			html = "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><div class='doc-up'><p style='text-align:center;'>"+$(this.filename_node[langcode]).text()+"</p></div><div class='doc-bottom'><span>Document</span></div></a>";
-		} else
-			html = "<div class='doc-up'><p style='text-align:center;'>"+karutaStr[LANG]['no-document']+"</p></div><div class='doc-bottom'><span>Document</span></div>";
 	}
 	if (type=='icon-url-label'){
 		if ($(this.filename_node[langcode]).text()!=""){

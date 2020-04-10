@@ -52,6 +52,7 @@ function displayKarutaPage()
 		data: "",
 		success : function(data) {
 			setConfigurationVariables();
+			applyKarutaConfiguration();
 			loadLanguages(function() {
 				getLanguage();
 			});
@@ -87,8 +88,6 @@ function displayKarutaPage()
 					var navbar_html = getNavBar('list',null);
 					$("#navigation-bar").html(navbar_html);
 					$("a[data-toggle='tooltip']").tooltip({html: true, trigger: 'hover'});
-
-					getAndApplyMainConfiguration();
 				}
 			});
 			//-------------------------------
@@ -132,6 +131,23 @@ function hideArchiveSearch()
 }
 
 
+//==============================
+function increaseFontSize()
+//==============================
+{
+	var root = document.documentElement;
+	var coeffsize = root.style.getPropertyValue('--font-size-coeff') * 1.1;	
+	root.style.setProperty('--font-size-coeff',coeffsize);
+}
+
+//==============================
+function decreaseFontSize()
+//==============================
+{
+	var root = document.documentElement;
+	var coeffsize = root.style.getPropertyValue('--font-size-coeff') * 0.9;	
+	root.style.setProperty('--font-size-coeff',coeffsize);
+}
 
 //==============================
 function setConfigurationVariables()
@@ -162,6 +178,10 @@ function setConfigurationVariables()
 			//----------------------
 			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
 			g_configVar['maxuserlist'] = getText('config-maxuserlist','Field','text',data);
+			//----------------------
+			g_configVar['font-standard'] = getText('config-font-standard','Field','text',data);
+			g_configVar['font-google'] = getText('config-font-google','Field','text',data);
+			g_configVar['font-size-coeff'] = getText('config-font-size-coeff','Field','text',data);
 			//----------------------
 			g_configVar['list-welcome-image'] = getBackgroundURL('config-list-welcome-image',data);		
 			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data);

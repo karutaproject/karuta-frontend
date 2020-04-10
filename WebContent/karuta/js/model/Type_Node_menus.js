@@ -11,7 +11,7 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 {	// note: #xxx is to avoid to scroll to the top of the page
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<a class='button text-button' href='#xxx' onclick=\"";
+	var html = "<a class='button text-button' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
 		html += items[0] +"('"+parentid+"','"+title+"'";
@@ -42,7 +42,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 {	// note: #xxx is to avoid to scroll to the top of the page
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<a class='dropdown-item button text-button' href='#xxx' onclick=\"";
+	var html = "<a class='dropdown-item button text-button' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
 		html += items[0] +"('"+parentid+"','"+title+"'";
@@ -116,23 +116,24 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 			}
 			if (subitems.length>6)
 				shares[i][6] = subitems[6]; // condition
-			if (shares[i][0].indexOf(userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+			if (shares[i][0].indexOf(this.userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
 				displayShare[i] = true;
 			else
 				displayShare[i] = false;
 		}
 		for (var i=0; i<items.length; i++){
-			var urlS = serverBCK+"/direct?uuid="+uuid+"&role="+shares[i][1]+"&lang="+languages[langcode]+"&l="+shares[i][3]+"&d="+shares[i][4]+"&type=showtorole&showtorole="+shares[i][2]+"&sharerole="+shares[i][0];
+			var urlS = serverBCK+"/direct?uuid="+this.id+"&role="+shares[i][1]+"&lang="+languages[langcode]+"&l="+shares[i][3]+"&d="+shares[i][4]+"&type=showtorole&showtorole="+shares[i][2]+"&sharerole="+shares[i][0];
 			$.ajax({
+				id : this.id,
 				type : "POST",
 				dataType : "text",
 				contentType: "application/xml",
 				url : urlS,
 				success : function (data){
 					var url = window.location.href;
-					var serverURL = url.substring(0,url.lastIndexOf('karuta')-1);
+					var serverURL = url.substring(0,url.lastIndexOf(appliname)+appliname.length);
 					url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
-					$("#2world-"+uuid).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-toggle='tooltip' data-placement='bottom'></a> ");
+					$("#2world-"+this.id).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-toggle='tooltip' data-placement='bottom'></a> ");
 				}
 			});
 		}
@@ -209,7 +210,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 	//------------- specific menu button ---------------
 	var no_monomenu = 0;
 	try {
-		if ((this.depth>0 || this.asmtype == 'asmUnitStructure') && this.menuroles != undefined && this.menuroles.length>10 && (this.menuroles.indexOf(userrole)>-1 || (this.menuroles.containsArrayElt(g_userroles) && this.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
+		if ((this.depth>0 || this.asmtype == 'asmUnitStructure') && this.menuroles != undefined && this.menuroles.length>10 && (this.menuroles.indexOf(this.userrole)>-1 || (this.menuroles.containsArrayElt(g_userroles) && this.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
 			//--------------------------------
 			var mlabels = [];
 			var labelitems = this.menulabels.split(";");
@@ -248,9 +249,9 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					var variable_name = test_string.substring(0,test_string.indexOf("##"));
 					menus[i][0] = menus[i][0].replace("##"+variable_name+"##", g_variables[variable_name]);
 				}
-				if (menus[i][3].indexOf(userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
+				if (menus[i][3].indexOf(this.userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
 					if (menus[i][4]==""){
-						displayMenu = true;  // userrole may be included in semantictag
+						displayMenu = true;  // this.userrole may be included in semantictag
 						no_monomenu = i;
 					}
 					else if(eval(menus[i][4])){
@@ -262,7 +263,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			//--------------------------------
 			var nbmenus = 0;
 			for (var i=0; i<menus.length; i++){
-				if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
 						nbmenus++;
 			}
 			var monomenu = (nbmenus==1);
@@ -274,7 +275,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				//-----------
 				if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
 					for (var i=0; i<mlabels.length; i++){
-						if (mlabels[i][1].indexOf(userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
+						if (mlabels[i][1].indexOf(this.userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
 							var titles = [];
 							var title = "";
 							try {
@@ -326,7 +327,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 						} catch(e){
 							title = menus[i][2];
 						}
-						if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+						if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
 							html += UIFactory["Node"].getSpecificMenu(this.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
 					}
 				}
@@ -359,7 +360,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				} catch(e){
 					title = menus[i][2];
 				}
-				if (menus[i][3].indexOf(userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
 					html += UIFactory["Node"].getSingleMenu(this.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
 				//------------------
 			}
@@ -374,7 +375,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				|| USER.admin
 				|| g_userroles[0]=='designer'
 				|| ( g_userroles[1]=='designer' && this.submitroles.indexOf(g_userroles[0])>-1)
-				|| this.submitroles.indexOf(userrole)>-1 )))
+				|| this.submitroles.indexOf(this.userrole)>-1 )))
 		{
 			html += "<span id='submit-"+this.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+this.id+"'";
 			if (this.submitall=='Y')
@@ -421,7 +422,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					shares[i][6] = subitems[6]; // condition
 				if (subitems.length>7)
 					shares[i][7] = subitems[7]; // keywords : obj and/or mess
-				if (shares[i][0].indexOf(userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+				if (shares[i][0].indexOf(this.userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
 					displayShare[i] = true;
 				else
 					displayShare[i] = false;
@@ -491,7 +492,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 						if (this.shareroles.indexOf('2world')>-1) {
 							html_toadd = "<span id='2world-"+this.id+"'></span>";
 						} else {
-							html_toadd = "<span class='button glyphicon glyphicon-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+this.id+"','"+this.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+							html_toadd = "<span class='button fas fa-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+this.id+"','"+this.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 						}
 					}
 					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))

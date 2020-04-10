@@ -108,8 +108,8 @@
 
 	displayHTML["standard-resource-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 												"	<div id='sub_node_#uuid#' class='resource-node row' >" +
-												"		<div class='col-2'></div>" +
-												"		<div id='std_node_#uuid#' name='lbl-div' class='col-2 resource-label inside-full-height'>" +
+												"		<div class='col-1'></div>" +
+												"		<div id='std_node_#uuid#' name='lbl-div' class='col-3 resource-label inside-full-height'>" +
 												"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 												"		</div>" +
 //												"		<div name='res-div' class='col-8'>" +

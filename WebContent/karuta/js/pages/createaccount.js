@@ -149,20 +149,20 @@ function callSubmit()
 function displayKarutaCreateAccount()
 //==============================
 {
+	loginPublic();
+	setLoginConfigurationVariables();
 	var html = "";
-	html += "<div id='navigation_bar'></div>";
+	html += "<div id='main-welcome'>";
+	html += "<div id='navigation-bar'></div>";
 	html += "<div id='main-container' class='container'>";
-	html += "	<div class='row-fluid'>";
-	html += "		<div class='col-md-5'>";
-	html += "			<div id='welcome1'></div>";
-	html += "			<div id='welcome2'></div>";
-	html += "			<div id='welcome3'></div>";
-	html += "			<h2 id='welcome4' style='font-size:250%;margin-top:20px;'></h2>";
-	html += "		</div>";
-	html += "		<div class='col-md-7'>";
-	html += "			<div class='form-signin' id='login'></div>";
-	html += "		</div>";
+	html += "	<div id='form-signin' class='form-signin'>";
+	html += "		<div id='welcome1'></div>";
+	html += "		<div id='welcome-version'></div>";
+	html += "		<div id='welcome2'></div>";
+	html += "		<div id='welcome3'></div>";
+	html += "		<div id='login'></div>";
 	html += "	</div>";
+	html += "</div>";
 	html += "</div>";
 	$('body').html(html);
 	$('body').append(alertBox());
@@ -178,18 +178,127 @@ function displayKarutaCreateAccount()
 			karuta_backend_date = $("date",$("#backend",data)).text();
 			karuta_fileserver_version = $("number",$("#fileserver",data)).text();
 			karuta_fileserver_date = $("date",$("#fileserver",data)).text();
+			applyNavbarConfiguration();
+			applyLoginConfiguration();
+			loadLanguages(function(data) {
+				getLanguage();
+				$("#navigation-bar").html(getNavBar('create_account',null));
+				$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
+			});
 		}
 	});
-	loadLanguages(function(data) {
-		getLanguage();
-		$("#navigation_bar").html(getNavBar('create_account',null));
-		$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
-	});
-	if (typeof welcome1 != 'undefined') {
-		$("#welcome1").html(welcome1[LANG]);
-		$("#welcome2").html(welcome2[LANG]);
-		$("#welcome3").html(welcome3[LANG]);
-	}
 }
 
 
+//==============================
+function setLoginConfigurationVariables()
+//==============================
+{
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration?resources=true";
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			//---------Languages--------------
+			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
+			for (i=0;i<language_nodes.length;i++){
+				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
+			}
+			loadLanguages(function() {
+				getLanguage();
+			});
+			NONMULTILANGCODE = 0;  // default language if non-multilingual
+			LANGCODE = 0; //default value
+			LANG = languages[LANGCODE]; //default value
+			//---------Navigation Bar--------------
+			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
+			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
+			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data);
+			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data);
+			//---------- Login -------------
+			g_configVar['login-background-image'] = getBackgroundURL('config-login-background-image',data);
+			g_configVar['login-background-color'] = getText('config-login-background-color','Color','text',data);
+			g_configVar['login-logo'] = getImg('config-login-logo',data);
+			g_configVar['login_logo_style'] = getContentStyle('config-login-logo',data);
+			g_configVar['login-subtitle'] = getText('config-login-subtitle','Field','text',data);
+			g_configVar['login-subtitle-style'] = getContentStyle('config-login-subtitle',data);
+			g_configVar['login-subtext'] = getText('config-login-subtext','Field','text',data);
+			g_configVar['login-subtext-style'] = getContentStyle('config-login-subtext',data);
+			g_configVar['login-text-color'] = getText('config-login-text-color','Color','text',data);
+			g_configVar['login-button-background-color'] = getText('config-login-button-background-color','Color','text',data);
+			g_configVar['login-button-text-color'] = getText('config-login-button-text-color','Color','text',data);
+			//-----------New Password ----------
+			g_configVar['login-new-password-display'] = getText('config-login-new-password-display','Get_Resource','value',data);
+			g_configVar['login-new-password-background-color'] = getText('config-login-new-password-background-color','Color','text',data);
+			g_configVar['login-new-password-text-color'] = getText('config-login-new-password-text-color','Color','text',data);
+			g_configVar['login-new-password-button-background-color'] = getText('config-login-new-password-button-background-color','Color','text',data);
+			g_configVar['login-new-password-button-text-color'] = getText('config-login-new-password-button-text-color','Color','text',data);
+			//------------New Account ---------
+			g_configVar['login-new-account-display'] = getText('config-login-new-account-display','Get_Resource','value',data);
+			g_configVar['login-new-account-background-color'] = getText('config-login-new-account-background-color','Color','text',data);
+			g_configVar['login-new-account-text-color'] = getText('config-login-new-account-text-color','Color','text',data);
+			g_configVar['login-new-account-button-background-color'] = getText('config-login-new-account-button-background-color','Color','text',data);
+			g_configVar['login-new-account-button-text-color'] = getText('config-login-new-account-button-text-color','Color','text',data);
+		}
+	});
+}
+
+//=======================================================================
+function setConfigLoginColor(root,configname) 
+// =======================================================================
+{
+	var color = g_configVar[configname];
+	if (color!=undefined)
+		root.style.setProperty("--"+configname,color);
+}
+
+//==============================
+function loginPublic()
+//==============================
+{
+	var data = "<credential><login>public</login><password>public</password></credential>";
+	$.ajax({
+		async:false,
+		contentType: "application/xml",
+		type : "POST",
+		dataType : "text",
+		url : serverBCK_API+"/credential/login",
+		data: data,
+		success : function(data) {
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Identification : "+jqxhr.responseText);
+		}
+	});
+}
+
+//==============================
+function applyLoginConfiguration()
+//==============================
+{
+	var root = document.documentElement;
+	//========================================
+	$('body').css("background-image", g_configVar['login-background-image']);
+	//========================================
+	$('#welcome1').html(g_configVar['login-logo']);
+	$("#welcome1").attr("style",g_configVar['login-logo_style']);
+	//---------------------
+	if (g_configVar['login-subtitle']!=undefined) {
+		$('#welcome2').html(g_configVar['login-subtitle']);
+		$("#welcome2").attr("style",g_configVar['login-subtitle-style']);
+	} else 
+		$('#welcome2').html(welcome2[LANG]);
+	//---------------------
+	if (g_configVar['login-subtext']!=undefined) {
+		$('#welcome3').html(g_configVar['login-subtext']);
+		$("#welcome3").attr("style",g_configVar['login-subtext-style']);
+	} else 
+		$('#welcome3').html(welcome3[LANG]);
+	//---------------------
+	setConfigLoginColor(root,'login-background-color');
+	setConfigLoginColor(root,'login-text-color');
+	setConfigLoginColor(root,'login-button-background-color');
+	setConfigLoginColor(root,'login-button-text-color');
+}

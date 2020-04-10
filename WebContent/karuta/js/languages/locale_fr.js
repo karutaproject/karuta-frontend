@@ -26,6 +26,7 @@ karutaStr['fr']['register']="Inscrire";
 karutaStr['fr']['edit']="Éditer";
 karutaStr["fr"]["button-edit"] = "Éditer";
 karutaStr["fr"]["button-delete"] = "Supprimer";
+karutaStr["fr"]["button-delete-content"] = "Supprimer le contenu";
 karutaStr["fr"]["button-restore"] = "Restaurer";
 karutaStr["fr"]["button-remove"] = "Retirer";
 karutaStr['fr']['button-submit']="Soumettre";
@@ -93,6 +94,10 @@ karutaStr['fr']['see-bin']="Voir la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
 karutaStr["fr"]["button-print"] = "Imprimer";
 karutaStr["fr"]["write-mode"] = "Éditer";
+karutaStr["fr"]["button-increase"] = "Augmenter la taille des caractères";
+karutaStr["fr"]["button-decrease"] = "Diminuer la taille des caractères";
+karutaStr["fr"]["copy"] = "Copier";
+karutaStr["fr"]["copied"] = "Copié";
 
 //=========================================
 //========== ERRORS =======================
@@ -164,8 +169,8 @@ karutaStr['fr']['color']="Couleur de la police";
 karutaStr['fr']['cssclass']="Classe CSS";
 karutaStr['fr']['top']="Position - Haut";
 karutaStr['fr']['left']="Position - Gauche";
-karutaStr['fr']['width']="Largeur (en pixels)";
-karutaStr['fr']['height']="Hauteur (en pixels)";
+karutaStr['fr']['width']="Largeur (px)";
+karutaStr['fr']['height']="Hauteur (px)";
 karutaStr['fr']['public']="Public";
 karutaStr['fr']['text-align']="Alignement";
 karutaStr['fr']['displayview']="Type d'affichage";
@@ -181,7 +186,7 @@ karutaStr['fr']['showtoroles']="Montrer à";
 karutaStr['fr']['private']="Caché";
 karutaStr['fr']['hide-metainfo']="Cacher metadata";
 karutaStr['fr']['show-metainfo']="Montrer metadata";
-karutaStr['fr']['padding-top']="Espace avant (en pixels)";
+karutaStr['fr']['padding-top']="Espace avant (px)";
 karutaStr['fr']['background-color']="Couleur du fond";
 karutaStr['fr']['moveroles']="Ordonner";
 karutaStr['fr']['movein']="Déplacer dans";
@@ -247,16 +252,15 @@ karutaStr['fr']['help_text_rename']="Pour déplacer un portfolio dans un autre p
 karutaStr['fr']['users-folders']="Dossiers";
 karutaStr['fr']['users-groups']="Groupes";
 karutaStr['fr']['users-in-rootfolder']="Usagers hors dossier";
+karutaStr['fr']['and-content']="et son contenu.";
 
 //=========================================
 //========== PORTFOLIOS ===================
 //=========================================
 
-karutaStr['fr']['projects']="Mes projets";
-karutaStr['fr']['portfolios-not-in-project']="Portfolios hors projet";
-karutaStr['fr']['portfolios']="Mes portfolios";
+karutaStr['fr']['portfolios-not-in-project']="Portfolios";
+karutaStr['fr']['portfolios']="Portfolios";
 karutaStr['fr']['portfolio']="Mon portfolio";
-karutaStr['fr']['bin']="Poubelle";
 karutaStr['fr']['nogroup']="Aucun groupe associé";
 karutaStr['fr']['karuta.model']="Créer un modèle de portfolio";
 karutaStr['fr']['code_portfolio']="Code du portfolio";
@@ -310,18 +314,22 @@ karutaStr['fr']['username-label']="Login";
 karutaStr['fr']['firstname-label']="Prénom";
 karutaStr['fr']['lastname-label']="Nom";
 karutaStr['fr']['changeOwner']="Changer le propriétaire";
+karutaStr['fr']['add-configpage']="Ajouter la nouvelle page de configuration";
+karutaStr['fr']['add-newwelcomepage']="Ajouter la nouvelle page de bienvenue";
 
 //=========================================
 //========== FOLDERS ======================
 //=========================================
 
-karutaStr['fr']['folders']="Mes dossiers";
-karutaStr['fr']['folders-admin']="Dossiers";
+karutaStr['fr']['folders']="Dossiers";
 
 karutaStr['fr']['next']="Suivant >";
 karutaStr['fr']['prev']="< Précédent";
 karutaStr['fr']['karuta.folder']="Créer un dossier de portfolios";
 karutaStr['fr']['create_folder']="Créer un dossier";
+karutaStr['fr']['create_subfolder']="Créer un sous-dossier";
+karutaStr['fr']['parent_code']="Code du parent";
+karutaStr['fr']['folder_code']="Code du dossier";
 
 //=========================================
 //========== USERS ========================
@@ -376,6 +384,7 @@ karutaStr['fr']['create_user_portfolios']="Créer un usager et ses portfolios";
 karutaStr['fr']['report']="Exécuter un script de rapport";
 karutaStr['fr']['upload_csv_or_code']="Téléverser un fichier CSV ou Saisir un code de modèle";
 karutaStr['fr']['model_code']="Code du modèle";
+karutaStr['fr']['report-elt-disabled'] = "désactivé";
 
 //=========================================
 //========== RESOURCE =====================
@@ -393,6 +402,7 @@ karutaStr['fr']['dashboard-code']="Code du rapport";
 karutaStr['fr']['report-code']="Code du rapport";
 karutaStr['fr']['csv']="Rôles - Afficher CSV";
 karutaStr['fr']['pdf']="Rôles - Afficher PDF";
+karutaStr['fr']['rtf']="Rôles - Afficher RTF";
 karutaStr['fr']['img']="Rôles - Afficher Image";
 karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
 karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + g_configVar['maxfilesizeupload'] + " Mo sont autorisés !";
@@ -444,7 +454,7 @@ karutaStr['fr']['confirm-remove-user-group']="Voulez-vous vraiment retirer cet u
 karutaStr['fr']['empty-group']="Groupe vide";
 karutaStr['fr']['list_portfoliosgroups']="Groupes de Portfolios";
 karutaStr['fr']['note-list_portfoliosgroups']="Attention - Les projets contenants les portfolios doivent être ouverts dans la page des portfolios";
-karutaStr['fr']['note-list_usergroups']="Attention - Les usagers ne doivent pas être filtrés dans la pages Usagers";
+karutaStr['fr']['note-list_usergroups']="Attention - Les usagers ne doivent pas être filtrés dans la page Usagers";
 karutaStr['fr']['confirm-remove-item-group']="Voulez-vous vraiment retirer cet élément du group ? Cette action est irréversible.";
 karutaStr['fr']['add_users']="Ajouter des usagers";
 karutaStr['fr']['add_portfolios']="Ajouter des portfolios";

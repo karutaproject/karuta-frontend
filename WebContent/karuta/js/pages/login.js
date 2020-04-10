@@ -97,7 +97,7 @@ function getLogin(encrypt_url,lang)
 //==============================
 {
 	var html = "";
-	html += "<div id='connection-cas' style='display:none'>";
+	html += "<div id='connection-cas'>";
 	html += "<h5>"+karutaStr[LANG]['connection-cas1']+"</h5>";
 	html += "<button class='button-login' onclick='javascript:callCAS()'>"+karutaStr[LANG]['login']+"</button>";
 	html += "<h5>"+karutaStr[LANG]['connection-cas2']+"</h5>";
@@ -114,7 +114,7 @@ function getNewPassword()
 //==============================
 {
 	var html = "";
-	html += "<a onclick=\"$('#show-newpassword').show()\">"+karutaStr[LANG]['newpassword']+"</a>";
+	html += "<a onclick=\"$('#show-newpassword').show()\" style='cursor:pointer'>"+karutaStr[LANG]['newpassword']+"</a>";
 	html +="<div id='show-newpassword' style='display:none'>"
 	html += "<input id='useridentifier_new' class='form-control' placeholder=\""+karutaStr[LANG]['username']+"\" type='text'/>";
 	html += "<button id='form-send' onclick='javascript:callSend()'>"+karutaStr[LANG]['button-send']+"</button>";
@@ -160,9 +160,10 @@ function displayKarutaLogin()
 	loadLanguages(function(data) {
 		getLanguage();
 		$("#navigation-bar").html(getNavBar('login',null));
-		$("#login").html(getLogin(encrypt_url,lang));
+		$("#login").html($(getLogin(encrypt_url,lang)));
+		$("#connection-cas").hide();
 		$("#useridentifier").focus();
-		if (typeof cas_url != 'undefined' &&cas_url!="")
+		if (typeof cas_url != 'undefined' && cas_url!="")
 			$("#connection-cas").show();
 		applyNavbarConfiguration();
 		applyLoginConfiguration();

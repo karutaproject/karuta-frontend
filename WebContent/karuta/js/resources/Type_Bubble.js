@@ -95,7 +95,7 @@ UIFactory["Bubble"].bubble.prototype.displayView = function(destid,type,lang)
 		type='detail';
 	if (type=='detail') {   //editnoderoles.containsArrayElt(g_userroles)
 		if (editresroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer') {
-			html += "<div class='btn-group bubble-button'>&nbsp;<span class='button glyphicon glyphicon-pencil' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\"></span></div>";
+			html += "<div class='btn-group bubble-button'>&nbsp;<span class='button fas fa-pencil-alt' onclick=\"javascript:Bubble_bubbles_byid['"+this.id+"'].displayEditor('"+destid+"');\"></span></div>";
 		}
 		html += "<div class='bubble_label'>"+UICom.structure["ui"][this.bubble_label_nodeid].resource.getView()+"</div>";
 		html += "<div class='bubble_decription'>"+UICom.structure["ui"][this.bubble_description_nodeid].resource.getView()+"</div>";
@@ -153,7 +153,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 					var callback2 = "UIFactory.Bubble.reloadparse";
 					var param2_2 = "'"+destid+"'";
 					var param2_3 = "'"+this.id+"'";
-					html += " &nbsp;<div class='btn-group bubble-del-bubble'><span  class='button glyphicon glyphicon-remove'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\"></span></div>";
+					html += " &nbsp;<div class='btn-group bubble-del-bubble'><span  class='button fas fa-trash'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\"></span></div>";
 				}
 				html += "</div>";
 			}
@@ -180,7 +180,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 				var param2_2 = "'"+destid+"'";
 				var param2_3 = "'"+this.id+"'";
 				html += "<div id='edit_"+uuid+"'>";
-				html += "<div class='btn-group bubble-del-url-button'><span  class='button glyphicon glyphicon-remove'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\"></span></div>";
+				html += "<div class='btn-group bubble-del-url-button'><span  class='button fas fa-trash'  style='cursor:pointer' onclick=\"javascript: confirmDel('"+uuid+"','Bubble',null,null,'"+callback2+"',"+param2_2+","+param2_3+")\"></span></div>";
 				html += "</div>";
 			}
 			$("#"+destid).append($(html));
@@ -268,7 +268,7 @@ UIFactory["Bubble"].getPublicURL = function(mapid,sharerole)
 		mapid : mapid,
 		success : function (data){
 			var url = window.location.href;
-			var serverURL = url.substring(0,url.indexOf("/karuta"));
+			var serverURL = url.substring(0,url.lastIndexOf(appliname)+appliname.length);
 			map_url = serverURL+"/application/htm/public.htm?i="+data;
 			$("#qrcode-image").qrcode({text:map_url,size:100,background: 'white'});
 			var text = document.getElementById("qrcode-image").toDataURL("image/jpeg");

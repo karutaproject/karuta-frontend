@@ -46,6 +46,12 @@ UIFactory["Dashboard"] = function( node )
 	}
 	this.pdf_node = $("pdf",$("asmResource[xsi_type='Dashboard']",node));
 	//--------------------
+	if ($("rtf",$("asmResource[xsi_type='Dashboard']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("rtf");
+		$("asmResource[xsi_type='Dashboard']",node)[0].appendChild(newelement);
+	}
+	this.rtf_node = $("rtf",$("asmResource[xsi_type='Dashboard']",node));
+	//--------------------
 	if ($("img",$("asmResource[xsi_type='Dashboard']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("img");
 		$("asmResource[xsi_type='Dashboard']",node)[0].appendChild(newelement);
@@ -131,7 +137,7 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 	$("#"+dest).html(html);
 //	report_not_in_a_portfolio = false;
 	//-----------------------------------------------------
-	$("#extra_"+uuid).append($("<div class='row'><div id='csv_button_"+uuid+"' class='dashboard-buttons col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div></div>"));
+	$("#extra_"+uuid).append($("<div class='row'><div id='extra_button_"+uuid+"' class='dashboard-buttons col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div></div>"));
 	var root_node = g_portfolio_current;
 	var parent_node = UICom.structure.ui[$(this.parent).attr("id")];
 	genDashboardContent("dashboard_"+uuid,uuid,parent_node,root_node);
@@ -141,15 +147,19 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 	var html_csv_pdf = ""
 	var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
 	if (csv_roles.indexOf('all')>-1 || csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
-		$("#csv_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
+		$("#extra_button_"+uuid).append($("<div class='csv-button button' onclick=\"javascript:xml2CSV('dashboard_"+uuid+"')\">CSV</div>"));				
 	}
 	var pdf_roles = $(UICom.structure["ui"][uuid].resource.pdf_node).text();
 	if (pdf_roles.indexOf('all')>-1 || pdf_roles.containsArrayElt(g_userroles) || (pdf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
-		$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div><div class='pdf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF/Word</div>"));				
+		$("#extra_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:xml2PDF('dashboard_"+uuid+"')\">PDF</div>"));				
+	}
+	var rtf_roles = $(UICom.structure["ui"][uuid].resource.rtf_node).text();
+	if (rtf_roles.indexOf('all')>-1 || rtf_roles.containsArrayElt(g_userroles) || (rtf_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
+		$("#extra_button_"+uuid).append($("<div class='rtf-button button' onclick=\"javascript:xml2RTF('dashboard_"+uuid+"')\">RTF/Word</div>"));				
 	}
 	var img_roles = $(UICom.structure["ui"][uuid].resource.img_node).text();
 	if (img_roles.indexOf('all')>-1 || img_roles.containsArrayElt(g_userroles) || (img_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
-		$("#csv_button_"+uuid).append($("<div class='pdf-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">PNG</div>"));
+		$("#extra_button_"+uuid).append($("<div class='img-button button' onclick=\"javascript:html2IMG('dashboard_"+uuid+"')\">PNG</div>"));
 	}
 };
 
@@ -220,6 +230,19 @@ UIFactory["Dashboard"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlpdfGroupObj).append($(htmlpdfLabelObj));
 		$(htmlpdfGroupObj).append($(htmlpdfDivObj));
 		$(htmlFormObj).append($(htmlpdfGroupObj));
+		//-----------------------------------------------------
+		var htmlrtfGroupObj = $("<div class='form-group'></div>")
+		var htmlrtfLabelObj = $("<label for='rtf_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['rtf']+"</label>");
+		var htmlrtfDivObj = $("<div class='col-sm-9'></div>");
+		var htmlrtfInputObj = $("<input id='rtf_"+this.id+"' type='text' class='form-control' value=\""+this.rtf_node.text()+"\">");
+		$(htmlrtfInputObj).change(function (){
+			$(self.rtf_node).text($(this).val());
+			UIFactory["Dashboard"].update(self,langcode);
+		});
+		$(htmlrtfDivObj).append($(htmlrtfInputObj));
+		$(htmlrtfGroupObj).append($(htmlrtfLabelObj));
+		$(htmlrtfGroupObj).append($(htmlrtfDivObj));
+		$(htmlFormObj).append($(htmlrtfGroupObj));
 		//-----------------------------------------------------
 		var htmlimgGroupObj = $("<div class='form-group'></div>")
 		var htmlimgLabelObj = $("<label for='img_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['img']+"</label>");

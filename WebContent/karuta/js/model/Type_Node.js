@@ -99,7 +99,7 @@ UIFactory["Node"] = function( node )
 			this.structured_resource = new UIFactory[this.xsi_type](node);
 		}
 		//------------------------------
-		this.loaded = !(g_complex); // if not complex all nodes are loaded
+//		this.loaded = !(g_complex); // if not complex all nodes are loaded
 	}
 	catch(err) {
 		alertHTML("UIFactory['Node']--flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype);
@@ -107,95 +107,6 @@ UIFactory["Node"] = function( node )
 };
 
 
-//==============================================================================
-//==============================================================================
-//==============================================================================
-UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock)
-//==============================================================================
-//==============================================================================
-//==============================================================================
-{
-	this.depth = depth;
-	if (edit==null || edit==undefined)
-		this.edit = false;
-	else
-		this.edit = edit;
-	if (inline==null || inline==undefined)
-		this.inline = false;
-	else
-		this.inline = inline
-	if (menu==null || menu==undefined)
-		this.menu = true;
-	else
-		this.menu = menu;
-	if (inblock==null || inblock==undefined)
-		this.inblock = false;
-	else
-		this.inblock = inblock;
-	this.parent = parent;
-	//-----------------------------
-	var data = this.node;
-	var uuid = this.id;
-	var node = UICom.structure["ui"][uuid];
-	// ---- store info to redisplay after change ---
-	//------------------metadata----------------------------
-	this.nodetype = $(data).prop("nodeName"); // name of the xml tag
-	this.writenode = ($(node.node).attr('write')=='Y')? true:false;
-	this.semtag =  ($("metadata",data)[0]==undefined || $($("metadata",data)[0]).attr('semantictag')==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
-	this.collapsed = 'N';
-	if (!g_designerrole)
-		this.collapsed = (sessionStorage.getItem('collapsed'+uuid)==undefined)?'N':sessionStorage.getItem('collapsed'+uuid);
-	else
-		this.collapsed = ($(node.metadata).attr('collapsed')==undefined)?'N':$(node.metadata).attr('collapsed');
-	this.displayed = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
-	this.collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
-	this.resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
-	this.nodenopencil = ($(node.metadatawad).attr('nodenopencil')==undefined)?'N':$(node.metadatawad).attr('nodenopencil');
-	this.editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'':$(node.metadatawad).attr('editcoderoles');
-	this.editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
-	this.delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
-	this.commentnoderoles = ($(node.metadatawad).attr('commentnoderoles')==undefined)?'':$(node.metadatawad).attr('commentnoderoles');
-	this.showroles = ($(node.metadatawad).attr('showroles')==undefined)?'':$(node.metadatawad).attr('showroles');
-	this.showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
-	this.editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
-	this.inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
-	if (this.inline_metadata=='Y')
-		this.inline = true;
-	this.seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
-	this.shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
-	this.seeqrcoderoles = ($(node.metadatawad).attr('seeqrcoderoles')==undefined)?'':$(node.metadatawad).attr('seeqrcoderoles');
-	this.moveroles = ($(node.metadatawad).attr('moveroles')==undefined)?'':$(node.metadatawad).attr('moveroles');
-	this.moveinroles = ($(node.metadatawad).attr('moveinroles')==undefined)?'none':$(node.metadatawad).attr('moveinroles');
-	this.printroles = ($(node.metadatawad).attr('printroles')==undefined)?'':$(node.metadatawad).attr('printroles');
-	this.privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
-	this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
-	if (this.submitted=='Y') {
-		this.menu = false;
-	}
-	this.cssclass = ($(node.metadataepm).attr('cssclass')==undefined)?'':$(node.metadataepm).attr('cssclass');
-	this.displayview = ($(node.metadataepm).attr('displayview')==undefined)?'':$(node.metadataepm).attr('displayview');
-	//-------------------- test if visible
-	this.visible =  ( this.displayed=='N' && (g_userroles[0]=='designer'  || USER.admin)
-				|| ( this.displayed=='Y' && ( this.seenoderoles.indexOf(USER.username)>-1 
-									|| this.seenoderoles.indexOf("all")>-1 
-									|| this.seenoderoles.containsArrayElt(g_userroles) 
-									|| (this.showtoroles.indexOf("all")>-1 && !this.privatevalue) 
-									|| (this.showtoroles.containsArrayElt(g_userroles) && !this.privatevalue) 
-									|| g_userroles[0]=='designer')
-					)
-				);
-	this.submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
-	this.submitall = ($(node.metadatawad).attr('submitall')==undefined)?'none':$(node.metadatawad).attr('submitall');
-	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'N':$(node.metadatawad).attr('submitted');
-	this.submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
-	this.duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
-	this.incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
-	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
-	this.menulabels = ($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels');
-	if (this.resource!=undefined || this.resource!=null)
-		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
-}
 
 //==============================================================================
 //==============================================================================
@@ -424,9 +335,9 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 //		$("div[name='lbl-div']","#node_"+uuid).hide();
 	//----------- Comments -----------
 	if (this.edit && this.inline && this.writenode)
-		UIFactory["Node"].displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
+		UIFactory.Node.displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
 	else
-		UIFactory["Node"].displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
+		UIFactory.Node.displayComments('comments_'+uuid,UICom.structure["ui"][uuid]);
 	//--------------------Metadata Info------------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		this.displayMetainfo("metainfo_"+uuid);
@@ -537,6 +448,12 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	if (!gotView)
 		label_html += " "+ this.getView('std_node_'+uuid);
 	$("#label_node_"+uuid).html(label_html);
+	//--------- chckbox comment in report/batch--------------
+	var html_chckbox = "<span class='chkbox-comments x"+this.semantictag+" '>&nbsp;<input ";
+	if (this.semantictag.indexOf('comments')>-1)
+		html_chckbox += "checked=true";
+	html_chckbox += " type='checkbox' onchange=\"UIFactory.Node.toggleComment('"+uuid+"',this)\">&nbsp;"+karutaStr[LANG]['report-elt-disabled']+"<span>";
+	$("div[class='title']","#label_node_"+uuid).append(html_chckbox);
 	//-------------- buttons --------------------------
 	if (edit) {
 		if (this.semtag.indexOf("bubble_level1")>-1)
@@ -796,6 +713,7 @@ UIFactory["Node"].update = function(input,itself,langcode)
 	itself.save();
 	writeSaved(itself.id);
 };
+
 
 //==================================
 UIFactory["Node"].prototype.getNodeLabelEditor = function(type,langcode)
@@ -1488,7 +1406,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 									|| g_userroles[0]=='designer' 
 								)
 					)
-				|| 	(this.inline && (	(USER.admin || g_userroles[0]=='designer'|| this.editnoderoles.containsArrayElt(g_userroles) || this.editnoderoles.indexOf(userrole)>-1) ))
+				|| 	(this.inline && (	(USER.admin || g_userroles[0]=='designer'|| this.editnoderoles.containsArrayElt(g_userroles) || this.editnoderoles.indexOf(this.userrole)>-1) ))
 			)
 		{
 			html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
@@ -1510,9 +1428,9 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		if (((this.writenode && this.moveinroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			var movein = ($(this.metadatawad).attr('movein')==undefined)?'':$(this.metadatawad).attr('movein');
 			if (movein=='')
-				html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
+				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
 			else
-				html+= "<span class='button glyphicon glyphicon-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
+				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
 		if ( (g_userroles[0]=='designer' && this.asmtype != 'asmRoot') // always duplicate for designer
@@ -1658,7 +1576,24 @@ UIFactory['Node'].loadStructure = function(uuid)
 	$.ajaxSetup({async: true});
 };
 
+//==================================================
+UIFactory['Node'].toggleComment = function(uuid,input)
+//==================================================
+{
+	var semantictag = UICom.structure.ui[uuid].semantictag;
+	if (input.checked) {
+		semantictag += ' comments';
+		UICom.structure.ui[uuid].semantictag = semantictag;
+		$("#node_"+uuid).addClass('comments');
+	}
+	else {
+		semantictag = semantictag.substring(0,semantictag.indexOf('comments')-1)
+		UICom.structure.ui[uuid].semantictag = semantictag;
+		$("#node_"+uuid).removeClass('comments');
+	}
+	UIFactory["Node"].updateMetadataAttribute(UICom.structure.ui[uuid].id,'semantictag',semantictag);
 
+}
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //------------------------ getBubbleView -------------------------------------------------------------------------------------
@@ -1688,40 +1623,6 @@ UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
 	html += "<div id='bubble_display_"+this.id+"' class='bubble_display'></div>";
 	return html;
 };
-
-//----------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-//--------------------------- displaySemanticTags ----------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
-
-//==================================
-UIFactory["Node"].prototype.displaySemanticTags = function(destid,langcode)
-//==================================
-{
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var semtag = this.semantictag; //		this.semantictag = $("metadata",node).attr('semantictag');
-	var label = this.getLabel(null,'none',langcode);
-	var html ="";
-	html += "<div class='semtag-line'>";
-	html += "	<div class='semtag-line-header'>";
-	html += "		<span class='semtag-label'>"+label+"</span>";
-	html += "		<span class='badge semtag-value'>"+semtag+"</span>";
-	html += "	</div>";
-	html += "	<div id='content-"+this.id+"' class='semtag-line-content'></div>";
-	html += "</div>";
-	$('#'+destid).append($(html));
-	var children = $(this.node).children();
-	for (var i=0;i<children.length;i++){
-		var tagname = $(children[i])[0].tagName;
-		if (tagname=="asmStructure" || tagname=="asmUnit" || tagname=="asmUnitStructure" || tagname=="asmContext")
-			UICom.structure.ui[$(children[i]).attr('id')].displaySemanticTags("content-"+this.id,langcode);
-	}
-};
-
 
 
 //=======================================================================================================================================
@@ -1956,7 +1857,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					//-----------------------------------------
 					var graphicers = $("metadata-wad[graphicerroles*="+g_userroles[0]+"]",data);
 					if (contentfreenode=='Y' && (graphicers.length>0 || g_userroles[0]=='designer'))
-						html += "<button class='btn  free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='glyphicon glyphicon-menu-hamburger'></span></button>";
+						html += "<button class='btn  free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='fas fa-bars'></span></button>";
 					//-----------------------------------------
 					html += "</div>";
 				}
@@ -2041,7 +1942,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					} else { // lang1/lang2/...
 						help_text = helps[langcode];  // lang1/lang2/...
 					}
-					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='glyphicon glyphicon-question-sign'></span></a> ";
+					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
 					$("#help_"+uuid).html(help);
 					$(".popinfo").popover({ 
 					    placement : 'right',
@@ -2277,7 +2178,7 @@ UIFactory["Node"].displayWelcomePage = function(root,dest,depth,langcode,edit,in
 		html = "<a  class='fas fa-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-toggle='tooltip' data-placement='bottom'></a>";
 		$("#welcome-edit").html(html);
 	}
-	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
+	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
 }
 
 

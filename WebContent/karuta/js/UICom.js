@@ -29,6 +29,7 @@ var UICom =
 	query: function( type, url, callback, dataType, data )
 	//=======================================================================
 	{
+		/*
 		var set =
 		{
 			dataType: dataType,
@@ -48,6 +49,25 @@ var UICom =
 			}
 		};
 		jQuery.ajax(set);
+		*/
+		$.ajax({
+			dataType: dataType,
+			type: type,
+			url: url,
+			contentType: "application/xml",
+			processData: false,
+			data: data,
+			success: function(data, textStatus)
+			{
+				if( callback != null )
+					callback(data);
+			},
+			error : function(jqxhr,textStatus) {
+				alertDisconnected();
+				alertHTML(karutaStr[LANG]['disconnected']);
+			}
+		});
+
 	},
 
 	//=======================================================================

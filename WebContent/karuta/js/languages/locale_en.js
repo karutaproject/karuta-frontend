@@ -26,6 +26,7 @@ karutaStr['en']['register']="Register";
 karutaStr['en']['edit']="Edit";
 karutaStr["en"]["button-edit"] = "Edit";
 karutaStr["en"]["button-delete"] = "Delete";
+karutaStr["en"]["button-delete-content"] = "Delete content";
 karutaStr["en"]["button-restore"] = "Restore";
 karutaStr["en"]["button-remove"] = "Remove";
 karutaStr["en"]["button-submit"] = "Submit";
@@ -93,6 +94,10 @@ karutaStr['en']['see-bin']="See Bin";
 karutaStr['en']['complex']="Partial Loading";
 karutaStr["en"]["button-print"] = "Print";
 karutaStr["en"]["write-mode"] = "Edit";
+karutaStr["en"]["button-increase"] = "Increase Character Size";
+karutaStr["en"]["button-decrease"] = "Decrease Character Size";
+karutaStr["en"]["copy"] = "Copy";
+karutaStr["en"]["copied"] = "Copied";
 
 //=========================================
 //========== ERRORS =======================
@@ -164,8 +169,8 @@ karutaStr['en']['color']="Font Color";
 karutaStr['en']['cssclass']="CSS Class";
 karutaStr['en']['top']="Position - Top";
 karutaStr['en']['left']="Position - Left";
-karutaStr['en']['width']="Width (in pixels)";
-karutaStr['en']['height']="Height (in pixels)";
+karutaStr['en']['width']="Width (px)";
+karutaStr['en']['height']="Height (px)";
 karutaStr['en']['public']="Public";
 karutaStr['en']['text-align']="Alignment";
 karutaStr['en']['displayview']="Display View";
@@ -181,7 +186,7 @@ karutaStr['en']['showtoroles']="Show To";
 karutaStr['en']['private']="Hidden";
 karutaStr['en']['hide-metainfo']="Hide Metadata";
 karutaStr['en']['show-metainfo']="Show Metadata";
-karutaStr['en']['padding-top']="Space Before (in pixels)";
+karutaStr['en']['padding-top']="Space Before (px)";
 karutaStr['en']['background-color']="Background Color";
 karutaStr['en']['moveroles']="Ordering";
 karutaStr['en']['movein']="Move in";
@@ -245,17 +250,17 @@ karutaStr['en']['list_groups']="Groups";
 karutaStr['en']['create-test-user']="Create a Test User";
 karutaStr['en']['help_text_rename']="To move a portfolio to another project, change the project code (part before the dot)";
 karutaStr['en']['users-folders']="Users Folders";
+karutaStr['en']['users-groups']="Groups";
 karutaStr['en']['users-in-rootfolder']="Users not in folders";
+karutaStr['en']['and-content']="and its content.";
 
 //=========================================
 //========== PORTFOLIOS ===================
 //=========================================
 
-karutaStr['en']['projects']="My Projects";
 karutaStr['en']['portfolios-not-in-project']="My Portfolios not in a Project";
-karutaStr['en']['portfolios']="My Portfolios";
+karutaStr['en']['portfolios']="Portfolios";
 karutaStr['en']['portfolio']="My Portfolio";
-karutaStr['en']['bin']="My Bin";
 karutaStr['en']['nogroup']="No Group";
 karutaStr['en']['karuta.model']="Create a Portfolio Model";
 karutaStr['en']['code_portfolio']="Portfolio Code";
@@ -309,18 +314,22 @@ karutaStr['en']['username-label']="Login";
 karutaStr['en']['firstname-label']="Firstname";
 karutaStr['en']['lastname-label']="Lastname";
 karutaStr['en']['changeOwner']="Change the Owner";
+karutaStr['en']['add-configpage']="Add new Configuration Page";
+karutaStr['en']['add-newwelcomepage']="Add new Welcome Page";
 
 //=========================================
 //========== FOLDERS ======================
 //=========================================
 
-karutaStr['en']['folders']="My Folders";
-karutaStr['en']['folders-admin']="Folders";
+karutaStr['en']['folders']="Folders";
 
 karutaStr['en']['next']="Next >";
 karutaStr['en']['prev']="< Prev";
 karutaStr['en']['karuta.folder']="Create a portfolio folder";
 karutaStr['en']['create_folder']="Create a Folder";
+karutaStr['en']['create_subfolder']="Create a Subfolder";
+karutaStr['en']['parent_code']="Parent Code";
+karutaStr['en']['folder_code']="Folder Code";
 
 //=========================================
 //========== USERS ========================
@@ -375,6 +384,7 @@ karutaStr['en']['create_user_portfolios']="Create an user and his portfolios";
 karutaStr['en']['report']="Execute Report Script";
 karutaStr['en']['upload_csv_or_code']="Upload a CSV File or Type a Model Code";
 karutaStr['en']['model_code']="Model Code";
+karutaStr['en']['report-elt-disabled'] = "disabled"
 
 //=========================================
 //========== RESOURCE =====================
@@ -392,6 +402,7 @@ karutaStr['en']['dashboard-code']="Dashboard Code";
 karutaStr['en']['report-code']="Report Code";
 karutaStr['en']['csv']="Roles - Display CSV";
 karutaStr['en']['pdf']="Roles - Display PDF";
+karutaStr['en']['rtf']="Rôles - Display RTF";
 karutaStr['en']['img']="Rôles - Display Image";
 karutaStr['en']['document-required']="You have to specify a document before to submit !";
 karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g_configVar['maxfilesizeupload'] + " Mo !";

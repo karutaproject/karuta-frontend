@@ -187,28 +187,26 @@
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	
-	<xsl:template match="*[metadata/@semantictag='create-tree']">
+	<xsl:template match="*[metadata/@semantictag='create-tree' or metadata/@semantictag='create-project']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<create-tree id="{$id}">
 			<template>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">tree-template</xsl:with-param>
-				</xsl:call-template>
+				<xsl:call-template name="txtval"><xsl:with-param name="semtag">tree-template</xsl:with-param></xsl:call-template>
+				<xsl:call-template name="varval"><xsl:with-param name="semtag">tree-template</xsl:with-param></xsl:call-template>
 			</template>
 			<code>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">tree-code</xsl:with-param>
-				</xsl:call-template>
+				<xsl:call-template name="txtval"><xsl:with-param name="semtag">tree-code</xsl:with-param></xsl:call-template>
+				<xsl:call-template name="varval"><xsl:with-param name="semtag">tree-code</xsl:with-param></xsl:call-template>
 			</code>
 			<label>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">tree-label</xsl:with-param>
-				</xsl:call-template>
+				<xsl:call-template name="txtval"><xsl:with-param name="semtag">tree-label</xsl:with-param></xsl:call-template>
+				<xsl:call-template name="varval"><xsl:with-param name="semtag">tree-label</xsl:with-param></xsl:call-template>
 			</label>
 		</create-tree>
 	</xsl:template>
+	
 	<xsl:template match="*[metadata/@semantictag='select-tree']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
@@ -896,6 +894,17 @@
 				<txtval><xsl:value-of select="$txtval"/></txtval>
 			</xsl:if>
 		</xsl:for-each>
+	</xsl:template>
+
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ================================ varval ============================================== -->
+	<!-- ====================================================================================== -->
+
+	<xsl:template name='varval'>
+		<xsl:param name="semtag"/>
+		<xsl:variable name="varval"><xsl:value-of select=".//*[metadata/@semantictag=$semtag]/*[metadata/@semantictag='varval']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<varval><xsl:value-of select="$varval"/></varval>
 	</xsl:template>
 
 	<!-- ====================================================================================== -->

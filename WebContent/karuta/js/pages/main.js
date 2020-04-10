@@ -71,11 +71,7 @@ function fill_main_page(rootid,role)
 		g_visible = localStorage.getItem('metadata');
 		toggleMetadata(g_visible);
 	}
-	var url = "";
-	if (g_complex)
-		url = serverBCK_API+"/nodes/node/" + rootid + "?level=2"
-	else
-		url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
+	var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
 	$.ajaxSetup({async: true});
 	$.ajax({
 		type : "GET",
@@ -113,17 +109,13 @@ function fill_main_page(rootid,role)
 			UICom.parseStructure(data,true);
 			for (role in UICom.roles)
 				g_roles[g_roles.length] = {'code':'','libelle':role};
-			//----if asmUnitStructures load content--------
-			if (g_complex) {
-				var unitStructures = $("asmUnitStructure",data);
-				for (var i=0;i<unitStructures.length;i++){
-					var nodeid = $(unitStructures[i]).attr('id');
-					UIFactory.Node.loadNode(nodeid);
-				}
-			}
 			//-------------------------------------------------
-			setCSSportfolio(data);
+			setCSSportfolioOLD(data);
+			if (g_configVar['portfolio-navbar-background-color']!=undefined)
+				setCSSportfolio(data);
+			setCSSportfolioOLD(data);  // V2 for V2 Portfolios
 			setVariables(data);
+			//-------------------------------------------------
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
 

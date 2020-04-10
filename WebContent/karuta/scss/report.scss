@@ -1,6 +1,30 @@
 /* ====================
-	Report Model
+	REPORT
    ====================*/
+
+.report .cssinfo {
+  display: block;
+}
+.report .chkbox-comments {
+  display: inline;
+  float: right;
+  margin-right: 20px;
+}
+.report .asmRoot > div[name=lbl-div] .chkbox-comments {
+  display: none;
+}
+.report .comments,
+.report .comments .form-control,
+.report .comments .btn,
+.report .comments .cssinfo {
+  font-style: italic;
+  font-weight: normal;
+  color:  var(--report-comment-color);
+}
+.report .ref-init .resource {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
 
 .portfoliocode{
 	margin-left:10px;
@@ -85,6 +109,10 @@
 }
 
 
+.report .draw-web-title,
+.report .draw-web-axis{
+	min-height:100px;
+}
 .aggregatetype select,
 .nodetype select,
 .todisplay select {
@@ -219,15 +247,3 @@
 	}
 }
 
-
-
-
-
-
-
-
-
-.report .draw-web-title,
-.report .draw-web-axis{
-	min-height:100px;
-}

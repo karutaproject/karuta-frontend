@@ -18353,7 +18353,7 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
      * @type String
      * @default
      */
-    fontFamily:           'Times New Roman',
+    fontFamily:           'Arial',
 
     /**
      * Text decoration Possible values: "", "underline", "overline" or "line-through".

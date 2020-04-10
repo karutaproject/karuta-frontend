@@ -221,7 +221,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	var uuid = this.id;
 	var html = "";
 	if (type=='default') {
-//		html += "<button id='button_"+this.id+"' class='glyphicon glyphicon-resize-full' style='height:24px;float:right;' onclick=\"UIFactory.TextField.toggleExpand('"+this.id+"','"+langcode+"')\"></button>";
+//		html += "<button id='button_"+this.id+"' class='fas fa-expand-alt' style='height:24px;float:right;' onclick=\"UIFactory.TextField.toggleExpand('"+this.id+"','"+langcode+"')\"></button>";
 		html += "<div id='div_"+this.id+"'><span id='counter_"+this.id+"' class='word-counter' style='float:right'></span><textarea id='"+this.id+"_edit_"+langcode+(inline?'inline':'')+"' class='form-control' expand='false' style='height:300px' placeholder='"+karutaStr[LANG]['enter-text']+"' ";
 		if (disabled)
 			html += "disabled='disabled' ";
@@ -269,13 +269,13 @@ UIFactory["TextField"].toggleExpand = function(uuid,langcode)
 //==================================
 {
 	if ($("#"+uuid+"_edit_"+langcode).attr('expand')=='false') {
-		$("#button_"+uuid).removeClass('glyphicon-resize-full').addClass('glyphicon-resize-small');
+		$("#button_"+uuid).removeClass('fa-expand-alt').addClass('fas fa-compress-alt');
 		$("#"+uuid+"_edit_"+langcode).attr('expand','true');
 //		$(".wysihtml5-sandbox").css('height','600px');
 //		$(".modal-dialog").css('width','90%');
 		$(".modal-dialog").addClass('modal-lg');
 	} else {
-		$("#button_"+uuid).removeClass('glyphicon-resize-small').addClass('glyphicon-resize-full');
+		$("#button_"+uuid).removeClass('fa-compress-alt').addClass('fas fa-expand-alt');
 		$("#"+uuid+"_edit_"+langcode).attr('expand','false');
 //		$(".wysihtml5-sandbox").css('height','300px');
 //		$(".modal-dialog").css('width','50%');

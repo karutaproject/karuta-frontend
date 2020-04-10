@@ -27,7 +27,8 @@ var portfolioid = null;
 var g_userrole = "";
 var g_userroles = [];
 var g_portfolioid = "";
-var g_complex = false;
+var g_model = "";
+//var g_complex = false;
 var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
@@ -137,7 +138,7 @@ function getNavBar(type,portfolioid,edit)
 	var html = "";
 	html += "	<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
 	html += "		<a id='navbar-brand-logo' href='#' class='navbar-brand'>";
-	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/favicon.png'/>";
+	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/logofonblanc.jpg'/>";
 	html +="		</a>";
 	if (type!='login') {
 		html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
@@ -154,7 +155,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
 	html += "			<ul class='mr-auto navbar-nav'>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
-	if (type=='login') {
+	if (type=='login' || type=="create_account") {
 		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
 	} else {
 		html += "			<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
@@ -162,32 +163,23 @@ function getNavBar(type,portfolioid,edit)
 	}
 //	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
-	if (languages.length>1) 
-		if(type=="create_account") {
-			html += "			<ul id='navbar-language' class='nav navbar-nav'>";
-			html += "				<li class='dropdown'><a data-toggle='dropdown' class='dropdown-toggle navbar-icon' ><img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>&nbsp;&nbsp;<span class='glyphicon glyphicon-triangle-bottom'></span></a>";
-			html += "					<ul class='dropdown-menu'>";
-			for (var i=0; i<languages.length;i++) {
-				html += "			<li><a  onclick=\"setLanguage('"+languages[i]+"');$('#login').html(getInputs());\"><img width='20px;' src='"+karuta_url+"./karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language']+"</a></li>";
-			}
-			html += "					</ul>";
-			html += "				</li>";
-			html += "			</ul>";
-		} else {
-			html += "	<li id='navbar-language' class='nav-item dropdown'>";
-			html += "		<a class='nav-link dropdown-toggle' href='#' id='languageDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-			html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
-			html += "		</a>";
-			html += "		<div class='dropdown-menu' aria-labelledby='languageDropdown'>";
-			if(type=="login")
-				html += getLanguageMenu("displayKarutaLogin();");
-			else
-				html += getLanguageMenu("setWelcomeTitles();fill_list_page();$('#navigation-bar').html(getNavBar('list',null));$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
-			html += "		</div>";
-			html += "	</li>";
-			}
+	if (languages.length>1) {
+		html += "	<li id='navbar-language' class='nav-item dropdown'>";
+		html += "		<a class='nav-link dropdown-toggle' href='#' id='languageDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
+		html += "		</a>";
+		html += "		<div class='dropdown-menu' aria-labelledby='languageDropdown'>";
+		if(type=="login")
+			html += getLanguageMenu("displayKarutaLogin();");
+		else if(type=="create_account")
+			html += getLanguageMenu("displayKarutaCreateAccount();");
+		else
+			html += getLanguageMenu("setWelcomeTitles();fill_list_page();$('#navigation-bar').html(getNavBar('list',null));$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
+		html += "		</div>";
+		html += "	</li>";
+	}
 	//-----------------ACTIONS-------------------------------
-	if (type!='login' && USER!=undefined) {
+	if (type!='login' && type!='create_account' &&USER!=undefined) {
 		if (USER.admin || (USER.creator && !USER.limited) ) {
 			html += "		<li id='navbar-actions' class='nav-item dropdown'>";
 			html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
@@ -197,20 +189,21 @@ function getNavBar(type,portfolioid,edit)
 			html += "				<a class='dropdown-item' onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</a>";
 			//-----------------
 			if (USER.admin) {
-				if ($("#main-portfoliosgroup").length && $("#main-portfoliosgroup").html()!="")
-					html += "		<a class='dropdown-item' onclick='show_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a>";
-				else
-					html += "		<a class='dropdown-item' onclick='display_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a>";
-				//-----------------
 				if ($("#main-user").length && $("#main-user").html()!="")
 					html += "		<a class='dropdown-item' onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a>";
 				else
 					html += "		<a class='dropdown-item' onclick='display_list_users()'>"+karutaStr[LANG]['list_users']+"</a>";
 				//-----------------
+				if ($("#main-portfoliosgroup").length && $("#main-portfoliosgroup").html()!="")
+					html += "		<a class='dropdown-item' onclick='show_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a>";
+				else
+					html += "		<a class='dropdown-item' onclick='display_list_portfoliosgroups()'>"+karutaStr[LANG]['list_portfoliosgroups']+"</a>";
+				//-----------------
 				if ($("#main-usersgroup").length && $("#main-usersgroup").html()!="")
 					html += "		<a class='dropdown-item' onclick='show_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a>";
 				else
 					html += "		<a class='dropdown-item' onclick='display_list_usersgroups()'>"+karutaStr[LANG]['list_usersgroups']+"</a>";
+				//-----------------
 				if (typeof specificmenus!='undefined' &&  specificmenus)
 					html += specificmenushtml();
 			}
@@ -221,7 +214,7 @@ function getNavBar(type,portfolioid,edit)
 			html += "		</li>";
 		}
 		//-----------------NEW WINDOW-----------------------------------------
-		if (type!='login' && USER!=undefined) {
+		if (type!='login' && type!='create_account' && USER!=undefined) {
 			if (USER.admin || (USER.creator && !USER.limited) ) {
 				html += "	<li class='nav-item icon'>";
 				html += "		<a class='nav-link' href='"+window.location+"' target='_blank' data-title='"+karutaStr[LANG]["button-new-window"]+"' data-toggle='tooltip' data-placement='bottom'><i class='far fa-clone'></i></a>";
@@ -230,6 +223,12 @@ function getNavBar(type,portfolioid,edit)
 		} 
 		html += "			</ul>";
 		html += "			<ul class='navbar-nav'>";
+		html += "	<li class='nav-item icon'>";
+		html += "		<a class='nav-link' onclick='increaseFontSize()' data-title='"+karutaStr[LANG]["button-increase"]+"' data-toggle='tooltip' data-placement='bottom' style='padding-top:.21rem;'><i style='font-size:120%' class='fa fa-font'></i></a>";
+		html += "	</li>";
+		html += "	<li class='nav-item icon'>";
+		html += "		<a class='nav-link' onclick='decreaseFontSize()' data-title='"+karutaStr[LANG]["button-decrease"]+"' data-toggle='tooltip' data-placement='bottom'><i style='font-size:80%' class='fa fa-font'></i></a>";
+		html += "	</li>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<li class='nav-item dropdown'>";
 		html += "				<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
@@ -580,6 +579,17 @@ function confirmDel(uuid,type,parentid,destid,callback,param1,param2)
 	$('#delete-window').modal('show');
 }
 
+//=======================================================================
+function confirmDelObject(id,type) 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');UIFactory."+type+".del('"+uuid+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
 //==================================
 function getURLParameter(sParam) {
 //==================================
@@ -646,6 +656,27 @@ function displayPage(uuid,depth,type,langcode) {
 			UICom.structure["ui"][uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
 	}
+	var semtag = UICom.structure.ui[uuid].semantictag;
+	if ( (g_userroles[0]=='designer' && semtag.indexOf('welcome-unit')>-1) || (semtag.indexOf('welcome-unit')>-1 && semtag.indexOf('-editable')>-1 && semtag.containsArrayElt(g_userroles)) ) {
+		html = "<a  class='fas fa-edit' onclick=\"if(!g_welcome_edit){g_welcome_edit=true;} else {g_welcome_edit=false;};$('#contenu').html('');displayPage('"+uuid+"',100,'standard','"+langcode+"',true)\" data-title='"+karutaStr[LANG]["button-welcome-edit"]+"' data-toggle='tooltip' data-placement='bottom'></a>";
+		$("#welcome-edit").html(html);
+		var rootid = $(UICom.root.node).attr('id');
+		var databack = false;
+		var callback = "UIFactory.Node.reloadStruct";
+		var param2 = "'"+g_portfolio_rootid+"'";
+		var param3 = null;
+		var param4 = null;
+		html = "			<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		html += karutaStr[LANG]['Add'];
+		html += "			</a>";
+		html += "			<div class='dropdown-menu'>";
+		html += "				<a class='dropdown-item' onclick=\"importBranch('"+rootid+"','karuta.model','configuration-unit',"+databack+","+callback+","+param2+","+param3+","+param4+");\">"+karutaStr[LANG]['add-configpage']+"</a>";
+		html += "				<a class='dropdown-item' onclick=\"importBranch('"+rootid+"','karuta.model','WELCOME',"+databack+","+callback+","+param2+","+param3+","+param4+");\">"+karutaStr[LANG]['add-newwelcomepage']+"</a>";
+		html += "			</div>";
+		$("#welcome-add").html(html);
+	}
+	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
+
 	$("#wait-window").modal('hide');
 }
 
@@ -1193,7 +1224,7 @@ function getEmail(role,emails) {
 function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.lastIndexOf('/karuta'));
+	var serverURL = url.substring(0,url.lastIndexOf(appliname)+appliname.length);
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
@@ -1596,6 +1627,8 @@ function cleanCode(code)
 	code = removeStr(code,"%");
 	code = removeStr(code,"$");
 	code = removeStr(code,"&");
+	code = removeStr(code,"!");
+	code = removeStr(code,"?");
 	code = removeStr(code,"----");
 	return code;
 }
@@ -1836,6 +1869,21 @@ function applyNavbarConfiguration()
 }
 
 //==============================
+function applyKarutaConfiguration()
+//==============================
+{
+	var root = document.documentElement;
+	if (g_configVar['font-standard']!=undefined && g_configVar['font-standard']!="")
+		root.style.setProperty('--font-family',g_configVar['font-standard'] + ", Helvetica, Arial, sans-serif");
+	if (g_configVar['font-size-coeff']!=undefined && g_configVar['font-size-coeff']!="") 
+		root.style.setProperty('--font-size-coeff',g_configVar['font-size-coeff']);
+	if (g_configVar['font-google']!=undefined && g_configVar['font-google']!="") {
+		$("#font-family").attr("href","https://fonts.googleapis.com/css?family="+g_configVar['font-google']);
+		root.style.setProperty('--font-family',g_configVar['font-google'] + ", Helvetica, Arial, sans-serif");
+	}
+}
+
+//==============================
 function getNodeid(semtag,data)
 //==============================
 {
@@ -2005,4 +2053,86 @@ function replaceVariable(text)
 		n++; // to avoid infinite loop
 	}
 	return text;
+}
+
+//=====================================================================================================
+//=====================================================================================================
+//============================== TREE MANAGEMENT ====================================================
+//=====================================================================================================
+//=====================================================================================================
+
+//==================================
+function toggleElt(closeSign,openSign,eltid,type)
+//==================================
+{ // click on open/closeSign
+	var elt = document.getElementById(type+"-toggle_"+eltid);
+	elt.classList.toggle(openSign);
+	elt = document.getElementById(type+"treecontent_"+eltid);
+	elt.classList.toggle('open');
+	if ($("#"+type+"-toggle_"+eltid).hasClass(openSign))
+		localStorage.setItem(type+"-toggle_"+eltid,'open');
+	else
+		localStorage.setItem(type+"-toggle_"+eltid,'closed');
+}
+
+//==================================
+function toggleOpenElt(closeSign,openSign,eltid)
+//==================================
+{ // click on label
+	var cookie = localStorage.getItem('sidebar'+eltid);
+	if (cookie == "closed") {
+		localStorage.setItem('sidebar'+eltid,'open');
+		document.getElementById("toggle_"+eltid).classList.add('openSign');
+		document.getElementById("collapse_"+eltid).classList.add('open');
+	}
+}
+
+//==================================
+function selectElt(type,uuid)
+//==================================
+{ // click on label
+	$('.'+type).removeClass('active');
+	$('#'+uuid).addClass('active');
+//	document.getElementById(uuid).classList.add('active');
+}
+
+//==================================
+function selectElts(type,list)
+//==================================
+{ // click on label
+	$('.'+type).removeClass('active');
+	for (var i=0;i<list.length;i++) {
+		$('#'+list[i]).addClass('active');
+	}
+}
+
+//=====================================================================================================
+//=====================================================================================================
+//============================== COPY CLIPBOARD =======================================================
+//=====================================================================================================
+//=====================================================================================================
+
+//==================================
+function copyInclipboad(id) 
+//==================================
+{
+	var element = document.getElementById("pcode_"+id);
+	var textArea = document.createElement("textarea");
+	textArea.value = element.textContent;
+	document.body.appendChild(textArea);
+	textArea.select();
+	document.execCommand("Copy");
+	textArea.remove();
+	$(element).tooltip('hide');
+	$(element).attr('title', karutaStr[LANG]['copied'] +" : "+element.textContent);
+	$(element).tooltip('show');
+}
+
+//==================================
+function outCopy(id)
+//==================================
+{
+	var element = document.getElementById("pcode_"+id);
+	$(element).tooltip('hide');
+	$(element).attr('title', karutaStr[LANG]['copy'] +" : "+element.textContent);
 }

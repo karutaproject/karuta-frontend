@@ -19,7 +19,7 @@ var Users_byid = {};
 var UsersActive_list = [];
 var UsersInactive_list = [];
 var UsersWithoutPortfolio_list = [];
-
+var nb_users_page = 7;
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -77,15 +77,25 @@ UIFactory["User"] = function( node )
 };
 
 
+//==================================
+function dragUser(ev)
+//==================================
+{
+	ev.dataTransfer.setData("id", ev.target.id.substring(ev.target.id.lastIndexOf('_')+1));
+	ev.dataTransfer.setData("type", "user");
+}
+
+
 /// Display
 
 //==================================
 UIFactory["User"].displayActive = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_users'></tbody></table>");
+	$("#"+destid).html("<h3>"+karutaStr[LANG]["active_users"]+"</h3>");
+	$("#"+destid).append("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th></th><th></th></thead><tbody id='list_users'></tbody></table>");
 	$("#temporary").html("<table id='temp_users'></table>");
-	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var itemid = destid+"_"+UsersActive_list[i].id;
 		var login = UsersActive_list[i].username_node.text();
@@ -104,7 +114,8 @@ UIFactory["User"].displayActive = function(destid,type,lang)
 UIFactory["User"].displayInactive = function(destid,type,lang)
 //==================================
 {
-	$("#"+destid).html("<table id='table_unusers' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
+	$("#"+destid).html("<h3>"+karutaStr[LANG]["inactive_users"]+"</h3>");
+	$("#"+destid).append("<table id='table_unusers' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
 	$("#list_unusers").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersInactive_list.length; i++) {
 		$('#inactive-users').show();
@@ -116,18 +127,71 @@ UIFactory["User"].displayInactive = function(destid,type,lang)
 };
 
 //==================================
+UIFactory["User"].displayActiveForUserGroup = function(dest,viewtype,index,nb_index)
+//==================================
+{
+	if (index==null)
+		index = 0;
+	if (nb_index==null)
+		nb_index = 1;
+	if (UsersActive_list.length<3)
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/users",
+			viewtype : viewtype,
+			success : function(data) {
+				UIFactory["User"].parse(data);
+				nb_index = Math.ceil((UsersActive_list.length)/nb_users_page);
+				UIFactory.User.displayActiveForUserGroupIndexed(dest,viewtype,index,nb_index);
+			}
+		});
+	else {
+		nb_index = Math.ceil((UsersActive_list.length)/nb_users_page);
+		UIFactory.User.displayActiveForUserGroupIndexed(dest,viewtype,index,nb_index);
+	}
+};
+
+//==================================
+UIFactory.User.displayPagesNavbar = function (dest,viewtype,index,nb_index)
+//==================================
+{
+	var html = "";
+	for (var i=1;i<=nb_index;i++) {
+		html += "<span class='badge";
+		if (i==index*1+1)
+			html += " active";
+		html += "' onclick=\"UIFactory.User.displayActiveForUserGroup('"+dest+"','"+viewtype+"','"+(i-1)+"')\">"+i+"</span>";
+	}
+	$("#usegroup-users-navbar-pages").html(html);
+}
+
+//==================================
+UIFactory["User"].displayActiveForUserGroupIndexed = function(dest,viewtype,index,nb_index)
+//==================================
+{
+	var html = "";
+	$("#"+dest).html($(html));
+	var first = index * nb_users_page;
+	var last = ((index*1+1) * nb_users_page);
+	if (last>UsersActive_list.length)
+		last = UsersActive_list.length;
+	for (var i=first; i<last;i++){
+		var item = UsersActive_list[i];
+		var destid = dest+"_item-user_"+item.id;
+		html += "<div class='row item item-user' id='"+destid+"' draggable='true' ondragstart='dragUser(event)'>";
+		html += item.getView(destid,'list3');
+		html += "</div>";
+	}
+	$("#"+dest).html($(html));
+	UIFactory.User.displayPagesNavbar(dest,viewtype,index,nb_index);
+}
+
+//==================================
 UIFactory["User"].prototype.getEmail = function()
 //==================================
 {
 	return this.email_node.text();
-}
-
-//==================================
-function dragUser(ev)
-//==================================
-{
-	ev.dataTransfer.setData("id", ev.target.id.substring(ev.target.id.lastIndexOf('_')+1));
-	ev.dataTransfer.setData("type", "user");
 }
 
 
@@ -187,17 +251,28 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	if (type=='list') {
 		html = "<td class='firstname'>"+this.firstname_node.text()+"</td>";
 		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
+		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</td>";
 		html += "<td class='username'>("+this.username_node.text()+")</td>";
 		//------------ buttons ---------------
 		html += "<td class='user-buttons'>";
 		if (USER.admin){
-			html += this.getAdminUserMenu('list');
+			html += this.getAdminUserMenu('list',gid);
 		}
 		html += "</td>";
 	}
-	if (type=='list2') {
+	if (type=='list-forusergroup') {
 		html = "<div class='col-5 firstname'>"+this.firstname_node.text()+"</div>";
 		html += "<div class='col-5 lastname'>"+this.lastname_node.text()+"</div>";
+	}
+	if (type=='list-usergroup') {
+		html = "<div class='col-5 firstname' id='f"+this.id+"_"+gid+"'>"+this.firstname_node.text()+"</div>";
+		html += "<div class='col-5 lastname' id='l"+this.id+"_"+gid+"'>"+this.lastname_node.text()+"</div>";
+		//------------ buttons ---------------
+		html += "<div class='col-1 user-buttons' id='b"+this.id+"_"+gid+"'>";
+		if (USER.admin){
+			html += this.getAdminUserMenu('list-ondrop',gid);
+		}
+		html += "</div>";
 	}
 	if (type=='list1') {
 		html = "<div class='col-3 firstname'>"+this.firstname_node.text()+"</div>";
@@ -484,6 +559,22 @@ UIFactory["User"].edit = function(userid)
 };
 
 //==================================
+UIFactory.User.loadUsers = function() 
+//==================================
+{
+	$.ajaxSetup({async: false});
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/users",
+		success : function(data) {
+			UIFactory["User"].parse(data);
+		}
+	});
+	$.ajaxSetup({async: true});
+}
+
+//==================================
 UIFactory["User"].parse = function(data) 
 //==================================
 {
@@ -518,6 +609,62 @@ UIFactory["User"].parse = function(data)
 	for (var i=0; i<newTableau2.length; i++){
 		UsersInactive_list[i] = Users_byid[newTableau2[i][2]];
 	}
+};
+
+//==================================
+UIFactory.User.loadUserAndDisplay = function(userid,dest,type) 
+//==================================
+{
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/users/user/"+userid,
+		success : function(data) {
+			UIFactory.User.parse_add(data,dest,type);
+		}
+	});
+}
+
+//==================================
+UIFactory["User"].parse_add = function(data,dest,type) 
+//==================================
+{
+	var tableau1 = new Array();
+	var tableau2 = new Array();
+	for ( var i = 0; i < UsersActive_list.length; i++) {
+		if (UsersActive_list[i]!=null)
+			tableau1[tableau1.length] = [UsersActive_list[i].lastname,UsersActive_list[i].firstname,UsersActive_list[i].id];
+	}	
+	for ( var i = 0; i < UsersInactive_list.length; i++) {
+		if (UsersInactive_list[i]!=null)
+			tableau2[tableau2.length] = [UsersInactive_list[i].lastname,UsersInactive_list[i].firstname,UsersInactive_list[i].id];
+	}	
+	UsersActive_list = [];
+	var user = $(":root",data);
+	var userid = $(user).attr('id');
+	Users_byid[userid] = new UIFactory["User"](user);
+	var lastname = Users_byid[userid].lastname;
+	if (lastname=="")
+		lastname = " ";
+	var firstname = Users_byid[userid].firstname;
+	if ($("active",$(user)).text() == "1") {  // active user
+		tableau1[tableau1.length] = [lastname,firstname,userid];
+	}
+	else { // inactive user
+		tableau2[tableau2.length] = [lastname,firstname,userid];
+	}
+	var newTableau1 = tableau1.sort(sortOn1_2);
+	for (var i=0; i<newTableau1.length; i++){
+		UsersActive_list[i] = Users_byid[newTableau1[i][2]];
+	}
+	var newTableau2 = tableau2.sort(sortOn1);
+	for (var i=0; i<newTableau2.length; i++){
+		UsersInactive_list[i] = Users_byid[newTableau2[i][2]];
+	}
+	var html = (Users_byid[userid]==null) ? "":Users_byid[userid].getView(null,type,null);
+	$("#"+dest).html(html);
+
 };
 
 //==================================
@@ -974,12 +1121,12 @@ UIFactory["User"].deleteEmptyUsers = function()
 }
 
 //======================
-UIFactory["User"].prototype.getAdminUserMenu = function(type)
+UIFactory["User"].prototype.getAdminUserMenu = function(type,gid)
 //======================
 {	
 	var html = "";
 	html += "<div class='btn-group'>";
-	if (type==null) {
+	if (type=='list') {
 		html += " <span class='button btn' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
 		html += "<span class='fas fa-pencil-alt'/>";
 		html += "</span>";
@@ -988,13 +1135,15 @@ UIFactory["User"].prototype.getAdminUserMenu = function(type)
 			html += "<span class='fa fa-trash-alt'/>";
 			html += "</span>";
 		}
-	} else {
-		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+type+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+	}
+	if (type=="list-ondrop") {
+		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 		html += "<span class='fa fa-trash-alt'/>";
 		html += "</span>";				
 	}
+
 	//----------------------------------
-	if (type!='list3') {
+	if (type!='list3' && type!="list-ondrop") {
 		//----------------------------------
 		html += "<span class='button btn' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
 		if (this.username_node.text()!='root' && this.username_node.text()!='public') {
