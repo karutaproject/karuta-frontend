@@ -99,6 +99,7 @@ function displayKarutaPublic()
 				dataType : "xml",
 				url : serverBCK_API+"/nodes/node/" + g_uuid,
 				success : function(data) {
+					g_edit = true; //no edit button
 					g_portfolio_current = data;
 					UICom.parseStructure(data);
 					var depth = 99;
