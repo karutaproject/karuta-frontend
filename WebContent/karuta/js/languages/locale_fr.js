@@ -489,7 +489,7 @@ karutaStr['fr']['GetResource']="GetResource";
 karutaStr['fr']['GetGetResource']="GetGetResource";
 karutaStr['fr']['GetDoubleResource']="GetDoubleResource";
 karutaStr['fr']['Proxy']="Proxy";
-karutaStr['fr']['Get_Proxy']="Get_Proxy";
+karutaStr['fr']['GetProxy']="GetProxy";
 
 karutaStr['fr']['asmColumn']="asmColumn";
 

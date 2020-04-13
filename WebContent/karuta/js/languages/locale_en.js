@@ -485,11 +485,11 @@ karutaStr['en']['URLBlock']="URLBlock";
 karutaStr['en']['ImageBlock']="ImageBlock";
 
 karutaStr['en']['Item']="Item";
-karutaStr['en']['GetResource']="Get_Resource";
-karutaStr['en']['GetGetResource']="Get_Get_Resource";
-karutaStr['en']['GetDoubleResource']="Get_DoubleResource";
+karutaStr['en']['GetResource']="GetResource";
+karutaStr['en']['GetGetResource']="GetGetResource";
+karutaStr['en']['GetDoubleResource']="GetDoubleResource";
 karutaStr['en']['Proxy']="Proxy";
-karutaStr['en']['Get_Proxy']="Get_Proxy";
+karutaStr['en']['GetProxy']="GetProxy";
 
 karutaStr['en']['asmColumn']="asmColumn";
 
