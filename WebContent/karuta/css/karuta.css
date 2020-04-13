@@ -116,22 +116,76 @@ body,
 }
 
 /* ====================== */
+/*   RIGTHSIDE LEFTSIDE   */
+/* ====================== */
+.gutter {
+  width: 10px;
+  float: right;
+}
+
+.leftside h3 {
+  margin-top: 20px;
+}
+.leftside .active {
+  background-color: var(--list-button-background-color);
+}
+.leftside .content1 {
+  overflow: auto;
+  max-height: 100vh;
+}
+.leftside h3,
+.leftside h4 {
+  color: var(--list-title-color);
+}
+
+.rightside .header {
+  padding: 7px;
+  background-color: var(--list-menu-background-color);
+  color: var(--list-button-text-color);
+}
+.rightside .header .btn {
+  background-color: var(--list-element-background-color);
+}
+.rightside .content1, .rightside content2 {
+  background-color: var(--list-element-background-color);
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 20px;
+}
+.rightside .dropdown.menu .btn {
+  height: 25px;
+  padding-left: 9px;
+  padding-right: 9px;
+}
+.rightside .dropdown-menu {
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+.rightside .dropdown-menu a.dropdown-item {
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+.rightside .dropdown-menu a.dropdown-item:hover {
+  color: var(--list-menu-background-color);
+  background-color: var(--list-menu-text-color);
+}
+.rightside .content1:empty {
+  visibility: hidden;
+}
+.rightside .portfolio-row {
+  margin: 2px;
+  color: var(--list-element-text-color);
+}
+.rightside .portfolio-row:hover {
+  background-color: var(--list-element-background-color-complement);
+}
+
+/* ====================== */
 /*     LIST CONTAINER     */
 /* ====================== */
 #list-container #portfolio-leftside {
   width: calc(25% - 5px);
   margin-bottom: 10px;
-}
-#list-container #portfolio-leftside h3 {
-  margin-top: 20px;
-}
-#list-container #portfolio-leftside .active {
-  background-color: var(--list-button-background-color);
-}
-#list-container .content1-leftside,
-#list-container .content2-rightside {
-  overflow: auto;
-  max-height: 100vh;
 }
 #list-container #gutter {
   width: 10px;
@@ -143,13 +197,10 @@ body,
   padding-bottom: 5px;
   float: right;
 }
-#list-container .porfolios-content,
-#list-container .portfolios-not-in-project,
-#list-container .projects-nb,
-#list-container .bin-nb,
-#list-container .portfolios-nb {
+#list-container .porfolios-content {
   background-color: var(--list-element-background-color);
-  padding-bottom: 7px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 #list-container .porfolios-content:empty {
   visibility: hidden;
@@ -167,10 +218,6 @@ body,
   padding-left: 9px;
   padding-right: 9px;
 }
-#list-container #bin {
-  padding: 5px;
-  background-color: var(--list-element-background-color);
-}
 #list-container #projects .active {
   background-color: var(--list-menu-background-color);
 }
@@ -185,13 +232,6 @@ body,
 #list-container .dropdown-menu a.dropdown-item:hover {
   color: var(--list-menu-background-color);
   background-color: var(--list-menu-text-color);
-}
-#list-container .portfolio-row {
-  margin: 2px;
-  color: var(--list-element-text-color);
-}
-#list-container .portfolio-row:hover {
-  background-color: var(--list-element-background-color-complement);
 }
 #list-container .portfolios-not-in-project {
   color: var(--list-element-text-color);
@@ -213,9 +253,6 @@ body,
 #list-container .folder-header .btn {
   background-color: var(--list-element-background-color);
 }
-#list-container h3,
-#list-container h4,
-#list-container #refresh,
 #list-container .projects-nb {
   color: var(--list-title-color);
 }
@@ -627,7 +664,7 @@ div.oembedall-container {
 }
 
 #list_users,
-#list_unuses {
+#list_unusers {
   background-color: var(--list-element-background-color);
 }
 
@@ -839,32 +876,55 @@ div.oembedall-container {
 /*  PAGE PORTFOLIOGROUP   */
 /* ====================== */
 #main-portfoliosgroup {
-  color: var(--list-element-text-color);
+  /*
+  		.porfoliogroup-content {
+  			background-color: var(--list-element-background-color);
+  			padding-top:2px;
+  			padding-bottom:2px;
+  		}
+  		.porfoliogroup-content:empty {
+  			visibility:hidden;
+  		}
+
+  		.btn  {
+  			background-color:var(--list-button-background-color);
+  			color:var(--list-button-text-color);
+  		}
+  		.list-btn {
+  			line-height:1;
+  			margin-left:5px;
+  		}
+  		.portfoliogroup-menu .btn{
+  			height:25px;
+  			padding-left:9px;
+  			padding-right:9px;
+  		}
+
+
+  		color: var(--list-element-text-color);
+  		.btn {
+  			color: var(--list-element-text-color);
+  			padding-left:9px;
+  			padding-right:9px;
+  			background-color: var(--list-element-background-color);
+  		}
+  */
 }
-#main-portfoliosgroup .btn {
-  color: var(--list-element-text-color);
-  padding-left: 9px;
-  padding-right: 9px;
-  background-color: var(--list-element-background-color);
+#main-portfoliosgroup #portfoliogroup-leftside {
+  width: calc(25% - 5px);
+  margin-bottom: 10px;
 }
-#main-portfoliosgroup .portfoliosgroup {
-  margin-top: 5px;
-  background-color: var(--list-menu-background-color);
+#main-portfoliosgroup #portfoliogroup-leftside h3 {
+  margin-top: 20px;
 }
-#main-portfoliosgroup .portfoliosgroup .btn {
-  height: 25px;
-}
-#main-portfoliosgroup .portfoliosgroup .row-label {
-  padding: 5px;
-}
-#main-portfoliosgroup .portfoliosgroup-content {
-  background-color: var(--list-element-background-color);
-}
-#main-portfoliosgroup .portfoliosgroup-content .btn {
+#main-portfoliosgroup #portfoliogroup-leftside .active {
   background-color: var(--list-button-background-color);
 }
-#main-portfoliosgroup .portfoliosgroup-content .row {
-  padding: 5px;
+#main-portfoliosgroup #portfoliogroup-rightside {
+  width: calc(75% - 5px);
+  margin-top: 2px;
+  padding-bottom: 5px;
+  float: right;
 }
 
 /* ====================== */
@@ -1321,7 +1381,6 @@ table[name=res-div] {
 .td-resource {
   width: 80%;
   margin-right: 0px;
-  background: white;
   padding-left: 0px;
   padding-right: 0px;
   margin-left: 0px;

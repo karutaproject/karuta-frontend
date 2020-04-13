@@ -65,20 +65,18 @@ function fill_list_page()
 	//-----------------------------------------------------------
 	html += "<div id='portfolio-body'>";
 	//------------------------------------------
-//	html += "	<div class='gutter'></div>";
-	//------------------------------------------
-	html += "	<div id='portfolio-rightside'>";
+	html += "	<div id='portfolio-rightside' class='rightside'>";
 	html += "		<div id='refresh-portfolio' class='refresh fas fa-sync-alt' onclick='fill_list_page()'></div>";
 	html += "		<div id='search-portfolio' class='search'></div>";
 	html += "		<div id='portfolio-title-rightside' class='title'></div>";
 	html += "		<div id='portfolio-header-rightside' class='header'></div>";
-	html += "		<div id='portfolio-content1-rightside' class='content1-rightside'></div>";
+	html += "		<div id='portfolio-content1-rightside' class='content1'></div>";
 	html += "		<div id='portfolio-navbar-pages-top-rightside' class='navbar-pages' style='display:none'></div>";
-	html += "		<div id='portfolio-content2-rightside' class='content2-rightside'></div>";
+	html += "		<div id='portfolio-content2-rightside' class='content2'></div>";
 	html += "		<div id='portfolio-navbar-pages-bottom-rightside' class='navbar-pages' style='display:none'></div>";
 	html += "	</div>";
 	//------------------------------------------
-	html += "	<div id='portfolio-leftside'>";
+	html += "	<div id='portfolio-leftside'  class='leftside'>";
 	html += "		<div id='menu'></div>";
 	html += "		<h3 class='portfolio-title-leftside'>";
 	html += "			<span id='folders-label' class='folder-label'>"+karutaStr[LANG]['folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
@@ -86,8 +84,8 @@ function fill_list_page()
 		html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.PortfolioFolder.createFolder();\"></i></span>";
 	}
 	html += "		</h3>";
-	html += "		<div id='portfolio-content1-leftside' class='content1-leftside tree'></div>";
-	html += "		<h3 id='portfolios-title' class='portfolio-title-leftside'>";
+	html += "		<div id='portfolio-content1-leftside' class='content1 tree'></div>";
+	html += "		<h3 id='portfolios-title' class='title'>";
 	html += "			<span id='portfolios-label' class='folder-label'>"+karutaStr[LANG]['portfolios']+"</span>&nbsp<span class='badge number_of_portfolios' id='portfolios-nb'></span>";
 	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
 	html += "		</h3>";

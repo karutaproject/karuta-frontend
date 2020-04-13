@@ -461,7 +461,6 @@ UIFactory["PortfolioFolder"].prototype.displayFolderContent = function(dest,type
 		$(window).scrollTop(0);
 		$("#wait-window").hide();
 	}
-	
 }
 
 //==================================

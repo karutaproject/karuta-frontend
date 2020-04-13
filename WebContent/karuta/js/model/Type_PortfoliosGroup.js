@@ -13,8 +13,8 @@
 	permissions and limitations under the License.
    ======================================================= */
 
-var PortfoliosGroups_byid = {};
-var PortfoliosGroups_list = [];
+var portfoliogroups_byid = {};
+var portfoliogroups_list = [];
 
 /// Check namespace existence
 if( UIFactory === undefined )
@@ -30,62 +30,168 @@ UIFactory["PortfoliosGroup"] = function( node )
 {
 	this.id = $(node).attr('id');
 	this.node = node;
-	this.label = $("label",node).text();
-	this.label_node = $("label",node);
-//	this.type = $("type",node).text();
-//	this.type_node = $("type",node);
-	this.attributes = {};
-	this.attributes["label"] = this.label_node;
-//	this.attributes["type"] = this.type_node;
+	this.code = $("label",node).text();
+	this.code_node = $("label",node);
+	//------------------------------
+	this.label_node = [];
+	for (var i=0; i<languages.length;i++){
+		this.label_node[i] = $("label[lang='"+languages[i]+"']",node);
+		if (this.label_node[i].length==0) {
+			var newElement = createXmlElement("label");
+			$(newElement).attr('lang', languages[i]);
+			$(newElement).text(karutaStr[languages[languages[i]],'new']);
+			$(node)[0].appendChild(newElement);
+			this.label_node[i] = $("label[lang='"+languages[i]+"']",node);
+		}
+	}
+	//------------------------------
 	this.display = {};
-	this.members = [];
-	this.roles = [];
-	this.rrg = {};
+	this.displayLabel = {};
+	//------------------------------
+	this.loaded = false;
+	this.nbchildren = 0;
+	this.children = {};
 };
 
-
-/// Display
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ LOADERS -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
 
 //==================================
-UIFactory["PortfoliosGroup"].displayGroups = function(destid,type,lang)
+UIFactory["PortfoliosGroup"].loadAndDisplayAll = function (dest,type)
 //==================================
 {
-	$("#"+destid).html("");
-	for ( var i = 0; i < PortfoliosGroups_list.length; i++) {
-		var itemid = "portfoliosgroup_"+PortfoliosGroups_list[i].id;
-		var html = "";
-		html += "<div id='"+itemid+"' class='portfoliosgroup'></div><!-- class='portfoliosgroup'-->";
-		$("#"+destid).append($(html));
-		$("#"+itemid).html(PortfoliosGroups_list[i].displayView(destid,type,lang));
+	$("#wait-window").show();
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfoliogroups",
+		data: "",
+		success : function(data) {
+			UIFactory.PortfoliosGroup.parse(data);
+			UIFactory.PortfoliosGroup.displayAll(dest,type);
+			$("#wait-window").hide();
+			//----------------
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET UIFactory.PortfoliosGroup.loadAndDisplayGroups: "+textStatus);
+			$("#wait-window").hide();
+		}
+	});
+}
+
+//==================================
+UIFactory["PortfoliosGroup"].parse = function(data) 
+//==================================
+{
+	portfoliogroups_byid = {};
+	portfoliogroups_list = [];
+	var items = $("group",data);
+	var tableau1 = new Array();
+	var tableau2 = new Array();
+	for ( var i = 0; i < items.length; i++) {
+		var gid = $(items[i]).attr('id');
+		portfoliogroups_byid[gid] = new UIFactory["PortfoliosGroup"](items[i]);
+		var code = portfoliogroups_byid[gid].code_node.text();
+		tableau1[i] = [code,gid];
 	}
-	if (type=='list') {
-		var group_type = "PortfoliosGroup";
-		for ( var i = 0; i < PortfoliosGroups_list.length; i++) {
-			var gid = PortfoliosGroups_list[i].id;
-			displayGroup[group_type][gid] = localStorage.getItem('dg_'+group_type+"-"+gid);
-			if (displayGroup[group_type][gid]!=undefined && displayGroup[group_type][gid]=='open'){
-				UIFactory["PortfoliosGroup"].displayPortfolios(gid,"content-"+group_type+"-"+gid,type,lang);				
-			}
-		}		
+	var newTableau1 = tableau1.sort(sortOn1);
+	for (var i=0; i<newTableau1.length; i++){
+		portfoliogroups_list[i] = portfoliogroups_byid[newTableau1[i][1]];
 	}
 };
 
 //==================================
-UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,type,lang)
+UIFactory["PortfoliosGroup"].prototype.toggleContent = function(dest,type,index)
+//==================================
+{
+	if ($("#tree_portfoliogroup_label_"+this.id).hasClass('active')) {
+		localStorage.setItem('currentDisplayedPortfolioGroupCode','none');
+	} else {
+		if (this.loaded)
+			this.displayContent();
+		else
+			this.loadAndDisplayContent(dest,type,index);
+		$("portfoliogroup-label").removeClass('active');
+		$("#tree_label_"+this.id).addClass('active');
+		localStorage.setItem('currentDisplayedPortfolioGroupCode',this.code_node.text());
+	}
+}
+
+//==============================
+UIFactory["PortfoliosGroup"].prototype.loadAndDisplayContent = function (dest,type)
+//==============================
+{
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfoliogroups?group="+this.id,
+		data: "",
+		group : this, // passing group to success
+		success : function(data) {
+			UIFactory["Portfolio"].parse_add(data);
+			this.group.loaded = true;
+			//-------------------------
+			var tableau1 = new Array();
+			var uuid = "";
+			var items = $("portfolio",data);
+			for ( var i = 0; i < items.length; i++) {
+				uuid = $(items[i]).attr('id');
+				var code = portfolios_byid[uuid].code_node.text();
+				tableau1[tableau1.length] = [code,uuid];
+			}
+			var newTableau1 = tableau1.sort(sortOn1);
+			this.group.children = {};
+			for (var i=0; i<newTableau1.length; i++){
+				this.group.children[newTableau1[i][1]] = {'id':newTableau1[i][1]};
+			}
+			this.group.nbchildren = items.length;
+			//-------------------------
+			this.group.displayContent(dest,type);
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+		}
+	});
+}
+
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ DISPLAY -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+
+//==================================
+UIFactory["PortfoliosGroup"].displayAll = function(dest,type)
+//==================================
+{
+	$("#"+dest).html("");
+	for ( var i = 0; i < portfoliogroups_list.length; i++) {
+		var itemid = "portfoliosgroup_"+portfoliogroups_list[i].id;
+		var html = "";
+		html += "<div id='"+itemid+"' class='portfoliosgroup'></div><!-- class='portfoliosgroup'-->";
+		$("#"+dest).append($(html));
+		portfoliogroups_list[i].displayView(itemid,type);
+	}
+};
+
+//==================================
+UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,type)
 //==================================
 {
 	var group_type = "PortfoliosGroup";
 	if (dest!=null) {
 		this.display[dest]=true;
 	}
-	if (lang==null)
-		lang = LANG;
 	if (type==null)
 		type = 'list';
 	var html = "";
-	if (type=='list') {
+	if (type=='list-old') {
 		displayGroup[group_type][this.id] = localStorage.getItem('dg_'+group_type+"-"+this.id);
-//		displayGroup[group_type][this.id] = Cookies.get('dg_'+group_type+"-"+this.id);
 		html += "	<div class='row row-label'>";
 		if (displayGroup[group_type][this.id]!=undefined && displayGroup[group_type][this.id]=='open')
 			html += "		<div onclick=\"javascript:toggleGroup('"+group_type+"','"+this.id+"','UIFactory.PortfoliosGroup.displayPortfolios','list','"+lang+"')\" class='col-1'><span id='toggleContent_"+group_type+"-"+this.id+"' class='button fas fa-minus'></span></div>";
@@ -115,62 +221,168 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,type,lang)
 			html += "	<div class='portfoliosgroup-content' id='content-"+group_type+"-"+this.id+"' style='display:block'></div>";
 		else
 			html += "	<div class='portfoliosgroup-content' id='content-"+group_type+"-"+this.id+"' style='display:none'></div>";
+		$("#"+dest).append($(html));
 	}
-	return html;
+	if (type=='header') {
+		html += "		<span class='portfoliosgroup-label'>"+this.code_node.text()+"</span>";
+		//------------ buttons ---------------
+		html += "		<div class='dropdown menu' style='float:right'>";
+		if (USER.admin) {
+			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
+			html += "		<div class='dropdown-menu  dropdown-menu-right'>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+//			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callAddPortfolios('"+this.id+"','"+this.label_node.text()+"')\" ><i class='fa fa-plus-square'></i> "+karutaStr[LANG]["add_portfolios"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callShareUsers('"+this.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callShareUsersGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
+			html += "		</div>";
+		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
+			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle' style='visibility:hidden'></button>";
+		}
+		html += "		</div><!-- class='dropdown' -->";
+		//---------------------------------------
+		$("#"+dest).append($(html));
+	}
+
+	if (type=='list') {
+		//---------------------
+		if (dest!=null) {
+			this.displayLabel["portfoliogrouplabel_"+this.id] = type;
+		}
+		//---------------------
+		var html = "";
+		var portfoliogroup_code = this.code_node.text();
+		//-------------------------------------------------
+		var portfoliogroup_label = this.label_node[LANGCODE].text();
+		if (portfoliogroup_label==undefined || portfoliogroup_label=='' || portfoliogroup_label=='&nbsp;')
+			portfoliogroup_label = '- no label in '+languages[LANGCODE]+' -';
+		//-------------------------------------------------
+		html += "<div id='portfoliogroup_"+this.id+"' class='portfoliogroup folder' ondrop='dropPortfolioGroupFolder(event)' ondragover='ondragoverPortfolioGroupFolder(event)' ondragleave='ondragleavePortfolioGroupFolder(event)'>";
+		html += "	<div id='tree_portfoliogroup-label_"+this.id+"' class='row-label portfoliogroup-label'>";
+		html += "		<span id='portfoliogrouplabel_"+this.id+"' onclick=\"portfoliogroups_byid['"+this.id+"'].toggleContent()\" class='project-label'>"+portfoliogroup_code+"</span>";
+		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"' style='display:none'>"+this.nbchildren+"</span>";
+		html += "	</div>";
+		html += "</div>"
+		$("#"+dest).append($(html));
+		//-------------------------------------------------
+		if (!this.loaded && localStorage.getItem('currentDisplayedPortfolioGroupCode')==portfoliogroup_code) {
+			this.loadAndDisplayContent(dest,type);
+			$(".row-portfoliogroup-label").removeClass('active');
+			$("#tree_portfoliogroup-label_"+this.id).addClass('active');
+		}
+	}
 };
 
 //==================================
-UIFactory["PortfoliosGroup"].displayPortfolios = function(gid,destid,type,lang)
+UIFactory["PortfoliosGroup"].prototype.displayContent = function(dest,type)
 //==================================
 {
 	if (type==null)
 		type = 'list';
-	//--------------------------
-	if (PortfoliosGroups_byid[gid].members.length==0) { // to load members of portfolios groups
-		var destid_group = "portfolios-group_"+gid;
-		var html = "";
-		html += "<div class='portfoliosgroup-items' id='"+destid_group+"'>";
-		html += "</div>";
-		$("#"+destid).html(html);
-		//--------------------------
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/portfoliogroups?group="+gid,
-			data: "",
-			success : function(data) {
-				var portfolios_ids = parseList("portfolio",data);
-				$("#"+destid_group).html("<div id='"+destid_group+"-list_items' class='portfoliosgroup-item'></div>");
-				destid_group +="-list_items";
-				for ( var i = 0; i < portfolios_ids.length; i++) {
-					var itemid = destid_group+"_"+portfolios_ids[i];
-					$("#"+destid_group).append($("<div class='row' id='"+itemid+"'></div>"));
-					if (portfolios_byid[portfolios_ids[i]]!=null && portfolios_byid[portfolios_ids[i]]!=undefined) {
-						$("#"+itemid).html(portfolios_byid[portfolios_ids[i]].getPortfolioView(itemid,type,null,null,null,gid));
-					} else { // we load portfolio information
-						UIFactory.Portfolio.load(portfolios_ids[i],"1");
-						if (portfolios_byid[portfolios_ids[i]]!=null && portfolios_byid[portfolios_ids[i]]!=undefined) {
-							$("#"+itemid).html(portfolios_byid[portfolios_ids[i]].getPortfolioView(itemid,type,null,null,null,gid));
-						}					}
-				}
-				PortfoliosGroups_byid[gid].members = portfolios_ids;
-				testGroup_Empty("portfolios-group_",gid);
-				PortfoliosGroups_byid[gid].roles = [];
-				//----------------
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error : "+jqxhr.responseText);
-			}
-		});
+	var code = this.code_node.text();
+	//-------------------- header -------------------------------
+	$("#portfoliogroup-rightside-header").html("");
+	this.displayView('portfoliogroup-rightside-header','header');
+	//------------------ content ---------------------------
+	$("#portfoliogroup-rightside-content1").html("");
+	for (uuid in this.children){
+		var portfolio = portfolios_byid[uuid];
+		var portfoliocode = portfolio.code_node.text();
+		$("#portfoliogroup-rightside-content1").append($("<div class='row portfolio-row' id='portfoliogroup_"+portfolio.id+"'</div>"));
+		$("#portfoliogroup_"+portfolio.id).html(portfolio.getPortfolioView("portfoliogroup_"+portfolio.id,'portfoliogroup'));
 	}
+	$(window).scrollTop(0);
+	$("#wait-window").hide();
 };
 
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ CREATE ------------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//==================================
+UIFactory["PortfoliosGroup"].callCreateGroup = function()
+//==================================
+{
+	$("#edit-window-title").html(karutaStr[LANG]['create_portfoliosgroup']);
+	$("#edit-window-footer").html("");
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var create_button = "<button id='create_button' class='btn'>"+karutaStr[LANG]['Create']+"</button>";
+	var obj = $(create_button);
+	$(obj).click(function (){
+		var code = $("#codegroup").val();
+		var label = $("#labelgroup").val();
+		if (code!='' && label!='') {
+			UIFactory.PortfoliosGroup.create(code,label);
+		} else {
+			if (code=='')
+				alertHTML(karutaStr[LANG]['code-not-null']);
+			if (label=='')
+				alertHTML(karutaStr[LANG]['label-not-null']);
+		}
+	});
+	$("#edit-window-footer").append(obj);
+	var footer = " <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
+	$("#edit-window-footer").append($(footer));
+
+	var html = "<div class='form-horizontal'>";
+	html += "<div class='form-group'>";
+	html += "		<label for='codegroup' class='col-sm-3 control-label'>Code</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='codegroup' type='text' class='form-control' value=''>";
+	html += "		</div>";
+	html += "</div>";
+	html += "<div class='form-group' style='display:none'>";
+	html += "		<label for='labelgroup' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>";
+	html += "		<div class='col-sm-9'>";
+	html += "			<input id='labelgroup' type='text' class='form-control' value=' '>";
+	html += "		</div>";
+	html += "</div>";
+	html += "</div>";
+	$("#edit-window-body").html(html);
+	//--------------------------
+	$('#edit-window').modal('show');
+};
+
+//==================================
+UIFactory["PortfoliosGroup"].create = function(code,label)
+//==================================
+{
+	var url = serverBCK_API+"/portfoliogroups?type=portfolio&label="+code;
+	$.ajax({
+		type : "POST",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		data : "",
+		success : function(data) {
+			$("#refresh").click();
+			//--------------------------
+			$('#edit-window').modal('hide');
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+			//--------------------------
+			$('#edit-window').modal('hide');
+		}
+	});
+};
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//
 //==================================
 UIFactory["PortfoliosGroup"].update = function(gid,attribute,value)
 //==================================
 {
-	PortfoliosGroups_byid[gid].attributes[attribute].text(value); // update attribute value
-	var node = PortfoliosGroups_byid[gid].node;
+	portfoliogroups_byid[gid].attributes[attribute].text(value); // update attribute value
+	var node = portfoliogroups_byid[gid].node;
 	var data = xml2string(node);
 	var url = serverBCK_API+"/portfoliogroups?group=" + gid +"&"+attribute+"="+value;
 	$.ajax({
@@ -230,23 +442,6 @@ UIFactory["PortfoliosGroup"].getAttributeCreator = function(attribute,value,pwd)
 	return html;
 };
 
-//==================================
-UIFactory["PortfoliosGroup"].callCreate = function()
-//==================================
-{
-	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "javascript:UIFactory['PortfoliosGroup'].create()";
-	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Create']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Cancel']+"</button>";
-	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['create_portfoliosgroup']);
-	var html = "";
-	html += "<form id='portfoliosgroup' class='form-horizontal'>";
-	html += UIFactory["PortfoliosGroup"].getAttributeCreator("label","");
-	html += "</form>";
-	$("#edit-window-body").html(html);
-	//--------------------------
-	$('#edit-window').modal('show');
-};
 
 //==================================
 UIFactory["PortfoliosGroup"].prototype.getSelector = function(attr,value,name)
@@ -272,32 +467,10 @@ UIFactory["PortfoliosGroup"].edit = function(gid)
 	var html = "";
 	$("#edit-window-body").html(html);
 	//--------------------------
-	html = PortfoliosGroups_byid[gid].getEditor();
+	html = portfoliogroups_byid[gid].getEditor();
 	$("#edit-window-body").append(html);
 	//--------------------------
 	$('#edit-window').modal('show');
-};
-
-//==================================
-UIFactory["PortfoliosGroup"].parse = function(data) 
-//==================================
-{
-	PortfoliosGroups_byid = {};
-	PortfoliosGroups_list = [];
-	var items = $("group",data);
-	var inactive = active = 0;
-	var tableau1 = new Array();
-	var tableau2 = new Array();
-	for ( var i = 0; i < items.length; i++) {
-		var gid = $(items[i]).attr('id');
-		PortfoliosGroups_byid[gid] = new UIFactory["PortfoliosGroup"](items[i]);
-		var label = PortfoliosGroups_byid[gid].label_node.text();
-		tableau1[i] = [label,gid];
-	}
-	var newTableau1 = tableau1.sort(sortOn1);
-	for (var i=0; i<newTableau1.length; i++){
-		PortfoliosGroups_list[i] = PortfoliosGroups_byid[newTableau1[i][1]];
-	}
 };
 
 //==================================
@@ -332,7 +505,7 @@ UIFactory["PortfoliosGroup"].remove = function(gid,uid)
 			if (uid!=null && uid!='null') {
 				$("#portfolios-group_"+gid+"-list_items_"+uid).remove();
 				testGroup_Empty("portfolios-group_",gid);
-				PortfoliosGroups_byid[gid].members = [];
+				portfoliogroups_byid[gid].members = [];
 			} else
 				$("#refresh").click();
 		}
@@ -344,38 +517,13 @@ UIFactory["PortfoliosGroup"].displaySelectMultiple = function(destid,type,lang)
 //==================================
 {
 	$("#"+destid).html("");
-	for ( var i = 0; i < PortfoliosGroups_list.length; i++) {
-		var input = PortfoliosGroups_list[i].getSelector(null,null,'select_portfoliosgroups');
+	for ( var i = 0; i < portfoliogroups_list.length; i++) {
+		var input = portfoliogroups_list[i].getSelector(null,null,'select_portfoliosgroups');
 		$("#"+destid).append($(input));
 		$("#"+destid).append($("<br>"));
 	}
 };
 
-//==================================
-UIFactory["PortfoliosGroup"].create = function()
-//==================================
-{
-
-	var label = $("#portfoliosgroup_label").val();
-	var url = serverBCK_API+"/portfoliogroups?type=portfolio&label="+label;
-	$.ajax({
-		type : "POST",
-		contentType: "application/xml",
-		dataType : "text",
-		url : url,
-		data : "",
-		success : function(data) {
-			$("#refresh").click();
-			//--------------------------
-			$('#edit-window').modal('hide');
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Error : "+jqxhr.responseText);
-			//--------------------------
-			$('#edit-window').modal('hide');
-		}
-	});
-};
 
 //==================================
 UIFactory["PortfoliosGroup"].editGroupsByUuid = function(uuid)
@@ -402,7 +550,7 @@ UIFactory["PortfoliosGroup"].editGroupsByUuid = function(uuid)
 		data: "",
 		success : function(data) {
 			var uuid_groupids = parseList("group",data);
-			if (PortfoliosGroups_byid.length>0) { // portfolios groups loaded
+			if (portfoliogroups_byid.length>0) { // portfolios groups loaded
 				UIFactory["PortfoliosGroup"].displayManageMultipleGroups('portfolio_list_groups','uuid',uuid,uuid_groupids,'updateGroup_Portfolio');
 				//--------------------------		
 			} else {
@@ -436,10 +584,10 @@ UIFactory["PortfoliosGroup"].displayManageMultipleGroups = function(destid,attr,
 //==================================
 {
 	$("#"+destid).html("");
-	if (PortfoliosGroups_list.length>0){
-		for ( var i = 0; i < PortfoliosGroups_list.length; i++) {
-			var checked = selectedlist.contains(PortfoliosGroups_list[i].id);
-			var input = PortfoliosGroups_list[i].getSelectorWithFunction(attr,value,'select_portfoliosgroups_'+i,checked,callFunction);
+	if (portfoliogroups_list.length>0){
+		for ( var i = 0; i < portfoliogroups_list.length; i++) {
+			var checked = selectedlist.contains(portfoliogroups_list[i].id);
+			var input = portfoliogroups_list[i].getSelectorWithFunction(attr,value,'select_portfoliosgroups_'+i,checked,callFunction);
 			$("#"+destid).append($(input));
 			$("#"+destid).append($("<br>"));
 		}		
@@ -516,7 +664,7 @@ UIFactory["PortfoliosGroup"].addPortfolios = function(gid)
 			success : function(data) {
 				var group_type = "PortfoliosGroup";
 				toggleGroup(group_type,gid,'UIFactory.PortfoliosGroup.displayPortfolios','list',null);
-				PortfoliosGroups_byid[gid].members = [];
+				portfoliogroups_byid[gid].members = [];
 			},
 			error : function(jqxhr,textStatus) {
 				alertHTML("Error : "+jqxhr.responseText);
@@ -598,7 +746,7 @@ UIFactory["PortfoliosGroup"].prototype.getSharingRoleEditor = function(destid,ca
 UIFactory["PortfoliosGroup"].displaySharingRoleEditor = function(destid,gid,callFunction)
 //==================================
 {
-	if (PortfoliosGroups_byid[gid].members.length==0) { // to load members of portfolios groups
+	if (portfoliogroups_byid[gid].members.length==0) { // to load members of portfolios groups
 		$.ajaxSetup({async: false});
 		$.ajax({
 			type : "GET",
@@ -606,9 +754,9 @@ UIFactory["PortfoliosGroup"].displaySharingRoleEditor = function(destid,gid,call
 			url : serverBCK_API+"/portfoliogroups?group="+gid,
 			data: "",
 			success : function(data) {
-				PortfoliosGroups_byid[gid].members = parseList("portfolio",data);
-				PortfoliosGroups_byid[gid].roles = [];
-				PortfoliosGroups_byid[gid].getSharingRoleEditor(destid,callFunction);
+				portfoliogroups_byid[gid].members = parseList("portfolio",data);
+				portfoliogroups_byid[gid].roles = [];
+				portfoliogroups_byid[gid].getSharingRoleEditor(destid,callFunction);
 				//----------------
 			},
 			error : function(jqxhr,textStatus) {
@@ -617,7 +765,7 @@ UIFactory["PortfoliosGroup"].displaySharingRoleEditor = function(destid,gid,call
 		});
 		$.ajaxSetup({async: true});
 	} else {
-		PortfoliosGroups_byid[gid].getSharingRoleEditor(destid,callFunction);
+		portfoliogroups_byid[gid].getSharingRoleEditor(destid,callFunction);
 	}
 };
 
@@ -630,7 +778,7 @@ UIFactory["PortfoliosGroup"].callShareUsers = function(gid)
 	var js3 = "javascript:UIFactory['PortfoliosGroup'].shareUsers('"+gid+"','share')";
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+PortfoliosGroups_byid[gid].label);
+	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+portfoliogroups_byid[gid].label);
 	$("#edit-window-type").html("");
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";
@@ -702,7 +850,7 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 	var js3 = "javascript:UIFactory['PortfoliosGroup'].shareGroups('"+gid+"','share')";
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+PortfoliosGroups_byid[gid].label);
+	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+portfoliogroups_byid[gid].label);
 	$("#edit-window-type").html("");
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";
@@ -779,8 +927,8 @@ UIFactory["PortfoliosGroup"].shareGroups = function(gid,type)
 	if (grouplabel!=null) {
 		var xml = get_usersxml_from_groups(usersgroups);
 		var users = $("user",xml);
-		for (var i=0; i<PortfoliosGroups_byid[gid].rrg[grouplabel].length; i++) {
-			var groupid = PortfoliosGroups_byid[gid].rrg[grouplabel][i];
+		for (var i=0; i<portfoliogroups_byid[gid].rrg[grouplabel].length; i++) {
+			var groupid = portfoliogroups_byid[gid].rrg[grouplabel][i];
 			updateRRGroup_Users(groupid,users,xml,type,'id');
 		}
 		//-----------------------------
@@ -839,8 +987,8 @@ UIFactory["PortfoliosGroup"].shareUsers = function(gid,type)
 			xml += "<user id='"+userid+"'/>";
 		}
 		xml += "</users>";
-		for (var i=0; i<PortfoliosGroups_byid[gid].rrg[grouplabel].length; i++) {
-			var groupid = PortfoliosGroups_byid[gid].rrg[grouplabel][i];
+		for (var i=0; i<portfoliogroups_byid[gid].rrg[grouplabel].length; i++) {
+			var groupid = portfoliogroups_byid[gid].rrg[grouplabel][i];
 			updateRRGroup_Users(groupid,users,xml,type,'value');
 		}
 		var html = "";

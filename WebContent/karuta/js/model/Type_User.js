@@ -93,7 +93,7 @@ UIFactory["User"].displayActive = function(destid,type,lang)
 //==================================
 {
 	$("#"+destid).html("<h3>"+karutaStr[LANG]["active_users"]+"</h3>");
-	$("#"+destid).append("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th></th><th></th></thead><tbody id='list_users'></tbody></table>");
+	$("#"+destid).append("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_users'></tbody></table>");
 	$("#temporary").html("<table id='temp_users'></table>");
 	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersActive_list.length; i++) {
@@ -115,11 +115,9 @@ UIFactory["User"].displayInactive = function(destid,type,lang)
 //==================================
 {
 	$("#"+destid).html("<h3>"+karutaStr[LANG]["inactive_users"]+"</h3>");
-	$("#"+destid).append("<table id='table_unusers' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
-	$("#list_unusers").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+	$("#"+destid).append("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
+	$("#list_unusers").append($("<tr><td></td><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersInactive_list.length; i++) {
-		$('#inactive-users').show();
-		$('#inactive').show();
 		var itemid = destid+"_"+UsersInactive_list[i].id;
 		$("#list_unusers").append($("<tr class='item' id='"+itemid+"'></tr>"));
 		$("#"+itemid).html(UsersInactive_list[i].getView(destid,type,lang));

@@ -124,6 +124,79 @@
 	}
 
 /* ====================== */
+/*   RIGTHSIDE LEFTSIDE   */
+/* ====================== */
+
+	.gutter {
+		width: 10px;
+		float: right;
+	}
+
+	.leftside {
+		h3 {
+			margin-top:20px;
+		}
+		.active {
+			background-color: var(--list-button-background-color);
+		}
+		.content1 {
+			overflow: auto;
+			max-height: 100vh;
+		}
+		h3,
+		h4 {
+			color: var(--list-title-color);
+		}
+	}
+
+	.rightside {
+		.header {
+			padding:7px;
+			background-color:var(--list-menu-background-color);
+			color:var(--list-button-text-color);
+			.btn  {
+				background-color:var(--list-element-background-color);
+			}
+		}
+		.content1, content2 {
+			background-color: var(--list-element-background-color);
+			padding-top:2px;
+			padding-bottom:2px;
+			padding-left:20px;
+		}
+		.dropdown.menu .btn{
+			height:25px;
+			padding-left:9px;
+			padding-right:9px;
+		}
+		.dropdown-menu {
+			color: var(--list-menu-text-color);
+			background-color: var(--list-menu-background-color);
+			a.dropdown-item {
+				color: var(--list-menu-text-color);
+				background-color: var(--list-menu-background-color);
+			}
+			a.dropdown-item:hover {
+				color: var(--list-menu-background-color);
+				background-color: var(--list-menu-text-color);
+			}
+		}
+		.content1:empty {
+			visibility:hidden;
+		}
+		.portfolio-row {
+			margin: 2px;
+			color: var(--list-element-text-color);
+			&:hover {
+				background-color: var(--list-element-background-color-complement);
+			}
+		}
+
+	}
+
+
+
+/* ====================== */
 /*     LIST CONTAINER     */
 /* ====================== */
 
@@ -131,19 +204,8 @@
 		#portfolio-leftside {
 			width: calc(25% - 5px);
 			margin-bottom: 10px;
-			h3 {
-				margin-top:20px;
-			}
-			.active {
-				background-color: var(--list-button-background-color);
-			}
 		}
 	
-		.content1-leftside,
-		.content2-rightside {
-			overflow: auto;
-			max-height: 100vh;
-		}
 	
 		#gutter {
 		  width: 10px;
@@ -157,13 +219,10 @@
 			float: right;
 		}
 
-		.porfolios-content,
-		.portfolios-not-in-project,
-		.projects-nb,
-		.bin-nb,
-		.portfolios-nb {
+		.porfolios-content {
 			background-color: var(--list-element-background-color);
-			padding-bottom:7px;
+			padding-top:2px;
+			padding-bottom:2px;
 		}
 		.porfolios-content:empty {
 			visibility:hidden;
@@ -182,10 +241,6 @@
 			padding-left:9px;
 			padding-right:9px;
 		}
-		#bin {
-			padding:5px;
-			background-color: var(--list-element-background-color);
-		}
 		#projects {
 			.active {
 				background-color: var(--list-menu-background-color);
@@ -201,13 +256,6 @@
 			a.dropdown-item:hover {
 				color: var(--list-menu-background-color);
 				background-color: var(--list-menu-text-color);
-			}
-		}
-		.portfolio-row {
-			margin: 2px;
-			color: var(--list-element-text-color);
-			&:hover {
-				background-color: var(--list-element-background-color-complement);
 			}
 		}
 		.portfolios-not-in-project {
@@ -231,9 +279,6 @@
 //				color:var(--list-button-text-color);
 			}
 		}
-		h3,
-		h4,
-		#refresh,
 		.projects-nb {
 			color: var(--list-title-color);
 		}
@@ -675,7 +720,7 @@ div.oembedall-container {
 		}
 	}
 	#list_users,
-	#list_unuses {
+	#list_unusers {
 		background-color: var(--list-element-background-color);
 	}
 
@@ -895,6 +940,49 @@ div.oembedall-container {
 /* ====================== */
 
 	#main-portfoliosgroup {
+		#portfoliogroup-leftside {
+			width: calc(25% - 5px);
+			margin-bottom: 10px;
+			h3 {
+				margin-top:20px;
+			}
+			.active {
+				background-color: var(--list-button-background-color);
+			}
+		}
+	
+		
+		#portfoliogroup-rightside {
+			width: calc(75% - 5px);
+			margin-top: 2px;
+			padding-bottom: 5px;
+			float: right;
+		}
+/*
+		.porfoliogroup-content {
+			background-color: var(--list-element-background-color);
+			padding-top:2px;
+			padding-bottom:2px;
+		}
+		.porfoliogroup-content:empty {
+			visibility:hidden;
+		}
+		
+		.btn  {
+			background-color:var(--list-button-background-color);
+			color:var(--list-button-text-color);
+		}
+		.list-btn {
+			line-height:1;
+			margin-left:5px;
+		}
+		.portfoliogroup-menu .btn{
+			height:25px;
+			padding-left:9px;
+			padding-right:9px;
+		}
+
+		
 		color: var(--list-element-text-color);
 		.btn {
 			color: var(--list-element-text-color);
@@ -902,25 +990,7 @@ div.oembedall-container {
 			padding-right:9px;
 			background-color: var(--list-element-background-color);
 		}
-		.portfoliosgroup{
-			margin-top:5px;
-			background-color:var(--list-menu-background-color);
-			.btn {
-				height:25px;
-			}
-			.row-label {
-				padding:5px;
-			}
-		}
-		.portfoliosgroup-content {
-			background-color: var(--list-element-background-color);
-			.btn {
-				background-color: var(--list-button-background-color);
-			}
-			.row {
-				padding:5px;
-			}
-		}
+*/
 	}
 
 
@@ -1426,7 +1496,6 @@ div.oembedall-container {
 	.td-resource {
 		width: 80%;
 		margin-right: 0px;
-		background: white;
 		padding-left: 0px;
 		padding-right: 0px;
 		margin-left: 0px;

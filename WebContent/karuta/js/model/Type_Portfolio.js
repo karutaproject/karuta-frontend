@@ -211,6 +211,9 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		html += "</div><!-- class='col' -->";
 		//------------------------------------
 	}
+	if (type=='portfoliogroup') {
+		html += "	<div class='portfoliogroup-portfolio-label' >"+portfolio_label+" "+tree_type+"</div>";
+	}
 	if (type=='card') {
 		html += "	<div class='card-header' >";
 		html += portfolio_label;
@@ -1066,25 +1069,7 @@ UIFactory["Portfolio"].del = function(portfolioid)
 		url : url,
 		data : "",
 		success : function(data) {
-			//--------we reload the projects-----------------------
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/portfolios?active=1&project=true",
-				success : function(data) {
-					nb_projects = parseInt($('portfolios',data).attr('count'))-1;
-					UIFactory["Portfolio"].parse(data);
-					$("#project-portfolios").html("");
-					UIFactory["Portfolio"].displayProjects('projects','list');
-					if ($("#project-portfolios").html()=="")
-						$("#project-portfolios").hide();
-					$("#wait-window").hide();
-				},
-				error : function(jqxhr,textStatus) {
-					alertHTML("Server Error GET active=1&project=true: "+textStatus);
-					$("#wait-window").hide();
-				}
-			});
+			UIFactory.PortfolioFolder.loadAndDisplayFolders('portfolio-content1-leftside','list');
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in del : "+jqxhr.responseText);

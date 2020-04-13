@@ -38,12 +38,19 @@ function fill_list_users(type)
 	html += "	</div>";
 	//------------------------------------------
 	html += "	<div id='user-leftside'>";
-	html += "		<h3 id='user-title-leftside'>"+karutaStr[LANG]['active_users']+"</h3>";
+	html += "		<h3 id='user-title-leftside'>"+karutaStr[LANG]['active_users'];
+	html += "			<button id='list-menu' class='btn' onclick=\"fill_list_usersOLD('user-content1-rightside','active','list');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "		</h3>";
 	html += "		<h4 id='user-header-leftside'>";
-	html += "			<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
-	html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersFolder.callCreateFolder('active');\"></i></span>";
+//	html += "			<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
+//	html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersFolder.callCreateFolder('active');\"></i></span>";
 	html += "		</h4>";
 	html += "		<div id='user-content1-leftside' class='content1-leftside tree'></div>";
+	html += "		<h3 id='user-title-leftside'>";
+	html += "			<span id='portfolios-label' class='folder-label'>"+karutaStr[LANG]['inactive_users']+"</span>&nbsp<span class='badge number_of_portfolios' id='portfolios-nb'></span>";
+	html += "			<button id='list-menu' class='btn' onclick=\"fill_list_usersOLD('user-content1-rightside','inactive','list');;\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "		</h3>";
+
 	html += "		<h3 id='temporary-users' style='display:none'>"+karutaStr[LANG]['temporary_users'];
 	html += "			&nbsp<button class='btn list-btn' onclick=\"confirmDelTemporaryUsers()\">";
 	html += 			karutaStr[LANG]["delete-temporary-users"];
@@ -58,7 +65,7 @@ function fill_list_users(type)
 	$("#main-user").html(html);
 	displaySearchUser("search-user");
 //	UIFactory.UsersFolder.loadAndDisplayFolders('user-content1-leftside','list-user');
-	fill_list_usersOLD('user-content1-rightside','active','list')
+	fill_list_usersOLD('user-content1-rightside','active','list');
 }
 
 //==============================
