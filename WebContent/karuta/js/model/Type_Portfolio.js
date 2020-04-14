@@ -23,6 +23,8 @@ var number_of_projects_portfolios = 0;
 var number_of_portfolios = 0;
 var loadedProjects = {};
 var list_view_type = localStorage.getItem('list_view_type');
+if (list_view_type==null)
+	list_view_type = "list";
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -211,7 +213,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		html += "</div><!-- class='col' -->";
 		//------------------------------------
 	}
-	if (type=='portfoliogroup') {
+	if (type=='portfoliogroup-portfolio') {
 		html += "	<div class='portfoliogroup-portfolio-label' >"+portfolio_label+" "+tree_type+"</div>";
 	}
 	if (type=='card') {
@@ -450,17 +452,16 @@ UIFactory["Portfolio"].load = function(portfolioid,level)
 		param="?resources=true";
 	else
 		param = "?level=" + level;
-//	$.ajaxSetup({async: false});
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + param,
 		success : function(data) {
 			UICom.parseStructure(data,true);
-			UIFactory["Portfolio"].parse_add(data);
+			UIFactory.Portfolio.parse_add(data);
 		}
 	});
-//	$.ajaxSetup({async: true});
 };
 
 //==================================

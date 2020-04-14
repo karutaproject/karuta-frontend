@@ -66,14 +66,14 @@ function fill_list_page()
 	html += "<div id='portfolio-body'>";
 	//------------------------------------------
 	html += "	<div id='portfolio-rightside' class='rightside'>";
-	html += "		<div id='refresh-portfolio' class='refresh fas fa-sync-alt' onclick='fill_list_page()'></div>";
-	html += "		<div id='search-portfolio' class='search'></div>";
-	html += "		<div id='portfolio-title-rightside' class='title'></div>";
-	html += "		<div id='portfolio-header-rightside' class='header'></div>";
-	html += "		<div id='portfolio-content1-rightside' class='content1'></div>";
-	html += "		<div id='portfolio-navbar-pages-top-rightside' class='navbar-pages' style='display:none'></div>";
-	html += "		<div id='portfolio-content2-rightside' class='content2'></div>";
-	html += "		<div id='portfolio-navbar-pages-bottom-rightside' class='navbar-pages' style='display:none'></div>";
+	html += "		<div id='portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_page()'></div>";
+	html += "		<div id='portfolio-search' class='search'></div>";
+	html += "		<div id='portfolio-rightside-title' class='title'></div>";
+	html += "		<div id='portfolio-rightside-header' class='header'></div>";
+	html += "		<div id='portfolio-rightside-content1' class='content1'></div>";
+	html += "		<div id='portfolio-rightside-navbar-pages-top' class='navbar-pages' style='display:none'></div>";
+	html += "		<div id='portfolio-rightside-content2' class='content2'></div>";
+	html += "		<div id='portfolio-rightside-navbar-pages-bottom' class='navbar-pages' style='display:none'></div>";
 	html += "	</div>";
 	//------------------------------------------
 	html += "	<div id='portfolio-leftside'  class='leftside'>";
@@ -84,12 +84,12 @@ function fill_list_page()
 		html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.PortfolioFolder.createFolder();\"></i></span>";
 	}
 	html += "		</h3>";
-	html += "		<div id='portfolio-content1-leftside' class='content1 tree'></div>";
-	html += "		<h3 id='portfolios-title' class='title'>";
+	html += "		<div id='portfolio-leftside-content1' class='content1 tree'></div>";
+	html += "		<h3 class='title'>";
 	html += "			<span id='portfolios-label' class='folder-label'>"+karutaStr[LANG]['portfolios']+"</span>&nbsp<span class='badge number_of_portfolios' id='portfolios-nb'></span>";
 	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
 	html += "		</h3>";
-	html += "		<div id='portfolio-content2-leftside' class='content2-leftside'></div>";
+	html += "		<div id='portfolio-leftside-content2' class='content2'></div>";
 	html += "	</div>";
 	//------------------------------------------
 	html += "</div>";
@@ -115,19 +115,19 @@ function fill_list_page()
 	}
 
 	//--------we load the folders-----------------------
-	UIFactory.PortfolioFolder.loadAndDisplayFolders('portfolio-content1-leftside','list');
+	UIFactory.PortfolioFolder.loadAndDisplayAll('portfolio');
 	UIFactory.PortfolioFolder.checkPortfolios();
 }
 
 //==============================
-function fill_search_page(code)
+function fill_search_page(code,type)
 //==============================
 {
 	searched_portfolios_list = [];
 	
-	$("#portfolio-header-rightside").html("");
-	$("#portfolio-content1-rightside").html("");
-	$("#portfolio-content2-rightside").html("");
+	$("#"+type+"-rightside-header").html("");
+	$("#"+type+"-rightside-content1").html("");
+	$("#"+type+"-rightside-content2e").html("");
 	$("#wait-window").show();
 	$("#menu").html("");
 	cleanList();
@@ -140,8 +140,8 @@ function fill_search_page(code)
 		success : function(data) {
 			var nb = parseInt($('portfolios',data).attr('count'));
 			UIFactory["Portfolio"].parse_search(data);
-			$("#portfolio-content2-rightside").html($("<div id='searched-portfolios-content' class='portfolios-content'></div>"));
-			$("#portfolio-content1-rightside").html($("<div id='searched-folders-content' class='portfolios-content'></div>"));
+			$("#"+type+"-content2-rightside").html($("<div id='searched-portfolios-content' class='portfolios-content'></div>"));
+			$("#"+type+"content1-rightside").html($("<div id='searched-folders-content' class='portfolios-content'></div>"));
 			//-------------------------------
 			for (var i=0;i<searched_portfolios_list.length;i++){
 				var portfolio = searched_portfolios_list[i];
@@ -236,10 +236,9 @@ function applyListConfiguration()
 function cleanList()
 //==============================
 {
-	$("#project-portfolios").hide();
 	$("#searched-portfolios-header").hide();
 	$("#searched-portfolios-content").hide();
-	$(".active").removeClass('active');
+	$(".portfolio-label.active").removeClass('active');
 }
 
 

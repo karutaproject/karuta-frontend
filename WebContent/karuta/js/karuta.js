@@ -2067,7 +2067,7 @@ function toggleElt(closeSign,openSign,eltid,type)
 { // click on open/closeSign
 	var elt = document.getElementById(type+"-toggle_"+eltid);
 	elt.classList.toggle(openSign);
-	elt = document.getElementById(type+"treecontent_"+eltid);
+	elt = document.getElementById(type+"-treecontent_"+eltid);
 	elt.classList.toggle('open');
 	if ($("#"+type+"-toggle_"+eltid).hasClass(openSign))
 		localStorage.setItem(type+"-toggle_"+eltid,'open');

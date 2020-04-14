@@ -24,9 +24,33 @@ function fill_list_portfoliosgroups()
 	//-----------------------------------------------------------
 	html += "<div id='portfoliogroup-body'>";
 	//------------------------------------------
+	html += "	<div id='portfoliogroup-portfolio-leftside'  class='leftside'>";
+	html += "		<div id='menu'></div>";
+	html += "		<h3 class='title'>";
+	html += "			<span id='folders-label' class='folder-label'>"+karutaStr[LANG]['folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
+	html += "		</h3>";
+	html += "		<div id='portfoliogroup-portfolio-leftside-content1' class='content1 tree'></div>";
+	html += "		<div id='portfoliogroup-portfolio-leftside-content2' class='content2'></div>";
+	html += "	</div>";
+	//------------------------------------------
+	html += "	<div class='gutter'>&nbsp;</div>";
+	//------------------------------------------
+	html += "	<div id='portfoliogroup-portfolio-rightside' class='rightside'>";
+	html += "		<div id='portfoliogroup-portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_portfoliosgroups()'></div>";
+	html += "		<div id='portfoliogroup-portfolio-search' class='search'></div>";
+	html += "		<div id='portfoliogroup-portfolio-rightside-title' class='title'></div>";
+	html += "		<div id='portfoliogroup-portfolio-rightside-header' class='header'></div>";
+	html += "		<div id='portfoliogroup-portfolio-rightside-content1' class='content1'></div>";
+	html += "		<div id='portfoliogroup-portfolio-rightside-navbar-pages-top' class='navbar-pages' style='display:none'></div>";
+	html += "		<div id='portfoliogroup-portfolio-rightside-content2' class='content2'></div>";
+	html += "		<div id='portfoliogroup-portfolio-rightside-navbar-pages-bottom' class='navbar-pages' style='display:none'></div>";
+	html += "	</div>";
+	//------------------------------------------
+	html += "	<div class='gutter'>&nbsp;</div>";
+	//------------------------------------------
 	html += "	<div id='portfoliogroup-rightside' class='rightside'>";
-	html += "		<div id='refresh-portfoliogroup' class='refresh fas fa-sync-alt' onclick='fill_list_portfoliosgroups()'></div>";
-	html += "		<div id='search-portfoliogroup' class='search'></div>";
+	html += "		<div id='portfoliogroup-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_portfoliosgroups()'></div>";
+	html += "		<div id='portfoliogroup-search' class='search'></div>";
 	html += "		<div id='portfoliogroup-rightside-title' class='title'></div>";
 	html += "		<div id='portfoliogroup-rightside-header' class='header'></div>";
 	html += "		<div id='portfoliogroup-rightside-content1' class='content1'></div>";
@@ -35,7 +59,7 @@ function fill_list_portfoliosgroups()
 	html += "		<div id='portfoliogroup-rightside-navbar-pages-bottom' class='navbar-pages' style='display:none'></div>";
 	html += "	</div>";
 	//------------------------------------------
-	html += "	<div class='gutter'></div>";
+	html += "	<div class='gutter'>&nbsp;</div>";
 	//------------------------------------------
 	html += "	<div id='portfoliogroup-leftside'  class='leftside'>";
 	html += "		<div id='menu'></div>";
@@ -43,21 +67,22 @@ function fill_list_portfoliosgroups()
 	html += "			<span id='folders-label' class='folder-label'>"+karutaStr[LANG]['list_portfoliosgroups']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
 	html += "			<span class='folder-label btn'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.PortfoliosGroup.callCreateGroup();\"></i></span>";
 	html += "		</h3>";
-	html += "		<div id='portfoliogroup-leftside-content1' class='leftside-content1 tree'></div>";
-	html += "		<div id='portfoliogroup-leftside-content2' class='leftside-content2'></div>";
+	html += "		<div id='portfoliogroup-leftside-content1' class='content1 tree'></div>";
+	html += "		<div id='portfoliogroup-leftside-content2' class='content2'></div>";
 	html += "	</div>";
 	//------------------------------------------
 	html += "</div>";
 	//-----------------------------------------------------------
 	$("#main-portfoliosgroup").html(html);
-	UIFactory.PortfoliosGroup.loadAndDisplayAll('portfoliogroup-leftside-content1','list');
+	UIFactory.PortfoliosGroup.loadAndDisplayAll('portfoliogroup');
+	UIFactory.PortfolioFolder.displayAll('portfoliogroup-portfolio'); // already loaded
 }
 
 //==============================
 function display_list_portfoliosgroups()
 //==============================
 {
-	if ($("#portfoliosgroup-create").length) {
+	if ($("#portfoliogroup-body").length) {
 		show_list_portfoliosgroups();
 	} else {
 		fill_list_portfoliosgroups();
