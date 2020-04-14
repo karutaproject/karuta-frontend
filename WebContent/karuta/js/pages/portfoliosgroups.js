@@ -25,7 +25,7 @@ function fill_list_portfoliosgroups()
 	html += "<div id='portfoliogroup-body'>";
 	//------------------------------------------
 	html += "	<div id='portfoliogroup-portfolio-leftside'  class='leftside'>";
-	html += "		<div id='menu'></div>";
+	html += "		<div id='portfoliogroup-portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_portfoliosgroups()'></div>";
 	html += "		<h3 class='title'>";
 	html += "			<span id='folders-label' class='folder-label'>"+karutaStr[LANG]['folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
 	html += "		</h3>";
@@ -36,7 +36,6 @@ function fill_list_portfoliosgroups()
 	html += "	<div class='gutter'>&nbsp;</div>";
 	//------------------------------------------
 	html += "	<div id='portfoliogroup-portfolio-rightside' class='rightside'>";
-	html += "		<div id='portfoliogroup-portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_portfoliosgroups()'></div>";
 	html += "		<div id='portfoliogroup-portfolio-search' class='search'></div>";
 	html += "		<div id='portfoliogroup-portfolio-rightside-title' class='title'></div>";
 	html += "		<div id='portfoliogroup-portfolio-rightside-header' class='header'></div>";
@@ -49,7 +48,6 @@ function fill_list_portfoliosgroups()
 	html += "	<div class='gutter'>&nbsp;</div>";
 	//------------------------------------------
 	html += "	<div id='portfoliogroup-rightside' class='rightside'>";
-	html += "		<div id='portfoliogroup-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_portfoliosgroups()'></div>";
 	html += "		<div id='portfoliogroup-search' class='search'></div>";
 	html += "		<div id='portfoliogroup-rightside-title' class='title'></div>";
 	html += "		<div id='portfoliogroup-rightside-header' class='header'></div>";

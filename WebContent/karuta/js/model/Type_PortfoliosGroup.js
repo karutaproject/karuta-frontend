@@ -15,6 +15,7 @@
 
 var portfoliogroups_byid = {};
 var portfoliogroups_list = [];
+var portfoliogroup_last_drop = "";
 
 /// Check namespace existence
 if( UIFactory === undefined )
@@ -56,6 +57,59 @@ UIFactory["PortfoliosGroup"] = function( node )
 	this.nbchildren = 0;
 	this.children = {};
 };
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------ DRAG AND DROP -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//==================================
+function ondragoverPortfolioGroup(ev)
+//==================================
+{
+	ev.preventDefault();
+	var root = document.documentElement;
+	var bckcolor = root.style.getPropertyValue('--list-element-background-color-complement');
+	event.target.style.outline = "3px solid "+bckcolor;
+}
+
+//==================================
+function ondragleavePortfolioGroup(ev)
+//==================================
+{
+	ev.preventDefault();
+	var root = document.documentElement;
+	event.target.style.outline = "0px solid white";
+}
+
+//==================================
+function dropPortfolioGroup(ev)
+//==================================
+{
+	ev.preventDefault();
+	event.target.style.outline = "0px solid white";
+	//----------srce----------------------
+	var srceid = ev.dataTransfer.getData("uuid").substring(ev.dataTransfer.getData("uuid").lastIndexOf('_')+1);
+	var type = ev.dataTransfer.getData("type");
+	//---------target------------------------
+	var groupid = ev.target.id.substring(ev.target.id.lastIndexOf('_')+1);
+	//---------------------------------
+	var current_drop = portfolioid+"/"+groupid;
+	if (current_drop!=portfoliogroup_last_drop) {
+		if (type=="portfolio") {
+			portfoliogroups_byid[groupid].addPortfolio(srceid);
+		}
+		if (type=="folder") {
+			var folder = folders_byid[srceid];
+			if (!folder.loaded)
+				folder.loadContent();
+			for (uuid in folder.children){
+				portfoliogroups_byid[groupid].addPortfolio(uuid);
+			}
+		}
+	}
+}
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
@@ -231,6 +285,7 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,viewtype,type
 		$("#"+dest).append($(html));
 	}
 	if (viewtype=='header') {
+		html += "<div id='portfoliogroup_"+this.id+"' class='tree-elt' ondrop='dropPortfolioGroup(event)' ondragover='ondragoverPortfolioGroup(event)' ondragleave='ondragleavePortfolioGroup(event)'";
 		html += "		<span class='portfoliosgroup-label'>"+this.code_node.text()+"</span>";
 		//------------ buttons ---------------
 		html += "		<div class='dropdown menu' style='float:right'>";
@@ -247,6 +302,7 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,viewtype,type
 			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle' style='visibility:hidden'></button>";
 		}
 		html += "		</div><!-- class='dropdown' -->";
+		html += "</div>";
 		//---------------------------------------
 		$("#"+dest).append($(html));
 	}
@@ -294,7 +350,7 @@ UIFactory["PortfoliosGroup"].prototype.displayContent = function(type)
 		var portfolio = portfolios_byid[uuid];
 		var portfoliocode = portfolio.code_node.text();
 		$("#"+type+"-portfolios-content").append($("<div class='row portfolio-row' id='portfoliogroup_"+portfolio.id+"'</div>"));
-		$("#portfoliogroup_"+portfolio.id).html(portfolio.getPortfolioView("portfoliogroup_"+portfolio.id,'portfoliogroup-portfolio'));
+		$("#portfoliogroup_"+portfolio.id).html(portfolio.getPortfolioView("portfoliogroup_"+portfolio.id,'portfoliogroup',null,null,null,this.id));
 	}
 	$(window).scrollTop(0);
 	$("#wait-window").hide();
@@ -362,7 +418,7 @@ UIFactory["PortfoliosGroup"].create = function(code,label)
 		url : url,
 		data : "",
 		success : function(data) {
-			$("#portfoliogroup-refresh").click();
+			fill_list_portfoliosgroups();
 			//--------------------------
 			$('#edit-window').modal('hide');
 		},
@@ -376,9 +432,29 @@ UIFactory["PortfoliosGroup"].create = function(code,label)
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
-//------------------------ DELETE ------------------------------
+//------------------------ADD \ DELETE -------------------------
 //--------------------------------------------------------------
 //--------------------------------------------------------------
+
+//==================================
+UIFactory["PortfoliosGroup"].prototype.addPortfolio = function(portfolioid)
+//==================================
+{
+	var url = serverBCK_API+"/portfoliogroups?group="+this.id+"&uuid="+portfolioid;
+	$.ajax({
+		type : 'PUT',
+		dataType : "text",
+		url : url,
+		data : "",
+		groupid : this.id,
+		success : function(data) {
+			portfoliogroups_byid[this.groupid].loadAndDisplayContent('portfoliogroup');
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+		}
+	});
+};
 
 //==================================
 UIFactory["PortfoliosGroup"].confirmRemove = function(gid,uid) 
@@ -408,12 +484,13 @@ UIFactory["PortfoliosGroup"].remove = function(gid,uid)
 		dataType : "text",
 		url : url,
 		data : "",
+		gid : gid,
+		uid : uid,
 		success : function(data) {
-			if (uid!=null && uid!='null') {
-				$("#portfolios-group_"+gid+"-list_items_"+uid).remove();
-				testGroup_Empty("portfolios-group_",gid);
+			if (this.uid!=null) {
+				portfoliogroups_byid[this.gid].loadAndDisplayContent('portfoliogroup');
 			} else
-				$("#portfoliogroup-refresh").click();
+				fill_list_portfoliosgroups();
 		}
 	});
 };
@@ -472,6 +549,24 @@ UIFactory["PortfoliosGroup"].prototype.getEditor = function(type,lang)
 	return html;
 };
 
+//==================================
+UIFactory["PortfoliosGroup"].edit = function(gid)
+//==================================
+{
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(karutaStr[LANG]['group']);
+	var html = "";
+	$("#edit-window-body").html(html);
+	//--------------------------
+	html = portfoliogroups_byid[gid].getEditor();
+	$("#edit-window-body").append(html);
+	//--------------------------
+	$('#edit-window').modal('show');
+};
+
+
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 //--------------------------------------------------------------
@@ -492,22 +587,6 @@ UIFactory["PortfoliosGroup"].prototype.getSelector = function(attr,value,name)
 	return html;
 };
 
-//==================================
-UIFactory["PortfoliosGroup"].edit = function(gid)
-//==================================
-{
-	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['group']);
-	var html = "";
-	$("#edit-window-body").html(html);
-	//--------------------------
-	html = portfoliogroups_byid[gid].getEditor();
-	$("#edit-window-body").append(html);
-	//--------------------------
-	$('#edit-window').modal('show');
-};
 
 
 //==================================

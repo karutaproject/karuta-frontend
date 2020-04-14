@@ -190,6 +190,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		portfolio_label = '- no label in '+languages[langcode]+' -';
 	//---------------------
 	var html = "";
+	//--------------------------------------------------------------------------------------------
 	if (type=='list') {
 		html += "<div class='portfolio-label col-10 col-md-4' onclick=\"display_main_page('"+this.rootid+"')\" ><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
 		if (USER.creator && !USER.limited) {
@@ -213,9 +214,15 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		html += "</div><!-- class='col' -->";
 		//------------------------------------
 	}
+	//--------------------------------------------------------------------------------------------
+	if (type=='portfoliogroup') {
+		html += "	<div class='portfoliogroup-portfolio-label' >"+portfolio_label+" "+tree_type+" <span class='fas fa-trash' onclick=\"UIFactory.PortfoliosGroup.remove('"+gid+"','"+this.id+"')\"></span></div>";
+	}
+	//--------------------------------------------------------------------------------------------
 	if (type=='portfoliogroup-portfolio') {
 		html += "	<div class='portfoliogroup-portfolio-label' >"+portfolio_label+" "+tree_type+"</div>";
 	}
+	//--------------------------------------------------------------------------------------------
 	if (type=='card') {
 		html += "	<div class='card-header' >";
 		html += portfolio_label;
@@ -227,6 +234,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		html += this.date_modified.substring(0,10);
 		html += "	</div>";
 	}
+	//--------------------------------------------------------------------------------------------
 	if (type=='card-admin') {
 		html += "<div class='card-header' >";
 		html += tree_type + " <a class='portfolio-label' onclick=\"display_main_page('"+this.rootid+"')\" >"+portfolio_label+"</a></div>"
@@ -253,7 +261,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		//------------------------------------
 		html += "</div>";
 	}
-
+	//--------------------------------------------------------------------------------------------
 	if (type=='select') {
 //		if (USER.admin || (USER.creator && !USER.limited) ){
 			html += "<div class='col-md-1 col-xs-1'>"+this.getSelector(null,null,'select_portfolios',true)+"</div>";
@@ -263,6 +271,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 			html += "<div class='col-md-1 col-xs-2'>"+this.date_modified.substring(0,10)+"</div>";
 //		}
 	}
+	//--------------------------------------------------------------------------------------------	
 	return html;
 };
 
@@ -271,7 +280,7 @@ UIFactory["Portfolio"].getAdminPortfolioMenu = function(gid,self,semtag)
 //======================
 {	
 	var html = "";
-	html += "<div class='dropdown portfolio-menu'>";
+	html += "<div class='dropdown menu'>";
 	html += "<button id='dropdown"+self.id+"' data-toggle='dropdown' class='btn dropdown-toggle'></button>";
 	html += "<div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdown"+self.id+"'>";
 	if (gid==null) {

@@ -175,7 +175,7 @@ body,
   background-color: var(--list-element-background-color);
   padding-top: 2px;
   padding-bottom: 2px;
-  padding-left: 20px;
+  padding-left: 7px;
 }
 .rightside .dropdown.menu .btn {
   height: 25px;
@@ -213,81 +213,94 @@ body,
 /* ====================== */
 /*     LIST CONTAINER     */
 /* ====================== */
+#list-container {
+  /*
+  		.porfolios-content {
+  			background-color: var(--list-element-background-color);
+  			padding-top:2px;
+  			padding-bottom:2px;
+  		}
+  		.porfolios-content:empty {
+  			visibility:hidden;
+  		}
+
+  		.list-btn {
+  			line-height:1;
+  			margin-left:5px;
+  		}
+  		.portfolio-menu .btn{
+  			height:25px;
+  			padding-left:9px;
+  			padding-right:9px;
+  		}
+  		#projects {
+  			.active {
+  				background-color: var(--list-menu-background-color);
+  			}
+  		}
+  		.dropdown-menu {
+  			color: var(--list-menu-text-color);
+  			background-color: var(--list-menu-background-color);
+  			a.dropdown-item {
+  				color: var(--list-menu-text-color);
+  				background-color: var(--list-menu-background-color);
+  			}
+  			a.dropdown-item:hover {
+  				color: var(--list-menu-background-color);
+  				background-color: var(--list-menu-text-color);
+  			}
+  		}
+  		.portfolios-not-in-project {
+  			color: var(--list-element-text-color);
+  		}
+  		.folder-header {
+  			padding:7px;
+  			background-color:var(--list-menu-background-color);
+  			color:var(--list-button-text-color);
+  			.btn  {
+  				background-color:var(--list-element-background-color);
+  //				color:var(--list-button-text-color);
+  			}
+  		}
+  		.projects-nb {
+  			color: var(--list-title-color);
+  		}
+  		.number_of_projects_portfolios {
+  			margin-left:5px;
+  			color: var(--list-title-color);
+  			background-color: var(--list-element-background-color-complement);
+  		}
+  		h3.projectcontent-label {
+  			padding:7px;
+  			background-color : var(--list-button-background-color);
+  			color : var(--list-element-text-color);
+  			.btn {
+  				background-color: var(--list-element-background-color);
+  			}
+  		}
+  		.project-content {
+  			.col-md-1{
+  				border-right: 1px solid var(--list-element-text-color);
+  			}
+  //			border-left: 1px solid var(--list-element-text-color);
+  //			.portfolio-row:first-child .col-md-1{
+  //				border-top: 1px solid var(--list-element-text-color);
+  //			}
+  //			.portfolio-row:last-child .col-md-1{
+  //				border-bottom: 1px solid var(--list-element-text-color);
+  //			}
+  		}
+  	*/
+}
 #list-container #portfolio-leftside {
   width: calc(25% - 5px);
   margin-bottom: 10px;
-}
-#list-container #gutter {
-  width: 10px;
-  float: right;
 }
 #list-container #portfolio-rightside {
   width: calc(75% - 5px);
   margin-top: 2px;
   padding-bottom: 5px;
   float: right;
-}
-#list-container .porfolios-content {
-  background-color: var(--list-element-background-color);
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-#list-container .porfolios-content:empty {
-  visibility: hidden;
-}
-#list-container .list-btn {
-  line-height: 1;
-  margin-left: 5px;
-}
-#list-container .portfolio-menu .btn {
-  height: 25px;
-  padding-left: 9px;
-  padding-right: 9px;
-}
-#list-container #projects .active {
-  background-color: var(--list-menu-background-color);
-}
-#list-container .dropdown-menu {
-  color: var(--list-menu-text-color);
-  background-color: var(--list-menu-background-color);
-}
-#list-container .dropdown-menu a.dropdown-item {
-  color: var(--list-menu-text-color);
-  background-color: var(--list-menu-background-color);
-}
-#list-container .dropdown-menu a.dropdown-item:hover {
-  color: var(--list-menu-background-color);
-  background-color: var(--list-menu-text-color);
-}
-#list-container .portfolios-not-in-project {
-  color: var(--list-element-text-color);
-}
-#list-container .folder-header {
-  padding: 7px;
-  background-color: var(--list-menu-background-color);
-  color: var(--list-button-text-color);
-}
-#list-container .folder-header .btn {
-  background-color: var(--list-element-background-color);
-}
-#list-container .projects-nb {
-  color: var(--list-title-color);
-}
-#list-container .number_of_projects_portfolios {
-  margin-left: 5px;
-  color: var(--list-title-color);
-  background-color: var(--list-element-background-color-complement);
-}
-#list-container h3.projectcontent-label {
-  padding: 7px;
-  background-color: var(--list-button-background-color);
-  color: var(--list-element-text-color);
-}
-#list-container h3.projectcontent-label .btn {
-  background-color: var(--list-element-background-color);
-}
-#list-container .project-content .col-md-1 {
-  border-right: 1px solid var(--list-element-text-color);
 }
 #list-container .copy-button .tooltiptext {
   font-family: var(--font-family);
@@ -892,11 +905,9 @@ div.oembedall-container {
 /*  PAGE PORTFOLIOGROUP   */
 /* ====================== */
 #main-portfoliosgroup #portfoliogroup-leftside {
+  float: right;
   width: calc(25% - 8px);
   margin-bottom: 10px;
-}
-#main-portfoliosgroup #portfoliogroup-leftside h3 {
-  margin-top: 20px;
 }
 #main-portfoliosgroup #portfoliogroup-leftside .active {
   background-color: var(--list-button-background-color);
@@ -911,9 +922,6 @@ div.oembedall-container {
   float: right;
   width: calc(25% - 8px);
   margin-bottom: 10px;
-}
-#main-portfoliosgroup #portfoliogroup-portfolio-leftside h3 {
-  margin-top: 20px;
 }
 #main-portfoliosgroup #portfoliogroup-portfolio-leftside .active {
   background-color: var(--list-button-background-color);
