@@ -26,6 +26,7 @@ function fill_list_portfoliosgroups()
 	//------------------------------------------
 	html += "	<div id='portfoliogroup-portfolio-leftside'  class='leftside'>";
 	html += "		<div id='portfoliogroup-portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_portfoliosgroups()'></div>";
+	html += "		<div id='portfoliogroup-portfolio-search' class='search'></div>";
 	html += "		<h3 class='title'>";
 	html += "			<span id='folders-label' class='folder-label'>"+karutaStr[LANG]['folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
 	html += "		</h3>";
@@ -72,6 +73,7 @@ function fill_list_portfoliosgroups()
 	html += "</div>";
 	//-----------------------------------------------------------
 	$("#main-portfoliosgroup").html(html);
+	UIFactory.PortfolioFolder.displayPortfolioSearch("portfoliogroup-portfolio",true);	
 	UIFactory.PortfoliosGroup.loadAndDisplayAll('portfoliogroup');
 	UIFactory.PortfolioFolder.displayAll('portfoliogroup-portfolio'); // already loaded
 }

@@ -175,6 +175,7 @@
 	.rightside {
 		.search{
 			min-height:25px;
+			margin-bottom: 5px;
 		}
 		.header {
 			padding:7px;
@@ -184,11 +185,14 @@
 				background-color:var(--list-element-background-color);
 			}
 		}
-		.content1, .portfolios-content {
-			background-color: var(--list-element-background-color);
-			padding-top:2px;
-			padding-bottom:2px;
-			padding-left:7px;
+		.content1{
+			margin-bottom:2px;
+			.portfolios-content {
+				background-color: var(--list-element-background-color);
+				padding-top:2px;
+				padding-bottom:2px;
+				padding-left:7px;
+			}
 		}
 		.dropdown.menu .btn{
 			height:25px;

@@ -232,11 +232,7 @@ UIFactory["PortfoliosGroup"].displayAll = function(type)
 {
 	$("#"+type+"-leftside-content1").html("");
 	for ( var i = 0; i < portfoliogroups_list.length; i++) {
-		var itemid = "portfoliosgroup_"+portfoliogroups_list[i].id;
-		var html = "";
-		html += "<div id='"+itemid+"' class='portfoliosgroup'></div><!-- class='portfoliosgroup'-->";
-		$("#"+type+"-leftside-content1").append($(html));
-		portfoliogroups_list[i].displayView(itemid,'list',type);
+		portfoliogroups_list[i].displayView(type+"-leftside-content1",'list',type);
 	}
 };
 
@@ -320,7 +316,7 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,viewtype,type
 		if (portfoliogroup_label==undefined || portfoliogroup_label=='' || portfoliogroup_label=='&nbsp;')
 			portfoliogroup_label = '- no label in '+languages[LANGCODE]+' -';
 		//-------------------------------------------------
-		html += "<div id='portfoliogroup_"+this.id+"' class='portfoliogroup folder' ondrop='dropPortfolioGroupFolder(event)' ondragover='ondragoverPortfolioGroupFolder(event)' ondragleave='ondragleavePortfolioGroupFolder(event)'>";
+		html += "<div id='portfoliogroup_"+this.id+"' class='portfoliogroup' ondrop='dropPortfolioGroupFolder(event)' ondragover='ondragoverPortfolioGroupFolder(event)' ondragleave='ondragleavePortfolioGroupFolder(event)'>";
 		html += "	<div id='tree_portfoliogroup-label_"+this.id+"' class='tree-label portfoliogroup-label'>";
 		html += "		<span id='portfoliogrouplabel_"+this.id+"' onclick=\"portfoliogroups_byid['"+this.id+"'].toggleContent('"+type+"')\" class='project-label'>"+portfoliogroup_code+"</span>";
 		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"' style='display:none'>"+this.nbchildren+"</span>";

@@ -370,8 +370,6 @@ UIFactory["PortfolioFolder"].prototype.displayFolder = function(type,dest)
 		if (folder_label==undefined || folder_label=='' || folder_label=='&nbsp;')
 			folder_label = '- no label in '+languages[LANGCODE]+' -';
 		//-------------------------------------------------
-//		projects_list[number_of_projects] = {"uuid":this.id,"folder_code":folder_code,"folderlabel":folder_label,"folders":""};
-//		projects_list[number_of_projects].folders += this.id;
 		html += "<div id='folder_"+this.id+"' class='tree-elt' draggable='true' ondragstart='dragPortfolioFolder(event)' ondrop='dropPortfolioFolder(event)' ondragover='ondragoverPortfolioFolder(event)' ondragleave='ondragleavePortfolioFolder(event)'";
 		html += "  data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + folder_code+"\" >";
 		html += "	<div id='"+type+"-tree-label_"+this.id+"' class='"+type+"-label tree-label'>";
@@ -985,4 +983,97 @@ UIFactory["PortfolioFolder"].displayPortfolios = function(dest,parentcode,type,i
 	}
 	$(window).scrollTop(0);
 	$("#wait-window").hide();
+}
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ SEARCH ------------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//==============================
+UIFactory["PortfolioFolder"].displayPortfolioSearch = function(type,searchOnly)
+//==============================
+{
+	if (searchOnly==null)
+		searchOnly = false;
+	var html = "";
+	html += "<div class='input-group'>";
+	html += "	<input id='"+type+"-search-portfolio-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"'>";
+	html += "	<div class='input-group-append'>";
+	html +="		<button id='search-button' type='button' onclick=\"UIFactory.PortfolioFolder.searchPortfolio('"+type+"')\" class='btn'><i class='fas fa-search'></i></button>";
+	if (!searchOnly) {
+		html +="		<a id='archive-button' href='' disabled='true' class='btn'><i class='fas fa-download'></i></a>";
+		html +="		<button id='remove-button' type='button' disabled='true' onclick='UIFactory.Portfolio.removeSearchedPortfolios()' class='btn'><i class='fas fa-trash'></i></button>";
+	}
+	html += "	</div>";
+	html += "</div>";
+	$("#"+type+"-search").html(html);
+	$("#"+type+"-search-portfolio-input").keypress(function(f) {
+		var code= (f.keyCode ? f.keyCode : f.which);
+		if (code == 13)
+			UIFactory.PortfolioFolder.searchPortfolio(type);
+	});
+}
+
+//==================================
+UIFactory["PortfolioFolder"].searchPortfolio = function(type)
+//==================================
+{
+	cleanList();
+	var code = $("#"+type+"-search-portfolio-input").val();
+	if (code!="")
+		UIFactory.PortfolioFolder.displaySearchedPortfolios(code,type);
+}
+
+//==============================
+UIFactory["PortfolioFolder"].displaySearchedPortfolios = function(code,type)
+//==============================
+{
+	searched_portfolios_list = [];
+	
+	$("#"+type+"-rightside-header").html("");
+	$("#"+type+"-rightside-content1").html("");
+	$("#"+type+"-rightside-content2").html("");
+	$("#wait-window").show();
+	$("#menu").html("");
+	cleanList();
+	//----------------
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios?active=1&search="+code,
+		code : code,
+		success : function(data) {
+			var nb = parseInt($('portfolios',data).attr('count'));
+			UIFactory["Portfolio"].parse_search(data);
+			$("#"+type+"-rightside-content2").html($("<div id='"+type+"-searched-portfolios-content' class='portfolios-content'></div>"));
+			$("#"+type+"-rightside-content1").html($("<div id='"+type+"-searched-folders-content' class='portfolios-content'></div>"));
+			//-------------------------------
+			for (var i=0;i<searched_portfolios_list.length;i++){
+				var portfolio = searched_portfolios_list[i];
+				if (portfolio.visible || (USER.creator && !USER.limited) ) {
+					if (portfolio.semantictag.indexOf('karuta-project')>-1)
+						$("#"+type+"-searched-folders-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"' draggable='true' ondragstart='dragPortfolioFolder(event)'></div>"));
+					else
+						$("#"+type+"-searched-portfolios-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
+					$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,type));
+				}
+			}
+			var archive_href = serverBCK_API+"/portfolios/zip?portfolios=";
+			for (var i = 0; i < searched_portfolios_list.length; i++) {
+				if (i>0)
+					archive_href += ","
+				archive_href += searched_portfolios_list[i].id;
+			}
+			$("#archive-button").removeAttr("disabled");
+			$("#archive-button").attr("href",archive_href);
+			$("#remove-button").prop("disabled",false);
+			$("#wait-window").hide();
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active: "+textStatus);
+		}
+	});
+	//---------------------------------------------------
 }

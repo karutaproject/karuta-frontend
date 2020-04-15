@@ -96,9 +96,7 @@ function fill_list_page()
 	html += "</div>";
 	//-----------------------------------------------------------
 	$("#list-container").html(html);
-
-	displayPortfolioSearch("search-portfolio");
-	
+	UIFactory.PortfolioFolder.displayPortfolioSearch("portfolio",false);	
 	//---------------------------------------------
 	if (USER.admin || USER.creator ){
 		//-------- menu -------------------------------------
@@ -121,58 +119,6 @@ function fill_list_page()
 }
 
 //==============================
-function fill_search_page(code,type)
-//==============================
-{
-	searched_portfolios_list = [];
-	
-	$("#"+type+"-rightside-header").html("");
-	$("#"+type+"-rightside-content1").html("");
-	$("#"+type+"-rightside-content2e").html("");
-	$("#wait-window").show();
-	$("#menu").html("");
-	cleanList();
-	//----------------
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&search="+code,
-		code : code,
-		success : function(data) {
-			var nb = parseInt($('portfolios',data).attr('count'));
-			UIFactory["Portfolio"].parse_search(data);
-			$("#"+type+"-content2-rightside").html($("<div id='searched-portfolios-content' class='portfolios-content'></div>"));
-			$("#"+type+"content1-rightside").html($("<div id='searched-folders-content' class='portfolios-content'></div>"));
-			//-------------------------------
-			for (var i=0;i<searched_portfolios_list.length;i++){
-				var portfolio = searched_portfolios_list[i];
-				if (portfolio.visible || (USER.creator && !USER.limited) ) {
-					if (portfolio.semantictag.indexOf('karuta-project')>-1)
-						$("#searched-folders-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"'></div>"));
-					else
-						$("#searched-portfolios-content").append($("<div class='row portfolio-row'   id='portfolio_"+portfolio.id+"'></div>"));
-					$("#portfolio_"+portfolio.id).html(portfolio.getPortfolioView("#portfolio_"+portfolio.id,'list'));
-				}
-			}
-			var archive_href = serverBCK_API+"/portfolios/zip?portfolios=";
-			for (var i = 0; i < searched_portfolios_list.length; i++) {
-				if (i>0)
-					archive_href += ","
-				archive_href += searched_portfolios_list[i].id;
-			}
-			$("#archive-button").removeAttr("disabled");
-			$("#archive-button").attr("href",archive_href);
-			$("#remove-button").prop("disabled",false);
-			$("#wait-window").hide();
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
-		}
-	});
-	//---------------------------------------------------
-}
-
-//==============================
 function display_list_page()
 //==============================
 {
@@ -184,36 +130,6 @@ function display_list_page()
 	}
 }
 
-//==============================
-function displayPortfolioSearch(dest)
-//==============================
-{
-	var html = "";
-	html += "<div id='search' class='input-group'>";
-	html += "	<input id='search-portfolio-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-label']+"'>";
-	html += "	<div class='input-group-append'>";
-	html +="		<button id='search-button' type='button' onclick='searchPortfolio()' class='btn'><i class='fas fa-search'></i></button>";
-	html +="		<a id='archive-button' href='' disabled='true' class='btn'><i class='fas fa-download'></i></button>";
-	html +="		<button id='remove-button' type='button' disabled='true' onclick='UIFactory.Portfolio.removeSearchedPortfolios()' class='btn'><i class='fas fa-trash'></i></button>";
-	html += "	</div>";
-	html += "</div>";
-	$("#"+dest).html(html);
-	$("#search-portfolio-input").keypress(function(f) {
-		var code= (f.keyCode ? f.keyCode : f.which);
-		if (code == 13)
-			searchPortfolio();
-	});
-}
-
-//==================================
-function searchPortfolio()
-//==================================
-{
-	cleanList();
-	var code = $("#search-portfolio-input").val();
-	if (code!="")
-		fill_search_page(code);
-}
 
 //==============================
 function applyListConfiguration()
