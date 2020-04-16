@@ -27,25 +27,31 @@ function fill_list_users(type)
 	//------------------------------------------
 //	html += "	<div class='gutter'></div>";
 	//------------------------------------------
-	html += "	<div id='user-rightside'>";
+	html += "	<div id='user-rightside' class='rightside'>";
 	html += "		<div id='search-user' class='search'></div>";
-	html += "		<div id='user-title-rightside' class='title'></div>";
-	html += "		<div id='user-header-rightside' class='header'></div>";
-	html += "		<div id='user-content1-rightside' class='content1-rightside'></div>";
-	html += "		<div id='user-navbar-pages-top-rightside' class='navbar-pages' style='display:none'></div>";
-	html += "		<div id='user-content2-rightside' class='content2-rightside'></div>";
-	html += "		<div id='user-navbar-pages-bottom-rightside' class='navbar-pages' style='display:none'></div>";
+	html += "		<div id='user-rightside-title' class='title'></div>";
+	html += "		<div id='user-rightside-header' class='header'></div>";
+	html += "		<div id='user-rightside-content1' class='content1'></div>";
+//	html += "		<div id='user-rightside-navbar-pages-top' class='navbar-pages'></div>";
+	html += "		<div id='user-rightside-content2' class='content2'>";
+	html += "			<table class='users-content'>";
+	html += "				<tr class='table-head'><th class='firstname'>"+karutaStr[LANG]['firstname']+"</th><th class='lastname'>"+karutaStr[LANG]['lastname']+"</th><th class='c-a-s'>"+karutaStr[LANG]['c-a-s']+"</th><th class='username'>"+karutaStr[LANG]['username']+"</th><th class='buttons'></th></tr>";
+	html += "				<tbody id='user-rightside-users-content' class='users-content'></tbody>";
+	html += "			</table>";
+	html += "		</div>";
+	html += "		<div id='user-rightside-navbar-pages-bottom' class='navbar-pages'></div>";
 	html += "	</div>";
 	//------------------------------------------
-	html += "	<div id='user-leftside'>";
-	html += "		<h3 id='user-title-leftside'>"+karutaStr[LANG]['active_users'];
-	html += "			<button id='list-menu' class='btn' onclick=\"fill_list_usersOLD('user-content1-rightside','active','list');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "	<div id='user-leftside'  class='leftside'>";
+	html += "		<h3>"+karutaStr[LANG]['active_users'];
+//	html += "			<button id='list-menu' class='btn' onclick=\"fill_list_usersOLD('user-content1-rightside','active','list');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.User.displayActive('user-rightside-users-content','user');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
 	html += "		</h3>";
-	html += "		<h4 id='user-header-leftside'>";
+	html += "		<h4>";
 //	html += "			<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
 //	html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersFolder.callCreateFolder('active');\"></i></span>";
 	html += "		</h4>";
-	html += "		<div id='user-content1-leftside' class='content1-leftside tree'></div>";
+	html += "		<div id='user-content1-leftside' class='content1'></div>";
 	html += "		<h3 id='user-title-leftside'>";
 	html += "			<span id='portfolios-label' class='folder-label'>"+karutaStr[LANG]['inactive_users']+"</span>&nbsp<span class='badge number_of_portfolios' id='portfolios-nb'></span>";
 	html += "			<button id='list-menu' class='btn' onclick=\"fill_list_usersOLD('user-content1-rightside','inactive','list');;\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
@@ -56,7 +62,7 @@ function fill_list_users(type)
 	html += 			karutaStr[LANG]["delete-temporary-users"];
 	html += "			</button>";
 	html += "		</h3>";
-	html += "		<div id='user-content2-leftside' class='content2-leftside'></div>";
+	html += "		<div id='user-content2-leftside' class='content2'></div>";
 	html += "	</div><!--div id='userslist-leftside'-->";
 	//------------------------------------------
 	html += "</div><!--div id='user-body'-->";
@@ -65,7 +71,7 @@ function fill_list_users(type)
 	$("#main-user").html(html);
 	displaySearchUser("search-user");
 //	UIFactory.UsersFolder.loadAndDisplayFolders('user-content1-leftside','list-user');
-	fill_list_usersOLD('user-content1-rightside','active','list');
+//	fill_list_usersOLD('user-content1-rightside','active','list');
 }
 
 //==============================

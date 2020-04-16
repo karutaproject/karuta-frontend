@@ -215,7 +215,8 @@
 		.content1:empty {
 			visibility:hidden;
 		}
-		.portfolio-row {
+		.portfolio-row,
+		.user-row {
 			margin: 2px;
 			color: var(--list-element-text-color);
 			&:hover {
@@ -226,8 +227,20 @@
 			background-color:var(--list-button-background-color);
 			color:var(--list-button-text-color);
 		}
-
-
+		.navbar-pages {
+			background-color: var(--list-button-background-color);
+			padding:5px;
+			.badge {
+				margin-left:5px;
+				background-color: var(--list-button-background-color);
+				cursor: pointer;
+				border: 1px solid var(--list-element-text-color);
+			}
+			.badge.active {
+				background-color: var(--list-element-background-color);
+				border: 1px solid var(--list-element-background-color);
+			}
+		}
 	}
 
 
@@ -248,83 +261,7 @@
 			padding-bottom: 5px;
 			float: right;
 		}
-/*
-		.porfolios-content {
-			background-color: var(--list-element-background-color);
-			padding-top:2px;
-			padding-bottom:2px;
-		}
-		.porfolios-content:empty {
-			visibility:hidden;
-		}
-		
-		.list-btn {
-			line-height:1;
-			margin-left:5px;
-		}
-		.portfolio-menu .btn{
-			height:25px;
-			padding-left:9px;
-			padding-right:9px;
-		}
-		#projects {
-			.active {
-				background-color: var(--list-menu-background-color);
-			}
-		}
-		.dropdown-menu {
-			color: var(--list-menu-text-color);
-			background-color: var(--list-menu-background-color);
-			a.dropdown-item {
-				color: var(--list-menu-text-color);
-				background-color: var(--list-menu-background-color);
-			}
-			a.dropdown-item:hover {
-				color: var(--list-menu-background-color);
-				background-color: var(--list-menu-text-color);
-			}
-		}
-		.portfolios-not-in-project {
-			color: var(--list-element-text-color);
-		}
-		.folder-header {
-			padding:7px;
-			background-color:var(--list-menu-background-color);
-			color:var(--list-button-text-color);
-			.btn  {
-				background-color:var(--list-element-background-color);
-//				color:var(--list-button-text-color);
-			}
-		}
-		.projects-nb {
-			color: var(--list-title-color);
-		}
-		.number_of_projects_portfolios {
-			margin-left:5px;
-			color: var(--list-title-color);
-			background-color: var(--list-element-background-color-complement);
-		}
-		h3.projectcontent-label {
-			padding:7px;
-			background-color : var(--list-button-background-color);
-			color : var(--list-element-text-color);
-			.btn {
-				background-color: var(--list-element-background-color);
-			}
-		}
-		.project-content {
-			.col-md-1{
-				border-right: 1px solid var(--list-element-text-color);
-			}
-//			border-left: 1px solid var(--list-element-text-color);
-//			.portfolio-row:first-child .col-md-1{
-//				border-top: 1px solid var(--list-element-text-color);
-//			}
-//			.portfolio-row:last-child .col-md-1{
-//				border-bottom: 1px solid var(--list-element-text-color);
-//			}
-		}
-	*/
+
 		.copy-button .tooltiptext {
 			font-family: var(--font-family);
 			display:none;
@@ -358,6 +295,7 @@
 			display:in-line;
 			opacity: 1;
 		}
+		//----- CARD -------
 		.portfolio-card{
 			margin-top:15px;
 			border:none;
@@ -457,10 +395,6 @@
 		background-color: var(--list-element-background-color);
 		padding-top: 5px;
 		padding-bottom: 5px;
-	}
-
-	.content1-rightside {
-		margin-bottom:2px;
 	}
 
 	#searched-portfolios-header {
@@ -564,87 +498,16 @@
 		content: "\25BC"; 
 	}
 
-/*
-.portfolio .closeSign::before,
-.portfolio .openSign::before{
-  color: var(--list-element-text-color);
-}
+/* ============================ */
+/*     PAGE USERS / USERSGROUP  */
+/* ============================ */
 
-#list-container .folders-nb {
-  color: var(--list-title-color);
-}
+	.users-content {
+		background-color: var(--list-element-background-color);
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
 
-.folder-label {
-  cursor: pointer;
-}
-
-
-
-#list-container .folders-nb {
-  color: var(--list-title-color);
-}
-
-.folder-content {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid var(--list-background-color);
-}
-
-#folder-portfolios .folder,
-#list-container #folders .active {
-  background-color: var(--list-menu-background-color);
-}
-
-#list-container .folder-row {
-  margin-left: 1px;
-  margin-right: 1px;
-  color: var(--list-element-text-color);
-}
-
-#list-container .folder-row:hover {
-  background-color: var(--list-element-background-color-complement);
-}
-
-#folder-portfolios-pages .folder-label {
-  cursor: none;
-  font-weight: normal;
-}
-
-.number_of_items {
-  margin-left: 5px;
-  background-color: var(--list-element-text-color);
-  color: var(--list-element-background-color);
-}
-
-.number_of_folders {
-  margin-left: 5px;
-  color: var(--list-element-text-color);
-  background-color: var(--list-element-background-color-complement);
-}
-
-.active .number_of_folders {
-  margin-left: 5px;
-  color: var(--list-element-text-color);
-  background-color: var(--list-element-background-color);
-}
-
-	
-.oembedall-closehide{
-	display:none;
-}
-
-
-div.oembedall-container {
-	margin-top:-10px;
-}
-
-
-.thereismore {
-	position:relative;
-	top:-10px;
-}
-
-*/
 
 /* ====================== */
 /*     PAGE USERS         */
@@ -674,6 +537,20 @@ div.oembedall-container {
 			background-color: var(--list-button-background-color);
 			color : var(--list-element-text-color);
 		}
+	
+		table.users-content {
+			width: 100%;
+			.table-head {
+				background-color: var(--list-button-background-color);
+				.firstname {width:25%;}
+				.lastname {width:25%;}
+				.c-a-s {width:5%;}
+				.username {width:30%;}
+				.buttons {width:10%;}
+			}
+		}
+	}
+/*
 		#active,
 		#inactive {
 			padding:10px;
@@ -778,6 +655,8 @@ div.oembedall-container {
 	#create-folder-button {
 		color : var(--list-element-text-color);
 	}
+*/
+
 
 /* ====================== */
 /*     PAGE USERSGROUPS   */
@@ -786,38 +665,41 @@ div.oembedall-container {
 
 	#main-usersgroup {
 		color : var(--list-element-text-color);
-		#usergroupslist-leftside {
-			width: calc(20% - 7px);
+		
+		#usergroup-leftside {
+			float: right;
+			width: calc(25% - 8px);
 			margin-bottom: 10px;
-			h3 {
-				margin-top:20px;
-			}
 			.active {
 				background-color: var(--list-button-background-color);
 			}
 		}
-		#usergroupslist-rightside {
-			width: calc(30% - 7px);
+	
+		#usergroup-rightside {
+			width: calc(25% - 8px);
 			margin-top: 2px;
 			padding-bottom: 5px;
 			float: right;
 		}
-		#userslist-leftside {
+
+		#usergroup-user-leftside {
 			float: right;
-			width: calc(20% - 7px);
+			width: calc(25% - 8px);
 			margin-bottom: 10px;
 			.active {
 				background-color: var(--list-button-background-color);
 			}
 		}
-		#usergroup-userslist-leftside.V2 {
+	
+		#usergroup-user-rightside {
+			width: calc(25% - 8px);
+			margin-top: 2px;
+			padding-bottom: 5px;
 			float: right;
-			width: calc(50% - 7px);
-			margin-bottom: 10px;
-			.active {
-				background-color: var(--list-button-background-color);
-			}
 		}
+
+	}
+/*
 		#list-users-active {
 			background-color: var(--list-element-background-color);
 			padding:15px;
@@ -845,20 +727,6 @@ div.oembedall-container {
 		}
 		h3,h4 {
 			color: var(--list-title-color);
-		}
-		.navbar-pages {
-			background-color: var(--list-button-background-color);
-			padding:5px;
-			.badge {
-				margin-left:5px;
-				background-color: var(--list-button-background-color);
-				cursor: pointer;
-				border: 1px solid var(--list-element-text-color);
-			}
-			.badge.active {
-				background-color: var(--list-element-background-color);
-				border: 1px solid var(--list-element-background-color);
-			}
 		}
 		.dropdown-menu {
 			color: var(--list-menu-text-color);
@@ -951,6 +819,7 @@ div.oembedall-container {
 			margin-bottom:2px;
 		}
 	}
+*/
 
 /* ====================== */
 /*  PAGE PORTFOLIOGROUP   */

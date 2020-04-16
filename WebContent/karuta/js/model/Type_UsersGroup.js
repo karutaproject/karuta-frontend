@@ -15,17 +15,12 @@
 
 var displayGroup = {};
 displayGroup['UsersGroup'] = {};
-displayGroup['PortfoliosGroup'] = {};
+displayGroup['UsersGroup'] = {};
 //---------------------------------
-var usersgroups_byid = {};
-var usersgroups_list = [];
-var bin_UsersGroup_list = [];
-var currentDisplayedUsersGroupId = null;
-var root_UsersGroup = '0';
-var pagegNavbar_list = ["top","bottom"];
-var number_of_usersgroups = 0;
-var folder_last_drop = "";
+var usergroups_byid = {};
+var usergroups_list = [];
 var usergroup_last_drop = "";
+
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -39,11 +34,8 @@ UIFactory["UsersGroup"] = function(node)
 {
 	this.id = $(node).attr('id');
 	this.node = node;
-	this.code_node = $("code",node);
-	this.code = this.code_node.text();
-	//--------- V2 ---------------------
-	this.label = $("label",node).text();
-	this.label_nodeV2 = $("label",node);
+	this.code = $("label",node).text();
+	this.code_node = $("label",node);
 	//------------------------------
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
@@ -59,46 +51,21 @@ UIFactory["UsersGroup"] = function(node)
 	//------------------------------
 	this.attributes = {};
 	this.attributes["code"] = this.code_node;
-	this.attributes["label"] = this.label_node;
-	this.attributes["labelV2"] = this.label_nodeV2;
+	this.attributes["label"] = this.code_node;
 	//------------------------------
-	this.date_modified = $(node).attr('modified');
-	this.owner = $(node).attr('owner');
-	if ($(node).attr('ownerid')!=undefined)
-		this.ownerid = $(node).attr('ownerid');
-	else
-		this.ownerid = null;
-	if ($(node).attr('nb_folders')!=undefined) {
-		this.nb_folders = $(node).attr('nb_folders');		
-	} else this.nb_folders = 0;
-	if ($(node).attr('nb_users')!=undefined) {
-		this.nb_users = $(node).attr('nb_users');
-	} else this.nb_users = 0;
-	this.loadedStruct = false;
-	this.folders_list = [];
-	this.loadedFolder = false;
-	this.pageindex = '1';
-	this.chidren_list = {};
 	this.display = {};
+	this.displayLabel = {};
+	//------------------------------
+	this.loaded = false;
+	this.nbchildren = 0;
+	this.children = {};
 }
 
-
-//==================================
-UIFactory["UsersGroup"].displayTree = function(dest,folderid,type)
-//==================================
-{
-	var folder_list = [];
-//	if (folderid==undefined || folderid==null)
-//		folder_list = usersgroups_list;
-//	else
-		folder_list = usersgroups_byid[folderid].folders_list;
-	var html="";
-	for (var i = 0; i < folder_list.length; i++) {
-		html += folder_list[i].getTreeNodeView(dest,type);
-	}
-	document.getElementById(dest).innerHTML = html;
-//	document.getElementById('nb_folders_'+usersgroups_byid[folderid].id).innerHTML = usersgroups_byid[folderid].nb_folders;
-}
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------ DRAG AND DROP -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
 
 //==================================
 function dragFolder(ev)
@@ -138,6 +105,218 @@ function dropFolder(ev)
 	}
 
 }
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ LOADERS -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//==================================
+UIFactory["UsersGroup"].loadAndDisplayAll = function (type)
+//==================================
+{
+	$("#wait-window").show();
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/usersgroups",
+		data: "",
+		success : function(data) {
+			UIFactory.UsersGroup.parse(data);
+			UIFactory.UsersGroup.displayAll(type);
+			$("#wait-window").hide();
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET UIFactory.UsersGroup.loadAndDisplayGroups: "+textStatus);
+			$("#wait-window").hide();
+		}
+	});
+}
+
+//==================================
+UIFactory["UsersGroup"].parse = function(data) 
+//==================================
+{
+	usergroups_byid = {};
+	usergroups_list = [];
+	var items = $("group",data);
+	var tableau1 = new Array();
+	var tableau2 = new Array();
+	for ( var i = 0; i < items.length; i++) {
+		var gid = $(items[i]).attr('id');
+		usergroups_byid[gid] = new UIFactory["UsersGroup"](items[i]);
+		var code = usergroups_byid[gid].code_node.text();
+		tableau1[i] = [code,gid];
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
+	for (var i=0; i<newTableau1.length; i++){
+		usergroups_list[i] = usergroups_byid[newTableau1[i][1]];
+	}
+};
+
+//==================================
+UIFactory["UsersGroup"].prototype.toggleContent = function(type)
+//==================================
+{
+	if ($("#tree_usergroup_label_"+this.id).hasClass('active')) {
+		localStorage.setItem('currentDisplayedUserGroupCode','none');
+	} else {
+		if (this.loaded)
+			this.displayContent(type);
+		else
+			this.loadAndDisplayContent(type);
+		$(".user-label").removeClass('active');
+		$("#tree_usergroup-label_"+this.id).addClass('active');
+		localStorage.setItem('currentDisplayedUserGroupCode',this.code_node.text());
+	}
+}
+
+//==============================
+UIFactory["UsersGroup"].prototype.loadAndDisplayContent = function (type)
+//==============================
+{
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/usersgroups?group="+this.id,
+		data: "",
+		group : this, // passing group to success
+		success : function(data) {
+			this.group.loaded = true;
+			//-------------------------
+			var tableau1 = new Array();
+			var uuid = "";
+			var items = $("user",data);
+			for ( var i = 0; i < items.length; i++) {
+				uuid = $(items[i]).attr('id');
+				if (Users_byid[uuid]==undefined){
+					UIFactory.User.load(uuid);
+				}
+				var lastname = Users_byid[uuid].lastname;
+				if (lastname=="")
+					lastname = " ";
+				var firstname = Users_byid[uuid].firstname;
+					tableau1[tableau1.length] = [lastname,firstname,uuid];
+			}
+			var newTableau1 = tableau1.sort(sortOn1_2);
+			this.group.children = {};
+			for (var i=0; i<newTableau1.length; i++){
+				this.group.children[newTableau1[i][2]] = {'id':newTableau1[i][2]};
+			}
+			this.group.nbchildren = items.length;
+			//-------------------------
+			this.group.displayContent(type);
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+		}
+	});
+}
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ DISPLAY -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+
+//==================================
+UIFactory["UsersGroup"].displayAll = function(type)
+//==================================
+{
+	$("#"+type+"-leftside-content1").html("");
+	for ( var i = 0; i < usergroups_list.length; i++) {
+		usergroups_list[i].displayView(type+"-leftside-content1",'list',type);
+	}
+};
+
+//==================================
+UIFactory["UsersGroup"].prototype.displayView = function(dest,viewtype,type)
+//==================================
+{
+	var group_type = "UsersGroup";
+	if (dest!=null) {
+		this.display[dest]=true;
+	}
+	if (viewtype==null)
+		viewtype = 'list';
+	var html = "";
+	if (viewtype=='header') {
+		html += "<div id='usergroup_"+this.id+"' class='tree-elt' ondrop='dropusergroup(event)' ondragover='ondragoverusergroup(event)' ondragleave='ondragleaveusergroup(event)'";
+		html += "		<span class='UsersGroup-label'>"+this.code_node.text()+"</span>";
+		//------------ buttons ---------------
+		html += "		<div class='dropdown menu' style='float:right'>";
+		if (USER.admin) {
+			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
+			html += "		<div class='dropdown-menu  dropdown-menu-right'>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+//			html += "			<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].callAddPortfolios('"+this.id+"','"+this.label_node.text()+"')\" ><i class='fa fa-plus-square'></i> "+karutaStr[LANG]["add_portfolios"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].callShareUsers('"+this.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].callShareUsersGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
+			html += "		</div>";
+		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
+			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle' style='visibility:hidden'></button>";
+		}
+		html += "		</div><!-- class='dropdown' -->";
+		html += "</div>";
+		//---------------------------------------
+		$("#"+dest).append($(html));
+	}
+
+	if (viewtype=='list') {
+		//---------------------
+		if (dest!=null) {
+			this.displayLabel["usergrouplabel_"+this.id] = viewtype;
+		}
+		//---------------------
+		var html = "";
+		var usergroup_code = this.code_node.text();
+		//-------------------------------------------------
+		var usergroup_label = this.label_node[LANGCODE].text();
+		if (usergroup_label==undefined || usergroup_label=='' || usergroup_label=='&nbsp;')
+			usergroup_label = '- no label in '+languages[LANGCODE]+' -';
+		//-------------------------------------------------
+		html += "<div id='usergroup_"+this.id+"' class='usergroup' ondrop='dropusergroupFolder(event)' ondragover='ondragoverusergroupFolder(event)' ondragleave='ondragleaveusergroupFolder(event)'>";
+		html += "	<div id='tree_usergroup-label_"+this.id+"' class='tree-label usergroup-label'>";
+		html += "		<span id='usergrouplabel_"+this.id+"' onclick=\"usergroups_byid['"+this.id+"'].toggleContent('"+type+"')\" class='project-label'>"+usergroup_code+"</span>";
+		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"' style='display:none'>"+this.nbchildren+"</span>";
+		html += "	</div>";
+		html += "</div>"
+		$("#"+dest).append($(html));
+		//-------------------------------------------------
+		if (!this.loaded && localStorage.getItem('currentDisplayedUserGroupCode')==usergroup_code) {
+			this.loadAndDisplayContent(type);
+			$(".usergroup-label").removeClass('active');
+			$("#tree_usergroup-label_"+this.id).addClass('active');
+		}
+	}
+};
+
+//==================================
+UIFactory["UsersGroup"].prototype.displayContent = function(type)
+//==================================
+{
+	var code = this.code_node.text();
+	//-------------------- header -------------------------------
+	$("#"+type+"-rightside-header").html("");
+	this.displayView(type+"-rightside-header",'header',type);
+	//------------------ content ---------------------------
+	$("#"+type+"-rightside-content2").html($("<div class='users-content' id='"+type+"-users-content'</div>"));
+	for (uuid in this.children){
+		var user = Users_byid[uuid];
+		$("#"+type+"-users-content").append($("<div class='row user-row' id='usergroup_"+user.id+"'</div>"));
+		$("#usergroup_"+user.id).html(user.getView("usergroup_"+user.id,'usergroup',null,this.id));
+	}
+	$(window).scrollTop(0);
+	$("#wait-window").hide();
+};
+
+
+
+
 
 //==================================
 UIFactory["UsersGroup"].prototype.getTreeNodeView = function(dest,type,langcode)
@@ -630,27 +809,6 @@ UIFactory["UsersGroup"].del = function(id)
 	});
 };
 
-//==================================
-UIFactory["UsersGroup"].parse = function(data) 
-//==================================
-{
-	usersgroups_byid = {};
-	usersgroups_list = [];		
-	var items = $("UsersGroup",data);
-	if (items.length==0) // -- V2--
-		items = $("group",data);
-	var tableau1 = new Array();
-	for (var i = 0; i < items.length; i++) {
-		var id = $(items[i]).attr('id');
-		usersgroups_byid[id] = new UIFactory["UsersGroup"](items[i]);
-		var code = usersgroups_byid[id].code;
-		tableau1[i] = [code,id];
-	}
-	var newTableau1 = tableau1.sort(sortOn1);
-	for (var i=0; i<newTableau1.length; i++){
-		usersgroups_list[i] = usersgroups_byid[newTableau1[i][1]]
-	}
-};
 
 //==================================
 UIFactory["UsersGroup"].parseStructure = function(data,parentid) 
@@ -1099,7 +1257,7 @@ UIFactory["UsersGroup"].displayGroups = function(destid,type,lang)
 };
 
 //==================================
-UIFactory["UsersGroup"].prototype.displayView = function(dest,type,lang)
+UIFactory["UsersGroup"].prototype.XXXdisplayView = function(dest,type,lang)
 //==================================
 {
 	var group_type = "UsersGroup";

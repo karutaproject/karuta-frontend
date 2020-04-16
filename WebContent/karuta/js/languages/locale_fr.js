@@ -361,6 +361,7 @@ karutaStr['fr']['select_user']="Select unusager";
 karutaStr['fr']['other']="Autre";
 karutaStr['fr']['delete-temporary-users']="Supprimer tous";
 karutaStr['fr']['delete-empty-users']="Supprimer la sélection";
+karutaStr['fr']['c-a-s']="C/A/S";
 
 //=========================================
 //========== ROLES ========================
