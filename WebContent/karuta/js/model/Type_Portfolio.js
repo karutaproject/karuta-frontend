@@ -1729,7 +1729,7 @@ UIFactory["Portfolio"].callShareUsersGroups = function(portfolioid,langcode)
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
-	if (usersgroups_list.length>0) { // users groups loaded
+	if (usergroups_list.length>0) { // users groups loaded
 		UIFactory["UsersGroup"].displaySelectMultipleWithUsersList('sharing_usersgroups');
 		$.ajax({
 			type : "GET",

@@ -26,9 +26,12 @@ function fill_list_usersgroups(type)
 	html += "		<div id='usergroup-user-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_usersgroups()'></div>";
 	html += "		<div id='usergroup-user-search' class='search'></div>";
 	html += "		<h3>"+karutaStr[LANG]['active_users'];
-	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.User.displayActive('usergroup-user-rightside-users-content','usergroup-user');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.User.displayActive('usergroup-user-rightside-users-content1','usergroup-user');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
 	html += "		</h3>";
 	html += "		<div id='usergroup-user-leftside-content1' class='content1 tree'></div>";
+	html += "		<h3>"+karutaStr[LANG]['inactive_users'];
+	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.User.displayInactive('usergroup-user-rightside-users-content2','usergroup-user');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "		</h3>";
 	html += "		<div id='usergroup-user-leftside-content2' class='content2'></div>";
 	html += "	</div>";
 	//------------------------------------------
@@ -37,10 +40,14 @@ function fill_list_usersgroups(type)
 	html += "	<div id='usergroup-user-rightside' class='rightside'>";
 	html += "		<div id='usergroup-user-search' class='search'></div>";
 	html += "		<div id='usergroup-user-rightside-title' class='title'></div>";
-	html += "		<div id='usergroup-user-rightside-header' class='header'></div>";
-	html += "		<div id='usergroup-user-rightside-content1' class='content1'></div>";
-	html += "		<div id='usergroup-user-rightside-navbar-pages-top' class='navbar-pages'></div>";
-	html += "		<div id='usergroup-user-rightside-content2' class='content2'> <div id='usergroup-user-rightside-users-content' class='users-content'></div> </div>";
+	html += "		<div id='usergroup-user-rightside-header1' class='header' style='display:none'>"+karutaStr[LANG]['active_users']+"</div>";
+	html += "		<div id='usergroup-user-rightside-content1' class='content1' style='display:none'>";
+	html += "			<div id='usergroup-user-rightside-users-content1' class='users-content'></div>";
+	html += "		</div>";
+	html += "		<div id='usergroup-user-rightside-header2' class='header' style='display:none'>"+karutaStr[LANG]['inactive_users']+"</div>";
+	html += "		<div id='usergroup-user-rightside-content2' class='content2' style='display:none'>";
+	html += "			<div id='usergroup-user-rightside-users-content2' class='users-content'></div>";
+	html += "		</div>";
 	html += "		<div id='usergroup-user-rightside-navbar-pages-bottom' class='navbar-pages'></div>";
 	html += "	</div>";
 	//------------------------------------------
@@ -72,8 +79,8 @@ function fill_list_usersgroups(type)
 	//-----------------------------------------------------------
 	$("#main-usersgroup").html(html);
 	//-----------------------------------------------------------
+	UIFactory.User.displaySearch("usergroup-user-search",false,'usergroup-user');
 	UIFactory.UsersGroup.loadAndDisplayAll('usergroup');
-//	UIFactory.User.displayActiveForUserGroup('usergroup-user-rightside-users-content','usergroup-user');
 
 }
 

@@ -165,6 +165,7 @@ body,
   margin-bottom: 5px;
 }
 .rightside .header {
+  margin-bottom: 4px;
   padding: 7px;
   background-color: var(--list-menu-background-color);
   color: var(--list-button-text-color);
@@ -464,6 +465,17 @@ body,
   background-color: var(--list-element-background-color);
   padding-top: 5px;
   padding-bottom: 5px;
+}
+.users-content:empty {
+  visibility: hidden;
+}
+
+.user-buttons {
+  padding-top: 2px;
+}
+
+.navbar-pages:empty {
+  visibility: hidden;
 }
 
 /* ====================== */

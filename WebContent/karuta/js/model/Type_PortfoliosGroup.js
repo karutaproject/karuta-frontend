@@ -56,6 +56,10 @@ UIFactory["PortfoliosGroup"] = function( node )
 	this.loaded = false;
 	this.nbchildren = 0;
 	this.children = {};
+	//------------------------------
+	this.roles = [];
+	this.rrg = {};
+
 };
 
 //--------------------------------------------------------------
@@ -179,17 +183,17 @@ UIFactory["PortfoliosGroup"].prototype.toggleContent = function(type)
 }
 
 //==============================
-UIFactory["PortfoliosGroup"].prototype.loadAndDisplayContent = function (type)
+UIFactory["PortfoliosGroup"].prototype.loadContent = function ()
 //==============================
 {
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfoliogroups?group="+this.id,
 		data: "",
 		group : this, // passing group to success
 		success : function(data) {
-//			UIFactory["Portfolio"].parse_add(data);
 			this.group.loaded = true;
 			//-------------------------
 			var tableau1 = new Array();
@@ -209,13 +213,19 @@ UIFactory["PortfoliosGroup"].prototype.loadAndDisplayContent = function (type)
 				this.group.children[newTableau1[i][1]] = {'id':newTableau1[i][1]};
 			}
 			this.group.nbchildren = items.length;
-			//-------------------------
-			this.group.displayContent(type);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error : "+jqxhr.responseText);
 		}
 	});
+}
+
+//==============================
+UIFactory["PortfoliosGroup"].prototype.loadAndDisplayContent = function (type)
+//==============================
+{
+	this.loadContent();
+	this.displayContent(type);
 }
 
 
@@ -685,66 +695,6 @@ UIFactory["PortfoliosGroup"].prototype.getSelectorWithFunction = function(attr,v
 	return html;
 };
 
-//==================================
-UIFactory["PortfoliosGroup"].callAddPortfolios = function(gid,portfolioLabel)
-//==================================
-{
-	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "javascript:UIFactory['PortfoliosGroup'].addPortfolios('"+gid+"');$('#edit-window').modal('hide')";
-	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['add_portfolios']+"</button><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(portfolioLabel);
-	var html = "";
-	html += "<div id='adding_portfolios' class='div_scroll'>";
-	html += "</div>";
-	$("#edit-window-body").html(html);
-	$("#edit-window-type").html("");
-	//--------------------------
-	$.ajaxSetup({async: false});
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfoliogroups?group="+gid,
-		data: "",
-		success : function(data) {
-			var items = parseList("portfolio",data);
-			if (!($("#list-menu").length && $("#list-menu").html()!="")) {
-				fill_list_page();
-			}
-			UIFactory["Portfolio"].displaySelectPortfolios(items,'adding_portfolios');
-			//----------------
-		}
-	});
-	$.ajaxSetup({async: true});
-	//--------------------------
-	$('#edit-window').modal('show');
-};
-
-//==================================
-UIFactory["PortfoliosGroup"].addPortfolios = function(gid)
-//==================================
-{
-	var items = $("input[name='select_portfolios']:not(:disabled)").filter(':checked');
-	var url = serverBCK_API+"/portfoliogroups?group="+gid+"&uuid=";
-	for (var i=0; i<items.length; i++){
-		var itemid = $(items[i]).attr('value');
-		var url2 = url+itemid;
-		$.ajax({
-			type : 'PUT',
-			dataType : "text",
-			url : url2,
-			data : "",
-			success : function(data) {
-				var group_type = "PortfoliosGroup";
-				toggleGroup(group_type,gid,'UIFactory.PortfoliosGroup.displayPortfolios','list',null);
-				portfoliogroups_byid[gid].members = [];
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error : "+jqxhr.responseText);
-			}
-		});
-	}
-};
 
 //==================================
 UIFactory["PortfoliosGroup"].prototype.fillSharingRoles = function()
@@ -753,14 +703,13 @@ UIFactory["PortfoliosGroup"].prototype.fillSharingRoles = function()
 	this.rrg = {};
 	var rrg = this.rrg;
 	var roles = this.roles;
-	$.ajaxSetup({async: false});
-	for ( var i = 0; i < this.members.length; i++) {
-		var id = this.members[i];
+	for ( uuid in this.children) {
 		//------------------------------------
 		$.ajax({
+			async:false,
 			type : "GET",
 			dataType : "xml",
-			url : serverBCK_API+"/rolerightsgroups?portfolio="+id,
+			url : serverBCK_API+"/rolerightsgroups?portfolio="+uuid,
 			success : function(data) {
 				var groups = $("rolerightsgroup",data);
 				if (groups.length>0) {
@@ -780,7 +729,6 @@ UIFactory["PortfoliosGroup"].prototype.fillSharingRoles = function()
 			}
 		});
 	}
-	$.ajaxSetup({async: true});
 	for (var e in this.rrg) {
 		this.roles[this.roles.length]=e;
 	}
@@ -819,27 +767,9 @@ UIFactory["PortfoliosGroup"].prototype.getSharingRoleEditor = function(destid,ca
 UIFactory["PortfoliosGroup"].displaySharingRoleEditor = function(destid,gid,callFunction)
 //==================================
 {
-	if (portfoliogroups_byid[gid].members.length==0) { // to load members of portfolios groups
-		$.ajaxSetup({async: false});
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/portfoliogroups?group="+gid,
-			data: "",
-			success : function(data) {
-				portfoliogroups_byid[gid].members = parseList("portfolio",data);
-				portfoliogroups_byid[gid].roles = [];
-				portfoliogroups_byid[gid].getSharingRoleEditor(destid,callFunction);
-				//----------------
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error : "+jqxhr.responseText);
-			}
-		});
-		$.ajaxSetup({async: true});
-	} else {
-		portfoliogroups_byid[gid].getSharingRoleEditor(destid,callFunction);
-	}
+	if (!portfoliogroups_byid[gid].loaded)
+		portfoliogroups_byid[gid].loadContent();
+	portfoliogroups_byid[gid].getSharingRoleEditor(destid,callFunction);
 };
 
 //==================================
@@ -961,7 +891,7 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
-	if (UsersGroups_byid.length>0) { // users groups loaded
+	if (usergroups_byid.length>0) { // users groups loaded
 		UIFactory["UsersGroup"].displaySelectMultipleWithUsersList('sharing_usersgroups');
 		//--------------------------		
 	} else {

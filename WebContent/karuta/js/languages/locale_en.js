@@ -492,22 +492,22 @@ karutaStr['en']['asmStructure']="Section";
 karutaStr['en']['asmUnit']="Page";
 karutaStr['en']['asmUnitStructure']="Subsection";
 
-karutaStr['en']['TextField']="TextField";
-karutaStr['en']['Field']="Field";
+karutaStr['en']['TextField']="Long Text";
+karutaStr['en']['Field']="Short Text";
 karutaStr['en']['Document']="Document";
 karutaStr['en']['URL']="URL";
 karutaStr['en']['Calendar']="Calendar";
 karutaStr['en']['Image']="Image";
 karutaStr['en']['Video']="Video";
 karutaStr['en']['Audio']="Audio";
-karutaStr['en']['Oembed']="Oembed";
+karutaStr['en']['Oembed']="oEmbed";
 karutaStr['en']['Color']="Color";
 karutaStr['en']['URL2Unit']="URL2Unit";
 karutaStr['en']['Comments']="Comments";
 
-karutaStr['en']['SendEmail']="SendEmail";
+karutaStr['en']['SendEmail']="Send Email";
 karutaStr['en']['Dashboard']="Dashboard";
-karutaStr['en']['Report']="Report";
+karutaStr['en']['Report']="Deferred Report";
 karutaStr['en']['BatchForm']="BatchForm";
 
 karutaStr['en']['DocumentBlock']="DocumentBlock";

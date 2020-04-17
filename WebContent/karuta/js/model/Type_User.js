@@ -20,7 +20,7 @@ var UsersActive_list = [];
 var UsersInactive_list = [];
 var UsersLoaded = false;
 var UsersWithoutPortfolio_list = [];
-var nb_users_page = 7;
+var nb_users_page = 30;
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -252,16 +252,19 @@ UIFactory["User"].displayXXXActive = function(destid,type,lang)
 };
 
 //==================================
-UIFactory["User"].displayInactive = function(destid,type,lang)
+UIFactory["User"].displayInactive = function(dest,type,lang)
 //==================================
 {
-	$("#"+destid).html("<h3>"+karutaStr[LANG]["inactive_users"]+"</h3>");
-	$("#"+destid).append("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
-	$("#list_unusers").append($("<tr><td></td><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+//	$("#"+dest).append("<h3>"+karutaStr[LANG]["inactive_users"]+"</h3>");
+	$("#"+type+"-rightside-content1").hide();
+	$("#"+type+"-rightside-content2").show();
+	$("#"+type+"-rightside-users-content1").html("");
+	$("#"+type+"-rightside-users-content2").html("");
+	$("#"+type+"-rightside-header1").hide();
+	$("#"+type+"-rightside-header2").show();
+	$("#"+type+"-rightside-navbar-pages-bottom").hide();
 	for ( var i = 0; i < UsersInactive_list.length; i++) {
-		var itemid = destid+"_"+UsersInactive_list[i].id;
-		$("#list_unusers").append($("<tr class='item' id='"+itemid+"'></tr>"));
-		$("#"+itemid).html(UsersInactive_list[i].getView(destid,type,lang));
+		$("#"+dest).append(UsersInactive_list[i].getView(dest,type,lang));
 	}
 };
 
@@ -273,6 +276,12 @@ UIFactory["User"].displayActive = function(dest,type,index,nbindex)
 		index = 0;
 	if (nbindex==null)
 		nbindex = 1;
+	$("#"+type+"-rightside-content2").hide();
+	$("#"+type+"-rightside-content1").show();
+	$("#"+type+"-rightside-users-content1").html("");
+	$("#"+type+"-rightside-users-content2").html("");
+	$("#"+type+"-rightside-header1").show();
+	$("#"+type+"-rightside-header2").hide();
 	if (!UsersLoaded)
 		$.ajax({
 			type : "GET",
@@ -285,6 +294,10 @@ UIFactory["User"].displayActive = function(dest,type,index,nbindex)
 				UsersLoaded = true;
 				UIFactory.User.parse(data);
 				nbindex = Math.ceil((UsersActive_list.length)/nb_users_page);
+				if (nbindex<2)
+					$("#"+type+"-rightside-navbar-pages-bottom").hide();
+				else
+					$("#"+type+"-rightside-navbar-pages-bottom").show();
 				UIFactory.User.displayActiveIndexed(this.dest,this.xtype,this.index,nbindex);
 			}
 		});
@@ -385,7 +398,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	}
 	//--------------------------------------------------------------------------------------------
 	if (type=='usergroup-user') {
-		html += "<div class='row item item-user' id='usergroup-user_"+this.id+"' draggable='true' ondragstart='dragUser(event)'>";
+		html += "<div class='row user-row' id='usergroup-user_"+this.id+"' draggable='true' ondragstart='dragUser(event)'>";
 		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+"</div>";
 		html += "</div>";
 	}
@@ -484,10 +497,116 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
-//------------------------  -----------------------------
+//------------------------ SEARCH  -----------------------------
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 
+//==============================
+UIFactory["User"].displaySearch = function (dest,trash,type)
+//==============================
+{
+	var html = "";
+	html += "<div class='input-group'>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<button id='"+type+"-search-choice' search-type='username' type='button' class='btn dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span id='"+type+"-search-input-label'>"+karutaStr[LANG]['username-label']+"</span> <span class='caret'></span></button>";
+	html += "		<div class='dropdown-menu'>";
+	html += "			<a href='#' class='dropdown-item' onclick=\"$('#"+type+"-search-choice').attr('search-type','username');$('#"+type+"-search-input-label').html('"+karutaStr[LANG]['username-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-username-label']+"')\">"+karutaStr[LANG]['username-label']+"</a>";
+	html += "			<a href='#' class='dropdown-item' onclick=\"$('#"+type+"-search-choice').attr('search-type','firstname');$('#"+type+"-search-input-label').html('"+karutaStr[LANG]['firstname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-firstname-label']+"')\">"+karutaStr[LANG]['firstname-label']+"</a>";
+	html += "			<a href='#' class='dropdown-item' onclick=\"$('#"+type+"-search-choice').attr('search-type','lastname');$('#"+type+"-search-input-label').html('"+karutaStr[LANG]['lastname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-lastname-label']+"')\">"+karutaStr[LANG]['lastname-label']+"</a>";
+	html += "		</div>";
+	html += "	</div><!-- /input-group-prepend -->";
+	html += "	<input type='text' id='"+type+"-search-user-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-username-label']+"'>";
+	html += "	<div class='input-group-append'>";
+	html += "		<button type='button' onclick=\"UIFactory.User.search('"+type+"')\" class='btn'><i class='fas fa-search'></i></button>";
+	if (trash)
+		html += "		<button type='button' disabled='true' onclick=\"UIFactory.User.confirmRemoveUsers()\" class='btn'><i class='fas fa-trash'></i></button>";
+	html += "	</div><!-- /input-group-append -->";
+	html += "</div><!-- /input-group -->";
+	$("#"+dest).html(html);
+	$("#"+type+"-search-user-input").keypress(function(f) {
+		var code= (f.keyCode ? f.keyCode : f.which);
+		if (code == 13)
+			UIFactory.User.search(type);
+	});
+}
+
+//==================================
+UIFactory["User"].search = function(type)
+//==================================
+{
+	var value = $("#"+type+"-search-user-input").val();
+	var search_type = $("#"+type+"-search-choice").attr('search-type');
+	UIFactory.User.displaySearched(value,search_type,type);
+}
+
+//==============================
+UIFactory["User"].displaySearched = function (value,search_type,type)
+//==============================
+{
+	var html = "";
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/users?"+search_type+"="+value,
+		success : function(data) {
+			UIFactory.User.parse_search(data);
+			$("#"+type+"-rightside-content1").show();
+			$("#"+type+"-rightside-content2").show();
+			$("#"+type+"-rightside-header1").show();
+			$("#"+type+"-rightside-header2").show();
+			$("#"+type+"-rightside-users-content1").html("");
+			$("#"+type+"-rightside-users-content2").html("");
+			for (var i=0; i<searched_active_users_list.length;i++){
+				$("#"+type+"-rightside-users-content1").append(searched_active_users_list[i].getView(type+"-rightside-users-content1",type));
+			}
+			for (var i=0; i<searched_inactive_users_list.length;i++){
+				$("#"+type+"-rightside-users-content2").append(searched_inactive_users_list[i].getView(type+"-rightside-users-content2",type));
+			}
+		}
+	});
+}
+
+//==================================
+UIFactory["User"].parse_search = function(data) 
+//==================================
+{
+	searched_active_users_list = [];
+	searched_inactive_users_list = [];
+	var items = $("user",data);
+	var inactive = active = 0;
+	var tableau1 = new Array();
+	var tableau2 = new Array();
+	for ( var i = 0; i < items.length; i++) {
+		var userid = $(items[i]).attr('id');
+		Users_byid[userid] = new UIFactory["User"](items[i]);
+		var lastname = Users_byid[userid].lastname;
+		if (lastname=="")
+			lastname = " ";
+		var firstname = Users_byid[userid].firstname;
+		if ($("active",$(items[i])).text() == "1") {  // active user
+			tableau1[active] = [lastname,firstname,userid];
+			active++;
+		}
+		else { // inactive user
+			tableau2[inactive] = [lastname,firstname,userid];
+			inactive++;
+		}
+	}
+	var newTableau1 = tableau1.sort(sortOn1_2);
+	for (var i=0; i<newTableau1.length; i++){
+		searched_active_users_list[i] = Users_byid[newTableau1[i][2]];
+	}
+	var newTableau2 = tableau2.sort(sortOn1);
+	for (var i=0; i<newTableau2.length; i++){
+		searched_inactive_users_list[i] = Users_byid[newTableau2[i][2]];
+	}
+};
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ UPDATE  -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
 
 
 //==================================
@@ -513,6 +632,7 @@ UIFactory["User"].update = function(userid,attribute,value)
 	});
 
 };
+
 
 //==================================================
 UIFactory["User"].getAttributeEditor = function(userid,attribute,value)
