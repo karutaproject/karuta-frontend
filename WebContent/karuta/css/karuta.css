@@ -67,6 +67,26 @@ body,
   color: var(--list-button-background-color);
 }
 
+.dropdown.menu .btn {
+  height: 25px;
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
+.dropdown-menu {
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+.dropdown-menu a.dropdown-item {
+  cursor: default;
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+.dropdown-menu a.dropdown-item:hover {
+  color: var(--list-menu-background-color);
+  background-color: var(--list-menu-text-color);
+}
+
 /* ====================== */
 /*    LIST- WELCOME       */
 /* ====================== */
@@ -181,23 +201,6 @@ body,
   padding-top: 2px;
   padding-bottom: 2px;
   padding-left: 7px;
-}
-.rightside .dropdown.menu .btn {
-  height: 25px;
-  padding-left: 9px;
-  padding-right: 9px;
-}
-.rightside .dropdown-menu {
-  color: var(--list-menu-text-color);
-  background-color: var(--list-menu-background-color);
-}
-.rightside .dropdown-menu a.dropdown-item {
-  color: var(--list-menu-text-color);
-  background-color: var(--list-menu-background-color);
-}
-.rightside .dropdown-menu a.dropdown-item:hover {
-  color: var(--list-menu-background-color);
-  background-color: var(--list-menu-text-color);
 }
 .rightside .header:empty,
 .rightside .content1:empty {

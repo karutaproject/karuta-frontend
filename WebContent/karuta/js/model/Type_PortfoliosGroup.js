@@ -575,6 +575,7 @@ UIFactory["PortfoliosGroup"].edit = function(gid)
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
+//---------------------- SHARING -------------------------------
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 
@@ -592,109 +593,6 @@ UIFactory["PortfoliosGroup"].prototype.getSelector = function(attr,value,name)
 	html += "> "+label+" </input>";
 	return html;
 };
-
-
-
-//==================================
-UIFactory["PortfoliosGroup"].displaySelectMultiple = function(destid,type,lang)
-//==================================
-{
-	$("#"+destid).html("");
-	for ( var i = 0; i < portfoliogroups_list.length; i++) {
-		var input = portfoliogroups_list[i].getSelector(null,null,'select_portfoliosgroups');
-		$("#"+destid).append($(input));
-		$("#"+destid).append($("<br>"));
-	}
-};
-
-
-//==================================
-UIFactory["PortfoliosGroup"].editGroupsByUuid = function(uuid)
-//==================================
-{
-	var nameinput = "uuid_"+uuid+"-list_groups-form-update";
-	var js1 = "javascript:updateDisplay_page('"+nameinput+"','fill_list_portfoliosgroups');$('#edit-window').modal('hide');$('#edit-window-body').html('')";
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['list_groups']);
-	var html = "<input type='hidden' name='"+nameinput+"' id='"+nameinput+"' value='0'>";
-	html += "<div id='portfolio_list_groups'>";
-	html += "</div>";
-	$("#edit-window-body").html(html);
-	$("#edit-window-type").html("");
-	//--------------------------
-	$('#edit-window').modal('show');
-
-//	$.ajaxSetup({async: false});
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfoliogroups?uuid="+uuid,
-		data: "",
-		success : function(data) {
-			var uuid_groupids = parseList("group",data);
-			if (portfoliogroups_byid.length>0) { // portfolios groups loaded
-				UIFactory["PortfoliosGroup"].displayManageMultipleGroups('portfolio_list_groups','uuid',uuid,uuid_groupids,'updateGroup_Portfolio');
-				//--------------------------		
-			} else {
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : serverBCK_API+"/portfoliogroups",
-					success : function(data) {
-						UIFactory["PortfoliosGroup"].parse(data);
-						UIFactory["PortfoliosGroup"].displayManageMultipleGroups('portfolio_list_groups','uuid',uuid,uuid_groupids,'updateGroup_Portfolio');
-						//--------------------------
-					},
-					error : function(jqxhr,textStatus) {
-						alertHTML("Error in editGroupsByUuid 1 : "+jqxhr.responseText);
-					}
-				});
-			}
-			//----------------
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Error in editGroupsByUuid 2 : "+jqxhr.responseText);
-		}
-	
-	});
-//	$.ajaxSetup({async: true});
-
-};
-
-//==================================
-UIFactory["PortfoliosGroup"].displayManageMultipleGroups = function(destid,attr,value,selectedlist,callFunction) 
-//==================================
-{
-	$("#"+destid).html("");
-	if (portfoliogroups_list.length>0){
-		for ( var i = 0; i < portfoliogroups_list.length; i++) {
-			var checked = selectedlist.contains(portfoliogroups_list[i].id);
-			var input = portfoliogroups_list[i].getSelectorWithFunction(attr,value,'select_portfoliosgroups_'+i,checked,callFunction);
-			$("#"+destid).append($(input));
-			$("#"+destid).append($("<br>"));
-		}		
-	} else {
-		$("#"+destid).append($(karutaStr[LANG]['no_group']));		
-	}
-};
-
-//==================================
-UIFactory["PortfoliosGroup"].prototype.getSelectorWithFunction = function(attr,value,name,checked,callFunction)
-//==================================
-{
-	var gid = this.id;
-	var label = this.label_node.text();
-	var html = "<input type='checkbox' name='"+name+"' value='"+gid+"'";
-	if (attr!=null && value!=null)
-		html += " "+attr+"='"+value+"'";
-	if (checked)
-		html += " checked='true' ";
-	html += " onchange=\"javascript:"+callFunction+"(this)\" ";
-	html += "> "+label+" </input>";
-	return html;
-};
-
 
 //==================================
 UIFactory["PortfoliosGroup"].prototype.fillSharingRoles = function()

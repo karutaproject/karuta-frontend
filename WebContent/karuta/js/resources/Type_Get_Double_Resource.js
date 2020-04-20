@@ -138,7 +138,7 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 		html += "["+$(this.value1_node).text()+ "] ";
 	if (($(this.code1_node).text()).indexOf("%")<0)
 		html += label1;
-	html += " </span>";
+	html += "</span>";
 	html += this.separator_node[langcode].text();
 	html += " <span class='Item2 "+cleanCode(code2)+"'>";
 	if (($(this.code2_node).text()).indexOf("#")>-1)
@@ -147,7 +147,7 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 		html += label2;
 	if (($(this.code2_node).text()).indexOf("&")>-1)
 		html += "["+$(this.value2_node).text()+ "] ";
-	html += " </span>";
+	html += "</span>";
 	 return html;
 };
 
@@ -174,7 +174,7 @@ UIFactory["Get_Double_Resource"].prototype.displayView = function(dest,type,lang
 	var label2 = this.label2_node[langcode].text();
 	if (this.encrypted)
 		label2 = decrypt(label2.substring(3),g_rc4key);
-	var code2 = $(this.code_node).text();
+	var code2 = $(this.code2_node).text();
 	//---------------------	
 	var html = "";
 	html += "<span class='Item1 "+cleanCode(code1)+"'>";
@@ -184,7 +184,7 @@ UIFactory["Get_Double_Resource"].prototype.displayView = function(dest,type,lang
 		html += "["+$(this.value1_node).text()+ "] ";
 	if (($(this.code1_node).text()).indexOf("%")<0)
 		html += label1;
-	html += " </span>";
+	html += "</span>";
 	html += this.separator_node[langcode].text();
 	html += " <span class='Item2 "+cleanCode(code2)+"'>";
 	if (($(this.code2_node).text()).indexOf("#")>-1)
@@ -193,7 +193,7 @@ UIFactory["Get_Double_Resource"].prototype.displayView = function(dest,type,lang
 		html += label2;
 	if (($(this.code2_node).text()).indexOf("&")>-1)
 		html += "["+$(this.value2_node).text()+ "] ";
-	html += " </span>";
+	html += "</span>";
 	$("#"+dest).html(html);
 };
 
@@ -234,12 +234,7 @@ UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,
 		var semtag1 = part1.substring(semtag1_indx+1,srce1_indx);
 		var target1 = part1.substring(srce1_indx+1); // label or text
 		
-		var code1 = part1.substring(0,semtag1_indx);
-		while (code1.indexOf("##")>-1) {
-			var test_string = code1.substring(code1.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-			var variable_name = test_string.substring(0,test_string.indexOf("##"));
-			code1 = code1.replace("##"+variable_name+"##", g_variables[variable_name]);
-		}
+		var code1 = r_replaceVariable(part1.substring(0,semtag1_indx));
 		if (code1.indexOf('.')<0 && selfcode.indexOf('.')>0 && code1!='self')  // There is no project, we add the project of the current portfolio
 			code1 = selfcode.substring(0,selfcode.indexOf('.')) + "." + code1;
 		if (code1=='self')
@@ -250,12 +245,7 @@ UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,
 		var semtag2_indx = part2.substring(0,srce2_indx).lastIndexOf('.');
 		var semtag2 = part2.substring(semtag2_indx+1,srce2_indx);
 		var target2 = part2.substring(srce2_indx+1); // label or text
-		var code2 = part2.substring(0,semtag2_indx);
-		while (code2.indexOf("##")>-2) {
-			var test_string = code2.substring(code2.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-			var variable_name = test_string.substring(0,test_string.indexOf("##"));
-			code2 = code2.replace("##"+variable_name+"##", g_variables[variable_name]);
-		}
+		var code2 = r_replaceVariable(part2.substring(0,semtag2_indx));
 		if (code2.indexOf('.')<0  && selfcode.indexOf('.')>0 && code2!='self')  // There is no project, we add the project of the current portfolio
 			code2 = selfcode.substring(0,selfcode.indexOf('.')) + "." + code2;
 		if (code2=='self')

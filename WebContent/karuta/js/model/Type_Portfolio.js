@@ -1597,8 +1597,7 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	//----------------------------------------------------------------
-//	UIFactory.UsersGroup.displaySelectMultiple('sharing_users');
-		if (Users_byid.length>0) { // users loaded
+	if (Users_byid.length>0) { // users loaded
 		UIFactory["User"].displaySelectMultipleActive('sharing_users');
 		//--------------------------
 		$.ajax({
@@ -2374,7 +2373,7 @@ UIFactory["Portfolio"].prototype.refresh = function()
 //--------------------- PROJECTS ---------------------------------------------------
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
-
+/*
 //==================================
 UIFactory["Portfolio"].renameProject = function(itself,langcode) 
 //==================================
@@ -2839,7 +2838,7 @@ UIFactory["Portfolio"].confirmDelProject = function (uuid,projectcode)
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
-
+*/
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------
 //---------------------------------- COLOR CONFIGURATION ----------------------------------------------
