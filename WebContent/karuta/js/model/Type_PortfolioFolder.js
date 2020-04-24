@@ -558,10 +558,10 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,viewt
 	if (viewtype == 'list') {
 		var tree_type='<span class="fas fa-folder" aria-hidden="true"></span>';
 		html += "<div class='row portfolio-row'>";
-		html += "<div class='folder-label col-10 col-md-4' id='portfolio_list_"+this.id+"' draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+"</div>";
+		html += "<div class='folder-label col-5' id='portfolio_list_"+this.id+"' draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+"</div>";
 		if (USER.creator && !USER.limited) {
 			html += "<div id='owner_"+this.id+"' class='col-2 d-none d-md-block'></div>";
-			html += "<div class='col-3 d-none d-md-block'>";
+			html += "<div class='col-5'>";
 			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
 			html += " <span class='copy-button fas fa-clipboard' ";
 			html += "   onclick=\"copyInclipboad('"+this.id+"')\" ";
@@ -570,9 +570,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,viewt
 			html += "</span>";
 			html += "</div>";
 		}
-		if (this.date_modified!=null)
-			html += "<div class='col-2 d-none d-md-block'>"+this.date_modified.substring(0,10)+"</div>";
-		$("#"+type+"-rightside-content1").append($(html));
+		$("#"+type+"-folders-content").append($(html));
 		//---------------------
 		this.displayOwner('owner_'+this.id);
 		//---------------------

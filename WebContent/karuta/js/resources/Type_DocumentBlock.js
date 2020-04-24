@@ -77,7 +77,7 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
 			if (cover!=undefined && cover.resource.getValue()=='1')
 				style += "background-size:cover;";
-			html += "<div class='DocumentBlock' style=\""+style+"\">";
+			html += "<div class='DocBlock' style=\""+style+"\">";
 			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='DocumentBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
 				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
 			else
@@ -85,7 +85,7 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 			html += "</div>";
 			html += "</a>";
 		} else {
-			html =  "<div class='DocumentBlock no-document'>";
+			html =  "<div class='DocBlock no-document'>";
 			html += "<div class='docblock-title'>"+karutaStr[LANG]['no-document']+"</div>";
 			html += "</div>";
 		}
@@ -131,7 +131,7 @@ UIFactory["DocumentBlock"].prototype.displayView = function(dest,type,langcode)
 			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
 			if (cover!=undefined && cover.resource.getValue()=='1')
 				style += "background-size:cover;";
-			html += "<div class='DocumentBlock' style=\""+style+"\">";
+			html += "<div class='DocBlock' style=\""+style+"\">";
 			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='DocumentBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
 				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
 			else
@@ -139,11 +139,12 @@ UIFactory["DocumentBlock"].prototype.displayView = function(dest,type,langcode)
 			html += "</div>";
 			html += "</a>";
 		} else {
-			html =  "<div class='DocumentBlock no-document'>";
+			html =  "<div class='DocBlock no-document'>";
 			html += "<div class='docblock-title'>"+karutaStr[LANG]['no-document']+"</div>";
 			html += "</div>";
 		}
 	}
+	$("#label_node_"+this.id).hide();
 	$("#"+dest).html(html);
 };
 

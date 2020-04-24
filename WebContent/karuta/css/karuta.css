@@ -3,7 +3,6 @@
 /*     DEFAULT VALUES     */
 /* ====================== */
 :root {
-  /* ========== navbar =============== */
   --font-family: Verdana;
   --font-size-coeff: 0.9;
 }
@@ -41,7 +40,6 @@ body,
   }
 }
 #contenu {
-  background-color: white;
   padding-left: 0px;
   padding-right: 0px;
   padding-bottom: 50px;
@@ -237,17 +235,17 @@ body,
 /* ====================== */
 /*     LIST CONTAINER     */
 /* ====================== */
-#list-container #portfolio-leftside {
+#main-list #portfolio-leftside {
   width: calc(25% - 5px);
   margin-bottom: 10px;
 }
-#list-container #portfolio-rightside {
+#main-list #portfolio-rightside {
   width: calc(75% - 5px);
   margin-top: 2px;
   padding-bottom: 5px;
   float: right;
 }
-#list-container .copy-button .tooltiptext {
+#main-list .copy-button .tooltiptext {
   font-family: var(--font-family);
   display: none;
   background-color: #555;
@@ -262,7 +260,7 @@ body,
   opacity: 0;
   transition: opacity 0.3s;
 }
-#list-container .copy-button .tooltiptext::after {
+#main-list .copy-button .tooltiptext::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -272,51 +270,51 @@ body,
   border-style: solid;
   border-color: #555 transparent transparent transparent;
 }
-#list-container .copy-button:hover .tooltiptext {
+#main-list .copy-button:hover .tooltiptext {
   display: in-line;
   opacity: 1;
 }
-#list-container .portfolio-card {
+#main-list .portfolio-card {
   margin-top: 15px;
   border: none;
   width: 200px;
   flex: none;
 }
-#list-container .portfolio-card .portfolio-label {
+#main-list .portfolio-card .portfolio-label {
   cursor: pointer;
 }
-#list-container .portfolio-card .card-header {
+#main-list .portfolio-card .card-header {
   background-color: var(--list-menu-background-color);
   color: var(--list-button-text-color);
   padding: 3px;
 }
-#list-container .portfolio-card .card-body {
+#main-list .portfolio-card .card-body {
   padding: 3px;
   color: var(--list-button-text-color);
   background-color: var(--list-element-background-color);
 }
-#list-container .portfolio-card .card-body .portfolio-code,
-#list-container .portfolio-card .card-body .owner {
+#main-list .portfolio-card .card-body .portfolio-code,
+#main-list .portfolio-card .card-body .owner {
   font-size: 80%;
 }
-#list-container .portfolio-card .card-body .comments {
+#main-list .portfolio-card .card-body .comments {
   border-bottom: 1px solid var(--list-button-text-color);
 }
-#list-container .portfolio-card .card-footer {
+#main-list .portfolio-card .card-footer {
   background-color: var(--list-menu-background-color);
   color: var(--list-button-text-color);
   text-align: center;
   font-size: 80%;
   padding: 0px;
 }
-#list-container .portfolio-card .card-button {
+#main-list .portfolio-card .card-button {
   float: right;
 }
-#list-container .portfolio-card .card-button .btn {
+#main-list .portfolio-card .card-button .btn {
   background-color: var(--list-element-background-color);
   margin: 3px;
 }
-#list-container .portfolios-deck-header {
+#main-list .portfolios-deck-header {
   margin-bottom: 5px;
 }
 
@@ -361,6 +359,9 @@ body,
   padding-top: 5px;
   padding-bottom: 5px;
 }
+.portfolios-content:empty {
+  display: none;
+}
 
 #searched-portfolios-header {
   color: var(--list-element-text-color);
@@ -396,7 +397,6 @@ body,
   position: relative;
 }
 .tree .nested .treeNode:last-child:before {
-  background: #fff;
   height: auto;
   top: 1em;
   bottom: 0;
@@ -837,6 +837,9 @@ body,
 #edit-window .modal-dialog .modal-content {
   min-height: 500px;
 }
+#edit-window button {
+  background-color: var(--edit-window-button-background-color);
+}
 
 #edit-window-header.modal-header {
   display: block;
@@ -880,9 +883,6 @@ body,
   white-space: nowrap;
 }
 
-.menus .dropdown {
-  float: left;
-}
 .menus a.text-button {
   font-size: calc(var(--font-size-coeff) * 1rem);
   margin-top: 2px;
@@ -1049,9 +1049,6 @@ body,
   border-left-color: #fff;
 }
 
-/* ====================== */
-/*   PORTFOLIO NAVBAR     */
-/* ====================== */
 #sub-bar {
   background-color: var(--portfolio-navbar-background-color);
   border-color: var(--portfolio-navbar-background-color);
@@ -1088,11 +1085,58 @@ body,
 /* ==================================================================== */
 /*                          PORTFOLIO                                   */
 /* ==================================================================== */
-#portfolio-container:not([role=designer]) .WELCOME div[name=lbl-div]:first-child {
-  display: none;
+#sub-bar {
+  background-color: var(--portfolio-navbar-background-color);
+  border-color: var(--portfolio-navbar-background-color);
+  /*
+  		.dropdown-menu,
+  		.open > a {
+  			background-color: var(--portfolio-navbar-background-color);
+  			border-color: var(--portfolio-navbar-background-color);
+  		}
+  		a.dropdown-item:hover {
+  			color: var(--portfolio-navbar-background-color);
+  		}
+  		a {
+  			color:var(--portfolio-navbar-text-color);
+  		}
+  */
 }
-#portfolio-container[role=designer] .WELCOME div[name=lbl-div]:first-child {
-  display: block;
+#sub-bar .dropdown-menu {
+  background-color: var(--portfolio-navbar-background-color);
+  color: var(--portfolio-navbar-text-color);
+}
+#sub-bar .dropdown-menu a.dropdown-item {
+  background-color: var(--portfolio-navbar-background-color);
+  color: var(--portfolio-navbar-text-color);
+}
+#sub-bar .dropdown-menu a.dropdown-item:hover {
+  background-color: var(--portfolio-navbar-text-color);
+  color: var(--portfolio-navbar-background-color);
+}
+#sub-bar #toggle-mode {
+  padding-top: 9px;
+  padding-left: 10px;
+  color: var(--portfolio-navbar-text-color);
+}
+#sub-bar #toggle-mode-icon {
+  font-size: calc(var(--font-size-coeff) * 1.1rem);
+}
+#sub-bar #refresh-portfolio {
+  padding-left: 15px;
+}
+#sub-bar .navbar-brand {
+  cursor: pointer;
+}
+#sub-bar #welcome-edit {
+  padding-top: 9px;
+}
+
+#portfolio-container {
+  background-color: var(--portfolio-background-color);
+}
+#portfolio-container:not([role=designer]) .WELCOME .first-node {
+  display: none;
 }
 #portfolio-container #contenu,
 #portfolio-container .popover-header {
@@ -1116,6 +1160,7 @@ body,
   color: var(--portfolio-menu-text-color);
 }
 #portfolio-container .dropdown-menu a.dropdown-item {
+  background-color: var(--portfolio-menu-background-color);
   color: var(--portfolio-menu-text-color);
 }
 #portfolio-container .dropdown-menu a.dropdown-item:hover {
@@ -1290,8 +1335,26 @@ table[name=res-div] {
   float: none;
 }
 
+.standard-node-default-content {
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+
+.standard-node-xwide-content {
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+
+.standard-resource-xwide .edit-bar {
+  float: right;
+  margin-right: 20px;
+}
+
 .standard-resource-simple td {
   min-height: 1.75rem;
+}
+.standard-resource-simple td .edit-bar {
+  float: right;
 }
 .standard-resource-simple .resource {
   border: none;
@@ -1301,9 +1364,15 @@ table[name=res-div] {
   height: inherit;
 }
 
+.standard-resource-Image-Img-Label .edit-bar {
+  top: 25px;
+  z-index: 100;
+  position: relative;
+}
+
 /*  --- node --- */
 .node-header {
-  padding: 15px 15px 15px 20px;
+  padding: 15px;
 }
 .node-header .buttons {
   float: right;
@@ -1317,6 +1386,10 @@ table[name=res-div] {
 .standard-resource-default {
   padding-top: 5px;
   padding-right: 20px;
+}
+
+.standard-resource-simple {
+  margin-top: 5px;
 }
 
 .content .resource-standard .title-subline {
@@ -1343,7 +1416,7 @@ table[name=res-div] {
   padding-top: 10px;
 }
 .resource-standard .buttons {
-  background: var(--portfolio-buttons-background-color);
+  background-color: var(--portfolio-buttons-background-color);
   border: 1px solid var(--portfolio-resource-border-color);
   width: 200px;
 }
@@ -1360,7 +1433,6 @@ table[name=res-div] {
 .resource-standard td-resource {
   width: 80%;
   margin-right: 0px;
-  background: white;
   border: 1px solid var(--portfolio-resource-border-color);
   padding-left: 0px;
   padding-right: 0px;
@@ -1381,7 +1453,9 @@ table[name=res-div] {
   transform: translateX(-50%);
 }
 
-/*------ CARD --------*/
+/* ========================= */
+/*     VUE  CARD             */
+/* ========================= */
 .card-header .buttons {
   float: right;
 }
@@ -1397,6 +1471,7 @@ table[name=res-div] {
   margin-bottom: 5px;
 }
 .standard-node-card .standard-resource-card {
+  margin-top: 20px;
   margin-left: 0px;
   margin-right: 0px;
 }
@@ -1410,20 +1485,21 @@ table[name=res-div] {
 .standard-node-card-carddeck {
   margin: 20px;
 }
-.standard-node-card-carddeck .card-body {
-  padding-top: 0px;
+.standard-node-carddeck-content {
+  padding: 20px;
+}
+.standard-node-carddeck-content .standard-node-card {
+  margin-top: 0px;
 }
 
-.standard-node-carddeck .content {
-  padding-left: 20px;
-  padding-right: 20px;
-}
 .standard-node-carddeck .butmen {
   text-align: right;
 }
-.standard-node-carddeck div[name=cnt-div] div[name=cnt-div] {
-  padding-left: 0px;
-  padding-right: 0px;
+/* ========================= */
+/*     VUE  1/X             */
+/* ========================= */
+.edit-bar {
+  text-align: right;
 }
 
 /* ====================== */
@@ -1460,7 +1536,7 @@ DASHBOARD CSV PDF BUTTONS
 .csv-button,
 .pdf-button,
 .img-button {
-  background: var(--portfolio-buttons-background-color);
+  background-color: var(--portfolio-buttons-background-color);
   border: 1px solid var(--portfolio-resource-border-color);
   float: left;
   height: 34px;
@@ -1718,7 +1794,7 @@ a.btn {
 
 .bar {
   height: 18px;
-  background: green;
+  background-color: green;
 }
 
 hr {
@@ -3013,10 +3089,10 @@ td {
 .URLBlock .content {
   display: none;
 }
-.DocumentBlock .resource-label,
-.ImageBlock .resource-label,
-.URLBlock .resource-label {
-  visibility: hidden;
+.DocumentBlock .title,
+.ImageBlock .title,
+.URLBlock .title {
+  display: none;
 }
 
 :root {
@@ -3059,10 +3135,10 @@ td {
 .block .ImageBlock,
 .block .DocumentBlock,
 .block .URLBlock,
-.ImageBlock .ImageBlock,
-.DocumentBlock .DocumentBlock,
-.URLBlock .URLBlock {
-  height: var(--block-img-height);
+.ImgBlock,
+.DocBlock,
+.UrlBlock {
+  min-height: var(--block-img-height);
   text-align: center;
   background-repeat: no-repeat;
   background-position: center center;
@@ -3083,10 +3159,12 @@ td {
 
 .block .docblock-title,
 .block .no-document .docblock-title,
-.URLBlock .no-document .docblock-title,
-.URLBlock .docblock-title,
-.DocumentBlock .no-document .docblock-title,
-.DocumentBlock .docblock-title {
+.ImgBlock .no-document .docblock-title,
+.ImgBlock .docblock-title,
+.UrlBlock .no-document .docblock-title,
+.UrlBlock .docblock-title,
+.DocBlock .no-document .docblock-title,
+.DocBlock .docblock-title {
   display: inline-block;
   margin-top: 90px;
   margin-left: 10px;

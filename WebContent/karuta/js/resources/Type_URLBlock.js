@@ -83,7 +83,7 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
 			if (cover!=undefined && cover.resource.getValue()=='1')
 				style += "background-size:cover;";
-			html += "<div class='URLBlock' style=\""+style+"\">";
+			html += "<div class='UrlBlock' style=\""+style+"\">";
 
 			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='URLBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
 				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
@@ -144,7 +144,7 @@ UIFactory["URLBlock"].prototype.displayView = function(dest,type,langcode)
 			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
 			if (cover!=undefined && cover.resource.getValue()=='1')
 				style += "background-size:cover;";
-			html += "<div class='URLBlock' style=\""+style+"\">";
+			html += "<div class='UrlBlock' style=\""+style+"\">";
 
 			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='URLBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
 				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
@@ -153,7 +153,7 @@ UIFactory["URLBlock"].prototype.displayView = function(dest,type,langcode)
 			html += "</div>";
 			html += "</a>";
 		} else {
-			html =  "<div class='URLBlock no-document'>";
+			html =  "<div class='UrlBlock no-document'>";
 			html += "<div class='docblock-title'>"+karutaStr[LANG]['no-URL']+"</div>";
 			html += "</div>";
 		}

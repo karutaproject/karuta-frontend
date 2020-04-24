@@ -1600,10 +1600,9 @@ function logout()
 function hideAllPages()
 //==============================
 {
-	$("#search-portfolio-div").hide();
-	$("#list-container").hide();
+	$("#main-list").hide();
 	$("#main-portfoliosgroup").hide();
-	$("#portfolio-container").hide();
+	$("#main-portfolio").hide();
 	$("#main-user").hide();
 	$("#main-usersgroup").hide();
 	$("#main-exec-report").hide();

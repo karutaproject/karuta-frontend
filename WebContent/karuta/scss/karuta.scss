@@ -5,7 +5,6 @@
 /* ====================== */
 
 	:root {
-		/* ========== navbar =============== */
 		--font-family : Verdana;
 		--font-size-coeff : 0.9;
 	}
@@ -46,7 +45,6 @@
 // --------------------------------------
 
 	#contenu {
-		background-color: white;
 		padding-left:0px;
 		padding-right:0px;
 		padding-bottom:50px;
@@ -251,7 +249,7 @@
 /*     LIST CONTAINER     */
 /* ====================== */
 
-	#list-container {
+	#main-list {
 		#portfolio-leftside {
 			width: calc(25% - 5px);
 			margin-bottom: 10px;
@@ -397,6 +395,9 @@
 		background-color: var(--list-element-background-color);
 		padding-top: 5px;
 		padding-bottom: 5px;
+		&:empty {
+			display:none;
+		}
 	}
 
 	#searched-portfolios-header {
@@ -435,10 +436,9 @@
 			margin-left:1em;
 			position:relative;
 			.treeNode:last-child:before {
-				background:#fff;
-					height:auto;
-					top:1em;
-					bottom:0
+				height:auto;
+				top:1em;
+				bottom:0
 			}
 		}
 		.open {
@@ -888,6 +888,9 @@
 				min-height:500px;
 			}
 		}
+		button{
+			background-color: var(--edit-window-button-background-color);
+		}
 	}
 
 	#edit-window-header.modal-header {
@@ -929,6 +932,7 @@
 	}
 
 
+
 /* ====================== */
 /*    BUTTONS - MENUS     */
 /* ====================== */
@@ -943,7 +947,7 @@
 
 	.menus {
 		 .dropdown {
-			float:left;
+//			float:left;
 		}
 		a.text-button {
 			font-size:calc(var(--font-size-coeff) * 1rem);
@@ -1121,9 +1125,6 @@
 	}
 
 
-/* ====================== */
-/*   PORTFOLIO NAVBAR     */
-/* ====================== */
 	#sub-bar {
 		background-color: var(--portfolio-navbar-background-color);
 		border-color: var(--portfolio-navbar-background-color);
@@ -1163,13 +1164,63 @@
 /* ==================================================================== */
 //--- le libellé Bienvenue de la page WELCOME n'est visible que pour le designer
 
+	#sub-bar {
+		background-color: var(--portfolio-navbar-background-color);
+		border-color: var(--portfolio-navbar-background-color);
+		.dropdown-menu {
+			background-color: var(--portfolio-navbar-background-color);
+			color: var(--portfolio-navbar-text-color);
+			a.dropdown-item {
+				background-color: var(--portfolio-navbar-background-color);
+				color: var(--portfolio-navbar-text-color);
+			}
+			a.dropdown-item:hover {
+				background-color: var(--portfolio-navbar-text-color);
+				color: var(--portfolio-navbar-background-color);
+			}
+		}
+/*
+		.dropdown-menu,
+		.open > a {
+			background-color: var(--portfolio-navbar-background-color);
+			border-color: var(--portfolio-navbar-background-color);
+		}
+		a.dropdown-item:hover {
+			color: var(--portfolio-navbar-background-color);
+		}
+		a {
+			color:var(--portfolio-navbar-text-color);
+		}
+*/
+		#toggle-mode {
+			padding-top: 9px;
+			padding-left: 10px;
+			color:var(--portfolio-navbar-text-color);
+		}
+		#toggle-mode-icon {
+			font-size:calc(var(--font-size-coeff) * 1.1rem);
+		}
+		#refresh-portfolio {
+			padding-left: 15px;
+		}
+		.navbar-brand {
+			cursor:pointer;
+		}
+		#welcome-edit{
+			padding-top:9px;
+		}
+	}
+
 	#portfolio-container{
-		&:not([role=designer]) .WELCOME div[name=lbl-div]:first-child{ 
+		background-color: var(--portfolio-background-color);
+		&:not([role=designer]) .WELCOME .first-node{ 
 			display:none
-		};
-		&[role=designer] .WELCOME div[name=lbl-div]:first-child{
-			display:block
-		};
+		}
+		&[role=designer] {
+//			.asmUnitStructure:hover{
+//				border: 1px dashed #d8d8d8;
+//			}
+		}
 		#contenu,
 		.popover-header {
 			color: var(--portfolio-text-color);
@@ -1191,6 +1242,7 @@
 			background-color: var(--portfolio-menu-background-color);
 			color: var(--portfolio-menu-text-color);
 			a.dropdown-item {
+				background-color: var(--portfolio-menu-background-color);
 				color: var(--portfolio-menu-text-color);
 			}
 			a.dropdown-item:hover {
@@ -1387,9 +1439,28 @@
 		}
 	}
 
+	.standard-node-default-content {
+		padding-top:10px;
+		margin-bottom:10px;
+	}
+
+	.standard-node-xwide-content{
+		padding-top:10px;
+		margin-bottom:10px;
+	}
+
+	.standard-resource-xwide{
+		.edit-bar {
+			float:right;
+			margin-right:20px;
+		}
+	}
 	.standard-resource-simple {
 		td {
-			min-height:1.75rem
+			min-height:1.75rem;
+			.edit-bar {
+				float:right;
+			}
 		}
 		 .resource {
 			border: none;
@@ -1400,11 +1471,18 @@
 		}
 	}
 
+	.standard-resource-Image-Img-Label {
+		.edit-bar{
+			top:25px;
+			z-index:100;
+			position:relative;
+		}
+	}
 	/*  --- node --- */
 
 
 	.node-header {
-		padding:15px 15px 15px 20px;
+		padding:15px;
 		.buttons { 
 			float:right;
 		}
@@ -1420,6 +1498,10 @@
 	.standard-resource-default {
 		padding-top:5px;
 		padding-right:20px;
+	}
+
+	.standard-resource-simple {
+		margin-top:5px;
 	}
 
 	.content .resource-standard .title-subline {
@@ -1445,7 +1527,7 @@
 	.resource-standard {
 		padding-top:10px;
 		.buttons{
-			background: var(--portfolio-buttons-background-color);
+			background-color: var(--portfolio-buttons-background-color);
 			border:1px solid var(--portfolio-resource-border-color);
 			width:200px;
 		}
@@ -1462,7 +1544,6 @@
 		td-resource{
 			width:80%;
 			margin-right:0px;
-			background:white;
 			border: 1px solid var(--portfolio-resource-border-color);
 			padding-left:0px;
 			padding-right:0px;
@@ -1486,7 +1567,9 @@
 		}
 	}
 
-	/*------ CARD --------*/
+/* ========================= */
+/*     VUE  CARD             */
+/* ========================= */
 
 	.card-header {
 		.buttons { 
@@ -1505,6 +1588,7 @@
 	
 		}
 		.standard-resource-card {
+			margin-top:20px;
 			margin-left:0px;
 			margin-right:0px;
 			&:first-child {margin-top:0px;}
@@ -1519,26 +1603,41 @@
 //			margin-right:15px;
 		}
 		.card-body {
-			padding-top:0px;
+//			padding-top:0px;
 		}
 	}
 	
+	.standard-node-carddeck-content{
+		padding:20px;
+		.standard-node-card {
+			margin-top:0px;
+		}
+	}
 	
 	.standard-node-carddeck {
 		.standard-node-card {
 //			margin-top:5px;
 		}
 		.content {
-			padding-left:20px;
-			padding-right:20px;
+//			padding-top:20px;
+//			padding-left:20px;
+//			padding-right:20px;
 		}
 		.butmen {
 			text-align:right;
 		}
 		div[name=cnt-div] div[name=cnt-div]{
-			padding-left:0px;
-			padding-right:0px;
+//			padding-left:0px;
+//			padding-right:0px;
 		}
+	}
+
+/* ========================= */
+/*     VUE  1/X             */
+/* ========================= */
+
+	.edit-bar{
+		text-align:right;
 	}
 
 /* ====================== */
@@ -1578,7 +1677,7 @@
 	.csv-button,
 	.pdf-button,
 	.img-button {
-		background: var(--portfolio-buttons-background-color);
+		background-color: var(--portfolio-buttons-background-color);
 		border:1px solid var(--portfolio-resource-border-color);
 		float:left;
 		height:34px;
@@ -1860,7 +1959,7 @@ a.btn {
 }
 .bar {
 	height: 18px;
-	background: green;
+	background-color: green;
 }
 
 hr {
@@ -3098,8 +3197,8 @@ table.tablesorter th.restore {
 		.content {
 			display:none;
 		}
-		.resource-label {
-			visibility : hidden;
+		.title {
+			display:none;
 		}
 	}
 
@@ -3146,10 +3245,10 @@ table.tablesorter th.restore {
 	.block .DocumentBlock,
 	.block .URLBlock,
 	//----------------------
-	.ImageBlock .ImageBlock,
-	.DocumentBlock .DocumentBlock,
-	.URLBlock .URLBlock {
-		height:var(--block-img-height);
+	.ImgBlock,
+	.DocBlock,
+	.UrlBlock {
+		min-height:var(--block-img-height);
 		text-align:center;
 		background-repeat: no-repeat;
 		background-position: center center;
@@ -3174,10 +3273,12 @@ table.tablesorter th.restore {
 	.block .docblock-title,
 	.block .no-document .docblock-title,
 	//----------------------
-	.URLBlock .no-document .docblock-title,
-	.URLBlock .docblock-title,
-	.DocumentBlock .no-document .docblock-title,
-	.DocumentBlock .docblock-title {
+	.ImgBlock .no-document .docblock-title,
+	.ImgBlock .docblock-title,
+	.UrlBlock .no-document .docblock-title,
+	.UrlBlock .docblock-title,
+	.DocBlock .no-document .docblock-title,
+	.DocBlock .docblock-title {
 		display: inline-block;
 		margin-top:90px;
 		margin-left:10px;

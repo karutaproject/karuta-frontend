@@ -348,6 +348,42 @@ UIFactory["User"].prototype.getEmail = function()
 	return this.email_node.text();
 }
 
+//==================================
+UIFactory["User"].prototype.getSelector = function(attr,value,name,checked,disabled)
+//==================================
+{
+	var userid = this.id;
+	var firstname = this.firstname_node.text();
+	var lastname = this.lastname_node.text();
+	var username = this.username_node.text();
+	var html = "<input type='checkbox' name='"+name+"' username='"+username+"' value='"+userid+"'";
+	if (attr!=null && value!=null)
+		html += " "+attr+"='"+value+"'";
+	if (disabled)
+		html+= " disabled='disabled' ";			
+	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
+	return html;
+};
+
+//==================================
+UIFactory["User"].prototype.getRadio = function(attr,value,name,checked,disabled)
+//==================================
+{
+	var userid = this.id;
+	var firstname = this.firstname_node.text();
+	var lastname = this.lastname_node.text();
+	var username = this.username_node.text();
+	var html = "<input type='radio' name='"+name+"' username='"+username+"' value='"+userid+"'";
+	if (attr!=null && value!=null)
+		html += " "+attr+"='"+value+"'";
+	if ((userid==1)||disabled)
+		html+= " disabled='disabled' ";			
+	if (checked)
+		html += " checked='true' ";
+	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
+	return html;
+};
+
 
 //==================================
 UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
@@ -550,17 +586,23 @@ UIFactory["User"].displaySearched = function (value,search_type,type)
 		url : serverBCK_API+"/users?"+search_type+"="+value,
 		success : function(data) {
 			UIFactory.User.parse_search(data);
-			$("#"+type+"-rightside-content1").show();
-			$("#"+type+"-rightside-content2").show();
-			$("#"+type+"-rightside-header1").show();
-			$("#"+type+"-rightside-header2").show();
-			$("#"+type+"-rightside-users-content1").html("");
-			$("#"+type+"-rightside-users-content2").html("");
-			for (var i=0; i<searched_active_users_list.length;i++){
-				$("#"+type+"-rightside-users-content1").append(searched_active_users_list[i].getView(type+"-rightside-users-content1",type));
-			}
-			for (var i=0; i<searched_inactive_users_list.length;i++){
-				$("#"+type+"-rightside-users-content2").append(searched_inactive_users_list[i].getView(type+"-rightside-users-content2",type));
+			if (type=='sharing-user'){
+				for (var i=0; i<searched_active_users_list.length;i++){
+					$("#"+type+"-rightside-users-content1").append(searched_active_users_list[i].getSelector(null,null,'select_users'));
+				}				
+			} else {
+				$("#"+type+"-rightside-content1").show();
+				$("#"+type+"-rightside-content2").show();
+				$("#"+type+"-rightside-header1").show();
+				$("#"+type+"-rightside-header2").show();
+				$("#"+type+"-rightside-users-content1").html("");
+				$("#"+type+"-rightside-users-content2").html("");
+				for (var i=0; i<searched_active_users_list.length;i++){
+					$("#"+type+"-rightside-users-content1").append(searched_active_users_list[i].getView(type+"-rightside-users-content1",type));
+				}
+				for (var i=0; i<searched_inactive_users_list.length;i++){
+					$("#"+type+"-rightside-users-content2").append(searched_inactive_users_list[i].getView(type+"-rightside-users-content2",type));
+				}
 			}
 		}
 	});
@@ -789,42 +831,6 @@ UIFactory["User"].callCreate = function()
 	$('#edit-window').modal('show');
 };
 
-//==================================
-UIFactory["User"].prototype.getSelector = function(attr,value,name,checked,disabled)
-//==================================
-{
-	var userid = this.id;
-	var firstname = this.firstname_node.text();
-	var lastname = this.lastname_node.text();
-	var username = this.username_node.text();
-	var html = "<input type='checkbox' name='"+name+"' username='"+username+"' value='"+userid+"'";
-	if (attr!=null && value!=null)
-		html += " "+attr+"='"+value+"'";
-	if (disabled)
-		html+= " disabled='disabled' ";			
-	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
-	return html;
-};
-
-//==================================
-UIFactory["User"].prototype.getRadio = function(attr,value,name,checked,disabled)
-//==================================
-{
-	var userid = this.id;
-	var firstname = this.firstname_node.text();
-	var lastname = this.lastname_node.text();
-	var username = this.username_node.text();
-	var html = "<input type='radio' name='"+name+"' username='"+username+"' value='"+userid+"'";
-	if (attr!=null && value!=null)
-		html += " "+attr+"='"+value+"'";
-	if ((userid==1)||disabled)
-		html+= " disabled='disabled' ";			
-	if (checked)
-		html += " checked='true' ";
-	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
-	return html;
-};
-
 
 //==================================
 UIFactory["User"].edit = function(userid)
@@ -900,6 +906,8 @@ UIFactory["User"].displaySelectMultipleActive = function(destid,type,lang)
 //==================================
 {
 	$("#"+destid).html("");
+	if (!UsersLoaded)
+		UIFactory.User.loadAll();
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var input = UsersActive_list[i].getSelector(null,null,'select_users');
 		$("#"+destid).append($(input));
@@ -912,6 +920,8 @@ UIFactory["User"].displaySelectMultipleActive2 = function(selectedlist,destid,ty
 //==================================
 {
 	$("#"+destid).html("");
+	if (!UsersLoaded)
+		UIFactory.User.loadAll();
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var checked = selectedlist.includes(UsersActive_list[i].id);
 		if (!checked) {
@@ -927,6 +937,8 @@ UIFactory["User"].displaySelectActive = function(destid,type,lang)
 //==================================
 {
 	$("#"+destid).html("");
+	if (!UsersLoaded)
+		UIFactory.User.loadAll();
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var input = UsersActive_list[i].getRadio(null,null,destid);
 		$("#"+destid).append($(input));

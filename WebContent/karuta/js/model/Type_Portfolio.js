@@ -1442,8 +1442,12 @@ UIFactory["Portfolio"].displayUnSharing = function(destid,data,unshare_disabled)
 				html = "<div class='row'><div class='col-md-3'>"+label+"</div><div class='col-md-9'>";
 				for (var j=0; j<users.length; j++){
 					var userid = $(users[j]).attr('id');
-					if (Users_byid[userid]!=undefined)
+					if (Users_byid[userid]!=undefined) {
 						html += "<div>"+Users_byid[userid].getSelector('group',groupid,'select_users2unshare',null,unshare_disabled)+"</div>";
+					} else {
+						UIFactory.User.load(userid);
+						html += "<div>"+Users_byid[userid].getSelector('group',groupid,'select_users2unshare',null,unshare_disabled)+"</div>";
+					}
 				}
 				html += "</div></div>";
 				$(dest).append($(html));
@@ -1583,11 +1587,15 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 	html += "</div>";
 	html += "</div><!--row-->";
 	html += "<br><div class='row'>";
-	html += "<div class='col-md-3'><br>";
+	html += "<div class='col-md-3'>";
 	html += karutaStr[LANG]['select_users'];
+	html += "	<div>"+karutaStr[LANG]['active_users'];
+	html += "		<button id='list-menu' class='btn' onclick=\"UIFactory.User.displaySelectMultipleActive('sharing-user-rightside-users-content1');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "	</div>";
 	html += "</div>";
 	html += "<div class='col-md-9'>";
-	html += "<div id='sharing_users'></div>";
+	html += "<div id='sharing-user-search'></div>";
+	html += "<div id='sharing-user-rightside-users-content1'></div>";
 	html += "</div>";
 	html += "</div><!--row-->";
 	html += "</div><!--sharing-->";
@@ -1596,8 +1604,10 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 	$("#edit-window-type").html("");
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
+	UIFactory.User.displaySearch("sharing-user-search",false,'sharing-user');
+
 	//----------------------------------------------------------------
-	if (Users_byid.length>0) { // users loaded
+/*	if (Users_byid.length>0) { // users loaded
 		UIFactory["User"].displaySelectMultipleActive('sharing_users');
 		//--------------------------
 		$.ajax({
@@ -1636,7 +1646,18 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 			}
 		});
 	}
-	
+*/
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
+		success : function(data) {
+			UIFactory.Portfolio.displayUnSharing('shared',data);
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in callShareUsers 1 : "+jqxhr.responseText);
+		}
+	});
 	//----------------------------------------------------------------
 	$.ajax({
 		type : "GET",
@@ -2876,6 +2897,7 @@ function setCSSportfolio(data)
 	//-----------PORTFOLIO COLORS------------------------------------
 	setConfigColor(data,root,'page-title-background-color');
 	setConfigColor(data,root,'page-title-subline-color');
+	setConfigColor(data,root,'portfolio-background-color');
 	setConfigColor(data,root,'portfolio-text-color');
 	setConfigColor(data,root,'portfolio-section-separator-color');
 	setConfigColor(data,root,'portfolio-buttons-background-color');
@@ -2996,12 +3018,6 @@ function setCSSportfolioOLD(data)
 		var portfolio_link_color_id = $("asmContext:has(metadata[semantictag='portfolio-link-color'])",data).attr("id");
 		var color = UICom.structure["ui"][portfolio_link_color_id].resource.getValue();
 		changeCss("a", "color:"+color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).length>0) {
-		var portfolio_section_title_background_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-title-background-color'])",data).attr("id");
-		var color = UICom.structure["ui"][portfolio_section_title_background_color_id].resource.getValue();
-		changeCss(".asmUnitStructure", "background:"+color+";");
 	}
 	// ========================================================================
 }

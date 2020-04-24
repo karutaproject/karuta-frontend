@@ -59,7 +59,7 @@ UIFactory["ProxyBlock"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	var html = "";
 	if (type=='standard'){
-		html = $(proxy_element.resource.label_node[langcode]).text();
+//		html = $(proxy_element.resource.label_node[langcode]).text();
 	}
 	return html;
 };
@@ -86,7 +86,7 @@ UIFactory["ProxyBlock"].prototype.displayView = function(dest,type,langcode)
 	//---------------------
 	var html = "";
 	if (type=='standard'){
-		html = $(proxy_element.resource.label_node[langcode]).text();
+//		html = $(proxy_element.resource.label_node[langcode]).text();
 	}
 	$("#"+dest).html(html);
 };

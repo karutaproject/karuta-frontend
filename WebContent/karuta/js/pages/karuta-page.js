@@ -11,7 +11,6 @@ function initKarutaPage()
 	html += "<div id='main-body'>";
 	html += "	<div id='navigation-bar'></div>";
 	html += "	<div id='welcome-bar'></div>";
-	html += "	<div id='sub-bar'></div>";
 	html += "	<div id='main-container'></div>";
 	html += "</div>";
 	html += "<div id='wait-window' class='modal' style='height:100px;'>";
@@ -59,14 +58,16 @@ function displayKarutaPage()
 			USER = new UIFactory["User"]($("user",data));
 			//-------------------------------
 			var html = "";
-			html += "	<div id='list-container' class='container-fluid'></div>";
-			html += "	<div id='portfolio-container' role='all' style='display:none'></div>";
-			html += "	<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-user' class='container-fluid' style='display:none'></div>";
-			html += "	<div id='main-usersgroup' class='container-fluid' style='display:none'></div>";
-			html += "	<div id='main-exec-batch' class='container-fluid' style='display:none'></div>";
-			html += "	<div id='main-exec-report' class='container-fluid' style='display:none'></div>";
+			html += "<div id='main-list' class='container-fluid'></div>";
+			html += "<div id='main-portfolio' class='container-fluid' style='display:none'>";
+			html += "	<div id='sub-bar'></div>";
+			html += "	<div id='portfolio-container' role='all'></div>";
 			html += "</div>";
+			html += "<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
+			html += "<div id='main-user' class='container-fluid' style='display:none'></div>";
+			html += "<div id='main-usersgroup' class='container-fluid' style='display:none'></div>";
+			html += "<div id='main-exec-batch' class='container-fluid' style='display:none'></div>";
+			html += "<div id='main-exec-report' class='container-fluid' style='display:none'></div>";
 			$("#main-container").html(html);
 			$.ajax({
 				type : "GET",
@@ -215,6 +216,7 @@ function setConfigurationVariables()
 			//----------
 			g_configVar['page-title-background-color'] = getText('config-page-title-background-color','Color','text',data);
 			g_configVar['page-title-subline-color'] = getText('config-page-title-subline-color','Color','text',data);
+			g_configVar['portfolio-background-color'] = getText('config-portfolio-background-color','Color','text',data);
 			g_configVar['portfolio-text-color'] = getText('config-portfolio-text-color','Color','text',data);
 			g_configVar['portfolio-buttons-color'] = getText('config-portfolio-buttons-color','Color','text',data);
 			g_configVar['portfolio-buttons-background-color'] = getText('config-portfolio-buttons-background-color','Color','text',data);

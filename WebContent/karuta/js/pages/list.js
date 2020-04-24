@@ -50,7 +50,7 @@ function show_list_page()
 	applyListConfiguration();
 	setLanguageMenu("fill_list_page()");
 	$("#search-portfolio-div").show();
-	$("#list-container").show();
+	$("#main-list").show();
 	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 
@@ -95,7 +95,7 @@ function fill_list_page()
 	//------------------------------------------
 	html += "</div>";
 	//-----------------------------------------------------------
-	$("#list-container").html(html);
+	$("#main-list").html(html);
 	UIFactory.PortfolioFolder.displayPortfolioSearch("portfolio",false);	
 	//---------------------------------------------
 	if (USER.admin || USER.creator ){

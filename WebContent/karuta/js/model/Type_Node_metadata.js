@@ -1537,6 +1537,7 @@ UIFactory["Node"].updateMetadataEpmSelectAttribute = function(nodeid,attribute,s
 	var value = $(option).attr('value');
 	var node = UICom.structure["ui"][nodeid].node;
 	$($("metadata-epm",node)[0]).attr(attribute,value);
+	var refresh = true;
 	UICom.UpdateMetaEpm(nodeid,refresh);
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		UICom.structure["ui"][nodeid].displayMetaEpmInfo("metaepm_"+nodeid);
