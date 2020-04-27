@@ -891,6 +891,31 @@
 		button{
 			background-color: var(--edit-window-button-background-color);
 		}
+		.dropdown-menu {
+			color: var(--edit-window-text-color);
+			background-color: var(--edit-window-background-color);
+			a.dropdown-item {
+				cursor:default;
+				color: var(--edit-window-text-color);
+				background-color: var(--edit-window-background-color);
+			}
+			a.dropdown-item:hover {
+				background-color: var(--edit-window-button-background-color);
+			}
+		}
+		.nested{
+			display: none;
+			margin-left:1em;
+			position:relative;
+			.treeNode:last-child:before {
+				height:auto;
+				top:1em;
+				bottom:0
+			}
+		}
+		.open {
+			display: block;
+		}
 	}
 
 	#edit-window-header.modal-header {
@@ -1415,6 +1440,20 @@
 		}
 	}
 
+/* ========================= */
+/*        VUE BASIC          */
+/* ========================= 
+
+	.basic {
+		.menus {
+			float:right;
+		}
+		.buttons {
+			float:right;
+			margin-top:10px;
+		}
+	}
+*/
 /* ========================= */
 /*     VUE  STANDARD         */
 /* ========================= */
@@ -3191,17 +3230,18 @@ table.tablesorter th.restore {
 /* ====================
 	BLOCK
    ====================*/
-	.DocumentBlock,
-	.ImageBlock,
-	.URLBlock {
-		.content {
-			display:none;
-		}
-		.title {
-			display:none;
+	.standard {
+		.DocumentBlock,
+		.ImageBlock,
+		.URLBlock {
+			.content {
+				display:none;
+			}
+			.title {
+				display:none;
+			}
 		}
 	}
-
 
 
 	:root{

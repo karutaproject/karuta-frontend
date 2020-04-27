@@ -840,6 +840,31 @@ body,
 #edit-window button {
   background-color: var(--edit-window-button-background-color);
 }
+#edit-window .dropdown-menu {
+  color: var(--edit-window-text-color);
+  background-color: var(--edit-window-background-color);
+}
+#edit-window .dropdown-menu a.dropdown-item {
+  cursor: default;
+  color: var(--edit-window-text-color);
+  background-color: var(--edit-window-background-color);
+}
+#edit-window .dropdown-menu a.dropdown-item:hover {
+  background-color: var(--edit-window-button-background-color);
+}
+#edit-window .nested {
+  display: none;
+  margin-left: 1em;
+  position: relative;
+}
+#edit-window .nested .treeNode:last-child:before {
+  height: auto;
+  top: 1em;
+  bottom: 0;
+}
+#edit-window .open {
+  display: block;
+}
 
 #edit-window-header.modal-header {
   display: block;
@@ -1312,6 +1337,20 @@ body,
   font-size: inherit;
 }
 
+/* ========================= */
+/*        VUE BASIC          */
+/* ========================= 
+
+	.basic {
+		.menus {
+			float:right;
+		}
+		.buttons {
+			float:right;
+			margin-top:10px;
+		}
+	}
+*/
 /* ========================= */
 /*     VUE  STANDARD         */
 /* ========================= */
@@ -3084,14 +3123,14 @@ td {
 /* ====================
 	BLOCK
    ====================*/
-.DocumentBlock .content,
-.ImageBlock .content,
-.URLBlock .content {
+.standard .DocumentBlock .content,
+.standard .ImageBlock .content,
+.standard .URLBlock .content {
   display: none;
 }
-.DocumentBlock .title,
-.ImageBlock .title,
-.URLBlock .title {
+.standard .DocumentBlock .title,
+.standard .ImageBlock .title,
+.standard .URLBlock .title {
   display: none;
 }
 

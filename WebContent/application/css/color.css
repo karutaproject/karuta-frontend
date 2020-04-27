@@ -72,6 +72,8 @@
 	/* ========== metadata =============== */
 	--edit-window-border-color: #ced4da;
 	--edit-window-button-background-color:#d8d8d8;
+	--edit-window-background-color:#fff;
+	--edit-window-text-color:#212529;
 	
 	--list-icon-section-color: Var(--list-complement-button-color);
 	

@@ -941,6 +941,16 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 };
 
 //==================================
+UIFactory["Portfolio"].toggleElt = function(eltid)
+//==================================
+{
+	var elt = document.getElementById("import-toggle_"+eltid);
+	elt.classList.toggle('openSign');
+	elt = document.getElementById("import-"+eltid);
+	elt.classList.toggle('open');
+}
+
+//==================================
 UIFactory["Portfolio"].importFile = function(instance)
 //==================================
 {
@@ -962,14 +972,29 @@ UIFactory["Portfolio"].importFile = function(instance)
 	html +="  </button>";
 	html +="  <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>";
 	html +="    <a class='dropdown-item' href='#'>&nbsp;</a>";
-	for (var i=0;i<projects_list.length;i++) {
+	for (var i=0;i<folders_list.length;i++) {
 		var js = "";
 		if (instance) 
-			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','true')";
+			js = "$('#project').attr('value','"+folders_list[i].code_node.text()+"');$('#instance').attr('value','true')";
 		else
-			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','false')";
-		js += ";$('#dropdownMenu1').html('"+projects_list[i].portfoliolabel+"')";
-		html += "<a class='dropdown-item' onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a>";
+			js = "$('#project').attr('value','"+folders_list[i].code_node.text()+"');$('#instance').attr('value','false')";
+		js += ";$('#dropdownMenu1').html('"+folders_list[i].label_node[LANGCODE].text()+"')";
+		if (folders_list[i].nbfolders>0)
+			html += "<a class='dropdown-item' onclick=\""+js+"\" onmouseover=\"UIFactory.Portfolio.toggleElt('"+folders_list[i].id+"')\" ><span id='import-toggle_"+folders_list[i].id+"' class='closeSign' ></span>"+folders_list[i].label_node[LANGCODE].text()+"</a>";
+		else
+			html += "<a class='dropdown-item' onclick=\""+js+"\">"+folders_list[i].label_node[LANGCODE].text()+"</a>";
+		if (folders_list[i].nbfolders>0) {
+			html += "<div id='import-"+folders_list[i].id+"' class='nested' onmouseleave=\"UIFactory.Portfolio.toggleElt('"+folders_list[i].id+"')\">";
+			for (uuid in folders_list[i].folders){
+				if (instance) 
+					js = "$('#project').attr('value','"+folders_byid[uuid].code_node.text()+"');$('#instance').attr('value','true')";
+				else
+					js = "$('#project').attr('value','"+folders_byid[uuid].code_node.text()+"');$('#instance').attr('value','false')";
+				js += ";$('#dropdownMenu1').html('"+folders_byid[uuid].label_node[LANGCODE].text()+"')";
+				html += "<a class='dropdown-item' onclick=\""+js+"\">"+folders_byid[uuid].label_node[LANGCODE].text()+"</a>";
+			}
+			html += "</div>";
+		}
 	}
 	html +="  </ul>";
 	html +="</div><br>";
@@ -1079,7 +1104,7 @@ UIFactory["Portfolio"].del = function(portfolioid)
 		url : url,
 		data : "",
 		success : function(data) {
-			UIFactory.PortfolioFolder.loadAndDisplayFolders('portfolio-content1-leftside','list');
+			fill_list_page();
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error in del : "+jqxhr.responseText);

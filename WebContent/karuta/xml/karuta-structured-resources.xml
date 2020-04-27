@@ -8,7 +8,7 @@
 		<metadata semantictag="karuta-components" sharedNode="N" sharedNodeResource="N" />
 		<asmResource xsi_type="nodeRes">
 			<lastmodified />
-			<code>karuta.karuta-other-resources</code>
+			<code>karuta.karuta-structured-resources</code>
 			<label lang="fr">KARUTA - Ressources structurées(2016/04/07)</label>
 			<label lang="en">KARUTA - Structured Resources (2016/04/07)</label>
 		</asmResource>
@@ -132,7 +132,7 @@
 			</asmContext>
 			//===================== Coverage =======================
 			<asmContext xsi_type="">
-				<metadata-wad seenoderoles="all" query="karuta.karuta-other-resources.coverage.label"/>
+				<metadata-wad seenoderoles="all" query="karuta.karuta-structured-resources.coverage.label"/>
 				<metadata-epm />
 				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="cover" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
@@ -221,7 +221,7 @@
 			</asmContext>
 			//===================== Coverage =======================
 			<asmContext xsi_type="">
-				<metadata-wad seenoderoles="all" query="karuta.karuta-other-resources.coverage.label"/>
+				<metadata-wad seenoderoles="all" query="karuta.karuta-structured-resources.coverage.label"/>
 				<metadata-epm />
 				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="cover" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
@@ -287,7 +287,7 @@
 			</asmContext>
 			//===================== Coverage =======================
 			<asmContext xsi_type="">
-				<metadata-wad seenoderoles="all" query="karuta.karuta-other-resources.coverage.label"/>
+				<metadata-wad seenoderoles="all" query="karuta.karuta-structured-resources.coverage.label"/>
 				<metadata-epm />
 				<metadata multilingual-node="Y" multilingual-resource="Y" semantictag ="cover" sharedNode="N" sharedNodeResource="N" sharedResource="N" />
 				<asmResource xsi_type="nodeRes">
