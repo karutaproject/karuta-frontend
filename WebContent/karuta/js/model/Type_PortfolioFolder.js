@@ -413,6 +413,36 @@ UIFactory["PortfolioFolder"].prototype.displayFolder = function(type,dest,parent
 }
 
 //==================================
+UIFactory["PortfolioFolder"].prototype.getView = function(type,instance)
+//==================================
+{
+	var html = "";
+	//--------------------------------------------------------------------------------------------	
+	if (type=='import') {
+		var js = "";
+		if (instance) 
+			js = "$('#project').attr('value','"+this.code_node.text()+"');$('#instance').attr('value','true')";
+		else
+			js = "$('#project').attr('value','"+this.code_node.text()+"');$('#instance').attr('value','false')";
+		js += ";$('#dropdownMenu1').html('"+this.label_node[LANGCODE].text()+"')";
+		if (this.nbfolders>0) {
+			html += "<div class='dropdown-submenu'>";
+			html += "<a class='dropdown-item'><span class='closeSign'/>"+this.label_node[LANGCODE].text()+"</a>";
+			html += "<div class='dropdown-menu'>";
+			for (uuid in this.folders) {
+				html += folders_byid[uuid].getView (type,instance)
+			}
+			html += "</div>";
+			html += "</div>";
+		} else {
+			html += "<a class='dropdown-item' onclick=\""+js+"\">"+this.label_node[LANGCODE].text()+"</a>";
+		}
+	}
+	//--------------------------------------------------------------------------------------------
+	return html;
+};
+
+//==================================
 UIFactory["PortfolioFolder"].prototype.displayContent = function(type,viewtype)
 //==================================
 {
@@ -510,9 +540,19 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,viewt
 			html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callChangeOwner('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["changeOwner"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsers('"+this.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory['Portfolio'].callShareUsersGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
-			html += "			<a class='dropdown-item' id='export-"+this.id+"' href='' style='display:block'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a>";
-			html += "			<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callArchive('"+folder_code+"')\" ><i class='fa fa-download'></i> "+karutaStr[LANG]["archive-project"]+"</a>";
+			html += "				<a class='dropdown-item' id='export-"+this.id+"' href='' style='display:block'><i class='fa fa-download'></i> "+karutaStr[LANG]["export-project"]+"</a>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callArchive('"+folder_code+"')\" ><i class='fa fa-download'></i> "+karutaStr[LANG]["archive-project"]+"</a>";
+			html += "				<div class='dropdown-submenu pull-left'>";
+			html += "				<a class='dropdown-item'><i class='fa fa-upload'></i> "+karutaStr[LANG]["import"]+"</a>";
+			html += "				<div class='dropdown-menu'>";
+			html += "					<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(false,false,'"+folder_code+"')\" ><i class='fa fa-upload'></i> "+karutaStr[LANG]['import_portfolio']+"</a>";
+			html += "					<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(true,false,'"+folder_code+"')\" ><i class='fa fa-upload'></i> "+karutaStr[LANG]['import_zip']+"</a>";
+			html += "					<div class='dropdown-divider'></div>";
+			html += "					<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(false,true,'"+folder_code+"')\" ><i class='fa fa-upload'></i> "+karutaStr[LANG]['import_instance']+"</a>";
+			html += "					<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(true,true,'"+folder_code+"')\" ><i class='fa fa-upload'></i> "+karutaStr[LANG]['import_zip_instance']+"</a>";
+			html += "				</div>";
 			html += "			</div>";
+			html += "		</div>";
 		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
 			html += "			<button  data-toggle='dropdown' class='btn   dropdown-toggle' style='visibility:hidden'>&nbsp;<span class='caret'></span>&nbsp;</button>";
 		}

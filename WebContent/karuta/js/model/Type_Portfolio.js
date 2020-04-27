@@ -271,7 +271,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 			html += "<div class='col-md-1 col-xs-2'>"+this.date_modified.substring(0,10)+"</div>";
 //		}
 	}
-	//--------------------------------------------------------------------------------------------	
+	//--------------------------------------------------------------------------------------------
 	return html;
 };
 
@@ -951,7 +951,7 @@ UIFactory["Portfolio"].toggleElt = function(eltid)
 }
 
 //==================================
-UIFactory["Portfolio"].importFile = function(instance)
+UIFactory["Portfolio"].import = function(zip,instance,foldercode)
 //==================================
 {
 	$("#edit-window-body").attr("type","list-menu");
@@ -963,48 +963,64 @@ UIFactory["Portfolio"].importFile = function(instance)
 	$("#edit-window-body").html($(html));
 	//--------------------------
 	var url = serverBCK_API+"/portfolios";
+	if (zip)
+		url += "/zip";
 	//--------------------------
-	var project = "";
-	html +="<div class='dropdown'>";
-	html +="  <button class='btn btn-default dropdown-toggle' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>";
-	html +="    Select a project ";
-	html +="    <span class='caret'></span>";
-	html +="  </button>";
-	html +="  <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>";
-	html +="    <a class='dropdown-item' href='#'>&nbsp;</a>";
-	for (var i=0;i<folders_list.length;i++) {
-		var js = "";
-		if (instance) 
-			js = "$('#project').attr('value','"+folders_list[i].code_node.text()+"');$('#instance').attr('value','true')";
-		else
-			js = "$('#project').attr('value','"+folders_list[i].code_node.text()+"');$('#instance').attr('value','false')";
-		js += ";$('#dropdownMenu1').html('"+folders_list[i].label_node[LANGCODE].text()+"')";
-		if (folders_list[i].nbfolders>0)
-			html += "<a class='dropdown-item' onclick=\""+js+"\" onmouseover=\"UIFactory.Portfolio.toggleElt('"+folders_list[i].id+"')\" ><span id='import-toggle_"+folders_list[i].id+"' class='closeSign' ></span>"+folders_list[i].label_node[LANGCODE].text()+"</a>";
-		else
-			html += "<a class='dropdown-item' onclick=\""+js+"\">"+folders_list[i].label_node[LANGCODE].text()+"</a>";
-		if (folders_list[i].nbfolders>0) {
-			html += "<div id='import-"+folders_list[i].id+"' class='nested' onmouseleave=\"UIFactory.Portfolio.toggleElt('"+folders_list[i].id+"')\">";
-			for (uuid in folders_list[i].folders){
-				if (instance) 
-					js = "$('#project').attr('value','"+folders_byid[uuid].code_node.text()+"');$('#instance').attr('value','true')";
-				else
-					js = "$('#project').attr('value','"+folders_byid[uuid].code_node.text()+"');$('#instance').attr('value','false')";
-				js += ";$('#dropdownMenu1').html('"+folders_byid[uuid].label_node[LANGCODE].text()+"')";
-				html += "<a class='dropdown-item' onclick=\""+js+"\">"+folders_byid[uuid].label_node[LANGCODE].text()+"</a>";
+	if (foldercode==null || foldercode=="") {
+		html +="<div class='dropdown'>";
+		html +="  <button class='btn btn-default dropdown-toggle' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>";
+		html +="    Select a project ";
+		html +="    <span class='caret'></span>";
+		html +="  </button>";
+		html +="  <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>";
+		html +="    <a class='dropdown-item' href='#'>&nbsp;</a>";
+		for (var i=0;i<folders_list.length;i++) {
+			html += folders_list[i].getView('import',instance);
+/*			var js = "";
+			if (instance) 
+				js = "$('#project').attr('value','"+folders_list[i].code_node.text()+"');$('#instance').attr('value','true')";
+			else
+				js = "$('#project').attr('value','"+folders_list[i].code_node.text()+"');$('#instance').attr('value','false')";
+			js += ";$('#dropdownMenu1').html('"+folders_list[i].label_node[LANGCODE].text()+"')";
+			if (folders_list[i].nbfolders>0) {
+				html += "<div class='dropdown-submenu'>";
+				html += "<a class='dropdown-item'><span class='closeSign'/>"+folders_list[i].label_node[LANGCODE].text()+"</a>";
+				html += "<div class='dropdown-menu'>";
+				for (uuid in folders_list[i].folders) {
+					if (instance) 
+						js = "$('#project').attr('value','"+folders_byid[uuid].code_node.text()+"');$('#instance').attr('value','true')";
+					else
+						js = "$('#project').attr('value','"+folders_byid[uuid].code_node.text()+"');$('#instance').attr('value','false')";
+					js += ";$('#dropdownMenu1').html('"+folders_byid[uuid].label_node[LANGCODE].text()+"')";
+					html += "<a class='dropdown-item' onclick=\""+js+"\">"+folders_byid[uuid].label_node[LANGCODE].text()+"</a>";
+				}
+				html += "</div>";
+				html += "</div>";
+			} else {
+				html += "<a class='dropdown-item' onclick=\""+js+"\">"+folders_list[i].label_node[LANGCODE].text()+"</a>";
 			}
-			html += "</div>";
+*/
 		}
+		html +="  </ul>";
+		html +="</div><br>";
+		html +=" <form id='fileupload' action='"+url+"'>";
+		html += " <input type='hidden' id='project' name='project' value=''>";
+		html += " <input type='hidden' id='instance' name='instance' value='false'>";
+		html += " <input id='uploadfile' type='file' name='uploadfile'>";
+		html += "</form>";
+		html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
+	} else {
+		html +=" <form id='fileupload' action='"+url+"'>";
+		html += " <input type='hidden' id='project' name='project' value='"+foldercode+"'>";
+		if (instance) 
+			html += " <input type='hidden' id='instance' name='instance' value='true'>";
+		else
+			html += " <input type='hidden' id='instance' name='instance' value='false'>";
+		html += " <input id='uploadfile' type='file' name='uploadfile'>";
+		html += "</form>";
+		html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
 	}
-	html +="  </ul>";
-	html +="</div><br>";
 	//--------------------------
-	html +=" <form id='fileupload' action='"+url+"'>";
-	html += " <input type='hidden' id='project' name='project' value=''>";
-	html += " <input type='hidden' id='instance' name='instance' value='false'>";
-	html += " <input id='uploadfile' type='file' name='uploadfile'>";
-	html += "</form>";
-	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
 	$("#edit-window-body").append($(html));
 	$("#loading").hide();
 	$("#fileupload").fileupload({
@@ -1027,7 +1043,7 @@ UIFactory["Portfolio"].importFile = function(instance)
 	//--------------------------
 	$('#edit-window').modal('show');
 };
-
+/*
 //==================================
 UIFactory["Portfolio"].importZip = function(instance,project)
 //==================================
@@ -1041,35 +1057,59 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	//--------------------------
 	var url = serverBCK_API+"/portfolios/zip";
 	//--------------------------
-	var project = "";
-	html +="<div class='dropdown'>";
-	html +="  <button class='btn btn-default dropdown-toggle' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>";
-	html +="    Select a project ";
-	html +="    <span class='caret'></span>";
-	html +="  </button>";
-	html +="  <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>";
-	html +="    <a class='dropdown-item' href='#'>&nbsp;</a>";
-	for (var i=0;i<projects_list.length;i++) {
-		var js = "";
-		if (instance) 
-			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','true')";
-		else
-			js = "$('#project').attr('value','"+projects_list[i].portfoliocode+"');$('#instance').attr('value','false')";
-		js += ";$('#dropdownMenu1').html('"+projects_list[i].portfoliolabel+"')";
-		html += "<a class='dropdown-item' onclick=\""+js+"\">"+projects_list[i].portfoliolabel+"</a>";
-	}
-	html +="  </ul>";
-	html +="</div><br>";
-	//--------------------------
-	html +=" <form id='fileupload' action='"+url+"'>";
-	html += " <input type='hidden' id='project' name='project' value=''>";
-	if (instance) 
-		html += " <input type='hidden' id='instance' name='instance' value='true'>";
-	else
+	if (foldercode==null || foldercode=="") {
+		html +="<div class='dropdown'>";
+		html +="  <button class='btn btn-default dropdown-toggle' type='button' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>";
+		html +="    Select a project ";
+		html +="    <span class='caret'></span>";
+		html +="  </button>";
+		html +="  <ul class='dropdown-menu' aria-labelledby='dropdownMenu1'>";
+		html +="    <a class='dropdown-item' href='#'>&nbsp;</a>";
+		for (var i=0;i<folders_list.length;i++) {
+			var js = "";
+			if (instance) 
+				js = "$('#project').attr('value','"+folders_list[i].code_node.text()+"');$('#instance').attr('value','true')";
+			else
+				js = "$('#project').attr('value','"+folders_list[i].code_node.text()+"');$('#instance').attr('value','false')";
+			js += ";$('#dropdownMenu1').html('"+folders_list[i].label_node[LANGCODE].text()+"')";
+			if (folders_list[i].nbfolders>0)
+				html += "<a class='dropdown-item' onclick=\""+js+"\" onmouseover=\"UIFactory.Portfolio.toggleElt('"+folders_list[i].id+"')\" ><span id='import-toggle_"+folders_list[i].id+"' class='closeSign' ></span>"+folders_list[i].label_node[LANGCODE].text()+"</a>";
+			else
+				html += "<a class='dropdown-item' onclick=\""+js+"\">"+folders_list[i].label_node[LANGCODE].text()+"</a>";
+			if (folders_list[i].nbfolders>0) {
+				html += "<div id='import-"+folders_list[i].id+"' class='nested' onmouseleave=\"UIFactory.Portfolio.toggleElt('"+folders_list[i].id+"')\">";
+				for (uuid in folders_list[i].folders){
+					if (instance) 
+						js = "$('#project').attr('value','"+folders_byid[uuid].code_node.text()+"');$('#instance').attr('value','true')";
+					else
+						js = "$('#project').attr('value','"+folders_byid[uuid].code_node.text()+"');$('#instance').attr('value','false')";
+					js += ";$('#dropdownMenu1').html('"+folders_byid[uuid].label_node[LANGCODE].text()+"')";
+					html += "<a class='dropdown-item' onclick=\""+js+"\">"+folders_byid[uuid].label_node[LANGCODE].text()+"</a>";
+				}
+				html += "</div>";
+			}
+		}
+		html +="  </ul>";
+		html +="</div><br>";
+		html +=" <form id='fileupload' action='"+url+"'>";
+		html += " <input type='hidden' id='project' name='project' value=''>";
 		html += " <input type='hidden' id='instance' name='instance' value='false'>";
-	html += " <input type='file' id='uploadfile' name='uploadfile'>";
-	html += "</form>";
-	html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
+		html += " <input id='uploadfile' type='file' name='uploadfile'>";
+		html += "</form>";
+		html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
+	} else {
+		html +=" <form id='fileupload' action='"+url+"'>";
+		html += " <input type='hidden' id='project' name='project' value='"+foldercode+"'>";
+		if (instance) 
+			html += " <input type='hidden' id='instance' name='instance' value='true'>";
+		else
+			html += " <input type='hidden' id='instance' name='instance' value='false'>";
+		html += " <input id='uploadfile' type='file' name='uploadfile'>";
+		html += "</form>";
+		html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";
+		
+	}
+	//--------------------------
 	$("#edit-window-body").append($(html));
 	$("#fileupload").fileupload({
 		progressall: function (e, data) {
@@ -1111,7 +1151,7 @@ UIFactory["Portfolio"].del = function(portfolioid)
 		}
 	});
 };
-
+*/
 //=======================================================================
 UIFactory["Portfolio"].getPDF = function(portfolioid) 
 //=======================================================================
