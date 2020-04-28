@@ -50,7 +50,8 @@ function displayKarutaPage()
 		url : serverBCK_API+"/credential",
 		data: "",
 		success : function(data) {
-			setConfigurationVariables();
+			setConfigurationTechVariables();
+			setConfigurationUIVariables();
 			applyKarutaConfiguration();
 			loadLanguages(function() {
 				getLanguage();
@@ -151,24 +152,16 @@ function decreaseFontSize()
 }
 
 //==============================
-function setConfigurationVariables()
+function setConfigurationUIVariables()
 //==============================
 {
-	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-ui?resources=true";
 	$.ajax({
 		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : url,
 		success : function(data) {
-			//-----------------------
-			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
-			for (i=0;i<language_nodes.length;i++){
-				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
-			}
-			NONMULTILANGCODE = 0;  // default language if non-multilingual
-			LANGCODE = 0; //default value
-			LANG = languages[LANGCODE]; //default value
 			//---------Navigation Bar--------------
 			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
@@ -240,10 +233,35 @@ function setConfigurationVariables()
 			g_configVar['svg-web7-color'] = getText('config-svg-web7-color','Color','text',data);
 			g_configVar['svg-web8-color'] = getText('config-svg-web8-color','Color','text',data);
 			g_configVar['svg-web9-color'] = getText('config-svg-web9-color','Color','text',data);
+		}
+	});
+}
 
-			//----- Load Plugins
+//==============================
+function setConfigurationTechVariables()
+//==============================
+{
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-tech?resources=true";
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			//-----------------------
+			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
+			for (i=0;i<language_nodes.length;i++){
+				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
+			}
+			NONMULTILANGCODE = 0;  // default language if non-multilingual
+			LANGCODE = 0; //default value
+			LANG = languages[LANGCODE]; //default value
+			//----------------------
+			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
+			g_configVar['maxuserlist'] = getText('config-maxuserlist','Field','text',data);
+			//----- Load Plugins + Javascript Files
 			var jsfile_nodes = [];
-			jsfile_nodes = $("asmContext:has(metadata[semantictag='plugin-file-js'])",data);
+			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-js'])",data);
 			for (var i=0; i<jsfile_nodes.length; i++){
 				var fileid = $(jsfile_nodes[i]).attr("id");
 				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
@@ -252,7 +270,21 @@ function setConfigurationVariables()
 					dataType: "script",
 				});
 			}
-			
+			//----- Load CSS Files
+			var jsfile_nodes = [];
+			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-css'])",data);
+			for (var i=0; i<jsfile_nodes.length; i++){
+				var fileid = $(jsfile_nodes[i]).attr("id");
+				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+				$.ajax({
+					url: url,
+					dataType: "text",
+					success:function(data){
+						console.log("CSS file loaded")
+						$("head").append("<style>" + data + "</style>");
+					}
+				});
+			}
 		}
 	});
 }

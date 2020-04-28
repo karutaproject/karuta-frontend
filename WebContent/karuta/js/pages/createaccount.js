@@ -194,7 +194,7 @@ function displayKarutaCreateAccount()
 function setLoginConfigurationVariables()
 //==============================
 {
-	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-ui?resources=true";
 	$.ajax({
 		async: false,
 		type : "GET",

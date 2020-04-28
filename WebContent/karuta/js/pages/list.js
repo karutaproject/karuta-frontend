@@ -79,7 +79,7 @@ function fill_list_page()
 	//------------------------------------------
 	html += "	<div id='portfolio-leftside'  class='leftside'>";
 	html += "		<div id='menu'></div>";
-	html += "		<h3 class='portfolio-title-leftside'>";
+	html += "		<h3 class='portfolio-title-leftside' ondrop='dropPortfolioFolder(event)' ondragover='ondragoverPortfolioFolder(event)' ondragleave='ondragleavePortfolioFolder(event)'>";
 	html += "			<span id='folders-label' class='folder-label'>"+karutaStr[LANG]['folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
 	if (USER.admin || (USER.creator && !USER.xlimited)){
 		html += "			<span class='folder-label btn' title='"+karutaStr[LANG]['create_folder']+"'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.PortfolioFolder.createFolder();\"></i></span>";

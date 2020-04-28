@@ -1387,14 +1387,11 @@ UIFactory["Portfolio"].rename = function(itself,langcode)
 };
 
 //==================================
-UIFactory["Portfolio"].renamePortfolioCode = function(itself,code,langcode)
+UIFactory["Portfolio"].prototype.renamePortfolioCode = function(code)
 //==================================
 {
 	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	var oldcode = $(itself.code_node).text();
+	var oldcode = $(this.code_node).text();
 	//---------- test if new code already exists
 	var exist = false;
 	if (oldcode!=code) {
@@ -1405,16 +1402,16 @@ UIFactory["Portfolio"].renamePortfolioCode = function(itself,code,langcode)
 	}
 	//-----------------------
 	if (!exist) {
-		$(itself.code_node).text(code);
+		$(this.code_node).text(code);
 		var xml = "";
 		xml +="<asmResource xsi_type='nodeRes'><code>"+code+"</code>";
 		for (var i=0; i<languages.length;i++){
-			xml +="<label lang='"+languages[i]+"'>"+$(itself.label_node[i]).text()+"</label>";	
+			xml +="<label lang='"+languages[i]+"'>"+$(this.label_node[i]).text()+"</label>";	
 		}
 		xml +="</asmResource>";
 		strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 		var callback = null;
-		UICom.query("PUT",serverBCK_API+'/nodes/node/'+itself.rootid+'/noderesource',callback,"text",strippeddata);
+		UICom.query("PUT",serverBCK_API+'/nodes/node/'+this.rootid+'/noderesource',callback,"text",strippeddata);
 	} else {
 		alertHTML(karutaStr[LANG]['existing-code']);
 	}

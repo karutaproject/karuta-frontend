@@ -136,19 +136,22 @@ function getNavBar(type,portfolioid,edit)
 //==============================
 {
 	var html = "";
-	html += "	<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
-	html += "		<a id='navbar-brand-logo' href='#' class='navbar-brand'>";
+	html += "<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
+	html += "	<div class='dropdown'>";
+	html += "		<a id='navbar-brand-logo' href='#' class='navbar-brand' data-toggle='dropdown'>";
 	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/logofonblanc.jpg'/>";
-	html +="		</a>";
+	html += "		</a>";
 	if (type!='login') {
-		html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
-		html += "				<li><b>Versions</b></li>";
-		html += "				<li>Application : "+application_version+" (" +application_date+")</li>";
-		html += "				<li>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</li>";
-		html += "				<li>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</li>";
-		html += "				<li>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</li>";
-		html += "			</ul>";
+		html += "	<div class='dropdown-menu versions' aria-labelledby='navbar-brand-logo'>";
+		html += "		<a class='dropdown-item'><b>Versions</b></a>";
+		html += "		<div class='dropdown-divider'></div>";
+		html += "		<a class='dropdown-item'>Application : "+application_version+" (" +application_date+")</a>";
+		html += "		<a class='dropdown-item'>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</a>";
+		html += "		<a class='dropdown-item'>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</a>";
+		html += "		<a class='dropdown-item'>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</a>";
+		html += "	</div>";
 	}
+	html += "	</div>";
 	html += "		<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-1' aria-controls='collapse-1' aria-expanded='false' aria-label='Toggle navigation'>";
 	html += "			<span class='navbar-toggler-icon'></span>";
 	html += "		</button>";
