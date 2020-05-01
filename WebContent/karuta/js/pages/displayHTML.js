@@ -2,10 +2,10 @@
 	var displayHTML = {};
 	var displayView = {};
 	
-	displayView["basic"] = {};
-	displayView["basic"]["struct"] = ["default"];
-	displayView["basic"]["node"] = ["default"];
-	displayView["basic"]["resource"] = ["default"];
+	displayView["raw"] = {};
+	displayView["raw"]["struct"] = ["default"];
+	displayView["raw"]["node"] = ["default"];
+	displayView["raw"]["resource"] = ["default"];
 
 	displayView["standard"] = {};
 	displayView["standard"]["struct"] = ["strcut"];
@@ -19,7 +19,7 @@
 
 	//========================== BEGIN DO NOT EDIT ===========================	
 	
-	displayHTML["basic-struct-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
+	displayHTML["raw-struct-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 									"	<div id='sub_node_#uuid#' name='lbl-div' class='row  #displayview#' >" +
 									"		<div id='collapsible_#uuid#' class='col-md-1'></div>" +
 									"		<div id='std_node_#uuid#' class='node-label col-md-7  '>" +
@@ -32,7 +32,7 @@
 									"	</div>" +
 									"</div>";
 
-	displayHTML["basic-node-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
+	displayHTML["raw-node-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 								" <div id='sub_node_#uuid#' name='lbl-div' class='node row' >" +
 								"	<div id='std_node_#uuid#' class='node-label col-7'>" +
 								"		<div><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
@@ -45,7 +45,7 @@
 								" <div id='content-#uuid#' name='cnt-div' class='content' ><\div>" +
 								"</div>";
 
-	displayHTML["basic-resource-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
+	displayHTML["raw-resource-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 									"	<div id='sub_node_#uuid#' class='resource-node row' >" +
 									"		<div id='std_node_#uuid#' name='lbl-div' class='col-md-offset-1 col-md-2 node-label inside-full-height'>" +
 									"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +

@@ -235,10 +235,9 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		//------------
 		var portfoliocode = r_replaceVariable(queryattr_value.substring(0,semtag_indx));
-		// ==== KARUTA =====
 		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-//			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
-//				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
+		if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
 		if (portfoliocode=='self') {
 			portfoliocode = selfcode;
 			cachable = false;

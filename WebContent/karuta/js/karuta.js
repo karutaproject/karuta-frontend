@@ -68,7 +68,7 @@ function setDesignerRole(role)
 	g_userroles[0] = role;
 	fillEditBoxBody();
 	$("#userrole").html(role);
-	if (g_display_type=='standard'){
+	if (g_display_type=='standard' || g_display_type=='raw'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
 		if (g_menu_type=="horizontal"){
@@ -87,23 +87,13 @@ function setDesignerRole(role)
 			html += "	</div>";
 			$("#portfolio-container").html(html);
 			$("#portfolio-container").attr('role',role);
-			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
+			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',g_display_type,LANGCODE,g_edit,g_portfolio_rootid);
 		}
 		$("#sidebar_"+uuid).click();
 	};
 	if (g_display_type=='model'){
-		displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);
+		displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
 	}
-	if (g_display_type=='basic'){
-		if (g_userroles[0]!='designer')
-			$("#rootnode").hide();
-		else
-			$("#rootnode").show();
-		UIFactory["Portfolio"].displayNodes('basic',UICom.root.node,'basic',LANGCODE,g_edit);
-//		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,g_edit,UICom.root.node);
-		var uuid = $("#page").attr('uuid');
-		$("#sidebar_"+uuid).click();
-	};
 }
 
 
@@ -368,7 +358,7 @@ function getEditBox(uuid,js2) {
 			$("#edit-window-body-node").html($(html));
 		}
 	} else {
-		if(UICom.structure["ui"][uuid].structured_resource!=null && g_display_type!='basic') {
+		if(UICom.structure["ui"][uuid].structured_resource!=null && g_display_type!='raw') {
 			try {
 				UICom.structure["ui"][uuid].structured_resource.displayEditor("edit-window-body-resource");
 				html = UICom.structure["ui"][uuid].getEditor();
@@ -655,7 +645,7 @@ function displayPage(uuid,depth,type,langcode) {
 		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
-		if (type=='basic' || type=='model') {
+		if (type=='raw' || type=='model') {
 			UICom.structure["ui"][uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
 	}

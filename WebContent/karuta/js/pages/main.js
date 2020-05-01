@@ -107,17 +107,18 @@ function fill_main_page(rootid,role)
 			for (role in UICom.roles)
 				g_roles[g_roles.length] = {'code':'','libelle':role};
 			//-------------------------------------------------
-			setCSSportfolioOLD(data);
+			var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
+			if (config_unit.length==0) // for backward compatibility
+				setCSSportfolioOLD(data);
 			if (g_configVar['portfolio-navbar-background-color']!=undefined)
-				setCSSportfolio(data);
-			setCSSportfolioOLD(data);  // V2 for V2 Portfolios
+				setCSSportfolio(config_unit);
 			setVariables(data);
 			//-------------------------------------------------
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
 
 			// --------------------------
-			if (g_display_type=="standard" || g_display_type=="basic") {
+			if (g_display_type=="standard" || g_display_type=="raw") {
 				if (USER.creator)
 					g_edit = true;
 				else

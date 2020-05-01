@@ -1469,10 +1469,10 @@
 	}
 
 /* ========================= */
-/*        VUE BASIC          */
+/*        VUE raw          */
 /* ========================= 
 
-	.basic {
+	.raw {
 		.menus {
 			float:right;
 		}
@@ -1511,17 +1511,26 @@
 		margin-bottom:10px;
 	}
 
+
+	.node.standard-node-xwide{
+		padding:15px;
+	}
+		
 	.standard-node-xwide-content{
 		padding-top:10px;
 		margin-bottom:10px;
 	}
 
 	.standard-resource-xwide{
+		&.resource-node {
+			padding:15px;
+		}
 		.edit-bar {
 			float:right;
 			margin-right:20px;
 		}
 	}
+
 	.standard-resource-simple {
 		td {
 			min-height:1.75rem;
@@ -1568,7 +1577,12 @@
 	}
 
 	.standard-resource-simple {
+		padding-left:15px;
 		margin-top:5px;
+	}
+
+	.card-body .standard-resource-simple {
+		padding-left:0px;
 	}
 
 	.content .resource-standard .title-subline {

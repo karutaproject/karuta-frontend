@@ -144,7 +144,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					}
 			}
 			//============================== ASMCONTEXT =============================
-			if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='basic' && this.semtag!='EuropassL')){
+			if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='raw' && this.semtag!='EuropassL')){
 				this.displayAsmContext(dest,type,langcode,edit,refresh);
 			}
 			//============================== NODE ===================================
@@ -204,13 +204,14 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			// ===========================================================================
 			var backgroundParent = UIFactory.Node.getMetadataEpm(this.metadataepm,'node-background-color',false);
 			
-			if (this.semtag.indexOf('asmColumns')>-1 && type!='basic') {
+			if (this.semtag.indexOf('asmColumns')>-1 && type!='raw') {
 				//-------------- for backward compatibility -----------
 				UIFactory["Node"].displayColumns(type,root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
-			} else if (this.semtag.indexOf('asm-block')>-1 && type!='basic') {
+			} else if (this.semtag.indexOf('asm-block')>-1 && type!='raw') {
 				//-------------- for backward compatibility -----------
 				UIFactory["Node"].displayBlocks(root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
 			} else {
+				//------------ EuropassL -----------------
 				if (this.semtag=="EuropassL"){
 					alreadyDisplayed = true;
 					if( node.structured_resource != null )
@@ -226,6 +227,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					$('body').append(qrCodeBox());
 					UIFactory.Bubble.getPublicURL(uuid,g_userroles[0]);
 				}
+				//------------ Default  -----------------
 				if (!alreadyDisplayed) {
 					for( var i=0; i<root.children.length; ++i ) {
 						// Recurse
@@ -269,7 +271,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	var html = "";
 	var displayview = "";
 	var resourcetype = this.resource_type;
-	if (this.displayview!='' & type!='basic') {
+	if (this.displayview!='' & type!='raw') {
 		var newtype = this.displayview;
 		html = displayHTML[type+"-resource-"+newtype];
 		displayview = type+"-resource-"+newtype;
@@ -284,9 +286,9 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 		}
 	}
 	else
-		if (type=='basic') {
-			html = displayHTML["basic-resource-default"];
-			displayview = "basic-resource-default";
+		if (type=='raw') {
+			html = displayHTML["raw-resource-default"];
+			displayview = "raw-resource-default";
 		} else {
 			html = displayHTML[type+"-resource-default"];
 			displayview = type+"-resource-default";
@@ -312,7 +314,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	//---------------- display resource ---------------------------------
 	if (this.edit && this.inline && this.writenode && this.editable_in_line)
 		this.resource.displayEditor("resource_"+uuid,null,langcode,false,this.inline);
-	else if (this.structured_resource != null && type!='basic') {
+	else if (this.structured_resource != null && type!='raw') {
 		this.structured_resource.displayView("resource_"+uuid,null,langcode);
 	}
 	else
@@ -321,7 +323,15 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	$("#label_node_"+uuid).html(this.getView('label_node_'+uuid));
 	//----------- Buttons & Menus -----------
 	if(edit) {
-		$("#buttons-"+uuid).html(this.getButtons(langcode));
+		var buttons = "";
+		if (this.xsi_type.indexOf("Block")>-1) {
+			buttons += this.structured_resource.getButtons();
+		}
+		buttons += this.getButtons(langcode);
+		if (buttons!="")
+			buttons = "<div class='btn-group'>"+buttons+"</div><!-- class='btn-group' -->"
+		$("#buttons-"+uuid).html(buttons);
+
 		if (this.menu)
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
@@ -359,7 +369,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	var displayview = "";
 	//---------------- DISPLAY -------------------------------
 	if (this.depth!=1 && this.depth<10 && nodetype=='asmStructure') {
-		if (this.displayview!='' & type!='basic')
+		if (this.displayview!='' & type!='raw')
 			displayview = type+"-node-"+this.displayview;
 		else
 			displayview = type+"-struct-default";
@@ -368,7 +378,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		$("#"+dest).append (html);
 		$("#label_node_"+uuid).click(function() {displayPage(uuid,1,type,langcode,g_edit)});
 	} else if (this.depth!=1 && this.depth<10 && nodetype=='asmUnit') {
-		if (this.displayview!='' & type!='basic')
+		if (this.displayview!='' & type!='raw')
 			displayview = type+"-node-"+this.displayview;
 		else
 			displayview = type+"-struct-default";
@@ -377,11 +387,11 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		$("#"+dest).append (html);
 		$("#label_node_"+uuid).click(function() {displayPage(uuid,100,type,langcode,g_edit)});
 	} else {
-		if (this.displayview!='' & type!='basic')
+		if (this.displayview!='' & type!='raw')
 				displayview = type+"-node-"+this.displayview;
 		else
-			if (type=='basic')
-				displayview = "basic-node-default";
+			if (type=='raw')
+				displayview = "raw-node-default";
 			else
 				displayview = type+"-node-default";
 		try {
@@ -462,6 +472,8 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		if (nodetype == "BatchForm") {
 			buttons += node.structured_resource.getButtons();
 		}
+		if (buttons!="")
+			buttons = "<div class='btn-group'>"+buttons+"</div><!-- class='btn-group' -->"
 		$("#buttons-"+uuid).html(buttons);
 		if (this.menu)
 			this.displayMenus("#menus-"+uuid,langcode);
@@ -990,7 +1002,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (type=='standard' || type=='translate' || type=='basic') {
+	if (type=='standard' || type=='translate' || type=='raw') {
 		for( var i=0;i<root.children.length;i++ )
 		{
 			var child = UICom.structure["tree"][root.children[i]].node;
@@ -1455,8 +1467,8 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			html += "<span class='button fas fa-print' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	}
 	//-------------------------------------------------
-	if (html!="")
-		html = "<div class='btn-group'>"+html+"</div><!-- class='btn-group' -->"
+//	if (html!="")
+//		html = "<div class='btn-group'>"+html+"</div><!-- class='btn-group' -->"
 	return html;
 }
 
@@ -1698,6 +1710,8 @@ UIFactory["Node"].displayBlocks = function(root,dest,depth,langcode,edit,inline,
 				var html = "<div id='structured_resource_"+blockid+"'>"+childnode.structured_resource.getView('structured_resource_'+blockid,null,langcode)+"</div>";
 				var block = true;
 				html += childnode.getButtons(langcode);
+				if (html!="")
+					html = "<div class='btn-group'>"+html+"</div><!-- class='btn-group' -->"
 				//-------------- metainfo -------------------------
 				if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
 					html += "<div id='metainfo_"+blockid+"' class='metainfo'></div><!-- metainfo -->";
@@ -1820,7 +1834,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					html += "<div id='comments_"+uuid+"' class='comments'></div><!-- comments -->";
 				}
 				//-------------- buttons --------------------------
-				html += UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu);
+				html += "<div class='btn-group'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu) +"</div><!-- class='btn-group' -->";
 				//--------------------------------------------------
 				//-------------- metainfo -------------------------
 				if (g_edit && (g_userroles[0]=='designer' || USER.admin)) {
@@ -1833,7 +1847,7 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					html += "<div class='row row-node'>";
 					//-------------- buttons --------------------------
 					html += "	<div id='buttons-"+uuid+"' class='buttons'>";
-					html += UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu);
+					html += "<div class='btn-group'>"+ UICom.structure["ui"][uuid].getButtons(null,null,null,inline,depth,edit,menu) +"</div><!-- class='btn-group' -->";
 					if (node.xsi_type == "BatchForm") {
 						html += node.structured_resource.getButtons();
 					}

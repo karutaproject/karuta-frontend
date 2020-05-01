@@ -535,7 +535,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','editboxtitle');
 	//----------------------Search----------------------------
-	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
+	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Get_Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
 		html  = "<label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','query');
@@ -861,7 +861,7 @@ UIFactory["Node"].displayMetaEpmInfos = function(destid,data)
 UIFactory["Node"].prototype.displayMetadataDisplayTypeAttributeEditor = function(destid,attribute,yes_no,disabled)
 //==================================================
 {
-	var display_types = ['standard','basic','model'];
+	var display_types = ['standard','raw','model'];
 	var value = $(this.metadata).attr('display-type');
 	var langcode = LANGCODE;
 	if (value==null || value==undefined || value=='undefined')

@@ -187,9 +187,11 @@ UIFactory["Get_Proxy"].prototype.displayEditor = function(destid,type,lang)
 		var srce = queryattr_value.substring(srce_indx+1);
 		var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');
 		var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
-		var portfoliocode = r_replaceVariable(queryattr_value.substring(0,semtag_indx));
+		var portfoliocode = queryattr_value.substring(0,semtag_indx);
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+		if (portfoliocode.indexOf('.')<0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
 		if (portfoliocode=='self')
 			portfoliocode = selfcode;
 		//------------

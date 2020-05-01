@@ -36,16 +36,12 @@ UIFactory["Proxy"] = function( node,condition)
 	this.value_node = $("value",$("asmResource["+this.clause+"]",node));
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
-		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
+		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node))[0];
 		if (this.label_node[i].length==0) {
-			if (i==0 && $("label",$("asmResource["+this.clause+"]",node)).length==1) { // for WAD6 imported portfolio
-				this.label_node[i] = $("text",$("asmResource["+this.clause+"]",node));
-			} else {
-				var newelement = createXmlElement("label");
-				$(newelement).attr('lang', languages[i]);
-				$("asmResource["+this.clause+"]",node)[0].appendChild(newelement);
-				this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
-			}
+			var newelement = createXmlElement("label");
+			$(newelement).attr('lang', languages[i]);
+			$("asmResource["+this.clause+"]",node)[0].appendChild(newelement);
+			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
 		}
 	}
 	this.text_node = [];
@@ -114,7 +110,7 @@ UIFactory["Proxy"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
-	return this.label_node[langcode].text();
+	return $(this.label_node[langcode]).text();
 };
 
 //==================================
@@ -132,7 +128,7 @@ UIFactory["Proxy"].prototype.displayView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
-	$(dest).html(this.label_node[langcode].text());
+	$("#"+dest).html($(this.label_node[langcode]).text());
 };
 
 
@@ -212,7 +208,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 									if (semtag.indexOf("proxy-")<0)
 										display = true;
 								}
-								if (nodes.length>0 && display) {									
+								if (nodes.length>0 && display) {
 									var html = "";
 									html += "<div class='portfolio-proxy' style='margin-top:20px'>"+label+"</div>";
 									var placeid = code.replace(/\./g, '_'); 
@@ -299,7 +295,10 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 		for ( var i = 0; i < newTableau1.length; ++i) {
 			var semtag = $("metadata",newTableau1[i]).attr('semantictag');
 			if (semtag.indexOf("proxy-")<0){
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i]);
+				if ($("asmResource",newTableau1[i]).length==3)
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i]); 
+				else
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i]);
 				var value = $(newTableau1[i][1]).attr('id');
 				var html = "<li></li>";
 				var select_item = $(html);
@@ -388,7 +387,7 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 UIFactory["Proxy"].prototype.save = function()
 //==================================
 {
-	UICom.UpdateResource(this.id,writeSaved);
+	UICom.UpdateResource(this.id,UIFactory.Node.reloadUnit);
 	this.refresh();
 };
 

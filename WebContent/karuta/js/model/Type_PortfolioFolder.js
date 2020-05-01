@@ -135,7 +135,7 @@ function dropPortfolioFolder(ev)
 	var folder_code = (folderid=='folders-label') ? "" : folders_byid[folderid].code_node.text()+"/";
 	var current_drop = portfolioid+"/"+folderid;
 	//---------------------------------
-	if (current_drop!=folder_last_drop) {
+	if (current_drop!=folder_last_drop && portfolioid!=folderid) {  // to avoid firing two times and avoid move in itself
 		folder_last_drop = current_drop;
 		if (type=="folder") {
 			var parent_code = (parentid=="") ? "" : folders_byid[parentid].code_node.text();
