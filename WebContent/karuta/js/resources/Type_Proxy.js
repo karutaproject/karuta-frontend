@@ -297,7 +297,10 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 		for ( var i = 0; i < newTableau1.length; ++i) {
 			var semtag = $("metadata",newTableau1[i]).attr('semantictag');
 			if (semtag.indexOf("proxy-")<0){
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i]);
+				if ($("asmResource",nodes[i]).length==3)
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i]); 
+				else
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i]);
 				var value = $(newTableau1[i][1]).attr('id');
 				var html = "<li></li>";
 				var select_item = $(html);
