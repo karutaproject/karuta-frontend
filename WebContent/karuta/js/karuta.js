@@ -33,7 +33,7 @@ var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
 var g_display_type = "standard"; // default value
-var g_menu_type = "vertical"; // default value
+var g_bar_type = "vertical"; // default value
 var g_edit = false;
 var g_visible = 'hidden';
 var g_display_sidebar = true;
@@ -71,7 +71,7 @@ function setDesignerRole(role)
 	if (g_display_type=='standard' || g_display_type=='raw'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
-		if (g_menu_type=="horizontal"){
+		if (g_bar_type=="horizontal"){
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			$("#portfolio-container").attr('role',role);			
 		}
@@ -611,7 +611,7 @@ function displayPage(uuid,depth,type,langcode) {
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
-	if (g_menu_type=="horizontal"){  // breadcrumb
+	if (g_bar_type=="horizontal"){  // breadcrumb
 		var nodeid = uuid;
 		var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
 		while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {

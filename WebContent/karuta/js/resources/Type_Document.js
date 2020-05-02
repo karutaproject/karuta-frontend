@@ -153,7 +153,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		if ($(this.filename_node[langcode]).text()!="")
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' style='width:25px'> "+$(this.filename_node[langcode]).text()+"</a>";
 		else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
+			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
 	}
 	if (type=='icon-url-label'){
 		if ($(this.filename_node[langcode]).text()!=""){
@@ -161,7 +161,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
 		} else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
+			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
 	}
 	if (type=='icon-url'){
 		if ($(this.filename_node[langcode]).text()!=""){
@@ -169,7 +169,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
 		} else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>";
+			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>";
 	}
 	if (type=='icon'){
 		if ($(this.filename_node[langcode]).text()!=""){
@@ -177,7 +177,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			var extension = filename.substring(filename.lastIndexOf(".")+1);
 			html =  documentIcon[extension]; 
 		} else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>";
+			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>";
 
 	}
 	return html;

@@ -332,7 +332,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 
 	}
 	else if (type=='standard' || type=='raw'){
-		if (g_menu_type=='horizontal') {
+		if (g_bar_type=='horizontal') {
 			html += "<div id='menu_bar'></div>";
 			html += "<div id='breadcrumb'></div>";
 			html += "<div id='contenu' class='container-fluid'></div>";
@@ -2509,7 +2509,34 @@ function setCSSportfolio(data)
 	setConfigColor(data,root,'svg-web7-color');
 	setConfigColor(data,root,'svg-web8-color');
 	setConfigColor(data,root,'svg-web9-color');
-	// ========================================================================
+	// --------CSS Text------------------
+	var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-portfolio-css'])",data))).text();
+	$("#csstext").remove();
+	if (csstext!=undefined && csstext!=''){
+		console.log("Portfolio CSS added")
+		$("<style id='csstext'>"+csstext+"</style>").appendTo('head');
+	}
+	//----- Load CSS Files ------------------
+	$("*[name='portfolio-config-css-file']").remove();
+	var jsfile_nodes = [];
+	jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-css'])",data);
+	for (var i=0; i<jsfile_nodes.length; i++){
+		var fileid = $(jsfile_nodes[i]).attr("id");
+		var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+		$.ajax({
+			url: url,
+			dataType: "text",
+			success:function(data){
+				console.log("CSS file loaded")
+				$("head").append("<style name='portfolio-config-css-file'>" + data + "</style>");
+			}
+		});
+	}
+	// --------Bar Type------------------
+	g_bar_type = $("code",$("asmResource[xsi_type='Get_Resource']",$("asmContext:has(metadata[semantictag='config-bar-type'])",data))).text();
+	if (g_bar_type=="" || g_bar_type==null || g_bar_type==undefined)
+		g_bar_type = 'vertical';
+	//-----------------------------------
 }
 
 //==================================

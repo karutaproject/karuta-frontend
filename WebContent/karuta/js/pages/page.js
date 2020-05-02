@@ -198,7 +198,7 @@ function displayOnePage()
 					success : function(data) {
 						UICom.parseStructure(data);
 						if (type=='standard')
-							UIFactory['Node'].displayNode('standard',UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
+							UICom.structure['ui'][pageid].displayNode('standard',UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
 						if (type=='translate')
 							UIFactory['Node'].displayTranslate(UICom.structure['tree'][pageid],'contenu',100,LANGCODE,g_edit);
 						if (type=='model'){

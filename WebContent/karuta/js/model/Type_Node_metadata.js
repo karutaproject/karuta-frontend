@@ -889,7 +889,7 @@ UIFactory["Node"].prototype.displayMetadataDisplayTypeAttributeEditor = function
 UIFactory["Node"].prototype.displayMetadataMenuTypeAttributeEditor = function(destid,attribute,yes_no,disabled)
 //==================================================
 {
-	var menu_types = ['vertical','horizontal'];
+	var bar_types = ['vertical','horizontal'];
 	var value = $(this.metadata).attr('menu-type');
 	var langcode = LANGCODE;
 	if (value==null || value==undefined || value=='undefined')
@@ -901,11 +901,11 @@ UIFactory["Node"].prototype.displayMetadataMenuTypeAttributeEditor = function(de
 		if(disabled!=null && disabled)
 			html+= " disabled='disabled' ";			
 		html+= ">";
-		for (var i=0; i<menu_types.length; i++) {
-			html += "<option value='"+menu_types[i]+"'";
-			if (value==menu_types[i])
+		for (var i=0; i<bar_types.length; i++) {
+			html += "<option value='"+bar_types[i]+"'";
+			if (value==bar_types[i])
 				html += " selected ";
-			html += ">"+menu_types[i]+"</option>";
+			html += ">"+bar_types[i]+"</option>";
 		}
 		html+= "</select>";
 		html+= "</div>";
@@ -1400,11 +1400,11 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		if (USER.admin || g_userroles[0]=='designer' || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1) {
 			if (name=='asmRoot') {
 				this.displayMetadataDisplayTypeAttributeEditor('metadata-epm-root','display-type');
-				this.displayMetadataMenuTypeAttributeEditor('metadata-epm-root','menu-type');
-				this.displayMetadataEpmAttributeEditor('metadata-epm-root','cssfile',$(this.metadata).attr('cssfile'));
-				html  = "<label>"+karutaStr[languages[langcode]]['csstext']+"</label>";
-				$("#metadata-epm-root").append($(html));
-				this.displayMetadatawWadTextAttributeEditor('metadata-epm-root','csstext');
+//				this.displayMetadataMenuTypeAttributeEditor('metadata-epm-root','menu-type');
+//				this.displayMetadataEpmAttributeEditor('metadata-epm-root','cssfile',$(this.metadata).attr('cssfile'));
+//				html  = "<label>"+karutaStr[languages[langcode]]['csstext']+"</label>";
+//				$("#metadata-epm-root").append($(html));
+//				this.displayMetadatawWadTextAttributeEditor('metadata-epm-root','csstext');
 			}
 			this.displayMetadataEpmAttributeEditor('metadata-epm-part1','cssclass',$(this.metadataepm).attr('cssclass'));
 			if (name!='asmRoot') {

@@ -86,9 +86,9 @@ function fill_main_page(rootid,role)
 			if (g_display_type=="" || g_display_type==null || g_display_type==undefined)
 				g_display_type = 'standard';
 			// --------Menu Type------------------
-			g_menu_type = $("metadata[menu-type]",data).attr('menu-type');
-			if (g_menu_type=="" || g_menu_type==null || g_menu_type==undefined)
-				g_menu_type = 'vertical';
+			g_bar_type = $("metadata[menu-type]",data).attr('menu-type');
+			if (g_bar_type=="" || g_bar_type==null || g_bar_type==undefined)
+				g_bar_type = 'vertical';
 			// --------CSS File------------------
 			var cssfile = $("metadata[cssfile]",data).attr('cssfile');
 			if (cssfile!=undefined && cssfile!=''){

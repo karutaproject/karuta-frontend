@@ -263,17 +263,15 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 	if (type=='select') {
 		//-----------------------------------
 		var html = "<div class='btn-group'>";
-		html += "<button type='button' class='btn btn-default select select-label' id='button_"+self.id+"'>&nbsp;</button>";
-		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
+		html += "	<button type='button' class='btn select selected-label' id='button_"+self.id+"'>&nbsp;</button>";
+		html += "	<button type='button' class='btn dropdown-toggle dropdown-toggle-split ' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
 		html += "</div>";
 		var btn_group = $(html);
 		$(formobj).append($(btn_group));
-		html = "<ul class='dropdown-menu' role='menu'></ul>";
+		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
 		var select  = $(html);
 		//----------------- null value to erase
-		html = "<li></li>";
-		var select_item = $(html);
-		html = "<a  value='' code='' ";
+		html = "<a class='dropdown-item' value='' code='' ";
 		for (var j=0; j<languages.length;j++) {
 			html += "label_"+languages[j]+"='&nbsp;' ";
 		}
@@ -289,8 +287,7 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 			$(self.value_node).text($(this).attr("value"));
 			UIFactory["Proxy"].update(self,langcode);
 		});
-		$(select_item).append($(select_item_a))
-		$(select).append($(select_item));
+		$(select).append($(select_item_a));
 		//--------------------
 		for ( var i = 0; i < newTableau1.length; ++i) {
 			var semtag = $("metadata",newTableau1[i]).attr('semantictag');
@@ -300,9 +297,7 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 				else
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i]);
 				var value = $(newTableau1[i][1]).attr('id');
-				var html = "<li></li>";
-				var select_item = $(html);
-				html = "<a  value='"+value+"' code='"+value+"' ";
+				html = "<a class='dropdown-item' value='"+value+"' code='"+value+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
@@ -318,12 +313,11 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 					$(self.value_node).text($(this).attr("value"));
 					UIFactory["Proxy"].update(self,langcode);
 				});
-				$(select_item).append($(select_item_a))
+				$(select).append($(select_item_a));
 				//-------------- update button -----
 				if (value!="" && self_value==value) {
 					$("#button_"+self.id).html(portfolio_label+"."+$(srce+"[lang='"+languages[langcode]+"']",resource).text());
 				}
-				$(select).append($(select_item));
 			}
 		$(btn_group).append($(select));
 		}
