@@ -205,7 +205,7 @@ karutaStr['en']['encrypted']="Encrypt Ressource";
 karutaStr['en']['get_rc4key']="Parts of this document are encrypted.\nFist Visit: Choose a key sentence.\nReturning Visits: Type your key sentence. ";
 karutaStr['en']['error_rc4key']="Error in key sentence.";
 karutaStr['en']['seltype']="Display";
-karutaStr['en']['shareroles']="Share<br/><span style='font-size:smaller'> role who shares,recipient role,roles and/or emails,level (0-4),link validity (in hours),";
+karutaStr['en']['shareroles']="Share<br/><span style='font-size:smaller'> role that shares,visitor role,recipient roles and/or emails,level (0-4),link lifespan (in hours),";
 karutaStr['en']['shareroles2']="button label@en";
 karutaStr['en']['shareroles3']="[,condition][;other sharing]";
 karutaStr['en']['submitted']="Submitted on ";

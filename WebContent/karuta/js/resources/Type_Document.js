@@ -188,16 +188,16 @@ UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
 	var documentIcon = {};
-	documentIcon['.doc'] = "../../karuta/img/word.gif";
-	documentIcon['.docx'] = "../../karuta/img/word.gif'";
-	documentIcon['.xls'] = "../../karuta/img/excel.gif";
-	documentIcon['.xlsx'] = "../../karuta/img/excel.gif";
-	documentIcon['.ppt'] = "../../karuta/img/powerpoint.gif";
-	documentIcon['.pptx'] = "../../karuta/img/powerpoint.gif";
-	documentIcon['.pdf'] = "../../karuta/img/adobe.gif";
+	documentIcon['.doc'] = "../../karuta/img/word.png";
+	documentIcon['.docx'] = "../../karuta/img/word.png'";
+	documentIcon['.xls'] = "../../karuta/img/excel.png";
+	documentIcon['.xlsx'] = "../../karuta/img/excel.png";
+	documentIcon['.ppt'] = "../../karuta/img/powerpoint.png";
+	documentIcon['.pptx'] = "../../karuta/img/powerpoint.png";
+	documentIcon['.pdf'] = "../../karuta/img/pdf.png";
 	documentIcon['.js'] = "../../karuta/img/js.png";
 	documentIcon['.txt'] = "../../karuta/img/text.png";
-	documentIcon['.jpg'] = "../../karuta/img/jpg.png";
+	documentIcon['.jpg'] = "../../karuta/img/jpeg.png";
 	documentIcon['.gif'] = "../../karuta/img/gif.png";
 	documentIcon['.png'] = "../../karuta/img/png.png";
 

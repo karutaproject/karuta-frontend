@@ -27,15 +27,15 @@ UIFactory["DocumentBlock"] = function( node )
 	this.node = node;
 	this.type = 'DocumentBlock';
 	//--------------------
-	this.document_node = $("asmContext:has(metadata[semantictag='document'])",node);
+	this.document_node = $("asmContext:has(metadata[semantictag='docblock-document'])",node);
 	this.document_nodeid = this.document_node.attr('id');
 	this.document_editresroles = ($(this.document_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.document_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
-	this.image_node = $("asmContext:has(metadata[semantictag='image'])",node);
+	this.image_node = $("asmContext:has(metadata[semantictag='docblock-image'])",node);
 	this.image_nodeid = this.image_node.attr('id');
 	this.image_editresroles = ($(this.image_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.image_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
-	this.cover_node = $("asmContext:has(metadata[semantictag='cover'])",node);
+	this.cover_node = $("asmContext:has(metadata[semantictag='docblock-cover'])",node);
 	this.cover_nodeid = this.cover_node.attr('id');
 	this.cover_editresroles = ($(this.cover_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.cover_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------

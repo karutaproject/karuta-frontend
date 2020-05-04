@@ -109,7 +109,7 @@
 	displayHTML["standard-resource-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 												"	<div id='sub_node_#uuid#' class='resource-node row' >" +
 												"		<div class='col-1'></div>" +
-												"		<div id='std_node_#uuid#' name='lbl-div' class='col-3 resource-label inside-full-height'>" +
+												"		<div id='std_node_#uuid#' name='res-lbl-div' class='col-3 resource-label inside-full-height'>" +
 												"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 												"		</div>" +
 //												"		<div name='res-div' class='col-8'>" +
@@ -162,7 +162,7 @@
 
 	displayHTML["standard-resource-xwide"]  =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 									" <div id='sub_node_#uuid#' class='resource-node #displayview#' >" +
-									"	<div id='std_node_#uuid#' name='lbl-div' class=''>" +
+									"	<div id='std_node_#uuid#' name='res-lbl-div' class=''>" +
 									 "		<div id='buttons-#uuid#' class='buttons edit-bar'></div>" +
 									"		<div class='node-label inside-full-height'>" +
 									 "			<div class='label-help'><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
@@ -227,7 +227,7 @@
 													"</div>";
 	//====================================================================
 	displayHTML["standard-resource-card"]  =	"<div id='node_#uuid#' class='card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
-												"	<div id='std_node_#uuid#' name='lbl-div' class='card-header'>" +
+												"	<div id='std_node_#uuid#' name='res-lbl-div' class='card-header'>" +
 												 "		<span id='buttons-#uuid#' class='buttons'></span>" +
 												 "		<span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span>" +
 												 "	</div>" +
@@ -245,7 +245,7 @@
 //====================================================================
 	displayHTML["standard-resource-Image-Img-Label2"]  =	"<div id='node_#uuid#' class='card #displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 													"	<div id='resource_#uuid#' class='card-img'></div>" +
-													"	<div id='std_node_#uuid#' name='lbl-div' class='card-img-overlay'>" +
+													"	<div id='std_node_#uuid#' name='res-lbl-div' class='card-img-overlay'>" +
 													 "		<div id='buttons-#uuid#' class='buttons edit-bar'></div>" +
 													 "		<div class='label-help'><span id='label_node_#uuid#' class='card-title'/><span id='help_#uuid#' class='ihelp'/></div>" +
 													 "	</div>" +
@@ -256,7 +256,7 @@
 												"<div id='buttons-#uuid#' class='buttons edit-bar'></div>" +
 												"	<div name='res-div'>" +
 												"		<div id='resource_#uuid#' class='resource'></div>" +
-												"		<div id='std_node_#uuid#' name='lbl-div'>" +
+												"		<div id='std_node_#uuid#' name='res-lbl-div'>" +
 												"			<div class='node-label'>" +
 												"				<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 												"			</div>" +
@@ -381,13 +381,16 @@
 	
 	var resource1 = "<div id='node_#uuid#' class='resource- #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv# col-md-";
 	var resource2 = " ' >" +
-					"<div class='edit-bar'><span id='buttons-#uuid#' name='res-div' class='buttons'/></div>" +
-					"<div id='sub_node_#uuid#' class='node #displayview#' >" +
-					"	<div id='std_node_#uuid#' class='node-label'>" +
-					"		<div name='lbl-div'><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
+					"	<div class='edit-bar'><span id='buttons-#uuid#' name='res-div' class='buttons'/></div>" +
+					"	<div id='sub_node_#uuid#' class='node #displayview#' >" +
+					"		<div id='std_node_#uuid#' class='node-label'>" +
+					"			<div name='res-lbl-div'><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
+					"		</div>" +
 					"		<div id='resource_#uuid#' name='res-div' class='resource'></div>" +
+					"		<div id='comments_#uuid#' class='comments'></div>" +
+					"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
+					"		<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 					"	</div>" +
-					"</div>" +
 					"</div>";
 
 	displayHTML["standard-resource-1/12"]  =	resource1 + "1" + resource2;

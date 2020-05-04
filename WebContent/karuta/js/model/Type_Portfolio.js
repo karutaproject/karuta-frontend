@@ -917,6 +917,8 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 						success : function(data) {
 							$("#wait-window").hide();
 							$('#edit-window').modal('hide');
+							if (rootsemtag=="karuta-project") // folder creation - we open the new folder
+								localStorage.setItem('currentDisplayedportfolioCode',targetcode);
 							fill_list_page();
 						},
 						error : function(jqxhr,textStatus) {
@@ -2099,7 +2101,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	//-------------------- ROLES-------------------------
 	if (g_userroles[0]=='designer') {
 		html += "		<li class='nav-item dropdown'>";
-		html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsRoles' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 		html += 				karutaStr[LANG]['role']+" : <span id='userrole'>designer</span>";
 		html += "			</a>";
 		html += "			<div class='dropdown-menu'>";

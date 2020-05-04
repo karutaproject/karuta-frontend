@@ -110,7 +110,7 @@ function fill_main_page(rootid,role)
 			var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
 			if (config_unit.length==0) // for backward compatibility
 				setCSSportfolioOLD(data);
-			if (g_configVar['portfolio-navbar-background-color']!=undefined)
+			else
 				setCSSportfolio(config_unit);
 			setVariables(data);
 			//-------------------------------------------------

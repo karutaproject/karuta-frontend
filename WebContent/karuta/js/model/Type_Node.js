@@ -307,7 +307,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	$("#node_"+uuid).attr("style",style);
 	//-------------------- label style -------------------
 	style = this.getLabelStyle(uuid);
-	$("*[name='lbl-div']","#node_"+uuid).attr("style",style);
+	$("*[name='res-lbl-div']","#node_"+uuid).attr("style",style);
 	//-------------------- resource style -------------------
 	style = this.getContentStyle();
 	$("*[name='res-div']","#node_"+uuid).attr("style",style);
@@ -341,8 +341,8 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 		$("#buttons-"+uuid).html(html);
 	}
 	//----------------- hide lbl-div if empty ------------------------------------
-//	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
-//		$("div[name='lbl-div']","#node_"+uuid).hide();
+	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
+		$("div[name='res-lbl-div']","#node_"+uuid).hide();
 	//----------- Comments -----------
 	if (this.edit && this.inline && this.writenode)
 		UIFactory.Node.displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
@@ -351,8 +351,8 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	//--------------------Metadata Info------------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		this.displayMetainfo("metainfo_"+uuid);
+		this.displayMetaEpmInfo("cssinfo_"+uuid);
 	}
-	this.displayMetaEpmInfo("cssinfo_"+uuid);
 	//-------------------------------------------------
 }
 
@@ -493,8 +493,8 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	//--------------------Metadata Info------------------------------------------
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		this.displayMetainfo("metainfo_"+uuid);
+		this.displayMetaEpmInfo("cssinfo_"+uuid);
 	}
-	this.displayMetaEpmInfo("cssinfo_"+uuid);
 	//--------------------Portfolio code------------------------------------------
 	if ((g_userroles[0]=='reporter' || g_userroles[0]=='designer' || USER.admin) && nodetype=='asmRoot') {
 		$("#portfoliocode_"+uuid).html(this.getCode());

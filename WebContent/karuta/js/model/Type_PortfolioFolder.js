@@ -814,7 +814,7 @@ UIFactory["PortfolioFolder"].callRename = function(folderid)
 	}
 	if ((USER.creator && !USER.limited)  || USER.admin) {
 		var htmlLabelGroupObj = $("<div class='form-group'></div>")
-		var htmlLabelLabelObj = $("<label for='code_"+folderid+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
+		var htmlLabelLabelObj = $("<label for='label_"+folderid+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
 		var htmlLabelDivObj = $("<div class='col-sm-9'></div>");
 		var htmlLabelInputObj = $("<input id='label_"+folderid+"_"+langcode+"' type='text' class='form-control' value=\""+self.label_node[langcode].text()+"\">");
 		$(htmlLabelInputObj).change(function (){
@@ -855,7 +855,7 @@ UIFactory["PortfolioFolder"].renameFolder = function(itself)
 	var oldfolder_code = $(itself.code_node).text();
 	var newfolder_code = $.trim($("#code_"+itself.id).val());
 	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
-	itself.rename(oldfolder_code,newfolder_code);
+	itself.rename(oldfolder_code,newfolder_code,label);
 }
 
 //==================================
