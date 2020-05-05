@@ -394,6 +394,7 @@ karutaStr['en']['report-elt-disabled'] = "disabled"
 karutaStr['en']['no-image']="No Image";
 karutaStr['en']['no-document']="No Document";
 karutaStr['en']['no-URL']="No URL";
+karutaStr['en']['no-URL2Unit']="No Target";
 karutaStr['en']['subject']="Subject";
 karutaStr['en']['message']="Message";
 karutaStr['en']['email-sent']="The message has been sent.";
@@ -513,6 +514,8 @@ karutaStr['en']['BatchForm']="BatchForm";
 karutaStr['en']['DocumentBlock']="DocumentBlock";
 karutaStr['en']['URLBlock']="URLBlock";
 karutaStr['en']['ImageBlock']="ImageBlock";
+karutaStr['en']['URL2UnitBlock']="URL2UnitBlock";
+karutaStr['en']['TextFieldBlock']="TextFieldBlock";
 karutaStr['en']['BubbleMap']="Bubble Map";
 karutaStr['en']['Europass']="Europass";
 

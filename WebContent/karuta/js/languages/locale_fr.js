@@ -394,6 +394,7 @@ karutaStr['fr']['report-elt-disabled'] = "désactivé";
 karutaStr['fr']['no-image']="Aucune image";
 karutaStr['fr']['no-document']="Aucun document";
 karutaStr['fr']['no-URL']="Aucun hyperlien";
+karutaStr['fr']['no-URL2Unit']="Aucune cible";
 karutaStr['fr']['subject']="Objet";
 karutaStr['fr']['message']="Message";
 karutaStr['fr']['email-sent']="Le message a été envoyé.";
@@ -513,6 +514,8 @@ karutaStr['fr']['BatchForm']="BatchForm";
 karutaStr['fr']['DocumentBlock']="DocumentBlock";
 karutaStr['fr']['URLBlock']="URLBlock";
 karutaStr['fr']['ImageBlock']="ImageBlock";
+karutaStr['fr']['URL2UnitBlock']="URL2UnitBlock";
+karutaStr['fr']['TextFieldBlock']="TextFieldBlock";
 karutaStr['fr']['BubbleMap']="Bubble Map";
 karutaStr['fr']['Europass']="Europass";
 

@@ -603,15 +603,19 @@ function displayPage(uuid,depth,type,langcode) {
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	var scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
+	var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 	if (g_current_page!=uuid) {
 		$(window).scrollTop(0);
+		scrollTop = 0;
+		scrollLeft = 0;
 		g_current_page = uuid;
 	}
 	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
-	if (g_bar_type=="horizontal"){  // breadcrumb
+	if (g_bar_type=="horizontal"){  // update breadcrumb
 		var nodeid = uuid;
 		var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
 		while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
@@ -621,14 +625,6 @@ function displayPage(uuid,depth,type,langcode) {
 		$("#breadcrumb").html(breadcrumb);
 	}
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
-	if (name == 'asmUnit' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
-		$("#wait-window").modal('show');
-		UIFactory.Node.loadNode(uuid);
-	}
-	if (name=='asmStructure' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
-		$("#wait-window").modal('show');
-		UIFactory.Node.loadStructure(uuid);
-	}
 	if (depth==null)
 		depth=100;
 	if (name=='asmRoot' || name=='asmStructure')
@@ -640,8 +636,9 @@ function displayPage(uuid,depth,type,langcode) {
 			$("#welcome-edit").html("");
 			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
 				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
-			else
+			else {
 				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+			}
 		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
@@ -669,8 +666,8 @@ function displayPage(uuid,depth,type,langcode) {
 		$("#welcome-add").html(html);
 	}
 	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
-
 	$("#wait-window").modal('hide');
+	window.scrollTo(scrollLeft, scrollTop);
 }
 
 //==================================
@@ -732,8 +729,8 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	}
-//	$.ajaxSetup({async: false});
 	$.ajax({
+		async: false,
 		type : "POST",
 		dataType : "text",
 		url : urlS,
@@ -754,7 +751,6 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 			$("#wait-window").modal('hide');			
 		}
 	});
-//	$.ajaxSetup({async: true});
 }
 
 //=======================================================================

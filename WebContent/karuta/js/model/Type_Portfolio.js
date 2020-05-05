@@ -1133,7 +1133,7 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 	//--------------------------
 	$('#edit-window').modal('show');
 };
-
+*/
 //==================================
 UIFactory["Portfolio"].del = function(portfolioid) 
 //==================================
@@ -1153,7 +1153,7 @@ UIFactory["Portfolio"].del = function(portfolioid)
 		}
 	});
 };
-*/
+
 //=======================================================================
 UIFactory["Portfolio"].getPDF = function(portfolioid) 
 //=======================================================================

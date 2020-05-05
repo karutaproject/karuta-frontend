@@ -1,4 +1,4 @@
-var karuta_version = "3.0 alpha5";
+var karuta_version = "3.0 alpha6";
 var karuta_date = "2020-04-28";
 
 var karuta_backend_version = "?";

@@ -1342,9 +1342,8 @@ body,
 .standard.asmStructure .asmStructure div[name=lbl-div], .standard.asmRoot .asmStructure div[name=lbl-div] {
   font-size: calc(var(--font-size-coeff) * 1.25rem);
   line-height: 1.5rem;
-  padding: 0px;
+  padding-top: 0px;
   padding-bottom: 5px;
-  padding-left: 15px;
   color: var(--portfolio-link-color);
 }
 .standard.asmUnit div[name=lbl-div] {
@@ -1354,8 +1353,8 @@ body,
 .standard.asmStructure .asmUnit div[name=lbl-div], .standard.asmRoot .asmUnit div[name=lbl-div] {
   font-size: calc(var(--font-size-coeff) * 1.25rem);
   line-height: 1.5rem;
-  padding: 0px;
-  padding-left: 15px;
+  padding-top: 0px;
+  padding-bottom: 5px;
   color: var(--portfolio-link-color);
 }
 .standard .asmUnitStructure div[name=lbl-div] {
@@ -3158,11 +3157,13 @@ td {
    ====================*/
 .standard .DocumentBlock .content,
 .standard .ImageBlock .content,
+.standard .URL2UnitBlock .content,
 .standard .URLBlock .content {
   display: none;
 }
 .standard .DocumentBlock .title,
 .standard .ImageBlock .title,
+.standard .URL2UnitBlock .title,
 .standard .URLBlock .title {
   display: none;
 }
@@ -3196,20 +3197,10 @@ td {
   margin-top: 0px;
 }
 
-.ProxyBlock a,
-.DocumentBlock a,
-.URLBlock a {
-  color: inherit;
-  text-align: center;
-}
-
 .block .ProxyBlock,
 .block .ImageBlock,
 .block .DocumentBlock,
-.block .URLBlock,
-.ImgBlock,
-.DocBlock,
-.UrlBlock {
+.block .URLBlock {
   min-height: var(--block-img-height);
   text-align: center;
   background-repeat: no-repeat;
@@ -3229,20 +3220,13 @@ td {
   position: relative;
 }
 
-.block .docblock-title,
-.block .no-document .docblock-title,
-.ImgBlock .no-document .docblock-title,
-.ImgBlock .docblock-title,
-.UrlBlock .no-document .docblock-title,
-.UrlBlock .docblock-title,
-.DocBlock .no-document .docblock-title,
-.DocBlock .docblock-title {
-  display: inline-block;
-  margin-top: 90px;
-  margin-left: 10px;
-  margin-right: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+.block .block-title,
+.block .no-document .block-title {
+  width: 50%;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: white;
   opacity: 0.8;
   -moz-box-shadow: 10px 10px 5px #888;

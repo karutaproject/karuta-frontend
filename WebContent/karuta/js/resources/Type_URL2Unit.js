@@ -186,7 +186,7 @@ UIFactory["URL2Unit"].prototype.displayEditor = function(destid,type,langcode,di
 		cachable = true;
 	if (type==undefined || type==null)
 		type = $("metadata-wad",this.node).attr('seltype');
-	var queryattr_value = $("metadata-wad",this.node).attr('query');
+	var queryattr_value = this.query;
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------
 		var srce_indx = queryattr_value.lastIndexOf('.');
@@ -209,6 +209,7 @@ UIFactory["URL2Unit"].prototype.displayEditor = function(destid,type,langcode,di
 			UIFactory["URL2Unit"].parse(destid,type,langcode,g_URL2Unit_caches[queryattr_value],self,disabled,srce,resettable,target,semtag);
 		else
 			$.ajax({
+				async : false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,

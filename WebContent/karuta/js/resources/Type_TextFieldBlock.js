@@ -20,22 +20,22 @@ if( UIFactory === undefined )
 }
  
 //==================================
-UIFactory["URLBlock"] = function( node )
+UIFactory["TextFieldBlock"] = function( node )
 //==================================
 {
 	this.id = $(node).attr('id');
 	this.node = node;
-	this.type = 'URLBlock';
+	this.type = 'TextFieldBlock';
 	//--------------------
-	this.url_node = $("asmContext:has(metadata[semantictag='urlblock-url'])",node);
-	this.url_nodeid = this.url_node.attr('id');
-	this.url_editresroles = ($(this.url_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.url_node[0].querySelector("metadata-wad")).attr('editresroles');
+	this.text_node = $("asmContext:has(metadata[semantictag='txtblock-textfield'])",node);
+	this.text_nodeid = this.text_node.attr('id');
+	this.text_editresroles = ($(this.text_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.text_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
-	this.image_node = $("asmContext:has(metadata[semantictag='urlblock-image'])",node);
+	this.image_node = $("asmContext:has(metadata[semantictag='txtblock-image'])",node);
 	this.image_nodeid = this.image_node.attr('id');
 	this.image_editresroles = ($(this.image_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.image_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
-	this.cover_node = $("asmContext:has(metadata[semantictag='urlblock-cover'])",node);
+	this.cover_node = $("asmContext:has(metadata[semantictag='txtblock-cover'])",node);
 	this.cover_nodeid = this.cover_node.attr('id');
 	this.cover_editresroles = ($(this.cover_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.cover_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
@@ -46,10 +46,10 @@ UIFactory["URLBlock"] = function( node )
 
 /// Display
 //==================================
-UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
+UIFactory["TextFieldBlock"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
-	var url_element = UICom.structure["ui"][this.url_nodeid];
+	var text = UICom.structure["ui"][this.text_nodeid];
 	var image = UICom.structure["ui"][this.image_nodeid];
 	var cover = UICom.structure["ui"][this.cover_nodeid];
 	//---------------------
@@ -73,48 +73,31 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 		if (!image.multilingual)
 			img_langcode = NONMULTILANGCODE;
 		//---------------------
-		var url_langcode = langcode;
-		if (!url_element.multilingual)
-			url_langcode = NONMULTILANGCODE;
+		var txt_langcode = langcode;
+		if (!text.multilingual)
+			txt_langcode = NONMULTILANGCODE;
 		//------------------------
 		var image_size = "";
 		if ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='')
 			image_size = "width:"+$(image.resource.width_node[langcode]).text()+"; "; 
 		if ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='')
 			image_size += "height:"+$(image.resource.height_node[langcode]).text()+"; "; 
-		//---------------------
-		var url = $(url_element.resource.url_node[url_langcode]).text();
-		if (url!="" && url.indexOf("http")<0)
-			url = "http://"+url;
-		var label = $(url_element.resource.label_node[url_langcode]).text();
-		if (label=="")
-			label = url;
-
-		if (url!="") {
-			html =  "<a style='text-decoration:none;color:inherit' id='url_"+url_element.id+"' href='"+url+"' target='_blank'>";
-			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
-			if (cover!=undefined && cover.resource.getValue()=='1')
-				style += "background-size:cover;";
-			html += "<div class='UrlBlock' style=\""+style+"\">";
-			style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
-			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='URLBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
-				html += "<div id='label_"+this.id+"' class='block-title'  style=\""+style+"\">"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
-			else
-				html += "<div class='block-title'  style=\""+style+"\">"+label+"</div>";
-			html += "</div>";
-			html += "</a>";
-		} else {
-			style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
-			html =  "<div class='URLBlock no-document' style=\""+image_size+"\">";
-			html += "<div class='block-title'  style=\""+style+"\">"+karutaStr[LANG]['no-URL']+"</div>";
-			html += "</div>";
-		}
+		//------------------------
+		var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
+		if (cover!=undefined && cover.resource.getValue()=='1')
+			style += " background-size:cover;";
+		html += "<div class='TxtBlock' style=\""+style+"\">";
+		style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		var style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		var text = text.resource.getView(dest,type,langcode);
+		html += "<div id='text_"+this.id+"' class='block-title' style=\""+style+"\">"+text+"</div>";
+		html += "</div>";
 	}
 	return html;
 };
 
 //==================================
-UIFactory["URLBlock"].prototype.displayView = function(dest,type,langcode)
+UIFactory["TextFieldBlock"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
 	var html = this.getView(dest,type,langcode);
@@ -124,7 +107,7 @@ UIFactory["URLBlock"].prototype.displayView = function(dest,type,langcode)
 };
 
 //==================================
-UIFactory["URLBlock"].prototype.getButtons = function(dest,type,langcode)
+UIFactory["TextFieldBlock"].prototype.getButtons = function(dest,type,langcode)
 //==================================
 {
 	if (langcode==null)
@@ -134,7 +117,7 @@ UIFactory["URLBlock"].prototype.getButtons = function(dest,type,langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var html = "";
-	if (this.image_editresroles.containsArrayElt(g_userroles) || this.image_editresroles.containsArrayElt(g_userroles)){
+	if (this.text_editresroles.containsArrayElt(g_userroles) || this.image_editresroles.containsArrayElt(g_userroles)){
 		html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
 	}
 	if (html!="")
@@ -143,10 +126,10 @@ UIFactory["URLBlock"].prototype.getButtons = function(dest,type,langcode)
 };
 
 //==================================
-UIFactory["URLBlock"].prototype.displayEditor = function(destid,type,langcode)
+UIFactory["TextFieldBlock"].prototype.displayEditor = function(destid,type,langcode)
 //==================================
 {
-	var url_element = UICom.structure["ui"][this.url_nodeid];
+	var text = UICom.structure["ui"][this.text_nodeid];
 	var image = UICom.structure["ui"][this.image_nodeid];
 	var cover = UICom.structure["ui"][this.cover_nodeid];
 	//---------------------
@@ -156,9 +139,9 @@ UIFactory["URLBlock"].prototype.displayEditor = function(destid,type,langcode)
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	if (this.url_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
-		$("#"+destid).append($("<h4>URL</h4>"));
-		$("#"+destid).append($(url_element.resource.getEditor(null,null,null,this)));
+	if (this.text_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
+		$("#"+destid).append($("<h4>Text</h4>"));
+		text.resource.displayEditor(destid,type,langcode);
 	}
 	//---------------------
 	if (this.image_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
@@ -173,11 +156,8 @@ UIFactory["URLBlock"].prototype.displayEditor = function(destid,type,langcode)
 	}
 }
 
-
-
-
 //==================================
-UIFactory["URLBlock"].prototype.refresh = function()
+UIFactory["TextFieldBlock"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {

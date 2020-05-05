@@ -149,7 +149,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			}
 			//============================== NODE ===================================
 			else { // other than asmContext
-				this.displayAsmNode(dest,type,langcode,edit,refresh);
+				this.displayAsmNode(dest,type,langcode,edit,refresh,depth);
 			}
 			//---------------------------- BUTTONS AND BACKGROUND COLOR -----------------------------------------------------------------
 			// ---------- if by error button color == background color we set button color to white or black to be able to see them -----
@@ -327,7 +327,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 		if (this.xsi_type.indexOf("Block")>-1) {
 			buttons += this.structured_resource.getButtons();
 		}
-		buttons += this.getButtons(langcode);
+		buttons += this.getButtons();
 		if (buttons!="")
 			buttons = "<div class='btn-group'>"+buttons+"</div><!-- class='btn-group' -->"
 		$("#buttons-"+uuid).html(buttons);
@@ -357,7 +357,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 }
 
 //==================================================
-UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,refresh)
+UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,refresh,depth)
 //==================================================
 {
 	var nodetype = this.asmtype;
@@ -418,9 +418,15 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	}
 	//-------------------- node style -------------------
 	var style = "";
+	if (this.depth>0 && type!='raw') {
+		style =  this.getNodeStyle(uuid);
+		$("#node_"+uuid).attr("style",style);
+	}
+	//-------------------- label style -------------------
 	if (this.depth>0) {
 		style = UIFactory["Node"].getLabelStyle(uuid);
 	} else {
+		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-padding-top',true);
 		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-size',true);
 		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-weight',false);
 		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-style',false);
@@ -429,9 +435,10 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-background-color',false);
 		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-othercss',false);
 	}
-	$("div[name='lbl-div']","#node_"+uuid).attr("style",style);
+	if (type!='raw')
+		$("div[name='lbl-div']","#node_"+uuid).attr("style",style);
 	//-------------------- content style -------------------
-	if (type!='model') {
+	if (type!='model' && type!='raw') {
 		style = this.getContentStyle(uuid);
 		$("div[name='cnt-div']","#node_"+uuid).attr("style",style);
 	}
@@ -468,7 +475,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	if (edit) {
 		if (this.semtag.indexOf("bubble_level1")>-1)
 			this.menu = false;
-		var buttons = this.getButtons(langcode);
+		var buttons = this.getButtons(null,null,null,null,depth);  //getButtons = function(dest,type,langcode,inline,depth,edit,menu,inblock)
 		if (nodetype == "BatchForm") {
 			buttons += node.structured_resource.getButtons();
 		}
@@ -500,7 +507,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		$("#portfoliocode_"+uuid).html(this.getCode());
 	}
 	//----------------- hide lbl-div if empty ------------------------------------
-	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
+	if (this.getLabel(null,'none',langcode)=="" && this.getButtons()=="" && this.getMenus(langcode)=="")
 		$("div[name='lbl-div']","#node_"+uuid).hide();
 }
 
@@ -1407,12 +1414,14 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 				this.writenode = this.menu; //if submitted menu==false
 		}
 	}
+	if (depth==null)
+		depth = 99;
 	//-----------------------------------
 	var html = "";
 	//-----------------------------------
 	if (this.edit) {
 		//------------ edit button ---------------------
-		if (
+		if ( (depth>1 || (depth==1 && this.asmtype != 'asmStructure' || this.asmtype != 'asmUnit'))&&
 					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
 									|| USER.admin
 									|| g_userroles[0]=='designer' 
@@ -1509,27 +1518,22 @@ UIFactory['Node'].reloadUnit = function()
 {
 	var uuid = $("#page").attr('uuid');
 	var parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
-	$.ajaxSetup({async: false});
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/" + uuid,
 		success : function(data) {
 			UICom.parseStructure(data,false,parentid);
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
+			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
 			if (g_display_type=='model')
 				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
 			else
 				displayPage(uuid,1,g_display_type,LANGCODE,g_edit);
-			if ($("#window-page").length>0) {
-				var window_uuid = $("#window-page").attr('uuid');
-				eval(redisplays[window_uuid]);
-			}
-			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
 			$('#wait-window').modal('hide');
 		}
 	});
-	$.ajaxSetup({async: true});
 };
 
 

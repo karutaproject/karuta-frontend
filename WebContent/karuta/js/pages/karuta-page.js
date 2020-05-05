@@ -170,9 +170,6 @@ function setConfigurationUIVariables()
 			g_configVar['navbar-display-mailto'] = getText('navbar-display-mailto','Get_Resource','value',data);
 			g_configVar['navbar-display-language'] = getText('navbar-display-language','Get_Resource','value',data);
 			//----------------------
-			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
-			g_configVar['maxuserlist'] = getText('config-maxuserlist','Field','text',data);
-			//----------------------
 			g_configVar['font-standard'] = getText('config-font-standard','Field','text',data);
 			g_configVar['font-google'] = getText('config-font-google','Field','text',data);
 			g_configVar['font-size-coeff'] = getText('config-font-size-coeff','Field','text',data);
