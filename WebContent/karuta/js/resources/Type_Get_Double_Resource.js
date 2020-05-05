@@ -128,7 +128,7 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 	var label2 = this.label2_node[langcode].text();
 	if (this.encrypted)
 		label2 = decrypt(label2.substring(3),g_rc4key);
-	var code2 = $(this.code_node).text();
+	var code2 = $(this.code2_node).text();
 	//---------------------	
 	var html = "";
 	html += "<span class='Item1 "+cleanCode(code1)+"'>";
@@ -138,7 +138,7 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 		html += "["+$(this.value1_node).text()+ "] ";
 	if (($(this.code1_node).text()).indexOf("%")<0)
 		html += label1;
-	html += " </span>";
+	html += "</span>";
 	html += this.separator_node[langcode].text();
 	html += " <span class='Item2 "+cleanCode(code2)+"'>";
 	if (($(this.code2_node).text()).indexOf("#")>-1)
@@ -147,7 +147,7 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 		html += label2;
 	if (($(this.code2_node).text()).indexOf("&")>-1)
 		html += "["+$(this.value2_node).text()+ "] ";
-	html += " </span>";
+	html += "</span>";
 	 return html;
 };
 
