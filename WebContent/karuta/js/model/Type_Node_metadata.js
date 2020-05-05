@@ -535,7 +535,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','editboxtitle');
 	//----------------------Search----------------------------
-	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
+	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Get_Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
 		html  = "<label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','query');
@@ -803,6 +803,7 @@ UIFactory["Node"].prototype.displayMetaEpmInfo = function(destid)
 {
 	var data = this.node;
 	var html = "";
+	$("#"+destid).html(html);
 	html += UIFactory.Node.getMetadataEpmInfo(data,'cssclass');
 	html += UIFactory.Node.getMetadataEpmInfo(data,'displayview');
 	//------------------------------------
@@ -861,35 +862,45 @@ UIFactory["Node"].displayMetaEpmInfos = function(destid,data)
 UIFactory["Node"].prototype.displayMetadataDisplayTypeAttributeEditor = function(destid,attribute,yes_no,disabled)
 //==================================================
 {
-	var display_types = ['standard','basic','model'];
+	var display_types = ['standard','raw','model'];
 	var value = $(this.metadata).attr('display-type');
 	var langcode = LANGCODE;
 	if (value==null || value==undefined || value=='undefined')
 		value = "";
+	var nodeid = this.id;
 	var html = "";
-	html += "<div class='form-group form-row'>";
-	html += "  <label class='col-4 control-label'>"+karutaStr[languages[langcode]][attribute]+"</label>";
-		html += "  <div class='col-8'><select class='form-control form-control-sm' onchange=\"javascript:UIFactory.Node.updateMetadataSelectAttribute('"+this.id+"','"+attribute+"',this)\"";
-		if(disabled!=null && disabled)
-			html+= " disabled='disabled' ";			
-		html+= ">";
+	html += "<div class='input-group '>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<div class='input-group-text'>";
+	html += karutaStr[languages[langcode]][attribute];
+	if (attribute=='seenoderoles')
+		html += "<a data-toggle='collapse' data-target='#see-calendar' aria-expanded='false'>&nbsp;<span class='fa fa-calendar'></span></a>"
+	html += "</div>";
+	html += "	</div>";
+	html += "	<div id='"+attribute+nodeid+"' class='form-control'>"+value+"</div>";
+	if(disabled==null || !disabled) {
+		html += "<div class='input-group-append'>";
+		html += "	<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+		html += "	<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
+		html += "			<div class='dropdown-item' onclick=\"$('#"+attribute+nodeid+"').html('');UIFactory.Node.updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"','');\")>&nbsp;</div>";
+		//---------------------
 		for (var i=0; i<display_types.length; i++) {
-			html += "<option value='"+display_types[i]+"'";
-			if (value==display_types[i])
-				html += " selected ";
-			html += ">"+display_types[i]+"</option>";
+			var value = display_types[i];
+			html += "		<div  class='dropdown-item' onclick=\"$('#"+attribute+nodeid+"').html('"+value+"');UIFactory.Node.updateMetadataAttribute('"+nodeid+"','"+attribute+"','"+value+"')\")>"+value+"</div>";
 		}
-		html+= "</select>";
-		html+= "</div>";
+		html += "	</div>";
+		html += "</div>";
+	}
 	html += "</div>";
 	$("#"+destid).append($(html));
 };
 
+/*
 //==================================================
 UIFactory["Node"].prototype.displayMetadataMenuTypeAttributeEditor = function(destid,attribute,yes_no,disabled)
 //==================================================
 {
-	var menu_types = ['vertical','horizontal'];
+	var bar_types = ['vertical','horizontal'];
 	var value = $(this.metadata).attr('menu-type');
 	var langcode = LANGCODE;
 	if (value==null || value==undefined || value=='undefined')
@@ -901,18 +912,18 @@ UIFactory["Node"].prototype.displayMetadataMenuTypeAttributeEditor = function(de
 		if(disabled!=null && disabled)
 			html+= " disabled='disabled' ";			
 		html+= ">";
-		for (var i=0; i<menu_types.length; i++) {
-			html += "<option value='"+menu_types[i]+"'";
-			if (value==menu_types[i])
+		for (var i=0; i<bar_types.length; i++) {
+			html += "<option value='"+bar_types[i]+"'";
+			if (value==bar_types[i])
 				html += " selected ";
-			html += ">"+menu_types[i]+"</option>";
+			html += ">"+bar_types[i]+"</option>";
 		}
 		html+= "</select>";
 		html+= "</div>";
 	html += "</div>";
 	$("#"+destid).append($(html));
 };
-
+*/
 
 //==================================================
 UIFactory["Node"].prototype.displayMetadataAttributeEditor = function(destid,attribute,yes_no,disabled)
@@ -1251,29 +1262,27 @@ UIFactory["Node"].prototype.displayMetadataEpmDisplayViewAttributeEditor = funct
 	var html = "";
 	html += "<div class='input-group '>";
 	html += "	<div class='input-group-prepend'>";
-	html += "		<div class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute]+"</div>";
+	html += "		<div class='input-group-text'>";
+	html += karutaStr[languages[langcode]][attribute];
+	if (attribute=='seenoderoles')
+		html += "<a data-toggle='collapse' data-target='#see-calendar' aria-expanded='false'>&nbsp;<span class='fa fa-calendar'></span></a>"
+	html += "</div>";
 	html += "	</div>";
-	html += "	<select class='form-control' onchange=\"javascript:UIFactory.Node.updateMetadataEpmSelectAttribute('"+nodeid+"','"+attribute+"',this)\"";
-	if(disabled!=null && disabled)
-		html+= " disabled='disabled' ";			
-	html+= ">";
-	html+= "		<option value=''></option>";
-	for (dest in displayView[g_display_type][nodetype]) {
-		html += "	<option value='"+displayView[g_display_type][nodetype][dest]+"'";
-		if (value==displayView[g_display_type][nodetype][dest])
-			html += " selected ";
-		html += ">"+displayView[g_display_type][nodetype][dest]+"</option>";
+	html += "	<div id='"+attribute+nodeid+"' class='form-control'>"+value+"</div>";
+	if(disabled==null || !disabled) {
+		html += "<div class='input-group-append'>";
+		html += "	<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+		html += "	<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
+		html += "			<div class='dropdown-item' onclick=\"$('#"+attribute+nodeid+"').html('');UIFactory.Node.updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"','');\")>&nbsp;</div>";
+		//---------------------
+		for (dest in displayView[g_display_type][nodetype]) {
+			var value = displayView[g_display_type][nodetype][dest];
+			html += "		<div  class='dropdown-item' onclick=\"$('#"+attribute+nodeid+"').html('"+value+"');UIFactory.Node.updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"','"+value+"')\")>"+value+"</div>";
+		}
+		html += "	</div>";
+		html += "</div>";
 	}
-	if (resourcetype!=undefined && resourcetype!=null)
-		html+= "		<option disabled>────────────────────</option>";
-	for (dest in displayView[g_display_type][nodetype][resourcetype]) {
-		html += "<option value='"+displayView[g_display_type][nodetype][resourcetype][dest]+"'";
-		if (value==displayView[g_display_type][nodetype][resourcetype][dest])
-			html += " selected ";
-		html += ">"+displayView[g_display_type][nodetype][resourcetype][dest]+"</option>";
-	}
-	html+= "	</select>";
-	html+= "</div>";
+	html += "</div>";
 	$("#"+destid).append($(html));
 };
 
@@ -1400,11 +1409,11 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		if (USER.admin || g_userroles[0]=='designer' || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1) {
 			if (name=='asmRoot') {
 				this.displayMetadataDisplayTypeAttributeEditor('metadata-epm-root','display-type');
-				this.displayMetadataMenuTypeAttributeEditor('metadata-epm-root','menu-type');
-				this.displayMetadataEpmAttributeEditor('metadata-epm-root','cssfile',$(this.metadata).attr('cssfile'));
-				html  = "<label>"+karutaStr[languages[langcode]]['csstext']+"</label>";
-				$("#metadata-epm-root").append($(html));
-				this.displayMetadatawWadTextAttributeEditor('metadata-epm-root','csstext');
+//				this.displayMetadataMenuTypeAttributeEditor('metadata-epm-root','menu-type');
+//				this.displayMetadataEpmAttributeEditor('metadata-epm-root','cssfile',$(this.metadata).attr('cssfile'));
+//				html  = "<label>"+karutaStr[languages[langcode]]['csstext']+"</label>";
+//				$("#metadata-epm-root").append($(html));
+//				this.displayMetadatawWadTextAttributeEditor('metadata-epm-root','csstext');
 			}
 			this.displayMetadataEpmAttributeEditor('metadata-epm-part1','cssclass',$(this.metadataepm).attr('cssclass'));
 			if (name!='asmRoot') {
@@ -1514,7 +1523,7 @@ UIFactory["Node"].updateMetadataEpmAttribute = function(nodeid,attribute,value,c
 	}
 
 };
-
+/*
 //==================================================
 UIFactory["Node"].updateMetadataSelectAttribute = function(nodeid,attribute,select)
 //==================================================
@@ -1528,7 +1537,7 @@ UIFactory["Node"].updateMetadataSelectAttribute = function(nodeid,attribute,sele
 		UICom.structure["ui"][nodeid].displayMetainfo("metainfo_"+nodeid);
 	}
 };
-
+*/
 //==================================================
 UIFactory["Node"].updateMetadataEpmSelectAttribute = function(nodeid,attribute,select)
 //==================================================
@@ -1537,6 +1546,7 @@ UIFactory["Node"].updateMetadataEpmSelectAttribute = function(nodeid,attribute,s
 	var value = $(option).attr('value');
 	var node = UICom.structure["ui"][nodeid].node;
 	$($("metadata-epm",node)[0]).attr(attribute,value);
+	var refresh = true;
 	UICom.UpdateMetaEpm(nodeid,refresh);
 	if (g_userroles[0]=='designer' || USER.admin) {  
 		UICom.structure["ui"][nodeid].displayMetaEpmInfo("metaepm_"+nodeid);

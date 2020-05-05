@@ -302,15 +302,10 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (semtag_parent.indexOf('#')==0)
 				semtag_parent = semtag_parent.substring(1);
 			var portfoliocode_end_indx = queryattr_value.indexOf('child')+queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent')+queryattr_value.indexOf('#')+queryattr_value.indexOf('itself')+3; //  if not present give -1
-			var portfoliocode = queryattr_value.substring(0,portfoliocode_end_indx);
-			while (portfoliocode.indexOf("##")>-1) {
-				var test_string = portfoliocode.substring(portfoliocode.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-				var variable_name = test_string.substring(0,test_string.indexOf("##"));
-				portfoliocode = portfoliocode.replace("##"+variable_name+"##", g_variables[variable_name]);
-			}
+			var portfoliocode = r_replaceVariable(queryattr_value.substring(0,portfoliocode_end_indx));
 			//------------
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-			if (portfoliocode.indexOf('.')<0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
 				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
 			if (portfoliocode=='self')
 				portfoliocode = selfcode;
@@ -359,6 +354,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			}
 			//----------------------
 			var portfoliocode_parent = $("portfoliocode",$("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent)).text();
+			if (portfoliocode_parent.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode_parent!='self')  // There is no project, we add the project of the current portfolio
+				portfoliocode_parent = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode_parent;
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 				var url ="";
 				if (portfoliocode.indexOf('?')!= -1) {

@@ -12,7 +12,7 @@ function show_main_page(rootid,role)
 	$("body").addClass("portfolio-container")
 	$("#portfolio-container").html("");
 	$("#portfolio-container").attr('role',g_userroles[0]);
-	$("#portfolio-container").show();
+	$("#main-portfolio").show();
 	$("#refresh").hide();
 }
 
@@ -32,9 +32,6 @@ function fill_main_page(rootid,role)
 		var parentid = $($(UICom.structure.ui[rootid].node).parent()).attr('id');
 		if ($($(UICom.structure.ui[rootid].node).parent())) {
 			g_portfolioid = parentid;
-//			g_complex = portfolios_byid[parentid].complex;
-//			if (typeof g_complex=='undefined' || g_complex==undefined || g_complex.lenght==0)
-//				g_complex = false;
 		} else {
 			rootid = g_portfolio_rootid;
 		}
@@ -89,9 +86,9 @@ function fill_main_page(rootid,role)
 			if (g_display_type=="" || g_display_type==null || g_display_type==undefined)
 				g_display_type = 'standard';
 			// --------Menu Type------------------
-			g_menu_type = $("metadata[menu-type]",data).attr('menu-type');
-			if (g_menu_type=="" || g_menu_type==null || g_menu_type==undefined)
-				g_menu_type = 'vertical';
+			g_bar_type = $("metadata[menu-type]",data).attr('menu-type');
+			if (g_bar_type=="" || g_bar_type==null || g_bar_type==undefined)
+				g_bar_type = 'vertical';
 			// --------CSS File------------------
 			var cssfile = $("metadata[cssfile]",data).attr('cssfile');
 			if (cssfile!=undefined && cssfile!=''){
@@ -110,17 +107,18 @@ function fill_main_page(rootid,role)
 			for (role in UICom.roles)
 				g_roles[g_roles.length] = {'code':'','libelle':role};
 			//-------------------------------------------------
-			setCSSportfolioOLD(data);
-			if (g_configVar['portfolio-navbar-background-color']!=undefined)
-				setCSSportfolio(data);
-			setCSSportfolioOLD(data);  // V2 for V2 Portfolios
+			var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
+			if (config_unit.length==0) // for backward compatibility
+				setCSSportfolioOLD(data);
+			else
+				setCSSportfolio(config_unit);
 			setVariables(data);
 			//-------------------------------------------------
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
 
 			// --------------------------
-			if (g_display_type=="standard" || g_display_type=="basic") {
+			if (g_display_type=="standard" || g_display_type=="raw") {
 				if (USER.creator)
 					g_edit = true;
 				else

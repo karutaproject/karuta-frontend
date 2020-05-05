@@ -27,11 +27,17 @@ UIFactory["DocumentBlock"] = function( node )
 	this.node = node;
 	this.type = 'DocumentBlock';
 	//--------------------
-	this.document_nodeid = $("asmContext:has(metadata[semantictag='document'])",node).attr('id');
+	this.document_node = $("asmContext:has(metadata[semantictag='docblock-document'])",node);
+	this.document_nodeid = this.document_node.attr('id');
+	this.document_editresroles = ($(this.document_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.document_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
-	this.image_nodeid = $("asmContext:has(metadata[semantictag='image'])",node).attr('id');
+	this.image_node = $("asmContext:has(metadata[semantictag='docblock-image'])",node);
+	this.image_nodeid = this.image_node.attr('id');
+	this.image_editresroles = ($(this.image_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.image_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
-	this.cover_nodeid = $("asmContext:has(metadata[semantictag='cover'])",node).attr('id');
+	this.cover_node = $("asmContext:has(metadata[semantictag='docblock-cover'])",node);
+	this.cover_nodeid = this.cover_node.attr('id');
+	this.cover_editresroles = ($(this.cover_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.cover_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.display = {};
@@ -70,23 +76,31 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 		var doc_langcode = langcode;
 		if (!document.multilingual)
 			doc_langcode = NONMULTILANGCODE;
-		//---------------------
+		//------------------------
+		var image_size = "";
+		if ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='')
+			image_size = "width:"+$(image.resource.width_node[langcode]).text()+"; "; 
+		if ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='')
+			image_size += "height:"+$(image.resource.height_node[langcode]).text()+"; "; 
+		//------------------------
 		var filename = $(document.resource.filename_node[doc_langcode]).text();
 		if (filename!="") {
 			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+document.id+"?lang="+languages[doc_langcode]+"'>";
-			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
+			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
 			if (cover!=undefined && cover.resource.getValue()=='1')
-				style += "background-size:cover;";
-			html += "<div class='DocumentBlock' style=\""+style+"\">";
+				style += " background-size:cover;";
+			html += "<div class='DocBlock' style=\""+style+"\">";
+			style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
 			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='DocumentBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
-				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+				html += "<div id='label_"+this.id+"' class='block-title' style=\""+style+"\">"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
 			else
-				html += "<div class='docblock-title'>"+filename+"</div>";
+				html += "<div class='block-title' style=\""+style+"\">"+filename+"</div>";
 			html += "</div>";
 			html += "</a>";
 		} else {
-			html =  "<div class='DocumentBlock no-document'>";
-			html += "<div class='docblock-title'>"+karutaStr[LANG]['no-document']+"</div>";
+			html =  "<div class='DocBlock no-document' style=\""+image_size+"\">";
+			var style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+			html += "<div class='block-title' style=\""+style+"\">"+karutaStr[LANG]['no-document']+"</div>";
 			html += "</div>";
 		}
 	}
@@ -97,56 +111,30 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 UIFactory["DocumentBlock"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	var document = UICom.structure["ui"][this.document_nodeid];
-	var image = UICom.structure["ui"][this.image_nodeid];
-	var cover = UICom.structure["ui"][this.cover_nodeid];
-	//---------------------
+	var html = this.getView(dest,type,langcode);
+	$("#"+dest).html(html);
+	$("#std_node_"+this.id).attr('style','visibility:hidden');
+	$("#menus-"+this.id).hide();
+};
+
+//==================================
+UIFactory["DocumentBlock"].prototype.getButtons = function(dest,type,langcode)
+//==================================
+{
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest] = {langcode: langcode, type : type};
-	}
-	//---------------------
-	if (type==null)
-		type = "standard";
-	//---------------------
 	var html = "";
-	if (type=='standard'){
-		//---------------------
-		var img_langcode = langcode;
-		if (!image.multilingual)
-			img_langcode = NONMULTILANGCODE;
-		//---------------------
-		var doc_langcode = langcode;
-		if (!document.multilingual)
-			doc_langcode = NONMULTILANGCODE;
-		//---------------------
-		var filename = $(document.resource.filename_node[doc_langcode]).text();
-		if (filename!="") {
-			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+document.id+"?lang="+languages[doc_langcode]+"'>";
-			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"');";
-			if (cover!=undefined && cover.resource.getValue()=='1')
-				style += "background-size:cover;";
-			html += "<div class='DocumentBlock' style=\""+style+"\">";
-			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='DocumentBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
-				html += "<div id='label_"+this.id+"' class='docblock-title'>"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
-			else
-				html += "<div class='docblock-title'>"+filename+"</div>";
-			html += "</div>";
-			html += "</a>";
-		} else {
-			html =  "<div class='DocumentBlock no-document'>";
-			html += "<div class='docblock-title'>"+karutaStr[LANG]['no-document']+"</div>";
-			html += "</div>";
-		}
+	if (this.document_editresroles.containsArrayElt(g_userroles) || this.image_editresroles.containsArrayElt(g_userroles)){
+		html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
 	}
-	$("#"+dest).html(html);
+	if (html!="")
+		html = "<div class='buttons-menus' id='btn-spec-"+this.id+"'>" + html + "</div><!-- #btn-+node.id -->";
+	return html;
 };
-
 
 //==================================
 UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langcode)
@@ -162,21 +150,22 @@ UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langco
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	$("#"+destid).append($("<h4>Document</h4>"));
-	document.resource.displayEditor(destid,type,langcode,this);
+	if (this.document_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
+		$("#"+destid).append($("<h4>Document</h4>"));
+		document.resource.displayEditor(destid,type,langcode,this);
+	}
 	//---------------------
-	$("#"+destid).append($("<h4>Image</h4>"));
-	$("#"+destid).append($("<div>"+karutaStr[LANG]['block-image-size']+"</div>"));
-	image.resource.displayEditor(destid,type,langcode,this);
+	if (this.image_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
+		$("#"+destid).append($("<h4>Image</h4>"));
+		$("#"+destid).append($("<div>"+karutaStr[LANG]['block-image-size']+"</div>"));
+		image.resource.displayEditor(destid,type,langcode,this);
+	}
 	//---------------------
-	if (cover!=undefined) {
+	if (cover!=undefined && this.cover_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>Coverage</h4>"));
 		cover.resource.displayEditor(destid,type,langcode,this);
 	}
 }
-
-
-
 
 //==================================
 UIFactory["DocumentBlock"].prototype.refresh = function()

@@ -140,7 +140,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param3 = "'"+this.id+"'";
 			var param4 = "null";
 			var level_plus = this.level+1;
-			var js1 = "importBranch('"+this.id+"','karuta.karuta-other-resources','bubble_level"+level_plus+"',"+databack+","+callback+","+param2+","+param3+","+param4+")";
+			var js1 = "importBranch('"+this.id+"','karuta.karuta-structured-resources','bubble_level"+level_plus+"',"+databack+","+callback+","+param2+","+param3+","+param4+")";
 			html += "<div class='bubble-children'>"
 				html += "<div class='btn-group bubble-button'><a class='button' onclick=\""+js1+";\">"+karutaStr[LANG]["bubble-add-bubble"]+"</a></div>";
 			html += "<div class='bubble-children-label'>"+karutaStr[LANG]["bubble-level"]+"&nbsp;"+level_plus+"</div>"
@@ -168,7 +168,7 @@ UIFactory["Bubble"].bubble.prototype.displayEditor = function(destid,type,lang) 
 			var param2 = "'"+destid+"'";
 			var param3 = "'"+this.id+"'";
 			var param4 = "null";
-			var js1 = "importBranch('"+this.id+"','karuta.karuta-other-resources','level"+this.level+"_url',"+databack+","+callback+","+param2+","+param3+","+param4+")";
+			var js1 = "importBranch('"+this.id+"','karuta.karuta-structured-resources','level"+this.level+"_url',"+databack+","+callback+","+param2+","+param3+","+param4+")";
 			html += "<div class='bubble-children'>"
 				html += "<div class='btn-group bubble-button'><a class='button' onclick=\""+js1+";\">"+karutaStr[LANG]["bubble-add-link"]+"</a></div>";
 			html += "<div class='bubble-children-label'>Liens</div>"

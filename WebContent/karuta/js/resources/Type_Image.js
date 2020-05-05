@@ -194,7 +194,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 //			html += "</a>";
 		}
 		else
-			html += "<img src='../img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
+			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
 		html += "</div>";
 	}
 	if (type=='span') {
@@ -205,7 +205,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 //			html += "</a>";
 		}
 		else
-			html += "<img src='../img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
+			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
 		html += "</span>";
 	}
 	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
@@ -235,7 +235,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 			html += "</td></tr></table>";
 		} else {
 			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
-			html += "<img src='../img/image-icon.png' height='150px' "+alt+" />"+karutaStr[LANG]['no-image'];
+			html += "<img src='../../karuta/img/image-icon.png' height='150px' "+alt+" />"+karutaStr[LANG]['no-image'];
 			html += "</td></tr></table>";
 		}
 		html += "</div>";
@@ -290,7 +290,7 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 //			html += "</a>";
 		}
 		else
-			html += "<img src='../img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
+			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
 		html += "</div>";
 	}
 	if (type=='span') {
@@ -301,7 +301,7 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 //			html += "</a>";
 		}
 		else
-			html += "<img src='../img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
+			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
 		html += "</span>";
 	}
 	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
@@ -331,7 +331,7 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 			html += "</td></tr></table>";
 		} else {
 			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
-			html += "<img src='../img/image-icon.png' height='150px' "+alt+" />"+karutaStr[LANG]['no-image'];
+			html += "<img src='../../karuta/img/image-icon.png' height='150px' "+alt+" />"+karutaStr[LANG]['no-image'];
 			html += "</td></tr></table>";
 		}
 		html += "</div>";

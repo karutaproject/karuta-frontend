@@ -18,8 +18,9 @@ var USER = null; // global variable: current user object
 var Users_byid = {};
 var UsersActive_list = [];
 var UsersInactive_list = [];
+var UsersLoaded = false;
 var UsersWithoutPortfolio_list = [];
-var nb_users_page = 7;
+var nb_users_page = 30;
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -76,6 +77,12 @@ UIFactory["User"] = function( node )
 	//-----------------------------------
 };
 
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------ DRAG AND DROP -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
 
 //==================================
 function dragUser(ev)
@@ -85,15 +92,149 @@ function dragUser(ev)
 	ev.dataTransfer.setData("type", "user");
 }
 
-
-/// Display
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ LOADERS -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
 
 //==================================
-UIFactory["User"].displayActive = function(destid,type,lang)
+UIFactory.User.loadAll = function() 
+//==================================
+{
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/users",
+		success : function(data) {
+			UsersLoaded = true;
+			UIFactory["User"].parse(data);
+		}
+	});
+}
+
+//==================================
+UIFactory["User"].parse = function(data) 
+//==================================
+{
+	Users_byid = {};
+	UsersActive_list = [];
+	UsersInactive_list = [];
+	var items = $("user",data);
+	var inactive = active = 0;
+	var tableau1 = new Array();
+	var tableau2 = new Array();
+	for ( var i = 0; i < items.length; i++) {
+		var userid = $(items[i]).attr('id');
+		Users_byid[userid] = new UIFactory["User"](items[i]);
+		var lastname = Users_byid[userid].lastname;
+		if (lastname=="")
+			lastname = " ";
+		var firstname = Users_byid[userid].firstname;
+		if ($("active",$(items[i])).text() == "1") {  // active user
+			tableau1[active] = [lastname,firstname,userid];
+			active++;
+		}
+		else { // inactive user
+			tableau2[inactive] = [lastname,firstname,userid];
+			inactive++;
+		}
+	}
+	var newTableau1 = tableau1.sort(sortOn1_2);
+	for (var i=0; i<newTableau1.length; i++){
+		UsersActive_list[i] = Users_byid[newTableau1[i][2]];
+	}
+	var newTableau2 = tableau2.sort(sortOn1);
+	for (var i=0; i<newTableau2.length; i++){
+		UsersInactive_list[i] = Users_byid[newTableau2[i][2]];
+	}
+};
+
+//==================================
+UIFactory.User.loadUserAndDisplay = function(userid,dest,type) 
+//==================================
+{
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/users/user/"+userid,
+		success : function(data) {
+			UIFactory.User.parse_add(data);
+			var html = (Users_byid[userid]==null) ? "":Users_byid[userid].getView(null,type,null);
+			$("#"+dest).html(html);
+		}
+	});
+}
+
+//==================================
+UIFactory.User.load = function(userid,type) 
+//==================================
+{
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/users/user/"+userid,
+		success : function(data) {
+			UIFactory.User.parse_add(data);
+		}
+	});
+}
+
+//==================================
+UIFactory["User"].parse_add = function(data) 
+//==================================
+{
+	var tableau1 = new Array();
+	var tableau2 = new Array();
+	for ( var i = 0; i < UsersActive_list.length; i++) {
+		if (UsersActive_list[i]!=null)
+			tableau1[tableau1.length] = [UsersActive_list[i].lastname,UsersActive_list[i].firstname,UsersActive_list[i].id];
+	}	
+	for ( var i = 0; i < UsersInactive_list.length; i++) {
+		if (UsersInactive_list[i]!=null)
+			tableau2[tableau2.length] = [UsersInactive_list[i].lastname,UsersInactive_list[i].firstname,UsersInactive_list[i].id];
+	}	
+	UsersActive_list = [];
+	var user = $(":root",data);
+	var userid = $(user).attr('id');
+	Users_byid[userid] = new UIFactory["User"](user);
+	var lastname = Users_byid[userid].lastname;
+	if (lastname=="")
+		lastname = " ";
+	var firstname = Users_byid[userid].firstname;
+	if ($("active",$(user)).text() == "1") {  // active user
+		tableau1[tableau1.length] = [lastname,firstname,userid];
+	}
+	else { // inactive user
+		tableau2[tableau2.length] = [lastname,firstname,userid];
+	}
+	var newTableau1 = tableau1.sort(sortOn1_2);
+	for (var i=0; i<newTableau1.length; i++){
+		UsersActive_list[i] = Users_byid[newTableau1[i][2]];
+	}
+	var newTableau2 = tableau2.sort(sortOn1);
+	for (var i=0; i<newTableau2.length; i++){
+		UsersInactive_list[i] = Users_byid[newTableau2[i][2]];
+	}
+};
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ DISPLAY -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+
+
+//==================================
+UIFactory["User"].displayXXXActive = function(destid,type,lang)
 //==================================
 {
 	$("#"+destid).html("<h3>"+karutaStr[LANG]["active_users"]+"</h3>");
-	$("#"+destid).append("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th></th><th></th></thead><tbody id='list_users'></tbody></table>");
+	$("#"+destid).append("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_users'></tbody></table>");
 	$("#temporary").html("<table id='temp_users'></table>");
 	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
 	for ( var i = 0; i < UsersActive_list.length; i++) {
@@ -111,49 +252,63 @@ UIFactory["User"].displayActive = function(destid,type,lang)
 };
 
 //==================================
-UIFactory["User"].displayInactive = function(destid,type,lang)
+UIFactory["User"].displayInactive = function(dest,type,lang)
 //==================================
 {
-	$("#"+destid).html("<h3>"+karutaStr[LANG]["inactive_users"]+"</h3>");
-	$("#"+destid).append("<table id='table_unusers' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_unusers'></tbody></table>");
-	$("#list_unusers").append($("<tr><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
+//	$("#"+dest).append("<h3>"+karutaStr[LANG]["inactive_users"]+"</h3>");
+	$("#"+type+"-rightside-content1").hide();
+	$("#"+type+"-rightside-content2").show();
+	$("#"+type+"-rightside-users-content1").html("");
+	$("#"+type+"-rightside-users-content2").html("");
+	$("#"+type+"-rightside-header1").hide();
+	$("#"+type+"-rightside-header2").show();
+	$("#"+type+"-rightside-navbar-pages-bottom").hide();
 	for ( var i = 0; i < UsersInactive_list.length; i++) {
-		$('#inactive-users').show();
-		$('#inactive').show();
-		var itemid = destid+"_"+UsersInactive_list[i].id;
-		$("#list_unusers").append($("<tr class='item' id='"+itemid+"'></tr>"));
-		$("#"+itemid).html(UsersInactive_list[i].getView(destid,type,lang));
+		$("#"+dest).append(UsersInactive_list[i].getView(dest,type,lang));
 	}
 };
 
 //==================================
-UIFactory["User"].displayActiveForUserGroup = function(dest,viewtype,index,nb_index)
+UIFactory["User"].displayActive = function(dest,type,index,nbindex)
 //==================================
 {
 	if (index==null)
 		index = 0;
-	if (nb_index==null)
-		nb_index = 1;
-	if (UsersActive_list.length<3)
+	if (nbindex==null)
+		nbindex = 1;
+	$("#"+type+"-rightside-content2").hide();
+	$("#"+type+"-rightside-content1").show();
+	$("#"+type+"-rightside-users-content1").html("");
+	$("#"+type+"-rightside-users-content2").html("");
+	$("#"+type+"-rightside-header1").show();
+	$("#"+type+"-rightside-header2").hide();
+	if (!UsersLoaded)
 		$.ajax({
 			type : "GET",
 			dataType : "xml",
 			url : serverBCK_API+"/users",
-			viewtype : viewtype,
+			dest : dest,
+			xtype : type,
+			index : index,
 			success : function(data) {
-				UIFactory["User"].parse(data);
-				nb_index = Math.ceil((UsersActive_list.length)/nb_users_page);
-				UIFactory.User.displayActiveForUserGroupIndexed(dest,viewtype,index,nb_index);
+				UsersLoaded = true;
+				UIFactory.User.parse(data);
+				nbindex = Math.ceil((UsersActive_list.length)/nb_users_page);
+				if (nbindex<2)
+					$("#"+type+"-rightside-navbar-pages-bottom").hide();
+				else
+					$("#"+type+"-rightside-navbar-pages-bottom").show();
+				UIFactory.User.displayActiveIndexed(this.dest,this.xtype,this.index,nbindex);
 			}
 		});
 	else {
-		nb_index = Math.ceil((UsersActive_list.length)/nb_users_page);
-		UIFactory.User.displayActiveForUserGroupIndexed(dest,viewtype,index,nb_index);
+		nbindex = Math.ceil((UsersActive_list.length)/nb_users_page);
+		UIFactory.User.displayActiveIndexed(dest,type,index,nbindex);
 	}
 };
 
 //==================================
-UIFactory.User.displayPagesNavbar = function (dest,viewtype,index,nb_index)
+UIFactory["User"].displayPagesNavbar = function (dest,type,index,nb_index)
 //==================================
 {
 	var html = "";
@@ -161,30 +316,29 @@ UIFactory.User.displayPagesNavbar = function (dest,viewtype,index,nb_index)
 		html += "<span class='badge";
 		if (i==index*1+1)
 			html += " active";
-		html += "' onclick=\"UIFactory.User.displayActiveForUserGroup('"+dest+"','"+viewtype+"','"+(i-1)+"')\">"+i+"</span>";
+		html += "' onclick=\"UIFactory.User.displayActive('"+dest+"','"+type+"','"+(i-1)+"')\">"+i+"</span>";
 	}
-	$("#usegroup-users-navbar-pages").html(html);
+//	$("#"+type+"-rightside-navbar-pages-top").html(html);
+	$("#"+type+"-rightside-navbar-pages-bottom").html(html);
 }
 
 //==================================
-UIFactory["User"].displayActiveForUserGroupIndexed = function(dest,viewtype,index,nb_index)
+UIFactory["User"].displayActiveIndexed = function(dest,type,index,nb_index)
 //==================================
 {
 	var html = "";
-	$("#"+dest).html($(html));
+	$("#"+dest).html("");
 	var first = index * nb_users_page;
 	var last = ((index*1+1) * nb_users_page);
 	if (last>UsersActive_list.length)
 		last = UsersActive_list.length;
 	for (var i=first; i<last;i++){
 		var item = UsersActive_list[i];
-		var destid = dest+"_item-user_"+item.id;
-		html += "<div class='row item item-user' id='"+destid+"' draggable='true' ondragstart='dragUser(event)'>";
-		html += item.getView(destid,'list3');
+		html += item.getView(dest,type);
 		html += "</div>";
 	}
 	$("#"+dest).html($(html));
-	UIFactory.User.displayPagesNavbar(dest,viewtype,index,nb_index);
+	UIFactory.User.displayPagesNavbar(dest,type,index,nb_index);
 }
 
 //==================================
@@ -193,6 +347,42 @@ UIFactory["User"].prototype.getEmail = function()
 {
 	return this.email_node.text();
 }
+
+//==================================
+UIFactory["User"].prototype.getSelector = function(attr,value,name,checked,disabled)
+//==================================
+{
+	var userid = this.id;
+	var firstname = this.firstname_node.text();
+	var lastname = this.lastname_node.text();
+	var username = this.username_node.text();
+	var html = "<input type='checkbox' name='"+name+"' username='"+username+"' value='"+userid+"'";
+	if (attr!=null && value!=null)
+		html += " "+attr+"='"+value+"'";
+	if (disabled)
+		html+= " disabled='disabled' ";			
+	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
+	return html;
+};
+
+//==================================
+UIFactory["User"].prototype.getRadio = function(attr,value,name,checked,disabled)
+//==================================
+{
+	var userid = this.id;
+	var firstname = this.firstname_node.text();
+	var lastname = this.lastname_node.text();
+	var username = this.username_node.text();
+	var html = "<input type='radio' name='"+name+"' username='"+username+"' value='"+userid+"'";
+	if (attr!=null && value!=null)
+		html += " "+attr+"='"+value+"'";
+	if ((userid==1)||disabled)
+		html+= " disabled='disabled' ";			
+	if (checked)
+		html += " checked='true' ";
+	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
+	return html;
+};
 
 
 //==================================
@@ -207,6 +397,48 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	if (type==null)
 		type = 'list';
 	var html = "";
+	//--------------------------------------------------------------------------------------------
+	if (type=='user') {
+		html += "<tr>"
+		html += "<td class='firstname'>"+this.firstname_node.text()+"</td>";
+		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
+		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</td>";
+		html += "<td class='username'>("+this.username_node.text()+")</td>";
+		//------------ buttons ---------------
+		html += "<td class='user-buttons'>";
+		if (USER.admin){
+			html += this.getAdminUserMenu('list',gid);
+		}
+		html += "</td>";
+		//------------------------------------
+		html += "</tr>";
+	}
+	//--------------------------------------------------------------------------------------------
+	if (type=='userX') {
+		html = "<div class='row user-row'>"
+		html = "<div class='col-2 firstname'>"+this.firstname_node.text()+"</div>";
+		html += "<div class='col-2 lastname'>"+this.lastname_node.text()+"</div>";
+		html += "<div class='col-2 creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</div>";
+		html += "<div class='col-2 username'>("+this.username_node.text()+")</div>";
+		//------------ buttons ---------------
+		html += "<div class='col-2 user-buttons'>";
+		if (USER.admin){
+			html += this.getAdminUserMenu('list',gid);
+		}
+		html += "</div>";
+		html += "</div>";
+	}
+	//--------------------------------------------------------------------------------------------
+	if (type=='usergroup') {
+		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+" <span class='fas fa-trash' onclick=\"UIFactory.UsersGroup.remove('"+gid+"','"+this.id+"')\"></span></div>";
+	}
+	//--------------------------------------------------------------------------------------------
+	if (type=='usergroup-user') {
+		html += "<div class='row user-row' id='usergroup-user_"+this.id+"' draggable='true' ondragstart='dragUser(event)'>";
+		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+"</div>";
+		html += "</div>";
+	}
+	//--------------------------------------------------------------------------------------------
 	if (type=='list0') {
 		html = "<td style='padding-left:4px;padding-right:4px'>"+this.firstname_node.text() + "</td><td style='padding-left:4px;padding-right:4px'>" + this.lastname_node.text()+ "</td><td style='padding-left:4px;padding-right:4px'> (" + this.username_node.text() + ")</td>";
 		if (USER.admin){
@@ -248,32 +480,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 			html += "</div></td>";
 		}
 	}
-	if (type=='list') {
-		html = "<td class='firstname'>"+this.firstname_node.text()+"</td>";
-		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
-		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</td>";
-		html += "<td class='username'>("+this.username_node.text()+")</td>";
-		//------------ buttons ---------------
-		html += "<td class='user-buttons'>";
-		if (USER.admin){
-			html += this.getAdminUserMenu('list',gid);
-		}
-		html += "</td>";
-	}
-	if (type=='list-forusergroup') {
-		html = "<div class='col-5 firstname'>"+this.firstname_node.text()+"</div>";
-		html += "<div class='col-5 lastname'>"+this.lastname_node.text()+"</div>";
-	}
-	if (type=='list-usergroup') {
-		html = "<div class='col-5 firstname' id='f"+this.id+"_"+gid+"'>"+this.firstname_node.text()+"</div>";
-		html += "<div class='col-5 lastname' id='l"+this.id+"_"+gid+"'>"+this.lastname_node.text()+"</div>";
-		//------------ buttons ---------------
-		html += "<div class='col-1 user-buttons' id='b"+this.id+"_"+gid+"'>";
-		if (USER.admin){
-			html += this.getAdminUserMenu('list-ondrop',gid);
-		}
-		html += "</div>";
-	}
+	//--------------------------------------------------------------------------------------------
 	if (type=='list1') {
 		html = "<div class='col-3 firstname'>"+this.firstname_node.text()+"</div>";
 		html += "<div class='col-3 lastname'>"+this.lastname_node.text()+"</div>";
@@ -285,6 +492,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		}
 		html += "</div>";
 	}
+	//--------------------------------------------------------------------------------------------
 	if (type=='list3') {
 		html = "<div class='col-5 firstname'>"+this.firstname_node.text()+"</div>";
 		html += "<div class='col-5 lastname'>"+this.lastname_node.text()+"</div>";
@@ -323,6 +531,125 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	return html;
 };
 
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ SEARCH  -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
+//==============================
+UIFactory["User"].displaySearch = function (dest,trash,type)
+//==============================
+{
+	var html = "";
+	html += "<div class='input-group'>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<button id='"+type+"-search-choice' search-type='username' type='button' class='btn dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span id='"+type+"-search-input-label'>"+karutaStr[LANG]['username-label']+"</span> <span class='caret'></span></button>";
+	html += "		<div class='dropdown-menu'>";
+	html += "			<a href='#' class='dropdown-item' onclick=\"$('#"+type+"-search-choice').attr('search-type','username');$('#"+type+"-search-input-label').html('"+karutaStr[LANG]['username-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-username-label']+"')\">"+karutaStr[LANG]['username-label']+"</a>";
+	html += "			<a href='#' class='dropdown-item' onclick=\"$('#"+type+"-search-choice').attr('search-type','firstname');$('#"+type+"-search-input-label').html('"+karutaStr[LANG]['firstname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-firstname-label']+"')\">"+karutaStr[LANG]['firstname-label']+"</a>";
+	html += "			<a href='#' class='dropdown-item' onclick=\"$('#"+type+"-search-choice').attr('search-type','lastname');$('#"+type+"-search-input-label').html('"+karutaStr[LANG]['lastname-label']+"');$('#search-user-input').attr('placeholder','"+karutaStr[LANG]['search-lastname-label']+"')\">"+karutaStr[LANG]['lastname-label']+"</a>";
+	html += "		</div>";
+	html += "	</div><!-- /input-group-prepend -->";
+	html += "	<input type='text' id='"+type+"-search-user-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-username-label']+"'>";
+	html += "	<div class='input-group-append'>";
+	html += "		<button type='button' onclick=\"UIFactory.User.search('"+type+"')\" class='btn'><i class='fas fa-search'></i></button>";
+	if (trash)
+		html += "		<button type='button' disabled='true' onclick=\"UIFactory.User.confirmRemoveUsers()\" class='btn'><i class='fas fa-trash'></i></button>";
+	html += "	</div><!-- /input-group-append -->";
+	html += "</div><!-- /input-group -->";
+	$("#"+dest).html(html);
+	$("#"+type+"-search-user-input").keypress(function(f) {
+		var code= (f.keyCode ? f.keyCode : f.which);
+		if (code == 13)
+			UIFactory.User.search(type);
+	});
+}
+
+//==================================
+UIFactory["User"].search = function(type)
+//==================================
+{
+	var value = $("#"+type+"-search-user-input").val();
+	var search_type = $("#"+type+"-search-choice").attr('search-type');
+	UIFactory.User.displaySearched(value,search_type,type);
+}
+
+//==============================
+UIFactory["User"].displaySearched = function (value,search_type,type)
+//==============================
+{
+	var html = "";
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/users?"+search_type+"="+value,
+		success : function(data) {
+			UIFactory.User.parse_search(data);
+			if (type=='sharing-user'){
+				for (var i=0; i<searched_active_users_list.length;i++){
+					$("#"+type+"-rightside-users-content1").append(searched_active_users_list[i].getSelector(null,null,'select_users'));
+				}				
+			} else {
+				$("#"+type+"-rightside-content1").show();
+				$("#"+type+"-rightside-content2").show();
+				$("#"+type+"-rightside-header1").show();
+				$("#"+type+"-rightside-header2").show();
+				$("#"+type+"-rightside-users-content1").html("");
+				$("#"+type+"-rightside-users-content2").html("");
+				for (var i=0; i<searched_active_users_list.length;i++){
+					$("#"+type+"-rightside-users-content1").append(searched_active_users_list[i].getView(type+"-rightside-users-content1",type));
+				}
+				for (var i=0; i<searched_inactive_users_list.length;i++){
+					$("#"+type+"-rightside-users-content2").append(searched_inactive_users_list[i].getView(type+"-rightside-users-content2",type));
+				}
+			}
+		}
+	});
+}
+
+//==================================
+UIFactory["User"].parse_search = function(data) 
+//==================================
+{
+	searched_active_users_list = [];
+	searched_inactive_users_list = [];
+	var items = $("user",data);
+	var inactive = active = 0;
+	var tableau1 = new Array();
+	var tableau2 = new Array();
+	for ( var i = 0; i < items.length; i++) {
+		var userid = $(items[i]).attr('id');
+		Users_byid[userid] = new UIFactory["User"](items[i]);
+		var lastname = Users_byid[userid].lastname;
+		if (lastname=="")
+			lastname = " ";
+		var firstname = Users_byid[userid].firstname;
+		if ($("active",$(items[i])).text() == "1") {  // active user
+			tableau1[active] = [lastname,firstname,userid];
+			active++;
+		}
+		else { // inactive user
+			tableau2[inactive] = [lastname,firstname,userid];
+			inactive++;
+		}
+	}
+	var newTableau1 = tableau1.sort(sortOn1_2);
+	for (var i=0; i<newTableau1.length; i++){
+		searched_active_users_list[i] = Users_byid[newTableau1[i][2]];
+	}
+	var newTableau2 = tableau2.sort(sortOn1);
+	for (var i=0; i<newTableau2.length; i++){
+		searched_inactive_users_list[i] = Users_byid[newTableau2[i][2]];
+	}
+};
+
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//------------------------ UPDATE  -----------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+
 
 //==================================
 UIFactory["User"].update = function(userid,attribute,value)
@@ -347,6 +674,7 @@ UIFactory["User"].update = function(userid,attribute,value)
 	});
 
 };
+
 
 //==================================================
 UIFactory["User"].getAttributeEditor = function(userid,attribute,value)
@@ -503,42 +831,6 @@ UIFactory["User"].callCreate = function()
 	$('#edit-window').modal('show');
 };
 
-//==================================
-UIFactory["User"].prototype.getSelector = function(attr,value,name,checked,disabled)
-//==================================
-{
-	var userid = this.id;
-	var firstname = this.firstname_node.text();
-	var lastname = this.lastname_node.text();
-	var username = this.username_node.text();
-	var html = "<input type='checkbox' name='"+name+"' username='"+username+"' value='"+userid+"'";
-	if (attr!=null && value!=null)
-		html += " "+attr+"='"+value+"'";
-	if (disabled)
-		html+= " disabled='disabled' ";			
-	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
-	return html;
-};
-
-//==================================
-UIFactory["User"].prototype.getRadio = function(attr,value,name,checked,disabled)
-//==================================
-{
-	var userid = this.id;
-	var firstname = this.firstname_node.text();
-	var lastname = this.lastname_node.text();
-	var username = this.username_node.text();
-	var html = "<input type='radio' name='"+name+"' username='"+username+"' value='"+userid+"'";
-	if (attr!=null && value!=null)
-		html += " "+attr+"='"+value+"'";
-	if ((userid==1)||disabled)
-		html+= " disabled='disabled' ";			
-	if (checked)
-		html += " checked='true' ";
-	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
-	return html;
-};
-
 
 //==================================
 UIFactory["User"].edit = function(userid)
@@ -558,114 +850,7 @@ UIFactory["User"].edit = function(userid)
 	$('#edit-window').modal('show');
 };
 
-//==================================
-UIFactory.User.loadUsers = function() 
-//==================================
-{
-	$.ajaxSetup({async: false});
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/users",
-		success : function(data) {
-			UIFactory["User"].parse(data);
-		}
-	});
-	$.ajaxSetup({async: true});
-}
 
-//==================================
-UIFactory["User"].parse = function(data) 
-//==================================
-{
-	Users_byid = {};
-	UsersActive_list = [];
-	UsersInactive_list = [];
-	var items = $("user",data);
-	var inactive = active = 0;
-	var tableau1 = new Array();
-	var tableau2 = new Array();
-	for ( var i = 0; i < items.length; i++) {
-		var userid = $(items[i]).attr('id');
-		Users_byid[userid] = new UIFactory["User"](items[i]);
-		var lastname = Users_byid[userid].lastname;
-		if (lastname=="")
-			lastname = " ";
-		var firstname = Users_byid[userid].firstname;
-		if ($("active",$(items[i])).text() == "1") {  // active user
-			tableau1[active] = [lastname,firstname,userid];
-			active++;
-		}
-		else { // inactive user
-			tableau2[inactive] = [lastname,firstname,userid];
-			inactive++;
-		}
-	}
-	var newTableau1 = tableau1.sort(sortOn1_2);
-	for (var i=0; i<newTableau1.length; i++){
-		UsersActive_list[i] = Users_byid[newTableau1[i][2]];
-	}
-	var newTableau2 = tableau2.sort(sortOn1);
-	for (var i=0; i<newTableau2.length; i++){
-		UsersInactive_list[i] = Users_byid[newTableau2[i][2]];
-	}
-};
-
-//==================================
-UIFactory.User.loadUserAndDisplay = function(userid,dest,type) 
-//==================================
-{
-	$.ajax({
-		async: false,
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/users/user/"+userid,
-		success : function(data) {
-			UIFactory.User.parse_add(data,dest,type);
-		}
-	});
-}
-
-//==================================
-UIFactory["User"].parse_add = function(data,dest,type) 
-//==================================
-{
-	var tableau1 = new Array();
-	var tableau2 = new Array();
-	for ( var i = 0; i < UsersActive_list.length; i++) {
-		if (UsersActive_list[i]!=null)
-			tableau1[tableau1.length] = [UsersActive_list[i].lastname,UsersActive_list[i].firstname,UsersActive_list[i].id];
-	}	
-	for ( var i = 0; i < UsersInactive_list.length; i++) {
-		if (UsersInactive_list[i]!=null)
-			tableau2[tableau2.length] = [UsersInactive_list[i].lastname,UsersInactive_list[i].firstname,UsersInactive_list[i].id];
-	}	
-	UsersActive_list = [];
-	var user = $(":root",data);
-	var userid = $(user).attr('id');
-	Users_byid[userid] = new UIFactory["User"](user);
-	var lastname = Users_byid[userid].lastname;
-	if (lastname=="")
-		lastname = " ";
-	var firstname = Users_byid[userid].firstname;
-	if ($("active",$(user)).text() == "1") {  // active user
-		tableau1[tableau1.length] = [lastname,firstname,userid];
-	}
-	else { // inactive user
-		tableau2[tableau2.length] = [lastname,firstname,userid];
-	}
-	var newTableau1 = tableau1.sort(sortOn1_2);
-	for (var i=0; i<newTableau1.length; i++){
-		UsersActive_list[i] = Users_byid[newTableau1[i][2]];
-	}
-	var newTableau2 = tableau2.sort(sortOn1);
-	for (var i=0; i<newTableau2.length; i++){
-		UsersInactive_list[i] = Users_byid[newTableau2[i][2]];
-	}
-	var html = (Users_byid[userid]==null) ? "":Users_byid[userid].getView(null,type,null);
-	$("#"+dest).html(html);
-
-};
 
 //==================================
 UIFactory["User"].confirmRemove = function(userid,from_page) 
@@ -721,6 +906,8 @@ UIFactory["User"].displaySelectMultipleActive = function(destid,type,lang)
 //==================================
 {
 	$("#"+destid).html("");
+	if (!UsersLoaded)
+		UIFactory.User.loadAll();
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var input = UsersActive_list[i].getSelector(null,null,'select_users');
 		$("#"+destid).append($(input));
@@ -733,6 +920,8 @@ UIFactory["User"].displaySelectMultipleActive2 = function(selectedlist,destid,ty
 //==================================
 {
 	$("#"+destid).html("");
+	if (!UsersLoaded)
+		UIFactory.User.loadAll();
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var checked = selectedlist.includes(UsersActive_list[i].id);
 		if (!checked) {
@@ -748,6 +937,8 @@ UIFactory["User"].displaySelectActive = function(destid,type,lang)
 //==================================
 {
 	$("#"+destid).html("");
+	if (!UsersLoaded)
+		UIFactory.User.loadAll();
 	for ( var i = 0; i < UsersActive_list.length; i++) {
 		var input = UsersActive_list[i].getRadio(null,null,destid);
 		$("#"+destid).append($(input));

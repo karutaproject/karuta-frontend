@@ -33,7 +33,7 @@ var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
 var g_display_type = "standard"; // default value
-var g_menu_type = "vertical"; // default value
+var g_bar_type = "vertical"; // default value
 var g_edit = false;
 var g_visible = 'hidden';
 var g_display_sidebar = true;
@@ -68,10 +68,10 @@ function setDesignerRole(role)
 	g_userroles[0] = role;
 	fillEditBoxBody();
 	$("#userrole").html(role);
-	if (g_display_type=='standard'){
+	if (g_display_type=='standard' || g_display_type=='raw'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
-		if (g_menu_type=="horizontal"){
+		if (g_bar_type=="horizontal"){
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			$("#portfolio-container").attr('role',role);			
 		}
@@ -87,23 +87,13 @@ function setDesignerRole(role)
 			html += "	</div>";
 			$("#portfolio-container").html(html);
 			$("#portfolio-container").attr('role',role);
-			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
+			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',g_display_type,LANGCODE,g_edit,g_portfolio_rootid);
 		}
 		$("#sidebar_"+uuid).click();
 	};
 	if (g_display_type=='model'){
-		displayPage(UICom.rootid,1,"model",LANGCODE,g_edit);
+		displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
 	}
-	if (g_display_type=='basic'){
-		if (g_userroles[0]!='designer')
-			$("#rootnode").hide();
-		else
-			$("#rootnode").show();
-		UIFactory["Portfolio"].displayNodes('basic',UICom.root.node,'basic',LANGCODE,g_edit);
-//		UIFactory["Portfolio"].displayMenu('menu','horizontal_menu',LANGCODE,g_edit,UICom.root.node);
-		var uuid = $("#page").attr('uuid');
-		$("#sidebar_"+uuid).click();
-	};
 }
 
 
@@ -136,19 +126,22 @@ function getNavBar(type,portfolioid,edit)
 //==============================
 {
 	var html = "";
-	html += "	<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
-	html += "		<a id='navbar-brand-logo' href='#' class='navbar-brand'>";
+	html += "<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
+	html += "	<div class='dropdown'>";
+	html += "		<a id='navbar-brand-logo' href='#' class='navbar-brand' data-toggle='dropdown'>";
 	html += (typeof navbar_title != 'undefined') ? navbar_title[LANG] : "<img style='margin-bottom:4px;' src='../../karuta/img/logofonblanc.jpg'/>";
-	html +="		</a>";
+	html += "		</a>";
 	if (type!='login') {
-		html += "			<ul style='padding:5px;' class='dropdown-menu versions'>";
-		html += "				<li><b>Versions</b></li>";
-		html += "				<li>Application : "+application_version+" (" +application_date+")</li>";
-		html += "				<li>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</li>";
-		html += "				<li>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</li>";
-		html += "				<li>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</li>";
-		html += "			</ul>";
+		html += "	<div class='dropdown-menu versions' aria-labelledby='navbar-brand-logo'>";
+		html += "		<a class='dropdown-item'><b>Versions</b></a>";
+		html += "		<div class='dropdown-divider'></div>";
+		html += "		<a class='dropdown-item'>Application : "+application_version+" (" +application_date+")</a>";
+		html += "		<a class='dropdown-item'>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</a>";
+		html += "		<a class='dropdown-item'>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</a>";
+		html += "		<a class='dropdown-item'>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</a>";
+		html += "	</div>";
 	}
+	html += "	</div>";
 	html += "		<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-1' aria-controls='collapse-1' aria-expanded='false' aria-label='Toggle navigation'>";
 	html += "			<span class='navbar-toggler-icon'></span>";
 	html += "		</button>";
@@ -224,10 +217,10 @@ function getNavBar(type,portfolioid,edit)
 		html += "			</ul>";
 		html += "			<ul class='navbar-nav'>";
 		html += "	<li class='nav-item icon'>";
-		html += "		<a class='nav-link' onclick='increaseFontSize()' data-title='"+karutaStr[LANG]["button-increase"]+"' data-toggle='tooltip' data-placement='bottom' style='padding-top:.21rem;'><i style='font-size:120%' class='fa fa-font'></i></a>";
+		html += "		<a class='nav-link' onclick='increaseFontSize()' style='cursor: zoom-in;' data-title='"+karutaStr[LANG]["button-increase"]+"' data-toggle='tooltip' data-placement='bottom' style='padding-top:.21rem;'><i style='font-size:120%' class='fa fa-font'></i></a>";
 		html += "	</li>";
 		html += "	<li class='nav-item icon'>";
-		html += "		<a class='nav-link' onclick='decreaseFontSize()' data-title='"+karutaStr[LANG]["button-decrease"]+"' data-toggle='tooltip' data-placement='bottom'><i style='font-size:80%' class='fa fa-font'></i></a>";
+		html += "		<a class='nav-link' onclick='decreaseFontSize()' style='cursor: zoom-out;' data-title='"+karutaStr[LANG]["button-decrease"]+"' data-toggle='tooltip' data-placement='bottom'><i style='font-size:80%' class='fa fa-font'></i></a>";
 		html += "	</li>";
 		//-----------------USERNAME-----------------------------------------
 		html += "			<li class='nav-item dropdown'>";
@@ -365,7 +358,7 @@ function getEditBox(uuid,js2) {
 			$("#edit-window-body-node").html($(html));
 		}
 	} else {
-		if(UICom.structure["ui"][uuid].structured_resource!=null && g_display_type!='basic') {
+		if(UICom.structure["ui"][uuid].structured_resource!=null && g_display_type!='raw') {
 			try {
 				UICom.structure["ui"][uuid].structured_resource.displayEditor("edit-window-body-resource");
 				html = UICom.structure["ui"][uuid].getEditor();
@@ -610,15 +603,19 @@ function displayPage(uuid,depth,type,langcode) {
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	var scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
+	var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 	if (g_current_page!=uuid) {
 		$(window).scrollTop(0);
+		scrollTop = 0;
+		scrollLeft = 0;
 		g_current_page = uuid;
 	}
 	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
-	if (g_menu_type=="horizontal"){  // breadcrumb
+	if (g_bar_type=="horizontal"){  // update breadcrumb
 		var nodeid = uuid;
 		var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
 		while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
@@ -628,14 +625,6 @@ function displayPage(uuid,depth,type,langcode) {
 		$("#breadcrumb").html(breadcrumb);
 	}
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
-	if (name == 'asmUnit' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
-		$("#wait-window").modal('show');
-		UIFactory.Node.loadNode(uuid);
-	}
-	if (name=='asmStructure' && !UICom.structure.ui[uuid].loaded) {// content is not loaded or empty
-		$("#wait-window").modal('show');
-		UIFactory.Node.loadStructure(uuid);
-	}
 	if (depth==null)
 		depth=100;
 	if (name=='asmRoot' || name=='asmStructure')
@@ -647,12 +636,13 @@ function displayPage(uuid,depth,type,langcode) {
 			$("#welcome-edit").html("");
 			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
 				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
-			else
+			else {
 				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+			}
 		}
 		if (type=='translate')
 			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
-		if (type=='basic' || type=='model') {
+		if (type=='raw' || type=='model') {
 			UICom.structure["ui"][uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
 	}
@@ -676,8 +666,8 @@ function displayPage(uuid,depth,type,langcode) {
 		$("#welcome-add").html(html);
 	}
 	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
-
 	$("#wait-window").modal('hide');
+	window.scrollTo(scrollLeft, scrollTop);
 }
 
 //==================================
@@ -739,8 +729,8 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 	}
-//	$.ajaxSetup({async: false});
 	$.ajax({
+		async: false,
 		type : "POST",
 		dataType : "text",
 		url : urlS,
@@ -761,7 +751,6 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 			$("#wait-window").modal('hide');			
 		}
 	});
-//	$.ajaxSetup({async: true});
 }
 
 //=======================================================================
@@ -1600,10 +1589,9 @@ function logout()
 function hideAllPages()
 //==============================
 {
-	$("#search-portfolio-div").hide();
-	$("#list-container").hide();
+	$("#main-list").hide();
 	$("#main-portfoliosgroup").hide();
-	$("#portfolio-container").hide();
+	$("#main-portfolio").hide();
 	$("#main-user").hide();
 	$("#main-usersgroup").hide();
 	$("#main-exec-report").hide();
@@ -2067,7 +2055,7 @@ function toggleElt(closeSign,openSign,eltid,type)
 { // click on open/closeSign
 	var elt = document.getElementById(type+"-toggle_"+eltid);
 	elt.classList.toggle(openSign);
-	elt = document.getElementById(type+"treecontent_"+eltid);
+	elt = document.getElementById(type+"-treecontent_"+eltid);
 	elt.classList.toggle('open');
 	if ($("#"+type+"-toggle_"+eltid).hasClass(openSign))
 		localStorage.setItem(type+"-toggle_"+eltid,'open');

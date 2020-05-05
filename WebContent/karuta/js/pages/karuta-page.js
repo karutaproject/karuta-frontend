@@ -11,7 +11,6 @@ function initKarutaPage()
 	html += "<div id='main-body'>";
 	html += "	<div id='navigation-bar'></div>";
 	html += "	<div id='welcome-bar'></div>";
-	html += "	<div id='sub-bar'></div>";
 	html += "	<div id='main-container'></div>";
 	html += "</div>";
 	html += "<div id='wait-window' class='modal' style='height:100px;'>";
@@ -51,7 +50,8 @@ function displayKarutaPage()
 		url : serverBCK_API+"/credential",
 		data: "",
 		success : function(data) {
-			setConfigurationVariables();
+			setConfigurationTechVariables();
+			setConfigurationUIVariables();
 			applyKarutaConfiguration();
 			loadLanguages(function() {
 				getLanguage();
@@ -59,14 +59,16 @@ function displayKarutaPage()
 			USER = new UIFactory["User"]($("user",data));
 			//-------------------------------
 			var html = "";
-			html += "	<div id='list-container' class='container-fluid'></div>";
-			html += "	<div id='portfolio-container' role='all' style='display:none'></div>";
-			html += "	<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
-			html += "	<div id='main-user' class='container-fluid' style='display:none'></div>";
-			html += "	<div id='main-usersgroup' class='container-fluid' style='display:none'></div>";
-			html += "	<div id='main-exec-batch' class='container-fluid' style='display:none'></div>";
-			html += "	<div id='main-exec-report' class='container-fluid' style='display:none'></div>";
+			html += "<div id='main-list' class='container-fluid'></div>";
+			html += "<div id='main-portfolio' class='container-fluid' style='display:none'>";
+			html += "	<div id='sub-bar'></div>";
+			html += "	<div id='portfolio-container' role='all'></div>";
 			html += "</div>";
+			html += "<div id='main-portfoliosgroup' class='col-md-12' style='display:none'></div>";
+			html += "<div id='main-user' class='container-fluid' style='display:none'></div>";
+			html += "<div id='main-usersgroup' class='container-fluid' style='display:none'></div>";
+			html += "<div id='main-exec-batch' class='container-fluid' style='display:none'></div>";
+			html += "<div id='main-exec-report' class='container-fluid' style='display:none'></div>";
 			$("#main-container").html(html);
 			$.ajax({
 				type : "GET",
@@ -150,24 +152,16 @@ function decreaseFontSize()
 }
 
 //==============================
-function setConfigurationVariables()
+function setConfigurationUIVariables()
 //==============================
 {
-	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-ui?resources=true";
 	$.ajax({
 		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : url,
 		success : function(data) {
-			//-----------------------
-			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
-			for (i=0;i<language_nodes.length;i++){
-				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
-			}
-			NONMULTILANGCODE = 0;  // default language if non-multilingual
-			LANGCODE = 0; //default value
-			LANG = languages[LANGCODE]; //default value
 			//---------Navigation Bar--------------
 			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
@@ -175,9 +169,6 @@ function setConfigurationVariables()
 			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data);
 			g_configVar['navbar-display-mailto'] = getText('navbar-display-mailto','Get_Resource','value',data);
 			g_configVar['navbar-display-language'] = getText('navbar-display-language','Get_Resource','value',data);
-			//----------------------
-			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
-			g_configVar['maxuserlist'] = getText('config-maxuserlist','Field','text',data);
 			//----------------------
 			g_configVar['font-standard'] = getText('config-font-standard','Field','text',data);
 			g_configVar['font-google'] = getText('config-font-google','Field','text',data);
@@ -215,6 +206,7 @@ function setConfigurationVariables()
 			//----------
 			g_configVar['page-title-background-color'] = getText('config-page-title-background-color','Color','text',data);
 			g_configVar['page-title-subline-color'] = getText('config-page-title-subline-color','Color','text',data);
+			g_configVar['portfolio-background-color'] = getText('config-portfolio-background-color','Color','text',data);
 			g_configVar['portfolio-text-color'] = getText('config-portfolio-text-color','Color','text',data);
 			g_configVar['portfolio-buttons-color'] = getText('config-portfolio-buttons-color','Color','text',data);
 			g_configVar['portfolio-buttons-background-color'] = getText('config-portfolio-buttons-background-color','Color','text',data);
@@ -238,10 +230,35 @@ function setConfigurationVariables()
 			g_configVar['svg-web7-color'] = getText('config-svg-web7-color','Color','text',data);
 			g_configVar['svg-web8-color'] = getText('config-svg-web8-color','Color','text',data);
 			g_configVar['svg-web9-color'] = getText('config-svg-web9-color','Color','text',data);
+		}
+	});
+}
 
-			//----- Load Plugins
+//==============================
+function setConfigurationTechVariables()
+//==============================
+{
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-tech?resources=true";
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			//-----------------------
+			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
+			for (i=0;i<language_nodes.length;i++){
+				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
+			}
+			NONMULTILANGCODE = 0;  // default language if non-multilingual
+			LANGCODE = 0; //default value
+			LANG = languages[LANGCODE]; //default value
+			//----------------------
+			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
+			g_configVar['maxuserlist'] = getText('config-maxuserlist','Field','text',data);
+			//----- Load Plugins + Javascript Files
 			var jsfile_nodes = [];
-			jsfile_nodes = $("asmContext:has(metadata[semantictag='plugin-file-js'])",data);
+			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-js'])",data);
 			for (var i=0; i<jsfile_nodes.length; i++){
 				var fileid = $(jsfile_nodes[i]).attr("id");
 				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
@@ -250,7 +267,21 @@ function setConfigurationVariables()
 					dataType: "script",
 				});
 			}
-			
+			//----- Load CSS Files
+			var jsfile_nodes = [];
+			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-css'])",data);
+			for (var i=0; i<jsfile_nodes.length; i++){
+				var fileid = $(jsfile_nodes[i]).attr("id");
+				var url = "../../../"+serverBCK+"/resources/resource/file/"+fileid;
+				$.ajax({
+					url: url,
+					dataType: "text",
+					success:function(data){
+						console.log("CSS file loaded")
+						$("head").append("<style>" + data + "</style>");
+					}
+				});
+			}
 		}
 	});
 }

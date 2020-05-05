@@ -73,7 +73,7 @@ UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callba
 {	// note: # is to avoid to scroll to the top of the page
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<a class='dropdown-item' href='#' onclick=\"";
+	var html = "<div class='dropdown-item' onclick=\"";
 	var semtags = tag.split(" ");
 	for (var i=0;i<semtags.length;i++){
 		if (semtags[i].length>0)
@@ -81,7 +81,7 @@ UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callba
 	}
 	html += "\">";
 	html += karutaStr[LANG][title];
-	html += "</a>";
+	html += "</div>";
 	return html;
 };
 
@@ -146,7 +146,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 	var html = "";
 	//------------- node menus button ---------------
 	if ((USER.admin || g_userroles[0]=='designer') && (this.asmtype != 'asmContext' && (this.depth>0 || this.asmtype == 'asmUnitStructure'))) {
-		html += "<div class='dropdown'>";
+		html += "<span class='dropdown'>";
 		html += "	<button class='btn dropdown-toggle add-button' type='button' id='add_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 		html += 		karutaStr[languages[langcode]]['Add'];
 		html += "	</button>";
@@ -185,9 +185,11 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Dashboard','Dashboard',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Report','Report',databack,callback,param2,param3,param4);
 		html += "<hr>";
-		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-other-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4);
-		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-other-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4);
-		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-other-resources','ImageBlock','ImageBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','DocumentBlock','DocumentBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','ImageBlock','ImageBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','URL2UnitBlock','URL2UnitBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','TextFieldBlock','TextFieldBlock',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-bubbles','bubble_level1','BubbleMap',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'europass.parts','EuropassL','Europass',databack,callback,param2,param3,param4);
 		html += "<hr>";
@@ -196,6 +198,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Get_Resource','Get_Get_Resource',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Double_Resource','Get_Double_Resource',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4);
+//		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4);
 		//--------------------------------
 		if (plugin_resources.length>0){
 			html += "<hr>";
@@ -205,9 +208,9 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		}
 		//--------------------------------
 		html += "	</div>"; // class='dropdown-menu'
-		html += "</div>"; // class='dropdown'
+		html += "</span>"; // class='dropdown'
 	}
-	//------------- specific menu button ---------------
+	//------------- specific menu ---------------
 	var no_monomenu = 0;
 	try {
 		if ((this.depth>0 || this.asmtype == 'asmUnitStructure') && this.menuroles != undefined && this.menuroles.length>10 && (this.menuroles.indexOf(this.userrole)>-1 || (this.menuroles.containsArrayElt(g_userroles) && this.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){

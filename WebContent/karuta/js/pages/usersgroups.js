@@ -20,91 +20,68 @@ function fill_list_usersgroups(type)
 {
 	setLanguageMenu("fill_list_usersgroups()");
 	var html = "";
-	html += "<div id='usergroup-header' class='row'>";
-	html += "</div>";
 	html += "<div id='usergroup-body'>";
-	//----------------------------V3-------------------------------
-	html += "	<div id='usergroup-userslist-leftside' class='V3' style='display:none'>";
-	html += "		<div id='usersfolders' class='tree user'>";
-	html += "			<h3 id='usersfolder_root'>"+karutaStr[LANG]['active_users']+"</h3>";
-	html += "			<h4 id='usersfolder_root'>";
-	html += "				<span id='usersfolders-label' class='folder-label'>"+karutaStr[LANG]['users-folders']+"</span>&nbsp<span class='badge number_of_folders' id='nb_folders_active'></span>";
-	html += "			</h4>";
-	html += "			<div id='list-usersfolder_active' class=''></div>";
-	html += "		</div><!--div id='usersfolders'-->";
-	html += "	</div><!--div id='userslist-leftside'-->";
-	//-----------------------------------------------------------
-	html += "	<div id='gutter'>&nbsp;</div>";
-	//-----------------------------------------------------------
-	html += "	<div id='usergroup-userslist-rightside'  style='display:none'>";
-	html += "		<div id='"+type+"-folder-users' class='folder-users'></div>";
-	html += "	</div><!--div id='userslist-rightside'-->";
-	//----------------------------V2-------------------------------
-	html += "	<div id='usergroup-userslist-leftside' class='V2' style='display:none'>";
-	html += "		<h3 id='usersfolder_root'>"+karutaStr[LANG]['active_users']+"</h3>";
-	html += "		<div id='list-users-active' class=''></div>";
-	html += "<div id='usegroup-users-navbar-pages' class='navbar-pages'></div>";
-	html += "	</div><!--div id='userslist-leftside'-->";
-	//-----------------------------------------------------------
-	//-----------------------------------------------------------
-	//-----------------------------------------------------------
-	html += "	<div id='gutter'>&nbsp;</div>";
-	//-----------------------------------------------------------
-	//-----------------------------------------------------------
-	//-----------------------------------------------------------
-	html += "	<div id='usergroupslist-rightside'>";
-	html += "		<div id='group-users'>";
+	//------------------------------------------
+	html += "	<div id='usergroup-user-leftside'  class='leftside'>";
+	html += "		<div id='usergroup-user-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_usersgroups()'></div>";
+	html += "		<div id='usergroup-user-search' class='search'></div>";
+	html += "		<h3>"+karutaStr[LANG]['active_users'];
+	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.User.displayActive('usergroup-user-rightside-users-content1','usergroup-user');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "		</h3>";
+	html += "		<div id='usergroup-user-leftside-content1' class='content1 tree'></div>";
+	html += "		<h3>"+karutaStr[LANG]['inactive_users'];
+	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.User.displayInactive('usergroup-user-rightside-users-content2','usergroup-user');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";
+	html += "		</h3>";
+	html += "		<div id='usergroup-user-leftside-content2' class='content2'></div>";
+	html += "	</div>";
+	//------------------------------------------
+	html += "	<div class='gutter'>&nbsp;</div>";
+	//------------------------------------------
+	html += "	<div id='usergroup-user-rightside' class='rightside'>";
+	html += "		<div id='usergroup-user-search' class='search'></div>";
+	html += "		<div id='usergroup-user-rightside-title' class='title'></div>";
+	html += "		<div id='usergroup-user-rightside-header1' class='header' style='display:none'>"+karutaStr[LANG]['active_users']+"</div>";
+	html += "		<div id='usergroup-user-rightside-content1' class='content1' style='display:none'>";
+	html += "			<div id='usergroup-user-rightside-users-content1' class='users-content'></div>";
 	html += "		</div>";
-	html += "	</div><!--div id='usergroupslist-rightside'-->";
+	html += "		<div id='usergroup-user-rightside-header2' class='header' style='display:none'>"+karutaStr[LANG]['inactive_users']+"</div>";
+	html += "		<div id='usergroup-user-rightside-content2' class='content2' style='display:none'>";
+	html += "			<div id='usergroup-user-rightside-users-content2' class='users-content'></div>";
+	html += "		</div>";
+	html += "		<div id='usergroup-user-rightside-navbar-pages-bottom' class='navbar-pages'></div>";
+	html += "	</div>";
+	//------------------------------------------
+	html += "	<div class='gutter'>&nbsp;</div>";
+	//------------------------------------------
+	html += "	<div id='usergroup-rightside' class='rightside'>";
+	html += "		<div id='usergroup-search' class='search'></div>";
+	html += "		<div id='usergroup-rightside-title' class='title'></div>";
+	html += "		<div id='usergroup-rightside-header' class='header'></div>";
+	html += "		<div id='usergroup-rightside-content1' class='content1'></div>";
+	html += "		<div id='usergroup-rightside-navbar-pages-top' class='navbar-pages' style='display:none'></div>";
+	html += "		<div id='usergroup-rightside-content2' class='content2'></div></div>";
+	html += "		<div id='usergroup-rightside-navbar-pages-bottom' class='navbar-pages' style='display:none'></div>";
+	html += "	</div>";
+	//------------------------------------------
+	html += "	<div class='gutter'>&nbsp;</div>";
+	//------------------------------------------
+	html += "	<div id='usergroup-leftside'  class='leftside'>";
+	html += "		<div id='menu'></div>";
+	html += "		<h3 class='title'>";
+	html += "			<span id='usersgroup-label' class='usergroup-label'>"+karutaStr[LANG]['list_usersgroups']+"</span>&nbsp";
+	html += "			<span class='folder-label btn'><i class='fas fa-folder-plus' id='folder-create' onclick=\"UIFactory.UsersGroup.callCreateGroup();\"></i></span>";
+	html += "		</h3>";
+	html += "		<div id='usergroup-leftside-content1' class='content1 tree'></div>";
+	html += "		<div id='usergroup-leftside-content2' class='content2'></div>";
+	html += "	</div>";
+	//------------------------------------------
+	html += "</div>";
 	//-----------------------------------------------------------
-	html += "	<div id='gutter'>&nbsp;</div>";
-	//-----------------------------------------------------------
-	html += "	<div id='usergroupslist-leftside'>";
-	html += "		<div id='usersgroups' class='tree user'>";
-	html += "			<h3 id='usersgroup_root'>"+karutaStr[LANG]['list_usersgroups']+"</h3>";
-	html += "			<h4 id='usersgroup_root'>";
-	html += "				<span id='usersgroups-label' class='group-label'>"+karutaStr[LANG]['users-groups']+"</span>&nbsp<span class='badge number_of_groups' id='nb_groups_active'></span>";
-	html += "				<span id='create-group-button' class='col-1'>";
-	html += "					<span class='group-label btn' title='"+karutaStr[LANG]['create_group']+"'><i class='fa fa-users' id='group-create' onclick=''></i></span>";
-	html += "				</span>";
-	html += "			</h4>";
-	html += "			<div id='usersgroup_active' class=''></div>";
-	html += "		</div><!--div id='usersgroups'-->";
-	html += "	</div><!--div id='usergrouplist-leftside'-->";
-
-	html += "</div><!--div id='usergroup-body'-->";
 	$("#main-usersgroup").html(html);
+	//-----------------------------------------------------------
+	UIFactory.User.displaySearch("usergroup-user-search",false,'usergroup-user');
+	UIFactory.UsersGroup.loadAndDisplayAll('usergroup');
 
-	if (karuta_backend_version.startsWith("2.")) {
-		$(".V2").show();
-		$("#group-create").attr("onclick","UIFactory.UsersGroup.callCreate()");
-		$.ajaxSetup({async: false});
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/usersgroups",
-			data: "",
-			success : function(data) {
-				UIFactory["UsersGroup"].parse(data);
-				UIFactory["UsersGroup"].displayGroups('usersgroup_active','list1');
-				//----------------
-			},
-			error : function(jqxhr,textStatus) {
-				loadLanguages(function(data) {alertHTML(karutaStr[LANG]['not-logged']);});
-				window.location="login.htm?lang="+LANG;
-			}
-		});
-		$.ajaxSetup({async: true});
-		UIFactory.User.displayActiveForUserGroup('list-users-active','list-forusergroup');
-	} else {
-		$("#group-create").attr("onclick","UIFactory.Usersgroup.callCreategroup('active'");
-		$("#userslist-leftside").css('visibility', 'visible');
-		$("#userslist-rightside").css('visibility', 'visible');
-		initusersgroups();
-		UIFactory.UsersGroup.loadAndDisplayStruct('usersgroup_active','grouproot');
-		initUsersFolders();
-		UIFactory.UsersFolder.loadAndDisplayStruct('list-usersfolder_active','active',true,'list-forusergroup');  // active users
-	}
 }
 
 

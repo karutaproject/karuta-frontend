@@ -153,7 +153,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 		if ($(this.filename_node[langcode]).text()!="")
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' style='width:25px'> "+$(this.filename_node[langcode]).text()+"</a>";
 		else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
+			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
 	}
 	if (type=='icon-url-label'){
 		if ($(this.filename_node[langcode]).text()!=""){
@@ -161,7 +161,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
 		} else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
+			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
 	}
 	if (type=='icon-url'){
 		if ($(this.filename_node[langcode]).text()!=""){
@@ -169,7 +169,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
 			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
 		} else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>";
+			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>";
 	}
 	if (type=='icon'){
 		if ($(this.filename_node[langcode]).text()!=""){
@@ -177,7 +177,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			var extension = filename.substring(filename.lastIndexOf(".")+1);
 			html =  documentIcon[extension]; 
 		} else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>";
+			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>";
 
 	}
 	return html;
@@ -188,14 +188,18 @@ UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
 	var documentIcon = {};
-	documentIcon['.doc'] = "../img/word.gif";
-	documentIcon['.docx'] = "../img/word.gif'";
-	documentIcon['.xls'] = "../img/excel.gif";
-	documentIcon['.xlsx'] = "../img/excel.gif";
-	documentIcon['.ppt'] = "../img/powerpoint.gif";
-	documentIcon['.pptx'] = "../img/powerpoint.gif";
-	documentIcon['.pdf'] = "../img/adobe.gif";
-	documentIcon['.txt'] = "../img/text.png";
+	documentIcon['.doc'] = "../../karuta/img/word.png";
+	documentIcon['.docx'] = "../../karuta/img/word.png'";
+	documentIcon['.xls'] = "../../karuta/img/excel.png";
+	documentIcon['.xlsx'] = "../../karuta/img/excel.png";
+	documentIcon['.ppt'] = "../../karuta/img/powerpoint.png";
+	documentIcon['.pptx'] = "../../karuta/img/powerpoint.png";
+	documentIcon['.pdf'] = "../../karuta/img/pdf.png";
+	documentIcon['.js'] = "../../karuta/img/js.png";
+	documentIcon['.txt'] = "../../karuta/img/text.png";
+	documentIcon['.jpg'] = "../../karuta/img/jpeg.png";
+	documentIcon['.gif'] = "../../karuta/img/gif.png";
+	documentIcon['.png'] = "../../karuta/img/png.png";
 
 	//---------------------
 	if (langcode==null)
@@ -213,36 +217,37 @@ UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
 		type = "standard";
 	//---------------------
 	var html = "";
-	if (type=='standard'){
-		if ($(this.filename_node[langcode]).text()!="")
-			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' style='width:25px'> "+$(this.filename_node[langcode]).text()+"</a>";
-		else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
-	}
-	if (type=='icon-url-label'){
-		if ($(this.filename_node[langcode]).text()!=""){
-			var filename = $(this.filename_node[langcode]).text();
-			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
-		} else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
-	}
-	if (type=='icon-url'){
-		if ($(this.filename_node[langcode]).text()!=""){
-			var filename = $(this.filename_node[langcode]).text();
-			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
-		} else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>";
-	}
-	if (type=='icon'){
-		if ($(this.filename_node[langcode]).text()!=""){
-			var filename = $(this.filename_node[langcode]).text();
-			var extension = filename.substring(filename.lastIndexOf(".")+1);
-			html =  documentIcon[extension]; 
-		} else
-			html =  "<img src='../img/document-icon.png' style='width:25px'>";
-
+	if ($(this.filename_node[langcode]).text()!="") {
+		var filename = $(this.filename_node[langcode]).text();
+		var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+		switch (extension) {
+			case ".doc" :
+			case ".docx" :
+			case ".doc" :
+			case ".xls" :
+			case ".xlsx" :
+			case ".ppt" :
+			case ".pptx" :
+			case ".pdf" :
+			case ".js" :
+				break;
+			default :
+				extension = ".txt";
+		}
+		if (type=='standard'){
+				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/> "+filename+"</a>";
+		}
+		if (type=='icon-url-label'){
+				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
+		}
+		if (type=='icon-url'){
+				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
+		}
+		if (type=='icon'){
+				html =  documentIcon[extension]; 
+		}
+	} else {
+		html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
 	}
 	$("#"+dest).html(html);
 };
