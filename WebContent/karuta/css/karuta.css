@@ -1100,8 +1100,12 @@ body,
 }
 
 #sub-bar {
+  color: var(--portfolio-navbar-text-color);
   background-color: var(--portfolio-navbar-background-color);
   border-color: var(--portfolio-navbar-background-color);
+}
+#sub-bar .btn {
+  color: var(--portfolio-navbar-text-color);
 }
 #sub-bar .dropdown-menu,
 #sub-bar .open > a {
@@ -1115,6 +1119,7 @@ body,
   color: var(--portfolio-navbar-text-color);
 }
 #sub-bar #toggle-mode {
+  width: 200px;
   padding-top: 9px;
   padding-left: 10px;
   color: var(--portfolio-navbar-text-color);
@@ -1135,53 +1140,55 @@ body,
 /* ==================================================================== */
 /*                          PORTFOLIO                                   */
 /* ==================================================================== */
-#sub-bar {
-  background-color: var(--portfolio-navbar-background-color);
-  border-color: var(--portfolio-navbar-background-color);
-  /*
-  		.dropdown-menu,
-  		.open > a {
-  			background-color: var(--portfolio-navbar-background-color);
-  			border-color: var(--portfolio-navbar-background-color);
-  		}
-  		a.dropdown-item:hover {
-  			color: var(--portfolio-navbar-background-color);
-  		}
-  		a {
-  			color:var(--portfolio-navbar-text-color);
-  		}
-  */
-}
-#sub-bar .dropdown-menu {
-  background-color: var(--portfolio-navbar-background-color);
-  color: var(--portfolio-navbar-text-color);
-}
-#sub-bar .dropdown-menu a.dropdown-item {
-  background-color: var(--portfolio-navbar-background-color);
-  color: var(--portfolio-navbar-text-color);
-}
-#sub-bar .dropdown-menu a.dropdown-item:hover {
-  background-color: var(--portfolio-navbar-text-color);
-  color: var(--portfolio-navbar-background-color);
-}
-#sub-bar #toggle-mode {
-  padding-top: 9px;
-  padding-left: 10px;
-  color: var(--portfolio-navbar-text-color);
-}
-#sub-bar #toggle-mode-icon {
-  font-size: calc(var(--font-size-coeff) * 1.1rem);
-}
-#sub-bar #refresh-portfolio {
-  padding-left: 15px;
-}
-#sub-bar .navbar-brand {
-  cursor: pointer;
-}
-#sub-bar #welcome-edit {
-  padding-top: 9px;
-}
+/*
+	#sub-bar {
+		background-color: var(--portfolio-navbar-background-color);
+		border-color: var(--portfolio-navbar-background-color);
+		.dropdown-menu {
+			background-color: var(--portfolio-navbar-background-color);
+			color: var(--portfolio-navbar-text-color);
+			a.dropdown-item {
+				background-color: var(--portfolio-navbar-background-color);
+				color: var(--portfolio-navbar-text-color);
+			}
+			a.dropdown-item:hover {
+				background-color: var(--portfolio-navbar-text-color);
+				color: var(--portfolio-navbar-background-color);
+			}
+		}
+/*
+		.dropdown-menu,
+		.open > a {
+			background-color: var(--portfolio-navbar-background-color);
+			border-color: var(--portfolio-navbar-background-color);
+		}
+		a.dropdown-item:hover {
+			color: var(--portfolio-navbar-background-color);
+		}
+		a {
+			color:var(--portfolio-navbar-text-color);
+		}
 
+		#toggle-mode {
+			width:200px;
+			padding-top: 9px;
+			padding-left: 10px;
+			color:var(--portfolio-navbar-text-color);
+		}
+		#toggle-mode-icon {
+			font-size:calc(var(--font-size-coeff) * 1.1rem);
+		}
+		#refresh-portfolio {
+			padding-left: 15px;
+		}
+		.navbar-brand {
+			cursor:pointer;
+		}
+		#welcome-edit{
+			padding-top:9px;
+		}
+	}
+*/
 #portfolio-container {
   background-color: var(--portfolio-background-color);
 }
@@ -3155,22 +3162,32 @@ td {
 /* ====================
 	BLOCK
    ====================*/
+:root {
+  --block-height:220px;
+  --block-img-height:218px;
+}
+
 .standard .DocumentBlock .content,
 .standard .ImageBlock .content,
 .standard .URL2UnitBlock .content,
-.standard .URLBlock .content {
+.standard .URLBlock .content,
+.standard .TextFieldBlock .content {
   display: none;
 }
 .standard .DocumentBlock .title,
 .standard .ImageBlock .title,
 .standard .URL2UnitBlock .title,
-.standard .URLBlock .title {
+.standard .URLBlock .title,
+.standard .TextFieldBlock .title {
   display: none;
 }
 
-:root {
-  --block-height:220px;
-  --block-img-height:218px;
+.Url2Block,
+.DocBlock,
+.ImgBlock,
+.UrlBlock,
+.TxtBlock {
+  height: var(--block-img-height);
 }
 
 .asmBlockContainer:first-of-type {

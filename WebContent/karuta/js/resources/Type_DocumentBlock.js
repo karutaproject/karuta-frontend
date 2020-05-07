@@ -76,33 +76,35 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 		var doc_langcode = langcode;
 		if (!document.multilingual)
 			doc_langcode = NONMULTILANGCODE;
-		//------------------------
+		//----------------------------------------
+		var img_width = ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='') ? $(image.resource.width_node[langcode]).text() : "";
+		var img_height = ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='') ? $(image.resource.height_node[langcode]).text() : "";
+		if (img_width!="" && img_width.indexOf('px')<0)
+			img_width += "px";
+		if (img_height!="" && img_height.indexOf('px')<0)
+			img_height += "px";
 		var image_size = "";
-		if ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='')
-			image_size = "width:"+$(image.resource.width_node[langcode]).text()+"; "; 
-		if ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='')
-			image_size += "height:"+$(image.resource.height_node[langcode]).text()+"; "; 
-		//------------------------
+		if (img_width!="")
+			image_size += " width:"+img_width + ";";
+		if (img_height!="")
+			image_size += " height:" + img_height + ";";
+		//----------------------------------------
 		var filename = $(document.resource.filename_node[doc_langcode]).text();
+		html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+document.id+"?lang="+languages[doc_langcode]+"'>";
+		var style = "background-repeat:no-repeat; background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
+		if (cover!=undefined && cover.resource.getValue()=='1')
+			style += " background-size:cover;";
+		html += "<div class='DocBlock' style=\""+style+"\">";
+		style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
 		if (filename!="") {
-			html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+document.id+"?lang="+languages[doc_langcode]+"'>";
-			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
-			if (cover!=undefined && cover.resource.getValue()=='1')
-				style += " background-size:cover;";
-			html += "<div class='DocBlock' style=\""+style+"\">";
-			style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
 			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='DocumentBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
 				html += "<div id='label_"+this.id+"' class='block-title' style=\""+style+"\">"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
 			else
 				html += "<div class='block-title' style=\""+style+"\">"+filename+"</div>";
-			html += "</div>";
-			html += "</a>";
-		} else {
-			html =  "<div class='DocBlock no-document' style=\""+image_size+"\">";
-			var style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		} else
 			html += "<div class='block-title' style=\""+style+"\">"+karutaStr[LANG]['no-document']+"</div>";
-			html += "</div>";
-		}
+		html += "</div>";
+		html += "</a>";
 	}
 	return html;
 };

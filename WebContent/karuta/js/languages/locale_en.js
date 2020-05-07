@@ -362,6 +362,7 @@ karutaStr['en']['other']="Other";
 karutaStr['en']['delete-temporary-users']="Delete All";
 karutaStr['en']['delete-empty-users']="Delete Selection";
 karutaStr['en']['c-a-s']="C/A/S";
+karutaStr['en']['too-much-users']="There are more than 200 users. Click 'See' button to display them or search using the input above."
 
 //=========================================
 //========== ROLES ========================

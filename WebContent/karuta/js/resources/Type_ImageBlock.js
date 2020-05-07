@@ -67,13 +67,19 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 		var img_langcode = langcode;
 		if (!image.multilingual)
 			img_langcode = NONMULTILANGCODE;
-		//------------------------
+		//----------------------------------------
+		var img_width = ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='') ? $(image.resource.width_node[langcode]).text() : "";
+		var img_height = ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='') ? $(image.resource.height_node[langcode]).text() : "";
+		if (img_width!="" && img_width.indexOf('px')<0)
+			img_width += "px";
+		if (img_height!="" && img_height.indexOf('px')<0)
+			img_height += "px";
 		var image_size = "";
-		if ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='')
-			image_size = "width:"+$(image.resource.width_node[langcode]).text()+"; "; 
-		if ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='')
-			image_size += "height:"+$(image.resource.height_node[langcode]).text()+"; "; 
-		//---------------------
+		if (img_width!="")
+			image_size += " width:"+img_width + ";";
+		if (img_height!="")
+			image_size += " height:" + img_height + ";";
+		//----------------------------------------
 		var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";

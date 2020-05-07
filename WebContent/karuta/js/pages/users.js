@@ -28,7 +28,7 @@ function fill_list_users(type)
 //	html += "	<div class='gutter'></div>";
 	//------------------------------------------
 	html += "	<div id='user-rightside' class='rightside'>";
-	html += "		<div id='user-refresh' class='refresh fas fa-sync-alt' onclick=\"fill_list_users('"+type+"')\"></div>";
+	html += "		<div id='user-refresh' class='refresh fas fa-sync-alt' onclick=\"UsersLoaded = false;UIFactory.User.displayActive('user-rightside-users-content1','user');\"></div>";
 	html += "		<div id='user-search' class='search'></div>";
 	html += "		<div id='user-rightside-title' class='title'></div>";
 	html += "		<div id='user-rightside-header1' class='header' style='display:none'>"+karutaStr[LANG]['active_users']+"</div>";
@@ -73,6 +73,14 @@ function fill_list_users(type)
 
 	$("#main-user").html(html);
 	UIFactory.User.displaySearch("user-search",true,'user');
+	if (!UsersLoaded)
+		UIFactory.User.loadAll();
+	if (UsersActive_list.length<200)
+		UIFactory.User.displayActive('user-rightside-users-content1','user');
+	else {
+		$("#user-rightside-users-content1").html(karutaStr[LANG]['too-much-users']);
+		$("#user-rightside-users-content1").show();
+	}
 }
 
 

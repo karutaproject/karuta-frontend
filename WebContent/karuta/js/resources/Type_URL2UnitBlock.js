@@ -84,30 +84,35 @@ UIFactory["URL2UnitBlock"].prototype.getView = function(dest,type,langcode)
 			label = local_label;
 		if (label=='')
 			label = "---";
+		//----------------------------------------
+		var img_width = ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='') ? $(image.resource.width_node[langcode]).text() : "";
+		var img_height = ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='') ? $(image.resource.height_node[langcode]).text() : "";
+		if (img_width!="" && img_width.indexOf('px')<0)
+			img_width += "px";
+		if (img_height!="" && img_height.indexOf('px')<0)
+			img_height += "px";
 		var image_size = "";
-		if ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='')
-			image_size = "width:"+$(image.resource.width_node[langcode]).text()+"; "; 
-		if ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='')
-			image_size += "height:"+$(image.resource.height_node[langcode]).text()+"; "; 
-		if (url2unit.resource.uuid_node.text()!="") {
-			if (this.query.indexOf('self.')>-1)
+		if (img_width!="")
+			image_size += " width:"+img_width + ";";
+		if (img_height!="")
+			image_size += " height:" + img_height + ";";
+		//----------------------------------------
+		if (this.query.indexOf('self.')>-1)
 			html = "<a  class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+url2unit.resource.uuid_node.text()+"').click()\">";
-			else
-				html = "<a href='page.htm?i="+url2unit.resource.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>";
-			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
-			if (cover!=undefined && cover.resource.getValue()=='1')
-				style += "background-size:cover;";
-			html += "<div class='Url2Block' style=\""+style+"\">";
-			style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		else
+			html = "<a href='page.htm?i="+url2unit.resource.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>";
+		var style = "background-repeat:no-repeat; background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
+		if (cover!=undefined && cover.resource.getValue()=='1')
+			style += "background-size:cover;";
+		html += "<div class='Url2Block' style=\""+style+"\">";
+		style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		if (url2unit.resource.uuid_node.text()!="")
 			html += "<div class='block-title' style=\""+style+"\">"+label+"</div>";
-			html += "</div>";
-			html += "</a>";
-		} else {
-			html =  "<div class='Url2Block no-document' style=\""+image_size+"\">";
-			var style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		else
 			html += "<div class='block-title' style=\""+style+"\">"+karutaStr[LANG]['no-URL2Unit']+"</div>";
-			html += "</div>";
-		}
+
+		html += "</div>";
+		html += "</a>";
 	}
 	return html;
 };

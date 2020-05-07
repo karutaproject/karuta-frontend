@@ -1669,48 +1669,15 @@ UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	UIFactory.User.displaySearch("sharing-user-search",false,'sharing-user');
-
 	//----------------------------------------------------------------
-/*	if (Users_byid.length>0) { // users loaded
-		UIFactory["User"].displaySelectMultipleActive('sharing_users');
-		//--------------------------
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
-			success : function(data) {
-				UIFactory["Portfolio"].displayUnSharing('shared',data);
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error in callShareUsers 1 : "+jqxhr.responseText);
-			}
-		});
-		//--------------------------		
-	} else {
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/users",
-			success : function(data) {
-				UIFactory["User"].parse(data);
-				UIFactory["User"].displaySelectMultipleActive('sharing_users');
-				//--------------------------
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid,
-					success : function(data) {
-						UIFactory["Portfolio"].displayUnSharing('shared',data);
-					}
-				});		
-				//--------------------------
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error in callShareUsers 2 : "+jqxhr.responseText);
-			}
-		});
+	if (!UsersLoaded)
+		UIFactory.User.loadAll();
+	if (UsersActive_list.length<200)
+		UIFactory.User.displaySelectMultipleActive('sharing-user-rightside-users-content1');
+	else {
+		$("#sharing-user-rightside-users-content1").html(karutaStr[LANG]['too-much-users']);
 	}
-*/
+	//----------------------------------------------------------------
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -2083,9 +2050,16 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	html += "	</button>";
 	html += "	<div class='navbar-collapse collapse' id='collapse-2'>";
 	html += "		<ul class='ml-auto navbar-nav'>";
+	//-------------------- SEARCH -----------
+	html += "	<li class='input-group'>";
+	html += "		<input type='text' id='"+type+"-search-text-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-portfolio-text']+"'>";
+	html += "		<div class='input-group-append'>";
+	html += "			<button type='button' onclick=\"UIFactory.Portfolio.search('"+type+"')\" class='btn'><i class='fas fa-search'></i></button>";
+	html += "		</div><!-- /input-group-append -->";
+	html += "	</li><!-- /input-group -->";
 	//-------------------- WELCOME PAGE EDIT -----------
-	html += "		<li id='welcome-edit'></li>";
-	html += "		<li id='welcome-add' class='nav-item dropdown'></li>";
+	html += "	<li id='welcome-edit'></li>";
+	html += "	<li id='welcome-add' class='nav-item dropdown'></li>";
 	//-------------------- ACTIONS----------------------
 	var actions = UIFactory.Portfolio.getActions(portfolioid);
 	if (actions!='') {
@@ -2451,15 +2425,26 @@ UIFactory["Portfolio"].prototype.refresh = function()
 	};
 
 };
+//--------------------------------------------------------------
+//--------------------------------------------------------------
+//--------------- SEARCH IN PORTFOLIO --------------------------
+//--------------------------------------------------------------
+//--------------------------------------------------------------
 
+//==================================
+UIFactory["Portfolio"].search = function(type)
+//==================================
+{
+	var value = $("#"+type+"-search-text-input").val();
+	var nodes = $("asmUnit:has(asmResource[xsi_type='nodeRes']:contains('"+value+"'))",g_portfolio_current);
+	var html="";
+}
 
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------
 //---------------------------------- COLOR CONFIGURATION ----------------------------------------------
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------
-
-
 
 
 //=======================================================================
