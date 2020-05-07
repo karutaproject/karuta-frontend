@@ -51,6 +51,7 @@ var UICom =
 		jQuery.ajax(set);
 		*/
 		$.ajax({
+			async:false,
 			dataType: dataType,
 			type: type,
 			url: url,
