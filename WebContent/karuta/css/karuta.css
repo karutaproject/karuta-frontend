@@ -111,6 +111,31 @@ body,
 }
 
 /* ====================== */
+/*    SEARCH-RESULT       */
+/* ====================== */
+.highlight {
+  background-color: yellow;
+}
+
+.result-title {
+  margin-top: 20px;
+  font-size: 150%;
+}
+
+.result-nb {
+  margin-top: 10px;
+  font-size: 120%;
+  margin-bottom: 10px;
+}
+
+.result-page {
+  margin-top: 10px;
+  margin-left: 20px;
+  color: var(--portfolio-link-color);
+  cursor: pointer;
+}
+
+/* ====================== */
 /*    LIST- WELCOME       */
 /* ====================== */
 .portfolio-label {

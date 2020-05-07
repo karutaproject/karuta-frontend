@@ -667,6 +667,13 @@ function displayPage(uuid,depth,type,langcode) {
 	}
 	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
 	$("#wait-window").modal('hide');
+	if ($("#standard-search-text-input").val()!="") {
+		var searched_text = $("#standard-search-text-input").val();
+		var  html = document.getElementById("contenu").innerHTML;
+		var regex = new RegExp(searched_text, 'g');
+		var newhtml  = html.replace(regex,"<span class='highlight'>"+searched_text+"</span>");
+		document.getElementById("contenu").innerHTML = newhtml;
+	}
 	window.scrollTo(scrollLeft, scrollTop);
 }
 

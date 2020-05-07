@@ -316,6 +316,9 @@ karutaStr['en']['lastname-label']="Lastname";
 karutaStr['en']['changeOwner']="Change the Owner";
 karutaStr['en']['add-configpage']="Add new Configuration Page";
 karutaStr['en']['add-newwelcomepage']="Add new Welcome Page";
+karutaStr['en']['search-portfolio-text']="Seach ...";
+karutaStr['en']['result-title']="Results for : ";
+karutaStr['en']['result-nb']="Number of pages : ";
 
 //=========================================
 //========== FOLDERS ======================

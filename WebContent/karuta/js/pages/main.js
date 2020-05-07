@@ -129,6 +129,11 @@ function fill_main_page(rootid,role)
 				g_edit = true;
 				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 			}
+			$("#standard-search-text-input").keypress(function(f) {
+				var code= (f.keyCode ? f.keyCode : f.which);
+				if (code == 13)
+					UIFactory.Portfolio.search('standard');
+			});
 			//---------------------------
 			if (g_encrypted)
 				loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});
