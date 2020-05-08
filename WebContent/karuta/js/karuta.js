@@ -667,7 +667,7 @@ function displayPage(uuid,depth,type,langcode) {
 	}
 	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
 	$("#wait-window").modal('hide');
-	if ($("#standard-search-text-input").val()!="") {
+	if ($("#standard-search-text-input").val()!=undefined && $("#standard-search-text-input").val()!="") {
 		var searched_text = $("#standard-search-text-input").val();
 		var  html = document.getElementById("contenu").innerHTML;
 		var regex = new RegExp(searched_text, 'g');

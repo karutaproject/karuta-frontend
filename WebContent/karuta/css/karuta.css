@@ -1241,11 +1241,12 @@ body,
   background-color: var(--portfolio-menu-background-color);
   color: var(--portfolio-menu-text-color);
 }
-#portfolio-container .dropdown-menu a.dropdown-item {
+#portfolio-container .dropdown-menu .dropdown-item {
+  cursor: pointer;
   background-color: var(--portfolio-menu-background-color);
   color: var(--portfolio-menu-text-color);
 }
-#portfolio-container .dropdown-menu a.dropdown-item:hover {
+#portfolio-container .dropdown-menu .dropdown-item:hover {
   background-color: var(--portfolio-menu-text-color);
   color: var(--portfolio-menu-background-color);
 }
@@ -1300,6 +1301,13 @@ body,
 .li-code,
 .li-value {
   margin-right: 5px;
+}
+
+.URL2Unit {
+  color: var(--portfolio-link-color);
+}
+.URL2Unit .URL2Unit-link {
+  cursor: pointer;
 }
 
 /* ====================== */

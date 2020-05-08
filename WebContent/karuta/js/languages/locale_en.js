@@ -318,6 +318,7 @@ karutaStr['en']['add-configpage']="Add new Configuration Page";
 karutaStr['en']['add-newwelcomepage']="Add new Welcome Page";
 karutaStr['en']['search-portfolio-text']="Seach ...";
 karutaStr['en']['result-title']="Results for : ";
+karutaStr['en']['result-subtitle']="Search is case sensitive.";
 karutaStr['en']['result-nb']="Number of pages : ";
 
 //=========================================

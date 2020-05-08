@@ -1326,11 +1326,12 @@
 		.dropdown-menu {
 			background-color: var(--portfolio-menu-background-color);
 			color: var(--portfolio-menu-text-color);
-			a.dropdown-item {
+			.dropdown-item {
+				cursor:pointer;
 				background-color: var(--portfolio-menu-background-color);
 				color: var(--portfolio-menu-text-color);
 			}
-			a.dropdown-item:hover {
+			.dropdown-item:hover {
 				background-color: var(--portfolio-menu-text-color);
 				color: var(--portfolio-menu-background-color);
 			}
@@ -1395,6 +1396,13 @@
 	.li-code,
 	.li-value {
 		margin-right:5px;
+	}
+
+	.URL2Unit {
+		color: var(--portfolio-link-color);
+		.URL2Unit-link {
+			cursor:pointer;
+		}
 	}
 
 /* ====================== */

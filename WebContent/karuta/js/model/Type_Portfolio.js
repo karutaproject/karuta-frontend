@@ -2437,9 +2437,11 @@ UIFactory["Portfolio"].search = function(type)
 {
 	var value = $("#"+type+"-search-text-input").val();
 //	var nodes = $("asmUnit:has(asmResource[xsi_type='nodeRes']:contains('"+value+"'))",g_portfolio_current);
-	var nodes = $("asmUnit:has(asmResource:contains('"+value+"'))",g_portfolio_current);
-	var html="<div class='result-title'>Résultats de la recherche pour : "+value+"</div>";
-	html+= "<div class='result-nb'>Nombre de pages : " + nodes.length + "</div>";
+	var nodes = $("asmUnit:has(asmResource:has(label[lang='"+LANG+"']:contains('"+value+"'),text[lang='"+LANG+"']:contains('"+value+"')))",g_portfolio_current);
+	var html="";
+	html += "<div class='result-title'>"+karutaStr[LANG]["result-title"]+value+"</div>";
+	html += "<div class='result-subtitle'>"+karutaStr[LANG]["result-subtitle"]+"</div>";
+	html += "<div class='result-nb'>"+karutaStr[LANG]["result-subtitle"] + nodes.length + "</div>";
 	for (var i=0; i<nodes.length;i++){
 		var nodeid = $(nodes[i]).attr('id');
 		var node_label = UICom.structure.ui[nodeid].getLabel();

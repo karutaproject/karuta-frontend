@@ -118,9 +118,9 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 		label = "---";
 	var html ="";
 	if (this.query.indexOf('self.')>-1)
-		html = "<a  class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+this.uuid_node.text()+"').click()\">"+label+"</a>";
+		html = "<div  class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+this.uuid_node.text()+"').click()\">"+label+"</div>";
 	else
-		html = "<a href='page.htm?i="+this.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>"+label+"</a>";
+		html = "<div href='page.htm?i="+this.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>"+label+"</div>";
 	return html;
 };
 
@@ -128,30 +128,7 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 UIFactory["URL2Unit"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	var label = this.label_node[langcode].text();
-	var local_label = this.local_label_node[langcode].text();
-	if (local_label!="")
-		label = local_label;
-	if (this.encrypted)
-		label = decrypt(label.substring(3),g_rc4key);
-	if (label=='')
-		label = "---";
-	var html ="";
-	if (this.query.indexOf('self.')>-1)
-		html = "<a  class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+this.uuid_node.text()+"').click()\">"+label+"</a>";
-	else
-		html = "<a href='page.htm?i="+this.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>"+label+"</a>";
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 
