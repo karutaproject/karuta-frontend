@@ -381,7 +381,7 @@
 	
 	var resource1 = "<div id='node_#uuid#' class='resource- #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv# col-md-";
 	var resource2 = " ' >" +
-					"	<div class='edit-bar'><span id='buttons-#uuid#' name='res-div' class='buttons'/></div>" +
+					"	<div class='edit-bar'><span id='buttons-#uuid#' class='buttons'/></div>" +
 					"	<div id='sub_node_#uuid#' class='node #displayview#' >" +
 					"		<div id='std_node_#uuid#' class='node-label'>" +
 					"			<div name='res-lbl-div'><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +

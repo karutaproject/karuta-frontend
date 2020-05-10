@@ -293,7 +293,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 			html = displayHTML[type+"-resource-default"];
 			displayview = type+"-resource-default";
 		}
-	html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+	html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
 	//-------------------- display ----------------------
 	if (!refresh) {
 		$("#"+dest).append (html);
@@ -771,6 +771,9 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	var div = $("<div></div>");
 	$(div).append($("<br>"));
 	//-----------------------------
+	var editcoderoles = $(this.metadatawad).attr('editcoderoles');
+	if (editcoderoles==undefined)
+		editcoderoles="";
 	var editnoderoles = $(this.metadatawad).attr('editnoderoles');
 	if (editnoderoles==undefined)
 		editnoderoles="";
@@ -778,7 +781,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
 		var query = $(this.metadatawad).attr('query');
 		if (query==undefined || query=='' || this.asmtype=='asmContext'){
-			if (g_userroles[0]=='designer' || USER.admin) {
+			if (g_userroles[0]=='designer' || USER.admin || editcoderoles.containsArrayElt(g_userroles) || editcoderoles.indexOf(this.userrole)>-1 || editcoderoles.indexOf($(USER.username_node).text())>-1) {
 				var htmlCodeGroupObj = $("<div class='form-group'></div>")
 				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
 				var htmlCodeDivObj = $("<div class='node-code'></div>");

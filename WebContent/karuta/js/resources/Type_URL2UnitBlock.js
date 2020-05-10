@@ -60,10 +60,6 @@ UIFactory["URL2UnitBlock"].prototype.getView = function(dest,type,langcode)
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest] = {langcode: langcode, type : type};
-	}
-	//---------------------
 	if (type==null)
 		type = "standard";
 	//---------------------
@@ -163,27 +159,17 @@ UIFactory["URL2UnitBlock"].prototype.displayEditor = function(destid,type,langco
 	if (this.url2unit_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>URL2Unit</h4>"));
 		url2unit.resource.query = this.query;
-		url2unit.resource.displayEditor(destid,type,langcode,this);
+		url2unit.resource.displayEditor(destid,type,langcode);
 	}
 	//---------------------
 	if (this.image_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>Image</h4>"));
 		$("#"+destid).append($("<div>"+karutaStr[LANG]['block-image-size']+"</div>"));
-		image.resource.displayEditor(destid,type,langcode,this);
+		image.resource.displayEditor(destid,type,langcode);
 	}
 	//---------------------
 	if (cover!=undefined && this.cover_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>Coverage</h4>"));
-		cover.resource.displayEditor(destid,type,langcode,this);
+		cover.resource.displayEditor(destid,type,langcode);
 	}
 }
-
-//==================================
-UIFactory["URL2UnitBlock"].prototype.refresh = function()
-//==================================
-{
-	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,this.display[dest].type,this.display[dest].langcode));
-	};
-
-};

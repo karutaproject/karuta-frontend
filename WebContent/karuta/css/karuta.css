@@ -1309,7 +1309,7 @@ body,
   margin-right: 5px;
 }
 
-.URL2Unit {
+.URL2Unit .resource {
   color: var(--portfolio-link-color);
 }
 .URL2Unit .URL2Unit-link {

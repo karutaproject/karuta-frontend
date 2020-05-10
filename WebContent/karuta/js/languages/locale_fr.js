@@ -237,6 +237,7 @@ karutaStr['fr']['seeend']="Voir - Date fin";
 karutaStr['fr']['logcode']="Code Log";
 karutaStr['fr']['alt']="Texte alternatif";
 karutaStr['fr']['node-comment']="Commentaires du noeud";
+karutaStr['fr']['autoload']="Autoload";
 
 //=========================================
 //========== ADMIN ========================
@@ -320,6 +321,8 @@ karutaStr['fr']['search-portfolio-text']="Recherche ...";
 karutaStr['fr']['result-title']="Résultats de la recherche pour : ";
 karutaStr['fr']['result-subtitle']="La recherche est sensible à la casse.";
 karutaStr['fr']['result-nb']="Nombre de pages : ";
+karutaStr['fr']['refresh-url2unit']="Actualiser les URL2Units";
+
 
 //=========================================
 //========== FOLDERS ======================

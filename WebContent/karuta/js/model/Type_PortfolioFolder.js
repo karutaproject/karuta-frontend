@@ -1103,7 +1103,6 @@ UIFactory["PortfolioFolder"].displaySearchedPortfolios = function(code,type)
 	$("#"+type+"-rightside-content1").html("");
 	$("#"+type+"-rightside-content2").html("");
 	$("#wait-window").show();
-	$("#menu").html("");
 	cleanList();
 	//----------------
 	$.ajax({

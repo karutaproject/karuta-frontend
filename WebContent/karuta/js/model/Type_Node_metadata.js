@@ -410,6 +410,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
 		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);
 		this.displayMetadataAttributeEditor('metadata-root','public',true);
+		this.displayMetadataAttributeEditor('metadata-root','autoload',true);
 	}
 	if (name=='asmContext' && this.resource.type=='Proxy')
 		this.displayMetadataAttributeEditor('metadata-part1','semantictag',false,true);

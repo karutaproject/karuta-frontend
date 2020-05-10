@@ -53,6 +53,7 @@ UIFactory["Portfolio"] = function( node )
 	this.semantictag = $("metadata",node).attr('semantictag');
 	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.visible = ($("metadata",node).attr('list-novisible')=='Y') ? false : true;
+	this.autoload = ($("metadata",node).attr('autoload')=='Y') ? false : true;
 	//------------------------------
 	this.export_pdf = UIFactory.Portfolio.getLogicalMetadataAttribute(node,"export-pdf");
 	this.export_rtf = UIFactory.Portfolio.getLogicalMetadataAttribute(node,"export-rtf");
@@ -1192,6 +1193,8 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		html += "<a class='dropdown-item'  onclick=\"toggleMetadata('hidden')\">"+karutaStr[LANG]['hide-metainfo']+"</a>";
 		html += "<a class='dropdown-item'  onclick=\"toggleMetadata('visible')\">"+karutaStr[LANG]['show-metainfo']+"</a>";
 		html += "<a class='dropdown-item'  onclick=\"$('#contenu').html('');UICom.structure.ui['"+g_portfolio_rootid+"'].displaySemanticTags('contenu')\">"+karutaStr[LANG]['list-semtags']+"</a>";
+		if (UIFactory.URL2Unit.testIfURL2Unit(g_portfolio_current))
+			html += "<a class='dropdown-item'  onclick=\"UIFactory.URL2Unit.bringUpToDate('"+portfolioid+"')\">"+karutaStr[LANG]['refresh-url2unit']+"</a>";
 //		if(languages.length>1)
 //			html += "<a class='dropdown-item'  onclick=\"$('#welcome-bar').hide();$('#sub-bar').html(UIFactory.Portfolio.getNavBar('translate',LANGCODE,g_edit,g_portfolioid))$('#sub-bar').show();;UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
 	}

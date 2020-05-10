@@ -237,6 +237,7 @@ karutaStr['en']['seeend']="See - End Date";
 karutaStr['en']['logcode']="Log Code";
 karutaStr['en']['alt']="Alternate Text";
 karutaStr['en']['node-comment']="Node Comments";
+karutaStr['en']['autoload']="Autoload";
 
 //=========================================
 //========== ADMIN ========================
@@ -320,6 +321,7 @@ karutaStr['en']['search-portfolio-text']="Seach ...";
 karutaStr['en']['result-title']="Results for : ";
 karutaStr['en']['result-subtitle']="Search is case sensitive.";
 karutaStr['en']['result-nb']="Number of pages : ";
+karutaStr['en']['refresh-url2unit']="Refresh URL2Units";
 
 //=========================================
 //========== FOLDERS ======================

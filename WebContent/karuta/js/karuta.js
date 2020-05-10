@@ -1359,10 +1359,12 @@ function toggleSideBar() {
 //==================================
 	if ($("#sidebar").is(":visible"))
 	{
+		localStorage.setItem('sidebar-'+g_portfolioid,'hidden');
 		$("#sidebar").hide();
 		g_display_sidebar = false;
 		$("#contenu").removeClass().addClass('col-md-12').addClass('col-sm-12');
 	} else {
+		localStorage.setItem('sidebar-'+g_portfolioid,'visible');
 		$("#contenu").removeClass().addClass('col-md-9').addClass('col-sm-9');
 		$("#sidebar").show();
 		g_display_sidebar = true;

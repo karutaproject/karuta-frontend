@@ -1407,7 +1407,9 @@
 	}
 
 	.URL2Unit {
-		color: var(--portfolio-link-color);
+		.resource {
+			color: var(--portfolio-link-color);
+		}
 		.URL2Unit-link {
 			cursor:pointer;
 		}

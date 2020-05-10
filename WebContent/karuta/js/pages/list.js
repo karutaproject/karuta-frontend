@@ -156,9 +156,13 @@ function cleanList()
 	$("#searched-portfolios-header").hide();
 	$("#searched-portfolios-content").hide();
 	$(".portfolio-label.active").removeClass('active');
+	$("#portfolio-rightside-title").html("");
+	$("#portfolio-rightside-header").html("");
+	$("#portfolio-rightside-content1").html("");
+	$("#portfolio-rightside-navbar-pages-top").html("");
+	$("#portfolio-rightside-content2").html("");
+	$("portfolio-rightside-navbar-pages-bottom").html("");
 }
-
-
 
 
 

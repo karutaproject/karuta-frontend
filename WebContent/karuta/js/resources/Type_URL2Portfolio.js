@@ -19,50 +19,44 @@ if( UIFactory === undefined )
   var UIFactory = {};
 }
 
-var g_URL2Unit_caches = {};
+var g_URL2Portfolio_caches = {};
 
 /// Define our type
 //==================================
-UIFactory["URL2Unit"] = function(node,condition)
+UIFactory["URL2Portfolio"] = function(node,condition)
 //==================================
 {
 	if (condition!=null)
 		clause = condition;
 	this.id = $(node).attr('id');
 	this.node = node;
-	this.type = 'URL2Unit';
+	this.type = 'URL2Portfolio';
 	//--------------------
-	if ($("lastmodified",$("asmResource[xsi_type='URL2Unit']",node)).length==0){  // for backward compatibility
+	if ($("lastmodified",$("asmResource[xsi_type='URL2Portfolio']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("lastmodified");
-		$("asmResource[xsi_type='URL2Unit']",node)[0].appendChild(newelement);
+		$("asmResource[xsi_type='URL2Portfolio']",node)[0].appendChild(newelement);
 	}
-	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='URL2Unit']",node));
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='URL2Portfolio']",node));
 	//--------------------
-	if ($("code",$("asmResource[xsi_type='URL2Unit']",node)).length==0){  // for backward compatibility
-		var newelement = createXmlElement("code");
-		$("asmResource[xsi_type='URL2Unit']",node)[0].appendChild(newelement);
-	}
-	this.code_node = $("code",$("asmResource[xsi_type='URL2Unit']",node));
-	//--------------------
-	this.uuid_node = $("uuid",$("asmResource[xsi_type='URL2Unit']",node));
+	this.uuid_node = $("uuid",$("asmResource[xsi_type='URL2Portfolio']",node));
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
-		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL2Unit']",node));
+		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL2Portfolio']",node));
 		if (this.label_node[i].length==0) {
 			var newelement = createXmlElement("label");
 			$(newelement).attr('lang', languages[i]);
-			$("asmResource[xsi_type='URL2Unit']",node)[0].appendChild(newelement);
-			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL2Unit']",node));
+			$("asmResource[xsi_type='URL2Portfolio']",node)[0].appendChild(newelement);
+			this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL2Portfolio']",node));
 		}
 	}
 	this.local_label_node = [];
 	for (var i=0; i<languages.length;i++){
-		this.local_label_node[i] = $("local-label[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL2Unit']",node));
+		this.local_label_node[i] = $("local-label[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL2Portfolio']",node));
 		if (this.local_label_node[i].length==0) {
 			var newelement = createXmlElement("local-label");
 			$(newelement).attr('lang', languages[i]);
-			$("asmResource[xsi_type='URL2Unit']",node)[0].appendChild(newelement);
-			this.local_label_node[i] = $("local-label[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL2Unit']",node));
+			$("asmResource[xsi_type='URL2Portfolio']",node)[0].appendChild(newelement);
+			this.local_label_node[i] = $("local-label[lang='"+languages[i]+"']",$("asmResource[xsi_type='URL2Portfolio']",node));
 		}
 	}
 	this.query = ($("metadata-wad",node).attr('query')==undefined)?'':$("metadata-wad",node).attr('query');
@@ -72,7 +66,7 @@ UIFactory["URL2Unit"] = function(node,condition)
 };
 
 //==================================
-UIFactory["URL2Unit"].prototype.getAttributes = function(type,langcode)
+UIFactory["URL2Portfolio"].prototype.getAttributes = function(type,langcode)
 //==================================
 {
 	var result = {};
@@ -100,7 +94,7 @@ UIFactory["URL2Unit"].prototype.getAttributes = function(type,langcode)
 
 /// Display
 //==================================
-UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
+UIFactory["URL2Portfolio"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
 	//---------------------
@@ -123,15 +117,12 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 	if (label=='')
 		label = "---";
 	var html ="";
-	if (this.query.indexOf('self.')>-1)
-		html = "<div  class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+this.uuid_node.text()+"').click()\">"+label+"</div>";
-	else
-		html = "<a href='page.htm?i="+this.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>"+label+"</a>";
+		html = "<div  class='URL2Portfolio-link' onclick=\"display_main_page('"+this.uuid_node.text()+"')\">"+label+"</div>";
 	return html;
 };
 
 //==================================
-UIFactory["URL2Unit"].prototype.displayView = function(dest,type,langcode)
+UIFactory["URL2Portfolio"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
 	var html = this.getView(dest,type,langcode);
@@ -140,20 +131,14 @@ UIFactory["URL2Unit"].prototype.displayView = function(dest,type,langcode)
 
 /// Editor
 //==================================
-UIFactory["URL2Unit"].update = function(selected_item,itself,langcode,type)
+UIFactory["URL2Portfolio"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
-	//---------------------
 	var value = $(selected_item).attr('value');
+	//---------------------
 	if (itself.encrypted)
 		value = "rc4"+encrypt(value,g_rc4key);
-	$(itself.uuid_node).text(value);
-	//---------------------
-	var code = $(selected_item).attr('code');
-	if (itself.encrypted)
-		code = "rc4"+encrypt(value,g_rc4key);
-	$(itself.code_node).text(code);
 	//---------------------
 	$(itself.uuid_node).text(value);
 	for (var i=0; i<languages.length;i++){
@@ -168,7 +153,7 @@ UIFactory["URL2Unit"].update = function(selected_item,itself,langcode,type)
 };
 
 //==================================
-UIFactory["URL2Unit"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable,resettable)
+UIFactory["URL2Portfolio"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable,resettable)
 //==================================
 {
 	if (cachable==undefined || cachable==null)
@@ -194,8 +179,8 @@ UIFactory["URL2Unit"].prototype.displayEditor = function(destid,type,langcode,di
 		}
 		//------------
 		var self = this;
-		if (cachable && g_URL2Unit_caches[queryattr_value]!=undefined && g_URL2Unit_caches[queryattr_value]!="")
-			UIFactory["URL2Unit"].parse(destid,type,langcode,g_URL2Unit_caches[queryattr_value],self,disabled,srce,resettable,target,semtag);
+		if (cachable && g_URL2Portfolio_caches[queryattr_value]!=undefined && g_URL2Portfolio_caches[queryattr_value]!="")
+			UIFactory["URL2Portfolio"].parse(destid,type,langcode,g_URL2Portfolio_caches[queryattr_value],self,disabled,srce,resettable,target,semtag);
 		else
 			$.ajax({
 				async : false,
@@ -204,8 +189,8 @@ UIFactory["URL2Unit"].prototype.displayEditor = function(destid,type,langcode,di
 				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
 				success : function(data) {
 					if (cachable)
-						g_URL2Unit_caches[queryattr_value] = data;
-					UIFactory["URL2Unit"].parse(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag);
+						g_URL2Portfolio_caches[queryattr_value] = data;
+					UIFactory["URL2Portfolio"].parse(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag);
 				}
 			});
 	}
@@ -213,7 +198,7 @@ UIFactory["URL2Unit"].prototype.displayEditor = function(destid,type,langcode,di
 
 
 //==================================
-UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag) {
+UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -254,7 +239,7 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 		$(select_item_a).click(function (ev){
 			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
 			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
-			UIFactory["URL2Unit"].update(this,self,langcode);
+			UIFactory["URL2Portfolio"].update(this,self,langcode);
 		});
 		$(select).append($(select_item_a));
 		//--------------------
@@ -301,7 +286,7 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 						code = code.substring(0,code.indexOf("#"))+code.substring(code.indexOf("#")+1);
 					}
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
-					UIFactory["URL2Unit"].update(this,self,langcode);
+					UIFactory["URL2Portfolio"].update(this,self,langcode);
 				});
 				$(select).append($(select_item_a));
 				//-------------- update button -----
@@ -331,7 +316,7 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 				$(select_item_a).click(function (ev){
 					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
-					UIFactory["URL2Unit"].update(this,self,langcode);
+					UIFactory["URL2Portfolio"].update(this,self,langcode);
 				});
 				$(select_item).append($(select_item_a))
 				$(select).append($(select_item));
@@ -344,7 +329,7 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 };
 
 //==================================
-UIFactory["URL2Unit"].prototype.save = function()
+UIFactory["URL2Portfolio"].prototype.save = function()
 //==================================
 {
 	UICom.UpdateResource(this.id,writeSaved);
@@ -352,7 +337,7 @@ UIFactory["URL2Unit"].prototype.save = function()
 };
 
 //==================================
-UIFactory["URL2Unit"].prototype.refresh = function()
+UIFactory["URL2Portfolio"].prototype.refresh = function()
 //==================================
 {
 	for (dest in this.display) {
@@ -360,96 +345,3 @@ UIFactory["URL2Unit"].prototype.refresh = function()
 	};
 
 };
-
-//==================================
-UIFactory["URL2Unit"].prototype.bringUpToDate = function()
-//==================================
-{
-	var unit_code = $(this.code_node).text();
-	var queryattr_value = this.query;
-	if (queryattr_value!=undefined && queryattr_value!='') {
-		//------------
-		var srce_indx = queryattr_value.lastIndexOf('.');
-		var srce = queryattr_value.substring(srce_indx+1);
-		var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');
-		var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
-		var target = queryattr_value.substring(srce_indx+1); // label or text
-		//------------
-		var portfoliocode = r_replaceVariable(queryattr_value.substring(0,semtag_indx));
-		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-		if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
-			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
-		if (portfoliocode=='self') {
-			portfoliocode = selfcode;
-		}
-		//------------
-		var self = this;
-		if (g_URL2Unit_caches[queryattr_value]!=undefined && g_URL2Unit_caches[queryattr_value]!="") {
-			var nodes = $("node",g_URL2Unit_caches[queryattr_value]);
-			for ( var i = 0; i < $(nodes).length; i++) {
-				var resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-				var code = $('code',resource).text();
-				if (code == unit_code) {
-					$(this.uuid_node).text($(nodes[i]).attr('id'));
-					this.save();
-					break;
-				}
-			}
-		} else
-			$.ajax({
-				self :self,
-				async : false,
-				unit_code : unit_code,
-				queryattr_value : queryattr_value,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
-				success : function(data) {
-					g_URL2Unit_caches[this.queryattr_value] = data;
-					var nodes = $("node",g_URL2Unit_caches[this.queryattr_value]);
-					for ( var i = 0; i < $(nodes).length; i++) {
-						var resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-						var code = $('code',resource).text();
-						if (code == this.unit_code) {
-							$(self.uuid_node).text($(nodes[i]).attr('id'));
-							self.save();
-							break;
-						}
-					}
-				}
-			});
-	}
-};
-
-//==================================
-UIFactory["URL2Unit"].bringUpToDate = function(portfolioid)
-//==================================
-{
-	var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
-	$.ajax({
-		async : false,
-		type : "GET",
-		dataType : "xml",
-		url : url,
-		success : function(data) {
-			UICom.parseStructure(data,true);
-			setVariables(data);
-			var url2units = $("asmContext:has(asmResource[xsi_type='URL2Unit'])",data);
-			for (var j=0; j<url2units.length; j++){
-				UICom.structure.ui[$(url2units[j]).attr('id')].resource.bringUpToDate();
-			}
-		}
-	});
-}
-
-//==================================
-UIFactory["URL2Unit"].testIfURL2Unit = function(data)
-//==================================
-{
-	var url2units = $("asmContext:has(asmResource[xsi_type='URL2Unit'])",data);
-	if (url2units.length>0)
-		return true;
-	else
-		return false;
-}
-

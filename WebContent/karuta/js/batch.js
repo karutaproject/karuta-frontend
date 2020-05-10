@@ -723,10 +723,9 @@ g_actions['delete-tree'] = function deleteTree(node)
 //=================================================
 {
 	var ok = false;
-	var code = getTxtvals($("code",node));
-	//----- get tree id -----
+	var treeref = $(node).attr("select");
 	try {
-		var portfolioid = UIFactory["Portfolio"].getid_bycode(code,false);
+		var portfolioid = g_trees[treeref][0];
 		if (portfolioid!=undefined) {
 			var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid;
 			$.ajax({
@@ -744,6 +743,34 @@ g_actions['delete-tree'] = function deleteTree(node)
 					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
 				}
 			});
+		} else {
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
+		}	
+	}
+	catch(err) {
+		$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
+	}
+	return ok;
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Refresh Tree URL2Units -----------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['refresh-tree-url2unit'] = function deleteTree(node)
+//=================================================
+{
+	var ok = false;
+	var treeref = $(node).attr("select");
+	try {
+		var portfolioid = g_trees[treeref][0];
+		if (portfolioid!=undefined) {
+			UIFactory.URL2Unit.bringUpToDate(portfolioid);
+			ok = true;
+			$("#batch-log").append("<br>- tree-url2unit refreshed - code:|"+code+"| portfolioid:"+portfolioid);
 		} else {
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> delete tree - code:|"+code+" ---- NOT FOUND ----");
 		}	

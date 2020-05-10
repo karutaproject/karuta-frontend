@@ -230,6 +230,16 @@
 		</delete-tree>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='refresh-tree-url2unit']">
+		<refresh-tree-url2unit>
+			<code>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">code</xsl:with-param>
+				</xsl:call-template>
+			</code>
+		</refresh-tree-url2unit>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='share-tree']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
