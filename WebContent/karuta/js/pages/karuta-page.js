@@ -163,8 +163,6 @@ function setConfigurationUIVariables()
 		url : url,
 		success : function(data) {
 			//---------Navigation Bar--------------
-			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
-			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
 			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data);
 			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data);
 			g_configVar['navbar-display-mailto'] = getText('navbar-display-mailto','Get_Resource','value',data);
@@ -175,8 +173,6 @@ function setConfigurationUIVariables()
 			g_configVar['font-size-coeff'] = getText('config-font-size-coeff','Field','text',data);
 			//----------------------
 			g_configVar['list-welcome-image'] = getBackgroundURL('config-list-welcome-image',data);		
-			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data);
-			g_configVar['list-welcome-subtitle'] = getText('config-list-welcome-subtitle','Field','text',data);
 			g_configVar['list-welcome-title-color'] = getText('config-list-welcome-title-color','Color','text',data);
 			g_configVar['list-welcome-title-css'] = getText('config-list-welcome-title-css','Field','text',data);
 			g_configVar['list-welcome-subline-color'] = getText('config-list-welcome-subline-color','Color','text',data);
@@ -211,8 +207,6 @@ function setConfigurationUIVariables()
 			g_configVar['portfolio-buttons-color'] = getText('config-portfolio-buttons-color','Color','text',data);
 			g_configVar['portfolio-buttons-background-color'] = getText('config-portfolio-buttons-background-color','Color','text',data);
 			g_configVar['portfolio-link-color'] = getText('config-portfolio-link-color','Color','text',data);
-			g_configVar['portfolio-section-title-background-color'] = getText('config-portfolio-section-title-background-color','Color','text',data);
-			g_configVar['portfolio-section-separator-color'] = getText('config-portfolio-section-separator-color','Color','text',data);
 			g_configVar['portfolio-resource-border-color'] = getText('config-portfolio-resource-border-color','Color','text',data);
 
 			//----------
@@ -256,6 +250,10 @@ function setConfigurationTechVariables()
 			//----------------------
 			g_configVar['maxfilesizeupload'] = getText('config-maxfilesizeupload','Field','text',data);
 			g_configVar['maxuserlist'] = getText('config-maxuserlist','Field','text',data);
+			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
+			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
+			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data);
+			g_configVar['list-welcome-subtitle'] = getText('config-list-welcome-subtitle','Field','text',data);
 			//----- Load Plugins + Javascript Files
 			var jsfile_nodes = [];
 			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-js'])",data);

@@ -173,11 +173,12 @@ var UICom =
 							dataType : "xml",
 							url : serverBCK_API+"/nodes/node/" + targetid + "?resources=true",
 							success : function(data) {
+								$(":root",data).attr("id",targetid+$(current).attr("id"));
 								proxies_data[targetid] = data;
 								proxies_parent[targetid] = $(current).attr("id");
 								proxies_edit[targetid] = edittargetroles;
 								proxies_delete[targetid] = delnoderoles;
-								proxies_nodeid[targetid] = id;
+								proxies_nodeid[targetid] = id; // og: ???
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
 							}
 						});

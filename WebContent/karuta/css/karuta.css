@@ -1228,18 +1228,12 @@ body,
 #main-portfolio #sub-bar #welcome-edit {
   padding-top: 9px;
 }
-#main-portfolio:not([role=designer]) .WELCOME .first-node {
+#main-portfolio #portfolio-container:not([role=designer]) .WELCOME .first-node {
   display: none;
 }
 #main-portfolio #contenu,
 #main-portfolio .popover-header {
   color: var(--portfolio-text-color);
-}
-#main-portfolio .row-node {
-  border-top: 1px solid var(--portfolio-section-separator-color);
-}
-#main-portfolio .row-node-asmUnitStructure {
-  background-color: var(--portfolio-section-title-background-color);
 }
 #main-portfolio .dropdown-menu {
   background-color: var(--portfolio-menu-background-color);
@@ -2269,6 +2263,7 @@ button.selected-label {
 }
 
 .comments {
+  font-size: 75%;
   font-style: italic;
   font-weight: normal;
 }

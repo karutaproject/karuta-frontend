@@ -641,7 +641,7 @@ function displayPage(uuid,depth,type,langcode) {
 			}
 		}
 		if (type=='translate')
-			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+			UICom.structure["ui"][uuid].displayTranslateNode(type,UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
 		if (type=='raw' || type=='model') {
 			UICom.structure["ui"][uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
@@ -1573,9 +1573,9 @@ function getFirstWords(html,nb) {
 function setVariables(data)
 //==================================
 {
-	var variable_nodes = $("asmContext:has(metadata[semantictag='g-variable'])",data);
+	var variable_nodes = $("asmContext:has(metadata[semantictag*='g-variable'])",data);
 	for (var i=0;i<variable_nodes.length;i++) {
-		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].getLabel(null,'none')] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().text;
+		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().name] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().value;
 	}
 }
 

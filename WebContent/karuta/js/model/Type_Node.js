@@ -511,6 +511,62 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		$("div[name='lbl-div']","#node_"+uuid).hide();
 }
 
+//==============================================================================
+//==============================================================================
+//==============================================================================
+UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock,refresh)
+//==============================================================================
+//==============================================================================
+//==============================================================================
+{
+	if (refresh==null)
+		refresh = false;
+	var uuid = this.id;
+	this.setMetadata(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock);
+	//============================== ASMCONTEXT =============================
+	if (this.nodetype == "asmContext"){
+		var uuid = this.id;
+		//---------------- DISPLAY HTML -------------------------------
+		var html = "";
+		var displayview = "translate-resource-default";
+		html = displayHTML[displayview];
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+		//-------------------- display ----------------------
+		$("#"+dest).append (html);
+		//---------------- display resource ---------------------------------
+		this.resource.displayEditor("resource1_"+uuid,null,0,false,this.inline);
+		this.resource.displayEditor("resource2_"+uuid,null,1,false,this.inline);
+		//---------------- display label ---------------------------------
+		$("#label1_"+uuid).append(this.getNodeLabelEditor(null,0));
+		$("#label2_"+uuid).append(this.getNodeLabelEditor(null,1));
+	}
+	//============================== NODE ===================================
+	else { // other than asmContext
+		var nodetype = this.asmtype;
+		var uuid = this.id;
+		var html = "";
+		var displayview = "translate-node-default";
+		//---------------- DISPLAY -------------------------------
+		html = displayHTML[displayview];
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+		$("#"+dest).append (html);
+		//-------------- label --------------------------
+		$("#label1_"+uuid).append(this.getNodeLabelEditor(null,0));
+		$("#label2_"+uuid).append(this.getNodeLabelEditor(null,1));
+	}
+	// ===========================================================================
+	// ================================= For each child ==========================
+	// ===========================================================================
+	for( var i=0; i<root.children.length; ++i ) {
+		// Recurse
+		var child = UICom.structure["tree"][root.children[i]];
+		var childnode = UICom.structure["ui"][root.children[i]];
+		var childsemtag = $(childnode.metadata).attr('semantictag');
+		childnode.displayTranslateNode(type,child, 'content-'+uuid, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
+	}
+	//-------------------------------------------------------
+};
+
 //==================================
 UIFactory["Node"].prototype.getUuid = function()
 //==================================

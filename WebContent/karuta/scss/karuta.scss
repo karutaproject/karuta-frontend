@@ -1311,7 +1311,7 @@
 		}
 
 		background-color: var(--portfolio-background-color);
-		&:not([role=designer]) .WELCOME .first-node{ 
+		#portfolio-container:not([role=designer]) .WELCOME .first-node{ 
 			display:none
 		}
 		&[role=designer] {
@@ -1322,12 +1322,6 @@
 		#contenu,
 		.popover-header {
 			color: var(--portfolio-text-color);
-		}
-		.row-node {
-			border-top:1px solid var(--portfolio-section-separator-color);
-		}
-		.row-node-asmUnitStructure {
-			background-color:var(--portfolio-section-title-background-color);
 		}
 		.dropdown-menu {
 			background-color: var(--portfolio-menu-background-color);
@@ -2479,6 +2473,7 @@ button.selected-label {
 	width:40px;
 }
 	.comments {
+		font-size:75%;
 		font-style:italic;
 		font-weight:normal;
 	//	padding:7px;

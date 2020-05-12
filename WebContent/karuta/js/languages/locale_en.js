@@ -419,6 +419,7 @@ karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g
 //=========================================
 //========== EUROPASS =====================
 //=========================================
+
 karutaStr['en']['mother-tongue']="Mother Tongue";
 karutaStr['en']['foreign-languages']="Foreign Languages";
 karutaStr['en']['add-foreign-language']="Add a foreign Language";
@@ -434,6 +435,7 @@ karutaStr['en']['writing']="WRITING";
 //=========================================
 //========== BUBBLE MAP ===================
 //=========================================
+
 karutaStr['en']['leave-edit-mode']="Leave Edit Mode";
 karutaStr['en']['bubble-label']="Label";
 karutaStr['en']['bubble-links']="Links";
@@ -527,11 +529,15 @@ karutaStr['en']['BubbleMap']="Bubble Map";
 karutaStr['en']['Europass']="Europass";
 
 karutaStr['en']['Item']="Item";
-karutaStr['en']['Get_Resource']="Get_Resource";
-karutaStr['en']['Get_Get_Resource']="Get_Get_Resource";
-karutaStr['en']['Get_Double_Resource']="Get_Double_Resource";
+karutaStr['en']['Get_Resource']="GetResource";
+karutaStr['en']['Get_Get_Resource']="GetGetResource";
+karutaStr['en']['Get_Double_Resource']="GetDoubleResource";
 karutaStr['en']['Proxy']="Proxy";
-karutaStr['en']['Get_Proxy']="Get_Proxy";
+karutaStr['en']['Get_Proxy']="GetProxy";
+
+karutaStr['en']['Variable']="Variable";
+karutaStr['en']['var-name']="Variable Name";
+karutaStr['en']['var-value']="Variable Value";
 
 karutaStr['en']['asmColumn']="asmColumn";
 

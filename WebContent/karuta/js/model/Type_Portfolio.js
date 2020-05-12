@@ -1195,8 +1195,10 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		html += "<a class='dropdown-item'  onclick=\"$('#contenu').html('');UICom.structure.ui['"+g_portfolio_rootid+"'].displaySemanticTags('contenu')\">"+karutaStr[LANG]['list-semtags']+"</a>";
 		if (UIFactory.URL2Unit.testIfURL2Unit(g_portfolio_current))
 			html += "<a class='dropdown-item'  onclick=\"UIFactory.URL2Unit.bringUpToDate('"+portfolioid+"')\">"+karutaStr[LANG]['refresh-url2unit']+"</a>";
-//		if(languages.length>1)
-//			html += "<a class='dropdown-item'  onclick=\"$('#welcome-bar').hide();$('#sub-bar').html(UIFactory.Portfolio.getNavBar('translate',LANGCODE,g_edit,g_portfolioid))$('#sub-bar').show();;UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
+		if(languages.length>1) {
+//			html += "<a class='dropdown-item'  onclick=\"$('#welcome-bar').hide();$('#sub-bar').html(UIFactory.Portfolio.getNavBar('translate',LANGCODE,g_edit,g_portfolioid))$('#sub-bar').show();UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
+			html += "<a class='dropdown-item'  onclick=\"UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
+		}
 	}
 	return html;
 };
@@ -2490,11 +2492,9 @@ function setCSSportfolio(data)
 	setConfigColor(data,root,'page-title-subline-color');
 	setConfigColor(data,root,'portfolio-background-color');
 	setConfigColor(data,root,'portfolio-text-color');
-	setConfigColor(data,root,'portfolio-section-separator-color');
 	setConfigColor(data,root,'portfolio-buttons-background-color');
 	setConfigColor(data,root,'portfolio-buttons-color');
 	setConfigColor(data,root,'portfolio-link-color');
-	setConfigColor(data,root,'portfolio-section-title-background-color');
 	setConfigColor(data,root,'portfolio-resource-border-color');
 	setConfigColor(data,root,'portfolio-menu-background-color');
 	setConfigColor(data,root,'portfolio-menu-text-color');
@@ -2604,12 +2604,6 @@ function setCSSportfolioOLD(data)
 		var color = UICom.structure["ui"][page_title_background_color_id].resource.getValue();
 		changeCss(".welcome-line,.row-node-asmRoot,.row-node-asmStructure,.row-node-asmUnit", "background-color:"+color+";");
 		changeCss(".row-node", "border-top:1px solid "+color+";");
-	}
-	//--------------------------------
-	if ($("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).length>0) {
-		var section_separator_color_id = $("asmContext:has(metadata[semantictag='portfolio-section-separator-color'])",data).attr("id");
-		var color = UICom.structure["ui"][section_separator_color_id].resource.getValue();
-		root.style.setProperty("--portfolio-sidebar-separator-color",color);
 	}
 	//--------------------------------
 	if ($("asmContext:has(metadata[semantictag='page-title-subline-color'])",data).length>0) {
