@@ -523,6 +523,7 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		refresh = false;
 	var uuid = this.id;
 	this.setMetadata(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock);
+	this.display_node[dest] = {"type":type,"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":type,"parent":parent,"menu":menu,"inblock":inblock};
 	//============================== ASMCONTEXT =============================
 	if (this.nodetype == "asmContext"){
 		var uuid = this.id;
@@ -532,13 +533,22 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		html = displayHTML[displayview];
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
 		//-------------------- display ----------------------
-		$("#"+dest).append (html);
+		if (!refresh) {
+			$("#"+dest).append (html);
+		} else {
+			$("#node_"+this.id).replaceWith(html);
+		}
 		//---------------- display resource ---------------------------------
-		this.resource.displayEditor("resource1_"+uuid,null,0,false,this.inline);
-		this.resource.displayEditor("resource2_"+uuid,null,1,false,this.inline);
+		try {
+			this.resource.displayEditor("resource0_"+uuid,null,g_translate[0],false,this.inline);
+			this.resource.displayEditor("resource1_"+uuid,null,g_translate[1],!this.resource.multilingual,this.inline)
+		} catch(e){
+			$("#resource0_"+uuid).append(this.resource.getEditor("resource0_"+uuid,null,g_translate[0],false,this.inline));
+			$("#resource1_"+uuid).append(this.resource.getEditor("resource1_"+uuid,null,g_translate[1],!this.resource.multilingual,this.inline))
+		}
 		//---------------- display label ---------------------------------
-		$("#label1_"+uuid).append(this.getNodeLabelEditor(null,0));
-		$("#label2_"+uuid).append(this.getNodeLabelEditor(null,1));
+		$("#label0_"+uuid).append(this.getNodeLabelEditor(null,g_translate[0]));
+		$("#label1_"+uuid).append(this.getNodeLabelEditor(null,g_translate[1]));
 	}
 	//============================== NODE ===================================
 	else { // other than asmContext
@@ -546,13 +556,18 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		var uuid = this.id;
 		var html = "";
 		var displayview = "translate-node-default";
-		//---------------- DISPLAY -------------------------------
+		//---------------- DISPLAY HTML -------------------------------
 		html = displayHTML[displayview];
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
-		$("#"+dest).append (html);
-		//-------------- label --------------------------
-		$("#label1_"+uuid).append(this.getNodeLabelEditor(null,0));
-		$("#label2_"+uuid).append(this.getNodeLabelEditor(null,1));
+		//-------------------- display ----------------------
+		if (!refresh) {
+			$("#"+dest).append (html);
+		} else {
+			$("#node_"+this.id).replaceWith(html);
+		}
+		//-------------- display label --------------------------
+		$("#label0_"+uuid).append(this.getNodeLabelEditor(null,g_translate[0]));
+		$("#label1_"+uuid).append(this.getNodeLabelEditor(null,g_translate[1]));
 	}
 	// ===========================================================================
 	// ================================= For each child ==========================
@@ -944,7 +959,10 @@ UIFactory["Node"].prototype.refresh = function()
 	};
 
 	for (dest3 in this.display_node) {
-		this.displayNode(this.display_node[dest3].type,this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent,this.display_node[dest3].parent,this.display_node[dest3].menu,this.display_node[dest3].inblock,true);
+		if (this.display_node[dest3].type=='translate')
+			this.displayTranslateNode(this.display_node[dest3].type,this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent,this.display_node[dest3].parent,this.display_node[dest3].menu,this.display_node[dest3].inblock,true);
+		else
+			this.displayNode(this.display_node[dest3].type,this.display_node[dest3].root, this.display_node[dest3].dest, this.display_node[dest3].depth,this.display_node[dest3].langcode,this.display_node[dest3].edit,this.display_node[dest3].inline,this.display_node[dest3].backgroundParent,this.display_node[dest3].parent,this.display_node[dest3].menu,this.display_node[dest3].inblock,true);
 	};
 
 	for (dest4 in this.display_context) {

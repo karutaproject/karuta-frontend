@@ -1425,6 +1425,29 @@ body,
 }
 
 /* ========================= */
+/*        VUE translate      */
+/* ========================= */
+.translate .node-label {
+  background: #f0f0f0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.translate img {
+  max-width: 100%;
+}
+.translate .translate-resource-default {
+  padding-top: 5px;
+  margin: 5px;
+  border: 1px dashed #f0f0f0;
+}
+.translate .resource-label {
+  margin-bottom: 5px;
+}
+.translate .resource-label input {
+  background: #f0f0f0;
+}
+
+/* ========================= */
 /*     VUE  STANDARD         */
 /* ========================= */
 .standard-struct-default {

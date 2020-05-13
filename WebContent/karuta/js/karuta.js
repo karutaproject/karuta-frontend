@@ -33,6 +33,7 @@ var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
 var g_display_type = "standard"; // default value
+var g_translate = [];
 var g_bar_type = "vertical"; // default value
 var g_edit = false;
 var g_visible = 'hidden';

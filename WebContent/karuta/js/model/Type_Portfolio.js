@@ -308,6 +308,21 @@ UIFactory["Portfolio"].getAdminPortfolioMenu = function(gid,self,semtag)
 }
 
 //======================
+UIFactory["Portfolio"].getTranslateMenu = function()
+//======================
+{
+	var html = "";
+	if (languages.length<3)
+		html += "<a class='dropdown-item'  onclick=\"g_translate[0]=0;g_translate[1]=1;UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+" "+languages[0]+"-"+languages[1]+"</a>";
+	else {
+		for (var i=0;i<languages.length-1;i++){
+			html += "<a class='dropdown-item'  onclick=\"g_translate[i]=0;g_translate[i+1]=1;UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+" "+languages[i]+"-"+languages[i+1]+"</a>";
+		}
+		html += "<a class='dropdown-item'  onclick=\"g_translate[0]=0;g_translate[languages.length-1]=1;UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+" "+languages[0]+"-"+languages[languages.length-1]+"</a>";
+	}
+	return html
+}
+//======================
 UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 //======================
 {	var html = "";
@@ -1197,7 +1212,7 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 			html += "<a class='dropdown-item'  onclick=\"UIFactory.URL2Unit.bringUpToDate('"+portfolioid+"')\">"+karutaStr[LANG]['refresh-url2unit']+"</a>";
 		if(languages.length>1) {
 //			html += "<a class='dropdown-item'  onclick=\"$('#welcome-bar').hide();$('#sub-bar').html(UIFactory.Portfolio.getNavBar('translate',LANGCODE,g_edit,g_portfolioid))$('#sub-bar').show();UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
-			html += "<a class='dropdown-item'  onclick=\"UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
+			html += UIFactory.Portfolio.getTranslateMenu();
 		}
 	}
 	return html;

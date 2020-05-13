@@ -149,18 +149,18 @@
 	//====================================================================
 	displayHTML["translate-node-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 											"	<div id='std_node_#uuid#' class='node-label row'>" +
-											"		<span class='col-6 label-node' id='label1_#uuid#'></span><span class='col-6 label-node' id='label2_#uuid#'></span>" +
+											"		<span class='col-6 label-node' id='label0_#uuid#'></span><span class='col-6 label-node' id='label1_#uuid#'></span>" +
 											"	</div>" +
 											"	<div id='content-#uuid#' name='cnt-div' class='content standard-node-default-content' ><\div>" +
 											"</div>";
 
 	displayHTML["translate-resource-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
-												"	<div id='std_node_#uuid#' class='node-label row'>" +
-												"		<span class='col-6 label-node' id='label1_#uuid#'></span><span class='col-6 label-node' id='label2_#uuid#'></span>" +
+												"	<div id='std_node_#uuid#' class='resource-label row'>" +
+												"		<span class='col-6 label-node' id='label0_#uuid#'></span><span class='col-6 label-node' id='label1_#uuid#'></span>" +
 												"	</div>" +
 												"	<div class='row'>" +
+												"			<div id='resource0_#uuid#' class='col-6'></div>" +
 												"			<div id='resource1_#uuid#' class='col-6'></div>" +
-												"			<div id='resource2_#uuid#' class='col-6'></div>" +
 												"	</div>" +
 												"</div>";
 
