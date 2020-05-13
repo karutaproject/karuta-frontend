@@ -2461,7 +2461,7 @@ UIFactory["Portfolio"].search = function(type)
 	var html="";
 	html += "<div class='result-title'>"+karutaStr[LANG]["result-title"]+value+"</div>";
 	html += "<div class='result-subtitle'>"+karutaStr[LANG]["result-subtitle"]+"</div>";
-	html += "<div class='result-nb'>"+karutaStr[LANG]["result-subtitle"] + nodes.length + "</div>";
+	html += "<div class='result-nb'>"+karutaStr[LANG]["result-nb"] + nodes.length + "</div>";
 	for (var i=0; i<nodes.length;i++){
 		var nodeid = $(nodes[i]).attr('id');
 		var node_label = UICom.structure.ui[nodeid].getLabel();

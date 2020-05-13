@@ -254,6 +254,15 @@ function setConfigurationTechVariables()
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
 			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data);
 			g_configVar['list-welcome-subtitle'] = getText('config-list-welcome-subtitle','Field','text',data);
+			
+			// --------CSS Text------------------
+			var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-css'])",data))).text();
+			csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");
+			if (csstext!=undefined && csstext!=''){
+				console.log("Configuration CSS added")
+				$("<style id='configcsstext'>"+csstext+"</style>").appendTo('head');
+			}
+
 			//----- Load Plugins + Javascript Files
 			var jsfile_nodes = [];
 			jsfile_nodes = $("asmContext:has(metadata[semantictag='config-file-js'])",data);

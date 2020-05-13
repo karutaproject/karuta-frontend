@@ -328,6 +328,11 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
 	html += "<span id='loaded_"+this.id+langcode+"'></span>"
 	html +=  " <button type='button' class='btn ' "+((disabled) ? "disabled":"")+" onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+	if (USER.admin || g_userroles[0]=='designer') {
+		var semtag =  ($("metadata",this.node)[0]==undefined || $($("metadata",this.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
+		if (semtag=="config-img-css")
+			html += "<div class='iamge-url'>url : ../../../"+serverBCK+"/resources/resource/file/"+this.id+"</div>";
+	}
 	$("#"+destid).append($(html));
 	var loadedid = 'loaded_'+this.id+langcode;
 	$('#fileupload_'+this.id+"_"+langcode).fileupload({

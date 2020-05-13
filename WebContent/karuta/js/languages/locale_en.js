@@ -322,7 +322,8 @@ karutaStr['en']['result-title']="Results for : ";
 karutaStr['en']['result-subtitle']="Search is case sensitive.";
 karutaStr['en']['result-nb']="Number of pages : ";
 karutaStr['en']['refresh-url2unit']="Refresh URL2Units";
-karutaStr['en']['not-multilingual']="Not Multilingual";
+karutaStr['en']['label-not-multilingual']="Label Not Multilingual";
+karutaStr['en']['resource-not-multilingual']="Resource Not Multilingual";
 
 //=========================================
 //========== FOLDERS ======================

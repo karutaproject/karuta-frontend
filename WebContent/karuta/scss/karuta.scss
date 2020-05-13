@@ -1546,9 +1546,9 @@
 
 	.translate {
 		.node-label{
-				background: #f0f0f0;
 				padding-top:10px;
 				padding-bottom:10px;
+				background: #f0f0f0;
 		}
 		img {
 			max-width:100%;
@@ -1556,13 +1556,13 @@
 		.translate-resource-default{
 			padding-top:5px;
 			margin: 5px;
-			border : 1px dashed #f0f0f0;
+			border : 1px dashed #a0a0a0;
 		}
 		.resource-label {
-			input {
-				background: #f0f0f0;
-			}
-		margin-bottom:5px;
+			margin-bottom:5px;
+		}
+		input {
+				background: #ffffee;
 		}
 	}
 
@@ -2603,8 +2603,9 @@ table.tablesorter th.restore {
 		background-repeat: no-repeat;
 		background-position: 10px 3px;
 		display:inline-block;
-		height:34px;
+		min-height:34px;
 		width:90%;
+		padding-left:40px;
 	}
 	
 	.selSMILEY-NEUTRAL, .SMILEY-NEUTRAL {
@@ -2612,8 +2613,9 @@ table.tablesorter th.restore {
 		background-repeat: no-repeat;
 		background-position: 10px 3px;
 		display:inline-block;
-		height:34px;
+		min-height:34px;
 		width:90%;
+		padding-left:40px;
 	}
 	
 	.selSMILEY-SAD, .SMILEY-SAD {
@@ -2621,8 +2623,9 @@ table.tablesorter th.restore {
 		background-repeat: no-repeat;
 		background-position: 10px 3px;
 		display:inline-block;
-		height:34px;
+		min-height:34px;
 		width:90%;
+		padding-left:40px;
 	}
 	
 	.selSMILEY-GREEN, .SMILEY-GREEN {
@@ -2630,8 +2633,9 @@ table.tablesorter th.restore {
 		background-repeat: no-repeat;
 		background-position: 10px 3px;
 		display:inline-block;
-		height:34px;
+		min-height:34px;
 		width:90%;
+		padding-left:40px;
 	}
 	
 	.selSMILEY-ORANGE, .SMILEY-ORANGE {
@@ -2639,8 +2643,9 @@ table.tablesorter th.restore {
 		background-repeat: no-repeat;
 		background-position: 10px 3px;
 		display:inline-block;
-		height:34px;
+		min-height:34px;
 		width:90%;
+		padding-left:40px;
 	}
 	
 	.selSMILEY-RED, .SMILEY-RED {
@@ -2648,8 +2653,9 @@ table.tablesorter th.restore {
 		background-repeat: no-repeat;
 		background-position: 10px 3px;
 		display:inline-block;
-		height:34px;
+		min-height:34px;
 		width:90%;
+		padding-left:40px;
 	}
 	
 	.selGREEN-CHECK, .GREEN-CHECK {
@@ -2657,8 +2663,9 @@ table.tablesorter th.restore {
 		background-repeat: no-repeat;
 		background-position: 10px 3px;
 		display:inline-block;
-		height:34px;
+		min-height:34px;
 		width:90%;
+		padding-left:40px;
 	}
 	
 	.selRED-X, .RED-X {
@@ -2666,8 +2673,9 @@ table.tablesorter th.restore {
 		background-repeat: no-repeat;
 		background-position: 10px 3px;
 		display:inline-block;
-		height:34px;
+		min-height:34px;
 		width:90%;
+		padding-left:40px;
 	}
 
 /* ====================

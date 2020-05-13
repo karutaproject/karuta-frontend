@@ -541,20 +541,23 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		//---------------- display resource ---------------------------------
 		try {
 			this.resource.displayEditor("resource0_"+uuid,null,g_translate[0],false);
-			if (this.multilingual)
+			if (this.resource.multilingual)
 				this.resource.displayEditor("resource1_"+uuid,null,g_translate[1],false);
 			else
-				$("#resource1_"+uuid).html(karutaStr[LANG]['not-multilingual']);
+				$("#resource1_"+uuid).html(karutaStr[LANG]['resource-not-multilingual']);
 		} catch(e){
 			$("#resource0_"+uuid).append(this.resource.getEditor("resource0_"+uuid,null,g_translate[0],false));
 			if (this.multilingual)
 				$("#resource1_"+uuid).append(this.resource.getEditor("resource1_"+uuid,null,g_translate[1],false))
 			else
-				$("#resource1_"+uuid).html(karutaStr[LANG]['not-multilingual']);
+				$("#resource1_"+uuid).html(karutaStr[LANG]['resource-not-multilingual']);
 		}
 		//---------------- display label ---------------------------------
 		$("#label0_"+uuid).append(this.getNodeLabelEditor(null,g_translate[0]));
-		$("#label1_"+uuid).append(this.getNodeLabelEditor(null,g_translate[1]));
+		if (this.multilingual)
+			$("#label1_"+uuid).append(this.getNodeLabelEditor(null,g_translate[1]));
+		else
+			$("#label1_"+uuid).html(karutaStr[LANG]['label-not-multilingual']);
 	}
 	//============================== NODE ===================================
 	else { // other than asmContext
@@ -577,10 +580,13 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 			if (this.multilingual)
 				this.structured_resource.displayEditor("resource1_"+uuid,null,g_translate[1],false);
 			else
-				$("#resource1_"+uuid).html(karutaStr[LANG]['not-multilingual']);
+				$("#resource1_"+uuid).html(karutaStr[LANG]['resource-not-multilingual']);
 		} else {
 			$("#label0_"+uuid).append(this.getNodeLabelEditor(null,g_translate[0]));
-			$("#label1_"+uuid).append(this.getNodeLabelEditor(null,g_translate[1]));
+			if (this.multilingual)
+				$("#label1_"+uuid).append(this.getNodeLabelEditor(null,g_translate[1]));
+			else
+				$("#label1_"+uuid).html(karutaStr[LANG]['label-not-multilingual']);
 		}
 	}
 	// ===========================================================================
