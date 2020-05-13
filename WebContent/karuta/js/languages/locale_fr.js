@@ -322,6 +322,7 @@ karutaStr['fr']['result-title']="Résultats de la recherche pour : ";
 karutaStr['fr']['result-subtitle']="La recherche est sensible à la casse.";
 karutaStr['fr']['result-nb']="Nombre de pages : ";
 karutaStr['fr']['refresh-url2unit']="Actualiser les URL2Units";
+karutaStr['fr']['not-multilingual']="Non Multilingue";
 
 //=========================================
 //========== FOLDERS ======================

@@ -540,11 +540,17 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		}
 		//---------------- display resource ---------------------------------
 		try {
-			this.resource.displayEditor("resource0_"+uuid,null,g_translate[0],false,this.inline);
-			this.resource.displayEditor("resource1_"+uuid,null,g_translate[1],!this.resource.multilingual,this.inline)
+			this.resource.displayEditor("resource0_"+uuid,null,g_translate[0],false);
+			if (this.multilingual)
+				this.resource.displayEditor("resource1_"+uuid,null,g_translate[1],false);
+			else
+				$("#resource1_"+uuid).html(karutaStr[LANG]['not-multilingual']);
 		} catch(e){
-			$("#resource0_"+uuid).append(this.resource.getEditor("resource0_"+uuid,null,g_translate[0],false,this.inline));
-			$("#resource1_"+uuid).append(this.resource.getEditor("resource1_"+uuid,null,g_translate[1],!this.resource.multilingual,this.inline))
+			$("#resource0_"+uuid).append(this.resource.getEditor("resource0_"+uuid,null,g_translate[0],false));
+			if (this.multilingual)
+				$("#resource1_"+uuid).append(this.resource.getEditor("resource1_"+uuid,null,g_translate[1],false))
+			else
+				$("#resource1_"+uuid).html(karutaStr[LANG]['not-multilingual']);
 		}
 		//---------------- display label ---------------------------------
 		$("#label0_"+uuid).append(this.getNodeLabelEditor(null,g_translate[0]));
@@ -565,20 +571,29 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		} else {
 			$("#node_"+this.id).replaceWith(html);
 		}
-		//-------------- display label --------------------------
-		$("#label0_"+uuid).append(this.getNodeLabelEditor(null,g_translate[0]));
-		$("#label1_"+uuid).append(this.getNodeLabelEditor(null,g_translate[1]));
+		//-------------- display structured resource or label --------------------------
+		if (this.structured_resource != null) {
+			this.structured_resource.displayEditor("resource0_"+uuid,null,g_translate[0],false);
+			if (this.multilingual)
+				this.structured_resource.displayEditor("resource1_"+uuid,null,g_translate[1],false);
+			else
+				$("#resource1_"+uuid).html(karutaStr[LANG]['not-multilingual']);
+		} else {
+			$("#label0_"+uuid).append(this.getNodeLabelEditor(null,g_translate[0]));
+			$("#label1_"+uuid).append(this.getNodeLabelEditor(null,g_translate[1]));
+		}
 	}
 	// ===========================================================================
 	// ================================= For each child ==========================
 	// ===========================================================================
-	for( var i=0; i<root.children.length; ++i ) {
-		// Recurse
-		var child = UICom.structure["tree"][root.children[i]];
-		var childnode = UICom.structure["ui"][root.children[i]];
-		var childsemtag = $(childnode.metadata).attr('semantictag');
-		childnode.displayTranslateNode(type,child, 'content-'+uuid, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
-	}
+	if (this.structured_resource == null)
+		for( var i=0; i<root.children.length; ++i ) {
+			// Recurse
+			var child = UICom.structure["tree"][root.children[i]];
+			var childnode = UICom.structure["ui"][root.children[i]];
+			var childsemtag = $(childnode.metadata).attr('semantictag');
+			childnode.displayTranslateNode(type,child, 'content-'+uuid, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
+		}
 	//-------------------------------------------------------
 };
 

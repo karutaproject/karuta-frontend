@@ -151,6 +151,10 @@
 											"	<div id='std_node_#uuid#' class='node-label row'>" +
 											"		<span class='col-6 label-node' id='label0_#uuid#'></span><span class='col-6 label-node' id='label1_#uuid#'></span>" +
 											"	</div>" +
+											"	<div class='row'>" +
+											"			<div id='resource0_#uuid#' class='col-6'></div>" +
+											"			<div id='resource1_#uuid#' class='col-6'></div>" +
+											"	</div>" +
 											"	<div id='content-#uuid#' name='cnt-div' class='content standard-node-default-content' ><\div>" +
 											"</div>";
 
