@@ -322,12 +322,12 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,'editor',langcode)+"</span> ";
 	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	html +=" <div id='divfileupload_"+this.id+"_"+langcode+"' >";
-	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' "+((disabled) ? "disabled":"")+" name='uploadfile' data-url='"+url+"'>";
+	html +=" <input id='fileupload_"+this.id+"_"+langcode+"' type='file' name='uploadfile' data-url='"+url+"'>";
 	html += "</div>";
 	html +=" <div id='progress_"+this.id+"_"+langcode+"''><div class='bar' style='width: 0%;'></div></div>";
 	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
 	html += "<span id='loaded_"+this.id+langcode+"'></span>"
-	html +=  " <button type='button' class='btn ' "+((disabled) ? "disabled":"")+" onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+	html +=  " <button type='button' class='btn ' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
 	if (USER.admin || g_userroles[0]=='designer') {
 		var semtag =  ($("metadata",this.node)[0]==undefined || $($("metadata",this.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
 		if (semtag=="config-img-css")
@@ -372,7 +372,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 		var htmlWidthGroupObj = $("<div class='form-group'></div>")
 		var htmlWidthLabelObj = $("<label for='width_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['width']+"</label>");
 		var htmlWidthDivObj = $("<div class='col-sm-9'></div>");
-		var htmlWidthInputObj = $("<input id='width_"+this.id+"_"+langcode+"' type='text' class='form-control' "+((disabled) ? "disabled":"")+" value=\""+width+"\">");
+		var htmlWidthInputObj = $("<input id='width_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+width+"\">");
 		var self = this;
 		$(htmlWidthInputObj).change(function (){
 			$(self.width_node[langcode]).text($(this).val());
@@ -389,7 +389,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 		var htmlHeightGroupObj = $("<div class='form-group'></div>")
 		var htmlHeightLabelObj = $("<label for='height_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['height']+"</label>");
 		var htmlHeightDivObj = $("<div class='col-sm-9'></div>");
-		var htmlHeightInputObj = $("<input id='height_"+this.id+"_"+langcode+"' type='text' class='form-control' "+((disabled) ? "disabled":"")+" value=\""+height+"\">");
+		var htmlHeightInputObj = $("<input id='height_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+height+"\">");
 		var self = this;
 		$(htmlHeightInputObj).change(function (){
 			$(self.height_node[langcode]).text($(this).val());
@@ -406,7 +406,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 		var htmlaltGroupObj = $("<div class='form-group'></div>")
 		var htmlaltLabelObj = $("<label for='alt_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['alt']+"</label>");
 		var htmlaltDivObj = $("<div class='col-sm-9'></div>");
-		var htmlaltInputObj = $("<input id='alt_"+this.id+"_"+langcode+"' type='text' class='form-control' "+((disabled) ? "disabled":"")+" value=\""+alt+"\">");
+		var htmlaltInputObj = $("<input id='alt_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+alt+"\">");
 		var self = this;
 		$(htmlaltInputObj).change(function (){
 			$(self.alt_node[langcode]).text($(this).val());
@@ -425,7 +425,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			var htmlcodeGroupObj = $("<div class='form-group'></div>")
 			var htmlcodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
 			var htmlcodeDivObj = $("<div class='col-sm-9'></div>");
-			var htmlcodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' "+((disabled) ? "disabled":"")+" value=\""+code+"\">");
+			var htmlcodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' value=\""+code+"\">");
 			var self = this;
 			$(htmlcodeInputObj).change(function (){
 				$(self.code_node).text($(this).val());
@@ -442,7 +442,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			var htmlvalueGroupObj = $("<div class='form-group'></div>")
 			var htmlvalueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
 			var htmlvalueDivObj = $("<div class='col-sm-9'></div>");
-			var htmlvalueInputObj = $("<input id='value_"+this.id+"' type='text' class='form-control' "+((disabled) ? "disabled":"")+" value=\""+value+"\">");
+			var htmlvalueInputObj = $("<input id='value_"+this.id+"' type='text' class='form-control' value=\""+value+"\">");
 			var self = this;
 			$(htmlvalueInputObj).change(function (){
 				$(self.value_node).text($(this).val());

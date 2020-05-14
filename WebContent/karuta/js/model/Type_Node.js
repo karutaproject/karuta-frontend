@@ -294,6 +294,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 			displayview = type+"-resource-default";
 		}
 	html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+	html = html.replace(/#node-orgclass#/g,this.displayitselforg)
 	//-------------------- display ----------------------
 	if (!refresh) {
 		$("#"+dest).append (html);
@@ -367,7 +368,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	if (nodetype=='asmUnitStructure')
 		this.depth=100;	
 	var displayview = "";
-	//---------------- DISPLAY -------------------------------
+	//---------------- DISPLAY ------------------------------- // .replace("#content-orgclass#","row row-cols-2");
 	if (this.depth!=1 && this.depth<10 && nodetype=='asmStructure') {
 		if (this.displayview!='' & type!='raw')
 			displayview = type+"-node-"+this.displayview;
@@ -384,6 +385,8 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			displayview = type+"-struct-default";
 		html = displayHTML[displayview];
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+		html = html.replace(/#node-orgclass#/g,this.displayparentorg)
+		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
 		$("#"+dest).append (html);
 		$("#label_node_"+uuid).click(function() {displayPage(uuid,100,type,langcode,g_edit)});
 	} else {
@@ -408,6 +411,8 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			html = displayHTML[displayview];
 		}
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+		html = html.replace(/#node-orgclass#/g,this.displayparentorg)
+		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
 		if (nodetype=='asmUnit')
 			html = html.replace(/#first#/g,"first-node");
 		if (!refresh) {

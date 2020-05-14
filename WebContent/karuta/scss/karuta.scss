@@ -354,10 +354,8 @@
 			border:none;
 			width:200px;
 			flex:none;
-			.portfolio-label{
-				cursor:pointer;
-			}
 			.card-header {
+				cursor:pointer;
 				background-color:var(--list-menu-background-color);
 				color:var(--list-button-text-color);
 				padding:3px;
@@ -1594,11 +1592,13 @@
 		}
 	}
 
-	.standard-node-default-content {
+	.content {
 		padding-top:10px;
-		margin-bottom:10px;
 	}
 
+	.standard-node-default{
+		margin-top:10px;
+	}
 
 	.node.standard-node-xwide{
 		padding:15px;
@@ -1735,13 +1735,104 @@
 		}
 	}
 
-	.standard-node-card {
-		margin:20px;
-		.node-model {
-			margin-bottom:5px;
-	
-		}
+	.standard-node-card-content.default{
 		.standard-resource-card {
+			margin-top:20px;
+			margin-left:0px;
+			margin-right:0px;
+			&:first-child {margin-top:0px;}
+			&:last-child {margin-bottom:0px;}
+		}
+	}
+
+	.row-cols-2 {
+		padding-left:20px;
+	}
+	
+	.row {
+		.card.col-md-2,
+		.card.col-md-3,
+		.card.col-md-4,
+		.card.col-md-5,
+		.card.col-md-6,
+		.card.col-md-7,
+		.card.col-md-8,
+		.card.col-md-9,
+		.card.col-md-10,
+		.card.col-md-11 {
+			padding-left:0px;
+			padding-right:0px;
+			margin-left:20px;
+			&:first-child {margin-left:0px;}
+		}
+		.card.col-md-1 {flex: 0 0 8%;}
+		.card.col-md-2 {flex: 0 0 15%;}
+		.card.col-md-3 {flex: 0 0 23.5%;}
+		.card.col-md-4 {flex: 0 0 32.5%;}
+		.card.col-md-5 {flex: 0 0 40%;}
+		.card.col-md-6 {flex: 0 0 49%;}
+		.card.col-md-7 {flex: 0 0 58%;}
+		.card.col-md-8 {flex: 0 0 66%;}
+		.card.col-md-9 {flex: 0 0 74%;}
+		.card.col-md-10 {flex: 0 0 82%;}
+		.card.col-md-11 {flex: 0 0 90%;}
+		
+		.row-cols-2>*,
+		.row-cols-3>*,
+		.row-cols-4>*,
+		.row-cols-5>*,
+		.row-cols-6>* {
+			margin-left:20px;
+			margin-top:20px; 
+		}
+	
+		.row-cols-2>* {
+			flex: 0 0 49%;
+			&:nth-child(odd) {margin-left:0px;}
+			&:first-child {margin-top:10px;}
+			&:nth-child(2) {margin-top:10px;}
+		}
+		.row-cols-3>* {
+			flex: 0 0 32%;
+			&:nth-child(3n+1) {margin-left:0px;}
+			&:first-child {margin-top:10px;}
+			&:nth-child(2) {margin-top:10px;}
+			&:nth-child(3) {margin-top:10px;}
+			}
+		.row-cols-4>* {
+			flex: 0 0 23.5%;
+			&:nth-child(4n+1) {margin-left:0px;}
+			&:first-child {margin-top:10px;}
+			&:nth-child(2) {margin-top:10px;}
+			&:nth-child(3) {margin-top:10px;}
+			&:nth-child(4) {margin-top:10px;}
+		}
+		.row-cols-5>* {
+			flex: 0 0 18.4%;
+			&:nth-child(5n+1) {margin-left:0px;}
+			&:first-child {margin-top:10px;}
+			&:nth-child(2) {margin-top:10px;}
+			&:nth-child(3) {margin-top:10px;}
+			&:nth-child(4) {margin-top:10px;}
+			&:nth-child(5) {margin-top:10px;}
+		}
+		.row-cols-6>* {
+			flex: 0 0 15%;
+			&:nth-child(6n+1) {margin-left:0px;}
+			&:first-child {margin-top:10px;}
+			&:nth-child(2) {margin-top:10px;}
+			&:nth-child(3) {margin-top:10px;}
+			&:nth-child(4) {margin-top:10px;}
+			&:nth-child(5) {margin-top:10px;}
+			&:nth-child(6) {margin-top:10px;}
+		}
+	}
+
+	.standard-node-card {
+		margin-left:20px;
+		margin-top:20px;
+	}
+/*		.standard-resource-card {
 			margin-top:20px;
 			margin-left:0px;
 			margin-right:0px;
@@ -1785,7 +1876,7 @@
 //			padding-right:0px;
 		}
 	}
-
+*/
 /* ========================= */
 /*     VUE  1/X             */
 /* ========================= */

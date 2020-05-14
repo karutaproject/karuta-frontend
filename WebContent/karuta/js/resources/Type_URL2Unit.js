@@ -236,8 +236,8 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 	//------------------------------------------------------------
 	if (type=='select') {
 		var html = "<div class='btn-group'>";
-		html += "	<button type='button' "+((disabled) ? "disabled":"")+" class='btn select selected-label' id='button_"+langcode+self.id+"'>&nbsp;</button>";
-		html += "	<button type='button'  "+((disabled) ? "disabled":"")+" class='btn dropdown-toggle dropdown-toggle-split ' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+		html += "	<button type='button' class='btn select selected-label' id='button_"+langcode+self.id+"'>&nbsp;</button>";
+		html += "	<button type='button'  class='btn dropdown-toggle dropdown-toggle-split ' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
 		html += "</div>";
 		var btn_group = $(html);
 		$("#"+destid).append($(btn_group));
