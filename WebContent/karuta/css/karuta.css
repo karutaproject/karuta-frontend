@@ -1472,14 +1472,6 @@ table[name=res-div] {
   float: none;
 }
 
-.content {
-  padding-top: 10px;
-}
-
-.standard-node-default {
-  margin-top: 10px;
-}
-
 .node.standard-node-xwide {
   padding: 15px;
 }
@@ -1616,8 +1608,12 @@ table[name=res-div] {
   margin-bottom: 0px;
 }
 
-.row-cols-2 {
-  padding-left: 20px;
+.row.content {
+  padding-top: 0px;
+}
+
+.row.content.card-body {
+  padding-top: 20px;
 }
 
 .row .card.col-md-2,
@@ -1662,7 +1658,7 @@ table[name=res-div] {
   flex: 0 0 40%;
 }
 .row .card.col-md-6 {
-  flex: 0 0 49%;
+  flex: 0 0 48%;
 }
 .row .card.col-md-7 {
   flex: 0 0 58%;
@@ -1679,103 +1675,54 @@ table[name=res-div] {
 .row .card.col-md-11 {
   flex: 0 0 90%;
 }
-.row .row-cols-2 > *,
-.row .row-cols-3 > *,
-.row .row-cols-4 > *,
-.row .row-cols-5 > *,
-.row .row-cols-6 > * {
+
+.card-deck.content {
+  padding-top: 20px;
+}
+
+.row.content.row-cols-2,
+.row.content.row-cols-3,
+.row.content.row-cols-4,
+.row.content.row-cols-5,
+.row.content.row-cols-6 {
+  padding-top: 0px;
+}
+
+.card-body.row-cols-2,
+.card-body.row-cols-3,
+.card-body.row-cols-4,
+.card-body.row-cols-5,
+.card-body.row-cols-6 {
+  padding-left: 0px;
+}
+
+.row-cols-2 > *,
+.row-cols-3 > *,
+.row-cols-4 > *,
+.row-cols-5 > *,
+.row-cols-6 > * {
   margin-left: 20px;
   margin-top: 20px;
 }
-.row .row-cols-2 > * {
-  flex: 0 0 49%;
+
+.row-cols-2 > * {
+  flex: 0 0 48%;
 }
-.row .row-cols-2 > *:nth-child(odd) {
-  margin-left: 0px;
+
+.row-cols-3 > * {
+  flex: 0 0 31.5%;
 }
-.row .row-cols-2 > *:first-child {
-  margin-top: 10px;
-}
-.row .row-cols-2 > *:nth-child(2) {
-  margin-top: 10px;
-}
-.row .row-cols-3 > * {
-  flex: 0 0 32%;
-}
-.row .row-cols-3 > *:nth-child(3n+1) {
-  margin-left: 0px;
-}
-.row .row-cols-3 > *:first-child {
-  margin-top: 10px;
-}
-.row .row-cols-3 > *:nth-child(2) {
-  margin-top: 10px;
-}
-.row .row-cols-3 > *:nth-child(3) {
-  margin-top: 10px;
-}
-.row .row-cols-4 > * {
+
+.row-cols-4 > * {
   flex: 0 0 23.5%;
 }
-.row .row-cols-4 > *:nth-child(4n+1) {
-  margin-left: 0px;
-}
-.row .row-cols-4 > *:first-child {
-  margin-top: 10px;
-}
-.row .row-cols-4 > *:nth-child(2) {
-  margin-top: 10px;
-}
-.row .row-cols-4 > *:nth-child(3) {
-  margin-top: 10px;
-}
-.row .row-cols-4 > *:nth-child(4) {
-  margin-top: 10px;
-}
-.row .row-cols-5 > * {
+
+.row-cols-5 > * {
   flex: 0 0 18.4%;
 }
-.row .row-cols-5 > *:nth-child(5n+1) {
-  margin-left: 0px;
-}
-.row .row-cols-5 > *:first-child {
-  margin-top: 10px;
-}
-.row .row-cols-5 > *:nth-child(2) {
-  margin-top: 10px;
-}
-.row .row-cols-5 > *:nth-child(3) {
-  margin-top: 10px;
-}
-.row .row-cols-5 > *:nth-child(4) {
-  margin-top: 10px;
-}
-.row .row-cols-5 > *:nth-child(5) {
-  margin-top: 10px;
-}
-.row .row-cols-6 > * {
+
+.row-cols-6 > * {
   flex: 0 0 15%;
-}
-.row .row-cols-6 > *:nth-child(6n+1) {
-  margin-left: 0px;
-}
-.row .row-cols-6 > *:first-child {
-  margin-top: 10px;
-}
-.row .row-cols-6 > *:nth-child(2) {
-  margin-top: 10px;
-}
-.row .row-cols-6 > *:nth-child(3) {
-  margin-top: 10px;
-}
-.row .row-cols-6 > *:nth-child(4) {
-  margin-top: 10px;
-}
-.row .row-cols-6 > *:nth-child(5) {
-  margin-top: 10px;
-}
-.row .row-cols-6 > *:nth-child(6) {
-  margin-top: 10px;
 }
 
 .standard-node-card {

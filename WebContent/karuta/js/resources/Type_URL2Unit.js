@@ -232,12 +232,34 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
+	//-----Node ordering-------------------------------------------------------
+	var nodes = $("node",data);
+	var tableau1 = new Array();
+	var tableau2 = new Array();
+	for ( var i = 0; i < $(nodes).length; i++) {
+		var resource = null;
+		if ($("asmResource",nodes[i]).length==3)
+			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+		else
+			resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+		var code = $('code',resource).text();
+		var value = $(nodes[i]).attr('id');
+		var libelle = $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+		tableau1[i] = [code,nodes[i]];
+		tableau2[i] = {'code':code,'libelle':libelle,'value':value};
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
 
 	//------------------------------------------------------------
 	if (type=='select') {
-		var html = "<div class='btn-group'>";
-		html += "	<button type='button' class='btn select selected-label' id='button_"+langcode+self.id+"'>&nbsp;</button>";
-		html += "	<button type='button'  class='btn dropdown-toggle dropdown-toggle-split ' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+		var html = "";
+//		var html = "<div class='btn-group'>";
+//		html += "	<button type='button' class='btn select selected-label' id='button_"+langcode+self.id+"'>&nbsp;</button>";
+//		html += "	<button type='button'  class='btn dropdown-toggle dropdown-toggle-split ' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+//		html += "</div>";
+		html += "<div class='auto-complete btn-group roles-choice select-"+semtag+"'>";
+		html += "<input id='button_"+langcode+self.id+"' onfocus=\"this.value=''\" type='text' class='btn btn-default select' code= '' value='' />";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
 		var btn_group = $(html);
 		$("#"+destid).append($(btn_group));
@@ -262,12 +284,14 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 		var nodes = $("node",data);
 		//---------------------
 		if (target=='label') {
-			for ( var i = 0; i < $(nodes).length; i++) {
+			for ( var i = 0; i < newTableau1.length; i++) {
+				//------------------------------
 				var resource = null;
-				if ($("asmResource",nodes[i]).length==3) // test if asmcontext
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+				if ($("asmResource",newTableau1[i][1]).length==3)
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 				else
-					resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				//------------------------------
 				var code = $('code',resource).text();
 				var display_code = true;
 				if (code.indexOf("@")>-1) {
@@ -308,15 +332,18 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 				//-------------- update button -----
 				if (code!="" && self_code==$('code',resource).text()) {
 					if (($('code',resource).text()).indexOf("#")>-1)
-						$("#button_"+langcode+self.id).html(code+" "+$(srce+"[lang='"+languages[langcode]+"']",resource).text());
+						$("#button_"+langcode+self.id).val(code+" "+$(srce+"[lang='"+languages[langcode]+"']",resource).text());
 					else
-						$("#button_"+langcode+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
+						$("#button_"+langcode+self.id).val($(srce+"[lang='"+languages[langcode]+"']",resource).text());
 					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 				}
 			}
 		}
 		//---------------------
 		$(btn_group).append($(select));
+		var input = document.getElementById("button_"+langcode+self.id);
+		var onupdate = "UIFactory.URL2Unit.update(input,self)";
+		autocomplete(input,tableau2,onupdate,self,langcode);
 		
 	}
 };

@@ -809,6 +809,7 @@ UIFactory["Node"].prototype.displayMetaEpmInfo = function(destid)
 	$("#"+destid).html(html);
 	html += UIFactory.Node.getMetadataEpmInfo(data,'cssclass');
 	html += UIFactory.Node.getMetadataEpmInfo(data,'displayview');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'displayparentorg');
 	//------------------------------------
 	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-margin-top');
 	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-othercss');

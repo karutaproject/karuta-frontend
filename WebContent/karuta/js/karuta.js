@@ -1746,10 +1746,14 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 				b.innerHTML = arrayOfValues[i].libelle.substr(0, indexval);
 				b.innerHTML += "<strong>" + arrayOfValues[i].libelle.substr(indexval,val.length) + "</strong>";
 				b.innerHTML += arrayOfValues[i].libelle.substr(indexval+val.length);
-				b.innerHTML += "<input type='hidden' code='"+arrayOfValues[i].code+"' label=\""+arrayOfValues[i].libelle+"\" >";
+				var value = "";
+				if (arrayOfValues[i].value!==undefined)
+					value = arrayOfValues[i].value;
+				b.innerHTML += "<input type='hidden' code='"+arrayOfValues[i].code+"' label=\""+arrayOfValues[i].libelle+"\" value=\""+value+"\" >";
 				b.addEventListener("click", function(e) {
 					$(input).attr("label_"+languages[langcode],$("input",this).attr('label'));
 					$(input).attr('code',$("input",this).attr('code'));
+					$(input).attr('value',$("input",this).attr('value'));
 					input.value = $("input",this).attr('label');
 					eval(onupdate);
 					closeAllLists();

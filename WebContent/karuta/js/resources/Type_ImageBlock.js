@@ -98,7 +98,7 @@ UIFactory["ImageBlock"].prototype.displayView = function(dest,type,langcode)
 {
 	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
-	$("#std_node_"+this.id).attr('style','visibility:hidden');
+	$("#std_node_"+this.id).attr('style','display:none');
 	$("#menus-"+this.id).hide();
 };
 

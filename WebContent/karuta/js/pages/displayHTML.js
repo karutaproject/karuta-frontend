@@ -22,7 +22,7 @@ displayOrg["asmContext"] = {};
 
 //              node type   parent         child
 displayOrg["asmStructure"]["default"] =["default","row","row-cols-2","row-cols-3","row-cols-4","row-cols-5","row-cols-6","card-deck"];
-displayOrg["asmStructure"]["strdefault"] =["default","row","row-cols-2","row-cols-3","row-cols-4","row-cols-5","row-cols-6","carddeck"];
+displayOrg["asmStructure"]["strdefault"] =["default","row","row-cols-2","row-cols-3","row-cols-4","row-cols-5","row-cols-6","card-deck"];
 
 //          node type  parent           child
 displayOrg["asmUnit"]["default"] = ["default","row","row-cols-2","row-cols-3","row-cols-4","row-cols-5","row-cols-6","card-deck"];
