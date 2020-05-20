@@ -96,7 +96,7 @@ function fill_main_page(rootid,role)
 					cssfile += ".css";
 				$('<link/>', { rel: 'stylesheet', type: 'text/css', href: '../../application/css/'+cssfile}).appendTo('head');
 			}
-			// --------CSS Text------------------
+			// --------CSS Text----------- for backward compatibility
 			var csstext = $("metadata-wad[csstext]",data).attr('csstext');
 			$("#csstext").remove();
 			if (csstext!=undefined && csstext!=''){
@@ -113,20 +113,23 @@ function fill_main_page(rootid,role)
 			else
 				setCSSportfolio(config_unit);
 			setVariables(data);
-			//-------------------------------------------------
-			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
 			if (g_display_type=="standard" || g_display_type=="raw") {
 				if (USER.creator)
 					g_edit = true;
 				else
 					g_edit = false;
-				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
-			}
-			if (g_display_type=="model" || g_display_type=="translate") {
+			} else if (g_display_type=="model" || g_display_type=="translate") {
 				g_edit = true;
-				$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 			}
+			$("#sub-bar").html(UIFactory["Portfolio"].getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
+			//-------------------------------------------------
+			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
+			// --------------------------
+			if (g_bar_type.indexOf('horizontal')>-1) {
+				$("#toggleSideBar").hide();
+			}
+			// --------------------------
 			$("#standard-search-text-input").keypress(function(f) {
 				var code= (f.keyCode ? f.keyCode : f.which);
 				if (code == 13)

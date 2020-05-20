@@ -72,7 +72,7 @@ function setDesignerRole(role)
 	if (g_display_type=='standard' || g_display_type=='raw'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
-		if (g_bar_type=="horizontal"){
+		if (g_bar_type.indexOf('horizontal')>-1) {
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			$("#portfolio-container").attr('role',role);			
 		}
@@ -616,14 +616,15 @@ function displayPage(uuid,depth,type,langcode) {
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
 	$("#sidebar_"+uuid).parent().addClass('selected');
-	if (g_bar_type=="horizontal"){  // update breadcrumb
+	if (g_bar_type.indexOf("horizontal")>-1){  // update breadcrumb
 		var nodeid = uuid;
 		var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
 		while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
 			nodeid = $(UICom.structure.ui[nodeid].node).parent().attr("id");
 			breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none') + breadcrumb;
 		}
-		$("#breadcrumb").html(breadcrumb);
+		breadcrumb = breadcrumb.substring(breadcrumb.indexOf("/")+1);
+		$("#breadcrumb").html(breadcrumb.substring(breadcrumb.indexOf("/")+1));
 	}
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (depth==null)

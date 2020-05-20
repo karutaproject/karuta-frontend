@@ -343,7 +343,8 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	}
 	//----------------- hide lbl-div if empty ------------------------------------
 	if (this.getLabel(null,'none',langcode)=="" && this.getButtons(langcode)=="" && this.getMenus(langcode)=="")
-		$("div[name='res-lbl-div']","#node_"+uuid).hide();
+		if (this.displayview=='xwide')
+			$("div[name='res-lbl-div']","#node_"+uuid).hide();
 	//----------- Comments -----------
 	if (this.edit && this.inline && this.writenode)
 		UIFactory.Node.displayCommentsEditor('comments_'+uuid,UICom.structure["ui"][uuid]);
@@ -376,6 +377,8 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			displayview = type+"-struct-default";
 		html = displayHTML[displayview];
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
+		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
 		$("#"+dest).append (html);
 		$("#label_node_"+uuid).click(function() {displayPage(uuid,1,type,langcode,g_edit)});
 	} else if (this.depth!=1 && this.depth<10 && nodetype=='asmUnit') {
@@ -385,7 +388,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			displayview = type+"-struct-default";
 		html = displayHTML[displayview];
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
-		html = html.replace(/#node-orgclass#/g,this.displayparentorg)
+		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
 		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
 		$("#"+dest).append (html);
 		$("#label_node_"+uuid).click(function() {displayPage(uuid,100,type,langcode,g_edit)});
@@ -411,7 +414,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			html = displayHTML[displayview];
 		}
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
-		html = html.replace(/#node-orgclass#/g,this.displayparentorg)
+		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
 		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
 		if (nodetype=='asmUnit')
 			html = html.replace(/#first#/g,"first-node");
@@ -1199,17 +1202,17 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				{
 					var html = "";
 					var depth = 99;
-					html += "<a style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='nav-item";
+					html += "<li style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='nav-item";
 					if (privatevalue)
 						html+= " private";
-					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</a>";
+					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</li>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmUnit" && level==1) // Click on Unit
 				{
 					var html = "";
 					var depth = 99;
-					html += "<a class='dropdown-item' href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+					html += "<li class='dropdown-item' href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</li>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmStructure" && level==0) // Click on Structure
@@ -1602,8 +1605,13 @@ UIFactory['Node'].reloadStruct = function(uuid)
 		success : function(data) {
 			UICom.parseStructure(data,true);
 			g_portfolio_current = data;
-			$("#sidebar").html("");
-			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
+			if (g_bar_type.indexOf('horizontal')>-1) {
+				$("#menu_bar").html("");
+				UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar',null,null,g_edit,UICom.rootid);
+			} else {
+				$("#sidebar").html("");
+				UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
+			}
 			var uuid = $("#page").attr('uuid');
 			if (g_display_type=='model')
 				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
@@ -1629,7 +1637,13 @@ UIFactory['Node'].reloadUnit = function()
 		success : function(data) {
 			UICom.parseStructure(data,false,parentid);
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
-			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
+			if (g_bar_type.indexOf('horizontal')>-1) {
+				$("#menu_bar").html("");
+				UIFactory.Portfolio.displayHorizontalMenu(UICom.root,'menu_bar',g_display_type,null,g_edit,UICom.rootid);
+			} else {
+				$("#sidebar").html("");
+				UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar',g_display_type,null,g_edit,UICom.rootid);
+			}
 			if (g_display_type=='model')
 				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
 			else

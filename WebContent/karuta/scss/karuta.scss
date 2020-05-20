@@ -1161,10 +1161,17 @@
 	}
 
 /* ====================== */
-/*      MENUBAR           */
+/*      MENU TOPBAR           */
 /* ====================== */
 
+	.topbarmenu{
+		min-height: 4rem;
+		padding-top: 1.4rem;
+	}
+
 	#menu_bar {
+		background-color: var(--portfolio-sidebar-background-color);
+		color: var(--portfolio-sidebar-text-color);
 		.nav-item {
 			padding-right:10px;
 		}
@@ -1201,8 +1208,10 @@
 		}
 	}
 
-
-
+	#breadcrumb {
+		background-color: var(--portfolio-sidebar-background-color);
+		color: var(--portfolio-text-color);
+	}
 
 /* ==================================================================== */
 /*                          PORTFOLIO                                   */
@@ -1257,7 +1266,12 @@
 		}
 	}
 */
+
 	#main-portfolio{
+		&.container-fluid {
+			padding-left : 0px;
+			padding-right : 0px;
+		}
 		a {
 			color: var(--portfolio-link-color);
 			cursor:pointer;
@@ -1725,6 +1739,22 @@
 /*     VUE  CARD             */
 /* ========================= */
 
+	.card-deck.content {
+		padding-top:15px;
+	}
+
+	.standard-node-default-content.row {
+		padding-right:15px;
+	}
+
+	.standard-node-default-content.row.row-cols-2,
+	.standard-node-default-content.row.row-cols-3,
+	.standard-node-default-content.row.row-cols-4,
+	.standard-node-default-content.row.row-cols-5,
+	.standard-node-default-content.row.row-cols-6 {
+		padding-right:0px;
+	}
+
 	.card-header {
 		.buttons { 
 			float:right;
@@ -1735,18 +1765,21 @@
 		}
 	}
 
-	.standard-node-card-content.default{
-		.standard-resource-card {
-			margin-top:20px;
-			margin-left:0px;
-			margin-right:0px;
-			&:first-child {margin-top:0px;}
-			&:last-child {margin-bottom:0px;}
+	.standard-node-card-content{
+		padding-right:15px;
+		&.default{
+			.standard-resource-card {
+				margin-top:15px;
+				margin-left:0px;
+				margin-right:0px;
+				&:first-child {margin-top:0px;}
+				&:last-child {margin-bottom:0px;}
+			}
 		}
 	}
 
 // ---------------------------
-// ------- Row -----------
+// ----------- Row -----------
 // ---------------------------
 
 	.row.content {
@@ -1754,7 +1787,7 @@
 	}
 
 	.row.content.card-body {
-		padding-top:20px;
+		padding:0px;
 	}
 
 	.row {
@@ -1770,24 +1803,37 @@
 		.card.col-md-11 {
 			padding-left:0px;
 			padding-right:0px;
-			margin-left:20px;
+			margin-left:15px;
+			margin-top:15px;
+		}
+
+		.card.col-md-1 {flex: 0 0 calc((100% * 1 / 12) - 15px);}
+		.card.col-md-2 {flex: 0 0 calc((100% * 2 / 12) - 15px);}
+		.card.col-md-3 {flex: 0 0 calc((100% * 3 / 12) - 15px);}
+		.card.col-md-4 {flex: 0 0 calc((100% * 4 / 12) - 15px);}
+		.card.col-md-5 {flex: 0 0 calc((100% * 5 / 12) - 15px);}
+		.card.col-md-6 {flex: 0 0 calc((100% * 6 / 12) - 15px);}
+		.card.col-md-7 {flex: 0 0 calc((100% * 7 / 12) - 15px);}
+		.card.col-md-8 {flex: 0 0 calc((100% * 8 / 12) - 15px);}
+		.card.col-md-9 {flex: 0 0 calc((100% * 9 / 12) - 15px);}
+		.card.col-md-10 {flex: 0 0 calc((100% * 10 / 12) - 15px);}
+		.card.col-md-11 {flex: 0 0 calc((100% * 11 / 12) - 15px);}
+		
+		.card .card.col-md-2,
+		.card .card.col-md-3,
+		.card .card.col-md-4,
+		.card .card.col-md-5,
+		.card .card.col-md-6,
+		.card .card.col-md-7,
+		.card .card.col-md-8,
+		.card .card.col-md-9,
+		.card .card.col-md-10,
+		.card .card.col-md-11 {
 			&:first-child {margin-left:0px;}
 		}
-		.card.col-md-1 {flex: 0 0 8%;}
-		.card.col-md-2 {flex: 0 0 15%;}
-		.card.col-md-3 {flex: 0 0 23.5%;}
-		.card.col-md-4 {flex: 0 0 32.5%;}
-		.card.col-md-5 {flex: 0 0 40%;}
-		.card.col-md-6 {flex: 0 0 48%;}
-		.card.col-md-7 {flex: 0 0 58%;}
-		.card.col-md-8 {flex: 0 0 66%;}
-		.card.col-md-9 {flex: 0 0 74%;}
-		.card.col-md-10 {flex: 0 0 82%;}
-		.card.col-md-11 {flex: 0 0 90%;}
+
 	}
-		.card-deck.content {
-			padding-top:20px;
-		}
+
 
 // ---------------------------
 // ------- Columns -----------
@@ -1814,23 +1860,22 @@
 	.row-cols-4>*,
 	.row-cols-5>*,
 	.row-cols-6>* {
-		margin-left:20px;
-		margin-top:20px; 
+		margin-left:15px;
+		margin-top:15px; 
 	}
 
-	.row-cols-2>* {flex: 0 0 48%;}
-	.row-cols-3>* {flex: 0 0 31.5%;}
-	.row-cols-4>* {flex: 0 0 23.5%;}
-	.row-cols-5>* {flex: 0 0 18.4%;}
-	.row-cols-6>* {flex: 0 0 15%;}
+	.row-cols-2>* {flex: 0 0 calc((100% - (3 * 15px))/2)}
+	.row-cols-3>* {flex: 0 0 calc((100% - (4 * 15px))/3)}
+	.row-cols-4>* {flex: 0 0 calc((100% - (5 * 15px))/4)}
+	.row-cols-5>* {flex: 0 0 calc((100% - (6 * 15px))/5)}
+	.row-cols-6>* {flex: 0 0 calc((100% - (7 * 15px))/6)}
 
 // ---------------------------
 // ---------------------------
 // ---------------------------
 
 		.standard-node-card {
-		margin-left:20px;
-		margin-top:20px;
+		margin:15px;
 	}
 /*		.standard-resource-card {
 			margin-top:20px;

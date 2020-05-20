@@ -97,7 +97,7 @@ UIFactory["URL2UnitBlock"].prototype.getView = function(dest,type,langcode)
 			html = "<a  class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+url2unit.resource.uuid_node.text()+"').click()\">";
 		else
 			html = "<a href='page.htm?i="+url2unit.resource.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>";
-		var style = "background-repeat:no-repeat; background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
+		var style = "background-position:center;background-repeat:no-repeat; background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";
 		html += "<div class='Url2Block' style=\""+style+"\">";

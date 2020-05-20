@@ -154,7 +154,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		//--------------------------------
 		if (this.asmtype == 'asmRoot' || this.asmtype == 'asmStructure') {
 			var databack = false;
-			var callback = "UIFactory['Node'].reloadStruct";
+			var callback = "UIFactory.Node.reloadStruct";
 			var param2 = "'"+g_portfolio_rootid+"'";
 			var param3 = null;
 			var param4 = null;

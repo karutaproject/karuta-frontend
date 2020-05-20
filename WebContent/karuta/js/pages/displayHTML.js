@@ -51,8 +51,8 @@ displayOrg["asmUnitStructure"]["default"] = ["default"];
 displayOrg["asmUnitStructure"]["strdefault"] = ["default"];
 displayOrg["asmUnitStructure"]["card-deck"] = ["default"];
 displayOrg["asmUnitStructure"]["strcard-deck"] = ["default"];
-displayOrg["asmUnitStructure"]["row"] = ["col-md-1","col-md-2","col-md-3","col-md-4","col-md-5","col-md-6","col-md-7","col-md-8","col-md-9","col-md-10","col-md-11","col-md-12"];
-displayOrg["asmUnitStructure"]["strrow"] = ["1/12 (col-md-1)","2/12  (col-md-2)","3/12  (col-md-3)","4/12 (col-md-4)","5/12 (col-md-5)","6/12 (col-md-6)","7/12 (col-md-7)","8/12 (col-md-8)","9/12 (col-md-9)","10/12 (col-md-10)","11/12 (col-md-11)"];
+displayOrg["asmUnitStructure"]["row"] = ["","col-md-1","col-md-2","col-md-3","col-md-4","col-md-5","col-md-6","col-md-7","col-md-8","col-md-9","col-md-10","col-md-11"];
+displayOrg["asmUnitStructure"]["strrow"] = ["default","1/12 (col-md-1)","2/12  (col-md-2)","3/12  (col-md-3)","4/12 (col-md-4)","5/12 (col-md-5)","6/12 (col-md-6)","7/12 (col-md-7)","8/12 (col-md-8)","9/12 (col-md-9)","10/12 (col-md-10)","11/12 (col-md-11)"];
 displayOrg["asmUnitStructure"]["row-cols-2"] = ["col"];
 displayOrg["asmUnitStructure"]["strrow-cols-2"] = ["col"];
 displayOrg["asmUnitStructure"]["row-cols-3"] = ["col"];
@@ -68,8 +68,8 @@ displayOrg["asmContext"]["default"] = ["default"];
 displayOrg["asmContext"]["strdefault"] = ["default"];
 displayOrg["asmContext"]["card-deck"] = ["default"];
 displayOrg["asmContext"]["strcard-deck"] = ["default"];
-displayOrg["asmContext"]["row"] = ["col-md-1","col-md-2","col-md-3","col-md-4","col-md-5","col-md-6","col-md-7","col-md-8","col-md-9","col-md-10","col-md-11","col-md-12"];
-displayOrg["asmContext"]["strrow"] = ["1/12 (col-md-1)","2/12  (col-md-2)","3/12  (col-md-3)","4/12 (col-md-4)","5/12 (col-md-5)","6/12 (col-md-6)","7/12 (col-md-7)","8/12 (col-md-8)","9/12 (col-md-9)","10/12 (col-md-10)","11/12 (col-md-11)"];
+displayOrg["asmContext"]["row"] = ["","col-md-1","col-md-2","col-md-3","col-md-4","col-md-5","col-md-6","col-md-7","col-md-8","col-md-9","col-md-10","col-md-11"];
+displayOrg["asmContext"]["strrow"] = ["default","1/12 (col-md-1)","2/12  (col-md-2)","3/12  (col-md-3)","4/12 (col-md-4)","5/12 (col-md-5)","6/12 (col-md-6)","7/12 (col-md-7)","8/12 (col-md-8)","9/12 (col-md-9)","10/12 (col-md-10)","11/12 (col-md-11)"];
 displayOrg["asmContext"]["row-cols-2"] = ["col"];
 displayOrg["asmContext"]["strrow-cols-2"] = ["col"];
 displayOrg["asmContext"]["row-cols-3"] = ["col"];
@@ -121,7 +121,7 @@ displayHTML["raw-node-default"] =	"<div id='node_#uuid#' class='#displayview# #d
 
 displayHTML["raw-resource-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 								"	<div id='sub_node_#uuid#' class='resource-node row' >" +
-								"		<div id='std_node_#uuid#' name='lbl-div' class='col-md-offset-1 col-md-2 node-label inside-full-height'>" +
+								"		<div id='std_node_#uuid#' name='lbl-div' class='col-md-offset-1 col-md-2 node-label'>" +
 								"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 								"		</div>" +
 								"		<div name='res-div' class='col-md-5'>" +
@@ -130,7 +130,7 @@ displayHTML["raw-resource-default"] =	"<div id='node_#uuid#' class='#displayview
 								"		</div>" +
 								"		<div class='col-md-4'><span id='buttons-#uuid#' class='buttons'/></div>" +
 								"	</div><!-- row -->" +
-								"	<div class='row'><div id='metainfo_#uuid#' class='col-md-offset-1 col-md-10 metainfo'></div></div>" +
+								"	<div id='metainfo_#uuid#' class='col-md-offset-1 col-md-10 metainfo'></div>" +
 								"	<div id='cssinfo_#uuid#' class='cssinfo'></div><!-- cssinfo -->" +
 								"	<div id='extra_#uuid#' class='extra'></div>" +
 								"</div>";
@@ -145,7 +145,7 @@ displayHTML["standard-struct-default"] =	"<div id='node_#uuid#' class='#displayv
 											"			<div><span class='label-node' id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 											"			<div id='comments_#uuid#' class='comments'></div>" +
 											"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
-											"			<div id='cssinfo_#uuid#' class='cssinfo'></div><!-- cssinfo -->" +
+											"			<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 											"		</div>" +
 											"	</div>" +
 											"</div>";
@@ -159,7 +159,7 @@ displayHTML["standard-node-default"] =	"<div id='node_#uuid#' class='#displayvie
 										"			<div id='portfoliocode_#uuid#' class='portfoliocode'></div>" +
 										"			<div id='comments_#uuid#' class='comments'></div>" +
 										"			<div id='metainfo_#uuid#' class='metainfo'></div>" +
-										"			<div id='cssinfo_#uuid#' class='cssinfo'></div><!-- cssinfo -->" +
+										"			<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 										"		</div>" +
 										"	</div>" +
 										"	<div id='content-#uuid#' name='cnt-div' class='content standard-node-default-content #content-orgclass#' ></div>" +
@@ -198,8 +198,8 @@ displayHTML["standard-resource-simple"] =	"<div id='node_#uuid#' class='#display
 											"		</tr></table>" +
 											"	</div>" +
 											"	<div id='comments_#uuid#' class='comments'></div>" +
-											"	<div id='metainfo_#uuid#' class='metainfo'></div></div>" +
-											"	<div id='cssinfo_#uuid#' class='cssinfo'></div></div>" +
+											"	<div id='metainfo_#uuid#' class='metainfo'></div>" +
+											"	<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 											"	<div id='content-#uuid#' name='cnt-div' class='content' ></div>" +
 											"	<div id='extra_#uuid#' class='extra'></div>" +
 											"</div>";
@@ -240,6 +240,7 @@ displayHTML["standard-node-xwide"]  =	"<div id='node_#uuid#' class='#displayview
 										"		<div class='label-help'><span id='label_node_#uuid#'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 										"		<div id='comments_#uuid#' class='comments'></div>" +
 										"		<div id='metainfo_#uuid#' class='metainfo'></div>" +
+										"		<div id='cssinfo_#uuid#' class='metainfo'></div>" +
 										"	</div>" +
 										" </div>" +
 										" <div id='content-#uuid#' name='cnt-div' class='content standard-node-xwide-content #content-orgclass#' ></div>" +
@@ -249,7 +250,7 @@ displayHTML["standard-resource-xwide"]=	"<div id='node_#uuid#' class='#displayvi
 										" <div class='edit-bar'><span id='buttons-#uuid#' class='buttons'/><span id='menus-#uuid#' class='menus'/></div>" +
 										" <div id='sub_node_#uuid#' class='resource-node #displayview#' >" +
 										"	<div id='std_node_#uuid#' name='res-lbl-div' class=''>" +
-										"		<div class='node-label inside-full-height'>" +
+										"		<div class='node-label'>" +
 										"			<div class='label-help'><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 										"		</div>" +
 										"	</div>" +

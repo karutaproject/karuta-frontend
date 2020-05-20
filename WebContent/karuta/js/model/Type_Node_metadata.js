@@ -809,7 +809,8 @@ UIFactory["Node"].prototype.displayMetaEpmInfo = function(destid)
 	$("#"+destid).html(html);
 	html += UIFactory.Node.getMetadataEpmInfo(data,'cssclass');
 	html += UIFactory.Node.getMetadataEpmInfo(data,'displayview');
-	html += UIFactory.Node.getMetadataEpmInfo(data,'displayparentorg');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'displayitselforg');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'displaychildorg');
 	//------------------------------------
 	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-margin-top');
 	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-othercss');
@@ -1294,7 +1295,7 @@ UIFactory["Node"].prototype.displayMetadataEpmDisplayOrgAttributeEditor = functi
 		value = "";
 	if (this.structured_resource!=null && attribute=="displaychildorg")
 		return
-	if (attribute=='displayitselforg' && displayOrg[this.asmtype][parent_displayorg].length==1) {
+	if (attribute=='displayitselforg' && displayOrg[this.asmtype][parent_displayorg]!=undefined && displayOrg[this.asmtype][parent_displayorg].length==1) {
 		if (value!=displayOrg[this.asmtype][parent_displayorg][0])
 			UIFactory.Node.updateMetadataEpmAttribute(nodeid,attribute,displayOrg[this.asmtype][parent_displayorg][0]);
 		return

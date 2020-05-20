@@ -334,25 +334,26 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		html += "<div id='navigation_bar'></div>";
 		html += "<div id='contenu' class='container-fluid'></div>";
 		html += "<div id='footer'></div>";
-		$("#"+destid).append($(html));
+		$("#"+destid).html($(html));
 	}
 	else if (type=='translate'){
 		html += "	<div class='row'>";
 		html += "		<div class='col-sm-3' id='sidebar'></div>";
 		html += "		<div class='colsm-9' id='contenu'></div>";
 		html += "	</div>";
-		$("#"+destid).append($(html));
+		$("#"+destid).html($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 		var uuid = $("#page").attr('uuid');
 		$("#sidebar_"+uuid).click();
 
 	}
 	else if (type=='standard' || type=='raw'){
-		if (g_bar_type=='horizontal') {
-			html += "<div id='menu_bar'></div>";
+		if (g_bar_type.indexOf('horizontal')>-1) {
+//			html += "<nav id='menu_bar' class='navbar navbar-expand-md navbar-light bg-lightfont'>";
+//			html += "</nav>";
 			html += "<div id='breadcrumb'></div>";
 			html += "<div id='contenu' class='container-fluid'></div>";
-			$("#"+destid).append($(html));
+			$("#"+destid).html($(html));
 			UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar',type,LANGCODE,edit,UICom.rootid);
 		}
 		else {
@@ -360,7 +361,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 			html += "		<div class='col-sm-3' id='sidebar'></div>";
 			html += "		<div class='col-sm-9' id='contenu'></div>";
 			html += "	</div>";
-			$("#"+destid).append($(html));
+			$("#"+destid).html($(html));
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 		}
 	}
@@ -370,7 +371,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		html += "		<div class='col-sm-3' id='sidebar'></div>";
 		html += "		<div class='col-sm-9' id='contenu'></div>";
 		html += "	</div>";
-		$("#"+destid).append($(html));
+		$("#"+destid).html($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
 
@@ -398,14 +399,12 @@ UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcod
 //======================
 {	
 	var html = "";
-	html += "<nav class='navbar navbar-expand-md navbar-light bg-lightfont'>";
-	html += "	<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-3' aria-controls='collapse-3' aria-expanded='false' aria-label='Toggle navigation'>";
-	html += "			<span class='navbar-toggler-icon'></span>";
-	html += "	</button>";
-	html += "	<div class='navbar-collapse collapse' id='collapse-3'>";
-	html += "		<ul id='parent-"+rootid+"' class='navbar-nav'></ul>";
+	html += "	<div class='navbar-collapse collapse navbars";
+	if (g_bar_type=='horizontal-right')
+		html += " justify-content-end";
+	html += "' id='portfolio-navbars'>";
+	html += "		<ul id='parent-"+rootid+"' class='navbar-nav topbarmenu'></ul>";
 	html += "	</div>";
-	html += "</nav>";
 	$("#"+destid).html($(html));
 	UIFactory.Node.displayHorizontalMenu(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
 };
@@ -428,6 +427,78 @@ UIFactory["Portfolio"].displayMenu = function(destid,type,langcode,edit,tree)
 		$("#"+destid).html(html);
 	}
 };
+
+//==============================
+UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
+//==============================
+{
+	var html = "";
+	var rootid = $(UICom.root.node).attr('id');
+	html += "<nav class='navbar navbar-expand-md navbar-dark'>";
+	html += "	<a  id='toggleSideBar' onclick='toggleSideBar()' class='nav-item button icon'><i class='fa fa-bars'></i></a>";
+	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
+	html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
+	html += "	</a>";
+	html += "	</div>";
+	html += "	<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='.navbars' aria-controls='portfolio-navbars' aria-expanded='false' aria-label='Toggle navigation'>";
+	html += "			<span class='navbar-toggler-icon'></span>";
+	html += "	</button>";
+	html += "	<div class='navbar-collapse collapse navbars' id='portfolio-navbars'>";
+	html += "		<ul class='ml-auto navbar-nav'>";
+	//-------------------- SEARCH -----------
+	html += "			<li class='input-group'>";
+	html += "				<input type='text' id='"+type+"-search-text-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-portfolio-text']+"'>";
+	html += "				<div class='input-group-append'>";
+	html += "					<button type='button' onclick=\"UIFactory.Portfolio.search('"+type+"')\" class='btn'><i class='fas fa-search'></i></button>";
+	html += "				</div><!-- /input-group-append -->";
+	html += "			</li><!-- /input-group -->";
+	//-------------------- WELCOME PAGE EDIT -----------
+	html += "			<li id='welcome-edit'></li>";
+	html += "			<li id='welcome-add' class='nav-item dropdown'></li>";
+	//-------------------- ACTIONS----------------------
+	var actions = UIFactory.Portfolio.getActions(portfolioid);
+	if (actions!='') {
+		html += "		<li class='nav-item dropdown'>";
+		html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		html += "				Actions";
+		html += "			</a>";
+		html += "			<div class='dropdown-menu'>";
+		html += actions;
+		html += "			</div>";
+		html += "		</li>";
+	}
+	//-------------------- ROLES-------------------------
+	if (g_userroles[0]=='designer') {
+		html += "		<li class='nav-item dropdown'>";
+		html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsRoles' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		html += 				karutaStr[LANG]['role']+" : <span id='userrole'>designer</span>";
+		html += "			</a>";
+		html += "			<div class='dropdown-menu'>";
+		html += "				<a class='dropdown-item' onclick=\"setDesignerRole('designer')\">designer</a>";
+		for (role in UICom.roles) {
+			if (role!="designer")
+				html += "		<a class='dropdown-item' onclick=\"setDesignerRole('"+role+"')\">"+role+"</a>";
+		}
+		html += "			</div>";
+		html += "		</li>";
+	}
+	//-------------------- MODE READ/EDIT---------------
+	html += "			<li id='toggle-mode' class='nav-item'>";
+	var toggle_mode_class = (g_edit) ? "fas fa-toggle-on":"fas fa-toggle-off";
+	html += "				<span>"+karutaStr[LANG]["write-mode"]+"</span>&nbsp;<a onclick='toggleMode()' data-title='"+karutaStr[LANG]["write-mode"]+"' data-toggle='tooltip' data-placement='bottom'><i id='toggle-mode-icon' class='"+toggle_mode_class+"'></i></a>";
+	html += "			</li>";
+	//-------------------- REFRESH---------------
+	html += "			<li class='nav-item icon'>";
+	html += "				<a id='refresh-portfolio' onclick='fill_main_page()' class='nav-link fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-toggle='tooltip' data-placement='bottom'></a>";
+	html += "			</li>";
+	//------------------------------------------------
+	html += "		</ul>";
+	html += "</nav>";
+	html += "<nav id='menu_bar' class='navbar navbar-expand-md navbar-light bg-lightfont'>";
+	html += "</nav>";
+	return html;
+}
+
 /*
 //======================
 UIFactory["Portfolio"].displayNodes = function(destid,tree,semtag,langcode,edit)
@@ -2052,76 +2123,6 @@ UIFactory["Portfolio"].archive = function(projectcode,langcode)
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
 
-//==============================
-UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
-//==============================
-{
-	var html = "";
-	var rootid = $(UICom.root.node).attr('id');
-	html += "<nav class='navbar navbar-expand-md navbar-dark'>";
-	html += "	<div>";
-	html += "	<a  onclick='toggleSideBar()' class='nav-item button icon'><i class='fa fa-bars'></i></a>";
-	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
-	html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
-	html += "	</a>";
-	html += "	</div>";
-	html += "	<button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#collapse-2' aria-controls='collapse-1' aria-expanded='false' aria-label='Toggle navigation'>";
-	html += "			<span class='navbar-toggler-icon'></span>";
-	html += "	</button>";
-	html += "	<div class='navbar-collapse collapse' id='collapse-2'>";
-	html += "		<ul class='ml-auto navbar-nav'>";
-	//-------------------- SEARCH -----------
-	html += "	<li class='input-group'>";
-	html += "		<input type='text' id='"+type+"-search-text-input' class='form-control' value='' placeholder='"+karutaStr[LANG]['search-portfolio-text']+"'>";
-	html += "		<div class='input-group-append'>";
-	html += "			<button type='button' onclick=\"UIFactory.Portfolio.search('"+type+"')\" class='btn'><i class='fas fa-search'></i></button>";
-	html += "		</div><!-- /input-group-append -->";
-	html += "	</li><!-- /input-group -->";
-	//-------------------- WELCOME PAGE EDIT -----------
-	html += "	<li id='welcome-edit'></li>";
-	html += "	<li id='welcome-add' class='nav-item dropdown'></li>";
-	//-------------------- ACTIONS----------------------
-	var actions = UIFactory.Portfolio.getActions(portfolioid);
-	if (actions!='') {
-		html += "		<li class='nav-item dropdown'>";
-		html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-		html += "				Actions";
-		html += "			</a>";
-		html += "			<div class='dropdown-menu'>";
-		html += actions;
-		html += "			</div>";
-		html += "		</li>";
-	}
-	//-------------------- ROLES-------------------------
-	if (g_userroles[0]=='designer') {
-		html += "		<li class='nav-item dropdown'>";
-		html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsRoles' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-		html += 				karutaStr[LANG]['role']+" : <span id='userrole'>designer</span>";
-		html += "			</a>";
-		html += "			<div class='dropdown-menu'>";
-		html += "				<a class='dropdown-item' onclick=\"setDesignerRole('designer')\">designer</a>";
-		for (role in UICom.roles) {
-			if (role!="designer")
-				html += "		<a class='dropdown-item' onclick=\"setDesignerRole('"+role+"')\">"+role+"</a>";
-		}
-		html += "			</div>";
-		html += "		</li>";
-	}
-	//-------------------- MODE READ/EDIT---------------
-	html += "			<li id='toggle-mode' class='nav-item'>";
-	var toggle_mode_class = (g_edit) ? "fas fa-toggle-on":"fas fa-toggle-off";
-	html += "				<span>"+karutaStr[LANG]["write-mode"]+"</span>&nbsp;<a onclick='toggleMode()' data-title='"+karutaStr[LANG]["write-mode"]+"' data-toggle='tooltip' data-placement='bottom'><i id='toggle-mode-icon' class='"+toggle_mode_class+"'></i></a>";
-	html += "			</li>";
-	//-------------------- REFRESH---------------
-	html += "			<li class='nav-item icon'>";
-	html += "				<a id='refresh-portfolio' onclick='fill_main_page()' class='nav-link fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-toggle='tooltip' data-placement='bottom'></a>";
-	html += "			</li>";
-	//------------------------------------------------
-	html += "		</ul>";
-	html += "	</div><!-- class='container-fluid' -->";
-	html += "</nav>";
-	return html;
-}
 
 //==================================================
 UIFactory["Portfolio"].displayComments = function(destid,node,type,langcode)
@@ -2526,6 +2527,7 @@ function setCSSportfolio(data)
 	setConfigColor(data,root,'svg-web9-color');
 	// --------CSS Text------------------
 	var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-portfolio-css'])",data))).text();
+	csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");
 	$("#csstext").remove();
 	if (csstext!=undefined && csstext!=''){
 		console.log("Portfolio CSS added")
