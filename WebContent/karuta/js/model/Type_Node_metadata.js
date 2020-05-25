@@ -36,6 +36,9 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	//------------------metadata----------------------------
 	this.nodetype = $(data).prop("nodeName"); // name of the xml tag
 	this.writenode = ($(node.node).attr('write')=='Y')? true:false;
+	this.deletenode = ($(node.node).attr('delete')=='Y')? true:false;
+	this.submitnode = ($(node.node).attr('submit')=='Y')? true:false;
+	//------------------------
 	this.semtag =  ($("metadata",data)[0]==undefined || $($("metadata",data)[0]).attr('semantictag')==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	this.collapsed = 'N';
 	if (!g_designerrole)

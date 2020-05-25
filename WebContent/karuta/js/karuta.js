@@ -174,7 +174,7 @@ function getNavBar(type,portfolioid,edit)
 	}
 	//-----------------ACTIONS-------------------------------
 	if (type!='login' && type!='create_account' &&USER!=undefined) {
-		if (USER.admin || (USER.creator && !USER.limited) ) {
+//		if (USER.admin || (USER.creator && !USER.limited) ) {
 			html += "		<li id='navbar-actions' class='nav-item dropdown'>";
 			html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 			html += "				Actions";
@@ -182,7 +182,7 @@ function getNavBar(type,portfolioid,edit)
 			html += "			<div class='dropdown-menu'>";
 			html += "				<a class='dropdown-item' onclick='show_list_page()'>"+karutaStr[LANG]['list_portfolios']+"</a>";
 			//-----------------
-			if (USER.admin) {
+//			if (USER.admin) {
 				if ($("#main-user").length && $("#main-user").html()!="")
 					html += "		<a class='dropdown-item' onclick='show_list_users()'>"+karutaStr[LANG]['list_users']+"</a>";
 				else
@@ -200,13 +200,13 @@ function getNavBar(type,portfolioid,edit)
 				//-----------------
 				if (typeof specificmenus!='undefined' &&  specificmenus)
 					html += specificmenushtml();
-			}
+//			}
 			//-----------------
 			html += "				<a class='dropdown-item' onclick='display_exec_batch()'>"+karutaStr[LANG]['batch']+"</a>";
 			html += "				<a class='dropdown-item' onclick='display_exec_report()'>"+karutaStr[LANG]['report']+"</a>";
 			html += "			</div>";
 			html += "		</li>";
-		}
+//		}
 		//-----------------NEW WINDOW-----------------------------------------
 		if (type!='login' && type!='create_account' && USER!=undefined) {
 			if (USER.admin || (USER.creator && !USER.limited) ) {

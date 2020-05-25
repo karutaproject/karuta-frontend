@@ -1556,42 +1556,31 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 {
 	var xml_model = "";
+	var xml_model = "";
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&search="+model_code,
+		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
 		success : function(data) {
-			var items = $("portfolio",data);
-			var uuid = $(items[0]).attr('id');
+			var nodeid = $("asmRoot",data).attr("id");
+			// ---- transform karuta portfolio to report model
+			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : serverBCK_API+"/portfolios/portfolio/"+uuid,
+				url : urlS,
 				success : function(data) {
-					var nodeid = $("asmRoot",data).attr("id");
-					// ---- transform karuta portfolio to report model
-					var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
-					$.ajax({
-						type : "GET",
-						dataType : "xml",
-						url : urlS,
-						success : function(data) {
-							g_dashboard_models[model_code] = data;
-//							try {
-								r_processPortfolio(0,data,destid,node,0);
-//							}
-//							catch(err) {
-//								alertHTML("Error in Dashboard : " + err.message);
-//							}
-							$("#wait-window").hide();
-							$("#wait-window").modal('hide');
-						}
-					 });
+					g_dashboard_models[model_code] = data;
+					try {
+						r_processPortfolio(0,data,destid,node,0);
+					}
+					catch(err) {
+						alertHTML("Error in Dashboard : " + err.message);
+					}
+					$("#wait-window").hide();
+					$("#wait-window").modal('hide');
 				}
-			});
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
+			 });
 		}
 	});
 }
