@@ -315,9 +315,9 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
 					if (($('code',resource).text()).indexOf("#")>-1)
-						$("#button_"+langcode+self.id).html(code+" "+$(this).attr("label_"+languages[langcode]));
+						$("#button_"+langcode+self.id).val(code+" "+$(this).attr("label_"+languages[langcode]));
 					else
-						$("#button_"+langcode+self.id).html($(this).attr("label_"+languages[langcode]));
+						$("#button_"+langcode+self.id).val($(this).attr("label_"+languages[langcode]));
 					var code = $(this).attr("code");
 					if (code.indexOf("@")>-1) {
 						code = code.substring(0,code.indexOf("@"))+code.substring(code.indexOf("@")+1);
@@ -389,40 +389,32 @@ UIFactory["URL2Unit"].prototype.bringUpToDate = function()
 		}
 		//------------
 		var self = this;
-		if (g_URL2Unit_caches[queryattr_value]!=undefined && g_URL2Unit_caches[queryattr_value]!="") {
-			var nodes = $("node",g_URL2Unit_caches[queryattr_value]);
-			for ( var i = 0; i < $(nodes).length; i++) {
-				var resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-				var code = $('code',resource).text();
-				if (code == unit_code) {
-					$(this.uuid_node).text($(nodes[i]).attr('id'));
-					this.save();
-					break;
-				}
-			}
-		} else
-			$.ajax({
-				self :self,
-				async : false,
-				unit_code : unit_code,
-				queryattr_value : queryattr_value,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
-				success : function(data) {
-					g_URL2Unit_caches[this.queryattr_value] = data;
-					var nodes = $("node",g_URL2Unit_caches[this.queryattr_value]);
-					for ( var i = 0; i < $(nodes).length; i++) {
-						var resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-						var code = $('code',resource).text();
-						if (code == this.unit_code) {
-							$(self.uuid_node).text($(nodes[i]).attr('id'));
-							self.save();
-							break;
+		$.ajax({
+			self :self,
+			async : false,
+			unit_code : unit_code,
+			queryattr_value : queryattr_value,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag,
+			success : function(data) {
+				g_URL2Unit_caches[this.queryattr_value] = data;
+				var nodes = $("node",g_URL2Unit_caches[this.queryattr_value]);
+				for ( var i = 0; i < $(nodes).length; i++) {
+					var resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+					var code = $('code',resource).text();
+					if (code == this.unit_code) {
+						$(self.uuid_node).text($(nodes[i]).attr('id'));
+						for (var i=0; i<languages.length;i++){
+							var label = $("label[lang='"+languages[i]+"']",resource).text();
+							$(self.label_node[i]).text(label);
 						}
+						self.save();
+						break;
 					}
 				}
-			});
+			}
+		});
 	}
 };
 

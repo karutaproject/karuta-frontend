@@ -615,16 +615,20 @@ function displayPage(uuid,depth,type,langcode) {
 	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
-	$("#sidebar_"+uuid).parent().addClass('selected');
 	if (g_bar_type.indexOf("horizontal")>-1){  // update breadcrumb
-		var nodeid = uuid;
-		var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
-		while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
-			nodeid = $(UICom.structure.ui[nodeid].node).parent().attr("id");
-			breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none') + breadcrumb;
+		$("#sidebar_"+uuid).addClass('selected');
+		if (g_breadcrumb=="@1") {
+			var nodeid = uuid;
+			var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
+			while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
+				nodeid = $(UICom.structure.ui[nodeid].node).parent().attr("id");
+				breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none') + breadcrumb;
+			}
+			breadcrumb = breadcrumb.substring(breadcrumb.indexOf("/")+1);
+			$("#breadcrumb").html(breadcrumb.substring(breadcrumb.indexOf("/")+1));
 		}
-		breadcrumb = breadcrumb.substring(breadcrumb.indexOf("/")+1);
-		$("#breadcrumb").html(breadcrumb.substring(breadcrumb.indexOf("/")+1));
+	} else {
+		$("#sidebar_"+uuid).parent().addClass('selected');
 	}
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (depth==null)
@@ -1893,19 +1897,33 @@ function getNodeid(semtag,data)
 	return $("metadata[semantictag='"+semtag+"']",data).parent().attr("id")
 }
 
+//------------------------------------------------------
+//---------- config function ---------------------------
+//------------------------------------------------------
+
 //==============================
-function getImg(semtag,data)
+function getImg(semtag,data,langcode)
 //==============================
 {
-	return "<img class='img-fluid' style='display:inline;' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[LANGCODE]+"'/>";
+	if (langcode==null)
+		langcode = LANGCODE;
+	var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
+	if (!multilingual)
+		langcode = NONMULTILANGCODE;
+	return "<img class='img-fluid' style='display:inline;' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"'/>";
 }
 
 
 //==============================
-function getBackgroundURL(semtag,data)
+function getBackgroundURL(semtag,data,langcode)
 //==============================
 {
-	return "url('../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[LANGCODE]+"')";
+	if (langcode==null)
+		langcode = LANGCODE;
+	var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
+	if (!multilingual)
+		langcode = NONMULTILANGCODE;
+	return "url('../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"')";
 }
 
 //==============================
@@ -1916,14 +1934,20 @@ function getContentStyle(semtag,data)
 }
 
 //==============================
-function getText(semtag,objtype,elttype,data)
+function getText(semtag,objtype,elttype,data,langcode)
 //==============================
 {
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
+	if (!multilingual)
+		langcode = NONMULTILANGCODE;
 	var result = "";
 	if (elttype=='value' || elttype=='code') // not language dependent
 		result = $(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
 	else
-		result = $(elttype+"[lang="+LANG+"]",$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+		result = $(elttype+"[lang="+languages[langcode]+"]",$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
 	return result;
 }
 

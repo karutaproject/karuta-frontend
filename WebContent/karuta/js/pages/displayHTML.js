@@ -212,8 +212,8 @@ displayHTML["translate-node-default"] =	"<div id='node_#uuid#' class='#displayvi
 										"		<span class='col-6 label-node' id='label0_#uuid#'></span><span class='col-6 label-node' id='label1_#uuid#'></span>" +
 										"	</div>" +
 										"	<div class='row'>" +
-										"			<div id='resource0_#uuid#' class='col-6'></div>" +
-										"			<div id='resource1_#uuid#' class='col-6'></div>" +
+										"		<div id='comments0_#uuid#' class='col-6'></div>" +
+										"		<div id='comments1_#uuid#' class='col-6'></div>" +
 										"	</div>" +
 										"	<div id='content-#uuid#' name='cnt-div' class='content standard-node-default-content' ></div>" +
 										"</div>";
@@ -225,6 +225,10 @@ displayHTML["translate-resource-default"] =	"<div id='node_#uuid#' class='#displ
 											"	<div class='row'>" +
 											"			<div id='resource0_#uuid#' class='col-6'></div>" +
 											"			<div id='resource1_#uuid#' class='col-6'></div>" +
+											"	</div>" +
+											"	<div class='row'>" +
+											"		<div id='comments0_#uuid#' class='col-6'></div>" +
+											"		<div id='comments1_#uuid#' class='col-6'></div>" +
 											"	</div>" +
 											"</div>";
 

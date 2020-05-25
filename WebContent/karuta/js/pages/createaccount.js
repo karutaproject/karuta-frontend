@@ -213,34 +213,34 @@ function setLoginConfigurationVariables()
 			LANGCODE = 0; //default value
 			LANG = languages[LANGCODE]; //default value
 			//---------Navigation Bar--------------
-			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data);
+			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data,langcode);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
-			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data);
-			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data);
+			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data,langcode);
+			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data,langcode);
 			//---------- Login -------------
-			g_configVar['login-background-image'] = getBackgroundURL('config-login-background-image',data);
-			g_configVar['login-background-color'] = getText('config-login-background-color','Color','text',data);
-			g_configVar['login-logo'] = getImg('config-login-logo',data);
+			g_configVar['login-background-image'] = getBackgroundURL('config-login-background-image',data,langcode);
+			g_configVar['login-background-color'] = getText('config-login-background-color','Color','text',data,langcode);
+			g_configVar['login-logo'] = getImg('config-login-logo',data,langcode);
 			g_configVar['login_logo_style'] = getContentStyle('config-login-logo',data);
-			g_configVar['login-subtitle'] = getText('config-login-subtitle','Field','text',data);
+			g_configVar['login-subtitle'] = getText('config-login-subtitle','Field','text',data,langcode);
 			g_configVar['login-subtitle-style'] = getContentStyle('config-login-subtitle',data);
-			g_configVar['login-subtext'] = getText('config-login-subtext','Field','text',data);
+			g_configVar['login-subtext'] = getText('config-login-subtext','Field','text',data,langcode);
 			g_configVar['login-subtext-style'] = getContentStyle('config-login-subtext',data);
-			g_configVar['login-text-color'] = getText('config-login-text-color','Color','text',data);
-			g_configVar['login-button-background-color'] = getText('config-login-button-background-color','Color','text',data);
-			g_configVar['login-button-text-color'] = getText('config-login-button-text-color','Color','text',data);
+			g_configVar['login-text-color'] = getText('config-login-text-color','Color','text',data,langcode);
+			g_configVar['login-button-background-color'] = getText('config-login-button-background-color','Color','text',data,langcode);
+			g_configVar['login-button-text-color'] = getText('config-login-button-text-color','Color','text',data,langcode);
 			//-----------New Password ----------
 			g_configVar['login-new-password-display'] = getText('config-login-new-password-display','Get_Resource','value',data);
-			g_configVar['login-new-password-background-color'] = getText('config-login-new-password-background-color','Color','text',data);
-			g_configVar['login-new-password-text-color'] = getText('config-login-new-password-text-color','Color','text',data);
-			g_configVar['login-new-password-button-background-color'] = getText('config-login-new-password-button-background-color','Color','text',data);
-			g_configVar['login-new-password-button-text-color'] = getText('config-login-new-password-button-text-color','Color','text',data);
+			g_configVar['login-new-password-background-color'] = getText('config-login-new-password-background-color','Color','text',data,langcode);
+			g_configVar['login-new-password-text-color'] = getText('config-login-new-password-text-color','Color','text',data,langcode);
+			g_configVar['login-new-password-button-background-color'] = getText('config-login-new-password-button-background-color','Color','text',data,langcode);
+			g_configVar['login-new-password-button-text-color'] = getText('config-login-new-password-button-text-color','Color','text',data,langcode);
 			//------------New Account ---------
 			g_configVar['login-new-account-display'] = getText('config-login-new-account-display','Get_Resource','value',data);
-			g_configVar['login-new-account-background-color'] = getText('config-login-new-account-background-color','Color','text',data);
-			g_configVar['login-new-account-text-color'] = getText('config-login-new-account-text-color','Color','text',data);
-			g_configVar['login-new-account-button-background-color'] = getText('config-login-new-account-button-background-color','Color','text',data);
-			g_configVar['login-new-account-button-text-color'] = getText('config-login-new-account-button-text-color','Color','text',data);
+			g_configVar['login-new-account-background-color'] = getText('config-login-new-account-background-color','Color','text',data,langcode);
+			g_configVar['login-new-account-text-color'] = getText('config-login-new-account-text-color','Color','text',data,langcode);
+			g_configVar['login-new-account-button-background-color'] = getText('config-login-new-account-button-background-color','Color','text',data,langcode);
+			g_configVar['login-new-account-button-text-color'] = getText('config-login-new-account-button-text-color','Color','text',data,langcode);
 		}
 	});
 }

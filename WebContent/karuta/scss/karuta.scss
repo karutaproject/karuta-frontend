@@ -1167,6 +1167,10 @@
 	.topbarmenu{
 		min-height: 4rem;
 		padding-top: 1.4rem;
+		li.selected {
+			font-weight:bold;
+			color: var(--portfolio-sidebar-selected-text-color);
+		}
 	}
 
 	#menu_bar {
@@ -1743,6 +1747,10 @@
 		padding-top:15px;
 	}
 
+	.standard-node-card {
+		margin:15px;
+	}
+
 	.standard-node-default-content.row {
 		padding-right:15px;
 	}
@@ -1860,8 +1868,10 @@
 	.row-cols-4>*,
 	.row-cols-5>*,
 	.row-cols-6>* {
+		margin-right:0px;
+		margin-bottom:0px;
 		margin-left:15px;
-		margin-top:15px; 
+		margin-top:15px;
 	}
 
 	.row-cols-2>* {flex: 0 0 calc((100% - (3 * 15px))/2)}
@@ -1870,13 +1880,20 @@
 	.row-cols-5>* {flex: 0 0 calc((100% - (6 * 15px))/5)}
 	.row-cols-6>* {flex: 0 0 calc((100% - (7 * 15px))/6)}
 
+	.row-cols-2,
+	.row-cols-3,
+	.row-cols-4,
+	.row-cols-5,
+	.row-cols-6 {
+		.asmContext.standard-resource-xwide{
+			padding:0px;
+		}
+	}
+
 // ---------------------------
 // ---------------------------
 // ---------------------------
 
-		.standard-node-card {
-		margin:15px;
-	}
 /*		.standard-resource-card {
 			margin-top:20px;
 			margin-left:0px;

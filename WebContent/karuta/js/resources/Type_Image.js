@@ -188,13 +188,15 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	if ($(this.alt_node[langcode]).text()!=undefined) // backward compatibility
 		alt = "alt=\""+$(this.alt_node[langcode]).text()+"\" "; 
 	//------------------------
+	var nodefileid = this.id;
+	if (nodefileid.indexOf("_")>-1) // proxy-image
+		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
+	//------------------------
 	var html ="";
 	if (type=='default') {
 		html +="<div uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
-//			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
-//			html += "</a>";
+			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
 		}
 		else
 			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
@@ -203,37 +205,35 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	if (type=='span') {
 		html +="<span uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
-//			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+""+alt+"  />";
-//			html += "</a>";
+			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+""+alt+"  />";
 		}
 		else
 			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
 		html += "</span>";
 	}
 	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
 	}
 	if (type=='withfilename'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
+		html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+nodefileid+"' title=''>";
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
 		html += "</a>";
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='withfilename-withoutlightbox'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='editor'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100' "+alt+" />";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100' "+alt+" />";		
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='block') {
 		html +="<div uuid='img_"+this.id+"' style='height:100%'>";
 		if ($(this.filename_node[langcode]).text()!="") {
 			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
-			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;max-height:218px;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
+			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+			html += "<img style='display:inline;max-height:218px;' id='image_"+nodefileid+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
 			html += "</a>";
 			html += "</td></tr></table>";
 		} else {
@@ -251,6 +251,15 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	if (this.multilingual!=undefined && !this.multilingual)
+		langcode = 0;
+	//---------------------
+	var alt = "";
+	if ($(this.alt_node[langcode]).text()!=undefined) // backward compatibility
+		alt = "alt=\""+$(this.alt_node[langcode]).text()+"\" "; 
 	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 	var uuid = this.id;
@@ -370,7 +379,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 		if (this.encrypted)
 			width = decrypt(width.substring(3),g_rc4key);
 		var htmlWidthGroupObj = $("<div class='form-group'></div>")
-		var htmlWidthLabelObj = $("<label for='width_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['width']+"</label>");
+		var htmlWidthLabelObj = $("<label for='width_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['width']+"</label>");
 		var htmlWidthDivObj = $("<div class='col-sm-9'></div>");
 		var htmlWidthInputObj = $("<input id='width_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+width+"\">");
 		var self = this;
@@ -387,7 +396,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 		if (this.encrypted)
 			height = decrypt(height.substring(3),g_rc4key);
 		var htmlHeightGroupObj = $("<div class='form-group'></div>")
-		var htmlHeightLabelObj = $("<label for='height_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['height']+"</label>");
+		var htmlHeightLabelObj = $("<label for='height_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['height']+"</label>");
 		var htmlHeightDivObj = $("<div class='col-sm-9'></div>");
 		var htmlHeightInputObj = $("<input id='height_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+height+"\">");
 		var self = this;
@@ -404,7 +413,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 		if (this.encrypted)
 			alt = decrypt(alt.substring(3),g_rc4key);
 		var htmlaltGroupObj = $("<div class='form-group'></div>")
-		var htmlaltLabelObj = $("<label for='alt_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['alt']+"</label>");
+		var htmlaltLabelObj = $("<label for='alt_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['alt']+"</label>");
 		var htmlaltDivObj = $("<div class='col-sm-9'></div>");
 		var htmlaltInputObj = $("<input id='alt_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+alt+"\">");
 		var self = this;
@@ -423,9 +432,9 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			if (this.encrypted)
 				code = decrypt(code.substring(3),g_rc4key);
 			var htmlcodeGroupObj = $("<div class='form-group'></div>")
-			var htmlcodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
+			var htmlcodeLabelObj = $("<label for='code_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
 			var htmlcodeDivObj = $("<div class='col-sm-9'></div>");
-			var htmlcodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' value=\""+code+"\">");
+			var htmlcodeInputObj = $("<input id='code_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+code+"\">");
 			var self = this;
 			$(htmlcodeInputObj).change(function (){
 				$(self.code_node).text($(this).val());
@@ -440,9 +449,9 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 			if (this.encrypted)
 				value = decrypt(value.substring(3),g_rc4key);
 			var htmlvalueGroupObj = $("<div class='form-group'></div>")
-			var htmlvalueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
+			var htmlvalueLabelObj = $("<label for='value_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
 			var htmlvalueDivObj = $("<div class='col-sm-9'></div>");
-			var htmlvalueInputObj = $("<input id='value_"+this.id+"' type='text' class='form-control' value=\""+value+"\">");
+			var htmlvalueInputObj = $("<input id='value_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+value+"\">");
 			var self = this;
 			$(htmlvalueInputObj).change(function (){
 				$(self.value_node).text($(this).val());

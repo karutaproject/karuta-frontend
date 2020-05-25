@@ -173,7 +173,7 @@ var UICom =
 							dataType : "xml",
 							url : serverBCK_API+"/nodes/node/" + targetid + "?resources=true",
 							success : function(data) {
-								$(":root",data).attr("id",targetid+$(current).attr("id"));
+								$(":root",data).attr("id",targetid+"_"+$(current).attr("id"));
 								proxies_data[targetid] = data;
 								proxies_parent[targetid] = $(current).attr("id");
 								proxies_edit[targetid] = edittargetroles;

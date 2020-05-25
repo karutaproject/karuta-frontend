@@ -101,7 +101,7 @@ UIFactory["URL2UnitBlock"].prototype.getView = function(dest,type,langcode)
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";
 		html += "<div class='Url2Block' style=\""+style+"\">";
-		style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		style = UICom.structure["ui"][this.id].getLabelStyle();
 		if (url2unit.resource.uuid_node.text()!="")
 			html += "<div class='block-title' style=\""+style+"\">"+label+"</div>";
 		else
@@ -159,6 +159,7 @@ UIFactory["URL2UnitBlock"].prototype.displayEditor = function(destid,type,langco
 	if (this.url2unit_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>URL2Unit</h4>"));
 		url2unit.resource.query = this.query;
+		UIFactory["Node"].updateMetadataWadAttribute(this.url2unit_nodeid,"query",this.query,null);
 		url2unit.resource.displayEditor(destid,type,langcode,disabled);
 	}
 	//---------------------

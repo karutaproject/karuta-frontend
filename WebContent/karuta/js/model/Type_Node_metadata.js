@@ -736,7 +736,7 @@ UIFactory["Node"].getMetadataInfo = function(data,attribute)
 {
 	var html = "";
 	if (data.getAttribute(attribute)!=undefined && data.getAttribute(attribute)!="")
-		html += "<span>"+attribute+":"+data.getAttribute(attribute)+"| </span>";
+		html += "<span>"+attribute+":"+data.getAttribute(attribute)+"|</span>";
 	return html;
 };
 
@@ -746,27 +746,31 @@ UIFactory["Node"].getMetadataEpmInfo = function(data,attribute)
 {
 	var html = "";
 	if ($("metadata-epm",data).attr(attribute)!=undefined && $("metadata-epm",data).attr(attribute)!="")
-		html += "<span>"+attribute+":"+$("metadata-epm",data).attr(attribute)+"| </span>";
+		html += "<span>"+attribute+":"+$("metadata-epm",data).attr(attribute)+"|</span>";
 	return html;
 };
 
 //==================================================
-UIFactory["Node"].prototype.displayMetainfo = function(destid)
+UIFactory["Node"].prototype.displayMetainfo = function(dest)
 //==================================================
 {
-	var data = this.node;
-	var html = "";
-	var type = $(data).prop("nodeName");
+	//-----------------------------------------
+	var type = this.asmtype;
 	if (type=='asmContext') {
-		var asmResources = $("asmResource",data);
-		type = $(asmResources[2]).attr('xsi_type');
+		resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",this.node);
+		type = this.resource.type;
 	}
+	//-----------------------------------------
+	var html = "";
 	html += "<span>"+karutaStr[languages[LANGCODE]][type]+" - </span>";
-	var metadata = data.querySelector("metadata");
-	var metadatawad = data.querySelector("metadata-wad");
-	if (metadata.getAttribute('semantictag')!=undefined && metadata.getAttribute('semantictag')!="")
-		html += "<span>semantictag:"+metadata.getAttribute('semantictag')+"| </span>";
-	html += UIFactory.Node.getMetadataInfo(metadatawad,'seenoderoles');
+	html += "<span>semantictag:"+this.semtag+"|</span>";
+	html += "<span>multilingual-node:"+this.multilingual+"|</span>";
+	if (this.asmtype=='asmContext') {
+		html += "<span>multilingual-resource:"+this.resource.multilingual+"|</span>";
+	}	
+	html += "<span>seenoderoles:"+this.seenoderoles+"|</span>";
+	//-----------------------------------------
+	var metadatawad = this.node.querySelector("metadata-wad");
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'seestart');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'seeend');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'editresroles');
@@ -789,7 +793,8 @@ UIFactory["Node"].prototype.displayMetainfo = function(destid)
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'moveroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'inline');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'printroles');
-	$("#"+destid).html(html);
+	//-----------------------------------------
+	$("#"+dest).html(html);
 };
 
 //==================================================

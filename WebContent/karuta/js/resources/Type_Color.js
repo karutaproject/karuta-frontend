@@ -194,6 +194,13 @@ UIFactory["Color"].prototype.getEditor = function(type,langcode,disabled)
 };
 
 //==================================
+UIFactory["Color"].prototype.displayEditor = function(dest,type,langcode,disabled)
+//==================================
+{
+	var obj = this.getEditor(type,langcode,disabled);
+	$("#"+dest).append(obj);
+}
+//==================================
 UIFactory["Color"].prototype.save = function()
 //==================================
 {

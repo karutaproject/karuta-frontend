@@ -313,12 +313,12 @@ UIFactory["Portfolio"].getTranslateMenu = function()
 {
 	var html = "";
 	if (languages.length<3)
-		html += "<a class='dropdown-item'  onclick=\"g_translate[0]=0;g_translate[1]=1;UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+" "+languages[0]+"-"+languages[1]+"</a>";
+		html += "<a class='dropdown-item'  onclick=\"g_translate[0]=0;g_translate[1]=1;UIFactory.Portfolio.displayPortfolio('portfolio-container','translate');\">"+karutaStr[LANG]['translate']+" "+languages[0]+"-"+languages[1]+"</a>";
 	else {
 		for (var i=0;i<languages.length-1;i++){
-			html += "<a class='dropdown-item'  onclick=\"g_translate[i]=0;g_translate[i+1]=1;UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+" "+languages[i]+"-"+languages[i+1]+"</a>";
+			html += "<a class='dropdown-item'  onclick=\"g_translate[i]=0;g_translate[i+1]=1;UIFactory.Portfolio.displayPortfolio('portfolio-container','translate');\">"+karutaStr[LANG]['translate']+" "+languages[i]+"-"+languages[i+1]+"</a>";
 		}
-		html += "<a class='dropdown-item'  onclick=\"g_translate[0]=0;g_translate[languages.length-1]=1;UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+" "+languages[0]+"-"+languages[languages.length-1]+"</a>";
+		html += "<a class='dropdown-item'  onclick=\"g_translate[0]=0;g_translate[languages.length-1]=1;UIFactory.Portfolio.displayPortfolio('portfolio-container','translate');\">"+karutaStr[LANG]['translate']+" "+languages[0]+"-"+languages[languages.length-1]+"</a>";
 	}
 	return html
 }
@@ -329,6 +329,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	if (type==null || type==undefined)
 		type = 'standard';
 	g_display_type = type;
+	var uuid = $("#page").attr('uuid');  // current page
 	//---------------------------------------
 	if (type=='model'){
 		html += "<div id='navigation_bar'></div>";
@@ -337,23 +338,30 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#"+destid).html($(html));
 	}
 	else if (type=='translate'){
-		html += "	<div class='row'>";
-		html += "		<div class='col-sm-3' id='sidebar'></div>";
-		html += "		<div class='colsm-9' id='contenu'></div>";
-		html += "	</div>";
-		$("#"+destid).html($(html));
-		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
-		var uuid = $("#page").attr('uuid');
-		$("#sidebar_"+uuid).click();
-
-	}
-	else if (type=='standard' || type=='raw'){
 		if (g_bar_type.indexOf('horizontal')>-1) {
-//			html += "<nav id='menu_bar' class='navbar navbar-expand-md navbar-light bg-lightfont'>";
-//			html += "</nav>";
 			html += "<div id='breadcrumb'></div>";
 			html += "<div id='contenu' class='container-fluid'></div>";
 			$("#"+destid).html($(html));
+			$("#menu_bar").show();
+			UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar',type,LANGCODE,edit,UICom.rootid);
+		}
+		else {
+			$("#menu_bar").hide();
+			html += "	<div class='row'>";
+			html += "		<div class='col-sm-3' id='sidebar'></div>";
+			html += "		<div class='col-sm-9' id='contenu'></div>";
+			html += "	</div>";
+			$("#"+destid).html($(html));
+			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
+		}
+		$("#sidebar_"+uuid).click();
+	}
+	else if (type=='standard' || type=='raw'){
+		if (g_bar_type.indexOf('horizontal')>-1) {
+			html += "<div id='breadcrumb'></div>";
+			html += "<div id='contenu' class='container-fluid'></div>";
+			$("#"+destid).html($(html));
+			$("#menu_bar").show();
 			UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar',type,LANGCODE,edit,UICom.rootid);
 		}
 		else {
@@ -361,6 +369,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 			html += "		<div class='col-sm-3' id='sidebar'></div>";
 			html += "		<div class='col-sm-9' id='contenu'></div>";
 			html += "	</div>";
+			$("#menu_bar").hide();
 			$("#"+destid).html($(html));
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 		}
@@ -1282,7 +1291,6 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		if (UIFactory.URL2Unit.testIfURL2Unit(g_portfolio_current))
 			html += "<a class='dropdown-item'  onclick=\"UIFactory.URL2Unit.bringUpToDate('"+portfolioid+"')\">"+karutaStr[LANG]['refresh-url2unit']+"</a>";
 		if(languages.length>1) {
-//			html += "<a class='dropdown-item'  onclick=\"$('#welcome-bar').hide();$('#sub-bar').html(UIFactory.Portfolio.getNavBar('translate',LANGCODE,g_edit,g_portfolioid))$('#sub-bar').show();UIFactory.Portfolio.displayPortfolio('main-container','translate');\">"+karutaStr[LANG]['translate']+"</a>";
 			html += UIFactory.Portfolio.getTranslateMenu();
 		}
 	}
@@ -2479,20 +2487,24 @@ UIFactory["Portfolio"].search = function(type)
 
 
 //=======================================================================
-function setConfigColor(data,root,configname) 
+function setConfigColor(data,root,configname,langcode) 
 // =======================================================================
 {
+	if (langcode==null)
+		langcode = LANGCODE;
 	var color = g_configVar[configname];
 	if ($("asmContext:has(metadata[semantictag='"+configname+"'])",data).length>0) {
-		color = getText(configname,'Color','text',data);
+		color = getText(configname,'Color','text',data,langcode);
 	}
 	root.style.setProperty("--"+configname,color);
 }
 
 //==================================
-function setCSSportfolio(data)
+function setCSSportfolio(data,langcode)
 //==================================
 {
+	if (langcode==null)
+		langcode = LANGCODE;
 	var root = document.documentElement;
 	//-----------NAVBAR------------------------------------
 	setConfigColor(data,root,'portfolio-navbar-background-color');
@@ -2526,7 +2538,11 @@ function setCSSportfolio(data)
 	setConfigColor(data,root,'svg-web8-color');
 	setConfigColor(data,root,'svg-web9-color');
 	// --------CSS Text------------------
-	var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-portfolio-css'])",data))).text();
+	var csstextlangcode = LANGCODE;
+	var multilingual = ($("metadata[semantictag='config-portfolio-css']",data).attr('multilingual-resource')=='Y') ? true : false;
+	if (!multilingual)
+		csstextlangcode = NONMULTILANGCODE;
+	var csstext = $("text[lang='"+languages[csstextlangcode]+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-portfolio-css'])",data))).text();
 	csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");
 	$("#csstext").remove();
 	if (csstext!=undefined && csstext!=''){
@@ -2553,6 +2569,10 @@ function setCSSportfolio(data)
 	g_bar_type = $("code",$("asmResource[xsi_type='Get_Resource']",$("asmContext:has(metadata[semantictag='config-bar-type'])",data))).text();
 	if (g_bar_type=="" || g_bar_type==null || g_bar_type==undefined)
 		g_bar_type = 'vertical';
+	// --------Breadcrumb------------------
+	g_breadcrumb = $("code",$("asmResource[xsi_type='Get_Resource']",$("asmContext:has(metadata[semantictag='config-breadcrumb'])",data))).text();
+	if (g_breadcrumb=="" || g_breadcrumb==null || g_breadcrumb==undefined)
+		g_breadcrumb = '@1';
 	//-----------------------------------
 }
 

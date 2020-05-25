@@ -245,7 +245,7 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 			"uuid":uuid,
 			"locale":LANG,
 			'events': {
-				'load': function(){$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][currentTexfieldUuid].resource.updateCounterWords(langcode);});},
+				'load': function(){try{$('.wysihtml5-sandbox').contents().find('body').on("keyup", function(){UICom.structure['ui'][currentTexfieldUuid].resource.updateCounterWords(langcode);});}catch(e){}; },
 				'change': function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);},
 				'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},
 				'blur': function(){clearInterval(currentTexfieldInterval);}
