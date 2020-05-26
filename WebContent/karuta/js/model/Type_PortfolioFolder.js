@@ -988,10 +988,14 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 			UIFactory["Portfolio"].parse_add(data);
 			var nb_visibleportfolios = 0;
 			var visibleid = "";
+			var autoload = "";
 			for (var i=0;i<portfolios_list.length;i++){
 				if (portfolios_list[i].visible) {
 					nb_visibleportfolios++;
 					visibleid = portfolios_list[i].id;
+				}
+				if (portfolios_list[i].autoload) {
+					autoload = portfolios_list[i].id;
 				}
 			}
 			if (nb_visibleportfolios>0)
@@ -1000,8 +1004,10 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 				else
 					if (nb_visibleportfolios>9)
 						UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',items);
-					else if (nb_visibleportfolios>1)
+					else if (nb_visibleportfolios>1 && autoload=="")
 						UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',items);
+					else if (autoload!="")
+						display_main_page(portfolios_byid[autoload].rootid);
 					else
 						display_main_page(portfolios_byid[visibleid].rootid);
 		},

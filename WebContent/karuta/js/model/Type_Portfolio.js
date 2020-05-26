@@ -492,10 +492,12 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 		html += "		</li>";
 	}
 	//-------------------- MODE READ/EDIT---------------
-	html += "			<li id='toggle-mode' class='nav-item'>";
-	var toggle_mode_class = (g_edit) ? "fas fa-toggle-on":"fas fa-toggle-off";
-	html += "				<span>"+karutaStr[LANG]["write-mode"]+"</span>&nbsp;<a onclick='toggleMode()' data-title='"+karutaStr[LANG]["write-mode"]+"' data-toggle='tooltip' data-placement='bottom'><i id='toggle-mode-icon' class='"+toggle_mode_class+"'></i></a>";
-	html += "			</li>";
+	if (USER.username.indexOf("karuser")<0) {
+		html += "			<li id='toggle-mode' class='nav-item'>";
+		var toggle_mode_class = (g_edit) ? "fas fa-toggle-on":"fas fa-toggle-off";
+		html += "				<span>"+karutaStr[LANG]["write-mode"]+"</span>&nbsp;<a onclick='toggleMode()' data-title='"+karutaStr[LANG]["write-mode"]+"' data-toggle='tooltip' data-placement='bottom'><i id='toggle-mode-icon' class='"+toggle_mode_class+"'></i></a>";
+		html += "			</li>";
+	}
 	//-------------------- REFRESH---------------
 	html += "			<li class='nav-item icon'>";
 	html += "				<a id='refresh-portfolio' onclick='fill_main_page()' class='nav-link fas fa-sync-alt' data-title='"+karutaStr[LANG]["button-reload"]+"' data-toggle='tooltip' data-placement='bottom'></a>";

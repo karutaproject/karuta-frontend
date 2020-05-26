@@ -1520,7 +1520,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 	//-----------------------------------
 	if (this.edit) {
 		//------------ edit button ---------------------
-		if ( (depth>1 || (depth==1 && this.asmtype != 'asmStructure' || this.asmtype != 'asmUnit'))&&
+		if ( (depth>1 || (depth==1 && this.asmtype != 'asmStructure' && this.asmtype != 'asmUnit')) &&
 					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
 									|| USER.admin
 									|| g_userroles[0]=='designer' 
