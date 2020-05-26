@@ -406,7 +406,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	var semtag =  ($("metadata",this.node)[0]==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
 	if (semtag==undefined) // for backward compatibility - node without semantic tag
 		semtag = '';
-	var resource_type = "";
+	var resource_type = this.xsi_type;
 	if (this.resource!=null)
 		resource_type = this.resource.type;
 	if (name=='asmRoot') {
@@ -541,7 +541,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','editboxtitle');
 	//----------------------Search----------------------------
-	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Get_Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
+	if (resource_type=='Get_Resource' || resource_type=='Get_Double_Resource' || resource_type=='Get_Get_Resource' || resource_type=='Proxy' || resource_type=='Get_Proxy' || resource_type=='Action' || resource_type=='URL2Unit' || resource_type=='URL2Portfolio' || name=='asmUnitStructure' || name=='asmUnit' || name=='asmStructure') {
 		html  = "<label>"+karutaStr[languages[langcode]]['query'+resource_type]+"</label>";
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','query');

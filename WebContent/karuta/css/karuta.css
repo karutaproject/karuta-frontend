@@ -1323,10 +1323,14 @@ body,
   margin-right: 5px;
 }
 
-.URL2Unit .resource {
+.URL2Unit .resource,
+.URL2Portfolio .resource {
   color: var(--portfolio-link-color);
 }
-.URL2Unit .URL2Unit-link {
+.URL2Unit .URL2Unit-link,
+.URL2Unit .URL2Portfolio-link,
+.URL2Portfolio .URL2Unit-link,
+.URL2Portfolio .URL2Portfolio-link {
   cursor: pointer;
 }
 
@@ -1677,37 +1681,37 @@ table[name=res-div] {
   margin-top: 15px;
 }
 .row .card.col-md-1 {
-  flex: 0 0 calc((100% * 1 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 1 / 12) - 15px);
 }
 .row .card.col-md-2 {
-  flex: 0 0 calc((100% * 2 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 2 / 12) - 15px);
 }
 .row .card.col-md-3 {
-  flex: 0 0 calc((100% * 3 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 3 / 12) - 15px);
 }
 .row .card.col-md-4 {
-  flex: 0 0 calc((100% * 4 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 4 / 12) - 15px);
 }
 .row .card.col-md-5 {
-  flex: 0 0 calc((100% * 5 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 5 / 12) - 15px);
 }
 .row .card.col-md-6 {
-  flex: 0 0 calc((100% * 6 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 6 / 12) - 15px);
 }
 .row .card.col-md-7 {
-  flex: 0 0 calc((100% * 7 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 7 / 12) - 15px);
 }
 .row .card.col-md-8 {
-  flex: 0 0 calc((100% * 8 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 8 / 12) - 15px);
 }
 .row .card.col-md-9 {
-  flex: 0 0 calc((100% * 9 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 9 / 12) - 15px);
 }
 .row .card.col-md-10 {
-  flex: 0 0 calc((100% * 10 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 10 / 12) - 15px);
 }
 .row .card.col-md-11 {
-  flex: 0 0 calc((100% * 11 / 12) - 15px);
+  flex: 0 0 calc(((100% - 15px) * 11 / 12) - 15px);
 }
 .row .card .card.col-md-2:first-child,
 .row .card .card.col-md-3:first-child,

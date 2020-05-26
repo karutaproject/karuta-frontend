@@ -38,6 +38,7 @@ UIFactory["URL2Portfolio"] = function(node,condition)
 	}
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='URL2Portfolio']",node));
 	//--------------------
+	this.code_node = $("code",$("asmResource[xsi_type='URL2Portfolio']",node));
 	this.uuid_node = $("uuid",$("asmResource[xsi_type='URL2Portfolio']",node));
 	this.label_node = [];
 	for (var i=0; i<languages.length;i++){
@@ -136,11 +137,15 @@ UIFactory["URL2Portfolio"].update = function(selected_item,itself,langcode,type)
 {
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var value = $(selected_item).attr('value');
+	var code = $(selected_item).attr('code');
 	//---------------------
-	if (itself.encrypted)
+	if (itself.encrypted) {
 		value = "rc4"+encrypt(value,g_rc4key);
+		code = "rc4"+encrypt(code,g_rc4key);
+	}
 	//---------------------
 	$(itself.uuid_node).text(value);
+	$(itself.code_node).text(value);
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);
 		//---------------------
@@ -170,7 +175,7 @@ UIFactory["URL2Portfolio"].prototype.displayEditor = function(destid,type,langco
 		//------------
 		var self = this;
 		if (cachable && g_URL2Portfolio_caches[queryattr_value]!=undefined && g_URL2Portfolio_caches[queryattr_value]!="")
-			UIFactory["URL2Portfolio"].parse(destid,type,langcode,g_URL2Portfolio_caches[queryattr_value],self,disabled,srce,resettable,target,semtag);
+			UIFactory["URL2Portfolio"].parse(destid,type,langcode,g_URL2Portfolio_caches[queryattr_value],self,disabled,resettable,target);
 		else
 			$.ajax({
 				async : false,
@@ -180,7 +185,7 @@ UIFactory["URL2Portfolio"].prototype.displayEditor = function(destid,type,langco
 				success : function(data) {
 					if (cachable)
 						g_URL2Portfolio_caches[queryattr_value] = data;
-					UIFactory["URL2Portfolio"].parse(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag);
+					UIFactory["URL2Portfolio"].parse(destid,type,langcode,data,self,disabled,resettable,target);
 				}
 			});
 	}
@@ -188,7 +193,7 @@ UIFactory["URL2Portfolio"].prototype.displayEditor = function(destid,type,langco
 
 
 //==================================
-UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag) {
+UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disabled,resettable,target) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -234,19 +239,20 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 		$(select).append($(select_item_a));
 		//---------------------
 		if (target=='label') {
-			var items = $("portfolio",data);
+			var items = $("portfolio>asmRoot",data);
 			for ( var i = 0; i < items.length; i++) {
 				var uuid = $(items[i]).attr('id');
-				var code = portfolios_byid[uuid].code_node.text();
-				var label = portfolios_byid[uuid].label_node[langcode].text();
-			}
-			for ( var i = 0; i < $(nodes).length; i++) {
+				var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+				var label = {};
+				for (var j=0; j<languages.length;j++){
+					label[j] = $("label[lang="+languages[j]+"]",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+				}
 				html = "<a class='dropdown-item' value='"+uuid+"' code='"+code+"' ";
 				for (var j=0; j<languages.length;j++){
-					html += "label_"+languages[j]+"=\""+portfolios_byid[uuid].label_node[languages[j]].text()+"\" ";
+					html += "label_"+languages[j]+"=\""+label[j]+"\" ";
 				}
 				html += ">";
-				html += "<div class='li-code'>"+code+"</div> <span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></a>";
+				html += "<div class='li-code'>"+code+"</div> <span class='li-label'>"+label[langcode]+"</span></a>";
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
 					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
@@ -256,9 +262,9 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 				//-------------- update button -----
 				if (code!="" && self_code==$('code',resource).text()) {
 					if (($('code',resource).text()).indexOf("#")>-1)
-						$("#button_"+self.id).html(code+" "+$(srce+"[lang='"+languages[langcode]+"']",resource).text());
+						$("#button_"+self.id).html(code+" "+label[langcode]);
 					else
-						$("#button_"+self.id).html($(srce+"[lang='"+languages[langcode]+"']",resource).text());
+						$("#button_"+self.id).html(label[langcode]);
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 				}
 			}

@@ -1416,11 +1416,13 @@
 		margin-right:5px;
 	}
 
-	.URL2Unit {
+	.URL2Unit,
+	.URL2Portfolio {
 		.resource {
 			color: var(--portfolio-link-color);
 		}
-		.URL2Unit-link {
+		.URL2Unit-link,
+		.URL2Portfolio-link {
 			cursor:pointer;
 		}
 	}
