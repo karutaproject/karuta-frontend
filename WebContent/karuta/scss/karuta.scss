@@ -948,6 +948,17 @@
 	#menu_bar {
 		background-color: var(--portfolio-sidebar-background-color);
 		color: var(--portfolio-sidebar-text-color);
+		.dropdown-menu {
+			background-color: var(--portfolio-sidebar-background-color);
+			color: var(--portfolio-sidebar-text-color);
+		}
+		.dropdown-item {
+			color: var(--portfolio-sidebar-text-color);
+		}
+		.dropdown-item:hover {
+			background-color: var(--portfolio-sidebar-text-color);
+			color: var(--portfolio-sidebar-background-color);
+		}
 		.nav-item {
 			padding-right:10px;
 		}
@@ -998,14 +1009,89 @@
 			padding-left : 0px;
 			padding-right : 0px;
 		}
-		a {
-			color: var(--portfolio-link-color);
-			cursor:pointer;
-			.portfolio-label:hover {
-				cursor:pointer;
+	
+		#portfolio-container {
+			background-color: var(--portfolio-background-color);
+			
+			&:not([role=designer]) .WELCOME .first-node{ 
+				display:none
 			}
+		
+			a {
+				color: var(--portfolio-link-color);
+				cursor:pointer;
+				.portfolio-label:hover {
+					cursor:pointer;
+				}
+			}
+		
+			#contenu,
+			.popover-header {
+				color: var(--portfolio-text-color);
+			}
+		
+			.dropdown-menu {
+				background-color: var(--portfolio-menu-background-color);
+				color: var(--portfolio-menu-text-color);
+				.dropdown-item,
+				a.dropdown-item {
+					cursor:pointer;
+					background-color: var(--portfolio-menu-background-color);
+					color: var(--portfolio-menu-text-color);
+				}
+				.dropdown-item:hover,
+				a.dropdown-item:hover {
+					background-color: var(--portfolio-menu-text-color);
+					color: var(--portfolio-menu-background-color);
+				}
+			}
+		
+			.row {
+				margin-right:0px;  // bootstrap default -15px;
+				margin-left:0px;  // bootstrap default -15px;
+			}
+		
+			.collapsible {
+				cursor:pointer;
+				float:left;
+				margin-right:5px;
+				margin-top: 1px;
+				color:var(--portfolio-buttons-color);
+			}
+		
+			.createreport .button,
+			.btn-group .button,
+			.menus,
+			.add-button {
+				color:var(--portfolio-buttons-color);
+			}
+		
+			.main-roles {
+				font-size:70%;
+				margin-left:5px;
+				td {
+					border: 1px solid gray;
+					padding:3px;
+				}
+			}
+		
+			.node-type {
+				font-size:90%;
+				font-style:italic;
+			}
+		
+			.semtag-line-header {
+				margin-bottom:2px;
+			}
+		
+			.semtag-value {
+				color:white;
+				background-color:#aaa;
+			}
+		
 		}
-		#sub-bar {
+	
+		#navbar1 {
 			color:var(--portfolio-navbar-text-color);
 			background-color: var(--portfolio-navbar-background-color);
 			border-color: var(--portfolio-navbar-background-color);
@@ -1047,76 +1133,7 @@
 				padding-top:9px;
 			}
 		}
-
-		background-color: var(--portfolio-background-color);
-		#portfolio-container:not([role=designer]) .WELCOME .first-node{ 
-			display:none
-		}
-		&[role=designer] {
-//			.asmUnitStructure:hover{
-//				border: 1px dashed #d8d8d8;
-//			}
-		}
-		#contenu,
-		.popover-header {
-			color: var(--portfolio-text-color);
-		}
-		.dropdown-menu {
-			background-color: var(--portfolio-menu-background-color);
-			color: var(--portfolio-menu-text-color);
-			.dropdown-item,
-			a.dropdown-item {
-				cursor:pointer;
-				background-color: var(--portfolio-menu-background-color);
-				color: var(--portfolio-menu-text-color);
-			}
-			.dropdown-item:hover,
-			a.dropdown-item:hover {
-				background-color: var(--portfolio-menu-text-color);
-				color: var(--portfolio-menu-background-color);
-			}
-		}
-		.row {
-			margin-right:0px;  // bootstrap default -15px;
-			margin-left:0px;  // bootstrap default -15px;
-		}
-		.collapsible {
-			cursor:pointer;
-			float:left;
-			margin-right:5px;
-			margin-top: 1px;
-			color:var(--portfolio-buttons-color);
-		}
-		.createreport .button,
-		.btn-group .button,
-		.menus,
-		.add-button {
-			color:var(--portfolio-buttons-color);
-		}
-		.main-roles {
-			font-size:70%;
-			margin-left:5px;
-			td {
-				border: 1px solid gray;
-				padding:3px;
-			}
-		}
-		.node-type {
-			font-size:90%;
-			font-style:italic;
-		}
-		.semtag-line-header {
-			margin-bottom:2px;
-		}
-		.semtag-value {
-			color:white;
-			background-color:#aaa;
-		}
-//		.menus {
-//			a.text-button {
-//				color:var(--portfolio-buttons-color);
-//			}
-//		}
+	
 
 	}
 	

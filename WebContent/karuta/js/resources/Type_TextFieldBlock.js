@@ -93,10 +93,16 @@ UIFactory["TextFieldBlock"].prototype.getView = function(dest,type,langcode)
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += " background-size:cover;";
 		html += "<div class='TxtBlock' style=\""+style+"\">";
-		style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
-		var style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
-		var text = text.resource.getView(dest,type,langcode);
-		html += "<div id='text_"+this.id+"' class='block-title' style=\""+style+"\">"+text+"</div>";
+		//---------------------------------
+		var title = UICom.structure.ui[this.id].getLabel(uuid);
+		var title_style = UICom.structure.ui[this.id].getLabelStyle(uuid);
+		if (title!="")
+			html += "<div id='title_"+this.id+"' class='block-title' style=\""+title_style+"\">"+title+"</div>";
+		//---------------------------------
+		var text_style = text.getContentStyle(uuid);
+		var text_content = text.resource.getView(dest,type,langcode);
+		html += "<div id='text_"+this.id+"' class='block-text' style=\""+text_style+"\">"+text_content+"</div>";
+		//---------------------------------
 		html += "</div>";
 	}
 	return html;
@@ -148,6 +154,16 @@ UIFactory["TextFieldBlock"].prototype.displayEditor = function(destid,type,langc
 	if (this.text_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>Text</h4>"));
 		text.resource.displayEditor(destid,type,langcode);
+		$("#"+destid).append($("<div id='text-metadata' class='metadata'></div>"));
+		text.displayMetadataEpmAttributeEditor('text-metadata','node-font-weight',$(text.metadataepm).attr('node-font-weight'));
+		text.displayMetadataEpmAttributeEditor('text-metadata','node-font-style',$(text.metadataepm).attr('node-font-style'));
+		text.displayMetadataEpmAttributeEditor('text-metadata','node-text-align',$(text.metadataepm).attr('node-text-align'));
+		text.displayMetadataEpmAttributeEditor('text-metadata','node-font-size',$(text.metadataepm).attr('node-font-size'));
+		text.displayMetadataEpmAttributeEditor('text-metadata','node-padding-top',$(text.metadataepm).attr('node-padding-top'));
+		text.displayMetadataEpmAttributeEditor('text-metadata','node-color',$(text.metadataepm).attr('node-color'));
+		text.displayMetadataEpmAttributeEditor('text-metadata','node-background-color',$(text.metadataepm).attr('node-background-color'));
+		text.displayMetadataEpmAttributeEditor('text-metadata','node-othercss',$(text.metadataepm).attr('node-othercss'));
+
 	}
 	//---------------------
 	if (this.image_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){

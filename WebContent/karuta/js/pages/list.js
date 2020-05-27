@@ -124,6 +124,7 @@ function display_list_page()
 {
 	if ($("#list-menu").length) {
 		show_list_page();
+		UIFactory.PortfolioFolder.checkPortfolios();
 	} else {
 		show_list_page();
 		fill_list_page();

@@ -283,13 +283,13 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	//-------------------- STYLES ---------------------------------------
 	var style = "";
 	//-------------------- node style -------------------
-	style = this.getNodeStyle(uuid);
+	style = r_replaceVariable(this.getNodeStyle(uuid));
 	$("#node_"+uuid).attr("style",style);
 	//-------------------- label style -------------------
-	style = this.getLabelStyle(uuid);
+	style = r_replaceVariable(this.getLabelStyle(uuid));
 	$("*[name='res-lbl-div']","#node_"+uuid).attr("style",style);
 	//-------------------- resource style -------------------
-	style = this.getContentStyle();
+	style = r_replaceVariable(this.getContentStyle());
 	$("*[name='res-div']","#node_"+uuid).attr("style",style);
 	//---------------- display resource ---------------------------------
 	if (this.edit && this.inline && this.writenode && this.editable_in_line)
@@ -406,7 +406,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	//-------------------- node style -------------------
 	var style = "";
 	if (this.depth>0 && type!='raw') {
-		style =  this.getNodeStyle(uuid);
+		style = r_replaceVariable(this.getNodeStyle(uuid));
 		$("#node_"+uuid).attr("style",style);
 	}
 	//-------------------- label style -------------------
@@ -422,11 +422,12 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-background-color',false);
 		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-othercss',false);
 	}
+	style = r_replaceVariable(style);
 	if (type!='raw')
 		$("div[name='lbl-div']","#node_"+uuid).attr("style",style);
 	//-------------------- content style -------------------
 	if (type!='model' && type!='raw') {
-		style = this.getContentStyle(uuid);
+		style = r_replaceVariable(this.getContentStyle(uuid));
 		$("div[name='cnt-div']","#node_"+uuid).attr("style",style);
 	}
 	//-------------------- collapsible -------------------
@@ -1212,15 +1213,15 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				{
 					var depth = 1;
 					var html = "";
-					html += "<li class='nav-item dropdown";
+					html += "<div class='nav-item dropdown";
 					if (privatevalue)
 						html+= "private"
-					html += "' id='parent-"+uuid+"' role='tablist'>";
-					html += "<a class='dropdown-toggle' href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+text+"</a>";
+					html += "' style='cursor:pointer' id='parent-"+uuid+"' role='tablist'>";
+					html += "<li class='dropdown-toggle' style='cursor:pointer' href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+text+"</li>";
 					html += "<div id='dropdown"+uuid+"' class='dropdown-menu' aria-labelledby='sidebar_"+uuid+"'>";
-					html += "<a class='dropdown-item' href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+					html += "<li class='dropdown-item'  style='cursor:pointer'href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</li>";
 					html += "</div><!-- panel-collapse -->";
-					html += "</li>";
+					html += "</div>";
 					$("#"+destid).append($(html));
 					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
 				}
