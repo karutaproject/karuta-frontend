@@ -97,7 +97,7 @@ function getvarvals(node)
 					text = items[i];
 				if (fct!=null)
 					text = eval(fct+"('"+text+"')");
-				if (text.indexOf('numline()')>-1) {
+				if (text!=undefined && text.indexOf('numline()')>-1) {
 					text = text.replace(/numline()/g,g_noline);
 					text = eval(text);
 				}
@@ -2481,7 +2481,7 @@ function getModelAndProcess(model_code)
 				portfoliologcode = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='Field']",$("asmContext:has(metadata[semantictag='portfoliologcode'])",data))).text();
 			var nodeid = $("asmRoot",data).attr("id");
 			// ---- transform karuta portfolio to batch model
-			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2batch.xsl&lang="+LANG;
+			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2batch.xsl&lang="+LANG;
 			$.ajax({
 				type : "GET",
 				dataType : "xml",

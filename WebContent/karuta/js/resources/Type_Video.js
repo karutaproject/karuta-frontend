@@ -187,7 +187,7 @@ UIFactory["Video"].prototype.setParameter = function(langcode)
 			m4v: srce
 			});
 		},
-		swfPath: karuta_url+"/other/jplayer",
+		swfPath: "../../other/jplayer",
 		solution:"flash,html",
 		supplied: "m4v",
 		size: {

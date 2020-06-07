@@ -105,7 +105,7 @@ function getLanguageMenu(js)
 	var html = "";
 	for (var i=0; i<languages.length;i++) {
 		html += "<a class='dropdown-item' id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');"+js+"\">";
-		html += "	<img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
+		html += "	<img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
 		html += "</a>"
 	}
 	return html;
@@ -159,7 +159,7 @@ function getNavBar(type,portfolioid,edit)
 	if (languages.length>1) {
 		html += "	<li id='navbar-language' class='nav-item dropdown'>";
 		html += "		<a class='nav-link dropdown-toggle' href='#' id='languageDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-		html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
+		html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
 		html += "		</a>";
 		html += "		<div class='dropdown-menu' aria-labelledby='languageDropdown'>";
 		if(type=="login")
@@ -720,7 +720,7 @@ function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,cla
 function writeSaved(uuid,data)
 //=======================================================================
 {
-	$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+	$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 }
 
 //=======================================================================
@@ -785,7 +785,7 @@ function loadLanguages(callback)
 			async:false,
 			type : "GET",
 			dataType : "script",
-			url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js"
+			url : "../../karuta/js/languages/locale_"+languages[i]+".js"
 		});
 	}
 	callback();
@@ -1281,7 +1281,7 @@ function setLanguage(lang,caller) {
 	localStorage.setItem('karuta-language',lang);
 	LANG = lang;
 	console.log("LANG: "+LANG);
-	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
+	$("#flagimage").attr("src","../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
 			LANGCODE = i;
@@ -1903,15 +1903,27 @@ function getNodeid(semtag,data)
 //------------------------------------------------------
 
 //==============================
-function getImg(semtag,data,langcode)
+function getImg(semtag,data,langcode,fluid)
 //==============================
 {
-	if (langcode==null)
-		langcode = LANGCODE;
-	var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
-	if (!multilingual)
-		langcode = NONMULTILANGCODE;
-	return "<img class='img-fluid' style='display:inline;' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"'/>";
+	var result = "";
+	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
+		if (langcode==null)
+			langcode = LANGCODE;
+		if (fluid==null)
+			fluid = true;
+		var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
+		if (!multilingual)
+			langcode = NONMULTILANGCODE;
+		var width = getText(semtag,'Image','width',data,langcode);
+		var height =  getText(semtag,'Image','height',data,langcode);
+		var result = "";
+		result += "<img ";
+		if (fluid)
+			result += "class='img-fluid' ";
+		result += "width='"+width+"' height='"+height+"' style='display:inline;' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"'/>";
+	}
+	return result;
 }
 
 
@@ -1919,38 +1931,52 @@ function getImg(semtag,data,langcode)
 function getBackgroundURL(semtag,data,langcode)
 //==============================
 {
-	if (langcode==null)
-		langcode = LANGCODE;
-	var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
-	if (!multilingual)
-		langcode = NONMULTILANGCODE;
-	return "url('../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"')";
+	var result = "";
+	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
+		if (langcode==null)
+			langcode = LANGCODE;
+		var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
+		if (!multilingual)
+			langcode = NONMULTILANGCODE;
+		result =  "url('../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"')";
+	}
+	return result;
 }
 
 //==============================
 function getContentStyle(semtag,data)
 //==============================
 {
-	return UIFactory.Node.getDataContentStyle($("metadata-epm",$("metadata[semantictag='"+semtag+"']",data).parent())[0]);
+	var result = "";
+	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
+		result = UIFactory.Node.getDataContentStyle($("metadata-epm",$("metadata[semantictag='"+semtag+"']",data).parent())[0]);
+	}
+	return result;
 }
 
 //==============================
 function getText(semtag,objtype,elttype,data,langcode)
 //==============================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
-	if (!multilingual)
-		langcode = NONMULTILANGCODE;
 	var result = "";
-	if (elttype=='value' || elttype=='code') // not language dependent
-		result = $(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
-	else
-		result = $(elttype+"[lang="+languages[langcode]+"]",$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
+		if (!multilingual)
+			langcode = NONMULTILANGCODE;
+		if (elttype=='value' || elttype=='code') // not language dependent
+			result = $(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+		else
+			result = $(elttype+"[lang="+languages[langcode]+"]",$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	}
 	return result;
 }
+
+//------------------------------------------------------
+//------------------------------------------------------
+//------------------------------------------------------
 
 //==============================
 function printSection(eltid)

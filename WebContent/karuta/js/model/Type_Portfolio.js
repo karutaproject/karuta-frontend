@@ -408,6 +408,8 @@ UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcod
 //======================
 {	
 	var html = "";
+	if (g_configVar['portfolio-hmenu-logo']!="")
+		html += "		<div id='portfolio-menu-logo' style=\""+g_configVar['portfolio-hmenu-logo-style']+"\">" + g_configVar['portfolio-hmenu-logo'] + "</div>";
 	html += "	<div class='navbar-collapse collapse navbars";
 	if (g_bar_type=='horizontal-right')
 		html += " justify-content-end";
@@ -1252,11 +1254,30 @@ UIFactory["Portfolio"].del = function(portfolioid)
 	});
 };
 
+//==================================
+UIFactory["Portfolio"].prototype.del = function() 
+//==================================
+{
+	$.ajax({
+		async: false,
+		type : "DELETE",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/" + this.id,
+		data : "",
+		success : function(data) {
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in del : "+jqxhr.responseText);
+		}
+	});
+};
+
 //=======================================================================
 UIFactory["Portfolio"].getPDF = function(portfolioid) 
 //=======================================================================
 {
-	var urlS = serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:fr;pers:mimi&format=application/pdf";
+	var urlS = serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:fr;pers:mimi&format=application/pdf";
 	$.ajax({
 		type : "GET",
 		headers: {
@@ -1273,9 +1294,9 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 {
 	var html ="";
 	if (portfolios_byid[portfolioid].export_pdf)
-		html += "<a class='dropdown-item' href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a>";
+		html += "<a class='dropdown-item' href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf'>"+karutaStr[LANG]['getPDF']+"</a>";
 	if (portfolios_byid[portfolioid].export_rtf)
-		html += "<a class='dropdown-item' href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+karutaname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf'>"+karutaStr[LANG]['getRTF']+"</a>";
+		html += "<a class='dropdown-item' href='../../../"+serverBCK+"/xsl?portfolioids="+portfolioid+"&xsl="+appliname+"/karuta/xsl/xmlportfolio2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf'>"+karutaStr[LANG]['getRTF']+"</a>";
 	if (portfolios_byid[portfolioid].export_htm)
 		html += "<a class='dropdown-item'  onclick='export_html()'>"+karutaStr[LANG]['getWebsite']+"</a>";
 //	html += "<a class='dropdown-item'  onclick=\"toggleButton('hidden')\">"+karutaStr[LANG]['hide-button']+"</a>";
@@ -2489,16 +2510,10 @@ UIFactory["Portfolio"].search = function(type)
 
 
 //=======================================================================
-function setConfigColor(data,root,configname,langcode) 
+function setConfigColor(root,configname) 
 // =======================================================================
 {
-	if (langcode==null)
-		langcode = LANGCODE;
-	var color = g_configVar[configname];
-	if ($("asmContext:has(metadata[semantictag='"+configname+"'])",data).length>0) {
-		color = getText(configname,'Color','text',data,langcode);
-	}
-	root.style.setProperty("--"+configname,color);
+	root.style.setProperty("--"+configname,g_configVar[configname]);
 }
 
 //==================================
@@ -2509,36 +2524,36 @@ function setCSSportfolio(data,langcode)
 		langcode = LANGCODE;
 	var root = document.documentElement;
 	//-----------NAVBAR------------------------------------
-	setConfigColor(data,root,'portfolio-navbar-background-color');
-	setConfigColor(data,root,'portfolio-navbar-text-color');
+	setConfigColor(root,'portfolio-navbar-background-color');
+	setConfigColor(root,'portfolio-navbar-text-color');
 	//-----------SIDEBAR------------------------------------
-	setConfigColor(data,root,'portfolio-sidebar-background-color');
-	setConfigColor(data,root,'portfolio-sidebar-text-color');
-	setConfigColor(data,root,'portfolio-sidebar-selected-text-color');
-	setConfigColor(data,root,'portfolio-sidebar-selected-border-color');
-	setConfigColor(data,root,'portfolio-sidebar-separator-color');
+	setConfigColor(root,'portfolio-sidebar-background-color');
+	setConfigColor(root,'portfolio-sidebar-text-color');
+	setConfigColor(root,'portfolio-sidebar-selected-text-color');
+	setConfigColor(root,'portfolio-sidebar-selected-border-color');
+	setConfigColor(root,'portfolio-sidebar-separator-color');
 	//-----------PORTFOLIO COLORS------------------------------------
-	setConfigColor(data,root,'page-title-background-color');
-	setConfigColor(data,root,'page-title-subline-color');
-	setConfigColor(data,root,'portfolio-background-color');
-	setConfigColor(data,root,'portfolio-text-color');
-	setConfigColor(data,root,'portfolio-buttons-background-color');
-	setConfigColor(data,root,'portfolio-buttons-color');
-	setConfigColor(data,root,'portfolio-link-color');
-	setConfigColor(data,root,'portfolio-resource-border-color');
-	setConfigColor(data,root,'portfolio-menu-background-color');
-	setConfigColor(data,root,'portfolio-menu-text-color');
+	setConfigColor(root,'page-title-background-color');
+	setConfigColor(root,'page-title-subline-color');
+	setConfigColor(root,'portfolio-background-color');
+	setConfigColor(root,'portfolio-text-color');
+	setConfigColor(root,'portfolio-buttons-background-color');
+	setConfigColor(root,'portfolio-buttons-color');
+	setConfigColor(root,'portfolio-link-color');
+	setConfigColor(root,'portfolio-resource-border-color');
+	setConfigColor(root,'portfolio-menu-background-color');
+	setConfigColor(root,'portfolio-menu-text-color');
 	//-----------SVG------------------------------------
-	setConfigColor(data,root,'svg-web0-color');
-	setConfigColor(data,root,'svg-web1-color');
-	setConfigColor(data,root,'svg-web2-color');
-	setConfigColor(data,root,'svg-web3-color');
-	setConfigColor(data,root,'svg-web4-color');
-	setConfigColor(data,root,'svg-web5-color');
-	setConfigColor(data,root,'svg-web6-color');
-	setConfigColor(data,root,'svg-web7-color');
-	setConfigColor(data,root,'svg-web8-color');
-	setConfigColor(data,root,'svg-web9-color');
+	setConfigColor(root,'svg-web0-color');
+	setConfigColor(root,'svg-web1-color');
+	setConfigColor(root,'svg-web2-color');
+	setConfigColor(root,'svg-web3-color');
+	setConfigColor(root,'svg-web4-color');
+	setConfigColor(root,'svg-web5-color');
+	setConfigColor(root,'svg-web6-color');
+	setConfigColor(root,'svg-web7-color');
+	setConfigColor(root,'svg-web8-color');
+	setConfigColor(root,'svg-web9-color');
 	// --------CSS Text------------------
 	var csstextlangcode = LANGCODE;
 	var multilingual = ($("metadata[semantictag='config-portfolio-css']",data).attr('multilingual-resource')=='Y') ? true : false;

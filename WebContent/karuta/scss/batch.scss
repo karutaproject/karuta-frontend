@@ -18,11 +18,10 @@
 		padding:5px;
 	}
 	.inside-full {
-		padding:3px;
+		padding:0px;
+		height:100%;
 		.form-control {
-			padding-top:0px;
-			padding-bottom:0px;
-			height: 1.7em;
+			border-radius:0px;
 		}
 	}
 	.model-node-label {

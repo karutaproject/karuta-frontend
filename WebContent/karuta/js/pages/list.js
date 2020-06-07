@@ -116,6 +116,11 @@ function fill_list_page()
 	//--------we load the folders-----------------------
 	UIFactory.PortfolioFolder.loadAndDisplayAll('portfolio');
 	UIFactory.PortfolioFolder.checkPortfolios();
+	if (nb_folders==0 && nb_portfolios==0 && g_execbatch!=undefined && g_execbatch){
+		$("#search-portfolio-div").hide();
+		$("#refresh").hide();
+		displayExecBatchButton();
+	}
 }
 
 //==============================

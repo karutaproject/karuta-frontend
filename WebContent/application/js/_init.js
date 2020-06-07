@@ -2,10 +2,8 @@
 var application_version = "2.0";
 var application_date = "2017-10-30";
 //----------------------------------
-var appliname = 'karuta3.0';
-var karutaname = 'karuta3.0'; // to share the same 'karuta-core' with multiple front-end
-var karuta_url = '../../../' + karutaname;
-var bckname = '3.0';
+var appliname = 'karuta3.0a';
+var bckname = '3.0a';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
@@ -16,7 +14,6 @@ if (new_bck) {
 	serverBCK_API = "../../../karuta-backend"+bckname+"/api";
 	appliname = 'karuta3.0-new';
 	karutaname = 'karuta3.0-new'; // to share the same 'karuta-core' with multiple front-end
-	karuta_url = '../../../' + karutaname;
 }
 //-------- LANGUAGES------------
 var languages = [];
@@ -37,9 +34,9 @@ var demo = false;
 g_configVar['login-new-password-display'] = "0";
 g_configVar['login-new-account-display'] = "0";
 //--------- NAVBAR BRAND ------------------ logo 126 x 34
-g_configVar['navbar-brand-logo'] = "<img src='"+karuta_url+"/karuta/img/logofonblanc.jpg'/>";
+g_configVar['navbar-brand-logo'] = "<img src='../../karuta/img/logofonblanc.jpg'/>";
 //-----------LOGIN PAGE -----------------------
-g_configVar['login-logo'] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
+g_configVar['login-logo'] = "<img class='img-fluid' src='../../karuta/img/logofonbleu.jpg'/>";
 var welcome2 = {};			//  Welcome title
 welcome2["fr"] = "BIENVENUE DANS KARUTA 3.0";
 welcome2["en"] = "WELCOME TO KARUTA 3.0";
@@ -58,8 +55,8 @@ var welcome5 = {}; 			//  Welcome sub-title
 	listinfo["en"] = "";
 //-----------PUBLIC PAGE -----------------------
 var welcome = {};// Welcome title
-	welcome["fr"] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
-	welcome["en"] = "<img class='img-fluid' src='"+karuta_url+"/karuta/img/logofonbleu.jpg'/>";
+	welcome["fr"] = "<img class='img-fluid' src='../../karuta/img/logofonbleu.jpg'/>";
+	welcome["en"] = "<img class='img-fluid' src='../../karuta/img/logofonbleu.jpg'/>";
 //--------- PUBLIC EMAIL LOGO - MESSAGE -------
 var url = window.location.href;
 var serverURL = url.substring(0,url.indexOf(appliname)-1);

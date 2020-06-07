@@ -119,6 +119,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 	if (refresh==null)
 		refresh = false;
 	var uuid = this.id;
+	this.display_node = {};
 	this.display_node[dest] = {"type":type,"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":type,"parent":parent,"menu":menu,"inblock":inblock};
 	this.setMetadata(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock);
 	var alreadyDisplayed = false;
@@ -1313,9 +1314,20 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 			type = 'default';
 		text = $(UICom.structure['ui'][uuid].context_text_node[langcode]).text();
 		html += "<h4>"+karutaStr[languages[LANGCODE]]['comments']+"</h4>";
-		html += "<div id='div_"+uuid+"'><textarea id='"+uuid+langcode+"_edit_comment' class='form-control' style='height:200px'>"+text+"</textarea></div>";
+		html += "<div id='div_"+uuid+langcode+"'><textarea id='"+uuid+langcode+"_edit_comment' class='form-control' style='height:200px'>"+text+"</textarea></div>";
 		$("#"+destid).append($(html));
-		$("#"+uuid+langcode+"_edit_comment").wysihtml5({toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},"uuid":uuid,"locale":LANG,'events': {'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments();},'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},'blur': function(){clearInterval(currentTexfieldInterval);}}});
+		$("#"+uuid+langcode+"_edit_comment").wysihtml5(
+			{
+				toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": false,"image": false,"link": false},
+				"uuid":uuid,
+				"locale":LANG,
+				'events': {
+					'change': function(){UICom.structure['ui'][currentTexfieldUuid].updateComments(langcode);},
+					'focus': function(){currentTexfieldUuid=uuid;currentTexfieldInterval = setInterval(function(){UICom.structure['ui'][currentTexfieldUuid].resource.update(langcode);}, g_wysihtml5_autosave);},
+					'blur': function(){clearInterval(currentTexfieldInterval);}
+				}
+			}
+		);
 	} else {
 		$("#"+destid).hide();
 	}
@@ -1521,7 +1533,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 	//-----------------------------------
 	if (this.edit) {
 		//------------ edit button ---------------------
-		if ( (depth>1 || (depth==1 && this.asmtype != 'asmStructure' && this.asmtype != 'asmUnit')) &&
+		if ( 
 					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
 									|| USER.admin
 									|| g_userroles[0]=='designer' 
@@ -1747,7 +1759,7 @@ UIFactory["Node"].prototype.getBubbleView = function(dest,type,langcode)
 		type='default';
 	var html ="";
 	UIFactory["Bubble"].parse(this.node);  // this.node
-	html += "<iframe id='bubble_iframe' class='bubble_iframe' src='"+karuta_url+"/karuta/htm/bubble.html?uuid="+this.id+"' height='500' width='100%'></iframe>";
+	html += "<iframe id='bubble_iframe' class='bubble_iframe' src='../../karuta/htm/bubble.html?uuid="+this.id+"' height='500' width='100%'></iframe>";
 	html += "<div id='map-info_"+this.id+"'></div>";
 	html += "<div id='bubble_display_"+this.id+"' class='bubble_display'></div>";
 	return html;

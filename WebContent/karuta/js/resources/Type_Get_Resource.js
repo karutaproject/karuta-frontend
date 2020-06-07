@@ -134,7 +134,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	if (type=='batchform')
 		return label;
 	var html = "";
-	html += "<div class='"+cleanCode(code)+" view-div' ";
+	html += "<span class='"+cleanCode(code)+" view-div' ";
 	if (indashboard)
 		html += " style='background-position:center'";
 	html += ">";
@@ -148,7 +148,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	}
 	if (code.indexOf("&")>-1)
 		html += " ["+$(this.value_node).text()+ "] ";
-	html += "</div>";
+	html += "</span>";
 	return html;
 };
 
@@ -156,30 +156,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-//	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	var label = this.label_node[langcode].text();
-	if (this.encrypted)
-		label = decrypt(label.substring(3),g_rc4key);
-	var code = $(this.code_node).text();
-	var html = "";
-	html += "<span class='"+cleanCode(code)+"'>";
-	if (code.indexOf("#")>-1)
-		html += cleanCode(code) + " ";
-	if (code.indexOf("%")<0)
-		html += label;
-	if (code.indexOf("&")>-1)
-		html += " ["+$(this.value_node).text()+ "] ";
-	html += "</span>";
+var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 
@@ -278,6 +255,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 	var self_code = $(self.code_node).text();
 	if (self.encrypted)
 		self_code = decrypt(self_code.substring(3),g_rc4key);
+	var self_label = $(self.label_node[langcode]).text();
+	if (self.encrypted)
+		self_label = decrypt(self_label.substring(3),g_rc4key);
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
@@ -353,7 +333,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					html = "<div class='dropdown-divider'></div>";
 					select_item = $(html);
 				} else {
-					html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+					html = "<a class='dropdown-item "+code+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
 					for (var j=0; j<languages.length;j++){
 						html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 					}
@@ -419,6 +399,13 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
+				//-------------- update button -----
+				if ((code!="" && self_code==$('code',resource).text()) || (self_label==$(srce+"[lang='"+languages[langcode]+"']",resource).text())) {
+					var html = "";
+					html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
+					$("#button_"+langcode+self.id).html(html);
+					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code);
+				}
 				$(select_item).append($(select_item))
 				$(select).append($(select_item));
 			}

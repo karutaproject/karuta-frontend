@@ -105,6 +105,7 @@ function callSubmit()
 		xml +="	<lastname>"+lastname+"</lastname>";
 		xml +="	<firstname>"+firstname+"</firstname>";
 		xml +="	<email>"+useridentifier+"</email>";
+		xml +="	<other>xlimited</other>";
 		xml +="</user>";
 		xml +="</users>";
 		var url = "../../../"+serverBCK+"/register";

@@ -104,10 +104,14 @@ function fill_main_page(rootid,role)
 				g_roles[g_roles.length] = {'code':'','libelle':role};
 			//-------------------------------------------------
 			var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
-			if (config_unit.length==0) // for backward compatibility
+			if (config_unit.length==0) { // for backward compatibility and portfolios without config
+				resetConfigurationPortfolioVariable();
+				setCSSportfolio("");
 				setCSSportfolioOLD(data);
-			else
+			} else {
+				setConfigurationPortfolioVariable(config_unit,true);
 				setCSSportfolio(config_unit);
+			}
 			setVariables(data);
 			// --------------------------
 			if (g_display_type=="standard" || g_display_type=="raw") {

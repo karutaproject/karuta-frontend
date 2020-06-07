@@ -149,6 +149,7 @@ function displayKarutaLogin()
 	html += "		<div id='welcome-version'></div>";
 	html += "		<div id='welcome2'></div>";
 	html += "		<div id='welcome3'></div>";
+	html += "		<div id='maintenance' style='display:none'></div>";
 	html += "		<div id='login'></div>";
 	html += "	</div>";
 	html += "	<div class='form-newpassword' id='newpassword'></div>";
@@ -249,6 +250,17 @@ function applyLoginConfiguration()
 		setConfigLoginColor(root,'login-new-account-button-text-color');
 	} else
 		$('#newaccount').hide();
+	//========================================
+	if (g_configVar['maintenance-display']=="1") {
+		$('#welcome2').hide();
+		$('#welcome3').hide();
+		$('#login').hide();
+		$('#maintenance').show();
+		$('#maintenance').html(g_configVar['maintenance-text']);
+		$("#maintenance").attr("style",g_configVar['maintenance-text-style']);
+		$("#welcome1").attr("onclick","$('#login').show()");
+	} else
+		$('#maintenance').hide();
 }
 
 //==============================
@@ -335,6 +347,10 @@ function setLoginTechnicalVariables()
 			g_configVar['login-new-password-display'] = getText('config-login-new-password-display','Get_Resource','value',data);
 			//------------New Account ---------
 			g_configVar['login-new-account-display'] = getText('config-login-new-account-display','Get_Resource','value',data);
+			//------------Maintenance ---------
+			g_configVar['maintenance-display'] = getText('config-maintenance-display','Get_Resource','value',data);
+			g_configVar['maintenance-text'] = getText('config-maintenance-text','TextField','text',data,LANGCODE);
+			g_configVar['maintenance-text-style'] = getContentStyle('config-maintenance-text',data);
 		}
 	});
 }

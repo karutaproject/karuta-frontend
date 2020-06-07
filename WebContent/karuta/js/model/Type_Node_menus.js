@@ -275,7 +275,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			//--------------------------------
 			if (displayMenu && !monomenu) {
 				//-----------------------
-				html += "<div class='dropdown'>";
+				html += "<span class='dropdown'>";
 				html += "	<button class='btn dropdown-toggle add-button' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 				//-----------
 				if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
@@ -338,7 +338,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				}
 				//-----------------------
 				html += "		</div>"; // class='dropdown-menu'
-				html += "	</div><!-- class='dropdown -->";
+				html += "	</span><!-- class='dropdown -->";
 			}
 			if (displayMenu && monomenu) {
 				var databack = false;

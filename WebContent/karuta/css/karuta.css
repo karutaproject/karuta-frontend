@@ -665,12 +665,13 @@ body,
   color: var(--edit-window-text-color);
   background-color: var(--edit-window-background-color);
 }
-#edit-window .dropdown-menu a.dropdown-item {
+#edit-window .dropdown-menu .dropdown-item {
   cursor: default;
   color: var(--edit-window-text-color);
   background-color: var(--edit-window-background-color);
 }
-#edit-window .dropdown-menu a.dropdown-item:hover {
+#edit-window .dropdown-menu .dropdown-item:hover {
+  color: var(--edit-window-text-color);
   background-color: var(--edit-window-button-background-color);
 }
 #edit-window .nested {
@@ -782,6 +783,190 @@ body,
   height: 60px;
 }
 
+/* ==================================================================== */
+/*                          PORTFOLIO                                   */
+/* ==================================================================== */
+#main-portfolio.container-fluid {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+#main-portfolio #portfolio-container {
+  background-color: var(--portfolio-background-color);
+  /* ====================== */
+  /*      SIDEBAR           */
+  /* ====================== */
+}
+#main-portfolio #portfolio-container:not([role=designer]) .WELCOME .first-node {
+  display: none;
+}
+#main-portfolio #portfolio-container a {
+  color: var(--portfolio-link-color);
+  cursor: pointer;
+}
+#main-portfolio #portfolio-container a .portfolio-label:hover {
+  cursor: pointer;
+}
+#main-portfolio #portfolio-container #contenu,
+#main-portfolio #portfolio-container .popover-header {
+  color: var(--portfolio-text-color);
+}
+#main-portfolio #portfolio-container .dropdown-menu {
+  background-color: var(--portfolio-menu-background-color);
+  color: var(--portfolio-menu-text-color);
+}
+#main-portfolio #portfolio-container .dropdown-menu .dropdown-item,
+#main-portfolio #portfolio-container .dropdown-menu a.dropdown-item {
+  cursor: pointer;
+  background-color: var(--portfolio-menu-background-color);
+  color: var(--portfolio-menu-text-color);
+}
+#main-portfolio #portfolio-container .dropdown-menu .dropdown-item:hover,
+#main-portfolio #portfolio-container .dropdown-menu a.dropdown-item:hover {
+  background-color: var(--portfolio-menu-text-color);
+  color: var(--portfolio-menu-background-color);
+}
+#main-portfolio #portfolio-container .row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+#main-portfolio #portfolio-container .collapsible {
+  cursor: pointer;
+  float: left;
+  margin-right: 5px;
+  margin-top: 1px;
+  color: var(--portfolio-buttons-color);
+}
+#main-portfolio #portfolio-container .createreport .button,
+#main-portfolio #portfolio-container .btn-group .button,
+#main-portfolio #portfolio-container .menus,
+#main-portfolio #portfolio-container .add-button {
+  color: var(--portfolio-buttons-color);
+}
+#main-portfolio #portfolio-container .main-roles {
+  font-size: 70%;
+  margin-left: 5px;
+}
+#main-portfolio #portfolio-container .main-roles td {
+  border: 1px solid gray;
+  padding: 3px;
+}
+#main-portfolio #portfolio-container .node-type {
+  font-size: 90%;
+  font-style: italic;
+}
+#main-portfolio #portfolio-container .semtag-line-header {
+  margin-bottom: 2px;
+}
+#main-portfolio #portfolio-container .semtag-value {
+  color: white;
+  background-color: #aaa;
+}
+#main-portfolio #portfolio-container #sidebar {
+  background-color: var(--portfolio-sidebar-background-color);
+}
+#main-portfolio #portfolio-container #sidebar-content {
+  color: var(--portfolio-sidebar-text-color);
+  padding-top: 15px;
+  min-height: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+#main-portfolio #portfolio-container #sidebar-content .selected a {
+  font-weight: bold;
+}
+#main-portfolio #portfolio-container #sidebar-content .sidebar-item {
+  border-bottom: 1px solid var(--portfolio-sidebar-separator-color);
+  padding-left: 15px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+#main-portfolio #portfolio-container #sidebar-content .sidebar-item a {
+  width: 100%;
+}
+#main-portfolio #portfolio-container #sidebar-content .sidebar-item .sidebar-item {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-bottom: 0px solid var(--portfolio-sidebar-separator-color);
+}
+#main-portfolio #portfolio-container #sidebar-content .sidebar-link {
+  color: var(--portfolio-sidebar-text-color);
+  padding-right: 9px;
+}
+#main-portfolio #portfolio-container #sidebar-content .sidebar-link a {
+  color: var(--portfolio-sidebar-text-color);
+}
+#main-portfolio #portfolio-container #sidebar-content .sidebar-link a:hover {
+  color: var(--portfolio-sidebar-selected-text-color);
+}
+#main-portfolio #portfolio-container #sidebar-content li.selected ul.nested {
+  display: block;
+}
+#main-portfolio #portfolio-container #sidebar-content li.nested {
+  text-indent: 15px;
+}
+#main-portfolio #portfolio-container #sidebar-content .number {
+  float: right;
+  font-size: calc(var(--font-size-coeff) * 0.9rem);
+  font-weight: normal;
+}
+#main-portfolio #portfolio-container #sidebar-content .selected {
+  padding-right: 5px;
+  border-right: 4px solid var(--portfolio-sidebar-selected-border-color);
+}
+#main-portfolio #portfolio-container #sidebar-content .selected a {
+  font-weight: bold;
+  color: var(--portfolio-sidebar-selected-text-color);
+}
+#main-portfolio #portfolio-container #sidebar-content a.sidebar-link:hover {
+  color: var(--portfolio-sidebar-selected-text-color);
+}
+#main-portfolio #navbar1 {
+  color: var(--portfolio-navbar-text-color);
+  background-color: var(--portfolio-navbar-background-color);
+  border-color: var(--portfolio-navbar-background-color);
+}
+#main-portfolio #navbar1 .btn {
+  color: var(--portfolio-navbar-text-color);
+}
+#main-portfolio #navbar1 .dropdown-menu,
+#main-portfolio #navbar1 .open > a {
+  background-color: var(--portfolio-navbar-background-color);
+  border-color: var(--portfolio-navbar-background-color);
+}
+#main-portfolio #navbar1 a.dropdown-item {
+  color: var(--portfolio-navbar-text-color);
+  background-color: var(--portfolio-navbar-background-color);
+}
+#main-portfolio #navbar1 a.dropdown-item:hover {
+  background-color: var(--portfolio-navbar-text-color);
+  color: var(--portfolio-navbar-background-color);
+}
+#main-portfolio #navbar1 a {
+  color: var(--portfolio-navbar-text-color);
+}
+#main-portfolio #navbar1 #toggle-mode {
+  width: 200px;
+  padding-top: 9px;
+  padding-left: 10px;
+  color: var(--portfolio-navbar-text-color);
+}
+#main-portfolio #navbar1 #toggle-mode-icon {
+  font-size: calc(var(--font-size-coeff) * 1.1rem);
+}
+#main-portfolio #navbar1 #refresh-portfolio {
+  padding-left: 15px;
+}
+#main-portfolio #navbar1 .navbar-brand {
+  cursor: pointer;
+}
+#main-portfolio #navbar1 #welcome-edit {
+  padding-top: 9px;
+}
+
+.chkbox-comments {
+  display: none;
+}
+
 /* ====================== */
 /*      BREADCRUMB        */
 /* ====================== */
@@ -791,70 +976,6 @@ body,
   padding-right: 15px;
   font-size: calc(var(--font-size-coeff) * 0.875rem);
   background-color: #FBFBFB;
-}
-
-/* ====================== */
-/*      SIDEBAR           */
-/* ====================== */
-#sidebar {
-  background-color: var(--portfolio-sidebar-background-color);
-}
-
-#sidebar-content {
-  color: var(--portfolio-sidebar-text-color);
-  padding-top: 15px;
-  min-height: 100%;
-  padding-left: 0px;
-  padding-right: 0px;
-}
-#sidebar-content .selected a {
-  font-weight: bold;
-}
-#sidebar-content .sidebar-item {
-  border-bottom: 1px solid var(--portfolio-sidebar-separator-color);
-  padding-left: 15px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-#sidebar-content .sidebar-item a {
-  width: 100%;
-}
-#sidebar-content .sidebar-item .sidebar-item {
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-bottom: 0px solid var(--portfolio-sidebar-separator-color);
-}
-#sidebar-content .sidebar-link {
-  color: var(--portfolio-sidebar-text-color);
-  padding-right: 9px;
-}
-#sidebar-content .sidebar-link a {
-  color: var(--portfolio-sidebar-text-color);
-}
-#sidebar-content .sidebar-link a:hover {
-  color: var(--portfolio-sidebar-selected-text-color);
-}
-#sidebar-content li.selected ul.nested {
-  display: block;
-}
-#sidebar-content li.nested {
-  text-indent: 15px;
-}
-#sidebar-content .number {
-  float: right;
-  font-size: calc(var(--font-size-coeff) * 0.9rem);
-  font-weight: normal;
-}
-#sidebar-content .selected {
-  padding-right: 5px;
-  border-right: 4px solid var(--portfolio-sidebar-selected-border-color);
-}
-#sidebar-content .selected a {
-  font-weight: bold;
-  color: var(--portfolio-sidebar-selected-text-color);
-}
-#sidebar-content a.sidebar-link:hover {
-  color: var(--portfolio-sidebar-selected-text-color);
 }
 
 /* ====================== */
@@ -924,131 +1045,17 @@ body,
   color: var(--portfolio-text-color);
 }
 
-/* ==================================================================== */
-/*                          PORTFOLIO                                   */
-/* ==================================================================== */
-#main-portfolio.container-fluid {
-  padding-left: 0px;
-  padding-right: 0px;
-}
-#main-portfolio #portfolio-container {
-  background-color: var(--portfolio-background-color);
-}
-#main-portfolio #portfolio-container:not([role=designer]) .WELCOME .first-node {
-  display: none;
-}
-#main-portfolio #portfolio-container a {
-  color: var(--portfolio-link-color);
-  cursor: pointer;
-}
-#main-portfolio #portfolio-container a .portfolio-label:hover {
-  cursor: pointer;
-}
-#main-portfolio #portfolio-container #contenu,
-#main-portfolio #portfolio-container .popover-header {
-  color: var(--portfolio-text-color);
-}
-#main-portfolio #portfolio-container .dropdown-menu {
-  background-color: var(--portfolio-menu-background-color);
-  color: var(--portfolio-menu-text-color);
-}
-#main-portfolio #portfolio-container .dropdown-menu .dropdown-item,
-#main-portfolio #portfolio-container .dropdown-menu a.dropdown-item {
-  cursor: pointer;
-  background-color: var(--portfolio-menu-background-color);
-  color: var(--portfolio-menu-text-color);
-}
-#main-portfolio #portfolio-container .dropdown-menu .dropdown-item:hover,
-#main-portfolio #portfolio-container .dropdown-menu a.dropdown-item:hover {
-  background-color: var(--portfolio-menu-text-color);
-  color: var(--portfolio-menu-background-color);
-}
-#main-portfolio #portfolio-container .row {
-  margin-right: 0px;
-  margin-left: 0px;
-}
-#main-portfolio #portfolio-container .collapsible {
-  cursor: pointer;
-  float: left;
-  margin-right: 5px;
-  margin-top: 1px;
-  color: var(--portfolio-buttons-color);
-}
-#main-portfolio #portfolio-container .createreport .button,
-#main-portfolio #portfolio-container .btn-group .button,
-#main-portfolio #portfolio-container .menus,
-#main-portfolio #portfolio-container .add-button {
-  color: var(--portfolio-buttons-color);
-}
-#main-portfolio #portfolio-container .main-roles {
-  font-size: 70%;
-  margin-left: 5px;
-}
-#main-portfolio #portfolio-container .main-roles td {
-  border: 1px solid gray;
-  padding: 3px;
-}
-#main-portfolio #portfolio-container .node-type {
-  font-size: 90%;
-  font-style: italic;
-}
-#main-portfolio #portfolio-container .semtag-line-header {
-  margin-bottom: 2px;
-}
-#main-portfolio #portfolio-container .semtag-value {
-  color: white;
-  background-color: #aaa;
-}
-#main-portfolio #navbar1 {
-  color: var(--portfolio-navbar-text-color);
-  background-color: var(--portfolio-navbar-background-color);
-  border-color: var(--portfolio-navbar-background-color);
-}
-#main-portfolio #navbar1 .btn {
-  color: var(--portfolio-navbar-text-color);
-}
-#main-portfolio #navbar1 .dropdown-menu,
-#main-portfolio #navbar1 .open > a {
-  background-color: var(--portfolio-navbar-background-color);
-  border-color: var(--portfolio-navbar-background-color);
-}
-#main-portfolio #navbar1 a.dropdown-item {
-  color: var(--portfolio-navbar-text-color);
-  background-color: var(--portfolio-navbar-background-color);
-}
-#main-portfolio #navbar1 a.dropdown-item:hover {
-  background-color: var(--portfolio-navbar-text-color);
-  color: var(--portfolio-navbar-background-color);
-}
-#main-portfolio #navbar1 a {
-  color: var(--portfolio-navbar-text-color);
-}
-#main-portfolio #navbar1 #toggle-mode {
-  width: 200px;
-  padding-top: 9px;
-  padding-left: 10px;
-  color: var(--portfolio-navbar-text-color);
-}
-#main-portfolio #navbar1 #toggle-mode-icon {
-  font-size: calc(var(--font-size-coeff) * 1.1rem);
-}
-#main-portfolio #navbar1 #refresh-portfolio {
-  padding-left: 15px;
-}
-#main-portfolio #navbar1 .navbar-brand {
-  cursor: pointer;
-}
-#main-portfolio #navbar1 #welcome-edit {
-  padding-top: 9px;
-}
-
-.chkbox-comments {
-  display: none;
-}
-
 /* ====================== */
 /*     RESOURCE         */
 /* ====================== */
+.standard-resource-xwide {
+  min-height: calc(var(--font-size-coeff) * 30px);
+}
+
+.standard-resource-xwide.TextField .resource {
+  padding-left: 5px;
+}
+
 .url_editor .form-horizontal {
   margin-top: 20px;
 }
@@ -1210,6 +1217,11 @@ body,
 /* ========================= */
 /*     VUE  STANDARD         */
 /* ========================= */
+.standard.asmRoot .asmStructure,
+.standard.asmRoot .asmUnit {
+  margin-top: 10px;
+}
+
 .standard-struct-default {
   cursor: pointer;
 }
@@ -1517,51 +1529,6 @@ table[name=res-div] {
   padding: 0px;
 }
 
-/*		.standard-resource-card {
-			margin-top:20px;
-			margin-left:0px;
-			margin-right:0px;
-			&:first-child {margin-top:0px;}
-			&:last-child {margin-bottom:0px;}
-		}
-	}
-
-	.standard-node-card-carddeck {
-		margin:20px;
-		.content {
-//			margin-left:15px;
-//			margin-right:15px;
-		}
-		.card-body {
-//			padding-top:0px;
-		}
-	}
-
-	.standard-node-carddeck-content{
-		padding:20px;
-		.standard-node-card {
-			margin-top:0px;
-		}
-	}
-
-	.standard-node-carddeck {
-		.standard-node-card {
-//			margin-top:5px;
-		}
-		.content {
-//			padding-top:20px;
-//			padding-left:20px;
-//			padding-right:20px;
-		}
-		.butmen {
-			text-align:right;
-		}
-		div[name=cnt-div] div[name=cnt-div]{
-//			padding-left:0px;
-//			padding-right:0px;
-		}
-	}
-*/
 /* ========================= */
 /*     VUE  1/X             */
 /* ========================= */
@@ -2193,6 +2160,17 @@ button.selected-label {
 /* ====================
 	divers
    ====================*/
+.comments {
+  font-size: 75%;
+  font-style: italic;
+  font-weight: normal;
+  padding-left: 5px;
+}
+
+.evo-palette {
+  margin-right: 5px;
+}
+
 .well {
   background-color: transparent;
 }
@@ -2211,16 +2189,6 @@ button.selected-label {
 
 .translate label span.lang {
   width: 40px;
-}
-
-.comments {
-  font-size: 75%;
-  font-style: italic;
-  font-weight: normal;
-}
-
-.evo-palette {
-  margin-right: 5px;
 }
 
 table.tablesorter thead tr th, table.tablesorter tfoot tr th {
@@ -2270,120 +2238,6 @@ table.tablesorter th.restore {
 /* ====================
 	Select with color
    ====================*/
-.selBDG0, option[value=BDG0] {
-  color: black;
-  background: lightgrey;
-  padding: 2px 4px;
-  height: 34px;
-}
-
-.selBDG1, option[value=BDG1] {
-  color: black;
-  background: DarkOrange;
-  padding: 2px 4px;
-  height: 34px;
-}
-
-.selBDG2, option[value=BDG2] {
-  color: black;
-  background: #FF6600;
-  padding: 2px 4px;
-  height: 34px;
-}
-
-.selBDG3, option[value=BDG3] {
-  color: black;
-  background: #fff;
-  padding: 2px 4px;
-  height: 34px;
-}
-
-.selBDG4, option[value=BDG4] {
-  color: black;
-  background: #CCFF99;
-  padding: 2px 4px;
-  height: 34px;
-}
-
-.selBDG5, option[value=BDG5] {
-  color: black;
-  background: #66CC00;
-  padding: 2px 4px;
-  height: 34px;
-}
-
-.BDG0 {
-  color: black;
-  background: lightgrey;
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-
-.BDG1 {
-  color: black;
-  background: DarkOrange;
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-
-.BDG2 {
-  color: black;
-  background: #FF6600;
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-
-.BDG3 {
-  color: black;
-  background: #fff;
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-
-.BDG4 {
-  color: black;
-  background: #CCFF99;
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-
-.BDG5 {
-  color: black;
-  background: #66CC00;
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-
-select.Y0, option[value=Y0] {
-  color: #fff;
-  background: gray;
-}
-
-select.Y1, option[value=Y1] {
-  color: #fff;
-  background: red;
-}
-
-select.Y2, option[value=Y2] {
-  color: #fff;
-  background: green;
-}
-
-.Y0 {
-  color: #fff;
-  background: gray;
-}
-
-.Y1 {
-  color: #fff;
-  background: red;
-}
-
-.Y2 {
-  color: #fff;
-  background: green;
-}
-
 .BDG {
   color: black;
   background: lightgrey;
@@ -2466,6 +2320,16 @@ select.Y2, option[value=Y2] {
 
 .selSMILEY-SAD, .SMILEY-SAD {
   background-image: url("../../karuta/img/smiley-sad.png");
+  background-repeat: no-repeat;
+  background-position: 10px 3px;
+  display: inline-block;
+  min-height: 34px;
+  width: 90%;
+  padding-left: 40px;
+}
+
+.selSMILEY-BLUE, .SMILEY-BLUE {
+  background-image: url("../../karuta/img/smiley-blue.png");
   background-repeat: no-repeat;
   background-position: 10px 3px;
   display: inline-block;
