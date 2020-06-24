@@ -45,19 +45,31 @@ UIFactory["Field"] = function( node )
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Field']",node));
 		if (this.text_node[i].length==0) {
-			if (i==0 && $("text",$("asmResource[xsi_type='Field']",node)).length==1) { // for WAD6 imported portfolio
-				this.text_node[i] = $("text",$("asmResource[xsi_type='Field']",node));
-			} else {
-				var newelement = createXmlElement("text");
-				$(newelement).attr('lang', languages[i]);
-				$("asmResource[xsi_type='Field']",node)[0].appendChild(newelement);
-				this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Field']",node));
-			}
+			var newelement = createXmlElement("text");
+			$(newelement).attr('lang', languages[i]);
+			$("asmResource[xsi_type='Field']",node)[0].appendChild(newelement);
+			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Field']",node));
 		}
 	}
-	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
-	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	//--------------------
 	this.display = {};
+	//--------------------
+	if ($("version",$("asmResource[xsi_type='Field']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='Field']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='Field']",node));
+	//--------------------
+	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		this.version_node.text("3.0");
+		var value = $(this.text_node[0]).text();
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.text_node[langcode]).text(value);
+		}
+		this.save();
+	}
+	//--------------------
 };
 
 //==================================
@@ -68,8 +80,6 @@ UIFactory["Field"].prototype.getAttributes = function(type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (this.multilingual!=undefined && !this.multilingual)
-		langcode = 0;
 	//---------------------
 	if (type==null)
 		type = 'default';
@@ -91,16 +101,10 @@ UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
 	var html = $(this.text_node[langcode]).text();
-	if (this.encrypted)
-		html = decrypt(html.substring(3),g_rc4key);
 	return html;
 };
 
@@ -108,32 +112,25 @@ UIFactory["Field"].prototype.getView = function(dest,type,langcode)
 UIFactory["Field"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	var html = $(this.text_node[langcode]).text();
-	if (this.encrypted)
-		html = decrypt(html.substring(3),g_rc4key);
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 
 /// Editor
 //==================================
-UIFactory["Field"].update = function(itself,langcode)
+UIFactory["Field"].prototype.update = function(langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
-	if (itself.encrypted)
-		$(itself.text_node[langcode]).text("rc4"+encrypt($(itself.text_node[langcode]).text(),g_rc4key));
-	itself.save();
+	$(this.lastmodified_node).text(new Date().toLocaleString());
+	//---------------------
+	if (!this.multilingual) {
+		var value = $(this.text_node[langcode]).text();
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.text_node[langcode]).text(value);
+		}
+	}
+	//---------------------
+	this.save();
 };
 
 //==================================
@@ -144,15 +141,10 @@ UIFactory["Field"].prototype.getEditor = function(type,langcode,disabled)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
 	//---------------------
 	var value = $(this.text_node[langcode]).text();
-	if (this.encrypted)
-		value = decrypt(value.substring(3),g_rc4key);
 	var html = "";
 	html += "<input type='text' class='form-control'";
 	if (disabled)
@@ -163,7 +155,7 @@ UIFactory["Field"].prototype.getEditor = function(type,langcode,disabled)
 	var self = this;
 	$(obj).change(function (){
 		$(self.text_node[langcode]).text($(this).val());
-		UIFactory["Field"].update(self,langcode);
+		self.update(langcode);
 	});
 	return obj;
 };
@@ -172,31 +164,7 @@ UIFactory["Field"].prototype.getEditor = function(type,langcode,disabled)
 UIFactory["Field"].prototype.displayEditor = function(dest,type,langcode,disabled)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	if (disabled==null)
-		disabled = false;
-	//---------------------
-	var value = $(this.text_node[langcode]).text();
-	if (this.encrypted)
-		value = decrypt(value.substring(3),g_rc4key);
-	var html = "";
-	html += "<input type='text' class='form-control'";
-	if (disabled)
-		html += "disabled='disabled' ";
-	html += "value=''>";
-	var obj = $(html);
-	$(obj).attr('value',value);
-	var self = this;
-	$(obj).change(function (){
-		$(self.text_node[langcode]).text($(this).val());
-		UIFactory["Field"].update(self,langcode);
-	});
+	var obj = this.getEditor(type,langcode,disabled);
 	$("#"+dest).append(obj);
 };
 
@@ -204,11 +172,11 @@ UIFactory["Field"].prototype.displayEditor = function(dest,type,langcode,disable
 UIFactory["Field"].prototype.save = function()
 //==================================
 {
-	if (UICom.structure.ui[this.id].logcode!="")
+	if (UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="") {
 		$(this.user_node).text(USER.firstname+" "+USER.lastname);
-	UICom.UpdateResource(this.id,writeSaved);
-	if (UICom.structure.ui[this.id].logcode!="")
 		UICom.structure.ui[this.id].log();
+	}
+	UICom.UpdateResource(this.id,writeSaved);
 	this.refresh();
 };
 

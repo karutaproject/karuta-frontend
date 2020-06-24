@@ -315,7 +315,6 @@ g_actions['create-user'] = function createUser(node)
 			$("#batch-log").append("<br>- user already defined("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 			var xml = "";
 			xml +="<?xml version='1.0' encoding='UTF-8'?>";
-			xml +="<users>";
 			xml +="<user>";
 			xml +="	<username>"+identifier+"</username>";
 			xml +="	<lastname>"+lastname+"</lastname>";
@@ -327,7 +326,6 @@ g_actions['create-user'] = function createUser(node)
 			xml +="	<admin>0</admin>";
 			xml +="	<designer>"+designer+"</designer>";
 			xml +="</user>";
-			xml +="</users>";
 			var url = serverBCK_API+"/users/user/"+userid;
 			$.ajax({
 				async : false,

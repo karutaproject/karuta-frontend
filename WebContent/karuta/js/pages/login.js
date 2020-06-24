@@ -28,6 +28,7 @@ function callSubmit(encrypt_url,lang)
 //==============================
 {
 	var data = "<credential><login>"+document.getElementById("useridentifier").value+"</login><password>"+document.getElementById("password").value+"</password></credential>";
+	localStorage.setItem('pwd',document.getElementById("password").value);
 	$.ajax({
 		contentType: "application/xml",
 		type : "POST",
@@ -138,8 +139,8 @@ function displayKarutaLogin()
 //==============================
 {
 	loginPublic();
-	setLoginConfigurationVariables();
 	setLoginTechnicalVariables();
+	setLoginConfigurationVariables();
 	var html = "";
 	html += "<div id='main-welcome'>";
 	html += "<div id='navigation-bar'></div>";
@@ -159,17 +160,14 @@ function displayKarutaLogin()
 	$('body').html(html);
 	$('body').append(alertBox());
 	$('body').append(EditBox());
-	loadLanguages(function(data) {
-		getLanguage();
-		$("#navigation-bar").html(getNavBar('login',null));
-		$("#login").html($(getLogin(encrypt_url,lang)));
-		$("#connection-cas").hide();
-		$("#useridentifier").focus();
-		if (typeof cas_url != 'undefined' && cas_url!="")
-			$("#connection-cas").show();
-		applyNavbarConfiguration();
-		applyLoginConfiguration();
-		});
+	$("#navigation-bar").html(getNavBar('login',null));
+	$("#login").html($(getLogin(encrypt_url,lang)));
+	$("#connection-cas").hide();
+	$("#useridentifier").focus();
+	if (typeof cas_url != 'undefined' && cas_url!="")
+		$("#connection-cas").show();
+	applyNavbarConfiguration();
+	applyLoginConfiguration();
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -274,17 +272,6 @@ function setLoginConfigurationVariables()
 		dataType : "xml",
 		url : url,
 		success : function(data) {
-			//---------Languages--------------
-			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
-			for (i=0;i<language_nodes.length;i++){
-				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
-			}
-			loadLanguages(function() {
-				getLanguage();
-			});
-			NONMULTILANGCODE = 0;  // default language if non-multilingual
-			LANGCODE = 0; //default value
-			LANG = languages[LANGCODE]; //default value
 			//---------Navigation Bar--------------
 			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data,LANGCODE);
 			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data,LANGCODE);
@@ -323,6 +310,7 @@ function setLoginTechnicalVariables()
 		url : url,
 		success : function(data) {
 			//---------Languages--------------
+			g_configVar['default-language'] = getText('default-language','Get_Resource','code',data,0);
 			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
 			for (i=0;i<language_nodes.length;i++){
 				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
@@ -330,9 +318,6 @@ function setLoginTechnicalVariables()
 			loadLanguages(function() {
 				getLanguage();
 			});
-			NONMULTILANGCODE = 0;  // default language if non-multilingual
-			LANGCODE = 0; //default value
-			LANG = languages[LANGCODE]; //default value
 			//---------Navigation Bar--------------
 			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data,LANGCODE);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);

@@ -873,7 +873,7 @@ UIFactory["Get_Resource"].prototype.save = function()
 			this.refresh();
 	}
 	else {// Node - Get_Resource {
-		UICom.UpdateNode(this.id);
+		UICom.UpdateNode(this.node);
 		UICom.structure.ui[this.id].refresh()
 	}	
 };

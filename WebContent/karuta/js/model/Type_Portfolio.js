@@ -53,7 +53,7 @@ UIFactory["Portfolio"] = function( node )
 	this.semantictag = $("metadata",node).attr('semantictag');
 	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.visible = ($("metadata",node).attr('list-novisible')=='Y') ? false : true;
-	this.autoload = ($("metadata",node).attr('autoload')=='Y') ? false : true;
+	this.autoload = ($("metadata",node).attr('autoload')=='Y') ? true : false;
 	//------------------------------
 	this.export_pdf = UIFactory.Portfolio.getLogicalMetadataAttribute(node,"export-pdf");
 	this.export_rtf = UIFactory.Portfolio.getLogicalMetadataAttribute(node,"export-rtf");
@@ -2383,6 +2383,7 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 {
 
 	var url0 = serverBCK_API+"/portfolios?active=1&userid="+userid;
+	var list = [];
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -2391,8 +2392,17 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 		firstname :firstname,
 		lastname :lastname,
 		success : function(data) {
-			UIFactory["Portfolio"].parse(data);
-			UIFactory["Portfolio"].displayListPortfolios(this.userid,this.firstname,this.lastname);
+			UIFactory.Portfolio.parse_add(data);
+			var items = $("portfolio",data);
+			for ( var i = 0; i < items.length; i++) {
+				try {
+					uuid = $(items[i]).attr('id');
+					list[list.length] = uuid;
+				} catch(e) {
+					alertHTML("Error UIFactory.Portfolio.parse:"+uuid+" - "+e.message);
+				}
+			}
+			UIFactory.Portfolio.displayListPortfolios(list,this.userid,this.firstname,this.lastname);
 			$("#wait-window").hide();
 		},
 		error : function(jqxhr,textStatus) {
@@ -2402,7 +2412,7 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 }
 
 //==================================
-UIFactory["Portfolio"].displayListPortfolios = function(userid,firstname,lastname,langcode)
+UIFactory.Portfolio.displayListPortfolios = function(list,userid,firstname,lastname,langcode)
 //==================================
 {
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
@@ -2420,9 +2430,9 @@ UIFactory["Portfolio"].displayListPortfolios = function(userid,firstname,lastnam
 
 	var html = "<table id='displayListPortfolios' class='zebra-table'>";
 	html += "<tr class='head'><td>"+karutaStr[LANG]['label']+"</td><td>"+karutaStr[LANG]['role']+"</td><td>"+karutaStr[LANG]['code']+"</td></tr>"
-	for (var i=0;i<portfolios_list.length;i++)
+	for (var i=0;i<list.length;i++)
 		{
-		var portfolio = portfolios_list[i];
+		var portfolio = portfolios_byid[list[i]];
 		var portfolioid = portfolio.id;
 		var portfoliocode = portfolio.code_node.text();
 		var portfolio_label = portfolio.label_node[langcode].text();
@@ -2448,6 +2458,7 @@ UIFactory["Portfolio"].displayListPortfolios = function(userid,firstname,lastnam
 	$('#edit-window').modal('show')
 	//--------------------------
 }
+
 
 //=======================================================================
 UIFactory["Portfolio"].confirmDelPortfolio = function (uuid) 

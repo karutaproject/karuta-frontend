@@ -23,7 +23,7 @@ function fill_list_usersgroups(type)
 	html += "<div id='usergroup-body'>";
 	//------------------------------------------
 	html += "	<div id='usergroup-user-leftside'  class='leftside'>";
-	html += "		<div id='usergroup-user-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_usersgroups()'></div>";
+	html += "		<div id='usergroup-user-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_usersgroups()' data-title='"+karutaStr[LANG]["button-reload"]+"' data-toggle='tooltip' data-placement='bottom'></div>";
 	html += "		<div id='usergroup-user-search' class='search'></div>";
 	html += "		<h3>"+karutaStr[LANG]['active_users'];
 	html += "			<button id='list-menu' class='btn' onclick=\"UIFactory.User.displayActive('usergroup-user-rightside-users-content1','usergroup-user');\">&nbsp;"+karutaStr[LANG]['see']+"</button>";

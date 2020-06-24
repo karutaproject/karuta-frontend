@@ -730,6 +730,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 {
 	$("#wait-window").modal('show');
 	//------------
+	srcecode = replaceVariable(srcecode);
 	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 	if (srcecode.indexOf('.')<0 && srcecode!='self')  // There is no project, we add the project of the current portfolio
 		srcecode = selfcode.substring(0,selfcode.indexOf('.')) + "." + srcecode;
@@ -1262,7 +1263,9 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 function getLanguage() {
 //==================================
 	var cookielang = localStorage.getItem('karuta-language');
-	if (cookielang == "undefined")
+	if (cookielang == null)
+		cookielang = g_configVar['default-language']
+	if (cookielang == "" || cookielang == undefined)
 		cookielang = languages[0];
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==cookielang) {
@@ -1898,6 +1901,13 @@ function getNodeid(semtag,data)
 	return $("metadata[semantictag='"+semtag+"']",data).parent().attr("id")
 }
 
+//==============================
+function doNotDisplayEdit()
+//==============================
+{
+	localStorage.setItem('display-edition-'+g_portfolioid,'no');
+}
+
 //------------------------------------------------------
 //---------- config function ---------------------------
 //------------------------------------------------------
@@ -1961,11 +1971,6 @@ function getText(semtag,objtype,elttype,data,langcode)
 	var result = "";
 	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
 		//---------------------
-		if (langcode==null)
-			langcode = LANGCODE;
-		var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
-		if (!multilingual)
-			langcode = NONMULTILANGCODE;
 		if (elttype=='value' || elttype=='code') // not language dependent
 			result = $(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
 		else

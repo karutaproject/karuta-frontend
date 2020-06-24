@@ -187,7 +187,7 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 	$(form).append(input1);
 	//------
 	if (g_userroles[0]=='designer' || USER.admin){
-		var group2 = $("<div class='form-group calendar-format'><label class='col-sm-3 control-label'>Diplay Format</label></div>");
+		var group2 = $("<div class='form-group calendar-format'><label class='col-sm-3 control-label'>Display Format</label></div>");
 		var div2 = $("<div class='col-sm-9'></div>");
 		html = "<input type='text' class='form-control' style='width:150px;' ";
 		if (disabled)

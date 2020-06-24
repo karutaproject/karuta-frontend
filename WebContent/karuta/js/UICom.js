@@ -418,12 +418,14 @@ var UICom =
 
 	  
 	//=======================================================================
-	  UpdateNode: function( uuid, cb )
+	  UpdateNode: function(node)
 	//=======================================================================
 	{
 		$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
-		var treenode = UICom.structure["ui"][uuid];
-		var resources = $(">asmResource",treenode.node);
+//		var treenode = UICom.structure["ui"][uuid];
+//		var resources = $(">asmResource",treenode.node);
+		var uuid =  $(node).attr('id');
+		var resources = $(">asmResource",node);
 	
 		for( var i=0; i<resources.length; ++i )
 		{
@@ -454,8 +456,8 @@ var UICom =
 					data : strippeddata,
 					success : function (data){
 						$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
-						if (cb!=undefined && jQuery.isFunction(cb))
-							cb(uuid,data);
+//						if (cb!=undefined && jQuery.isFunction(cb))
+//							cb(uuid,data);
 					},
 					error : function(jqxhr,textStatus) {
 						alertDisconnected();

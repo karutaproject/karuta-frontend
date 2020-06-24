@@ -831,7 +831,7 @@
 	}
 	
 	#navigation-bar {
-		margin-top: 15px; // space for saved information
+		padding-top: 15px; // space for saved information
 		li.icon {
 			margin-top:4px;
 		}
@@ -2065,7 +2065,6 @@ textarea {
 
 	#saved-window {
 		width:100%;
-		background-color:white;
 		position:fixed;
 		top:0;
 		left:0;

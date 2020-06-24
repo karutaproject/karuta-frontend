@@ -763,7 +763,7 @@ body,
 }
 
 #navigation-bar {
-  margin-top: 15px;
+  padding-top: 15px;
 }
 #navigation-bar li.icon {
   margin-top: 4px;
@@ -1908,7 +1908,6 @@ textarea {
 
 #saved-window {
   width: 100%;
-  background-color: white;
   position: fixed;
   top: 0;
   left: 0;

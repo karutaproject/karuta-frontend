@@ -67,7 +67,7 @@ function fill_list_page()
 	html += "<div id='portfolio-body'>";
 	//------------------------------------------
 	html += "	<div id='portfolio-rightside' class='rightside'>";
-	html += "		<div id='portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_page()'></div>";
+	html += "		<div id='portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_page()' data-title='"+karutaStr[LANG]["button-reload"]+"' data-toggle='tooltip' data-placement='bottom'></div>";
 	html += "		<div id='portfolio-search' class='search'></div>";
 	html += "		<div id='portfolio-rightside-title' class='title'></div>";
 	html += "		<div id='portfolio-rightside-header' class='header'></div>";

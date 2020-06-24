@@ -61,13 +61,15 @@ UIFactory["Node"] = function( node )
 		this.resource_type = null;
 		this.resource = null;
 		if (this.asmtype=='asmContext') {
-			flag_error = 'e';
+			flag_error = 'd1';
 			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",node);
 			this.resource_type = $(resource).attr("xsi_type");
+			var restype = this.resource_type;
 			this.resource = new UIFactory[this.resource_type](node);
-			flag_error = 'f';
+			flag_error = 'd2';
 		}
 		//------------------------------
+		flag_error = 'e';
 		this.context = $("asmResource[xsi_type='context']",node);
 		this.context_text_node = [];
 		//------------------------------
@@ -81,28 +83,49 @@ UIFactory["Node"] = function( node )
 			}
 		}
 		//------------------------------
+		flag_error = 'f';
 		this.metadata = node.querySelector("metadata");
 		this.metadatawad = node.querySelector("metadata-wad");
 		this.metadataepm = node.querySelector("metadata-epm");
 		this.semantictag = this.metadata.getAttribute('semantictag');
 		if (this.semantictag==undefined) // for backward compatibility - node without semantictag attribute
 			this.semantictag='';
+		//--------------------
+		flag_error = 'g';
+		if ($("version",$("asmResource[xsi_type='nodeRes']",node)).length==0){  // for backward compatibility
+			var newelement = createXmlElement("version");
+			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
+		}
+		this.version_node = $("version",$("asmResource[xsi_type='nodeRes']",node));
+		//--------------------
+		flag_error = 'h';
 		this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
+		if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+			this.version_node.text("3.0");
+			var value1 = $(this.label_node[0]).text();
+			var value2 = $(this.context_text_node[0]).text();
+			for (var langcode=0; langcode<languages.length; langcode++) {
+				$(this.label_node[langcode]).text(value1);
+				$(this.context_text_node[langcode]).text(value2);
+			}
+			this.save();
+		}
 		//------------------------------
+		flag_error = 'i';
 		this.display = {}; // to refresh after changes
 		this.display_label = {}; // to refresh after changes
 		this.display_node = {}; // to refresh after changes (metadataepm)
 		this.display_context = {}; // to refresh after changes (metadataepm)
 		//------------------------------
+		flag_error = 'j';
 		this.structured_resource = null;
 		if (this.xsi_type!=undefined && this.xsi_type!='' && this.xsi_type != this.asmtype) { // structured resource
 			this.structured_resource = new UIFactory[this.xsi_type](node);
 		}
 		//------------------------------
-//		this.loaded = !(g_complex); // if not complex all nodes are loaded
 	}
 	catch(err) {
-		alertHTML("UIFactory['Node']--flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype);
+		alertHTML("UIFactory['Node']--flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype+"--xsi_type:"+this.xsi_type);
 	}
 };
 
@@ -640,10 +663,6 @@ UIFactory["Node"].prototype.getContext = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-node')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	var html = "";
 	var text = this.context_text_node[langcode].text();
 	if (type=="div")
@@ -666,10 +685,6 @@ UIFactory["Node"].prototype.getLabel = function(dest,type,langcode)
 		type = 'span';
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-node')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null)
 		this.display_label[dest]=type;
@@ -694,10 +709,6 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 		type = 'default';
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = (this.metadata.getAttribute('multilingual-node')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
@@ -746,10 +757,6 @@ UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-node')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -789,43 +796,52 @@ UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 
 /// Editor
 //==================================
-UIFactory["Node"].updateLabel = function(input,itself,langcode)
+UIFactory["Node"].prototype.updateLabel = function(langcode)
 //==================================
 {
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
+	var label = $.trim($("#label_"+this.id+"_"+langcode).val());
+	$(this.label_node[langcode]).text(label);
 	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-node')=='Y') ? true : false;
-	if (!itself.multilingual)
-		langcode = NONMULTILANGCODE;
+	if (!this.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.label_node[langcode]).text(label);
+		}
+	}
 	//---------------------
-	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
-	$(itself.label_node[langcode]).text(label);
-	itself.save();
-	writeSaved(itself.id);
+	this.save();
+	writeSaved(this.id);
 };
 
 //==================================
-UIFactory["Node"].update = function(input,itself,langcode)
+UIFactory["Node"].prototype.update = function(langcode)
 //==================================
 {
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-node')=='Y') ? true : false;
-	if (!itself.multilingual)
+	this.multilingual = ($("metadata",this.node).attr('multilingual-node')=='Y') ? true : false;
+	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	if ($("#code_"+itself.id).length){
-		var code = $.trim($("#code_"+itself.id).val());
-		$(itself.code_node).text(code);
+	if ($("#code_"+this.id).length){
+		var code = $.trim($("#code_"+this.id).val());
+		$(this.code_node).text(code);
 	}
-	var label = $.trim($("#label_"+itself.id+"_"+langcode).val());
-	$(itself.label_node[langcode]).text(label);
-	itself.save();
-	writeSaved(itself.id);
+	var label = $.trim($("#label_"+this.id+"_"+langcode).val());
+	$(this.label_node[langcode]).text(label);
+	//---------------------
+	if (!this.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.label_node[langcode]).text(label);
+		}
+	}
+	//---------------------
+	this.save();
+	writeSaved(this.id);
 };
 
 
@@ -837,15 +853,11 @@ UIFactory["Node"].prototype.getNodeLabelEditor = function(type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-node')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	var self = this;
 	var inputLabel = "<input class='form-control' id='label_"+this.id+"_"+langcode+"' type='text'  value=\""+this.label_node[langcode].text()+"\">";
 	var objLabel = $(inputLabel);
 	$(objLabel).change(function (){
-		UIFactory["Node"].updateLabel(objLabel,self,langcode);
+		self.updateLabel(langcode);
 	});
 	return objLabel;
 };
@@ -857,10 +869,6 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-node')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	var self = this;
 	var div = $("<div></div>");
@@ -882,7 +890,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 				var htmlCodeDivObj = $("<div class='node-code'></div>");
 				var htmlCodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' name='input_code' value=\""+this.code_node.text()+"\">");
 				$(htmlCodeInputObj).change(function (){
-					UIFactory["Node"].update(htmlCodeInputObj,self,langcode);
+					self.update(langcode);
 				});
 				$(htmlCodeDivObj).append($(htmlCodeInputObj));
 				$(htmlCodeGroupObj).append($(htmlCodeLabelObj));
@@ -895,7 +903,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 				var htmlLabelDivObj = $("<div class='node-label'></div>");
 				var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.label_node[langcode].text()+"\">");
 				$(htmlLabelInputObj).change(function (){
-					UIFactory["Node"].updateLabel(htmlLabelInputObj,self,langcode);
+					self.updateLabel(langcode);
 				});
 				$(htmlLabelDivObj).append($(htmlLabelInputObj));
 				$(htmlLabelGroupObj).append($(htmlLabelLabelObj));
@@ -950,7 +958,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 UIFactory["Node"].prototype.save = function()
 //==================================
 {
-	UICom.UpdateNode(this.id);
+	UICom.UpdateNode(this.node);
 	if (this.logcode!="")
 		this.log();
 	this.refresh();

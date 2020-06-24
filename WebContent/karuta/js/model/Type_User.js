@@ -40,6 +40,8 @@ UIFactory["User"] = function( node )
 	this.lastname = $("lastname",node).text();
 	this.username = $("username",node).text();
 	this.email = $("email",node).text();
+	this.password = localStorage.getItem('pwd');
+	localStorage.getItem('pwd',"");
 	this.username_node = $("username",node);
 	this.firstname_node = $("firstname",node);
 	this.lastname_node = $("lastname",node);
@@ -890,12 +892,12 @@ UIFactory["User"].remove = function(userid,from_page)
 		data : "",
 		success : function(data) {
 			if (from_page==null){
-				$("#refresh").click();
+				$("#user-refresh").click();
 				fill_list_usersgroups();
 			}
 			else if (from_page=="UsersGroup"){
 				fill_list_users();
-				$("#refresh").click();
+				$("#user-refresh").click();
 			}
 		}
 	});
@@ -975,7 +977,7 @@ UIFactory["User"].create = function()
 		url : url,
 		data : xml,
 		success : function(data) {
-			$("#refresh").click();
+			$("#user-refresh").click();
 			//--------------------------
 			$('#edit-window').modal('hide');
 		},
@@ -1210,7 +1212,7 @@ UIFactory["User"].removeUsers = function()
 	$("#wait-window").hide();
 	$.ajaxSetup({async: true});
 	fill_list_users();
-	$("#refresh").click();
+	$("#user-refresh").click();
 	//----------------
 }
 

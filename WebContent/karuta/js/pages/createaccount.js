@@ -151,6 +151,7 @@ function displayKarutaCreateAccount()
 //==============================
 {
 	loginPublic();
+	setLoginTechnicalVariables();
 	setLoginConfigurationVariables();
 	var html = "";
 	html += "<div id='main-welcome'>";
@@ -168,8 +169,8 @@ function displayKarutaCreateAccount()
 	$('body').html(html);
 	$('body').append(alertBox());
 
-	$.ajaxSetup({async: false});
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK+"/version",
@@ -179,13 +180,10 @@ function displayKarutaCreateAccount()
 			karuta_backend_date = $("date",$("#backend",data)).text();
 			karuta_fileserver_version = $("number",$("#fileserver",data)).text();
 			karuta_fileserver_date = $("date",$("#fileserver",data)).text();
+			$("#navigation-bar").html(getNavBar('create_account',null));
+			$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
 			applyNavbarConfiguration();
 			applyLoginConfiguration();
-			loadLanguages(function(data) {
-				getLanguage();
-				$("#navigation-bar").html(getNavBar('create_account',null));
-				$("#login").html(getInputs());$("#welcome4").html(karutaStr[LANG]['create_account']);
-			});
 		}
 	});
 }
@@ -202,7 +200,45 @@ function setLoginConfigurationVariables()
 		dataType : "xml",
 		url : url,
 		success : function(data) {
+			//---------Navigation Bar--------------
+			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data,LANGCODE);
+			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data,LANGCODE);
+			//---------- Login -------------
+			g_configVar['login-background-image'] = getBackgroundURL('config-login-background-image',data,LANGCODE);
+			g_configVar['login-background-color'] = getText('config-login-background-color','Color','text',data,LANGCODE);
+			g_configVar['login-text-color'] = getText('config-login-text-color','Color','text',data,LANGCODE);
+			g_configVar['login-button-background-color'] = getText('config-login-button-background-color','Color','text',data,LANGCODE);
+			g_configVar['login-button-text-color'] = getText('config-login-button-text-color','Color','text',data,LANGCODE);
+			//-----------New Password ----------
+			g_configVar['login-new-password-background-color'] = getText('config-login-new-password-background-color','Color','text',data,LANGCODE);
+			g_configVar['login-new-password-text-color'] = getText('config-login-new-password-text-color','Color','text',data,LANGCODE);
+			g_configVar['login-new-password-button-background-color'] = getText('config-login-new-password-button-background-color','Color','text',data,LANGCODE);
+			g_configVar['login-new-password-button-text-color'] = getText('config-login-new-password-button-text-color','Color','text',data,LANGCODE);
+			//------------New Account ---------
+			g_configVar['login-new-account-background-color'] = getText('config-login-new-account-background-color','Color','text',data,LANGCODE);
+			g_configVar['login-new-account-text-color'] = getText('config-login-new-account-text-color','Color','text',data,LANGCODE);
+			g_configVar['login-new-account-button-background-color'] = getText('config-login-new-account-button-background-color','Color','text',data,LANGCODE);
+			g_configVar['login-new-account-button-text-color'] = getText('config-login-new-account-button-text-color','Color','text',data,LANGCODE);
+			//------------Menu ---------
+			g_configVar['list-menu-background-color'] = getText('config-list-menu-background-color','Color','text',data,LANGCODE);
+			g_configVar['list-menu-text-color'] = getText('config-list-menu-text-color','Color','text',data,LANGCODE);
+		}
+	});
+}
+
+//==============================
+function setLoginTechnicalVariables()
+//==============================
+{
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-tech?resources=true";
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
 			//---------Languages--------------
+			g_configVar['default-language'] = getText('default-language','Get_Resource','code',data,0);
 			var language_nodes = $("metadata[semantictag='portfolio-language']",data);
 			for (i=0;i<language_nodes.length;i++){
 				languages[i] = $("code",$("asmResource[xsi_type='Get_Resource']",$(language_nodes[i]).parent())).text();
@@ -210,38 +246,24 @@ function setLoginConfigurationVariables()
 			loadLanguages(function() {
 				getLanguage();
 			});
-			NONMULTILANGCODE = 0;  // default language if non-multilingual
-			LANGCODE = 0; //default value
-			LANG = languages[LANGCODE]; //default value
 			//---------Navigation Bar--------------
-			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data,langcode);
+			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data,LANGCODE);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
-			g_configVar['navbar-text-color'] = getText('config-navbar-text-color','Color','text',data,langcode);
-			g_configVar['navbar-background-color'] = getText('config-navbar-background-color','Color','text',data,langcode);
 			//---------- Login -------------
-			g_configVar['login-background-image'] = getBackgroundURL('config-login-background-image',data,langcode);
-			g_configVar['login-background-color'] = getText('config-login-background-color','Color','text',data,langcode);
-			g_configVar['login-logo'] = getImg('config-login-logo',data,langcode);
+			g_configVar['login-logo'] = getImg('config-login-logo',data,LANGCODE);
 			g_configVar['login_logo_style'] = getContentStyle('config-login-logo',data);
-			g_configVar['login-subtitle'] = getText('config-login-subtitle','Field','text',data,langcode);
+			g_configVar['login-subtitle'] = getText('config-login-subtitle','Field','text',data,LANGCODE);
 			g_configVar['login-subtitle-style'] = getContentStyle('config-login-subtitle',data);
-			g_configVar['login-subtext'] = getText('config-login-subtext','Field','text',data,langcode);
+			g_configVar['login-subtext'] = getText('config-login-subtext','Field','text',data,LANGCODE);
 			g_configVar['login-subtext-style'] = getContentStyle('config-login-subtext',data);
-			g_configVar['login-text-color'] = getText('config-login-text-color','Color','text',data,langcode);
-			g_configVar['login-button-background-color'] = getText('config-login-button-background-color','Color','text',data,langcode);
-			g_configVar['login-button-text-color'] = getText('config-login-button-text-color','Color','text',data,langcode);
 			//-----------New Password ----------
 			g_configVar['login-new-password-display'] = getText('config-login-new-password-display','Get_Resource','value',data);
-			g_configVar['login-new-password-background-color'] = getText('config-login-new-password-background-color','Color','text',data,langcode);
-			g_configVar['login-new-password-text-color'] = getText('config-login-new-password-text-color','Color','text',data,langcode);
-			g_configVar['login-new-password-button-background-color'] = getText('config-login-new-password-button-background-color','Color','text',data,langcode);
-			g_configVar['login-new-password-button-text-color'] = getText('config-login-new-password-button-text-color','Color','text',data,langcode);
 			//------------New Account ---------
 			g_configVar['login-new-account-display'] = getText('config-login-new-account-display','Get_Resource','value',data);
-			g_configVar['login-new-account-background-color'] = getText('config-login-new-account-background-color','Color','text',data,langcode);
-			g_configVar['login-new-account-text-color'] = getText('config-login-new-account-text-color','Color','text',data,langcode);
-			g_configVar['login-new-account-button-background-color'] = getText('config-login-new-account-button-background-color','Color','text',data,langcode);
-			g_configVar['login-new-account-button-text-color'] = getText('config-login-new-account-button-text-color','Color','text',data,langcode);
+			//------------Maintenance ---------
+			g_configVar['maintenance-display'] = getText('config-maintenance-display','Get_Resource','value',data);
+			g_configVar['maintenance-text'] = getText('config-maintenance-text','TextField','text',data,LANGCODE);
+			g_configVar['maintenance-text-style'] = getContentStyle('config-maintenance-text',data);
 		}
 	});
 }
