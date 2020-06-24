@@ -357,7 +357,13 @@ function setConfigurationTechVariables(langcode)
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);
 			g_configVar['list-welcome-title'] = getText('config-list-welcome-title','Field','text',data,langcode);
 			g_configVar['list-welcome-subtitle'] = getText('config-list-welcome-subtitle','Field','text',data,langcode);
-			
+			// --------Global variables------------------
+			var variable_nodes = $("asmContext:has(metadata[semantictag*='g-variable'])",data);
+			for (var i=0;i<variable_nodes.length;i++) {
+				var name = $("name",$("asmResource[xsi_type='Variable']",variable_nodes[i])).text();
+				var value = $("value",$("asmResource[xsi_type='Variable']",variable_nodes[i])).text();
+				g_variables[name] = value;
+			}
 			// --------CSS Text------------------
 			var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-css'])",data))).text();
 			csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");

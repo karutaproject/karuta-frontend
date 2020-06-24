@@ -735,7 +735,7 @@ UIFactory["PortfolioFolder"].delFolderContent = function(folderid)
 	var folder= folders_byid[folderid];
 	//----------------
 	for (uuid in folder.children){
-		portfolios_byid[folderid].del(); 
+		portfolios_byid[uuid].del(); 
 	}
 	//----------------
 	for (uuid in folder.folders){

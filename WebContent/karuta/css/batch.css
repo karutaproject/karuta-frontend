@@ -315,6 +315,10 @@
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }
+.batch .refresh-tree-url2unit {
+  margin-top: 7px;
+  border: 1px solid var(--batch-resource-color);
+}
 .batch .for-each-line,
 .batch .for-each-tree,
 .batch .for-each-person,

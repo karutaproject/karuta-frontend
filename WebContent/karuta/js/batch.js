@@ -2966,7 +2966,7 @@ function updateProxy(nodes,node,type,semtag)
 					semtag : semtag,
 					url : serverBCK_API+"/resources/resource/" + targetid,
 					success : function(data) {
-						$("#batch-log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semtag + " - srce:"+this.sourceid);
+						$("#batch-log").append("<br>- resource updated ("+this.targetid+") - semtag="+this.semantictag + " - srce:"+this.sourceid);
 						updateProxyResource(nodes,node,type,semtag);
 						//===========================================================
 					},
@@ -3002,12 +3002,12 @@ function updateDashboard(nodes,node,type,semtag,text)
 			semtag : semtag,
 			url : serverBCK_API+"/resources/resource/" + nodeid,
 			success : function(data) {
-				$("#batch-log").append("<br>- resource Dashboard update("+this.nodeid+") - semtag="+this.semtag);
-				updateDashboard(nodes,node,type,this.semtag,text);
+				$("#batch-log").append("<br>- resource Dashboard update("+this.nodeid+") - semtag="+this.semantictag);
+				updateDashboard(nodes,node,type,this.semantictag,text);
 			},
 			error : function(data) {
 				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update Dashboard("+nodeid+") - semtag="+semtag);
-				updateDashboard(nodes,node,type,this.semtag,text);
+				updateDashboard(nodes,node,type,this.semantictag,text);
 			}
 		});
 	}
@@ -3082,11 +3082,11 @@ function updateMetada(nodes,node,type,semtag,text,attribute)
 			semtag : semtag,
 			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
 			success : function(data) {
-				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag);
+				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semantictag);
 				updateMetada(nodes,node,type,semtag,text,attribute)
 			},
 			error : function(data,nodeid,semtag) {
-				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadata("+this.nodeid+") - semtag="+this.semtag);
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadata("+this.nodeid+") - semtag="+this.semantictag);
 				updateMetada(nodes,node,type,semtag,text,attribute);
 			}
 		});
@@ -3113,11 +3113,11 @@ function updateMetadawad(nodes,node,type,semtag,text,attribute)
 			semtag : semtag,
 			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadatawad",
 			success : function(data) {
-				$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semtag);
+				$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semantictag);
 				updateMetadawad(nodes,node,type,semtag,text,attribute)
 			},
 			error : function(data,nodeid,semtag) {
-				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadatawad("+this.nodeid+") - semtag="+this.semtag);
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadatawad("+this.nodeid+") - semtag="+this.semantictag);
 				updateMetadawad(nodes,node,type,semtag,text,attribute);
 			}
 		});

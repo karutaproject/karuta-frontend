@@ -168,7 +168,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					}
 			}
 			//============================== ASMCONTEXT =============================
-			if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='raw' && this.semtag!='EuropassL')){
+			if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='raw' && this.semantictag!='EuropassL')){
 				this.displayAsmContext(dest,type,langcode,edit,refresh);
 			}
 			//============================== NODE ===================================
@@ -207,15 +207,15 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			// ===========================================================================
 			var backgroundParent = UIFactory.Node.getMetadataEpm(this.metadataepm,'node-background-color',false);
 			
-			if (this.semtag.indexOf('asmColumns')>-1 && type!='raw') {
+			if (this.semantictag.indexOf('asmColumns')>-1 && type!='raw') {
 				//-------------- for backward compatibility -----------
 				UIFactory["Node"].displayColumns(type,root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
-			} else if (this.semtag.indexOf('asm-block')>-1 && type!='raw') {
+			} else if (this.semantictag.indexOf('asm-block')>-1 && type!='raw') {
 				//-------------- for backward compatibility -----------
 				UIFactory["Node"].displayBlocks(root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
 			} else {
 				//------------ EuropassL -----------------
-				if (this.semtag=="EuropassL"){
+				if (this.semantictag=="EuropassL"){
 					alreadyDisplayed = true;
 					if( node.structured_resource != null )
 					{
@@ -223,7 +223,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					}
 				}
 				//------------ Bubble Map -----------------
-				if (this.semtag=='bubble_level1' && (this.seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')){
+				if (this.semantictag=='bubble_level1' && (this.seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')){
 					alreadyDisplayed = true;
 					var map_info = UIFactory.Bubble.getLinkQRcode(uuid);
 					$('#map-info_'+uuid).html(map_info);
@@ -296,7 +296,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 			html = displayHTML[type+"-resource-default"];
 			displayview = type+"-resource-default";
 		}
-	html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+	html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
 	html = html.replace(/#node-orgclass#/g,this.displayitselforg)
 	//-------------------- display ----------------------
 	if (!refresh) {
@@ -379,7 +379,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		else
 			displayview = type+"-struct-default";
 		html = displayHTML[displayview];
-		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
 		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
 		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
 		$("#"+dest).append (html);
@@ -390,7 +390,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		else
 			displayview = type+"-struct-default";
 		html = displayHTML[displayview];
-		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
 		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
 		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
 		$("#"+dest).append (html);
@@ -416,7 +416,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			displayview = type+"-node-default";
 			html = displayHTML[displayview];
 		}
-		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
 		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
 		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
 		if (nodetype=='asmUnit')
@@ -470,7 +470,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	//-------------- label --------------------------
 	var gotView = false;
 	var label_html = ""
-	if (this.semtag=='bubble_level1'){
+	if (this.semantictag=='bubble_level1'){
 		label_html += " "+UICom.structure["ui"][uuid].getBubbleView('std_node_'+uuid);
 		gotView = true;
 	}
@@ -485,7 +485,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	$("div[class='title']","#label_node_"+uuid).append(html_chckbox);
 	//-------------- buttons --------------------------
 	if (edit) {
-		if (this.semtag.indexOf("bubble_level1")>-1)
+		if (this.semantictag.indexOf("bubble_level1")>-1)
 			this.menu = false;
 		var buttons = this.getButtons(null,null,null,null,depth);  //getButtons = function(dest,type,langcode,inline,depth,edit,menu,inblock)
 		if (nodetype == "BatchForm") {
@@ -545,7 +545,7 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		var html = "";
 		var displayview = "translate-resource-default";
 		html = displayHTML[displayview];
-		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#resourcetype#/g,this.resource_type).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
 		//-------------------- display ----------------------
 		if (!refresh) {
 			$("#"+dest).append (html);
@@ -587,7 +587,7 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		var displayview = "translate-node-default";
 		//---------------- DISPLAY HTML -------------------------------
 		html = displayHTML[displayview];
-		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semtag).replace(/#cssclass#/g,this.cssclass);
+		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
 		//-------------------- display ----------------------
 		if (!refresh) {
 			$("#"+dest).append (html);
@@ -883,7 +883,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 	if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
 		var query = $(this.metadatawad).attr('query');
-		if (query==undefined || query=='' || this.asmtype=='asmContext'){
+		if (query==undefined || query=='' || this.asmtype=='asmContext' || g_display_type=='raw'){
 			if (g_userroles[0]=='designer' || USER.admin || editcoderoles.containsArrayElt(g_userroles) || editcoderoles.indexOf(this.userrole)>-1 || editcoderoles.indexOf($(USER.username_node).text())>-1) {
 				var htmlCodeGroupObj = $("<div class='form-group'></div>")
 				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");

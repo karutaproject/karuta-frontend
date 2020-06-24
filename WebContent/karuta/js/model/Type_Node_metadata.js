@@ -39,7 +39,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.deletenode = ($(node.node).attr('delete')=='Y')? true:false;
 	this.submitnode = ($(node.node).attr('submit')=='Y')? true:false;
 	//------------------------
-	this.semtag =  ($("metadata",data)[0]==undefined || $($("metadata",data)[0]).attr('semantictag')==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
+	this.semantictag =  ($("metadata",data)[0]==undefined || $($("metadata",data)[0]).attr('semantictag')==undefined)?'': $($("metadata",data)[0]).attr('semantictag');
 	this.collapsed = 'N';
 	if (!g_designerrole)
 		this.collapsed = (sessionStorage.getItem('collapsed'+uuid)==undefined)?'N':sessionStorage.getItem('collapsed'+uuid);
@@ -91,8 +91,8 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
 	this.duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
 	this.incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
-	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
-	this.menulabels = ($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels');
+	this.menuroles =r_replaceVariable(($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles'));
+	this.menulabels = r_replaceVariable(($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels'));
 	if (this.resource!=undefined || this.resource!=null)
 		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
 }
@@ -766,7 +766,7 @@ UIFactory["Node"].prototype.displayMetainfo = function(dest)
 	//-----------------------------------------
 	var html = "";
 	html += "<span>"+karutaStr[languages[LANGCODE]][type]+" - </span>";
-	html += "<span>semantictag:"+this.semtag+"|</span>";
+	html += "<span>semantictag:"+this.semantictag+"|</span>";
 	html += "<span>multilingual-node:"+this.multilingual+"|</span>";
 	if (this.asmtype=='asmContext') {
 		html += "<span>multilingual-resource:"+this.resource.multilingual+"|</span>";

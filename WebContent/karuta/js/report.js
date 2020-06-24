@@ -1799,7 +1799,7 @@ function genDashboardContent(destid,uuid,parent,root_node)
 		alertHTML("Error in Dashboard : " + err.message);
 	}
 	if (spinning)
-		$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});					
+		$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});
 };
 
 //=========================================================================
