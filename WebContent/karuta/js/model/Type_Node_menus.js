@@ -139,6 +139,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 		}
 	}
 }
+
 //==================================================
 UIFactory["Node"].prototype.getMenus = function(langcode)
 //==================================================

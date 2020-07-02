@@ -538,7 +538,7 @@ karutaStr['fr']['ImageBlock']="ImageBlock";
 karutaStr['fr']['URL2UnitBlock']="URL2UnitBlock";
 karutaStr['fr']['URL2PortfolioBlock']="URL2PortfolioBlock";
 karutaStr['fr']['TextFieldBlock']="TextFieldBlock";
-karutaStr['fr']['BubbleMap']="Bubble Map";
+karutaStr['fr']['BubbleMap']="BubbleMap";
 karutaStr['fr']['Europass']="Europass";
 
 karutaStr['fr']['Item']="Item";

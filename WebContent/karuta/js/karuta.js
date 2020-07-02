@@ -1593,15 +1593,17 @@ function setVariables(data)
 function logout()
 //==============================
 {
-    $.ajax({
-       type: "POST",
-       dataType: "text",
-       url: serverBCK_API+"/credential/logout",
-       data: "",
-       success: function(data) {
-                       window.location="login.htm?lang="+LANG;
-       }
-    });
+	$.ajax({
+		type: "GET",
+		dataType: "text",
+		url: serverBCK_API+"/credential/logout",
+		success: function(data) {
+			window.location="login.htm?lang="+LANG;
+		},
+		error: function(data) {
+			window.location="login.htm?lang="+LANG;
+		}
+	});
 }
  
 //==============================
