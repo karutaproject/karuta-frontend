@@ -59,7 +59,9 @@ var welcome = {};// Welcome title
 	welcome["en"] = "<img class='img-fluid' src='../../karuta/img/logofonbleu.jpg'/>";
 //--------- PUBLIC EMAIL LOGO - MESSAGE -------
 var url = window.location.href;
-var serverURL = url.substring(0,url.lastIndexOf(appliname)+appliname.length);
+var serverURL = url.substring(0,url.indexOf("/application/htm"));
+if (url.indexOf("/application/htm")<0)
+	serverURL = url.substring(0,url.indexOf("/karuta/htm"));
 var g_sendEmailPublicURL_logo = serverURL+"/karuta/img/logofonbleu.jpg";
 var g_sendEmailPublicURL_message ="&lt;img src='"+g_sendEmailPublicURL_logo+"' style='width:300px;margin-bottom:4px;margin-top:30px;'&gt;";
 g_sendEmailPublicURL_message +=  "&lt;div style='margin:30px;border-radius:4px;padding:10px;border: 1px solid lightGrey;box-shadow: 3px 3px 3px #CCC'&gt;";

@@ -108,8 +108,9 @@ function fill_main_page(rootid,role)
 			//-------------------------------------------------
 			var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
 			if (config_unit.length==0) { // for backward compatibility and portfolios without config
-				resetConfigurationPortfolioVariable();
-				setCSSportfolio("");
+//				if (g_configDefaultVar.length>0)
+					resetConfigurationPortfolioVariable();
+//				setCSSportfolio("");
 				setCSSportfolioOLD(data);
 			} else {
 				setConfigurationPortfolioVariable(config_unit,true);

@@ -1228,7 +1228,9 @@ function getEmail(role,emails) {
 function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.lastIndexOf(appliname)+appliname.length);
+	var serverURL = url.substring(0,url.indexOf("/application/htm"));
+	if (url.indexOf("/application/htm")<0)
+		serverURL = url.substring(0,url.indexOf("/karuta/htm"));
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
