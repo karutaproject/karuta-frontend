@@ -197,7 +197,15 @@ UIFactory["Comments"].prototype.update = function(langcode)
 		this.date_node.text('');
 		this.author_node.text('');
 	}
-	$(this.text_node[langcode]).text(value);//	$(this.text_node[langcode]).html($.parseHTML(value));
+	//---------------------
+	if (!this.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.text_node[langcode]).text(value);
+		}
+	} else
+		$(this.text_node[langcode]).text(value);
+	//---------------------
+
 	this.save();
 };
 
