@@ -29,32 +29,45 @@ UIFactory["TextField"] = function( node )
 	this.node = node;
 	this.type = 'TextField';
 	//--------------------
-	if ($("lastmodified",$("asmResource[xsi_type='TextField']",node)).length==0){  // for backward compatibility
+	if ($("lastmodified",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("lastmodified");
-		$("asmResource[xsi_type='TextField']",node)[0].appendChild(newelement);
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
 	}
-	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='TextField']",node));
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='"+this.type+"']",node));
 	//--------------------
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
-		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='TextField']",node));
+		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='"+this.type+"']",node));
 		if (this.text_node[i].length==0) {
-			if (i==0 && $("text",$("asmResource[xsi_type='TextField']",node)).length==1) { // for WAD6 imported portfolio
-				this.text_node[i] = $("text",$("asmResource[xsi_type='TextField']",node));
-			} else {
-				var newelement = createXmlElement("text");
-				$(newelement).attr('lang', languages[i]);
-				$("asmResource[xsi_type='TextField']",node)[0].appendChild(newelement);
-				this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='TextField']",node));
-			}
+			var newelement = createXmlElement("text");
+			$(newelement).attr('lang', languages[i]);
+			$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='"+this.type+"']",node));
 		}
 	}
 	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
-	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	//--------------------
 	this.maxword = $("metadata-wad",node).attr('maxword');
 	if (this.maxword==undefined)
 		this.maxword = 0;
+	//--------------------
 	this.display = {};
+	//--------------------
+	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='"+this.type+"']",node));
+	//--------------------
+	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		this.version_node.text("3.0");
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.text_node[langcode]).text($(this.text_node[0]).text());
+		}
+		this.save();
+	}
+	//--------------------
 };
 
 UIFactory["TextField"].prototype.getAttributes = function(type,langcode)
@@ -158,7 +171,12 @@ UIFactory["TextField"].prototype.update = function(langcode)
 	}
 	if (this.encrypted)
 		newValue = "rc4"+encrypt(newValue,g_rc4key);
-	$(this.text_node[langcode]).text(newValue);
+	if (!this.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.text_node[langcode]).text(newValue);
+		}
+	} else
+		$(this.text_node[langcode]).text(newValue);
 	this.updateCounterWords(langcode);
 	this.save();
 };

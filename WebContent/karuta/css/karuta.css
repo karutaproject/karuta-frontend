@@ -1006,7 +1006,7 @@ body,
   color: var(--portfolio-sidebar-background-color);
 }
 #menu_bar .nav-item {
-  padding-right: 10px;
+  padding-right: 20px;
 }
 #menu_bar .dropdown-submenu {
   position: relative;

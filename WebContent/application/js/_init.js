@@ -43,9 +43,6 @@ var welcome4 = {};			//  Welcome title
 var welcome5 = {}; 			//  Welcome sub-title
 	welcome5["fr"] = "PORTFOLIO OPEN SOURCE";
 	welcome5["en"] = "OPEN SOURCE PORTFOLIO";
-	var listinfo = {};       // Welcome text
-	listinfo["fr"] = "";
-	listinfo["en"] = "";
 //-----------PUBLIC PAGE -----------------------
 var welcome = {};// Welcome title
 	welcome["fr"] = "<img class='img-fluid' src='../../karuta/img/logofonbleu.jpg'/>";

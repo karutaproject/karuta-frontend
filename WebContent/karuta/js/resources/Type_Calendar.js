@@ -38,28 +38,20 @@ UIFactory["Calendar"] = function( node )
 	for (var i=0; i<languages.length;i++){
 		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
 		if (this.text_node[i].length==0) {
-			if (i==0 && $("text",$("asmResource[xsi_type='Calendar']",node)).length==1) { // for WAD6 imported portfolio
-				this.text_node[i] = $("text",$("asmResource[xsi_type='Calendar']",node));
-			} else {
-				var newelement = createXmlElement("text");
-				$(newelement).attr('lang', languages[i]);
-				$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
-				this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
-			}
+			var newelement = createXmlElement("text");
+			$(newelement).attr('lang', languages[i]);
+			$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
+			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
 		}
 	}
 	this.format_node = [];
 	for (var i=0; i<languages.length;i++){
 		this.format_node[i] = $("format[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
 		if (this.format_node[i].length==0) {
-			if (i==0 && $("format",$("asmResource[xsi_type='Calendar']",node)).length==1) { // for WAD6 imported portfolio
-				this.format_node[i] = $("format",$("asmResource[xsi_type='Calendar']",node));
-			} else {
-				var newelement = createXmlElement("format");
-				$(newelement).attr('lang', languages[i]);
-				$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
-				this.format_node[i] = $("format[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
-			}
+			var newelement = createXmlElement("format");
+			$(newelement).attr('lang', languages[i]);
+			$("asmResource[xsi_type='Calendar']",node)[0].appendChild(newelement);
+			this.format_node[i] = $("format[lang='"+languages[i]+"']",$("asmResource[xsi_type='Calendar']",node));
 		}
 	}
 	//--------------------
@@ -69,7 +61,22 @@ UIFactory["Calendar"] = function( node )
 	}
 	this.utc = $("utc",$("asmResource[xsi_type='Calendar']",node))
 	//--------------------
+	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='"+this.type+"']",node));
+	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		this.version_node.text("3.0");
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.text_node[langcode]).text($(this.text_node[0]).text());
+			$(this.format_node[langcode]).text($(this.format_node[0]).text());
+		}
+		this.save();
+	}
+	//--------------------
 	this.display = {};
 };
 
@@ -144,6 +151,16 @@ UIFactory["Calendar"].update = function(itself,langcode)
 //==================================
 {
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	//---------------------
+	if (!this.multilingual) {
+		var text = $(this.text_node[langcode]).text();
+		var format = $(this.format_node[langcode]).text();
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.text_node[langcode]).text(text);
+			$(this.format_node[langcode]).text(format);
+		}
+	}
+	//---------------------
 	itself.save();
 };
 

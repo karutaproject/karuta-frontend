@@ -80,7 +80,25 @@ UIFactory["Video"] = function( node )
 		}
 		//----------------------------
 	}
+	//--------------------
+	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='"+this.type+"']",node));
+	//----------------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		this.version_node.text("3.0");
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.filename_node[langcode]).text($(this.filename_node[0]).text());
+			$(this.type_node[langcode]).text($(this.filename_node[0]).text());
+			$(this.size_node[langcode]).text($(this.filename_node[0]).text());
+			$(this.fileid_node[langcode]).text($(this.filename_node[0]).text());
+		}
+		this.save();
+	}
+	//----------------------------
 	this.display = {};
 };
 
@@ -216,11 +234,21 @@ UIFactory["Video"].update = function(data,uuid,langcode)
 	var type = data.files[0].type;
 	$("#fileVideo_"+uuid+"_"+langcode).html(filename);
 	var fileid = data.files[0].fileid;
-	itself.resource.fileid_node[langcode].text(fileid);
-	itself.resource.filename_node[langcode].text(filename);
-	itself.resource.size_node[langcode].text(size);
-	itself.resource.type_node[langcode].text(type);
-	itself.resource.save();
+	//---------------------
+	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			itself.resource.fileid_node[langcode].text(fileid);
+			itself.resource.filename_node[langcode].text(filename);
+			itself.resource.size_node[langcode].text(size);
+			itself.resource.type_node[langcode].text(type);
+		}
+	} else {
+		itself.resource.fileid_node[langcode].text(fileid);
+		itself.resource.filename_node[langcode].text(filename);
+		itself.resource.size_node[langcode].text(size);
+		itself.resource.type_node[langcode].text(type);
+	}
 };
 
 //==================================

@@ -423,7 +423,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataAttributeEditor('metadata-part1','semantictag');
 	if (languages.length>1) { // multilingual application
 		this.displayMetadataAttributeEditor('metadata-part1','multilingual-node',true);
-		if (name=='asmContext') {
+		if (name=='asmContext' && semtag!="g-variable") {
 			this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true);
 		}
 	}

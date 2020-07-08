@@ -28,6 +28,7 @@ function fill_main_page(rootid,role)
 	var html = "";
 	$("#portfolio-container").html(html);
 	g_welcome_add = false;
+	//-------------------------------------------
 	if (rootid!=null){
 		var parentid = $($(UICom.structure.ui[rootid].node).parent()).attr('id');
 		if ($($(UICom.structure.ui[rootid].node).parent())) {
@@ -42,6 +43,7 @@ function fill_main_page(rootid,role)
 	userrole = role;
 	if (userrole=='undefined')
 		userrole = "";
+	//-------------------------------------------
 	if (!USER.admin) {
 		$.ajax({ // get group-role for the user
 			Accept: "application/xml",
@@ -71,8 +73,8 @@ function fill_main_page(rootid,role)
 		g_visible = localStorage.getItem('metadata');
 		toggleMetadata(g_visible);
 	}
+	//-------------------------------------------
 	var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
-	$.ajaxSetup({async: true});
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -190,8 +192,6 @@ function fill_main_page(rootid,role)
 			}
 			//---------------------------
 			fillEditBoxBody();
-
-//								UIFactory.Node.reloadUnit(UICom.rootid); // for IE9
 		},
 		error : function(jqxhr,textStatus) {
 			if (jqxhr.status=="403") {
