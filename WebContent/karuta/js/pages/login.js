@@ -336,6 +336,11 @@ function setLoginTechnicalVariables()
 			g_configVar['maintenance-display'] = getText('config-maintenance-display','Get_Resource','value',data);
 			g_configVar['maintenance-text'] = getText('config-maintenance-text','TextField','text',data,LANGCODE);
 			g_configVar['maintenance-text-style'] = getContentStyle('config-maintenance-text',data);
+		},
+		error : function() {
+			loadLanguages(function() {
+				getLanguage();
+			});
 		}
 	});
 }

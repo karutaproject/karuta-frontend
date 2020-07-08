@@ -29,6 +29,9 @@ UIFactory["Node"] = function( node )
 		this.node = node;
 		this.asmtype = $(node).prop("nodeName");
 		this.code_node = $($("code",node)[0]);
+		//--------------------
+		this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
+		//--------------------
 		var flag_error = 'a';
 		//--------------------
 		if ($("value",$("asmResource[xsi_type='nodeRes']",node)).length==0){  // for backward compatibility

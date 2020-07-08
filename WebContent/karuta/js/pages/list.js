@@ -106,8 +106,8 @@ function fill_list_page()
 		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(false)\" >"+karutaStr[LANG]['import_portfolio']+"</a>";
 		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(true)\" >"+karutaStr[LANG]['import_zip']+"</a>";
 		html += "		<div class='dropdown-divider'></div>";
-		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importFile(false,true)\" >"+karutaStr[LANG]['import_instance']+"</a>";
-		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importZip(true,true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(false,true)\" >"+karutaStr[LANG]['import_instance']+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(true,true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a>";
 		html += "	</div>";
 		html += "</div>";
 		$("#menu").html(html);

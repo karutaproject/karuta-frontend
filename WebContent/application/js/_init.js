@@ -8,13 +8,6 @@ var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
 var new_bck = false;
-if (new_bck) {
-	bckname = '-new';
-	serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
-	serverBCK_API = "../../../karuta-backend"+bckname+"/api";
-	appliname = 'karuta3.0-new';
-	karutaname = 'karuta3.0-new'; // to share the same 'karuta-core' with multiple front-end
-}
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';
