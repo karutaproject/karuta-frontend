@@ -1104,6 +1104,10 @@
 		.nav-item {
 			padding-right:20px;
 		}
+		.first-item {
+			font-weight:bold;
+			border-bottom: 1px solid;
+		}
 		.dropdown-submenu {
 			position: relative;
 			&>.dropdown-menu {

@@ -84,6 +84,10 @@
 .createreport {
   margin-top: 10px;
 }
+.createreport .URL2Portfolio-link {
+  cursor: pointer;
+  color: var(--portfolio-link-color);
+}
 
 .createreport table {
   margin-bottom: 0px;

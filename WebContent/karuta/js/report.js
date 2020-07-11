@@ -467,7 +467,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 					help_text = helps[j].substring(0,helps[j].indexOf("@"));
 			}
 		} else { // lang1/lang2/...
-			help_text = helps[langcode];  // lang1/lang2/...
+			help_text = helps[LANGCODE];  // lang1/lang2/...
 		}
 		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
 		$("#help_"+destid+'-'+no).html(help);
@@ -999,7 +999,12 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				inline = true;
 			//----------------------------
 			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+				try {
+					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+				} catch(e){
+					text = UICom.structure["ui"][nodeid].structured_resource.getView("dashboard_"+nodeid,null,null,true);
+				}
+				
 			}
 			if (selector.type=='resource code') {
 				text = UICom.structure["ui"][nodeid].resource.getCode();
@@ -1428,6 +1433,40 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 	$("#"+destid).append($(text));
 	$("#"+nodeid).attr("style",style);
 }
+
+//=============================================================================
+//=============================================================================
+//======================== URL2PORTFOLIO ======================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['url2portfolio'] = function (destid,action,no,data)
+//==================================
+{
+	var nodeid = $(data).attr("id");
+	var uuid = "";
+	var label = "";
+	var style = r_replaceVariable($(action).attr("style"));
+	var cssclass = r_replaceVariable($(action).attr("class"));
+	var code = $(action).attr("code");
+	code = r_replaceVariable(code);
+	var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			uuid = $("asmRoot",data).attr("id");
+			label = $("label[lang='"+languages[LANGCODE]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",data)[0]).text();
+		}
+	});
+	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"')\">"+label+"</span>";
+	$("#"+destid).append($(text));
+	$("#"+nodeid).attr("style",style);
+}
+
 
 //=============================================================================
 //=============================================================================

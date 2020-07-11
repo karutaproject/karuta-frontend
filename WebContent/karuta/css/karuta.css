@@ -1008,6 +1008,10 @@ body,
 #menu_bar .nav-item {
   padding-right: 20px;
 }
+#menu_bar .first-item {
+  font-weight: bold;
+  border-bottom: 1px solid;
+}
 #menu_bar .dropdown-submenu {
   position: relative;
 }
