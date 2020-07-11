@@ -171,7 +171,7 @@ UIFactory["Field"].prototype.displayEditor = function(dest,type,langcode,disable
 UIFactory["Field"].prototype.save = function()
 //==================================
 {
-	if (UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="") {
+	if (UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="") {
 		$(this.user_node).text(USER.firstname+" "+USER.lastname);
 		UICom.structure.ui[this.id].log();
 	}

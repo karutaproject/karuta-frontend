@@ -152,12 +152,12 @@ UIFactory["Calendar"].update = function(itself,langcode)
 {
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	//---------------------
-	if (!this.multilingual) {
-		var text = $(this.text_node[langcode]).text();
-		var format = $(this.format_node[langcode]).text();
+	if (!itself.multilingual) {
+		var text = $(itself.text_node[langcode]).text();
+		var format = $(itself.format_node[langcode]).text();
 		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(this.text_node[langcode]).text(text);
-			$(this.format_node[langcode]).text(format);
+			$(itself.text_node[langcode]).text(text);
+			$(itself.format_node[langcode]).text(format);
 		}
 	}
 	//---------------------

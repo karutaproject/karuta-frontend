@@ -168,8 +168,12 @@ UIFactory["Color"].update = function(itself,langcode)
 //==================================
 {
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
-	if (itself.encrypted)
-		$(itself.text_node[langcode]).text("rc4"+encrypt($(itself.text_node[langcode]).text(),g_rc4key));
+	if (!itself.multilingual) {
+		var text = $(itself.text_node[langcode]).text();
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(itself.text_node[langcode]).text(text);
+		}
+	}
 	itself.save();
 }
 

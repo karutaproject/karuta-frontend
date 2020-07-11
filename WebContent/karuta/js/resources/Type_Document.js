@@ -86,7 +86,25 @@ UIFactory["Document"] = function( node )
 		}
 		//----------------------------
 	}
+	//--------------------
+	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='"+this.type+"']",node));
+	//----------------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		this.version_node.text("3.0");
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.filename_node[langcode]).text($(this.filename_node[0]).text());
+			$(this.type_node[langcode]).text($(this.filename_node[0]).text());
+			$(this.size_node[langcode]).text($(this.filename_node[0]).text());
+			$(this.fileid_node[langcode]).text($(this.filename_node[0]).text());
+		}
+		this.save();
+	}
+	//----------------------------
 	this.display = {};
 };
 
@@ -205,13 +223,6 @@ UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
-		langcode = NONMULTILANGCODE;
-	//--------------------- if IE the file server returns a string --------
-//	if(typeof data=='string')
-//		data = jQuery.parseJSON(data);
-	//---------------------
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var filename = filename; //data.files[0].name;
 	var size = data.files[0].size;
@@ -219,10 +230,21 @@ UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)
 	$("#file_"+uuid+"_"+langcode).html(filename);
 	$("#file__"+uuid+"_"+langcode).html(filename);
 	var fileid = data.files[0].fileid;
-	itself.resource.fileid_node[langcode].text(fileid);
-	itself.resource.filename_node[langcode].text(filename);
-	itself.resource.size_node[langcode].text(size);
-	itself.resource.type_node[langcode].text(type);
+	//---------------------
+	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			itself.resource.fileid_node[langcode].text(fileid);
+			itself.resource.filename_node[langcode].text(filename);
+			itself.resource.size_node[langcode].text(size);
+			itself.resource.type_node[langcode].text(type);
+		}
+	} else {
+		itself.resource.fileid_node[langcode].text(fileid);
+		itself.resource.filename_node[langcode].text(filename);
+		itself.resource.size_node[langcode].text(size);
+		itself.resource.type_node[langcode].text(type);
+	}
 	itself.resource.save(parent);
 };
 

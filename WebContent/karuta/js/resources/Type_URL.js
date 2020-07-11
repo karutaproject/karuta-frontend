@@ -65,7 +65,23 @@ UIFactory["URL"] = function( node )
 			}
 		}
 	}
+	//--------------------
+	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='"+this.type+"']",node));
+	//----------------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		this.version_node.text("3.0");
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.label_node[langcode]).text($(this.label_node[0]).text());
+			$(this.url_node[langcode]).text($(this.url_node[0]).text());
+		}
+		this.save();
+	}
+	//----------------------------
 	this.display = {};
 };
 
@@ -224,18 +240,24 @@ UIFactory["URL"].update = function(obj,itself,type,langcode,parent)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!itself.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	var label = $("input[name='label']",obj).val();
 	var url = $("input[name='url']",obj).val();
 	if (url!="" && url.indexOf("http")<0)
 		url = "http://"+url;
 	if(type!=null && type=='same')
 		label = url;
-	$(itself.label_node[langcode]).text(label);
-	$(itself.url_node[langcode]).text(url);
+	//---------------------
+	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (itself.multilingual!=undefined && !itself.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(itself.label_node[langcode]).text(label);
+			$(itself.url_node[langcode]).text(url);
+		}
+	} else {
+		$(itself.label_node[langcode]).text(label);
+		$(itself.url_node[langcode]).text(url);
+	}
+	//---------------------
 	itself.save(parent);
 };
 

@@ -241,7 +241,7 @@ UIFactory["Oembed"].update = function(obj,itself,type,langcode)
 	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
 	if (!itself.multilingual)
 		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(this.url_node[langcode]).text(url);
+			$(itself.url_node[langcode]).text(url);
 		}
 	else
 		$(itself.url_node[langcode]).text(url);

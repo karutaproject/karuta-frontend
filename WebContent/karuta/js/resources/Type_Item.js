@@ -233,10 +233,10 @@ UIFactory["Item"].update = function(itself,langcode)
 {
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	//---------------------
-	if (!this.multilingual) {
-		var value = $(this.label_node[langcode]).text();
+	if (!itself.multilingual) {
+		var value = $(itself.label_node[langcode]).text();
 		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(this.label_node[langcode]).text(value);
+			$(itself.label_node[langcode]).text(value);
 		}
 	}
 	//---------------------

@@ -103,7 +103,7 @@ UIFactory["Node"] = function( node )
 		//--------------------
 		flag_error = 'h';
 		this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
-/*		if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
 			this.version_node.text("3.0");
 			var value1 = $(this.label_node[0]).text();
 			var value2 = $(this.context_text_node[0]).text();
@@ -112,7 +112,7 @@ UIFactory["Node"] = function( node )
 				$(this.context_text_node[langcode]).text(value2);
 			}
 			this.save();
-		} */
+		}
 		//------------------------------
 		flag_error = 'i';
 		this.display = {}; // to refresh after changes
