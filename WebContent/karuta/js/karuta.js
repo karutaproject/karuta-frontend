@@ -1234,11 +1234,16 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
-	message = g_sendEmailPublicURL_message.replace("#firstname#",USER.firstname);
-	message = message.replace("#lastname#",USER.lastname);
+	message = g_sendEmailPublicURL_message.replace("##firstname##",USER.firstname);
+	message = message.replace("##lastname##",USER.lastname);
 	message = message.replace("#want-sharing#",karutaStr[LANG]['want-sharing']);
 	message = message.replace("#see#",karutaStr[LANG]['see']);
 	message = message.replace("#do not edit this#",url);
+	//------------------------------
+//	var message = g_config['send-email-logo'] + g_config['send-email-message'];
+//	message = message.replace("##firstname##",USER.firstname);
+//	message = message.replace("##lastname##",USER.lastname);
+//	message = message.replace("##click-here##","<a href='"+url+"'>"+g_config['send-email-image']+"</a>");
 	//------------------------------
 	var xml ="<node>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";

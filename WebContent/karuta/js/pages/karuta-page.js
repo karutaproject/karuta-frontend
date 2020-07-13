@@ -364,6 +364,10 @@ function setConfigurationTechVariables(langcode)
 				var value = $("value",$("asmResource[xsi_type='Variable']",variable_nodes[i])).text();
 				g_variables[name] = value;
 			}
+			//----------------------
+			g_configVar['send-email-logo'] = getImg('config-send-email-logo',data,langcode);
+			g_configVar['send-email-image'] = getImg('config-send-email-image',data,langcode);
+			g_configVar['send-email-message'] = getText('config-send-email-message','TextField','text',data,langcode);
 			// --------CSS Text------------------
 			var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-css'])",data))).text();
 			csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");
