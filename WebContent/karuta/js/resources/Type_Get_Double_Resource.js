@@ -223,6 +223,8 @@ UIFactory["Get_Double_Resource"].prototype.displayEditor = function(destid,type,
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------------
+		queryattr_value = r_replaceVariable(queryattr_value);
+		//------------------
 		var separator_indx = queryattr_value.indexOf(';');
 		var part1 = queryattr_value.substring(0,separator_indx);
 		var part2 = queryattr_value.substring(separator_indx+1);

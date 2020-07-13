@@ -74,7 +74,7 @@ function setDesignerRole(role)
 		var html = "";
 		if (g_bar_type.indexOf('horizontal')>-1) {
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
-			$("#portfolio-container").attr('role',role);			
+			$("#portfolio-container").attr('role',role);
 		}
 		else {
 			html += "	<div id='main-row' class='row'>";

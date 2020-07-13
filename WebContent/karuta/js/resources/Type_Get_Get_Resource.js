@@ -291,6 +291,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 		type = 'multiple';
 	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
+		queryattr_value = r_replaceVariable(queryattr_value);
 		try {
 			//------------------------------
 			var srce_indx = queryattr_value.lastIndexOf('.');

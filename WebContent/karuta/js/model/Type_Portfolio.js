@@ -1353,6 +1353,8 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 		html += "<a class='dropdown-item'  onclick=\"$('#contenu').html('');UICom.structure.ui['"+g_portfolio_rootid+"'].displaySemanticTags('contenu')\">"+karutaStr[LANG]['list-semtags']+"</a>";
 		if (UIFactory.URL2Unit.testIfURL2Unit(g_portfolio_current))
 			html += "<a class='dropdown-item'  onclick=\"$('#wait-window').show();UIFactory.URL2Unit.bringUpToDate('"+portfolioid+"');$('#wait-window').hide();\">"+karutaStr[LANG]['refresh-url2unit']+"</a>";
+		if (UIFactory.URL2Portfolio.testIfURL2Portfolio(g_portfolio_current))
+			html += "<a class='dropdown-item'  onclick=\"$('#wait-window').show();UIFactory.URL2Portfolio.bringUpToDate('"+portfolioid+"');$('#wait-window').hide();\">"+karutaStr[LANG]['refresh-url2portfolio']+"</a>";
 		if(languages.length>1) {
 			html += UIFactory.Portfolio.getTranslateMenu();
 		}

@@ -331,6 +331,7 @@ karutaStr['fr']['result-title']="Résultats de la recherche pour : ";
 karutaStr['fr']['result-subtitle']="La recherche est sensible à la casse.";
 karutaStr['fr']['result-nb']="Nombre de pages : ";
 karutaStr['fr']['refresh-url2unit']="Actualiser les URL2Units";
+karutaStr['fr']['refresh-url2portfolio']="Actualiser les URL2Portfolios";
 karutaStr['fr']['label-not-multilingual']="Libellé non multilingue";
 karutaStr['fr']['resource-not-multilingual']="Ressource non multilingue";
 

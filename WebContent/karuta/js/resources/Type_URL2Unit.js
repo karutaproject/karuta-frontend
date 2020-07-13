@@ -373,6 +373,8 @@ UIFactory["URL2Unit"].prototype.bringUpToDate = function()
 	var unit_code = $(this.code_node).text();
 	var queryattr_value = this.query;
 	if (queryattr_value!=undefined && queryattr_value!='') {
+		//------------------
+		queryattr_value = r_replaceVariable(queryattr_value);
 		//------------
 		var srce_indx = queryattr_value.lastIndexOf('.');
 		var srce = queryattr_value.substring(srce_indx+1);

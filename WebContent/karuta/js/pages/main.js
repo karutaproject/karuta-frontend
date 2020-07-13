@@ -10,7 +10,7 @@ function show_main_page(rootid,role)
 	$("#refresh").attr("onclick","fill_main_page()");
 	$("body").removeClass();
 	$("body").addClass("portfolio-container")
-	$("#portfolio-container").html("");
+//	$("#portfolio-container").html("");
 	$("#portfolio-container").attr('role',g_userroles[0]);
 	$("#main-portfolio").show();
 	$("#refresh").hide();

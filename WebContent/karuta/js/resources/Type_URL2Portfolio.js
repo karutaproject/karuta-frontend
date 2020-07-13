@@ -167,11 +167,12 @@ UIFactory["URL2Portfolio"].prototype.displayEditor = function(destid,type,langco
 		type = $("metadata-wad",this.node).attr('seltype');
 	var queryattr_value = this.query;
 	if (queryattr_value!=undefined && queryattr_value!='') {
+		queryattr_value = r_replaceVariable(queryattr_value);
 		//------------
 		var target_indx = queryattr_value.lastIndexOf('.');
 		var target = queryattr_value.substring(target_indx+1);
 		//------------
-		var portfoliocode = r_replaceVariable(queryattr_value.substring(0,target_indx));
+		var portfoliocode = queryattr_value.substring(0,target_indx);
 		//------------
 		var self = this;
 		if (cachable && g_URL2Portfolio_caches[queryattr_value]!=undefined && g_URL2Portfolio_caches[queryattr_value]!="")
@@ -290,5 +291,95 @@ UIFactory["URL2Portfolio"].prototype.refresh = function()
 	for (dest in this.display) {
 		$("#"+dest).html(this.getView(null,null,this.display[dest]));
 	};
-
 };
+
+//==================================
+UIFactory["URL2Portfolio"].prototype.bringUpToDate = function()
+//==================================
+{
+	var queryattr_value = this.query;
+	if (queryattr_value!=undefined && queryattr_value!='') {
+		queryattr_value = r_replaceVariable(queryattr_value);
+		//------------
+		var target_indx = queryattr_value.lastIndexOf('.');
+		var target = queryattr_value.substring(target_indx+1);
+		//------------
+		var portfoliocode = queryattr_value.substring(0,target_indx);
+		//------------
+		var self = this;
+		if (g_URL2Portfolio_caches[queryattr_value]!=undefined && g_URL2Portfolio_caches[queryattr_value]!="") {
+			var items = $("portfolio>asmRoot",data);
+			for ( var i = 0; i < items.length; i++) {
+				var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+				if (code == portfoliocode) {
+					$(self.uuid_node).text($(items[i]).attr('id'));
+					for (var i=0; i<languages.length;i++){
+						var label = $("label[lang="+languages[j]+"]",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+						$(self.label_node[i]).text(label);
+					}
+					self.save();
+					break;
+				}
+			}
+		} else
+			$.ajax({
+				async : false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfolios?active=1&search="+portfoliocode,
+				success : function(data) {
+					g_URL2Portfolio_caches[queryattr_value] = data;
+					var items = $("portfolio>asmRoot",data);
+					for ( var i = 0; i < items.length; i++) {
+						var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+						if (code == portfoliocode) {
+							$(self.uuid_node).text($(items[i]).attr('id'));
+							for (var j=0; j<languages.length;j++){
+								var label = $("label[lang="+languages[j]+"]",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
+								$(self.label_node[i]).text(label);
+							}
+							self.save();
+							break;
+						}
+					}
+				}
+			});
+	}
+};
+
+//==================================
+UIFactory["URL2Portfolio"].bringUpToDate = function(portfolioid)
+//==================================
+{
+	$("#wait-window").modal("show");
+	g_URL2Portfolio_caches = [];
+	var url = serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true";
+	$.ajax({
+		async : false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		beforeSend: function (XMLHttpRequest) {
+			$("#wait-window").modal("show");
+		},
+	 	success : function(data) {
+			UICom.parseStructure(data,true);
+			setVariables(data);
+			var url2portfolios = $("asmContext:has(asmResource[xsi_type='URL2Portfolio'])",data);
+			for (var j=0; j<url2portfolios.length; j++){
+				UICom.structure.ui[$(url2portfolios[j]).attr('id')].resource.bringUpToDate();
+			}
+		}
+	});
+	$("#wait-window").modal("hide");
+}
+//==================================
+UIFactory["URL2Portfolio"].testIfURL2Portfolio = function(data)
+//==================================
+{
+	var url2portfolios = $("asmContext:has(asmResource[xsi_type='URL2Portfolio'])",data);
+	if (url2portfolios.length>0)
+		return true;
+	else
+		return false;
+}

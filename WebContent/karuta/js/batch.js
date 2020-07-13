@@ -758,7 +758,7 @@ g_actions['delete-tree'] = function deleteTree(node)
 //-----------------------------------------------------------------------
 
 //=================================================
-g_actions['refresh-tree-url2unit'] = function deleteTree(node)
+g_actions['refresh-tree-url2unit'] = function refreshTreeURL2Unit(node)
 //=================================================
 {
 	var ok = false;
@@ -775,6 +775,34 @@ g_actions['refresh-tree-url2unit'] = function deleteTree(node)
 	}
 	catch(err) {
 		$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree-url2unit refreshed -portfolioid:"+portfolioid+" ---- NOT FOUND ----");
+	}
+	return ok;
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ Refresh Tree URL2Portfolios -----------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['refresh-tree-url2portfolio'] = function refreshTreeURL2Portfolio(node)
+//=================================================
+{
+	var ok = false;
+	var treeref = $(node).attr("select");
+	try {
+		var portfolioid = g_trees[treeref][0];
+		if (portfolioid!=undefined) {
+			UIFactory.URL2Portfolio.bringUpToDate(portfolioid);
+			ok = true;
+			$("#batch-log").append("<br>- tree-url2portfolio refreshed - portfolioid:"+portfolioid);
+		} else {
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree-url2portfolio - portfolioid:"+portfolioid+" ---- NOT FOUND ----");
+		}	
+	}
+	catch(err) {
+		$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> tree-url2portfolio refreshed -portfolioid:"+portfolioid+" ---- NOT FOUND ----");
 	}
 	return ok;
 }

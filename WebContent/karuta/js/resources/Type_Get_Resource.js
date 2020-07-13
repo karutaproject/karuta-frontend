@@ -204,6 +204,8 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		type = 'multiple';
 	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
+		//------------------
+		queryattr_value = r_replaceVariable(queryattr_value);
 		//------------
 		var srce_indx = queryattr_value.lastIndexOf('.');
 		var srce = queryattr_value.substring(srce_indx+1);
