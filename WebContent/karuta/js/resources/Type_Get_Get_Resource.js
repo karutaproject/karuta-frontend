@@ -711,11 +711,11 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 				input += "' ";
 				for (var j=0; j<languages.length;j++){
-					if (target=='fileid' || target=='resource') {
+					if (srce=='fileid' || srce=='resource') {
 						if (target=='fileid')
-							input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
+							input += "label_"+languages[j] + "=\"" + srce + "-" + uuid + "\" ";
 						else
-							input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"\" ";
+							input += "label_"+languages[j] + "=\"" + srce + ":" + uuid + "|semtag:"+semtag+"\" ";
 					} else 
 						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}

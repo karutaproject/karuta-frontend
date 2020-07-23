@@ -80,7 +80,7 @@ function getvarvals(node)
 	var str = "";
 	if ($("varval",node).length>0) {
 		var txtvarval = $("varval",node).text();
-		var items = txtvarval.split("\\");
+		var items = txtvarval.split("|");
 		for (var i=0; i<items.length; i++){
 			var text = "";
 			if (items[i]!=undefined && items[i]!="") {
@@ -2473,6 +2473,88 @@ g_actions['update-url2unit'] = function update_url2unit(node)
 	return (ok!=0 && ok == nodes.length);
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- UPDATE-URL2PORTFOLIO ------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['update-url2portfolio'] = function update_url2portfolio(node)
+//=================================================
+{
+	var ok = 0;
+	//------------ Source --------------------
+	var srce_url = getSourceUrl(node);
+	var sources = new Array();
+	var sourceid = "";
+	$.ajax({
+		async : false,
+		type : "GET",
+		dataType : "xml",
+		url : srce_url,
+		success : function(data) {
+			if (this.url.indexOf('/node/')>-1) {  // get by uuid
+				var results = $('*',data);
+				sources[0] = results[0];
+			} else {							// get by code and semtag
+				sources = $("node",data);
+			}
+			sourceid = $(sources[0]).attr('id');
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***SOURCE NOT FOUND <span class='danger'>ERROR</span>");
+		}
+	});
+	//------------ Target --------------------
+	var target_url = getTargetUrl(node);
+	var nodes = new Array();
+	$.ajax({
+		async : false,
+		type : "GET",
+		dataType : "xml",
+		url : target_url,
+		success : function(data) {
+			if (this.url.indexOf('/node/')>-1) {  // get by uuid
+				var results = $('*',data);
+				nodes[0] = results[0];
+			} else {							// get by code and semtag
+				nodes = $("node",data);
+			}
+			for (i=0; i<nodes.length; i++){
+				ok++;
+				var targetid = $(nodes[i]).attr('id');
+				//----- get target ----------------
+				var resource = $("asmResource[xsi_type='URL2Portfolio']",nodes[i]);
+				$("uuid",resource).text(sourceid);
+				var xml = "<asmResource xsi_type='URL2Portfolio'>" + $(resource).html() + "</asmResource>";
+				var strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+				//----- update target ----------------
+				$.ajax({
+					type : "PUT",
+					contentType: "application/xml",
+					dataType : "text",
+					data : xml,
+					targetid : targetid,
+					sourceid : sourceid,
+					url : serverBCK_API+"/resources/resource/" + targetid,
+					success : function(data) {
+						ok++;
+						$("#batch-log").append("<br>- URL2Portfolio updated target : "+this.targetid+" - srce: "+this.sourceid);
+						//===========================================================
+					},
+					error : function(data) {
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update url2unit");
+					}
+				});
+			}
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***TARGET NOT FOUND <span class='danger'>ERROR</span> ");
+		}
+	});
+	return (ok!=0 && ok == nodes.length);
+}
 //==========================================================================
 //==========================================================================
 //==========================================================================

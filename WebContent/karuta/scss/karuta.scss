@@ -697,6 +697,21 @@
 	}
 
 /* ====================== */
+/*     PREVIEW WINDOW        */
+/* ====================== */
+	#preview-window {
+		.modal-dialog {
+			width:90%;
+			height:90%;
+			max-width:none;
+			transform: scale(0.6);
+			#preview-window-footer .btn{
+				font-size:150%;
+			}
+		}
+	}
+
+/* ====================== */
 /*     EDIT WINDOW        */
 /* ====================== */
 	#edit-window {

@@ -155,6 +155,8 @@ UIFactory["Dashboard"].prototype.displayView = function(dest,langcode)
 	var root_node = g_portfolio_current;
 	var parent_node = UICom.structure.ui[$(this.parent).attr("id")];
 	genDashboardContent("dashboard_"+uuid,uuid,parent_node,root_node);
+//	var dashboardContent = $("dashboard_"+uuid).html();
+//	var dashboardContentPNG = html2IMG('dashboard_"+uuid+"');
 	if (g_userroles[0]!='designer')
 		$("#sub_node_"+uuid).hide();
 	//---------- display csv or pdf -------

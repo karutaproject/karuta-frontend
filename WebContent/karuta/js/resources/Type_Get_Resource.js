@@ -58,6 +58,7 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.displayCode = {};
 	this.displayValue = {};
 	this.multiple = "";
+	this.simple = "";
 };
 
 //==================================
@@ -202,6 +203,11 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		multiple_tags = this.multiple.substring(this.multiple.indexOf('/')+1);
 		queryattr_value = this.multiple.substring(0,this.multiple.indexOf('/'));
 		type = 'multiple';
+	}
+	if (this.simple!=""){
+		multiple_tags = this.simple.substring(this.simple.indexOf('/')+1);
+		queryattr_value = this.simple.substring(0,this.simple.indexOf('/'));
+		type = 'simple';
 	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------------
@@ -863,6 +869,97 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		var onupdate = "UIFactory.Get_Resource.update(input,self)";
 		autocomplete(document.getElementById("button_"+self.id), tableau2,onupdate,self,langcode);
 	}
+	
+	//------------------------------------------------------------
+	if (type=='simple') {
+		var html ="";
+		html += "<form autocomplete='off'>";
+		html += "</form>";
+		var form = $(html);
+		html = "";
+		html += "<div class='auto-complete btn-group roles-choice select-"+semtag+"'>";
+		html += "<input id='button_"+self.id+"' type='text' class='btn btn-default select' code= '' value=''/>";
+		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
+		html += "</div>";
+		var btn_group = $(html);
+		$(form).append($(btn_group));
+		$("#"+destid).append(form);
+		//---------------------------------------------------
+		
+		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
+		var select  = $(html);		$(select_item).append($(select_item_a))
+		$(select).append($(select_item));
+		//---------------------
+		if (target=='label') {
+			for ( var i = 0; i < newTableau1.length; i++) {
+				//------------------------------
+				var resource = null;
+				if ($("asmResource",newTableau1[i][1]).length==3)
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				else
+					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				//------------------------------
+				var code = $('code',resource).text();
+				var display_code = false;
+				var display_label = true;
+				if (code.indexOf("$")>-1) 
+					display_label = false;
+				if (code.indexOf("@")<0) {
+					display_code = true;
+				}
+				code = cleanCode(code);
+				//------------------------------
+				if ($('code',resource).text().indexOf('----')>-1) {
+					html = "<div class='dropdown-divider'></div>";
+					select_item = $(html);
+				} else {
+					html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+					for (var j=0; j<languages.length;j++){
+						html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+					}
+					html += ">";
+					if (display_code)
+						html += "<span class='li-code'>"+code+"</span>";
+					if (display_value)
+						html += "<span class='li-value'>"+value+"</span>";
+					if (display_label)
+						html += "<span class='li-label'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span>";
+					html += "</a>";
+					select_item = $(html);
+				}
+				$(select_item).click(function (ev){
+					//--------------------------------
+					var code = $(this).attr('code');
+					var display_code = false;
+					var display_label = true;
+					if (code.indexOf("$")>-1) 
+						display_label = false;
+					if (code.indexOf("@")<0) {
+						display_code = true;
+					}
+					code = cleanCode(code);
+					//--------------------------------
+					var html = "";
+					if (display_code)
+						html += code+" ";
+					if (display_label)
+						html += $(this).attr("label_"+languages[langcode]);
+					$("#button_"+self.id).html(html);
+					$("#button_"+self.id).attr("code",$('code',resource).text());
+					$("#button_"+self.id).attr("value",html);
+					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					for (var j=0; j<languages.length;j++){
+						$("#button_"+self.id).attr("label_"+languages[j],$(srce+"[lang='"+languages[j]+"']",resource).text());
+					}
+					//--------------------------------
+				});
+				$(select).append($(select_item));
+			}
+		}
+		//---------------------
+		$(btn_group).append($(select));
+		autocomplete(document.getElementById("button_"+self.id), tableau2,onupdate,self,langcode);
+	}
 };
 
 //==================================
@@ -893,6 +990,25 @@ UIFactory["Get_Resource"].prototype.refresh = function()
 	for (dest in this.displayValue) {
 		$("#"+dest).html(this.getValue());
 	};
+};
+
+//==================================
+UIFactory["Get_Resource"].addSimple = function(parentid,multiple_tags)
+//==================================
+{
+	$.ajaxSetup({async: false});
+	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
+	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
+	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
+	var get_resource_semtag = multiple_tags.substring(multiple_tags.indexOf(',')+1);
+	var input = $("#button_"+parentid);
+	// for each one create a part
+	var databack = true;
+	var callback = UIFactory.Get_Resource.updateaddedpart;
+	var param2 = get_resource_semtag;
+	var param3 = input;
+	var param4 = true;
+	importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4);
 };
 
 //==================================
@@ -1007,6 +1123,28 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 }
 
 //==================================
+function get_simple(parentid,title,query,partcode,get_resource_semtag)
+//==================================
+{
+	var langcode = LANGCODE;
+	//---------------------
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+partcode+","+get_resource_semtag+"')";
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(title);
+	var html = "<div id='get-resource-node'></div>";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	getResource.simple = query+"/"+partcode+","+get_resource_semtag;
+	getResource.displayEditor("get-resource-node");
+	$('#edit-window').modal('show');
+}
+//==================================
 function get_multiple(parentid,title,query,partcode,get_resource_semtag)
 //==================================
 {
@@ -1027,7 +1165,6 @@ function get_multiple(parentid,title,query,partcode,get_resource_semtag)
 	getResource.multiple = query+"/"+partcode+","+get_resource_semtag;
 	getResource.displayEditor("get-resource-node");
 	$('#edit-window').modal('show');
-
 }
 
 //==================================

@@ -90,18 +90,30 @@ var UICom =
 		var name = "asmRoot";
 		if (root==null) {
 			root = data.querySelector("asmStructure");
+			if (root==null) {
+				root = data.querySelector("node[type='asmStructure']");
+			}
 			name = "asmStructure";
 		}
 		if (root==null) {
 			root = data.querySelector("asmUnit");
+			if (root==null) {
+				root = data.querySelector("node[type='asmUnit']");
+			}
 			name = "asmUnit";
 		}
 		if (root==null) {
 			root = data.querySelector("asmUnitStructure");
+			if (root==null) {
+				root = data.querySelector("node[type='asmUnitStructure']");
+			}
 			name = "asmUnitStructure";
 		}
 		if (root==null) {
 			root = data.querySelector("asmContext");
+			if (root==null) {
+				root = data.querySelector("node[type='asmContext']");
+			}
 		}
 		//---------------------
 		var id = root.getAttribute("id");
@@ -151,6 +163,8 @@ var UICom =
 		for( var i=0; i<children.length; ++i ) {
 			var child = children[i];
 			var name = child.tagName;
+			if (name=="node")
+				name = $(child).attr("type");
 			if( "asmRoot" == name || "asmStructure" == name || "asmUnit" == name || "asmUnitStructure" == name || "asmContext" == name ) {
 				var id = $(child).attr("id");
 				var childTree = new UICom.Tree(child);

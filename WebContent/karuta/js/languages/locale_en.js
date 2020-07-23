@@ -46,6 +46,7 @@ karutaStr["en"]["button-change-password"] = "To change your password";
 karutaStr["en"]["button-change-name"] = "Change your name";
 karutaStr["en"]["button-new-window"] = "Open a new tab";
 karutaStr["en"]["button-support"] = "Technical Support";
+karutaStr["en"]["button-preview"] = "Preview";
 karutaStr['en']['Add']="Add";
 karutaStr['en']['AddGroup']="Add a Group";
 karutaStr['en']['confirm-delete']="Do you want to delete? This action cannot be undone.";
@@ -510,6 +511,7 @@ karutaStr['en']['email-message']="Message";
 //========== RESOURCES =======================
 //=========================================
 
+karutaStr['en']['asmRoot']="Root";
 karutaStr['en']['asmStructure']="Section";
 karutaStr['en']['asmUnit']="Page";
 karutaStr['en']['asmUnitStructure']="Subsection";

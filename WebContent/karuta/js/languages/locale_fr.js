@@ -46,6 +46,7 @@ karutaStr["fr"]["button-change-password"] = "Changement de mot de passe";
 karutaStr["fr"]["button-change-name"] = "Changement votre nom";
 karutaStr["fr"]["button-new-window"] = "Ouvrir un nouvel onglet";
 karutaStr["fr"]["button-support"] = "Support technique";
+karutaStr["fr"]["button-preview"] = "Aperçu";
 karutaStr['fr']['Add']="Ajouter";
 karutaStr['fr']['AddGroup']="Ajouter un groupe";
 karutaStr['fr']['confirm-delete']="Voulez-vous vraiment supprimer ? Cette action est irréversible.";
@@ -510,6 +511,7 @@ karutaStr['fr']['email-message']="Message";
 //========== RESOURCES ====================
 //=========================================
 
+karutaStr['fr']['asmRoot']="Root";
 karutaStr['fr']['asmStructure']="Section";
 karutaStr['fr']['asmUnit']="Page";
 karutaStr['fr']['asmUnitStructure']="Sous-section";

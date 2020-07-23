@@ -427,6 +427,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 			this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true);
 		}
 	}
+	if (name=='asmContext' && this.resource.type=='URL2Unit')
+		this.displayMetadataAttributeEditor('metadata-part1','preview',true);
 //	if (name=='asmContext') {
 //		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
 //			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
@@ -1527,11 +1529,13 @@ UIFactory["Node"].updateMetadataAttribute = function(nodeid,attribute,value,chec
 	if (checked!=undefined && !checked)
 		value = "N";
 	if (attribute=='multilingual-node')
-		UICom.structure["ui"][nodeid].multilingual =  (value=="Y");
+		UICom.structure["ui"][nodeid].multilingual = (value=="Y");
 	if (attribute=='semantictag')
 		UICom.structure["ui"][nodeid].semantictag = value;
 	if (attribute=='multilingual-resource')
 		UICom.structure["ui"][nodeid].resource.multilingual = (value=="Y");
+	if (attribute=='preview')
+		UICom.structure["ui"][nodeid].resource.preview = (value=="Y");
 	$($("metadata",node)[0]).attr(attribute,value);
 	UICom.UpdateMetadata(nodeid);
 	if (g_userroles[0]=='designer' || USER.admin) {  

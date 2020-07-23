@@ -68,6 +68,7 @@ UIFactory["URL2Unit"] = function(node,condition)
 	this.query = ($("metadata-wad",node).attr('query')==undefined)?'':$("metadata-wad",node).attr('query');
 	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	this.preview = ($("metadata",node).attr('preview')=='Y') ? true : false;
 	this.display = {};
 };
 
@@ -123,10 +124,15 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 	if (label=='')
 		label = "---";
 	var html ="";
-	if (this.query.indexOf('self.')>-1)
-		html = "<div  class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+this.uuid_node.text()+"').click()\">"+label+"</div>";
+	if (this.query.indexOf('self.')>-1) {
+		html = "<div  class='URL2Unit-link'><span onclick=\"javascript:$('#sidebar_"+this.uuid_node.text()+"').click()\">"+label+"</span>";
+		if (this.preview)
+			html+= "&nbsp;<span class='button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["button-preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+		html += "</div>"
+	}
 	else
 		html = "<a href='page.htm?i="+this.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>"+label+"</a>";
+
 	return html;
 };
 

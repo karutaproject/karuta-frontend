@@ -55,7 +55,7 @@ if (url.indexOf("/application/htm")<0)
 var g_sendEmailPublicURL_logo = serverURL+"/karuta/img/logofonbleu.jpg";
 var g_sendEmailPublicURL_message ="&lt;img src='"+g_sendEmailPublicURL_logo+"' style='width:300px;margin-bottom:4px;margin-top:30px;'&gt;";
 g_sendEmailPublicURL_message +=  "&lt;div style='margin:30px;border-radius:4px;padding:10px;border: 1px solid lightGrey;box-shadow: 3px 3px 3px #CCC'&gt;";
-g_sendEmailPublicURL_message += "&lt;br/&gt;#firstname# #lastname# #want-sharing#";
+g_sendEmailPublicURL_message += "&lt;br/&gt;##firstname## ##lastname## #want-sharing#";
 g_sendEmailPublicURL_message += "&lt;div style='font-weight:bold;font-size:14pt;margin:30px;width:150px;'&gt;";
 g_sendEmailPublicURL_message +="&lt;a href='#do not edit this#' style='text-decoration: none;color:black;padding:10px;padding-left:40px;padding-right:40px;border-radius:4px;background-color:lightgrey'&gt;";
 g_sendEmailPublicURL_message += "#see#";

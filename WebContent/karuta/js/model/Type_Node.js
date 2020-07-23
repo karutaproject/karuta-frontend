@@ -28,6 +28,8 @@ UIFactory["Node"] = function( node )
 		this.xsi_type = $(node).attr('xsi_type');
 		this.node = node;
 		this.asmtype = $(node).prop("nodeName");
+		if (this.asmtype=="node")
+			this.asmtype = $(node).attr('xsi_type');
 		this.code_node = $($("code",node)[0]);
 		//--------------------
 		this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
@@ -103,7 +105,7 @@ UIFactory["Node"] = function( node )
 		//--------------------
 		flag_error = 'h';
 		this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
-		if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+/*		if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
 			this.version_node.text("3.0");
 			var value1 = $(this.label_node[0]).text();
 			var value2 = $(this.context_text_node[0]).text();
@@ -112,7 +114,7 @@ UIFactory["Node"] = function( node )
 				$(this.context_text_node[langcode]).text(value2);
 			}
 			this.save();
-		}
+		}*/
 		//------------------------------
 		flag_error = 'i';
 		this.display = {}; // to refresh after changes
@@ -885,7 +887,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		editnoderoles="";
 	if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
-		var query = $(this.metadatawad).attr('query');
+		var query = r_replaceVariable($(this.metadatawad).attr('query'));
 		if (query==undefined || query=='' || this.asmtype=='asmContext' || g_display_type=='raw'){
 			if (g_userroles[0]=='designer' || USER.admin || editcoderoles.containsArrayElt(g_userroles) || editcoderoles.indexOf(this.userrole)>-1 || editcoderoles.indexOf($(USER.username_node).text())>-1) {
 				var htmlCodeGroupObj = $("<div class='form-group'></div>")
@@ -1570,9 +1572,9 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		if (((this.writenode && this.moveinroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			var movein = ($(this.metadatawad).attr('movein')==undefined)?'':$(this.metadatawad).attr('movein');
 			if (movein=='')
-				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
+				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			else
-				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-tooltip='true' data-placement='bottom'></span>";
+				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
 		if ( (g_userroles[0]=='designer' && this.asmtype != 'asmRoot') // always duplicate for designer

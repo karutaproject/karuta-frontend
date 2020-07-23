@@ -191,7 +191,7 @@ displayHTML["standard-resource-default"] =	"<div id='node_#uuid#' class='#displa
 displayHTML["standard-resource-simple"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv# #node-orgclass#'>" +
 											"	<div id='sub_node_#uuid#' class='resource-node' >" +
 											"		<table width='100%'><tr>" +
-											"			<td width='50%'><span id='buttons-#uuid#' class='buttons edit-bar'/><span id='label_node_#uuid#' class='label-libelle'/><span id='help_#uuid#' class='ihelp'/></td>" +
+											"			<td width='50%'><span id='buttons-#uuid#' class='buttons edit-bar'/><span name='res-lbl-div' id='label_node_#uuid#' class='label-libelle'/><span id='help_#uuid#' class='ihelp'/></td>" +
 											"			<td width='50%' class='td-resource'>" +
 											"				<div id='resource_#uuid#' class='resource'></div>" +
 											"			</td>" +

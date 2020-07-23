@@ -501,6 +501,26 @@ function messageBox()
 }
 
 //==============================
+function previewBox()
+//==============================
+{
+	var html = "";
+	html += "\n<!-- ==================== Message box ==================== -->";
+	html += "\n<div id='preview-window' class='modal fade'>";
+	html += "\n		<div class='modal-dialog'>";
+	html += "\n			<div class='modal-content'>";
+	html += "\n				<div id='preview-window-body' class='modal-body'>";
+	html += "\n				</div>";
+	html += "\n				<div id='preview-window-footer' class='modal-footer' >";
+	html += "\n				</div>";
+	html += "\n			</div>";
+	html += "\n		</div>";
+	html += "\n</div>";
+	html += "\n<!-- ============================================== -->";
+	return html;
+}
+
+//==============================
 function imageBox()
 //==============================
 {
@@ -682,6 +702,26 @@ function displayPage(uuid,depth,type,langcode) {
 		document.getElementById("contenu").innerHTML = newhtml;
 	}
 	window.scrollTo(scrollLeft, scrollTop);
+}
+
+//==================================
+function previewPage(uuid,depth,type,langcode) 
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	$("#preview-window-footer").html("");
+	var footer = "<button class='btn' onclick=\"$('#preview-window').modal('hide');\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#preview-window-footer").append($(footer));
+	$("#preview-window-body").html("");
+	if (UICom.structure['tree'][uuid]!=null) {
+		if (type=='standard') {
+			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+		}
+		$("#preview-window").modal('show');
+	}
 }
 
 //==================================
@@ -1240,10 +1280,16 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	message = message.replace("#see#",karutaStr[LANG]['see']);
 	message = message.replace("#do not edit this#",url);
 	//------------------------------
-//	var message = g_config['send-email-logo'] + g_config['send-email-message'];
-//	message = message.replace("##firstname##",USER.firstname);
-//	message = message.replace("##lastname##",USER.lastname);
-//	message = message.replace("##click-here##","<a href='"+url+"'>"+g_config['send-email-image']+"</a>");
+/*
+	message = g_configVar['send-email-logo'] + g_configVar['send-email-message'];
+	message = message.replace("##firstname##",USER.firstname);
+	message = message.replace("##lastname##",USER.lastname);
+	message = message.replace("##click-here##","<a href='"+url+"'>"+g_configVar['send-email-image']+"</a>");
+	var elt = document.createElement("p");
+	elt.textContent = message;
+	message = elt.innerHTML;
+	message = message.replace(/..\/..\/..\/..\/..\/../g, window.location.protocol+"//"+window.location.host);
+*/	
 	//------------------------------
 	var xml ="<node>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";

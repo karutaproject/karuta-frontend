@@ -635,6 +635,22 @@
 		</update-url2unit>
 	</xsl:template>
 
+	<xsl:template match="*[metadata/@semantictag='update-url2portfolio']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="source">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<update-url2portfolio type='URL2Portfolio' select="{$select}">
+			<source select="{$source}"/>
+		</update-url2portfolio>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='update-dashboard']">
 		<xsl:variable name="select">
 			<xsl:call-template name='get-select'>
