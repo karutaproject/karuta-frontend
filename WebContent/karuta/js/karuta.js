@@ -33,6 +33,7 @@ var g_designerrole = false;
 var g_rc4key = "";
 var g_encrypted = false;
 var g_display_type = "standard"; // default value
+var g_translate = [];
 var g_bar_type = "vertical"; // default value
 var g_edit = false;
 var g_visible = 'hidden';
@@ -71,9 +72,9 @@ function setDesignerRole(role)
 	if (g_display_type=='standard' || g_display_type=='raw'){
 		var uuid = $("#page").attr('uuid');
 		var html = "";
-		if (g_bar_type=="horizontal"){
+		if (g_bar_type.indexOf('horizontal')>-1) {
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
-			$("#portfolio-container").attr('role',role);			
+			$("#portfolio-container").attr('role',role);
 		}
 		else {
 			html += "	<div id='main-row' class='row'>";
@@ -104,7 +105,7 @@ function getLanguageMenu(js)
 	var html = "";
 	for (var i=0; i<languages.length;i++) {
 		html += "<a class='dropdown-item' id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');"+js+"\">";
-		html += "	<img width='20px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
+		html += "	<img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
 		html += "</a>"
 	}
 	return html;
@@ -150,16 +151,15 @@ function getNavBar(type,portfolioid,edit)
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	if (type=='login' || type=="create_account") {
 		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+technical_support+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
-	} else {
+	} else if (USER.username.indexOf("karuser")<0) {
 		html += "			<li id='navbar-home' class='nav-item icon'><a class='nav-link' onclick='show_list_page()' data-title='"+karutaStr[LANG]["home"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-home'></i></a></li>";
 		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='javascript:displayTechSupportForm()' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope'></i></a></li>";
 	}
-//	html += "			</ul>";
 	//-------------------LANGUAGES---------------------------displayTechSupportForm(langcode)
 	if (languages.length>1) {
 		html += "	<li id='navbar-language' class='nav-item dropdown'>";
 		html += "		<a class='nav-link dropdown-toggle' href='#' id='languageDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-		html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='"+karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
+		html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
 		html += "		</a>";
 		html += "		<div class='dropdown-menu' aria-labelledby='languageDropdown'>";
 		if(type=="login")
@@ -215,30 +215,32 @@ function getNavBar(type,portfolioid,edit)
 			}
 		} 
 		html += "			</ul>";
-		html += "			<ul class='navbar-nav'>";
+		html += "<ul class='navbar-nav'>";
 		html += "	<li class='nav-item icon'>";
 		html += "		<a class='nav-link' onclick='increaseFontSize()' style='cursor: zoom-in;' data-title='"+karutaStr[LANG]["button-increase"]+"' data-toggle='tooltip' data-placement='bottom' style='padding-top:.21rem;'><i style='font-size:120%' class='fa fa-font'></i></a>";
 		html += "	</li>";
 		html += "	<li class='nav-item icon'>";
 		html += "		<a class='nav-link' onclick='decreaseFontSize()' style='cursor: zoom-out;' data-title='"+karutaStr[LANG]["button-decrease"]+"' data-toggle='tooltip' data-placement='bottom'><i style='font-size:80%' class='fa fa-font'></i></a>";
 		html += "	</li>";
-		//-----------------USERNAME-----------------------------------------
-		html += "			<li class='nav-item dropdown'>";
-		html += "				<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
-		html += "					<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
-		html += " 				</a>";
-		html += "				<div class='dropdown-menu dropdown-menu-right' aria-labelledby='userDropdown'>";
-		html += "					<a class='dropdown-item' href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a>";
-		if ((USER.creator && !USER.limited)  && !USER.admin)
-			html += "				<a class='dropdown-item' href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a>";
-		html += "				</div>";
-		html += "			</li>";
-		//-----------------LOGOUT-----------------------------------------
-		html += "			<li class='nav-item icon'>";
-		html += "				<a class='nav-link' onclick='logout()' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-sign-out-alt'></i></a>";
-		html += "			</li>";
+		if (USER.username.indexOf("karuser")<0) {
+			//-----------------USERNAME-----------------------------------------
+			html += "	<li class='nav-item dropdown'>";
+			html += "		<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
+			html += "			<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
+			html += " 		</a>";
+			html += "		<div class='dropdown-menu dropdown-menu-right' aria-labelledby='userDropdown'>";
+			html += "				<a class='dropdown-item' href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a>";
+			if ((USER.creator && !USER.limited)  && !USER.admin)
+				html += "			<a class='dropdown-item' href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a>";
+			html += "		</div>";
+			html += "	</li>";
+			//-----------------LOGOUT-----------------------------------------
+			html += "	<li class='nav-item icon'>";
+			html += "				<a class='nav-link' onclick='logout()' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-sign-out-alt'></i></a>";
+			html += "	</li>";
+		}
+		html += "</ul>";
 	}
-	html += "			</ul>";
 	//----------------------------------------------------------
 	html += "		</div><!--.nav-collapse -->";
 	html += "	</div>";
@@ -371,11 +373,11 @@ function getEditBox(uuid,js2) {
 		} else {
 			html = UICom.structure["ui"][uuid].getEditor();
 			$("#edit-window-body-node").html($(html));
-			if ($("#get-resource-node").length){
+			if ($("#get-resource-node").length && g_display_type!='raw'){
 				var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
 				getResource.displayEditor("get-resource-node");
 			}
-			if ($("#get-get-resource-node").length){
+			if ($("#get-get-resource-node").length && g_display_type!='raw'){
 				var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
 				getgetResource.displayEditor("get-get-resource-node");
 			}
@@ -490,6 +492,26 @@ function messageBox()
 	html += "\n				<div id='message-window-body' class='modal-body'>";
 	html += "\n				</div>";
 	html += "\n				<div id='message-window-footer' class='modal-footer' >";
+	html += "\n				</div>";
+	html += "\n			</div>";
+	html += "\n		</div>";
+	html += "\n</div>";
+	html += "\n<!-- ============================================== -->";
+	return html;
+}
+
+//==============================
+function previewBox()
+//==============================
+{
+	var html = "";
+	html += "\n<!-- ==================== Message box ==================== -->";
+	html += "\n<div id='preview-window' class='modal fade'>";
+	html += "\n		<div class='modal-dialog'>";
+	html += "\n			<div class='modal-content'>";
+	html += "\n				<div id='preview-window-body' class='modal-body'>";
+	html += "\n				</div>";
+	html += "\n				<div id='preview-window-footer' class='modal-footer' >";
 	html += "\n				</div>";
 	html += "\n			</div>";
 	html += "\n		</div>";
@@ -614,15 +636,20 @@ function displayPage(uuid,depth,type,langcode) {
 	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
-	$("#sidebar_"+uuid).parent().addClass('selected');
-	if (g_bar_type=="horizontal"){  // update breadcrumb
-		var nodeid = uuid;
-		var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
-		while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
-			nodeid = $(UICom.structure.ui[nodeid].node).parent().attr("id");
-			breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none') + breadcrumb;
+	if (g_bar_type.indexOf("horizontal")>-1){  // update breadcrumb
+		$("#sidebar_"+uuid).addClass('selected');
+		if (g_breadcrumb=="@1") {
+			var nodeid = uuid;
+			var breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none');
+			while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
+				nodeid = $(UICom.structure.ui[nodeid].node).parent().attr("id");
+				breadcrumb = "/" + UICom.structure.ui[nodeid].getLabel(null,'none') + breadcrumb;
+			}
+			breadcrumb = breadcrumb.substring(breadcrumb.indexOf("/")+1);
+			$("#breadcrumb").html(breadcrumb.substring(breadcrumb.indexOf("/")+1));
 		}
-		$("#breadcrumb").html(breadcrumb);
+	} else {
+		$("#sidebar_"+uuid).parent().addClass('selected');
 	}
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (depth==null)
@@ -641,7 +668,7 @@ function displayPage(uuid,depth,type,langcode) {
 			}
 		}
 		if (type=='translate')
-			UIFactory['Node'].displayTranslate(UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
+			UICom.structure["ui"][uuid].displayTranslateNode(type,UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
 		if (type=='raw' || type=='model') {
 			UICom.structure["ui"][uuid].displayNode(type,UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
 		}
@@ -667,7 +694,34 @@ function displayPage(uuid,depth,type,langcode) {
 	}
 	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
 	$("#wait-window").modal('hide');
+	if ($("#standard-search-text-input").val()!=undefined && $("#standard-search-text-input").val()!="") {
+		var searched_text = $("#standard-search-text-input").val();
+		var  html = document.getElementById("contenu").innerHTML;
+		var regex = new RegExp(searched_text, 'g');
+		var newhtml  = html.replace(regex,"<span class='highlight'>"+searched_text+"</span>");
+		document.getElementById("contenu").innerHTML = newhtml;
+	}
 	window.scrollTo(scrollLeft, scrollTop);
+}
+
+//==================================
+function previewPage(uuid,depth,type,langcode) 
+//==================================
+{
+	//---------------------
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	$("#preview-window-footer").html("");
+	var footer = "<button class='btn' onclick=\"$('#preview-window').modal('hide');\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#preview-window-footer").append($(footer));
+	$("#preview-window-body").html("");
+	if (UICom.structure['tree'][uuid]!=null) {
+		if (type=='standard') {
+			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+		}
+		$("#preview-window").modal('show');
+	}
 }
 
 //==================================
@@ -706,7 +760,7 @@ function displayControlGroup_displayView(destid,label,controlsid,nodeid,type,cla
 function writeSaved(uuid,data)
 //=======================================================================
 {
-	$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+	$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 }
 
 //=======================================================================
@@ -716,6 +770,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 {
 	$("#wait-window").modal('show');
 	//------------
+	srcecode = replaceVariable(srcecode);
 	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 	if (srcecode.indexOf('.')<0 && srcecode!='self')  // There is no project, we add the project of the current portfolio
 		srcecode = selfcode.substring(0,selfcode.indexOf('.')) + "." + srcecode;
@@ -771,7 +826,7 @@ function loadLanguages(callback)
 			async:false,
 			type : "GET",
 			dataType : "script",
-			url : karuta_url+"/karuta/js/languages/locale_"+languages[i]+".js"
+			url : "../../karuta/js/languages/locale_"+languages[i]+".js"
 		});
 	}
 	callback();
@@ -1213,15 +1268,28 @@ function getEmail(role,emails) {
 function sendEmailPublicURL(encodeddata,email,langcode) {
 //==================================
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.lastIndexOf(appliname)+appliname.length);
+	var serverURL = url.substring(0,url.indexOf("/application/htm"));
+	if (url.indexOf("/application/htm")<0)
+		serverURL = url.substring(0,url.indexOf("/karuta/htm"));
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
-	message = g_sendEmailPublicURL_message.replace("#firstname#",USER.firstname);
-	message = message.replace("#lastname#",USER.lastname);
+	message = g_sendEmailPublicURL_message.replace("##firstname##",USER.firstname);
+	message = message.replace("##lastname##",USER.lastname);
 	message = message.replace("#want-sharing#",karutaStr[LANG]['want-sharing']);
 	message = message.replace("#see#",karutaStr[LANG]['see']);
 	message = message.replace("#do not edit this#",url);
+	//------------------------------
+/*
+	message = g_configVar['send-email-logo'] + g_configVar['send-email-message'];
+	message = message.replace("##firstname##",USER.firstname);
+	message = message.replace("##lastname##",USER.lastname);
+	message = message.replace("##click-here##","<a href='"+url+"'>"+g_configVar['send-email-image']+"</a>");
+	var elt = document.createElement("p");
+	elt.textContent = message;
+	message = elt.innerHTML;
+	message = message.replace(/..\/..\/..\/..\/..\/../g, window.location.protocol+"//"+window.location.host);
+*/	
 	//------------------------------
 	var xml ="<node>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
@@ -1248,7 +1316,9 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 function getLanguage() {
 //==================================
 	var cookielang = localStorage.getItem('karuta-language');
-	if (cookielang == "undefined")
+	if (cookielang == null)
+		cookielang = g_configVar['default-language']
+	if (cookielang == "" || cookielang == undefined)
 		cookielang = languages[0];
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==cookielang) {
@@ -1267,7 +1337,7 @@ function setLanguage(lang,caller) {
 	localStorage.setItem('karuta-language',lang);
 	LANG = lang;
 	console.log("LANG: "+LANG);
-	$("#flagimage").attr("src",karuta_url+"/karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
+	$("#flagimage").attr("src","../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png");
 	for (var i=0; i<languages.length;i++){
 		if (languages[i]==lang)
 			LANGCODE = i;
@@ -1352,10 +1422,12 @@ function toggleSideBar() {
 //==================================
 	if ($("#sidebar").is(":visible"))
 	{
+		localStorage.setItem('sidebar-'+g_portfolioid,'hidden');
 		$("#sidebar").hide();
 		g_display_sidebar = false;
 		$("#contenu").removeClass().addClass('col-md-12').addClass('col-sm-12');
 	} else {
+		localStorage.setItem('sidebar-'+g_portfolioid,'visible');
 		$("#contenu").removeClass().addClass('col-md-9').addClass('col-sm-9');
 		$("#sidebar").show();
 		g_display_sidebar = true;
@@ -1564,9 +1636,9 @@ function getFirstWords(html,nb) {
 function setVariables(data)
 //==================================
 {
-	var variable_nodes = $("asmContext:has(metadata[semantictag='g-variable'])",data);
+	var variable_nodes = $("asmContext:has(metadata[semantictag*='g-variable'])",data);
 	for (var i=0;i<variable_nodes.length;i++) {
-		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].getLabel(null,'none')] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().text;
+		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().name] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().value;
 	}
 }
 
@@ -1574,17 +1646,20 @@ function setVariables(data)
 function logout()
 //==============================
 {
-    $.ajax({
-       type: "POST",
-       dataType: "text",
-       url: serverBCK_API+"/credential/logout",
-       data: "",
-       success: function(data) {
-                       window.location="login.htm?lang="+LANG;
-       }
-    });
+	$.ajax({
+		type: "GET",
+		dataType: "text",
+		url: serverBCK_API+"/credential/logout",
+		data: "",
+		success: function(data) {
+		window.location="login.htm?lang="+LANG;
+		},
+		error: function(data) {
+		window.location="login.htm?lang="+LANG;
+		}
+	});
 }
- 
+
 //==============================
 function hideAllPages()
 //==============================
@@ -1736,10 +1811,14 @@ function autocomplete(input,arrayOfValues,onupdate,self,langcode) {
 				b.innerHTML = arrayOfValues[i].libelle.substr(0, indexval);
 				b.innerHTML += "<strong>" + arrayOfValues[i].libelle.substr(indexval,val.length) + "</strong>";
 				b.innerHTML += arrayOfValues[i].libelle.substr(indexval+val.length);
-				b.innerHTML += "<input type='hidden' code='"+arrayOfValues[i].code+"' label=\""+arrayOfValues[i].libelle+"\" >";
+				var value = "";
+				if (arrayOfValues[i].value!==undefined)
+					value = arrayOfValues[i].value;
+				b.innerHTML += "<input type='hidden' code='"+arrayOfValues[i].code+"' label=\""+arrayOfValues[i].libelle+"\" value=\""+value+"\" >";
 				b.addEventListener("click", function(e) {
 					$(input).attr("label_"+languages[langcode],$("input",this).attr('label'));
 					$(input).attr('code',$("input",this).attr('code'));
+					$(input).attr('value',$("input",this).attr('value'));
 					input.value = $("input",this).attr('label');
 					eval(onupdate);
 					closeAllLists();
@@ -1843,8 +1922,10 @@ String.prototype.toNoAccents = function()
 function applyNavbarConfiguration()
 //==============================
 {
-	$('#navbar-brand-logo').html(g_configVar['navbar-brand-logo']);
-	$("#navbar-brand-logo").attr("style",g_configVar['navbar-brand-logo-style']);
+	if (g_configVar['navbar-brand-logo']!="")
+		$('#navbar-brand-logo').html(g_configVar['navbar-brand-logo']);
+	if (g_configVar['navbar-brand-logo-style']!="")
+		$("#navbar-brand-logo").attr("style",g_configVar['navbar-brand-logo-style']);
 	if (g_configVar['navbar-display-mailto']=='0')
 		$("#navbar-mailto").hide();
 	if (g_configVar['navbar-display-language']=='0')
@@ -1879,38 +1960,86 @@ function getNodeid(semtag,data)
 }
 
 //==============================
-function getImg(semtag,data)
+function doNotDisplayEdit()
 //==============================
 {
-	return "<img class='img-fluid' style='display:inline;' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[LANGCODE]+"'/>";
+	localStorage.setItem('display-edition-'+g_portfolioid,'no');
+}
+
+//------------------------------------------------------
+//---------- config function ---------------------------
+//------------------------------------------------------
+
+//==============================
+function getImg(semtag,data,langcode,fluid)
+//==============================
+{
+	var result = "";
+	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
+		if (langcode==null)
+			langcode = LANGCODE;
+		if (fluid==null)
+			fluid = true;
+		var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
+		if (!multilingual)
+			langcode = NONMULTILANGCODE;
+		var width = getText(semtag,'Image','width',data,langcode);
+		var height =  getText(semtag,'Image','height',data,langcode);
+		var result = "";
+		result += "<img ";
+		if (fluid)
+			result += "class='img-fluid' ";
+		result += "width='"+width+"' height='"+height+"' style='display:inline;' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"'/>";
+	}
+	return result;
 }
 
 
 //==============================
-function getBackgroundURL(semtag,data)
+function getBackgroundURL(semtag,data,langcode)
 //==============================
 {
-	return "url('../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[LANGCODE]+"')";
+	var result = "";
+	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
+		if (langcode==null)
+			langcode = LANGCODE;
+		var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
+		if (!multilingual)
+			langcode = NONMULTILANGCODE;
+		result =  "url('../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"')";
+	}
+	return result;
 }
 
 //==============================
 function getContentStyle(semtag,data)
 //==============================
 {
-	return UIFactory.Node.getDataContentStyle($("metadata-epm",$("metadata[semantictag='"+semtag+"']",data).parent())[0]);
+	var result = "";
+	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
+		result = UIFactory.Node.getDataContentStyle($("metadata-epm",$("metadata[semantictag='"+semtag+"']",data).parent())[0]);
+	}
+	return result;
 }
 
 //==============================
-function getText(semtag,objtype,elttype,data)
+function getText(semtag,objtype,elttype,data,langcode)
 //==============================
 {
 	var result = "";
-	if (elttype=='value' || elttype=='code') // not language dependent
-		result = $(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
-	else
-		result = $(elttype+"[lang="+LANG+"]",$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
+		//---------------------
+		if (elttype=='value' || elttype=='code') // not language dependent
+			result = $(elttype,$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+		else
+			result = $(elttype+"[lang="+languages[langcode]+"]",$("asmResource[xsi_type='"+objtype+"']",$("metadata[semantictag='"+semtag+"']",data).parent())).text();
+	}
 	return result;
 }
+
+//------------------------------------------------------
+//------------------------------------------------------
+//------------------------------------------------------
 
 //==============================
 function printSection(eltid)

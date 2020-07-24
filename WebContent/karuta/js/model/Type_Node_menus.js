@@ -139,6 +139,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 		}
 	}
 }
+
 //==================================================
 UIFactory["Node"].prototype.getMenus = function(langcode)
 //==================================================
@@ -154,7 +155,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		//--------------------------------
 		if (this.asmtype == 'asmRoot' || this.asmtype == 'asmStructure') {
 			var databack = false;
-			var callback = "UIFactory['Node'].reloadStruct";
+			var callback = "UIFactory.Node.reloadStruct";
 			var param2 = "'"+g_portfolio_rootid+"'";
 			var param3 = null;
 			var param4 = null;
@@ -179,6 +180,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Oembed','Oembed',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Color','Color',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','URL2Unit','URL2Unit',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','URL2Portfolio','URL2Portfolio',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Comments','Comments',databack,callback,param2,param3,param4);
 		html += "<hr>";
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','SendEmail','SendEmail',databack,callback,param2,param3,param4);
@@ -189,6 +191,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','URLBlock','URLBlock',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','ImageBlock','ImageBlock',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','URL2UnitBlock','URL2UnitBlock',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','URL2PortfolioBlock','URL2PortfolioBlock',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-structured-resources','TextFieldBlock','TextFieldBlock',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-bubbles','bubble_level1','BubbleMap',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'europass.parts','EuropassL','Europass',databack,callback,param2,param3,param4);
@@ -273,7 +276,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			//--------------------------------
 			if (displayMenu && !monomenu) {
 				//-----------------------
-				html += "<div class='dropdown'>";
+				html += "<span class='dropdown'>";
 				html += "	<button class='btn dropdown-toggle add-button' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 				//-----------
 				if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
@@ -336,7 +339,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				}
 				//-----------------------
 				html += "		</div>"; // class='dropdown-menu'
-				html += "	</div><!-- class='dropdown -->";
+				html += "	</span><!-- class='dropdown -->";
 			}
 			if (displayMenu && monomenu) {
 				var databack = false;

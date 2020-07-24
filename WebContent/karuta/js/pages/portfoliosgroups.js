@@ -25,7 +25,7 @@ function fill_list_portfoliosgroups()
 	html += "<div id='portfoliogroup-body'>";
 	//------------------------------------------
 	html += "	<div id='portfoliogroup-portfolio-leftside'  class='leftside'>";
-	html += "		<div id='portfoliogroup-portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_portfoliosgroups()'></div>";
+	html += "		<div id='portfoliogroup-portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_portfoliosgroups()' data-title='"+karutaStr[LANG]["button-reload"]+"' data-toggle='tooltip' data-placement='bottom'></div>";
 	html += "		<div id='portfoliogroup-portfolio-search' class='search'></div>";
 	html += "		<h3 class='title'>";
 	html += "			<span id='folders-label' class='folder-label'>"+karutaStr[LANG]['folders']+"</span>";

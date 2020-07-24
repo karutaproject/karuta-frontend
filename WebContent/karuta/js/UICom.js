@@ -51,6 +51,7 @@ var UICom =
 		jQuery.ajax(set);
 		*/
 		$.ajax({
+			async:false,
 			dataType: dataType,
 			type: type,
 			url: url,
@@ -89,18 +90,30 @@ var UICom =
 		var name = "asmRoot";
 		if (root==null) {
 			root = data.querySelector("asmStructure");
+			if (root==null) {
+				root = data.querySelector("node[type='asmStructure']");
+			}
 			name = "asmStructure";
 		}
 		if (root==null) {
 			root = data.querySelector("asmUnit");
+			if (root==null) {
+				root = data.querySelector("node[type='asmUnit']");
+			}
 			name = "asmUnit";
 		}
 		if (root==null) {
 			root = data.querySelector("asmUnitStructure");
+			if (root==null) {
+				root = data.querySelector("node[type='asmUnitStructure']");
+			}
 			name = "asmUnitStructure";
 		}
 		if (root==null) {
 			root = data.querySelector("asmContext");
+			if (root==null) {
+				root = data.querySelector("node[type='asmContext']");
+			}
 		}
 		//---------------------
 		var id = root.getAttribute("id");
@@ -150,6 +163,8 @@ var UICom =
 		for( var i=0; i<children.length; ++i ) {
 			var child = children[i];
 			var name = child.tagName;
+			if (name=="node")
+				name = $(child).attr("type");
 			if( "asmRoot" == name || "asmStructure" == name || "asmUnit" == name || "asmUnitStructure" == name || "asmContext" == name ) {
 				var id = $(child).attr("id");
 				var childTree = new UICom.Tree(child);
@@ -167,15 +182,18 @@ var UICom =
 						var edittargetroles = ($("metadata-wad",child).attr('edittargetroles')==undefined)?'none':$("metadata-wad",child).attr('edittargetroles');
 						var delnoderoles = ($("metadata-wad",child).attr('delnoderoles')==undefined)?'none':$("metadata-wad",child).attr('delnoderoles');
 						$.ajax({
+							async : false,
 							type : "GET",
 							dataType : "xml",
 							url : serverBCK_API+"/nodes/node/" + targetid + "?resources=true",
 							success : function(data) {
-								proxies_data[targetid] = data;
-								proxies_parent[targetid] = $(current).attr("id");
-								proxies_edit[targetid] = edittargetroles;
-								proxies_delete[targetid] = delnoderoles;
-								proxies_nodeid[targetid] = id;
+								var newid = targetid+"_"+$(current).attr("id");
+								$(":root",data).attr("id",newid);
+								proxies_data[newid] = data;
+								proxies_parent[newid] = $(current).attr("id");
+								proxies_edit[newid] = edittargetroles;
+								proxies_delete[newid] = delnoderoles;
+								proxies_nodeid[newid] = id; // og: ???
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
 							}
 						});
@@ -241,7 +259,7 @@ var UICom =
 					var items = $("metadata-wad",node).attr(attribute).split(";");
 					for (var i=0; i<items.length; i++){
 						var subitems = items[i].split(",");
-						if (subitems[0]!="#line") {
+						if (subitems[0]!="#line" && subitems[0].indexOf("##")<0) {
 							roles = subitems[3].split(" ");
 							//----------------------------
 							for (var j=0;j<roles.length;j++){
@@ -291,7 +309,7 @@ var UICom =
 	 UpdateMeta: function( uuid, cb )
 	//=======================================================================
 	{
-		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
+		$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
 		var treenode = UICom.structure["tree"][uuid];
 		var metawad = $(">metadata",treenode.node);
 		var data = xml2string(metawad[0]);
@@ -306,7 +324,7 @@ var UICom =
 			url : urlS,
 			data : data,
 			success : function (data){
-				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+				$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 				UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
@@ -322,7 +340,7 @@ var UICom =
 	 UpdateMetaWad: function(uuid)
 	//=======================================================================
 	{
-		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
+		$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
 		var node = UICom.structure["ui"][uuid].node;
 		var metawad = $("metadata-wad",node);
 		var data =  xml2string(metawad[0]);
@@ -334,7 +352,7 @@ var UICom =
 			url : urlS,
 			data : data,
 			success : function (data){
-				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+				$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 				UICom.structure["ui"][uuid].refresh();
 			},
 			error : function(jqxhr,textStatus) {
@@ -349,7 +367,7 @@ var UICom =
 	 UpdateMetaEpm: function(uuid,refresh)
 	//=======================================================================
 	{
-		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
+		$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
 		var node = UICom.structure["ui"][uuid].node;
 		var metawad_epm = $("metadata-epm",node);
 		var data =  xml2string(metawad_epm[0]);
@@ -361,7 +379,7 @@ var UICom =
 			url : urlS,
 			data : data,
 			success : function (data){
-				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+				$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 				if (refresh)
 					UICom.structure["ui"][uuid].refresh();
 			},
@@ -377,7 +395,7 @@ var UICom =
 	  UpdateResource: function(uuid, cb1, cb2, delfile )
 	//=======================================================================
 	{	
-		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
+		$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
 		var treenode = UICom.structure["tree"][uuid];
 		var resource = $(">asmResource[xsi_type!='nodeRes'][xsi_type!='context']",treenode.node)[0];
 	
@@ -397,7 +415,7 @@ var UICom =
 			url : urlS,
 			data : strippeddata,
 			success : function (data){
-				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+				$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 				if (cb1!=undefined && jQuery.isFunction(cb1))
 					cb1(uuid,data);
 				if (cb2!=undefined && jQuery.isFunction(cb2))
@@ -414,12 +432,14 @@ var UICom =
 
 	  
 	//=======================================================================
-	  UpdateNode: function( uuid, cb )
+	  UpdateNode: function(node)
 	//=======================================================================
 	{
-		$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
-		var treenode = UICom.structure["ui"][uuid];
-		var resources = $(">asmResource",treenode.node);
+		$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
+//		var treenode = UICom.structure["ui"][uuid];
+//		var resources = $(">asmResource",treenode.node);
+		var uuid =  $(node).attr('id');
+		var resources = $(">asmResource",node);
 	
 		for( var i=0; i<resources.length; ++i )
 		{
@@ -449,9 +469,9 @@ var UICom =
 					url : urlS,
 					data : strippeddata,
 					success : function (data){
-						$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> saved : "+new Date().toLocaleString());
-						if (cb!=undefined && jQuery.isFunction(cb))
-							cb(uuid,data);
+						$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+//						if (cb!=undefined && jQuery.isFunction(cb))
+//							cb(uuid,data);
 					},
 					error : function(jqxhr,textStatus) {
 						alertDisconnected();
@@ -469,13 +489,13 @@ var UICom =
 	  DeleteNode: function( uuid, callback,param1,param2 )
 	//=======================================================================
 	{
-			$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/red.png'/> recording...");
+			$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
 			$.ajax({
 			type : "DELETE",
 			dataType : "text",
 			url : serverBCK_API+"/nodes/node/" + uuid,
 			success : function(data) {
-				$("#saved-window-body").html("<img src='"+karuta_url+"/karuta/img/green.png'/> deleted : "+new Date().toLocaleString());
+				$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> deleted : "+new Date().toLocaleString());
 				if (callback!=null && callback!='undefined')
 					if (jQuery.isFunction(callback))
 						callback(param1,param2);

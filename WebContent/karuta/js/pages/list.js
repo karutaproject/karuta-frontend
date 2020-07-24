@@ -22,7 +22,7 @@ function getListSubBar()
 function setWelcomeTitles()
 //==============================
 {
-	if (g_configVar['list-welcome-title-color']!=undefined) { //configuration portfolio has been read
+	if (g_configVar['list-welcome-title-color']!=undefined && g_configVar['list-welcome-title-color']!="") { //configuration portfolio has been read
 		var root = document.documentElement;
 		root.style.setProperty('--list-welcome-title-color',g_configVar['list-welcome-title-color']);
 		root.style.setProperty('--list-welcome-subtitle-color',g_configVar['list-welcome-subtitle-color']);
@@ -33,6 +33,10 @@ function setWelcomeTitles()
 		$("#welcome-title").attr('style', g_configVar['list-welcome-title-css']);
 		$("#welcome-baseline").html(g_configVar['list-welcome-subtitle']);
 		$("#welcome-baseline").attr('style', g_configVar['list-welcome-subtitle-css']);
+	} else {
+		$("#welcome-title").html(welcome4[LANG]);
+		$("#welcome-baseline").html(welcome5[LANG]);
+
 	}
 }
 
@@ -67,7 +71,7 @@ function fill_list_page()
 	html += "<div id='portfolio-body'>";
 	//------------------------------------------
 	html += "	<div id='portfolio-rightside' class='rightside'>";
-	html += "		<div id='portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_page()'></div>";
+	html += "		<div id='portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_page()' data-title='"+karutaStr[LANG]["button-reload"]+"' data-toggle='tooltip' data-placement='bottom'></div>";
 	html += "		<div id='portfolio-search' class='search'></div>";
 	html += "		<div id='portfolio-rightside-title' class='title'></div>";
 	html += "		<div id='portfolio-rightside-header' class='header'></div>";
@@ -106,8 +110,8 @@ function fill_list_page()
 		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(false)\" >"+karutaStr[LANG]['import_portfolio']+"</a>";
 		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(true)\" >"+karutaStr[LANG]['import_zip']+"</a>";
 		html += "		<div class='dropdown-divider'></div>";
-		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importFile(false,true)\" >"+karutaStr[LANG]['import_instance']+"</a>";
-		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.importZip(true,true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(false,true)\" >"+karutaStr[LANG]['import_instance']+"</a>";
+		html += "		<a class='dropdown-item' onclick=\"javascript:UIFactory.Portfolio.import(true,true)\" >"+karutaStr[LANG]['import_zip_instance']+"</a>";
 		html += "	</div>";
 		html += "</div>";
 		$("#menu").html(html);
@@ -116,6 +120,11 @@ function fill_list_page()
 	//--------we load the folders-----------------------
 	UIFactory.PortfolioFolder.loadAndDisplayAll('portfolio');
 	UIFactory.PortfolioFolder.checkPortfolios();
+	if (nb_folders==0 && nb_portfolios==0 && g_execbatch!=undefined && g_execbatch){
+		$("#search-portfolio-div").hide();
+		$("#refresh").hide();
+		displayExecBatchButton();
+	}
 }
 
 //==============================
@@ -124,6 +133,7 @@ function display_list_page()
 {
 	if ($("#list-menu").length) {
 		show_list_page();
+		UIFactory.PortfolioFolder.checkPortfolios();
 	} else {
 		show_list_page();
 		fill_list_page();
@@ -156,9 +166,13 @@ function cleanList()
 	$("#searched-portfolios-header").hide();
 	$("#searched-portfolios-content").hide();
 	$(".portfolio-label.active").removeClass('active');
+	$("#portfolio-rightside-title").html("");
+	$("#portfolio-rightside-header").html("");
+	$("#portfolio-rightside-content1").html("");
+	$("#portfolio-rightside-navbar-pages-top").html("");
+	$("#portfolio-rightside-content2").html("");
+	$("portfolio-rightside-navbar-pages-bottom").html("");
 }
-
-
 
 
 

@@ -291,6 +291,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 		type = 'multiple';
 	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
+		queryattr_value = r_replaceVariable(queryattr_value);
 		try {
 			//------------------------------
 			var srce_indx = queryattr_value.lastIndexOf('.');
@@ -710,11 +711,11 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 				input += "' ";
 				for (var j=0; j<languages.length;j++){
-					if (target=='fileid' || target=='resource') {
+					if (srce=='fileid' || srce=='resource') {
 						if (target=='fileid')
-							input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
+							input += "label_"+languages[j] + "=\"" + srce + "-" + uuid + "\" ";
 						else
-							input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"\" ";
+							input += "label_"+languages[j] + "=\"" + srce + ":" + uuid + "|semtag:"+semtag+"\" ";
 					} else 
 						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
@@ -1047,7 +1048,7 @@ UIFactory["Get_Get_Resource"].prototype.save = function()
 			this.refresh();
 	}
 	else {// Node - Get_Get_Resource {
-		UICom.UpdateNode(this.id);
+		UICom.UpdateNode(this.node);
 		UICom.structure.ui[this.id].refresh()
 	}	
 };

@@ -50,7 +50,22 @@ UIFactory["Color"] = function( node )
 		}
 	}
 	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
+	//--------------------
+	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='"+this.type+"']",node));
+	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		this.version_node.text("3.0");
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.text_node[langcode]).text($(this.text_node[0]).text());
+		}
+		this.save();
+	}
+	//--------------------
 	this.display = {};
 };
 
@@ -153,8 +168,12 @@ UIFactory["Color"].update = function(itself,langcode)
 //==================================
 {
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
-	if (itself.encrypted)
-		$(itself.text_node[langcode]).text("rc4"+encrypt($(itself.text_node[langcode]).text(),g_rc4key));
+	if (!itself.multilingual) {
+		var text = $(itself.text_node[langcode]).text();
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(itself.text_node[langcode]).text(text);
+		}
+	}
 	itself.save();
 }
 
@@ -193,6 +212,13 @@ UIFactory["Color"].prototype.getEditor = function(type,langcode,disabled)
 	return obj;
 };
 
+//==================================
+UIFactory["Color"].prototype.displayEditor = function(dest,type,langcode,disabled)
+//==================================
+{
+	var obj = this.getEditor(type,langcode,disabled);
+	$("#"+dest).append(obj);
+}
 //==================================
 UIFactory["Color"].prototype.save = function()
 //==================================

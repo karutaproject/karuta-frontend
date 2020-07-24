@@ -20,18 +20,23 @@ if( UIFactory === undefined )
 }
  
 //==================================
-UIFactory["ImageBlock"] = function( node )
+UIFactory["URL2PortfolioBlock"] = function( node )
 //==================================
 {
 	this.id = $(node).attr('id');
 	this.node = node;
-	this.type = 'ImageBlock';
+	this.type = 'URL2PortfolioBlock';
 	//--------------------
-	this.image_node = $("asmContext:has(metadata[semantictag='imgblock-image'])",node);
+	this.url2portfolio_node = $("asmContext:has(metadata[semantictag='url2block-url2portfolio'])",node);
+	this.url2portfolio_nodeid = this.url2portfolio_node.attr('id');
+	this.url2portfolio_editresroles = ($(this.url2portfolio_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.url2portfolio_node[0].querySelector("metadata-wad")).attr('editresroles');
+	this.query = ($("metadata-wad",node).attr('query')==undefined)?'':$("metadata-wad",node).attr('query');
+	//--------------------
+	this.image_node = $("asmContext:has(metadata[semantictag='url2block-image'])",node);
 	this.image_nodeid = this.image_node.attr('id');
 	this.image_editresroles = ($(this.image_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.image_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
-	this.cover_node = $("asmContext:has(metadata[semantictag='imgblock-cover'])",node);
+	this.cover_node = $("asmContext:has(metadata[semantictag='url2block-cover'])",node);
 	this.cover_nodeid = this.cover_node.attr('id');
 	this.cover_editresroles = ($(this.cover_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.cover_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
@@ -42,9 +47,10 @@ UIFactory["ImageBlock"] = function( node )
 
 /// Display
 //==================================
-UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
+UIFactory["URL2PortfolioBlock"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
+	var url2portfolio = UICom.structure["ui"][this.url2portfolio_nodeid];
 	var image = UICom.structure["ui"][this.image_nodeid];
 	var cover = UICom.structure["ui"][this.cover_nodeid];
 	//---------------------
@@ -53,10 +59,6 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = {langcode: langcode, type : type};
-	}
 	//---------------------
 	if (type==null)
 		type = "standard";
@@ -67,6 +69,17 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 		var img_langcode = langcode;
 		if (!image.multilingual)
 			img_langcode = NONMULTILANGCODE;
+		//---------------------
+		var doc_langcode = langcode;
+		if (!document.multilingual)
+			doc_langcode = NONMULTILANGCODE;
+		//---------------------
+		var label = url2portfolio.resource.label_node[langcode].text();
+		var local_label = url2portfolio.resource.local_label_node[langcode].text();
+		if (local_label!="")
+			label = local_label;
+		if (label=='')
+			label = "---";
 		//----------------------------------------
 		var img_width = ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='') ? $(image.resource.width_node[langcode]).text() : "";
 		var img_height = ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='') ? $(image.resource.height_node[langcode]).text() : "";
@@ -80,30 +93,35 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 		if (img_height!="")
 			image_size += " height:" + img_height + ";";
 		//----------------------------------------
-		var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
+			html = "<a  class='URL2Unit-link' onclick=\"display_main_page('"+url2portfolio.resource.uuid_node.text()+"')\">";
+		var style = "background-position:center;background-repeat:no-repeat; background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";
-		html += "<div id='image_"+this.id+"' class='ImgBlock' style=\""+style+"\">";
-		style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
-		if (UICom.structure["ui"][this.id].getLabel(null,'none').indexOf('ImageBlock')<0 && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
-			html += "<div id='label_"+this.id+"' class='block-title' style=\""+style+"\">"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+		html += "<div class='Url2Block' style=\""+style+"\">";
+		style = UICom.structure["ui"][this.id].getLabelStyle();
+		if (url2portfolio.resource.uuid_node.text()!="")
+			html += "<div class='block-title' style=\""+style+"\">"+label+"</div>";
+		else
+			html += "<div class='block-title' style=\""+style+"\">"+karutaStr[LANG]['no-URL2Unit']+"</div>";
+
 		html += "</div>";
+		html += "</a>";
 	}
 	return html;
 };
 
 //==================================
-UIFactory["ImageBlock"].prototype.displayView = function(dest,type,langcode)
+UIFactory["URL2PortfolioBlock"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
 	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
-	$("#std_node_"+this.id).attr('style','display:none');
+	$("#std_node_"+this.id).attr('style','visibilty:hidden');
 	$("#menus-"+this.id).hide();
 };
 
 //==================================
-UIFactory["ImageBlock"].prototype.getButtons = function(dest,type,langcode)
+UIFactory["URL2PortfolioBlock"].prototype.getButtons = function(dest,type,langcode)
 //==================================
 {
 	if (langcode==null)
@@ -113,7 +131,7 @@ UIFactory["ImageBlock"].prototype.getButtons = function(dest,type,langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	var html = "";
-	if (this.image_editresroles.containsArrayElt(g_userroles) || this.image_editresroles.containsArrayElt(g_userroles)){
+	if (this.url2portfolio_editresroles.containsArrayElt(g_userroles) || this.image_editresroles.containsArrayElt(g_userroles)){
 		html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
 	}
 	if (html!="")
@@ -121,11 +139,11 @@ UIFactory["ImageBlock"].prototype.getButtons = function(dest,type,langcode)
 	return html;
 };
 
-/// EDITOR
 //==================================
-UIFactory["ImageBlock"].prototype.displayEditor = function(destid,type,langcode)
+UIFactory["URL2PortfolioBlock"].prototype.displayEditor = function(destid,type,langcode,disabled)
 //==================================
 {
+	var url2portfolio = UICom.structure["ui"][this.url2portfolio_nodeid];
 	var image = UICom.structure["ui"][this.image_nodeid];
 	var cover = UICom.structure["ui"][this.cover_nodeid];
 	//---------------------
@@ -135,28 +153,21 @@ UIFactory["ImageBlock"].prototype.displayEditor = function(destid,type,langcode)
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
+	if (this.url2portfolio_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
+		$("#"+destid).append($("<h4>URL2Portfolio</h4>"));
+		url2portfolio.resource.query = this.query;
+		UIFactory["Node"].updateMetadataWadAttribute(this.url2portfolio_nodeid,"query",this.query,null);
+		url2portfolio.resource.displayEditor(destid,type,langcode,disabled);
+	}
+	//---------------------
 	if (this.image_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>Image</h4>"));
 		$("#"+destid).append($("<div>"+karutaStr[LANG]['block-image-size']+"</div>"));
-		image.resource.displayEditor(destid,type,langcode,this);
+		image.resource.displayEditor(destid,type,langcode,disabled);
 	}
 	//---------------------
 	if (cover!=undefined && this.cover_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>Coverage</h4>"));
-		cover.resource.displayEditor(destid,type,langcode,this);
+		cover.resource.displayEditor(destid,type,langcode,disabled);
 	}
 }
-
-
-
-
-//==================================
-UIFactory["ImageBlock"].prototype.refresh = function()
-//==================================
-{
-		for (dest in this.display) {
-			$("#"+dest).html(this.getView(null,this.display[dest].type,this.display[dest].langcode));
-			$("#std_node_"+this.id).attr('style','visibilty:hidden');
-			$("#menus-"+this.id).hide();
-		};		
-};

@@ -37,7 +37,8 @@ karutaStr["en"]["button-show"] = "Show";
 karutaStr["en"]["button-hide"] = "Hide";
 karutaStr["en"]["button-2world"] = "Public URL";
 karutaStr["en"]["button-up"] = "Up";
-karutaStr["en"]["button-relaod"] = "Reload Portfolio";
+karutaStr["en"]["button-reload"] = "Reload";
+karutaStr["en"]["button-edition"] = "To switch to edition mode push the 'Edit' button. <p style='margin-top:20px;font-size:small'> Do not display anymore <input type='checkbox' onclick='doNotDisplayEdit()'></p>";
 karutaStr["en"]["button-refresh"] = "Reload Page";
 karutaStr["en"]["button-refresh-report"] = "Reload Report";
 karutaStr["en"]["button-disconnect"] = "Disconnect";
@@ -45,6 +46,7 @@ karutaStr["en"]["button-change-password"] = "To change your password";
 karutaStr["en"]["button-change-name"] = "Change your name";
 karutaStr["en"]["button-new-window"] = "Open a new tab";
 karutaStr["en"]["button-support"] = "Technical Support";
+karutaStr["en"]["button-preview"] = "Preview";
 karutaStr['en']['Add']="Add";
 karutaStr['en']['AddGroup']="Add a Group";
 karutaStr['en']['confirm-delete']="Do you want to delete? This action cannot be undone.";
@@ -137,14 +139,20 @@ karutaStr['en']['editnoderoles']="Edit Label";
 karutaStr['en']['editcoderoles']="Edit Code";
 karutaStr['en']['duplicateroles']="Duplicate";
 karutaStr['en']['editboxtitle']="Editing Box Title";
-karutaStr['en']['queryGet_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
+karutaStr['en']['queryGet_Resource']="Query <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
 karutaStr['en']['query']=karutaStr['en']['queryGet_Resource'];
-karutaStr['en']['queryURL2Unit']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
-karutaStr['en']['queryGet_Get_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code.<i>child</i>|<i>parent</i>[.<i>parent</i>].semantic_tag1.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
-karutaStr['en']['queryProxy']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
-karutaStr['en']['queryAction']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
-karutaStr['en']['queryGet_Double_Resource']="Search <br/><span style='font-size:smaller'> portfolio_code1.semantic_tag1.<i>label;</i>portfolio_code2.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
-karutaStr['en']['queryGet_Proxy']="Search <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i>/target_semantic_tag";
+karutaStr['en']['queryasmUnitStructure']=karutaStr['en']['queryGet_Resource'];
+karutaStr['en']['queryasmUnit']=karutaStr['en']['queryGet_Resource'];
+karutaStr['en']['queryasmStructure']=karutaStr['en']['queryGet_Resource'];
+karutaStr['en']['queryURL2Unit']="Query <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
+karutaStr['en']['queryURL2UnitBlock']=karutaStr['en']['queryURL2Unit'];
+karutaStr['en']['queryURL2Portfolio']="Query <br/><span style='font-size:smaller'> part of portfolio_code.<i>label</i>";
+karutaStr['en']['queryURL2PortfolioBlock']=karutaStr['en']['queryURL2Portfolio'];
+karutaStr['en']['queryGet_Get_Resource']="Query <br/><span style='font-size:smaller'> portfolio_code.<i>child</i>|<i>parent</i>[.<i>parent</i>].semantic_tag1.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
+karutaStr['en']['queryProxy']="Query <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
+karutaStr['en']['queryAction']="Query <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i><br> Reserved words for portfolio_code are <i>all</i> and <i>self</i></span>";
+karutaStr['en']['queryGet_Double_Resource']="Query <br/><span style='font-size:smaller'> portfolio_code1.semantic_tag1.<i>label;</i>portfolio_code2.semantic_tag2.<i>label</i><br> Reserved word for portfolio_code is <i>self</i></span>";
+karutaStr['en']['queryGet_Proxy']="Query <br/><span style='font-size:smaller'> portfolio_code.semantic_tag.<i>label</i>/target_semantic_tag";
 karutaStr['en']['shownoderoles']="Show";
 karutaStr['en']['showroles']="Show To";
 karutaStr['en']['notifyroles']="Notify To";
@@ -174,6 +182,8 @@ karutaStr['en']['height']="Height (px)";
 karutaStr['en']['public']="Public";
 karutaStr['en']['text-align']="Alignment";
 karutaStr['en']['displayview']="Display View";
+karutaStr['en']['displayitselforg']="Display Type";
+karutaStr['en']['displaychildorg']="Content Display Type";
 karutaStr['en']['margin-top']="Margin Top (px)";
 karutaStr['en']['sharedResource']="Shared Resource";
 karutaStr['en']['sharedNodeResource']="Shared Node Resource";
@@ -199,7 +209,7 @@ karutaStr['en']['node-content']="Node Content";
 karutaStr['en']['node-label']="Node Label";
 karutaStr['en']['resource']="Resource";
 karutaStr['en']['metadata']="Metadata";
-karutaStr['en']['css-styles']="CSS Styles";
+karutaStr['en']['css-styles']="Display";
 karutaStr['en']['inparent']="In Parent";
 karutaStr['en']['encrypted']="Encrypt Ressource";
 karutaStr['en']['get_rc4key']="Parts of this document are encrypted.\nFist Visit: Choose a key sentence.\nReturning Visits: Type your key sentence. ";
@@ -237,6 +247,7 @@ karutaStr['en']['seeend']="See - End Date";
 karutaStr['en']['logcode']="Log Code";
 karutaStr['en']['alt']="Alternate Text";
 karutaStr['en']['node-comment']="Node Comments";
+karutaStr['en']['autoload']="Autoload";
 
 //=========================================
 //========== ADMIN ========================
@@ -248,7 +259,7 @@ karutaStr['en']['list_user_portfolio']="Portfolios of ";
 karutaStr['en']['list_roles']="Roles";
 karutaStr['en']['list_groups']="Groups";
 karutaStr['en']['create-test-user']="Create a Test User";
-karutaStr['en']['help_text_rename']="To move a portfolio to another project, change the project code (part before the dot)";
+karutaStr['en']['help_text_rename']="To move a portfolio to another folder, change the folder code (part before the dot)";
 karutaStr['en']['users-folders']="Users Folders";
 karutaStr['en']['users-groups']="Groups";
 karutaStr['en']['users-in-rootfolder']="Users not in folders";
@@ -258,14 +269,14 @@ karutaStr['en']['and-content']="and its content.";
 //========== PORTFOLIOS ===================
 //=========================================
 
-karutaStr['en']['portfolios-not-in-project']="My Portfolios not in a Project";
+karutaStr['en']['portfolios-not-in-project']="My Portfolios not in a Folder";
 karutaStr['en']['portfolios']="Portfolios";
 karutaStr['en']['portfolio']="My Portfolio";
 karutaStr['en']['nogroup']="No Group";
 karutaStr['en']['karuta.model']="Create a Portfolio Model";
 karutaStr['en']['code_portfolio']="Portfolio Code";
 karutaStr['en']['import_portfolio']="Import a Model (.xml)";
-karutaStr['en']['import_zip']="Import a Model or Project (.zip)";
+karutaStr['en']['import_zip']="Import a Model or Folder (.zip)";
 karutaStr['en']['instantiate_portfolio']="Instantiate a Portfolio";
 karutaStr['en']['button-instantiate']="Instantiate";
 karutaStr['en']['unshare']="Unshare";
@@ -277,8 +288,8 @@ karutaStr['en']['sharing']="Sharing";
 karutaStr['en']['sharing_with_designers']="Share with Designers";
 karutaStr['en']['unsharing']="Unsharing";
 karutaStr['en']['export']="Export";
-karutaStr['en']['export-project']="Export Project";
-karutaStr['en']['archive-project']="Archive Project";
+karutaStr['en']['export-project']="Export Folder";
+karutaStr['en']['archive-project']="Archive Folder";
 karutaStr['en']['nbeltsperarchive']="Number of elements by archive";
 karutaStr['en']['export-with-files']="Export with Files";
 karutaStr['en']['button-duplicate']="Duplicate";
@@ -291,14 +302,14 @@ karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['import_instance']="Import a Portfolio Instance (.xml)";
 karutaStr['en']['remove-selection']="Move to Bin";
 karutaStr['en']['delete-selection']="Delete";
-karutaStr['en']['import_zip_instance']="Import a Portfolio or Project Instance (.zip)";
+karutaStr['en']['import_zip_instance']="Import a Portfolio or Folder Instance (.zip)";
 karutaStr['en']['rename-move']="Rename or Move";
 karutaStr['en']['rename']="Rename";
 karutaStr['en']['karuta.batch']="Create a Batch";
 karutaStr['en']['karuta.batch-form']="Create a Batch Form Model";
 karutaStr['en']['karuta.report']="Create a Report";
 karutaStr['en']['create_tree']="Create an Empty Tree";
-karutaStr['en']['create_project']="Create a Project";
+karutaStr['en']['create_project']="Create a Folder";
 karutaStr['en']['karuta.rubrics']="Create Rubrics";
 karutaStr['en']['karuta.parts']="Create Components";
 karutaStr['en']['welcome-add']="Add the Welcome Page";
@@ -316,6 +327,14 @@ karutaStr['en']['lastname-label']="Lastname";
 karutaStr['en']['changeOwner']="Change the Owner";
 karutaStr['en']['add-configpage']="Add new Configuration Page";
 karutaStr['en']['add-newwelcomepage']="Add new Welcome Page";
+karutaStr['en']['search-portfolio-text']="Search ...";
+karutaStr['en']['result-title']="Results for : ";
+karutaStr['en']['result-subtitle']="Search is case sensitive.";
+karutaStr['en']['result-nb']="Number of pages : ";
+karutaStr['en']['refresh-url2unit']="Refresh URL2Units";
+karutaStr['en']['refresh-url2portfolio']="Refresh URL2Portfolios";
+karutaStr['en']['label-not-multilingual']="Label Not Multilingual";
+karutaStr['en']['resource-not-multilingual']="Resource Not Multilingual";
 
 //=========================================
 //========== FOLDERS ======================
@@ -353,7 +372,7 @@ karutaStr['en']['admin']="Admin";
 karutaStr['en']['designer']="Creator";
 karutaStr['en']['active']="Active";
 karutaStr['en']['select_users']="Select Users";
-karutaStr['en']['projects-admin']="Projects";
+karutaStr['en']['projects-admin']="Folders";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";
 karutaStr['en']['substitute']="Substitution";
@@ -362,6 +381,7 @@ karutaStr['en']['other']="Other";
 karutaStr['en']['delete-temporary-users']="Delete All";
 karutaStr['en']['delete-empty-users']="Delete Selection";
 karutaStr['en']['c-a-s']="C/A/S";
+karutaStr['en']['too-much-users']="There are more than 200 users. Click 'See' button to display them or search using the input above."
 
 //=========================================
 //========== ROLES ========================
@@ -412,6 +432,7 @@ karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g
 //=========================================
 //========== EUROPASS =====================
 //=========================================
+
 karutaStr['en']['mother-tongue']="Mother Tongue";
 karutaStr['en']['foreign-languages']="Foreign Languages";
 karutaStr['en']['add-foreign-language']="Add a foreign Language";
@@ -427,6 +448,7 @@ karutaStr['en']['writing']="WRITING";
 //=========================================
 //========== BUBBLE MAP ===================
 //=========================================
+
 karutaStr['en']['leave-edit-mode']="Leave Edit Mode";
 karutaStr['en']['bubble-label']="Label";
 karutaStr['en']['bubble-links']="Links";
@@ -455,7 +477,7 @@ karutaStr['en']['addshare-users']="Share with Users";
 karutaStr['en']['confirm-remove-user-group']="Do you want to remove this user from the group? This action cannot be undone.";
 karutaStr['en']['empty-group']="Empty Group";
 karutaStr['en']['list_portfoliosgroups']="Portfolio Groups";
-karutaStr['en']['note-list_portfoliosgroups']="Attention - The projects in which the portfolios are contained must be open on the Portfolio Page";
+karutaStr['en']['note-list_portfoliosgroups']="Attention - The folders in which the portfolios are contained must be open on the Portfolio Page";
 karutaStr['en']['note-list_usergroups']="Attention - Users must not filtered on the Users Page";
 karutaStr['en']['confirm-remove-item-group']="Do you want to remove this element from the group? This action cannot be undone.";
 karutaStr['en']['add_users']="Add Users";
@@ -489,6 +511,7 @@ karutaStr['en']['email-message']="Message";
 //========== RESOURCES =======================
 //=========================================
 
+karutaStr['en']['asmRoot']="Root";
 karutaStr['en']['asmStructure']="Section";
 karutaStr['en']['asmUnit']="Page";
 karutaStr['en']['asmUnitStructure']="Subsection";
@@ -504,6 +527,7 @@ karutaStr['en']['Audio']="Audio";
 karutaStr['en']['Oembed']="oEmbed";
 karutaStr['en']['Color']="Color";
 karutaStr['en']['URL2Unit']="URL2Unit";
+karutaStr['en']['URL2Portfolio']="URL2Portfolio";
 karutaStr['en']['Comments']="Comments";
 
 karutaStr['en']['SendEmail']="Send Email";
@@ -515,16 +539,21 @@ karutaStr['en']['DocumentBlock']="DocumentBlock";
 karutaStr['en']['URLBlock']="URLBlock";
 karutaStr['en']['ImageBlock']="ImageBlock";
 karutaStr['en']['URL2UnitBlock']="URL2UnitBlock";
+karutaStr['en']['URL2PortfolioBlock']="URL2PortfolioBlock";
 karutaStr['en']['TextFieldBlock']="TextFieldBlock";
-karutaStr['en']['BubbleMap']="Bubble Map";
+karutaStr['en']['BubbleMap']="BubbleMap";
 karutaStr['en']['Europass']="Europass";
 
 karutaStr['en']['Item']="Item";
-karutaStr['en']['Get_Resource']="Get_Resource";
-karutaStr['en']['Get_Get_Resource']="Get_Get_Resource";
-karutaStr['en']['Get_Double_Resource']="Get_Double_Resource";
+karutaStr['en']['Get_Resource']="GetResource";
+karutaStr['en']['Get_Get_Resource']="GetGetResource";
+karutaStr['en']['Get_Double_Resource']="GetDoubleResource";
 karutaStr['en']['Proxy']="Proxy";
-karutaStr['en']['Get_Proxy']="Get_Proxy";
+karutaStr['en']['Get_Proxy']="GetProxy";
+
+karutaStr['en']['Variable']="Variable";
+karutaStr['en']['var-name']="Variable Name";
+karutaStr['en']['var-value']="Variable Value";
 
 karutaStr['en']['asmColumn']="asmColumn";
 

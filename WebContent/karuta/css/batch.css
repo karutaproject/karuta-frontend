@@ -16,12 +16,11 @@
   padding: 5px;
 }
 .batch .inside-full {
-  padding: 3px;
+  padding: 0px;
+  height: 100%;
 }
 .batch .inside-full .form-control {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  height: 1.7em;
+  border-radius: 0px;
 }
 .batch .model-node-label .buttons {
   float: right;
@@ -313,6 +312,10 @@
   border: 1px solid var(--batch-resource-color);
 }
 .batch .update-item {
+  margin-top: 7px;
+  border: 1px solid var(--batch-resource-color);
+}
+.batch .refresh-tree-url2unit {
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }

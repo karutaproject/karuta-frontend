@@ -334,9 +334,9 @@ UIFactory["Proxy"].parse = function(destid,type,langcode,data,self,portfolio_lab
 			var selectable = true;
 			var input = "";
 			var resource = null;
-			if ($("asmResource",newTableau1[i][1]).length==3)
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
-			else
+//			if ($("asmResource",newTableau1[i][1]).length==3)
+//				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+//			else
 				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			//------------------------------
 			var code = $('code',resource).text();
@@ -464,13 +464,14 @@ UIFactory["Proxy"].updateaddedpart = function(data,get_resource_semtag,selected_
 		url : serverBCK_API+"/nodes/node/"+partid,
 		last : last,
 		success : function(data) {
-//			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
 			var node = $("*:has(metadata[semantictag='"+get_resource_semtag+"'])",data);
 			if (node.length==0)
 				node = $( ":root",data ); //node itself
+			if (node.length>1) // we take the deepest
+				node = node[node.length-1];
 			var nodeid = $(node).attr('id');
 			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
-			var tagname = $( ":root",data )[ 0 ].nodeName;
+			var tagname = $(node).nodeName;
 			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
 				xml = xml.replace("Proxy","nodeRes");
 				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";

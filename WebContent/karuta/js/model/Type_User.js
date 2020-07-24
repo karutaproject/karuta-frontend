@@ -40,6 +40,8 @@ UIFactory["User"] = function( node )
 	this.lastname = $("lastname",node).text();
 	this.username = $("username",node).text();
 	this.email = $("email",node).text();
+	this.password = localStorage.getItem('pwd');
+	localStorage.getItem('pwd',"");
 	this.username_node = $("username",node);
 	this.firstname_node = $("firstname",node);
 	this.lastname_node = $("lastname",node);
@@ -444,11 +446,11 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		if (USER.admin){
 			html += "<td><div class='btn-group'>";
 			if (gid==null) {
-				html += " <button class='btn ' onclick=\"UIFactory['User'].edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
+				html += " <button class='btn ' onclick=\"UIFactory.User.edit('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' relx='tooltip'>";
 				html += "<span class='fas fa-pencil-alt' aria-hidden='true'></span>";
 				html += "</button>";
 				if (this.username_node.text()!='root' && this.username_node.text()!='public' && this.username_node.text()!='sys_public') {
-					html += "<button class='btn ' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+					html += "<button class='btn ' onclick=\"UIFactory.User.confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 					html += "<i class='fa fa-trash-alt'></i>";
 					html += "</button>";
 				} else {
@@ -457,12 +459,12 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 					html += "</button>";
 				}
 			} else {
-				html += "<button class='btn ' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
+				html += "<button class='btn ' onclick=\"UIFactory.UsersGroup.confirmRemove('"+gid+"','"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 				html += "<span class='fas fa-trash-alt'></span>";
 				html += "</button>";				
 			}
 			//----------------------------------
-			html += "<button class='btn ' onclick=\"UIFactory['UsersGroup'].editGroupsByUser('"+this.id+"')\"";
+			html += "<button class='btn ' onclick=\"UIFactory.UsersGroup.editGroupsByUser('"+this.id+"')\"";
 			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
 				html += ">";
 			} else {
@@ -662,13 +664,11 @@ UIFactory["User"].update = function(userid,attribute,value)
 	$.ajax({
 		type : "PUT",
 		contentType: "application/xml",
-		dataType : "xml",
+		dataType : "text",
 		url : url,
 		data : data,
 		success : function(data) {
-			alertHTML(karutaStr[LANG]['saved']);
-//			$("#refresh").click();
-//			window.location.reload();
+//			alertHTML(karutaStr[LANG]['saved']);
 			fill_list_users();
 		}
 	});
@@ -685,7 +685,7 @@ UIFactory["User"].getAttributeEditor = function(userid,attribute,value)
 	html += "  <label class='col-3 control-label'>"+karutaStr[LANG][attribute]+"</label>";
 	html += "  <div class='col-9'><input class='form-control'";
 	html += " type='text'";
-	html += " onchange=\"javascript:UIFactory['User'].update('"+userid+"','"+attribute+"',this.value)\" value=\""+value+"\" ></div>";
+	html += " onchange=\"javascript:UIFactory.User.update('"+userid+"','"+attribute+"',this.value)\" value=\""+value+"\" ></div>";
 	html += "</div>";
 	return html;
 };
@@ -890,12 +890,12 @@ UIFactory["User"].remove = function(userid,from_page)
 		data : "",
 		success : function(data) {
 			if (from_page==null){
-				$("#refresh").click();
+				$("#user-refresh").click();
 				fill_list_usersgroups();
 			}
 			else if (from_page=="UsersGroup"){
 				fill_list_users();
-				$("#refresh").click();
+				$("#user-refresh").click();
 			}
 		}
 	});
@@ -975,7 +975,7 @@ UIFactory["User"].create = function()
 		url : url,
 		data : xml,
 		success : function(data) {
-			$("#refresh").click();
+			$("#user-refresh").click();
 			//--------------------------
 			$('#edit-window').modal('hide');
 		},
@@ -1210,7 +1210,7 @@ UIFactory["User"].removeUsers = function()
 	$("#wait-window").hide();
 	$.ajaxSetup({async: true});
 	fill_list_users();
-	$("#refresh").click();
+	$("#user-refresh").click();
 	//----------------
 }
 

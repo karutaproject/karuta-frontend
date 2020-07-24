@@ -76,39 +76,40 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 		var url_langcode = langcode;
 		if (!url_element.multilingual)
 			url_langcode = NONMULTILANGCODE;
-		//------------------------
+		//----------------------------------------
+		var img_width = ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='') ? $(image.resource.width_node[langcode]).text() : "";
+		var img_height = ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='') ? $(image.resource.height_node[langcode]).text() : "";
+		if (img_width!="" && img_width.indexOf('px')<0)
+			img_width += "px";
+		if (img_height!="" && img_height.indexOf('px')<0)
+			img_height += "px";
 		var image_size = "";
-		if ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='')
-			image_size = "width:"+$(image.resource.width_node[langcode]).text()+"; "; 
-		if ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='')
-			image_size += "height:"+$(image.resource.height_node[langcode]).text()+"; "; 
-		//---------------------
+		if (img_width!="")
+			image_size += " width:"+img_width + ";";
+		if (img_height!="")
+			image_size += " height:" + img_height + ";";
+		//----------------------------------------
 		var url = $(url_element.resource.url_node[url_langcode]).text();
 		if (url!="" && url.indexOf("http")<0)
 			url = "http://"+url;
 		var label = $(url_element.resource.label_node[url_langcode]).text();
 		if (label=="")
 			label = url;
-
+		html =  "<a style='text-decoration:none;color:inherit' id='url_"+url_element.id+"' href='"+url+"' target='_blank'>";
+		var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
+		if (cover!=undefined && cover.resource.getValue()=='1')
+			style += "background-size:cover;";
+		html += "<div class='UrlBlock' style=\""+style+"\">";
+		style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
 		if (url!="") {
-			html =  "<a style='text-decoration:none;color:inherit' id='url_"+url_element.id+"' href='"+url+"' target='_blank'>";
-			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
-			if (cover!=undefined && cover.resource.getValue()=='1')
-				style += "background-size:cover;";
-			html += "<div class='UrlBlock' style=\""+style+"\">";
-			style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
-			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='URLBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
-				html += "<div id='label_"+this.id+"' class='block-title'  style=\""+style+"\">"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
-			else
-				html += "<div class='block-title'  style=\""+style+"\">"+label+"</div>";
-			html += "</div>";
-			html += "</a>";
-		} else {
-			style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
-			html =  "<div class='URLBlock no-document' style=\""+image_size+"\">";
-			html += "<div class='block-title'  style=\""+style+"\">"+karutaStr[LANG]['no-URL']+"</div>";
-			html += "</div>";
-		}
+		if (UICom.structure["ui"][this.id].getLabel(null,'none')!='URLBlock' && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
+			html += "<div id='label_"+this.id+"' class='block-title'  style=\""+style+"\">"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
+		else
+			html += "<div class='block-title'  style=\""+style+"\">"+label+"</div>";
+		} else
+			html += "<div class='block-title'  style=\""+style+"\">"+karutaStr[LANG]['no-URL']+"</div>";				
+		html += "</div>";
+		html += "</a>";
 	}
 	return html;
 };

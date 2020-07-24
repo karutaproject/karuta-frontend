@@ -60,10 +60,6 @@ UIFactory["URL2UnitBlock"].prototype.getView = function(dest,type,langcode)
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest] = {langcode: langcode, type : type};
-	}
-	//---------------------
 	if (type==null)
 		type = "standard";
 	//---------------------
@@ -84,30 +80,35 @@ UIFactory["URL2UnitBlock"].prototype.getView = function(dest,type,langcode)
 			label = local_label;
 		if (label=='')
 			label = "---";
+		//----------------------------------------
+		var img_width = ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='') ? $(image.resource.width_node[langcode]).text() : "";
+		var img_height = ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='') ? $(image.resource.height_node[langcode]).text() : "";
+		if (img_width!="" && img_width.indexOf('px')<0)
+			img_width += "px";
+		if (img_height!="" && img_height.indexOf('px')<0)
+			img_height += "px";
 		var image_size = "";
-		if ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='')
-			image_size = "width:"+$(image.resource.width_node[langcode]).text()+"; "; 
-		if ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='')
-			image_size += "height:"+$(image.resource.height_node[langcode]).text()+"; "; 
-		if (url2unit.resource.uuid_node.text()!="") {
-			if (this.query.indexOf('self.')>-1)
+		if (img_width!="")
+			image_size += " width:"+img_width + ";";
+		if (img_height!="")
+			image_size += " height:" + img_height + ";";
+		//----------------------------------------
+		if (this.query.indexOf('self.')>-1)
 			html = "<a  class='URL2Unit-link' onclick=\"javascript:$('#sidebar_"+url2unit.resource.uuid_node.text()+"').click()\">";
-			else
-				html = "<a href='page.htm?i="+url2unit.resource.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>";
-			var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
-			if (cover!=undefined && cover.resource.getValue()=='1')
-				style += "background-size:cover;";
-			html += "<div class='Url2Block' style=\""+style+"\">";
-			style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		else
+			html = "<a href='page.htm?i="+url2unit.resource.uuid_node.text()+"&type=standard&lang="+LANG+"' class='URL2Unit-link' target='_blank'>";
+		var style = "background-position:center;background-repeat:no-repeat; background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
+		if (cover!=undefined && cover.resource.getValue()=='1')
+			style += "background-size:cover;";
+		html += "<div class='Url2Block' style=\""+style+"\">";
+		style = UICom.structure["ui"][this.id].getLabelStyle();
+		if (url2unit.resource.uuid_node.text()!="")
 			html += "<div class='block-title' style=\""+style+"\">"+label+"</div>";
-			html += "</div>";
-			html += "</a>";
-		} else {
-			html =  "<div class='Url2Block no-document' style=\""+image_size+"\">";
-			var style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		else
 			html += "<div class='block-title' style=\""+style+"\">"+karutaStr[LANG]['no-URL2Unit']+"</div>";
-			html += "</div>";
-		}
+
+		html += "</div>";
+		html += "</a>";
 	}
 	return html;
 };
@@ -142,7 +143,7 @@ UIFactory["URL2UnitBlock"].prototype.getButtons = function(dest,type,langcode)
 };
 
 //==================================
-UIFactory["URL2UnitBlock"].prototype.displayEditor = function(destid,type,langcode)
+UIFactory["URL2UnitBlock"].prototype.displayEditor = function(destid,type,langcode,disabled)
 //==================================
 {
 	var url2unit = UICom.structure["ui"][this.url2unit_nodeid];
@@ -158,27 +159,18 @@ UIFactory["URL2UnitBlock"].prototype.displayEditor = function(destid,type,langco
 	if (this.url2unit_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>URL2Unit</h4>"));
 		url2unit.resource.query = this.query;
-		url2unit.resource.displayEditor(destid,type,langcode,this);
+		UIFactory["Node"].updateMetadataWadAttribute(this.url2unit_nodeid,"query",this.query,null);
+		url2unit.resource.displayEditor(destid,type,langcode,disabled);
 	}
 	//---------------------
 	if (this.image_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>Image</h4>"));
 		$("#"+destid).append($("<div>"+karutaStr[LANG]['block-image-size']+"</div>"));
-		image.resource.displayEditor(destid,type,langcode,this);
+		image.resource.displayEditor(destid,type,langcode,disabled);
 	}
 	//---------------------
 	if (cover!=undefined && this.cover_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>Coverage</h4>"));
-		cover.resource.displayEditor(destid,type,langcode,this);
+		cover.resource.displayEditor(destid,type,langcode,disabled);
 	}
 }
-
-//==================================
-UIFactory["URL2UnitBlock"].prototype.refresh = function()
-//==================================
-{
-	for (dest in this.display) {
-		$("#"+dest).html(this.getView(null,this.display[dest].type,this.display[dest].langcode));
-	};
-
-};

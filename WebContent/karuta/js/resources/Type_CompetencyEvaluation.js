@@ -216,7 +216,7 @@ UIFactory["CompetencyEvaluation"].parse = function(destid,data,lang,self,type,na
 UIFactory["CompetencyEvaluation"].prototype.save = function()
 //==================================
 {
-	UICom.UpdateNode(this.id);
+	UICom.UpdateNode(this.node);
 	this.refresh();
 };
 

@@ -28,25 +28,36 @@ UIFactory["Comments"] = function( node )
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Comments';
-	this.lastmodified_node = $("lastModified",$("asmResource[xsi_type='Comments']",node));
-	this.author_node = $("author",$("asmResource[xsi_type='Comments']",node));
-	this.date_node = $("date",$("asmResource[xsi_type='Comments']",node));
+	this.lastmodified_node = $("lastModified",$("asmResource[xsi_type='"+this.type+"']",node));
+	this.author_node = $("author",$("asmResource[xsi_type='"+this.type+"']",node));
+	this.date_node = $("date",$("asmResource[xsi_type='"+this.type+"']",node));
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
-		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Comments']",node));
+		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='"+this.type+"']",node));
 		if (this.text_node[i].length==0) {
-			if (i==0 && $("text",$("asmResource[xsi_type='Comments']",node)).length==1) { // for WAD6 imported portfolio
-				this.text_node[i] = $("text",$("asmResource[xsi_type='Comments']",node));
-			} else {
-				var newelement = createXmlElement("text");
-				$(newelement).attr('lang', languages[i]);
-				$(newelement).removeAttr('xmlns');
-				$("asmResource[xsi_type='Comments']",node)[0].appendChild(newelement);
-				this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='Comments']",node));
-			}
+			var newelement = createXmlElement("text");
+			$(newelement).attr('lang', languages[i]);
+			$(newelement).removeAttr('xmlns');
+			$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource[xsi_type='"+this.type+"']",node));
 		}
 	}
+	//--------------------
+	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='"+this.type+"']",node));
+	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		this.version_node.text("3.0");
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.text_node[langcode]).text($(this.text_node[0]).text());
+		}
+		this.save();
+	}
+	//--------------------
 	this.display = {};
 };
 
@@ -186,7 +197,15 @@ UIFactory["Comments"].prototype.update = function(langcode)
 		this.date_node.text('');
 		this.author_node.text('');
 	}
-	$(this.text_node[langcode]).text(value);//	$(this.text_node[langcode]).html($.parseHTML(value));
+	//---------------------
+	if (!this.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.text_node[langcode]).text(value);
+		}
+	} else
+		$(this.text_node[langcode]).text(value);
+	//---------------------
+
 	this.save();
 };
 

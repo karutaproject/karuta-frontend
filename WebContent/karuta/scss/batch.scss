@@ -18,11 +18,10 @@
 		padding:5px;
 	}
 	.inside-full {
-		padding:3px;
+		padding:0px;
+		height:100%;
 		.form-control {
-			padding-top:0px;
-			padding-bottom:0px;
-			height: 1.7em;
+			border-radius:0px;
 		}
 	}
 	.model-node-label {
@@ -346,6 +345,10 @@
 		border:1px solid var(--batch-resource-color);
 	}
 	.update-item{
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.refresh-tree-url2unit{
 		margin-top:7px;
 		border:1px solid var(--batch-resource-color);
 	}

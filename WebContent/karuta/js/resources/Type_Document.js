@@ -86,7 +86,25 @@ UIFactory["Document"] = function( node )
 		}
 		//----------------------------
 	}
+	//--------------------
+	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='"+this.type+"']",node));
+	//----------------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		this.version_node.text("3.0");
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			$(this.filename_node[langcode]).text($(this.filename_node[0]).text());
+			$(this.type_node[langcode]).text($(this.filename_node[0]).text());
+			$(this.size_node[langcode]).text($(this.filename_node[0]).text());
+			$(this.fileid_node[langcode]).text($(this.filename_node[0]).text());
+		}
+		this.save();
+	}
+	//----------------------------
 	this.display = {};
 };
 
@@ -121,70 +139,6 @@ UIFactory["Document"].prototype.getAttributes = function(type,langcode)
 /// Display
 //==================================
 UIFactory["Document"].prototype.getView = function(dest,type,langcode)
-//==================================
-{
-	var documentIcon = {};
-	documentIcon['.doc'] = "../img/word.gif";
-	documentIcon['.docx'] = "../img/word.gif'";
-	documentIcon['.xls'] = "../img/excel.gif";
-	documentIcon['.xlsx'] = "../img/excel.gif";
-	documentIcon['.ppt'] = "../img/powerpoint.gif";
-	documentIcon['.pptx'] = "../img/powerpoint.gif";
-	documentIcon['.pdf'] = "../img/adobe.gif";
-	documentIcon['.txt'] = "../img/text.png";
-
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = {langcode: langcode, type : type};
-	}
-	//---------------------
-	if (type==null)
-		type = "standard";
-	//---------------------
-	var html = "";
-	if (type=='standard'){
-		if ($(this.filename_node[langcode]).text()!="")
-			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='../img/document-icon.png' style='width:25px'> "+$(this.filename_node[langcode]).text()+"</a>";
-		else
-			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
-	}
-	if (type=='icon-url-label'){
-		if ($(this.filename_node[langcode]).text()!=""){
-			var filename = $(this.filename_node[langcode]).text();
-			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
-		} else
-			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
-	}
-	if (type=='icon-url'){
-		if ($(this.filename_node[langcode]).text()!=""){
-			var filename = $(this.filename_node[langcode]).text();
-			var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-			html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
-		} else
-			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>";
-	}
-	if (type=='icon'){
-		if ($(this.filename_node[langcode]).text()!=""){
-			var filename = $(this.filename_node[langcode]).text();
-			var extension = filename.substring(filename.lastIndexOf(".")+1);
-			html =  documentIcon[extension]; 
-		} else
-			html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>";
-
-	}
-	return html;
-};
-
-//==================================
-UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
 	var documentIcon = {};
@@ -235,20 +189,28 @@ UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
 				extension = ".txt";
 		}
 		if (type=='standard'){
-				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/> "+filename+"</a>";
+				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+documentIcon[extension]+"'/> "+filename+"</a>";
 		}
 		if (type=='icon-url-label'){
-				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img src='"+documentIcon[extension]+"'/></a>"; 
+				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'>"+$(this.filename_node[langcode]).text()+" <img style='width:24px' src='"+documentIcon[extension]+"'/></a>"; 
 		}
 		if (type=='icon-url'){
-				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img src='"+documentIcon[extension]+"'/></a>"; 
+				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+documentIcon[extension]+"'/></a>"; 
 		}
 		if (type=='icon'){
 				html =  documentIcon[extension]; 
 		}
 	} else {
-		html =  "<img src='../../karuta/img/document-icon.png' style='width:25px'>"+karutaStr[LANG]['no-document'];
+		html =  "<img src='../../karuta/img/document-icon.png' style='width:24px'>"+karutaStr[LANG]['no-document'];
 	}
+	return html;
+};
+
+//==================================
+UIFactory["Document"].prototype.displayView = function(dest,type,langcode)
+//==================================
+{
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 /// Editor
@@ -261,13 +223,6 @@ UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
-		langcode = NONMULTILANGCODE;
-	//--------------------- if IE the file server returns a string --------
-//	if(typeof data=='string')
-//		data = jQuery.parseJSON(data);
-	//---------------------
 	$(itself.lastmodified_node).text(new Date().toLocaleString());
 	var filename = filename; //data.files[0].name;
 	var size = data.files[0].size;
@@ -275,10 +230,21 @@ UIFactory["Document"].update = function(data,uuid,langcode,parent,filename)
 	$("#file_"+uuid+"_"+langcode).html(filename);
 	$("#file__"+uuid+"_"+langcode).html(filename);
 	var fileid = data.files[0].fileid;
-	itself.resource.fileid_node[langcode].text(fileid);
-	itself.resource.filename_node[langcode].text(filename);
-	itself.resource.size_node[langcode].text(size);
-	itself.resource.type_node[langcode].text(type);
+	//---------------------
+	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
+	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			itself.resource.fileid_node[langcode].text(fileid);
+			itself.resource.filename_node[langcode].text(filename);
+			itself.resource.size_node[langcode].text(size);
+			itself.resource.type_node[langcode].text(type);
+		}
+	} else {
+		itself.resource.fileid_node[langcode].text(fileid);
+		itself.resource.filename_node[langcode].text(filename);
+		itself.resource.size_node[langcode].text(size);
+		itself.resource.type_node[langcode].text(type);
+	}
 	itself.resource.save(parent);
 };
 

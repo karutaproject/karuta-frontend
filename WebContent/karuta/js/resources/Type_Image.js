@@ -114,7 +114,27 @@ UIFactory["Image"] = function( node )
 		}
 		//----------------------------
 	}
+	//--------------------
+	if ($("version",$("asmResource[xsi_type='Image']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='Image']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='Image']",node));
+	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - we set all languages
+		this.version_node.text("3.0");
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			this.filename_node[langcode].text(this.filename_node[0].text());
+			this.type_node[langcode].text(this.type_node[0].text());
+			this.size_node[langcode].text(this.size_node[0].text());
+			this.fileid_node[langcode].text(this.fileid_node[0].text());
+			this.width_node[langcode].text(this.width_node[0].text());
+			this.height_node[langcode].text(this.height_node[0].text());
+			this.alt_node[langcode].text(this.alt_node[0].text());
+		}
+		this.save();
+	}
 	this.display = {};
 	this.displayType = {};
 };
@@ -127,8 +147,6 @@ UIFactory["Image"].prototype.getAttributes = function(type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (this.multilingual!=undefined && !this.multilingual)
-		langcode = 0;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest]=langcode;
@@ -158,40 +176,41 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (this.multilingual!=undefined && !this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest]=langcode;
-		this.displayType[dest]=type;
 	}
 	if (type==null)
 		type='default';
 	//------------------------
 	var image_size = "";
-	if ($(this.width_node[langcode]).text()!=undefined && $(this.width_node[langcode]).text()!='') // backward compatibility
-		image_size = "width='"+$(this.width_node[langcode]).text()+"' "; 
-	if (image_size=="" && $("metadata-epm",this.node).attr('width')!=undefined && $("metadata-epm",this.node).attr('width')!='') // backward compatibility
-		image_size = "width='"+$("metadata-epm",this.node).attr('width')+"' "; 
-	if ($(this.height_node[langcode]).text()!=undefined && $(this.height_node[langcode]).text()!='') // backward compatibility
-		image_size += "height='"+$(this.height_node[langcode]).text()+"' "; 
-	if (image_size.indexOf('height')<0 && $("metadata-epm",this.node).attr('height')!=undefined && $("metadata-epm",this.node).attr('height')!='')
-		image_size += "height='"+$("metadata-epm",this.node).attr('height')+"' "; 
-	if (image_size=="")
-		image_size = "class='image img-fluid'";
+	var img_width = ($(this.width_node[langcode]).text()!=undefined) ? $(this.width_node[langcode]).text() : "";
+	var img_height = ($(this.height_node[langcode]).text()!=undefined) ? $(this.height_node[langcode]).text() : "";
+	if (img_width!="" && img_width.indexOf('px')<0)
+		img_width += "px";
+	if (img_height!="" && img_height.indexOf('px')<0)
+		img_height += "px";
+	if (img_width=="" && img_height=="")
+		image_size = " class='image img-fluid' ";
+	else {
+		if (img_width!="")
+			image_size += " width='"+img_width + "' ";
+		if (img_height!="")
+			image_size += " height='" + img_height + "' ";
+	}
 	//------------------------
 	var alt = "";
 	if ($(this.alt_node[langcode]).text()!=undefined) // backward compatibility
 		alt = "alt=\""+$(this.alt_node[langcode]).text()+"\" "; 
 	//------------------------
+	var nodefileid = this.id;
+	if (nodefileid.indexOf("_")>-1) // proxy-image
+		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
+	//------------------------
 	var html ="";
 	if (type=='default') {
 		html +="<div uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
-//			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
-//			html += "</a>";
+			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
 		}
 		else
 			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
@@ -200,37 +219,35 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 	if (type=='span') {
 		html +="<span uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
-//			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
-//			html += "</a>";
+			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+""+alt+"  />";
 		}
 		else
 			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
 		html += "</span>";
 	}
 	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
 	}
 	if (type=='withfilename'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
+		html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+nodefileid+"' title=''>";
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
 		html += "</a>";
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='withfilename-withoutlightbox'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='editor'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='edit-img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100' "+alt+" />";		
+		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100' "+alt+" />";		
 		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
 	}
 	if (type=='block') {
 		html +="<div uuid='img_"+this.id+"' style='height:100%'>";
 		if ($(this.filename_node[langcode]).text()!="") {
 			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
-			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;max-height:218px;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
+			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
+			html += "<img style='display:inline;max-height:218px;' id='image_"+nodefileid+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
 			html += "</a>";
 			html += "</td></tr></table>";
 		} else {
@@ -239,9 +256,6 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 			html += "</td></tr></table>";
 		}
 		html += "</div>";
-	}
-	if (type=='url') {
-		html = "../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime();
 	}
 
 	return html;
@@ -255,88 +269,10 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (this.multilingual!=undefined && !this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest]=langcode;
-	}
-	if (type==null)
-		type='default';
-	//------------------------
-	var image_size = "";
-	if ($(this.width_node[langcode]).text()!=undefined && $(this.width_node[langcode]).text()!='') // backward compatibility
-		image_size = "width='"+$(this.width_node[langcode]).text()+"' "; 
-//	if (image_size=="" && $("metadata-epm",this.node).attr('width')!=undefined && $("metadata-epm",this.node).attr('width')!='') // backward compatibility
-//		image_size = "width='"+$("metadata-epm",this.node).attr('width')+"' "; 
-	if ($(this.height_node[langcode]).text()!=undefined && $(this.height_node[langcode]).text()!='') // backward compatibility
-		image_size += "height='"+$(this.height_node[langcode]).text()+"' "; 
-	if (image_size.indexOf('height')<0 && $("metadata-epm",this.node).attr('height')!=undefined && $("metadata-epm",this.node).attr('height')!='')
-		image_size += "height='"+$("metadata-epm",this.node).attr('height')+"' "; 
-	if (image_size=="")
-		image_size = "class='image img-fluid'";
-	//------------------------
 	var alt = "";
 	if ($(this.alt_node[langcode]).text()!=undefined) // backward compatibility
 		alt = "alt=\""+$(this.alt_node[langcode]).text()+"\" "; 
-	//------------------------
-	var html ="";
-	if (type=='default') {
-		html +="<div uuid='img_"+this.id+"'>";
-		if ($(this.filename_node[langcode]).text()!="") {
-//			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
-//			html += "</a>";
-		}
-		else
-			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
-		html += "</div>";
-	}
-	if (type=='span') {
-		html +="<span uuid='img_"+this.id+"'>";
-		if ($(this.filename_node[langcode]).text()!="") {
-//			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+""+alt+"  />";
-//			html += "</a>";
-		}
-		else
-			html += "<img src='../../karuta/img/image-icon.png' height='25px'/>"+karutaStr[LANG]['no-image'];
-		html += "</span>";
-	}
-	if (type=='withoutlightbox' && $(this.filename_node[langcode]).text()!="") {
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
-	}
-	if (type=='withfilename'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
-		html += "</a>";
-		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
-	}
-	if (type=='withfilename-withoutlightbox'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";		
-		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
-	}
-	if (type=='editor'  && $(this.filename_node[langcode]).text()!=""){
-		html += "<img uuid='img_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' height='100' "+alt+" />";		
-		html += " <span>"+$(this.filename_node[langcode]).text()+"</span>";
-	}
-	if (type=='block') {
-		html +="<div uuid='img_"+this.id+"' style='height:100%'>";
-		if ($(this.filename_node[langcode]).text()!="") {
-			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
-			html += "<a href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=L&timestamp=" + new Date().getTime()+"' data-lightbox='image-"+this.id+"' title=''>";
-			html += "<img style='display:inline;max-height:218px;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&size=S&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
-			html += "</a>";
-			html += "</td></tr></table>";
-		} else {
-			html += "<table width='100%' height='100%'><tr><td style='vertical-align:middle;text-align:center'>";
-			html += "<img src='../../karuta/img/image-icon.png' height='150px' "+alt+" />"+karutaStr[LANG]['no-image'];
-			html += "</td></tr></table>";
-		}
-		html += "</div>";
-	}
-
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 	var uuid = this.id;
 	$("#image_"+this.id).click(function(){
@@ -344,6 +280,8 @@ UIFactory["Image"].prototype.displayView = function(dest,type,langcode)
 	});
 
 };
+
+
 //==================================
 UIFactory["Image"].update = function(data,uuid,langcode,parent,filename)
 //==================================
@@ -354,18 +292,23 @@ UIFactory["Image"].update = function(data,uuid,langcode,parent,filename)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	$("#fileimage_"+uuid+"_"+langcode).html(filename);
 	var size = data.files[0].size;
 	var type = data.files[0].type;
 	var fileid = data.files[0].fileid;
-	itself.resource.fileid_node[langcode].text(fileid);
-	itself.resource.filename_node[langcode].text(filename);
-	itself.resource.size_node[langcode].text(size);
-	itself.resource.type_node[langcode].text(type);
+	if (!itself.resource.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			itself.resource.fileid_node[langcode].text(fileid);
+			itself.resource.filename_node[langcode].text(filename);
+			itself.resource.size_node[langcode].text(size);
+			itself.resource.type_node[langcode].text(type);
+		}
+	} else {
+		itself.resource.fileid_node[langcode].text(fileid);
+		itself.resource.filename_node[langcode].text(filename);
+		itself.resource.size_node[langcode].text(size);
+		itself.resource.type_node[langcode].text(type);
+	}
 	itself.resource.save(parent);
 };
 
@@ -377,31 +320,33 @@ UIFactory["Image"].remove = function(uuid,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	$("#fileimage_"+uuid+"_"+langcode).html("");
-	itself.resource.fileid_node[langcode].text("");
-	itself.resource.filename_node[langcode].text("");
-	itself.resource.size_node[langcode].text("");
-	itself.resource.type_node[langcode].text("");
+	if (!itself.resource.multilingual) {
+		for (var langcode=0; langcode<languages.length; langcode++) {
+			itself.resource.fileid_node[langcode].text("");
+			itself.resource.filename_node[langcode].text("");
+			itself.resource.size_node[langcode].text("");
+			itself.resource.type_node[langcode].text("");
+		}
+	} else {
+		itself.resource.fileid_node[langcode].text("");
+		itself.resource.filename_node[langcode].text("");
+		itself.resource.size_node[langcode].text("");
+		itself.resource.type_node[langcode].text("");
+	}
 	var delfile = true;
 	itself.resource.save(null,delfile);
 };
 
 //==================================
-UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,parent,disabled)
+UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disabled,parent)
 //==================================
 {
 	var filename = ""; // to avoid problem : filename with accents	
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-//	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	var html ="";
 	html += " <span id='editimage_"+this.id+"_"+langcode+"'>"+this.getView('editimage_'+this.id+"_"+langcode,'editor',langcode)+"</span> ";
@@ -413,6 +358,11 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 	html += "<span id='fileimage_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
 	html += "<span id='loaded_"+this.id+langcode+"'></span>"
 	html +=  " <button type='button' class='btn ' onclick=\"UIFactory.Image.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+	if (USER.admin || g_userroles[0]=='designer') {
+		var semtag =  ($("metadata",this.node)[0]==undefined || $($("metadata",this.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
+		if (semtag=="config-img-css")
+			html += "<div class='iamge-url'>url : ../../../"+serverBCK+"/resources/resource/file/"+this.id+"</div>";
+	}
 	$("#"+destid).append($(html));
 	var loadedid = 'loaded_'+this.id+langcode;
 	$('#fileupload_'+this.id+"_"+langcode).fileupload({
@@ -450,7 +400,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 		if (this.encrypted)
 			width = decrypt(width.substring(3),g_rc4key);
 		var htmlWidthGroupObj = $("<div class='form-group'></div>")
-		var htmlWidthLabelObj = $("<label for='width_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['width']+"</label>");
+		var htmlWidthLabelObj = $("<label for='width_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['width']+"</label>");
 		var htmlWidthDivObj = $("<div class='col-sm-9'></div>");
 		var htmlWidthInputObj = $("<input id='width_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+width+"\">");
 		var self = this;
@@ -467,7 +417,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 		if (this.encrypted)
 			height = decrypt(height.substring(3),g_rc4key);
 		var htmlHeightGroupObj = $("<div class='form-group'></div>")
-		var htmlHeightLabelObj = $("<label for='height_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['height']+"</label>");
+		var htmlHeightLabelObj = $("<label for='height_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['height']+"</label>");
 		var htmlHeightDivObj = $("<div class='col-sm-9'></div>");
 		var htmlHeightInputObj = $("<input id='height_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+height+"\">");
 		var self = this;
@@ -484,7 +434,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 		if (this.encrypted)
 			alt = decrypt(alt.substring(3),g_rc4key);
 		var htmlaltGroupObj = $("<div class='form-group'></div>")
-		var htmlaltLabelObj = $("<label for='alt_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['alt']+"</label>");
+		var htmlaltLabelObj = $("<label for='alt_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['alt']+"</label>");
 		var htmlaltDivObj = $("<div class='col-sm-9'></div>");
 		var htmlaltInputObj = $("<input id='alt_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+alt+"\">");
 		var self = this;
@@ -503,9 +453,9 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 			if (this.encrypted)
 				code = decrypt(code.substring(3),g_rc4key);
 			var htmlcodeGroupObj = $("<div class='form-group'></div>")
-			var htmlcodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
+			var htmlcodeLabelObj = $("<label for='code_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['code']+"</label>");
 			var htmlcodeDivObj = $("<div class='col-sm-9'></div>");
-			var htmlcodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' value=\""+code+"\">");
+			var htmlcodeInputObj = $("<input id='code_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+code+"\">");
 			var self = this;
 			$(htmlcodeInputObj).change(function (){
 				$(self.code_node).text($(this).val());
@@ -520,9 +470,9 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 			if (this.encrypted)
 				value = decrypt(value.substring(3),g_rc4key);
 			var htmlvalueGroupObj = $("<div class='form-group'></div>")
-			var htmlvalueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
+			var htmlvalueLabelObj = $("<label for='value_"+this.id+"_"+langcode+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['value']+"</label>");
 			var htmlvalueDivObj = $("<div class='col-sm-9'></div>");
-			var htmlvalueInputObj = $("<input id='value_"+this.id+"' type='text' class='form-control' value=\""+value+"\">");
+			var htmlvalueInputObj = $("<input id='value_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+value+"\">");
 			var self = this;
 			$(htmlvalueInputObj).change(function (){
 				$(self.value_node).text($(this).val());
@@ -537,6 +487,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,paren
 		//---------------------
 		$("#"+destid).append(htmlFormObj);
 		//---------------------
+//		UIFactory.Image.resizeImage();
 	}
 };
 
@@ -561,3 +512,48 @@ UIFactory["Image"].prototype.refresh = function()
 		this.displayView(dest,this.displayType[dest],this.display[dest]);
 	};		
 };
+
+
+var loadImageFile = function () {
+	var uploadImage = document.getElementById("upload-Image");
+	//check and retuns the length of uploded file.
+	if (uploadImage.files.length === 0) { 
+		return; 
+	}
+	//Is Used for validate a valid file.
+	var uploadFile = document.getElementById("upload-Image").files[0];
+	if (!filterType.test(uploadFile.type)) {
+		alert("Please select a valid image."); 
+		return;
+	}
+	fileReader.readAsDataURL(uploadFile);
+}
+
+var fileReader = new FileReader();
+var filterType = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+
+fileReader.onload = function (event) {
+	var image = new Image();
+	image.onload=function(){
+		document.getElementById("original-img").src = image.src;
+		var canvas = document.createElement("canvas");
+		var context = canvas.getContext("2d");
+		canvas.width = image.width/4;
+		canvas.height = image.height/4;
+		context.drawImage(image,0,0,image.width,image.height,0,0,canvas.width,canvas.height);
+		document.getElementById("upload-Preview").src = canvas.toDataURL("image/jpeg");
+		file = dataURLtoBlob(canvas.toDataURL())
+	}
+	image.src = event.target.result;
+};
+
+
+//==================================
+UIFactory["Image"].resizeImage = function()
+//==================================
+{
+	var html ="<div>Select Image - <input id='upload-Image' type='file' onchange='loadImageFile();' /></div>"
+	html += "<div>Origal Img - <img id='original-img'/></div>";
+	html += "<div>Compress Img - <img id='upload-Preview'/></div>";
+	$("#edit-window-body").append($(html));
+}

@@ -467,7 +467,7 @@ g_report_actions['cell'] = function (destid,action,no,data)
 					help_text = helps[j].substring(0,helps[j].indexOf("@"));
 			}
 		} else { // lang1/lang2/...
-			help_text = helps[langcode];  // lang1/lang2/...
+			help_text = helps[LANGCODE];  // lang1/lang2/...
 		}
 		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
 		$("#help_"+destid+'-'+no).html(help);
@@ -999,7 +999,12 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				inline = true;
 			//----------------------------
 			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+				try {
+					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+				} catch(e){
+					text = UICom.structure["ui"][nodeid].structured_resource.getView("dashboard_"+nodeid,null,null,true);
+				}
+				
 			}
 			if (selector.type=='resource code') {
 				text = UICom.structure["ui"][nodeid].resource.getCode();
@@ -1431,6 +1436,40 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 
 //=============================================================================
 //=============================================================================
+//======================== URL2PORTFOLIO ======================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['url2portfolio'] = function (destid,action,no,data)
+//==================================
+{
+	var nodeid = $(data).attr("id");
+	var uuid = "";
+	var label = "";
+	var style = r_replaceVariable($(action).attr("style"));
+	var cssclass = r_replaceVariable($(action).attr("class"));
+	var code = $(action).attr("code");
+	code = r_replaceVariable(code);
+	var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			uuid = $("asmRoot",data).attr("id");
+			label = $("label[lang='"+languages[LANGCODE]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",data)[0]).text();
+		}
+	});
+	text = "<span id='"+nodeid+"' style='"+style+"' class='URL2Portfolio-link "+cssclass+"' onclick=\"display_main_page('"+uuid+"')\">"+label+"</span>";
+	$("#"+destid).append($(text));
+	$("#"+nodeid).attr("style",style);
+}
+
+
+//=============================================================================
+//=============================================================================
 //======================== AGGREGATE ==========================================
 //=============================================================================
 //=============================================================================
@@ -1556,42 +1595,31 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 {
 	var xml_model = "";
+	var xml_model = "";
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&search="+model_code,
+		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
 		success : function(data) {
-			var items = $("portfolio",data);
-			var uuid = $(items[0]).attr('id');
+			var nodeid = $("asmRoot",data).attr("id");
+			// ---- transform karuta portfolio to report model
+			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
-				url : serverBCK_API+"/portfolios/portfolio/"+uuid,
+				url : urlS,
 				success : function(data) {
-					var nodeid = $("asmRoot",data).attr("id");
-					// ---- transform karuta portfolio to report model
-					var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
-					$.ajax({
-						type : "GET",
-						dataType : "xml",
-						url : urlS,
-						success : function(data) {
-							g_dashboard_models[model_code] = data;
-//							try {
-								r_processPortfolio(0,data,destid,node,0);
-//							}
-//							catch(err) {
-//								alertHTML("Error in Dashboard : " + err.message);
-//							}
-							$("#wait-window").hide();
-							$("#wait-window").modal('hide');
-						}
-					 });
+					g_dashboard_models[model_code] = data;
+					try {
+						r_processPortfolio(0,data,destid,node,0);
+					}
+					catch(err) {
+						alertHTML("Error in Dashboard : " + err.message);
+					}
+					$("#wait-window").hide();
+					$("#wait-window").modal('hide');
 				}
-			});
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
+			 });
 		}
 	});
 }
@@ -1616,7 +1644,7 @@ function report_getModelAndProcess(model_code,json)
 				success : function(data) {
 					var nodeid = $("asmRoot",data).attr("id");
 					// ---- transform karuta portfolio to report model
-					var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+karutaname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
+					var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
 					$.ajax({
 						type : "GET",
 						dataType : "xml",
@@ -1651,7 +1679,7 @@ function xml2PDF(content)
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
+	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
 	postAndDownload(urlS,data);
 }
 
@@ -1676,7 +1704,7 @@ function xml2RTF(content)
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
 	var url = window.location.href;
 	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+karutaname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
+	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
 	postAndDownload(urlS,data);
 }
 
@@ -1697,7 +1725,7 @@ function xml2CSV(content)
 	var data = $('#'+content).html();
 	data = data.replace('&nbsp;', ' ');
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"\">]><div>" + data + "</div>";
-	var url =  "../../../"+serverBCK+"/xsl?xsl="+karutaname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
+	var url =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
 	postAndDownload(url,data);
 }
 
@@ -1810,7 +1838,7 @@ function genDashboardContent(destid,uuid,parent,root_node)
 		alertHTML("Error in Dashboard : " + err.message);
 	}
 	if (spinning)
-		$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});					
+		$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});
 };
 
 //=========================================================================
