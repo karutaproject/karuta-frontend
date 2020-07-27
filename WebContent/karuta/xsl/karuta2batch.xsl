@@ -642,9 +642,7 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="source">
-			<xsl:call-template name='get-select'>
-				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
-			</xsl:call-template>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<update-url2portfolio type='URL2Portfolio' select="{$select}">
 			<source select="{$source}"/>

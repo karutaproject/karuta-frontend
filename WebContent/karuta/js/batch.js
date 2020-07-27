@@ -2485,25 +2485,15 @@ g_actions['update-url2portfolio'] = function update_url2portfolio(node)
 {
 	var ok = 0;
 	//------------ Source --------------------
-	var srce_url = getSourceUrl(node);
-	var sources = new Array();
+	var treeref = $("source",node).attr("select");
 	var sourceid = "";
 	$.ajax({
 		async : false,
 		type : "GET",
 		dataType : "xml",
-		url : srce_url,
+		url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag=root",
 		success : function(data) {
-			if (this.url.indexOf('/node/')>-1) {  // get by uuid
-				var results = $('*',data);
-				sources[0] = results[0];
-			} else {							// get by code and semtag
-				sources = $("node",data);
-			}
-			sourceid = $(sources[0]).attr('id');
-		},
-		error : function(data) {
-			$("#batch-log").append("<br>- ***SOURCE NOT FOUND <span class='danger'>ERROR</span>");
+			sourceid = $("asmRoot",data).attr('id');
 		}
 	});
 	//------------ Target --------------------
