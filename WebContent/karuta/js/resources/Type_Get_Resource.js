@@ -877,12 +877,17 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		html += "</form>";
 		var form = $(html);
 		html = "";
-		html += "<div class='auto-complete btn-group roles-choice select-"+semtag+"'>";
-		html += "<input id='button_"+self.id+"' type='text' class='btn btn-default select' code= '' value=''/>";
+		html += "<div class='input-group select-"+semtag+"'>";
+		html += "<input id='button_"+self.id+"' type='text' class='form-control' code= '' value=''/>";
+		html += "</div>";
+		var input_group = $(html);
+		$(form).append($(input_group));
+		html = "";
+		html += "<div class='input-group-append'>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
 		var btn_group = $(html);
-		$(form).append($(btn_group));
+		$(input_group).append($(btn_group));
 		$("#"+destid).append(form);
 		//---------------------------------------------------
 		
@@ -945,11 +950,11 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					if (display_label)
 						html += $(this).attr("label_"+languages[langcode]);
 					$("#button_"+self.id).html(html);
-					$("#button_"+self.id).attr("code",$('code',resource).text());
+					$("#button_"+self.id).attr("code",$(this).attr("code"));
 					$("#button_"+self.id).attr("value",html);
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 					for (var j=0; j<languages.length;j++){
-						$("#button_"+self.id).attr("label_"+languages[j],$(srce+"[lang='"+languages[j]+"']",resource).text());
+						$("#button_"+self.id).attr("label_"+languages[j],$(this).attr("label_"+languages[j]));
 					}
 					//--------------------------------
 				});

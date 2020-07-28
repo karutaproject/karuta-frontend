@@ -162,7 +162,7 @@
 		.welcome-box {
 			margin-left:auto;
 			margin-right:auto;
-			width:50%;
+			width:80%;
 			min-width:200px;
 			padding:3px;
 			border:1px solid var(--list-welcome-box-border-color);
@@ -190,14 +190,6 @@
 			color: var(--list-welcome-subtitle-color);
 			font-size:150%;
 			text-align: center;
-		}
-		@media only screen and (max-width: 320px) {
-			.welcome-title {
-				font-size: 100%;
-			}
-			.welcome-baseline {
-				font-size: 75%;
-			}
 		}
 	}
 
