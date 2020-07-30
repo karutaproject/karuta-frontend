@@ -49,7 +49,7 @@ function fill_main_page(rootid,role)
 			Accept: "application/xml",
 			type : "GET",
 			dataType : "xml",
-			url : serverBCK_API+"/credential/group/" + g_portfolioid,
+			url : serverBCK_API+"/groups/" + g_portfolioid,
 			success : function(data) {
 				var usergroups = $("group",data);
 				for (var i=0;i<usergroups.length;i++) {

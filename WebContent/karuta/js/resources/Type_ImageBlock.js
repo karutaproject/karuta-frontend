@@ -28,10 +28,14 @@ UIFactory["ImageBlock"] = function( node )
 	this.type = 'ImageBlock';
 	//--------------------
 	this.image_node = $("asmContext:has(metadata[semantictag='imgblock-image'])",node);
+	if (this.image_node.length==0)
+		this.image_node = $("asmContext:has(metadata[semantictag='image'])",node);		
 	this.image_nodeid = this.image_node.attr('id');
 	this.image_editresroles = ($(this.image_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.image_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
 	this.cover_node = $("asmContext:has(metadata[semantictag='imgblock-cover'])",node);
+	if (this.cover_node.length==0)
+		this.cover_node = $("asmContext:has(metadata[semantictag='cover'])",node);		
 	this.cover_nodeid = this.cover_node.attr('id');
 	this.cover_editresroles = ($(this.cover_node[0].querySelector("metadata-wad")).attr('editresroles')==undefined)?'':$(this.cover_node[0].querySelector("metadata-wad")).attr('editresroles');
 	//--------------------
@@ -84,7 +88,7 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";
 		html += "<div id='image_"+this.id+"' class='ImgBlock' style=\""+style+"\">";
-		style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		style = UICom.structure["ui"][this.id].getLabelStyle(this.id);
 		if (UICom.structure["ui"][this.id].getLabel(null,'none').indexOf('ImageBlock')<0 && UICom.structure["ui"][this.id].getLabel(null,'none')!='')
 			html += "<div id='label_"+this.id+"' class='block-title' style=\""+style+"\">"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
 		html += "</div>";

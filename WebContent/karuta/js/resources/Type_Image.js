@@ -487,7 +487,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 		//---------------------
 		$("#"+destid).append(htmlFormObj);
 		//---------------------
-		UIFactory.Image.resizeImage(this.id);
+//		UIFactory.Image.resizeImage(this.id);
 	}
 };
 

@@ -217,11 +217,11 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	}
 	//--------------------------------------------------------------------------------------------
 	if (type=='portfoliogroup') {
-		html += "	<div class='portfoliogroup-portfolio-label' >"+portfolio_label+" "+tree_type+" <span class='fas fa-trash' onclick=\"UIFactory.PortfoliosGroup.remove('"+gid+"','"+this.id+"')\"></span></div>";
+		html += "	<div class='portfoliogroup-portfolio-label' >"+portfolio_label+" <span class='fas fa-trash' onclick=\"UIFactory.PortfoliosGroup.confirmRemove('"+gid+"','"+this.id+"')\"></span></div>";
 	}
 	//--------------------------------------------------------------------------------------------
 	if (type=='portfoliogroup-portfolio') {
-		html += "	<div class='portfoliogroup-portfolio-label' >"+portfolio_label+" "+tree_type+"</div>";
+		html += "	<div class='portfoliogroup-portfolio-label' >"+portfolio_label+"</div>";
 	}
 	//--------------------------------------------------------------------------------------------
 	if (type=='card') {
@@ -935,7 +935,7 @@ UIFactory["Portfolio"].callRenameInstantiate = function(portfolioid,langcode,pro
 	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Close']+"</button>";
 	var self = portfolios_byid[portfolioid];
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['rename-move']);
+	$("#edit-window-title").html(karutaStr[LANG]['button-instantiate']);
 	var div = $("<div></div>");
 	var htmlFormObj = $("<form class='form-horizontal'></form>");
 	$(div).append($(htmlFormObj));
@@ -1094,7 +1094,7 @@ UIFactory["Portfolio"].callRenameCopy = function(portfolioid,langcode,project)
 	footer += "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Close']+"</button>";
 	var self = portfolios_byid[portfolioid];
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['rename-move']);
+	$("#edit-window-title").html(karutaStr[LANG]['button-duplicate']);
 	var div = $("<div></div>");
 	var htmlFormObj = $("<form class='form-horizontal'></form>");
 	$(div).append($(htmlFormObj));
@@ -1700,7 +1700,7 @@ UIFactory["Portfolio"].prototype.renamePortfolioCode = function(code)
 UIFactory["Portfolio"].displaySharingRoleEditor = function(destid,portfolioid,data,callFunction,instance)
 //==================================
 {
-	var groups = $("rolerightgroup",data);
+	var groups = $("rolerightsgroup",data);
 	if (groups.length>0) {
 		//--------------------------
 		$("#"+destid).append("<div id='special-roles'></div>")

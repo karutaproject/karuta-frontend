@@ -451,7 +451,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	}
 	else {
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles');
-		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
+		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',true);
 	}
 	this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
 	if (model)
@@ -486,10 +486,11 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',true);
 	//-----------------------------------------
-	if (semtag=='bubble_level1' && model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles',false,true);
+	if (semtag=='bubble_level1')
+		if (model)
+			this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles');
+		else
+			this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles',false,true);
 	//-----------------------------------------
 	if (this.resource_type=='Proxy' && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','edittargetroles');

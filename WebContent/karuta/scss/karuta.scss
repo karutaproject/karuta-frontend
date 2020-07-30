@@ -820,6 +820,7 @@
 	#navigation-bar,
 	.navbar-light .navbar-nav .nav-link,
 	.navbar-light .navbar-nav .nav-link:hover {
+		cursor:pointer;
 		color: var(--navbar-text-color);
 		background-color: var(--navbar-background-color);
 		.dropdown-menu {
@@ -869,6 +870,14 @@
 			padding-right : 0px;
 		}
 	
+		#toggle-mode,
+		a {
+			cursor:pointer;
+			.portfolio-label:hover {
+				cursor:pointer;
+			}
+		}
+	
 		#portfolio-container {
 			background-color: var(--portfolio-background-color);
 			
@@ -878,10 +887,6 @@
 		
 			a {
 				color: var(--portfolio-link-color);
-				cursor:pointer;
-				.portfolio-label:hover {
-					cursor:pointer;
-				}
 			}
 		
 			#contenu,

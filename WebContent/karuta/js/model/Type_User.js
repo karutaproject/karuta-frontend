@@ -432,12 +432,12 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	}
 	//--------------------------------------------------------------------------------------------
 	if (type=='usergroup') {
-		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+" <span class='fas fa-trash' onclick=\"UIFactory.UsersGroup.remove('"+gid+"','"+this.id+"')\"></span></div>";
+		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+" ("+this.username_node.text()+") <span class='fas fa-trash' onclick=\"UIFactory.UsersGroup.ConfirmRemove('"+gid+"','"+this.id+"')\"></span></div>";
 	}
 	//--------------------------------------------------------------------------------------------
 	if (type=='usergroup-user') {
 		html += "<div class='row user-row' id='usergroup-user_"+this.id+"' draggable='true' ondragstart='dragUser(event)'>";
-		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+"</div>";
+		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+" ("+this.username_node.text()+")</div>";
 		html += "</div>";
 	}
 	//--------------------------------------------------------------------------------------------
