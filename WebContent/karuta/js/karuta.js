@@ -66,6 +66,8 @@ function setDesignerRole(role)
 	USER.admin = false;
 	if (role=='')
 		role = 'designer';
+	if (role=='designer')
+		USER.admin = USER.admin_original;
 	g_userroles[0] = role;
 	fillEditBoxBody();
 	$("#userrole").html(role);

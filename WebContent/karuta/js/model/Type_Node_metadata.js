@@ -343,16 +343,18 @@ UIFactory["Node"].prototype.displayRights = function(destid)
 	roles_by_role = {};
 	var rights = this.getRights(this.id);
 	var roles = $("role",rights);
-	html += "<table id='rights'>";
-	html+= "<tr><td></td><td> Read </td><td> Write </td><td> Delete </td><td> Submit </td>";
-	for (var i=0;i<roles.length;i++){
-		var rolename = $(roles[i]).attr("name");
-		roles_by_role[rolename] = new RoleRights(roles[i],this.id);
+	if (roles.length>0) {
+		html += "<table id='rights'>";
+		html+= "<tr><td></td><td> Read </td><td> Write </td><td> Delete </td><td> Submit </td>";
+		for (var i=0;i<roles.length;i++){
+			var rolename = $(roles[i]).attr("name");
+			roles_by_role[rolename] = new RoleRights(roles[i],this.id);
+		}
+		for (role in roles_by_role) {
+			html += roles_by_role[role].getEditor();
+		}
+		html += "<table>";
 	}
-	for (role in roles_by_role) {
-		html += roles_by_role[role].getEditor();
-	}
-	html += "<table>";
 	$("#"+destid).append($(html));
 }
 
@@ -423,8 +425,11 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataAttributeEditor('metadata-part1','semantictag');
 	if (languages.length>1) { // multilingual application
 		this.displayMetadataAttributeEditor('metadata-part1','multilingual-node',true);
-		if (name=='asmContext' && semtag!="g-variable") {
-			this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true);
+		if (name=='asmContext') {
+			if (this.resource.type!=='Variable')
+				this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true);
+			else
+				this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true,true);
 		}
 	}
 	if (name=='asmContext' && this.resource.type=='URL2Unit')
@@ -433,7 +438,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 //		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
 //			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
 //	}
-	if (USER.admin && Object.keys(UICom.roles).length>2)
+	if (!model)
 		this.displayRights('metadata-rights');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
@@ -646,9 +651,9 @@ UIFactory["Node"].getMetadataEpm = function(data,attribute,number)
 			html += attribute.substring(8) + ":" + value;
 		else
 			html += attribute + ":" + value;
-		if (attribute.indexOf("font-size")>-1 && number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
+		if (attribute.indexOf("font-size")>-1 && number && value.indexOf('%')<0 && value.indexOf('em')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
 			html += 'px';			
-		else if (number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
+		else if (number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('em')<0 && value.indexOf('pt')<0)
 			html += 'px';
 		html += ';';
 	}	return html;

@@ -26,6 +26,8 @@ UIFactory["Variable"] = function( node )
 	this.name_node = $("name",$("asmResource[xsi_type='Variable']",node));
 	this.value_node = $("value",$("asmResource[xsi_type='Variable']",node));
 	this.display = {};
+	//--------------------
+	this.multilingual = false;
 };
 
 //==================================

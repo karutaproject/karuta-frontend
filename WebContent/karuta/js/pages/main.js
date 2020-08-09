@@ -44,7 +44,8 @@ function fill_main_page(rootid,role)
 	if (userrole=='undefined')
 		userrole = "";
 	//-------------------------------------------
-	if (!USER.admin) {
+	USER.admin = USER.admin_original; // reset if role playing when reload
+/*	if (!USER.admin) {
 		$.ajax({ // get group-role for the user
 			Accept: "application/xml",
 			type : "GET",
@@ -53,7 +54,14 @@ function fill_main_page(rootid,role)
 			success : function(data) {
 				var usergroups = $("group",data);
 				for (var i=0;i<usergroups.length;i++) {
-					g_userroles[i+1] = $("role",usergroups[i]).text();
+//					g_userroles[i+1] = $("role",usergroups[i]).text();
+					// -------------
+					g_userroles[i+1] = $("rolename",usergroups[i]).text();
+					if ($("rolename",usergroups[i]).text()=='designer') {
+						g_designerrole = true;
+						g_userroles[1] = 'designer';
+					}
+					// -------------
 				}
 				g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
 				if (g_userroles[1]=='designer')
@@ -72,7 +80,7 @@ function fill_main_page(rootid,role)
 		g_designerrole = true;
 		g_visible = localStorage.getItem('metadata');
 		toggleMetadata(g_visible);
-	}
+	}*/
 	//-------------------------------------------
 	var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
 	$.ajax({
@@ -86,6 +94,16 @@ function fill_main_page(rootid,role)
 			UICom.structure['ui'][g_portfolio_rootid].loaded = true;
 			var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
 			$("body").addClass(root_semantictag);
+			// --------------------------
+			var role = $("asmRoot",data).attr("role");
+			if (role!="") {
+				g_userroles[0] = g_userroles[1] = role;
+			} else {
+				g_userroles[0] = g_userroles[1] ='designer';
+				g_designerrole = true;
+				g_visible = localStorage.getItem('metadata');
+				toggleMetadata(g_visible);
+			}
 			// --------Display Type------------------
 			g_display_type = $("metadata[display-type]",data).attr('display-type');
 			if (g_display_type=="" || g_display_type==null || g_display_type==undefined)
@@ -105,6 +123,7 @@ function fill_main_page(rootid,role)
 			}
 			// --------------------------
 			UICom.parseStructure(data,true);
+			//-------------------------------------------------
 			for (role in UICom.roles)
 				g_roles[g_roles.length] = {'code':'','libelle':role};
 			//-------------------------------------------------

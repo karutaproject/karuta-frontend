@@ -245,7 +245,7 @@ UIFactory["Item"].update = function(itself,langcode)
 
 
 //==================================
-UIFactory["Item"].prototype.getEditor = function(type,langcode)
+UIFactory["Item"].prototype.getEditor = function(type,langcode,disabled)
 //==================================
 {
 	//---------------------
@@ -304,6 +304,14 @@ UIFactory["Item"].prototype.getEditor = function(type,langcode)
 	}
 	//------------------------
 	return htmlFormObj;
+};
+
+//==================================
+UIFactory["Item"].prototype.displayEditor = function(dest,type,langcode,disabled,translate)
+//==================================
+{
+	var obj = this.getEditor(type,langcode,disabled);
+	$("#"+dest).append(obj);
 };
 
 //==================================

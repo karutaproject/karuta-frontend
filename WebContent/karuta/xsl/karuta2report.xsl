@@ -254,7 +254,7 @@
 		</lastname>
 	</xsl:template>
 	<!-- ================ firstname-lastname ============================ -->
-	<xsl:template match="*[metadata/@semantictag='firstname-lastname']">
+	<xsl:template match="*[metadata/@semantictag='first-last-name']">
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
 		</xsl:variable>

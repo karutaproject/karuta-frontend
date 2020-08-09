@@ -97,15 +97,15 @@ UIFactory["Node"] = function( node )
 			this.semantictag='';
 		//--------------------
 		flag_error = 'g';
-		if ($("version",$("asmResource[xsi_type='nodeRes']",node)).length==0){  // for backward compatibility
+		if ($("version",$("asmResource[xsi_type='nodeRes']",node)[0]).length==0){  // for backward compatibility
 			var newelement = createXmlElement("version");
 			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
 		}
-		this.version_node = $("version",$("asmResource[xsi_type='nodeRes']",node));
+		this.version_node = $("version",$("asmResource[xsi_type='nodeRes']",node)[0]);
 		//--------------------
 		flag_error = 'h';
 		this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
-/*		if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
+		if (!this.multilingual && this.version_node.text()!="3.0") {  // for backward compatibility - if multilingual we set all languages
 			this.version_node.text("3.0");
 			var value1 = $(this.label_node[0]).text();
 			var value2 = $(this.context_text_node[0]).text();
@@ -114,7 +114,7 @@ UIFactory["Node"] = function( node )
 				$(this.context_text_node[langcode]).text(value2);
 			}
 			this.save();
-		}*/
+		}
 		//------------------------------
 		flag_error = 'i';
 		this.display = {}; // to refresh after changes
@@ -130,7 +130,7 @@ UIFactory["Node"] = function( node )
 		//------------------------------
 	}
 	catch(err) {
-		alertHTML("UIFactory['Node']--flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype+"--xsi_type:"+this.xsi_type);
+		alertHTML("UIFactory.Node -- flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype+"--xsi_type:"+this.xsi_type);
 	}
 };
 
@@ -461,6 +461,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	}
 	//-------------------- collapsible -------------------
 	if (this.collapsible=='Y') {
+		$("#collapsible_"+uuid).show();
 		$("#collapsible_"+uuid).html("<span id='toggleContent_"+uuid+"' class='button'></span>");
 		$("#collapsible_"+uuid).attr("onclick","javascript:toggleContent('"+uuid+"')");
 		if (this.collapsed=='Y') {
@@ -471,7 +472,8 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			$("#toggleContent_"+uuid).attr("class","fas fa-minus collapsible");
 			$("#content-"+uuid).show();
 		}
-	}
+	} else
+		$("#collapsible_"+uuid).hide();
 	//-------------- label --------------------------
 	var gotView = false;
 	var label_html = ""
@@ -1126,7 +1128,8 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 	if (type=='standard' || type=='translate' || type=='raw') {
 		for( var i=0;i<root.children.length;i++ )
 		{
-			var child = UICom.structure["tree"][root.children[i]].node;
+			UIFactory.Node.displaySidebarItem(root.children[i],destid,type,langcode,edit,parentid);
+			/*var child = UICom.structure["tree"][root.children[i]].node;
 			var name = child.tagName;
 			var uuid = $(child).attr("id");
 			var text = UICom.structure["ui"][uuid].getLabel('sidebar_'+uuid,'span');
@@ -1173,10 +1176,64 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					$("#"+destid).append($(html));
 					UIFactory["Node"].displaySidebar(UICom.structure["tree"][root.children[i]],'panel-body'+uuid,type,langcode,g_edit,uuid);
 				}
-			}
+			}*/
 		}
 	}};
 
+	//===========================================
+	UIFactory["Node"].displaySidebarItem = function(itemid,destid,type,langcode,edit,parentid)
+	//===========================================
+	{
+		var child = UICom.structure["tree"][itemid].node;
+		var name = child.tagName;
+		var uuid = $(child).attr("id");
+		var text = UICom.structure["ui"][uuid].getLabel('sidebar_'+uuid,'span');
+		var node = UICom.structure["ui"][uuid];
+		var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
+		var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
+		var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+		var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+		if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
+			if(name == "asmUnit") // Click on Unit
+			{
+				var html = "";
+				var depth = 99;
+				html += "<div class='sidebar-item ";
+				if (privatevalue)
+					html+= "private"
+				html += "' id='parent-"+uuid+"' role='tablist'>";
+				html += "  <a style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='sidebar-link' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</a>";
+				html += "</div><!-- panel -->";
+				$("#"+destid).append($(html));
+			}
+			if(name == "asmStructure" || name == "asmRoot") // Click on Structure
+			{
+				var depth = 1;
+				var html = "";
+				html += "<div class='sidebar-item ";
+				if (privatevalue)
+					html+= "private"
+				html += "' id='parent-"+uuid+"' role='tablist'>";
+				html += "  <div  class='sidebar-link' style='cursor:pointer' redisplay=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >";
+				if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
+					html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='fas fa-minus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
+				else
+					html += "  <small ><span onclick=\"toggleSidebarPlusMinus('"+uuid+"')\" id='toggle_"+uuid+"' class='fas fa-plus' style='float:right;padding-left:5px;margin-right:5px;'></span></small>";
+				html += "  <a class='sidebar-link' href='#' onclick=\"toggleSidebarPlus('"+uuid+"');displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+				html += "  </div>"
+				if (localStorage.getItem('sidebar'+uuid)!=undefined && localStorage.getItem('sidebar'+uuid)=='open')
+					html += "<div id='collapse"+uuid+"' class='panel-collapse collapse show' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
+				else
+					html += "<div id='collapse"+uuid+"' class='panel-collapse collapse' role='tabpanel' aria-labelledby='sidebar_"+uuid+"'>";
+				html += "<div id='panel-body"+uuid+"' class='panel-body'></div><!-- panel-body -->";
+				html += "</div><!-- panel-collapse -->";
+				html += "</div><!-- panel -->";
+				$("#"+destid).append($(html));
+				UIFactory["Node"].displaySidebar(UICom.structure["tree"][itemid],'panel-body'+uuid,type,langcode,g_edit,uuid);
+			}
+		}
+
+	}
 	//----------------------------------------------------------------------------------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------------
 	//----------------------- HORIZONTAL MENU ------------------------------------------------------------------------------------
@@ -1872,7 +1929,7 @@ UIFactory["Node"].displayBlocks = function(root,dest,depth,langcode,edit,inline,
 					});
 				}
 		} else
-				UIFactory["Node"].displayNode(type,child,'column_'+blockid,this.depth-1,langcode,edit,inline,backgroundParent,root,menu,true);
+				UIFactory.Node.displayNode('standard',child,'column_'+blockid,this.depth-1,langcode,edit,inline,backgroundParent,root,menu,true);
 		}
 	}
 }

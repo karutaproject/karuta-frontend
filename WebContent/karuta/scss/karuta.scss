@@ -25,7 +25,7 @@
 	body {
 		font-family :var(--font-family);
 		font-size :calc(var(--font-size-coeff) * 1rem);
-		background-color: var(--list-background-color);
+//		background-color: var(--list-background-color);
 	}
 
 	// ----General font size ---------------
@@ -807,7 +807,7 @@
 //			float:left;
 		}
 		a.text-button {
-			font-size:calc(var(--font-size-coeff) * 1rem);
+			font-size:calc(var(--font-size-coeff) * 0.9rem);
 			margin-top:2px;
 		}
 	}
@@ -1194,6 +1194,47 @@
 		}
 	}
 
+/* ====================
+	Image
+   ====================*/
+	.clickable img {
+		cursor:pointer;
+	}
+
+/* ====================
+	Calendar
+   ====================*/
+	.calendar-format {
+		margin-top:10px;
+	}
+	
+	.container .Calendar .form-group {
+		margin-bottom:0px;
+	}
+	
+	.container .calendar-format {
+		display:none;
+	}
+
+/* ====================
+	SendEmail
+   ====================*/
+
+	.receiver_SendEmail{
+		font-size:calc(var(--font-size-coeff) * 1rem);
+		margin-bottom:20px;
+		background-color: lightgrey;
+		padding: 5px;
+	}
+	
+	.name_SendEmail {
+		font-weight:bold;
+	}
+	
+	.email_SendEmail {
+	}
+
+
 /* ====================== */
 /*     FIRST NODE         */
 /* ====================== */
@@ -1517,7 +1558,8 @@
 		padding-top:15px;
 	}
 
-	.standard-node-card {
+	.standard-node-card,
+	.standard-resource-card {
 		margin:15px;
 	}
 
@@ -1539,7 +1581,7 @@
 		}
 		.menus {
 			float:right;
-			margin-top:-10px;
+			margin-top:-7px;
 		}
 	}
 
@@ -1562,6 +1604,7 @@
 
 	.row.content {
 		padding-top:0px;
+		padding-left:15px;
 	}
 
 	.row.content.card-body {
@@ -1581,7 +1624,7 @@
 		.card.col-md-11 {
 			padding-left:0px;
 			padding-right:0px;
-			margin-left:15px;
+			margin-left:5px;
 			margin-top:15px;
 		}
 
@@ -1669,6 +1712,19 @@
 		text-align:right;
 	}
 
+/* ========================= */
+/*     VUE  SIMPLE           */
+/* ========================= */
+
+	.td1 {
+		width:40%;
+	}
+	.td2 {
+		width:50%;
+	}
+	.td3 {
+		width:10%;
+	}
 /* ====================== */
 /*         MODEL          */
 /* ====================== */	
@@ -1705,6 +1761,7 @@
 
 	.csv-button,
 	.pdf-button,
+	.rtf-button,
 	.img-button {
 		background-color: var(--portfolio-buttons-background-color);
 		border:1px solid var(--portfolio-resource-border-color);
@@ -2541,39 +2598,6 @@ table.tablesorter th.restore {
 		min-height:34px;
 		width:90%;
 		padding-left:40px;
-	}
-
-/* ====================
-	Calendar
-   ====================*/
-	.calendar-format {
-		margin-top:10px;
-	}
-	
-	.container .Calendar .form-group {
-		margin-bottom:0px;
-	}
-	
-	.container .calendar-format {
-		display:none;
-	}
-
-/* ====================
-	SendEmail
-   ====================*/
-
-	.receiver_SendEmail{
-		font-size:calc(var(--font-size-coeff) * 1rem);
-		margin-bottom:20px;
-		background-color: lightgrey;
-		padding: 5px;
-	}
-	
-	.name_SendEmail {
-		font-weight:bold;
-	}
-	
-	.email_SendEmail {
 	}
 
 

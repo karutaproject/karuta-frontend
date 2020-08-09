@@ -19,17 +19,23 @@ if( UIFactory === undefined )
   var UIFactory = {};
 }
 
- var documentIcon = {};
- documentIcon['png'] = "<i class='icon-picture'></i>";
- documentIcon['gif'] = "<i class='icon-picture'></i>";
- documentIcon['jpg'] = "<i class='icon-picture'></i>";
- documentIcon['mp4'] = "<i class='icon-film'></i>";
- documentIcon['doc'] = "<i class='icon-file'></i>";
- documentIcon['docx'] = "<i class='icon-file'></i>";
- documentIcon['xls'] = "<i class='icon-file'></i>";
- documentIcon['xlsx'] = "<i class='icon-file'></i>";
- documentIcon['pdf'] = "<i class='icon-file'></i>";
- 
+var documentIcon = {};
+documentIcon['.doc'] = "../../karuta/img/word.png";
+documentIcon['.docx'] = "../../karuta/img/word.png'";
+documentIcon['.xls'] = "../../karuta/img/excel.png";
+documentIcon['.xlsx'] = "../../karuta/img/excel.png";
+documentIcon['.ppt'] = "../../karuta/img/powerpoint.png";
+documentIcon['.pptx'] = "../../karuta/img/powerpoint.png";
+documentIcon['.pdf'] = "../../karuta/img/pdf.png";
+documentIcon['.js'] = "../../karuta/img/js.png";
+documentIcon['.txt'] = "../../karuta/img/text.png";
+documentIcon['.jpg'] = "../../karuta/img/jpeg.png";
+documentIcon['.gif'] = "../../karuta/img/gif.png";
+documentIcon['.png'] = "../../karuta/img/png.png";
+documentIcon['.xml'] = "../../karuta/img/xml.png";
+documentIcon['.htm'] = "../../karuta/img/html.png";
+documentIcon['.html'] = "../../karuta/img/html.png";
+documentIcon['.png'] = "../../karuta/img/png.png";
 
  
 /// Define our type
@@ -141,19 +147,6 @@ UIFactory["Document"].prototype.getAttributes = function(type,langcode)
 UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
-	var documentIcon = {};
-	documentIcon['.doc'] = "../../karuta/img/word.png";
-	documentIcon['.docx'] = "../../karuta/img/word.png'";
-	documentIcon['.xls'] = "../../karuta/img/excel.png";
-	documentIcon['.xlsx'] = "../../karuta/img/excel.png";
-	documentIcon['.ppt'] = "../../karuta/img/powerpoint.png";
-	documentIcon['.pptx'] = "../../karuta/img/powerpoint.png";
-	documentIcon['.pdf'] = "../../karuta/img/pdf.png";
-	documentIcon['.js'] = "../../karuta/img/js.png";
-	documentIcon['.txt'] = "../../karuta/img/text.png";
-	documentIcon['.jpg'] = "../../karuta/img/jpeg.png";
-	documentIcon['.gif'] = "../../karuta/img/gif.png";
-	documentIcon['.png'] = "../../karuta/img/png.png";
 
 	//---------------------
 	if (langcode==null)
@@ -184,6 +177,12 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			case ".pptx" :
 			case ".pdf" :
 			case ".js" :
+			case ".xml" :
+			case ".jpg" :
+			case ".htm" :
+			case ".html" :
+			case ".png" :
+			case ".gif" :
 				break;
 			default :
 				extension = ".txt";

@@ -66,7 +66,7 @@ UIFactory["Field"] = function( node )
 		for (var langcode=0; langcode<languages.length; langcode++) {
 			$(this.text_node[langcode]).text($(this.text_node[0]).text());
 		}
-		this.save();
+		this.save(true);
 	}
 	//--------------------
 };
@@ -168,10 +168,12 @@ UIFactory["Field"].prototype.displayEditor = function(dest,type,langcode,disable
 };
 
 //==================================
-UIFactory["Field"].prototype.save = function()
+UIFactory["Field"].prototype.save = function(version)
 //==================================
 {
-	if (UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="") {
+	if (version ==null)
+		version = false;
+	if (!version && UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="") {
 		$(this.user_node).text(USER.firstname+" "+USER.lastname);
 		UICom.structure.ui[this.id].log();
 	}

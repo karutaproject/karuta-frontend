@@ -372,7 +372,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 						if (display_label)
 							html += $(this).attr("label_"+languages[langcode]);
 						$("#button_"+langcode+self.id).html(html);
-						$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+						$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code).addClass(code);
 						UIFactory["Get_Resource"].update(this,self,langcode);
 						//--------------------------------
 					});
@@ -385,7 +385,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					if (display_label)
 						html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 					$("#button_"+langcode+self.id).html(html);
-					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code).addClass(code);
 				}
 				$(select).append($(select_item));
 			}
@@ -404,7 +404,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				var select_item = $(html);
 				$(select_item).click(function (ev){
 					$("#button_"+langcode+self.id).html($(this).attr("label_"+languages[langcode]));
-					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code).addClass(code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
 				//-------------- update button -----
@@ -412,7 +412,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					var html = "";
 					html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 					$("#button_"+langcode+self.id).html(html);
-					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code).addClass(code);
 				}
 				$(select_item).append($(select_item))
 				$(select).append($(select_item));
@@ -452,7 +452,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
 					$("#button_"+langcode+self.id).html(UICom.structure["ui"][$(this).attr("label_"+languages[langcode]).substring(7)].resource.getView());
-					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code).addClass(code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
 				$(select_item).append($(select_item_a))
@@ -465,7 +465,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					if (display_label)
 						html += UICom.structure["ui"][uuid].resource.getView(null,'span');
 					$("#button_"+langcode+self.id).html(html);
-					$("#button_"+langcode+self.id).attr('class', 'btn  select selected-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn  select selected-label').addClass("sel"+code).addClass(code);
 				}
 			}
 		}
@@ -504,7 +504,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
 					$("#button_"+langcode+self.id).html(UICom.structure["ui"][$(this).attr("label_"+languages[langcode]).substring(7)].resource.getView());
-					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code).addClass(code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
 				$(select_item).append($(select_item_a))
@@ -517,7 +517,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					if (display_label)
 						html += UICom.structure["ui"][uuid].resource.getView(null,'span');
 					$("#button_"+langcode+self.id).html(html);
-					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code).addClass(code);
 				}
 			}
 		}		//---------------------

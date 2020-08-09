@@ -422,10 +422,10 @@ karutaStr['fr']['alternative-label']="Libellé alternatif";
 karutaStr['fr']['sent-by']="Envoyé par";
 karutaStr['fr']['dashboard-code']="Code du rapport";
 karutaStr['fr']['report-code']="Code du rapport";
-karutaStr['fr']['csv']="Rôles - Afficher CSV";
-karutaStr['fr']['pdf']="Rôles - Afficher PDF";
-karutaStr['fr']['rtf']="Rôles - Afficher RTF";
-karutaStr['fr']['img']="Rôles - Afficher Image";
+karutaStr['fr']['csv']="Rôles - Bouton CSV";
+karutaStr['fr']['pdf']="Rôles - Bouton PDF";
+karutaStr['fr']['rtf']="Rôles - Bouton RTF";
+karutaStr['fr']['img']="Rôles - Bouton PNG";
 karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
 karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + g_configVar['maxfilesizeupload'] + " Mo sont autorisés !";
 
@@ -557,7 +557,7 @@ karutaStr['fr']['var-value']="Valeur de la variable";
 
 karutaStr['fr']['asmColumn']="asmColumn";
 
-karutaStr['fr']['startday']="Date de début";
+karutaStr['fr']['startday']="Moment d'exécution";
 karutaStr['fr']['time']="Heure (HH:MM)";
 karutaStr['fr']['freq']="Fréquence";
 karutaStr['fr']['execroles']="Rôles - Exécuter";

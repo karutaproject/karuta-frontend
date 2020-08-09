@@ -179,7 +179,8 @@ function displayOnePage()
 					success : function(data) {
 						var usergroups = $("group",data);
 						for (var i=0;i<usergroups.length;i++) {
-							g_userroles[i+1] = $("role",usergroups[i]).text();
+//							g_userroles[i+1] = $("role",usergroups[i]).text();
+							g_userroles[i+1] = $("rolename",usergroups[i]).text();
 						}
 						g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
 						if (g_userroles[1]=='designer')

@@ -422,10 +422,10 @@ karutaStr['en']['alternative-label']="Alternative Label";
 karutaStr['en']['sent-by']="Sent by";
 karutaStr['en']['dashboard-code']="Dashboard Code";
 karutaStr['en']['report-code']="Report Code";
-karutaStr['en']['csv']="Roles - Display CSV";
-karutaStr['en']['pdf']="Roles - Display PDF";
-karutaStr['en']['rtf']="Rôles - Display RTF";
-karutaStr['en']['img']="Rôles - Display Image";
+karutaStr['en']['csv']="Roles - Button CSV";
+karutaStr['en']['pdf']="Roles - Button PDF";
+karutaStr['en']['rtf']="Rôles - Button RTF";
+karutaStr['en']['img']="Rôles - Button PNG";
 karutaStr['en']['document-required']="You have to specify a document before to submit !";
 karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g_configVar['maxfilesizeupload'] + " Mo !";
 
@@ -557,7 +557,7 @@ karutaStr['en']['var-value']="Variable Value";
 
 karutaStr['en']['asmColumn']="asmColumn";
 
-karutaStr['en']['startday']="Start day";
+karutaStr['en']['startday']="Execution Time";
 karutaStr['en']['time']="Time (HH:MM)";
 karutaStr['en']['freq']="Frequency";
 karutaStr['en']['execroles']="Roles - Execute";
