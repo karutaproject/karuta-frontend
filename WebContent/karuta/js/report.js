@@ -113,15 +113,15 @@ function r_getSelector(select,test)
 	 test = "";
 	//-------------------------
 	var unique = null;
-	if (test.indexOf(".uniqueNodeLabel"))
+	if (test.indexOf(".uniqueNodeLabel")>-1)
 		unique = "uniqueNodeLabel";
-	if (test.indexOf(".uniqueNodeCode"))
+	if (test.indexOf(".uniqueNodeCode")>-1)
 		unique = "uniqueNodeCode";
-	if (test.indexOf(".uniqueResourceCode"))
+	if (test.indexOf(".uniqueResourceCode")>-1)
 		unique = "uniqueResourceCode";
-	if (test.indexOf(".uniqueResourceValue"))
+	if (test.indexOf(".uniqueResourceValue")>-1)
 		unique = "uniqueResourceValue";
-	if (test.indexOf(".uniqueResource"))
+	if (test.indexOf(".uniqueResource")>-1)
 		unique = "uniqueResource";
 	//-------------------------
 	var selects = select.split("."); // nodetype.semtag.[node|resource] or .[node|resource]
