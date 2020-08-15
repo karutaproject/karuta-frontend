@@ -181,8 +181,8 @@ karutaStr['en']['width']="Width (px)";
 karutaStr['en']['height']="Height (px)";
 karutaStr['en']['public']="Public";
 karutaStr['en']['text-align']="Alignment";
-karutaStr['en']['displayview']="Display View";
-karutaStr['en']['displayitselforg']="Display Type";
+karutaStr['en']['displayview']="View Type";
+karutaStr['en']['displayitselforg']="Display Width";
 karutaStr['en']['displaychildorg']="Content Display Type";
 karutaStr['en']['margin-top']="Margin Top (px)";
 karutaStr['en']['sharedResource']="Shared Resource";
@@ -204,6 +204,7 @@ karutaStr['en']['moveinroles']="Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
 karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
+karutaStr['en']['layout']="Layout";
 karutaStr['en']['node']="Node";
 karutaStr['en']['node-content']="Node Content";
 karutaStr['en']['node-label']="Node Label";
@@ -420,7 +421,7 @@ karutaStr['en']['message']="Message";
 karutaStr['en']['email-sent']="The message has been sent.";
 karutaStr['en']['alternative-label']="Alternative Label";
 karutaStr['en']['sent-by']="Sent by";
-karutaStr['en']['dashboard-code']="Dashboard Code";
+karutaStr['en']['dashboard-code']="Report Portfolio Code";
 karutaStr['en']['report-code']="Report Code";
 karutaStr['en']['csv']="Roles - Button CSV";
 karutaStr['en']['pdf']="Roles - Button PDF";
@@ -566,3 +567,13 @@ karutaStr['en']['exec']="Execute Now";
 karutaStr['en']['uploaded-by']="Uploaded by";
 karutaStr['en']['date']="Date";
 karutaStr['en']['file']="File";
+
+karutaStr['en']['coverage']="Coverage";
+
+//=========================================
+//========== LOGIN ====================
+//=========================================
+
+karutaStr['fr']['connection-cas1']="Connection with University Account";
+karutaStr['fr']['connection-cas2']="Connection without University Account";
+

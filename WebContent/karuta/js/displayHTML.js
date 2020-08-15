@@ -21,12 +21,12 @@ displayOrg["asmUnitStructure"] = {};
 displayOrg["asmContext"] = {};
 
 //              node type   parent         child
-displayOrg["asmStructure"]["default"] =["default","row","row-cols-2","row-cols-3","row-cols-4","row-cols-5","row-cols-6","card-deck"];
+displayOrg["asmStructure"]["default"] =[];
 displayOrg["asmStructure"]["strdefault"] =["default","row","row-cols-2","row-cols-3","row-cols-4","row-cols-5","row-cols-6","card-deck"];
 
 //          node type  parent           child
-displayOrg["asmUnit"]["default"] = ["default","row","row-cols-2","row-cols-3","row-cols-4","row-cols-5","row-cols-6","card-deck"];
-displayOrg["asmUnit"]["strdefault"] = ["default","row","row-cols-2","row-cols-3","row-cols-4","row-cols-5","row-cols-6","card-deck"];
+displayOrg["asmUnit"]["default"] = [];
+displayOrg["asmUnit"]["strdefault"] = ["default","row","2 colums","3 colums","4 colums","5 colums","6 colums","card-deck"];
 
 displayOrg["asmUnit"]["row"] = ["col-md-1","col-md-2","col-md-3","col-md-4","col-md-5","col-md-6","col-md-7","col-md-8","col-md-9","col-md-10","col-md-11","col-md-12"];
 displayOrg["asmUnit"]["strrow"] = ["1/12 (col-md-1)","2/12  (col-md-2)","3/12  (col-md-3)","4/12 (col-md-4)","5/12 (col-md-5)","6/12 (col-md-6)","7/12 (col-md-7)","8/12 (col-md-8)","9/12 (col-md-9)","10/12 (col-md-10)","11/12 (col-md-11)"];
@@ -45,7 +45,7 @@ displayOrg["asmUnit"]["strcard-deck"] = ["card"];
 
 //             node type        org parent              org child
 displayOrg["asmUnitStructure"]["children"] = ["default","row","row row-cols-2","row row-cols-3","row row-cols-4","row row-cols-5","row row-cols-6","card-deck"];
-displayOrg["asmUnitStructure"]["strchildren"] = ["default","row","2 colums","3 colums","4 colums","5 colums","6 colums","card-deck"];
+displayOrg["asmUnitStructure"]["strchildren"] = ["default","row","2 columns (row row-cols-2)","3 columns (row row-cols-3)","4 columns (row row-cols-4)","5 columns (row row-cols-5)","6 columns (row row-cols-6)","card-deck"];
 
 displayOrg["asmUnitStructure"]["default"] = ["default"];
 displayOrg["asmUnitStructure"]["strdefault"] = ["default"];
@@ -84,7 +84,9 @@ displayOrg["asmContext"]["strrow-cols-6"] = ["col"];
 //           viewtype   node type               pre
 displayView["standard"]["asmContext"] = ["default","xwide","card","simple"];
 displayView["standard"]["asmUnitStructure"] = ["default","xwide","card"];
-displayView["standard"]["asmUnit"] = ["default","xwide"];
+displayView["standard"]["asmUnit"] = [];
+displayView["standard"]["asmStructure"] = [];
+displayView["standard"]["asmRoot"] = [];
 
 
 displayView["model"] = {};
@@ -193,7 +195,7 @@ displayHTML["standard-resource-simple"] =	"<div id='node_#uuid#' class='#display
 											"		<table width='100%'><tr>" +
 											"			<td class='td1'><span name='res-lbl-div' id='label_node_#uuid#' class='label-libelle'/><span id='help_#uuid#' class='ihelp'/></td>" +
 											"			<td class='td2'>" +
-											"				<div id='resource_#uuid#' class='resource'></div>" +
+											"				<div id='resource_#uuid#'  name='res-div' class='resource'></div>" +
 											"			</td>" +
 											"			<td class='td3'><span id='buttons-#uuid#' class='buttons edit-bar'/></td>" +
 											"		</tr></table>" +

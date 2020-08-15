@@ -181,8 +181,8 @@ karutaStr['fr']['width']="Largeur (px)";
 karutaStr['fr']['height']="Hauteur (px)";
 karutaStr['fr']['public']="Public";
 karutaStr['fr']['text-align']="Alignement";
-karutaStr['fr']['displayview']="Type de Vue";
-karutaStr['fr']['displayitselforg']="Type d'affichage";
+karutaStr['fr']['displayview']="Type de vue";
+karutaStr['fr']['displayitselforg']="Largeur d'affichage";
 karutaStr['fr']['displaychildorg']="Type d'affichage du contenu";
 karutaStr['fr']['margin-top']="Marge supérieure (px)";
 karutaStr['fr']['sharedResource']="Ressource partagée";
@@ -204,6 +204,7 @@ karutaStr['fr']['moveinroles']="Déplacer";
 karutaStr['fr']['othercss']="Autres instructions CSS";
 karutaStr['fr']['cssfile']="Fichier CSS";
 karutaStr['fr']['display-type']="Type de présentation";
+karutaStr['fr']['layout']="Disposition";
 karutaStr['fr']['node']="Noeud";
 karutaStr['fr']['node-content']="Contenu du noeud";
 karutaStr['fr']['node-label']="Libellé du noeud";
@@ -420,7 +421,7 @@ karutaStr['fr']['message']="Message";
 karutaStr['fr']['email-sent']="Le message a été envoyé.";
 karutaStr['fr']['alternative-label']="Libellé alternatif";
 karutaStr['fr']['sent-by']="Envoyé par";
-karutaStr['fr']['dashboard-code']="Code du rapport";
+karutaStr['fr']['dashboard-code']="Code du portfolio rapport";
 karutaStr['fr']['report-code']="Code du rapport";
 karutaStr['fr']['csv']="Rôles - Bouton CSV";
 karutaStr['fr']['pdf']="Rôles - Bouton PDF";
@@ -566,6 +567,8 @@ karutaStr['fr']['exec']="Exécuter maintenant";
 karutaStr['fr']['uploaded-by']="Téléversé par";
 karutaStr['fr']['date']="Date";
 karutaStr['fr']['file']="Fichier";
+
+karutaStr['fr']['coverage']="Couverture";
 
 //=========================================
 //========== LOGIN ====================

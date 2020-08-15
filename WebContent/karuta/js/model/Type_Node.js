@@ -1037,7 +1037,7 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 				dataType : "xml",
 				url : serverBCK_API+"/nodes/node/"+uuid,
 				success : function(data) {
-					//------------------------------
+					//------------------------------------------
 					var code = $($("code",data)[0]).text();
 					var label = [];
 					for (var i=0; i<languages.length;i++){
@@ -1049,6 +1049,8 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 						}
 					}
 					var nbcode = code.match(/\d+$/);
+					if (nbcode!=null)
+						nbcode = nbcode[0];
 					if ($.isNumeric(nbcode)) {
 						nbcode++;
 						code = code.replace(/\d+$/,nbcode);
@@ -1066,8 +1068,45 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 						data : xml,
 						url : serverBCK_API+"/nodes/node/" + uuid + "/noderesource",
 						success : function(data) {
-							$("#wait-window").modal('hide');			
-							UIFactory.Node.reloadUnit();
+							//------------------------------------------
+							if ($(":root",data)[0]!=undefined && $(":root",data)[0].tagName=='asmContext') {
+								resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data);
+								if ($(resource).attr("xsi_type")=="Item") {
+									var code = $('code',resource).text();
+									var nbcode = code.match(/\d+$/);
+									if (nbcode!=null)
+										nbcode = nbcode[0];
+									if ($.isNumeric(nbcode)) {
+										nbcode++;
+										code = code.replace(/\d+$/,nbcode);
+										$("code",resource).text(code);
+										var data = xml2string($(resource)[0]);
+										var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+										var urlS = serverBCK_API+'/resources/resource/'+uuid;
+										$.ajax({
+											async:false,
+											type : "PUT",
+											dataType : "text",
+											contentType: "application/xml",
+											url : urlS,
+											data : strippeddata,
+											success : function (data){
+												$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+												$("#wait-window").modal('hide');			
+												UIFactory.Node.reloadUnit();
+											},
+											error : function(jqxhr,textStatus) {
+												alert("Error in duplicate rename : "+jqxhr.responseText);
+											}
+										});
+									}
+								}
+							} else {
+								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+								$("#wait-window").modal('hide');			
+								UIFactory.Node.reloadUnit();
+							}
+							//------------------------------------------
 						},
 						error : function(jqxhr,textStatus) {
 							alert("Error in duplicate rename : "+jqxhr.responseText);

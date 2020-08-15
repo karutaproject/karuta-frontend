@@ -64,51 +64,6 @@ body,
   color: var(--list-button-background-color);
 }
 
-.dropdown.menu .btn {
-  height: 25px;
-  padding-left: 9px;
-  padding-right: 9px;
-}
-
-.dropdown-menu {
-  color: var(--list-menu-text-color);
-  background-color: var(--list-menu-background-color);
-}
-.dropdown-menu a.dropdown-item {
-  cursor: default;
-  color: var(--list-menu-text-color);
-  background-color: var(--list-menu-background-color);
-}
-.dropdown-menu a.dropdown-item:hover {
-  color: var(--list-menu-background-color);
-  background-color: var(--list-menu-text-color);
-}
-.dropdown-menu .dropdown-submenu {
-  position: relative;
-}
-.dropdown-menu .dropdown-submenu > .dropdown-menu {
-  top: 0;
-  left: 100px;
-  margin-top: -6px;
-  margin-left: -1px;
-  -webkit-border-radius: 0 6px 6px 6px;
-  -moz-border-radius: 0 6px 6px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-menu .dropdown-submenu:hover > .dropdown-menu {
-  display: block;
-}
-.dropdown-menu .dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-menu .dropdown-submenu.pull-left > .dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  -webkit-border-radius: 6px 0 6px 6px;
-  -moz-border-radius: 6px 0 6px 6px;
-  border-radius: 6px 0 6px 6px;
-}
-
 /* ====================== */
 /*    SEARCH-RESULT       */
 /* ====================== */
@@ -726,6 +681,51 @@ body,
 /* ====================== */
 /*    BUTTONS - MENUS     */
 /* ====================== */
+.dropdown.menu .btn {
+  height: 25px;
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
+.dropdown-menu {
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+.dropdown-menu a.dropdown-item {
+  cursor: default;
+  color: var(--list-menu-text-color);
+  background-color: var(--list-menu-background-color);
+}
+.dropdown-menu a.dropdown-item:hover {
+  color: var(--list-menu-background-color);
+  background-color: var(--list-menu-text-color);
+}
+.dropdown-menu .dropdown-submenu {
+  position: relative;
+}
+.dropdown-menu .dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100px;
+  margin-top: -6px;
+  margin-left: -1px;
+  -webkit-border-radius: 0 6px 6px 6px;
+  -moz-border-radius: 0 6px 6px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-menu .dropdown-submenu:hover > .dropdown-menu {
+  display: block;
+}
+.dropdown-menu .dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-menu .dropdown-submenu.pull-left > .dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  -webkit-border-radius: 6px 0 6px 6px;
+  -moz-border-radius: 6px 0 6px 6px;
+  border-radius: 6px 0 6px 6px;
+}
+
 .button {
   font-size: calc(var(--font-size-coeff) * 0.9rem);
   padding: 5px;
@@ -735,7 +735,7 @@ body,
 }
 
 .menus a.text-button {
-  font-size: calc(var(--font-size-coeff) * 0.9rem);
+  font-size: calc(var(--font-size-coeff) * 1rem);
   margin-top: 2px;
 }
 
@@ -814,6 +814,9 @@ body,
 }
 #main-portfolio #portfolio-container a {
   color: var(--portfolio-link-color);
+}
+#main-portfolio #portfolio-container .menus a {
+  color: var(--portfolio-buttons-color);
 }
 #main-portfolio #portfolio-container #contenu,
 #main-portfolio #portfolio-container .popover-header {

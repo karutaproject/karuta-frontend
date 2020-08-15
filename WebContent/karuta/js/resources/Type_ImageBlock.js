@@ -140,13 +140,13 @@ UIFactory["ImageBlock"].prototype.displayEditor = function(destid,type,langcode)
 		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (this.image_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
-		$("#"+destid).append($("<h4>Image</h4>"));
+		$("#"+destid).append($("<h4>"+karutaStr[LANG]['Image']+"</h4>"));
 		$("#"+destid).append($("<div>"+karutaStr[LANG]['block-image-size']+"</div>"));
 		image.resource.displayEditor(destid,type,langcode,this);
 	}
 	//---------------------
 	if (cover!=undefined && this.cover_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
-		$("#"+destid).append($("<h4>Coverage</h4>"));
+		$("#"+destid).append($("<h4>"+karutaStr[LANG]['coverage']+"</h4>"));
 		cover.resource.displayEditor(destid,type,langcode,this);
 	}
 }

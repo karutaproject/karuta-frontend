@@ -482,6 +482,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 	}
 	//-------------------- ROLES-------------------------
 	if (g_userroles[0]=='designer') {
+		setDesignerRole('designer');
 		html += "		<li class='nav-item dropdown'>";
 		html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsRoles' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 		html += 				karutaStr[LANG]['role']+" : <span id='userrole'>designer</span>";

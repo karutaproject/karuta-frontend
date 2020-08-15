@@ -26,6 +26,8 @@ var portfolioid_current = null;
 
 var g_report_actions = {};
 var g_report_users = {};
+var g_unique_functions = {};
+var current_nodes = null;
 
 var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sortUTC()'] = ".sort(function(a, b){ return $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
@@ -56,13 +58,21 @@ jquerySpecificFunctions['.filename_or_url_not_empty()'] = ".has(\"asmResource[xs
 jquerySpecificFunctions['.filename_or_text_or_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty),asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty),asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:empty\")";
 jquerySpecificFunctions['.filename_or_text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty),asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\")";
 jquerySpecificFunctions['.url_or_text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > url[lang='#lang#']:not(:empty),asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\")";
+//---------------
+jquerySpecificFunctions['.uniqueNodeLabel()'] = "";
+jquerySpecificFunctions['.uniqueNodeCode()'] = "";
+jquerySpecificFunctions['.uniqueResourceCode()'] = "";
+jquerySpecificFunctions['.uniqueResourceValue()'] = "";
+jquerySpecificFunctions['.uniqueResource()'] = "";
+//---------------
 
-Selector = function(jquery,type,filter1,filter2)
+Selector = function(jquery,type,filter1,filter2,unique)
 {
 	this.jquery = jquery;
 	this.type = type;
 	this.filter1 = filter1;
 	this.filter2 = filter2;
+	this.unique = unique
 };
 
 //==================================
@@ -101,6 +111,19 @@ function r_getSelector(select,test)
 {
 	if (test==null)
 	 test = "";
+	//-------------------------
+	var unique = null;
+	if (test.indexOf(".uniqueNodeLabel"))
+		unique = "uniqueNodeLabel";
+	if (test.indexOf(".uniqueNodeCode"))
+		unique = "uniqueNodeCode";
+	if (test.indexOf(".uniqueResourceCode"))
+		unique = "uniqueResourceCode";
+	if (test.indexOf(".uniqueResourceValue"))
+		unique = "uniqueResourceValue";
+	if (test.indexOf(".uniqueResource"))
+		unique = "uniqueResource";
+	//-------------------------
 	var selects = select.split("."); // nodetype.semtag.[node|resource] or .[node|resource]
 	if (selects[0]=="")
 		selects[0] = "*";
@@ -129,7 +152,7 @@ function r_getSelector(select,test)
 	var type = "";
 	if (selects.length>2)
 		type = selects[2];
-	var selector = new Selector(jquery,type,filter1,filter2);
+	var selector = new Selector(jquery,type,filter1,filter2,unique);
 	return selector;
 }
 
@@ -256,6 +279,10 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 		if (nodes.length==0) { // try the node itself
 			var nodes = $(selector.jquery,data).addBack().filter(selector.filter1);
 			nodes = eval("nodes"+selector.filter2);
+		}
+		if (selector.unique!=null) {
+			g_current_nodes = nodes;
+			nodes = nodes.filter(g_unique_functions[selector.unique]);
 		}
 		//---------------------------
 		var actions = $(action).children();
@@ -2171,3 +2198,71 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 	var yline = makeSVG('line',{'x1':500+xyaxis,'y1':0,'x2':500+xyaxis,'y2':1000,'stroke':'black','stroke-width': 2});
 	document.getElementById(destid).appendChild(yline);
 }
+
+//====================================================================
+//====================================================================
+//====================================================================
+//====================================================================
+//====================================================================
+
+//==================================
+g_unique_functions['uniqueNodeCode'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueNodeLabel'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueResourceValue'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueResourceCode'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueResource'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+
