@@ -249,6 +249,7 @@ karutaStr['en']['logcode']="Log Code";
 karutaStr['en']['alt']="Alternate Text";
 karutaStr['en']['node-comment']="Node Comments";
 karutaStr['en']['autoload']="Autoload";
+karutaStr['en']['defaultrole']="Default Role";
 
 //=========================================
 //========== ADMIN ========================

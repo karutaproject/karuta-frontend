@@ -91,7 +91,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
 	this.duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
 	this.incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
-	this.menuroles =r_replaceVariable(($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles'));
+	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	this.menulabels = r_replaceVariable(($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels'));
 	if (this.resource!=undefined || this.resource!=null)
 		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
@@ -413,10 +413,11 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		resource_type = this.resource.type;
 	if (name=='asmRoot') {
 		this.displayMetadataAttributeEditor('metadata-root','list-novisible',true);
-		this.displayMetadataAttributeEditor('metadata-root','export-pdf',true);
-		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
-		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);
+//		this.displayMetadataAttributeEditor('metadata-root','export-pdf',true);
+//		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
+//		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);
 		this.displayMetadataAttributeEditor('metadata-root','public',true);
+		this.displayMetadataWadAttributeEditor('metadata-root','defaultrole');
 		this.displayMetadataAttributeEditor('metadata-root','autoload',true);
 	}
 	if (name=='asmContext' && this.resource.type=='Proxy')
@@ -1019,7 +1020,7 @@ UIFactory["Node"].prototype.displayMetadataWadAttributeEditor = function(destid,
 			html += "	</div>";
 		}
 		html += "</div>";
-	} else if (attribute.indexOf('roles')>-1){
+	} else if (attribute.indexOf('role')>-1){
 		this.displaySelectRole(destid,attribute,yes_no,disabled);
 	} else {
 		html += "<div class='input-group '>";

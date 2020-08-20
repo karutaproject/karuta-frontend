@@ -93,6 +93,7 @@ function fill_main_page(rootid,role)
 			g_portfolio_rootid = $("asmRoot",data).attr("id");
 			UICom.structure['ui'][g_portfolio_rootid].loaded = true;
 			var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
+			var default_role = $("metadata-wad",$("asmRoot",data)).attr('defaultrole').trim();
 			$("body").addClass(root_semantictag);
 			// --------------------------
 			var role = $("asmRoot",data).attr("role");
@@ -179,7 +180,12 @@ function fill_main_page(rootid,role)
 			//---------------------------
 			$("#wait-window").modal('hide');
 			//---------------------------
-			if (root_semantictag.indexOf('karuta-batch')>-1){
+			if (default_role!=""){
+				g_userroles[0] = default_role;
+				USER.admin = false;
+				$("#userrole").html(default_role);
+			}
+/*			if (root_semantictag.indexOf('karuta-batch')>-1){
 				g_userroles[0] = 'batcher';
 				USER.admin = false;
 				$("#userrole").html('batcher');
@@ -189,6 +195,7 @@ function fill_main_page(rootid,role)
 				USER.admin = false;
 				$("#userrole").html('reporter');
 			}
+*/
 			//---------------------------
 			var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
 			if (welcomes.length==0) // for backward compatibility

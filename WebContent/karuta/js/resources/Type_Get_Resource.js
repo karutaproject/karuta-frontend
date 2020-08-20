@@ -1134,7 +1134,7 @@ function get_simple(parentid,title,query,partcode,get_resource_semtag)
 	var langcode = LANGCODE;
 	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+partcode+","+get_resource_semtag+"')";
+	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
@@ -1156,7 +1156,7 @@ function get_multiple(parentid,title,query,partcode,get_resource_semtag)
 	var langcode = LANGCODE;
 	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+partcode+","+get_resource_semtag+"')";
+	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
@@ -1179,7 +1179,7 @@ function import_multiple(parentid,title,query,partcode,get_resource_semtag)
 	var langcode = LANGCODE;
 	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+partcode+"')";
+	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+r_replaceVariable(partcode)+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
