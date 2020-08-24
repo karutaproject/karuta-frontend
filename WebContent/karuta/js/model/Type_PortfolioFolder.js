@@ -954,7 +954,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 			var visibleid = "";
 			var autoload = "";
 			for (var i=0;i<portfolios_list.length;i++){
-				if (portfolios_list[i].visible) {
+				if (portfolios_list[i].visible || portfolios_list[i].ownerid==USER.id) {
 					nb_visibleportfolios++;
 					visibleid = portfolios_list[i].id;
 				}

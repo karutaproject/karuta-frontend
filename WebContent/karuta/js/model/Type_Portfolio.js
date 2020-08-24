@@ -481,7 +481,7 @@ UIFactory["Portfolio"].getNavBar = function (type,langcode,edit,portfolioid)
 		html += "		</li>";
 	}
 	//-------------------- ROLES-------------------------
-	if (g_userroles[0]=='designer') {
+	if (g_userroles[0]=='designer' || USER.admin) {
 		setDesignerRole('designer');
 		html += "		<li class='nav-item dropdown'>";
 		html += "			<a class='nav-link dropdown-toggle' href='#' id='actionsRoles' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
@@ -1450,11 +1450,11 @@ UIFactory["Portfolio"].getActions = function(portfolioid)
 //		html += "<a class='dropdown-item'  onclick='export_html()'>"+karutaStr[LANG]['getWebsite']+"</a>";
 //	html += "<a class='dropdown-item'  onclick=\"toggleButton('hidden')\">"+karutaStr[LANG]['hide-button']+"</a>";
 //	html += "<a class='dropdown-item'  onclick=\"toggleButton('visible')\">"+karutaStr[LANG]['show-button']+"</a>";
-	if (USER.admin || portfolios_byid[portfolioid].owner=='Y') {
+	if ( (USER.admin || portfolios_byid[portfolioid].owner=='Y') && !USER.xlimited) {
 		html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callShareUsers('"+portfolioid+"')\" >"+karutaStr[LANG]["addshare-users"]+"</a>";
 		html += "<a class='dropdown-item' onclick=\"UIFactory.Portfolio.callShareUsersGroups('"+portfolioid+"')\" >"+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
 	}
-	if (USER.admin || g_userroles[0]=='designer') {
+	if ( (USER.admin || g_userroles[0]=='designer') && !USER.xlimited) {
 		html += "<a class='dropdown-item' href='../../../"+serverBCK_API+"/portfolios/portfolio/"+portfolioid+"?resources=true&export=true'>"+karutaStr[LANG]['export']+"</a>";
 		html += "<a class='dropdown-item' href='../../../"+serverBCK_API+"/portfolios/portfolio/"+portfolioid+"?resources=true&amp;files=true'>"+karutaStr[LANG]['export-with-files']+"</a>";
 		html += "<a class='dropdown-item'  onclick=\"toggleMetadata('hidden')\">"+karutaStr[LANG]['hide-metainfo']+"</a>";

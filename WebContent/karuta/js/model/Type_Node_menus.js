@@ -229,6 +229,8 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			//--------------------------------
 			var menus = [];
 			var displayMenu = false;
+			if (this.menuroles.indexOf('function')<0)
+				this.menuroles = r_replaceVariable(this.menuroles);
 			var items = this.menuroles.split(";");
 			for (var i=0; i<items.length; i++){
 				var subitems = items[i].split(",");

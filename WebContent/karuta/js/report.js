@@ -692,13 +692,6 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 //==================================
 {
 	var countvar = $(action).attr("countvar");
-	var ref_init = $(action).attr("ref-init");
-	if (ref_init!=undefined) {
-		ref_init = r_replaceVariable(ref_init);
-		var ref_inits = ref_init.split("/"); // ref1/ref2/...
-		for (var i=0;i<ref_inits.length;i++)
-			g_variables[ref_inits[i]] = new Array();
-	}
 	if (userid==null)
 		userid = USER.id;
 	var searchvalue = "";
@@ -790,6 +783,13 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				if (countvar!=undefined) {
 					g_variables[countvar] = j;
 				}
+				var ref_init = $(action).attr("ref-init");
+				if (ref_init!=undefined) {
+					ref_init = r_replaceVariable(ref_init);
+					var ref_inits = ref_init.split("/"); // ref1/ref2/...
+					for (var i=0;i<ref_inits.length;i++)
+						g_variables[ref_inits[i]] = new Array();
+				}
 				var code = portfolios_list[j].code_node.text();
 				//------------------------------------
 				if (select.indexOf("code*=")>-1) {
@@ -822,6 +822,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 					portfolioid = portfolios_list[j].id;
 					portfolioid_current = portfolioid;
 					$.ajax({
+						async:false,
 						type : "GET",
 						dataType : "xml",
 						j : j,
@@ -852,7 +853,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 //=============================================================================
 
 //==================================
-g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
+g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 //==================================
 {
 	var countvar = $(action).attr("countvar");
@@ -860,6 +861,7 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 	if (userid==null)
 		userid = USER.id;
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&user="+userid,
@@ -897,6 +899,7 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 					//------------------------------------
 					if (condition && sortag!=""){
 						$.ajax({
+							async:false,
 							type : "GET",
 							dataType : "xml",
 							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
@@ -947,31 +950,52 @@ g_report_actions['for-each-portfolio-node'] = function (destid,action,no,data)
 				//------------------------------------
 				if (condition){
 					//--------------------------------
-					var ref_init = $(action).attr("ref-init");
-					if (ref_init!=undefined) {
-						ref_init = r_replaceVariable(ref_init);
-						var ref_inits = ref_init.split("/"); // ref1/ref2/...
-						for (var i=0;i<ref_inits.length;i++)
-							g_variables[ref_inits[i]] = new Array();
-					}
-					//--------------------------------
 					$.ajax({
+						async:false,
 						type : "GET",
 						dataType : "xml",
-						j : j,
 						url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+nodetag,
 						success : function(data) {
-							//-----------------------------
-							UICom.structure["tree"] = {};
-							UICom.structure["ui"] = {};
-							UICom.parseStructure(data,true, null, null,true);
-							//-----------------------------
-							var actions = $(action).children();
-							for (var i=0; i<actions.length;i++){
-								var tagname = $(actions[i])[0].tagName;
-								g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+							var nodes = $("node",data);
+							for (var l=0; l<nodes.length;l++){
+								//----------------------------------
+								if (countvar!=undefined) {
+									g_variables[countvar] = j;
+								}
+								//----------------------------------
+								var ref_init = $(action).attr("ref-init");
+								if (ref_init!=undefined) {
+									ref_init = r_replaceVariable(ref_init);
+									var ref_inits = ref_init.split("/"); // ref1/ref2/...
+									for (var k=0;k<ref_inits.length;k++)
+										g_variables[ref_inits[k]] = new Array();
+								}
+								//----------------------------------
+								var nodeid = $(nodes[l]).attr('id');
+								$.ajax({
+									async:false,
+									type : "GET",
+									dataType : "xml",
+									j : j,
+									url : serverBCK_API+"/nodes/node/"+nodeid,
+									success : function(data) {
+										//-----------------------------
+										if (report_not_in_a_portfolio){
+											UICom.structure["tree"] = {};
+											UICom.structure["ui"] = {};
+										}
+										UICom.parseStructure(data,true, null, null,true);
+										//-----------------------------
+										var actions = $(action).children();
+										for (var i=0; i<actions.length;i++){
+											var tagname = $(actions[i])[0].tagName;
+											g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+										};
+										//-----------------------------
+									}
+								});
+								//----------------------------------
 							};
-							//-----------------------------
 						}
 					});
 				}
@@ -1099,7 +1123,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			}
 		}
 	} catch(e){
-		text = "<span id='dashboard_"+nodeid+"'>&mdash;</span>";
+		text = "<span id='dashboard_"+nodeid+"'></span>";
 	}
 	//------------------------------
 	text += "<span id='reshelp_"+nodeid+"'></span>"
@@ -1323,6 +1347,7 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 	//------------------------------
 	if (typeof csvseparator == 'undefined') // for backward compatibility
 		csvseparator = ";";
+	text = r_replaceVariable(text);
 	csvline += text + csvseparator;
 }
 

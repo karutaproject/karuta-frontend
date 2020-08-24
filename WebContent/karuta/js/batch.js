@@ -2724,7 +2724,7 @@ function execReport_BatchCSV(parentid,title,codeReport)
 		root_node = UICom.structure["ui"][parentid].node;
 		codeReport = codeReport.substring(0,codeReport.indexOf("@local"))+codeReport.substring(codeReport.indexOf("@local")+6);
 	}
-
+	codeReport = r_replaceVariable(codeReport);
 	report_getModelAndPortfolio(codeReport,root_node,null,g_dashboard_models);
 	$.ajaxSetup({async: true});
 	initBatchVars();

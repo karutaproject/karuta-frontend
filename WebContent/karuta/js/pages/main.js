@@ -93,7 +93,9 @@ function fill_main_page(rootid,role)
 			g_portfolio_rootid = $("asmRoot",data).attr("id");
 			UICom.structure['ui'][g_portfolio_rootid].loaded = true;
 			var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
-			var default_role = $("metadata-wad",$("asmRoot",data)).attr('defaultrole').trim();
+			var default_role = "";
+			if ($("metadata-wad",$("asmRoot",data)).attr('defaultrole')!= undefined)
+				default_role = $("metadata-wad",$("asmRoot",data)).attr('defaultrole').trim();
 			$("body").addClass(root_semantictag);
 			// --------------------------
 			var role = $("asmRoot",data).attr("role");
@@ -105,7 +107,12 @@ function fill_main_page(rootid,role)
 				g_visible = localStorage.getItem('metadata');
 				toggleMetadata(g_visible);
 			}
-			// --------Display Type------------------
+			//-------------- DEFAULT_ROLE -------------
+			if (default_role!="" && g_userroles[1]=="designer"){
+				g_userroles[0] = default_role;
+//				USER.admin = false;
+				$("#userrole").html(default_role);
+			}			// --------Display Type------------------
 			g_display_type = $("metadata[display-type]",data).attr('display-type');
 			if (g_display_type=="" || g_display_type==null || g_display_type==undefined)
 				g_display_type = 'standard';
@@ -179,12 +186,7 @@ function fill_main_page(rootid,role)
 				loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});
 			//---------------------------
 			$("#wait-window").modal('hide');
-			//---------------------------
-			if (default_role!=""){
-				g_userroles[0] = default_role;
-				USER.admin = false;
-				$("#userrole").html(default_role);
-			}
+
 /*			if (root_semantictag.indexOf('karuta-batch')>-1){
 				g_userroles[0] = 'batcher';
 				USER.admin = false;
