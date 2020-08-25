@@ -1791,18 +1791,7 @@ function setCSSportfolio(data)
 function logout()
 //==============================
 {
-	$.ajax({
-		type: "GET",
-		dataType: "text",
-		url: serverBCK_API+"/credential/logout",
-		data: "",
-		success: function(data) {
-			window.location="login.htm?lang="+LANG;
-		},
-		error: function(data) {
-			window.location="login.htm?lang="+LANG;
-		}
-	});
+	window.location=serverBCK_API+"/credential/logout";
 }
  
 //==============================
