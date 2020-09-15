@@ -366,6 +366,8 @@ function setConfigurationTechVariables(langcode)
 				g_variables[name] = value;
 			}
 			//----------------------
+			g_configVar['technical-support'] = getImg('config-technical-support',data,langcode);
+			//----------------------
 			g_configVar['send-email-logo'] = getImg('config-send-email-logo',data,langcode);
 			g_configVar['send-email-image'] = getImg('config-send-email-image',data,langcode);
 			g_configVar['send-email-message'] = getText('config-send-email-message','TextField','text',data,langcode);

@@ -109,9 +109,9 @@ UIFactory["Node"] = function( node )
 			this.version_node.text("3.0");
 			var value1 = $(this.label_node[0]).text();
 			var value2 = $(this.context_text_node[0]).text();
-			for (var langcode=0; langcode<languages.length; langcode++) {
-				$(this.label_node[langcode]).text(value1);
-				$(this.context_text_node[langcode]).text(value2);
+			for (var i=0; i<languages.length; i++) {
+				$(this.label_node[i]).text(value1);
+				$(this.context_text_node[i]).text(value2);
 			}
 			this.save();
 		}
@@ -124,7 +124,7 @@ UIFactory["Node"] = function( node )
 		//------------------------------
 		flag_error = 'j';
 		this.structured_resource = null;
-		if (this.xsi_type!=undefined && this.xsi_type!='' && this.xsi_type != this.asmtype) { // structured resource
+		if (this.xsi_type!="null" && this.xsi_type!=null && this.xsi_type!=undefined && this.xsi_type!='' && this.xsi_type != this.asmtype) { // structured resource
 			this.structured_resource = new UIFactory[this.xsi_type](node);
 		}
 		//------------------------------
@@ -228,12 +228,14 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					}
 				}
 				//------------ Bubble Map -----------------
-				if (this.semantictag=='bubble_level1' && (this.seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')){
+				if (this.semantictag=='bubble_level1') {
 					alreadyDisplayed = true;
-					var map_info = UIFactory.Bubble.getLinkQRcode(uuid);
-					$('#map-info_'+uuid).html(map_info);
-					$('body').append(qrCodeBox());
-					UIFactory.Bubble.getPublicURL(uuid,g_userroles[0]);
+					if  (this.seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
+						var map_info = UIFactory.Bubble.getLinkQRcode(uuid);
+						$('#map-info_'+uuid).html(map_info);
+						$('body').append(qrCodeBox());
+						UIFactory.Bubble.getPublicURL(uuid,g_userroles[0]);
+					}
 				}
 				//------------ Default  -----------------
 				if (!alreadyDisplayed) {
@@ -813,8 +815,8 @@ UIFactory["Node"].prototype.updateLabel = function(langcode)
 	$(this.label_node[langcode]).text(label);
 	//---------------------
 	if (!this.multilingual) {
-		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(this.label_node[langcode]).text(label);
+		for (var i=0; i<languages.length; i++) {
+			$(this.label_node[i]).text(label);
 		}
 	}
 	//---------------------
@@ -842,8 +844,8 @@ UIFactory["Node"].prototype.update = function(langcode)
 	$(this.label_node[langcode]).text(label);
 	//---------------------
 	if (!this.multilingual) {
-		for (var langcode=0; langcode<languages.length; langcode++) {
-			$(this.label_node[langcode]).text(label);
+		for (var i=0; i<languages.length; langcode++) {
+			$(this.label_node[i]).text(label);
 		}
 	}
 	//---------------------

@@ -80,6 +80,7 @@ function r_replaceVariable(text)
 //==================================
 {
 	var n=0;
+	var text_original = text;
 	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
 		var variable_name = test_string.substring(0,test_string.indexOf("##}"));
@@ -1051,7 +1052,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//----------------------------
 			if (selector.type=='resource') {
 				try {
-					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
+					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,'none',null,true);
 				} catch(e){
 					text = UICom.structure["ui"][nodeid].structured_resource.getView("dashboard_"+nodeid,null,null,true);
 				}
@@ -1393,14 +1394,19 @@ g_report_actions['europass'] = function (destid,action,no,data)
 	var style = "";
 	var attr_help = "";
 	var selector = r_getSelector('asmUnitStructure.EuropassL','');
-	var node = $(selector.jquery,data);
-	if (node.length>0 || select.substring(0,1)=="."){
-		var nodeid = $(node).attr("id");
-		var text = "<table id='"+destid+"europass' style='width:100%;margin-top:30px;'></table>";
-		$("#"+destid).append($(text));
-		var europass_node = UICom.structure["ui"][nodeid];
-		//----------------------------
-		europass_node.structured_resource.displayView(destid+"europass",null,'report',nodeid,null,false);
+	var nodes = $(selector.jquery,data);
+	if (nodes.length>0 || select.substring(0,1)=="."){
+		for (var enode=0;enode<nodes.length;enode++) {
+			var semantictag = $("metadata",nodes[enode]).attr('semantictag');
+			if (semantictag=='EuropassL') {
+				var nodeid = $(nodes[enode]).attr("id");
+				var text = "<table id='"+destid+"europass' style='width:100%;margin-top:30px;'></table>";
+				$("#"+destid).append($(text));
+				var europass_node = UICom.structure["ui"][nodeid];
+				//----------------------------
+				europass_node.structured_resource.displayView(destid+"europass",null,'report',nodeid,null,false);
+			}
+		}
 	}
 }
 

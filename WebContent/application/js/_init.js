@@ -7,7 +7,6 @@ var bckname = '3.0';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";
-var new_bck = false;
 //-------- LANGUAGES------------
 var languages = [];
 languages [0] = 'fr';

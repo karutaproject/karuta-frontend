@@ -186,6 +186,7 @@
 		}
 		.active {
 			background-color: var(--list-button-background-color);
+			color: var(--list-button-text-color);
 		}
 
 	}
@@ -202,6 +203,7 @@
 			color:var(--list-button-text-color);
 			.btn  {
 				background-color:var(--list-element-background-color);
+				color: var(--list-element-text-color);
 			}
 		}
 		.content1{

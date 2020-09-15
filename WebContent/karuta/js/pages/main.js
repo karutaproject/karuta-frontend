@@ -97,7 +97,7 @@ function fill_main_page(rootid,role)
 			if ($("metadata-wad",$("asmRoot",data)).attr('defaultrole')!= undefined)
 				default_role = $("metadata-wad",$("asmRoot",data)).attr('defaultrole').trim();
 			$("body").addClass(root_semantictag);
-			// --------------------------
+			// -----------ROLE---------------
 			var role = $("asmRoot",data).attr("role");
 			if (role!="") {
 				g_userroles[0] = g_userroles[1] = role;
@@ -107,12 +107,9 @@ function fill_main_page(rootid,role)
 				g_visible = localStorage.getItem('metadata');
 				toggleMetadata(g_visible);
 			}
-			//-------------- DEFAULT_ROLE -------------
-			if (default_role!="" && g_userroles[1]=="designer"){
-				g_userroles[0] = default_role;
-//				USER.admin = false;
-				$("#userrole").html(default_role);
-			}			// --------Display Type------------------
+			// --------------------------
+			UICom.parseStructure(data,true);
+			// --------Display Type------------------
 			g_display_type = $("metadata[display-type]",data).attr('display-type');
 			if (g_display_type=="" || g_display_type==null || g_display_type==undefined)
 				g_display_type = 'standard';
@@ -129,8 +126,6 @@ function fill_main_page(rootid,role)
 			if (csstext!=undefined && csstext!=''){
 				$("<style id='csstext'>"+csstext+"</style>").appendTo('head');
 			}
-			// --------------------------
-			UICom.parseStructure(data,true);
 			//-------------------------------------------------
 			for (role in UICom.roles)
 				g_roles[g_roles.length] = {'code':'','libelle':role};
@@ -161,7 +156,13 @@ function fill_main_page(rootid,role)
 				var message = karutaStr[LANG]["button-edition"];
 				alertHTML(message);
 			}
-
+			//-------------- DEFAULT_ROLE -------------
+			if (default_role!="" && g_userroles[1]=="designer"){
+				g_userroles[0] = default_role;
+				USER.admin = false;
+				$("#userrole").html(default_role);
+				$("#portfolio-container").attr('role',default_role);
+			}
 			//-------------------------------------------------
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------

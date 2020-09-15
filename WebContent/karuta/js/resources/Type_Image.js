@@ -207,7 +207,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
 	//------------------------
 	var html ="";
-	if (type=='default') {
+	if (type=='default' || 'none') {
 		html +="<div uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
 			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";

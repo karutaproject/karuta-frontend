@@ -172,6 +172,7 @@ body,
 }
 .leftside .active {
   background-color: var(--list-button-background-color);
+  color: var(--list-button-text-color);
 }
 
 .rightside .search {
@@ -186,6 +187,7 @@ body,
 }
 .rightside .header .btn {
   background-color: var(--list-element-background-color);
+  color: var(--list-element-text-color);
 }
 .rightside .content1 {
   margin-bottom: 2px;

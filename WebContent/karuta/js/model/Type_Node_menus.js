@@ -27,7 +27,7 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 		var semtags = tag.split(" ");
 		for (var i=0;i<semtags.length;i++){
 			if (semtags[i].length>0)
-			html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+			html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
 		}
 	}
 	html += "\">";
@@ -58,7 +58,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 		var semtags = tag.split(" ");
 		for (var i=0;i<semtags.length;i++){
 			if (semtags[i].length>0)
-			html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+			html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
 		}
 	}
 	html += "\">";
@@ -77,7 +77,7 @@ UIFactory["Node"].getItemMenu = function(parentid,srce,tag,title,databack,callba
 	var semtags = tag.split(" ");
 	for (var i=0;i<semtags.length;i++){
 		if (semtags[i].length>0)
-		html += "importBranch('"+parentid+"','"+srce+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+		html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
 	}
 	html += "\">";
 	html += karutaStr[LANG][title];
