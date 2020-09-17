@@ -824,6 +824,24 @@ UIFactory["Portfolio"].getid_bycode = function(code,resources)
 };
 
 //==================================
+UIFactory["Portfolio"].search_bycode = function(code) 
+//==================================
+{
+	var result = "";
+	var url = serverBCK_API+"/portfolios?active=1&search=" + code;
+	$.ajax({
+		async: false,
+		type : "GET",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			result = $("portfolio", data);
+		}
+	});
+	return result;
+};
+
+//==================================
 UIFactory["Portfolio"].getLabel_bycode = function(code,langcode) 
 //==================================
 {

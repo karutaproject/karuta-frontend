@@ -59,8 +59,9 @@ UIFactory["PortfoliosGroup"] = function( node )
 	//------------------------------
 	this.roles = [];
 	this.rrg = {};
-
-};
+	//------------------------------
+	this.loadContent()
+;};
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
@@ -341,7 +342,7 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,viewtype,type
 		html += "<div id='portfoliogroup_"+this.id+"' class='portfoliogroup' ondrop='dropPortfolioGroupFolder(event)' ondragover='ondragoverPortfolioGroupFolder(event)' ondragleave='ondragleavePortfolioGroupFolder(event)'>";
 		html += "	<div id='tree_portfoliogroup-label_"+this.id+"' class='tree-label portfoliogroup-label'>";
 		html += "		<span id='portfoliogrouplabel_"+this.id+"' onclick=\"portfoliogroups_byid['"+this.id+"'].toggleContent('"+type+"')\" class='project-label'>"+portfoliogroup_code+"</span>";
-		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"' style='display:none'>"+this.nbchildren+"</span>";
+		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"'>"+this.nbchildren+"</span>";
 		html += "	</div>";
 		html += "</div>"
 		$("#"+dest).append($(html));

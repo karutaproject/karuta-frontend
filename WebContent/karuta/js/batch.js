@@ -56,7 +56,7 @@ function getTxtvals(node)
 			if (select.indexOf("//")>-1)
 				text = eval("g_json."+select.substring(2));
 			else if (select.indexOf("/")>-1)
-				text = eval("g_json."+select.substring(1));
+				text = eval("g_users['"+select.substring(1)+"']");
 			else
 				text = eval("g_json.lines["+g_noline+"]."+select);
 			if (fct!=null)
@@ -261,22 +261,41 @@ g_actions['for-each-user'] = function (node)
 //==================================
 {
 	var username = getTxtvals($("username",node));
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/users?username="+username,
-		success : function(data) {
-			UIFactory["User"].parse(data);
-			for ( var j = 0; j < UsersActive_list.length; j++) {
-				var username = UsersActive_list[j].username_node.text();
-				var userref = $(node).attr('id');
-				g_users[userref] = username;
-				$("#batch-log").append("<br>- user selected - username:"+username);
-				processListActions($("actions",node).children());
-					//------------------------------------
+	var email = getTxtvals($("email",node));
+	if (username!="")
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/users?username="+username,
+			success : function(data) {
+				UIFactory["User"].parse(data);
+				for ( var j = 0; j < UsersActive_list.length; j++) {
+					var username = UsersActive_list[j].username_node.text();
+					var userref = $(node).attr('id');
+					g_users[userref] = username;
+					$("#batch-log").append("<br>- user selected - username:"+username);
+					processListActions($("actions",node).children());
+						//------------------------------------
+				}
 			}
-		}
-	});
+		});
+	else
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/users?email="+email,
+			success : function(data) {
+				UIFactory["User"].parse(data);
+				for ( var j = 0; j < UsersActive_list.length; j++) {
+					var username = UsersActive_list[j].username_node.text();
+					var userref = $(node).attr('id');
+					g_users[userref] = username;
+					$("#batch-log").append("<br>- user selected - username:"+username);
+					processListActions($("actions",node).children());
+						//------------------------------------
+				}
+			}
+		});
 }
 
 //-----------------------------------------------------------------------
@@ -1111,6 +1130,51 @@ g_actions['share-tree'] = function shareTree(node)
 		},
 		error : function(data) {
 			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref][1]+") - role:"+role);
+		}
+	});
+	return ok;
+}
+
+//=================================================
+g_actions['share-tree-byemail'] = function (node)
+//=================================================
+{
+	var ok = false;
+	var role = "";
+	var user = "";
+	var treeref = $(node).attr("select");
+	var role = getTxtvals($("role",node));
+	var email = getTxtvals($("user",node));
+	//---- get userid ----------
+	var url = serverBCK_API+"/users/user/username/"+user;
+	var xml = "<users><user email='"+email+"'/></users>";
+	//---- get role groupid ----------
+	var groupid = "";
+	var url = serverBCK_API+"/rolerightsgroups?portfolio="+g_trees[treeref][0]+"&role="+role;
+	$.ajax({
+		async : false,
+		type : "GET",
+		contentType: "text/html",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			groupid = data;
+			//---- share tree --------------
+			var url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupid + "/users";
+			$.ajax({
+				type : "POST",
+				contentType: "application/xml",
+				dataType : "xml",
+				url : url,
+				data : xml,
+				success : function(data) {
+					ok = true;
+					$("#batch-log").append("<br>- tree shared ("+g_trees[treeref][1]+") - user:"+user_id+" - role:"+role);
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in share tree ("+g_trees[treeref][1]+") - role:"+role);
+				}
+			});
 		}
 	});
 	return ok;

@@ -402,7 +402,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	var html = "";
 	//--------------------------------------------------------------------------------------------
 	if (type=='user') {
-		html += "<tr>"
+		html += "<tr class='user-row'>"
 		html += "<td class='firstname'>"+this.firstname_node.text()+"</td>";
 		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
 		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</td>";

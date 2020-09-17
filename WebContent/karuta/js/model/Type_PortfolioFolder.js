@@ -177,7 +177,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 		url : serverBCK_API+"/portfolios?active=1&project=true",
 		success : function(data) {
 			nb_folders = parseInt($('portfolios',data).attr('count'));
-			UIFactory["Portfolio"].parse(data);
+			UIFactory["Portfolio"].parse_add(data);
 			UIFactory["PortfolioFolder"].parse(data);
 			UIFactory["PortfolioFolder"].displayAll(type);
 			//--------------------------------------
