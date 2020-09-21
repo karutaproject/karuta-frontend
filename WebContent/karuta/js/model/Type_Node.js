@@ -967,6 +967,12 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 UIFactory["Node"].prototype.save = function()
 //==================================
 {
+	//-------- if function js -------------
+	if (UICom.structure["ui"][this.id].js!="") {
+		var elts = UICom.structure["ui"][this.id].js.split("/");
+		if (elts[0]=="update-node")
+			eval(elts[1]+"(this.node,g_portfolioid)");
+	}
 	UICom.UpdateNode(this.node);
 	if (this.logcode!="")
 		this.log();
@@ -984,6 +990,13 @@ UIFactory["Node"].prototype.remove = function()
 UIFactory["Node"].remove = function(uuid,callback,param1,param2)
 //==================================
 {
+	//-------- if function js -------------
+	if (UICom.structure["ui"][uuid].js!="") {
+		var elts = UICom.structure["ui"][uuid].js.split("/");
+		if (elts[0]=="delete")
+			eval(elts[1]+"(UICom.structure.ui[uuid].node,g_portfolioid)");
+	}
+	//---------------------
 	$("#"+uuid,g_portfolio_current).remove();
 	UICom.DeleteNode(uuid,callback,param1,param2);
 };

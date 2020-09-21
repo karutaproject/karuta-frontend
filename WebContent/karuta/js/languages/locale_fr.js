@@ -246,6 +246,7 @@ karutaStr['fr']['duration']="Durée de vie du lien (en heures)";
 karutaStr['fr']['seestart']="Voir - Date début";
 karutaStr['fr']['seeend']="Voir - Date fin";
 karutaStr['fr']['logcode']="Code Log";
+karutaStr['fr']['js']="Function js";
 karutaStr['fr']['alt']="Texte alternatif";
 karutaStr['fr']['node-comment']="Commentaires du noeud";
 karutaStr['fr']['autoload']="Autoload";

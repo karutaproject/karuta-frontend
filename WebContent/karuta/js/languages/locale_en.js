@@ -246,6 +246,7 @@ karutaStr['en']['duration']="Link Lifetime";
 karutaStr['en']['seestart']="See - Start Date";
 karutaStr['en']['seeend']="See - End Date";
 karutaStr['en']['logcode']="Log Code";
+karutaStr['en']['js']="JS Function";
 karutaStr['en']['alt']="Alternate Text";
 karutaStr['en']['node-comment']="Node Comments";
 karutaStr['en']['autoload']="Autoload";

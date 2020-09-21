@@ -93,6 +93,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
 	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	this.menulabels = r_replaceVariable(($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels'));
+	this.js = ($(node.metadatawad).attr('js')==undefined)?"":$(node.metadatawad).attr('js');
 	if (this.resource!=undefined || this.resource!=null)
 		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
 }
@@ -534,6 +535,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (name=='asmContext' && this.resource.type=='TextField')
 		this.displayMetadataWadAttributeEditor('metadata-part2','maxword');
 	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
+	this.displayMetadataWadAttributeEditor('metadata-part2','js');
 	//--------------------------------------
 	if (name!='asmRoot')
 		this.displayMetadataWadAttributeEditor('metadata-part2','display',true);

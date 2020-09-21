@@ -392,6 +392,7 @@ function setConfigurationTechVariables(langcode)
 					url: url,
 					dataType: "script",
 				});
+				console.log("JS file loaded")
 			}
 			//----- Load CSS Files
 			var jsfile_nodes = [];

@@ -33,10 +33,11 @@ var jquerySpecificFunctions = {};
 jquerySpecificFunctions['.sortUTC()'] = ".sort(function(a, b){ return $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.invsortUTC()'] = ".sort(function(a, b){ return $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
 jquerySpecificFunctions['.sortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jquerySpecificFunctions['.sortResourceText(#'] = ".sort(function(a, b){ return $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.sortResource(#'] = ".sort(function(a, b){ return $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"#1[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.sortResourceValue()'] = ".sort(function(a, b){ return $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
 jquerySpecificFunctions['.sortResourceCode()'] = ".sort(function(a, b){ return $(\"code\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"code\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
-jquerySpecificFunctions['.invsortResource()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
+jquerySpecificFunctions['.invsortResourceText()'] = ".sort(function(a, b){ return $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"text[lang='#lang#']\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
 jquerySpecificFunctions['.invsortResourceValue()'] = ".sort(function(a, b){ return $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
 jquerySpecificFunctions['.invsortResourceCode()'] = ".sort(function(a, b){ return $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"value\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
 jquerySpecificFunctions['.sortNodeLabel()'] = ".sort(function(a, b){ return $(\"label[lang='#lang#']\",$(\"asmResource[xsi_type='nodeRes']\",$(a))).text() > $(\"label[lang='#lang#']\",$(\"asmResource[xsi_type='nodeRes']\",$(b))).text() ? 1 : -1; })";
@@ -63,7 +64,7 @@ jquerySpecificFunctions['.uniqueNodeLabel()'] = "";
 jquerySpecificFunctions['.uniqueNodeCode()'] = "";
 jquerySpecificFunctions['.uniqueResourceCode()'] = "";
 jquerySpecificFunctions['.uniqueResourceValue()'] = "";
-jquerySpecificFunctions['.uniqueResource()'] = "";
+jquerySpecificFunctions['.uniqueResourceText()'] = "";
 //---------------
 
 Selector = function(jquery,type,filter1,filter2,unique)
@@ -122,8 +123,8 @@ function r_getSelector(select,test)
 		unique = "uniqueResourceCode";
 	if (test.indexOf(".uniqueResourceValue")>-1)
 		unique = "uniqueResourceValue";
-	if (test.indexOf(".uniqueResource")>-1)
-		unique = "uniqueResource";
+	if (test.indexOf(".uniqueResourceText")>-1)
+		unique = "uniqueResourceText";
 	//-------------------------
 	var selects = select.split("."); // nodetype.semtag.[node|resource] or .[node|resource]
 	if (selects[0]=="")
@@ -850,6 +851,55 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 					//------------------------------------
 			}		}
 	});
+}
+
+//==================================
+g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
+//==================================
+{
+	var countvar = $(action).attr("countvar");
+	if (userid==null)
+		userid = USER.id;
+	var searchvalue = "";
+	var select = $(action).attr("select");
+	select = r_replaceVariable(select);
+
+	var portfolioids = eval(select); // return array of portfolioids
+	
+	//----------------------------------
+	for ( var j = 0; j < portfolioids.length; j++) {
+		if (countvar!=undefined) {
+			g_variables[countvar] = j;
+		}
+		var ref_init = $(action).attr("ref-init");
+		if (ref_init!=undefined) {
+			ref_init = r_replaceVariable(ref_init);
+			var ref_inits = ref_init.split("/"); // ref1/ref2/...
+			for (var i=0;i<ref_inits.length;i++)
+				g_variables[ref_inits[i]] = new Array();
+		}
+		portfolioid = portfolioids[j];
+		portfolioid_current = portfolioid;
+		$.ajax({
+			async:false,
+			type : "GET",
+			dataType : "xml",
+			j : j,
+			url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
+			success : function(data) {
+				if (report_not_in_a_portfolio){
+					UICom.structure["tree"] = {};
+					UICom.structure["ui"] = {};
+				}
+				UICom.parseStructure(data,true, null, null,true);
+				var actions = $(action).children();
+				for (var i=0; i<actions.length;i++){
+					var tagname = $(actions[i])[0].tagName;
+					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+				};
+			}
+		});
+	}
 }
 
 //=============================================================================
@@ -2311,7 +2361,7 @@ g_unique_functions['uniqueResourceCode'] = function (index,node)
 }
 
 //==================================
-g_unique_functions['uniqueResource'] = function (index,node)
+g_unique_functions['uniqueResourceText'] = function (index,node)
 //==================================
 {
 	if (index>0) {

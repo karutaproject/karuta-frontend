@@ -185,6 +185,13 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 		//---------------------
 		$(itself.label_node[i][0]).text(label);
 	}
+	//-------- if function js -------------
+	if (UICom.structure["ui"][itself.id].js!="") {
+		var elts = UICom.structure["ui"][itself.id].js.split("/");
+		if (elts[0]=="update-resource")
+			eval(elts[1]+"(itself.node,g_portfolioid)");
+	}
+	//---------------------
 	itself.save();
 };
 
