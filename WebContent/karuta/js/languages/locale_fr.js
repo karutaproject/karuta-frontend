@@ -181,8 +181,8 @@ karutaStr['fr']['width']="Largeur (px)";
 karutaStr['fr']['height']="Hauteur (px)";
 karutaStr['fr']['public']="Public";
 karutaStr['fr']['text-align']="Alignement";
-karutaStr['fr']['displayview']="Type de Vue";
-karutaStr['fr']['displayitselforg']="Type d'affichage";
+karutaStr['fr']['displayview']="Type de vue";
+karutaStr['fr']['displayitselforg']="Largeur d'affichage";
 karutaStr['fr']['displaychildorg']="Type d'affichage du contenu";
 karutaStr['fr']['margin-top']="Marge supérieure (px)";
 karutaStr['fr']['sharedResource']="Ressource partagée";
@@ -204,6 +204,7 @@ karutaStr['fr']['moveinroles']="Déplacer";
 karutaStr['fr']['othercss']="Autres instructions CSS";
 karutaStr['fr']['cssfile']="Fichier CSS";
 karutaStr['fr']['display-type']="Type de présentation";
+karutaStr['fr']['layout']="Disposition";
 karutaStr['fr']['node']="Noeud";
 karutaStr['fr']['node-content']="Contenu du noeud";
 karutaStr['fr']['node-label']="Libellé du noeud";
@@ -245,9 +246,11 @@ karutaStr['fr']['duration']="Durée de vie du lien (en heures)";
 karutaStr['fr']['seestart']="Voir - Date début";
 karutaStr['fr']['seeend']="Voir - Date fin";
 karutaStr['fr']['logcode']="Code Log";
+karutaStr['fr']['js']="Function js";
 karutaStr['fr']['alt']="Texte alternatif";
 karutaStr['fr']['node-comment']="Commentaires du noeud";
 karutaStr['fr']['autoload']="Autoload";
+karutaStr['fr']['defaultrole']="Rôle par défaut";
 
 //=========================================
 //========== ADMIN ========================
@@ -275,8 +278,8 @@ karutaStr['fr']['portfolio']="Mon portfolio";
 karutaStr['fr']['nogroup']="Aucun groupe associé";
 karutaStr['fr']['karuta.model']="Créer un modèle de portfolio";
 karutaStr['fr']['code_portfolio']="Code du portfolio";
-karutaStr['fr']['import_portfolio']="Importer un modèle (.xml)";
-karutaStr['fr']['import_zip']="Importer un modèle ou dossier (.zip)";
+karutaStr['fr']['import_portfolio']="Importer un modèle <b>.xml</b>";
+karutaStr['fr']['import_zip']="Importer un modèle ou dossier <b>.zip</b>";
 karutaStr['fr']['instantiate_portfolio']="Instancier un portfolio";
 karutaStr['fr']['button-instantiate']="Instancier";
 karutaStr['fr']['unshare']="Départager";
@@ -299,10 +302,10 @@ karutaStr['fr']['getWebsite']="Exporter site Web";
 karutaStr['fr']['owner']="Propriétaire";
 karutaStr['fr']['portfolios-admin']="Portfolios";
 karutaStr['fr']['bin-admin']="Poubelle";
-karutaStr['fr']['import_instance']="Importer une instance de portfolio (.xml)";
+karutaStr['fr']['import_instance']="Importer une instance de portfolio <b>.xml</b>";
 karutaStr['fr']['remove-selection']="Déplacer vers la poubelle";
 karutaStr['fr']['delete-selection']="Détruire";
-karutaStr['fr']['import_zip_instance']="Importer une instance de portfolio ou dossier (.zip)";
+karutaStr['fr']['import_zip_instance']="Importer une instance de portfolio ou dossier <b>.zip</b>";
 karutaStr['fr']['rename-move']="Renommer ou déplacer";
 karutaStr['fr']['rename']="Renommer";
 karutaStr['fr']['karuta.batch']="Créer un batch";
@@ -420,12 +423,12 @@ karutaStr['fr']['message']="Message";
 karutaStr['fr']['email-sent']="Le message a été envoyé.";
 karutaStr['fr']['alternative-label']="Libellé alternatif";
 karutaStr['fr']['sent-by']="Envoyé par";
-karutaStr['fr']['dashboard-code']="Code du rapport";
+karutaStr['fr']['dashboard-code']="Code du portfolio rapport";
 karutaStr['fr']['report-code']="Code du rapport";
-karutaStr['fr']['csv']="Rôles - Afficher CSV";
-karutaStr['fr']['pdf']="Rôles - Afficher PDF";
-karutaStr['fr']['rtf']="Rôles - Afficher RTF";
-karutaStr['fr']['img']="Rôles - Afficher Image";
+karutaStr['fr']['csv']="Rôles - Bouton CSV";
+karutaStr['fr']['pdf']="Rôles - Bouton PDF";
+karutaStr['fr']['rtf']="Rôles - Bouton RTF";
+karutaStr['fr']['img']="Rôles - Bouton PNG";
 karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
 karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + g_configVar['maxfilesizeupload'] + " Mo sont autorisés !";
 
@@ -479,7 +482,7 @@ karutaStr['fr']['empty-group']="Groupe vide";
 karutaStr['fr']['list_portfoliosgroups']="Groupes de portfolios";
 karutaStr['fr']['note-list_portfoliosgroups']="Attention - Les dossiers contenants les portfolios doivent être ouverts dans la page des portfolios";
 karutaStr['fr']['note-list_usergroups']="Attention - Les usagers ne doivent pas être filtrés dans la page Usagers";
-karutaStr['fr']['confirm-remove-item-group']="Voulez-vous vraiment retirer cet élément du group ? Cette action est irréversible.";
+karutaStr['fr']['confirm-remove-item-group']="Voulez-vous vraiment retirer cet élément du groupe ? Cette action est irréversible.";
 karutaStr['fr']['add_users']="Ajouter des usagers";
 karutaStr['fr']['add_portfolios']="Ajouter des portfolios";
 karutaStr['fr']['select_groups']="Sélectionner des groupes";
@@ -557,7 +560,7 @@ karutaStr['fr']['var-value']="Valeur de la variable";
 
 karutaStr['fr']['asmColumn']="asmColumn";
 
-karutaStr['fr']['startday']="Date de début";
+karutaStr['fr']['startday']="Moment d'exécution";
 karutaStr['fr']['time']="Heure (HH:MM)";
 karutaStr['fr']['freq']="Fréquence";
 karutaStr['fr']['execroles']="Rôles - Exécuter";
@@ -566,6 +569,8 @@ karutaStr['fr']['exec']="Exécuter maintenant";
 karutaStr['fr']['uploaded-by']="Téléversé par";
 karutaStr['fr']['date']="Date";
 karutaStr['fr']['file']="Fichier";
+
+karutaStr['fr']['coverage']="Couverture";
 
 //=========================================
 //========== LOGIN ====================

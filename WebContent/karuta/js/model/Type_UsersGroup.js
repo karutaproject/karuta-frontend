@@ -56,6 +56,7 @@ UIFactory["UsersGroup"] = function(node)
 	this.loaded = false;
 	this.nbchildren = 0;
 	this.children = {};
+	this.loadContent();
 }
 
 //--------------------------------------------------------------
@@ -171,10 +172,11 @@ UIFactory["UsersGroup"].prototype.toggleContent = function(type)
 }
 
 //==============================
-UIFactory["UsersGroup"].prototype.loadAndDisplayContent = function (type)
+UIFactory["UsersGroup"].prototype.loadContent = function (type)
 //==============================
 {
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/usersgroups?group="+this.id,
@@ -203,13 +205,19 @@ UIFactory["UsersGroup"].prototype.loadAndDisplayContent = function (type)
 				this.group.children[newTableau1[i][2]] = {'id':newTableau1[i][2]};
 			}
 			this.group.nbchildren = items.length;
-			//-------------------------
-			this.group.displayContent(type);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Error : "+jqxhr.responseText);
 		}
 	});
+}
+
+//==============================
+UIFactory["UsersGroup"].prototype.loadAndDisplayContent = function (type)
+//==============================
+{
+	this.loadContent();
+	this.displayContent(type);
 }
 
 //--------------------------------------------------------------
@@ -274,7 +282,7 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type)
 		html += "<div id='usergroup_"+this.id+"' class='usergroup'>";
 		html += "	<div id='tree_usergroup-label_"+this.id+"' class='tree-label usergroup-label'>";
 		html += "		<span id='usergrouplabel_"+this.id+"' onclick=\"usergroups_byid['"+this.id+"'].toggleContent('"+type+"')\" class='project-label'>"+usergroup_code+"</span>";
-		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"' style='display:none'>"+this.nbchildren+"</span>";
+		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"' >"+this.nbchildren+"</span>";
 		html += "	</div>";
 		html += "</div>"
 		$("#"+dest).append($(html));

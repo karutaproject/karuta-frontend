@@ -313,9 +313,9 @@ UIFactory["URL2Portfolio"].prototype.bringUpToDate = function()
 				var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
 				if (code == portfoliocode) {
 					$(self.uuid_node).text($(items[i]).attr('id'));
-					for (var i=0; i<languages.length;i++){
+					for (var j=0; j<languages.length;j++){
 						var label = $("label[lang="+languages[j]+"]",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
-						$(self.label_node[i]).text(label);
+						$(self.label_node[j]).text(label);
 					}
 					self.save();
 					break;
@@ -336,7 +336,7 @@ UIFactory["URL2Portfolio"].prototype.bringUpToDate = function()
 							$(self.uuid_node).text($(items[i]).attr('id'));
 							for (var j=0; j<languages.length;j++){
 								var label = $("label[lang="+languages[j]+"]",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
-								$(self.label_node[i]).text(label);
+								$(self.label_node[j]).text(label);
 							}
 							self.save();
 							break;

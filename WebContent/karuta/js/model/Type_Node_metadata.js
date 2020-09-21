@@ -91,8 +91,9 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
 	this.duplicateroles = ($(node.metadatawad).attr('duplicateroles')==undefined)?'none':$(node.metadatawad).attr('duplicateroles');
 	this.incrementroles = ($(node.metadatawad).attr('incrementroles')==undefined)?'none':$(node.metadatawad).attr('incrementroles');
-	this.menuroles =r_replaceVariable(($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles'));
+	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	this.menulabels = r_replaceVariable(($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels'));
+	this.js = ($(node.metadatawad).attr('js')==undefined)?"":$(node.metadatawad).attr('js');
 	if (this.resource!=undefined || this.resource!=null)
 		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
 }
@@ -343,16 +344,18 @@ UIFactory["Node"].prototype.displayRights = function(destid)
 	roles_by_role = {};
 	var rights = this.getRights(this.id);
 	var roles = $("role",rights);
-	html += "<table id='rights'>";
-	html+= "<tr><td></td><td> Read </td><td> Write </td><td> Delete </td><td> Submit </td>";
-	for (var i=0;i<roles.length;i++){
-		var rolename = $(roles[i]).attr("name");
-		roles_by_role[rolename] = new RoleRights(roles[i],this.id);
+	if (roles.length>0) {
+		html += "<table id='rights'>";
+		html+= "<tr><td></td><td> Read </td><td> Write </td><td> Delete </td><td> Submit </td>";
+		for (var i=0;i<roles.length;i++){
+			var rolename = $(roles[i]).attr("name");
+			roles_by_role[rolename] = new RoleRights(roles[i],this.id);
+		}
+		for (role in roles_by_role) {
+			html += roles_by_role[role].getEditor();
+		}
+		html += "<table>";
 	}
-	for (role in roles_by_role) {
-		html += roles_by_role[role].getEditor();
-	}
-	html += "<table>";
 	$("#"+destid).append($(html));
 }
 
@@ -411,10 +414,11 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		resource_type = this.resource.type;
 	if (name=='asmRoot') {
 		this.displayMetadataAttributeEditor('metadata-root','list-novisible',true);
-		this.displayMetadataAttributeEditor('metadata-root','export-pdf',true);
-		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
-		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);
+//		this.displayMetadataAttributeEditor('metadata-root','export-pdf',true);
+//		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
+//		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);
 		this.displayMetadataAttributeEditor('metadata-root','public',true);
+		this.displayMetadataWadAttributeEditor('metadata-root','defaultrole');
 		this.displayMetadataAttributeEditor('metadata-root','autoload',true);
 	}
 	if (name=='asmContext' && this.resource.type=='Proxy')
@@ -423,8 +427,11 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataAttributeEditor('metadata-part1','semantictag');
 	if (languages.length>1) { // multilingual application
 		this.displayMetadataAttributeEditor('metadata-part1','multilingual-node',true);
-		if (name=='asmContext' && semtag!="g-variable") {
-			this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true);
+		if (name=='asmContext') {
+			if (this.resource.type!=='Variable')
+				this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true);
+			else
+				this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true,true);
 		}
 	}
 	if (name=='asmContext' && this.resource.type=='URL2Unit')
@@ -433,7 +440,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 //		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
 //			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
 //	}
-	if (USER.admin && Object.keys(UICom.roles).length>2)
+	if (!model)
 		this.displayRights('metadata-rights');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
@@ -451,7 +458,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	}
 	else {
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles');
-		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
+		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',true);
 	}
 	this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
 	if (model)
@@ -486,10 +493,11 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','incrementroles',true);
 	//-----------------------------------------
-	if (semtag=='bubble_level1' && model)
-		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles');
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles',false,true);
+	if (semtag=='bubble_level1')
+		if (model)
+			this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles');
+		else
+			this.displayMetadataWadAttributeEditor('metadata-part2','seeqrcoderoles',false,true);
 	//-----------------------------------------
 	if (this.resource_type=='Proxy' && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','edittargetroles');
@@ -527,6 +535,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (name=='asmContext' && this.resource.type=='TextField')
 		this.displayMetadataWadAttributeEditor('metadata-part2','maxword');
 	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
+	this.displayMetadataWadAttributeEditor('metadata-part2','js');
 	//--------------------------------------
 	if (name!='asmRoot')
 		this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
@@ -645,9 +654,9 @@ UIFactory["Node"].getMetadataEpm = function(data,attribute,number)
 			html += attribute.substring(8) + ":" + value;
 		else
 			html += attribute + ":" + value;
-		if (attribute.indexOf("font-size")>-1 && number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
+		if (attribute.indexOf("font-size")>-1 && number && value.indexOf('%')<0 && value.indexOf('em')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
 			html += 'px';			
-		else if (number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('pt')<0)
+		else if (number && value.indexOf('%')<0 && value.indexOf('px')<0 && value.indexOf('em')<0 && value.indexOf('pt')<0)
 			html += 'px';
 		html += ';';
 	}	return html;
@@ -887,8 +896,8 @@ UIFactory["Node"].prototype.displayMetadataDisplayTypeAttributeEditor = function
 	html += "	<div class='input-group-prepend'>";
 	html += "		<div class='input-group-text'>";
 	html += karutaStr[languages[langcode]][attribute];
-	if (attribute=='seenoderoles')
-		html += "<a data-toggle='collapse' data-target='#see-calendar' aria-expanded='false'>&nbsp;<span class='fa fa-calendar'></span></a>"
+//	if (attribute=='seenoderoles')
+//		html += "<a data-toggle='collapse' data-target='#see-calendar' aria-expanded='false'>&nbsp;<span class='fa fa-calendar'></span></a>";
 	html += "</div>";
 	html += "	</div>";
 	html += "	<div id='"+attribute+nodeid+"' class='form-control'>"+value+"</div>";
@@ -1013,7 +1022,7 @@ UIFactory["Node"].prototype.displayMetadataWadAttributeEditor = function(destid,
 			html += "	</div>";
 		}
 		html += "</div>";
-	} else if (attribute.indexOf('roles')>-1){
+	} else if (attribute.indexOf('role')>-1){
 		this.displaySelectRole(destid,attribute,yes_no,disabled);
 	} else {
 		html += "<div class='input-group '>";
@@ -1181,79 +1190,6 @@ UIFactory["Node"].prototype.displaySelectRole= function(destid,attribute,yes_no,
 
 }
 
-//==================================
-function addautocomplete(input,arrayOfValues) {
-//==================================
-	var currentFocus;
-	input.addEventListener("input", function(e) {
-		var a, b, i, val = this.value.substring(this.value.lastIndexOf(" ")+1);
-		closeAllLists();
-		if (!val) { return false;}
-	 	currentFocus = -1;
-		a = document.createElement("DIV");
-		a.setAttribute("id", this.id + "autocomplete-list");
-		a.setAttribute("class", "autocomplete-items");
-		this.parentNode.appendChild(a);
-		for (i = 0; i < arrayOfValues.length; i++) {
-			var indexval = arrayOfValues[i].libelle.toUpperCase().indexOf(val.toUpperCase());
-			if (indexval>-1) {
-				b = document.createElement("DIV");
-				b.innerHTML = arrayOfValues[i].libelle.substr(0, indexval);
-				b.innerHTML += "<strong>" + arrayOfValues[i].libelle.substr(indexval,val.length) + "</strong>";
-				b.innerHTML += arrayOfValues[i].libelle.substr(indexval+val.length);
-				b.innerHTML += "<input type='hidden' label=\""+arrayOfValues[i].libelle+"\" >";
-				b.addEventListener("click", function(e) {
-					if (input.value.lastIndexOf(" "))
-						input.value = input.value.substring(0,input.value.lastIndexOf(" ")+1) + $("input",this).attr('label');
-					else
-						input.value = $("input",this).attr('label');
-					$(input).change();
-					closeAllLists();
-				});
-				a.appendChild(b);
-			}
-		}
-	});
-	input.addEventListener("keydown", function(e) {
-		var x = document.getElementById(this.id + "autocomplete-list");
-		if (x) x = x.getElementsByTagName("div");
-		if (e.keyCode == 40) {
-			currentFocus++;
-		addActive(x);
-		} else if (e.keyCode == 38) { //up
-			currentFocus--;
-			addActive(x);
-		} else if (e.keyCode == 13) {
-			e.preventDefault();
-			if (currentFocus > -1) {
-				if (x) x[currentFocus].click();
-			}
-		}
-	});
-	function addActive(x) {
-		if (!x) return false;
-		removeActive(x);
-		if (currentFocus >= x.length) currentFocus = 0;
-		if (currentFocus < 0) currentFocus = (x.length - 1);
-		x[currentFocus].classList.add("autocomplete-active");
-	}
-	function removeActive(x) {
-		for (var i = 0; i < x.length; i++) {
-			x[i].classList.remove("autocomplete-active");
-		}
-	}
-	function closeAllLists(elmnt) {
-		var x = document.getElementsByClassName("autocomplete-items");
-		for (var i = 0; i < x.length; i++) {
-			if (elmnt != x[i] && elmnt != input) {
-				x[i].parentNode.removeChild(x[i]);
-			}
-		}
-	}
-	document.addEventListener("click", function (e) {
-		closeAllLists(e.target);
-	});
-}
 
 
 //---------------------------------------------------------
@@ -1264,6 +1200,8 @@ function addautocomplete(input,arrayOfValues) {
 UIFactory["Node"].prototype.displayMetadataEpmDisplayViewAttributeEditor = function(destid,attribute,value,yes_no,disabled)
 //==================================================
 {
+	if (displayView[g_display_type][this.asmtype]!=undefined && displayView[g_display_type][this.asmtype].length==0) // no display views
+		return;
 	var nodeid = this.id;
 	var langcode = LANGCODE;
 	if (value==null || value==undefined || value=='undefined')
@@ -1305,11 +1243,15 @@ UIFactory["Node"].prototype.displayMetadataEpmDisplayOrgAttributeEditor = functi
 		value = "";
 	if (this.structured_resource!=null && attribute=="displaychildorg")
 		return
+	if (attribute=='displayitselforg' && (displayOrg[this.asmtype][parent_displayorg]==undefined || displayOrg[this.asmtype][parent_displayorg].length==0))
+		return;
 	if (attribute=='displayitselforg' && displayOrg[this.asmtype][parent_displayorg]!=undefined && displayOrg[this.asmtype][parent_displayorg].length==1) {
 		if (value!=displayOrg[this.asmtype][parent_displayorg][0])
 			UIFactory.Node.updateMetadataEpmAttribute(nodeid,attribute,displayOrg[this.asmtype][parent_displayorg][0]);
-		return
+		return;
 	}
+	if (attribute=='displaychildorg' && (displayOrg[this.asmtype]["children"]==undefined || displayOrg[this.asmtype]["children"].length==0))
+		return;
 	var html = "";
 	html += "<div class='input-group '>";
 	html += "	<div class='input-group-prepend'>";
@@ -1442,6 +1384,9 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		var html = "";
 		html += "<form id='metadata-epm' class='metadata'>";
 		html += "	<div id='metadata-epm-root'></div>";
+		html += "	<div id='metadata-epm-part0'></div>"
+		if (name!='asmRoot')
+			html += "<h5 id='layout'>"+karutaStr[languages[langcode]]['layout']+"</h5>";
 		html += "	<div id='metadata-epm-part1'></div>"
 		html += "<h5>"+karutaStr[languages[langcode]]['node']+"</h5>";
 		html += "	<div id='metadata-epm-node'></div>";
@@ -1464,13 +1409,9 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		if (USER.admin || g_userroles[0]=='designer' || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1) {
 			if (name=='asmRoot') {
 				this.displayMetadataDisplayTypeAttributeEditor('metadata-epm-root','display-type');
-//				this.displayMetadataMenuTypeAttributeEditor('metadata-epm-root','menu-type');
-//				this.displayMetadataEpmAttributeEditor('metadata-epm-root','cssfile',$(this.metadata).attr('cssfile'));
-//				html  = "<label>"+karutaStr[languages[langcode]]['csstext']+"</label>";
-//				$("#metadata-epm-root").append($(html));
-//				this.displayMetadatawWadTextAttributeEditor('metadata-epm-root','csstext');
 			}
-			this.displayMetadataEpmAttributeEditor('metadata-epm-part1','cssclass',$(this.metadataepm).attr('cssclass'));
+			this.displayMetadataEpmAttributeEditor('metadata-epm-part0','cssclass',$(this.metadataepm).attr('cssclass'));
+			//------------LAYOUT-----------------------
 			if (name!='asmRoot') {
 				this.displayMetadataEpmDisplayViewAttributeEditor('metadata-epm-part1','displayview',$(this.metadataepm).attr('displayview'));
 				this.displayMetadataEpmDisplayOrgAttributeEditor('metadata-epm-part1','displayitselforg',$(this.metadataepm).attr('displayitselforg'));
@@ -1513,6 +1454,8 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-style',$(this.metadataepm).attr('comment-font-style'));
 		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-color',$(this.metadataepm).attr('comment-color'));
 		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-size',$(this.metadataepm).attr('comment-font-size'));
+		if ($("#metadata-epm-part1").html()=="")
+			$("#layout").hide();
 	}
 };
 

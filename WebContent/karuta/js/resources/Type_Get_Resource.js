@@ -185,6 +185,13 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 		//---------------------
 		$(itself.label_node[i][0]).text(label);
 	}
+	//-------- if function js -------------
+	if (UICom.structure["ui"][itself.id].js!="") {
+		var elts = UICom.structure["ui"][itself.id].js.split("/");
+		if (elts[0]=="update-resource")
+			eval(elts[1]+"(itself.node,g_portfolioid)");
+	}
+	//---------------------
 	itself.save();
 };
 
@@ -372,7 +379,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 						if (display_label)
 							html += $(this).attr("label_"+languages[langcode]);
 						$("#button_"+langcode+self.id).html(html);
-						$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+						$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code).addClass(code);
 						UIFactory["Get_Resource"].update(this,self,langcode);
 						//--------------------------------
 					});
@@ -385,7 +392,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					if (display_label)
 						html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 					$("#button_"+langcode+self.id).html(html);
-					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code).addClass(code);
 				}
 				$(select).append($(select_item));
 			}
@@ -404,7 +411,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				var select_item = $(html);
 				$(select_item).click(function (ev){
 					$("#button_"+langcode+self.id).html($(this).attr("label_"+languages[langcode]));
-					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code).addClass(code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
 				//-------------- update button -----
@@ -412,7 +419,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					var html = "";
 					html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 					$("#button_"+langcode+self.id).html(html);
-					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code).addClass(code);
 				}
 				$(select_item).append($(select_item))
 				$(select).append($(select_item));
@@ -452,7 +459,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
 					$("#button_"+langcode+self.id).html(UICom.structure["ui"][$(this).attr("label_"+languages[langcode]).substring(7)].resource.getView());
-					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn select selected-label').addClass("sel"+code).addClass(code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
 				$(select_item).append($(select_item_a))
@@ -465,7 +472,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					if (display_label)
 						html += UICom.structure["ui"][uuid].resource.getView(null,'span');
 					$("#button_"+langcode+self.id).html(html);
-					$("#button_"+langcode+self.id).attr('class', 'btn  select selected-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn  select selected-label').addClass("sel"+code).addClass(code);
 				}
 			}
 		}
@@ -504,7 +511,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
 					$("#button_"+langcode+self.id).html(UICom.structure["ui"][$(this).attr("label_"+languages[langcode]).substring(7)].resource.getView());
-					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code).addClass(code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
 				$(select_item).append($(select_item_a))
@@ -517,7 +524,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					if (display_label)
 						html += UICom.structure["ui"][uuid].resource.getView(null,'span');
 					$("#button_"+langcode+self.id).html(html);
-					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code).addClass(code);
 				}
 			}
 		}		//---------------------
@@ -877,12 +884,17 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		html += "</form>";
 		var form = $(html);
 		html = "";
-		html += "<div class='auto-complete btn-group roles-choice select-"+semtag+"'>";
-		html += "<input id='button_"+self.id+"' type='text' class='btn btn-default select' code= '' value=''/>";
+		html += "<div class='input-group select-"+semtag+"'>";
+		html += "<input id='button_"+self.id+"' type='text' class='form-control' code= '' value=''/>";
+		html += "</div>";
+		var input_group = $(html);
+		$(form).append($(input_group));
+		html = "";
+		html += "<div class='input-group-append'>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
 		var btn_group = $(html);
-		$(form).append($(btn_group));
+		$(input_group).append($(btn_group));
 		$("#"+destid).append(form);
 		//---------------------------------------------------
 		
@@ -945,11 +957,11 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					if (display_label)
 						html += $(this).attr("label_"+languages[langcode]);
 					$("#button_"+self.id).html(html);
-					$("#button_"+self.id).attr("code",$('code',resource).text());
+					$("#button_"+self.id).attr("code",$(this).attr("code"));
 					$("#button_"+self.id).attr("value",html);
 					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 					for (var j=0; j<languages.length;j++){
-						$("#button_"+self.id).attr("label_"+languages[j],$(srce+"[lang='"+languages[j]+"']",resource).text());
+						$("#button_"+self.id).attr("label_"+languages[j],$(this).attr("label_"+languages[j]));
 					}
 					//--------------------------------
 				});
@@ -1129,7 +1141,7 @@ function get_simple(parentid,title,query,partcode,get_resource_semtag)
 	var langcode = LANGCODE;
 	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+partcode+","+get_resource_semtag+"')";
+	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
@@ -1151,7 +1163,7 @@ function get_multiple(parentid,title,query,partcode,get_resource_semtag)
 	var langcode = LANGCODE;
 	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+partcode+","+get_resource_semtag+"')";
+	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
@@ -1174,7 +1186,7 @@ function import_multiple(parentid,title,query,partcode,get_resource_semtag)
 	var langcode = LANGCODE;
 	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+partcode+"')";
+	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+r_replaceVariable(partcode)+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);

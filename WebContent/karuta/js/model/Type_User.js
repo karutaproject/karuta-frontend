@@ -73,6 +73,7 @@ UIFactory["User"] = function( node )
 	//-----------------------------------
 	// setting flags
 	this.admin = this.admin_node.text()=='1';
+	this.admin_original = this.admin_node.text()=='1';
 	this.creator = this.designer_node.text()=='1' || this.admin_node.text()=='1';
 	this.limited = this.other_node.text().indexOf('limited')>-1;
 	this.xlimited = this.other_node.text().indexOf('xlimited')>-1;
@@ -401,7 +402,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	var html = "";
 	//--------------------------------------------------------------------------------------------
 	if (type=='user') {
-		html += "<tr>"
+		html += "<tr class='user-row'>"
 		html += "<td class='firstname'>"+this.firstname_node.text()+"</td>";
 		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
 		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</td>";
@@ -432,12 +433,12 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	}
 	//--------------------------------------------------------------------------------------------
 	if (type=='usergroup') {
-		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+" <span class='fas fa-trash' onclick=\"UIFactory.UsersGroup.remove('"+gid+"','"+this.id+"')\"></span></div>";
+		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+" ("+this.username_node.text()+") <span class='fas fa-trash' onclick=\"UIFactory.UsersGroup.ConfirmRemove('"+gid+"','"+this.id+"')\"></span></div>";
 	}
 	//--------------------------------------------------------------------------------------------
 	if (type=='usergroup-user') {
 		html += "<div class='row user-row' id='usergroup-user_"+this.id+"' draggable='true' ondragstart='dragUser(event)'>";
-		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+"</div>";
+		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+" ("+this.username_node.text()+")</div>";
 		html += "</div>";
 	}
 	//--------------------------------------------------------------------------------------------

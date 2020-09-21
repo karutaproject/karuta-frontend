@@ -42,27 +42,24 @@
 		</else-part>		
 	</xsl:template>
 
-	<xsl:template match="*[metadata/@semantictag='for-each-tree']">
-		<xsl:variable name="id">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<for-each-tree id="{$id}">
-			<code>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">code</xsl:with-param>
-				</xsl:call-template>
-			</code>
-			<actions>
-				<xsl:apply-templates select='asmUnitStructure'/>
-			</actions>
-		</for-each-tree>
-	</xsl:template>
+
+
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ================================ PERSON ============================================== -->
+	<!-- ====================================================================================== -->
+	<!-- ====================================================================================== -->
 
 	<xsl:template match="*[metadata/@semantictag='for-each-person']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='personid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<for-each-user id="{$id}">
+			<email>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">email</xsl:with-param>
+				</xsl:call-template>
+			</email>
 			<username>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">username</xsl:with-param>
@@ -73,12 +70,6 @@
 			</actions>
 		</for-each-user>
 	</xsl:template>
-
-	<!-- ====================================================================================== -->
-	<!-- ====================================================================================== -->
-	<!-- ================================ PERSON ============================================== -->
-	<!-- ====================================================================================== -->
-	<!-- ====================================================================================== -->
 
 	<xsl:template match="*[metadata/@semantictag='create-person']">
 		<xsl:variable name="identifier">
@@ -187,6 +178,20 @@
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	
+	<xsl:template match="*[metadata/@semantictag='for-each-tree']">
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<for-each-tree id="{$id}">
+			<code>
+				<xsl:call-template name="txtval"><xsl:with-param name="semtag">code</xsl:with-param></xsl:call-template>
+			</code>
+			<actions>
+				<xsl:apply-templates select='asmUnitStructure'/>
+			</actions>
+		</for-each-tree>
+	</xsl:template>
+
 	<xsl:template match="*[metadata/@semantictag='create-tree' or metadata/@semantictag='create-project']">
 		<xsl:variable name="id">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -642,9 +647,7 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="source">
-			<xsl:call-template name='get-select'>
-				<xsl:with-param name='parent'>subsection-source</xsl:with-param>
-			</xsl:call-template>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<update-url2portfolio type='URL2Portfolio' select="{$select}">
 			<source select="{$source}"/>
@@ -927,7 +930,7 @@
 
 	<xsl:template name='txtval'>
 		<xsl:param name="semtag"/>
-		<xsl:for-each select=".//*[metadata/@semantictag=$semtag]/*[metadata/@semantictag='txtsel' or metadata/@semantictag='txtval' or metadata/@semantictag='textval']">
+		<xsl:for-each select=".//*[metadata/@semantictag=$semtag]/*[metadata/@semantictag='txtsel' or metadata/@semantictag='txtval' or metadata/@semantictag='textval' or metadata/@semantictag='usersel']">
 			<xsl:if test="metadata/@semantictag='txtsel'">
 				<xsl:variable name="txtsel">
 					<xsl:value-of select="asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
@@ -946,6 +949,11 @@
 				</xsl:variable>
 				<txtval><xsl:value-of select="$txtval"/></txtval>
 			</xsl:if>
+			<xsl:if test="metadata/@semantictag='usersel'">
+				<xsl:variable name="usrsel">/<xsl:value-of select="asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of></xsl:variable>
+				<txtval select='{$usrsel}'/>
+			</xsl:if>
+			
 		</xsl:for-each>
 	</xsl:template>
 

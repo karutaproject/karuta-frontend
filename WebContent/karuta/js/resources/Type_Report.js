@@ -280,6 +280,7 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlfreqGroupObj).append($(htmlfreqDivObj));
 		$(htmlFormObj).append($(htmlfreqGroupObj));
 		//-----------------------------------------------------
+		/*
 		var htmlexecGroupObj = $("<div class='form-group'></div>")
 		var htmlexecLabelObj = $("<label for='exec_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['execroles']+"</label>");
 		var htmlexecDivObj = $("<div class='col-sm-9'></div>");
@@ -292,6 +293,7 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlexecGroupObj).append($(htmlexecLabelObj));
 		$(htmlexecGroupObj).append($(htmlexecDivObj));
 		$(htmlFormObj).append($(htmlexecGroupObj));
+		*/
 		//-----------------------------------------------------
 		/*
 		var htmlcommentsGroupObj = $("<div class='form-group'></div>")

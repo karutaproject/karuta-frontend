@@ -66,13 +66,14 @@ UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,par
 		html += "</div><!--row-->";
 		//----------------------------
 		html += "<div class='row'>";
-		html += "<div class='offset-md-1 col-7'>";
+		html += "<div class='offset-md-1 col-6'>";
 		html += "<h5>"+UICom.structure["ui"][this.foreignid].getLabel('std_node_'+parentid,"none")+"</h5>";
 		html += "</div><!--col-->";
 		if (writenode || g_userroles[0]=='designer') {
-			html += "<div class='col--4'>";
-			html += UICom.structure["ui"][this.foreignid].getButtons(null,null,null,false,0,true,menu);
-			html += UICom.structure["ui"][this.foreignid].getMenus(langcode,null,null,false,0,true,menu);
+			html += "<div class='col-5 btn-group'>";
+			html += "<div class='edit-bar'><span id='buttons-"+this.foreignid+"' class='buttons'/><span id='menus-"+this.foreignid+"' class='menus'/></div>";
+//			html += UICom.structure["ui"][this.foreignid].getButtons(null,null,null,false,0,true,menu);
+//			html += UICom.structure["ui"][this.foreignid].getMenus(langcode,null,null,false,0,true,menu);
 			html += "</div><!--col-->";
 		}
 		html += "</div><!--row-->";
@@ -83,6 +84,8 @@ UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,par
 		html += "<tr class='en-tete'><td></td><td class='bordure'> "+karutaStr[LANG]['listening']+" </td><td class='bordure'> "+karutaStr[LANG]['reading']+" </td><td class='bordure'> "+karutaStr[LANG]['spoken-interaction']+" </td><td class='bordure'> "+karutaStr[LANG]['spoken-production']+" </td><td class='bordure'> </td></tr>";
 		html += "</table>";
 		$("#"+destid).html(html);
+		$("#buttons-"+this.foreignid).html(UICom.structure["ui"][this.foreignid].getButtons(null,null,null,false,0,true,menu));
+		$("#menus-"+this.foreignid).html(UICom.structure["ui"][this.foreignid].getMenus(langcode,null,null,false,0,true,menu));
 		for ( var i = 0; i < this.langues_list.length; i++) {
 				$("#"+destid+"europass_table").append($("<tr id='"+destid+"_"+this.langues_list[i].id+"'></tr>"));			
 				this.langues_list[i].displayView(destid+"_"+this.langues_list[i].id,type,langcode,writenode || g_userroles[0]=='designer');

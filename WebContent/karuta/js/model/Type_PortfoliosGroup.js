@@ -59,8 +59,9 @@ UIFactory["PortfoliosGroup"] = function( node )
 	//------------------------------
 	this.roles = [];
 	this.rrg = {};
-
-};
+	//------------------------------
+	this.loadContent()
+;};
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
@@ -247,6 +248,18 @@ UIFactory["PortfoliosGroup"].displayAll = function(type)
 };
 
 //==================================
+UIFactory["PortfoliosGroup"].prototype.getLabel = function(langcode)
+//==================================
+{
+	if (langcode==null)
+		langcode = LANGCODE;
+	var label = this.label_node[langcode].text();
+	if (label=="")
+		label = this.code_node.text(); // for backward compatibility
+	return label;
+}
+
+//==================================
 UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,viewtype,type)
 //==================================
 {
@@ -298,11 +311,11 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,viewtype,type
 		if (USER.admin) {
 			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
 			html += "		<div class='dropdown-menu  dropdown-menu-right'>";
-			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a>";
-			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
-//			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callAddPortfolios('"+this.id+"','"+this.label_node.text()+"')\" ><i class='fa fa-plus-square'></i> "+karutaStr[LANG]["add_portfolios"]+"</a>";
-			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callShareUsers('"+this.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
-			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callShareUsersGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory.PortfoliosGroup.edit('"+this.id+"')\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory.PortfoliosGroup.confirmRemove('"+this.id+"',null)\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+//			html += "			<a class='dropdown-item' onclick=\"UIFactory.PortfoliosGroup.callAddPortfolios('"+this.id+"','"+this.label_node.text()+"')\" ><i class='fa fa-plus-square'></i> "+karutaStr[LANG]["add_portfolios"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory.PortfoliosGroup.callShareUsers('"+this.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory.PortfoliosGroup.callShareUsersGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
 			html += "		</div>";
 		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
 			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle' style='visibility:hidden'></button>";
@@ -329,7 +342,7 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,viewtype,type
 		html += "<div id='portfoliogroup_"+this.id+"' class='portfoliogroup' ondrop='dropPortfolioGroupFolder(event)' ondragover='ondragoverPortfolioGroupFolder(event)' ondragleave='ondragleavePortfolioGroupFolder(event)'>";
 		html += "	<div id='tree_portfoliogroup-label_"+this.id+"' class='tree-label portfoliogroup-label'>";
 		html += "		<span id='portfoliogrouplabel_"+this.id+"' onclick=\"portfoliogroups_byid['"+this.id+"'].toggleContent('"+type+"')\" class='project-label'>"+portfoliogroup_code+"</span>";
-		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"' style='display:none'>"+this.nbchildren+"</span>";
+		html += "		&nbsp;<span class='nbchildren badge' id='nbchildren_"+this.id+"'>"+this.nbchildren+"</span>";
 		html += "	</div>";
 		html += "</div>"
 		$("#"+dest).append($(html));
@@ -679,7 +692,7 @@ UIFactory["PortfoliosGroup"].callShareUsers = function(gid)
 	var js3 = "javascript:UIFactory['PortfoliosGroup'].shareUsers('"+gid+"','share')";
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+portfoliogroups_byid[gid].label);
+	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+portfoliogroups_byid[gid].getLabel());
 	$("#edit-window-type").html("");
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";
@@ -751,7 +764,7 @@ UIFactory["PortfoliosGroup"].callShareUsersGroups = function(gid)
 	var js3 = "javascript:UIFactory['PortfoliosGroup'].shareGroups('"+gid+"','share')";
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+portfoliogroups_byid[gid].label);
+	$("#edit-window-title").html(karutaStr[LANG]['addshare']+'/'+karutaStr[LANG]['unshare']+' '+portfoliogroups_byid[gid].getLabel());
 	$("#edit-window-type").html("");
 	var html = "";
 	html += "<div id='sharing' style='display:none'>";

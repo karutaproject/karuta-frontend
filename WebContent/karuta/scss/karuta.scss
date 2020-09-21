@@ -25,7 +25,7 @@
 	body {
 		font-family :var(--font-family);
 		font-size :calc(var(--font-size-coeff) * 1rem);
-		background-color: var(--list-background-color);
+//		background-color: var(--list-background-color);
 	}
 
 	// ----General font size ---------------
@@ -71,49 +71,6 @@
 		color:var(--list-button-background-color);
 	}
 
-	.dropdown.menu .btn{
-		height:25px;
-		padding-left:9px;
-		padding-right:9px;
-	}
-	.dropdown-menu {
-		color: var(--list-menu-text-color);
-		background-color: var(--list-menu-background-color);
-		a.dropdown-item {
-			cursor:default;
-			color: var(--list-menu-text-color);
-			background-color: var(--list-menu-background-color);
-		}
-		a.dropdown-item:hover {
-			color: var(--list-menu-background-color);
-			background-color: var(--list-menu-text-color);
-		}
-		.dropdown-submenu {
-			position: relative;
-		}
-		.dropdown-submenu>.dropdown-menu {
-			top: 0;
-			left: 100px;
-			margin-top: -6px;
-			margin-left: -1px;
-			-webkit-border-radius: 0 6px 6px 6px;
-			-moz-border-radius: 0 6px 6px;
-			border-radius: 0 6px 6px 6px;
-		}
-		.dropdown-submenu:hover>.dropdown-menu {
-			display: block;
-		}
-		.dropdown-submenu.pull-left {
-			float: none;
-		}
-		.dropdown-submenu.pull-left>.dropdown-menu {
-			left: -100%;
-			margin-left: 10px;
-			-webkit-border-radius: 6px 0 6px 6px;
-			-moz-border-radius: 6px 0 6px 6px;
-			border-radius: 6px 0 6px 6px;
-		}
-	}
 
 
 /* ====================== */
@@ -162,7 +119,7 @@
 		.welcome-box {
 			margin-left:auto;
 			margin-right:auto;
-			width:50%;
+			width:80%;
 			min-width:200px;
 			padding:3px;
 			border:1px solid var(--list-welcome-box-border-color);
@@ -190,14 +147,6 @@
 			color: var(--list-welcome-subtitle-color);
 			font-size:150%;
 			text-align: center;
-		}
-		@media only screen and (max-width: 320px) {
-			.welcome-title {
-				font-size: 100%;
-			}
-			.welcome-baseline {
-				font-size: 75%;
-			}
 		}
 	}
 
@@ -237,6 +186,7 @@
 		}
 		.active {
 			background-color: var(--list-button-background-color);
+			color: var(--list-button-text-color);
 		}
 
 	}
@@ -253,6 +203,7 @@
 			color:var(--list-button-text-color);
 			.btn  {
 				background-color:var(--list-element-background-color);
+				color: var(--list-element-text-color);
 			}
 		}
 		.content1{
@@ -802,6 +753,50 @@
 /*    BUTTONS - MENUS     */
 /* ====================== */
 
+	.dropdown.menu .btn{
+		height:25px;
+		padding-left:9px;
+		padding-right:9px;
+	}
+	.dropdown-menu {
+		color: var(--list-menu-text-color);
+		background-color: var(--list-menu-background-color);
+		a.dropdown-item {
+			cursor:default;
+			color: var(--list-menu-text-color);
+			background-color: var(--list-menu-background-color);
+		}
+		a.dropdown-item:hover {
+			color: var(--list-menu-background-color);
+			background-color: var(--list-menu-text-color);
+		}
+		.dropdown-submenu {
+			position: relative;
+		}
+		.dropdown-submenu>.dropdown-menu {
+			top: 0;
+			left: 100px;
+			margin-top: -6px;
+			margin-left: -1px;
+			-webkit-border-radius: 0 6px 6px 6px;
+			-moz-border-radius: 0 6px 6px;
+			border-radius: 0 6px 6px 6px;
+		}
+		.dropdown-submenu:hover>.dropdown-menu {
+			display: block;
+		}
+		.dropdown-submenu.pull-left {
+			float: none;
+		}
+		.dropdown-submenu.pull-left>.dropdown-menu {
+			left: -100%;
+			margin-left: 10px;
+			-webkit-border-radius: 6px 0 6px 6px;
+			-moz-border-radius: 6px 0 6px 6px;
+			border-radius: 6px 0 6px 6px;
+		}
+	}
+
 	.button{
 		font-size: calc(var(--font-size-coeff) * 0.9rem);
 		padding: 5px;
@@ -828,6 +823,7 @@
 	#navigation-bar,
 	.navbar-light .navbar-nav .nav-link,
 	.navbar-light .navbar-nav .nav-link:hover {
+		cursor:pointer;
 		color: var(--navbar-text-color);
 		background-color: var(--navbar-background-color);
 		.dropdown-menu {
@@ -877,6 +873,14 @@
 			padding-right : 0px;
 		}
 	
+		#toggle-mode,
+		a {
+			cursor:pointer;
+			.portfolio-label:hover {
+				cursor:pointer;
+			}
+		}
+	
 		#portfolio-container {
 			background-color: var(--portfolio-background-color);
 			
@@ -886,10 +890,10 @@
 		
 			a {
 				color: var(--portfolio-link-color);
-				cursor:pointer;
-				.portfolio-label:hover {
-					cursor:pointer;
-				}
+			}
+
+			.menus a {
+				color: var(--portfolio-buttons-color);
 			}
 		
 			#contenu,
@@ -1196,6 +1200,47 @@
 			cursor:pointer;
 		}
 	}
+
+/* ====================
+	Image
+   ====================*/
+	.clickable img {
+		cursor:pointer;
+	}
+
+/* ====================
+	Calendar
+   ====================*/
+	.calendar-format {
+		margin-top:10px;
+	}
+	
+	.container .Calendar .form-group {
+		margin-bottom:0px;
+	}
+	
+	.container .calendar-format {
+		display:none;
+	}
+
+/* ====================
+	SendEmail
+   ====================*/
+
+	.receiver_SendEmail{
+		font-size:calc(var(--font-size-coeff) * 1rem);
+		margin-bottom:20px;
+		background-color: lightgrey;
+		padding: 5px;
+	}
+	
+	.name_SendEmail {
+		font-weight:bold;
+	}
+	
+	.email_SendEmail {
+	}
+
 
 /* ====================== */
 /*     FIRST NODE         */
@@ -1520,7 +1565,8 @@
 		padding-top:15px;
 	}
 
-	.standard-node-card {
+	.standard-node-card,
+	.standard-resource-card {
 		margin:15px;
 	}
 
@@ -1542,7 +1588,7 @@
 		}
 		.menus {
 			float:right;
-			margin-top:-10px;
+			margin-top:-7px;
 		}
 	}
 
@@ -1565,6 +1611,7 @@
 
 	.row.content {
 		padding-top:0px;
+		padding-left:15px;
 	}
 
 	.row.content.card-body {
@@ -1584,7 +1631,7 @@
 		.card.col-md-11 {
 			padding-left:0px;
 			padding-right:0px;
-			margin-left:15px;
+			margin-left:5px;
 			margin-top:15px;
 		}
 
@@ -1672,6 +1719,19 @@
 		text-align:right;
 	}
 
+/* ========================= */
+/*     VUE  SIMPLE           */
+/* ========================= */
+
+	.td1 {
+		width:40%;
+	}
+	.td2 {
+		width:50%;
+	}
+	.td3 {
+		width:10%;
+	}
 /* ====================== */
 /*         MODEL          */
 /* ====================== */	
@@ -1708,6 +1768,7 @@
 
 	.csv-button,
 	.pdf-button,
+	.rtf-button,
 	.img-button {
 		background-color: var(--portfolio-buttons-background-color);
 		border:1px solid var(--portfolio-resource-border-color);
@@ -2544,39 +2605,6 @@ table.tablesorter th.restore {
 		min-height:34px;
 		width:90%;
 		padding-left:40px;
-	}
-
-/* ====================
-	Calendar
-   ====================*/
-	.calendar-format {
-		margin-top:10px;
-	}
-	
-	.container .Calendar .form-group {
-		margin-bottom:0px;
-	}
-	
-	.container .calendar-format {
-		display:none;
-	}
-
-/* ====================
-	SendEmail
-   ====================*/
-
-	.receiver_SendEmail{
-		font-size:calc(var(--font-size-coeff) * 1rem);
-		margin-bottom:20px;
-		background-color: lightgrey;
-		padding: 5px;
-	}
-	
-	.name_SendEmail {
-		font-weight:bold;
-	}
-	
-	.email_SendEmail {
 	}
 
 

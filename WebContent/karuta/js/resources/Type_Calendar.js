@@ -109,7 +109,7 @@ UIFactory["Calendar"].prototype.getAttributes = function(type,langcode)
 
 /// Display
 //==================================
-UIFactory["Calendar"].prototype.getView = function(dest,langcode)
+UIFactory["Calendar"].prototype.getView = function(dest,type,langcode)
 //==================================
 {
 	//---------------------

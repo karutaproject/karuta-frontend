@@ -25,13 +25,16 @@ function displayKarutaPublic()
 //==============================
 {
 	var html = "";
-	html += "<div id='main-container' class='container-fluid public-container'>";
-	html += "<div class='row public-row'>";
-	html += "	<div class='col-md-3'>";
+	html += "<div id='main-container'>";
+	html += "<div id='main-portfolio' class='container-fluid public-container'>";
+	html += "<div id='portfolio-container'>";
+	html += "<div class='main-row row'>";
+	html += "	<div class='col-sm-3'>";
 	html += "		<div id='welcome'></div>";
-	html += "		<div id='sidebar'></div>";
+	html += "		<div id='sidebar'><div id='sidebar-content'><div  class='panel-group' id='sidebar-parent' role='tablist'></div></div></div>";
 	html += "	</div>";
-	html += "	<div class='col-md-9' id='contenu'></div>";
+	html += "	<div class='col-sm-9' id='contenu'></div>";
+	html += "</div>";
 	html += "</div>";
 	html += "</div>";
 	$('body').html(html);
@@ -57,19 +60,6 @@ function displayKarutaPublic()
 		url : serverBCK+"/direct?i=" + iid,
 		success : function(data) {
 			g_uuid = data;
-			$.ajax({ // get group-role for the user
-				Accept: "application/xml",
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/credential/group/" + g_uuid,
-				success : function(data) {
-					var usergroups = $("group",data);
-					for (var i=0;i<usergroups.length;i++) {
-						g_userroles[i+1] = $("role",usergroups[i]).text();
-					}
-					g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
-				}
-			});
 			//----------------
 			$.ajax({
 				type : "GET",
@@ -86,7 +76,7 @@ function displayKarutaPublic()
 				}
 			});
 			//----------------
-			$.ajax({
+			$.ajax({	// get id of the portfolio that contains the node
 				type : "GET",
 				dataType : "text",
 				url : serverBCK_API+"/nodes/node/" + g_uuid  +"/portfolioid",
@@ -107,10 +97,22 @@ function displayKarutaPublic()
 					var rootnode = UICom.structure['ui'][g_uuid];
 					if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
 						depth = 1;
+					// --------------------------
+					var role = $(":root",data).attr("role");
+					if (role!="") {
+						g_userroles[0] = g_userroles[1] = role;
+					} else {
+						g_userroles[0] = g_userroles[1] ='designer';
+						g_designerrole = true;
+						g_visible = localStorage.getItem('metadata');
+						toggleMetadata(g_visible);
+					}
 					setCSSportfolio(data);
 					setLanguage(lang,'publichtm');
-					if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure')
-						UIFactory["Portfolio"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
+					if (rootnode.asmtype=='asmRoot' || rootnode.asmtype=='asmStructure') {
+						UIFactory.Node.displaySidebarItem(g_uuid,'sidebar-parent','standard',LANGCODE,false,g_uuid);
+//						UIFactory["Node"].displaySidebar(UICom.structure['tree'][g_uuid],'sidebar','standard',LANGCODE,false,g_uuid);
+					}
 					$("#contenu").html("<div id='page' uuid='"+g_uuid+"'></div>");
 					var semtag =  ($("metadata",rootnode.node)[0]==undefined || $($("metadata",rootnode.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",rootnode.node)[0]).attr('semantictag');
 					if (semtag == 'bubble_level1') {

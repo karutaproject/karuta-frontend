@@ -26,6 +26,8 @@ UIFactory["Variable"] = function( node )
 	this.name_node = $("name",$("asmResource[xsi_type='Variable']",node));
 	this.value_node = $("value",$("asmResource[xsi_type='Variable']",node));
 	this.display = {};
+	//--------------------
+	this.multilingual = false;
 };
 
 //==================================
@@ -107,6 +109,8 @@ UIFactory["Variable"].prototype.displayEditor = function(dest,type,langcode,disa
 	$(htmlNameGroupObj).append($(htmlNameLabelObj));
 	$(htmlNameGroupObj).append($(htmlNameDivObj));
 	$(htmlFormObj).append($(htmlNameGroupObj));
+	if (g_userroles[0]!='designer')
+		$(htmlNameInputObj).attr('disabled',true);
 	//---------------------
 	var value = $(this.value_node).text();
 	var htmlValueGroupObj = $("<div class='form-group'></div>")

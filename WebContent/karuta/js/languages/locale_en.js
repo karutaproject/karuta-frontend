@@ -181,8 +181,8 @@ karutaStr['en']['width']="Width (px)";
 karutaStr['en']['height']="Height (px)";
 karutaStr['en']['public']="Public";
 karutaStr['en']['text-align']="Alignment";
-karutaStr['en']['displayview']="Display View";
-karutaStr['en']['displayitselforg']="Display Type";
+karutaStr['en']['displayview']="View Type";
+karutaStr['en']['displayitselforg']="Display Width";
 karutaStr['en']['displaychildorg']="Content Display Type";
 karutaStr['en']['margin-top']="Margin Top (px)";
 karutaStr['en']['sharedResource']="Shared Resource";
@@ -204,6 +204,7 @@ karutaStr['en']['moveinroles']="Move";
 karutaStr['en']['othercss']="Other CSS Instructions";
 karutaStr['en']['cssfile']="CSS File";
 karutaStr['en']['display-type']="Display Type";
+karutaStr['en']['layout']="Layout";
 karutaStr['en']['node']="Node";
 karutaStr['en']['node-content']="Node Content";
 karutaStr['en']['node-label']="Node Label";
@@ -245,9 +246,11 @@ karutaStr['en']['duration']="Link Lifetime";
 karutaStr['en']['seestart']="See - Start Date";
 karutaStr['en']['seeend']="See - End Date";
 karutaStr['en']['logcode']="Log Code";
+karutaStr['en']['js']="JS Function";
 karutaStr['en']['alt']="Alternate Text";
 karutaStr['en']['node-comment']="Node Comments";
 karutaStr['en']['autoload']="Autoload";
+karutaStr['en']['defaultrole']="Default Role";
 
 //=========================================
 //========== ADMIN ========================
@@ -275,8 +278,8 @@ karutaStr['en']['portfolio']="My Portfolio";
 karutaStr['en']['nogroup']="No Group";
 karutaStr['en']['karuta.model']="Create a Portfolio Model";
 karutaStr['en']['code_portfolio']="Portfolio Code";
-karutaStr['en']['import_portfolio']="Import a Model (.xml)";
-karutaStr['en']['import_zip']="Import a Model or Folder (.zip)";
+karutaStr['en']['import_portfolio']="Import a Model <b>.xml</b>";
+karutaStr['en']['import_zip']="Import a Model or Folder <b>.zip</b>";
 karutaStr['en']['instantiate_portfolio']="Instantiate a Portfolio";
 karutaStr['en']['button-instantiate']="Instantiate";
 karutaStr['en']['unshare']="Unshare";
@@ -299,10 +302,10 @@ karutaStr['en']['getWebsite']="Export Website";
 karutaStr['en']['owner']="Owner";
 karutaStr['en']['portfolios-admin']="Portfolios";
 karutaStr['en']['bin-admin']="Bin";
-karutaStr['en']['import_instance']="Import a Portfolio Instance (.xml)";
+karutaStr['en']['import_instance']="Import a Portfolio Instance<b>.xml</b>";
 karutaStr['en']['remove-selection']="Move to Bin";
 karutaStr['en']['delete-selection']="Delete";
-karutaStr['en']['import_zip_instance']="Import a Portfolio or Folder Instance (.zip)";
+karutaStr['en']['import_zip_instance']="Import a Portfolio or Folder Instance <b>.zip</b>";
 karutaStr['en']['rename-move']="Rename or Move";
 karutaStr['en']['rename']="Rename";
 karutaStr['en']['karuta.batch']="Create a Batch";
@@ -420,12 +423,12 @@ karutaStr['en']['message']="Message";
 karutaStr['en']['email-sent']="The message has been sent.";
 karutaStr['en']['alternative-label']="Alternative Label";
 karutaStr['en']['sent-by']="Sent by";
-karutaStr['en']['dashboard-code']="Dashboard Code";
+karutaStr['en']['dashboard-code']="Report Portfolio Code";
 karutaStr['en']['report-code']="Report Code";
-karutaStr['en']['csv']="Roles - Display CSV";
-karutaStr['en']['pdf']="Roles - Display PDF";
-karutaStr['en']['rtf']="Rôles - Display RTF";
-karutaStr['en']['img']="Rôles - Display Image";
+karutaStr['en']['csv']="Roles - Button CSV";
+karutaStr['en']['pdf']="Roles - Button PDF";
+karutaStr['en']['rtf']="Rôles - Button RTF";
+karutaStr['en']['img']="Rôles - Button PNG";
 karutaStr['en']['document-required']="You have to specify a document before to submit !";
 karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g_configVar['maxfilesizeupload'] + " Mo !";
 
@@ -557,7 +560,7 @@ karutaStr['en']['var-value']="Variable Value";
 
 karutaStr['en']['asmColumn']="asmColumn";
 
-karutaStr['en']['startday']="Start day";
+karutaStr['en']['startday']="Execution Time";
 karutaStr['en']['time']="Time (HH:MM)";
 karutaStr['en']['freq']="Frequency";
 karutaStr['en']['execroles']="Roles - Execute";
@@ -566,3 +569,13 @@ karutaStr['en']['exec']="Execute Now";
 karutaStr['en']['uploaded-by']="Uploaded by";
 karutaStr['en']['date']="Date";
 karutaStr['en']['file']="File";
+
+karutaStr['en']['coverage']="Coverage";
+
+//=========================================
+//========== LOGIN ====================
+//=========================================
+
+karutaStr['fr']['connection-cas1']="Connection with University Account";
+karutaStr['fr']['connection-cas2']="Connection without University Account";
+

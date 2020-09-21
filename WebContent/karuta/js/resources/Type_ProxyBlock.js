@@ -104,10 +104,10 @@ UIFactory["ProxyBlock"].prototype.displayEditor = function(destid,type,langcode)
 	if (!this.multilingual)
 		langcode = NONMULTILANGCODE;
 	//---------------------
-	$("#"+destid).append($("<h4>Image</h4>"));
+	$("#"+destid).append($("<h4>"+karutaStr[LANG]['Image']+"</h4>"));
 	image.resource.displayEditor(destid,type,langcode);
 	//---------------------
-	$("#"+destid).append($("<h4>Proxy</h4>"));
+	$("#"+destid).append($("<h4>"+karutaStr[LANG]['Proxy']+"</h4>"));
 	proxy.resource.displayEditor(destid,type,langcode);
 }
 

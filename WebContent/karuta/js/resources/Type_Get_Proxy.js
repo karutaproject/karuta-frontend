@@ -186,17 +186,18 @@ UIFactory["Get_Proxy"].prototype.displayEditor = function(destid,type,langcode)
 		} else {  // code==all
 			// retrieve active portfolios
 			$("#wait-window").modal('show');
-			$.ajaxSetup({async: false});
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/portfolios?active=1",
-				success : function(data) {
-					UIFactory["Portfolio"].parse(data);
+//			$.ajaxSetup({async: false});
+//			$.ajax({
+//				type : "GET",
+//				dataType : "xml",
+//				url : serverBCK_API+"/portfolios?active=1",
+//				success : function(data) {
+//					UIFactory["Portfolio"].parse(data);
 					for ( var i = 0; i < portfolios_list.length; i++) {
 						code = portfolios_list[i].code_node.text();
 						label = portfolios_list[i].label_node[langcode].text();
 						$.ajax({
+							async:false,
 							type : "GET",
 							dataType : "xml",
 							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+semtag,
@@ -219,13 +220,13 @@ UIFactory["Get_Proxy"].prototype.displayEditor = function(destid,type,langcode)
 							}
 						});
 					}
-				},
-				error : function(jqxhr,textStatus) {
-					alertHTML("Server Error UIFactory.Get_Proxy.prototype.displayEditor: "+textStatus);
-					$("#wait-window").modal('hide');
-				}
-			});
-			$.ajaxSetup({async: true});
+//				},
+//				error : function(jqxhr,textStatus) {
+//					alertHTML("Server Error UIFactory.Get_Proxy.prototype.displayEditor: "+textStatus);
+//					$("#wait-window").modal('hide');
+//				}
+//			});
+//			$.ajaxSetup({async: true});
 			$("#wait-window").modal('hide');
 		}
 	}
