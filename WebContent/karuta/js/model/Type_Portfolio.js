@@ -333,6 +333,13 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	g_display_type = type;
 	var uuid = $("#page").attr('uuid');  // current page
 	//---------------------------------------
+	var rootid = UICom.rootid;
+	html += "	<a class='navbar-brand' id='sidebar_"+rootid+"' onclick=\"displayPage('"+rootid+"',1,'"+type+"','"+langcode+"',"+g_edit+")\">";
+	html += 		UICom.structure["ui"][rootid].getLabel('sidebar_'+rootid);
+	html += "	</a>";
+	$("#sidebar_"+rootid).replaceWith($(html));
+	//---------------------------------------
+	html = "";
 	if (type=='model'){
 		html += "<div id='navigation_bar'></div>";
 		html += "<div id='contenu' class='container-fluid'></div>";
