@@ -34,12 +34,12 @@ UIFactory["Field"] = function( node )
 		$("asmResource[xsi_type='Field']",node)[0].appendChild(newelement);
 	}
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='Field']",node));
-	//--------------------
-	if ($("user",$("asmResource[xsi_type='Field']",node)).length==0){  // for backward compatibility
+	//------- for log -------------
+	if ($("user",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("user");
-		$("asmResource[xsi_type='Field']",node)[0].appendChild(newelement);
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
 	}
-	this.user_node = $("user",$("asmResource[xsi_type='Field']",node));
+	this.user_node = $("user",$("asmResource[xsi_type='"+this.type+"']",node));
 	//--------------------
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
@@ -66,7 +66,7 @@ UIFactory["Field"] = function( node )
 		for (var langcode=0; langcode<languages.length; langcode++) {
 			$(this.text_node[langcode]).text($(this.text_node[0]).text());
 		}
-		this.save(true);
+		UICom.UpdateResource(this.id,writeSaved);
 	}
 	//--------------------
 };
@@ -168,16 +168,19 @@ UIFactory["Field"].prototype.displayEditor = function(dest,type,langcode,disable
 };
 
 //==================================
-UIFactory["Field"].prototype.save = function(version)
+UIFactory["Field"].prototype.save = function()
 //==================================
 {
-	if (version ==null)
-		version = false;
-	if (!version && UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="") {
+	//------------------------------
+	var log = (UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="");
+	if (log)
 		$(this.user_node).text(USER.firstname+" "+USER.lastname);
-		UICom.structure.ui[this.id].log();
-	}
+	//------------------------------
 	UICom.UpdateResource(this.id,writeSaved);
+	//------------------------------
+	if (log)
+		UICom.structure.ui[this.id].log();
+	//---------------------------
 	this.refresh();
 };
 

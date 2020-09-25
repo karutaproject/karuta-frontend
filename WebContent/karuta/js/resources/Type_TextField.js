@@ -34,6 +34,12 @@ UIFactory["TextField"] = function( node )
 		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
 	}
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='"+this.type+"']",node));
+	//------- for log -------------
+	if ($("user",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("user");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.user_node = $("user",$("asmResource[xsi_type='"+this.type+"']",node));
 	//--------------------
 	this.text_node = [];
 	for (var i=0; i<languages.length;i++){
@@ -65,7 +71,7 @@ UIFactory["TextField"] = function( node )
 		for (var langcode=0; langcode<languages.length; langcode++) {
 			$(this.text_node[langcode]).text($(this.text_node[0]).text());
 		}
-		this.save();
+		UICom.UpdateResource(this.id,writeSaved);
 	}
 	//--------------------
 };
@@ -304,7 +310,16 @@ UIFactory["TextField"].toggleExpand = function(uuid,langcode)
 UIFactory["TextField"].prototype.save = function()
 //==================================
 {
+	//------------------------------
+	var log = (UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="");
+	if (log)
+		$(this.user_node).text(USER.firstname+" "+USER.lastname);
+	//------------------------------
 	UICom.UpdateResource(this.id,writeSaved);
+	//------------------------------
+	if (log)
+		UICom.structure.ui[this.id].log();
+	//---------------------------
 	this.refresh();
 };
 

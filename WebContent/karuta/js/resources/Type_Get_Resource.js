@@ -32,6 +32,19 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.id = $(node).attr('id');
 	this.node = node;
 	this.type = 'Get_Resource';
+	//--------------------
+	if ($("lastmodified",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("lastmodified");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='"+this.type+"']",node));
+	//------- for log -------------
+	if ($("user",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("user");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.user_node = $("user",$("asmResource[xsi_type='"+this.type+"']",node));
+	//--------------------
 	this.code_node = $("code",$("asmResource["+this.clause+"]",node));
 	this.value_node = $("value",$("asmResource["+this.clause+"]",node));
 	this.label_node = [];
@@ -59,6 +72,15 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.displayValue = {};
 	this.multiple = "";
 	this.simple = "";
+	//--------------------
+	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("version");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.version_node = $("version",$("asmResource[xsi_type='"+this.type+"']",node));
+	//--------------------
+	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
+	//--------------------
 };
 
 //==================================
@@ -978,6 +1000,13 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 UIFactory["Get_Resource"].prototype.save = function()
 //==================================
 {
+	//------------------------------
+	var log = (UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="");
+	if (log)
+		$(this.user_node).text(USER.firstname+" "+USER.lastname);
+	//------------------------------
+	$(this.lastmodified_node).text(new Date().toLocaleString());
+	//------------------------------
 	if (this.clause=="xsi_type='Get_Resource'") {
 		UICom.UpdateResource(this.id,writeSaved);
 		if (!this.inline)
@@ -986,7 +1015,12 @@ UIFactory["Get_Resource"].prototype.save = function()
 	else {// Node - Get_Resource {
 		UICom.UpdateNode(this.node);
 		UICom.structure.ui[this.id].refresh()
-	}	
+	}
+	//--------- log -------------
+	if (log) {
+		UICom.structure.ui[this.id].log();
+	}
+	//---------------------------
 };
 
 //==================================

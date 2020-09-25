@@ -409,6 +409,7 @@ var UICom =
 		if (delfile!=null && delfile)
 			urlS += "?delfile=true";
 		$.ajax({
+			async:false,
 			type : "PUT",
 			dataType : "text",
 			contentType: "application/xml",
@@ -463,6 +464,7 @@ var UICom =
 			else {
 				var urlS = serverBCK_API+'/resources/resource/'+uuid;
 				$.ajax({
+					async:false,
 					type : "PUT",
 					dataType : "text",
 					contentType: "application/xml",
