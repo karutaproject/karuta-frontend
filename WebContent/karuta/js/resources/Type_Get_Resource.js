@@ -33,13 +33,13 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.node = node;
 	this.type = 'Get_Resource';
 	//--------------------
-	if ($("lastmodified",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+	if ($("asmResource[xsi_type='"+this.type+"']",node).length>0 && $("lastmodified",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("lastmodified");
 		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
 	}
 	this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='"+this.type+"']",node));
 	//------- for log -------------
-	if ($("user",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+	if ($("asmResource[xsi_type='"+this.type+"']",node).length>0 && $("user",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("user");
 		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
 	}
@@ -73,7 +73,7 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.multiple = "";
 	this.simple = "";
 	//--------------------
-	if ($("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+	if ($("asmResource[xsi_type='"+this.type+"']",node).length>0 && $("version",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
 		var newelement = createXmlElement("version");
 		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
 	}
