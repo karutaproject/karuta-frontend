@@ -205,8 +205,12 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 			html += "</span>";
 			html += "</div>";
 		}
-		if (this.date_modified!=null)
-			html += "<div class='col-2 d-none d-md-block' onclick=\"display_main_page('"+this.rootid+"')\">"+this.date_modified.substring(0,10)+"</div>";
+		if (this.date_modified!=null) {
+			var msec = Date.parse(this.date_modified);
+			var d = new Date(msec);
+			var ds = d.toLocaleDateString();
+			html += "<div class='col-2 d-none d-md-block' onclick=\"display_main_page('"+this.rootid+"')\">"+ds+"</div>";
+		}
 		//------------ buttons ---------------
 		html += "<div class='col-1'>";
 		if (USER.admin || (this.owner=='Y' && !USER.xlimited) || (USER.creator && !USER.limited)) {
