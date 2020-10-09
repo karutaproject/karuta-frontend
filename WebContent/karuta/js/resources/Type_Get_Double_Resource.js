@@ -280,8 +280,8 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (!self.multilingual)
-		langcode = NONMULTILANGCODE;
+//	if (!self.multilingual)
+//		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
 	//---------------------

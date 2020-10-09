@@ -282,8 +282,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (!self.multilingual)
-		langcode = NONMULTILANGCODE;
+//	if (!self.multilingual)
+//		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
 	if (resettable==null)

@@ -225,8 +225,8 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (!self.multilingual)
-		langcode = NONMULTILANGCODE;
+//	if (!self.multilingual)
+//		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
 	if (resettable==null)

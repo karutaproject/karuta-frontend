@@ -199,8 +199,8 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (!self.multilingual)
-		langcode = NONMULTILANGCODE;
+//	if (!self.multilingual)
+//		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
 	if (resettable==null)

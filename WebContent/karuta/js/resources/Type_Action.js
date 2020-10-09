@@ -221,8 +221,8 @@ UIFactory["Action"].parse = function(destid,type,langcode,data,self,portfolio_la
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (!self.multilingual)
-		langcode = NONMULTILANGCODE;
+//	if (!self.multilingual)
+//		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';

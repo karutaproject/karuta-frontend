@@ -155,6 +155,12 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		this.display[dest] = type;
 	}
 	//---------------------
+	if (this.date_modified!=null) {
+		var msec = Date.parse(this.date_modified);
+		var d = new Date(msec);
+		var dmodified = d.toLocaleDateString();
+	}
+	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
@@ -206,10 +212,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 			html += "</div>";
 		}
 		if (this.date_modified!=null) {
-			var msec = Date.parse(this.date_modified);
-			var d = new Date(msec);
-			var ds = d.toLocaleDateString();
-			html += "<div class='col-2 d-none d-md-block' onclick=\"display_main_page('"+this.rootid+"')\">"+ds+"</div>";
+			html += "<div class='col-2 d-none d-md-block' onclick=\"display_main_page('"+this.rootid+"')\">"+dmodified+"</div>";
 		}
 		//------------ buttons ---------------
 		html += "<div class='col-1'>";
@@ -236,7 +239,9 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		html += this.context_text_node[langcode].text();
 		html += "	</div>";
 		html += "	<div class='card-footer' >";
-		html += this.date_modified.substring(0,10);
+		if (this.date_modified!=null) {
+			html += dmodified;
+		}
 		html += "	</div>";
 	}
 	//--------------------------------------------------------------------------------------------
@@ -256,7 +261,9 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		html += "	<div id='owner_"+this.id+"' class='owner'></div>";
 		html += "</div>";
 		html += "<div class='card-footer' >";
-		html += this.date_modified.substring(0,10);
+		if (this.date_modified!=null) {
+			html += dmodified;
+		}
 		//------------ buttons ---------------
 		html += "<div class='card-button'>";
 		if (USER.admin || (this.owner=='Y' && !USER.xlimited) || (USER.creator && !USER.limited)) {

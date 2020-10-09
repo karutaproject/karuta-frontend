@@ -239,8 +239,8 @@ UIFactory["Get_Proxy"].parse = function(destid,type,langcode,data,self,portfolio
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (!self.multilingual)
-		langcode = NONMULTILANGCODE;
+//	if (!self.multilingual)
+//		langcode = NONMULTILANGCODE;
 	var self_value = $(self.value_node).text();
 	//---------------------
 	if (type==undefined || type==null)
