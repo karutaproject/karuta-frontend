@@ -122,8 +122,6 @@ UIFactory["Document"].prototype.getAttributes = function(type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (this.multilingual!=undefined && !this.multilingual)
-		langcode = 0;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest]=langcode;
@@ -151,10 +149,6 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest] = {langcode: langcode, type : type};
@@ -256,10 +250,6 @@ UIFactory["Document"].remove = function(uuid,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.resource.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (itself.resource.multilingual!=undefined && !itself.resource.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	var filename = "";
 	var size = "";
 	var type = "";
@@ -283,10 +273,6 @@ UIFactory["Document"].prototype.displayEditor = function(destid,type,langcode,pa
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	var html ="";
 	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];

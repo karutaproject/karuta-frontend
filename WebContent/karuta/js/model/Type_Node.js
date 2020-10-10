@@ -832,10 +832,6 @@ UIFactory["Node"].prototype.update = function(langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-node')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if ($("#code_"+this.id).length){
 		var code = $.trim($("#code_"+this.id).val());
 		$(this.code_node).text(code);
@@ -1051,13 +1047,15 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/nodes/node/"+uuid,
-				success : function(data) {
+				success : function(node_data) {
 					//------------------------------------------
-					var code = $($("code",data)[0]).text();
+					var code = $($("code",node_data)[0]).text();
 					var label = [];
 					for (var i=0; i<languages.length;i++){
-						label[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",data)[0]).text();
+						label[i] = $("label[lang='"+languages[i]+"']",$("asmResource[xsi_type='nodeRes']",node_data)[0]).text();
 						var nb = label[i].match(/\d+$/);
+						if (nb!=null)
+							nb = nb[0];
 						if ($.isNumeric(nb)) {
 							nb++;
 							label[i] = label[i].replace(/\d+$/,nb);
@@ -1084,9 +1082,11 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 						url : serverBCK_API+"/nodes/node/" + uuid + "/noderesource",
 						success : function(data) {
 							//------------------------------------------
-							if ($(":root",data)[0]!=undefined && $(":root",data)[0].tagName=='asmContext') {
-								resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",data);
+							if ($(":root",node_data)[0]!=undefined && $(":root",node_data)[0].tagName=='asmContext') {
+								var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",node_data);
 								if ($(resource).attr("xsi_type")=="Item") {
+									var tobesaved = false;
+									//-----------------------------
 									var code = $('code',resource).text();
 									var nbcode = code.match(/\d+$/);
 									if (nbcode!=null)
@@ -1095,6 +1095,34 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 										nbcode++;
 										code = code.replace(/\d+$/,nbcode);
 										$("code",resource).text(code);
+										tobesaved = true;
+									}
+									//-----------------------------
+									var value = $('value',resource).text();
+									var nbvalue = value.match(/\d+$/);
+									if (nbvalue!=null)
+										nbvalue = nbvalue[0];
+									if ($.isNumeric(nbvalue)) {
+										nbvalue++;
+										value = value.replace(/\d+$/,nbvalue);
+										$("value",resource).text(value);
+										tobesaved = true;
+									}
+									//-----------------------------
+									for (var i=0; i<languages.length;i++){
+										label[i] = $("label[lang='"+languages[i]+"']",resource).text();
+										var nblabel = label[i].match(/\d+$/);
+										if (nblabel!=null)
+											nblabel = nblabel[0];
+										if ($.isNumeric(nblabel)) {
+											nblabel++;
+											label[i] = label[i].replace(/\d+$/,nblabel);
+											$("label[lang='"+languages[i]+"']",resource).text(label[i]);
+											tobesaved = true;
+										}
+									}
+									//-----------------------------
+									if (tobesaved) {
 										var data = xml2string($(resource)[0]);
 										var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 										var urlS = serverBCK_API+'/resources/resource/'+uuid;
@@ -1394,9 +1422,6 @@ UIFactory["Node"].displayComments = function(destid,node,type,langcode)
 		//---------------------
 		if (langcode==null)
 			langcode = LANGCODE;
-		var multilingual = ($(node.metadata).attr('multilingual-node')=='Y') ? true : false;
-		if (!multilingual)
-			langcode = NONMULTILANGCODE;
 		//---------------------
 		var uuid = node.id;
 		var text = $(UICom.structure['ui'][uuid].context_text_node[langcode]).text();
@@ -1428,9 +1453,6 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		//---------------------
 		if (langcode==null)
 			langcode = LANGCODE;
-		var multilingual = ($(node.metadata).attr('multilingual-node')=='Y') ? true : false;
-		if (!multilingual)
-			langcode = NONMULTILANGCODE;
 		//---------------------
 		var uuid = node.id;
 		var text = "";
@@ -1464,10 +1486,6 @@ UIFactory["Node"].prototype.updateComments = function(langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-node')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	var value = $.trim($("#"+this.id+langcode+"_edit_comment").val());
 	$(this.context_text_node[langcode]).text(value);

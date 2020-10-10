@@ -112,10 +112,6 @@ UIFactory["Get_Double_Resource"].prototype.getView = function(dest,type,langcode
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------	
 	if (dest!=null) {
 		this.display[dest] = langcode;
@@ -158,10 +154,6 @@ UIFactory["Get_Double_Resource"].prototype.displayView = function(dest,type,lang
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------	
 	if (dest!=null) {
 		this.display[dest] = langcode;
@@ -280,8 +272,6 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-//	if (!self.multilingual)
-//		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
 	//---------------------

@@ -55,9 +55,6 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = {langcode: langcode, type : type};
 	}
@@ -67,10 +64,6 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	var html = "";
 	if (type=='standard'){
-		//---------------------
-		var img_langcode = langcode;
-		if (!image.multilingual)
-			img_langcode = NONMULTILANGCODE;
 		//----------------------------------------
 		var img_width = ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='') ? $(image.resource.width_node[langcode]).text() : "";
 		var img_height = ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='') ? $(image.resource.height_node[langcode]).text() : "";
@@ -84,7 +77,7 @@ UIFactory["ImageBlock"].prototype.getView = function(dest,type,langcode)
 		if (img_height!="")
 			image_size += " height:" + img_height + ";";
 		//----------------------------------------
-		var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
+		var style = "background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += "background-size:cover;";
 		html += "<div id='image_"+this.id+"' class='ImgBlock' style=\""+style+"\">";
@@ -113,9 +106,6 @@ UIFactory["ImageBlock"].prototype.getButtons = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	var html = "";
 	if (this.image_editresroles.containsArrayElt(g_userroles) || this.image_editresroles.containsArrayElt(g_userroles)){
 		html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
@@ -135,9 +125,6 @@ UIFactory["ImageBlock"].prototype.displayEditor = function(destid,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (this.image_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>"+karutaStr[LANG]['Image']+"</h4>"));

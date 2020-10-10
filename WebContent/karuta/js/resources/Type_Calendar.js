@@ -88,8 +88,6 @@ UIFactory["Calendar"].prototype.getAttributes = function(type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (this.multilingual!=undefined && !this.multilingual)
-		langcode = 0;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest]=langcode;
@@ -116,10 +114,6 @@ UIFactory["Calendar"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -133,10 +127,6 @@ UIFactory["Calendar"].prototype.displayView = function(dest,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
@@ -172,9 +162,6 @@ UIFactory["Calendar"].prototype.displayEditor = function(dest,type,langcode,disa
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
 	//---------------------

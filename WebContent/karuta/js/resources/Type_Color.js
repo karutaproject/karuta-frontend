@@ -77,8 +77,6 @@ UIFactory["Color"].prototype.getAttributes = function(type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (this.multilingual!=undefined && !this.multilingual)
-		langcode = 0;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest]=langcode;
@@ -104,10 +102,6 @@ UIFactory["Color"].prototype.getValue = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -126,10 +120,6 @@ UIFactory["Color"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -147,10 +137,6 @@ UIFactory["Color"].prototype.displayView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
@@ -185,9 +171,6 @@ UIFactory["Color"].prototype.getEditor = function(type,langcode,disabled)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
 	//---------------------

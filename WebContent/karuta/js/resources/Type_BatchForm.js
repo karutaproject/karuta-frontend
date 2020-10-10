@@ -33,8 +33,6 @@ UIFactory["BatchForm"] = function( node )
 	this.batchform_line0_node = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLine0'])",node);
 	this.batchform_lines_node = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLines'])",node);
 	//--------------------
-//	this.type_nodeid = $("asmContext:has(metadata[semantictag='formtype'])",node).attr('id');
-	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.display = {};
 };
@@ -49,9 +47,6 @@ UIFactory["BatchForm"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest] = {langcode: langcode, type : type};
@@ -74,9 +69,6 @@ UIFactory["BatchForm"].prototype.displayView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = {langcode: langcode, type : type};
 	}
@@ -97,9 +89,6 @@ UIFactory["BatchForm"].prototype.displayEditor = function(destid,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 }
 
 //==================================
@@ -118,9 +107,6 @@ UIFactory["BatchForm"].prototype.getButtons = function(dest,type,langcode)
 {
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	var execroles = UICom.structure["ui"][this.execroles_nodeid].resource.getView();
 	var html = "<div class='btn-group'>";

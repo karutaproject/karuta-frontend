@@ -1893,9 +1893,6 @@ function getImg(semtag,data,langcode,fluid)
 			langcode = LANGCODE;
 		if (fluid==null)
 			fluid = true;
-		var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
-		if (!multilingual)
-			langcode = NONMULTILANGCODE;
 		var width = getText(semtag,'Image','width',data,langcode);
 		var height =  getText(semtag,'Image','height',data,langcode);
 		var result = "";
@@ -1916,9 +1913,6 @@ function getBackgroundURL(semtag,data,langcode)
 	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
 		if (langcode==null)
 			langcode = LANGCODE;
-		var multilingual = ($("metadata[semantictag='"+semtag+"']",data).attr('multilingual-resource')=='Y') ? true : false;
-		if (!multilingual)
-			langcode = NONMULTILANGCODE;
 		result =  "url('../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"')";
 	}
 	return result;

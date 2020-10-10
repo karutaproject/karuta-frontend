@@ -2350,9 +2350,6 @@ UIFactory["Portfolio"].displayComments = function(destid,node,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	var multilingual = $(node.multilingual)
-	if (!multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	var text = $(node.context_text_node[langcode]).text();
 	html += "<div>"+text+"</div>";
@@ -2753,9 +2750,6 @@ function setCSSportfolio(data,langcode)
 	setConfigColor(root,'svg-web9-color');
 	// --------CSS Text------------------
 	var csstextlangcode = LANGCODE;
-	var multilingual = ($("metadata[semantictag='config-portfolio-css']",data).attr('multilingual-resource')=='Y') ? true : false;
-	if (!multilingual)
-		csstextlangcode = NONMULTILANGCODE;
 	var csstext = $("text[lang='"+languages[csstextlangcode]+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-portfolio-css'])",data))).text();
 	csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");
 	$("#csstext").remove();

@@ -56,9 +56,6 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = {langcode: langcode, type : type};
 	}
@@ -68,14 +65,6 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	var html = "";
 	if (type=='standard'){
-		//---------------------
-		var img_langcode = langcode;
-		if (!image.multilingual)
-			img_langcode = NONMULTILANGCODE;
-		//---------------------
-		var doc_langcode = langcode;
-		if (!document.multilingual)
-			doc_langcode = NONMULTILANGCODE;
 		//----------------------------------------
 		var img_width = ($(image.resource.width_node[langcode]).text()!=undefined && $(image.resource.width_node[langcode]).text()!='') ? $(image.resource.width_node[langcode]).text() : "";
 		var img_height = ($(image.resource.height_node[langcode]).text()!=undefined && $(image.resource.height_node[langcode]).text()!='') ? $(image.resource.height_node[langcode]).text() : "";
@@ -89,9 +78,9 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 		if (img_height!="")
 			image_size += " height:" + img_height + ";";
 		//----------------------------------------
-		var filename = $(document.resource.filename_node[doc_langcode]).text();
-		html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+document.id+"?lang="+languages[doc_langcode]+"'>";
-		var style = "background-repeat:no-repeat; background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[img_langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
+		var filename = $(document.resource.filename_node[langcode]).text();
+		html =  "<a style='text-decoration:none;color:inherit' id='file_"+document.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+document.id+"?lang="+languages[langcode]+"'>";
+		var style = "background-repeat:no-repeat; background-image:url('../../../"+serverBCK+"/resources/resource/file/"+image.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'); " +image_size;
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += " background-size:cover;";
 		html += "<div class='DocBlock' style=\""+style+"\">";
@@ -126,9 +115,6 @@ UIFactory["DocumentBlock"].prototype.getButtons = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	var html = "";
 	if (this.document_editresroles.containsArrayElt(g_userroles) || this.image_editresroles.containsArrayElt(g_userroles)){
 		html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
@@ -148,9 +134,6 @@ UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langco
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (this.document_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>"+karutaStr[LANG]['Document']+"</h4>"));

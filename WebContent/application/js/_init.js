@@ -12,7 +12,6 @@ var languages = [];
 languages [0] = 'fr';
 languages [1] = 'en';
 //----------------------------------
-var NONMULTILANGCODE = 0;  // default language if non-multilingual
 var LANGCODE = 0; //default value
 var LANG = languages[LANGCODE]; //default value
 //----------------------------------

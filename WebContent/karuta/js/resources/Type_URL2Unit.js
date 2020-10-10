@@ -108,10 +108,6 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -225,10 +221,10 @@ UIFactory["URL2Unit"].parse = function(destid,type,langcode,data,self,disabled,s
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-//	if (!self.multilingual)
-//		langcode = NONMULTILANGCODE;
+	//---------------------
 	if (disabled==null)
 		disabled = false;
+	//---------------------
 	if (resettable==null)
 		resettable = true;
 	//---------------------

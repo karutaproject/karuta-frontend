@@ -103,10 +103,6 @@ UIFactory["Get_Proxy"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -120,10 +116,6 @@ UIFactory["Get_Proxy"].prototype.displayView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
@@ -239,8 +231,7 @@ UIFactory["Get_Proxy"].parse = function(destid,type,langcode,data,self,portfolio
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-//	if (!self.multilingual)
-//		langcode = NONMULTILANGCODE;
+	//---------------------
 	var self_value = $(self.value_node).text();
 	//---------------------
 	if (type==undefined || type==null)

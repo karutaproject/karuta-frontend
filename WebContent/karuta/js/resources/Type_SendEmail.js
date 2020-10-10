@@ -105,10 +105,6 @@ UIFactory["SendEmail"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -125,10 +121,6 @@ UIFactory["SendEmail"].prototype.displayView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
@@ -150,10 +142,6 @@ UIFactory["SendEmail"].update = function(obj,itself,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!itself.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	var firstname = $("input[name='firstname_SendEmail']",obj).val();
 	$(itself.firstname_node[langcode]).text(firstname);
 	var lastname = $("input[name='lastname_SendEmail']",obj).val();
@@ -171,10 +159,6 @@ UIFactory["SendEmail"].prototype.getEditor = function(type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (type==null)
 		type = 'default';
@@ -270,10 +254,6 @@ UIFactory["SendEmail"].send = function(obj,itself,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	itself.multilingual = ($("metadata",itself.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!itself.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	var subject = $("#subject_SendEmail",obj).val();
 	subject += " - "+karutaStr[LANG]['sent-by']+" "+USER.getView(null,"firstname-lastname");

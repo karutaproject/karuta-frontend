@@ -141,9 +141,6 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 	if (type==null)
 		type = "default";
 	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -185,9 +182,6 @@ UIFactory["Get_Get_Resource"].prototype.displayView = function(dest,type,langcod
 	if (type==null)
 		type = "default";
 	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -224,10 +218,6 @@ UIFactory["Get_Get_Resource"].prototype.displayView = function(dest,type,langcod
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
@@ -414,8 +404,6 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-//	if (!self.multilingual)
-//		langcode = NONMULTILANGCODE;
 	//---------------------
 	var self_code = $(self.code_node).text();
 	if (self.encrypted)
@@ -848,8 +836,6 @@ UIFactory["Get_Get_Resource"].reparse = function(destid,type,langcode,data,self,
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-//	if (!self.multilingual)
-//		langcode = NONMULTILANGCODE;
 	//---------------------
 	var self_code = $(self.code_node).text();
 	if (self.encrypted)
