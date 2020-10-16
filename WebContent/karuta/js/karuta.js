@@ -652,6 +652,11 @@ function displayPage(uuid,depth,type,langcode) {
 		}
 	} else {
 		$("#sidebar_"+uuid).parent().addClass('selected');
+		var nodeid = uuid;
+		while($(UICom.structure.ui[nodeid].node)!=undefined && $(UICom.structure.ui[nodeid].node).parent().parent().parent().length!=0) {
+			nodeid = $(UICom.structure.ui[nodeid].node).parent().attr("id");
+			toggleSidebarPlus(nodeid);
+		}
 	}
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (depth==null)
