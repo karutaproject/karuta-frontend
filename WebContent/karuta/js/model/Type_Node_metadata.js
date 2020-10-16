@@ -504,7 +504,11 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	//-----------------------------------------
 	if (name=='asmContext' && this.resource.type=='Image' && model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','resizeroles');
-//	this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
+	//-----------------------------------------
+	if (model)
+		this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles');
+	else
+		this.displayMetadataWadAttributeEditor('metadata-part2','graphicerroles',false,true);
 	//-----------------------------------------
 	if (name=='asmRoot' || !model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','moveroles',false,true);
@@ -799,7 +803,7 @@ UIFactory["Node"].prototype.displayMetainfo = function(dest)
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'display');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'menuroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'notifyroles');
-//	html += UIFactory.Node.getMetadataInfo(metadatawad,'graphicerroles');
+	html += UIFactory.Node.getMetadataInfo(metadatawad,'graphicerroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'resizeroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'edittargetroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'showroles');
@@ -1379,7 +1383,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 	var name = this.asmtype;
 	var editnoderoles = ($(this.metadatawad).attr('editnoderoles')==undefined)?'none':$(this.metadatawad).attr('editnoderoles');
 	var graphicerroles = ($(this.metadatawad).attr('graphicerroles')==undefined)?'none':$(this.metadatawad).attr('graphicerroles');
-	if (USER.admin || g_userroles[0]=='designer' || graphicerroles.containsArrayElt(g_userroles) || graphicerroles.indexOf(this.userrole)>-1) {
+	if (USER.admin || g_userroles[0]=='designer' || (graphicerroles.containsArrayElt(g_userroles) && editnoderoles.containsArrayElt(g_userroles)) || (graphicerroles.indexOf(this.userrole)>-1 &&editnoderoles.indexOf(this.userrole)>-1)) {
 		var langcode = LANGCODE;
 		var html = "";
 		html += "<form id='metadata-epm' class='metadata'>";
@@ -1406,31 +1410,29 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		html += "</form>";
 		$("#"+destid).append($(html));
 		//----------------------------------
-		if (USER.admin || g_userroles[0]=='designer' || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1) {
-			if (name=='asmRoot') {
-				this.displayMetadataDisplayTypeAttributeEditor('metadata-epm-root','display-type');
-			}
-			this.displayMetadataEpmAttributeEditor('metadata-epm-part0','cssclass',$(this.metadataepm).attr('cssclass'));
-			//------------LAYOUT-----------------------
-			if (name!='asmRoot') {
-				this.displayMetadataEpmDisplayViewAttributeEditor('metadata-epm-part1','displayview',$(this.metadataepm).attr('displayview'));
-				this.displayMetadataEpmDisplayOrgAttributeEditor('metadata-epm-part1','displayitselforg',$(this.metadataepm).attr('displayitselforg'));
-				if (name!='asmContext')
-					this.displayMetadataEpmDisplayOrgAttributeEditor('metadata-epm-part1','displaychildorg',$(this.metadataepm).attr('displaychildorg'));
-			}
-			//------------------------------------
-			this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-margin-top',$(this.metadataepm).attr('nds-margin-top'));
-			this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-othercss',$(this.metadataepm).attr('nds-othercss'));
-			//------------------------------------
-			this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-weight',$(this.metadataepm).attr('font-weight'));
-			this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-style',$(this.metadataepm).attr('font-style'));
-			this.displayMetadataEpmAttributeEditor('metadata-epm-label','text-align',$(this.metadataepm).attr('text-align'));
-			this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-size',$(this.metadataepm).attr('font-size'));
-			this.displayMetadataEpmAttributeEditor('metadata-epm-label','padding-top',$(this.metadataepm).attr('padding-top'));
-			this.displayMetadataEpmAttributeEditor('metadata-epm-label','color',$(this.metadataepm).attr('color'));
-			this.displayMetadataEpmAttributeEditor('metadata-epm-label','background-color',$(this.metadataepm).attr('background-color'));
-			this.displayMetadataEpmAttributeEditor('metadata-epm-label','othercss',$(this.metadataepm).attr('othercss'));
+		if (name=='asmRoot') {
+			this.displayMetadataDisplayTypeAttributeEditor('metadata-epm-root','display-type');
 		}
+		this.displayMetadataEpmAttributeEditor('metadata-epm-part0','cssclass',$(this.metadataepm).attr('cssclass'));
+		//------------LAYOUT-----------------------
+		if (name!='asmRoot') {
+			this.displayMetadataEpmDisplayViewAttributeEditor('metadata-epm-part1','displayview',$(this.metadataepm).attr('displayview'));
+			this.displayMetadataEpmDisplayOrgAttributeEditor('metadata-epm-part1','displayitselforg',$(this.metadataepm).attr('displayitselforg'));
+			if (name!='asmContext')
+				this.displayMetadataEpmDisplayOrgAttributeEditor('metadata-epm-part1','displaychildorg',$(this.metadataepm).attr('displaychildorg'));
+		}
+		//------------------------------------
+		this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-margin-top',$(this.metadataepm).attr('nds-margin-top'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-othercss',$(this.metadataepm).attr('nds-othercss'));
+		//------------------------------------
+		this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-weight',$(this.metadataepm).attr('font-weight'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-style',$(this.metadataepm).attr('font-style'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-label','text-align',$(this.metadataepm).attr('text-align'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-size',$(this.metadataepm).attr('font-size'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-label','padding-top',$(this.metadataepm).attr('padding-top'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-label','color',$(this.metadataepm).attr('color'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-label','background-color',$(this.metadataepm).attr('background-color'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-label','othercss',$(this.metadataepm).attr('othercss'));
 		//----------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-font-weight',$(this.metadataepm).attr('node-font-weight'));
 		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-font-style',$(this.metadataepm).attr('node-font-style'));

@@ -99,10 +99,6 @@ UIFactory["Action"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -117,10 +113,6 @@ UIFactory["Action"].prototype.displayView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
@@ -221,8 +213,6 @@ UIFactory["Action"].parse = function(destid,type,langcode,data,self,portfolio_la
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (!self.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';

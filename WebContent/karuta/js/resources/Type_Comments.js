@@ -78,8 +78,6 @@ UIFactory["Comments"].prototype.getAttributes = function(type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	if (this.multilingual!=undefined && !this.multilingual)
-		langcode = 0;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest]=langcode;
@@ -105,10 +103,6 @@ UIFactory["Comments"].prototype.getValues = function(type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	var text = $("<div class='text'>").append($(this.text_node[langcode]).clone()).html();
 
 	var comment = new Comment($(this.author_node).text(),$(this.date_node).text(),text);
@@ -123,10 +117,6 @@ UIFactory["Comments"].prototype.getView = function(dest,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
@@ -153,10 +143,6 @@ UIFactory["Comments"].prototype.displayView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
@@ -182,10 +168,6 @@ UIFactory["Comments"].prototype.update = function(langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	var now = new Date().toLocaleString();
 	$(this.lastModified).text(now);
@@ -218,9 +200,6 @@ UIFactory["Comments"].prototype.displayEditor = function(destid,type,langcode,di
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	this.multilingual = ($("metadata",this.node).attr('multilingual-resource')=='Y') ? true : false;
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	if (disabled==null)
 		disabled = false;
 	//---------------------

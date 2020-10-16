@@ -47,9 +47,6 @@ UIFactory["ProxyBlock"].prototype.getView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = {langcode: langcode, type : type};
 	}
@@ -74,9 +71,6 @@ UIFactory["ProxyBlock"].prototype.displayView = function(dest,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = {langcode: langcode, type : type};
 	}
@@ -100,9 +94,6 @@ UIFactory["ProxyBlock"].prototype.displayEditor = function(destid,type,langcode)
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
-	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
 	//---------------------
 	$("#"+destid).append($("<h4>"+karutaStr[LANG]['Image']+"</h4>"));
 	image.resource.displayEditor(destid,type,langcode);

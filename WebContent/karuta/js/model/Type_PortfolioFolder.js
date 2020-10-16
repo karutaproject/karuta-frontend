@@ -17,7 +17,7 @@ var folders_byid = {};
 var folders_list = [];
 var nb_folders = 0;
 var nb_portfolios = 0;
-var portfoliosnotinproject = [];
+var portfoliosnotinfolders = [];
 var folder_last_drop = "";
 /// Check namespace existence
 if( UIFactory === undefined )
@@ -527,13 +527,13 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		html += "		<div class='col-3 folder-label' id='folderlabel_"+this.id+"' >"+folder_label+"</div>";
 		html += "		<div id='owner_"+this.id+"' class='col-2 d-none d-md-block project-label'></div>";
 		html += "		<div class='col-3 d-none d-sm-block comments' id='folder-comments_"+this.id+"'> </div><!-- comments -->";
-		html += "		<div class='col-2'>";
 		//---------------------------------------
+		html += "		<div class='col-2'>";
 		html += "<span class='fa fa-th' style='cursor:pointer;font-size:130%;margin-top:4px' onclick=\"list_view_type='card-admin';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','card-admin');\"></span>&nbsp;";
 		html += "<span class='fa fa-list' style='cursor:pointer;font-size:130%' onclick=\"list_view_type='list';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','list')\"></span>";
 		html += "		</div>";
-		html += "		<div class='col-1'>";
 		//------------ buttons ---------------
+		html += "		<div class='col-1'>";
 		html += "			<div class='dropdown menu'>";
 		if (USER.admin || (this.owner=='Y' && !USER.xlimited)) {
 			html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
@@ -948,7 +948,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&project=false",
 		success : function(data) {
-			var items = $("portfolio",data);
+			portfoliosnotinfolders = $("portfolio",data);
 			UIFactory["Portfolio"].parse_add(data);
 			var nb_visibleportfolios = 0;
 			var visibleid = "";
@@ -963,17 +963,14 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 				}
 			}
 			if (nb_visibleportfolios>0)
-				if (USER.admin || USER.creator)
-					UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','card-admin',items);
+				if (nb_visibleportfolios>9 && portfoliosnotinfolders.length>9)
+					UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',portfoliosnotinfolders);
+				else if (nb_visibleportfolios>1 && autoload=="")
+					UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
+				else if (autoload!="")
+					display_main_page(portfolios_byid[autoload].rootid);
 				else
-					if (nb_visibleportfolios>9)
-						UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',items);
-					else if (nb_visibleportfolios>1 && autoload=="")
-						UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',items);
-					else if (autoload!="")
-						display_main_page(portfolios_byid[autoload].rootid);
-					else
-						display_main_page(portfolios_byid[visibleid].rootid);
+					display_main_page(portfolios_byid[visibleid].rootid);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
@@ -993,8 +990,20 @@ UIFactory["PortfolioFolder"].displayPortfolios = function(dest,parentcode,type,i
 			type = 'list';
 		else
 			type = list_view_type;
+	if (type=='card' && (USER.admin || USER.creator))
+		type = 'card-admin'
 	$("#"+dest).show();
-	$("#portfolio-rightside-header").html("<div class='folder-header'>"+karutaStr[LANG]['portfolios']+"</div>");
+	var html = "";
+	html += "<div class='row row-label'>";
+	html += "	<div class='col-6 folder-label'>"+karutaStr[LANG]['portfolios']+"</div>";
+	//---------------------------------------
+	html += "	<div class='col-2'>";
+	html += "		<span class='fa fa-th' style='cursor:pointer;font-size:130%;margin-top:4px' onclick=\"UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);" +
+			";\"></span>&nbsp;";
+	html += "		<span class='fa fa-list' style='cursor:pointer;font-size:130%' onclick=\"UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','list',portfoliosnotinfolders);\"></span>";
+	html += "	</div>";
+	html += "</div>";
+	$("#portfolio-rightside-header").html("<div class='folder-header'>"+html+"</div>");
 	var langcode = LANGCODE;
 	if (type=='card' || type=='card-admin')
 		$("#portfolio-rightside-content2").html("<div class='card-deck' id='porfolios-deck'></div>");
