@@ -474,7 +474,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 			html += "<i class='fa fa-users fa-lg' ></i>";
 			html += "</button>";
 			//----------------------------------
-			if (this.username_node.text()!='root' && this.username_node.text()!='public') {
+			if (this.username_node.text()!='root') {
 				html += "<button class='btn ' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
 				html += "<i class='fa fa-file' ></i>";
 				html += "</button>";
@@ -860,7 +860,7 @@ UIFactory["User"].confirmRemove = function(userid,from_page)
 	var js_remove = "UIFactory.User.remove('"+userid+"')";
 	if (from_page!=null)
 		js_remove = "UIFactory.User.remove('"+userid+"','"+from_page+"')";	
-	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"] + " " + Users_byid[userid].firstname + " " + Users_byid[userid].lastname + " ("+ Users_byid[userid].username + ")";
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
 	buttons += "<button class='btn btn-danger' onclick=\"javascript:"+js_remove+";$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
@@ -1346,7 +1346,7 @@ UIFactory["User"].prototype.getAdminUserMenu = function(type,gid)
 		html += "<span class='fa fa-users fa-lg'/>";
 		html += "</span>";
 		//----------------------------------
-		if (this.username_node.text()!='root' && this.username_node.text()!='public') {
+		if (this.username_node.text()!='root') {
 			html += "<span class='button btn' onclick=\"UIFactory.Portfolio.getListPortfolios('"+this.id+"','"+this.firstname+"','"+this.lastname+"')\">";
 			html += "<span class='fa fa-file'/>";
 			html += "</span>";

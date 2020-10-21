@@ -820,7 +820,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				if (select.length==0) {
 					condition = true;;
 				}
-				if (select.startsWith("{")) {
+				if (select.substring(0,1) == "{") {
 					var toeval = select.substring(1,select.length-1);
 					condition = eval(toeval);
 				}

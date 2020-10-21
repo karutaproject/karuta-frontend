@@ -152,7 +152,7 @@ function fill_main_page(rootid,role)
 			}
 			$("#sub-bar").html(UIFactory.Portfolio.getNavBar(g_display_type,LANGCODE,g_edit,g_portfolioid));
 			// -----how to edit message---------------------
-			if (!g_edit && !USER.creator && (localStorage.getItem('display-edition-'+g_portfolioid)==undefined || localStorage.getItem('display-edition-'+g_portfolioid)!='no')) {
+			if (!g_edit && !USER.creator && (localStorage.getItem('display-edition-'+g_portfolioid)==undefined || localStorage.getItem('display-edition-'+g_portfolioid)!='no') && USER.username.indexOf("karuser")<0) {
 				var message = karutaStr[LANG]["button-edition"];
 				alertHTML(message);
 			}
