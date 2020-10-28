@@ -3357,3 +3357,28 @@ table.tablesorter th.restore {
 		display:none;
 	}
 	
+	#edit-window.Block {
+		#edit-window-body-node,
+		#metadata-epm-part0,
+		#layout, #metadata-epm-part1,
+		#metadata-epm-node, .metadata-epm-node,
+//		#metadata-node-resource, .metadata-node-resource,
+		#metadata-node-comment, .metadata-node-comment
+		{
+			display:none;
+		}
+	}
+
+	#edit-window.Block {
+		.padding-top,
+		.node-font-weight,
+		.node-font-style,
+		.node-text-align,
+		.node-font-size,
+		.node-padding-top,
+		.node-color
+		{
+			display:none;
+		}
+	}
+

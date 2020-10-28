@@ -2226,7 +2226,7 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 		for (var i=0; i<nodes.length;i++){
 			if (points[i].value!=null)
 				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+pos);
-			if (no==0 && pos==0){
+			if (pos==0){ // draw gaduations
 				for (var j=0;j<=Math.abs(max-min);j++) {
 					if (j>0)
 						drawGraduationLine(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);

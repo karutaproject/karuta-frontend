@@ -128,6 +128,7 @@ UIFactory["Node"] = function( node )
 			this.structured_resource = new UIFactory[this.xsi_type](node);
 		}
 		//------------------------------
+		this.js = "";
 	}
 	catch(err) {
 		alertHTML("UIFactory.Node -- flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype+"--xsi_type:"+this.xsi_type);
