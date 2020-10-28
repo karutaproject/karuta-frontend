@@ -966,6 +966,15 @@ function sortJsonOnCode(a,b)
 }
 
 //==================================
+function sortJsonOnCodeInterne(a,b)
+//==================================
+{
+	a = a.code_interne.toLowerCase();
+	b = b.code_interne.toLowerCase();
+	return (a < b) ? -1 : (a > b) ? 1 : 0;
+}
+
+//==================================
 function sortOn1(a,b)
 //==================================
 {

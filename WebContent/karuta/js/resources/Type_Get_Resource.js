@@ -1334,12 +1334,15 @@ UIFactory["Get_Resource"].parseCNAM = function(destid,type,langcode,data,self,di
 		});
 		$(select_item).append($(select_item_a))
 		$(select).append($(select_item));
-		var newTableau1 = tableau1.sort(sortJsonOnCode);
+		var sortFonction = sortJsonOnCode;
+		if (tableau1[0].code==undefined)
+			sortFonction = sortJsonOnCodeInterne;
+		var newTableau1 = tableau1.sort(sortFonction);
 		//---------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
 			//------------------------------
-			var code = newTableau1[i].code;
-			var label = newTableau1[i].intitule;
+			var code = (newTableau1[i].code==undefined)?newTableau1[i].code_interne:newTableau1[i].code;
+			var label = (newTableau1[i].intitule==undefined)?newTableau1[i].intitule_officiel:newTableau1[i].intitule;
 			newTableau2.push({'code':code,'libelle':code+" - "+label});
 			html = "<li></li>";
 			var select_item = $(html);
