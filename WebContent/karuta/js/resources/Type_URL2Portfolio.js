@@ -277,7 +277,10 @@ UIFactory["URL2Portfolio"].prototype.save = function()
 //==================================
 {
 	UICom.UpdateResource(this.id,writeSaved);
-	this.refresh();
+	if (this.blockparent!=null)
+		this.blockparent.refresh();
+	else
+		this.refresh();
 };
 
 //==================================

@@ -355,7 +355,10 @@ UIFactory["URL"].prototype.save = function(parent)
 //==================================
 {
 	UICom.UpdateResource(this.id,writeSaved);
-	this.refresh();
+	if (this.blockparent!=null)
+		this.blockparent.refresh();
+	else
+		this.refresh();
 	if (parent!=null) // --- structured resource
 		parent.refresh();
 };

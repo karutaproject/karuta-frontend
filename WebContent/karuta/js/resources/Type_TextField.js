@@ -74,6 +74,8 @@ UIFactory["TextField"] = function( node )
 		UICom.UpdateResource(this.id,writeSaved);
 	}
 	//--------------------
+	this.blockparent = null;
+	//--------------------
 };
 
 UIFactory["TextField"].prototype.getAttributes = function(type,langcode)
@@ -308,7 +310,10 @@ UIFactory["TextField"].prototype.save = function()
 	if (log)
 		UICom.structure.ui[this.id].log();
 	//---------------------------
-	this.refresh();
+	if (this.blockparent!=null)
+		this.blockparent.refresh();
+	else
+		this.refresh();
 };
 
 //==================================

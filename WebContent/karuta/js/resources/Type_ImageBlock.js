@@ -123,6 +123,9 @@ UIFactory["ImageBlock"].prototype.displayEditor = function(destid,type,langcode)
 	var image = UICom.structure["ui"][this.image_nodeid];
 	var cover = UICom.structure["ui"][this.cover_nodeid];
 	//---------------------
+	UICom.structure.ui[this.image_nodeid].resource.blockparent = UICom.structure.ui[this.id];
+	UICom.structure.ui[this.cover_nodeid].resource.blockparent = UICom.structure.ui[this.id];
+	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------

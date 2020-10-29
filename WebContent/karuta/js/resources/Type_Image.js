@@ -502,6 +502,8 @@ UIFactory["Image"].prototype.save = function(parent,delfile)
 	window.setTimeout(this.refresh(),1000 );
 	if (parent!=null) // --- structured resource
 		window.setTimeout(parent.refresh(),2000 );
+	if (this.blockparent!=null)
+		this.blockparent.refresh();
 };
 
 //==================================

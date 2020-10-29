@@ -323,6 +323,8 @@ UIFactory["Document"].prototype.save = function(parent,delfile)
 	this.refresh();
 	if (parent!=null) // --- structured resource
 		parent.refresh();
+	if (this.blockparent!=null)
+		this.blockparent.refresh();
 };
 
 

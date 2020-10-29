@@ -1007,7 +1007,10 @@ UIFactory["Get_Resource"].prototype.save = function()
 	if (this.clause=="xsi_type='Get_Resource'") {
 		UICom.UpdateResource(this.id,writeSaved);
 		if (!this.inline)
-			this.refresh();
+			if (this.blockparent!=null)
+				this.blockparent.refresh();
+			else
+				this.refresh();
 	}
 	else {// Node - Get_Resource {
 		UICom.UpdateNode(this.node);
