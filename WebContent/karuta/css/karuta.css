@@ -3062,8 +3062,8 @@ td {
 	BLOCK
    ====================*/
 :root {
-  --block-height:220px;
-  --block-img-height:218px;
+  --block-height:240px;
+  --block-img-height:238px;
 }
 
 .standard .DocumentBlock .content,
@@ -3169,20 +3169,17 @@ td {
   display: none;
 }
 
-#edit-window.Block #metadata-epm-part0,
-#edit-window.Block #layout, #edit-window.Block #metadata-epm-part1,
-#edit-window.Block #metadata-epm-node, #edit-window.Block .metadata-epm-node,
-#edit-window.Block #metadata-node-comment, #edit-window.Block .metadata-node-comment {
-  display: none;
-}
-
-#edit-window.Block .padding-top,
-#edit-window.Block .node-font-weight,
-#edit-window.Block .node-font-style,
-#edit-window.Block .node-text-align,
-#edit-window.Block .node-font-size,
-#edit-window.Block .node-padding-top,
-#edit-window.Block .node-color {
+#edit-window:not([role=designer]) #metadata-epm-part0,
+#edit-window:not([role=designer]) #layout, #edit-window:not([role=designer]) #metadata-epm-part1,
+#edit-window:not([role=designer]) #metadata-epm-node, #edit-window:not([role=designer]) .metadata-epm-node,
+#edit-window:not([role=designer]) #metadata-node-comment, #edit-window:not([role=designer]) .metadata-node-comment,
+#edit-window:not([role=designer]) .padding-top,
+#edit-window:not([role=designer]) .node-font-weight,
+#edit-window:not([role=designer]) .node-font-style,
+#edit-window:not([role=designer]) .node-text-align,
+#edit-window:not([role=designer]) .node-font-size,
+#edit-window:not([role=designer]) .node-padding-top,
+#edit-window:not([role=designer]) .node-color {
   display: none;
 }
 

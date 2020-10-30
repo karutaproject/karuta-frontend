@@ -3247,8 +3247,8 @@ table.tablesorter th.restore {
 	BLOCK
    ====================*/
 	:root{
-		--block-height:220px;
-		--block-img-height:218px;
+		--block-height:240px;
+		--block-img-height:238px;
 	}
 
 	.standard {
@@ -3297,6 +3297,8 @@ table.tablesorter th.restore {
 		margin-top:0px;
 	}
 	
+	//----------------------
+	//----------------------
 	//----------------------
 	.block .ProxyBlock,
 	.block .ImageBlock,
@@ -3357,28 +3359,23 @@ table.tablesorter th.restore {
 		display:none;
 	}
 	
-	#edit-window.Block {
-//		#edit-window-body-node,
-		#metadata-epm-part0,
-		#layout, #metadata-epm-part1,
-		#metadata-epm-node, .metadata-epm-node,
-//		#metadata-node-resource, .metadata-node-resource,
-		#metadata-node-comment, .metadata-node-comment
-		{
-			display:none;
-		}
-	}
+	//----Hidden Attributes for Grphicer User-
 
-	#edit-window.Block {
-		.padding-top,
-		.node-font-weight,
-		.node-font-style,
-		.node-text-align,
-		.node-font-size,
-		.node-padding-top,
-		.node-color
-		{
-			display:none;
+	#edit-window:not([role=designer]) { 
+			#metadata-epm-part0,
+			#layout, #metadata-epm-part1,
+			#metadata-epm-node, .metadata-epm-node,
+			#metadata-node-comment, .metadata-node-comment,
+			.padding-top,
+			.node-font-weight,
+			.node-font-style,
+			.node-text-align,
+			.node-font-size,
+			.node-padding-top,
+			.node-color
+			{
+				display:none;
+			}
 		}
-	}
+
 

@@ -90,6 +90,7 @@ function setDesignerRole(role)
 			html += "	</div>";
 			$("#portfolio-container").html(html);
 			$("#portfolio-container").attr('role',role);
+			$("#edit-window").attr('role',role);
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',g_display_type,LANGCODE,g_edit,g_portfolio_rootid);
 		}
 		$("#sidebar_"+uuid).click();

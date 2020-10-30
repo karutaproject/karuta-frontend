@@ -134,6 +134,7 @@ UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langco
 {
 	if (!USER.admin && g_userroles[0]!='designer')
 		$("#edit-window").addClass("Block");
+	//---------------------
 	var document = UICom.structure["ui"][this.document_nodeid];
 	var image = UICom.structure["ui"][this.image_nodeid];
 	var cover = UICom.structure["ui"][this.cover_nodeid];
