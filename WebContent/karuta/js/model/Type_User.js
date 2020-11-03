@@ -447,7 +447,7 @@ UIFactory["User"].prototype.getRadio = function(attr,value,name,checked,disabled
 	var html = "<input type='radio' name='"+name+"' username='"+username+"' value='"+userid+"'";
 	if (attr!=null && value!=null)
 		html += " "+attr+"='"+value+"'";
-	if ((userid==1)||disabled)
+	if (disabled)
 		html+= " disabled='disabled' ";			
 	if (checked)
 		html += " checked='true' ";
