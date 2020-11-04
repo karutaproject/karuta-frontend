@@ -343,6 +343,7 @@ function hideMessageBox()
 function getEditBox(uuid,js2) {
 //==================================
 	$("#edit-window").removeClass("Block");
+	$("#edit-window").attr("role",g_userroles[0]);
 	fillEditBoxBody();
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	if (js2!=null)
