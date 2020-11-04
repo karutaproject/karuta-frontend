@@ -1,4 +1,4 @@
-document.write("<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'/>");
+document.write("<link href='https://fonts.googleapis.com/css?family=Raleway'  rel='stylesheet'/>");
 
 //------ EXEC BATCH AT USER CREATION ------------------
 var g_execbatch = false;

@@ -99,7 +99,7 @@ function r_replaceVariable(text)
 		if (aggregates[variable_name]!=undefined && aggregates[variable_name].length>0)
 				text = text.replace("##"+variable_name+"##", aggregates[variable_name][0]);
 		if (text.indexOf("[")>-1) {
-			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+			var variable_value = text.substring(0,text.indexOf("["))
 			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
 			i = r_replaceVariable(i);
 			var variable_array1 = text.replace("["+i+"]","");
@@ -695,7 +695,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				if (select.length==0) {
 					condition = true;;
 				}
-				if (select.startsWith("{")) {
+				if (select.substring(0,1) == "{") {
 					var toeval = select.substring(1,select.length-1);
 					condition = eval(toeval);
 				}

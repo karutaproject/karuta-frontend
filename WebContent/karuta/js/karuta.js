@@ -966,6 +966,15 @@ function sortJsonOnCode(a,b)
 }
 
 //==================================
+function sortJsonOnCodeInterne(a,b)
+//==================================
+{
+	a = a.code_interne.toLowerCase();
+	b = b.code_interne.toLowerCase();
+	return (a < b) ? -1 : (a > b) ? 1 : 0;
+}
+
+//==================================
 function sortOn1(a,b)
 //==================================
 {
@@ -1268,7 +1277,7 @@ function getEmail(role,emails) {
 function sendEmailPublicURL(encodeddata,email,langcode,sharetomessage,sharetoobj) {
 //==================================
 	var url = window.location.href;
-	var serverURL = url.substring(0,url.indexOf('/application/htm/karuta.htm'));
+	var serverURL = url.substring(0,url.lastIndexOf(appliname)+appliname.length);
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
@@ -1791,15 +1800,7 @@ function setCSSportfolio(data)
 function logout()
 //==============================
 {
-    $.ajax({
-       type: "POST",
-       dataType: "text",
-       url: serverBCK_API+"/credential/logout",
-       data: "",
-       success: function(data) {
-                       window.location="login.htm?lang="+LANG;
-       }
-    });
+	window.location=serverBCK_API+"/credential/logout";
 }
  
 //==============================
