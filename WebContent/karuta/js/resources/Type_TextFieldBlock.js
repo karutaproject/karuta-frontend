@@ -88,7 +88,7 @@ UIFactory["TextFieldBlock"].prototype.getView = function(dest,type,langcode)
 		if (title!="")
 			html += "<div id='title_"+this.id+"' class='block-title' style=\""+title_style+"\">"+title+"</div>";
 		//---------------------------------
-		var text_style = text.getContentStyle(uuid);
+		var text_style = UICom.structure.ui[this.id].getContentStyle(uuid);
 		var text_content = text.resource.getView(dest,type,langcode);
 		html += "<div id='text_"+this.id+"' class='block-text' style=\""+text_style+"\">"+text_content+"</div>";
 		//---------------------------------

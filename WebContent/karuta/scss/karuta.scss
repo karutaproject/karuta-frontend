@@ -36,7 +36,15 @@
 		font-size: calc(var(--font-size-coeff) * 0.8rem);
 	}
 	
-	@media (min-width: 768px) {  
+		@media (max-width: 640px) {  
+		body,
+		.form-control,
+		.btn {
+			font-size: calc(var(--font-size-coeff) * 0.6rem);
+		}
+	}
+	
+		@media (min-width: 1024px) {  
 		body,
 		.form-control,
 		.btn {
@@ -3362,20 +3370,20 @@ table.tablesorter th.restore {
 	//----Hidden Attributes for Grphicer User-
 
 	#edit-window:not([role=designer]) { 
-			#metadata-epm-part0,
-			#layout, #metadata-epm-part1,
-			#metadata-epm-node, .metadata-epm-node,
-			#metadata-node-comment, .metadata-node-comment,
-			.padding-top,
-			.node-font-weight,
-			.node-font-style,
-			.node-text-align,
-			.node-font-size,
-			.node-padding-top,
-			.node-color
-			{
-				display:none;
-			}
+		#metadata-epm-part0,
+		#layout, #metadata-epm-part1,
+		#metadata-epm-node, .metadata-epm-node,
+		#metadata-node-comment, .metadata-node-comment,
+		.padding-top,
+		.node-font-weight,
+		.node-font-style,
+		.node-text-align,
+		.node-font-size,
+		.node-padding-top,
+		.node-color
+		{
+			display:none;
 		}
+	}
 
 

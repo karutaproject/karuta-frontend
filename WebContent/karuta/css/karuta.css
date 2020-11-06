@@ -31,7 +31,14 @@ body,
   font-size: calc(var(--font-size-coeff) * 0.8rem);
 }
 
-@media (min-width: 768px) {
+@media (max-width: 640px) {
+  body,
+.form-control,
+.btn {
+    font-size: calc(var(--font-size-coeff) * 0.6rem);
+  }
+}
+@media (min-width: 1024px) {
   body,
 .form-control,
 .btn {

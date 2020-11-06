@@ -176,6 +176,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			//============================== ASMCONTEXT =============================
 			if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='raw' && this.semantictag!='EuropassL')){
 				this.displayAsmContext(dest,type,langcode,edit,refresh);
+				alreadyDisplayed = true;
 			}
 			//============================== NODE ===================================
 			else { // other than asmContext
