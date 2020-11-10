@@ -404,7 +404,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
 	if (UICom.structure["ui"][rootid].getCode().indexOf("documentation-karuta")>-1)
-		window.history.pushState('kardoc','Documentation','/karuta3.0/application/htm/documentation.htm');
+		window.history.pushState('kardoc','Documentation','/'+appliname+'/application/htm/documentation.htm');
 	//---------------------------------------
 	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 

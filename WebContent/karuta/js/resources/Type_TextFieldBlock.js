@@ -83,12 +83,14 @@ UIFactory["TextFieldBlock"].prototype.getView = function(dest,type,langcode)
 			style += " background-size:cover;";
 		html += "<div class='TxtBlock' style=\""+style+"\">";
 		//---------------------------------
-		var title = UICom.structure.ui[this.id].getLabel(uuid);
-		var title_style = UICom.structure.ui[this.id].getLabelStyle(uuid);
-		if (title!="")
+		var title = UICom.structure.ui[this.id].getLabel();
+		var title_style = UICom.structure.ui[this.id].getLabelStyle();
+		if (title!="<span></span>")
 			html += "<div id='title_"+this.id+"' class='block-title' style=\""+title_style+"\">"+title+"</div>";
+		else
+			html += "<div id='title_"+this.id+"' class='block-title' style=\"visibility:hidden;"+title_style+"\">no title</div>";
 		//---------------------------------
-		var text_style = UICom.structure.ui[this.id].getContentStyle(uuid);
+		var text_style = UICom.structure.ui[this.id].getContentStyle();
 		var text_content = text.resource.getView(dest,type,langcode);
 		html += "<div id='text_"+this.id+"' class='block-text' style=\""+text_style+"\">"+text_content+"</div>";
 		//---------------------------------
@@ -127,6 +129,9 @@ UIFactory["TextFieldBlock"].prototype.getButtons = function(dest,type,langcode)
 UIFactory["TextFieldBlock"].prototype.displayEditor = function(destid,type,langcode)
 //==================================
 {
+	if (!USER.admin && g_userroles[0]!='designer')
+		$("#edit-window").addClass("TextFieldEditor");
+	//---------------------
 	var text = UICom.structure.ui[this.text_nodeid];
 	var image = UICom.structure.ui[this.image_nodeid];
 	var cover = UICom.structure.ui[this.cover_nodeid];

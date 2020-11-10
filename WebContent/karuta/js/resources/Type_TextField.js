@@ -208,6 +208,8 @@ var currentTexfieldInterval = "";
 UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,disabled,inline)
 //==================================
 {
+	if (!USER.admin && g_userroles[0]!='designer')
+		$("#edit-window").addClass("TextFieldEditor");
 	//---------------------
 	if (inline==null)
 		inline = false;

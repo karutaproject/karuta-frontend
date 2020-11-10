@@ -3367,7 +3367,7 @@ table.tablesorter th.restore {
 		display:none;
 	}
 	
-	//----Hidden Attributes for Grphicer User-
+	//----Hidden Attributes for Graphicer User-
 
 	#edit-window:not([role=designer]) { 
 		#metadata-epm-part0,
@@ -3385,5 +3385,18 @@ table.tablesorter th.restore {
 			display:none;
 		}
 	}
+
+	#edit-window.TextFieldEditor { 
+		.node-font-weight,
+		.node-font-style,
+		.node-text-align,
+		.node-font-size,
+		.node-padding-top,
+		.node-color
+		{
+			display:flex;
+		}
+	}
+
 
 

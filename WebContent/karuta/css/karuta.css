@@ -3190,4 +3190,13 @@ td {
   display: none;
 }
 
+#edit-window.TextFieldEditor .node-font-weight,
+#edit-window.TextFieldEditor .node-font-style,
+#edit-window.TextFieldEditor .node-text-align,
+#edit-window.TextFieldEditor .node-font-size,
+#edit-window.TextFieldEditor .node-padding-top,
+#edit-window.TextFieldEditor .node-color {
+  display: flex;
+}
+
 /*# sourceMappingURL=karuta.css.map */

@@ -550,7 +550,7 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 	this.setMetadata(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock);
 	this.display_node[dest] = {"type":type,"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":type,"parent":parent,"menu":menu,"inblock":inblock};
 	//============================== ASMCONTEXT =============================
-	if (this.nodetype == "asmContext"){
+	if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='raw' && this.semantictag!='EuropassL')){
 		var uuid = this.id;
 		//---------------- DISPLAY HTML -------------------------------
 		var html = "";
@@ -565,11 +565,19 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		}
 		//---------------- display resource ---------------------------------
 		try {
+			if (this.structured_resource != null) {
+				this.structured_resource.displayEditor("resource0_"+uuid,null,g_translate[0],false);
+				if (this.multilingual)
+					this.structured_resource.displayEditor("resource1_"+uuid,null,g_translate[1],false);
+				else
+					$("#resource1_"+uuid).html(karutaStr[LANG]['resource-not-multilingual']);
+			} else {
 			this.resource.displayEditor("resource0_"+uuid,null,g_translate[0],false);
 			if (this.resource.multilingual)
 				this.resource.displayEditor("resource1_"+uuid,null,g_translate[1],false);
 			else
 				$("#resource1_"+uuid).html(karutaStr[LANG]['resource-not-multilingual']);
+			}
 		} catch(e){
 			$("#resource0_"+uuid).append(this.resource.getEditor("resource0_"+uuid,null,g_translate[0],false));
 			if (this.resource.multilingual)
