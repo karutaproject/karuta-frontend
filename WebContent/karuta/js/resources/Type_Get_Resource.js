@@ -218,7 +218,6 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcode,disabled,cachable,resettable)
 //==================================
 {
-
 	var multiple_tags = "";
 	if (cachable==undefined || cachable==null)
 		cachable = true;
@@ -318,7 +317,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 	}
 	var newTableau1 = tableau1.sort(sortOn1);
 	//------------------------------------------------------------
+	//------------------------------------------------------------
 	if (type=='select') {
+	//------------------------------------------------------------
+	//------------------------------------------------------------
 		var html = "";
 		html += "<div class='btn-group select-label select-"+semtag+"'>";		
 		html += "	<button type='button' class='btn select selected-label' id='button_"+langcode+self.id+"'>&nbsp;</button>";
@@ -450,6 +452,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				$(select).append($(select_item));
 			}
 		}
+		//---------------------
 		if (target=='fileid') {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				var uuid = $(newTableau1[i][1]).attr('id');
@@ -559,6 +562,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 	//------------------------------------------------------------
 	//------------------------------------------------------------
 	if (type.indexOf('radio')>-1) {
+	//------------------------------------------------------------
+	//------------------------------------------------------------
 		//----------------- null value to erase
 		if (resettable) {
 			var radio_obj = $("<div class='get-radio'></div>");
@@ -633,7 +638,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		}
 	}
 	//------------------------------------------------------------
+	//------------------------------------------------------------
 	if (type.indexOf('click')>-1) {
+	//------------------------------------------------------------
+	//------------------------------------------------------------
 		var inputs = "<div class='click'></div>";
 		var inputs_obj = $(inputs);
 		//----------------- null value to erase
@@ -698,11 +706,13 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			$(inputs_obj).append(input_obj);
 		}
 		$("#"+destid).append(inputs_obj);
-		//------------------------------------------------------------
+		//---------------------
 	}
 	//------------------------------------------------------------
+	//------------------------------------------------------------
 	if (type.indexOf('multiple')>-1) {
-		//------------------------
+	//------------------------------------------------------------
+	//------------------------------------------------------------
 		var inputs = "<div id='get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
 		//-----------------------
@@ -758,17 +768,21 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
 			var input_obj = $(input);
 			$(inputs_obj).append(input_obj);
-			// ------------------------- child ---------
+			// ---------------------- children ---------
 			if (semtag2!="") {
 				var semtag_parent = semtag.replace("!","");
 				UIFactory.Get_Resource.getChildren(inputs_obj,langcode,srce,target,portfoliocode,semtag2,semtag_parent,code,cachable);
 			}
+			//------------------------------------------
 		}
 		//------------------------------
 		$("#"+destid).append(inputs_obj);
 	}
 	//------------------------------------------------------------
+	//------------------------------------------------------------
 	if (type=='completion') {
+	//------------------------------------------------------------
+	//------------------------------------------------------------
 		var html ="";
 		html += "<form autocomplete='off'>";
 		html += "</form>";
@@ -909,7 +923,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 	}
 	
 	//------------------------------------------------------------
+	//------------------------------------------------------------
 	if (type=='simple') {
+	//------------------------------------------------------------
+	//------------------------------------------------------------
 		var html ="";
 		html += "<form autocomplete='off'>";
 		html += "</form>";

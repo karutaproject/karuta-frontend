@@ -364,7 +364,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					}
 					$(this.portfoliocode_node).text(code_parent);
 					portfoliocode = code_parent;
-					url = serverBCK_API+"/nodes?portfoliocode="+code_parent+"&semtag="+semtag;
+					url = serverBCK_API+"/nodes?portfoliocode="+code_parent+"&semtag="+semtag.replace("!","");
 				}
 				else if (portfoliocode=='parent?'){
 					if (portfoliocode_parent.indexOf("@")>-1) {
@@ -376,10 +376,10 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					}
 					$(this.portfoliocode_node).text(portfoliocode_parent);
 					portfoliocode = portfoliocode_parent;
-					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
 				} else {
 					$(this.portfoliocode_node).text(portfoliocode);
-					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
 				}
 				var self = this;
 				$.ajax({
@@ -389,7 +389,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					portfoliocode:portfoliocode,
 					semtag2:semtag2,
 					success : function(data) {
-						UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2);
+						UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 					},
 					error : function(jqxhr,textStatus) {
 						$("#"+destid).html("No result");
@@ -405,7 +405,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 
 
 //==================================
-UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,portfoliocode,semtag,semtag2) {
+UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,portfoliocode,semtag,semtag2,cachable) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -665,8 +665,10 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 		}
 	}
 	//------------------------------------------------------------
+	//------------------------------------------------------------
 	if (type.indexOf('multiple')>-1) {
-		//------------------------
+	//------------------------------------------------------------
+	//------------------------------------------------------------
 		var inputs = "<div id='get_get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
 		//-----------------------
@@ -695,7 +697,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			if (code.indexOf("?")>-1) {
 				disabled = true;
 			}
-			if (code.indexOf("!")>-1) {
+			if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1) {
 				selectable = false;
 			}
 			code = cleanCode(code);
@@ -705,12 +707,6 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 				input += "' ";
 				for (var j=0; j<languages.length;j++){
-					if (srce=='fileid' || srce=='resource') {
-						if (target=='fileid')
-							input += "label_"+languages[j] + "=\"" + srce + "-" + uuid + "\" ";
-						else
-							input += "label_"+languages[j] + "=\"" + srce + ":" + uuid + "|semtag:"+semtag+"\" ";
-					} else 
 						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
 				if (disabled)
@@ -722,87 +718,12 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
 			var input_obj = $(input);
 			$(inputs_obj).append(input_obj);
-			// ------------------------- child ---------
+			// ---------------------- children ---------
 			if (semtag2!="") {
-				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag2+"&semtag_parent="+semtag+ "&code_parent="+code;
-				$.ajax({
-					type : "GET",
-					dataType : "xml",
-					url : url,
-					portfoliocode:portfoliocode,
-					success : function(data) {
-						//-----Node ordering-------------------------------------------------------
-						var nodes = $("node",data);
-						var tableau1 = new Array();
-						for ( var i = 0; i < $(nodes).length; i++) {
-							var resource = null;
-							if ($("asmResource",nodes[i]).length==3)
-								resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
-							else
-								resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
-							var code = $('code',resource).text();
-							tableau1[i] = [code,nodes[i]];
-						}
-						var newTableau1 = tableau1.sort(sortOn1);
-						//--------------------------------------------------------------------
-						for ( var i = 0; i < newTableau1.length; ++i) {
-							var input = "";
-							//------------------------------
-							var resource = null;
-							if ($("asmResource",newTableau1[i][1]).length==3)
-								resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
-							else
-								resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
-							//------------------------------
-							var code = $('code',resource).text();
-							var selectable = true;
-							var disabled = false;
-							var display_code = false;
-							var display_label = true;
-							//------------------------
-							if (code.indexOf("$")>-1){ 
-								display_label = false;
-							}
-							if (code.indexOf("@")<0) {
-								display_code = true;
-							}
-							if (code.indexOf("?")>-1) {
-								disabled = true;
-							}
-							if (code.indexOf("!")>-1) {
-								selectable = false;
-							}
-							code = cleanCode(code);
-							//------------------------------
-							input += "<div id='"+code+"'>";
-							if (selectable) {
-								input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
-								input += "' ";
-								for (var j=0; j<languages.length;j++){
-									if (target=='fileid' || target=='resource') {
-										if (target=='fileid')
-											input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
-										else
-											input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"\" ";
-									} else 
-										input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
-								}
-								if (disabled)
-									input += "disabled";
-								input += "> ";
-							}
-							if (display_code)
-								input += code + " ";
-							input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
-							var input_obj = $(input);
-							$(inputs_obj).append(input_obj);
-						}
-					},
-					error : function(jqxhr,textStatus) {
-						$("#"+code).html("No result");
-					}
-				});
+				var semtag_parent = semtag.replace("!","");
+				UIFactory.Get_Get_Resource.getChildren(inputs_obj,langcode,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
 			}
+			//------------------------------------------
 		}
 		//------------------------------
 		$("#"+destid).append(inputs_obj);
@@ -810,6 +731,103 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 	//------------------------------------------------------------
 };
 
+//==================================
+UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,srce,portfoliocode,semtag,semtag_parent,code,cachable)
+//==================================
+{
+	var semtag2 = "";
+	if (semtag.indexOf('&')>-1) {
+		semtag2 = semtag.substring(semtag.indexOf('&')+1);
+		semtag = semtag.substring(0,semtag.indexOf('&'));
+	}
+	//------------
+	if (cachable && g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code]!=undefined && g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code]!="")
+		UIFactory.Get_Get_Resource.parseChildren(dest,g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code],langcode,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+	else {
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code,
+			success : function(data) {
+				if (cachable)
+					g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code] = data;
+				UIFactory.Get_Get_Resource.parseChildren(dest,data,langcode,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+			}
+		});
+	}
+	//------------
+}
+//==================================
+UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+//==================================
+{
+	//-----Node ordering-------------------------------------------------------
+	var nodes = $("node",data);
+	var tableau1 = new Array();
+	for ( var i = 0; i < $(nodes).length; i++) {
+		var resource = null;
+		if ($("asmResource",nodes[i]).length==3)
+			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[i]); 
+		else
+			resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+		var code = $('code',resource).text();
+		tableau1[i] = [code,nodes[i]];
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
+	//--------------------------------------------------------------------
+	for ( var i = 0; i < newTableau1.length; ++i) {
+		var uuid = $(newTableau1[i][1]).attr('id');
+		//------------------------------
+		var input = "";
+		//------------------------------
+		var resource = null;
+		if ($("asmResource",newTableau1[i][1]).length==3)
+			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+		else
+			resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+		//------------------------------
+		var code = $('code',resource).text();
+		var selectable = true;
+		var disabled = false;
+		var display_code = false;
+		var display_label = true;
+		//------------------------
+		if (code.indexOf("$")>-1){ 
+			display_label = false;
+		}
+		if (code.indexOf("@")<0) {
+			display_code = true;
+		}
+		if (code.indexOf("?")>-1) {
+			disabled = true;
+		}
+		if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1 ) {
+			selectable = false;
+		}
+		code = cleanCode(code);
+		//------------------------------
+		input += "<div id='"+code+"'>";
+		if (selectable) {
+			input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
+			input += "' ";
+			for (var j=0; j<languages.length;j++){
+				input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+			}
+			if (disabled)
+				input += "disabled";
+			input += "> ";
+		}
+		if (display_code)
+			input += code + " ";
+		input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
+		var input_obj = $(input);
+		$(dest).append(input_obj);
+		if (semtag2!="") {
+			var semtag_parent = semtag.replace("!","");
+			UIFactory.Get_Get_Resource.getChildren(dest,langcode,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
+		}
+	}
+}
 //==================================
 UIFactory["Get_Get_Resource"].reloadIfInLine = function(uuid,destid,type,langcode)
 //==================================
