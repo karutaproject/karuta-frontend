@@ -155,8 +155,7 @@ UIFactory["Node"].prototype.getLabelStyle = function()
 UIFactory["Node"].getContentStyle = function(uuid)
 //==================================================
 {
-	var node = UICom.structure["ui"][uuid].metadataepm;
-//	metadataepm = node.metadataepm;
+	var metadataepm = UICom.structure["ui"][uuid].metadataepm;
 	var style = "";
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);

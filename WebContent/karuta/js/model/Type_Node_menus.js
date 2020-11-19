@@ -360,7 +360,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					titles = menus[i][2].split("/");
 					if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
 						for (var j=0; j<titles.length; j++){
-							if (titles[j].indexOf(languages[langcode])>-1)
+							if (titles[j].indexOf("@"+languages[langcode])>-1)
 								title = titles[j].substring(0,titles[j].indexOf("@"));
 						}
 					} else { // lang1/lang2/...
@@ -462,7 +462,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 								var label = "";
 								var labels = sharelabel.split("/");
 								for (var j=0; j<labels.length; j++){
-									if (labels[j].indexOf(languages[langcode])>-1)
+									if (labels[j].indexOf("@"+languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
@@ -489,7 +489,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 								var label = "";
 								var labels = sharelabel.split("/");
 								for (var j=0; j<labels.length; j++){
-									if (labels[j].indexOf(languages[langcode])>-1)
+									if (labels[j].indexOf("@"+languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
 								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\"> "+label+"</span>";

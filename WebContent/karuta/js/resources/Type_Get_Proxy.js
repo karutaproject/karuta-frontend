@@ -289,7 +289,17 @@ UIFactory["Get_Proxy"].parse = function(destid,type,langcode,data,self,portfolio
 				else
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i]);
 				var value = $(newTableau1[i][1]).attr('id');
-				html = "<a class='dropdown-item' value='"+value+"' code='"+value+"' ";
+				var code = $('code',resource).text();
+//				var value = $('value',resource).text();
+				var display_code = false;
+				var display_label = true;
+				if (code.indexOf("$")>-1) 
+					display_label = false;
+				if (code.indexOf("@")<0) {
+					display_code = true;
+				}
+				code = cleanCode(code);
+				html = "<a class='dropdown-item' value='"+value+"' code='"+code+"' ";
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}

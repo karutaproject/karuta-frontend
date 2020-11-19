@@ -747,13 +747,16 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 		style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
 		style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
 		style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
-//		if (style.length>0)
-//			html += " style='"+style+"' ";
+		if (style.length>0)
+			html += " style='"+style+"' ";
 		//----------------------------
 		html += ">";
-		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userroles[0]=='designer' || USER.admin)) {
+		//----- code -----
+		var displayCodeValue = (this.editcoderoles.containsArrayElt(g_userroles) || this.editcoderoles.indexOf(this.userrole)>-1 || this.editcoderoles.indexOf($(USER.username_node).text())>-1) && this.nodenopencil=='N';
+		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userroles[0]=='designer' || USER.admin || displayCodeValue)) {
 			html += this.code_node.text()+" ";
 		}
+		//----- label -----
 		var label = this.label_node[langcode].text();
 		if (label == "")
 			label="&nbsp;";
@@ -770,7 +773,7 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	var html = "";
+/*	var html = "";
 	if (type==null)
 		type = 'default';
 	if (langcode==null)
@@ -810,6 +813,8 @@ UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 		if (type=="span")
 			html += "</span>";
 	}
+*/
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 
@@ -945,7 +950,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			titles = editboxtitle.split("/");
 			if (editboxtitle.indexOf("@")>-1) { // lang@fr/lang@en/...
 				for (var j=0; j<titles.length; j++){
-					if (titles[j].indexOf(languages[langcode])>-1)
+					if (titles[j].indexOf("@"+languages[langcode])>-1)
 						title = titles[j].substring(0,titles[j].indexOf("@"));
 				}
 			} else { // lang1/lang2/...
