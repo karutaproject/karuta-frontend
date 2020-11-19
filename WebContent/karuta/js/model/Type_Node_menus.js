@@ -14,7 +14,7 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 	var html = "<a class='button text-button' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
-		html += items[0] +"('"+parentid+"','"+title+"'";
+		html += items[0] +"('"+parentid+"','"+title.replaceAll("'","##apos##")+"'";
 		if (items.length>1)
 			html += ",";
 		for (var i=1;i<items.length;i++){
@@ -45,7 +45,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 	var html = "<a class='dropdown-item button text-button' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
-		html += items[0] +"('"+parentid+"','"+title+"'";
+		html += items[0] +"('"+parentid+"','"+title.replaceAll("'","##apos##")+"'";
 		if (items.length>0)
 			html += ",";
 		for (var i=1;i<items.length;i++){
