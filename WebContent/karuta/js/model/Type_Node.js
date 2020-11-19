@@ -1799,8 +1799,9 @@ UIFactory['Node'].reloadUnit = function()
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/" + uuid,
+		parentid : parentid,
 		success : function(data) {
-			UICom.parseStructure(data,false,parentid);
+			UICom.parseStructure(data,false,this.parentid);
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
 			if (g_bar_type.indexOf('horizontal')>-1) {
 				$("#menu_bar").html("");
@@ -1814,7 +1815,7 @@ UIFactory['Node'].reloadUnit = function()
 			if (g_display_type=='model')
 				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
 			else
-				displayPage(uuid,1,g_display_type,LANGCODE,g_edit);
+				displayPage(uuid,99,g_display_type,LANGCODE,g_edit);
 			$('#wait-window').modal('hide');
 		}
 	});
