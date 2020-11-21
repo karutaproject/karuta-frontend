@@ -746,6 +746,7 @@ body,
 .menus a.text-button {
   font-size: calc(var(--font-size-coeff) * 1rem);
   margin-top: 2px;
+  font-style: normal;
 }
 
 /* ====================== */
@@ -856,6 +857,7 @@ body,
   margin-right: 5px;
   margin-top: 1px;
   color: var(--portfolio-buttons-color);
+  font-size: calc(var(--font-size-coeff) * 1rem);
 }
 #main-portfolio #portfolio-container .createreport .button,
 #main-portfolio #portfolio-container .btn-group .button,
@@ -1135,6 +1137,22 @@ body,
 
 .name_SendEmail {
   font-weight: bold;
+}
+
+/* ====================
+	Get_Resource - search in Node
+   ====================*/
+#get-resource-node .btn-group.select-label {
+  width: 100%;
+}
+#get-resource-node .btn-group.select-label .dropdown-menu {
+  width: 90%;
+}
+#get-resource-node .btn-group.select-label button.select {
+  width: 100%;
+}
+#get-resource-node .btn-group.select-label button.dropdown-toggle {
+  width: 30px;
 }
 
 /* ====================== */

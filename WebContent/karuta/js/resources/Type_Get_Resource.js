@@ -61,6 +61,16 @@ UIFactory["Get_Resource"] = function(node,condition)
 			}
 		}
 	}
+	this.text_node = [];
+	for (var i=0; i<languages.length;i++){
+		this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
+		if (this.text_node[i].length==0) {
+			var newelement = createXmlElement("text");
+			$(newelement).attr('lang', languages[i]);
+			$("asmResource["+this.clause+"]",node)[0].appendChild(newelement);
+			this.text_node[i] = $("text[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node));
+		}
+	}
 	this.encrypted = ($("metadata",node).attr('encrypted')=='Y') ? true : false;
 	if (this.clause=="xsi_type='Get_Resource'")
 		this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
@@ -144,31 +154,63 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	if (!this.multilingual)
+		langcode = NONMULTILANGCODE;
+	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
+	var text = this.text_node[langcode].text();
+	if (this.encrypted)
+		text = decrypt(text.substring(3),g_rc4key);
 	var label = this.label_node[langcode].text();
 	if (this.encrypted)
 		label = decrypt(label.substring(3),g_rc4key);
 	var code = $(this.code_node).text();
-	if (type=='batchform')
-		return label;
 	var html = "";
-	html += "<span class='"+cleanCode(code)+" view-div' ";
-	if (indashboard)
-		html += " style='background-position:center'";
-	html += ">";
-	if (code.indexOf("#")>-1)
-		html += cleanCode(code) + " ";
-	if (code.indexOf("%")<0) {
-		if (label.indexOf("fileid-")>-1)
-			html += UICom.structure["ui"][label.substring(7)].resource.getView();
-		else
-			html += label;
+	if (label.indexOf("resource:")>-1) {
+		var elts = label.split("|");
+		try {
+			html += UICom.structure["ui"][elts[0].substring(9)].resource.getView();
+		}
+		catch(e) {
+			var semtag = elts[1].substring(7);
+			// search for resource uuid
+			var res_node = $("asmContext:has(metadata[semantictag='"+semtag+"']):has(code:contains('"+code+"'))",g_portfolio_current);
+
+			var resid = $($(res_node)[0]).attr('id');
+			for (var i=0; i<languages.length;i++){
+				this.label_node[i].text('resource:'+resid+'|semtag:'+semtag);
+			}
+			if (resid!=undefined) {
+			//update get_resource
+			this.save();
+			html += UICom.structure["ui"][resid].resource.getView();
+			}
+		}
+	} else {
+		html += "<div class='"+cleanCode(code)+" view-div' style='";
+		if (indashboard)
+			html += "background-position:center;";
+		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
+			html += "font-weight:bold;"
+		html += "'>";
+		if (code.indexOf("#")>-1 || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
+			html += cleanCode(code) + " ";
+		if (code.indexOf("%")<0) {
+			if (label.indexOf("fileid-")>-1)
+				html += UICom.structure["ui"][label.substring(7)].resource.getView();
+			else
+				html += label;
+		}
+		if (code.indexOf("&")>-1)
+			html += " ["+$(this.value_node).text()+ "] ";
+		html += "</div>";
+		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1){
+			html += text;
+		}
+
 	}
-	if (code.indexOf("&")>-1)
-		html += " ["+$(this.value_node).text()+ "] ";
-	html += "</span>";
 	return html;
 };
 
@@ -328,9 +370,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		html += "</div>";
 		var btn_group = $(html);
 		$("#"+destid).append($(btn_group));
-		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
+		html = "<div class='dropdown-menu dropdown-menu-left'></div>";
 		var select  = $(html);
-		if (resettable) {//----------------- null value to erase
+		//----------------- null value to erase
+		if (resettable) {
 			html = "<a class='dropdown-item' value='' code='' ";
 			for (var j=0; j<languages.length;j++) {
 				html += "label_"+languages[j]+"='&nbsp;' ";
@@ -789,7 +832,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		var form = $(html);
 		html = "";
 		html += "<div class='auto-complete btn-group roles-choice select-"+semtag+"'>";
-		html += "<input id='button_"+self.id+"' type='text' class='btn btn-default select' code= '' value=''/>";
+		html += "<input id='button_"+langcode+self.id+"' type='text' class='btn btn-default select' code= '' value=''/>";
 		html += "<button type='button' class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>&nbsp;</span></button>";
 		html += "</div>";
 		var btn_group = $(html);
@@ -799,25 +842,22 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		
 		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
 		var select  = $(html);
-		if (resettable) //----------------- null value to erase
-			html = "<li></li>";
-		else
-			html ="";
-		var select_item = $(html);
-		html = "<a  value='' code='' ";
-		for (var j=0; j<languages.length;j++) {
-			html += "label_"+languages[j]+"='&nbsp;' ";
+		//----------------- null value to erase
+		if (resettable) {
+			html = "<a class='dropdown-item' value='' code='' ";
+			for (var j=0; j<languages.length;j++) {
+				html += "label_"+languages[j]+"='&nbsp;' ";
+			}
+			html += ">";
+			html += "&nbsp;</a>";
+			var select_item = $(html);
+			$(select_item).click(function (ev){
+				document.getElementById("button_"+langcode+self.id).defaultValue = "";
+				document.getElementById("button_"+langcode+self.id).className = "btn btn-default select selected-label";
+				UIFactory["Get_Resource"].update(this,self,langcode);
+			});
+			$(select).append($(select_item));
 		}
-		html += ">";
-		html += "&nbsp;</a>";
-		var select_item_a = $(html);
-		$(select_item_a).click(function (ev){
-			$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
-			$("#button_"+self.id).attr('class', 'btn btn-default select select-label');
-			UIFactory["Get_Resource"].update(this,self,langcode);
-		});
-		$(select_item).append($(select_item_a))
-		$(select).append($(select_item));
 		//---------------------
 		if (target=='label') {
 			for ( var i = 0; i < newTableau1.length; i++) {
@@ -872,9 +912,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 							html += code+" ";
 						if (display_label)
 							html += $(this).attr("label_"+languages[langcode]);
-						$("#button_"+self.id).html(html);
-						$("#button_"+self.id).attr("value",html);
-						$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+						$("#button_"+langcode+self.id).html(html);
+						$("#button_"+langcode+self.id).attr("value",html);
+						$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 						UIFactory["Get_Resource"].update(this,self,langcode);
 						//--------------------------------
 					});
@@ -886,9 +926,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 						html += code+" ";
 					if (display_label)
 						html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
-					$("#button_"+self.id).html(html);
-					$("#button_"+self.id).attr("value",html);
-					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).html(html);
+					$("#button_"+langcode+self.id).attr("value",html);
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 				}
 				$(select).append($(select_item));
 			}
@@ -908,8 +948,8 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				html += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</a>";
 				var select_item_a = $(html);
 				$(select_item_a).click(function (ev){
-					$("#button_"+self.id).html($(this).attr("label_"+languages[langcode]));
-					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).html($(this).attr("label_"+languages[langcode]));
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
 				$(select_item).append($(select_item_a))
@@ -919,7 +959,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		//---------------------
 		$(btn_group).append($(select));
 		var onupdate = "UIFactory.Get_Resource.update(input,self)";
-		autocomplete(document.getElementById("button_"+self.id), tableau2,onupdate,self,langcode);
+		autocomplete(document.getElementById("button_"+langcode+self.id), tableau2,onupdate,self,langcode);
 	}
 	
 	//------------------------------------------------------------
@@ -933,7 +973,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		var form = $(html);
 		html = "";
 		html += "<div class='input-group select-"+semtag+"'>";
-		html += "<input id='button_"+self.id+"' type='text' class='form-control' code= '' value=''/>";
+		html += "<input id='button_"+langcode+self.id+"' type='text' class='form-control' code= '' value=''/>";
 		html += "</div>";
 		var input_group = $(html);
 		$(form).append($(input_group));
@@ -1004,12 +1044,12 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 						html += code+" ";
 					if (display_label)
 						html += $(this).attr("label_"+languages[langcode]);
-					$("#button_"+self.id).html(html);
-					$("#button_"+self.id).attr("code",$(this).attr("code"));
-					$("#button_"+self.id).attr("value",html);
-					$("#button_"+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
+					$("#button_"+langcode+self.id).html(html);
+					$("#button_"+langcode+self.id).attr("code",$(this).attr("code"));
+					$("#button_"+langcode+self.id).attr("value",html);
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code);
 					for (var j=0; j<languages.length;j++){
-						$("#button_"+self.id).attr("label_"+languages[j],$(this).attr("label_"+languages[j]));
+						$("#button_"+langcode+self.id).attr("label_"+languages[j],$(this).attr("label_"+languages[j]));
 					}
 					//--------------------------------
 				});
@@ -1018,7 +1058,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		}
 		//---------------------
 		$(btn_group).append($(select));
-		autocomplete(document.getElementById("button_"+self.id), tableau2,onupdate,self,langcode);
+		autocomplete(document.getElementById("button_"+langcode+self.id), tableau2,onupdate,self,langcode);
 	}
 };
 

@@ -814,12 +814,13 @@
 	}
 
 	.menus {
-		 .dropdown {
+//		.dropdown {
 //			float:left;
-		}
+//		}
 		a.text-button {
 			font-size:calc(var(--font-size-coeff) * 1rem);
 			margin-top:2px;
+			font-style:normal;
 		}
 	}
 	
@@ -936,6 +937,7 @@
 				margin-right:5px;
 				margin-top: 1px;
 				color:var(--portfolio-buttons-color);
+				font-size:calc(var(--font-size-coeff) * 1rem);
 			}
 		
 			.createreport .button,
@@ -1249,6 +1251,24 @@
 	.email_SendEmail {
 	}
 
+/* ====================
+	Get_Resource - search in Node
+   ====================*/
+
+	#get-resource-node {
+		.btn-group.select-label {
+			width:100%;
+			.dropdown-menu {
+				width:90%;
+			}
+			button.select {
+				width:100%;
+			}
+			button.dropdown-toggle {
+				width:30px;
+			}
+		}
+	}
 
 /* ====================== */
 /*     FIRST NODE         */

@@ -160,7 +160,7 @@ function decreaseFontSize()
 function setConfigurationUIVariables(langcode)
 //==============================
 {
-	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-ui?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta-configuration.configuration-ui?resources=true";
 	$.ajax({
 		async: false,
 		type : "GET",
@@ -303,7 +303,7 @@ function resetConfigurationPortfolioVariable()
 function setConfigurationTechVariables(langcode)
 //==============================
 {
-	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-tech?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta-configuration.configuration-tech?resources=true";
 	$.ajax({
 		async: false,
 		type : "GET",

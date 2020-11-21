@@ -574,16 +574,32 @@
 				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:variable name="varname">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='variable-name']/asmResource[@xsi_type='Field']/text"></xsl:value-of>
+		<xsl:variable name="variable-name">
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">variable-name</xsl:with-param>
+				</xsl:call-template>
 		</xsl:variable>
-		<update-resource type='Variable' select="{$select}.{$varname}">
+		<update-resource type='Variable' select="{$select}">
+			<xsl:if test="$variable-name!=''">
+				<attribute name='name' language-dependent='N'>
+					<txtval>
+						<xsl:value-of select='$variable-name'/>
+					</txtval>
+				</attribute>
+			</xsl:if>
 			<attribute name='value' language-dependent='N'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">variable-value</xsl:with-param>
 				</xsl:call-template>
 			</attribute>
 		</update-resource>
+		<xsl:if test="$variable-name!=''">
+			<update-node type='Metadata' select="{$select}" attribute="semantictag">
+				<text>
+					<txtval>g-variable <xsl:value-of select='$variable-name'/></txtval>
+				</text>
+			</update-node>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='update-document']">
@@ -881,6 +897,7 @@
 		<xsl:variable name="ref-id"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="portfoliocode">#<xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='portfoliocode']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="semtag"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='node-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="varname"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='variable-name']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="uuid"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='uuid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<!-- for backward compatibility -->
 		<xsl:variable name="old-select"><xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
@@ -911,7 +928,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:choose>
-							<xsl:when test="$semtag=''"><xsl:value-of select='$ref-id'/></xsl:when>
+							<xsl:when test="$semtag=''"><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$varname'/></xsl:when>
 							<xsl:otherwise><xsl:value-of select='$ref-id'/>.<xsl:value-of select='$semtag'/></xsl:otherwise>
 						</xsl:choose>
 					</xsl:otherwise>

@@ -265,7 +265,7 @@ function applyLoginConfiguration()
 function setLoginConfigurationVariables()
 //==============================
 {
-	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-ui?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta-configuration.configuration-ui?resources=true";
 	$.ajax({
 		async: false,
 		type : "GET",
@@ -302,7 +302,7 @@ function setLoginConfigurationVariables()
 function setLoginTechnicalVariables()
 //==============================
 {
-	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-tech?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta-configuration.configuration-tech?resources=true";
 	$.ajax({
 		async: false,
 		type : "GET",

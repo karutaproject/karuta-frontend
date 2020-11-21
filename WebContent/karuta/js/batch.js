@@ -3252,7 +3252,7 @@ function updateMetada(nodes,node,type,semtag,text,attribute)
 			semtag : semtag,
 			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
 			success : function(data) {
-				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semantictag);
+				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag);
 				updateMetada(nodes,node,type,semtag,text,attribute)
 			},
 			error : function(data,nodeid,semtag) {
@@ -3283,7 +3283,7 @@ function updateMetadawad(nodes,node,type,semtag,text,attribute)
 			semtag : semtag,
 			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadatawad",
 			success : function(data) {
-				$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semantictag);
+				$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semtag);
 				updateMetadawad(nodes,node,type,semtag,text,attribute)
 			},
 			error : function(data,nodeid,semtag) {

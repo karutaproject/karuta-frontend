@@ -156,6 +156,8 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 				style = "min-height:240px";
 			html = "<iframe style='width: 100%; "+style+"' src='"+url+"'/>";
 		}
+		else
+			html =  "<img src='../../karuta/img/link-icon.png' style='width:25px'> "+karutaStr[LANG]['no-URL'];
 	}
 	return html;
 };

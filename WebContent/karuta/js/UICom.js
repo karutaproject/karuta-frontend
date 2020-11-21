@@ -259,7 +259,7 @@ var UICom =
 					var items = $("metadata-wad",node).attr(attribute).split(";");
 					for (var i=0; i<items.length; i++){
 						var subitems = items[i].split(",");
-						if (subitems[0]!="#line" && subitems[0].indexOf("##")<0) {
+						if (subitems[0]!="#line") {
 							roles = subitems[3].split(" ");
 							//----------------------------
 							for (var j=0;j<roles.length;j++){
