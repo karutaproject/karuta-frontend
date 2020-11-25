@@ -31,6 +31,7 @@ UIFactory["Node"] = function( node )
 		if (this.asmtype=="node")
 			this.asmtype = $(node).attr('xsi_type');
 		this.code_node = $($("code",node)[0]);
+		this.js = "";
 		//--------------------
 		this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
 		//--------------------
@@ -128,7 +129,6 @@ UIFactory["Node"] = function( node )
 			this.structured_resource = new UIFactory[this.xsi_type](node);
 		}
 		//------------------------------
-		this.js = "";
 	}
 	catch(err) {
 		alertHTML("UIFactory.Node -- flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype+"--xsi_type:"+this.xsi_type);
@@ -979,8 +979,8 @@ UIFactory["Node"].prototype.save = function()
 //==================================
 {
 	//-------- if function js -------------
-	if (UICom.structure["ui"][this.id].js!="") {
-		var elts = UICom.structure["ui"][this.id].js.split("/");
+	if (this.js!=undefined && this.js!="") {
+		var elts = this.js.split("/");
 		if (elts[0]=="update-node")
 			eval(elts[1]+"(this.node,g_portfolioid)");
 	}
@@ -994,7 +994,7 @@ UIFactory["Node"].prototype.save = function()
 UIFactory["Node"].prototype.remove = function()
 //==================================
 {
-	UIFactory["Node"].remove(this.id);
+	UIFactory.Node.remove(this.id);
 };
 
 //==================================
@@ -1002,8 +1002,8 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2)
 //==================================
 {
 	//-------- if function js -------------
-	if (UICom.structure["ui"][uuid].js!="") {
-		var elts = UICom.structure["ui"][uuid].js.split("/");
+	if (UICom.structure.ui[uuid].js!=undefined && UICom.structure.ui[uuid].js!="") {
+		var elts = UICom.structure.ui[uuid].js.split("/");
 		if (elts[0]=="delete")
 			eval(elts[1]+"(UICom.structure.ui[uuid].node,g_portfolioid)");
 	}

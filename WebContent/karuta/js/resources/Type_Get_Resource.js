@@ -1220,7 +1220,7 @@ UIFactory["Get_Resource"].addSimple = function(parentid,multiple_tags)
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
 	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
 	var get_resource_semtag = multiple_tags.substring(multiple_tags.indexOf(',')+1);
-	var input = $("#button_"+parentid);
+	var input = $("#button_"+LANGCODE+parentid);
 	// for each one create a part
 	var databack = true;
 	var callback = UIFactory.Get_Resource.updateaddedpart;
@@ -1345,8 +1345,6 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 function get_simple(parentid,title,query,partcode,get_resource_semtag)
 //==================================
 {
-	var langcode = LANGCODE;
-	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
@@ -1367,8 +1365,6 @@ function get_simple(parentid,title,query,partcode,get_resource_semtag)
 function get_multiple(parentid,title,query,partcode,get_resource_semtag)
 //==================================
 {
-	var langcode = LANGCODE;
-	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
@@ -1390,8 +1386,6 @@ function get_multiple(parentid,title,query,partcode,get_resource_semtag)
 function import_multiple(parentid,title,query,partcode,get_resource_semtag)
 //==================================
 {
-	var langcode = LANGCODE;
-	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+r_replaceVariable(partcode)+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";

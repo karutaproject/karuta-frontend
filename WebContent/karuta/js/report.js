@@ -1113,7 +1113,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//----------------------------
 			if (selector.type=='resource') {
 				try {
-					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,'none',null,true);
+					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
 				} catch(e){
 					text = UICom.structure["ui"][nodeid].structured_resource.getView("dashboard_"+nodeid,null,null,true);
 				}

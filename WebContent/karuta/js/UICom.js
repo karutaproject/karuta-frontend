@@ -255,8 +255,9 @@ var UICom =
 			try {
 				//----------------------------
 				var roles = null;
-				if (attribute == 'menuroles' && $("metadata-wad",node).attr(attribute) != undefined && $("metadata-wad",node).attr(attribute).length>10) {
-					var items = $("metadata-wad",node).attr(attribute).split(";");
+				var attribute_value = r_replaceVariable($("metadata-wad",node).attr(attribute) != undefined ? $("metadata-wad",node).attr(attribute):"");
+				if (attribute == 'menuroles' && attribute_value.length>10) {
+					var items = attribute_value.split(";");
 					for (var i=0; i<items.length; i++){
 						var subitems = items[i].split(",");
 						if (subitems[0]!="#line") {
@@ -271,7 +272,7 @@ var UICom =
 					}
 				}
 				else {
-					roles = $("metadata-wad",node).attr(attribute).split(" ");
+					roles = attribute_value.split(" ");
 					//----------------------------
 					for (var i=0;i<roles.length;i++){
 						if (roles[i]!='' && roles[j]!='user')
@@ -280,7 +281,7 @@ var UICom =
 					//----------------------------
 				}
 			} catch(e) {
-				alertHTML('Error role in :'+attribute+"  --"+e); 
+				alertHTML('Error-role in :'+attribute+"  --"+e); 
 			}
 		}
 	},

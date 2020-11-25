@@ -820,7 +820,9 @@
 		a.text-button {
 			font-size:calc(var(--font-size-coeff) * 1rem);
 			margin-top:2px;
-			font-style:normal;
+			font-weight:initial;
+			font-style:initial;
+			font-variant:initial;
 		}
 	}
 	

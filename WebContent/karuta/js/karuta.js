@@ -1843,9 +1843,9 @@ String.prototype.toNoAccents = function()
 function applyNavbarConfiguration()
 //==============================
 {
-	if (g_configVar['navbar-brand-logo']!="")
+//	if (g_configVar['navbar-brand-logo']!="")
 		$('#navbar-brand-logo').html(g_configVar['navbar-brand-logo']);
-	if (g_configVar['navbar-brand-logo-style']!="")
+//	if (g_configVar['navbar-brand-logo-style']!="")
 		$("#navbar-brand-logo").attr("style",g_configVar['navbar-brand-logo-style']);
 	if (g_configVar['navbar-display-mailto']=='0')
 		$("#navbar-mailto").hide();
