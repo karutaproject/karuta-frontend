@@ -95,7 +95,7 @@ UIFactory["ImageBlock"].prototype.displayView = function(dest,type,langcode)
 {
 	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
-	$("#std_node_"+this.id).attr('style','display:none');
+	$("#std_node_"+this.id).attr('style','visibility:hidden');
 	$("#menus-"+this.id).hide();
 };
 
@@ -122,6 +122,9 @@ UIFactory["ImageBlock"].prototype.displayEditor = function(destid,type,langcode)
 {
 	var image = UICom.structure["ui"][this.image_nodeid];
 	var cover = UICom.structure["ui"][this.cover_nodeid];
+	//---------------------
+	UICom.structure.ui[this.image_nodeid].resource.blockparent = UICom.structure.ui[this.id];
+	UICom.structure.ui[this.cover_nodeid].resource.blockparent = UICom.structure.ui[this.id];
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

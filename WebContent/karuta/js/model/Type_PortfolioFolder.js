@@ -969,7 +969,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 					UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
 				else if (autoload!="")
 					display_main_page(portfolios_byid[autoload].rootid);
-				else
+				else   // nb_visibleportfolios == 1
 					display_main_page(portfolios_byid[visibleid].rootid);
 		},
 		error : function(jqxhr,textStatus) {

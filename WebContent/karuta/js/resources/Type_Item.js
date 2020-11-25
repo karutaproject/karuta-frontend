@@ -159,11 +159,15 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
+	var node = UICom.structure["ui"][this.id];
+	var editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
+	var resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
+	var displayCodeValue = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf(this.userrole)>-1 || editresroles.indexOf($(USER.username_node).text())>-1) && resnopencil=='N';
 	var label = this.label_node[langcode].text();
 	var code = $(this.code_node).text();
 	var value = $(this.value_node).text();
 	var html = "";
-	if (g_userroles[0]=='designer' || USER.admin) {
+	if (g_userroles[0]=='designer' || USER.admin || displayCodeValue) {
 		html += "<div class='"+ code +" view-div'>"+ code + " "+label;
 		if (value!='')
 			html += " ["+ value + "]";
@@ -185,32 +189,7 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 UIFactory["Item"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	var label = this.label_node[langcode].text();
-	var code = $(this.code_node).text();
-	var value = $(this.value_node).text();
-	var html = "";
-	if (g_userroles[0]=='designer' || USER.admin) {
-		html += "<div class='"+ code +" view-div'>"+ code + " "+label;
-		if (value!='')
-			html += " ["+ value + "]";
-		html += "</div> ";
-	} else {
-		html += "<div class='"+ code +" view-div'>";
-		if (code.indexOf("#")>-1)
-			html += cleanCode(code) + " ";
-		if (code.indexOf("%")<0)
-			html += " "+label;
-		if (code.indexOf("&")>-1)
-			html += " ["+$(this.value_node).text()+ "] ";
-		html += "</div>";
-	}
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 

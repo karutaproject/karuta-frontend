@@ -201,8 +201,8 @@ var UICom =
 					if (resource_type=='Get_Proxy') {
 						var targetid = $("value",$("asmResource[xsi_type='Get_Proxy']",child)).text();
 						var edittargetroles = ($("metadata-wad",child).attr('edittargetroles')==undefined)?'none':$("metadata-wad",child).attr('edittargetroles');
-						var delnoderoles = ($("metadata-wad",child).attr('delnoderoles')==undefined)?'none':$("metadata-wad",child).attr('delnoderoles');
 						$.ajax({
+							async : false,
 							type : "GET",
 							dataType : "xml",
 							url : serverBCK_API+"/nodes/node/" + targetid + "?resources=true",
@@ -210,8 +210,8 @@ var UICom =
 								proxies_data[targetid] = data;
 								proxies_parent[targetid] = $(current).attr("id");
 								proxies_edit[targetid] = edittargetroles;
-								proxies_delete[targetid] = delnoderoles;
 								proxies_nodeid[targetid] = id;
+//								UICom.parseStructure(data,false,$(current).attr("id"));
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
 							}
 						});
@@ -255,11 +255,12 @@ var UICom =
 			try {
 				//----------------------------
 				var roles = null;
-				if (attribute == 'menuroles' && $("metadata-wad",node).attr(attribute) != undefined && $("metadata-wad",node).attr(attribute).length>10) {
-					var items = $("metadata-wad",node).attr(attribute).split(";");
+				var attribute_value = r_replaceVariable($("metadata-wad",node).attr(attribute) != undefined ? $("metadata-wad",node).attr(attribute):"");
+				if (attribute == 'menuroles' && attribute_value.length>10) {
+					var items = attribute_value.split(";");
 					for (var i=0; i<items.length; i++){
 						var subitems = items[i].split(",");
-						if (subitems[0]!="#line" && subitems[0].indexOf("##")<0) {
+						if (subitems[0]!="#line") {
 							roles = subitems[3].split(" ");
 							//----------------------------
 							for (var j=0;j<roles.length;j++){
@@ -271,7 +272,7 @@ var UICom =
 					}
 				}
 				else {
-					roles = $("metadata-wad",node).attr(attribute).split(" ");
+					roles = attribute_value.split(" ");
 					//----------------------------
 					for (var i=0;i<roles.length;i++){
 						if (roles[i]!='' && roles[j]!='user')
@@ -280,7 +281,7 @@ var UICom =
 					//----------------------------
 				}
 			} catch(e) {
-				alertHTML('Error role in :'+attribute+"  --"+e); 
+				alertHTML('Error-role in :'+attribute+"  --"+e); 
 			}
 		}
 	},

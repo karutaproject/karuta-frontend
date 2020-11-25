@@ -150,8 +150,14 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 				}
 			}
 			// display div
-			html = '<iframe style="width: 100%; height: 240px;" src='+url+'/>';
+			var node = UICom.structure["ui"][this.id].metadataepm;
+			var style = UIFactory.Node.getOtherMetadataEpm(node,'node-othercss');
+			if (style=="")
+				style = "min-height:240px";
+			html = "<iframe style='width: 100%; "+style+"' src='"+url+"'/>";
 		}
+		else
+			html =  "<img src='../../karuta/img/link-icon.png' style='width:25px'> "+karutaStr[LANG]['no-URL'];
 	}
 	return html;
 };
@@ -160,62 +166,7 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 UIFactory["Oembed"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	//---------------------
-	if (type==null)
-		type = "standard";
-	var html = "";
-	//---------------------
-	if(type=='standard' || type=='block') {
-		var url = $(this.url_node[langcode]).text();
-		if (url!='')
-		{
-			// Cleanup url
-			// Youtube
-			if( url.indexOf('youtube') != -1)
-			{
-				var vid = /v=([^&]*)&?/i;
-				var v = url.match(vid);
-				if (v!=null) {
-					url = url.replace(vid, '');
-					url = url.replace('/watch', '/embed/'+v[1]);
-					url = url.replace('&feature=youtu.be','');
-				}
-			} else if (url.indexOf('youtu.be') != -1) {
-				var youtube_code = url.substring(url.lastIndexOf('/')+1);
-				url = "https://www.youtube.com/embed/" + youtube_code;
-			}
-			// Vimeo
-			else if( url.indexOf('vimeo') != -1 )
-			{
-				if(url.indexOf('player') === -1 )
-				{
-					var urlsplit = url.split('/');
-					url = 'https://player.vimeo.com/video/'+urlsplit[urlsplit.length-1];
-				}
-			}
-			// Dailymotion
-			else if(url.indexOf('dailymotion') != -1)
-			{
-				if( url.indexOf('http') !== -1 )
-				{
-					var split1 = url.split('/');
-					var part = split1[split1.length-1];
-					var split2 = part.split('_');
-					url = '//www.dailymotion.com/embed/video/' + split2[0];
-				}
-			}
-			// display div
-			html = '<iframe style="width: 100%; height: 240px;" src='+url+'/>';
-		}
-	}
-	$("#"+dest).html(html);
+	$("#"+dest).html(this.getView(dest,type,langcode));
 };
 
 /// Editor

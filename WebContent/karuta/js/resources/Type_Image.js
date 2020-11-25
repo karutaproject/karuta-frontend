@@ -207,7 +207,7 @@ UIFactory["Image"].prototype.getView = function(dest,type,langcode)
 		nodefileid = nodefileid.substring(0,nodefileid.indexOf("_"));
 	//------------------------
 	var html ="";
-	if (type=='default' || 'none') {
+	if (type=='default' || type=='none') {
 		html +="<div uuid='img_"+this.id+"'>";
 		if ($(this.filename_node[langcode]).text()!="") {
 			html += "<img style='display:inline;' id='image_"+this.id+"' src='../../../"+serverBCK+"/resources/resource/file/"+nodefileid+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"' "+image_size+" "+alt+" />";
@@ -502,6 +502,8 @@ UIFactory["Image"].prototype.save = function(parent,delfile)
 	window.setTimeout(this.refresh(),1000 );
 	if (parent!=null) // --- structured resource
 		window.setTimeout(parent.refresh(),2000 );
+	if (this.blockparent!=null)
+		this.blockparent.refresh();
 };
 
 //==================================
@@ -513,113 +515,3 @@ UIFactory["Image"].prototype.refresh = function()
 	};		
 };
 
-
-function loadImageFile (uuid) {
-	var fileReader = new FileReader();
-	var filterType = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
-	var uploadImage = document.getElementById("upload-Image");
-	//check and retuns the length of uploded file.
-	if (uploadImage.files.length === 0) { 
-		return; 
-	}
-	//Is Used for validate a valid file.
-	var uploadFile = document.getElementById("upload-Image").files[0];
-	if (!filterType.test(uploadFile.type)) {
-		alert("Please select a valid image."); 
-		return;
-	}
-
-	fileReader.onload = function (event) {
-		var image = new Image();
-		image.onload=function(){
-			document.getElementById("original-img").src = image.src;
-			$("#original-width").html(image.width);
-			$("#original-height").html(image.height);
-			var canvas = document.createElement("canvas");
-			var context = canvas.getContext("2d");
-			canvas.width = image.width/4;
-			canvas.height = image.height/4;
-			context.drawImage(image,0,0,image.width,image.height,0,0,canvas.width,canvas.height);
-			document.getElementById("upload-Preview").src = canvas.toDataURL("image/jpeg");
-			file = dataURLToBlob(canvas.toDataURL());
-			var url = serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[LANGCODE];
-			//			fileUpload3(canvas);
-		}
-		image.src = event.target.result;
-	};
-
-	fileReader.readAsDataURL(uploadFile);
-}
-
-
-
-function dataURLToBlob(dataURL) {
-    var BASE64_MARKER = ';base64,';
-
-    if (dataURL.indexOf(BASE64_MARKER) == -1) {
-        var parts = dataURL.split(',');
-        var contentType = parts[0].split(':')[1];
-        var raw = decodeURIComponent(parts[1]);
-
-        return new Blob([raw], {type: contentType});
-    }
-
-    var parts = dataURL.split(BASE64_MARKER);
-    var contentType = parts[0].split(':')[1];
-    var raw = window.atob(parts[1]);
-    var rawLength = raw.length;
-
-    var uInt8Array = new Uint8Array(rawLength);
-
-    for (var i = 0; i < rawLength; ++i) {
-        uInt8Array[i] = raw.charCodeAt(i);
-    }
-
-    return new Blob([uInt8Array], {type: contentType});
-}
-function fileUpload(file,uuid) {
-	var url = serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[LANGCODE];
-
-	  const reader = new FileReader();  
-	  const xhr = new XMLHttpRequest();
-	  this.xhr = xhr;
-	  
-	  const self = this;
-	  xhr.open("POST", url);
-//	  xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
-	  reader.onload = function(evt) {
-	    xhr.send(evt.target.result);
-	  };
-	  reader.readAsBinaryString(file);
-}
-
-function fileUpload2(file,uuid) {
-	var formData = new FormData();
-	var url = serverBCK+"/resources/resource/file/"+uuid+"?lang="+languages[LANGCODE];
-
-	// HTML file input, chosen by user
-	formData.append("uploadfile",file);
-
-	var request = new XMLHttpRequest();
-	request.open("POST", url);
-	request.send(formData);
-}
-
-
-
-function fileUpload3(canvas) {
-canvas.toBlob(function(blob) {
-    saveAs(blob, "pretty image.png");
-});
-}
-//==================================
-UIFactory["Image"].resizeImage = function(uuid)
-//==================================
-{
-	var html ="<div>Resize Image - <input id='upload-Image' type='file' onchange=\"loadImageFile('"+uuid+"');\" /></div>"
-	html += "<div>Original Img -  <span id='original-width'></span> X <span id='original-height'></span> <img id='original-img'/></div>";
-	html += "<div>Compress Img - <img id='upload-Preview'/></div>";
-	$("#post-form").append($(html));
-	$("#post-form").show();
-	
-}

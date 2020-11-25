@@ -53,6 +53,10 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 	var image = UICom.structure["ui"][this.image_nodeid];
 	var cover = UICom.structure["ui"][this.cover_nodeid];
 	//---------------------
+	UICom.structure.ui[this.document_nodeid].resource.blockparent = UICom.structure.ui[this.id];
+	UICom.structure.ui[this.image_nodeid].resource.blockparent = UICom.structure.ui[this.id];
+	UICom.structure.ui[this.cover_nodeid].resource.blockparent = UICom.structure.ui[this.id];
+	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
@@ -84,7 +88,7 @@ UIFactory["DocumentBlock"].prototype.getView = function(dest,type,langcode)
 		if (cover!=undefined && cover.resource.getValue()=='1')
 			style += " background-size:cover;";
 		html += "<div class='DocBlock' style=\""+style+"\">";
-		style = UICom.structure["ui"][this.id].getLabelStyle(uuid);
+		style = UICom.structure["ui"][this.id].getLabelStyle();
 		if (filename!="") {
 			if (UICom.structure["ui"][this.id].getLabel(null,'none')!='')
 				html += "<div id='label_"+this.id+"' class='block-title' style=\""+style+"\">"+UICom.structure["ui"][this.id].getLabel('label_'+this.id,'none')+"</div>";
@@ -128,6 +132,9 @@ UIFactory["DocumentBlock"].prototype.getButtons = function(dest,type,langcode)
 UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langcode)
 //==================================
 {
+	if (!USER.admin && g_userroles[0]!='designer')
+		$("#edit-window").addClass("Block");
+	//---------------------
 	var document = UICom.structure["ui"][this.document_nodeid];
 	var image = UICom.structure["ui"][this.image_nodeid];
 	var cover = UICom.structure["ui"][this.cover_nodeid];
@@ -149,6 +156,12 @@ UIFactory["DocumentBlock"].prototype.displayEditor = function(destid,type,langco
 	if (cover!=undefined && this.cover_editresroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer'){
 		$("#"+destid).append($("<h4>"+karutaStr[LANG]['coverage']+"</h4>"));
 		cover.resource.displayEditor(destid,type,langcode,this);
+	}
+	//---------------------
+	var graphicerroles = ($(UICom.structure.ui[this.id].metadatawad).attr('graphicerroles')==undefined)?'none':$(UICom.structure.ui[this.id].metadatawad).attr('graphicerroles');
+	var editnoderoles = ($(UICom.structure.ui[this.id].metadatawad).attr('editnoderoles')==undefined)?'none':$(UICom.structure.ui[this.id].metadatawad).attr('editnoderoles');
+	if (USER.admin || g_userroles[0]=='designer' || (graphicerroles.containsArrayElt(g_userroles) && editnoderoles.containsArrayElt(g_userroles)) || (graphicerroles.indexOf($UICom.structure.ui[this.id].userrole)>-1 && editnoderoles.indexOf($UICom.structure.ui[this.id])>-1)) {
+		$("#"+destid).append($("<h4 style='margin-top:10px'>"+karutaStr[LANG]['css-styles']+"</h4>"));
 	}
 }
 

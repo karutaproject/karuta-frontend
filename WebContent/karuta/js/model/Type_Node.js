@@ -31,6 +31,7 @@ UIFactory["Node"] = function( node )
 		if (this.asmtype=="node")
 			this.asmtype = $(node).attr('xsi_type');
 		this.code_node = $($("code",node)[0]);
+		this.js = "";
 		//--------------------
 		this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
 		//--------------------
@@ -175,6 +176,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			//============================== ASMCONTEXT =============================
 			if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='raw' && this.semantictag!='EuropassL')){
 				this.displayAsmContext(dest,type,langcode,edit,refresh);
+				alreadyDisplayed = true;
 			}
 			//============================== NODE ===================================
 			else { // other than asmContext
@@ -548,7 +550,7 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 	this.setMetadata(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock);
 	this.display_node[dest] = {"type":type,"uuid":uuid,"root":root,"dest":dest,"depth":depth,"langcode":langcode,"edit":edit,"inline":inline,"backgroundParent":backgroundParent,"display":type,"parent":parent,"menu":menu,"inblock":inblock};
 	//============================== ASMCONTEXT =============================
-	if (this.nodetype == "asmContext"){
+	if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='raw' && this.semantictag!='EuropassL')){
 		var uuid = this.id;
 		//---------------- DISPLAY HTML -------------------------------
 		var html = "";
@@ -563,11 +565,19 @@ UIFactory["Node"].prototype.displayTranslateNode = function(type,root,dest,depth
 		}
 		//---------------- display resource ---------------------------------
 		try {
+			if (this.structured_resource != null) {
+				this.structured_resource.displayEditor("resource0_"+uuid,null,g_translate[0],false);
+				if (this.multilingual)
+					this.structured_resource.displayEditor("resource1_"+uuid,null,g_translate[1],false);
+				else
+					$("#resource1_"+uuid).html(karutaStr[LANG]['resource-not-multilingual']);
+			} else {
 			this.resource.displayEditor("resource0_"+uuid,null,g_translate[0],false);
 			if (this.resource.multilingual)
 				this.resource.displayEditor("resource1_"+uuid,null,g_translate[1],false);
 			else
 				$("#resource1_"+uuid).html(karutaStr[LANG]['resource-not-multilingual']);
+			}
 		} catch(e){
 			$("#resource0_"+uuid).append(this.resource.getEditor("resource0_"+uuid,null,g_translate[0],false));
 			if (this.resource.multilingual)
@@ -737,13 +747,16 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 		style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
 		style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
 		style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
-//		if (style.length>0)
-//			html += " style='"+style+"' ";
+		if (style.length>0)
+			html += " style='"+style+"' ";
 		//----------------------------
 		html += ">";
-		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userroles[0]=='designer' || USER.admin)) {
+		//----- code -----
+		var displayCodeValue = (this.editcoderoles.containsArrayElt(g_userroles) || this.editcoderoles.indexOf(this.userrole)>-1 || this.editcoderoles.indexOf($(USER.username_node).text())>-1) && this.nodenopencil=='N';
+		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userroles[0]=='designer' || USER.admin || displayCodeValue)) {
 			html += this.code_node.text()+" ";
 		}
+		//----- label -----
 		var label = this.label_node[langcode].text();
 		if (label == "")
 			label="&nbsp;";
@@ -760,7 +773,7 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	var html = "";
+/*	var html = "";
 	if (type==null)
 		type = 'default';
 	if (langcode==null)
@@ -800,6 +813,8 @@ UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 		if (type=="span")
 			html += "</span>";
 	}
+*/
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 
@@ -935,7 +950,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 			titles = editboxtitle.split("/");
 			if (editboxtitle.indexOf("@")>-1) { // lang@fr/lang@en/...
 				for (var j=0; j<titles.length; j++){
-					if (titles[j].indexOf(languages[langcode])>-1)
+					if (titles[j].indexOf("@"+languages[langcode])>-1)
 						title = titles[j].substring(0,titles[j].indexOf("@"));
 				}
 			} else { // lang1/lang2/...
@@ -964,8 +979,8 @@ UIFactory["Node"].prototype.save = function()
 //==================================
 {
 	//-------- if function js -------------
-	if (UICom.structure["ui"][this.id].js!="") {
-		var elts = UICom.structure["ui"][this.id].js.split("/");
+	if (this.js!=undefined && this.js!="") {
+		var elts = this.js.split("/");
 		if (elts[0]=="update-node")
 			eval(elts[1]+"(this.node,g_portfolioid)");
 	}
@@ -979,7 +994,7 @@ UIFactory["Node"].prototype.save = function()
 UIFactory["Node"].prototype.remove = function()
 //==================================
 {
-	UIFactory["Node"].remove(this.id);
+	UIFactory.Node.remove(this.id);
 };
 
 //==================================
@@ -987,8 +1002,8 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2)
 //==================================
 {
 	//-------- if function js -------------
-	if (UICom.structure["ui"][uuid].js!="") {
-		var elts = UICom.structure["ui"][uuid].js.split("/");
+	if (UICom.structure.ui[uuid].js!=undefined && UICom.structure.ui[uuid].js!="") {
+		var elts = UICom.structure.ui[uuid].js.split("/");
 		if (elts[0]=="delete")
 			eval(elts[1]+"(UICom.structure.ui[uuid].node,g_portfolioid)");
 	}
@@ -1784,8 +1799,9 @@ UIFactory['Node'].reloadUnit = function()
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/" + uuid,
+		parentid : parentid,
 		success : function(data) {
-			UICom.parseStructure(data,false,parentid);
+			UICom.parseStructure(data,false,this.parentid);
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
 			if (g_bar_type.indexOf('horizontal')>-1) {
 				$("#menu_bar").html("");
@@ -1799,7 +1815,7 @@ UIFactory['Node'].reloadUnit = function()
 			if (g_display_type=='model')
 				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
 			else
-				displayPage(uuid,1,g_display_type,LANGCODE,g_edit);
+				displayPage(uuid,99,g_display_type,LANGCODE,g_edit);
 			$('#wait-window').modal('hide');
 		}
 	});

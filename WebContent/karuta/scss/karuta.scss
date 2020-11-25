@@ -36,7 +36,15 @@
 		font-size: calc(var(--font-size-coeff) * 0.8rem);
 	}
 	
-	@media (min-width: 768px) {  
+		@media (max-width: 640px) {  
+		body,
+		.form-control,
+		.btn {
+			font-size: calc(var(--font-size-coeff) * 0.6rem);
+		}
+	}
+	
+		@media (min-width: 1024px) {  
 		body,
 		.form-control,
 		.btn {
@@ -806,12 +814,15 @@
 	}
 
 	.menus {
-		 .dropdown {
+//		.dropdown {
 //			float:left;
-		}
+//		}
 		a.text-button {
 			font-size:calc(var(--font-size-coeff) * 1rem);
 			margin-top:2px;
+			font-weight:initial;
+			font-style:initial;
+			font-variant:initial;
 		}
 	}
 	
@@ -928,6 +939,7 @@
 				margin-right:5px;
 				margin-top: 1px;
 				color:var(--portfolio-buttons-color);
+				font-size:calc(var(--font-size-coeff) * 1rem);
 			}
 		
 			.createreport .button,
@@ -1241,6 +1253,24 @@
 	.email_SendEmail {
 	}
 
+/* ====================
+	Get_Resource - search in Node
+   ====================*/
+
+	#get-resource-node {
+		.btn-group.select-label {
+			width:100%;
+			.dropdown-menu {
+				width:90%;
+			}
+			button.select {
+				width:100%;
+			}
+			button.dropdown-toggle {
+				width:30px;
+			}
+		}
+	}
 
 /* ====================== */
 /*     FIRST NODE         */
@@ -3247,8 +3277,8 @@ table.tablesorter th.restore {
 	BLOCK
    ====================*/
 	:root{
-		--block-height:220px;
-		--block-img-height:218px;
+		--block-height:240px;
+		--block-img-height:238px;
 	}
 
 	.standard {
@@ -3297,6 +3327,8 @@ table.tablesorter th.restore {
 		margin-top:0px;
 	}
 	
+	//----------------------
+	//----------------------
 	//----------------------
 	.block .ProxyBlock,
 	.block .ImageBlock,
@@ -3357,3 +3389,36 @@ table.tablesorter th.restore {
 		display:none;
 	}
 	
+	//----Hidden Attributes for Graphicer User-
+
+	#edit-window:not([role=designer]) { 
+		#metadata-epm-part0,
+		#layout, #metadata-epm-part1,
+		#metadata-epm-node, .metadata-epm-node,
+		#metadata-node-comment, .metadata-node-comment,
+		.padding-top,
+		.node-font-weight,
+		.node-font-style,
+		.node-text-align,
+		.node-font-size,
+		.node-padding-top,
+		.node-color
+		{
+			display:none;
+		}
+	}
+
+	#edit-window.TextFieldEditor { 
+		.node-font-weight,
+		.node-font-style,
+		.node-text-align,
+		.node-font-size,
+		.node-padding-top,
+		.node-color
+		{
+			display:flex;
+		}
+	}
+
+
+

@@ -160,7 +160,7 @@ function decreaseFontSize()
 function setConfigurationUIVariables(langcode)
 //==============================
 {
-	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-ui?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta-configuration.configuration-ui?resources=true";
 	$.ajax({
 		async: false,
 		type : "GET",
@@ -297,49 +297,13 @@ function resetConfigurationPortfolioVariable()
 		if (item.indexOf('portfolio-')>-1 ||item.indexOf('svg-')>-1)
 			g_configVar[item] = g_configDefaultVar[item];
 	}
-	/*
-	//--------- Portfolios -------------
-	g_configVar['portfolio-navbar-background-color'] = g_configVar['portfolio-navbar-background-color']
-	g_configVar['portfolio-navbar-text-color'] = g_configVar['portfolio-navbar-text-color']
-	//----------
-	g_configVar['portfolio-hmenu-logo'] = g_configVar['portfolio-hmenu-logo'];
-	g_configVar['portfolio-hmenu-logo-style'] = g_configVar['portfolio-hmenu-logo-style'];
-	g_configVar['portfolio-sidebar-background-color'] = g_configVar['portfolio-sidebar-background-color'];
-	g_configVar['portfolio-sidebar-text-color'] = g_configVar['portfolio-sidebar-text-color'];
-	g_configVar['portfolio-sidebar-selected-text-color'] = g_configVar['portfolio-sidebar-selected-text-color'];
-	g_configVar['portfolio-sidebar-separator-color'] = g_configVar['portfolio-sidebar-separator-color'];
-	g_configVar['portfolio-sidebar-selected-border-color'] = g_configVar['portfolio-sidebar-selected-border-color'];
-	//----------
-	g_configVar['page-title-background-color'] = getText('page-title-background-color','Color','text',data,langcode);
-	g_configVar['page-title-subline-color'] = getText('page-title-subline-color','Color','text',data,langcode);
-	g_configVar['portfolio-background-color'] = getText('portfolio-background-color','Color','text',data,langcode);
-	g_configVar['portfolio-text-color'] = getText('portfolio-text-color','Color','text',data,langcode);
-	g_configVar['portfolio-buttons-color'] = getText('portfolio-buttons-color','Color','text',data,langcode);
-	g_configVar['portfolio-buttons-background-color'] = getText('portfolio-buttons-background-color','Color','text',data,langcode);
-	g_configVar['portfolio-link-color'] = getText('portfolio-link-color','Color','text',data,langcode);
-	g_configVar['portfolio-resource-border-color'] = getText('portfolio-resource-border-color','Color','text',data,langcode);
-	//----------
-	g_configVar['portfolio-menu-background-color'] = getText('portfolio-menu-background-color','Color','text',data,langcode);
-	g_configVar['portfolio-menu-text-color'] = getText('portfolio-menu-text-color','Color','text',data,langcode);
-	//-----SVG----
-	g_configVar['svg-web0-color'] = getText('svg-web0-color','Color','text',data,langcode);
-	g_configVar['svg-web1-color'] = getText('svg-web1-color','Color','text',data,langcode);
-	g_configVar['svg-web2-color'] = getText('svg-web2-color','Color','text',data,langcode);
-	g_configVar['svg-web3-color'] = getText('svg-web3-color','Color','text',data,langcode);
-	g_configVar['svg-web4-color'] = getText('svg-web4-color','Color','text',data,langcode);
-	g_configVar['svg-web5-color'] = getText('svg-web5-color','Color','text',data,langcode);
-	g_configVar['svg-web6-color'] = getText('svg-web6-color','Color','text',data,langcode);
-	g_configVar['svg-web7-color'] = getText('svg-web7-color','Color','text',data,langcode);
-	g_configVar['svg-web8-color'] = getText('svg-web8-color','Color','text',data,langcode);
-	g_configVar['svg-web9-color'] = getText('svg-web9-color','Color','text',data,langcode);
-	*/
 }
 
 //==============================
 function setConfigurationTechVariables(langcode)
 //==============================
 {
-	var url = serverBCK_API+"/portfolios/portfolio/code/karuta.configuration-tech?resources=true";
+	var url = serverBCK_API+"/portfolios/portfolio/code/karuta-configuration.configuration-tech?resources=true";
 	$.ajax({
 		async: false,
 		type : "GET",

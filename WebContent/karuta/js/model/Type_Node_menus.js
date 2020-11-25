@@ -14,7 +14,7 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 	var html = "<a class='button text-button' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
-		html += items[0] +"('"+parentid+"','"+title+"'";
+		html += items[0] +"('"+parentid+"','"+title.replaceAll("'","##apos##")+"'";
 		if (items.length>1)
 			html += ",";
 		for (var i=1;i<items.length;i++){
@@ -45,7 +45,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 	var html = "<a class='dropdown-item button text-button' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
-		html += items[0] +"('"+parentid+"','"+title+"'";
+		html += items[0] +"('"+parentid+"','"+title.replaceAll("'","##apos##")+"'";
 		if (items.length>0)
 			html += ",";
 		for (var i=1;i<items.length;i++){
@@ -201,6 +201,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Get_Resource','Get_Get_Resource',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Double_Resource','Get_Double_Resource',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','g-variable','Variable',databack,callback,param2,param3,param4);
 //		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4);
 		//--------------------------------
 		if (plugin_resources.length>0){
@@ -252,11 +253,6 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					else
 						menus[i][4] = ""; // condition
 				}
-/*				while (menus[i][0].indexOf("##")>-1) {
-					var test_string = menus[i][0].substring(menus[i][0].indexOf("##")+2); // test_string = abcd##variable##efgh.....
-					var variable_name = test_string.substring(0,test_string.indexOf("##"));
-					menus[i][0] = menus[i][0].replace("##"+variable_name+"##", g_variables[variable_name]);
-				} */
 				if (menus[i][3].indexOf(this.userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
 					if (menus[i][4]==""){
 						displayMenu = true;  // this.userrole may be included in semantictag
@@ -359,7 +355,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					titles = menus[i][2].split("/");
 					if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
 						for (var j=0; j<titles.length; j++){
-							if (titles[j].indexOf(languages[langcode])>-1)
+							if (titles[j].indexOf("@"+languages[langcode])>-1)
 								title = titles[j].substring(0,titles[j].indexOf("@"));
 						}
 					} else { // lang1/lang2/...
@@ -461,7 +457,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 								var label = "";
 								var labels = sharelabel.split("/");
 								for (var j=0; j<labels.length; j++){
-									if (labels[j].indexOf(languages[langcode])>-1)
+									if (labels[j].indexOf("@"+languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
 								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
@@ -488,7 +484,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 								var label = "";
 								var labels = sharelabel.split("/");
 								for (var j=0; j<labels.length; j++){
-									if (labels[j].indexOf(languages[langcode])>-1)
+									if (labels[j].indexOf("@"+languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
 								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\"> "+label+"</span>";

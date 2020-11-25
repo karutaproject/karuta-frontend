@@ -74,6 +74,8 @@ UIFactory["TextField"] = function( node )
 		UICom.UpdateResource(this.id,writeSaved);
 	}
 	//--------------------
+	this.blockparent = null;
+	//--------------------
 };
 
 UIFactory["TextField"].prototype.getAttributes = function(type,langcode)
@@ -206,6 +208,8 @@ var currentTexfieldInterval = "";
 UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,disabled,inline)
 //==================================
 {
+	if (!USER.admin && g_userroles[0]!='designer')
+		$("#edit-window").addClass("TextFieldEditor");
 	//---------------------
 	if (inline==null)
 		inline = false;
@@ -308,7 +312,10 @@ UIFactory["TextField"].prototype.save = function()
 	if (log)
 		UICom.structure.ui[this.id].log();
 	//---------------------------
-	this.refresh();
+	if (this.blockparent!=null)
+		this.blockparent.refresh();
+	else
+		this.refresh();
 };
 
 //==================================

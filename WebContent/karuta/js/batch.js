@@ -53,9 +53,12 @@ function getTxtvals(node)
 				fct = select.substring(9,select.indexOf(','))
 				select = select.substring(select.indexOf(',')+1,select.indexOf(')'))
 			}
-			if (select.indexOf("//")>-1)
-				text = eval("g_json."+select.substring(2));
-			else if (select.indexOf("/")>-1)
+			if (select.indexOf("//")>-1) {
+				if (select=="//today")
+					text = new Date().toLocaleString();
+				else
+					text = eval("g_json."+select.substring(2));
+			} else if (select.indexOf("/")>-1)
 				text = eval("g_users['"+select.substring(1)+"']");
 			else
 				text = eval("g_json.lines["+g_noline+"]."+select);
@@ -89,9 +92,12 @@ function getvarvals(node)
 					fct = items[i].substring(9,items[i].indexOf(','));
 					items[i] = items[i].substring(items[i].indexOf(',')+1,items[i].indexOf(')'));
 				}
-				if (items[i].indexOf("//")>-1)
-					text = eval("g_json."+items[i].substring(2));
-				else if (items[i].indexOf("/")>-1)
+				if (select.indexOf("//")>-1) {
+					if (select=="//today")
+						text = new Date().toLocaleString();
+					else
+						text = eval("g_json."+select.substring(2));
+				} else if (items[i].indexOf("/")>-1)
 					text = eval("g_json.lines["+g_noline+"]."+items[i].substring(1));
 				else 
 					text = items[i];
@@ -3246,7 +3252,7 @@ function updateMetada(nodes,node,type,semtag,text,attribute)
 			semtag : semtag,
 			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
 			success : function(data) {
-				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semantictag);
+				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag);
 				updateMetada(nodes,node,type,semtag,text,attribute)
 			},
 			error : function(data,nodeid,semtag) {
@@ -3277,7 +3283,7 @@ function updateMetadawad(nodes,node,type,semtag,text,attribute)
 			semtag : semtag,
 			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadatawad",
 			success : function(data) {
-				$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semantictag);
+				$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semtag);
 				updateMetadawad(nodes,node,type,semtag,text,attribute)
 			},
 			error : function(data,nodeid,semtag) {

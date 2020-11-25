@@ -820,7 +820,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 				if (select.length==0) {
 					condition = true;;
 				}
-				if (select.startsWith("{")) {
+				if (select.substring(0,1) == "{") {
 					var toeval = select.substring(1,select.length-1);
 					condition = eval(toeval);
 				}
@@ -1113,7 +1113,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//----------------------------
 			if (selector.type=='resource') {
 				try {
-					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,'none',null,true);
+					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
 				} catch(e){
 					text = UICom.structure["ui"][nodeid].structured_resource.getView("dashboard_"+nodeid,null,null,true);
 				}
@@ -2226,7 +2226,7 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 		for (var i=0; i<nodes.length;i++){
 			if (points[i].value!=null)
 				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+pos);
-			if (no==0 && pos==0){
+			if (pos==0){ // draw gaduations
 				for (var j=0;j<=Math.abs(max-min);j++) {
 					if (j>0)
 						drawGraduationLine(destid,j,min,max,angle*i,svgcenter,'svg-web-line'+no);

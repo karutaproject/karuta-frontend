@@ -155,8 +155,7 @@ UIFactory["Node"].prototype.getLabelStyle = function()
 UIFactory["Node"].getContentStyle = function(uuid)
 //==================================================
 {
-	var node = UICom.structure["ui"][uuid];
-	metadataepm = node.metadataepm;
+	var metadataepm = UICom.structure["ui"][uuid].metadataepm;
 	var style = "";
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
@@ -452,7 +451,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles',false,true);
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','delnoderoles');
-	if ((!model || name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && this.structured_resource==null)	{
+//	if ((!model || name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0 && this.structured_resource==null)	{
+	if ((!model || name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && semtag.indexOf('node_resource')<0)	{
 		this.displayMetadataWadAttributeEditor('metadata-part2','editresroles',false,true);
 		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',false,true);
 	}
@@ -478,10 +478,10 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles',false,true);
 	//-----------------------------------------
-	if (model)
+//	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
-	else
-		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',false,true);
+//	else
+//		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',false,true);
 	//-----------------------------------------
 	if (name=='asmRoot' || !model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','duplicateroles',false,true);
@@ -962,7 +962,7 @@ UIFactory["Node"].prototype.displayMetadataAttributeEditor = function(destid,att
 		value = "";
 	var html = "";
 	if (yes_no!=null && yes_no) {
-		html += "<div class='input-group '>";
+		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend'>";
 		html += "		<div class='input-group-text' id='"+attribute+this.id+"'>"+karutaStr[languages[langcode]][attribute]+"</div>";
 		html += "	</div>";
@@ -974,7 +974,7 @@ UIFactory["Node"].prototype.displayMetadataAttributeEditor = function(destid,att
 		html+= "></div>";
 	}
 	else {
-		html += "<div class='input-group '>";
+		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend'>";
 		html += "		<span class='input-group-text' id='"+attribute+this.id+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";
 		html += "	</div>";
@@ -1211,7 +1211,7 @@ UIFactory["Node"].prototype.displayMetadataEpmDisplayViewAttributeEditor = funct
 	if (value==null || value==undefined || value=='undefined')
 		value = "";
 	var html = "";
-	html += "<div class='input-group '>";
+	html += "<div class='input-group "+attribute+"'>";
 	html += "	<div class='input-group-prepend'>";
 	html += "		<div class='input-group-text'>";
 	html += karutaStr[languages[langcode]][attribute];
@@ -1257,15 +1257,15 @@ UIFactory["Node"].prototype.displayMetadataEpmDisplayOrgAttributeEditor = functi
 	if (attribute=='displaychildorg' && (displayOrg[this.asmtype]["children"]==undefined || displayOrg[this.asmtype]["children"].length==0))
 		return;
 	var html = "";
-	html += "<div class='input-group '>";
+	html += "<div class='input-group "+attribute+"'>";
 	html += "	<div class='input-group-prepend'>";
 	html += "		<div class='input-group-text'>";
 	html += karutaStr[languages[langcode]][attribute];
 	html += "</div>";
 	html += "	</div>";
-	html += "	<div id='"+attribute+nodeid+"' class='form-control'>"+value+"</div>";
+	html += "	<div id='"+attribute+nodeid+"' class='form-control "+attribute+"'>"+value+"</div>";
 	if(disabled==null || !disabled) {
-		html += "<div class='input-group-append'>";
+		html += "<div class='input-group-append "+attribute+"'>";
 		html += "	<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
 		html += "	<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
 		//---------------------
@@ -1308,7 +1308,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 		attribute_label = attribute.substring(8);
 	if (attribute.indexOf('font-weight')>-1){
 		var choices = [{code:'normal',label:'Normal'},{code:'bold',label:'Bold'}];
-		html += "<div class='input-group '>";
+		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
 		html += "	</div>";
@@ -1325,7 +1325,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 	}
 	else if (attribute.indexOf('font-style')>-1){
 		var choices = [{code:'normal',label:'Normal'},{code:'italic',label:'Italic'}];
-		html += "<div class='input-group '>";
+		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
 		html += "	</div>";
@@ -1341,7 +1341,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 		html += "</div>";
 	}
 	else if (attribute.indexOf('color')>-1){
-		html += "<div class='input-group '>";
+		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
 		html += "	</div>";
@@ -1350,7 +1350,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 	}
 	else if (attribute.indexOf('text-align')>-1){
 		var choices = [{code:'left',label:'Left'},{code:'right',label:'Right'},{code:'center',label:'Center'},{code:'justify',label:'Justify'}];
-		html += "<div class='input-group '>";
+		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
 		html += "	</div>";
@@ -1366,7 +1366,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 		html += "</div>";
 	}
 	else {
-		html += "<div class='input-group '>";
+		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
 		html += "	</div>";
@@ -1392,20 +1392,20 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		if (name!='asmRoot')
 			html += "<h5 id='layout'>"+karutaStr[languages[langcode]]['layout']+"</h5>";
 		html += "	<div id='metadata-epm-part1'></div>"
-		html += "<h5>"+karutaStr[languages[langcode]]['node']+"</h5>";
+		html += "<h5 class='metadata-epm-node'>"+karutaStr[languages[langcode]]['node']+"</h5>";
 		html += "	<div id='metadata-epm-node'></div>";
-		html += "<h5>"+karutaStr[languages[langcode]]['node-label']+"</h5>";
+		html += "<h5 class='metadata-epm-label'>"+karutaStr[languages[langcode]]['node-label']+"</h5>";
 		html += "	<div id='metadata-epm-label'></div>";
 		if (name=='asmContext') 
-			html += "<hr><h5>"+karutaStr[languages[langcode]]['resource']+"</h5>";
+			html += "<hr><h5 class='metadata-node-resource'>"+karutaStr[languages[langcode]]['resource']+"</h5>";
 		else
-			html += "<h5>"+karutaStr[languages[langcode]]['node-content']+"</h5>";
+			html += "<h5 class='metadata-node-resource'>"+karutaStr[languages[langcode]]['node-content']+"</h5>";
 		html += "	<div id='metadata-node-resource'></div>";
 		if (name=='asmStructure' || name=='asmUnit') {
 			html += "<hr><h5>"+karutaStr[languages[langcode]]['inparent']+"</h5>";
 			html += "	<div id='metadata-inparent'></div>";
 		}
-		html += "<h5>"+karutaStr[languages[langcode]]['node-comment']+"</h5>";
+		html += "<h5 class='metadata-node-comment'>"+karutaStr[languages[langcode]]['node-comment']+"</h5>";
 		html += "	<div id='metadata-node-comment'></div>";
 		html += "</form>";
 		$("#"+destid).append($(html));

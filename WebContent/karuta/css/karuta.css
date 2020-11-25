@@ -31,7 +31,14 @@ body,
   font-size: calc(var(--font-size-coeff) * 0.8rem);
 }
 
-@media (min-width: 768px) {
+@media (max-width: 640px) {
+  body,
+.form-control,
+.btn {
+    font-size: calc(var(--font-size-coeff) * 0.6rem);
+  }
+}
+@media (min-width: 1024px) {
   body,
 .form-control,
 .btn {
@@ -739,6 +746,9 @@ body,
 .menus a.text-button {
   font-size: calc(var(--font-size-coeff) * 1rem);
   margin-top: 2px;
+  font-weight: initial;
+  font-style: initial;
+  font-variant: initial;
 }
 
 /* ====================== */
@@ -849,6 +859,7 @@ body,
   margin-right: 5px;
   margin-top: 1px;
   color: var(--portfolio-buttons-color);
+  font-size: calc(var(--font-size-coeff) * 1rem);
 }
 #main-portfolio #portfolio-container .createreport .button,
 #main-portfolio #portfolio-container .btn-group .button,
@@ -1128,6 +1139,22 @@ body,
 
 .name_SendEmail {
   font-weight: bold;
+}
+
+/* ====================
+	Get_Resource - search in Node
+   ====================*/
+#get-resource-node .btn-group.select-label {
+  width: 100%;
+}
+#get-resource-node .btn-group.select-label .dropdown-menu {
+  width: 90%;
+}
+#get-resource-node .btn-group.select-label button.select {
+  width: 100%;
+}
+#get-resource-node .btn-group.select-label button.dropdown-toggle {
+  width: 30px;
 }
 
 /* ====================== */
@@ -3062,8 +3089,8 @@ td {
 	BLOCK
    ====================*/
 :root {
-  --block-height:220px;
-  --block-img-height:218px;
+  --block-height:240px;
+  --block-img-height:238px;
 }
 
 .standard .DocumentBlock .content,
@@ -3167,6 +3194,29 @@ td {
 
 .block .oembedall-container div:last-child {
   display: none;
+}
+
+#edit-window:not([role=designer]) #metadata-epm-part0,
+#edit-window:not([role=designer]) #layout, #edit-window:not([role=designer]) #metadata-epm-part1,
+#edit-window:not([role=designer]) #metadata-epm-node, #edit-window:not([role=designer]) .metadata-epm-node,
+#edit-window:not([role=designer]) #metadata-node-comment, #edit-window:not([role=designer]) .metadata-node-comment,
+#edit-window:not([role=designer]) .padding-top,
+#edit-window:not([role=designer]) .node-font-weight,
+#edit-window:not([role=designer]) .node-font-style,
+#edit-window:not([role=designer]) .node-text-align,
+#edit-window:not([role=designer]) .node-font-size,
+#edit-window:not([role=designer]) .node-padding-top,
+#edit-window:not([role=designer]) .node-color {
+  display: none;
+}
+
+#edit-window.TextFieldEditor .node-font-weight,
+#edit-window.TextFieldEditor .node-font-style,
+#edit-window.TextFieldEditor .node-text-align,
+#edit-window.TextFieldEditor .node-font-size,
+#edit-window.TextFieldEditor .node-padding-top,
+#edit-window.TextFieldEditor .node-color {
+  display: flex;
 }
 
 /*# sourceMappingURL=karuta.css.map */
