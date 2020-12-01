@@ -316,7 +316,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (query.indexOf('sibling')>-1) {
 				parent = $(this.node).parent();
 			}
-			if (query.indexOf('parent.parent.parent')>-1) {
+			if (query.indexOf('parent.parent.parent.parent.parent')>-1) {
+				parent = $(this.node).parent().parent().parent().parent().parent().parent();
+			} else if (query.indexOf('parent.parent.parent.parent')>-1) {
+				parent = $(this.node).parent().parent().parent().parent().parent();
+			} else if (query.indexOf('parent.parent.parent')>-1) {
 				parent = $(this.node).parent().parent().parent().parent();
 			} else	if (query.indexOf('parent.parent')>-1) {
 				parent = $(this.node).parent().parent().parent();
@@ -383,6 +387,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				}
 				var self = this;
 				$.ajax({
+					async:false,
 					type : "GET",
 					dataType : "xml",
 					url : url,
@@ -745,6 +750,7 @@ UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,srce,portfoli
 		UIFactory.Get_Get_Resource.parseChildren(dest,g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code],langcode,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
 	else {
 		$.ajax({
+			async:false,
 			type : "GET",
 			dataType : "xml",
 			url : serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code,
@@ -1225,7 +1231,7 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
 			var tagname = $( ":root",data )[ 0 ].nodeName;
 			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
-				xml = xml.replace("Get_Resource","nodeRes");
+				xml = xml.replace("Get_Get_Resource","nodeRes");
 				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
 			}
 			$.ajax({

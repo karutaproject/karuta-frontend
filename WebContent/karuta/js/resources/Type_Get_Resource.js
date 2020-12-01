@@ -370,7 +370,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		html += "</div>";
 		var btn_group = $(html);
 		$("#"+destid).append($(btn_group));
-		html = "<div class='dropdown-menu dropdown-menu-left'></div>";
+		html = "<div class='dropdown-menu dropdown-menu-right'></div>";
 		var select  = $(html);
 		//----------------- null value to erase
 		if (resettable) {
@@ -808,7 +808,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			}
 			if (display_code)
 				input += code + " ";
-			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
+			if (display_label)
+				input += UICom.structure.ui[uuid].resource.getView(null,'span')+"</div>";
+
+//			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
 			var input_obj = $(input);
 			$(inputs_obj).append(input_obj);
 			// ---------------------- children ---------
@@ -1076,6 +1079,7 @@ UIFactory["Get_Resource"].getChildren = function(dest,langcode,srce,target,portf
 		UIFactory.Get_Resource.parseChildren(dest,g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code],langcode,srce,target,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
 	else {
 		$.ajax({
+			async:false,
 			type : "GET",
 			dataType : "xml",
 			url : serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code,

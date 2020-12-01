@@ -1595,7 +1595,7 @@ UIFactory['Node'].moveTo = function(nodeid,parentid)
 };
 
 //===========================================
-UIFactory["Node"].selectNode = function(nodeid,node)
+UIFactory["Node"].selectNode = function(nodeid,node,semtag)
 //===========================================
 {
 	//---------------------
@@ -1608,9 +1608,9 @@ UIFactory["Node"].selectNode = function(nodeid,node)
 	$("#edit-window-title").html("&nbsp;");
 	//-----------------------------
 	if (UICom.structure.ui[nodeid].asmtype=='asmContext')
-		$("#edit-window-type").html(karutaStr[languages[LANGCODE]][UICom.structure.ui[nodeid].resource.type]);
+		$("#edit-window-type").html(UICom.structure.ui[nodeid].resource.type);
 	else
-		$("#edit-window-type").html(karutaStr[languages[LANGCODE]][UICom.structure.ui[nodeid].asmtype]);
+		$("#edit-window-type").html(UICom.structure.ui[nodeid].asmtype);
 	//-----------------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory.Node.moveNode('"+nodeid+"')";
@@ -1623,18 +1623,19 @@ UIFactory["Node"].selectNode = function(nodeid,node)
 	var html = "<select class='form-control'>";
 	var uuid = $(node.node).attr("id");
 	var label = UICom.structure["ui"][uuid].label_node[langcode].text();
-	html += "<option uuid = '"+uuid+"'>"+label+"</option>";
-	html += UIFactory["Node"].getSubNodes(node, nodeid, UICom.structure.ui[nodeid].asmtype);
+	html += "<option uuid = ''>&nbsp;</option>";
+	if (semtag==null)
+		html += "<option uuid = '"+uuid+"'>"+label+"</option>";
+	html += UIFactory["Node"].getSubNodes(node, nodeid, UICom.structure.ui[nodeid].asmtype,semtag);
 	html += "</select>";
 	// ------------------------------
 	$("#edit-window-body").html($(html));
 	// ------------------------------
-	$("#edit-window").modal('show');	
-
+	$("#edit-window").modal('show');
 };
 
 //===========================================
-UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved)
+UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved,semtag)
 //===========================================
 {
 	//---------------------
@@ -1650,9 +1651,9 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved)
 			var label = UICom.structure["ui"][uuid].label_node[langcode].text();
 			var name = UICom.structure["ui"][uuid].asmtype;
 			if (name!='asmContext' && (typemoved != "asmUnit" || name != "asmUnit") && (uuid !=idmoved)){
-				if (semantictag.indexOf("welcome-unit")<0)
+				if (semantictag.indexOf("welcome-unit")<0 && (semtag==null || (semtag!=null && semantictag==semtag)))
 					html += "<option uuid = '"+uuid+"'>"+label+"</option>";
-				html += UIFactory["Node"].getSubNodes(UICom.structure["tree"][uuid], idmoved, typemoved);
+				html += UIFactory["Node"].getSubNodes(UICom.structure["tree"][uuid], idmoved, typemoved,semtag);
 			}
 		}
 	}
