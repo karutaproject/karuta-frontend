@@ -638,6 +638,7 @@ function displayPage(uuid,depth,type,langcode) {
 		scrollLeft = 0;
 		g_current_page = uuid;
 	}
+	localStorage.setItem('currentDisplayedPage',uuid);
 	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');

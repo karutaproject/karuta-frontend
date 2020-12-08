@@ -115,25 +115,6 @@ UIFactory["Node"].prototype.getNodeStyle = function()
 	return style;
 }
 
-
-//==================================================
-UIFactory["Node"].getLabelStyle = function(uuid)
-//==================================================
-{
-	var node = UICom.structure["ui"][uuid];
-	metadataepm = node.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
-	return style;
-}
-
 //==================================================
 UIFactory["Node"].prototype.getLabelStyle = function()
 //==================================================
@@ -152,11 +133,20 @@ UIFactory["Node"].prototype.getLabelStyle = function()
 }
 
 //==================================================
-UIFactory["Node"].getContentStyle = function(uuid)
+UIFactory["Node"].getLabelStyle = function(uuid)
+//==================================================
+{	var style ="";
+	if (UICom.structure["ui"][uuid]!=undefined)
+		style = UICom.structure["ui"][uuid].getLabelStyle();
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].prototype.getContentStyle = function()
 //==================================================
 {
-	var metadataepm = UICom.structure["ui"][uuid].metadataepm;
 	var style = "";
+	metadataepm = this.metadataepm;
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
@@ -167,6 +157,37 @@ UIFactory["Node"].getContentStyle = function(uuid)
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
 	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].getContentStyle = function(uuid)
+//==================================================
+{	var style ="";
+	if (UICom.structure["ui"][uuid]!=undefined)
+		style = UICom.structure["ui"][uuid].getContentStyle();
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].prototype.getCommentStyle = function()
+//==================================================
+{
+	metadataepm = this.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-color',false);
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].getCommentStyle = function(uuid)
+//==================================================
+{	var style ="";
+	if (UICom.structure["ui"][uuid]!=undefined)
+		style = UICom.structure["ui"][uuid].getCommentStyle();
 	return style;
 }
 
@@ -185,53 +206,6 @@ UIFactory["Node"].getDataContentStyle = function(data)
 	style += UIFactory.Node.getMetadataEpm(data,'node-width',true);
 	style += UIFactory.Node.getMetadataEpm(data,'node-height',true);
 	style += UIFactory.Node.getOtherMetadataEpm(data,'node-othercss');
-	return style;
-}
-
-
-//==================================================
-UIFactory["Node"].prototype.getContentStyle = function()
-//==================================================
-{
-	metadataepm = this.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
-	return style;
-}
-
-//==================================================
-UIFactory["Node"].getCommentStyle = function(uuid)
-//==================================================
-{
-	var node = UICom.structure["ui"][uuid];
-	metadataepm = node.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-color',false);
-	return style;
-}
-
-//==================================================
-UIFactory["Node"].prototype.getCommentStyle = function()
-//==================================================
-{
-	metadataepm = this.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-color',false);
 	return style;
 }
 

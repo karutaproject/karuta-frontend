@@ -42,7 +42,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 {	// note: #xxx is to avoid to scroll to the top of the page
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<a class='dropdown-item button text-button' onclick=\"";
+	var html = "<div class='dropdown-item button text-button' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
 		html += items[0] +"('"+parentid+"','"+title.replaceAll("'","##apos##")+"'";
@@ -63,7 +63,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 	}
 	html += "\">";
 	html += title;
-	html += "</a>";
+	html += "</div>";
 	return html;
 };
 

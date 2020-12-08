@@ -223,12 +223,13 @@ function fill_main_page(rootid,role)
 			fillEditBoxBody();
 		},
 		error : function(jqxhr,textStatus) {
-			if (jqxhr.status=="403") {
+			if (jqxhr.status=="403")
 				alertHTML("Sorry. A problem occurs : no right to see this portfolio (" + g_portfolioid + ")");
-				$("#wait-window").modal('hide');
-			}
-			else
-				alertHTML("Error in fill_main_page : "+jqxhr.responseText+"/"+textStatus+"/"+jqxhr.status);
+			
+			else {
+				alertHTML("<h4>Error in fill_main_page</h4><h5>responseText</h5><p>"+jqxhr.responseText+"</p><h5>textStatus</h5><p>"+textStatus+"<h5>status</h5><p>"+jqxhr.status);
+				}
+		$("#wait-window").modal('hide');
 		}
 	});
 	$.ajaxSetup({async: false});

@@ -736,7 +736,7 @@ body,
 }
 
 .button {
-  font-size: calc(var(--font-size-coeff) * 0.9rem);
+  font-size: calc(var(--font-size-coeff) * 1rem);
   padding: 5px;
   cursor: pointer;
   display: inline-block;
@@ -2185,9 +2185,9 @@ hr {
   margin-bottom: 2px;
 }
 
-.radio-div {
+input[type=radio].radio-div {
   float: left;
-  padding: 5px;
+  margin: 5px;
 }
 
 .radio-label {

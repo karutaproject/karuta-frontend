@@ -348,11 +348,17 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			$(select).append($(select_item));
 			//--------------------
 			for ( var i = 0; i < newTableau1.length; i++) {
+				//------------------------------
+				var uuid = $(newTableau1[i][1]).attr('id');
+				var style = "";
 				var resource = null;
-				if ($("asmResource",newTableau1[i][1]).length==3)
+				if ($("asmResource",newTableau1[i][1]).length==3) {
+					style = UIFactory.Node.getContentStyle(uuid);
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
-				else
+				} else {
+					style = UIFactory.Node.getLabelStyle(uuid);
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				}
 				//------------------------------
 				var code = $('code',resource).text();
 				var display_code = false;
@@ -473,11 +479,17 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			$(select).append($(select_item));
 			//--------------------
 			for ( var i = 0; i < newTableau2.length; i++) {
+				//------------------------------
+				var uuid = $(newTableau2[i][1]).attr('id');
+				var style = "";
 				var resource = null;
-				if ($("asmResource",newTableau2[i][1]).length==3)
+				if ($("asmResource",newTableau2[i][1]).length==3) {
+					style = UIFactory.Node.getContentStyle(uuid);
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
-				else
+				} else {
+					style = UIFactory.Node.getLabelStyle(uuid);
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
+				}
 				//------------------------------
 				var code = $('code',resource).text();
 				var display_code = false;
@@ -581,11 +593,18 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			for ( var i = 0; i < newTableau1.length; i++) {
 				var radio_obj1 = $("<div class='get-radio'></div>");
 				var input = "";
+				//------------------------------
+				var uuid = $(newTableau1[i][1]).attr('id');
+				var style = "";
 				var resource = null;
-				if ($("asmResource",newTableau1[i][1]).length==3)
+				if ($("asmResource",newTableau1[i][1]).length==3) {
+					style = UIFactory.Node.getContentStyle(uuid);
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
-				else
+				} else {
+					style = UIFactory.Node.getLabelStyle(uuid);
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				}
+				//------------------------------
 				var code = $('code',resource).text();
 				first = false;
 				input += "<input type='radio' name='radio1_"+self.id+"' value='"+$(newTableau1[i][1]).attr('id')+"' code='"+code+"' ";
@@ -658,12 +677,19 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			for ( var i = 0; i < newTableau2.length; i++) {
 				var radio_obj = $("<div class='get-radio'></div>");
 				var input = "";
+				//------------------------------
+				var uuid = $(newTableau2[i][1]).attr('id');
+				var style = "";
 				var resource = null;
-				if ($("asmResource",newTableau2[i][1]).length==3)
+				if ($("asmResource",newTableau2[i][1]).length==3) {
+					style = UIFactory.Node.getContentStyle(uuid);
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
-				else
+				} else {
+					style = UIFactory.Node.getLabelStyle(uuid);
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
-				var code = $('code',resource).text();
+				}
+				//------------------------------
+					var code = $('code',resource).text();
 				first = false;
 				input += "<input type='radio' name='radio2_"+self.id+"' value='"+$(newTableau1[i][1]).attr('id')+"' code='"+code+"' ";
 				if (disabled)
@@ -720,11 +746,18 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			//----------------------------
 			for ( var i = 0; i < newTableau1.length; ++i) {
 				var input = "";
+				//------------------------------
+				var uuid = $(newTableau1[i][1]).attr('id');
+				var style = "";
 				var resource = null;
-				if ($("asmResource",newTableau1[i][1]).length==3)
+				if ($("asmResource",newTableau1[i][1]).length==3) {
+					style = UIFactory.Node.getContentStyle(uuid);
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
-				else
+				} else {
+					style = UIFactory.Node.getLabelStyle(uuid);
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				}
+				//------------------------------
 				var code = $('code',resource).text();
 				input += "<div name='click_"+self.id+"' value='"+$(newTableau1[i][1]).attr('id')+"' code='"+code+"' class='click-item";
 				if (self_code1==code)
@@ -799,11 +832,18 @@ UIFactory["Get_Double_Resource"].parse = function(destid,type,langcode,data1,dat
 			//----------------------------
 			for ( var i = 0; i < newTableau2.length; ++i) {
 				var input = "";
+				//------------------------------
+				var uuid = $(newTableau2[i][1]).attr('id');
+				var style = "";
 				var resource = null;
-				if ($("asmResource",newTableau2[i][1]).length==3)
+				if ($("asmResource",newTableau2[i][1]).length==3) {
+					style = UIFactory.Node.getContentStyle(uuid);
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
-				else
+				} else {
+					style = UIFactory.Node.getLabelStyle(uuid);
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
+				}
+				//------------------------------
 				var code = $('code',resource).text();
 				input += "<div name='click_"+self.id+"' value='"+$(newTableau2[i][1]).attr('id')+"' code='"+code+"' class='click-item";
 				if (self_code2==code)

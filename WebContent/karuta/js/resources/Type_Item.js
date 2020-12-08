@@ -172,29 +172,30 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 	var html = "";
 	if (type=="default") {
 		if (g_userroles[0]=='designer' || USER.admin || displayCodeValue) {
-			html += "<div class='"+ code +" view-div'>"+ code + " "+label;
+			html += "<div class='"+ code +" view-div'>"+ "<span name='code'>" +code + "</span> <span name='label'>"+label + "</span>";
 			if (value!='')
-				html += " ["+ value + "]";
+				html += "<span name='value'> ["+ value + "] </span>";
 			html += "</div> ";
 		} else {
 			html += "<div class='"+ code +" view-div'>";
 			if (code.indexOf("#")>-1)
-				html += cleanCode(code) + " ";
+			html += "<span name='code'>" +cleanCode(code) + "</span> ";
 			if (code.indexOf("%")<0)
+			html += " <span name='label'>"+label + "</span> ";
 				html += " "+label;
 			if (code.indexOf("&")>-1)
-				html += " ["+$(this.value_node).text()+ "] ";
+				html += "<span name='value'> ["+ value + "] </span>";
 			html += "</div>";
 		}
 	}
 	if (type=="span") {
 		html += "<span class='"+ code +" view-div'>";
 		if (code.indexOf("#")>-1)
-			html += cleanCode(code) + " ";
+			html += "<span name='code'>" +cleanCode(code) + "</span> ";
 		if (code.indexOf("%")<0)
-			html += " "+label;
+			html += " <span name='label'>"+label + "</span> ";
 		if (code.indexOf("&")>-1)
-			html += " ["+$(this.value_node).text()+ "] ";
+				html += "<span name='value'> ["+ value + "] </span>";
 		html += "</span>";
 	}
 	return html;
