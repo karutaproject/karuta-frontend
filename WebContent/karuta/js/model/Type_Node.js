@@ -851,6 +851,12 @@ UIFactory["Node"].prototype.update = function(langcode)
 		var code = $.trim($("#code_"+this.id).val());
 		$(this.code_node).text(code);
 	}
+	//---------------------
+	if ($("#value_"+this.id).length){
+		var value = $.trim($("#value_"+this.id).val());
+		$(this.value_node).text(value);
+	}
+	//---------------------
 	var label = $.trim($("#label_"+this.id+"_"+langcode).val());
 	$(this.label_node[langcode]).text(label);
 	//---------------------
@@ -905,6 +911,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		var query = r_replaceVariable($(this.metadatawad).attr('query'));
 		if (query==undefined || query=='' || this.asmtype=='asmContext' || g_display_type=='raw'){
 			if (g_userroles[0]=='designer' || USER.admin || editcoderoles.containsArrayElt(g_userroles) || editcoderoles.indexOf(this.userrole)>-1 || editcoderoles.indexOf($(USER.username_node).text())>-1) {
+				//---------------------- code ----------------------------
 				var htmlCodeGroupObj = $("<div class='form-group'></div>")
 				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
 				var htmlCodeDivObj = $("<div class='node-code'></div>");
@@ -916,6 +923,18 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 				$(htmlCodeGroupObj).append($(htmlCodeLabelObj));
 				$(htmlCodeGroupObj).append($(htmlCodeDivObj));
 				$(htmlFormObj).append($(htmlCodeGroupObj));
+				//---------------------- value ----------------------------
+				var htmlValueGroupObj = $("<div class='form-group'></div>")
+				var htmlValueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>Value</label>");
+				var htmlValueDivObj = $("<div class='node-value'></div>");
+				var htmlValueInputObj = $("<input id='value_"+this.id+"' type='text' class='form-control' name='input_value' value=\""+this.value_node.text()+"\">");
+				$(htmlValueInputObj).change(function (){
+					self.update(langcode);
+				});
+				$(htmlValueDivObj).append($(htmlValueInputObj));
+				$(htmlValueGroupObj).append($(htmlValueLabelObj));
+				$(htmlValueGroupObj).append($(htmlValueDivObj));
+				$(htmlFormObj).append($(htmlValueGroupObj));
 			}
 			if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 				var htmlLabelGroupObj = $("<div class='form-group'></div>")
@@ -1159,9 +1178,12 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 										});
 									}
 								}
+								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+								$("#wait-window").modal('hide');
+								UIFactory.Node.reloadUnit();
 							} else {
 								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
-								$("#wait-window").modal('hide');			
+								$("#wait-window").modal('hide');
 								UIFactory.Node.reloadUnit();
 							}
 							//------------------------------------------
@@ -1362,19 +1384,27 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
 				if(name == "asmUnit" && level==0) // first level
 				{
+					$("#"+destid).removeClass("nodisplay");
 					var html = "";
 					var depth = 99;
-					html += "<div style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='nav-item";
+					html += "<div class='dropdown-submenu";
 					if (privatevalue)
-						html+= " private";
-					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</div>";
+						html+= "private"
+					html += "' id='parent-"+uuid+"' role='tabdivst'>";
+					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+
+//					html += "<div style='cursor:pointer' id='sidebar_"+uuid+"' class='dropdown-item";
+//					if (privatevalue)
+//						html+= " private";
+//					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmUnit" && level==1) // in a dropdown
 				{
+					$("#"+destid).removeClass("nodisplay");
 					var html = "";
 					var depth = 99;
-					html += "<div class='dropdown-item' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
 /*				if(name == "asmStructure" && level==0) // Click on Structure
@@ -1395,6 +1425,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 				} */
 				if(name == "asmStructure") // Click on Structure
 				{
+					$("#"+destid).removeClass("nodisplay");
 					var depth = 1;
 					var html = "";
 					html += "<div class='dropdown-submenu";
@@ -1402,7 +1433,7 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 						html+= "private"
 					html += "' id='parent-"+uuid+"' role='tabdivst'>";
 					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
-					html += "<div id='dropdown"+uuid+"' class='dropdown-menu' aria-labelledby='sidebar_"+uuid+"'></div>";
+					html += "<div id='dropdown"+uuid+"' class='dropdown-menu nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
 					html += "</div>";
 					$("#"+destid).append($(html));
 					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);

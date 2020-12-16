@@ -270,9 +270,9 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');
 			var semtag2 = "";
 			var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
-			if (semtag.indexOf('&')>-1) {
-				semtag2 = semtag.substring(semtag.indexOf('&')+1);
-				semtag = semtag.substring(0,semtag.indexOf('&'));
+			if (semtag.indexOf('+')>-1) {
+				semtag2 = semtag.substring(semtag.indexOf('+')+1);
+				semtag = semtag.substring(0,semtag.indexOf('+'));
 			}
 			var semtag_parent_indx = queryattr_value.substring(0,semtag_indx).lastIndexOf('.');
 			var semtag_parent = queryattr_value.substring(semtag_parent_indx+1,semtag_indx);
@@ -425,7 +425,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 	if (type=='select') {
 		//--------------------------------
 		var html = "";
-		html += "<div class='btn-group select-label'>";		
+		html += "<div class='btn-group select-label'>";
 		html += "	<button type='button' class='btn select selected-label' id='button_"+self.id+"'>&nbsp;</button>";
 		html += "<button type='button' onclick=\"UIFactory.Get_Get_Resource.reloadIfInLine('"+self.id+"','"+destid+"','"+type+"','"+langcode+"')\" class='btn btn-default dropdown-toggle select' data-toggle='dropdown' aria-expanded='false'><span class='caret'></span><span class='sr-only'>Toggle Dropdown</span></button>";
 		html += "</div>";
@@ -481,7 +481,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
-				html += " style=\""+style+"\">";				html += ">";
+				html += " style=\""+style+"\">";
 				if (display_code)
 					html += "<span class='li-code'>"+code+"</span>";
 				if (display_label)
@@ -676,6 +676,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 		//-----------------------
 		var nodes = $("node",data);
 		for ( var i = 0; i < newTableau1.length; ++i) {
+			var uuid = $(newTableau1[i][1]).attr('id');
 			var input = "";
 			var style = "";
 			//------------------------------
@@ -742,9 +743,9 @@ UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,srce,portfoli
 //==================================
 {
 	var semtag2 = "";
-	if (semtag.indexOf('&')>-1) {
-		semtag2 = semtag.substring(semtag.indexOf('&')+1);
-		semtag = semtag.substring(0,semtag.indexOf('&'));
+	if (semtag.indexOf('+')>-1) {
+		semtag2 = semtag.substring(semtag.indexOf('+')+1);
+		semtag = semtag.substring(0,semtag.indexOf('+'));
 	}
 	//------------
 	if (cachable && g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code]!=undefined && g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code]!="")

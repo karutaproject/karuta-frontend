@@ -296,9 +296,9 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');
 		var semtag2 = "";
 		var semtag = queryattr_value.substring(semtag_indx+1,srce_indx);
-		if (semtag.indexOf('&')>-1) {
-			semtag2 = semtag.substring(semtag.indexOf('&')+1);
-			semtag = semtag.substring(0,semtag.indexOf('&'));
+		if (semtag.indexOf('+')>-1) {
+			semtag2 = semtag.substring(semtag.indexOf('+')+1);
+			semtag = semtag.substring(0,semtag.indexOf('+'));
 		}
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		//------------
@@ -1122,9 +1122,9 @@ UIFactory["Get_Resource"].getChildren = function(dest,langcode,srce,target,portf
 //==================================
 {
 	var semtag2 = "";
-	if (semtag.indexOf('&')>-1) {
-		semtag2 = semtag.substring(semtag.indexOf('&')+1);
-		semtag = semtag.substring(0,semtag.indexOf('&'));
+	if (semtag.indexOf('+')>-1) {
+		semtag2 = semtag.substring(semtag.indexOf('+')+1);
+		semtag = semtag.substring(0,semtag.indexOf('+'));
 	}
 	//------------
 	if (cachable && g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code]!=undefined && g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code]!="")

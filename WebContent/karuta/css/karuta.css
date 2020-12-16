@@ -751,6 +751,11 @@ body,
   font-variant: initial;
 }
 
+.resource-choice {
+  padding-left: 15px;
+  padding-bottom: 15px;
+}
+
 /* ====================== */
 /*      NAVBAR            */
 /* ====================== */
@@ -1025,6 +1030,7 @@ body,
 }
 #menu_bar .dropdown-item {
   color: var(--portfolio-sidebar-text-color);
+  padding: 0.25rem 0.75rem;
 }
 #menu_bar .dropdown-item:hover {
   background-color: var(--portfolio-sidebar-text-color);
@@ -1041,8 +1047,7 @@ body,
   position: relative;
 }
 #menu_bar .dropdown-submenu > .dropdown-menu {
-  top: 0;
-  left: 100%;
+  top: 2.5rem;
   margin-top: -6px;
   margin-left: -1px;
   -webkit-border-radius: 0 6px 6px 6px;
@@ -1051,6 +1056,9 @@ body,
 }
 #menu_bar .dropdown-submenu:hover > .dropdown-menu {
   display: block;
+}
+#menu_bar .dropdown-submenu:hover > .dropdown-menu.nodisplay {
+  display: none;
 }
 #menu_bar .dropdown-submenu > a:after {
   display: block;
@@ -1663,8 +1671,8 @@ table[name=res-div] {
 }
 
 /* ===========================
-DASHBOARD CSV PDF BUTTONS
-  ===========================*/
+	DASHBOARD CSV PDF BUTTONS
+   ===========================*/
 .csv-button,
 .pdf-button,
 .rtf-button,

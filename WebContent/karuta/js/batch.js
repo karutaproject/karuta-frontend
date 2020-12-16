@@ -23,7 +23,27 @@ var g_current_node_uuid = null;
 var g_users = {};
 //-----------------------
 
+var jqueryBatchSpecificFunctions = {};
+jqueryBatchSpecificFunctions['.resourceTextContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
+jqueryBatchSpecificFunctions['.resourceCodeContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
+jqueryBatchSpecificFunctions['.resourceValueContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
+jqueryBatchSpecificFunctions['.nodeLabelContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>label[lang='#lang#']:contains(";
+jqueryBatchSpecificFunctions['.nodeCodeContains('] = "asmResource[xsi_type='nodeRes']>code:contains(";
+jqueryBatchSpecificFunctions['.resourceFilenameContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
 
+//==================================
+function getTest(test)
+//==================================
+{
+	for (fct in jqueryBatchSpecificFunctions) {
+		if (test.indexOf(fct)>-1) {
+			test = ".has(\"" + test.replace(fct,jqueryBatchSpecificFunctions[fct]) + "\")";
+			if (test.indexOf("#lang#")>-1)
+				test = test.replace(/#lang#/g,languages[LANGCODE]);
+		}
+	}
+	return test;
+}
 
 //==================================
 function initBatchVars()
@@ -40,6 +60,14 @@ function initBatchVars()
 
 //==================================
 function getTxtvals(node)
+//==================================
+{
+	var str = getTxtvalsWithoutReplacement(node);
+	return r_replaceVariable(str.trim());
+}
+
+//==================================
+function getTxtvalsWithoutReplacement(node)
 //==================================
 {
 	var str = "";
@@ -248,6 +276,7 @@ g_actions['for-each-tree'] = function forEachTree(node)
 				portfolio [1] = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",trees[i])).text();
 				var treeref = $(node).attr('id');
 				g_trees[treeref] = portfolio;
+			$("#batch-log").append("<br>------------- current-tree -----------------");
 				$("#batch-log").append("<br>- tree selected - code:"+portfolio [1]+" - portfolioid:"+portfolio [0]);
 				processListActions($("actions",node).children());
 			}
@@ -279,6 +308,7 @@ g_actions['for-each-user'] = function (node)
 					var username = UsersActive_list[j].username_node.text();
 					var userref = $(node).attr('id');
 					g_users[userref] = username;
+			$("#batch-log").append("<br>------------- current-user -----------------");
 					$("#batch-log").append("<br>- user selected - username:"+username);
 					processListActions($("actions",node).children());
 						//------------------------------------
@@ -1339,6 +1369,11 @@ g_actions['update-resource'] = function updateResource(node)
 	var ok = 0;
 	var type = $(node).attr("type");
 	var attributes = $("attribute",node)
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = r_replaceVariable(test);
+		test=getTest(test);
+	}
 	//------------ Target --------------------
 	var url = getTargetUrl(node);
 	//--------------------------------
@@ -1355,6 +1390,7 @@ g_actions['update-resource'] = function updateResource(node)
 			} else {							// get by code and semtag
 				nodes = $("node",data);
 			}
+			nodes = eval("$(nodes)"+test);
 			if (nodes.length>0){
 				for (var i=0; i<nodes.length; i++){
 					//-------------------
@@ -1412,6 +1448,11 @@ g_actions['update-node-resource'] = function updateResource(node)
 {
 	var ok = 0;
 	var type = $(node).attr("type");
+	var test = $(node).attr("test");
+	if (test!=undefined) {
+		test = r_replaceVariable(test);
+		test=getTest(test);
+	}
 	//------------ Target --------------------
 	var url = getTargetUrl(node);
 	//--------------------------------
@@ -1428,6 +1469,7 @@ g_actions['update-node-resource'] = function updateResource(node)
 			} else {							// get by code and semtag
 				nodes = $("node",data);
 			}
+			nodes = eval("$(nodes)"+test);
 			if (nodes.length>0){
 				for (var i=0; i<nodes.length; i++){
 					//-------------------
@@ -1468,6 +1510,263 @@ g_actions['update-node-resource'] = function updateResource(node)
 	return (ok!=0 && ok == nodes.length);
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------- Update Node - Metadata ----------------------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+g_actions['update-node'] = function updateNode(node)
+//=================================================
+{
+	var select = $(node).attr("select");
+	var type = $(node).attr("type");
+	var idx = select.indexOf(".");
+	//----------------------------------------------------
+	if (select=='#current_node') {
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/"+g_current_node_uuid,
+			success : function(data) {
+				var results = $('*',data);
+				var nodes = new Array();
+				nodes[0] = results[0];
+				var text = getTxtvalsWithoutReplacement($("text",node));
+				if ($("source",node).length>0){
+					var source_select = $("source",node).attr("select");
+					var source_idx = source_select.indexOf(".");
+					var source_treeref = source_select.substring(0,source_idx);
+					var source_semtag = source_select.substring(source_idx+1);
+					if (source_semtag=="UUID")
+						text = g_trees[source_treeref][0];
+				}
+				//---------------------------
+				if (type=='Metadata'){
+					var attribute = $(node).attr("attribute");
+					updateMetada(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='Metadatawad'){
+					var attribute = $(node).attr("attribute");
+					updateMetadawad(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='Metadataepm'){
+					var attribute = $(node).attr("attribute");
+					updateMetadaepm(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='Field') {//---------------------- for backward compatibility ---------------------
+					updateField(nodes,node,type,semtag,r_replaceVariable(text));
+				}
+				if (type=='Proxy') {//---------------------- for backward compatibility ---------------------
+					updateProxy(nodes,node,type,semtag);
+				}
+				if (type=='Dashboard') {//---------------------- for backward compatibility ---------------------
+					updateDashboard(nodes,node,type,semtag,text);
+				}
+				if (type=='MetadataInline'){//---------------------- for backward compatibility ---------------------
+					var attribute = 'inline';
+					updateMetada(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='MetadatawadQuery') {//---------------------- for backward compatibility ---------------------
+					var attribute = 'query';
+					updateMetadawad(nodes,node,type,semtag,text,attribute);
+				}
+				if (type=='MetadatawadMenu') {//---------------------- for backward compatibility ---------------------
+					var attribute = 'menuroles';
+					updateMetadawad(nodes,node,type,semtag,text,attribute);
+				}
+				if (type=='NodeResource') {//---------------------- for backward compatibility ---------------------
+					updateNodeResource(nodes,node);
+				}
+				if (type=='Calendar') {//---------------------- for backward compatibility ---------------------
+					updateCalendar(nodes,node,text,semtag);
+				}
+				if (type=='Document') {//---------------------- for backward compatibility ---------------------
+					updateDocument(nodes,node,text,semtag);
+				}
+				if (type=='Rights'){//---------------------- for backward compatibility ---------------------
+					var rd = $(node).attr("rd");
+					var wr = $(node).attr("wr");
+					var dl = $(node).attr("dl");
+					var sb = $(node).attr("sb");
+					updateRights(nodes,node,role,rd,wr,dl,sb);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-resource - uuid="+g_current_node_uuid+" semtag="+semtag);
+			}
+		});
+	} else {
+		var treeref = select.substring(0,idx);
+		var semtag = select.substring(idx+1);
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
+			success : function(data) {
+				var nodes = $("node",data);
+				var text = getTxtvals($("text",node));
+				if ($("source",node).length>0){
+					var source_select = $("source",node).attr("select");
+					var source_idx = source_select.indexOf(".");
+					var source_treeref = source_select.substring(0,source_idx);
+					var source_semtag = source_select.substring(source_idx+1);
+					if (source_semtag=="UUID")
+						text = g_trees[source_treeref][0];
+				}
+				//---------------------------
+				if (type=='Metadata'){
+					var attribute = $(node).attr("attribute");
+					updateMetada(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='Metadatawad'){
+					var attribute = $(node).attr("attribute");
+					updateMetadawad(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='Metadataepm'){
+					var attribute = $(node).attr("attribute");
+					updateMetadaepm(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='Field') {//---------------------- for backward compatibility ---------------------
+					updateField(nodes,node,type,semtag,r_replaceVariable(text));
+				}
+				if (type=='Proxy') {//---------------------- for backward compatibility ---------------------
+					updateProxy(nodes,node,type,semtag);
+				}
+				if (type=='Dashboard') {//---------------------- for backward compatibility ---------------------
+					updateDashboard(nodes,node,type,semtag,text);
+				}
+				if (type=='MetadataInline'){//---------------------- for backward compatibility ---------------------
+					var attribute = 'inline';
+					updateMetada(nodes,node,type,semtag,text,attribute)
+				}
+				if (type=='MetadatawadQuery') {//---------------------- for backward compatibility ---------------------
+					var attribute = 'query';
+					updateMetadawad(nodes,node,type,semtag,text,attribute);
+				}
+				if (type=='MetadatawadMenu') {//---------------------- for backward compatibility ---------------------
+					var attribute = 'menuroles';
+					updateMetadawad(nodes,node,type,semtag,text,attribute);
+				}
+				if (type=='NodeResource') {//---------------------- for backward compatibility ---------------------
+					updateNodeResource(nodes,node);
+				}
+				if (type=='Calendar') {//---------------------- for backward compatibility ---------------------
+					updateCalendar(nodes,node,text,semtag);
+				}
+				if (type=='Document') {//---------------------- for backward compatibility ---------------------
+					updateDocument(nodes,node,text,semtag);
+				}
+				if (type=='Rights'){//---------------------- for backward compatibility ---------------------
+					var rd = $(node).attr("rd");
+					var wr = $(node).attr("wr");
+					var dl = $(node).attr("dl");
+					var sb = $(node).attr("sb");
+					updateRights(nodes,node,role,rd,wr,dl,sb);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
+			}
+		});
+	}
+}
+
+
+//=================================================
+function updateMetada(nodes,node,type,semtag,text,attribute)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		var metadata = $("metadata",nodes[0]);
+		$(metadata).attr(attribute,text);
+		var xml = xml2string(metadata[0]);
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			async : false,
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			nodeid : nodeid,
+			semtag : semtag,
+			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
+			success : function(data) {
+				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag);
+				updateMetada(nodes,node,type,semtag,text,attribute)
+			},
+			error : function(data,nodeid,semtag) {
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadata("+this.nodeid+") - semtag="+this.semantictag);
+				updateMetada(nodes,node,type,semtag,text,attribute);
+			}
+		});
+	}
+}
+
+//=================================================
+function updateMetadawad(nodes,node,type,semtag,text,attribute)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		var metadatawad = $("metadata-wad",nodes[0]);
+		$(metadatawad).attr(attribute,text);
+		var xml = xml2string(metadatawad[0]);
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			async : false,
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			nodeid : nodeid,
+			semtag : semtag,
+			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadatawad",
+			success : function(data) {
+				$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semtag);
+				updateMetadawad(nodes,node,type,semtag,text,attribute)
+			},
+			error : function(data,nodeid,semtag) {
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadatawad("+this.nodeid+") - semtag="+this.semantictag);
+				updateMetadawad(nodes,node,type,semtag,text,attribute);
+			}
+		});
+	}
+}
+
+//=================================================
+function updateMetadaepm(nodes,node,type,semtag,text,attribute)
+//=================================================
+{
+	if (nodes.length>0) {
+		var nodeid = $(nodes[0]).attr('id');
+		var metadatawad = $("metadata-epm",nodes[0]);
+		$(metadatawad).attr(attribute,text);
+		var xml = xml2string(metadatawad[0]);
+		nodes = nodes.slice(1,nodes.length);
+		$.ajax({
+			async : false,
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : xml,
+			nodeid : nodeid,
+			semtag : semtag,
+			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadataepm",
+			success : function(data) {
+				$("#batch-log").append("<br>- resource metadataepm updated ("+this.nodeid+") - semtag="+this.semtag);
+				updateMetadaepm(nodes,node,type,semtag,text,attribute)
+			},
+			error : function(data,nodeid,semtag) {
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadataepm("+this.nodeid+") - semtag="+this.semantictag);
+				updateMetadaepm(nodes,node,type,semtag,text,attribute);
+			}
+		});
+	}
+}
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -1631,7 +1930,6 @@ g_actions['delete-node-byid'] = function deleteNodeById(node)
 	});
 	return ok;
 }
-
 
 
 //-----------------------------------------------------------------------
@@ -2829,164 +3127,90 @@ function convertCSVLine2json(codes,csvline)
 	return g_json_line;
 };
 
-
-
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//------------------------ Update Node ----------------------------------
-//-----------------------------------------------------------------------
-//---------------------- for backward compatibility ---------------------
-
 //=================================================
-g_actions['update-node'] = function updateNode(node)
+function saveLog(model_code,portfoliologcode,logtext)
 //=================================================
 {
-	var select = $(node).attr("select");
-	var type = $(node).attr("type");
-	var idx = select.indexOf(".");
-	//----------------------------------------------------
-	if (select=='#current_node') {
-		$.ajax({
-			async : false,
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/nodes/node/"+g_current_node_uuid,
-			success : function(data) {
-				var results = $('*',data);
-				var nodes = new Array();
-				nodes[0] = results[0];
-				var text = getTxtvals($("text",node));
-				if ($("source",node).length>0){
-					var source_select = $("source",node).attr("select");
-					var source_idx = source_select.indexOf(".");
-					var source_treeref = source_select.substring(0,source_idx);
-					var source_semtag = source_select.substring(source_idx+1);
-					if (source_semtag=="UUID")
-						text = g_trees[source_treeref][0];
+	var text ="<h3>"+model_code+"</h3>"+"<h4>"+new Date().toLocaleString()+"</h4>"+logtext;
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/code/"+portfoliologcode,
+		success : function(data) {
+			var nodeid = $("asmRoot",data).attr("id");
+			// ---- import textfield ---------
+			var urlS = serverBCK_API+"/nodes/node/import/"+nodeid+"?srcetag=TextField&srcecode=karuta.karuta-resources";
+			$.ajax({
+				async:false,
+				type : "POST",
+				dataType : "text",
+				url : urlS,
+				data : "",
+				success : function(data) {
+					// ---- update textfield ---------
+					var uuid = data;
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/nodes/node/" + uuid,
+						success : function(data) {
+						var resource = $("asmResource[xsi_type='TextField']",data);
+						$("text[lang='"+LANG+"']",resource).text(text);
+						var data = "<asmResource xsi_type='TextField'>" + $(resource).html() + "</asmResource>";
+						var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+						//-------------------
+						$.ajax({
+							async : false,
+							type : "PUT",
+							contentType: "application/xml",
+							dataType : "text",
+							data : strippeddata,
+							url : serverBCK_API+"/resources/resource/" + uuid,
+							success : function(data) {
+								$("#batch-log").append("<br>--- log saved in "+portfoliologcode+" ---");
+							},
+							error : function(data) {
+								$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in saveLog");
+							}
+						});
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in saveLog");
+						}
+					});
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in saveLog");
 				}
-				//---------------------------
-				if (type=='Field') {//---------------------- for backward compatibility ---------------------
-					updateField(nodes,node,type,semtag,text);
-				}
-				if (type=='Proxy') {//---------------------- for backward compatibility ---------------------
-					updateProxy(nodes,node,type,semtag);
-				}
-				if (type=='Dashboard') {//---------------------- for backward compatibility ---------------------
-					updateDashboard(nodes,node,type,semtag,text);
-				}
-				if (type=='Metadata'){
-					var attribute = $(node).attr("attribute");
-					updateMetada(nodes,node,type,semtag,text,attribute)
-				}
-				if (type=='MetadataInline'){//---------------------- for backward compatibility ---------------------
-					var attribute = 'inline';
-					updateMetada(nodes,node,type,semtag,text,attribute)
-				}
-				if (type=='Metadatawad'){
-					var attribute = $(node).attr("attribute");
-					updateMetadawad(nodes,node,type,semtag,text,attribute)
-				}
-				if (type=='MetadatawadQuery') {//---------------------- for backward compatibility ---------------------
-					var attribute = 'query';
-					updateMetadawad(nodes,node,type,semtag,text,attribute);
-				}
-				if (type=='MetadatawadMenu') {//---------------------- for backward compatibility ---------------------
-					var attribute = 'menuroles';
-					updateMetadawad(nodes,node,type,semtag,text,attribute);
-				}
-				if (type=='NodeResource') {//---------------------- for backward compatibility ---------------------
-					updateNodeResource(nodes,node);
-				}
-				if (type=='Calendar') {//---------------------- for backward compatibility ---------------------
-					updateCalendar(nodes,node,text,semtag);
-				}
-				if (type=='Document') {//---------------------- for backward compatibility ---------------------
-					updateDocument(nodes,node,text,semtag);
-				}
-				if (type=='Rights'){//---------------------- for backward compatibility ---------------------
-					var rd = $(node).attr("rd");
-					var wr = $(node).attr("wr");
-					var dl = $(node).attr("dl");
-					var sb = $(node).attr("sb");
-					updateRights(nodes,node,role,rd,wr,dl,sb);
-				}
-			},
-			error : function(data) {
-				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-resource - uuid="+g_current_node_uuid+" semtag="+semtag);
-			}
-		});
-	} else {
-		var treeref = select.substring(0,idx);
-		var semtag = select.substring(idx+1);
-		$.ajax({
-			async : false,
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
-			success : function(data) {
-				var nodes = $("node",data);
-				var text = getTxtvals($("text",node));
-				if ($("source",node).length>0){
-					var source_select = $("source",node).attr("select");
-					var source_idx = source_select.indexOf(".");
-					var source_treeref = source_select.substring(0,source_idx);
-					var source_semtag = source_select.substring(source_idx+1);
-					if (source_semtag=="UUID")
-						text = g_trees[source_treeref][0];
-				}
-				//---------------------------
-				if (type=='Field') {
-					updateField(nodes,node,type,semtag,text);
-				}
-				if (type=='Proxy') {
-					updateProxy(nodes,node,type,semtag);
-				}
-				if (type=='Dashboard') {
-					updateDashboard(nodes,node,type,semtag,text);
-				}
-				if (type=='Metadata'){
-					var attribute = $(node).attr("attribute");
-					updateMetada(nodes,node,type,semtag,text,attribute)
-				}
-				if (type=='MetadataInline'){
-					var attribute = 'inline';
-					updateMetada(nodes,node,type,semtag,text,attribute)
-				}
-				if (type=='Metadatawad'){
-					var attribute = $(node).attr("attribute");
-					updateMetadawad(nodes,node,type,semtag,text,attribute)
-				}
-				if (type=='MetadatawadQuery') {
-					var attribute = 'query';
-					updateMetadawad(nodes,node,type,semtag,text,attribute);
-				}
-				if (type=='MetadatawadMenu') {
-					var attribute = 'menuroles';
-					updateMetadawad(nodes,node,type,semtag,text,attribute);
-				}
-				if (type=='NodeResource') {
-					updateNodeResource(nodes,node);
-				}
-				if (type=='Calendar') {
-					updateCalendar(nodes,node,text,semtag);
-				}
-				if (type=='Document') {
-					updateDocument(nodes,node,semtag);
-				}
-				if (type=='Rights'){
-					var rd = $(node).attr("rd");
-					var wr = $(node).attr("wr");
-					var dl = $(node).attr("dl");
-					var sb = $(node).attr("sb");
-					updateRights(nodes,node,role,rd,wr,dl,sb);
-				}
-			},
-			error : function(data) {
-				$("#batch-log").append("<br>- ***NOT FOUND <span class='danger'>ERROR</span> in update-resource - tree="+g_trees[treeref][1]+" semtag="+semtag);
-			}
-		});
-	}
+			});
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> Portfolio log does not exist");
+		}
+	});
+
 }
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ EXEC BATCH AT USER CREATION ------------------
+//-----------------------------------------------------------------------
+
+//=================================================
+function displayExecBatchButton()
+//=================================================
+{
+	var html = "<div id='create-portfolio'>"+g_execbatchbuttonlabel1[LANG]+"</div>";
+	$("#main-list").html(html);
+	initBatchVars();
+	prepareBatch();
+	getModelAndProcess(g_json.model_code);
+}
+
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------ for backward compatibility ------------------
+//-----------------------------------------------------------------------
 
 //=================================================
 function updateDocument(nodes,node,semtag)
@@ -3230,147 +3454,5 @@ function updateNodeResource(nodes,node)
 			}
 		});
 	}
-}
-
-//=================================================
-function updateMetada(nodes,node,type,semtag,text,attribute)
-//=================================================
-{
-	if (nodes.length>0) {
-		var nodeid = $(nodes[0]).attr('id');
-		var metadata = $("metadata",nodes[0]);
-		$(metadata).attr(attribute,text);
-		var xml = xml2string(metadata[0]);
-		nodes = nodes.slice(1,nodes.length);
-		$.ajax({
-			async : false,
-			type : "PUT",
-			contentType: "application/xml",
-			dataType : "text",
-			data : xml,
-			nodeid : nodeid,
-			semtag : semtag,
-			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
-			success : function(data) {
-				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag);
-				updateMetada(nodes,node,type,semtag,text,attribute)
-			},
-			error : function(data,nodeid,semtag) {
-				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadata("+this.nodeid+") - semtag="+this.semantictag);
-				updateMetada(nodes,node,type,semtag,text,attribute);
-			}
-		});
-	}
-}
-
-//=================================================
-function updateMetadawad(nodes,node,type,semtag,text,attribute)
-//=================================================
-{
-	if (nodes.length>0) {
-		var nodeid = $(nodes[0]).attr('id');
-		var metadatawad = $("metadata-wad",nodes[0]);
-		$(metadatawad).attr(attribute,text);
-		var xml = xml2string(metadatawad[0]);
-		nodes = nodes.slice(1,nodes.length);
-		$.ajax({
-			async : false,
-			type : "PUT",
-			contentType: "application/xml",
-			dataType : "text",
-			data : xml,
-			nodeid : nodeid,
-			semtag : semtag,
-			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadatawad",
-			success : function(data) {
-				$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semtag);
-				updateMetadawad(nodes,node,type,semtag,text,attribute)
-			},
-			error : function(data,nodeid,semtag) {
-				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadatawad("+this.nodeid+") - semtag="+this.semantictag);
-				updateMetadawad(nodes,node,type,semtag,text,attribute);
-			}
-		});
-	}
-}
-
-//=================================================
-function saveLog(model_code,portfoliologcode,logtext)
-//=================================================
-{
-	var text ="<h3>"+model_code+"</h3>"+"<h4>"+new Date().toLocaleString()+"</h4>"+logtext;
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios/portfolio/code/"+portfoliologcode,
-		success : function(data) {
-			var nodeid = $("asmRoot",data).attr("id");
-			// ---- import textfield ---------
-			var urlS = serverBCK_API+"/nodes/node/import/"+nodeid+"?srcetag=TextField&srcecode=karuta.karuta-resources";
-			$.ajax({
-				async:false,
-				type : "POST",
-				dataType : "text",
-				url : urlS,
-				data : "",
-				success : function(data) {
-					// ---- update textfield ---------
-					var uuid = data;
-					$.ajax({
-						type : "GET",
-						dataType : "xml",
-						url : serverBCK_API+"/nodes/node/" + uuid,
-						success : function(data) {
-						var resource = $("asmResource[xsi_type='TextField']",data);
-						$("text[lang='"+LANG+"']",resource).text(text);
-						var data = "<asmResource xsi_type='TextField'>" + $(resource).html() + "</asmResource>";
-						var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-						//-------------------
-						$.ajax({
-							async : false,
-							type : "PUT",
-							contentType: "application/xml",
-							dataType : "text",
-							data : strippeddata,
-							url : serverBCK_API+"/resources/resource/" + uuid,
-							success : function(data) {
-								$("#batch-log").append("<br>--- log saved in "+portfoliologcode+" ---");
-							},
-							error : function(data) {
-								$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in saveLog");
-							}
-						});
-						},
-						error : function(data) {
-							$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in saveLog");
-						}
-					});
-				},
-				error : function(data) {
-					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in saveLog");
-				}
-			});
-		},
-		error : function(data) {
-			$("#batch-log").append("<br>- <span class='danger'>ERROR</span> Portfolio log does not exist");
-		}
-	});
-
-}
-
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//------------------------ EXEC BATCH AT USER CREATION ------------------
-//-----------------------------------------------------------------------
-
-//=================================================
-function displayExecBatchButton()
-//=================================================
-{
-	var html = "<div id='create-portfolio'>"+g_execbatchbuttonlabel1[LANG]+"</div>";
-	$("#main-list").html(html);
-	initBatchVars();
-	prepareBatch();
-	getModelAndProcess(g_json.model_code);
 }
 
