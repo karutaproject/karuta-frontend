@@ -179,6 +179,7 @@ UIFactory["Node"].prototype.getCommentStyle = function()
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-weight',false);
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-style',false);
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-othercss',false);
 	return style;
 }
 
@@ -439,7 +440,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles',false,true);
-	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && model)
+	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitall',true);
 	//-----------------------------------------
 	if (model)
@@ -620,6 +621,8 @@ UIFactory["Node"].getMetadataEpm = function(data,attribute,number)
 			html += attribute.substring(17) + value;
 		else if (attribute.indexOf("node-othercss")>-1)
 			html += attribute.substring(13) + value;
+		else if (attribute.indexOf("comment-othercss")>-1)
+			html += attribute.substring(16) + value;
 		else if (attribute.indexOf("othercss")>-1)
 			html += attribute.substring(8) + value;
 		else if (attribute.indexOf("node-")>-1)
@@ -1428,8 +1431,9 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		//----------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-weight',$(this.metadataepm).attr('comment-font-weight'));
 		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-style',$(this.metadataepm).attr('comment-font-style'));
-		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-color',$(this.metadataepm).attr('comment-color'));
 		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-size',$(this.metadataepm).attr('comment-font-size'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-color',$(this.metadataepm).attr('comment-color'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-othercss',$(this.metadataepm).attr('comment-othercss'));
 		if ($("#metadata-epm-part1").html()=="")
 			$("#layout").hide();
 	}

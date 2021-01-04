@@ -83,8 +83,6 @@ UIFactory["URLBlock"].prototype.getView = function(dest,type,langcode)
 			image_size += " height:" + img_height + ";";
 		//----------------------------------------
 		var url = $(url_element.resource.url_node[langcode]).text();
-		if (url!="" && url.indexOf("http")<0)
-			url = "http://"+url;
 		var label = $(url_element.resource.label_node[langcode]).text();
 		if (label=="")
 			label = url;

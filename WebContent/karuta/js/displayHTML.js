@@ -83,13 +83,13 @@ displayOrg["asmContext"]["strrow-cols-6"] = ["col"];
 
 //           viewtype   node type               pre
 displayView["standard"]["asmContext"] = ["default","xwide","card","simple"];
-displayView["standard"]["asmUnitStructure"] = ["default","xwide","card","default-block","xwide-block"];
+displayView["standard"]["asmUnitStructure"] = ["default","xwide","card"];
 displayView["standard"]["asmUnit"] = [];
 displayView["standard"]["asmStructure"] = [];
 displayView["standard"]["asmRoot"] = [];
 
 displayView["raw"]["asmContext"] = ["default","xwide","card","simple"];
-displayView["raw"]["asmUnitStructure"] = ["default","xwide","card","default-block","xwide-block"];
+displayView["raw"]["asmUnitStructure"] = ["default","xwide","card"];
 
 
 displayView["model"] = {};
@@ -179,26 +179,6 @@ displayHTML["standard-resource-default"] =	"<div id='node_#uuid#' class='#displa
 											"			<table class='col-8' width='100%'><tr>" +
 										"					<td  width='80%' class='td-resource'>" +
 											"					<div id='resource_#uuid#' name='res-div' class='resource inside-full'></div>" +
-											"					<div id='comments_#uuid#' class='comments'></div>" +
-											"				</td>" +
-											"				<td class='td-buttons buttons'><span id='menus-#uuid#' class='menus'/><span id='buttons-#uuid#' /></td>" +
-											"			</tr></table>" +
-											"	</div><!-- row -->" +
-											"	<div class='row'><div id='metainfo_#uuid#' class='offset-md-1 col-md-10 metainfo'></div></div>" +
-											"	<div class='row'><div id='cssinfo_#uuid#' class='offset-md-1 col-md-10 cssinfo'></div></div>" +
-											"	<div id='content-#uuid#' name='cnt-div' class='content' ></div>" +
-											"	<div id='extra_#uuid#' class='extra'></div>" +
-											"</div>";
-
-displayHTML["standard-resource-default-block"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv# #node-orgclass#'>" +
-											"	<div id='sub_node_#uuid#' class='resource-node row' >" +
-											"		<div class='col-1'></div>" +
-											"		<div id='std_node_#uuid#' name='res-lbl-div' class='col-3 resource-label inside-full-height'>" +
-											"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
-											"		</div>" +
-											"			<table class='col-8' width='100%'><tr>" +
-											"					<td  width='80%' class='td-resource'>" +
-											"					<div id='resource_#uuid#' name='res-div-block' class='resource inside-full'></div>" +
 											"					<div id='comments_#uuid#' class='comments'></div>" +
 											"				</td>" +
 											"				<td class='td-buttons buttons'><span id='menus-#uuid#' class='menus'/><span id='buttons-#uuid#' /></td>" +

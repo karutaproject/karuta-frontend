@@ -161,9 +161,6 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (!this.multilingual)
-		langcode = NONMULTILANGCODE;
-	//---------------------
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}

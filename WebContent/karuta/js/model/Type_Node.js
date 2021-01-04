@@ -734,7 +734,8 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 	}
 	//---------------------
 	if (g_userroles[0]=='designer' || USER.admin || this.metadatawad.getAttribute('display')!='N') {
-		if (type=="default")
+		//-----------------------------
+			if (type=="default")
 			html += "<div><div class='title'";
 		if (type=="span")
 			html += "<span class='title'";
@@ -761,6 +762,12 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 		if (label == "")
 			label="&nbsp;";
 		html += label+"<span id='help_"+this.id+"' class='ihelp'></span>";
+		//----- value -----
+		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userroles[0]=='designer' || USER.admin || displayCodeValue)) {
+			if (this.value_node.text()!='')
+				html += "<span name='value'> ["+ this.value_node.text() + "] </span>";
+		}
+		//-----------------------------
 		if (type=="default")
 			html += "</div><div class='title-subline'></div></div>";
 		if (type=="span")
@@ -773,47 +780,6 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-/*	var html = "";
-	if (type==null)
-		type = 'default';
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	//---------------------
-	if (g_userroles[0]=='designer' || USER.admin || $(this.metadatawad).attr('display')!='N') {
-		if (type=="default")
-			html += "<div><div class='title'";
-		if (type=="span")
-			html += "<span class='title'";
-		//----------------------------
-		var style ="";
-		var metadataepm = $(this.metadataepm);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
-		style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
-		if (style.length>0)
-			html += " style='"+style+"' ";
-		//----------------------------
-		html += ">";
-		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userroles[0]=='designer' || USER.admin)) {
-			html += this.code_node.text()+" ";
-		}
-		var label = this.label_node[langcode].text();
-		if (label == "")
-			label="&nbsp;";
-		html += label+"<span id='help_"+this.id+"' class='ihelp'></span>";
-		if (type=="default")
-			html += "</div><div class='title-subline'></div></div>";
-		if (type=="span")
-			html += "</span>";
-	}
-*/
 	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };

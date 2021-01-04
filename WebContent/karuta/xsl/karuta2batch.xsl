@@ -918,6 +918,24 @@
 		</update-node>
 	</xsl:template>
 	
+	<xsl:template match="*[metadata/@semantictag='update-metadata-epm']">
+		<xsl:variable name="select">
+			<xsl:call-template name='get-select'>
+				<xsl:with-param name='parent'>subsection-target</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="attribute">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='attribute']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<update-node type='Metadataepm' select="{$select}" attribute="{$attribute}">
+			<text>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">text</xsl:with-param>
+				</xsl:call-template>
+			</text>
+		</update-node>
+	</xsl:template>
+	
 	<!-- ====================================================================================== -->
 	<!-- ====================================================================================== -->
 	<!-- ================================ get-select ========================================== -->
@@ -985,7 +1003,7 @@
 				<xsl:variable name="txtchoice">
 					<xsl:value-of select="asmResource[@xsi_type='Get_Get_Resource']/value"/>
 				</xsl:variable>
-				<txtval select='{$txtchoice}'/>
+				<txtval><xsl:value-of select="$txtchoice"/></txtval>
 			</xsl:if>
 			<xsl:if test="metadata/@semantictag='txtsel'">
 				<xsl:variable name="txtsel">
