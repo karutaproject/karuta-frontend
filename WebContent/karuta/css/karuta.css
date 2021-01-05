@@ -1617,7 +1617,8 @@ table[name=res-div] {
 .row-cols-4 .asmContext.standard-resource-xwide,
 .row-cols-5 .asmContext.standard-resource-xwide,
 .row-cols-6 .asmContext.standard-resource-xwide {
-  padding: 0px;
+  padding-top: 0px;
+  padding-right: 0px;
 }
 
 /* ========================= */

@@ -1607,7 +1607,7 @@ g_actions['update-node'] = function updateNode(node)
 			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag,
 			success : function(data) {
 				var nodes = $("node",data);
-				var text = getTxtvals($("text",node));
+				var text = getTxtvalsWithoutReplacement($("text",node));
 				if ($("source",node).length>0){
 					var source_select = $("source",node).attr("select");
 					var source_idx = source_select.indexOf(".");

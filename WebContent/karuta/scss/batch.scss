@@ -79,6 +79,7 @@
 	span.chkbox-comments.xmoveup-node,
 	span.chkbox-comments.xupdate-metadata,
 	span.chkbox-comments.xupdate-metadata-wad,
+	span.chkbox-comments.xupdate-metadata-epm,
 	span.chkbox-comments.xupdate-metadata-inline,
 	span.chkbox-comments.xupdate-metadata-query,
 	span.chkbox-comments.xupdate-metadata-menu,
@@ -278,6 +279,10 @@
 		margin-top:7px;
 		border:1px solid var(--batch-metadata-color);
 	}
+	.update-metadata-epm {
+		margin-top:7px;
+		border:1px solid var(--batch-metadata-color);
+	}
 	.update-metadata-inline {
 		margin-top:7px;
 		border:1px solid var(--batch-metadata-color);
@@ -333,6 +338,10 @@
 		border:1px solid var(--batch-resource-color);
 	}
 	.update-document{
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-variable{
 		margin-top:7px;
 		border:1px solid var(--batch-resource-color);
 	}

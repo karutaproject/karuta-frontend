@@ -73,6 +73,7 @@
 .batch span.chkbox-comments.xmoveup-node,
 .batch span.chkbox-comments.xupdate-metadata,
 .batch span.chkbox-comments.xupdate-metadata-wad,
+.batch span.chkbox-comments.xupdate-metadata-epm,
 .batch span.chkbox-comments.xupdate-metadata-inline,
 .batch span.chkbox-comments.xupdate-metadata-query,
 .batch span.chkbox-comments.xupdate-metadata-menu,
@@ -249,6 +250,10 @@
   margin-top: 7px;
   border: 1px solid var(--batch-metadata-color);
 }
+.batch .update-metadata-epm {
+  margin-top: 7px;
+  border: 1px solid var(--batch-metadata-color);
+}
 .batch .update-metadata-inline {
   margin-top: 7px;
   border: 1px solid var(--batch-metadata-color);
@@ -300,6 +305,10 @@
   border: 1px solid var(--batch-resource-color);
 }
 .batch .update-document {
+  margin-top: 7px;
+  border: 1px solid var(--batch-resource-color);
+}
+.batch .update-variable {
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }
