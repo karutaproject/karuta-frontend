@@ -35,7 +35,7 @@ UIFactory["Get_Proxy"] = function( node,condition)
 	this.code_node = $("code",$("asmResource["+this.clause+"]",node));
 	this.value_node = $("value",$("asmResource["+this.clause+"]",node));
 	this.label_node = [];
-	for (var i=0; i<languages.length;i++){
+	for (var i=0; i < languages.length; i++) {
 		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node))[0];
 		if (this.label_node[i].length==0) {
 			var newelement = createXmlElement("label");

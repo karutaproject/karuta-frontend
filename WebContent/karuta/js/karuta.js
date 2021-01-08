@@ -380,7 +380,7 @@ function getEditBox(uuid,js2) {
 			$("#edit-window-body-node").html($(html));
 			if ($("#get-resource-node").length && g_display_type!='raw'){
 				var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
-				getResource.displayEditor("get-resource-node");
+				getResource.displayEditor("get-resource-node","completion");
 			}
 			if ($("#get-get-resource-node").length && g_display_type!='raw'){
 				var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");

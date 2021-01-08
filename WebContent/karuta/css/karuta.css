@@ -332,14 +332,11 @@ body,
 #project-portfolios .project {
   color: var(--list-element-text-color);
 }
+
 .project-label {
   cursor: pointer;
 }
 
-#folder-portfolios .folder-label {
-  cursor: none;
-  font-weight: bold;
-}
 #folder-portfolios .row-label {
   padding-bottom: 5px;
 }

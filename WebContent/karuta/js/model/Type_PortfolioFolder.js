@@ -69,7 +69,6 @@ UIFactory["PortfolioFolder"] = function(node)
 	this.children = {};
 	this.folders = {};
 	this.display = {};
-	var url = 
 	this.nbfolders = 0;
 	this.nbchildren = 0;
 	$.ajax({
@@ -524,11 +523,12 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 	if (viewtype == 'portfolio') {
 		html += "<div id='folderheader_"+this.id+"' parentid='"+parentid+"' class='folder-header' draggable='true' ondragstart='dragPortfolioFolder(event)'>";
 		html += "	<div class='row row-label'>";
-		html += "		<div class='col-3 folder-label' id='folderlabel_"+this.id+"' >"+folder_label+"</div>";
-		html += "		<div id='owner_"+this.id+"' class='col-2 d-none d-md-block project-label'></div>";
-		html += "		<div class='col-3 d-none d-sm-block comments' id='folder-comments_"+this.id+"'> </div><!-- comments -->";
+		html += "		<div class='col-4 folder-label' id='folderlabel_"+this.id+"' >"+folder_label+"</div>";
+		html += "		<div id='owner_"+this.id+"' class='col-1 headerfolderowner'></div>";
+		html += "		<div id='code_"+this.id+"' class='col-2 headerfoldercode'>"+folder_code+"</div>";
+		html += "		<div class='col-2 d-none d-sm-block comments' id='folder-comments_"+this.id+"'> </div><!-- comments -->";
 		//---------------------------------------
-		html += "		<div class='col-2'>";
+		html += "		<div class='col-1'>";
 		html += "<span class='fa fa-th' style='cursor:pointer;font-size:130%;margin-top:4px' onclick=\"list_view_type='card-admin';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','card-admin');\"></span>&nbsp;";
 		html += "<span class='fa fa-list' style='cursor:pointer;font-size:130%' onclick=\"list_view_type='list';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','list')\"></span>";
 		html += "		</div>";
