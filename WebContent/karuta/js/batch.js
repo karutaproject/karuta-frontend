@@ -1435,7 +1435,7 @@ g_actions['update-resource'] = function updateResource(node)
 						url : serverBCK_API+"/resources/resource/" + nodeid,
 						success : function(data) {
 							ok++;
-							$("#batch-log").append("<br>- resource updated "+type+" - attributes :"+attributes[0];
+							$("#batch-log").append("<br>- resource updated "+type+" - attributes :"+attributes[0]);
 						},
 						error : function(data) {
 							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource "+type+" - attribute :"+attributes[0]);

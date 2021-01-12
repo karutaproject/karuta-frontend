@@ -525,12 +525,19 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		html += "	<div class='row row-label'>";
 		html += "		<div class='col-4 folder-label' id='folderlabel_"+this.id+"' >"+folder_label+"</div>";
 		html += "		<div id='owner_"+this.id+"' class='col-1 headerfolderowner'></div>";
-		html += "		<div id='code_"+this.id+"' class='col-2 headerfoldercode'>"+folder_code+"</div>";
+		html += "		<div class='col-2 headerfoldercode'>";
+		html += "			<span id='pcode_"+this.id+"' >"+folder_code+"</span>";
+		html += "			<span class='copy-button fas fa-clipboard' ";
+		html += "				onclick=\"copyInclipboad('"+this.id+"')\" ";
+		html += "				onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + karutaStr[LANG]['copy'] +" : "+this.code_node.text()+"\" ";
+		html += "				onmouseout=\"outCopy('"+this.id+"')\">";
+		html += "			</span>";
+		html += "		</div>";
 		html += "		<div class='col-2 d-none d-sm-block comments' id='folder-comments_"+this.id+"'> </div><!-- comments -->";
 		//---------------------------------------
 		html += "		<div class='col-1'>";
-		html += "<span class='fa fa-th' style='cursor:pointer;font-size:130%;margin-top:4px' onclick=\"list_view_type='card-admin';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','card-admin');\"></span>&nbsp;";
-		html += "<span class='fa fa-list' style='cursor:pointer;font-size:130%' onclick=\"list_view_type='list';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','list')\"></span>";
+		html += "			<span class='fa fa-th' style='cursor:pointer;font-size:130%;margin-top:4px' onclick=\"list_view_type='card-admin';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','card-admin');\"></span>&nbsp;";
+		html += "			<span class='fa fa-list' style='cursor:pointer;font-size:130%' onclick=\"list_view_type='list';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','list')\"></span>";
 		html += "		</div>";
 		//------------ buttons ---------------
 		html += "		<div class='col-1'>";
@@ -538,7 +545,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		if (USER.admin || (this.owner=='Y' && !USER.xlimited)) {
 			html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
 			html += "			<div class='dropdown-menu  dropdown-menu-right'>";
-			html += "				<a class='dropdown-item' onclick=\"UIFactory['PortfolioFolder'].callRename('"+this.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.callRename('"+this.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.createFolder('"+folder_code+"/')\" ><i class='fas fa-folder'></i> "+karutaStr[LANG]["create_subfolder"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.confirmDelFolderContent('"+this.id+"')\" ><i class='fa fa-trash'></i> "+karutaStr[LANG]["button-delete-content"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.confirmDelFolder('"+this.id+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
@@ -847,7 +854,10 @@ UIFactory["PortfolioFolder"].prototype.rename = function(oldfolder_code,newfolde
 	if (!exist) {
 		if (label!=null)
 			$(this.label_node[langcode]).text(label);
-		if (newfolder_code!=oldfolder_code) {
+		if (newfolder_code="") {
+			alertHTML(karutaStr[LANG]['error-empty-code']);
+			$("#code_"+this.id).val(oldprojectcode);
+		} else if (newfolder_code!=oldfolder_code) {
 			$.ajax({
 				async: false,
 				folder : this,

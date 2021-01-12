@@ -107,6 +107,7 @@ karutaStr["en"]["copied"] = "Copied";
 
 karutaStr['en']['error-existing-code']="ERROR - The code already exists. Please choose another one.";
 karutaStr['en']['error-existing-login']="ERROR - The login already exists or an input is invalid. Please choose another login or check input fields.";
+karutaStr['en']['error-empty-code']="ERROR - The code cannot be empty.";
 
 //=========================================
 //========== NODE =====================
