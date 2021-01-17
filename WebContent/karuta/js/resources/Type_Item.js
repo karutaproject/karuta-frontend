@@ -179,10 +179,9 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 		} else {
 			html += "<div class='"+ code +" view-div'>";
 			if (code.indexOf("#")>-1)
-			html += "<span name='code'>" +cleanCode(code) + "</span> ";
+				html += "<span name='code'>" +cleanCode(code) + "</span> ";
 			if (code.indexOf("%")<0)
-			html += " <span name='label'>"+label + "</span> ";
-				html += " "+label;
+				html += " <span name='label'>"+label + "</span> ";
 			if (code.indexOf("&")>-1)
 				html += "<span name='value'> ["+ value + "] </span>";
 			html += "</div>";
@@ -195,7 +194,7 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 		if (code.indexOf("%")<0)
 			html += " <span name='label'>"+label + "</span> ";
 		if (code.indexOf("&")>-1)
-				html += "<span name='value'> ["+ value + "] </span>";
+			html += "<span name='value'> ["+ value + "] </span>";
 		html += "</span>";
 	}
 	return html;

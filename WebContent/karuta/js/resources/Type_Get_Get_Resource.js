@@ -681,12 +681,13 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			var style = "";
 			//------------------------------
 			var resource = null;
-			if ($("asmResource",newTableau1[i][1]).length==3) {
+			if ($("asmResource",newTableau1[i][1]).length==3 && srce!='node') {
 				style = UIFactory.Node.getContentStyle(uuid);
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]);
 			} else {
 				style = UIFactory.Node.getLabelStyle(uuid);
 				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				srce = 'label';
 			}
 			//------------------------------
 			var code = $('code',resource).text();

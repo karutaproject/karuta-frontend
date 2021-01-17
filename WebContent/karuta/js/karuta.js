@@ -1651,6 +1651,13 @@ function setVariables(data)
 	for (var i=0;i<variable_nodes.length;i++) {
 		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().name] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().value;
 	}
+	var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
+	for (var i=0;i<select_variable_nodes.length;i++) {
+		var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
+		var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
+		var variable_value = (value=="") ? code : value;
+		g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = variable_value;
+	}	
 }
 
 //==============================

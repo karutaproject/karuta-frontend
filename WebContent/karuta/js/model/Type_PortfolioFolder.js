@@ -213,7 +213,7 @@ UIFactory["PortfolioFolder"].parse = function(data)
 				var code = folders_byid[uuid].code_node.text();
 				if (code.indexOf(".")<0)
 					code += ".";
-				tableau1[i] = [code,uuid];//			}
+				tableau1[i] = [code,uuid];
 		} catch(e) {
 			var del = alert("Erreur folder"+uuid+" - code:"+code);
 		}
@@ -523,7 +523,10 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 	if (viewtype == 'portfolio') {
 		html += "<div id='folderheader_"+this.id+"' parentid='"+parentid+"' class='folder-header' draggable='true' ondragstart='dragPortfolioFolder(event)'>";
 		html += "	<div class='row row-label'>";
-		html += "		<div class='col-4 folder-label' id='folderlabel_"+this.id+"' >"+folder_label+"</div>";
+		html += "		<div class='col-4 folder-label' id='folderlabel_"+this.id+"' ";
+		if (USER.admin)
+			html += "onclick=\"display_main_page('"+this.rootid+"')\"";
+		html += " >"+folder_label+"</div>";
 		html += "		<div id='owner_"+this.id+"' class='col-1 headerfolderowner'></div>";
 		html += "		<div class='col-2 headerfoldercode'>";
 		html += "			<span id='pcode_"+this.id+"' >"+folder_code+"</span>";
@@ -854,16 +857,16 @@ UIFactory["PortfolioFolder"].prototype.rename = function(oldfolder_code,newfolde
 	if (!exist) {
 		if (label!=null)
 			$(this.label_node[langcode]).text(label);
-		if (newfolder_code="") {
+		if (newfolder_code=="") {
 			alertHTML(karutaStr[LANG]['error-empty-code']);
 			$("#code_"+this.id).val(oldprojectcode);
-		} else if (newfolder_code!=oldfolder_code) {
+		} else if (newfolder_code!=oldfolder_code && oldfolder_code!="") {
 			$.ajax({
 				async: false,
 				folder : this,
 				type : "GET",
 				dataType : "xml",
-				url : serverBCK_API+"/portfolios?active=1&project="+this.code_node.text(),
+				url : serverBCK_API+"/portfolios?active=1&project="+oldfolder_code,
 				success : function(data) {
 					var items = $("portfolio",data);
 					for ( var i = 0; i < items.length; i++) {
@@ -896,7 +899,14 @@ UIFactory["PortfolioFolder"].prototype.rename = function(oldfolder_code,newfolde
 			}
 			xml +="		</asmResource>";
 			strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-			UICom.query("PUT",serverBCK_API+'/nodes/node/'+this.rootid+'/noderesource',fill_list_page,"text",strippeddata);
+			var callback = function () {
+				portfolios_byid = {};
+				portfolios_list = [];
+				folders_byid = {};
+				folders_list = [];
+				fill_list_page();
+				}
+			UICom.query("PUT",serverBCK_API+'/nodes/node/'+this.rootid+'/noderesource',callback,"text",strippeddata);
 			//------------------------------------------
 		} else {
 			//------------------------------------------
