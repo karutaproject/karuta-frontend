@@ -385,6 +385,9 @@
 		<xsl:if test="contains(@style,'background-color:')">
 			<xsl:attribute name="background-color"><xsl:value-of select="substring-before(substring-after(@style,'background-color:'),';')"/></xsl:attribute>
 		</xsl:if>
+		<xsl:if test="contains(@style,'width:')">
+			<xsl:attribute name="width"><xsl:value-of select="substring-before(substring-after(@style,'width:'),';')"/></xsl:attribute>
+		</xsl:if>
 		<xsl:choose>
 			<xsl:when test="contains(@style,'border:0px') or contains(@style,'border: 0px') or contains(@style,'border: none') or contains(@style,'border:none')">
 				<xsl:if test="contains(@style,'border-bottom')">

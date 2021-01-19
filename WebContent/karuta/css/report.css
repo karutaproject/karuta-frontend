@@ -57,12 +57,6 @@
   padding: 10px;
 }
 
-/*
-.report .select{
-	padding-left:0px;
-	border-left:0px solid lightGrey;
-}
-*/
 .report .select select,
 .report .select input {
   margin-bottom: 0px;
@@ -76,6 +70,29 @@
 .report button.select-label {
   padding-left: 5px;
   min-width: 120px;
+}
+
+.report #layout,
+.report #metadata-epm-part1,
+.report #metadata-epm-node {
+  display: none;
+}
+
+/* ====================
+	Report Graphicer
+   ====================*/
+.report #edit-window[role=reporter] .padding-top,
+.report #edit-window[role=reporter] .node-font-weight,
+.report #edit-window[role=reporter] .node-font-style,
+.report #edit-window[role=reporter] .node-text-align,
+.report #edit-window[role=reporter] .node-font-size,
+.report #edit-window[role=reporter] .node-padding-top,
+.report #edit-window[role=reporter] .node-color {
+  display: flex;
+}
+.report #edit-window[role=reporter] .metadata-epm-label,
+.report #edit-window[role=reporter] #metadata-epm-label {
+  display: none;
 }
 
 /* ====================

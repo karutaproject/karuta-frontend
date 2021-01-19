@@ -1632,6 +1632,7 @@ g_actions['update-node'] = function updateNode(node)
 				var nodes = $("node",data);
 				nodes = eval("$(nodes)"+test);
 				var text = getTxtvalsWithoutReplacement($("text",node));
+				$("#batch-log").append("<br>- " + nodes.length + " nodes");
 				if (nodes.length>0) {
 					if ($("source",node).length>0){
 						var source_select = $("source",node).attr("select");
@@ -1707,12 +1708,11 @@ g_actions['update-node'] = function updateNode(node)
 function updateMetada(nodes,node,type,semtag,text,attribute)
 //=================================================
 {
-	if (nodes.length>0) {
-		var nodeid = $(nodes[0]).attr('id');
-		var metadata = $("metadata",nodes[0]);
+	for (var inode=0;inode<nodes.length;inode++) {
+		var nodeid = $(nodes[inode]).attr('id');
+		var metadata = $("metadata",nodes[inode]);
 		$(metadata).attr(attribute,text);
 		var xml = xml2string(metadata[0]);
-		nodes = nodes.slice(1,nodes.length);
 		$.ajax({
 			async : false,
 			type : "PUT",
@@ -1738,12 +1738,11 @@ function updateMetada(nodes,node,type,semtag,text,attribute)
 function updateMetadawad(nodes,node,type,semtag,text,attribute)
 //=================================================
 {
-	if (nodes.length>0) {
-		var nodeid = $(nodes[0]).attr('id');
-		var metadatawad = $("metadata-wad",nodes[0]);
+	for (var inode=0;inode<nodes.length;inode++) {
+		var nodeid = $(nodes[inode]).attr('id');
+		var metadatawad = $("metadata-wad",nodes[inode]);
 		$(metadatawad).attr(attribute,text);
 		var xml = xml2string(metadatawad[0]);
-		nodes = nodes.slice(1,nodes.length);
 		$.ajax({
 			async : false,
 			type : "PUT",
@@ -1755,11 +1754,9 @@ function updateMetadawad(nodes,node,type,semtag,text,attribute)
 			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadatawad",
 			success : function(data) {
 				$("#batch-log").append("<br>- resource metadatawad updated ("+this.nodeid+") - semtag="+this.semtag+" attribute="+attribute+" value="+text);
-				updateMetadawad(nodes,node,type,semtag,text,attribute)
 			},
-			error : function(data,nodeid,semtag) {
+			error : function(data) {
 				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadatawad("+this.nodeid+") - semtag="+this.semantictag+" attribute="+attribute+" value="+text);
-				updateMetadawad(nodes,node,type,semtag,text,attribute);
 			}
 		});
 	}
@@ -1769,12 +1766,11 @@ function updateMetadawad(nodes,node,type,semtag,text,attribute)
 function updateMetadaepm(nodes,node,type,semtag,text,attribute)
 //=================================================
 {
-	if (nodes.length>0) {
-		var nodeid = $(nodes[0]).attr('id');
-		var metadatawad = $("metadata-epm",nodes[0]);
+	for (var inode=0;inode<nodes.length;inode++) {
+		var nodeid = $(nodes[inode]).attr('id');
+		var metadatawad = $("metadata-epm",nodes[inode]);
 		$(metadatawad).attr(attribute,text);
 		var xml = xml2string(metadatawad[0]);
-		nodes = nodes.slice(1,nodes.length);
 		$.ajax({
 			async : false,
 			type : "PUT",

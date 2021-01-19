@@ -146,8 +146,9 @@ function applyListConfiguration()
 //==============================
 {
 	if (g_configVar['list-welcome-image']!=undefined) { // configuration has been read
-		$('.list-page #main-body').css("background-image", g_configVar['list-welcome-image']);
+//		$('.list-page #main-body').css("background-image", g_configVar['list-welcome-image']);
 		var root = document.documentElement;
+		root.style.setProperty('--list-background-image', g_configVar['list-welcome-image']);
 		root.style.setProperty('--list-background-color',g_configVar['list-background-color']);
 		root.style.setProperty('--list-menu-background-color',g_configVar['list-menu-background-color']);
 		root.style.setProperty('--list-menu-text-color',g_configVar['list-menu-text-color']);
