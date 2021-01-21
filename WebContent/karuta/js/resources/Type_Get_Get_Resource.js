@@ -263,6 +263,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		queryattr_value = r_replaceVariable(queryattr_value);
+		if (type=='multiple')
+			queryattr_value = cleanCode(queryattr_value);  // portfoliocode may be from a get_ressource with spécial characters
 		try {
 			//------------------------------
 			var srce_indx = queryattr_value.lastIndexOf('.');
@@ -729,7 +731,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			// ---------------------- children ---------
 			if (semtag2!="") {
 				var semtag_parent = semtag.replace("!","");
-				UIFactory.Get_Get_Resource.getChildren(inputs_obj,langcode,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
+				UIFactory.Get_Get_Resource.getChildren(inputs_obj,langcode,self,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
 			}
 			//------------------------------------------
 		}
@@ -740,7 +742,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,srce,portfoliocode,semtag,semtag_parent,code,cachable)
+UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,cachable)
 //==================================
 {
 	var semtag2 = "";
@@ -760,14 +762,14 @@ UIFactory["Get_Get_Resource"].getChildren = function(dest,langcode,srce,portfoli
 			success : function(data) {
 				if (cachable)
 					g_Get_Resource_caches[portfoliocode+semtag+semtag_parent+code] = data;
-				UIFactory.Get_Get_Resource.parseChildren(dest,data,langcode,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+				UIFactory.Get_Get_Resource.parseChildren(dest,data,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
 			}
 		});
 	}
 	//------------
 }
 //==================================
-UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
+UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,srce,portfoliocode,semtag,semtag_parent,code,semtag2,cachable)
 //==================================
 {
 	//-----Node ordering-------------------------------------------------------

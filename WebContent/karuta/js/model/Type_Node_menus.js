@@ -202,7 +202,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Double_Resource','Get_Double_Resource',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','g-variable','Variable',databack,callback,param2,param3,param4);
-//		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4);
 		//--------------------------------
 		if (plugin_resources.length>0){
 			html += "<hr>";

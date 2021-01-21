@@ -781,7 +781,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 {
 	$("#wait-window").modal('show');
 	//------------
-	srcecode = replaceVariable(srcecode);
+	srcecode = cleanCode(replaceVariable(srcecode));
 	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 	if (srcecode.indexOf('.')<0 && srcecode!='self')  // There is no project, we add the project of the current portfolio
 		srcecode = selfcode.substring(0,selfcode.indexOf('.')) + "." + srcecode;

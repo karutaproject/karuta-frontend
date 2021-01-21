@@ -1721,7 +1721,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			 || (this.duplicateroles!='none'  
 				 	&& this.duplicateroles!='' 
 				 	&& this.asmtype != 'asmRoot' 
-				 	&& ( this.duplicateroles.containsArrayElt(g_userroles) || this.duplicateroles.indexOf($(USER.username_node).text())>-1) || USER.admin || g_userroles[0]=='designer' )
+				 	&& ( this.duplicateroles.containsArrayElt(g_userroles) || this.duplicateroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer' )
 			 	 )
 			)
 		{

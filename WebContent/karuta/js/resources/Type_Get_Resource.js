@@ -200,7 +200,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
 			html += "font-weight:bold;"
 		html += "'>";
-		if (code.indexOf("#")>-1 || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
+		if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 			html += "<span name='code'>" + cleanCode(code) + "</span> ";
 		if (code.indexOf("%")<0) {
 			if (label.indexOf("fileid-")>-1)
@@ -301,7 +301,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		}
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		//------------
-		var portfoliocode = r_replaceVariable(queryattr_value.substring(0,semtag_indx));
+		var portfoliocode = cleanCode(r_replaceVariable(queryattr_value.substring(0,semtag_indx)));
 		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 		if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
 			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
@@ -1344,7 +1344,8 @@ UIFactory["Get_Resource"].importMultiple = function(parentid,srce)
 			}
 			code = newcode;
 		}
-		importBranch(parentid,encodeURIComponent(srce),encodeURIComponent(code),databack,callback);
+//		importBranch(parentid,encodeURIComponent(srce),encodeURIComponent(code),databack,callback);
+		importBranch(parentid,srce,encodeURIComponent(code),databack,callback);
 	}
 };
 
