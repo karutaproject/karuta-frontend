@@ -178,15 +178,41 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			var semtag = elts[1].substring(7);
 			// search for resource uuid
 			var res_node = $("asmContext:has(metadata[semantictag='"+semtag+"']):has(code:contains('"+code+"'))",g_portfolio_current);
-
-			var resid = $($(res_node)[0]).attr('id');
-			for (var i=0; i<languages.length;i++){
-				this.label_node[i].text('resource:'+resid+'|semtag:'+semtag);
-			}
-			if (resid!=undefined) {
-			//update get_resource
-			this.save();
-			html += UICom.structure["ui"][resid].resource.getView();
+			if (res_node.length>0) {
+				var resid = $($(res_node)[0]).attr('id');
+				for (var i=0; i<languages.length;i++){
+					this.label_node[i].text('resource:'+resid+'|semtag:'+semtag);
+				}
+				if (resid!=undefined) {
+				//update get_resource
+				this.save();
+				html += UICom.structure["ui"][resid].resource.getView();
+				}
+			} else {
+				if (indashboard)
+					html += "<span class='"+cleanCode(code)+"' style='";
+				else
+					html += "<div class='"+cleanCode(code)+" view-div' style='";
+				html += style;
+				if (indashboard)
+					html += "background-position:center;";
+				if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
+					html += "font-weight:bold;"
+				html += "'>";
+				if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
+					html += "<span name='code'>" + cleanCode(code) + "</span> ";
+				if (code.indexOf("%")<0) {
+						html += "<span name='label'>" + elts[2].substring(6) + "</span> ";
+				}
+				if (code.indexOf("&")>-1)
+					html += " ["+$(this.value_node).text()+ "] ";
+				if (indashboard)
+					html += "</span>";
+				else
+					html += "</div>";
+				if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1){
+					html += text;
+				}
 			}
 		}
 	} else {
@@ -217,7 +243,6 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1){
 			html += text;
 		}
-
 	}
 	return html;
 };
@@ -834,7 +859,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 						if (target=='fileid')
 							input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
 						else
-							input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+							input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
 					} else 
 						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
@@ -845,8 +870,10 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (display_code)
 				input += code + " ";
 			if (display_label) {
-				if (srce=='resource') srce = 'label';
-				input += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</div>";
+				if (srce=='resource')
+					input += $("label[lang='"+languages[langcode]+"']",resource).text()+"</div>";
+				else
+					input += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</div>";
 			}
 
 //			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
@@ -1293,21 +1320,25 @@ UIFactory["Get_Resource"].addMultiple = function(parentid,multiple_tags)
 //==================================
 {
 	$.ajaxSetup({async: false});
-	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
+	var elts = multiple_tags.split(",");
+	var part_code = elts[0];
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
 	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
-	var get_resource_semtag = multiple_tags.substring(multiple_tags.indexOf(',')+1);
+	var get_resource_semtag = elts[1];
+	var fct = elts[2];
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	// for each one create a part
 	var databack = true;
 	var callback = UIFactory.Get_Resource.updateaddedpart;
 	var param2 = get_resource_semtag;
 	var param4 = false;
+	var param5 = parentid;
+	var param6 = fct;
 	for (var j=0; j<inputs.length;j++){
 		var param3 = inputs[j];
 		if (j==inputs.length-1)
 			param4 = true;
-		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4);
+		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4,param5,param6);
 	}
 };
 
@@ -1350,12 +1381,15 @@ UIFactory["Get_Resource"].importMultiple = function(parentid,srce)
 };
 
 //==================================
-UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,selected_item,last)
+UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,selected_item,last,parentid,fct)
 //==================================
 {
 	var partid = data;
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
+	if (fct=="+parentcode") {
+		code += "+"+UICom.structure.ui[parentid].getCode();
+	}
 	var xml = "<asmResource xsi_type='Get_Resource'>";
 	xml += "<code>"+code+"</code>";
 	xml += "<value>"+value+"</value>";
@@ -1421,11 +1455,11 @@ function get_simple(parentid,title,query,partcode,get_resource_semtag)
 	$('#edit-window').modal('show');
 }
 //==================================
-function get_multiple(parentid,title,query,partcode,get_resource_semtag)
+function get_multiple(parentid,title,query,partcode,get_resource_semtag,fct)
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
+	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+","+fct+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title.replaceAll("##apos##","'"));
@@ -1436,7 +1470,7 @@ function get_multiple(parentid,title,query,partcode,get_resource_semtag)
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
-	getResource.multiple = query+"/"+partcode+","+get_resource_semtag;
+	getResource.multiple = query+"/"+partcode+","+get_resource_semtag+","+fct;
 	getResource.displayEditor("get-resource-node");
 	$('#edit-window').modal('show');
 }

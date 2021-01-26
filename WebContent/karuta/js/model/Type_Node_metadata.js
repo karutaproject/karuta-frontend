@@ -1284,7 +1284,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 	if (attribute.indexOf('comment-')>-1)
 		attribute_label = attribute.substring(8);
 	if (attribute.indexOf('font-weight')>-1){
-		var choices = [{code:'normal',label:'Normal'},{code:'bold',label:'Bold'}];
+		var choices = [{code:'normal',label:'Normal'},{code:'bold',label:'Bold'},{code:'nothing',label:'None'}];
 		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
@@ -1301,7 +1301,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 		html += "</div>";
 	}
 	else if (attribute.indexOf('font-style')>-1){
-		var choices = [{code:'normal',label:'Normal'},{code:'italic',label:'Italic'}];
+		var choices = [{code:'normal',label:'Normal'},{code:'italic',label:'Italic'},{code:'nothing',label:'None'}];
 		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
@@ -1326,7 +1326,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 		html += "</div>";
 	}
 	else if (attribute.indexOf('text-align')>-1){
-		var choices = [{code:'left',label:'Left'},{code:'right',label:'Right'},{code:'center',label:'Center'},{code:'justify',label:'Justify'}];
+		var choices = [{code:'left',label:'Left'},{code:'right',label:'Right'},{code:'center',label:'Center'},{code:'justify',label:'Justify'},{code:'nothing',label:'None'}];
 		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
@@ -1502,7 +1502,10 @@ UIFactory["Node"].updateMetadataEpmAttribute = function(nodeid,attribute,value,c
 	var node = UICom.structure["ui"][nodeid].node;
 	if (checked!=undefined && !checked)
 		value = "N";
-	$($("metadata-epm",node)[0]).attr(attribute,value);
+	if (value=='nothing')
+		$($("metadata-epm",node)[0]).removeAttr(attribute);
+	else
+		$($("metadata-epm",node)[0]).attr(attribute,value);
 	var refresh = true;
 	if (attribute=="top" || attribute=="left")
 		refresh = false;

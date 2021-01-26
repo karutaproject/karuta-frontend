@@ -157,6 +157,7 @@ function fill_main_page(rootid,role)
 				alertHTML(message);
 			}
 			//-------------- DEFAULT_ROLE -------------
+			$("#portfolio-container").attr('role',g_userroles[0]);
 			if (default_role!="" && g_userroles[1]=="designer"){
 				g_userroles[0] = default_role;
 				USER.admin = false;

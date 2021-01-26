@@ -2754,7 +2754,7 @@ function setCSSportfolio(data,langcode)
 	// --------CSS Text------------------
 	var csstextlangcode = LANGCODE;
 	var csstext = $("text[lang='"+languages[csstextlangcode]+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-portfolio-css'])",data))).text();
-	csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");
+	csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"").replace(/&gt;/g,">");
 	$("#csstext").remove();
 	if (csstext!=undefined && csstext!=''){
 		console.log("Portfolio CSS added")

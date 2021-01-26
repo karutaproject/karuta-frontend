@@ -289,6 +289,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (portfoliocode=='self')
 				portfoliocode = selfcode;
 			//------------
+			portfoliocode = cleanCode(portfoliocode);
+			//------------
 			var query = queryattr_value.substring(portfoliocode_end_indx,semtag_parent_indx);
 			var parent = null;
 			var ref = null;
@@ -327,6 +329,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 						code_parent = $($("code",child)[0]).text();
 
 				}
+				code_parent = code_parent.substring(0,code_parent.indexOf("+"));
 			}
 			//----------------------
 			if ($("*:has(metadata[semantictag*='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
@@ -716,8 +719,16 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			if (selectable) {
 				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 				input += "' ";
-				for (var j=0; j<languages.length;j++){
+				if (srce=="resource") {
+					for (var j=0; j<languages.length;j++){
+						var elts = $("label[lang='"+languages[langcode]+"']",resource).text().split("|");
+						input += "label_"+languages[j]+"=\""+elts[2].substring(6)+"\" ";
+					}
+				}
+				else {
+					for (var j=0; j<languages.length;j++){
 						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+					}
 				}
 				if (disabled)
 					input += "disabled";
@@ -725,7 +736,12 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			}
 			if (display_code)
 				input += code + " ";
-			input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
+				if (srce=="resource") {
+					var elts = $("label[lang='"+languages[langcode]+"']",resource).text().split("|");
+					input +="<span  class='"+code+"'>" + elts[2].substring(6) + "</span></div>";
+				}
+			else	
+				input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
 			var input_obj = $(input);
 			$(inputs_obj).append(input_obj);
 			// ---------------------- children ---------
