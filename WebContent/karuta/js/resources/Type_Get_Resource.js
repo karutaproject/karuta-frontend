@@ -1388,7 +1388,7 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
 	if (fct=="+parentcode") {
-		code += "+"+UICom.structure.ui[parentid].getCode();
+		code += "$"+UICom.structure.ui[parentid].getCode();
 	}
 	var xml = "<asmResource xsi_type='Get_Resource'>";
 	xml += "<code>"+code+"</code>";

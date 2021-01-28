@@ -2092,7 +2092,7 @@ hr {
   margin-top: 3px;
   border: 1px solid #ced4da;
   border-radius: 0.2rem;
-  max-width: 600px;
+  max-width: 80%;
 }
 .metadata .input-group .form-control {
   border: 0px solid var(--edit-window-border-color);

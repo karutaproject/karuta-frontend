@@ -316,7 +316,12 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (queryattr_value.indexOf('#')>0)
 				code_parent = semtag_parent;
 			else {
-//				var child = $("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent);
+				var removestar = false
+				if (semtag_parent.indexOf('*')==0) {
+					removestar = true;
+					semtag_parent = semtag_parent.substring(1);				
+				}
+
 				var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
 				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
 				if (child.length==0 && itself.length>0){
@@ -329,7 +334,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 						code_parent = $($("code",child)[0]).text();
 
 				}
-				code_parent = code_parent.substring(0,code_parent.indexOf("+"));
+				if (removestar)
+					code_parent = code_parent.substring(0,code_parent.indexOf("*"));
 			}
 			//----------------------
 			if ($("*:has(metadata[semantictag*='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)

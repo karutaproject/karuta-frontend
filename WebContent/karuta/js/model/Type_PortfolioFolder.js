@@ -600,6 +600,10 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		for (uuid in this.children){
 			portfolio_list += "," + uuid;
 		}
+		for (uuid in this.folders){
+			portfolio_list += "," + uuid + folders_byid[uuid].contentList();
+
+		}
 		if (portfolio_list.length>0)
 			portfolio_list = this.id+portfolio_list;
 		$("#export-"+this.id).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+portfolio_list);
@@ -613,7 +617,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 	if (viewtype == 'list') {
 		var tree_type='<span class="fas fa-folder" aria-hidden="true"></span>';
 		html += "<div class='row portfolio-row'>";
-		html += "<div class='folder-label col-5' id='portfolio_list_"+this.id+"' draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+"</div>";
+		html += "<div class='folder-label col-5 XXX' id='portfolio_list_"+this.id+"' onclick=\"folders_byid['"+this.id+"'].toggleContent('"+type+"','"+parentid+"')\" draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+"</div>";
 		if (USER.creator && !USER.limited) {
 			html += "<div id='owner_"+this.id+"' class='col-2 d-none d-md-block'></div>";
 			html += "<div class='col-5'>";
@@ -638,6 +642,24 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		$("#"+type+"-rightside-header").html($(html));
 	}
 }
+
+//==================================
+UIFactory["PortfolioFolder"].prototype.contentList = function()
+//==================================
+{
+	var list = "";
+		if (!this.loaded)
+			this.loadContent();
+		for (uuid in this.children){
+			list += "," + uuid;
+		}
+	for (uuid in this.folders){
+		list += "," + uuid;
+		list += "," + + folders_byid[uuid].contentList();
+	}
+	return list
+}
+
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
