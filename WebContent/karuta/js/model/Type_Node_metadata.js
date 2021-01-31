@@ -395,10 +395,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-root','defaultrole');
 		this.displayMetadataAttributeEditor('metadata-root','autoload',true);
 	}
-	if (name=='asmContext' && this.resource.type=='Proxy')
-		this.displayMetadataAttributeEditor('metadata-part1','semantictag',false,true);
-	else
-		this.displayMetadataAttributeEditor('metadata-part1','semantictag');
+	this.displayMetadataAttributeEditor('metadata-part1','semantictag');
 	if (languages.length>1) { // multilingual application
 		this.displayMetadataAttributeEditor('metadata-part1','multilingual-node',true);
 		if (name=='asmContext') {
@@ -1552,11 +1549,9 @@ UIFactory["Node"].updateMetadatawWadTextAttribute = function(nodeid,attribute)
 	var node = UICom.structure["ui"][nodeid].node;
 	var value = $.trim($("#"+nodeid+"_"+attribute).val());
 	if (attribute=='query' && UICom.structure["ui"][nodeid].resource!=undefined && UICom.structure["ui"][nodeid].resource.type=='Proxy' && value!=undefined && value!='') {
-		var srce_indx = value.lastIndexOf('.');
-		var srce = value.substring(srce_indx+1);
-		var semtag_indx = value.substring(0,srce_indx).lastIndexOf('.');
-		var semtag = value.substring(semtag_indx+1,srce_indx);
-		$($("metadata",node)[0]).attr('semantictag','proxy-'+semtag);
+		var semtag = $($("metadata",node)[0]).attr('semantictag');
+		if (semtag.indexOf ('proxy')<0)
+			$($("metadata",node)[0]).attr('semantictag','proxy-'+semtag);
 		UICom.UpdateMetadata(nodeid);
 	}
 	$($("metadata-wad",node)[0]).attr(attribute,value);

@@ -1428,7 +1428,12 @@ UIFactory["Node"].displayComments = function(destid,node,type,langcode)
 	var seenoderoles = $(node.metadatawad).attr('seenoderoles');
 	if (seenoderoles==undefined)
 		seenoderoles = "all";
-	if (seenoderoles!="" && (seenoderoles.indexOf("all")>-1 || USER.admin || g_userroles[0]=='designer' || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || seenoderoles.indexOf(this.userrole)>-1)) {
+	if (seenoderoles!="" && (seenoderoles.indexOf("all")>-1
+			|| USER.admin
+			|| g_userroles[0]=='designer'
+			|| seenoderoles.containsArrayElt(g_userroles)
+			|| showtoroles.containsArrayElt(g_userroles)
+			|| seenoderoles.indexOf(this.userrole)>-1)) {
 		//---------------------
 		if (langcode==null)
 			langcode = LANGCODE;
@@ -1456,8 +1461,9 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		commentnoderoles = "";
 	if (commentnoderoles!="" 
 		&& (USER.admin 
-			|| g_userroles[0]=='designer' 
+			|| g_userroles[0]=='designer'
 			|| commentnoderoles.indexOf(g_userroles[0])>-1 
+			|| commentnoderoles.indexOf($(USER.username_node).text()>-1)
 			)
 		) {
 		//---------------------
@@ -2152,10 +2158,6 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					html +=" style='"+style+"'";
 					html += ">";
 					//-----------------------------------------
-					var graphicers = $("metadata-wad[graphicerroles*="+g_userroles[0]+"]",data);
-					if (contentfreenode=='Y' && (graphicers.length>0 || g_userroles[0]=='designer'))
-						html += "<button class='btn  free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='fas fa-bars'></span></button>";
-					//-----------------------------------------
 					html += "</div>";
 				}
 				
@@ -2251,17 +2253,6 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					});
 				}
 			}
-			//----------------------------------------------
-			$("#free-toolbar-menu_"+uuid).click(function(){
-				if ($(".free-toolbar",$("#content-"+uuid)).css('visibility')=='hidden') {
-					$(".free-toolbar",$("#content-"+uuid)).css('visibility','visible');
-					g_free_toolbar_visibility = 'visible';
-				}
-				else {
-					$(".free-toolbar",$("#content-"+uuid)).css('visibility','hidden');
-					g_free_toolbar_visibility = 'hidden';
-				}
-			});
 			// -------------- display metainfo
 			if (g_userroles[0]=='designer' || USER.admin) {  
 				UIFactory["Node"].displayMetainfo("metainfo_"+uuid,data);
