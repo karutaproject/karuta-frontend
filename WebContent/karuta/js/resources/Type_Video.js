@@ -147,7 +147,7 @@ UIFactory["Video"].prototype.getView = function(dest,type,langcode)
 		type = "html5";
 	//---------------------
 	var html ="";
-	if (type=='html5') {
+	if (type=='html5' || type='none') {
 		html += "<video width='100%' controls>";
 		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp4";
 		html += "<source src='"+srce+"' type=\"video/mp4\"></source>";

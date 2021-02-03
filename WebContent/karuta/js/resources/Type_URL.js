@@ -138,17 +138,11 @@ UIFactory["URL"].prototype.getView = function(dest,type,langcode)
 		else
 			html =  " "+karutaStr[LANG]['no-URL'];
 	}
-	if(type=='standard') {
+	if(type=='standard' || type=='none') {
 		if (url!="")
 			html = "<a href='"+url+"' target='_blank'><img src='../../karuta/img/link-icon.png' style='width:25px'> "+label+"</a>";
 		else
 			html =  "<img src='../../karuta/img/link-icon.png' style='width:25px'> "+karutaStr[LANG]['no-URL'];
-	}
-	if (type=='free-positioning'){
-		if (url!="")
-			html = "<a href='"+url+"'><div class='url-up'><p style='text-align:center;'>"+label+"</p></div><div class='url-bottom'><span>URL</span></div></a>";
-		else
-			html = "<div class='url-up'><p style='text-align:center;'>"+karutaStr[LANG]['no-URL']+"</p></div><div class='url-bottom'><span>URL</span></div>";
 	}
 	if (type=='icon-url-label'){
 		if (url!="")

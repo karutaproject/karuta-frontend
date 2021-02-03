@@ -110,7 +110,7 @@ UIFactory["Oembed"].prototype.getView = function(dest,type,langcode)
 		type = "standard";
 	var html = "";
 	//---------------------
-	if(type=='standard' || type=='block') {
+	if(type=='standard' || type=='block' || type=='none') {
 		var url = $(this.url_node[langcode]).text();
 		if (url!='')
 		{
