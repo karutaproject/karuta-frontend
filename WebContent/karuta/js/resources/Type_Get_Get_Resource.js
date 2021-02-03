@@ -1202,31 +1202,42 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags)
 //==================================
 {
 	$.ajaxSetup({async: false});
-	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
+	var elts = multiple_tags.split(",");
+	var part_code = elts[0];
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
 	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
-	var get_resource_semtag = multiple_tags.substring(multiple_tags.indexOf(',')+1);
+	var get_resource_semtag = elts[1];
+	var fct = elts[2];
+
+//	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
+//	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
+//	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
+//	var get_resource_semtag = multiple_tags.substring(multiple_tags.indexOf(',')+1);
+
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	// for each one create a part
 	var databack = true;
 	var callback = UIFactory.Get_Get_Resource.updateaddedpart;
 	var param2 = get_resource_semtag;
 	var param4 = false;
+	var param5 = parentid;
+	var param6 = fct;
 	for (var j=0; j<inputs.length;j++){
 		var param3 = inputs[j];
 		if (j==inputs.length-1)
 			param4 = true;
-		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4);
+		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4,param5,param6);
 	}
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].importMultiple = function(parentid,srce)
+UIFactory["Get_Get_Resource"].importMultiple = function(parentid,srce,fct)
 //==================================
 {
 	$.ajaxSetup({async: false});
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
-	var databack = true;
+	var param2 = parentid;
+	var databack = false;
 	var callback = UIFactory.Node.reloadUnit;
 	for (var j=0; j<inputs.length;j++){
 		var code = $(inputs[j]).attr('code');
@@ -1234,15 +1245,22 @@ UIFactory["Get_Get_Resource"].importMultiple = function(parentid,srce)
 			srce = $(inputs[j]).attr('portfoliocode');
 		importBranch(parentid,srce,code,databack,callback);
 	}
+	if (fct!=null) {
+		fct(parentid);
+		UIFactory.Node.reloadUnit();
+	}
 }
 
 //==================================
-UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semtag,selected_item,last)
+UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semtag,selected_item,last,parentid,fct)
 //==================================
 {
 	var partid = data;
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
+	if (fct=="+parentcode") {
+		code += "$"+UICom.structure.ui[parentid].getCode();
+	}
 	var xml = "<asmResource xsi_type='Get_Get_Resource'>";
 	xml += "<code>"+code+"</code>";
 	xml += "<value>"+value+"</value>";
@@ -1309,13 +1327,13 @@ function get_get_multiple(parentid,title,query,partcode,get_get_resource_semtag)
 }
 
 //==================================
-function import_ggmultiple(parentid,title,query,partcode,get_get_resource_semtag)
+function import_ggmultiple(parentid,title,query,partcode,fct)
 //==================================
 {
 	var langcode = LANGCODE;
 	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Get_Resource.importMultiple('"+parentid+"','"+partcode+"')";
+	var js2 = "UIFactory.Get_Get_Resource.importMultiple('"+parentid+"','"+partcode+"',"+fct+")";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
@@ -1326,7 +1344,7 @@ function import_ggmultiple(parentid,title,query,partcode,get_get_resource_semtag
 	$("#edit-window-body-metadata").html("");
 	$("#edit-window-body-metadata-epm").html("");
 	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
-	getgetResource.multiple = query+"/"+partcode+","+get_get_resource_semtag;
+	getgetResource.multiple = query+"/"+partcode;
 	getgetResource.displayEditor("get-get-resource-node");
 	$('#edit-window').modal('show');
 }
