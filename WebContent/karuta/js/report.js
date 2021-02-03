@@ -1195,15 +1195,17 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
 	}
 	if (report_refresh && $("#dashboard_"+prefix_id+nodeid).length>0) {
+		$("#dashboard_"+prefix_id+nodeid).attr('dashboard',dashboard_current);
 		$("#dashboard_"+prefix_id+nodeid).on('DOMSubtreeModified',function (){
-			refresh_report(dashboard_current);
+			refresh_report(this.attributes['dashboard'].value);
 		});
 	}
 	if (report_refresh && $("#report_get_editor_"+nodeid).length>0) {
 		$("#report_get_editor_"+nodeid).append(UICom.structure["ui"][nodeid].resource.getEditor());
 		var input = $('input',$("#report_get_editor_"+nodeid));
+		$(input).attr('dashboard',dashboard_current);
 		$(input).change(function (){
-			refresh_report(dashboard_current);
+			refresh_report(this.attributes['dashboard'].value);
 		});
 	}
 }
@@ -1700,7 +1702,7 @@ function refresh_report(dashboard_current)
 //==================================
 {
 	$("#"+dashboard_current).html("");
-	r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
+	r_processPortfolio(99,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
 	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 
