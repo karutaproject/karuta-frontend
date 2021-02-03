@@ -734,7 +734,8 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 	}
 	//---------------------
 	if (g_userroles[0]=='designer' || USER.admin || this.metadatawad.getAttribute('display')!='N') {
-		if (type=="default")
+		//-----------------------------
+			if (type=="default")
 			html += "<div><div class='title'";
 		if (type=="span")
 			html += "<span class='title'";
@@ -761,6 +762,12 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 		if (label == "")
 			label="&nbsp;";
 		html += label+"<span id='help_"+this.id+"' class='ihelp'></span>";
+		//----- value -----
+		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userroles[0]=='designer' || USER.admin || displayCodeValue)) {
+			if (this.value_node.text()!='')
+				html += "<span name='value'> ["+ this.value_node.text() + "] </span>";
+		}
+		//-----------------------------
 		if (type=="default")
 			html += "</div><div class='title-subline'></div></div>";
 		if (type=="span")
@@ -773,47 +780,6 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 UIFactory["Node"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-/*	var html = "";
-	if (type==null)
-		type = 'default';
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	//---------------------
-	if (g_userroles[0]=='designer' || USER.admin || $(this.metadatawad).attr('display')!='N') {
-		if (type=="default")
-			html += "<div><div class='title'";
-		if (type=="span")
-			html += "<span class='title'";
-		//----------------------------
-		var style ="";
-		var metadataepm = $(this.metadataepm);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
-		style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
-		if (style.length>0)
-			html += " style='"+style+"' ";
-		//----------------------------
-		html += ">";
-		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userroles[0]=='designer' || USER.admin)) {
-			html += this.code_node.text()+" ";
-		}
-		var label = this.label_node[langcode].text();
-		if (label == "")
-			label="&nbsp;";
-		html += label+"<span id='help_"+this.id+"' class='ihelp'></span>";
-		if (type=="default")
-			html += "</div><div class='title-subline'></div></div>";
-		if (type=="span")
-			html += "</span>";
-	}
-*/
 	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
@@ -851,6 +817,12 @@ UIFactory["Node"].prototype.update = function(langcode)
 		var code = $.trim($("#code_"+this.id).val());
 		$(this.code_node).text(code);
 	}
+	//---------------------
+	if ($("#value_"+this.id).length){
+		var value = $.trim($("#value_"+this.id).val());
+		$(this.value_node).text(value);
+	}
+	//---------------------
 	var label = $.trim($("#label_"+this.id+"_"+langcode).val());
 	$(this.label_node[langcode]).text(label);
 	//---------------------
@@ -905,6 +877,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		var query = r_replaceVariable($(this.metadatawad).attr('query'));
 		if (query==undefined || query=='' || this.asmtype=='asmContext' || g_display_type=='raw'){
 			if (g_userroles[0]=='designer' || USER.admin || editcoderoles.containsArrayElt(g_userroles) || editcoderoles.indexOf(this.userrole)>-1 || editcoderoles.indexOf($(USER.username_node).text())>-1) {
+				//---------------------- code ----------------------------
 				var htmlCodeGroupObj = $("<div class='form-group'></div>")
 				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
 				var htmlCodeDivObj = $("<div class='node-code'></div>");
@@ -916,6 +889,18 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 				$(htmlCodeGroupObj).append($(htmlCodeLabelObj));
 				$(htmlCodeGroupObj).append($(htmlCodeDivObj));
 				$(htmlFormObj).append($(htmlCodeGroupObj));
+				//---------------------- value ----------------------------
+				var htmlValueGroupObj = $("<div class='form-group'></div>")
+				var htmlValueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>Value</label>");
+				var htmlValueDivObj = $("<div class='node-value'></div>");
+				var htmlValueInputObj = $("<input id='value_"+this.id+"' type='text' class='form-control' name='input_value' value=\""+this.value_node.text()+"\">");
+				$(htmlValueInputObj).change(function (){
+					self.update(langcode);
+				});
+				$(htmlValueDivObj).append($(htmlValueInputObj));
+				$(htmlValueGroupObj).append($(htmlValueLabelObj));
+				$(htmlValueGroupObj).append($(htmlValueDivObj));
+				$(htmlFormObj).append($(htmlValueGroupObj));
 			}
 			if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 				var htmlLabelGroupObj = $("<div class='form-group'></div>")
@@ -1159,9 +1144,12 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 										});
 									}
 								}
+								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
+								$("#wait-window").modal('hide');
+								UIFactory.Node.reloadUnit();
 							} else {
 								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
-								$("#wait-window").modal('hide');			
+								$("#wait-window").modal('hide');
 								UIFactory.Node.reloadUnit();
 							}
 							//------------------------------------------
@@ -1360,52 +1348,59 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 			if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
-				if(name == "asmUnit" && level==0) // Click on Unit
+				if(name == "asmUnit" && level==0) // first level
 				{
+					$("#"+destid).removeClass("nodisplay");
 					var html = "";
 					var depth = 99;
-					html += "<li style='cursor:pointer' id='sidebar_"+uuid+"' href='#' class='nav-item";
+					html += "<div class='dropdown-submenu";
 					if (privatevalue)
-						html+= " private";
-					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</li>";
+						html+= "private"
+					html += "' id='parent-"+uuid+"' role='tabdivst'>";
+					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+
+//					html += "<div style='cursor:pointer' id='sidebar_"+uuid+"' class='dropdown-item";
+//					if (privatevalue)
+//						html+= " private";
+//					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
-				if(name == "asmUnit" && level==1) // Click on Unit
+				if(name == "asmUnit" && level==1) // in a dropdown
 				{
+					$("#"+destid).removeClass("nodisplay");
 					var html = "";
 					var depth = 99;
-					html += "<li class='dropdown-item' href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</li>";
+					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
-				if(name == "asmStructure" && level==0) // Click on Structure
+/*				if(name == "asmStructure" && level==0) // Click on Structure
 				{
 					var depth = 1;
 					var html = "";
-					html += "<div class='nav-item dropdown";
+					html += "<div class='nav-item dropdown-submenu";
 					if (privatevalue)
 						html+= "private"
-					html += "' style='cursor:pointer' id='parent-"+uuid+"' role='tablist'>";
-					html += "<li class='dropdown-toggle' style='cursor:pointer' href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+text+"</li>";
+					html += "' style='cursor:pointer' id='parent-"+uuid+"' role='tabdivst'>";
+					html += "<div class='dropdown-toggle' style='cursor:pointer' href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+text+"</div>";
 					html += "<div id='dropdown"+uuid+"' class='dropdown-menu' aria-labelledby='sidebar_"+uuid+"'>";
-					html += "<li class='dropdown-item first-item'  style='cursor:pointer' href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</li>";
+					html += "<div class='dropdown-item first-item'  style='cursor:pointer' href='#' oncdivck=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					html += "</div><!-- panel-collapse -->";
 					html += "</div>";
 					$("#"+destid).append($(html));
 					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
-				}
-				if(name == "asmStructure" && level==1) // Click on Structure
+				} */
+				if(name == "asmStructure") // Click on Structure
 				{
+					$("#"+destid).removeClass("nodisplay");
 					var depth = 1;
 					var html = "";
-					html += "<li class='dropdown-submenu";
+					html += "<div class='dropdown-submenu";
 					if (privatevalue)
 						html+= "private"
-					html += "' id='parent-"+uuid+"' role='tablist'>";
-					html += "<a class='dropdown-item' href='#'>"+text+"</a>";
-					html += "<div id='dropdown"+uuid+"' class='dropdown-menu' aria-labelledby='sidebar_"+uuid+"'>";
-					html += "<a class='dropdown-item' href='#' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
-					html += "</div><!-- panel-collapse -->";
-					html += "</li>";
+					html += "' id='parent-"+uuid+"' role='tabdivst'>";
+					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					html += "<div id='dropdown"+uuid+"' class='dropdown-menu nodisplay' aria-labelledby='sidebar_"+uuid+"'></div>";
+					html += "</div>";
 					$("#"+destid).append($(html));
 					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
 				}
@@ -1433,7 +1428,12 @@ UIFactory["Node"].displayComments = function(destid,node,type,langcode)
 	var seenoderoles = $(node.metadatawad).attr('seenoderoles');
 	if (seenoderoles==undefined)
 		seenoderoles = "all";
-	if (seenoderoles!="" && (seenoderoles.indexOf("all")>-1 || USER.admin || g_userroles[0]=='designer' || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || seenoderoles.indexOf(this.userrole)>-1)) {
+	if (seenoderoles!="" && (seenoderoles.indexOf("all")>-1
+			|| USER.admin
+			|| g_userroles[0]=='designer'
+			|| seenoderoles.containsArrayElt(g_userroles)
+			|| showtoroles.containsArrayElt(g_userroles)
+			|| seenoderoles.indexOf(this.userrole)>-1)) {
 		//---------------------
 		if (langcode==null)
 			langcode = LANGCODE;
@@ -1461,8 +1461,9 @@ UIFactory["Node"].displayCommentsEditor = function(destid,node,type,langcode)
 		commentnoderoles = "";
 	if (commentnoderoles!="" 
 		&& (USER.admin 
-			|| g_userroles[0]=='designer' 
+			|| g_userroles[0]=='designer'
 			|| commentnoderoles.indexOf(g_userroles[0])>-1 
+			|| commentnoderoles.indexOf($(USER.username_node).text()>-1)
 			)
 		) {
 		//---------------------
@@ -1595,7 +1596,7 @@ UIFactory['Node'].moveTo = function(nodeid,parentid)
 };
 
 //===========================================
-UIFactory["Node"].selectNode = function(nodeid,node)
+UIFactory["Node"].selectNode = function(nodeid,node,semtag)
 //===========================================
 {
 	//---------------------
@@ -1608,9 +1609,9 @@ UIFactory["Node"].selectNode = function(nodeid,node)
 	$("#edit-window-title").html("&nbsp;");
 	//-----------------------------
 	if (UICom.structure.ui[nodeid].asmtype=='asmContext')
-		$("#edit-window-type").html(karutaStr[languages[LANGCODE]][UICom.structure.ui[nodeid].resource.type]);
+		$("#edit-window-type").html(UICom.structure.ui[nodeid].resource.type);
 	else
-		$("#edit-window-type").html(karutaStr[languages[LANGCODE]][UICom.structure.ui[nodeid].asmtype]);
+		$("#edit-window-type").html(UICom.structure.ui[nodeid].asmtype);
 	//-----------------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "javascript:UIFactory.Node.moveNode('"+nodeid+"')";
@@ -1623,18 +1624,19 @@ UIFactory["Node"].selectNode = function(nodeid,node)
 	var html = "<select class='form-control'>";
 	var uuid = $(node.node).attr("id");
 	var label = UICom.structure["ui"][uuid].label_node[langcode].text();
-	html += "<option uuid = '"+uuid+"'>"+label+"</option>";
-	html += UIFactory["Node"].getSubNodes(node, nodeid, UICom.structure.ui[nodeid].asmtype);
+	html += "<option uuid = ''>&nbsp;</option>";
+	if (semtag==null)
+		html += "<option uuid = '"+uuid+"'>"+label+"</option>";
+	html += UIFactory["Node"].getSubNodes(node, nodeid, UICom.structure.ui[nodeid].asmtype,semtag);
 	html += "</select>";
 	// ------------------------------
 	$("#edit-window-body").html($(html));
 	// ------------------------------
-	$("#edit-window").modal('show');	
-
+	$("#edit-window").modal('show');
 };
 
 //===========================================
-UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved)
+UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved,semtag)
 //===========================================
 {
 	//---------------------
@@ -1650,9 +1652,9 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved)
 			var label = UICom.structure["ui"][uuid].label_node[langcode].text();
 			var name = UICom.structure["ui"][uuid].asmtype;
 			if (name!='asmContext' && (typemoved != "asmUnit" || name != "asmUnit") && (uuid !=idmoved)){
-				if (semantictag.indexOf("welcome-unit")<0)
+				if (semantictag.indexOf("welcome-unit")<0 && (semtag==null || (semtag!=null && semantictag==semtag)))
 					html += "<option uuid = '"+uuid+"'>"+label+"</option>";
-				html += UIFactory["Node"].getSubNodes(UICom.structure["tree"][uuid], idmoved, typemoved);
+				html += UIFactory["Node"].getSubNodes(UICom.structure["tree"][uuid], idmoved, typemoved,semtag);
 			}
 		}
 	}
@@ -1691,7 +1693,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 	if (this.edit) {
 		//------------ edit button ---------------------
 		if ( 
-					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles)))
+					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles) || this.editnoderoles.indexOf($(USER.username_node).text())>-1 || this.editresroles.indexOf($(USER.username_node).text())>-1))
 									|| USER.admin
 									|| g_userroles[0]=='designer' 
 								)
@@ -1702,7 +1704,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
 		}
 		//------------ delete button ---------------------
-		if (( (this.deletenode && this.delnoderoles.containsArrayElt(g_userroles) ) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
+		if (( (this.deletenode && (this.delnoderoles.containsArrayElt(g_userroles) || this.delnoderoles.indexOf($(USER.username_node).text())>-1) ) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			if (this.asmtype == 'asmStructure' || this.asmtype == 'asmUnit') {
 				html += deleteButton(this.id,this.asmtype,undefined,undefined,"UIFactory.Node.reloadStruct",g_portfolio_rootid,null);
 			} else {
@@ -1710,10 +1712,10 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			}
 		}
 		//------------- move node buttons ---------------
-		if (((this.writenode && this.moveroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
+		if (((this.writenode && (this.moveroles.containsArrayElt(g_userroles)  || this.moveroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			html+= "<span class='button fas fa-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
-		if (((this.writenode && this.moveinroles.containsArrayElt(g_userroles)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
+		if (((this.writenode && (this.moveinroles.containsArrayElt(g_userroles)  || this.moveinroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			var movein = ($(this.metadatawad).attr('movein')==undefined)?'':$(this.metadatawad).attr('movein');
 			if (movein=='')
 				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
@@ -1725,7 +1727,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			 || (this.duplicateroles!='none'  
 				 	&& this.duplicateroles!='' 
 				 	&& this.asmtype != 'asmRoot' 
-				 	&& ( this.duplicateroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer' )
+				 	&& ( this.duplicateroles.containsArrayElt(g_userroles) || this.duplicateroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer' )
 			 	 )
 			)
 		{
@@ -1733,7 +1735,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		}
 	}
 	//------------- private button -------------------
-	if ((this.showroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && this.showroles!='none' && this.showroles!='') {
+	if ((this.showroles.containsArrayElt(g_userroles) || this.showroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.showroles!='none' && this.showroles!='') {
 		if (this.privatevalue) {
 			html += "<span class='button fas fa-eye-slash' onclick=\"javascript:show('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		} else {
@@ -1741,7 +1743,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		}
 	}
 	//------------- print button -------------------
-	if ((this.printroles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
+	if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
 			html += "<span class='button fas fa-print' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	}
 	//-------------------------------------------------
@@ -2156,10 +2158,6 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					html +=" style='"+style+"'";
 					html += ">";
 					//-----------------------------------------
-					var graphicers = $("metadata-wad[graphicerroles*="+g_userroles[0]+"]",data);
-					if (contentfreenode=='Y' && (graphicers.length>0 || g_userroles[0]=='designer'))
-						html += "<button class='btn  free-toolbar-menu' id='free-toolbar-menu_"+uuid+"' data-toggle='tooltip' data-placement='right' title='"+karutaStr[languages[langcode]]["free-toolbar-menu-tooltip"]+"'><span class='fas fa-bars'></span></button>";
-					//-----------------------------------------
 					html += "</div>";
 				}
 				
@@ -2255,17 +2253,6 @@ UIFactory["Node"].displayBlock = function(root,dest,depth,langcode,edit,inline,b
 					});
 				}
 			}
-			//----------------------------------------------
-			$("#free-toolbar-menu_"+uuid).click(function(){
-				if ($(".free-toolbar",$("#content-"+uuid)).css('visibility')=='hidden') {
-					$(".free-toolbar",$("#content-"+uuid)).css('visibility','visible');
-					g_free_toolbar_visibility = 'visible';
-				}
-				else {
-					$(".free-toolbar",$("#content-"+uuid)).css('visibility','hidden');
-					g_free_toolbar_visibility = 'hidden';
-				}
-			});
 			// -------------- display metainfo
 			if (g_userroles[0]=='designer' || USER.admin) {  
 				UIFactory["Node"].displayMetainfo("metainfo_"+uuid,data);

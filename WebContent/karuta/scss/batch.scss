@@ -79,21 +79,21 @@
 	span.chkbox-comments.xmoveup-node,
 	span.chkbox-comments.xupdate-metadata,
 	span.chkbox-comments.xupdate-metadata-wad,
+	span.chkbox-comments.xupdate-metadata-epm,
 	span.chkbox-comments.xupdate-metadata-inline,
 	span.chkbox-comments.xupdate-metadata-query,
 	span.chkbox-comments.xupdate-metadata-menu,
 	span.chkbox-comments.xupdate-rights,
-	span.chkbox-comments.xuuid-components,
 	span.chkbox-comments.xupdate-field-byid,
 	span.chkbox-comments.xdelete-node-byid,
 	span.chkbox-comments.xreset-document-byid,
-	span.chkbox-comments.xupdate-resource,
 	span.chkbox-comments.xupdate-field,
 	span.chkbox-comments.xupdate-textfield,
 	span.chkbox-comments.xupdate-dashboard,
 	span.chkbox-comments.xupdate-proxy,
 	span.chkbox-comments.xupdate-calendar,
 	span.chkbox-comments.xupdate-document,
+	span.chkbox-comments.xupdate-variable,
 	span.chkbox-comments.xupdate-proxy,
 	span.chkbox-comments.xupdate-url2unit,
 	span.chkbox-comments.xupdate-item,
@@ -278,6 +278,10 @@
 		margin-top:7px;
 		border:1px solid var(--batch-metadata-color);
 	}
+	.update-metadata-epm {
+		margin-top:7px;
+		border:1px solid var(--batch-metadata-color);
+	}
 	.update-metadata-inline {
 		margin-top:7px;
 		border:1px solid var(--batch-metadata-color);
@@ -333,6 +337,10 @@
 		border:1px solid var(--batch-resource-color);
 	}
 	.update-document{
+		margin-top:7px;
+		border:1px solid var(--batch-resource-color);
+	}
+	.update-variable{
 		margin-top:7px;
 		border:1px solid var(--batch-resource-color);
 	}

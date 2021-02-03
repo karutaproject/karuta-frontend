@@ -115,25 +115,6 @@ UIFactory["Node"].prototype.getNodeStyle = function()
 	return style;
 }
 
-
-//==================================================
-UIFactory["Node"].getLabelStyle = function(uuid)
-//==================================================
-{
-	var node = UICom.structure["ui"][uuid];
-	metadataepm = node.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
-	return style;
-}
-
 //==================================================
 UIFactory["Node"].prototype.getLabelStyle = function()
 //==================================================
@@ -152,11 +133,20 @@ UIFactory["Node"].prototype.getLabelStyle = function()
 }
 
 //==================================================
-UIFactory["Node"].getContentStyle = function(uuid)
+UIFactory["Node"].getLabelStyle = function(uuid)
+//==================================================
+{	var style ="";
+	if (UICom.structure["ui"][uuid]!=undefined)
+		style = UICom.structure["ui"][uuid].getLabelStyle();
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].prototype.getContentStyle = function()
 //==================================================
 {
-	var metadataepm = UICom.structure["ui"][uuid].metadataepm;
 	var style = "";
+	metadataepm = this.metadataepm;
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
@@ -167,6 +157,38 @@ UIFactory["Node"].getContentStyle = function(uuid)
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
 	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].getContentStyle = function(uuid)
+//==================================================
+{	var style ="";
+	if (UICom.structure["ui"][uuid]!=undefined)
+		style = UICom.structure["ui"][uuid].getContentStyle();
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].prototype.getCommentStyle = function()
+//==================================================
+{
+	metadataepm = this.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-othercss',false);
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].getCommentStyle = function(uuid)
+//==================================================
+{	var style ="";
+	if (UICom.structure["ui"][uuid]!=undefined)
+		style = UICom.structure["ui"][uuid].getCommentStyle();
 	return style;
 }
 
@@ -185,53 +207,6 @@ UIFactory["Node"].getDataContentStyle = function(data)
 	style += UIFactory.Node.getMetadataEpm(data,'node-width',true);
 	style += UIFactory.Node.getMetadataEpm(data,'node-height',true);
 	style += UIFactory.Node.getOtherMetadataEpm(data,'node-othercss');
-	return style;
-}
-
-
-//==================================================
-UIFactory["Node"].prototype.getContentStyle = function()
-//==================================================
-{
-	metadataepm = this.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
-	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
-	return style;
-}
-
-//==================================================
-UIFactory["Node"].getCommentStyle = function(uuid)
-//==================================================
-{
-	var node = UICom.structure["ui"][uuid];
-	metadataepm = node.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-color',false);
-	return style;
-}
-
-//==================================================
-UIFactory["Node"].prototype.getCommentStyle = function()
-//==================================================
-{
-	metadataepm = this.metadataepm;
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(metadataepm,'comment-color',false);
 	return style;
 }
 
@@ -420,10 +395,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-root','defaultrole');
 		this.displayMetadataAttributeEditor('metadata-root','autoload',true);
 	}
-	if (name=='asmContext' && this.resource.type=='Proxy')
-		this.displayMetadataAttributeEditor('metadata-part1','semantictag',false,true);
-	else
-		this.displayMetadataAttributeEditor('metadata-part1','semantictag');
+	this.displayMetadataAttributeEditor('metadata-part1','semantictag');
 	if (languages.length>1) { // multilingual application
 		this.displayMetadataAttributeEditor('metadata-part1','multilingual-node',true);
 		if (name=='asmContext') {
@@ -465,7 +437,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles',false,true);
-	if ((name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') && model)
+	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitall',true);
 	//-----------------------------------------
 	if (model)
@@ -646,6 +618,8 @@ UIFactory["Node"].getMetadataEpm = function(data,attribute,number)
 			html += attribute.substring(17) + value;
 		else if (attribute.indexOf("node-othercss")>-1)
 			html += attribute.substring(13) + value;
+		else if (attribute.indexOf("comment-othercss")>-1)
+			html += attribute.substring(16) + value;
 		else if (attribute.indexOf("othercss")>-1)
 			html += attribute.substring(8) + value;
 		else if (attribute.indexOf("node-")>-1)
@@ -1307,7 +1281,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 	if (attribute.indexOf('comment-')>-1)
 		attribute_label = attribute.substring(8);
 	if (attribute.indexOf('font-weight')>-1){
-		var choices = [{code:'normal',label:'Normal'},{code:'bold',label:'Bold'}];
+		var choices = [{code:'normal',label:'Normal'},{code:'bold',label:'Bold'},{code:'nothing',label:'None'}];
 		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
@@ -1324,7 +1298,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 		html += "</div>";
 	}
 	else if (attribute.indexOf('font-style')>-1){
-		var choices = [{code:'normal',label:'Normal'},{code:'italic',label:'Italic'}];
+		var choices = [{code:'normal',label:'Normal'},{code:'italic',label:'Italic'},{code:'nothing',label:'None'}];
 		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
@@ -1349,7 +1323,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributeEditor = function(destid,
 		html += "</div>";
 	}
 	else if (attribute.indexOf('text-align')>-1){
-		var choices = [{code:'left',label:'Left'},{code:'right',label:'Right'},{code:'center',label:'Center'},{code:'justify',label:'Justify'}];
+		var choices = [{code:'left',label:'Left'},{code:'right',label:'Right'},{code:'center',label:'Center'},{code:'justify',label:'Justify'},{code:'nothing',label:'None'}];
 		html += "<div class='input-group "+attribute+"'>";
 		html += "	<div class='input-group-prepend' style='margin-right:5px'>";
 		html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute_label]+"</span>";
@@ -1454,8 +1428,9 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		//----------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-weight',$(this.metadataepm).attr('comment-font-weight'));
 		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-style',$(this.metadataepm).attr('comment-font-style'));
-		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-color',$(this.metadataepm).attr('comment-color'));
 		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-font-size',$(this.metadataepm).attr('comment-font-size'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-color',$(this.metadataepm).attr('comment-color'));
+		this.displayMetadataEpmAttributeEditor('metadata-node-comment','comment-othercss',$(this.metadataepm).attr('comment-othercss'));
 		if ($("#metadata-epm-part1").html()=="")
 			$("#layout").hide();
 	}
@@ -1524,7 +1499,10 @@ UIFactory["Node"].updateMetadataEpmAttribute = function(nodeid,attribute,value,c
 	var node = UICom.structure["ui"][nodeid].node;
 	if (checked!=undefined && !checked)
 		value = "N";
-	$($("metadata-epm",node)[0]).attr(attribute,value);
+	if (value=='nothing')
+		$($("metadata-epm",node)[0]).removeAttr(attribute);
+	else
+		$($("metadata-epm",node)[0]).attr(attribute,value);
 	var refresh = true;
 	if (attribute=="top" || attribute=="left")
 		refresh = false;
@@ -1571,11 +1549,9 @@ UIFactory["Node"].updateMetadatawWadTextAttribute = function(nodeid,attribute)
 	var node = UICom.structure["ui"][nodeid].node;
 	var value = $.trim($("#"+nodeid+"_"+attribute).val());
 	if (attribute=='query' && UICom.structure["ui"][nodeid].resource!=undefined && UICom.structure["ui"][nodeid].resource.type=='Proxy' && value!=undefined && value!='') {
-		var srce_indx = value.lastIndexOf('.');
-		var srce = value.substring(srce_indx+1);
-		var semtag_indx = value.substring(0,srce_indx).lastIndexOf('.');
-		var semtag = value.substring(semtag_indx+1,srce_indx);
-		$($("metadata",node)[0]).attr('semantictag','proxy-'+semtag);
+		var semtag = $($("metadata",node)[0]).attr('semantictag');
+		if (semtag.indexOf ('proxy')<0)
+			$($("metadata",node)[0]).attr('semantictag','proxy-'+semtag);
 		UICom.UpdateMetadata(nodeid);
 	}
 	$($("metadata-wad",node)[0]).attr(attribute,value);

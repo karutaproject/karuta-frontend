@@ -35,7 +35,7 @@ UIFactory["Get_Proxy"] = function( node,condition)
 	this.code_node = $("code",$("asmResource["+this.clause+"]",node));
 	this.value_node = $("value",$("asmResource["+this.clause+"]",node));
 	this.label_node = [];
-	for (var i=0; i<languages.length;i++){
+	for (var i=0; i < languages.length; i++) {
 		this.label_node[i] = $("label[lang='"+languages[i]+"']",$("asmResource["+this.clause+"]",node))[0];
 		if (this.label_node[i].length==0) {
 			var newelement = createXmlElement("label");
@@ -63,7 +63,6 @@ UIFactory["Get_Proxy"] = function( node,condition)
 	this.displayCode = {};
 	this.displayValue = {};
 	this.multiple = "";
-	this.queryattr_value = $("metadata-wad",node).attr('query');
 };
 
 //==================================
@@ -189,21 +188,19 @@ UIFactory["Get_Proxy"].prototype.displayEditor = function(destid,type,langcode)
 
 
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
-	var parts = queryattr_value.split("/");
-	var queryattr_value = parts[0];
-	var proxy_semtag = parts[1]
-	this.queryattr_value = queryattr_value; // update if changed
-	//---------------------------
-	if (this.multiple!=""){
-		multiple_tags = this.multiple.substring(this.multiple.indexOf('/')+1);
-		queryattr_value = this.multiple.substring(0,this.multiple.indexOf('/'));
-		type = 'multiple';
-	}
-	//---------------------------
 	if (queryattr_value!=undefined && queryattr_value!='') {
-		//------------
-		queryattr_value = replaceVariable(queryattr_value);
-		//------------
+		//------------------
+		queryattr_value = cleanCode(r_replaceVariable(queryattr_value));
+		var parts = queryattr_value.split("|");
+		var queryattr_value = parts[0];
+		var proxy_semtag = parts[1]
+		this.queryattr_value = queryattr_value; // update if changed
+		//---------------------------
+		if (this.multiple!=""){
+			multiple_tags = this.multiple.substring(this.multiple.indexOf('/')+1);
+			queryattr_value = this.multiple.substring(0,this.multiple.indexOf('/'));
+			type = 'multiple';
+		}
 		var srce_indx = queryattr_value.lastIndexOf('.');
 		var srce = queryattr_value.substring(srce_indx+1);
 		var semtag_indx = queryattr_value.substring(0,srce_indx).lastIndexOf('.');

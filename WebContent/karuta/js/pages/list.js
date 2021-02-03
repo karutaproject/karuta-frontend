@@ -71,7 +71,7 @@ function fill_list_page()
 	html += "<div id='portfolio-body'>";
 	//------------------------------------------
 	html += "	<div id='portfolio-rightside' class='rightside'>";
-	html += "		<div id='portfolio-refresh' class='refresh fas fa-sync-alt' onclick='fill_list_page()' data-title='"+karutaStr[LANG]["button-reload"]+"' data-toggle='tooltip' data-placement='bottom'></div>";
+	html += "		<div id='portfolio-refresh' class='refresh fas fa-sync-alt' onclick='portfolios_byid = {};portfolios_list = [];folders_byid = {};folders_list = [];fill_list_page()' data-title='"+karutaStr[LANG]["button-reload"]+"' data-toggle='tooltip' data-placement='bottom'></div>";
 	html += "		<div id='portfolio-search' class='search'></div>";
 	html += "		<div id='portfolio-rightside-title' class='title'></div>";
 	html += "		<div id='portfolio-rightside-header' class='header'></div>";
@@ -146,8 +146,9 @@ function applyListConfiguration()
 //==============================
 {
 	if (g_configVar['list-welcome-image']!=undefined) { // configuration has been read
-		$('.list-page #main-body').css("background-image", g_configVar['list-welcome-image']);
+//		$('.list-page #main-body').css("background-image", g_configVar['list-welcome-image']);
 		var root = document.documentElement;
+		root.style.setProperty('--list-background-image', g_configVar['list-welcome-image']);
 		root.style.setProperty('--list-background-color',g_configVar['list-background-color']);
 		root.style.setProperty('--list-menu-background-color',g_configVar['list-menu-background-color']);
 		root.style.setProperty('--list-menu-text-color',g_configVar['list-menu-text-color']);

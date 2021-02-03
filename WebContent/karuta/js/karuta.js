@@ -380,7 +380,7 @@ function getEditBox(uuid,js2) {
 			$("#edit-window-body-node").html($(html));
 			if ($("#get-resource-node").length && g_display_type!='raw'){
 				var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
-				getResource.displayEditor("get-resource-node");
+				getResource.displayEditor("get-resource-node","completion");
 			}
 			if ($("#get-get-resource-node").length && g_display_type!='raw'){
 				var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][uuid].node,"xsi_type='nodeRes'");
@@ -638,6 +638,7 @@ function displayPage(uuid,depth,type,langcode) {
 		scrollLeft = 0;
 		g_current_page = uuid;
 	}
+	localStorage.setItem('currentDisplayedPage',uuid);
 	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
@@ -780,7 +781,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 {
 	$("#wait-window").modal('show');
 	//------------
-	srcecode = replaceVariable(srcecode);
+	srcecode = cleanCode(replaceVariable(srcecode));
 	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 	if (srcecode.indexOf('.')<0 && srcecode!='self')  // There is no project, we add the project of the current portfolio
 		srcecode = selfcode.substring(0,selfcode.indexOf('.')) + "." + srcecode;
@@ -1650,6 +1651,13 @@ function setVariables(data)
 	for (var i=0;i<variable_nodes.length;i++) {
 		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().name] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().value;
 	}
+	var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
+	for (var i=0;i<select_variable_nodes.length;i++) {
+		var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
+		var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
+		var variable_value = (value=="") ? code : value;
+		g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = variable_value;
+	}	
 }
 
 //==============================

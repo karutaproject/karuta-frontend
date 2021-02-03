@@ -69,7 +69,6 @@ UIFactory["PortfolioFolder"] = function(node)
 	this.children = {};
 	this.folders = {};
 	this.display = {};
-	var url = 
 	this.nbfolders = 0;
 	this.nbchildren = 0;
 	$.ajax({
@@ -214,7 +213,7 @@ UIFactory["PortfolioFolder"].parse = function(data)
 				var code = folders_byid[uuid].code_node.text();
 				if (code.indexOf(".")<0)
 					code += ".";
-				tableau1[i] = [code,uuid];//			}
+				tableau1[i] = [code,uuid];
 		} catch(e) {
 			var del = alert("Erreur folder"+uuid+" - code:"+code);
 		}
@@ -524,13 +523,24 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 	if (viewtype == 'portfolio') {
 		html += "<div id='folderheader_"+this.id+"' parentid='"+parentid+"' class='folder-header' draggable='true' ondragstart='dragPortfolioFolder(event)'>";
 		html += "	<div class='row row-label'>";
-		html += "		<div class='col-3 folder-label' id='folderlabel_"+this.id+"' >"+folder_label+"</div>";
-		html += "		<div id='owner_"+this.id+"' class='col-2 d-none d-md-block project-label'></div>";
-		html += "		<div class='col-3 d-none d-sm-block comments' id='folder-comments_"+this.id+"'> </div><!-- comments -->";
+		html += "		<div class='col-4 folder-label' id='folderlabel_"+this.id+"' ";
+		if (USER.admin)
+			html += "onclick=\"display_main_page('"+this.rootid+"')\"";
+		html += " >"+folder_label+"</div>";
+		html += "		<div id='owner_"+this.id+"' class='col-1 headerfolderowner'></div>";
+		html += "		<div class='col-2 headerfoldercode'>";
+		html += "			<span id='pcode_"+this.id+"' >"+folder_code+"</span>";
+		html += "			<span class='copy-button fas fa-clipboard' ";
+		html += "				onclick=\"copyInclipboad('"+this.id+"')\" ";
+		html += "				onmouseover=\"$(this).tooltip('show')\" data-html='true' data-toggle='tooltip' data-placement='top' title=\"" + karutaStr[LANG]['copy'] +" : "+this.code_node.text()+"\" ";
+		html += "				onmouseout=\"outCopy('"+this.id+"')\">";
+		html += "			</span>";
+		html += "		</div>";
+		html += "		<div class='col-2 d-none d-sm-block comments' id='folder-comments_"+this.id+"'> </div><!-- comments -->";
 		//---------------------------------------
-		html += "		<div class='col-2'>";
-		html += "<span class='fa fa-th' style='cursor:pointer;font-size:130%;margin-top:4px' onclick=\"list_view_type='card-admin';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','card-admin');\"></span>&nbsp;";
-		html += "<span class='fa fa-list' style='cursor:pointer;font-size:130%' onclick=\"list_view_type='list';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','list')\"></span>";
+		html += "		<div class='col-1'>";
+		html += "			<span class='fa fa-th' style='cursor:pointer;font-size:130%;margin-top:4px' onclick=\"list_view_type='card-admin';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','card-admin');\"></span>&nbsp;";
+		html += "			<span class='fa fa-list' style='cursor:pointer;font-size:130%' onclick=\"list_view_type='list';folders_byid['"+this.id+"'].displayContent('"+type+"','"+parentid+"');localStorage.setItem('list_view_type','list')\"></span>";
 		html += "		</div>";
 		//------------ buttons ---------------
 		html += "		<div class='col-1'>";
@@ -538,7 +548,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		if (USER.admin || (this.owner=='Y' && !USER.xlimited)) {
 			html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
 			html += "			<div class='dropdown-menu  dropdown-menu-right'>";
-			html += "				<a class='dropdown-item' onclick=\"UIFactory['PortfolioFolder'].callRename('"+this.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.callRename('"+this.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.createFolder('"+folder_code+"/')\" ><i class='fas fa-folder'></i> "+karutaStr[LANG]["create_subfolder"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.confirmDelFolderContent('"+this.id+"')\" ><i class='fa fa-trash'></i> "+karutaStr[LANG]["button-delete-content"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.confirmDelFolder('"+this.id+"')\" ><i class='far fa-trash-alt'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
@@ -590,6 +600,10 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		for (uuid in this.children){
 			portfolio_list += "," + uuid;
 		}
+		for (uuid in this.folders){
+			portfolio_list += "," + uuid + folders_byid[uuid].contentList();
+
+		}
 		if (portfolio_list.length>0)
 			portfolio_list = this.id+portfolio_list;
 		$("#export-"+this.id).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+portfolio_list);
@@ -603,7 +617,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 	if (viewtype == 'list') {
 		var tree_type='<span class="fas fa-folder" aria-hidden="true"></span>';
 		html += "<div class='row portfolio-row'>";
-		html += "<div class='folder-label col-5' id='portfolio_list_"+this.id+"' draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+"</div>";
+		html += "<div class='folder-label col-5 XXX' id='portfolio_list_"+this.id+"' onclick=\"folders_byid['"+this.id+"'].toggleContent('"+type+"','"+parentid+"')\" draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+"</div>";
 		if (USER.creator && !USER.limited) {
 			html += "<div id='owner_"+this.id+"' class='col-2 d-none d-md-block'></div>";
 			html += "<div class='col-5'>";
@@ -628,6 +642,24 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		$("#"+type+"-rightside-header").html($(html));
 	}
 }
+
+//==================================
+UIFactory["PortfolioFolder"].prototype.contentList = function()
+//==================================
+{
+	var list = "";
+		if (!this.loaded)
+			this.loadContent();
+		for (uuid in this.children){
+			list += "," + uuid;
+		}
+	for (uuid in this.folders){
+		list += "," + uuid;
+		list += "," + + folders_byid[uuid].contentList();
+	}
+	return list
+}
+
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
@@ -847,13 +879,16 @@ UIFactory["PortfolioFolder"].prototype.rename = function(oldfolder_code,newfolde
 	if (!exist) {
 		if (label!=null)
 			$(this.label_node[langcode]).text(label);
-		if (newfolder_code!=oldfolder_code) {
+		if (newfolder_code=="") {
+			alertHTML(karutaStr[LANG]['error-empty-code']);
+			$("#code_"+this.id).val(oldprojectcode);
+		} else if (newfolder_code!=oldfolder_code && oldfolder_code!="") {
 			$.ajax({
 				async: false,
 				folder : this,
 				type : "GET",
 				dataType : "xml",
-				url : serverBCK_API+"/portfolios?active=1&project="+this.code_node.text(),
+				url : serverBCK_API+"/portfolios?active=1&project="+oldfolder_code,
 				success : function(data) {
 					var items = $("portfolio",data);
 					for ( var i = 0; i < items.length; i++) {
@@ -886,7 +921,14 @@ UIFactory["PortfolioFolder"].prototype.rename = function(oldfolder_code,newfolde
 			}
 			xml +="		</asmResource>";
 			strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
-			UICom.query("PUT",serverBCK_API+'/nodes/node/'+this.rootid+'/noderesource',fill_list_page,"text",strippeddata);
+			var callback = function () {
+				portfolios_byid = {};
+				portfolios_list = [];
+				folders_byid = {};
+				folders_list = [];
+				fill_list_page();
+				}
+			UICom.query("PUT",serverBCK_API+'/nodes/node/'+this.rootid+'/noderesource',callback,"text",strippeddata);
 			//------------------------------------------
 		} else {
 			//------------------------------------------

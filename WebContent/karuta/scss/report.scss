@@ -57,12 +57,6 @@
 }
 
 
-/*
-.report .select{
-	padding-left:0px;
-	border-left:0px solid lightGrey;
-}
-*/
 .report .select select,
 .report .select input{
 	margin-bottom:0px;
@@ -77,6 +71,35 @@
 	padding-left:5px;
 	min-width:120px;
 }
+
+.report{
+	#layout,
+	#metadata-epm-part1,
+	#metadata-epm-node {
+		display:none;
+	}
+}
+
+/* ====================
+	Report Graphicer
+   ====================*/
+
+	.report #edit-window[role=reporter] { 
+		.padding-top,
+		.node-font-weight,
+		.node-font-style,
+		.node-text-align,
+		.node-font-size,
+		.node-padding-top,
+		.node-color
+		{
+			display:flex;
+		}
+		.metadata-epm-label,
+		#metadata-epm-label {
+			display:none;
+		}
+	}
 
 /* ====================
 	Report Dashboard

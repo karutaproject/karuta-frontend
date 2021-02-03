@@ -90,7 +90,7 @@ karutaStr['fr']['choose']="Choisir";
 karutaStr['fr']['quit']="Quitter";
 karutaStr['fr']['menu']="Menu";
 karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - Hauteur : 220<br>&nbsp; - Largeur : 800 divisé par le nombre de colonnes<br>&nbsp;";
-karutaStr['fr']['list-novisible']="Non visible";
+karutaStr['fr']['list-novisible']="Portfolio non visible";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
 karutaStr['fr']['see-bin']="Voir la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
@@ -107,6 +107,7 @@ karutaStr["fr"]["copied"] = "Copié";
 
 karutaStr['fr']['error-existing-code']="ERREUR - Le code existe déjà. Veuillez en choisir un autre.";
 karutaStr['fr']['error-existing-login']="ERREUR - Le login existe déjà ou une entrée est invalide. Veuillez choisir un autre login ou vérifiez les champs.";
+karutaStr['fr']['error-empty-code']="ERREUR - Le code ne peut être vide.";
 
 //=========================================
 //========== NODE =========================
@@ -179,7 +180,7 @@ karutaStr['fr']['top']="Position - Haut";
 karutaStr['fr']['left']="Position - Gauche";
 karutaStr['fr']['width']="Largeur (px)";
 karutaStr['fr']['height']="Hauteur (px)";
-karutaStr['fr']['public']="Public";
+karutaStr['fr']['public']="Portfolio Public";
 karutaStr['fr']['text-align']="Alignement";
 karutaStr['fr']['displayview']="Type de vue";
 karutaStr['fr']['displayitselforg']="Largeur d'affichage";
@@ -246,7 +247,7 @@ karutaStr['fr']['duration']="Durée de vie du lien (en heures)";
 karutaStr['fr']['seestart']="Voir - Date début";
 karutaStr['fr']['seeend']="Voir - Date fin";
 karutaStr['fr']['logcode']="Code Log";
-karutaStr['fr']['js']="Function js";
+karutaStr['fr']['js']="Fonction js";
 karutaStr['fr']['alt']="Texte alternatif";
 karutaStr['fr']['node-comment']="Commentaires du noeud";
 karutaStr['fr']['autoload']="Autoload";
@@ -431,6 +432,7 @@ karutaStr['fr']['rtf']="Rôles - Bouton RTF";
 karutaStr['fr']['img']="Rôles - Bouton PNG";
 karutaStr['fr']['document-required']="Vous devez spécifier un document avant de le soumettre !";
 karutaStr['fr']['size-upload']="Votre fichier est trop volumineux : seuls les fichiers de moins de " + g_configVar['maxfilesizeupload'] + " Mo sont autorisés !";
+karutaStr['fr']['local-label']="Libellé local";
 
 //=========================================
 //========== EUROPASS =====================

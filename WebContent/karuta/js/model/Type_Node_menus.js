@@ -24,7 +24,7 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 		}
 		html += ");"
 	} else {
-		var semtags = tag.split(" ");
+		var semtags = tag.split("+");
 		for (var i=0;i<semtags.length;i++){
 			if (semtags[i].length>0)
 			html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
@@ -42,7 +42,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 {	// note: #xxx is to avoid to scroll to the top of the page
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<a class='dropdown-item button text-button' onclick=\"";
+	var html = "<div class='dropdown-item button text-button' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
 		html += items[0] +"('"+parentid+"','"+title.replaceAll("'","##apos##")+"'";
@@ -63,7 +63,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,ca
 	}
 	html += "\">";
 	html += title;
-	html += "</a>";
+	html += "</div>";
 	return html;
 };
 
@@ -202,7 +202,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Double_Resource','Get_Double_Resource',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','g-variable','Variable',databack,callback,param2,param3,param4);
-//		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(this.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4);
 		//--------------------------------
 		if (plugin_resources.length>0){
 			html += "<hr>";

@@ -90,7 +90,7 @@ karutaStr['en']['choose']="Choose";
 karutaStr['en']['quit']="Quit";
 karutaStr['en']['menu']="Menu";
 karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Height : 220<br>&nbsp; - Width : 800 divided by number of columns<br>&nbsp;";
-karutaStr['en']['list-novisible']="Not Visible";
+karutaStr['en']['list-novisible']="Portfolio Not Visible";
 karutaStr['en']['empty-bin']="Empty bin";
 karutaStr['en']['see-bin']="See Bin";
 karutaStr['en']['complex']="Partial Loading";
@@ -107,6 +107,7 @@ karutaStr["en"]["copied"] = "Copied";
 
 karutaStr['en']['error-existing-code']="ERROR - The code already exists. Please choose another one.";
 karutaStr['en']['error-existing-login']="ERROR - The login already exists or an input is invalid. Please choose another login or check input fields.";
+karutaStr['en']['error-empty-code']="ERROR - The code cannot be empty.";
 
 //=========================================
 //========== NODE =====================
@@ -179,7 +180,7 @@ karutaStr['en']['top']="Position - Top";
 karutaStr['en']['left']="Position - Left";
 karutaStr['en']['width']="Width (px)";
 karutaStr['en']['height']="Height (px)";
-karutaStr['en']['public']="Public";
+karutaStr['en']['public']="Portfolio Public";
 karutaStr['en']['text-align']="Alignment";
 karutaStr['en']['displayview']="View Type";
 karutaStr['en']['displayitselforg']="Display Width";
@@ -246,7 +247,7 @@ karutaStr['en']['duration']="Link Lifetime";
 karutaStr['en']['seestart']="See - Start Date";
 karutaStr['en']['seeend']="See - End Date";
 karutaStr['en']['logcode']="Log Code";
-karutaStr['en']['js']="JS Function";
+karutaStr['en']['js']="js Function";
 karutaStr['en']['alt']="Alternate Text";
 karutaStr['en']['node-comment']="Node Comments";
 karutaStr['en']['autoload']="Autoload";
@@ -431,6 +432,7 @@ karutaStr['en']['rtf']="Rôles - Button RTF";
 karutaStr['en']['img']="Rôles - Button PNG";
 karutaStr['en']['document-required']="You have to specify a document before to submit !";
 karutaStr['en']['size-upload']="Your file is so big : it must be less than " + g_configVar['maxfilesizeupload'] + " Mo !";
+karutaStr['en']['local-label']="Local Label";
 
 //=========================================
 //========== EUROPASS =====================

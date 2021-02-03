@@ -145,7 +145,7 @@ UIFactory["Proxy"].prototype.displayEditor = function(destid,type,langcode)
 	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------
-		queryattr_value = replaceVariable(queryattr_value);
+		queryattr_value = cleanCode(replaceVariable(queryattr_value));
 		//------------
 		var srce_indx = queryattr_value.lastIndexOf('.');
 		var srce = queryattr_value.substring(srce_indx+1);

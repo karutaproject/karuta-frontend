@@ -73,21 +73,21 @@
 .batch span.chkbox-comments.xmoveup-node,
 .batch span.chkbox-comments.xupdate-metadata,
 .batch span.chkbox-comments.xupdate-metadata-wad,
+.batch span.chkbox-comments.xupdate-metadata-epm,
 .batch span.chkbox-comments.xupdate-metadata-inline,
 .batch span.chkbox-comments.xupdate-metadata-query,
 .batch span.chkbox-comments.xupdate-metadata-menu,
 .batch span.chkbox-comments.xupdate-rights,
-.batch span.chkbox-comments.xuuid-components,
 .batch span.chkbox-comments.xupdate-field-byid,
 .batch span.chkbox-comments.xdelete-node-byid,
 .batch span.chkbox-comments.xreset-document-byid,
-.batch span.chkbox-comments.xupdate-resource,
 .batch span.chkbox-comments.xupdate-field,
 .batch span.chkbox-comments.xupdate-textfield,
 .batch span.chkbox-comments.xupdate-dashboard,
 .batch span.chkbox-comments.xupdate-proxy,
 .batch span.chkbox-comments.xupdate-calendar,
 .batch span.chkbox-comments.xupdate-document,
+.batch span.chkbox-comments.xupdate-variable,
 .batch span.chkbox-comments.xupdate-proxy,
 .batch span.chkbox-comments.xupdate-url2unit,
 .batch span.chkbox-comments.xupdate-item,
@@ -249,6 +249,10 @@
   margin-top: 7px;
   border: 1px solid var(--batch-metadata-color);
 }
+.batch .update-metadata-epm {
+  margin-top: 7px;
+  border: 1px solid var(--batch-metadata-color);
+}
 .batch .update-metadata-inline {
   margin-top: 7px;
   border: 1px solid var(--batch-metadata-color);
@@ -300,6 +304,10 @@
   border: 1px solid var(--batch-resource-color);
 }
 .batch .update-document {
+  margin-top: 7px;
+  border: 1px solid var(--batch-resource-color);
+}
+.batch .update-variable {
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }

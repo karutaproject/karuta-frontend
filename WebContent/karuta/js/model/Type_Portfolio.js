@@ -403,8 +403,10 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		$("#"+destid).html($(html));
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
-	if (UICom.structure["ui"][rootid].getCode().indexOf("documentation-karuta")>-1)
-		window.history.pushState('kardoc','Documentation','/'+appliname+'/application/htm/documentation.htm');
+	//---------------------------------------
+	if (typeof checkIfSpecialApp == 'function') { 
+		checkIfSpecialApp(UICom.structure["ui"][rootid].getCode());
+	}
 	//---------------------------------------
 	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 
@@ -2752,7 +2754,7 @@ function setCSSportfolio(data,langcode)
 	// --------CSS Text------------------
 	var csstextlangcode = LANGCODE;
 	var csstext = $("text[lang='"+languages[csstextlangcode]+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-portfolio-css'])",data))).text();
-	csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"");
+	csstext = csstext.replace(/(<([^>]+)>)/ig, "").replace(/&nbsp;/g,"").replace(/&gt;/g,">");
 	$("#csstext").remove();
 	if (csstext!=undefined && csstext!=''){
 		console.log("Portfolio CSS added")

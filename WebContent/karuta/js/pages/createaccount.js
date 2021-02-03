@@ -116,7 +116,7 @@ function callSubmit()
 			url : url,
 			data : xml,
 			success : function(data) {
-				alert(karutaStr[LANG]['password-sent']);
+				alert(karutaStr[LANG]['password-sent']+" "+karutaStr['fr']['tipnewpassword']);
 				window.location="login.htm";
 			}
 		});
