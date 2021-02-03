@@ -91,6 +91,11 @@ function fill_main_page(rootid,role)
 			UICom.roles = {};
 			g_portfolio_current = data;
 			g_portfolio_rootid = $("asmRoot",data).attr("id");
+			//-------------------------
+			var portfoliocode = portfolios_byid[g_portfolioid].code_node.text();
+			if (typeof(rewriteURL) == 'function')
+				rewriteURL(portfoliocode);
+			//-------------------------
 			UICom.structure['ui'][g_portfolio_rootid].loaded = true;
 			var root_semantictag = $("metadata",$("asmRoot",data)).attr('semantictag');
 			var default_role = "";
