@@ -1656,7 +1656,7 @@ function setVariables(data)
 		var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
 		var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
 		var variable_value = (value=="") ? code : value;
-		g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = variable_value;
+		g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = cleanCode(variable_value,true);
 	}	
 }
 
@@ -1700,11 +1700,12 @@ function removeStr(str1,str2)
 }
 
 //==============================
-function cleanCode(code)
+function cleanCode(code,variable)
 //==============================
 {
 	code = removeStr(code,"@");
-	code = removeStr(code,"#");
+	if (!variable)
+		code = removeStr(code,"#");
 	code = removeStr(code,"%");
 	code = removeStr(code,"$");
 	code = removeStr(code,"&");
