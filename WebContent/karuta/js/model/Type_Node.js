@@ -965,9 +965,12 @@ UIFactory["Node"].prototype.save = function()
 {
 	//-------- if function js -------------
 	if (this.js!=undefined && this.js!="") {
-		var elts = this.js.split("/");
-		if (elts[0]=="update-node")
-			eval(elts[1]+"(this.node,g_portfolioid)");
+		var fcts = this.js.split(";");
+		for (var i=0;i<fcts.length;i++) {
+			var elts = fcts[i].split("/");
+			if (elts[0]=="update-node")
+				eval(elts[1]+"(this.node,g_portfolioid)");
+		}
 	}
 	UICom.UpdateNode(this.node);
 	if (this.logcode!="")

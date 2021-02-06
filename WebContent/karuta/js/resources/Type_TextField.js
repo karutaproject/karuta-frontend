@@ -119,7 +119,7 @@ UIFactory["TextField"].prototype.getView = function(dest,type,langcode)
 		type = "standard";
 	var html = $(this.text_node[langcode]).text();
 	//---------------------
-	if(type=='standard' || type='none') {
+	if(type=='standard' || type=='none') {
 		if (this.encrypted)
 			html = decrypt(html.substring(3),g_rc4key);
 	}
