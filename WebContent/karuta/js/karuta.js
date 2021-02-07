@@ -2194,12 +2194,21 @@ function replaceVariable(text)
 
 function addParentCode (parentid) {
 	var parentCode = UICom.structure.ui[parentid].getCode();
+	var parentcode_parts = parentCode.split("*");
 	var nodes = $("asmUnitStructure:has(code:not(:empty))",UICom.structure.ui[parentid].node);
 	for (var i=0;i<nodes.length;i++) {
 		var nodeid = $(nodes[i]).attr("id");
-		var nodecode =  UICom.structure.ui[nodeid].getCode();
-		if (nodecode.indexOf("*")<0) {
-			var newnodecode = parentCode + "*" + nodecode;
+		var newcode = nodecode =  UICom.structure.ui[nodeid].getCode();
+		if (nodecode.indexOf(parentCode)<0) {
+			//-------test if parent last = node first------------
+			var nodecode_parts = nodecode.split("*");
+			if (parentcode_parts[parentcode_parts.length-1]==nodecode_parts[0]) {
+				newcode = "";
+				for (var j=1;j<nodecode_parts.length;j++) 
+					newcode += nodecode_parts[j] + ((j==nodecode_parts.length-1)?"" : "*");
+			}
+			//-------------------
+			var newnodecode = parentCode + "*" + newcode;
 			//-------------------
 			var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
 			$("code",resource).text(newnodecode);

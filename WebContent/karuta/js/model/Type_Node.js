@@ -1543,7 +1543,7 @@ UIFactory['Node'].upNode = function(nodeid)
 };
 
 //==================================
-function moveTO(nodeid,title,destsemtag,srcesemtag) 
+function moveTO(nodeid,title,destsemtag,srcesemtag,fct) 
 //==================================
 {
 	$('#wait-window').modal('show');
@@ -1566,6 +1566,8 @@ function moveTO(nodeid,title,destsemtag,srcesemtag)
 			UIFactory.Node.moveTo(nodeid,parentid);
 			// reload destination
 			UIFactory.Node.loadNode(parentid);
+			if (fct!=null)
+				eval(fct+"()");
 		}
 	});
 }
@@ -1585,6 +1587,7 @@ UIFactory['Node'].moveTo = function(nodeid,parentid)
 {
 	if (parent !=undefined && parent!=null)
 		$.ajax({
+			async:false,
 			type : "POST",
 			dataType : "text",
 			url : serverBCK_API+"/nodes/node/" + nodeid + "/parentof/"+parentid,
