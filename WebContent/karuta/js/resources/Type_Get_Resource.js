@@ -86,6 +86,7 @@ UIFactory["Get_Resource"] = function(node,condition)
 	this.display = {};
 	this.displayCode = {};
 	this.displayValue = {};
+	this.displayLabel = {};
 	this.multiple = "";
 	this.simple = "";
 	//--------------------
@@ -141,6 +142,30 @@ UIFactory["Get_Resource"].prototype.getValue = function(dest)
 		this.displayValue[dest] = true;
 	}
 	return this.value_node.text();
+};
+
+//==================================
+UIFactory["Get_Resource"].prototype.getLabel = function(dest,type,langcode)
+//==================================
+{
+	//---------------------
+	if (type==null)
+		type = 'span';
+	if (langcode==null)
+		langcode = LANGCODE;
+	//---------------------
+	if (dest!=null)
+		this.displayLabel[dest]=type;
+	//---------------------
+	var html = "";
+	var label = this.label_node[langcode].text();
+	if (type=="div")
+		html =   "<div>"+label+"</div>";
+	if (type=="span")
+		html =   "<span>"+label+"</span>";
+	if (type=="none")
+		html = label;
+	return html;
 };
 
 //==================================
@@ -1293,6 +1318,9 @@ UIFactory["Get_Resource"].prototype.refresh = function()
 	};
 	for (dest in this.displayValue) {
 		$("#"+dest).html(this.getValue());
+	};
+	for (dest in this.displayLabel) {
+		$("#"+dest).html(this.getLabel(null,this.displayLabel[dest]));
 	};
 };
 

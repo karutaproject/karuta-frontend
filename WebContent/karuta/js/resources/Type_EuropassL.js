@@ -55,12 +55,12 @@ UIFactory["EuropassL"].prototype.displayView = function(destid,langcode,type,par
 		html += "<div class='row'>";
 		html += "<div class='offset-md-1 col-11'>";
 		html += "<span class='mothertongue-label'>"+UICom.structure["ui"][this.mother_tongueid].getLabel('std_node_'+parentid,"none")+"</span>";
-		html += "<span class='mothertongue-value' id='mother_tongue_"+parentid+"'>"+UICom.structure["ui"][this.mother_tongueid].resource.getView('mother_tongue_'+parentid,"span");
+		html += "<span class='mothertongue-value' id='mother_tongue_"+parentid+"'>"+UICom.structure["ui"][this.mother_tongueid].resource.getLabel('mother_tongue_'+parentid,"none");
 		html +="</span>";
 		if (writenode || g_userroles[0]=='designer') {
-			html +="<div id='mother_tongue_button' class='btn-group' style='margin-left:3px;'>";
+			html +="<span id='mother_tongue_button' class='btn-group' style='margin-left:3px;'>";
 			html += UICom.structure["ui"][this.mother_tongueid].getButtons(null,null,null,false,0,true,menu);
-			html +="</div>";
+			html +="</span>";
 		}
 		html += "</div><!--col-->";
 		html += "</div><!--row-->";
