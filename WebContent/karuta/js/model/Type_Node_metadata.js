@@ -136,10 +136,37 @@ UIFactory["Node"].prototype.getLabelStyle = function()
 UIFactory["Node"].getLabelStyle = function(uuid)
 //==================================================
 {	var style ="";
-	if (UICom.structure["ui"][uuid]!=undefined)
-		style = UICom.structure["ui"][uuid].getLabelStyle();
+	if (UICom.structure.ui[uuid]!=undefined)
+		style = UICom.structure.ui[uuid].getLabelStyle();
 	return style;
 }
+
+//==================================================
+UIFactory["Node"].prototype.getInParentLabelStyle = function()
+//==================================================
+{
+	metadataepm = this.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'inparent-padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'inparent-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'inparent-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'inparent-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'inparent-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'inparent-text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'inparent-background-color',false);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'inparent-othercss',false);
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].getInParentLabelStyle = function(uuid)
+//==================================================
+{	var style ="";
+	if (UICom.structure.ui[uuid]!=undefined)
+		style = UICom.structure.ui[uuid].getInParentLabelStyle();
+	return style;
+}
+
 
 //==================================================
 UIFactory["Node"].prototype.getContentStyle = function()

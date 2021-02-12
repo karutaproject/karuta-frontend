@@ -428,7 +428,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
 		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
 		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
-		if (nodetype=='asmUnit')
+		if (nodetype=='asmUnit' || nodetype=='asmStructure')
 			html = html.replace(/#first#/g,"first-node");
 		if (!refresh) {
 			$("#"+dest).append (html);
@@ -443,17 +443,10 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		$("#node_"+uuid).attr("style",style);
 	}
 	//-------------------- label style -------------------
-	if (this.depth>0) {
-		style = UIFactory["Node"].getLabelStyle(uuid);
+	if (this.depth>1) {
+		style = UIFactory.Node.getLabelStyle(uuid);
 	} else {
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-padding-top',true);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-size',true);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-weight',false);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-style',false);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-color',false);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-text-align',false);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-background-color',false);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-othercss',false);
+		style = UIFactory.Node.getInParentLabelStyle(uuid);
 	}
 	style = r_replaceVariable(style);
 	if (type!='raw')
