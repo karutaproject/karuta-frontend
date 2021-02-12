@@ -1,0 +1,110 @@
+:root {
+	/* ========== navbar =============== */
+	--navbar-background-color : white;
+	--navbar-text-color:#45bbf8;
+	
+	/* ========== login page =============== */
+	--login-background-color:#09bbd9;
+	--login-text-color:#ffffff;
+	--login-button-background-color:#c4d014;
+	--login-button-text-color:#000000;
+	--login-new-password-background-color: #cc2072;
+	--login-new-password-text-color: #000000;
+	--login-new-password-button-background-color: #edb81b;
+	--login-new-password-button-text-color: #000000;
+	--login-new-account-background-color: #ffc000;
+	--login-new-account-text-color: #ff0000;
+	--login-new-account-button-background-color: #cc2072;
+	--login-new-account-button-text-color: #ffff00;
+	
+	/* ========== list configuration =============== */
+	--list-welcome-title-color:white;
+	--list-welcome-subtitle-color:#18b8d6;
+	--list-welcome-line-color:white;
+	--list-welcome-box-background-color:black;
+	--list-welcome-box-border-color:white;
+
+	--list-title-color: white;
+	--list-menu-text-color:white;
+	--list-menu-background-color:black;
+	--list-element-background-color: #00274e;
+	--list-element-background-color-complement:#073765;
+	--list-element-text-color:white;
+	--list-background-color:#073765;
+	--list-background-color-complement:#073765;
+	--list-background-image:none;
+	--list-button-background-color:black;
+	--list-button-text-color:white;
+	
+	/* ========== portfolio ==========*/
+	--portfolio-navbar-background-color:black;
+	--portfolio-navbar-text-color:#ffffff;
+	--portfolio-sidebar-background-color : #073765;
+	--portfolio-sidebar-text-color:#ffffff;
+	--portfolio-sidebar-selected-border-color:#09bbd9;
+	--portfolio-sidebar-link-selected-color:#09bbd9;
+	--portfolio-sidebar-separator-color:#08a4bf;
+	
+	--page-title-background-color: #d8d8d8;
+	--page-title-subline-color: #09bbd9;
+	--portfolio-background-color: #fff;
+	--portfolio-text-color: #333;
+	--portfolio-section-separator-color: #d8d8d8;
+	--portfolio-link-color:#337ab7;
+	--portfolio-section-title-background-color: #ffffff;
+	--portfolio-buttons-color:#09bbd9;
+	--portfolio-buttons-background-color:#d8d8d8;
+	--portfolio-resource-border-color:#d8d8d8;
+	--portfolio-menu-text-color:#ffffff;
+	--portfolio-menu-background-color:#09bbd9;
+	
+	/* ========== web chart report =============== */
+	--svg-web0-color : red;
+	--svg-web1-color : blue;
+	--svg-web2-color : purple;
+	--svg-web3-color : green;
+	--svg-web4-color : orange;
+	--svg-web5-color : violet;
+	--svg-web6-color : yellow;
+	--svg-web7-color : pink;
+	--svg-web8-color : cyan;
+	--svg-web9-color : magenta;
+	
+	/* ========== metadata =============== */
+	--edit-window-border-color: #ced4da;
+	--edit-window-button-background-color:#d8d8d8;
+	--edit-window-background-color:#fff;
+	--edit-window-text-color:#212529;
+	
+	--list-icon-section-color: Var(--list-complement-button-color);
+	
+	
+	/* ========== portfolio  =============== */
+	
+	--main-background-color:white;
+	--standard-border-color : #d3d3d3;
+
+	
+	/* ========== welcome ===============
+	--welcome-title-color:white;
+	--welcome-subtitle-color:#18b8d6;
+	--welcome-box-border-color:white;
+	--welcome-line-color:white;
+	--welcome-subbox-background-color:black;
+	 */
+	
+	/* ========== portfolio ==========*/
+	
+	
+	--row-node-border-color:lightgrey;
+	
+	--resource-standard-border-color:lightgrey;
+	--resource-standard-buttons-background-color:lightgrey;
+	
+	/* ========== report =============== */
+	--report-comment-color:#333;
+	
+
+	
+}
+
