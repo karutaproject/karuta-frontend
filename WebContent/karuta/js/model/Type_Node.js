@@ -1712,7 +1712,8 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		}
 		//------------- move node buttons ---------------
 		if (((this.writenode && (this.moveroles.containsArrayElt(g_userroles)  || this.moveroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
-			html+= "<span class='button fas fa-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			if ((this.asmtype!='asmUnit' && this.asmtype!='asmStructure') || depth<1)
+				html+= "<span class='button fas fa-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		if (((this.writenode && (this.moveinroles.containsArrayElt(g_userroles)  || this.moveinroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			var movein = ($(this.metadatawad).attr('movein')==undefined)?'':$(this.metadatawad).attr('movein');
