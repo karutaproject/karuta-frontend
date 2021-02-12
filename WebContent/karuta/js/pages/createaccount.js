@@ -19,63 +19,6 @@ if (lang==null)
 
 
 //==============================
-function loadCSS(url)
-//==============================
-{
-	document.write("<link rel='stylesheet' type='text/css' href='"+url+"'></link>");
-};
-
-//==============================
-function loadLESS(url)
-//==============================
-{
-	document.write("<link rel='stylesheet/less' type='text/css' href='"+url+"'></link>");
-};
-
-//==============================
-function loadJS(url)
-//==============================
-{
-	document.write("<script src='"+url+"'></script>");
-};
-
-//==============================
-function loadCreateAccountPage(url)
-//==============================
-{
-	//--------------------------------------------------------------
-	loadCSS(url+"/other/bootstrap/css/bootstrap.min.css");
-	loadCSS(url+"/other/css/jquery-ui.css");
-	loadCSS(url+"/other/css/font-awesome/css/font-awesome.min.css");
-	//--------------------------------------------------------------
-	var karuta_config = "../../../"+appliname+"/application/css/color.less";
-	less = {
-		    globalVars: {
-		    	'KARUTA-CONFIG': "'"+karuta_config+"'"
-		    }
-		  };
-	loadLESS(url+"/karuta/css/welcome.less");
-	loadJS(url+"/other/js/less.min.js")
-	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/karuta.js");
-	loadJS(url+"/karuta/js/UICom.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/other/js/jquery-1.10.2.js");
-	loadJS(url+"/other/js/jquery-ui-1.10.3.custom.min.js");
-	loadJS(url+"/other/bootstrap/js/bootstrap.min.js");
-	loadJS(url+"/other/js/jquery.ui.touch-punch.min.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/model/Type_Portfolio.js");
-	loadJS(url+"/karuta/js/model/Type_Node.js");
-	loadJS(url+"/karuta/js/model/Type_User.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/other/js/js.cookie.js");
-	//--------------------------------------------------------------
-	loadJS(url+"/karuta/js/version.js");
-	//--------------------------------------------------------------
-}
-
-//==============================
 function callSubmit()
 //==============================
 {

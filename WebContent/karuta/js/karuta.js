@@ -1656,7 +1656,7 @@ function setVariables(data)
 		var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
 		var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
 		var variable_value = (value=="") ? code : value;
-		g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = variable_value;
+		g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = cleanCode(variable_value,true);
 	}	
 }
 
@@ -1700,11 +1700,12 @@ function removeStr(str1,str2)
 }
 
 //==============================
-function cleanCode(code)
+function cleanCode(code,variable)
 //==============================
 {
 	code = removeStr(code,"@");
-	code = removeStr(code,"#");
+	if (!variable)
+		code = removeStr(code,"#");
 	code = removeStr(code,"%");
 	code = removeStr(code,"$");
 	code = removeStr(code,"&");
@@ -2189,6 +2190,79 @@ function replaceVariable(text)
 		n++; // to avoid infinite loop
 	}
 	return text;
+}
+
+function addParentCode (parentid) {
+	var parentCode = UICom.structure.ui[parentid].getCode();
+	var parentcode_parts = parentCode.split("*");
+	var nodes = $("asmUnitStructure:has(code:not(:empty))",UICom.structure.ui[parentid].node);
+	for (var i=0;i<nodes.length;i++) {
+		var nodeid = $(nodes[i]).attr("id");
+		var newcode = nodecode =  UICom.structure.ui[nodeid].getCode();
+		if (nodecode.indexOf(parentCode)<0) {
+			//-------test if parent last = node first------------
+			var nodecode_parts = nodecode.split("*");
+			if (parentcode_parts[parentcode_parts.length-1]==nodecode_parts[0]) {
+				newcode = "";
+				for (var j=1;j<nodecode_parts.length;j++) 
+					newcode += nodecode_parts[j] + ((j==nodecode_parts.length-1)?"" : "*");
+			}
+			//-------------------
+			var newnodecode = parentCode + "*" + newcode;
+			//-------------------
+			var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+			$("code",resource).text(newnodecode);
+			var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//-------------------
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+				success : function(data) {
+				},
+				error : function(data) {
+				}
+			});
+			//-------------------
+		}
+	}
+}
+
+function updateParentCode (node) {
+	var uuid = $(node).attr("id");
+	var parentcode = UICom.structure.ui[uuid].getCode();
+	var nodes = $("> asmUnitStructure:has(code:not(:empty))",UICom.structure.ui[uuid].node);
+	for (var i=0;i<nodes.length;i++) {
+		var nodeid = $(nodes[i]).attr("id");
+		var nodecode =  UICom.structure.ui[nodeid].getCode();
+		if (nodecode.indexOf("*")>-1) {
+			var newnodecode = parentcode + nodecode.substring(nodecode.indexOf("*"));
+			//-------------------
+			var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+			$("code",resource).text(newnodecode);
+			var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//-------------------
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+				success : function(data) {
+				},
+				error : function(data) {
+				}
+			});
+			//-------------------
+		}
+	}
+	UIFactory.Node.reloadUnit;
 }
 
 //=====================================================================================================

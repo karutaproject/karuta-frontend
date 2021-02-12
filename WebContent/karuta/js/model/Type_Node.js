@@ -428,7 +428,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		html = html.replace(/#displayview#/g,displayview).replace(/#displaytype#/g,type).replace(/#uuid#/g,uuid).replace(/#nodetype#/g,this.nodetype).replace(/#semtag#/g,this.semantictag).replace(/#cssclass#/g,this.cssclass);
 		html = html.replace(/#node-orgclass#/g,this.displayitselforg)
 		html = html.replace(/#content-orgclass#/g,this.displaychildorg)
-		if (nodetype=='asmUnit')
+		if (nodetype=='asmUnit' || nodetype=='asmStructure')
 			html = html.replace(/#first#/g,"first-node");
 		if (!refresh) {
 			$("#"+dest).append (html);
@@ -443,17 +443,10 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		$("#node_"+uuid).attr("style",style);
 	}
 	//-------------------- label style -------------------
-	if (this.depth>0) {
-		style = UIFactory["Node"].getLabelStyle(uuid);
+	if (this.depth>1) {
+		style = UIFactory.Node.getLabelStyle(uuid);
 	} else {
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-padding-top',true);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-size',true);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-weight',false);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-font-style',false);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-color',false);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-text-align',false);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-background-color',false);
-		style += UIFactory.Node.getMetadataEpm(this.metadataepm,'inparent-othercss',false);
+		style = UIFactory.Node.getInParentLabelStyle(uuid);
 	}
 	style = r_replaceVariable(style);
 	if (type!='raw')
@@ -965,9 +958,12 @@ UIFactory["Node"].prototype.save = function()
 {
 	//-------- if function js -------------
 	if (this.js!=undefined && this.js!="") {
-		var elts = this.js.split("/");
-		if (elts[0]=="update-node")
-			eval(elts[1]+"(this.node,g_portfolioid)");
+		var fcts = this.js.split(";");
+		for (var i=0;i<fcts.length;i++) {
+			var elts = fcts[i].split("/");
+			if (elts[0]=="update-node")
+				eval(elts[1]+"(this.node,g_portfolioid)");
+		}
 	}
 	UICom.UpdateNode(this.node);
 	if (this.logcode!="")
@@ -1540,7 +1536,7 @@ UIFactory['Node'].upNode = function(nodeid)
 };
 
 //==================================
-function moveTO(nodeid,title,destsemtag,srcesemtag) 
+function moveTO(nodeid,title,destsemtag,srcesemtag,fct) 
 //==================================
 {
 	$('#wait-window').modal('show');
@@ -1563,6 +1559,8 @@ function moveTO(nodeid,title,destsemtag,srcesemtag)
 			UIFactory.Node.moveTo(nodeid,parentid);
 			// reload destination
 			UIFactory.Node.loadNode(parentid);
+			if (fct!=null)
+				eval(fct+"()");
 		}
 	});
 }
@@ -1582,6 +1580,7 @@ UIFactory['Node'].moveTo = function(nodeid,parentid)
 {
 	if (parent !=undefined && parent!=null)
 		$.ajax({
+			async:false,
 			type : "POST",
 			dataType : "text",
 			url : serverBCK_API+"/nodes/node/" + nodeid + "/parentof/"+parentid,
@@ -1713,7 +1712,8 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		}
 		//------------- move node buttons ---------------
 		if (((this.writenode && (this.moveroles.containsArrayElt(g_userroles)  || this.moveroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
-			html+= "<span class='button fas fa-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			if ((this.asmtype!='asmUnit' && this.asmtype!='asmStructure') || depth<1)
+				html+= "<span class='button fas fa-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		if (((this.writenode && (this.moveinroles.containsArrayElt(g_userroles)  || this.moveinroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			var movein = ($(this.metadatawad).attr('movein')==undefined)?'':$(this.metadatawad).attr('movein');

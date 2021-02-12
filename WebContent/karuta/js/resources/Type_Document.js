@@ -181,7 +181,7 @@ UIFactory["Document"].prototype.getView = function(dest,type,langcode)
 			default :
 				extension = ".txt";
 		}
-		if (type=='standard'){
+		if (type=='standard' || type=='none'){
 				html =  "<a id='file_"+this.id+"' href='../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&timestamp=" + new Date().getTime()+"'><img style='width:24px' src='"+documentIcon[extension]+"'/> "+filename+"</a>";
 		}
 		if (type=='icon-url-label'){

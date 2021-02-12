@@ -197,6 +197,15 @@ UIFactory["Item"].prototype.getView = function(dest,type,langcode)
 			html += "<span name='value'> ["+ value + "] </span>";
 		html += "</span>";
 	}
+	if (type=="none") {
+		if (code.indexOf("#")>-1)
+			html += cleanCode(code) + " ";
+		if (code.indexOf("%")<0)
+			html += label;
+		if (code.indexOf("&")>-1)
+			html += " ["+ value + "]";
+		html += "</span>";
+	}
 	return html;
 };
 

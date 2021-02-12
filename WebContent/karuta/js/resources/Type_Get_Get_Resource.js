@@ -316,12 +316,17 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (queryattr_value.indexOf('#')>0)
 				code_parent = semtag_parent;
 			else {
-				var removestar = false
-				if (semtag_parent.indexOf('*')==0) {
-					removestar = true;
-					semtag_parent = semtag_parent.substring(1);				
+				//-----------
+				var removestar = -1;
+				if (semtag_parent.indexOf('*')>-1 ) {
+					var elts = semtag_parent.split("*");
+					for (var i=0;i<elts.length;i++) {
+						if (elts[i]!="")
+							removestar = i;
+					}
+					semtag_parent = elts[removestar];
 				}
-
+				//-----------
 				var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
 				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
 				if (child.length==0 && itself.length>0){
@@ -334,8 +339,12 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 						code_parent = $($("code",child)[0]).text();
 
 				}
-				if (removestar)
-					code_parent = code_parent.substring(0,code_parent.indexOf("*"));
+				//-----------
+				if (removestar>-1) {
+					var elts = code_parent.split("*");
+					code_parent = elts[removestar];
+				}
+				//-----------
 			}
 			//----------------------
 			if ($("*:has(metadata[semantictag*='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)

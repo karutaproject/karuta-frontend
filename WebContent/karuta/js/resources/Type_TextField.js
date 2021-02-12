@@ -119,7 +119,7 @@ UIFactory["TextField"].prototype.getView = function(dest,type,langcode)
 		type = "standard";
 	var html = $(this.text_node[langcode]).text();
 	//---------------------
-	if(type=='standard') {
+	if(type=='standard' || type=='none') {
 		if (this.encrypted)
 			html = decrypt(html.substring(3),g_rc4key);
 	}
@@ -130,22 +130,7 @@ UIFactory["TextField"].prototype.getView = function(dest,type,langcode)
 UIFactory["TextField"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	//---------------------
-	if (type==null)
-		type = "standard";
-	var html = $(this.text_node[langcode]).text();
-	//---------------------
-	if(type=='standard') {
-		if (this.encrypted)
-			html = decrypt(html.substring(3),g_rc4key);
-	}
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 

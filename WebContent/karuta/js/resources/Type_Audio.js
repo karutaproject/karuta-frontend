@@ -129,7 +129,7 @@ UIFactory["Audio"].prototype.getView = function(dest,type,langcode)
 		type = "html5";
 	//---------------------
 	var html ="";
-	if (type=='html5') {
+	if (type=='html5' || type=='none') {
 		html += "<audio controls>";
 		var srce = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"&type=.mp3";
 		html += "<source src='"+srce+"' type='audio/mpeg'/>";
