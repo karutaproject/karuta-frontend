@@ -210,6 +210,8 @@
 .report .text,
 .report .node_resource,
 .report .url2unit,
+.report .url2portfolio,
+.report .preview2unit,
 .report .model-qrcode {
   margin-top: 7px;
   border: 1px solid var(--report-display-color);

@@ -5,7 +5,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" shrink-to-fit="no"/>
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
 		<link rel="icon" type="image/png" href="../../karuta/img/faviconK.png"></link>
-		<script src="../../application/js/_init.js"></script>
 		<!-- =============================================================== -->
 		<link id='font-family' href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 		<!-- =============================================================== -->
@@ -90,6 +89,8 @@
 		<!-- =============================================================== -->		
 		<script src="../../karuta/js/resources/Type_EuropassL.js"></script>
 		<!-- =============================================================== -->
+		<!--link rel='stylesheet' type='text/css' href='../../application/css/specific.css'></link-->
+		<!-- =============================================================== -->
 		<script src="../../other/js/jquery-3.3.1.min.js"></script>
 		<script src="../../other/js/popper.min.js"></script>
 		<script src="../../other/bootstrap-4.4.0-dist/js/bootstrap.min.js"></script>
@@ -132,6 +133,17 @@
 	</head>
 	<body>
 		<script>
+			var pathname = window.location.pathname;
+			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
+			var url = "../../.." + appliname + "-config/_init.js"
+			$.ajax({
+				async:false,
+				url: url,
+				dataType: "script",
+				error : function(jqxhr,textStatus) {
+					alert(appliname + "-config/_init.js not found");
+				}
+			});
 			initKarutaPage();
 			window.addEventListener("load", function() {
 				displayKarutaPage();
