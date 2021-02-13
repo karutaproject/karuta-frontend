@@ -123,7 +123,7 @@ UIFactory["URL2Unit"].prototype.getView = function(dest,type,langcode)
 	if (this.query.indexOf('self.')>-1) {
 		html = "<div  class='URL2Unit-link'><span onclick=\"javascript:$('#sidebar_"+this.uuid_node.text()+"').click()\">"+label+"</span>";
 		if (this.preview)
-			html+= "&nbsp;<span class='button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["button-preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html+= "&nbsp;<span class='button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		html += "</div>"
 	}
 	else

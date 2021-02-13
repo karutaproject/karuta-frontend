@@ -6,7 +6,6 @@
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 		<link rel="icon" type="image/png" href="../img/faviconK.png" />
 		<link rel="icon" type="image/png" href="../../karuta/img/faviconK.png"></link>
-		<script src="../../application/js/_init.js"></script>
 		<!-- =============================================================== -->
 		<link rel="stylesheet" type="text/css" href="../../other/bootstrap-4.4.0-dist/css/bootstrap.min.css"></link>
 		<link rel="stylesheet" type="text/css" href="../../other/css/jquery-ui.css"></link>
@@ -35,9 +34,23 @@
 		<script src="../../karuta/js/resources/Type_Get_Resource.js"></script>
 		<!-- =============================================================== -->
 		<script>
-			window.onload = function() {
+			var pathname = window.location.pathname;
+			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
+			var url = "../../.." + appliname + "-config/_init.js"
+			$.ajax({
+				async:false,
+				url: url,
+				dataType: "script",
+				error : function(jqxhr,textStatus) {
+					alert(appliname + "-config/_init.js not found");
+				}
+			});
+			window.addEventListener("load", function() {
 				displayKarutaLogin();
-			};
+			});
+			$('[data-toggle="tooltip"]').tooltip({
+				trigger : 'hover'
+			})  // to avoid tooltip when button is clicked
 		</script>
 	</head>
 	<body class="welcome">

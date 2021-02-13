@@ -1,7 +1,7 @@
 
 
 //==============================
-function show_main_page(rootid,role)
+function show_main_page(rootid)
 //==============================
 {
 	hideAllPages();
@@ -17,7 +17,7 @@ function show_main_page(rootid,role)
 }
 
 //==============================
-function fill_main_page(rootid,role)
+function fill_main_page(rootid,portfolioid)
 //==============================
 {
 	setLanguageMenu("fill_main_page()");
@@ -31,7 +31,7 @@ function fill_main_page(rootid,role)
 	//-------------------------------------------
 	if (rootid!=null){
 		var parentid = $($(UICom.structure.ui[rootid].node).parent()).attr('id');
-		if ($($(UICom.structure.ui[rootid].node).parent())) {
+		if (parentid!=undefined && $($(UICom.structure.ui[rootid].node).parent())) {
 			g_portfolioid = parentid;
 		} else {
 			rootid = g_portfolio_rootid;
@@ -40,47 +40,11 @@ function fill_main_page(rootid,role)
 		rootid = g_portfolio_rootid;
 	}
 	//-------------------------------------------
-	userrole = role;
+	userrole = g_userroles[0];
 	if (userrole=='undefined')
 		userrole = "";
 	//-------------------------------------------
 	USER.admin = USER.admin_original; // reset if role playing when reload
-/*	if (!USER.admin) {
-		$.ajax({ // get group-role for the user
-			Accept: "application/xml",
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/groups/" + g_portfolioid,
-			success : function(data) {
-				var usergroups = $("group",data);
-				for (var i=0;i<usergroups.length;i++) {
-//					g_userroles[i+1] = $("role",usergroups[i]).text();
-					// -------------
-					g_userroles[i+1] = $("rolename",usergroups[i]).text();
-					if ($("rolename",usergroups[i]).text()=='designer') {
-						g_designerrole = true;
-						g_userroles[1] = 'designer';
-					}
-					// -------------
-				}
-				g_userroles[0] = g_userroles[1]; // g_userroles[0] played role by designer
-				if (g_userroles[1]=='designer')
-					g_designerrole = true;
-				if (g_designerrole) {
-					g_visible = localStorage.getItem('metadata');
-					toggleMetadata(g_visible);
-				}
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error in fill_main_page : "+jqxhr.responseText+"/"+textStatus);
-			}
-		});
-	} else {
-		g_userroles[0] = g_userroles[1] ='designer';
-		g_designerrole = true;
-		g_visible = localStorage.getItem('metadata');
-		toggleMetadata(g_visible);
-	}*/
 	//-------------------------------------------
 	var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
 	$.ajax({
@@ -250,12 +214,12 @@ function fill_main_page(rootid,role)
 }
 
 //==============================
-function display_main_page(rootid,role)
+function display_main_page(rootid,portfolioid)
 //==============================
 {
 	$("#sub-bar").show();
 	$("#welcome-bar").hide();
-	fill_main_page(rootid,role);
-	show_main_page(rootid,role);		
+	fill_main_page(rootid,portfolioid);
+	show_main_page(rootid);		
 }
 
