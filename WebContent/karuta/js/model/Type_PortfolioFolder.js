@@ -302,7 +302,7 @@ UIFactory["PortfolioFolder"].prototype.loadAndDisplayContent = function (type,pa
 				this.folder.children[newTableau1[i][1]] = {'id':newTableau1[i][1]};
 			}
 			//-------------------------
-			this.folder.displayContent(type,this.parentid);
+			this.folder.displayContent(type,this.folder.id);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
@@ -499,9 +499,9 @@ UIFactory["PortfolioFolder"].prototype.displayOwner = function(dest)
 //==================================
 {
 	if (Users_byid[this.ownerid]==null)
-		UIFactory.User.loadUserAndDisplay(this.ownerid,dest,'firstname-lastname');
+		UIFactory.User.loadUserAndDisplay(this.ownerid,dest,'(firstname-lastname)');
 	else {
-		var owner = Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
+		var owner = Users_byid[this.ownerid].getView(null,'(firstname-lastname)',null);
 		$("#"+dest).html(owner);
 	}
 }
@@ -523,11 +523,12 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 	if (viewtype == 'portfolio') {
 		html += "<div id='folderheader_"+this.id+"' parentid='"+parentid+"' class='folder-header' draggable='true' ondragstart='dragPortfolioFolder(event)'>";
 		html += "	<div class='row row-label'>";
-		html += "		<div class='col-4 folder-label' id='folderlabel_"+this.id+"' ";
+		html += "		<div class='col-5'>";
+		html += "			<span class=''folder-label' id='folderlabel_"+this.id+"' ";
 		if (USER.admin)
 			html += "onclick=\"display_main_page('"+this.rootid+"','"+this.id+"')\"";
-		html += " >"+folder_label+"</div>";
-		html += "		<div id='owner_"+this.id+"' class='col-1 headerfolderowner'></div>";
+		html += " >"
+		html += folder_label + " </span><span id='owner_"+this.id+"' class='owner'></span></div>";
 		html += "		<div class='col-2 headerfoldercode'>";
 		html += "			<span id='pcode_"+this.id+"' >"+folder_code+"</span>";
 		html += "			<span class='copy-button fas fa-clipboard' ";
@@ -617,9 +618,8 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 	if (viewtype == 'list') {
 		var tree_type='<span class="fas fa-folder" aria-hidden="true"></span>';
 		html += "<div class='row portfolio-row'>";
-		html += "<div class='folder-label col-5 XXX' id='portfolio_list_"+this.id+"' onclick=\"folders_byid['"+this.id+"'].toggleContent('"+type+"','"+parentid+"')\" draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+"</div>";
+		html += "<div class='folder-label col-5' id='portfolio_list_"+this.id+"' onclick=\"folders_byid['"+this.id+"'].toggleContent('"+type+"','"+parentid+"')\" draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'></span></div>";
 		if (USER.creator && !USER.limited) {
-			html += "<div id='owner_"+this.id+"' class='col-2 d-none d-md-block'></div>";
 			html += "<div class='col-5'>";
 			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
 			html += " <span class='copy-button fas fa-clipboard' ";

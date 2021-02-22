@@ -141,9 +141,9 @@ UIFactory["Portfolio"].prototype.displayOwner = function(dest)
 //==================================
 {
 	if (Users_byid[this.ownerid]==null)
-		UIFactory.User.loadUserAndDisplay(this.ownerid,dest,'firstname-lastname');
+		UIFactory.User.loadUserAndDisplay(this.ownerid,dest,'(firstname-lastname)');
 	else {
-		var owner = Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
+		var owner = Users_byid[this.ownerid].getView(null,'(firstname-lastname)',null);
 		$("#"+dest).html(owner);
 	}
 }
@@ -199,10 +199,9 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	var html = "";
 	//--------------------------------------------------------------------------------------------
 	if (type=='list' || type=='portfolio') {
-		html += "<div class='portfolio-label col-10 col-md-4' onclick=\"display_main_page('"+this.rootid+"','"+this.id+"')\" ><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
+		html += "<div class='portfolio-label col-10 col-md-5' onclick=\"display_main_page('"+this.rootid+"','"+this.id+"')\" ><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'/> </div>";
 		if (USER.creator && !USER.limited) {
-			html += "<div id='owner_"+this.id+"' class='col-2 d-none d-md-block'></div>";
-			html += "<div class='col-3 d-none d-md-block'>";
+			html += "<div class='col-4 d-none d-md-block'>";
 			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
 			html += " <span class='copy-button fas fa-clipboard' ";
 			html += "   onclick=\"copyInclipboad('"+this.id+"')\" ";

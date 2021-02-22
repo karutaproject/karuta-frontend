@@ -231,29 +231,6 @@ UIFactory["User"].parse_add = function(data)
 //--------------------------------------------------------------
 
 
-
-//==================================
-UIFactory["User"].displayXXXActive = function(destid,type,lang)
-//==================================
-{
-	$("#"+destid).html("<h3>"+karutaStr[LANG]["active_users"]+"</h3>");
-	$("#"+destid).append("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_users'></tbody></table>");
-	$("#temporary").html("<table id='temp_users'></table>");
-	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
-	for ( var i = 0; i < UsersActive_list.length; i++) {
-		var itemid = destid+"_"+UsersActive_list[i].id;
-		var login = UsersActive_list[i].username_node.text();
-		if (login.length<80){ //not a temporary user
-			$("#list_users").append($("<tr class='item' id='"+itemid+"'></tr>"));
-			$("#"+itemid).html(UsersActive_list[i].getView(destid,type,lang));
-		} else {
-			$('#temporary-users').show();
-			$("#temp_users").append($("<tr id='"+itemid+"'></tr>"));
-			$("#"+itemid).html(UsersActive_list[i].getView(destid,'temporary',lang));
-		}
-	}
-};
-
 //==================================
 UIFactory["User"].displayInactive = function(dest,type,lang)
 //==================================
@@ -379,8 +356,8 @@ UIFactory["User"].prototype.getRadio = function(attr,value,name,checked,disabled
 	var html = "<input type='radio' name='"+name+"' username='"+username+"' value='"+userid+"'";
 	if (attr!=null && value!=null)
 		html += " "+attr+"='"+value+"'";
-	if ((userid==1)||disabled)
-		html+= " disabled='disabled' ";			
+//	if ((userid==1)||disabled)
+//		html+= " disabled='disabled' ";			
 	if (checked)
 		html += " checked='true' ";
 	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
@@ -508,6 +485,12 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	}
 	if (type=='firstname-lastname') {
 		html = this.firstname_node.text() + " " + this.lastname_node.text();
+	}
+	if (type=='(firstname-lastname)') {
+		html = "(" + this.firstname_node.text();
+		if (this.lastname_node.text()!="")
+			html += " " + this.lastname_node.text();
+		html += ")";
 	}
 	if (type=='firstname-lastname-username') {
 		html = this.firstname_node.text() + " " + this.lastname_node.text()+ " (" + this.username_node.text()+")";

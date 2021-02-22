@@ -99,7 +99,8 @@ body,
 /* ====================== */
 /*    LIST- WELCOME       */
 /* ====================== */
-.portfolio-label {
+.portfolio-label,
+.folder-label {
   cursor: pointer;
 }
 
@@ -280,6 +281,10 @@ body,
   display: in-line;
   opacity: 1;
 }
+#main-list .owner {
+  font-size: 80%;
+  font-style: italic;
+}
 #main-list .portfolio-card {
   margin-top: 15px;
   border: none;
@@ -297,8 +302,7 @@ body,
   color: var(--list-button-text-color);
   background-color: var(--list-element-background-color);
 }
-#main-list .portfolio-card .card-body .portfolio-code,
-#main-list .portfolio-card .card-body .owner {
+#main-list .portfolio-card .card-body .portfolio-code {
   font-size: 80%;
 }
 #main-list .portfolio-card .card-body .comments {

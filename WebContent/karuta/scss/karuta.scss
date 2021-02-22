@@ -113,7 +113,8 @@
 /*    LIST- WELCOME       */
 /* ====================== */
 
-	.portfolio-label {
+	.portfolio-label,
+	.folder-label {
 		cursor: pointer;
 	}
 
@@ -308,6 +309,10 @@
 			display:in-line;
 			opacity: 1;
 		}
+		.owner {
+			font-size:80%;
+			font-style: italic;
+		}
 		//----- CARD -------
 		.portfolio-card{
 			margin-top:15px;
@@ -324,8 +329,7 @@
 				padding:3px;
 				color:var(--list-button-text-color);
 				background-color: var(--list-element-background-color);
-				.portfolio-code,
-				.owner {
+				.portfolio-code {
 					font-size:80%;
 				}
 			.comments {
