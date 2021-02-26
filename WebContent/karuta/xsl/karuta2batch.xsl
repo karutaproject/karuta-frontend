@@ -219,7 +219,7 @@
 		<select-tree id="{$id}">
 			<code>
 				<xsl:call-template name="txtval">
-				<xsl:with-param name="semtag">code</xsl:with-param>
+					<xsl:with-param name="semtag">code</xsl:with-param>
 				</xsl:call-template>
 		</code>
 		</select-tree>
@@ -574,7 +574,7 @@
 			</attribute>
 			<attribute name='text' language-dependent='Y'>
 				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">text</xsl:with-param>
+					<xsl:with-param name="semtag">date</xsl:with-param>
 				</xsl:call-template>
 			</attribute>
 		</update-resource>

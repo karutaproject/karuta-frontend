@@ -1313,6 +1313,11 @@ body,
   margin-top: 10px;
 }
 
+.standard.asmStructure .asmStructure,
+.standard.asmStructure .asmUnit {
+  margin-top: 10px;
+}
+
 .standard-struct-default {
   cursor: pointer;
 }

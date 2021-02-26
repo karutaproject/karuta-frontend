@@ -157,18 +157,6 @@ function fill_main_page(rootid,portfolioid)
 				loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});
 			//---------------------------
 			$("#wait-window").modal('hide');
-
-/*			if (root_semantictag.indexOf('karuta-batch')>-1){
-				g_userroles[0] = 'batcher';
-				USER.admin = false;
-				$("#userrole").html('batcher');
-			}
-			if (root_semantictag.indexOf('karuta-report')>-1){
-				g_userroles[0] = 'reporter';
-				USER.admin = false;
-				$("#userrole").html('reporter');
-			}
-*/
 			//---------------------------
 			var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
 			if (welcomes.length==0) // for backward compatibility

@@ -38,7 +38,7 @@ var g_bar_type = "vertical"; // default value
 var g_edit = false;
 var g_visible = 'hidden';
 var g_display_sidebar = true;
-
+var g_execbatch = false;
 //---- caches -----
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_report_models = {}; // cache for report_models
@@ -1649,7 +1649,10 @@ function setVariables(data)
 {
 	var variable_nodes = $("asmContext:has(metadata[semantictag*='g-variable'])",data);
 	for (var i=0;i<variable_nodes.length;i++) {
-		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().name] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().value;
+//		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().name] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().value;
+		var var_name = $("name",$("asmResource[xsi_type='Variable']",variable_nodes[i])).text()
+		var var_value = $("value",$("asmResource[xsi_type='Variable']",variable_nodes[i])).text()
+		g_variables[var_name] = var_value;
 	}
 	var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
 	for (var i=0;i<select_variable_nodes.length;i++) {

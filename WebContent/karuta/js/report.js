@@ -17,7 +17,7 @@ var userid = null; // current user
 var report_refresh = true;
 var csvline = "";
 
-var csvreport = null;
+var csvreport = [];
 var report_not_in_a_portfolio = false;
 
 var dashboard_infos = {};
@@ -66,6 +66,13 @@ jqueryReportSpecificFunctions['.uniqueResourceCode()'] = "";
 jqueryReportSpecificFunctions['.uniqueResourceValue()'] = "";
 jqueryReportSpecificFunctions['.uniqueResourceText()'] = "";
 //---------------
+jqueryReportSpecificFunctions['.resourceTextContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
+jqueryReportSpecificFunctions['.resourceCodeContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
+jqueryReportSpecificFunctions['.resourceValueContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
+jqueryReportSpecificFunctions['.nodeLabelContains('] = "asmResource[xsi_type='nodeRes']>label[lang='#lang#']:contains(";
+jqueryReportSpecificFunctions['.nodeCodeContains('] = "asmResource[xsi_type='nodeRes']>code:contains(";
+jqueryReportSpecificFunctions['.resourceFilenameContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
+//---------------
 
 Selector = function(jquery,type,filter1,filter2,unique)
 {
@@ -105,6 +112,20 @@ function r_replaceVariable(text)
 		n++; // to avoid infinite loop
 	}
 	return text;
+}
+
+//==================================
+function r_getTest(test)
+//==================================
+{
+	for (fct in jqueryReportSpecificFunctions) {
+		if (test.indexOf(fct)>-1) {
+			test = ".has(\"" + test.replace(fct,jqueryReportSpecificFunctions[fct]) + "\")";
+			if (test.indexOf("#lang#")>-1)
+				test = test.replace(/#lang#/g,languages[LANGCODE]);
+		}
+	}
+	return test;
 }
 
 //==================================
@@ -1362,6 +1383,7 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 	var attr_help = "";
 	var prefix_id = "";
 	try {
+		//----------selector---------------------
 		var select = $(action).attr("select");
 		while (select.indexOf("##")>-1) {
 			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
@@ -1374,6 +1396,14 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 			node = $(selector.jquery,data).addBack();
 		if (select.substring(0,2)=="..") // node itself
 			node = data;
+		//---------------test-----------------
+		var test = $(action).attr("test");
+		if (test!=undefined) {
+			test = r_replaceVariable(test);
+			test = getTest(test);
+			node = eval("$(node)"+test);
+		}
+		//------------------------------
 		if (node.length>0 || select.substring(0,1)=="."){
 			var nodeid = $(node).attr("id");
 			//----------------------------
@@ -1416,6 +1446,9 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 		csvseparator = ";";
 	text = r_replaceVariable(text);
 	csvline += text + csvseparator;
+	// to display for testing
+	$("#"+destid).append(text);
+
 }
 
 //=============================================================================
@@ -1759,6 +1792,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
 		success : function(data) {
+			setVariables(data);
 			var nodeid = $("asmRoot",data).attr("id");
 			// ---- transform karuta portfolio to report model
 			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;

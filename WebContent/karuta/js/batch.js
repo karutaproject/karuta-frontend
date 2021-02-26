@@ -67,6 +67,15 @@ function getTxtvals(node)
 }
 
 //==================================
+function b_replaceVariable(text)
+//==================================
+{
+	if (text.indexOf("//")>-1)
+		text = eval("g_json."+text.substring(2));
+	return text;
+}
+
+//==================================
 function getTxtvalsWithoutReplacement(node)
 //==================================
 {
@@ -94,6 +103,8 @@ function getTxtvalsWithoutReplacement(node)
 				text = eval(fct+"('"+text+"')");
 		} else {
 			text = $(txtvals[i]).text();
+			if (text=="//today")
+				text = new Date().toLocaleString();
 			if (text.indexOf('numline()')>-1) {
 				text = text.replace(/numline()/g,g_noline);
 				text = eval(text);
@@ -153,9 +164,13 @@ function getTargetUrl(node)
 	var semtag = select.substring(idx+1);
 	if (semtag=='#current_node')
 		url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
-	else if (semtag=='#uuid')
+	else if (semtag=='#uuid') {
+		if (treeref.indexOf("//")>-1)
+			treeref = eval("g_json."+treeref.substring(2));
+		else if (treeref.indexOf("/")>-1)
+			treeref = eval("g_json.lines["+g_noline+"]."+treeref.substring(1));
 		url = serverBCK_API+"/nodes/node/"+treeref;
-	else if (treeref.indexOf("#")>-1)
+	} else if (treeref.indexOf("#")>-1)
 		url = serverBCK_API+"/nodes?portfoliocode=" + treeref.substring(1) + "&semtag="+semtag;	
 	else
 		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag;
@@ -183,9 +198,13 @@ function getSourceUrl(node)
 	var semtag = select.substring(idx+1);
 	if (semtag=='#current_node')
 		url = serverBCK_API+"/nodes/node/"+g_current_node_uuid;
-	else if (semtag=='#uuid')
+	else if (semtag=='#uuid') {
+		if (treeref.indexOf("//")>-1)
+			treeref = eval("g_json."+treeref.substring(2));
+		else if (treeref.indexOf("/")>-1)
+			treeref = eval("g_json.lines["+g_noline+"]."+treeref.substring(1));
 		url = serverBCK_API+"/nodes/node/"+treeref;
-	else if (treeref.indexOf("#")>-1)
+	} else if (treeref.indexOf("#")>-1)
 		url = serverBCK_API+"/nodes?portfoliocode=" + treeref.substring(1) + "&semtag="+semtag;	
 	else
 		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag;
@@ -2531,7 +2550,7 @@ g_actions['import-node'] = function importNode(node)
 		if (select.indexOf('#current_node')>-1)
 			destid = g_current_node_uuid;
 		else
-			destid = treeref; // select = porfolio_uuid.#uuid
+			destid = r_replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
 		var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?srcetag="+srcetag+"&srcecode="+srcecode;
 		$.ajax({
 			async:false,
@@ -2756,10 +2775,12 @@ g_actions['update-proxy'] = function update_proxy(node)
 			for (i=0; i<nodes.length; i++){
 				ok++;
 				var targetid = $(nodes[i]).attr('id');
-				var xml = "<asmResource xsi_type='Proxy'>";
-				xml += "<code>"+sourceid+"</code>";
-				xml += "<value>"+sourceid+"</value>";
-				xml += "</asmResource>";
+				//----- get target ----------------
+				var resource = $("asmResource[xsi_type='Proxy']",nodes[i]);
+				$("code",resource).text(sourceid);
+				$("value",resource).text(sourceid);
+				var xml = "<asmResource xsi_type='Proxy'>" + $(resource).html() + "</asmResource>";
+				var strippeddata = xml.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 				//----- update target ----------------
 				$.ajax({
 					async : false,
@@ -2975,6 +2996,7 @@ function getModelAndProcess(model_code)
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code + "?resources=true",
 		success : function(data) {
+			setVariables(data);
 			var portfoliologcode = "";
 			if ($("asmContext:has(metadata[semantictag='portfoliologcode'])",data).length>0)
 				portfoliologcode = r_replaceVariable($("text[lang='"+LANG+"']",$("asmResource[xsi_type='Field']",$("asmContext:has(metadata[semantictag='portfoliologcode'])",data))).text());
@@ -3116,9 +3138,11 @@ function display_execBatch()
 };
 
 //==================================================
-function execReport_BatchCSV(parentid,title,codeReport)
+function execReport_BatchCSV(parentid,title,codeReport,display)
 //==================================================
 {
+	if (display==null)
+		display = true;
 	csvreport = [];
 	$.ajaxSetup({async: false});
 	var root_node = g_portfolio_current;
@@ -3130,17 +3154,20 @@ function execReport_BatchCSV(parentid,title,codeReport)
 	report_getModelAndPortfolio(codeReport,root_node,null,g_dashboard_models);
 	$.ajaxSetup({async: true});
 	initBatchVars();
-	if (csvreport.length>3) {
+	if (csvreport.length>1) {
 		var codesLine = csvreport[0].substring(0,csvreport[0].length-1).split(csvseparator);
 		g_json = convertCSVLine2json(codesLine,csvreport[1]);
 //		g_json['model_code'] = codeBatch;
-		g_json['lines'] = [];
-		codesLine = csvreport[2].substring(0,csvreport[2].length-1).split(csvseparator);
-		for (var i=3; i<csvreport.length;i++){
-			g_json.lines[g_json.lines.length] = convertCSVLine2json(codesLine,csvreport[i]);
+		if (csvreport.length>3) {
+			g_json['lines'] = [];
+			codesLine = csvreport[2].substring(0,csvreport[2].length-1).split(csvseparator);
+			for (var i=3; i<csvreport.length;i++){
+				g_json.lines[g_json.lines.length] = convertCSVLine2json(codesLine,csvreport[i]);
+			}
 		}
 		//------------------------------
-		display_execBatch()
+		if (display)
+			display_execBatch()
 		//------------------------------
 		getModelAndProcess(g_json.model_code);		
 		UIFactory.Node.reloadUnit();
