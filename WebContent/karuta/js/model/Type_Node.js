@@ -175,8 +175,8 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			}
 			//============================== ASMCONTEXT =============================
 			if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='raw' && this.semantictag!='EuropassL')){
-				this.displayAsmContext(dest,type,langcode,edit,refresh);
 				alreadyDisplayed = true;
+				this.displayAsmContext(dest,type,langcode,edit,refresh,depth);
 			}
 			//============================== NODE ===================================
 			else { // other than asmContext
@@ -1689,7 +1689,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 	//-----------------------------------
 	var html = "";
 	//-----------------------------------
-	if (this.edit) {
+	if (this.edit && this.id.indexOf('temp-')==-1) {
 		//------------ edit button ---------------------
 		if ( 
 					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles) || this.editnoderoles.indexOf($(USER.username_node).text())>-1 || this.editresroles.indexOf($(USER.username_node).text())>-1))
@@ -1746,9 +1746,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 	if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
 			html += "<span class='button fas fa-print' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	}
-	//-------------------------------------------------
-//	if (html!="")
-//		html = "<div class='btn-group'>"+html+"</div><!-- class='btn-group' -->"
+	//-----------------------------------------------
 	return html;
 }
 

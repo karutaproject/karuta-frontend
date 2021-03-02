@@ -806,7 +806,7 @@
 
 	.button{
 		font-size: calc(var(--font-size-coeff) * 1rem);
-		padding: 5px;
+		padding: 6px;
 		cursor:pointer;
 		display: inline-block;
 		white-space:nowrap;
@@ -818,7 +818,7 @@
 //		}
 		a.text-button {
 			font-size:calc(var(--font-size-coeff) * 1rem);
-			margin-top:2px;
+			//margin-top:2px;
 			font-weight:initial;
 			font-style:initial;
 			font-variant:initial;
