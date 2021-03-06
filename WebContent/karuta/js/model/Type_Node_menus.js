@@ -9,9 +9,10 @@
 UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4)
 //==================================================
 {	// note: #xxx is to avoid to scroll to the top of the page
+	var menus_style = UICom.structure.ui[parentid].getMenuStyle();
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<a class='button text-button btn' onclick=\"";
+	var html = "<a class='button text-button btn' style='"+menus_style+"' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
 		html += items[0] +"('"+parentid+"','"+title.replaceAll("'","##apos##")+"'";
@@ -40,9 +41,10 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4)
 //==================================================
 {	// note: #xxx is to avoid to scroll to the top of the page
+	var menus_style = UICom.structure.ui[parentid].getMenuStyle();
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<div class='dropdown-item button btn text-button' onclick=\"";
+	var html = "<div class='dropdown-item button btn text-button' style='"+menus_style+"' onclick=\"";
 	if (srce=='function'){
 		var items = tag.split("/");
 		html += items[0] +"('"+parentid+"','"+title.replaceAll("'","##apos##")+"'";
@@ -145,10 +147,11 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 //==================================================
 {
 	var html = "";
+	var menus_style = this.getMenuStyle();
 	//------------- node menus button ---------------
 	if ((USER.admin || g_userroles[0]=='designer') && (this.asmtype != 'asmContext' && (this.depth>0 || this.asmtype == 'asmUnitStructure'))) {
 		html += "<span class='dropdown'>";
-		html += "	<button class='btn dropdown-toggle add-button' type='button' id='add_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+		html += "	<button class='btn dropdown-toggle add-button' style='"+menus_style+"' type='button' id='add_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 		html += 		karutaStr[languages[langcode]]['Add'];
 		html += "	</button>";
 		html += "	<div class='dropdown-menu dropdown-menu-right' aria-labelledby='add_"+this.id+"'>";
@@ -275,7 +278,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			if (displayMenu && !monomenu) {
 				//-----------------------
 				html += "<span class='dropdown'>";
-				html += "	<button class='btn dropdown-toggle add-button' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+				html += "	<button class='btn dropdown-toggle add-button' style='"+menus_style+"' type='button' id='specific_"+this.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 				//-----------
 				if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
 					for (var i=0; i<mlabels.length; i++){
@@ -303,7 +306,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				}
 				//-----------
 				html += "	</button>";
-				html += "	<div class='dropdown-menu dropdown-menu-right' aria-labelledby='specific_"+this.id+"'>";
+				html += "	<div class='dropdown-menu dropdown-menu-right' style='"+menus_style+"' aria-labelledby='specific_"+this.id+"'>";
 				//-----------------------
 				var databack = false;
 				var callback = "UIFactory.Node.reloadUnit";
@@ -381,7 +384,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				|| ( g_userroles[1]=='designer' && this.submitroles.indexOf(g_userroles[0])>-1)
 				|| this.submitroles.indexOf(this.userrole)>-1 )))
 		{
-			html += "<span id='submit-"+this.id+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+this.id+"'";
+			html += "<span id='submit-"+this.id+"' style='"+menus_style+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+this.id+"'";
 			if (this.submitall=='Y')
 				html += ",true";
 			html += ")\" ";
@@ -460,9 +463,9 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 									if (labels[j].indexOf("@"+languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\"> "+label+"</span>";
+								html_toadd = " <span class='button sharing-button' style='"+menus_style+"' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
-								html_toadd = " <span class='button sharing-button' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
+								html_toadd = " <span class='button sharing-button' style='"+menus_style+"' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
 							}
 						} else {
 							if (shareto!='?') {
@@ -487,16 +490,16 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 									if (labels[j].indexOf("@"+languages[langcode])>-1)
 										label = labels[j].substring(0,labels[j].indexOf("@"));
 								}
-								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\"> "+label+"</span>";
+								html_toadd = " <span class='button sharing-button' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\"> "+label+"</span>";
 							} else {
-								html_toadd = " <span class='button sharing-button' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
+								html_toadd = " <span class='button sharing-button' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\""+js+"\">"+karutaStr[languages[langcode]]['send']+"</span>";
 							}
 						}
 					} else {
 						if (this.shareroles.indexOf('2world')>-1) {
 							html_toadd = "<span id='2world-"+this.id+"'></span>";
 						} else {
-							html_toadd = "<span class='button fas fa-share' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+this.id+"','"+this.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+							html_toadd = "<span class='button fas fa-share' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+this.id+"','"+this.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 						}
 					}
 					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))

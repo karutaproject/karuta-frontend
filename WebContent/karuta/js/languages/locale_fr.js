@@ -187,6 +187,7 @@ karutaStr['fr']['displayview']="Type de vue";
 karutaStr['fr']['displayitselforg']="Largeur d'affichage";
 karutaStr['fr']['displaychildorg']="Type d'affichage du contenu";
 karutaStr['fr']['margin-top']="Marge supérieure (px)";
+karutaStr['fr']['menus-color']="Couleur des menus, boutons et +/-";
 karutaStr['fr']['sharedResource']="Ressource partagée";
 karutaStr['fr']['sharedNodeResource']="Ress. du noeud partagée";
 karutaStr['fr']['resizeroles']="Modifier taille image";

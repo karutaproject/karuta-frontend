@@ -458,15 +458,16 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	}
 	//-------------------- collapsible -------------------
 	if (this.collapsible=='Y') {
+		var menus_color  = this.getMenuStyle()
 		$("#collapsible_"+uuid).show();
-		$("#collapsible_"+uuid).html("<span id='toggleContent_"+uuid+"' class='button'></span>");
+		$("#collapsible_"+uuid).html("<span id='toggleContent_"+uuid+"' class='button' style='"+menus_color+"'></span>");
 		$("#collapsible_"+uuid).attr("onclick","javascript:toggleContent('"+uuid+"')");
 		if (this.collapsed=='Y') {
-			$("#toggleContent_"+uuid).attr("class","fas fa-plus collapsible");
+			$("#toggleContent_"+uuid).attr("class","fas fa-plus");
 			$("#content-"+uuid).hide();
 		}
 		else {
-			$("#toggleContent_"+uuid).attr("class","fas fa-minus collapsible");
+			$("#toggleContent_"+uuid).attr("class","fas fa-minus");
 			$("#content-"+uuid).show();
 		}
 	} else
@@ -1691,6 +1692,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		depth = 99;
 	//-----------------------------------
 	var html = "";
+	var menus_color = this.getMenuStyle();
 	//-----------------------------------
 	if (this.edit && this.id.indexOf('temp-')==-1) {
 		//------------ edit button ---------------------
@@ -1703,7 +1705,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 				|| 	(this.inline && (	(USER.admin || g_userroles[0]=='designer'|| this.editnoderoles.containsArrayElt(g_userroles) || this.editnoderoles.indexOf(this.userrole)>-1) ))
 			)
 		{
-			html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
+			html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' style='"+menus_color+"' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
 		}
 		//------------ delete button ---------------------
 		if (( (this.deletenode && (this.delnoderoles.containsArrayElt(g_userroles) || this.delnoderoles.indexOf($(USER.username_node).text())>-1) ) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
@@ -1716,14 +1718,14 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		//------------- move node buttons ---------------
 		if (((this.writenode && (this.moveroles.containsArrayElt(g_userroles)  || this.moveroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			if ((this.asmtype!='asmUnit' && this.asmtype!='asmStructure') || depth<1)
-				html+= "<span class='button fas fa-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				html+= "<span class='button fas fa-arrow-up' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.upNode('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		if (((this.writenode && (this.moveinroles.containsArrayElt(g_userroles)  || this.moveinroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			var movein = ($(this.metadatawad).attr('movein')==undefined)?'':$(this.metadatawad).attr('movein');
 			if (movein=='')
-				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			else
-				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
 		if ( (g_userroles[0]=='designer' && this.asmtype != 'asmRoot') // always duplicate for designer
@@ -1734,20 +1736,20 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			 	 )
 			)
 		{
-			html+= "<span class='button fas fa-clone' onclick=\"javascript:UIFactory.Node.duplicate('"+this.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html+= "<span class='button fas fa-clone' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.duplicate('"+this.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 	}
 	//------------- private button -------------------
 	if ((this.showroles.containsArrayElt(g_userroles) || this.showroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.showroles!='none' && this.showroles!='') {
 		if (this.privatevalue) {
-			html += "<span class='button fas fa-eye-slash' onclick=\"javascript:show('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html += "<span class='button fas fa-eye-slash' style='"+menus_color+"' onclick=\"javascript:show('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		} else {
-			html += "<span class='button fas fa-eye' onclick=\"javascript:hide('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html += "<span class='button fas fa-eye' style='"+menus_color+"' onclick=\"javascript:hide('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 	}
 	//------------- print button -------------------
 	if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-			html += "<span class='button fas fa-print' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	}
 	//-----------------------------------------------
 	return html;

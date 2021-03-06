@@ -100,7 +100,7 @@ displayView["model"]["resource"] = ["default","1/12","2/12","3/12","4/12","5/12"
 
 displayHTML["raw-struct-default"] =	"<div id='node_#uuid#' class='#displayview# #displaytype# #nodetype# #semtag# #cssclass#  #resourcetype# #priv#'>" +
 								"	<div id='sub_node_#uuid#' name='lbl-div' class='row  #displayview#' >" +
-								"		<div id='collapsible_#uuid#' class='col-md-1'></div>" +
+								"		<div id='collapsible_#uuid#' class='collapsible col-md-1'></div>" +
 								"		<div id='std_node_#uuid#' class='node-label col-md-7  '>" +
 								"			<div><a id='label_node_#uuid#' class='label-libelle'></a><span id='help_#uuid#' class='ihelp'></span></div>" +
 								"			<div id='comments_#uuid#' class='comments'></div><!-- comments -->" +

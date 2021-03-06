@@ -237,6 +237,16 @@ UIFactory["Node"].getDataContentStyle = function(data)
 	return style;
 }
 
+//==================================================
+UIFactory["Node"].prototype.getMenuStyle = function()
+//==================================================
+{
+	metadataepm = this.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'nds-menus-color',false);
+	return style;
+}
+
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //-------------------- RIGHTS ------------------------------------------------------------------------------------------------
@@ -651,6 +661,8 @@ UIFactory["Node"].getMetadataEpm = function(data,attribute,number)
 			html += attribute.substring(8) + value;
 		else if (attribute.indexOf("node-")>-1)
 			html += attribute.substring(5) + ":" + value;
+		else if (attribute.indexOf("nds-menus-")>-1)
+			html += attribute.substring(10) + ":" + value;
 		else if (attribute.indexOf("nds-")>-1)
 			html += attribute.substring(4) + ":" + value;
 		else if (attribute.indexOf("inparent-")>-1)
@@ -838,6 +850,7 @@ UIFactory["Node"].prototype.displayMetaEpmInfo = function(destid)
 	//------------------------------------
 	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-margin-top');
 	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-othercss');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-menus-color');
 	//------------------------------------
 	html += UIFactory.Node.getMetadataEpmInfo(data,'node-font-weight');
 	html += UIFactory.Node.getMetadataEpmInfo(data,'node-font-style');
@@ -1425,6 +1438,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		//------------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-margin-top',$(this.metadataepm).attr('nds-margin-top'));
 		this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-othercss',$(this.metadataepm).attr('nds-othercss'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-menus-color',$(this.metadataepm).attr('nds-menus-color'));
 		//------------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-weight',$(this.metadataepm).attr('font-weight'));
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-style',$(this.metadataepm).attr('font-style'));

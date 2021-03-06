@@ -417,9 +417,10 @@ function getEditBoxOnCallback(data,param2,param3,param4) {
 function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
 //==============================
 {
+	var menus_style = UICom.structure.ui[uuid].getMenuStyle();
 	var html = "";
 	html += "\n<!-- ==================== Delete Button ==================== -->";
-	html += "<i id='del-"+uuid+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom'></i>";
+	html += "<i id='del-"+uuid+"' style='"+menus_style+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom'></i>";
 	return html;
 }
 

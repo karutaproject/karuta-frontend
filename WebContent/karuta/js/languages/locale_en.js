@@ -187,6 +187,7 @@ karutaStr['en']['displayview']="View Type";
 karutaStr['en']['displayitselforg']="Display Width";
 karutaStr['en']['displaychildorg']="Content Display Type";
 karutaStr['en']['margin-top']="Margin Top (px)";
+karutaStr['en']['menus-color']="Menus, Buttons and +/-";
 karutaStr['en']['sharedResource']="Shared Resource";
 karutaStr['en']['sharedNodeResource']="Shared Node Resource";
 karutaStr['en']['resizeroles']="Resize Image";
