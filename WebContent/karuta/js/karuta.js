@@ -732,6 +732,11 @@ function previewPage(uuid,depth,type,langcode)
 			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
 		}
 		$("#preview-window").modal('show');
+	} else {
+		var html = "";
+		html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
+		$("#preview-window-body").html(html);
+		$("#preview-window").modal('show');
 	}
 }
 
@@ -1649,21 +1654,31 @@ function setVariables(data)
 {
 	var variable_nodes = $("asmContext:has(metadata[semantictag*='g-variable'])",data);
 	for (var i=0;i<variable_nodes.length;i++) {
-//		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().name] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().value;
 		var var_name = $("name",$("asmResource[xsi_type='Variable']",variable_nodes[i])).text()
 		var var_value = $("value",$("asmResource[xsi_type='Variable']",variable_nodes[i])).text()
 		g_variables[var_name] = var_value;
 	}
 	try {
-	var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
-	for (var i=0;i<select_variable_nodes.length;i++) {
-		var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
-		var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
-		var variable_value = (value=="") ? code : value;
-		g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = cleanCode(variable_value,true);
-	}
+		var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
+		for (var i=0;i<select_variable_nodes.length;i++) {
+			var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
+			var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
+			var variable_value = (value=="") ? code : value;
+			g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = cleanCode(variable_value,true);
+		}
 	} catch(e){}
 }
+
+//==================================
+function updateVariable(node)
+//==================================
+{
+	var value = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().value;
+	var code = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().code;
+	var variable_value = (value=="") ? code : value;
+	g_variables[UICom.structure.ui[$(node).attr("id")].getCode()] = cleanCode(variable_value,true);
+}
+
 
 //==============================
 function logout()

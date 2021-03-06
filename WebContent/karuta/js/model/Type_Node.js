@@ -725,22 +725,25 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
+	if(this.editcoderoles==undefined)
+		this.setMetadata();
+
 	//---------------------
 	if (g_userroles[0]=='designer' || USER.admin || this.metadatawad.getAttribute('display')!='N') {
 		//-----------------------------
-			if (type=="default")
+		if (type=="default")
 			html += "<div><div class='title'";
 		if (type=="span")
 			html += "<span class='title'";
 		//----------------------------
 		var style ="";
-		var metadataepm = this.metadataepm;
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
-		style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
+//		var metadataepm = this.metadataepm;
+//		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
+//		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
+//		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
+//		style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
+//		style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
+//		style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
 		if (style.length>0)
 			html += " style='"+style+"' ";
 		//----------------------------
@@ -1767,6 +1770,7 @@ UIFactory['Node'].reloadStruct = function(uuid)
 		url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
+			setVariables(data);
 			g_portfolio_current = data;
 			if (g_bar_type.indexOf('horizontal')>-1) {
 				$("#menu_bar").html("");
@@ -1802,6 +1806,7 @@ UIFactory['Node'].reloadUnit = function()
 		parentid : parentid,
 		success : function(data) {
 			UICom.parseStructure(data,false,this.parentid);
+			setVariables(data);
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
 			if (g_bar_type.indexOf('horizontal')>-1) {
 				$("#menu_bar").html("");

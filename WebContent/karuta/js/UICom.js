@@ -207,7 +207,7 @@ var UICom =
 								dataS += "	<asmResource xsi_type='context'><text lang='fr' /><text lang='en' /></asmResource>";
 								dataS += "	<asmResource xsi_type='Field'>";
 								for (var i=0; i<languages.length;i++){
-									dataS += "<text lang='" + languages[i] + "'>" + karutaStr[languages[i]]['error-proxy'] + "</text>";
+									dataS += "<text lang='" + languages[i] + "'>" + karutaStr[languages[i]]['error-notfound'] + "</text>";
 								}
 								dataS += "	</asmResource>";
 								dataS += "</asmContext>";
@@ -248,7 +248,7 @@ var UICom =
 								dataS += "	<asmResource xsi_type='context'><text lang='fr' /><text lang='en' /></asmResource>";
 								dataS += "	<asmResource xsi_type='Field'>";
 								for (var i=0; i<languages.length;i++){
-									dataS += "<text lang='" + languages[i] + "'>" + karutaStr[languages[i]]['error-proxy'] + "</text>";
+									dataS += "<text lang='" + languages[i] + "'>" + karutaStr[languages[i]]['error-notfound'] + "</text>";
 								}
 								dataS += "	</asmResource>";
 								dataS += "</asmContext>";

@@ -1179,6 +1179,8 @@ UIFactory["Get_Get_Resource"].reparse = function(destid,type,langcode,data,self,
 UIFactory["Get_Get_Resource"].prototype.save = function()
 //==================================
 {
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.node);
 	if (this.clause=="xsi_type='Get_Get_Resource'") {
 		UICom.UpdateResource(this.id,writeSaved);
 		if (!this.inline)

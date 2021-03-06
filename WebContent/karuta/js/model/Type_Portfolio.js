@@ -606,6 +606,7 @@ UIFactory["Portfolio"].reload = function(portfolioid)
 		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
+			setVariables(data);
 		}
 	});
 };
@@ -620,6 +621,7 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
+			setVariables(data);
 			UIFactory["Portfolio"].parse_add(data);
 			$("#sidebar").html("");
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.root);

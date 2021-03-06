@@ -1114,6 +1114,11 @@ body,
   cursor: pointer;
 }
 
+.Get_Resource .preview-button {
+  color: var(--portfolio-link-color);
+  cursor: pointer;
+}
+
 /* ====================
 	Image
    ====================*/

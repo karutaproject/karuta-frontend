@@ -432,7 +432,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 				this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true,true);
 		}
 	}
-	if (name=='asmContext' && this.resource.type=='URL2Unit')
+	if (name=='asmContext' && (this.resource.type=='URL2Unit' || this.resource.type=='Get_Resource'))
 		this.displayMetadataAttributeEditor('metadata-part1','preview',true);
 //	if (name=='asmContext') {
 //		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')

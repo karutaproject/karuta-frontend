@@ -30,15 +30,10 @@ function fill_main_page(rootid,portfolioid)
 	g_welcome_add = false;
 	//-------------------------------------------
 	if (rootid!=null){
-		var parentid = $($(UICom.structure.ui[rootid].node).parent()).attr('id');
-		if (parentid!=undefined && $($(UICom.structure.ui[rootid].node).parent())) {
-			g_portfolioid = parentid;
-		} else {
-			rootid = g_portfolio_rootid;
-		}
+			g_portfolioid = portfolioid;
 	} else {
 		rootid = g_portfolio_rootid;
-	}
+	} 
 	//-------------------------------------------
 	userrole = g_userroles[0];
 	if (userrole=='undefined')

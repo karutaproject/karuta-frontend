@@ -177,8 +177,8 @@ displayHTML["standard-resource-default"] =	"<div id='node_#uuid#' class='#displa
 											"			<div><span id='label_node_#uuid#' class='label-libelle'></span><span id='help_#uuid#' class='ihelp'></span></div>" +
 											"		</div>" +
 											"			<table class='col-8' width='100%'><tr>" +
-										"					<td  width='80%' class='td-resource'>" +
-											"					<div id='resource_#uuid#' name='res-div' class='resource inside-full'></div>" +
+										"					<td  width='80%'  name='res-div' class='td-resource'>" +
+											"					<div id='resource_#uuid#' class='resource inside-full'></div>" +
 											"					<div id='comments_#uuid#' class='comments'></div>" +
 											"				</td>" +
 											"				<td class='td-buttons buttons'><span id='menus-#uuid#' class='menus'/><span id='buttons-#uuid#' /></td>" +
@@ -197,13 +197,13 @@ displayHTML["standard-resource-simple"] =	"<div id='node_#uuid#' class='#display
 											"	<div id='sub_node_#uuid#' class='resource-node' >" +
 											"		<table width='100%'><tr>" +
 											"			<td class='td1' name='res-lbl-div'><span id='label_node_#uuid#' class='label-libelle'/><span id='help_#uuid#' class='ihelp'/></td>" +
-											"			<td class='td2'>" +
-											"				<div id='resource_#uuid#'  name='res-div' class='resource'></div>" +
+											"			<td class='td2' name='res-div'>" +
+											"				<div id='resource_#uuid#'  class='resource'></div>" +
+											"				<div id='comments_#uuid#' class='comments'></div>" +
 											"			</td>" +
 											"			<td class='td3'><span id='buttons-#uuid#' class='buttons edit-bar'/></td>" +
 											"		</tr></table>" +
 											"	</div>" +
-											"	<div id='comments_#uuid#' class='comments'></div>" +
 											"	<div id='metainfo_#uuid#' class='metainfo'></div>" +
 											"	<div id='cssinfo_#uuid#' class='cssinfo'></div>" +
 											"	<div id='content-#uuid#' name='cnt-div' class='content' ></div>" +
