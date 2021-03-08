@@ -263,8 +263,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		queryattr_value = r_replaceVariable(queryattr_value);
-		if (type=='multiple')
-			queryattr_value = cleanCode(queryattr_value);  // portfoliocode may be from a get_ressource with spécial characters
+//		if (type=='multiple')
+//			queryattr_value = cleanCode(queryattr_value);  // portfoliocode may be from a get_ressource with spécial characters
 		try {
 			//------------------------------
 			var srce_indx = queryattr_value.lastIndexOf('.');
@@ -289,7 +289,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (portfoliocode=='self')
 				portfoliocode = selfcode;
 			//------------
-			portfoliocode = cleanCode(portfoliocode);
+//			portfoliocode = cleanCode(portfoliocode); // portfoliocode may be from a get_ressource with spécial characters
 			//------------
 			var query = queryattr_value.substring(portfoliocode_end_indx,semtag_parent_indx);
 			var parent = null;

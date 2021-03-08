@@ -2505,6 +2505,7 @@ UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,i
 		var nodeid = $(resources[i]).attr("id");
 		style = UIFactory["Node"].getContentStyle(nodeid);
 		html += "<div id='welcome_resource_"+nodeid+"' class='col-md-12' style='"+style+"'>";
+		UICom.structure["ui"][nodeid].setMetadata();
 		html += UICom.structure["ui"][nodeid].resource.getView('welcome_resource_'+nodeid);
 		html += "</div><!-- class='col-md-12' -->";
 	}
