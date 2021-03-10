@@ -6,16 +6,39 @@
 //----------------------------------------------------------------------------------------------------------------------------
 
 //==================================================
-UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4)
+UIFactory["Node"].getEltMenu = function(parentid,menus,targetid,title,databack,callback,param2,param3,param4)
 //==================================================
-{	// note: #xxx is to avoid to scroll to the top of the page
-	var menus_style = UICom.structure.ui[parentid].getMenuStyle();
+{
+	var html ="";
+	var srce = menus[0];
+	var tag = menus[1];
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	var html = "<a class='button text-button btn' style='"+menus_style+"' onclick=\"";
-	if (srce=='function'){
+	if (srce=='functions'){
+		var menuelts = tag.split("//");
+		for (var j=1;j<menuelts.length;j++){
+			if (menuelts[i].indexOf("/")>-1) {
+				var items = tag.split("/");
+				html += items[0] +"('"+parentid+"','"+targetid+"','"+title.replaceAll("'","##apos##")+"'";
+				if (items.length>1)
+					html += ",";
+				for (var i=1;i<items.length;i++){
+					html += "'" + items[i] + "'";
+					if (i<items.length-1)
+						html += ",";
+				}
+				html += ");"
+			} else {
+			var semtags = menuelts.split("+");
+			for (var i=0;i<semtags.length;i++){
+				if (semtags[i].length>0)
+				html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+			}
+			}
+		}
+	} else if (srce=='function'){
 		var items = tag.split("/");
-		html += items[0] +"('"+parentid+"','"+title.replaceAll("'","##apos##")+"'";
+		html += items[0] +"('"+parentid+"','"+targetid+"','"+title.replaceAll("'","##apos##")+"'";
 		if (items.length>1)
 			html += ",";
 		for (var i=1;i<items.length;i++){
@@ -33,38 +56,26 @@ UIFactory["Node"].getSingleMenu = function(parentid,srce,tag,title,databack,call
 	}
 	html += "\">";
 	html += title;
+	return html;
+}
+//==================================================
+UIFactory["Node"].getSingleMenu = function(parentid,menus,targetid,title,databack,callback,param2,param3,param4)
+//==================================================
+{	// note: #xxx is to avoid to scroll to the top of the page
+	var menus_style = UICom.structure.ui[parentid].getMenuStyle();
+	var html = "<a class='button text-button btn' style='"+menus_style+"' onclick=\"";
+	html += UIFactory.Node.getEltMenu(parentid,menus,targetid,title,databack,callback,param2,param3,param4);
 	html += "</a>";
 	return html;
 };
 
 //==================================================
-UIFactory["Node"].getSpecificMenu = function(parentid,srce,tag,title,databack,callback,param2,param3,param4)
+UIFactory["Node"].getSpecificMenu = function(parentid,menus,targetid,title,databack,callback,param2,param3,param4)
 //==================================================
-{	// note: #xxx is to avoid to scroll to the top of the page
+{
 	var menus_style = UICom.structure.ui[parentid].getMenuStyle();
-	if (srce=="self")
-		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 	var html = "<div class='dropdown-item button btn text-button' style='"+menus_style+"' onclick=\"";
-	if (srce=='function'){
-		var items = tag.split("/");
-		html += items[0] +"('"+parentid+"','"+title.replaceAll("'","##apos##")+"'";
-		if (items.length>0)
-			html += ",";
-		for (var i=1;i<items.length;i++){
-			html += "'" + items[i] + "'";
-			if (i<items.length-1)
-				html += ",";
-		}
-		html += ");"
-	} else {
-		var semtags = tag.split(" ");
-		for (var i=0;i<semtags.length;i++){
-			if (semtags[i].length>0)
-			html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
-		}
-	}
-	html += "\">";
-	html += title;
+	html += UIFactory.Node.getEltMenu(parentid,menus,targetid,title,databack,callback,param2,param3,param4);
 	html += "</div>";
 	return html;
 };
@@ -234,7 +245,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			var menus = [];
 			var displayMenu = false;
 			if (this.menuroles.indexOf('function')<0)
-				this.menuroles = r_replaceVariable(this.menuroles);
+				this.menuroles = replaceVariable(this.menuroles);
 			var items = this.menuroles.split(";");
 			for (var i=0; i<items.length; i++){
 				var subitems = items[i].split(",");
@@ -255,6 +266,10 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 						menus[i][4] = subitems[4]; // condition
 					else
 						menus[i][4] = ""; // condition
+					if (subitems.length>5)
+						menus[i][5] = subitems[5]; // target
+					else
+						menus[i][5] = ""; // target
 				}
 				if (menus[i][3].indexOf(this.userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
 					if (menus[i][4]==""){
@@ -307,7 +322,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				//-----------
 				html += "	</button>";
 				html += "	<div class='dropdown-menu dropdown-menu-right' style='"+menus_style+"' aria-labelledby='specific_"+this.id+"'>";
-				//-----------------------
+				//--------------------------menu items--------------------------------------
 				var databack = false;
 				var callback = "UIFactory.Node.reloadUnit";
 				if (this.asmtype=='asmStructure' || this.asmtype=='asmRoot' )
@@ -334,11 +349,37 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 						} catch(e){
 							title = menus[i][2];
 						}
+						//---------------------target----------------------------------------
+						var targetid = "";
+						if (menus[i][5]!=""){
+							var nodes = $("*:has(>metadata[semantictag='"+menus[i][5]+"'])",g_portfolio_current);
+							if (nodes.length>0) {
+								targetid = $(nodes[0]).attr("id");
+								var parent = nodes[0];
+								while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
+									parent = $(parent).parent();
+								}
+								var parentid = $(parent).attr("id");
+								if ($(parent).prop("nodeName") == "asmUnit"){
+									callback = "UIFactory.Node.reloadUnit";
+									param2 = "'"+parentid+"'";
+									if ($("#page").attr('uuid')!=parentid)
+										param3 = false;
+								}
+								else {
+									callback = "UIFactory.Node.reloadStruct";
+									param2 = "'"+g_portfolio_rootid+"'";
+									if ($("#page").attr('uuid')!=parentid)
+										param3 = false;
+									}
+							}
+						}
+						//-------------------------------------------------------------
 						if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
-							html += UIFactory["Node"].getSpecificMenu(this.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
+							html += UIFactory["Node"].getSpecificMenu(this.id,menus[i],targetid,title,databack,callback,param2,param3,param4);
 					}
 				}
-				//-----------------------
+				//----------------------------------------------------------------
 				html += "		</div>"; // class='dropdown-menu'
 				html += "	</span><!-- class='dropdown -->";
 			}
@@ -367,8 +408,33 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				} catch(e){
 					title = menus[i][2];
 				}
+					//---------------------target----------------------------------------
+					var targetid = this.id;
+					if (menus[i][5]!=""){
+						var nodes = $("*:has(>metadata[semantictag='"+menus[i][5]+"'])",g_portfolio_current);
+						if (nodes.length>0) {
+							targetid = $(nodes[0]).attr("id");
+							var parent = nodes[0];
+							while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
+								parent = $(parent).parent();
+							}
+							var parentid = $(parent).attr("id");
+							if ($(parent).prop("nodeName") == "asmUnit"){
+								callback = "UIFactory.Node.reloadUnit";
+								param2 = "'"+parentid+"'";
+								if ($("#page").attr('uuid')!=parentid)
+									param3 = false;
+							}
+							else {
+								callback = "UIFactory.Node.reloadStruct";
+								param2 = "'"+g_portfolio_rootid+"'";
+								if ($("#page").attr('uuid')!=parentid)
+									param3 = false;
+								}
+						}
+					}
 				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
-					html += UIFactory["Node"].getSingleMenu(this.id,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
+					html += UIFactory["Node"].getSingleMenu(targetid,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
 				//------------------
 			}
 		}

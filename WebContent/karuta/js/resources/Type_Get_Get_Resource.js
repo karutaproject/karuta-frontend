@@ -262,7 +262,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 		type = 'multiple';
 	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
-		queryattr_value = r_replaceVariable(queryattr_value);
+		queryattr_value = replaceVariable(queryattr_value);
 //		if (type=='multiple')
 //			queryattr_value = cleanCode(queryattr_value);  // portfoliocode may be from a get_ressource with spécial characters
 		try {
@@ -281,7 +281,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (semtag_parent.indexOf('#')==0)
 				semtag_parent = semtag_parent.substring(1);
 			var portfoliocode_end_indx = queryattr_value.indexOf('child')+queryattr_value.indexOf('sibling')+queryattr_value.indexOf('parent')+queryattr_value.indexOf('#')+queryattr_value.indexOf('itself')+3; //  if not present give -1
-			var portfoliocode = r_replaceVariable(queryattr_value.substring(0,portfoliocode_end_indx));
+			var portfoliocode = replaceVariable(queryattr_value.substring(0,portfoliocode_end_indx));
 			//------------
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
@@ -360,16 +360,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 				var url ="";
 				if (portfoliocode.indexOf('?')!= -1) {
-					if (code_parent.indexOf("@")>-1) {
-						display_code_parent = false;
-						code_parent =code_parent.substring(0,code_parent.indexOf("@"))+code_parent.substring(code_parent.indexOf("@")+1);
-					}
-					if (code_parent.indexOf("#")>-1) {
-						code_parent = code_parent.substring(0,code_parent.indexOf("#"))+code_parent.substring(code_parent.indexOf("#")+1);
-					}
+					code_parent = replaceVariable(code_parent);
+					code_parent = cleanCode(code_parent);
 					$(this.portfoliocode_node).text(code_parent);
 					portfoliocode = code_parent;
-					url = serverBCK_API+"/nodes?portfoliocode="+code_parent+"&semtag="+semtag.replace("!","");
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
 				}
 				else if (portfoliocode=='parent?'){
 					if (portfoliocode_parent.indexOf("@")>-1) {
@@ -732,7 +727,7 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			//------------------------------
 			input += "<div id='"+code+"' style=\""+style+"\">";
 			if (selectable) {
-				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
+				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' portfoliocode='"+portfoliocode+"' class='multiple-item";
 				input += "' ";
 				if (srce=="resource") {
 					for (var j=0; j<languages.length;j++){
@@ -1209,7 +1204,7 @@ UIFactory["Get_Get_Resource"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags)
+UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags)
 //==================================
 {
 	$.ajaxSetup({async: false});
@@ -1242,19 +1237,39 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags)
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].importMultiple = function(parentid,srce,fct)
+UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,fct)
 //==================================
 {
 	$.ajaxSetup({async: false});
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
-	var param2 = parentid;
+	if (targetid!="")
+		parentid = targetid;
+	var callback = "";
 	var databack = false;
-	var callback = UIFactory.Node.reloadUnit;
+	var param2 = "";
+	var param3 = "";
+	var parent = UICom.structure.ui[parentid].node;
+	while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
+		parent = $(parent).parent();
+	}
+	var parentid = $(parent).attr("id");
+	if ($(parent).prop("nodeName") == "asmUnit"){
+		callback = UIFactory.Node.reloadUnit;
+		param2 = parentid;
+		if ($("#page").attr('uuid')!=parentid)
+			param3 = false;
+	}
+	else {
+		callback = UIFactory.Node.reloadStruct;
+		param2 = g_portfolio_rootid;
+		if ($("#page").attr('uuid')!=parentid)
+			param3 = false;
+	}
 	for (var j=0; j<inputs.length;j++){
 		var code = $(inputs[j]).attr('code');
 		if (srce=='?')
 			srce = $(inputs[j]).attr('portfoliocode');
-		importBranch(parentid,srce,code,databack,callback);
+		importBranch(parentid,srce,code,databack,callback,param2,param3);
 	}
 	if (fct!=null) {
 		fct(parentid);
@@ -1317,8 +1332,6 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 function get_get_multiple(parentid,title,query,partcode,get_get_resource_semtag)
 //==================================
 {
-	var langcode = LANGCODE;
-	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "UIFactory.Get_Get_Resource.addMultiple('"+parentid+"','"+partcode+","+get_get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
@@ -1338,13 +1351,11 @@ function get_get_multiple(parentid,title,query,partcode,get_get_resource_semtag)
 }
 
 //==================================
-function import_ggmultiple(parentid,title,query,partcode,fct)
+function import_ggmultiple(parentid,targetid,title,query,partcode,fct)
 //==================================
 {
-	var langcode = LANGCODE;
-	//---------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Get_Resource.importMultiple('"+parentid+"','"+partcode+"',"+fct+")";
+	var js2 = "UIFactory.Get_Get_Resource.importMultiple('"+parentid+"','"+targetid+"','"+partcode+"',"+fct+")";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);

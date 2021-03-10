@@ -2204,7 +2204,6 @@ function replaceVariable(text)
 			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
 			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
 			i = replaceVariable(i);
-			var variable_array1 = text.replace("["+i+"]","");
 			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
 				text = g_variables[variable_value][i];
 			}

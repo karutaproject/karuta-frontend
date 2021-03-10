@@ -1438,7 +1438,6 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		//------------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-margin-top',$(this.metadataepm).attr('nds-margin-top'));
 		this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-othercss',$(this.metadataepm).attr('nds-othercss'));
-		this.displayMetadataEpmAttributeEditor('metadata-epm-node','nds-menus-color',$(this.metadataepm).attr('nds-menus-color'));
 		//------------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-weight',$(this.metadataepm).attr('font-weight'));
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','font-style',$(this.metadataepm).attr('font-style'));
@@ -1447,6 +1446,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','padding-top',$(this.metadataepm).attr('padding-top'));
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','color',$(this.metadataepm).attr('color'));
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','background-color',$(this.metadataepm).attr('background-color'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-label','nds-menus-color',$(this.metadataepm).attr('nds-menus-color'));
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','othercss',$(this.metadataepm).attr('othercss'));
 		//----------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-font-weight',$(this.metadataepm).attr('node-font-weight'));

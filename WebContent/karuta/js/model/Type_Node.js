@@ -488,7 +488,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		html_chckbox += "checked=true";
 	html_chckbox += " type='checkbox' onchange=\"UIFactory.Node.toggleComment('"+uuid+"',this)\">&nbsp;"+karutaStr[LANG]['report-elt-disabled']+"<span>";
 	$("div[class='title']","#label_node_"+uuid).append(html_chckbox);
-	//-------------- buttons --------------------------
+	//-------------- buttons & menus --------------------------
 	if (edit) {
 		if (this.semantictag.indexOf("bubble_level1")>-1)
 			this.menu = false;
@@ -499,6 +499,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		if (buttons!="")
 			buttons = "<div class='btn-group'>"+buttons+"</div><!-- class='btn-group' -->"
 		$("#buttons-"+uuid).html(buttons);
+		//-------------- menus ---------------
 		if (this.menu)
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
@@ -1762,11 +1763,13 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 //----------------------------------------------------------------------------------------------------------------------------
 
 //==================================================
-UIFactory['Node'].reloadStruct = function(uuid)
+UIFactory['Node'].reloadStruct = function(uuid,redisplay)
 //==================================================
 {
-	$.ajaxSetup({async: false});
+	if (redisplay == null)
+		redisplay = true;
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
@@ -1783,23 +1786,31 @@ UIFactory['Node'].reloadStruct = function(uuid)
 				$("#menu_bar").hide();
 				UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
 			}
-			var uuid = $("#page").attr('uuid');
-			if (g_display_type=='model')
-				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
-			else
-				displayPage(uuid,1,g_display_type,LANGCODE,g_edit);
-			$('#wait-window').modal('hide');
+			if (redisplay) {
+				var uuid = $("#page").attr('uuid');
+				if (g_display_type=='model')
+					displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
+				else
+					displayPage(uuid,1,g_display_type,LANGCODE,g_edit);
+				$('#wait-window').modal('hide');
+			}
 		}
 	});
-	$.ajaxSetup({async: true});
 };
 
 //==================================================
-UIFactory['Node'].reloadUnit = function()
+UIFactory['Node'].reloadUnit = function(uuid,redisplay)
 //==================================================
 {
-	var uuid = $("#page").attr('uuid');
-	var parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
+	if (redisplay == null || redisplay=="")
+		redisplay = true;
+	if (redisplay)
+		uuid = $("#page").attr('uuid');
+	var parentid = "";
+	if (uuid==g_portfolio_rootid)
+		parentid = g_portfolio_rootid;
+	else
+		parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
 	$.ajax({
 		async: false,
 		type : "GET",
@@ -1819,10 +1830,12 @@ UIFactory['Node'].reloadUnit = function()
 				$("#menu_bar").hide();
 				UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar',g_display_type,null,g_edit,UICom.rootid);
 			}
-			if (g_display_type=='model')
-				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
-			else
-				displayPage(uuid,99,g_display_type,LANGCODE,g_edit);
+			if (redisplay) {
+				if (g_display_type=='model')
+					displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
+				else
+					displayPage(uuid,99,g_display_type,LANGCODE,g_edit);
+			}
 			$('#wait-window').modal('hide');
 		}
 	});
