@@ -1204,7 +1204,7 @@ UIFactory["Get_Get_Resource"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags)
+UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags,get_get_resource_semtag)
 //==================================
 {
 	$.ajaxSetup({async: false});
@@ -1247,7 +1247,7 @@ UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,f
 	var callback = "";
 	var databack = false;
 	var param2 = "";
-	var param3 = "";
+	var param3 = null;
 	var parent = UICom.structure.ui[parentid].node;
 	while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
 		parent = $(parent).parent();
@@ -1328,10 +1328,17 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 
 }
 
+//--------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+//----------------------------------Menu Functions--------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+
 //==================================
-function get_get_multiple(parentid,title,query,partcode,get_get_resource_semtag)
+function get_get_multiple(parentid,targetid,title,query,partcode,get_get_resource_semtag)
 //==================================
 {
+	// targetid not used with get_get_multiple
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "UIFactory.Get_Get_Resource.addMultiple('"+parentid+"','"+partcode+","+get_get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";

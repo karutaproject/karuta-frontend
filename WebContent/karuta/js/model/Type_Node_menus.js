@@ -32,7 +32,10 @@ UIFactory["Node"].getEltMenu = function(parentid,menus,targetid,title,databack,c
 			var semtags = menuelts.split("+");
 			for (var i=0;i<semtags.length;i++){
 				if (semtags[i].length>0)
-				html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+					if (targetid!="")
+						html += "importBranch('"+targetid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+					else
+						html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
 			}
 			}
 		}
@@ -51,7 +54,10 @@ UIFactory["Node"].getEltMenu = function(parentid,menus,targetid,title,databack,c
 		var semtags = tag.split("+");
 		for (var i=0;i<semtags.length;i++){
 			if (semtags[i].length>0)
-			html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+				if (targetid!="")
+					html += "importBranch('"+targetid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+				else
+					html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
 		}
 	}
 	html += "\">";
@@ -255,7 +261,8 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					menus[i][1] = ""; // semantic tag
 					menus[i][2] = ""; // label
 					menus[i][3] = ""; // roles
-					menus[i][4] = ""; // condition
+					menus[i][4] = ""; // target
+					menus[i][5] = ""; // condition
 					
 				} else {
 					menus[i][0] = subitems[0]; // portfolio code
@@ -263,20 +270,20 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					menus[i][2] = subitems[2]; // label
 					menus[i][3] = subitems[3]; // roles
 					if (subitems.length>4)
-						menus[i][4] = subitems[4]; // condition
+						menus[i][4] = subitems[4]; // target
 					else
-						menus[i][4] = ""; // condition
+						menus[i][4] = ""; // target
 					if (subitems.length>5)
-						menus[i][5] = subitems[5]; // target
+						menus[i][5] = subitems[5]; // condition
 					else
-						menus[i][5] = ""; // target
+						menus[i][5] = ""; // condition
 				}
 				if (menus[i][3].indexOf(this.userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
-					if (menus[i][4]==""){
+					if (menus[i][5]==""){
 						displayMenu = true;  // this.userrole may be included in semantictag
 						no_monomenu = i;
 					}
-					else if(eval(menus[i][4])){
+					else if(eval(menus[i][5])){
 						displayMenu = true;
 						no_monomenu = i;
 					}
@@ -324,13 +331,13 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				html += "	<div class='dropdown-menu dropdown-menu-right' style='"+menus_style+"' aria-labelledby='specific_"+this.id+"'>";
 				//--------------------------menu items--------------------------------------
 				var databack = false;
-				var callback = "UIFactory.Node.reloadUnit";
-				if (this.asmtype=='asmStructure' || this.asmtype=='asmRoot' )
-					callback = "UIFactory.Node.reloadStruct";
-				var param2 = "'"+g_portfolio_rootid+"'";
-				var param3 = null;
-				var param4 = null;
 				for (var i=0; i<menus.length; i++){
+					var callback = "UIFactory.Node.reloadUnit";
+					if (this.asmtype=='asmStructure' || this.asmtype=='asmRoot' )
+						callback = "UIFactory.Node.reloadStruct";
+					var param2 = null;
+					var param3 = null;
+					var param4 = null;
 					if (menus[i][0]=="#line") {
 						html += "<div class='dropdown-divider'></div>";
 					} else {
@@ -351,8 +358,8 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 						}
 						//---------------------target----------------------------------------
 						var targetid = "";
-						if (menus[i][5]!=""){
-							var nodes = $("*:has(>metadata[semantictag='"+menus[i][5]+"'])",g_portfolio_current);
+						if (menus[i][4]!=""){
+							var nodes = $("*:has(>metadata[semantictag='"+menus[i][4]+"'])",g_portfolio_current);
 							if (nodes.length>0) {
 								targetid = $(nodes[0]).attr("id");
 								var parent = nodes[0];
@@ -385,12 +392,14 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			}
 			if (displayMenu && monomenu) {
 				var databack = false;
-				var callback = "UIFactory.Node.reloadUnit";
-				if (this.asmtype=='asmStructure' || this.asmtype=='asmRoot' )
-					callback = "UIFactory.Node.reloadStruct";
-				var param2 = "'"+g_portfolio_rootid+"'";
+				var param2 = null;
 				var param3 = null;
 				var param4 = null;
+				var callback = "UIFactory.Node.reloadUnit";
+				if (this.asmtype=='asmStructure' || this.asmtype=='asmRoot' ) {
+					callback = "UIFactory.Node.reloadStruct";
+					param2 = "'"+g_portfolio_rootid+"'";
+				}
 				var i = no_monomenu;
 				//-------------------
 				var titles = [];
@@ -410,8 +419,8 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				}
 					//---------------------target----------------------------------------
 					var targetid = this.id;
-					if (menus[i][5]!=""){
-						var nodes = $("*:has(>metadata[semantictag='"+menus[i][5]+"'])",g_portfolio_current);
+					if (menus[i][4]!=""){
+						var nodes = $("*:has(>metadata[semantictag='"+menus[i][4]+"'])",g_portfolio_current);
 						if (nodes.length>0) {
 							targetid = $(nodes[0]).attr("id");
 							var parent = nodes[0];
@@ -434,7 +443,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 						}
 					}
 				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
-					html += UIFactory["Node"].getSingleMenu(targetid,menus[i][0],menus[i][1],title,databack,callback,param2,param3,param4);
+					html += UIFactory["Node"].getSingleMenu(this.id,menus[i],targetid,title,databack,callback,param2,param3,param4);
 				//------------------
 			}
 		}

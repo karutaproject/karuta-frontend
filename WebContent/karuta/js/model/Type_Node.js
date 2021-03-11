@@ -1802,7 +1802,7 @@ UIFactory['Node'].reloadStruct = function(uuid,redisplay)
 UIFactory['Node'].reloadUnit = function(uuid,redisplay)
 //==================================================
 {
-	if (redisplay == null || redisplay=="")
+	if (redisplay == null)
 		redisplay = true;
 	if (redisplay)
 		uuid = $("#page").attr('uuid');

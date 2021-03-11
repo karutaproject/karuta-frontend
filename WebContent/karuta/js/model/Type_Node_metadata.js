@@ -442,8 +442,6 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 				this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true,true);
 		}
 	}
-	if (name=='asmContext' && (this.resource.type=='URL2Unit' || this.resource.type=='Get_Resource'))
-		this.displayMetadataAttributeEditor('metadata-part1','preview',true);
 //	if (name=='asmContext') {
 //		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
 //			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
@@ -550,6 +548,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
 	this.displayMetadataWadAttributeEditor('metadata-part2','js');
 	//--------------------------------------
+	if (name=='asmContext' && (this.resource.type=='URL2Unit' || this.resource.type=='Get_Resource'))
+		this.displayMetadataAttributeEditor('metadata-part2','preview',true);
 	if (name!='asmRoot')
 		this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
 	if (name=='asmUnitStructure')
