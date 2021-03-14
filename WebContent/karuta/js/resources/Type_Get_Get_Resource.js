@@ -313,6 +313,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				parent = $(this.node).parent().parent();
 			}
 			var code_parent = "";
+			var value_parent = "";
 			if (queryattr_value.indexOf('#')>0)
 				code_parent = semtag_parent;
 			else {
@@ -331,20 +332,18 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
 				if (child.length==0 && itself.length>0){
 					code_parent = $($("code",itself)[0]).text();
+					value_parent = $($("value",itself)[0]).text();
 				} else {
 					var nodetype = $(child).prop("nodeName"); // name of the xml tag
-					if (nodetype=='asmContext')
+					if (nodetype=='asmContext') {
 						code_parent = $($("code",child)[1]).text();
-					else
+						value_parent = $($("value",child)[1]).text();
+					 } else {
 						code_parent = $($("code",child)[0]).text();
+						value_parent = $($("value",child)[0]).text();
+					}
 
 				}
-				//-----------
-				if (removestar>-1) {
-					var elts = code_parent.split("*");
-					code_parent = elts[removestar];
-				}
-				//-----------
 			}
 			//----------------------
 			if ($("*:has(metadata[semantictag*='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
@@ -352,6 +351,12 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			//----------------------
 			if (query.indexOf('itself')>-1) {
 				code_parent = $($("code",$(this.node)[0])[0]).text();
+				value_parent = $($("value",$(this.node)[0])[0]).text();
+			}
+			//----------------------
+			if (removestar>-1) {
+				var elts = code_parent.split("*");
+				code_parent = elts[removestar];
 			}
 			//----------------------
 			var portfoliocode_parent = $("portfoliocode",$("*:has(metadata[semantictag*='"+semtag_parent+"'])",parent)).text();
@@ -359,14 +364,12 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				portfoliocode_parent = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode_parent;
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 				var url ="";
-				if (portfoliocode.indexOf('?')!= -1) {
+				if (portfoliocode.indexOf('value?')>-1) {
 					code_parent = replaceVariable(code_parent);
-					code_parent = cleanCode(code_parent);
-					$(this.portfoliocode_node).text(code_parent);
-					portfoliocode = code_parent;
-					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
-				}
-				else if (portfoliocode=='parent?'){
+					value_parent = replaceVariable(value_parent);
+					portfoliocode_parent = value_parent;
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+				} else if (portfoliocode.indexOf('parent?')>-1){
 					if (portfoliocode_parent.indexOf("@")>-1) {
 						display_portfoliocode_parent = false;
 						portfoliocode_parent =portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("@"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("@")+1);
@@ -377,6 +380,12 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					$(this.portfoliocode_node).text(portfoliocode_parent);
 					portfoliocode = portfoliocode_parent;
 					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+				} else if (portfoliocode.indexOf('?')>-1 || portfoliocode.indexOf('code?')>-1){
+					code_parent = replaceVariable(code_parent);
+					code_parent = cleanCode(code_parent);
+					$(this.portfoliocode_node).text(code_parent);
+					portfoliocode = code_parent;
+					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
 				} else {
 					$(this.portfoliocode_node).text(portfoliocode);
 					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
@@ -1204,7 +1213,7 @@ UIFactory["Get_Get_Resource"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags,get_get_resource_semtag)
+UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags,get_get_resource_semtag)
 //==================================
 {
 	$.ajaxSetup({async: false});
@@ -1221,6 +1230,12 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags,get_
 //	var get_resource_semtag = multiple_tags.substring(multiple_tags.indexOf(',')+1);
 
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined)
+		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
+	//------------------------------
 	// for each one create a part
 	var databack = true;
 	var callback = UIFactory.Get_Get_Resource.updateaddedpart;
@@ -1236,14 +1251,71 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,multiple_tags,get_
 	}
 };
 
+
+//==================================
+UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semtag,selected_item,last,parentid,fct)
+//==================================
+{
+	var partid = data;
+	var value = $(selected_item).attr('value');
+	if (value=="")
+		value = $(selected_item).attr('portfoliocode');
+	var code = $(selected_item).attr('code');
+	if (fct=="+parentcode") {
+		code += "$"+UICom.structure.ui[parentid].getCode();
+	}
+	var xml = "<asmResource xsi_type='Get_Get_Resource'>";
+	xml += "<code>"+code+"</code>";
+	xml += "<value>"+value+"</value>";
+	for (var i=0; i<languages.length;i++){
+		var label = $(selected_item).attr('label_'+languages[i]);
+		xml += "<label lang='"+languages[i]+"'>"+label+"</label>";
+	}
+	xml += "</asmResource>";
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/nodes/node/"+partid,
+		last : last,
+		success : function(data) {
+			var nodeid = $("*:has(>metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
+			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
+			var tagname = $( ":root",data )[ 0 ].nodeName;
+			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
+				xml = xml.replace("Get_Get_Resource","nodeRes");
+				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
+			}
+			$.ajax({
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : xml,
+				last : this.last,
+				url : url_resource,
+				success : function(data) {
+					if (this.last) {
+						$('#edit-window').modal('hide');
+						UIFactory.Node.reloadUnit();
+					}
+				}
+			});
+		}
+	});
+}
+
 //==================================
 UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,fct)
 //==================================
 {
 	$.ajaxSetup({async: false});
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined)
+		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
 	if (targetid!="")
 		parentid = targetid;
+	//------------------------------
 	var callback = "";
 	var databack = false;
 	var param2 = "";
@@ -1277,57 +1349,6 @@ UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,f
 	}
 }
 
-//==================================
-UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semtag,selected_item,last,parentid,fct)
-//==================================
-{
-	var partid = data;
-	var value = $(selected_item).attr('value');
-	var code = $(selected_item).attr('code');
-	if (fct=="+parentcode") {
-		code += "$"+UICom.structure.ui[parentid].getCode();
-	}
-	var xml = "<asmResource xsi_type='Get_Get_Resource'>";
-	xml += "<code>"+code+"</code>";
-	xml += "<value>"+value+"</value>";
-	for (var i=0; i<languages.length;i++){
-		var label = $(selected_item).attr('label_'+languages[i]);
-		xml += "<label lang='"+languages[i]+"'>"+label+"</label>";
-	}
-	xml += "</asmResource>";
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/nodes/node/"+partid,
-		last : last,
-		success : function(data) {
-//			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
-			var nodeid = $("*:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
-			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
-			var tagname = $( ":root",data )[ 0 ].nodeName;
-			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
-				xml = xml.replace("Get_Get_Resource","nodeRes");
-				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
-			}
-			$.ajax({
-				type : "PUT",
-				contentType: "application/xml",
-				dataType : "text",
-				data : xml,
-				last : this.last,
-				url : url_resource,
-				success : function(data) {
-					if (this.last) {
-						$('#edit-window').modal('hide');
-						UIFactory.Node.reloadUnit();
-					}
-				}
-			});
-		}
-	});
-
-}
-
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------Menu Functions--------------------------------------------------------
@@ -1340,7 +1361,7 @@ function get_get_multiple(parentid,targetid,title,query,partcode,get_get_resourc
 {
 	// targetid not used with get_get_multiple
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Get_Resource.addMultiple('"+parentid+"','"+partcode+","+get_get_resource_semtag+"')";
+	var js2 = "UIFactory.Get_Get_Resource.addMultiple('"+parentid+"','"+targetid+"','"+partcode+","+get_get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
@@ -1374,6 +1395,47 @@ function import_ggmultiple(parentid,targetid,title,query,partcode,fct)
 	$("#edit-window-body-metadata-epm").html("");
 	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
 	getgetResource.multiple = query+"/"+partcode;
+	getgetResource.displayEditor("get-get-resource-node");
+	$('#edit-window').modal('show');
+}
+
+//==================================
+function functions_ggmultiple(parentid,targetid,title,query,functions)
+//==================================
+{
+	var js1 = "javascript:$('#edit-window').modal('hide')";
+	var elts = functions.split("&");
+	var js2 = "";
+	for (var i=0;i<elts.length;i++){
+		var items = elts[i].split(":");
+		if (items[0]=="import_ggmultiple") {
+			js2 += "UIFactory.Get_Get_Resource.importMultiple('"+parentid+"'";
+			if (items.length>2)
+				js2 += ",'"+items[2]+"'";
+			else
+				js2 += ",'"+targetid+"'";
+			js2 += ",'"+items[1]+"');";
+		}
+		if (items[0]=="get_get_multiple") {
+			js2 += "UIFactory.Get_Get_Resource.addMultiple('"+parentid+"'";
+			if (items.length>3)
+				js2 += ",'"+items[3]+"'";
+			else
+				js2 += ",'"+targetid+"'";
+			js2 += ",'"+items[1]+","+items[2]+"');";
+		}
+	}
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(title);
+	var html = "<div id='get-get-resource-node'></div>";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	var getgetResource = new UIFactory["Get_Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	getgetResource.multiple = query+"/";
 	getgetResource.displayEditor("get-get-resource-node");
 	$('#edit-window').modal('show');
 }

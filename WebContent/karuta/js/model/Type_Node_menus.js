@@ -14,16 +14,16 @@ UIFactory["Node"].getEltMenu = function(parentid,menus,targetid,title,databack,c
 	var tag = menus[1];
 	if (srce=="self")
 		srce = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	if (srce=='functions'){
+	if (srce=='multiple'){
 		var menuelts = tag.split("//");
 		for (var j=1;j<menuelts.length;j++){
-			if (menuelts[i].indexOf("/")>-1) {
+			if (menuelts[j].indexOf("/")>-1) {
 				var items = tag.split("/");
 				html += items[0] +"('"+parentid+"','"+targetid+"','"+title.replaceAll("'","##apos##")+"'";
 				if (items.length>1)
 					html += ",";
 				for (var i=1;i<items.length;i++){
-					html += "'" + items[i] + "'";
+					html += "'" + items[j] + "'";
 					if (i<items.length-1)
 						html += ",";
 				}

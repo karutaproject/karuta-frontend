@@ -2285,6 +2285,16 @@ function updateParentCode (node) {
 	UIFactory.Node.reloadUnit;
 }
 
+//==================================
+function getNodeIdBySemtag(semtag)
+//==================================
+{
+	var nodeid = "";
+	var nodes = $("*:has(>metadata[semantictag='"+semtag+"'])",g_portfolio_current);
+	if (nodes.length>0)
+		nodeid = $(nodes[0]).attr("id");
+	return nodeid;
+}
 //=====================================================================================================
 //=====================================================================================================
 //============================== TREE MANAGEMENT ====================================================
