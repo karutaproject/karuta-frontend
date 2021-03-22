@@ -1217,9 +1217,16 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 	}
 	if (report_refresh && $("#dashboard_"+prefix_id+nodeid).length>0 && editresroles.length>0) {
 		$("#dashboard_"+prefix_id+nodeid).attr('dashboard',dashboard_current);
-		$("#dashboard_"+prefix_id+nodeid).on('DOMSubtreeModified',function (){
-			refresh_report(this.attributes['dashboard'].value);
+
+		var config = { attributes: true, childList: true, characterData: true, subtree:true }
+		var observer = new MutationObserver(function(mutations) {
+			for (var mutation of mutations) {
+				if (mutation.target.attributes['dashboard']!=undefined)
+					refresh_report(mutation.target.attributes['dashboard'].value);
+			};
 		});
+		var target = document.querySelector("#dashboard_"+prefix_id+nodeid);
+		observer.observe(target, config);
 	}
 	if (report_refresh && $("#report_get_editor_"+nodeid).length>0) {
 		$("#report_get_editor_"+nodeid).append(UICom.structure["ui"][nodeid].resource.getEditor());

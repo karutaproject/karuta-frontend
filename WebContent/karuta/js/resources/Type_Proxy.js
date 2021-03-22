@@ -381,11 +381,15 @@ UIFactory["Proxy"].prototype.refresh = function()
 };
 
 //==================================
-function proxy_multiple(parentid,title,query,partcode,get_resource_semtag)
+function proxy_multiple(parentid,targetid,title,query,partcode,get_resource_semtag)
 //==================================
 {
-	var langcode = LANGCODE;
-	//---------------------
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined && targetid!="")
+		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
+	//------------------------------
 	var js1 = "javascript:$('#edit-window').modal('hide')";
 	var js2 = "UIFactory.Proxy.addMultiple('"+parentid+"','"+partcode+","+get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";

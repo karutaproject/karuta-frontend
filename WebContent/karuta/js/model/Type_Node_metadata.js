@@ -94,6 +94,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	this.menulabels = r_replaceVariable(($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels'));
 	this.js = ($(node.metadatawad).attr('js')==undefined)?"":$(node.metadatawad).attr('js');
+	this.langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?"":$(node.metadatawad).attr('langnotvisible');
 	if (this.resource!=undefined || this.resource!=null)
 		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
 }
@@ -552,6 +553,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataAttributeEditor('metadata-part2','preview',true);
 	if (name!='asmRoot')
 		this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
+	this.displayMetadataWadAttributeEditor('metadata-part2','langnotvisible');
 	if (name=='asmUnitStructure')
 		this.displayMetadataWadAttributeEditor('metadata-part2','collapsible',true);
 	if (name=='asmContext' && this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL' && this.resource.type!='Oembed')
@@ -1042,6 +1044,8 @@ UIFactory["Node"].prototype.displayMetadataWadAttributeEditor = function(destid,
 		html += "</div>";
 	} else if (attribute.indexOf('role')>-1){
 		this.displaySelectRole(destid,attribute,yes_no,disabled);
+	} else if (attribute.indexOf('lang')>-1){
+		this.displaySelectLanguage(destid,attribute,yes_no,disabled);
 	} else {
 		html += "<div class='input-group '>";
 		html += "	<div class='input-group-prepend'>";
@@ -1205,7 +1209,52 @@ UIFactory["Node"].prototype.displaySelectRole= function(destid,attribute,yes_no,
 		$("#"+destid).append($(html));
 	}
 	addautocomplete(document.getElementById(attribute+nodeid), rolesarray);
+}
 
+//==================================
+UIFactory["Node"].prototype.displaySelectLanguage= function(destid,attribute,yes_no,disabled) 
+//==================================
+{
+	var languagessarray = [];
+	var value = $(this.metadatawad).attr(attribute);
+	if (value==null || value==undefined || value=='undefined')
+		value = "";
+	var nodeid = this.id;
+	var langcode = LANGCODE;
+	var html = "";
+	html += "<div class='input-group '>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<div class='input-group-text'>";
+	html += karutaStr[languages[langcode]][attribute];
+	html += "</div>";
+	html += "	</div>";
+	html += "	<input id='"+attribute+nodeid+"' type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
+	if(disabled!=null && disabled)
+		html+= " disabled='disabled' ";			
+	html += ">";
+	if(disabled==null || !disabled) {
+		html += "<div class='input-group-append'>";
+		html += "	<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+		html += "	<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
+//		html += "		<div class='dropdown-menu'>";
+		html += "			<a class='dropdown-item' value='' onclick=\"$('#"+attribute+nodeid+"').val('');$('#"+attribute+nodeid+"').change();\")>&nbsp;</a>";
+		//---------------------
+	for (var i=0; i<languages.length;i++) {
+		languagessarray[languagessarray.length] = {'libelle':karutaStr[languages[i]]['language']};
+		html += "<a class='dropdown-item' id='lang-menu-"+languages[i]+"' onclick=\"var v=$('#"+attribute+nodeid+"').val();$('#"+attribute+nodeid+"').val(v+' "+karutaStr[languages[i]]['language']+"');$('#"+attribute+nodeid+"').change();\">";
+		html += "	<img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
+		html += "</a>"
+	}
+		html += "	</div>";
+		html += "</div>";
+	}
+	html += "</div>";
+	$("#"+destid).append($(html));
+	if (attribute=='seenoderoles'){
+		html = "<div id='see-calendar' class='collapse'></div>"
+		$("#"+destid).append($(html));
+	}
+	addautocomplete(document.getElementById(attribute+nodeid), languagessarray);
 }
 
 

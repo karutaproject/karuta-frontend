@@ -1453,9 +1453,15 @@ UIFactory["Get_Resource"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Get_Resource"].addSimple = function(parentid,multiple_tags)
+UIFactory["Get_Resource"].addSimple = function(parentid,targetid,multiple_tags)
 //==================================
 {
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined && targetid!="")
+		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
+	//------------------------------
 	$.ajaxSetup({async: false});
 	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
@@ -1472,9 +1478,15 @@ UIFactory["Get_Resource"].addSimple = function(parentid,multiple_tags)
 };
 
 //==================================
-UIFactory["Get_Resource"].addMultiple = function(parentid,multiple_tags)
+UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags)
 //==================================
 {
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined && targetid!="")
+		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
+	//------------------------------
 	$.ajaxSetup({async: false});
 	var elts = multiple_tags.split(",");
 	var part_code = elts[0];
@@ -1559,8 +1571,12 @@ UIFactory["Get_Resource"].importMultiple = function(parentid,targetid,srce)
 	$.ajaxSetup({async: false});
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	// for each one import a part
-	if (targetid!="")
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined && targetid!="")
+		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
 		parentid = targetid;
+	//------------------------------
 	var callback = "";
 	var databack = false;
 	var param2 = "";
@@ -1622,7 +1638,7 @@ function get_simple(parentid,targetid,title,query,partcode,get_resource_semtag)
 {
 	// targetid not used with get_simple
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
+	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+targetid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title.replaceAll("##apos##","'"));
@@ -1643,7 +1659,7 @@ function get_multiple(parentid,targetid,title,query,partcode,get_resource_semtag
 {
 	// targetid not used with get_multiple
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+","+fct+"')";
+	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+targetid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+","+fct+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title.replaceAll("##apos##","'"));

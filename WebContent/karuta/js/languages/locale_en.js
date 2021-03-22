@@ -254,6 +254,7 @@ karutaStr['en']['alt']="Alternate Text";
 karutaStr['en']['node-comment']="Node Comments";
 karutaStr['en']['autoload']="Autoload";
 karutaStr['en']['defaultrole']="Default Role";
+karutaStr['en']['langnotvisible']="Not visible in";
 
 //=========================================
 //========== ADMIN ========================

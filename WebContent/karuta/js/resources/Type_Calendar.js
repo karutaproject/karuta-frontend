@@ -277,13 +277,19 @@ UIFactory["Calendar"].prototype.refresh = function()
 //============================================================
 
 //==================================
-function importAndSetDateToday(parentid,label,srce,part_semtag,calendar_semtag)
+function importAndSetDateToday(parentid,targetid,label,srce,part_semtag,calendar_semtag)
 //==================================
 {
 	$.ajaxSetup({async: false});
 	var databack = true;
 	var callback = UIFactory.Calendar.updateaddedpart;
-	importBranch(parentid,srce,part_semtag,databack,callback,calendar_semtag);
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined && targetid!="")
+		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
+	//------------------------------
+	importBranch(parentid,replaceVariable(srce),part_semtag,databack,callback,calendar_semtag);
 };
 
 

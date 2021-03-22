@@ -3138,7 +3138,7 @@ function display_execBatch()
 };
 
 //==================================================
-function execReport_BatchCSV(parentid,title,codeReport,display)
+function execReport_BatchCSV(parentid,targetid,title,codeReport,display)
 //==================================================
 {
 	if (display==null)

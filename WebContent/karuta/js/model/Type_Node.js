@@ -153,7 +153,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 	this.setMetadata(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock);
 	var alreadyDisplayed = false;
 	//---------------------------------------
-	if (this.visible) {
+	if (this.visible && this.langnotvisible!=karutaStr[languages[LANGCODE]]['language']) {
 		var node = UICom.structure["ui"][uuid];
 		var structure_node =   node.resource==null 
 							|| node.resource.type!='Proxy' 
@@ -961,6 +961,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 UIFactory["Node"].prototype.save = function()
 //==================================
 {
+	UICom.UpdateNode(this.node);
 	//-------- if function js -------------
 	if (this.js!=undefined && this.js!="") {
 		var fcts = this.js.split(";");
@@ -970,7 +971,7 @@ UIFactory["Node"].prototype.save = function()
 				eval(elts[1]+"(this.node,g_portfolioid)");
 		}
 	}
-	UICom.UpdateNode(this.node);
+	//------------------------------------
 	if (this.logcode!="")
 		this.log();
 	this.refresh();
@@ -1278,8 +1279,9 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 		var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 		var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
 		var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+		var langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
 		var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-		if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
+		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && (display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
 			if(name == "asmUnit") // Click on Unit
 			{
 				var html = "";
@@ -1347,8 +1349,9 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 			var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+			var langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
 			var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-			if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
+			if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && ( (display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')))) {
 				if(name == "asmUnit" && level==0) // first level
 				{
 					$("#"+destid).removeClass("nodisplay");
@@ -1541,7 +1544,7 @@ UIFactory['Node'].upNode = function(nodeid)
 };
 
 //==================================
-function moveTO(nodeid,title,destsemtag,srcesemtag,fct) 
+function moveTO(nodeid,targetid,title,destsemtag,srcesemtag,fct) 
 //==================================
 {
 	$('#wait-window').modal('show');
@@ -1768,6 +1771,8 @@ UIFactory['Node'].reloadStruct = function(uuid,redisplay)
 {
 	if (redisplay == null)
 		redisplay = true;
+	if (uuid == null)
+		uuid = g_portfolio_rootid;
 	$.ajax({
 		async: false,
 		type : "GET",

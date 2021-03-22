@@ -199,7 +199,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	var html = "";
 	//--------------------------------------------------------------------------------------------
 	if (type=='list' || type=='portfolio') {
-		html += "<div class='portfolio-label col-10 col-md-5' onclick=\"display_main_page('"+this.rootid+"','"+this.id+"')\" ><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'/> </div>";
+		html += "<div class='portfolio-label col-10 col-md-5' onclick=\"display_main_page('"+this.id+"')\" ><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'/> </div>";
 		if (USER.creator && !USER.limited) {
 			html += "<div class='col-4 d-none d-md-block'>";
 			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
@@ -211,7 +211,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 			html += "</div>";
 		}
 		if (this.date_modified!=null) {
-			html += "<div class='col-2 d-none d-md-block' onclick=\"display_main_page('"+this.rootid+"','"+this.id+"')\">"+dmodified+"</div>";
+			html += "<div class='col-2 d-none d-md-block' onclick=\"display_main_page('"+this.id+"')\">"+dmodified+"</div>";
 		}
 		//------------ buttons ---------------
 		html += "<div class='col-1'>";
@@ -246,7 +246,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	//--------------------------------------------------------------------------------------------
 	if (type=='card-admin') {
 		html += "<div class='card-header' >";
-		html += tree_type + " <a class='portfolio-label' onclick=\"display_main_page('"+this.rootid+"','"+this.id+"')\" >"+portfolio_label+"</a></div>"
+		html += tree_type + " <a class='portfolio-label' onclick=\"display_main_page('"+this.id+"')\" >"+portfolio_label+"</a></div>"
 		html += "	</div>";
 		html += "<div class='card-body' >";
 		if (this.context_text_node[langcode].text()!="")

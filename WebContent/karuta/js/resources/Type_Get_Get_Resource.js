@@ -294,65 +294,71 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			var query = queryattr_value.substring(portfoliocode_end_indx,semtag_parent_indx);
 			var parent = null;
 			var ref = null;
-			// ------- search for parent ----
-			if (query.indexOf('child')>-1) {
-				parent = this.node;
-			}
-			if (query.indexOf('sibling')>-1) {
-				parent = $(this.node).parent();
-			}
-			if (query.indexOf('parent.parent.parent.parent.parent')>-1) {
-				parent = $(this.node).parent().parent().parent().parent().parent().parent();
-			} else if (query.indexOf('parent.parent.parent.parent')>-1) {
-				parent = $(this.node).parent().parent().parent().parent().parent();
-			} else if (query.indexOf('parent.parent.parent')>-1) {
-				parent = $(this.node).parent().parent().parent().parent();
-			} else	if (query.indexOf('parent.parent')>-1) {
-				parent = $(this.node).parent().parent().parent();
-			} else if (query.indexOf('parent')>-1) {
-				parent = $(this.node).parent().parent();
-			}
 			var code_parent = "";
 			var value_parent = "";
-			if (queryattr_value.indexOf('#')>0)
-				code_parent = semtag_parent;
-			else {
-				//-----------
-				var removestar = -1;
-				if (semtag_parent.indexOf('*')>-1 ) {
-					var elts = semtag_parent.split("*");
-					for (var i=0;i<elts.length;i++) {
-						if (elts[i]!="")
-							removestar = i;
-					}
-					semtag_parent = elts[removestar];
+			//-------------------------------
+			var removestar = -1;
+			if (semtag_parent.indexOf('*')>-1 ) {
+				var elts = semtag_parent.split("*");
+				for (var i=0;i<elts.length;i++) {
+					if (elts[i]!="")
+						removestar = i;
 				}
-				//-----------
-				var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
-				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
-				if (child.length==0 && itself.length>0){
-					code_parent = $($("code",itself)[0]).text();
-					value_parent = $($("value",itself)[0]).text();
-				} else {
-					var nodetype = $(child).prop("nodeName"); // name of the xml tag
-					if (nodetype=='asmContext') {
-						code_parent = $($("code",child)[1]).text();
-						value_parent = $($("value",child)[1]).text();
-					 } else {
-						code_parent = $($("code",child)[0]).text();
-						value_parent = $($("value",child)[0]).text();
-					}
-
-				}
+				semtag_parent = elts[removestar];
 			}
-			//----------------------
-			if ($("*:has(metadata[semantictag*='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
-				code_parent = decrypt(code_parent.substring(3),g_rc4key);
-			//----------------------
-			if (query.indexOf('itself')>-1) {
+			// ------- search for parent ----
+			if (query.indexOf('itselfcode')>-1) {
 				code_parent = $($("code",$(this.node)[0])[0]).text();
 				value_parent = $($("value",$(this.node)[0])[0]).text();
+			} else if (query.indexOf('parentparentcode')>-1) {
+				code_parent = $($("code",$(this.node).parent().parent()[0])[0]).text();
+				value_parent = $($("value",$(this.node).parent().parent()[0])[0]).text();
+			} else if (query.indexOf('parentcode')>-1) {
+				code_parent = $($("code",$(this.node).parent()[0])[0]).text();
+				value_parent = $($("value",$(this.node).parent()[0])[0]).text();
+			} else {
+				if (query.indexOf('child.')>-1) {
+					parent = this.node;
+				}
+				if (query.indexOf('sibling.')>-1) {
+					parent = $(this.node).parent();
+				}
+				if (query.indexOf('parent.parent.parent.parent.parent')>-1) {
+					parent = $(this.node).parent().parent().parent().parent().parent().parent();
+				} else if (query.indexOf('parent.parent.parent.parent')>-1) {
+					parent = $(this.node).parent().parent().parent().parent().parent();
+				} else if (query.indexOf('parent.parent.parent')>-1) {
+					parent = $(this.node).parent().parent().parent().parent();
+				} else	if (query.indexOf('parent.parent')>-1) {
+					parent = $(this.node).parent().parent().parent();
+				} else if (query.indexOf('parent')>-1) {
+					parent = $(this.node).parent().parent();
+				}
+				if (queryattr_value.indexOf('#')>0)
+					code_parent = semtag_parent;
+				else {
+					//-----------
+					var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
+					var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
+					if (child.length==0 && itself.length>0){
+						code_parent = $($("code",itself)[0]).text();
+						value_parent = $($("value",itself)[0]).text();
+					} else {
+						var nodetype = $(child).prop("nodeName"); // name of the xml tag
+						if (nodetype=='asmContext') {
+							code_parent = $($("code",child)[1]).text();
+							value_parent = $($("value",child)[1]).text();
+						 } else {
+							code_parent = $($("code",child)[0]).text();
+							value_parent = $($("value",child)[0]).text();
+						}
+	
+					}
+				}
 			}
+			//----------------------
+//			if ($("*:has(metadata[semantictag*='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
+//				code_parent = decrypt(code_parent.substring(3),g_rc4key);
 			//----------------------
 			if (removestar>-1) {
 				var elts = code_parent.split("*");
@@ -368,6 +374,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					code_parent = replaceVariable(code_parent);
 					value_parent = replaceVariable(value_parent);
 					portfoliocode_parent = value_parent;
+					portfoliocode = portfoliocode_parent;
 					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
 				} else if (portfoliocode.indexOf('parent?')>-1){
 					if (portfoliocode_parent.indexOf("@")>-1) {
@@ -1231,7 +1238,7 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_
 
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	//------------------------------
-	if (UICom.structure.ui[targetid]==undefined)
+	if (UICom.structure.ui[targetid]==undefined && targetid!="")
 		targetid = getNodeIdBySemtag(targetid);
 	if (targetid!="" && targetid!=parentid)
 		parentid = targetid;
@@ -1313,7 +1320,6 @@ UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,f
 	if (UICom.structure.ui[targetid]==undefined)
 		targetid = getNodeIdBySemtag(targetid);
 	if (targetid!="" && targetid!=parentid)
-	if (targetid!="")
 		parentid = targetid;
 	//------------------------------
 	var callback = "";
@@ -1324,17 +1330,17 @@ UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,f
 	while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
 		parent = $(parent).parent();
 	}
-	var parentid = $(parent).attr("id");
+	var topid = $(parent).attr("id");
 	if ($(parent).prop("nodeName") == "asmUnit"){
 		callback = UIFactory.Node.reloadUnit;
-		param2 = parentid;
-		if ($("#page").attr('uuid')!=parentid)
+		param2 = topid;
+		if ($("#page").attr('uuid')!=topid)
 			param3 = false;
 	}
 	else {
 		callback = UIFactory.Node.reloadStruct;
 		param2 = g_portfolio_rootid;
-		if ($("#page").attr('uuid')!=parentid)
+		if ($("#page").attr('uuid')!=topid)
 			param3 = false;
 	}
 	for (var j=0; j<inputs.length;j++){

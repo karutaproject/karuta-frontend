@@ -1,7 +1,7 @@
 
 
 //==============================
-function show_main_page(rootid)
+function show_main_page()
 //==============================
 {
 	hideAllPages();
@@ -17,7 +17,7 @@ function show_main_page(rootid)
 }
 
 //==============================
-function fill_main_page(rootid,portfolioid)
+function fill_main_page(portfolioid)
 //==============================
 {
 	setLanguageMenu("fill_main_page()");
@@ -29,11 +29,8 @@ function fill_main_page(rootid,portfolioid)
 	$("#portfolio-container").html(html);
 	g_welcome_add = false;
 	//-------------------------------------------
-	if (rootid!=null){
-			g_portfolioid = portfolioid;
-	} else {
-		rootid = g_portfolio_rootid;
-	} 
+	if (portfolioid!=null)
+		g_portfolioid = portfolioid;
 	//-------------------------------------------
 	userrole = g_userroles[0];
 	if (userrole=='undefined')
@@ -197,12 +194,12 @@ function fill_main_page(rootid,portfolioid)
 }
 
 //==============================
-function display_main_page(rootid,portfolioid)
+function display_main_page(portfolioid)
 //==============================
 {
 	$("#sub-bar").show();
 	$("#welcome-bar").hide();
-	fill_main_page(rootid,portfolioid);
-	show_main_page(rootid);		
+	fill_main_page(portfolioid);
+	show_main_page();		
 }
 
