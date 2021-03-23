@@ -990,9 +990,12 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2)
 {
 	//-------- if function js -------------
 	if (UICom.structure.ui[uuid].js!=undefined && UICom.structure.ui[uuid].js!="") {
-		var elts = UICom.structure.ui[uuid].js.split("/");
-		if (elts[0]=="delete")
-			eval(elts[1]+"(UICom.structure.ui[uuid].node,g_portfolioid)");
+		var fcts = UICom.structure.ui[uuid].js.split(";");
+		for (var i=0;i<fcts.length;i++) {
+			var elts = fcts[i].split("/");
+			if (elts[0]=="delete")
+				eval(elts[1]+"(UICom.structure.ui[uuid].node,g_portfolioid)");
+		}
 	}
 	//---------------------
 	$("#"+uuid,g_portfolio_current).remove();

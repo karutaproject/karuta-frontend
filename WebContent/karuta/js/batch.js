@@ -1743,11 +1743,9 @@ function updateMetada(nodes,node,type,semtag,text,attribute)
 			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadata",
 			success : function(data) {
 				$("#batch-log").append("<br>- resource metadata updated ("+this.nodeid+") - semtag="+this.semtag+" attribute="+attribute+" value="+text);
-				updateMetada(nodes,node,type,semtag,text,attribute)
 			},
 			error : function(data,nodeid,semtag) {
 				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadata("+this.nodeid+") - semtag="+this.semantictag+" attribute="+attribute+" value="+text);
-				updateMetada(nodes,node,type,semtag,text,attribute);
 			}
 		});
 	}
@@ -1801,11 +1799,9 @@ function updateMetadaepm(nodes,node,type,semtag,text,attribute)
 			url : serverBCK_API+"/nodes/node/" + nodeid+"/metadataepm",
 			success : function(data) {
 				$("#batch-log").append("<br>- resource metadataepm updated ("+this.nodeid+") - semtag="+this.semtag+" attribute="+attribute+" value="+text);
-				updateMetadaepm(nodes,node,type,semtag,text,attribute)
 			},
-			error : function(data,nodeid,semtag) {
+			error : function(data) {
 				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update metadataepm("+this.nodeid+") - semtag="+this.semantictag+" attribute="+attribute+" value="+text);
-				updateMetadaepm(nodes,node,type,semtag,text,attribute);
 			}
 		});
 	}

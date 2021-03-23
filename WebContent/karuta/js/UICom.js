@@ -240,7 +240,7 @@ var UICom =
 							error : function(jqxhr,textStatus) {
 								var dataS = "";
 								var targetid = "temp-"+id;
-								dataS += "<asmContext id='"+newid+"' delete='Y' read='Y' role='' submit='' write='Y' xsi_type=''>";
+								dataS += "<asmContext id='"+targetid+"' delete='Y' read='Y' role='' submit='' write='Y' xsi_type=''>";
 								dataS += "	<metadata-wad seenoderoles='all' />";
 								dataS += "	<metadata-epm displayview='xwide' />";
 								dataS += "	<metadata multilingual-node='Y' multilingual-resource='Y' semantictag='Field' />";
