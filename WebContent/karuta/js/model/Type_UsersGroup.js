@@ -199,7 +199,7 @@ UIFactory["UsersGroup"].prototype.loadContent = function (type)
 						lastname = " ";
 					var firstname = Users_byid[uuid].firstname;
 						tableau1[tableau1.length] = [lastname,firstname,uuid];
-					}
+				}
 			}
 			var newTableau1 = tableau1.sort(sortOn1_2);
 			this.group.children = {};

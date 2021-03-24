@@ -1010,9 +1010,9 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 				else if (nb_visibleportfolios>1 && autoload=="")
 					UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
 				else if (autoload!="")
-					display_main_page(portfolios_byid[autoload].rootid,autoload);
+					display_main_page(portfolios_byid[autoload].id,autoload);
 				else   // nb_visibleportfolios == 1
-					display_main_page(portfolios_byid[visibleid].rootid,visibleid);
+					display_main_page(portfolios_byid[visibleid].id,visibleid);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);

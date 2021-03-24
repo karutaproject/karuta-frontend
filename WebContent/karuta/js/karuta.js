@@ -2212,7 +2212,9 @@ function replaceVariable(text)
 	return text;
 }
 
+//==================================
 function addParentCode (parentid) {
+//==================================
 	var parentCode = UICom.structure.ui[parentid].getCode();
 	var parentcode_parts = parentCode.split("*");
 	var nodes = $("asmUnitStructure:has(code:not(:empty))",UICom.structure.ui[parentid].node);
@@ -2252,7 +2254,9 @@ function addParentCode (parentid) {
 	}
 }
 
+//==================================
 function updateParentCode (node) {
+//==================================
 	var uuid = $(node).attr("id");
 	var parentcode = UICom.structure.ui[uuid].getCode();
 	var nodes = $("> asmUnitStructure:has(code:not(:empty))",UICom.structure.ui[uuid].node);
@@ -2376,3 +2380,103 @@ function outCopy(id)
 	$(element).tooltip('hide');
 	$(element).attr('title', karutaStr[LANG]['copy'] +" : "+element.textContent);
 }
+
+
+
+
+//==================================
+function callmajcodenum (nodeid) {
+//==================================
+	majcodenum(UICom.structure.ui[nodeid].node);
+}
+
+
+
+//==================================
+function majcodenum (node) {
+//==================================
+	var uuid = $(node).attr("id");
+	var code = UICom.structure.ui[uuid].getCode();
+	if (code.indexOf("*")>-1)
+		code = code.substring(0,code.indexOf("*"));
+	var nodes = $("*:has(>metadata[semantictag*='majcode'])",node);
+	for (var i=0;i<nodes.length;i++) {
+		var nodeid = $(nodes[i]).attr("id");
+		if (UICom.structure.ui[nodeid].semantictag.indexOf('majcode')>-1) {
+			var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+			var nodecode =  UICom.structure.ui[nodeid].getCode();
+			var newnodecode = nodecode;
+			if (nodecode.indexOf("*")>-1) {
+				var oldpartcode = nodecode.substring(nodecode.indexOf("*"));
+				newnodecode = code+oldpartcode;
+			}
+			$("code",resource).text(newnodecode);
+			var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//-------------------
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+				success : function(data) {
+				},
+				error : function(data) {
+				}
+			});
+			//-------------------
+		}
+	}
+	//-----Node ordering-------------------------------------------------------
+	var nodes = $("*:has(>metadata[semantictag*='majnum'])",node);
+	var tableau1 = new Array();
+	for ( var i = 0; i < $(nodes).length; i++) {
+		var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+		var code = $('code',resource).text();
+		tableau1[i] = [code.substring(0,code.indexOf("*")+2),nodes[i]];
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
+	//-------------------------------------------------------------------------
+	var num = 0;
+	var currentletter = "";
+	for ( var i = 0; i < newTableau1.length; i++) {
+		var oldcode = newTableau1[i][0];
+		var starindex = oldcode.indexOf("*");
+		var letter = oldcode.substring(starindex+1,starindex+2);
+		if (letter!=currentletter) {
+			num = 0;
+			currentletter = letter;
+		}
+		num++;
+		var newcode = oldcode.substring(0,starindex+1)+currentletter+(num>9?"":"0")+num.toString();
+		//--------------- maj resource --------------
+		var nodeid = $(newTableau1[i][1]).attr('id');
+		var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+		$("code",resource).text(newcode);
+		var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+		//-------------------
+		$.ajax({
+			async : false,
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : strippeddata,
+			url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+			success : function(data) {
+			},
+			error : function(data) {
+			}
+		});
+		//-------------------
+	}
+	//-------------------------------------------------------------------------
+	if (UICom.structure.ui[uuid].asmtype=='asmStructure')
+		UIFactory.Node.reloadStruct();
+	else
+		UIFactory.Node.reloadUnit();
+}
+
+

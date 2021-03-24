@@ -310,6 +310,15 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (query.indexOf('itselfcode')>-1) {
 				code_parent = $($("code",$(this.node)[0])[0]).text();
 				value_parent = $($("value",$(this.node)[0])[0]).text();
+			} else if (query.indexOf('parentparentparentparentparentcode')>-1) {
+				code_parent = $($("code",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
+				value_parent = $($("value",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
+			} else if (query.indexOf('parentparentparentparentcode')>-1) {
+				code_parent = $($("code",$(this.node).parent().parent().parent().parent()[0])[0]).text();
+				value_parent = $($("value",$(this.node).parent().parent().parent().parent()[0])[0]).text();
+			} else if (query.indexOf('parentparentparentcode')>-1) {
+				code_parent = $($("code",$(this.node).parent().parent().parent()[0])[0]).text();
+				value_parent = $($("value",$(this.node).parent().parent().parent()[0])[0]).text();
 			} else if (query.indexOf('parentparentcode')>-1) {
 				code_parent = $($("code",$(this.node).parent().parent()[0])[0]).text();
 				value_parent = $($("value",$(this.node).parent().parent()[0])[0]).text();
@@ -317,10 +326,10 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				code_parent = $($("code",$(this.node).parent()[0])[0]).text();
 				value_parent = $($("value",$(this.node).parent()[0])[0]).text();
 			} else {
-				if (query.indexOf('child.')>-1) {
+				if (query.indexOf('child')>-1) {
 					parent = this.node;
 				}
-				if (query.indexOf('sibling.')>-1) {
+				if (query.indexOf('sibling')>-1) {
 					parent = $(this.node).parent();
 				}
 				if (query.indexOf('parent.parent.parent.parent.parent')>-1) {
