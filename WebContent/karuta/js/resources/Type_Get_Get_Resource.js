@@ -522,10 +522,14 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			var code = $('code',resource).text();
 			var display_code = false;
 			var display_label = true;
+			var display_value = false;
 			if (code.indexOf("$")>-1) 
 				display_label = false;
 			if (code.indexOf("@")<0) {
 				display_code = true;
+			}
+			if (code.indexOf("?")>-1) {
+				display_value = true;
 			}
 			code = cleanCode(code);
 			//------------------------------
@@ -557,9 +561,6 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 					display_label = false;
 				if (code.indexOf("@")<0) {
 					display_code = true;
-				}
-				if (code.indexOf("?")>-1) {
-					display_value = true;
 				}
 				code = cleanCode(code);
 				//--------------------------------

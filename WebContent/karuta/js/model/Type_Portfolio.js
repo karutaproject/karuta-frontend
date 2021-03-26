@@ -2366,7 +2366,7 @@ UIFactory["Portfolio"].callChangeOwner = function(portfolioid,langcode)
 	footer += "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 
 	$("#edit-window-footer").html(footer);
-	$("#edit-window-title").html(karutaStr[LANG]['changeOwner']+' '+portfolios_byid[portfolioid].label_node[langcode].text());
+	$("#edit-window-title").html(karutaStr[LANG]['changeOwner']+' '+portfolios_byid[portfolioid].label_node[langcode].text()+"<div style='text-align:right'>"+footer+"</div>");
 	var html = "";
 	html += "<div class='row'>";
 	html += "<div class='col-md-3'><br>";
