@@ -974,30 +974,52 @@
 		<xsl:variable name="ref">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="xyaxis">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='xyaxis']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		<xsl:variable name="graphtype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='graphtype']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="yxaxis">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='yxaxis']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		<xsl:variable name="xaxis">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='xaxis']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="yaxis">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='yaxis']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="xmin">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-xmin']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='xmin']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="xmax">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-xmax']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='xmax']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="x-nbgraduation">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='x-nbgraduation']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="ymin">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-ymin']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ymin']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="ymax">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-ymax']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ymax']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<xsl:variable name="legenddisplay">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='legenddisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		<xsl:variable name="y-nbgraduation">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='y-nbgraduation']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="xlegendtext">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='xlegendtext']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="ylegendtext">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='ylegendtext']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="class">
 			<xsl:call-template name="class"/>
 		</xsl:variable>
+		<xsl:variable name="nodetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="todisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
 		<draw-xy-axis>
 			<xsl:if test="not($class='')">
 				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
@@ -1008,26 +1030,22 @@
 			<xsl:if test="not($ref='')">
 				<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
 			</xsl:if>
-			<xsl:if test="not($style='..')">
+			<xsl:if test="not($style='')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
 			</xsl:if>
-			<xsl:if test="not($xyaxis='..')">
-				<xsl:attribute name="xyaxis"><xsl:value-of select="$xyaxis"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="not($yxaxis='..')">
-				<xsl:attribute name="yxaxis"><xsl:value-of select="$yxaxis"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="not($xmin='..')">
-				<xsl:attribute name="xmin"><xsl:value-of select="$xmin"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="not($xmax='..')">
-				<xsl:attribute name="xmax"><xsl:value-of select="$xmax"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="not($ymin='..')">
-				<xsl:attribute name="ymin"><xsl:value-of select="$ymin"/></xsl:attribute>
-			</xsl:if>
-			<xsl:if test="not($ymax='..')">
-				<xsl:attribute name="ymax"><xsl:value-of select="$ymax"/></xsl:attribute>
+			<xsl:attribute name="graphtype"><xsl:value-of select="$graphtype"/></xsl:attribute>
+			<xsl:attribute name="xaxis"><xsl:value-of select="$xaxis"/></xsl:attribute>
+			<xsl:attribute name="yaxis"><xsl:value-of select="$yaxis"/></xsl:attribute>
+			<xsl:attribute name="xmin"><xsl:value-of select="$xmin"/></xsl:attribute>
+			<xsl:attribute name="xmax"><xsl:value-of select="$xmax"/></xsl:attribute>
+			<xsl:attribute name="x-nbgraduation"><xsl:value-of select="$x-nbgraduation"/></xsl:attribute>
+			<xsl:attribute name="xlegendtext"><xsl:value-of select="$xlegendtext"/></xsl:attribute>
+			<xsl:attribute name="ymin"><xsl:value-of select="$ymin"/></xsl:attribute>
+			<xsl:attribute name="ymax"><xsl:value-of select="$ymax"/></xsl:attribute>
+			<xsl:attribute name="y-nbgraduation"><xsl:value-of select="$y-nbgraduation"/></xsl:attribute>
+			<xsl:attribute name="ylegendtext"><xsl:value-of select="$ylegendtext"/></xsl:attribute>
+			<xsl:if test="not($select='..')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
 			</xsl:if>
 		</draw-xy-axis>
 	</xsl:template>

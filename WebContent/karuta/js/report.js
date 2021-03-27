@@ -2130,6 +2130,15 @@ function drawLine(destid,value1,angle1,value2,angle2,center,cssclass){
 	document.getElementById(destid).appendChild(line);
 }
 
+function getTextSize(destid,text,svgfontsize,svgfontname) {
+	var size = 0;
+	var textsvg = makeSVG('text',{'x':-100,'id':'x123','y':-100,'font-size':svgfontsize,'font-family':svgfontname},text);
+		document.getElementById(destid).appendChild(textsvg);
+		size = document.getElementById('x123').getComputedTextLength();
+		document.getElementById('x123').remove();
+	return size;
+}
+
 
 //==================================
 g_report_actions['svg'] = function (destid,action,no,data)
@@ -2191,10 +2200,8 @@ g_report_actions['draw-web-title'] = function (destid,action,no,data)
 				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
 			}
 		};
-//		var l = getWidthOfText(text, svgfontname, svgfontsize*2);
-//		var x = svgaxislength*2-l*3.2;
-		var x = 10;
-		var svgtext = makeSVG('text',{'x':x,'y':40,'font-size':svgfontsize*2,'font-family':svgfontname},text+txt);
+		var size = getTextSize(destid,text+txt,svgfontsize*2,svgfontname)
+		var svgtext = makeSVG('text',{'x':1100-size,'y':40,'font-size':svgfontsize*2,'font-family':svgfontname},text+txt);
 		document.getElementById(destid).appendChild(svgtext);
 	}
 }
@@ -2260,7 +2267,6 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 		pos = 0;
 //	if (pos > no)
 //		no = pos;
-	var html = "";
 	if (select!=undefined) {
 		while (select.indexOf("##")>-1) {
 			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
@@ -2369,41 +2375,180 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 //==================================
 {
+	var select = $(action).attr("select");
+	var legendselect = $(action).attr("legendselect");
+	var graphtype = $(action).attr("graphtype");
 	var xlegend = $(action).attr("xlegend");
 	var ylegend = $(action).attr("ylegend");
-	var xyaxis = parseInt($(action).attr("xyaxis"));
-	var yxaxis = parseInt($(action).attr("yxaxis"));
+	var xaxis = parseInt($(action).attr("xaxis"));
+	var yaxis = parseInt($(action).attr("yaxis"));
 	var xmin = parseInt($(action).attr("xmin"));
 	var xmax = parseInt($(action).attr("xmax"));
+	var xnbgraduation = parseInt($(action).attr("x-nbgraduation"));
+	var xlegendtext = $(action).attr("xlegendtext");
 	var ymin = parseInt($(action).attr("ymin"));
 	var ymax = parseInt($(action).attr("ymax"));
-	if (xyaxis==undefined)
-		xyaxis = 0;
-	if (yxaxis==undefined)
-		yxaxis = 0;
+	var ynbgraduation = parseInt($(action).attr("y-nbgraduation"));
+	var ylegendtext = $(action).attr("ylegendtext");
+	if (xaxis==undefined)
+		xaxis = 0;
+	if (yaxis==undefined)
+		yaxis = 0;
 	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
 	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':0,'y2':1200,'stroke':'red','stroke-width': 2}));
 	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
 	document.getElementById(destid).appendChild(makeSVG('line',{'x1':1200,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
 	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
 	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
-	var xline = makeSVG('line',{'x1':100,'y1':600+yxaxis,'x2':1100,'y2':600+yxaxis,'stroke':'black','stroke-width': 2});
-	document.getElementById(destid).appendChild(xline);
-	var yline = makeSVG('line',{'x1':600+xyaxis,'y1':100,'x2':600+xyaxis,'y2':1100,'stroke':'black','stroke-width': 2});
+	// x axis
+	var yline = makeSVG('line',{'x1':100+xaxis,'y1':100,'x2':100+xaxis,'y2':1100,'stroke':'black','stroke-width': 2});
 	document.getElementById(destid).appendChild(yline);
-	for (var j=0;j<=Math.abs(xmax-xmin);j++) {
-		var x = 600+xyaxis + ((500-xyaxis)/Math.abs(xmax-xmin)) * j ;
-		var line = makeSVG('line',{'x1':x,'y1':600+yxaxis-5,'x2':x,'y2':600+yxaxis+5,'stroke':'black','stroke-width': 1});
-		document.getElementById(destid).appendChild(line);
-		var text = makeSVG('text',{'x':x,'y':600+yxaxis+25,'font-size':svgfontsize,'font-family':svgfontname},(xmax>xmin)?j+xmin:xmin-j);
+	// x axis graduation
+	if (xnbgraduation>0) {
+		for (var j=0;j<=xnbgraduation;j++) {
+			var x = 100+xaxis + (1000-xaxis) / xnbgraduation * j ;
+			var line = makeSVG('line',{'x1':x,'y1':1100-yaxis-5,'x2':x,'y2':1100-yaxis+5,'stroke':'black','stroke-width': 1});
+			document.getElementById(destid).appendChild(line);
+			var label = (xmax - xmin) / xnbgraduation * j ;
+			var text = makeSVG('text',{'x':x,'y':1100-yaxis+25,'font-size':svgfontsize,'font-family':svgfontname},label);
+			document.getElementById(destid).appendChild(text);
+		}
+	}
+	// x legend
+	if (xlegendtext!=""){
+		var size = getTextSize(destid,xlegendtext,svgfontsize,svgfontname);
+		var text = makeSVG('text',{'x':1100-size,'y':1100-yaxis+75,'font-size':svgfontsize+4,'font-family':svgfontname},xlegendtext);
 		document.getElementById(destid).appendChild(text);
 	}
-	for (var j=0;j<=Math.abs(ymax-ymin);j++) {
-		var y = 600+yxaxis - ((500+yxaxis)/Math.abs(ymax-ymin)) * j ;
-		var line = makeSVG('line',{'x1':600+xyaxis-5,'y1':y,'x2':600+xyaxis+5,'y2':y,'stroke':'black','stroke-width': 1});
-		document.getElementById(destid).appendChild(line);
-		var text = makeSVG('text',{'x':600+xyaxis-25,'y':y,'font-size':svgfontsize,'font-family':svgfontname},(xmax>xmin)?j+xmin:xmin-j);
+	// y axis
+	var xline = makeSVG('line',{'x1':100,'y1':1100-yaxis,'x2':1100,'y2':1100-yaxis,'stroke':'black','stroke-width': 2});
+	document.getElementById(destid).appendChild(xline);
+	// y axis graduation
+	if (ynbgraduation>0) {
+		for (var j=0;j<=ynbgraduation;j++) {
+			var y = 1100-yaxis - (1000-yaxis) / ynbgraduation * j  ;
+			var line = makeSVG('line',{'x1':100+xaxis-5,'y1':y,'x2':100+xaxis+5,'y2':y,'stroke':'black','stroke-width': 1});
+			document.getElementById(destid).appendChild(line);
+			var label = (ymax - ymin) / ynbgraduation * j ;
+			var text = makeSVG('text',{'x':100+xaxis-25,'y':y,'font-size':svgfontsize,'font-family':svgfontname},label);
+			document.getElementById(destid).appendChild(text);
+		}
+	}
+	if (ylegendtext!=""){
+		var text = makeSVG('text',{'x':50+xaxis,'y':75,'font-size':svgfontsize+4,'font-family':svgfontname},ylegendtext);
 		document.getElementById(destid).appendChild(text);
+	}
+		if (select!=undefined) {
+		while (select.indexOf("##")>-1) {
+			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
+			var variable_name = test_string.substring(0,test_string.indexOf("##"));
+			select = select.replace("##"+variable_name+"##", g_variables[variable_name]);
+		}
+		var selector = r_getSelector(select,null);
+		var nodes = $(selector.jquery,data).filter(selector.filter1);
+		nodes = eval("nodes"+selector.filter2);
+		var angle = 360 / nodes.length;
+		var points = [];
+		for (var i=0; i<nodes.length;i++){
+			//---------------------------
+			var nodeid = $(nodes[i]).attr("id");
+			if (selector.type=='resource') {
+				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+			}
+			if (selector.type=='resource code') {
+				text = UICom.structure["ui"][nodeid].resource.getCode();
+			}
+			if (selector.type=='resource value') {
+				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+			}
+			if (selector.type=='resource label') {
+				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+			}
+			if (selector.type=='node label') {
+				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+			}
+			if (selector.type=='node value') {
+				text = UICom.structure["ui"][nodeid].getValue();
+			}
+			if (selector.type=='node code') {
+				text = UICom.structure["ui"][nodeid].getCode();
+			}
+			if (selector.type=='node context') {
+				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
+			}
+			if (text.length>0)
+				points[points.length] = {'value': parseInt(text),'x':0,'y':0};
+			else
+				points[points.length] = {'value': null};
+		};
+		if (graphtype=='point' || graphtype=='line') {
+			for (var i=0; i<nodes.length;i++){
+				if (points[i].value!=null){
+					points[i].x = 100+xaxis + (1000-xaxis) / xnbgraduation * (i+1) ;
+					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
+					var line = makeSVG('line',{'x1':points[i].x,'y1':points[i].y,'x2':points[i].x,'y2':points[i].y,'stroke':'green','stroke-width': 7,'stroke-linecap': 'round'});
+					document.getElementById(destid).appendChild(line);
+				}
+				if (i>0 && points[i-1].value!=null && points[i].value!=null && graphtype=='line') {
+					var line = makeSVG('line',{'x1':points[i-1].x,'y1':points[i-1].y,'x2':points[i].x,'y2':points[i].y,'stroke':'green','stroke-width': 2});
+					document.getElementById(destid).appendChild(line);
+				}
+			}
+		}
+		if (graphtype=='bar') {
+			for (var i=0; i<nodes.length;i++){
+				if (points[i].value!=null){
+					points[i].x = 90+xaxis + (1000-xaxis) / xnbgraduation * (i+1) ;
+					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
+					var rect = makeSVG('rect',{'x':points[i].x,'y':points[i].y,'width':20,'height':(1000-yaxis) / (ymax-ymin) * points[i].value,'stroke-width': 1,'fill': 'green'});
+					document.getElementById(destid).appendChild(rect);
+				}
+			}
+		}
+//		if (points[i-1].value!=null && points[0].value!=null)
+//			drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+pos);
+		// draw legend
+		if (legendselect!=undefined) {
+			var selector = r_getSelector(legendselect,null);
+			var nodes = $(selector.jquery,data).filter(selector.filter1);
+			nodes = eval("nodes"+selector.filter2);
+			var text = 'legend';
+			for (var i=0; i<nodes.length;i++){
+				//---------------------------
+				var nodeid = $(nodes[i]).attr("id");
+				if (selector.type=='resource') {
+					text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+				}
+				if (selector.type=='resource code') {
+					text = UICom.structure["ui"][nodeid].resource.getCode();
+				}
+				if (selector.type=='resource value') {
+					text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+				}
+				if (selector.type=='resource label') {
+					text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+				}
+				if (selector.type=='node label') {
+					text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+				}
+				if (selector.type=='node value') {
+					text = UICom.structure["ui"][nodeid].getValue();
+				}
+				if (selector.type=='node code') {
+					text = UICom.structure["ui"][nodeid].getCode();
+				}
+				if (selector.type=='node context') {
+					text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
+				}
+			};
+			var line = makeSVG('line',{'x1':10,'y1':975-20*pos,'x2':10,'y2':975-20*pos,'class':'svg-web-value'+pos});
+//			var line = makeSVG('line',{'x1':10,'y1':25+20*no,'x2':10,'y2':25+20*no,'class':'svg-web-value'+no});
+			document.getElementById(destid).appendChild(line);
+			var svgtext = makeSVG('text',{'x':20,'y':980-20*pos,'font-size':svgfontsize,'font-family':svgfontname},text);
+//			var svgtext = makeSVG('text',{'x':20,'y':30+20*no,'font-size':svgfontsize,'font-family':svgfontname},text);
+			document.getElementById(destid).appendChild(svgtext);
+		}
+
 	}
 }
 

@@ -595,15 +595,14 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		html += "		</div><!-- class='col-1' -->";
 		html += "	</div><!-- class='row' -->";
 		html += "</div><!-- class='project'-->";
-		//---------------------
+		//------- export --------------
 		$("#"+type+"-rightside-header").html($(html));
 		var portfolio_list = "";
-		for (uuid in this.children){
+		for (var uuid in this.children){
 			portfolio_list += "," + uuid;
 		}
-		for (uuid in this.folders){
+		for (var uuid in this.folders){
 			portfolio_list += "," + uuid + folders_byid[uuid].contentList();
-
 		}
 		if (portfolio_list.length>0)
 			portfolio_list = this.id+portfolio_list;
@@ -650,12 +649,11 @@ UIFactory["PortfolioFolder"].prototype.contentList = function()
 	var list = "";
 		if (!this.loaded)
 			this.loadContent();
-		for (uuid in this.children){
+		for (var uuid in this.children){
 			list += "," + uuid;
 		}
-	for (uuid in this.folders){
-		list += "," + uuid;
-		list += "," + + folders_byid[uuid].contentList();
+	for (var uuid in this.folders){
+		list += "," + uuid + folders_byid[uuid].contentList();
 	}
 	return list
 }
