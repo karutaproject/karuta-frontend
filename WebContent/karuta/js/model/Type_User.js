@@ -253,9 +253,10 @@ UIFactory["User"].displayActive = function(dest,type,index,nbindex)
 //==================================
 {
 	if (index==null)
-		index = 0;
+		index = localStorage.getItem('currentUsersIndex')!=undefined ? localStorage.getItem('currentUsersIndex') : 0;
 	if (nbindex==null)
 		nbindex = 1;
+	localStorage.setItem('currentUsersIndex',index);
 	$("#"+type+"-rightside-content2").hide();
 	$("#"+type+"-rightside-content1").show();
 	$("#"+type+"-rightside-users-content1").html("");
@@ -278,11 +279,15 @@ UIFactory["User"].displayActive = function(dest,type,index,nbindex)
 					$("#"+type+"-rightside-navbar-pages-bottom").hide();
 				else
 					$("#"+type+"-rightside-navbar-pages-bottom").show();
+				if (index>=nbindex)
+					index = 0;
 				UIFactory.User.displayActiveIndexed(this.dest,this.xtype,this.index,nbindex);
 			}
 		});
 	else {
 		nbindex = Math.ceil((UsersActive_list.length)/nb_users_page);
+		if (index>=nbindex)
+			index = 0;
 		UIFactory.User.displayActiveIndexed(dest,type,index,nbindex);
 	}
 };

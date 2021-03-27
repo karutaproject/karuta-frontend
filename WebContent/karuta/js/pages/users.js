@@ -75,12 +75,7 @@ function fill_list_users(type)
 	UIFactory.User.displaySearch("user-search",true,'user');
 	if (!UsersLoaded)
 		UIFactory.User.loadAll();
-	if (UsersActive_list.length<200)
-		UIFactory.User.displayActive('user-rightside-users-content1','user');
-	else {
-		$("#user-rightside-users-content1").html(karutaStr[LANG]['too-much-users']);
-		$("#user-rightside-users-content1").show();
-	}
+	UIFactory.User.displayActive('user-rightside-users-content1','user');
 }
 
 
@@ -142,9 +137,9 @@ function fill_list_usersOLD(dest,type,viewtype)
 				success : function(data) {
 					UIFactory["User"].parse(data);
 					if (type=='active')
-						UIFactory["User"].displayActive(dest,this.viewtype);
+						UIFactory["User"].displayActive(dest,this.viewtype,index);
 					else
-						UIFactory["User"].displayInactive(dest,this.viewtype);
+						UIFactory["User"].displayInactive(dest,this.viewtype,index);
 				}
 			});
 			//----------------

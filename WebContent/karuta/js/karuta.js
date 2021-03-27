@@ -2453,7 +2453,7 @@ function majcodenum (node) {
 		var newcode = oldcode.substring(0,starindex+1)+currentletter+(num>9?"":"0")+num.toString();
 		//--------------- maj resource --------------
 		var nodeid = $(newTableau1[i][1]).attr('id');
-		var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+		var resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1])[0];
 		$("code",resource).text(newcode);
 		var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
 		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute

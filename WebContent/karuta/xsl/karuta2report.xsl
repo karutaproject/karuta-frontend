@@ -5,7 +5,7 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<xsl:output method="xml" />
-	<xsl:param name="lang">en</xsl:param>
+	<xsl:param name="lang">fr</xsl:param>
 	<xsl:template match="/">
 		<model>
 			<xsl:apply-templates select='//asmRoot/asmUnitStructure'/>
@@ -515,13 +515,10 @@
 	</xsl:template>
 	<!-- ================ SVG ============================ -->
 	<xsl:template match="*[metadata/@semantictag='model-svg']">
-		<xsl:variable name="min-height">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='min-height']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
-		</xsl:variable>
-		<xsl:variable name="min-width">
+		<xsl:variable name="width">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='min-width']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<svg min-width='{$min-width}' min-height='{min-height}'>
+		<svg min-width='{$width}'>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</svg>
 	</xsl:template>
@@ -825,6 +822,10 @@
 		<xsl:variable name="class">
 			<xsl:call-template name="class"/>
 		</xsl:variable>
+		<xsl:variable name="text">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		
 		<draw-web-title>
 			<xsl:if test="not($class='')">
 				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
@@ -840,6 +841,9 @@
 			</xsl:if>
 			<xsl:if test="not($style='..')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($text='..')">
+				<xsl:attribute name="text"><xsl:value-of select="$text"/></xsl:attribute>
 			</xsl:if>
 		</draw-web-title>
 	</xsl:template>
@@ -970,6 +974,12 @@
 		<xsl:variable name="ref">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="xyaxis">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='xyaxis']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="yxaxis">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='yxaxis']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="xmin">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='value-xmin']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -1001,6 +1011,12 @@
 			<xsl:if test="not($style='..')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
 			</xsl:if>
+			<xsl:if test="not($xyaxis='..')">
+				<xsl:attribute name="xyaxis"><xsl:value-of select="$xyaxis"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($yxaxis='..')">
+				<xsl:attribute name="yxaxis"><xsl:value-of select="$yxaxis"/></xsl:attribute>
+			</xsl:if>
 			<xsl:if test="not($xmin='..')">
 				<xsl:attribute name="xmin"><xsl:value-of select="$xmin"/></xsl:attribute>
 			</xsl:if>
@@ -1008,7 +1024,7 @@
 				<xsl:attribute name="xmax"><xsl:value-of select="$xmax"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($ymin='..')">
-				<xsl:attribute name="xmin"><xsl:value-of select="$ymin"/></xsl:attribute>
+				<xsl:attribute name="ymin"><xsl:value-of select="$ymin"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($ymax='..')">
 				<xsl:attribute name="ymax"><xsl:value-of select="$ymax"/></xsl:attribute>
