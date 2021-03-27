@@ -972,7 +972,7 @@
 			<xsl:call-template name="style"/>
 		</xsl:variable>
 		<xsl:variable name="ref">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='ref']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='graphid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="graphtype">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='graphtype']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
@@ -1048,6 +1048,46 @@
 				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
 			</xsl:if>
 		</draw-xy-axis>
+	</xsl:template>
+	
+	<!-- ================ draw-data ============================ -->
+	<xsl:template match="*[metadata/@semantictag='draw-data']">
+		<xsl:variable name="graphtype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='graphtype']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="nodetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="todisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="legend-nodetype">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='legend-nodetype']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="legend-semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='legend-semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="legend-todisplay">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='legend-todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="ref">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='graphref']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
+		<xsl:variable name="legend-select"><xsl:value-of select="$legend-nodetype"/>.<xsl:value-of select="$legend-semtag"/>.<xsl:value-of select="$legend-todisplay"/></xsl:variable>
+		<draw-data>
+			<xsl:attribute name="ref"><xsl:value-of select="$ref"/></xsl:attribute>
+			<xsl:attribute name="graphtype"><xsl:value-of select="$graphtype"/></xsl:attribute>
+			<xsl:if test="not($select='..')">
+				<xsl:attribute name="select"><xsl:value-of select="$select"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($legend-select='..')">
+				<xsl:attribute name="legend-select"><xsl:value-of select="$legend-select"/></xsl:attribute>
+			</xsl:if>
+		</draw-data>
 	</xsl:template>
 
 	<!-- ================ asmNop ============================ -->
