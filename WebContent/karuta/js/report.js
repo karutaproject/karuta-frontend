@@ -151,11 +151,11 @@ function r_getSelector(select,test)
 	var selects = select.split("."); // nodetype.semtag.[node|resource] or .[node|resource]
 	if (selects[0]=="")
 		selects[0] = "*";
-	var jquery = selects[0];
+	var jquery = ""; //selects[0];
 	var filter1 = null;
 	var filter2 = null;
 	if (selects[1]!="") {
-		jquery +=":has(metadata[semantictag*='"+selects[1]+"'])";
+		jquery +="*:has(>metadata[semantictag*='"+selects[1]+"'])";
 		filter1 = function(){return $(this).children("metadata[semantictag*='"+selects[1]+"']").length>0};
 	}	else {
 		jquery +=":has(metadata)";
@@ -2145,6 +2145,7 @@ function getPoints(data,select) {
 	var selector = r_getSelector(select,null);
 	var nodes = $(selector.jquery,data).filter(selector.filter1);
 	nodes = eval("nodes"+selector.filter2);
+	var angle = 360 / nodes.length;
 	for (var i=0; i<nodes.length;i++){
 		//---------------------------
 		var nodeid = $(nodes[i]).attr("id");
@@ -2201,7 +2202,6 @@ function getResText(data,select) {
 			text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
 		}
 		texts[texts.length] = text;
-
 	};
 	return texts;
 }
@@ -2230,43 +2230,8 @@ g_report_actions['draw-web-title'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	var txt = $(action).attr("text");
 	if (select!=undefined) {
-		while (select.indexOf("##")>-1) {
-			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-			var variable_name = test_string.substring(0,test_string.indexOf("##"));
-			select = select.replace("##"+variable_name+"##", g_variables[variable_name]);
-		}
-		var selector = r_getSelector(select,null);
-		var nodes = $(selector.jquery,data).addBack(selector.jquery).filter(selector.filter1);
-		nodes = eval("nodes"+selector.filter2);
-		var text = '';
-		for (var i=0; i<nodes.length;i++){
-			//---------------------------
-			var nodeid = $(nodes[i]).attr("id");
-			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-			}
-			if (selector.type=='resource code') {
-				text = UICom.structure["ui"][nodeid].resource.getCode();
-			}
-			if (selector.type=='resource value') {
-				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-			}
-			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-			}
-			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-			}
-			if (selector.type=='node code') {
-				text = UICom.structure["ui"][nodeid].getCode();
-			}
-			if (selector.type=='node value') {
-				text = UICom.structure["ui"][nodeid].getValue();
-			}
-			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
-			}
-		};
+		select = replaceVariable(select);
+		var text = getResText(data,select)[0];
 		var size = getTextSize(destid,text+txt,svgfontsize*2,svgfontname)
 		var svgtext = makeSVG('text',{'x':1100-size,'y':40,'font-size':svgfontsize*2,'font-family':svgfontname},text+txt);
 		document.getElementById(destid).appendChild(svgtext);
@@ -2278,45 +2243,13 @@ g_report_actions['draw-web-axis'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	if (select!=undefined) {
-		while (select.indexOf("##")>-1) {
-			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-			var variable_name = test_string.substring(0,test_string.indexOf("##"));
-			select = select.replace("##"+variable_name+"##", g_variables[variable_name]);
+		
+		select = replaceVariable(select);
+		var texts = getResText(data,select);
+		var angle = 360 / texts.length;
+		for (var i=0; i<texts.length;i++){
+			drawAxis(destid,texts[i],svgfontname,svgfontsize,angle*i,svgcenter,svgaxislength);
 		}
-		var selector = r_getSelector(select,null);
-		var nodes = $(selector.jquery,data).filter(selector.filter1);
-		nodes = eval("nodes"+selector.filter2);
-		var angle = 360 / nodes.length;
-		for (var i=0; i<nodes.length;i++){
-			//---------------------------
-			var text = "";
-			var nodeid = $(nodes[i]).attr("id");
-			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-			}
-			if (selector.type=='resource code') {
-				text = UICom.structure["ui"][nodeid].resource.getCode();
-			}
-			if (selector.type=='resource value') {
-				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-			}
-			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-			}
-			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-			}
-			if (selector.type=='node code') {
-				text = UICom.structure["ui"][nodeid].getCode();
-			}
-			if (selector.type=='node value') {
-				text = UICom.structure["ui"][nodeid].getValue();
-			}
-			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
-			}
-			drawAxis(destid,text,svgfontname,svgfontsize,angle*i,svgcenter,svgaxislength);
-		};
 	}
 }
 
@@ -2326,60 +2259,20 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	var legendselect = $(action).attr("legendselect");
-	var test = $(action).attr("test");
 	var min = parseInt($(action).attr("min"));
 	var max = parseInt($(action).attr("max"));
 	var pos = $(action).attr("pos");
 	if (pos==undefined)
 		pos = 0;
-//	if (pos > no)
-//		no = pos;
 	if (select!=undefined) {
-		while (select.indexOf("##")>-1) {
-			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-			var variable_name = test_string.substring(0,test_string.indexOf("##"));
-			select = select.replace("##"+variable_name+"##", g_variables[variable_name]);
-		}
-		var selector = r_getSelector(select,null);
-		var nodes = $(selector.jquery,data).filter(selector.filter1);
-		nodes = eval("nodes"+selector.filter2);
-		var angle = 360 / nodes.length;
-		var points = [];
-		for (var i=0; i<nodes.length;i++){
-			//---------------------------
-			var nodeid = $(nodes[i]).attr("id");
-			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-			}
-			if (selector.type=='resource code') {
-				text = UICom.structure["ui"][nodeid].resource.getCode();
-			}
-			if (selector.type=='resource value') {
-				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-			}
-			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-			}
-			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-			}
-			if (selector.type=='node value') {
-				text = UICom.structure["ui"][nodeid].getValue();
-			}
-			if (selector.type=='node code') {
-				text = UICom.structure["ui"][nodeid].getCode();
-			}
-			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
-			}
-			if (text.length>0)
-				points[points.length] = {'value': ((text - min)/(max-min))*svgaxislength, 'angle':angle*i};
-			else
-				points[points.length] = {'value': null, 'angle':angle*i};
-		};
-		for (var i=0; i<nodes.length;i++){
-			if (points[i].value!=null)
+		select = replaceVariable(select);
+		var points = getPoints(data,select);
+		var angle = 360 / points.length;
+		for (var i=0; i<points.length;i++){
+			if (points[i].value!=null) {
+				points[i] = {'value': ((points[i].value - min)/(max-min))*svgaxislength, 'angle':angle*i};
 				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+pos);
+				}
 			if (pos==0){ // draw gaduations
 				for (var j=0;j<=Math.abs(max-min);j++) {
 					if (j>0)
@@ -2395,43 +2288,10 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 			drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+pos);
 		// draw legend
 		if (legendselect!=undefined) {
-			var selector = r_getSelector(legendselect,null);
-			var nodes = $(selector.jquery,data).filter(selector.filter1);
-			nodes = eval("nodes"+selector.filter2);
-			var text = 'legend';
-			for (var i=0; i<nodes.length;i++){
-				//---------------------------
-				var nodeid = $(nodes[i]).attr("id");
-				if (selector.type=='resource') {
-					text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-				}
-				if (selector.type=='resource code') {
-					text = UICom.structure["ui"][nodeid].resource.getCode();
-				}
-				if (selector.type=='resource value') {
-					text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-				}
-				if (selector.type=='resource label') {
-					text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-				}
-				if (selector.type=='node label') {
-					text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-				}
-				if (selector.type=='node value') {
-					text = UICom.structure["ui"][nodeid].getValue();
-				}
-				if (selector.type=='node code') {
-					text = UICom.structure["ui"][nodeid].getCode();
-				}
-				if (selector.type=='node context') {
-					text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
-				}
-			};
+			var text = getResText(data,legendselect)[0];
 			var line = makeSVG('line',{'x1':10,'y1':975-20*pos,'x2':10,'y2':975-20*pos,'class':'svg-web-value'+pos});
-//			var line = makeSVG('line',{'x1':10,'y1':25+20*no,'x2':10,'y2':25+20*no,'class':'svg-web-value'+no});
 			document.getElementById(destid).appendChild(line);
 			var svgtext = makeSVG('text',{'x':20,'y':980-20*pos,'font-size':svgfontsize,'font-family':svgfontname},text);
-//			var svgtext = makeSVG('text',{'x':20,'y':30+20*no,'font-size':svgfontsize,'font-family':svgfontname},text);
 			document.getElementById(destid).appendChild(svgtext);
 		}
 
@@ -2453,23 +2313,27 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 	var xmin = parseInt($(action).attr("xmin"));
 	var xmax = parseInt($(action).attr("xmax"));
 	var xnbgraduation = parseInt($(action).attr("x-nbgraduation"));
+	var xdisplaygraduation = parseInt($(action).attr("x-displaygraduation"));
 	var xlegendtext = $(action).attr("xlegendtext");
 	var ymin = parseInt($(action).attr("ymin"));
 	var ymax = parseInt($(action).attr("ymax"));
 	var ynbgraduation = parseInt($(action).attr("y-nbgraduation"));
+	var ydisplaygraduation = parseInt($(action).attr("y-displaygraduation"));
 	var ylegendtext = $(action).attr("ylegendtext");
 	if (xaxis==undefined)
 		xaxis = 0;
 	if (yaxis==undefined)
 		yaxis = 0;
+	// store graph axis information
 	if (graphid!="")
-		g_graphs [graphid] = {'xaxis':xaxis,'yaxis':yaxis,'xmin':xmin,'xmax':xmax,'ymin':ymin,'ymax':ymax,'xnbgraduation':xnbgraduation,'ynbgraduation':ynbgraduation,'nbdata':0}
-	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
-	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':0,'y2':1200,'stroke':'red','stroke-width': 2}));
-	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
-	document.getElementById(destid).appendChild(makeSVG('line',{'x1':1200,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
-	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
-	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
+		g_graphs [graphid] = {'xaxis':xaxis,'yaxis':yaxis,'xmin':xmin,'xmax':xmax,'ymin':ymin,'ymax':ymax,'xnbgraduation':xnbgraduation,'ynbgraduation':ynbgraduation,'xdisplaygraduation':xdisplaygraduation,'ydisplaygraduation':ydisplaygraduation,'nbdata':0}
+	//--------------------------
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':0,'y2':1200,'stroke':'red','stroke-width': 2}));
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':1200,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
 	// x axis
 	var yline = makeSVG('line',{'x1':100+xaxis,'y1':100,'x2':100+xaxis,'y2':1100,'stroke':'black','stroke-width': 2});
 	document.getElementById(destid).appendChild(yline);
@@ -2479,9 +2343,12 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 			var x = 100+xaxis + (1000-xaxis) / xnbgraduation * j ;
 			var line = makeSVG('line',{'x1':x,'y1':1100-yaxis-5,'x2':x,'y2':1100-yaxis+5,'stroke':'black','stroke-width': 1});
 			document.getElementById(destid).appendChild(line);
-			var label = (xmax - xmin) / xnbgraduation * j ;
-			var text = makeSVG('text',{'x':x,'y':1100-yaxis+25,'font-size':svgfontsize,'font-family':svgfontname},label);
-			document.getElementById(destid).appendChild(text);
+			// x graduation label
+			if (xdisplaygraduation=='1') {
+				var label = (xmax - xmin) / xnbgraduation * j ;
+				var text = makeSVG('text',{'x':x,'y':1100-yaxis+25,'font-size':svgfontsize,'font-family':svgfontname},label);
+				document.getElementById(destid).appendChild(text);
+			}
 		}
 	}
 	// x legend
@@ -2499,125 +2366,19 @@ g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 			var y = 1100-yaxis - (1000-yaxis) / ynbgraduation * j  ;
 			var line = makeSVG('line',{'x1':100+xaxis-5,'y1':y,'x2':100+xaxis+5,'y2':y,'stroke':'black','stroke-width': 1});
 			document.getElementById(destid).appendChild(line);
-			var label = (ymax - ymin) / ynbgraduation * j ;
-			var text = makeSVG('text',{'x':100+xaxis-25,'y':y,'font-size':svgfontsize,'font-family':svgfontname},label);
-			document.getElementById(destid).appendChild(text);
+			// y graduation label
+			if (ydisplaygraduation=='1') {
+				var label = (ymax - ymin) / ynbgraduation * j ;
+				var text = makeSVG('text',{'x':100+xaxis-25,'y':y,'font-size':svgfontsize,'font-family':svgfontname},label);
+				document.getElementById(destid).appendChild(text);
+			}
 		}
 	}
 	if (ylegendtext!=""){
 		var text = makeSVG('text',{'x':50+xaxis,'y':75,'font-size':svgfontsize+4,'font-family':svgfontname},ylegendtext);
 		document.getElementById(destid).appendChild(text);
 	}
-		if (select!=undefined) {
-		while (select.indexOf("##")>-1) {
-			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-			var variable_name = test_string.substring(0,test_string.indexOf("##"));
-			select = select.replace("##"+variable_name+"##", g_variables[variable_name]);
-		}
-		var selector = r_getSelector(select,null);
-		var nodes = $(selector.jquery,data).filter(selector.filter1);
-		nodes = eval("nodes"+selector.filter2);
-		var angle = 360 / nodes.length;
-		var points = [];
-		for (var i=0; i<nodes.length;i++){
-			//---------------------------
-			var nodeid = $(nodes[i]).attr("id");
-			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-			}
-			if (selector.type=='resource code') {
-				text = UICom.structure["ui"][nodeid].resource.getCode();
-			}
-			if (selector.type=='resource value') {
-				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-			}
-			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-			}
-			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-			}
-			if (selector.type=='node value') {
-				text = UICom.structure["ui"][nodeid].getValue();
-			}
-			if (selector.type=='node code') {
-				text = UICom.structure["ui"][nodeid].getCode();
-			}
-			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
-			}
-			if (text.length>0)
-				points[points.length] = {'value': parseInt(text),'x':0,'y':0};
-			else
-				points[points.length] = {'value': null};
-		};
-		if (graphtype=='point' || graphtype=='line') {
-			for (var i=0; i<nodes.length;i++){
-				if (points[i].value!=null){
-					points[i].x = 100+xaxis + (1000-xaxis) / xnbgraduation * (i+1) ;
-					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
-					var line = makeSVG('line',{'x1':points[i].x,'y1':points[i].y,'x2':points[i].x,'y2':points[i].y,'stroke':'green','stroke-width': 7,'stroke-linecap': 'round'});
-					document.getElementById(destid).appendChild(line);
-				}
-				if (i>0 && points[i-1].value!=null && points[i].value!=null && graphtype=='line') {
-					var line = makeSVG('line',{'x1':points[i-1].x,'y1':points[i-1].y,'x2':points[i].x,'y2':points[i].y,'stroke':'green','stroke-width': 2});
-					document.getElementById(destid).appendChild(line);
-				}
-			}
-		}
-		if (graphtype=='bar') {
-			for (var i=0; i<nodes.length;i++){
-				if (points[i].value!=null){
-					points[i].x = 90+xaxis + (1000-xaxis) / xnbgraduation * (i+1) ;
-					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
-					var rect = makeSVG('rect',{'x':points[i].x,'y':points[i].y,'width':20,'height':(1000-yaxis) / (ymax-ymin) * points[i].value,'stroke-width': 1,'fill': 'green'});
-					document.getElementById(destid).appendChild(rect);
-				}
-			}
-		}
-//		if (points[i-1].value!=null && points[0].value!=null)
-//			drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+pos);
-		// draw legend
-		if (legendselect!=undefined) {
-			var selector = r_getSelector(legendselect,null);
-			var nodes = $(selector.jquery,data).filter(selector.filter1);
-			nodes = eval("nodes"+selector.filter2);
-			var text = 'legend';
-			for (var i=0; i<nodes.length;i++){
-				//---------------------------
-				var nodeid = $(nodes[i]).attr("id");
-				if (selector.type=='resource') {
-					text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-				}
-				if (selector.type=='resource code') {
-					text = UICom.structure["ui"][nodeid].resource.getCode();
-				}
-				if (selector.type=='resource value') {
-					text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-				}
-				if (selector.type=='resource label') {
-					text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-				}
-				if (selector.type=='node label') {
-					text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-				}
-				if (selector.type=='node value') {
-					text = UICom.structure["ui"][nodeid].getValue();
-				}
-				if (selector.type=='node code') {
-					text = UICom.structure["ui"][nodeid].getCode();
-				}
-				if (selector.type=='node context') {
-					text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
-				}
-			};
-			var line = makeSVG('line',{'x1':10,'y1':975+20*ndata,'x2':10,'y2':975-20*pos,'class':'svg-web-value'+nadata});
-			document.getElementById(destid).appendChild(line);
-			var svgtext = makeSVG('text',{'x':20,'y':980-20*pos,'font-size':svgfontsize,'font-family':svgfontname},text);
-			document.getElementById(destid).appendChild(svgtext);
-		}
 
-	}
 }
 
 //==================================
@@ -2626,8 +2387,12 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 {
 	var graphid = $(action).attr("ref");
 	var graphtype = $(action).attr("graphtype");
-	var select = $(action).attr("select");
+	var pointvariable = $(action).attr("point-variable");
+	var pointselect = $(action).attr("point-select");
+	var legendvariable = $(action).attr("legend-variable");
 	var legendselect = $(action).attr("legend-select");
+	var gradvariable = $(action).attr("grad-variable");
+	var gradselect = $(action).attr("grad-select");
 	//-----------------
 	var xaxis = g_graphs[graphid].xaxis;
 	var yaxis = g_graphs[graphid].yaxis;
@@ -2636,13 +2401,18 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 	var ymax = g_graphs[graphid].ymax;
 	var nbdata = g_graphs[graphid].nbdata++;
 	//----------------
-	if (select!=undefined) {
-		while (select.indexOf("##")>-1) {
-			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-			var variable_name = test_string.substring(0,test_string.indexOf("##"));
-			select = select.replace("##"+variable_name+"##", g_variables[variable_name]);
+	if (pointselect!=undefined || pointvariable!="") {
+		var points = [];
+		if (pointselect!=undefined){
+			pointselect = r_replaceVariable(pointselect);
+			// draw points
+			points = getPoints(data,pointselect);
 		}
-		var points = getPoints(data,select);
+		if (pointvariable!="") {
+			for (var i=0; i<g_variables[pointvariable].length;i++){
+				points[points.length] = {'value': parseInt(g_variables[pointvariable][i]),'x':0,'y':0};
+			}
+		}
 		if (graphtype=='point' || graphtype=='line') {
 			for (var i=0; i<points.length;i++){
 				if (points[i].value!=null){
@@ -2668,8 +2438,17 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 			}
 		}
 		// draw legend
-		if (legendselect!=undefined) {
-			var texts = getResText(data,legendselect);
+		if (legendselect!=undefined || legendvariable!="") {
+			var texts = [];
+			if (legendselect!=undefined){
+				legendselect = r_replaceVariable(legendselect);
+				texts = getResText(data,legendselect);
+			}
+			if (legendvariable!="") {
+				for (var i=0; i<g_variables[legendvariable].length;i++){
+					texts[texts.length] = g_variables[legendvariable][i];
+				}
+			}
 			for (var i=0; i<texts.length;i++){
 				var line = makeSVG('line',{'x1':100,'y1':1140+20*nbdata,'x2':100,'y2':1140+20*nbdata,'class':'svg-web-value'+nbdata});
 				document.getElementById(destid).appendChild(line);
@@ -2677,7 +2456,25 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 				document.getElementById(destid).appendChild(svgtext);
 			}
 		}
-
+		// draw x graduation
+		if (gradselect!=undefined || gradvariable!="") {
+			var texts = [];
+			if (gradselect!=undefined){
+				gradselect = r_replaceVariable(gradselect);
+				texts = getResText(data,gradselect);
+			}
+			if (gradvariable!="") {
+				for (var i=0; i<g_variables[gradvariable].length;i++){
+					texts[texts.length] = g_variables[gradvariable][i];
+				}
+			}
+			for (var i=0; i<texts.length;i++){
+				var x = 100+xaxis + (20*nbdata) + (1000-xaxis) / xnbgraduation * (i+1) ;
+				var y = 1120 ;
+				var svgtext = makeSVG('text',{'x':x,'y':y,'transform':"rotate(45 "+x+" "+y+")",'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
+				document.getElementById(destid).appendChild(svgtext);
+			}
+		}
 	}
 }
 

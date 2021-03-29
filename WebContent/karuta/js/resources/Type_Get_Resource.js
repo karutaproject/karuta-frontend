@@ -230,8 +230,6 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				html += style;
 				if (indashboard)
 					html += "background-position:center;";
-				if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
-					html += "font-weight:bold;"
 				html += "'>";
 				if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 					html += "<span name='code'>" + cleanCode(code) + "</span> ";
@@ -244,9 +242,6 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 					html += "</span>";
 				else
 					html += "</div>";
-				if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1){
-					html += text;
-				}
 			}
 		}
 	//--------------------------------------------------
@@ -257,8 +252,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			var code = "";
 			var style = "";
 		try {
-//			html += UICom.structure["ui"][elts[0].substring(10)].getView(null,"span");
-			var node = UICom.structure["ui"][elts[0].substring(10)];
+			var resid = elts[0].substring(10);
+			var node = UICom.structure["ui"][resid];
 			label = node.label_node[langcode].text();
 			code = node.code_node.text();
 			style = this.style_node.text();
@@ -301,6 +296,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		}
 		if (code.indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
+		if (this.preview)
+			html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+resid+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		if (indashboard)
 			html += "</span>";
 		else
@@ -322,11 +319,11 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				html += UICom.structure["ui"][label.substring(7)].resource.getView();
 			else
 				html += "<span name='label'>" + label + "</span> ";
-			if (this.preview)
-				html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			}
 		if (code.indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
+		if (this.preview)
+			html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		if (indashboard)
 			html += "</span>";
 		else
@@ -1534,13 +1531,12 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 		url : serverBCK_API+"/nodes/node/"+partid,
 		last : last,
 		success : function(data) {
-//			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
-			var nodes = $("*:has(metadata[semantictag*='"+get_resource_semtag+"'])",data);
+			var nodes = $("*:has(>metadata[semantictag*='"+get_resource_semtag+"'])",data);
 			if (nodes.length==0)
 				nodes = $( ":root",data ); //node itself
-			var nodeid = $(nodes[nodes.length-1]).attr('id'); // if more than one node (embedded node), the last must be the right one
+			var nodeid = $(nodes[0]).attr('id'); 
 			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
-			var tagname = $( ":root",data )[ 0 ].nodeName;
+			var tagname = $(nodes[0])[0].nodeName;
 			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
 				xml = xml.replace("Get_Resource","nodeRes");
 				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
