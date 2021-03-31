@@ -1242,7 +1242,7 @@ UIFactory["Node"].prototype.displaySelectLanguage= function(destid,attribute,yes
 	for (var i=0; i<languages.length;i++) {
 		languagessarray[languagessarray.length] = {'libelle':karutaStr[languages[i]]['language']};
 		html += "<a class='dropdown-item' id='lang-menu-"+languages[i]+"' onclick=\"var v=$('#"+attribute+nodeid+"').val();$('#"+attribute+nodeid+"').val(v+' "+karutaStr[languages[i]]['language']+"');$('#"+attribute+nodeid+"').change();\">";
-		html += "	<img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
+		html += karutaStr[languages[i]]['language'];
 		html += "</a>"
 	}
 		html += "	</div>";

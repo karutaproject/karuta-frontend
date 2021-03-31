@@ -468,6 +468,80 @@ g_actions['create-user'] = function createUser(node)
 	return ok;
 };
 
+function updateUserAttribute(data,attribute,value) {
+		if (value!="" && $(attribute,data).text()!=value) {
+		$(attribute,data).text(value);
+	}
+}
+//=================================================
+g_actions['update-user'] = function updateUser(node)
+//=================================================
+{
+	var ok = false;
+	var identifier = getTxtvals($("identifier",node));
+	var newlastname = getTxtvals($("lastname",node));
+	var newfirstname = getTxtvals($("firstname",node));
+	var newemail = getTxtvals($("email",node));
+	var newdesigner = getTxtvals($("designer",node));
+	var newadmin = getTxtvals($("admin",node));
+	var newpassword = getTxtvals($("password",node));
+	var newother = getTxtvals($("other",node));
+	//---- get userid ----------
+	var userid = "";
+	var url = serverBCK_API+"/users/user/username/"+identifier;
+	$.ajax({
+		async : false,
+		type : "GET",
+		contentType: "application/xml",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			userid = data;
+			var url = serverBCK_API+"/users/user/"+userid;
+			$.ajax({
+				async : false,
+				type : "GET",
+				contentType: "application/xml",
+				dataType : "text",
+				url : url,
+				success : function(data) {
+					ok = true;
+					updateUserAttribute(data,"lastname",newlastname)
+					updateUserAttribute(data,"firstname",newfirstname)
+					updateUserAttribute(data,"email",newemail)
+					updateUserAttribute(data,"designer",newdesigner)
+					updateUserAttribute(data,"admin",newadmin)
+					updateUserAttribute(data,"password",newpassword)
+					updateUserAttribute(data,"other",newother)
+					var url = serverBCK_API+"/users/user/"+userid;
+					$.ajax({
+						async : false,
+						type : "PUT",
+						contentType: "application/xml; charset=UTF-8",
+						dataType : "text",
+						url : url,
+						data : data,
+						success : function(data) {
+							userid = data;
+							ok = true;
+							$("#batch-log").append("<br>- user updated("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+						},
+						error : function(data) {
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+						}
+					});
+				},
+				error : function(data) {
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+				}
+			});
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+		}
+	});
+	return ok;
+};
 
 //=================================================
 g_actions['delete-user'] = function deleteUser(node)
@@ -2986,6 +3060,7 @@ function processCode()
 function getModelAndProcess(model_code)
 //=================================================
 {
+	model_code = replaceVariable(model_code)
 	$.ajax({
 		async : false,
 		type : "GET",
@@ -3257,11 +3332,12 @@ function saveLog(model_code,portfoliologcode,logtext)
 function displayExecBatchButton()
 //=================================================
 {
-	var html = "<div id='create-portfolio'>"+g_execbatchbuttonlabel1[LANG]+"</div>";
+	var html = "<div id='create-portfolio' class='alert alert-success'>"+g_execbatchbuttonlabel1[LANG]+"</div>";
 	$("#main-list").html(html);
 	initBatchVars();
 	prepareBatch();
 	getModelAndProcess(g_json.model_code);
+
 }
 
 //-----------------------------------------------------------------------

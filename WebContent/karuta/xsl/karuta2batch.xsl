@@ -93,6 +93,9 @@
 		<xsl:variable name="designer">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='designer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="admin">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='admin']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
+		</xsl:variable>
 		<create-user>
 			<identifier>
 				<xsl:call-template name="txtval">
@@ -130,7 +133,78 @@
 			<designer>
 				<txtval><xsl:value-of select="$designer"/></txtval>
 			</designer>
+			<admin>
+				<txtval><xsl:value-of select="$admin"/></txtval>
+			</admin>
 		</create-user>
+	</xsl:template>
+
+	<xsl:template match="*[metadata/@semantictag='update-person']">
+		<xsl:variable name="identifier">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='identifier']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="firstname">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='firstname']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="lastname">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='lastname']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="email">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='email']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="password">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='password']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="other">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='other']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="designer">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='designer']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="admin">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='admin']/asmResource[@xsi_type='Get_Resource']/code"></xsl:value-of>
+		</xsl:variable>
+		<update-user>
+			<identifier>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">identifier</xsl:with-param>
+				</xsl:call-template>
+				<txtval select='{$identifier}'/>
+			</identifier>
+			<firstname>
+				<txtval select='{$firstname}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">firstname</xsl:with-param>
+				</xsl:call-template>
+			</firstname>
+			<lastname>
+				<txtval select='{$lastname}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">lastname</xsl:with-param>
+				</xsl:call-template>
+			</lastname>
+			<email>
+				<txtval select='{$email}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">email</xsl:with-param>
+				</xsl:call-template>
+			</email>
+			<password>
+				<txtval select='{$password}'/>
+				<xsl:call-template name="txtval">
+					<xsl:with-param name="semtag">password</xsl:with-param>
+				</xsl:call-template>
+			</password>
+			<other>
+				<txtval><xsl:value-of select="$other"/></txtval>
+			</other>
+			<designer>
+				<txtval><xsl:value-of select="$designer"/></txtval>
+			</designer>
+			<admin>
+				<txtval><xsl:value-of select="$admin"/></txtval>
+			</admin>
+		</update-user>
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='delete-person']">
