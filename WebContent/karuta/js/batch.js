@@ -2083,7 +2083,7 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 {
 	var ok = false;
 	var portfoliogroup = getTxtvals($("portfoliogroup",node));
-	var select = $(node).attr("select");  // select = #portfoliocode. or refif
+	var select = $(node).attr("select");  // select = #portfoliocode. or refid
 	//---- get portfoliogroupid ----------
 	var groupid = "";
 	var url = serverBCK_API+"/portfoliogroups";
@@ -2101,9 +2101,8 @@ g_actions['join-portfoliogroup'] = function JoinPortfolioGroup(node)
 			if (groupid=="")
 				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in JoinPortfolioGroup - portfoliogroup:"+portfoliogroup+" NOT FOUND");
 			else {
-				var portfolios = new Array();
 				if (select.indexOf("#")<0) {
-					var treeref = select;
+					var treeref = select.replace(".","");
 					//---- join group --------------
 					$.ajax({
 						async : false,
@@ -2165,7 +2164,7 @@ g_actions['leave-portfoliogroup'] = function LeavePortfolioGroup(node)
 {
 	var ok = false;
 	var portfoliogroup = getTxtvals($("portfoliogroup",node));
-	var treeref = $(node).attr("select");
+	var treeref = select.replace(".","");
 	//---- get portfoliogroupid ----------
 	var groupid = "";
 	var url = serverBCK_API+"/portfoliogroups";
