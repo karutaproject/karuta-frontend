@@ -620,7 +620,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 //=============================================================================
 
 //==================================
-g_report_actions['username'] = function (destid,action,no,userid,is_out_csv)
+g_report_actions['login'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
 	var text ="";
@@ -640,7 +640,7 @@ g_report_actions['username'] = function (destid,action,no,userid,is_out_csv)
 }
 
 //==================================
-g_report_actions['firstname'] = function (destid,action,no,userid,is_out_csv)
+g_report_actions['firstname'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
 	var text ="";
@@ -660,7 +660,7 @@ g_report_actions['firstname'] = function (destid,action,no,userid,is_out_csv)
 }
 
 //==================================
-g_report_actions['lastname'] = function (destid,action,no,userid,is_out_csv)
+g_report_actions['lastname'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
 	var text ="";
@@ -680,7 +680,7 @@ g_report_actions['lastname'] = function (destid,action,no,userid,is_out_csv)
 }
 
 //==================================
-g_report_actions['firstname-lastname'] = function (destid,action,no,userid,is_out_csv)
+g_report_actions['firstname-lastname'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
 	var text1 ="";
@@ -1121,12 +1121,16 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//----------------------------
 			var node = UICom.structure["ui"][nodeid];
 			var writenode = ($(node.node).attr('write')=='Y')? true:false;
+			if (editresroles.indexOf("user")>-1)
+				editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
 			if (g_designerrole || writenode) {
-				writenode = (editresroles.containsArrayElt(g_userroles))? true : false;
+				writenode = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf($(USER.username_node).text())>-1 )
 			}
 			var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
+			if (delnoderoles.indexOf("user")>-1)
+				delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
 			if (g_designerrole || deletenode) {
-				deletenode = (delnoderoles.containsArrayElt(g_userroles))? true : false;
+				deletenode = (delnoderoles.containsArrayElt(g_userroles) || delnoderoles.indexOf($(USER.username_node).text())>-1);
 			}
 			var inline = false;
 			var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');

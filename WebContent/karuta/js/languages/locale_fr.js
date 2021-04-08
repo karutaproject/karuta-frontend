@@ -171,7 +171,7 @@ karutaStr['fr']['menulabels2']="libellé@fr";
 karutaStr['fr']['menulabels3']=",rôles[;autre libellé]</span>";
 karutaStr['fr']['help']="Bulle d'aide <br/><span style='font-size:smaller'>";
 karutaStr['fr']['help2']="texte en français@fr";
-karutaStr['fr']['help3']="</span>";
+karutaStr['fr']['help3']="[,rôle]</span>";
 karutaStr['fr']['font-size']="Taille police (px)";
 karutaStr['fr']['font-weight']="Poids de la police";
 karutaStr['fr']['font-style']="Style de la police";

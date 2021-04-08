@@ -184,8 +184,8 @@
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</else-part>		
 	</xsl:template>
-	<!-- ================ username ============================ -->
-	<xsl:template match="*[metadata/@semantictag='username']">
+	<!-- ================ login ============================ -->
+	<xsl:template match="*[metadata/@semantictag='login']">
 		<xsl:variable name="style">
 			<xsl:call-template name="style"/>
 		</xsl:variable>
@@ -195,7 +195,7 @@
 		<xsl:variable name="class">
 			<xsl:call-template name="class"/>
 		</xsl:variable>
-		<username>
+		<login>
 			<xsl:if test="not($class='')">
 				<xsl:attribute name="class"><xsl:value-of select="$class"/></xsl:attribute>
 			</xsl:if>
@@ -205,7 +205,7 @@
 			<xsl:if test="not($help='')">
 				<xsl:attribute name="help"><xsl:value-of select="$help"/></xsl:attribute>
 			</xsl:if>
-		</username>
+		</login>
 	</xsl:template>
 	<!-- ================ firstname ============================ -->
 	<xsl:template match="*[metadata/@semantictag='firstname']">

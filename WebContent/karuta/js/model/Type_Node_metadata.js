@@ -1464,7 +1464,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		else
 			html += "<h5 class='metadata-node-resource'>"+karutaStr[languages[langcode]]['node-content']+"</h5>";
 		html += "	<div id='metadata-node-resource'></div>";
-		if (name=='asmStructure' || name=='asmUnit') {
+		if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit') {
 			html += "<hr><h5>"+karutaStr[languages[langcode]]['inparent']+"</h5>";
 			html += "	<div id='metadata-inparent'></div>";
 		}

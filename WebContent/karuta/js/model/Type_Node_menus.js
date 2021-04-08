@@ -237,7 +237,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 	//------------- specific menu ---------------
 	var no_monomenu = 0;
 	try {
-		if ((this.depth>0 || this.asmtype == 'asmUnitStructure') && this.menuroles != undefined && this.menuroles.length>10 && (this.menuroles.indexOf(this.userrole)>-1 || (this.menuroles.containsArrayElt(g_userroles) && this.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
+		if ((this.depth>0 || this.asmtype == 'asmUnitStructure') && this.menuroles != undefined && this.menuroles.length>10 && (this.menuroles.indexOf(this.userrole)>-1 || this.menuroles.indexOf($(USER.username_node).text())>-1 || (this.menuroles.containsArrayElt(g_userroles) && this.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
 			//--------------------------------
 			var mlabels = [];
 			var labelitems = this.menulabels.split(";");
@@ -278,7 +278,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					else
 						menus[i][5] = ""; // condition
 				}
-				if (menus[i][3].indexOf(this.userrole)>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
+				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].indexOf($(USER.username_node).text())>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
 					if (menus[i][5]==""){
 						displayMenu = true;  // this.userrole may be included in semantictag
 						no_monomenu = i;
@@ -292,7 +292,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 			//--------------------------------
 			var nbmenus = 0;
 			for (var i=0; i<menus.length; i++){
-				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].indexOf($(USER.username_node).text())>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
 						nbmenus++;
 			}
 			var monomenu = (nbmenus==1);
@@ -304,7 +304,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 				//-----------
 				if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
 					for (var i=0; i<mlabels.length; i++){
-						if (mlabels[i][1].indexOf(this.userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
+						if (mlabels[i][1].indexOf(this.userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || mlabels[i][1].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') {
 							var titles = [];
 							var title = "";
 							try {
@@ -382,7 +382,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 							}
 						}
 						//-------------------------------------------------------------
-						if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+						if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || menus[i][3].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer')
 							html += UIFactory["Node"].getSpecificMenu(this.id,menus[i],targetid,title,databack,callback,param2,param3,param4);
 					}
 				}
@@ -442,7 +442,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 								}
 						}
 					}
-				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+				if (menus[i][3].indexOf(this.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || menus[i][3].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer')
 					html += UIFactory["Node"].getSingleMenu(this.id,menus[i],targetid,title,databack,callback,param2,param3,param4);
 				//------------------
 			}
