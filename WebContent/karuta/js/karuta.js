@@ -2431,9 +2431,9 @@ function updatelabel (node) {
 }
 
 //==================================
-function updatecodenum (node) {
+function updatecodenum (uuid) {
 //==================================
-	var uuid = $(node).attr("id");
+	var node = UICom.structure.ui[uuid].node;
 	var code = UICom.structure.ui[uuid].getCode();
 	if (code.indexOf("*")>-1)
 		code = code.substring(0,code.indexOf("*"));

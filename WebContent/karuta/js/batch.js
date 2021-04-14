@@ -203,7 +203,10 @@ function getSourceUrl(node)
 			treeref = eval("g_json."+treeref.substring(2));
 		else if (treeref.indexOf("/")>-1)
 			treeref = eval("g_json.lines["+g_noline+"]."+treeref.substring(1));
-		url = serverBCK_API+"/nodes/node/"+treeref;
+		else if (treeref.indexOf("##")>-1)
+			treeref = replaceVariable(treeref);
+		if (treeref!='#none')
+			url = serverBCK_API+"/nodes/node/"+treeref;
 	} else if (treeref.indexOf("#")>-1)
 		url = serverBCK_API+"/nodes?portfoliocode=" + treeref.substring(1) + "&semtag="+semtag;	
 	else
@@ -222,8 +225,10 @@ function processAll(model_code,portfoliologcode)
 //=================================================
 {
 	$.ajaxSetup({async: false});
-	get_list_portfoliosgroups();
-	get_list_usersgroups();
+	if (USER.creator){
+		get_list_portfoliosgroups();
+		get_list_usersgroups();
+	}
 	var actions_list = $("model",g_xmlDoc).children();
 	processListActions(actions_list);
 	$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
@@ -2808,24 +2813,26 @@ g_actions['update-proxy'] = function update_proxy(node)
 	var srce_url = getSourceUrl(node);
 	var sources = new Array();
 	var sourceid = "";
-	$.ajax({
-		async : false,
-		type : "GET",
-		dataType : "xml",
-		url : srce_url,
-		success : function(data) {
-			if (this.url.indexOf('/node/')>-1) {  // get by uuid
-				var results = $('*',data);
-				sources[0] = results[0];
-			} else {							// get by code and semtag
-				sources = $("node",data);
+	if (srce_url!="") {
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : srce_url,
+			success : function(data) {
+				if (this.url.indexOf('/node/')>-1) {  // get by uuid
+					var results = $('*',data);
+					sources[0] = results[0];
+				} else {							// get by code and semtag
+					sources = $("node",data);
+				}
+				sourceid = $(sources[0]).attr('id');
+			},
+			error : function() {
+				$("#batch-log").append("<br>- ***SOURCE NOT FOUND <span class='danger'>ERROR</span>");
 			}
-			sourceid = $(sources[0]).attr('id');
-		},
-		error : function(data) {
-			$("#batch-log").append("<br>- ***SOURCE NOT FOUND <span class='danger'>ERROR</span>");
-		}
-	});
+		});
+	}
 	//------------ Target --------------------
 	var target_url = getTargetUrl(node);
 	var nodes = new Array();
@@ -2856,7 +2863,7 @@ g_actions['update-proxy'] = function update_proxy(node)
 					type : "PUT",
 					contentType: "application/xml",
 					dataType : "text",
-					data : xml,
+					data : strippeddata,
 					targetid : targetid,
 					sourceid : sourceid,
 					url : serverBCK_API+"/resources/resource/" + targetid,
