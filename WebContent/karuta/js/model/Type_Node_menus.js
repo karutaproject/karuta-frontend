@@ -520,7 +520,7 @@ UIFactory["Node"].prototype.getMenus = function(langcode)
 					var sharelabel = shares[i][5];
 					var shareoptions = (shares[i].length>7) ? shares[i][7] : "";
 					if (shareto!='' && this.shareroles.indexOf('2world')<0) {
-						if (shareto!='?' && shareduration!='?' && shareoptions!="") {
+						if (shareto!='?' && shareduration!='?') {
 							var sharetoemail = "";
 							var sharetoroles = "";
 							var sharetos = shareto.split(" ");

@@ -77,6 +77,7 @@ function displayKarutaPublic()
 			});
 			//----------------
 			$.ajax({	// get id of the portfolio that contains the node
+				async : false,
 				type : "GET",
 				dataType : "text",
 				url : serverBCK_API+"/nodes/node/" + g_uuid  +"/portfolioid",
@@ -84,6 +85,19 @@ function displayKarutaPublic()
 					g_portfolioid = data;
 				}
 			});
+			//----------------
+			$.ajax({	// get id of the portfolio that contains the node
+				type : "GET",
+				dataType : "text",
+				url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
+				success : function(data) {
+					var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
+//					setConfigurationPortfolioVariable(config_unit,true);
+					setCSSportfolio(config_unit);
+					setVariables(data);
+				}
+			});
+
 			//----------------
 			$.ajax({
 				type : "GET",

@@ -83,6 +83,7 @@ function fill_list_users(type)
 function display_list_users(type)
 //==============================
 {
+	USER.admin = USER.admin_original; // reset if role playing when reload
 	if (type==null)
 		type='list1';
 	if ($("#user-create").length) {

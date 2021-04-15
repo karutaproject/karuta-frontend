@@ -82,6 +82,7 @@ function fill_list_portfoliosgroups()
 function display_list_portfoliosgroups()
 //==============================
 {
+	USER.admin = USER.admin_original; // reset if role playing when reload
 	if ($("#portfoliogroup-body").length) {
 		show_list_portfoliosgroups();
 	} else {

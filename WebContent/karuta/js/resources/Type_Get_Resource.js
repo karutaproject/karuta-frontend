@@ -1003,7 +1003,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 							input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
 						else
 							input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
-					} else 
+					} else if (target=='nodelabel')
+						input += "label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure["ui"][uuid].getLabel(null,'none')+"\" ";
+					else 
 						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
 				if (disabled)
@@ -1013,7 +1015,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (display_code)
 				input += code + " ";
 			if (display_label) {
-				if (srce=='resource')
+				if (srce=='resource' || srce=='nodelabel')
 					input += $("label[lang='"+languages[langcode]+"']",resource).text()+"</div>";
 				else
 					input += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</div>";

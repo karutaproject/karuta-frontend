@@ -170,7 +170,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					var proxy_parent = proxies_parent[uuid];
 					if (proxy_parent==dest.substring(8) || dest=='contenu') { // dest = {parentid}
 						proxy_target = true;
-						edit = menu = (proxies_edit[uuid].containsArrayElt(g_userroles) || g_userroles[0]=='designer');
+						edit = menu = (proxies_edit[uuid].containsArrayElt(g_userroles) || g_userroles[0]=='designer') && g_edit;
 					}
 			}
 			//============================== ASMCONTEXT =============================
@@ -357,7 +357,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
 	//----------------delete control on proxy parent ------------
-	if (proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
+	if (edit && proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
 		var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
 		$("#buttons-"+uuid).html(html);
 	}
@@ -512,7 +512,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
 	//----------------delete control on proxy parent ------------
-	if (proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
+	if (edit && proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
 		var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
 		$("#buttons-"+uuid).html(html);
 	}
@@ -1643,7 +1643,7 @@ UIFactory["Node"].selectNode = function(nodeid,node,semtag)
 	var uuid = $(node.node).attr("id");
 	var label = UICom.structure["ui"][uuid].label_node[langcode].text();
 	html += "<option uuid = ''>&nbsp;</option>";
-	if (semtag==null)
+	if (semtag=='')
 		html += "<option uuid = '"+uuid+"'>"+label+"</option>";
 	html += UIFactory["Node"].getSubNodes(node, nodeid, UICom.structure.ui[nodeid].asmtype,semtag);
 	html += "</select>";
@@ -1670,7 +1670,7 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved,semtag)
 			var label = UICom.structure["ui"][uuid].label_node[langcode].text();
 			var name = UICom.structure["ui"][uuid].asmtype;
 			if (name!='asmContext' && (typemoved != "asmUnit" || name != "asmUnit") && (uuid !=idmoved)){
-				if (semantictag.indexOf("welcome-unit")<0 && (semtag==null || (semtag!=null && semantictag==semtag)))
+				if (semantictag.indexOf("welcome-unit")<0 && (semtag=='' || (semtag!=Z && semantictag==semtag)))
 					html += "<option uuid = '"+uuid+"'>"+label+"</option>";
 				html += UIFactory["Node"].getSubNodes(UICom.structure["tree"][uuid], idmoved, typemoved,semtag);
 			}
@@ -1737,10 +1737,10 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		}
 		if (((this.writenode && (this.moveinroles.containsArrayElt(g_userroles)  || this.moveinroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			var movein = ($(this.metadatawad).attr('movein')==undefined)?'':$(this.metadatawad).attr('movein');
-			if (movein=='')
-				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
-			else
-				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+//			if (movein=='')
+				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root,'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+//			else
+//				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
 		if ( (g_userroles[0]=='designer' && this.asmtype != 'asmRoot') // always duplicate for designer
@@ -1820,13 +1820,15 @@ UIFactory['Node'].reloadUnit = function(uuid,redisplay)
 {
 	if (redisplay == null)
 		redisplay = true;
-	if (redisplay)
+	if (uuid=="" || uuid==null || redisplay)
 		uuid = $("#page").attr('uuid');
 	var parentid = "";
 	if (uuid==g_portfolio_rootid)
 		parentid = g_portfolio_rootid;
 	else
 		parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
+	if (uuid.indexOf("_")>-1)
+		uuid = uuid.substring(0,uuid.indexOf("_"));
 	$.ajax({
 		async: false,
 		type : "GET",

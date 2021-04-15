@@ -534,6 +534,12 @@ body,
   width: 10%;
 }
 
+.passwordbyroot {
+  background-color: white;
+  text-shadow: 0px 0px 5px red;
+  letter-spacing: 2px;
+}
+
 /* ====================== */
 /*     PAGE USERSGROUPS   */
 /* ====================== */
