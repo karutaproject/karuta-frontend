@@ -108,7 +108,8 @@ function getLanguageMenu(js)
 	var html = "";
 	for (var i=0; i<languages.length;i++) {
 		html += "<a class='dropdown-item' id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');"+js+"\">";
-		html += "	<img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
+//		html += "	<img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
+		html += karutaStr[languages[i]]['langshort']
 		html += "</a>"
 	}
 	return html;
@@ -120,7 +121,7 @@ function setLanguageMenu(js)
 //==============================
 {
 	for (var i=0; i<languages.length;i++) {
-		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');$('#navigation-bar').html(getNavBar('list',null));setWelcomeTitles();"+js);
+		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');$('#navigation-bar').html(getNavBar('list',null));applyNavbarConfiguration();setWelcomeTitles();"+js);
 	}
 }
 
@@ -162,7 +163,8 @@ function getNavBar(type,portfolioid,edit)
 	if (languages.length>1) {
 		html += "	<li id='navbar-language' class='nav-item dropdown'>";
 		html += "		<a class='nav-link dropdown-toggle' href='#' id='languageDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-		html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
+//		html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
+		html += karutaStr[LANG]['langshort'];
 		html += "		</a>";
 		html += "		<div class='dropdown-menu' aria-labelledby='languageDropdown'>";
 		if(type=="login")
@@ -170,7 +172,7 @@ function getNavBar(type,portfolioid,edit)
 		else if(type=="create_account")
 			html += getLanguageMenu("displayKarutaCreateAccount();");
 		else
-			html += getLanguageMenu("setWelcomeTitles();fill_list_page();$('#navigation-bar').html(getNavBar('list',null));$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
+			html += getLanguageMenu("setWelcomeTitles();fill_list_page();$('#navigation-bar').html(getNavBar('list',null));applyNavbarConfiguration();$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
 		html += "		</div>";
 		html += "	</li>";
 	}

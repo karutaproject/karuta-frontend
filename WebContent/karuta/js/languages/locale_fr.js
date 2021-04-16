@@ -2,6 +2,7 @@
 
 //----------------------------------------------------
 karutaStr['fr']['language']="Français";
+karutaStr['fr']['langshort']="FR";
 karutaStr['fr']['flag-name']="France";
 //----------------------------------------------------
 karutaStr['fr']['new']="Nouvel élément";

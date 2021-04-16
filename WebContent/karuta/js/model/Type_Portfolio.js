@@ -403,10 +403,6 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
 	//---------------------------------------
-	if (typeof checkIfSpecialApp == 'function') { 
-		checkIfSpecialApp(UICom.structure["ui"][rootid].getCode());
-	}
-	//---------------------------------------
 	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 
 };

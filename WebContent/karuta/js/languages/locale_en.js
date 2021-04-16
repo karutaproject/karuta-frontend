@@ -2,6 +2,7 @@
 
 //----------------------------------------------------
 karutaStr['en']['language']="English";
+karutaStr['en']['langshort']="EN";
 karutaStr['en']['flag-name']="United-Kingdom";
 //----------------------------------------------------
 karutaStr['en']['new']="New Element";

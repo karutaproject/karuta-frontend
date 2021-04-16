@@ -1931,6 +1931,12 @@ function xml2CSV(content)
 {
 	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
 	var data = $('#'+content).html();
+	data = data.replace(/<hr>/g, '<hr/>');
+	data = data.replace(/<br>/g, '<br/>');
+	data = data.replace(/<br\/>/g, '\n');
+	data = data.replace(/(<img[^>]*?[^\/]\s*)(>)/g, "$1/$2");
+	data = data.replace(/"(?![^<]*>)/g, '""');
+	data = data.replace(/(<span[^>]*>)(?!<\/span)([\s\S]*?)(<\/span>)/g, "$1\"$2\"$3");
 	data = data.replace('&nbsp;', ' ');
 	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"\">]><div>" + data + "</div>";
 	var url =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
