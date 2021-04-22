@@ -157,6 +157,7 @@ function applyListConfiguration()
 		root.style.setProperty('--list-element-background-color-complement',g_configVar['list-element-background-color-complement']);
 		root.style.setProperty('--list-title-color',g_configVar['list-title-color']);
 		root.style.setProperty('--list-button-background-color',g_configVar['list-button-background-color']);
+		root.style.setProperty('--list-button-text-color',g_configVar['list-button-text-color']);
 	}
 }
 

@@ -300,7 +300,7 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</text>
 	</xsl:template>
-	<!-- ================ node-resource ============================ -->
+	<!-- ================ r_getSelector ============================ -->
 	<xsl:template match="*[metadata/@semantictag='node_resource']">
 		<xsl:variable name="editresroles">
 			<xsl:value-of select="metadata-wad/@editresroles"></xsl:value-of>
@@ -797,6 +797,19 @@
 	<xsl:template match="*[metadata/@semantictag='display-sharing']">
 		<display-sharing>
 		</display-sharing>
+	</xsl:template>
+		<!-- ================ menu ============================ -->
+	<xsl:template match="*[metadata/@semantictag='menu']">
+		<xsl:variable name="semtag">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='semtag']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<xsl:variable name="mtext">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='mtext']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<menu>
+			<xsl:attribute name="select">.<xsl:value-of select="$semtag"/></xsl:attribute>
+			<mtext><xsl:value-of select="$mtext"/></mtext>
+		</menu>
 	</xsl:template>
 	<!-- ================ draw-web-title ============================ -->
 	<xsl:template match="*[metadata/@semantictag='draw-web-title']">

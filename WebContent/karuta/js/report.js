@@ -22,6 +22,7 @@ var report_not_in_a_portfolio = false;
 
 var dashboard_infos = {};
 var dashboard_current = null;
+var dashboard_id = null;
 var portfolioid_current = null;
 
 var g_report_actions = {};
@@ -215,6 +216,7 @@ function processReportActions(destid,actions,data)
 	};
 };
 
+
 //=============================================================================
 //=============================================================================
 //======================= IF-THEN-ELSE ========================================
@@ -295,8 +297,11 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 		test = r_replaceVariable(test);
 	if (select!=undefined) {
 		select = r_replaceVariable(select);
-		var selector = r_getSelector(select,test);
-		var nodeold = $(selector.jquery,data);
+		var selector = null;
+		if (test.indexOf('notFound')<0)
+			selector = r_getSelector(select,test);
+		else 
+			selector = r_getSelector(select,"");		
 		var nodes = $(selector.jquery,data).filter(selector.filter1);
 		selector.filter2 = r_replaceVariable(selector.filter2);
 		nodes = eval("$(nodes)"+selector.filter2);
@@ -310,26 +315,34 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 		}
 		//---------------------------
 		var actions = $(action).children();
-		for (var j=0; j<nodes.length;j++){
-			//----------------------------------
-			if (countvar!=undefined) {
-				g_variables[countvar] = j;
-			}
-			//----------------------------------
-			var ref_init = $(action).attr("ref-init");
-			if (ref_init!=undefined) {
-				ref_init = r_replaceVariable(ref_init);
-				var ref_inits = ref_init.split("/"); // ref1/ref2/...
-				for (var k=0;k<ref_inits.length;k++)
-					g_variables[ref_inits[k]] = new Array();
-			}
-			//----------------------------------
+		if (test.indexOf('notFound')<0) {
+			for (var j=0; j<nodes.length;j++){
+				//----------------------------------
+				if (countvar!=undefined) {
+					g_variables[countvar] = j;
+				}
+				//----------------------------------
+				var ref_init = $(action).attr("ref-init");
+				if (ref_init!=undefined) {
+					ref_init = r_replaceVariable(ref_init);
+					var ref_inits = ref_init.split("/"); // ref1/ref2/...
+					for (var k=0;k<ref_inits.length;k++)
+						g_variables[ref_inits[k]] = new Array();
+				}
+				//----------------------------------
+				for (var i=0; i<actions.length;i++){
+					var tagname = $(actions[i])[0].tagName;
+					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
+				}
+				//----------------------------------
+			};
+		}
+		else if (nodes.length==0){
 			for (var i=0; i<actions.length;i++){
 				var tagname = $(actions[i])[0].tagName;
-				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
+				g_report_actions[tagname](destid,actions[i],no,data);
 			}
-			//----------------------------------
-		};
+		}
 	}
 }
 
@@ -984,7 +997,6 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 							dataType : "xml",
 							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
 							success : function(data) {
-								var text = ";"
 								if (sortelt=='resource code') {
 									sortvalue = $("code",data)[0].text();
 								}
@@ -1221,6 +1233,15 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
 	}
 
+/*
+	// -------- if resource changed refresh the report - editor not inline
+	if (report_refresh && $("#dashboard_node_resource"+nodeid).length>0 && editresroles.length>0) {
+		$("#dashboard_"+prefix_id+nodeid).on('DOMSubtreeModified',function (){
+			refresh_report(dashboard_current);
+		});
+	}
+*/
+
 	// -------- if resource changed refresh the report - editor not inline
 	if (report_refresh && $("#dashboard_node_resource"+nodeid).length>0 && editresroles.length>0) {
 		$("#dashboard_node_resource"+nodeid).attr('dashboard',dashboard_current);
@@ -1231,8 +1252,11 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			this.disconnect();
 			refresh_report(dashboardid);
 		});
-		var target = $("#"+nodeid,g_portfolio_current)[0];
-//		var target = g_portfolio_current.querySelector(nodeid);
+		//-----------
+		var target = $("#"+nodeid,data)[0];
+		if ($("#"+nodeid,data).length==0)
+			target = data; //node itself
+		//-----------
 		observer.observe(target, config);
 	}
 
@@ -1247,6 +1271,33 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 	}
 }
 
+//=============================================================================
+//=============================================================================
+//====================== MENU =========================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['menu'] = function (destid,action,no,data)
+//==================================
+{
+	var select = $(action).attr("select");
+	select = r_replaceVariable(select);
+	var mtext = $("mtext",action).text();
+	mtext = r_replaceVariable(mtext);
+	var selector = r_getSelector(select);
+	var node = $(selector.jquery,data);
+	if (node.length==0) // try the node itself
+		node = $(selector.jquery,data).addBack();
+	if (select.substring(0,2)=="..") // node itself
+		node = data;
+	if (node.length>0 || select.substring(0,1)=="."){
+		var nodeid = targetid = $(node).attr("id");
+		var html = UIFactory.Node.getReportMenus("",mtext,nodeid,targetid,LANGCODE)
+		$("#"+destid).append(html);
+	}
+
+}
 //=============================================================================
 //=============================================================================
 //====================== Variable =============================================
@@ -1557,6 +1608,7 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 	text = "<span id='txt"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
 	$("#"+destid).append($(text));
 }
+
 
 //=============================================================================
 //=============================================================================
@@ -2013,6 +2065,7 @@ function register_report(uuid)
 function genDashboardContent(destid,uuid,parent,root_node)
 //==================================
 {
+	dashboard_id = uuid;
 	var spinning = true;
 	var dashboard_code = r_replaceVariable(UICom.structure["ui"][uuid].resource.getView());
 	var folder_code = dashboard_code.substring(0,dashboard_code.indexOf('.'));

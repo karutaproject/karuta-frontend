@@ -238,7 +238,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					}
 				}
 				//------------ Bubble Map -----------------
-				if (this.semantictag=='bubble_level1') {
+				if (this.semantictag.indexOf('bubble_level1')>-1) {
 					alreadyDisplayed = true;
 					if  (this.seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
 						var map_info = UIFactory.Bubble.getLinkQRcode(uuid);
@@ -483,7 +483,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	//-------------- label --------------------------
 	var gotView = false;
 	var label_html = ""
-	if (this.semantictag=='bubble_level1'){
+	if (this.semantictag.indexOf("bubble_level1")>-1){
 		label_html += " "+UICom.structure["ui"][uuid].getBubbleView('std_node_'+uuid);
 		gotView = true;
 	}
