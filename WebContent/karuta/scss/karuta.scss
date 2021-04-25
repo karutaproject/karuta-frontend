@@ -79,6 +79,9 @@
 		color:var(--list-button-background-color);
 	}
 
+	.sort-th {
+		cursor:pointer;
+	}
 
 
 /* ====================== */
@@ -1024,12 +1027,6 @@
 				font-size:calc(var(--font-size-coeff) * 1rem);
 			}
 		
-			.createreport .button,
-			.btn-group .button,
-			.menus,
-			.add-button {
-				color:var(--portfolio-buttons-color);
-			}
 		
 			.main-roles {
 				font-size:70%;
@@ -2456,13 +2453,14 @@ button.selected-label {
 			font-weight:normal;
 			color:#aaaaaa;
 		}
-	.ref-init {
-		.resource {
-			border: 1px solid #ced4da;
-			border-radius: .25rem;
+		.ref-init {
+			.resource {
+				border: 1px solid #ced4da;
+				border-radius: .25rem;
+			}
 		}
 	}
-	}
+
 
 /* ====================
 	divers

@@ -71,6 +71,10 @@ body,
   color: var(--list-button-background-color);
 }
 
+.sort-th {
+  cursor: pointer;
+}
+
 /* ====================== */
 /*    SEARCH-RESULT       */
 /* ====================== */
@@ -944,12 +948,6 @@ body,
   margin-top: 1px;
   color: var(--portfolio-buttons-color);
   font-size: calc(var(--font-size-coeff) * 1rem);
-}
-#main-portfolio #portfolio-container .createreport .button,
-#main-portfolio #portfolio-container .btn-group .button,
-#main-portfolio #portfolio-container .menus,
-#main-portfolio #portfolio-container .add-button {
-  color: var(--portfolio-buttons-color);
 }
 #main-portfolio #portfolio-container .main-roles {
   font-size: 70%;

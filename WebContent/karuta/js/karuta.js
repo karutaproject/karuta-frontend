@@ -2610,4 +2610,37 @@ function majcodenum (node) {
 		UIFactory.Node.reloadUnit();
 }
 
+//==================================
+function sortTable (tableid)
+//==================================
+{
+	// adapted from Pierre Giraud - www.pierre-giraud.com
+	const compare = function(ids, asc){
+		return function(row1, row2){
+			const tdValue = function(row, ids){
+				return row.children[ids].textContent;
+			}
+			const tri = function(v1, v2){
+				if (v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2)){
+					return v1 - v2;
+				} else {
+					return v1.toString().localeCompare(v2);
+				}
+				return v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2);
+			};
+			return tri(tdValue(asc ? row1 : row2, ids), tdValue(asc ? row2 : row1, ids));
+		}
+	}
 
+	var table = document.getElementById(tableid);
+	var ths = table.querySelectorAll(".sort-th");
+	var trs = table.querySelectorAll(".sort-tr");
+	ths.forEach(function(th){
+		th.addEventListener('click', function(){
+			let classe = Array.from(trs).sort(compare(Array.from(ths).indexOf(th), this.asc = !this.asc));
+			classe.forEach(function(tr){
+				table.appendChild(tr)
+			});
+		});
+	});
+}

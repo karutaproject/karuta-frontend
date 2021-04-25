@@ -33,8 +33,8 @@ function fill_list_users(type)
 	html += "		<div id='user-rightside-title' class='title'></div>";
 	html += "		<div id='user-rightside-header1' class='header' style='display:none'>"+karutaStr[LANG]['active_users']+"</div>";
 	html += "		<div id='user-rightside-content1' class='content1' style='display:none'>";
-	html += "			<table class='users-content'>";
-	html += "				<tr class='table-head'><th class='firstname'>"+karutaStr[LANG]['firstname']+"</th><th class='lastname'>"+karutaStr[LANG]['lastname']+"</th><th class='c-a-s'>"+karutaStr[LANG]['c-a-s']+"</th><th class='username'>"+karutaStr[LANG]['username']+"</th><th class='buttons'></th></tr>";
+	html += "			<table id='users-table' class='users-content'>";
+	html += "				<tr class='table-head'><th class='firstname sort-th'>"+karutaStr[LANG]['firstname']+"</th><th class='lastname  sort-th'>"+karutaStr[LANG]['lastname']+"</th><th class='c-a-s sort-th'>"+karutaStr[LANG]['c-a-s']+"</th><th class='username sort-th'>"+karutaStr[LANG]['username']+"</th><th class='buttons'></th></tr>";
 	html += "				<tbody id='user-rightside-users-content1' class='users-content'></tbody>";
 	html += "			</table>";
 	html += "		</div>";

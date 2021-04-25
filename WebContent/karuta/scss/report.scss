@@ -104,7 +104,16 @@
 /* ====================
 	Report Dashboard
    ====================*/
-   
+
+.createreport {
+	.button,
+	.btn-group .button,
+	.menus,
+	.add-button {
+		color:var(--portfolio-buttons-color);
+	}
+}
+
 .createreport {
 	margin-top:10px;
 	.URL2Portfolio-link {

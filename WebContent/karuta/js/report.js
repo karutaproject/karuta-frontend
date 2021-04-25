@@ -159,7 +159,7 @@ function r_getSelector(select,test)
 		jquery +="*:has(>metadata[semantictag*='"+selects[1]+"'])";
 		filter1 = function(){return $(this).children("metadata[semantictag*='"+selects[1]+"']").length>0};
 	}	else {
-		jquery +=":has(metadata)";
+		jquery +=":has(>metadata)";
 		filter1 = function(){return $(this).children("metadata").length>0};
 	}
 	var filter2 = test; // test = .has("metadata-wad[submitted='Y']").last()
@@ -181,6 +181,72 @@ function r_getSelector(select,test)
 	return selector;
 }
 
+//====================================================================
+//====================================================================
+
+//==================================
+g_unique_functions['uniqueNodeCode'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueNodeLabel'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueResourceValue'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueResourceCode'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueResourceText'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//====================================================================
+//====================================================================
+//====================================================================
 
 //==================================
 function r_processPortfolio(no,xmlReport,destid,data,line)
@@ -215,6 +281,303 @@ function processReportActions(destid,actions,data)
 		g_report_actions[tagname](destid,actions[i],i.toString(),data);
 	};
 };
+
+//===============================================================
+//===============================================================
+//===============================================================
+//===============================================================
+
+//==================================
+function refresh_report(dashboard_current)
+//==================================
+{
+	$("#"+dashboard_current).html("");
+	r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
+	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
+}
+
+//==================================
+function report_processCode()
+//==================================
+{
+	var model_code = $("#report-model_code").val();
+	report_getModelAndProcess(model_code);
+}
+
+//==================================
+function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
+//==================================
+{
+	var xml_model = "";
+	var xml_model = "";
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
+		success : function(data) {
+			setVariables(data);
+			var nodeid = $("asmRoot",data).attr("id");
+			// ---- transform karuta portfolio to report model
+			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : urlS,
+				success : function(data) {
+					g_dashboard_models[model_code] = data;
+					try {
+						r_processPortfolio(0,data,destid,node,0);
+					}
+					catch(err) {
+						alertHTML("Error in Dashboard : " + err.message);
+					}
+					$("#wait-window").hide();
+					$("#wait-window").modal('hide');
+				}
+			 });
+		}
+	});
+}
+
+//==================================
+function report_getModelAndProcess(model_code,json)
+//==================================
+/// csv +report
+{
+	$('#wait-window').show();
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios?active=1&search="+model_code,
+		success : function(data) {
+			var items = $("portfolio",data);
+			var uuid = $(items[0]).attr('id');
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfolios/portfolio/"+uuid,
+				success : function(data) {
+					var nodeid = $("asmRoot",data).attr("id");
+					// ---- transform karuta portfolio to report model
+					var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
+					$.ajax({
+						type : "GET",
+						dataType : "xml",
+						url : urlS,
+						success : function(data) {
+							r_report_process(data,json);
+							$("#wait-window").hide();
+							$("#wait-window").modal('hide');
+						}
+					 });
+				}
+			});
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active: "+textStatus);
+		}
+	});
+
+}
+
+//===============================================================
+//===============================================================
+//===============================================================
+//===============================================================
+
+//==================================
+function xml2PDF(content)
+//==================================
+{
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
+	var data = $('#'+content).html();
+	data = data.replace(/&nbsp;/g, ' ');
+	data = data.replace(/<hr>/g, '<hr/>');
+	data = data.replace(/<br>/g, '<br/>');
+	data = data.replace(/<hr>/g, '<hr/>');
+	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
+	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
+	var url = window.location.href;
+	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
+	postAndDownload(urlS,data);
+}
+
+//==================================
+function displayPDFButton()
+//==================================
+{
+	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2PDF('report-pdf')\">PDF</button>";
+	$("#report-pdf").html(html);
+}
+
+//==================================
+function xml2RTF(content)
+//==================================
+{
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
+	var data = $('#'+content).html();
+	data = data.replace(/&nbsp;/g, ' ');
+	data = data.replace(/<hr>/g, '<hr/>');
+	data = data.replace(/<br>/g, '<br/>');
+	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
+	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
+	var url = window.location.href;
+	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
+	postAndDownload(urlS,data);
+}
+
+//==================================
+function displayRTFButton()
+//==================================
+{
+	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2RTF('report-pdf')\">RTF/Word</button>";
+	$("#report-pdf").html(html);
+}
+
+
+//==================================
+function xml2CSV(content)
+//==================================
+{
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
+	var data = $('#'+content).html();
+	data = data.replace(/<hr>/g, '<hr/>');
+	data = data.replace(/<br>/g, '<br/>');
+	data = data.replace(/<br\/>/g, '\n');
+	data = data.replace(/(<img[^>]*?[^\/]\s*)(>)/g, "$1/$2");
+	data = data.replace(/"(?![^<]*>)/g, '""');
+	data = data.replace(/(<span[^>]*>)(?!<\/span)([\s\S]*?)(<\/span>)/g, "$1\"$2\"$3");
+	data = data.replace('&nbsp;', ' ');
+	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"\">]><div>" + data + "</div>";
+	var url =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
+	postAndDownload(url,data);
+}
+
+//==================================
+function displayCSVButton()
+//==================================
+{
+	var html = "<h4 class='line'><span class='badge'>4</span></h4><button onclick=\"javascript:xml2CSV('report-content')\">CSV</button>";
+	$("#report-csv").html(html);
+}
+
+//==================================
+function html2IMG(contentid)
+//==================================
+{
+	var js1 = "javascript:$('#image-window').modal('hide')";
+	var buttons = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#image-window-header").html($(buttons));
+	$("#image-window-footer").html($(buttons));
+	$("#image-window-body").html("");
+	$("#image-window").modal('show');
+	var svgnode = $("svg",document.getElementById(contentid));
+	if(svgnode.length>0) {
+		var img = SVGToPNG(svgnode);
+		$("#image-window-body").append(img);
+	} else {
+		var htmlnode = document.getElementById(contentid);
+		var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>";
+		svg += "<foreignObject width='100%' height='100%'>";
+		svg += xml2string(htmlnode);
+		svg += "</foreignObject>";
+		svg += "</svg>";
+		var htmlcanvas = "<canvas id='canvas' width='400' height='400'></canvas>"
+		html2canvas(htmlnode).then(function(canvas) {
+			var src_img = canvas.toDataURL();
+			var img = document.createElement('img');
+			img.src = src_img;
+			document.getElementById("image-window-body").appendChild(img);
+	});
+
+	}
+}
+
+//===============================================================
+//===============================================================
+//===============================================================
+//===============================================================
+
+//==================================
+function register_report(uuid)
+//==================================
+{
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
+	var node_resource = UICom.structure["ui"][uuid].resource;
+	var startday = node_resource.startday_node.text();
+	var time = node_resource.time_node.text();
+	var freq = node_resource.freq_node.text();
+	var comments = node_resource.comments_node[LANGCODE].text();
+	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
+	var url = serverBCK+"/report";
+	$.ajax({
+		type : "POST",
+		url : url,
+		data : data,
+		dataType: "text",
+		success : function(data) {
+			alertHTML("OK - rapport inscrit");
+		},
+		error : function(jqxhr, textStatus, err) {
+			alertHTML("Erreur - rapport non inscrit:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
+		}
+	});
+}
+
+//==================================
+function genDashboardContent(destid,uuid,parent,root_node)
+//==================================
+{
+	dashboard_id = uuid;
+	var spinning = true;
+	var dashboard_code = r_replaceVariable(UICom.structure["ui"][uuid].resource.getView());
+	var folder_code = dashboard_code.substring(0,dashboard_code.indexOf('.'));
+	var part_code = dashboard_code.substring(dashboard_code.indexOf('.'));
+	var model_code = "";
+	if (part_code.indexOf('/')>-1){
+		var parameters = part_code.substring(part_code.indexOf('/')+1).split('/');
+		for (var i=0; i<parameters.length;i++){
+			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = parameters[i].substring(parameters[i].indexOf(":")+1);
+		}
+		model_code = folder_code + part_code.substring(0,part_code.indexOf("/"));
+	} else {
+		model_code = folder_code + part_code;
+	}
+	if (model_code.indexOf("@local")>-1){
+		root_node = parent.node;
+		model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
+	}
+	if (model_code.indexOf("@norefresh")>-1){
+		report_refresh = false;
+		model_code = removeStr(model_code,"@norefresh");
+	}
+	if (model_code.indexOf("@nospinning")>-1){
+		spinning = false;
+		model_code = model_code.substring(0,model_code.indexOf("@nospinning"))+model_code.substring(model_code.indexOf("@nospinning")+11);
+	}
+	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
+		model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
+	try {
+		if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
+			r_processPortfolio(0,g_dashboard_models[model_code],destid,root_node,0,spinning);
+		else
+			report_getModelAndPortfolio(model_code,root_node,destid,g_dashboard_models,spinning);
+	}
+	catch(err) {
+		alertHTML("Error in Dashboard : " + err.message);
+	}
+	if (spinning)
+		$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});
+};
+
+//#######################################################################################################################################
+//#######################################################################################################################################
+//############################################### G_REPORT_ACTIONS ######################################################################
+//#######################################################################################################################################
+//#######################################################################################################################################
 
 
 //=============================================================================
@@ -480,6 +843,9 @@ g_report_actions['table'] = function (destid,action,no,data)
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
+	//-----------SORT----------------
+	if (cssclass!=undefined && cssclass.indexOf('sort-table')>-1)
+		sortTable(destid+'-'+no);
 }
 
 //==================================
@@ -520,6 +886,8 @@ g_report_actions['cell'] = function (destid,action,no,data)
 	if (colspan!=null && colspan!='0')
 		html += "colspan='"+colspan+"' "
 	html += "><span id='help_"+destid+'-'+no+"' class='ihelp'></span>";
+	if (cssclass!=undefined && cssclass.indexOf('sort-th')>-1)
+		html+= "<i class='fas fa-sort' aria-hidden='true'></i> ";
 	html += "</td>";
 	$("#"+destid).append($(html));
 	if (attr_help!=undefined && attr_help!="") {
@@ -536,12 +904,12 @@ g_report_actions['cell'] = function (destid,action,no,data)
 		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
 		$("#help_"+destid+'-'+no).html(help);
 		$(".popinfo").popover({ 
-		    placement : 'bottom',
-		    container : 'body',
-		    title:karutaStr[LANG]['help-label'],
-		    html : true,
-		    trigger:'click hover',
-		    content: help_text
+			placement : 'bottom',
+			container : 'body',
+			title:karutaStr[LANG]['help-label'],
+			html : true,
+			trigger:'click hover',
+			content: help_text
 		});
 	}
 	//---------------------------
@@ -1198,15 +1566,15 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				g_variables[ref][g_variables[ref].length] = text;
 			}
 			text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"'>"+text+"</span>";
-			if (writenode) {
+			if (g_edit && writenode) {
 				text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			}
-			if (deletenode) {
+			if (g_edit && deletenode) {
 				var type = UICom.structure["ui"][nodeid].asmtype;
 				text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
 			}
 			//----------------------------
-			if (inline & writenode) {
+			if (g_edit && inline & writenode) {
 				//-----------------------
 				if(UICom.structure["ui"][nodeid].resource!=null) {
 					try {
@@ -1291,10 +1659,13 @@ g_report_actions['menu'] = function (destid,action,no,data)
 		node = $(selector.jquery,data).addBack();
 	if (select.substring(0,2)=="..") // node itself
 		node = data;
-	if (node.length>0 || select.substring(0,1)=="."){
+	if (g_edit && (node.length>0 || select.substring(0,1)==".")){
 		var nodeid = targetid = $(node).attr("id");
-		var html = UIFactory.Node.getReportMenus("",mtext,nodeid,targetid,LANGCODE)
-		$("#"+destid).append(html);
+		if(UICom.structure.ui[nodeid].menuroles==undefined) // in case of display before the node
+			UICom.structure.ui[nodeid].setMetadata();
+		UICom.structure.ui[nodeid].displayMenus("#"+destid,LANGCODE);
+//		var html = UIFactory.Node.getReportMenus("",mtext,nodeid,targetid,LANGCODE)
+//		$("#"+destid).append(html);
 	}
 
 }
@@ -1827,286 +2198,6 @@ g_report_actions['operation'] = function (destid,action,no,data)
 	$("#"+destid).append($(result));
 }
 
-//===============================================================
-//===============================================================
-//===============================================================
-//===============================================================
-
-//==================================
-function refresh_report(dashboard_current)
-//==================================
-{
-	$("#"+dashboard_current).html("");
-	r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
-	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
-}
-
-//==================================
-function report_processCode()
-//==================================
-{
-	var model_code = $("#report-model_code").val();
-	report_getModelAndProcess(model_code);
-}
-
-//==================================
-function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
-//==================================
-{
-	var xml_model = "";
-	var xml_model = "";
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
-		success : function(data) {
-			setVariables(data);
-			var nodeid = $("asmRoot",data).attr("id");
-			// ---- transform karuta portfolio to report model
-			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : urlS,
-				success : function(data) {
-					g_dashboard_models[model_code] = data;
-//					try {
-						r_processPortfolio(0,data,destid,node,0);
-//					}
-//					catch(err) {
-//						alertHTML("Error in Dashboard : " + err.message);
-//					}
-					$("#wait-window").hide();
-					$("#wait-window").modal('hide');
-				}
-			 });
-		}
-	});
-}
-
-//==================================
-function report_getModelAndProcess(model_code,json)
-//==================================
-/// csv +report
-{
-	$('#wait-window').show();
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&search="+model_code,
-		success : function(data) {
-			var items = $("portfolio",data);
-			var uuid = $(items[0]).attr('id');
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/portfolios/portfolio/"+uuid,
-				success : function(data) {
-					var nodeid = $("asmRoot",data).attr("id");
-					// ---- transform karuta portfolio to report model
-					var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
-					$.ajax({
-						type : "GET",
-						dataType : "xml",
-						url : urlS,
-						success : function(data) {
-							r_report_process(data,json);
-							$("#wait-window").hide();
-							$("#wait-window").modal('hide');
-						}
-					 });
-				}
-			});
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
-		}
-	});
-
-}
-
-//==================================
-function xml2PDF(content)
-//==================================
-{
-	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
-	var data = $('#'+content).html();
-	data = data.replace(/&nbsp;/g, ' ');
-	data = data.replace(/<hr>/g, '<hr/>');
-	data = data.replace(/<br>/g, '<br/>');
-	data = data.replace(/<hr>/g, '<hr/>');
-	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
-	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
-	var url = window.location.href;
-	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
-	postAndDownload(urlS,data);
-}
-
-//==================================
-function displayPDFButton()
-//==================================
-{
-	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2PDF('report-pdf')\">PDF</button>";
-	$("#report-pdf").html(html);
-}
-
-//==================================
-function xml2RTF(content)
-//==================================
-{
-	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
-	var data = $('#'+content).html();
-	data = data.replace(/&nbsp;/g, ' ');
-	data = data.replace(/<hr>/g, '<hr/>');
-	data = data.replace(/<br>/g, '<br/>');
-	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
-	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
-	var url = window.location.href;
-	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
-	postAndDownload(urlS,data);
-}
-
-//==================================
-function displayRTFButton()
-//==================================
-{
-	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2RTF('report-pdf')\">RTF/Word</button>";
-	$("#report-pdf").html(html);
-}
-
-
-//==================================
-function xml2CSV(content)
-//==================================
-{
-	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
-	var data = $('#'+content).html();
-	data = data.replace(/<hr>/g, '<hr/>');
-	data = data.replace(/<br>/g, '<br/>');
-	data = data.replace(/<br\/>/g, '\n');
-	data = data.replace(/(<img[^>]*?[^\/]\s*)(>)/g, "$1/$2");
-	data = data.replace(/"(?![^<]*>)/g, '""');
-	data = data.replace(/(<span[^>]*>)(?!<\/span)([\s\S]*?)(<\/span>)/g, "$1\"$2\"$3");
-	data = data.replace('&nbsp;', ' ');
-	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"\">]><div>" + data + "</div>";
-	var url =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
-	postAndDownload(url,data);
-}
-
-//==================================
-function displayCSVButton()
-//==================================
-{
-	var html = "<h4 class='line'><span class='badge'>4</span></h4><button onclick=\"javascript:xml2CSV('report-content')\">CSV</button>";
-	$("#report-csv").html(html);
-}
-
-//==================================
-function html2IMG(contentid)
-//==================================
-{
-	var js1 = "javascript:$('#image-window').modal('hide')";
-	var buttons = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#image-window-header").html($(buttons));
-	$("#image-window-footer").html($(buttons));
-	$("#image-window-body").html("");
-	$("#image-window").modal('show');
-	var svgnode = $("svg",document.getElementById(contentid));
-	if(svgnode.length>0) {
-		var img = SVGToPNG(svgnode);
-		$("#image-window-body").append(img);
-	} else {
-		var htmlnode = document.getElementById(contentid);
-		var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>";
-		svg += "<foreignObject width='100%' height='100%'>";
-		svg += xml2string(htmlnode);
-		svg += "</foreignObject>";
-		svg += "</svg>";
-		var htmlcanvas = "<canvas id='canvas' width='400' height='400'></canvas>"
-		html2canvas(htmlnode).then(function(canvas) {
-			var src_img = canvas.toDataURL();
-			var img = document.createElement('img');
-			img.src = src_img;
-			document.getElementById("image-window-body").appendChild(img);
-	});
-
-	}
-}
-
-//==================================
-function register_report(uuid)
-//==================================
-{
-	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
-	var node_resource = UICom.structure["ui"][uuid].resource;
-	var startday = node_resource.startday_node.text();
-	var time = node_resource.time_node.text();
-	var freq = node_resource.freq_node.text();
-	var comments = node_resource.comments_node[LANGCODE].text();
-	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
-	var url = serverBCK+"/report";
-	$.ajax({
-		type : "POST",
-		url : url,
-		data : data,
-		dataType: "text",
-		success : function(data) {
-			alertHTML("OK - rapport inscrit");
-		},
-		error : function(jqxhr, textStatus, err) {
-			alertHTML("Erreur - rapport non inscrit:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
-		}
-	});
-}
-
-//==================================
-function genDashboardContent(destid,uuid,parent,root_node)
-//==================================
-{
-	dashboard_id = uuid;
-	var spinning = true;
-	var dashboard_code = r_replaceVariable(UICom.structure["ui"][uuid].resource.getView());
-	var folder_code = dashboard_code.substring(0,dashboard_code.indexOf('.'));
-	var part_code = dashboard_code.substring(dashboard_code.indexOf('.'));
-	var model_code = "";
-	if (part_code.indexOf('/')>-1){
-		var parameters = part_code.substring(part_code.indexOf('/')+1).split('/');
-		for (var i=0; i<parameters.length;i++){
-			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = parameters[i].substring(parameters[i].indexOf(":")+1);
-		}
-		model_code = folder_code + part_code.substring(0,part_code.indexOf("/"));
-	} else {
-		model_code = folder_code + part_code;
-	}
-	if (model_code.indexOf("@local")>-1){
-		root_node = parent.node;
-		model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
-	}
-	if (model_code.indexOf("@norefresh")>-1){
-		report_refresh = false;
-		model_code = removeStr(model_code,"@norefresh");
-	}
-	if (model_code.indexOf("@nospinning")>-1){
-		spinning = false;
-		model_code = model_code.substring(0,model_code.indexOf("@nospinning"))+model_code.substring(model_code.indexOf("@nospinning")+11);
-	}
-	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
-		model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
-	try {
-		if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
-			r_processPortfolio(0,g_dashboard_models[model_code],destid,root_node,0,spinning);
-		else
-			report_getModelAndPortfolio(model_code,root_node,destid,g_dashboard_models,spinning);
-	}
-	catch(err) {
-		alertHTML("Error in Dashboard : " + err.message);
-	}
-	if (spinning)
-		$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});
-};
 
 //=========================================================================
 //=========================================================================
@@ -2541,70 +2632,7 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 	}
 }
 
-//====================================================================
-//====================================================================
-//====================================================================
-//====================================================================
-//====================================================================
 
-//==================================
-g_unique_functions['uniqueNodeCode'] = function (index,node)
-//==================================
-{
-	if (index>0) {
-		var current = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
-		return current!=previous;
-	} else 
-		return true;
-}
 
-//==================================
-g_unique_functions['uniqueNodeLabel'] = function (index,node)
-//==================================
-{
-	if (index>0) {
-		var current = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
-		return current!=previous;
-	} else 
-		return true;
-}
-
-//==================================
-g_unique_functions['uniqueResourceValue'] = function (index,node)
-//==================================
-{
-	if (index>0) {
-		var current = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
-		return current!=previous;
-	} else 
-		return true;
-}
-
-//==================================
-g_unique_functions['uniqueResourceCode'] = function (index,node)
-//==================================
-{
-	if (index>0) {
-		var current = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
-		return current!=previous;
-	} else 
-		return true;
-}
-
-//==================================
-g_unique_functions['uniqueResourceText'] = function (index,node)
-//==================================
-{
-	if (index>0) {
-		var current = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
-		return current!=previous;
-	} else 
-		return true;
-}
 
 

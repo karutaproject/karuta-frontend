@@ -80,7 +80,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,menus,targetid,title,datab
 //==================================================
 {
 	var menus_style = UICom.structure.ui[parentid].getMenuStyle();
-	var html = "<div class='dropdown-item button btn text-button' style='"+menus_style+"' onclick=\"";
+	var html = "<div class='dropdown-item btn text-button' style='"+menus_style+"' onclick=\"";
 	html += UIFactory.Node.getEltMenu(parentid,menus,targetid,title,databack,callback,param2,param3,param4);
 	html += "</div>";
 	return html;
