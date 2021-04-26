@@ -93,6 +93,7 @@ UIFactory["PortfolioFolder"] = function(node)
 function dragPortfolioFolder(ev)
 //==================================
 {
+	folder_last_drop = ""; // init
 	var portfolioid = ev.target.id.substring(ev.target.id.lastIndexOf('_')+1);
 	var parentid = ev.target.getAttribute('parentid');
 	ev.dataTransfer.setData("uuid", portfolioid);
@@ -617,7 +618,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 	if (viewtype == 'list') {
 		var tree_type='<span class="fas fa-folder" aria-hidden="true"></span>';
 		html += "<div class='row portfolio-row'>";
-		html += "<div class='folder-label col-5' id='portfolio_list_"+this.id+"' onclick=\"folders_byid['"+this.id+"'].toggleContent('"+type+"','"+parentid+"')\" draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'></span></div>";
+		html += "<div class='folder-label col-5' id='portfolio_list_"+this.id+"' parentid='"+parentid+"' onclick=\"folders_byid['"+this.id+"'].toggleContent('"+type+"','"+parentid+"')\" draggable='true' ondragstart='dragPortfolioFolder(event)'><a class='folder-label' >"+folder_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'></span></div>";
 		if (USER.creator && !USER.limited) {
 			html += "<div class='col-5'>";
 			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
