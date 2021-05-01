@@ -25,6 +25,7 @@ var dashboard_current = null;
 var dashboard_id = null;
 var portfolioid_current = null;
 
+var g_report_edit = false;  // false when inside a preview page if not equals to g_edit
 var g_report_actions = {};
 var g_report_users = {};
 var g_graphs = {};
@@ -1566,15 +1567,15 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				g_variables[ref][g_variables[ref].length] = text;
 			}
 			text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"'>"+text+"</span>";
-			if (g_edit && writenode) {
+			if (g_report_edit && writenode) {
 				text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			}
-			if (g_edit && deletenode) {
+			if (g_report_edit && deletenode) {
 				var type = UICom.structure["ui"][nodeid].asmtype;
 				text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
 			}
 			//----------------------------
-			if (g_edit && inline & writenode) {
+			if (g_report_edit && inline & writenode) {
 				//-----------------------
 				if(UICom.structure["ui"][nodeid].resource!=null) {
 					try {
@@ -1659,7 +1660,7 @@ g_report_actions['menu'] = function (destid,action,no,data)
 		node = $(selector.jquery,data).addBack();
 	if (select.substring(0,2)=="..") // node itself
 		node = data;
-	if (g_edit && (node.length>0 || select.substring(0,1)==".")){
+	if (g_report_edit && (node.length>0 || select.substring(0,1)==".")){
 		var nodeid = targetid = $(node).attr("id");
 		if(UICom.structure.ui[nodeid].menuroles==undefined) // in case of display before the node
 			UICom.structure.ui[nodeid].setMetadata();

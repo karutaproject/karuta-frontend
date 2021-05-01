@@ -732,7 +732,9 @@ function previewPage(uuid,depth,type,langcode)
 	$("#preview-window-body").html("");
 	if (UICom.structure['tree'][uuid]!=null) {
 		if (type=='standard') {
+			g_report_edit = false;
 			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+			g_report_edit = g_edit;
 		}
 		$("#preview-window").modal('show');
 	} else {
@@ -1839,10 +1841,10 @@ function toggleMode()
 //==============================
 {
 	if (g_edit) {
-		g_edit = false;
+		g_report_edit = g_edit = false;
 		$("#toggle-mode-icon").removeClass('fas fa-toggle-on').addClass('fas fa-toggle-off');
 	} else {
-		g_edit = true;
+		g_report_edit = g_edit = true;
 		$("#toggle-mode-icon").removeClass('fas fa-toggle-off').addClass('fas fa-toggle-on');
 	}
 //	UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
@@ -2399,11 +2401,10 @@ function callmajcodenum (nodeid) {
 //=====================================================================================================
 
 //==================================
-function updatelabel (node) {
+function updatelabel (uuid) {
 //==================================
-	var uuid = $(node).attr("id");
 	var label = UICom.structure.ui[uuid].getLabel(null,'none');
-	var nodes = $("*:has(>metadata[semantictag*='updatelabel'])",node);
+	var nodes = $("*:has(>metadata[semantictag*='updatelabel'])",UICom.structure.ui[uuid].node);
 	for (var i=0;i<nodes.length;i++) {
 		var nodeid = $(nodes[i]).attr("id");
 		var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
@@ -2435,11 +2436,10 @@ function updatelabel (node) {
 //==================================
 function updatecodenum (uuid) {
 //==================================
-	var node = UICom.structure.ui[uuid].node;
 	var code = UICom.structure.ui[uuid].getCode();
 	if (code.indexOf("*")>-1)
 		code = code.substring(0,code.indexOf("*"));
-	var nodes = $("*:has(>metadata[semantictag*='updatecode'])",node);
+	var nodes = $("*:has(>metadata[semantictag*='updatecode'])",UICom.structure.ui[uuid].node);
 	for (var i=0;i<nodes.length;i++) {
 		var nodeid = $(nodes[i]).attr("id");
 		var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
@@ -2468,7 +2468,7 @@ function updatecodenum (uuid) {
 		//-------------------
 	}
 	//-----Node ordering-------------------------------------------------------
-	var nodes = $("*:has(>metadata[semantictag*='updatenum'])",node);
+	var nodes = $("*:has(>metadata[semantictag*='updatenum'])",UICom.structure.ui[uuid].node);
 	var tableau1 = new Array();
 	for ( var i = 0; i < $(nodes).length; i++) {
 		var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
@@ -2644,3 +2644,60 @@ function sortTable (tableid)
 		});
 	});
 }
+
+//=====================================
+$.fn.hasAttr = function (options)
+//=====================================
+{
+	var defaults= {"attribute":"id","meta":"metadata"};
+	var parameters = $.extend(defaults, options); 
+	return this.each(function() {
+		if ($(">"+parameters.meta,this).attr(parameters.attribute) != undefined)
+			return this;
+	});
+};
+
+//=====================================
+$.fn.hasNotAttr = function (options)
+//=====================================
+{
+	var defaults= { "attribute":"id"};
+	var parameters = $.extend(defaults, options);
+	var result = [];
+	this.each(function() {
+		if ($(">"+parameters.meta,this).attr(parameters.attribute) == undefined)
+			result.push(this);
+	});
+	return result;
+};
+
+//==================================
+function getTarget (knode,menuitem)
+//==================================
+{
+	var node = knode.node;
+	var target = "";
+	if (menuitem.indexOf("child.")>-1) {
+		var semtag = menuitem.substring("child.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",node);
+	} else if (menuitem.indexOf("parent.parent.parent.parent.parent.")>-1) {
+		var semtag = menuitem.substring("parent.parent.parent.parent.parent.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent().parent());
+	} else if (menuitem.indexOf("parent.parent.parent.parent")>-1) {
+		var semtag = menuitem.substring("parent.parent.parent.parent.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent());
+	} else if (menuitem.indexOf("parent.parent.parent")>-1) {
+		var semtag = menuitem.substring("parent.parent.parent.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent());
+	} else if (menuitem.indexOf("parent.parent")>-1) {
+		var semtag = menuitem.substring("parent.parent.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent());
+	} else if (menuitem.indexOf("parent.")>-1) {
+		var semtag = menuitem.substring("parent.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+	} else {
+		target = $("*:has(>metadata[semantictag='"+menuitem+"'])",g_portfolio_current);
+	}
+	return target;
+}
+

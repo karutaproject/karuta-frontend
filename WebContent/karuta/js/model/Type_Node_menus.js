@@ -118,6 +118,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 		var items = this.shareroles.split(";");
 		for (var i=0; i<items.length; i++){
 			var subitems = items[i].split(",");
+				//----------------------
 			shares[i] = [];
 			shares[i][0] = subitems[0]; // sharing role
 			if (subitems.length>1) {
@@ -127,21 +128,33 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 				shares[i][4] = subitems[4]; // duration
 				shares[i][5] = subitems[5]; // labels
 			} else {
-				shares[i][1] = "all"; // recepient role
-				shares[i][2] = "2world"; // roles or emails
-				shares[i][3] = "4"; // level
-				shares[i][4] = "unlimited"; // duration
-				shares[i][5] = "URL"; // labels
+				shares[i][1] = ""; // recepient role
+				shares[i][2] = ""; // roles or emails
+				shares[i][3] = ""; // level
+				shares[i][4] = ""; // duration
+				shares[i][5] = ""; // labels
 			}
 			if (subitems.length>6)
-				shares[i][6] = subitems[6]; // condition
-			if (shares[i][0].indexOf(this.userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+				shares[i][6] = subitems[6]; // target
+			if (subitems.length>7)
+				shares[i][7] = subitems[7]; // keywords : obj and/or mess
+			if (subitems.length>8)
+				shares[i][8] = subitems[8]; // condition
+			//----------------------
+			if (shares[i][0].indexOf(node.userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
 				displayShare[i] = true;
 			else
 				displayShare[i] = false;
+			//----------------------
+			var targetid = this.id; //by default the node itself
+			if (shares[i].length>6 && shares[i][6]!=""){
+				target = getTarget (node,menus[i][6]);
+				if (target.length>0)
+					targetid = $(target[0]).attr("id");
+			}
 		}
 		for (var i=0; i<items.length; i++){
-			var urlS = serverBCK+"/direct?uuid="+this.id+"&role="+shares[i][1]+"&lang="+languages[langcode]+"&l="+shares[i][3]+"&d="+shares[i][4]+"&type=showtorole&showtorole="+shares[i][2]+"&sharerole="+shares[i][0];
+			var urlS = serverBCK+"/direct?uuid="+targetid+"&role="+shares[i][1]+"&lang="+languages[langcode]+"&l="+shares[i][3]+"&d="+shares[i][4]+"&type=showtorole&showtorole="+shares[i][2]+"&sharerole="+shares[i][0];
 			$.ajax({
 				id : this.id,
 				type : "POST",
@@ -365,10 +378,11 @@ UIFactory["Node"].getMenus = function(node,langcode)
 						//---------------------target----------------------------------------
 						var targetid = "";
 						if (menus[i][4]!=""){
-							var nodes = $("*:has(>metadata[semantictag='"+menus[i][4]+"'])",g_portfolio_current);
-							if (nodes.length>0) {
-								targetid = $(nodes[0]).attr("id");
-								var parent = nodes[0];
+							target = getTarget (node,menus[i][4]);
+							if (target.length>0) {
+								targetid = $(target[0]).attr("id");
+								//---------- search for parent to reload after import------
+								var parent = target[0];
 								while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
 									parent = $(parent).parent();
 								}
@@ -384,8 +398,10 @@ UIFactory["Node"].getMenus = function(node,langcode)
 									param2 = "'"+g_portfolio_rootid+"'";
 									if ($("#page").attr('uuid')!=parentid)
 										param3 = false;
-									}
+								}
+								//---------------------------------------------------------
 							}
+							
 						}
 						//-------------------------------------------------------------
 						if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || menus[i][3].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer')
@@ -423,31 +439,33 @@ UIFactory["Node"].getMenus = function(node,langcode)
 				} catch(e){
 					title = menus[i][2];
 				}
-					//---------------------target----------------------------------------
-					var targetid = node.id;
-					if (menus[i][4]!=""){
-						var nodes = $("*:has(>metadata[semantictag='"+menus[i][4]+"'])",g_portfolio_current);
-						if (nodes.length>0) {
-							targetid = $(nodes[0]).attr("id");
-							var parent = nodes[0];
-							while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
-								parent = $(parent).parent();
-							}
-							var parentid = $(parent).attr("id");
-							if ($(parent).prop("nodeName") == "asmUnit"){
-								callback = "UIFactory.Node.reloadUnit";
-								param2 = "'"+parentid+"'";
-								if ($("#page").attr('uuid')!=parentid)
-									param3 = false;
-							}
-							else {
-								callback = "UIFactory.Node.reloadStruct";
-								param2 = "'"+g_portfolio_rootid+"'";
-								if ($("#page").attr('uuid')!=parentid)
-									param3 = false;
-								}
+				//---------------------target----------------------------------------
+				var targetid = "";
+				if (menus[i][4]!=""){
+					target = getTarget (node,menus[i][4]);
+					if (target.length>0) {
+						targetid = $(target[0]).attr("id");
+						//---------- search for parent to reload after import------
+						var parent = target[0];
+						while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
+							parent = $(parent).parent();
 						}
+						var parentid = $(parent).attr("id");
+						if ($(parent).prop("nodeName") == "asmUnit"){
+							callback = "UIFactory.Node.reloadUnit";
+							param2 = "'"+parentid+"'";
+							if ($("#page").attr('uuid')!=parentid)
+								param3 = false;
+						}
+						else {
+							callback = "UIFactory.Node.reloadStruct";
+							param2 = "'"+g_portfolio_rootid+"'";
+							if ($("#page").attr('uuid')!=parentid)
+								param3 = false;
+						}
+						//---------------------------------------------------------
 					}
+				}
 				if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || menus[i][3].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer')
 					html += UIFactory["Node"].getSingleMenu(node.id,menus[i],targetid,title,databack,callback,param2,param3,param4);
 				//------------------
@@ -458,6 +476,23 @@ UIFactory["Node"].getMenus = function(node,langcode)
 	}
 	//------------- submit  -------------------
 	if (node.submitroles!='none' && node.submitroles!='') {
+		//------------------
+		var labels = [];
+		labels[0] = karutaStr[languages[langcode]]['button-submit'];
+		labels[1] = karutaStr[languages[langcode]]['button-unsubmit'];
+		labels[2] = karutaStr[languages[langcode]]['submitted'];
+		labels[3] = karutaStr[languages[langcode]]['notsubmitted'];
+		if (node.textssubmit!="") {
+			var texts = node.textssubmit.split(";");
+			for (var j=0; j<texts.length; j++){
+				var textlang = texts[j].split("/");
+				for (var k=0; k<textlang.length; k++){
+					if (textlang[k].indexOf("@"+languages[langcode])>-1)
+						labels[j] = textlang[k].substring(0,textlang[k].indexOf("@"));
+				}
+			}
+		}
+		//------------------
 		if ( node.submitted!='Y' && (
 				(node.submitnode && ( node.submitroles.indexOf(g_userroles[0])>-1 || node.submitroles.indexOf($(USER.username_node).text())>-1)
 				|| USER.admin
@@ -469,17 +504,21 @@ UIFactory["Node"].getMenus = function(node,langcode)
 			if (node.submitall=='Y')
 				html += ",true";
 			html += ")\" ";
-			html += " >"+karutaStr[languages[langcode]]['button-submit']+"</span>";
+			html += " >"+labels[0]+"</span>";
 		} else {
 			if (node.submitted=='Y') {
-				if (USER.admin || g_userroles[0]=='administrator') {
+				if (node.unsubmitnode && ( node.unsubmitroles.indexOf(g_userroles[0])>-1 || node.unsubmitroles.indexOf($(USER.username_node).text())>-1)
+				|| USER.admin
+				|| g_userroles[0]=='designer'
+				|| ( g_userroles[1]=='designer' && node.unsubmitroles.indexOf(g_userroles[0])>-1)
+				|| node.unsubmitroles.indexOf(node.userrole)>-1 ) {
 					html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:reset('"+node.id+"')\" ";
-					html += " >"+karutaStr[languages[langcode]]['button-unsubmit']+"</span>";
+					html += " >"+labels[1]+"</span>";
 				}
-				html += "<div class='alert alert-success button text-button'>"+karutaStr[languages[langcode]]['submitted']+node.submitteddate+"</div>";
+				html += "<div class='alert alert-success button text-button'>"+labels[2]+node.submitteddate+"</div>";
 			} 
 			else {
-				html += "<div class='alert alert-danger button text-button'>"+karutaStr[languages[langcode]]['notsubmitted']+"</div>";			
+				html += "<div class='alert alert-danger button text-button'>"+labels[3]+"</div>";
 			}
 		}
 	}
@@ -491,6 +530,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 			var items = node.shareroles.split(";");
 			for (var i=0; i<items.length; i++){
 				var subitems = items[i].split(",");
+				//----------------------
 				shares[i] = [];
 				shares[i][0] = subitems[0]; // sharing role
 				if (subitems.length>1) {
@@ -507,13 +547,17 @@ UIFactory["Node"].getMenus = function(node,langcode)
 					shares[i][5] = ""; // labels
 				}
 				if (subitems.length>6)
-					shares[i][6] = subitems[6]; // condition
+					shares[i][6] = subitems[6]; // target
 				if (subitems.length>7)
 					shares[i][7] = subitems[7]; // keywords : obj and/or mess
+				if (subitems.length>8)
+					shares[i][8] = subitems[8]; // condition
+				//----------------------
 				if (shares[i][0].indexOf(node.userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
 					displayShare[i] = true;
 				else
 					displayShare[i] = false;
+				//----------------------
 			}
 			for (var i=0; i<shares.length; i++){
 				if (displayShare[i]) {
@@ -524,6 +568,12 @@ UIFactory["Node"].getMenus = function(node,langcode)
 					var sharelevel = shares[i][3];
 					var shareduration = shares[i][4];
 					var sharelabel = shares[i][5];
+					var targetid = node.id; //by default the node itself
+					if (shares[i].length>6 && shares[i][6]!=""){
+						target = getTarget (node,shares[i][6]);
+						if (target.length>0)
+							targetid = $(target[0]).attr("id");
+					}
 					var shareoptions = (shares[i].length>7) ? shares[i][7] : "";
 					if (shareto!='' && node.shareroles.indexOf('2world')<0) {
 						if (shareto!='?' && shareduration!='?') {
@@ -536,7 +586,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 								else
 									sharetoroles += sharetos[k]+" ";
 							}
-							var js = "sendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
+							var js = "sendSharingURL('"+targetid+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -562,8 +612,8 @@ UIFactory["Node"].getMenus = function(node,langcode)
 							} else {
 								sharetoemail = shareto;
 							}
-							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
-//							var js = "getSendSharingURL('"+node.id+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
+							var js = "getSendSharingURL('"+targetid+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
+//							var js = "getSendSharingURL('"+targetid+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -580,10 +630,10 @@ UIFactory["Node"].getMenus = function(node,langcode)
 						if (node.shareroles.indexOf('2world')>-1) {
 							html_toadd = "<span id='2world-"+node.id+"'></span>";
 						} else {
-							html_toadd = "<span class='button fas fa-share' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+node.id+"','"+node.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+							html_toadd = "<span class='button fas fa-share' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+targetid+"','"+node.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 						}
 					}
-					if (shares[i].length==6 || (shares[i].length>6 && eval(shares[i][6])))
+					if (shares[i].length<=8 || (shares[i].length>8 && eval(shares[i][8])))
 						html += html_toadd;
 				}
 			}

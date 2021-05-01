@@ -281,6 +281,7 @@ var UICom =
 		UICom.addRole(node,'delnoderoles');
 		UICom.addRole(node,'commentnoderoles');
 		UICom.addRole(node,'submitroles');
+		UICom.addRole(node,'unsubmitroles');
 		UICom.addRole(node,'editnoderoles');
 		UICom.addRole(node,'shownoderoles');
 		UICom.addRole(node,'showroles');

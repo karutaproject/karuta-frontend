@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2018 - ePortfolium - Licensed under the
+	Copyright 2021 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -508,7 +508,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 			buttons = "<div class='btn-group'>"+buttons+"</div><!-- class='btn-group' -->"
 		$("#buttons-"+uuid).html(buttons);
 		//-------------- menus ---------------
-		if (this.menu)
+		if (this.menu || USER.admin || g_userroles[0]=='administrator')
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
 	//----------------delete control on proxy parent ------------
@@ -976,7 +976,7 @@ UIFactory["Node"].prototype.save = function()
 		for (var i=0;i<fcts.length;i++) {
 			var elts = fcts[i].split("/");
 			if (elts[0]=="update-node")
-				eval(elts[1]+"(this.node,g_portfolioid)");
+				eval(elts[1]+"(this.id)");
 		}
 	}
 	//------------------------------------
@@ -1002,7 +1002,7 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2)
 		for (var i=0;i<fcts.length;i++) {
 			var elts = fcts[i].split("/");
 			if (elts[0]=="delete")
-				eval(elts[1]+"(UICom.structure.ui[uuid].node,g_portfolioid)");
+				eval(elts[1]+"(uuid)");
 		}
 	}
 	//---------------------

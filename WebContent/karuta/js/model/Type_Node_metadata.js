@@ -68,9 +68,6 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
 	this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
-	if (this.submitted=='Y') {
-		this.menu = false;
-	}
 	this.cssclass = ($(node.metadataepm).attr('cssclass')==undefined)?'':$(node.metadataepm).attr('cssclass');
 	this.displayview = ($(node.metadataepm).attr('displayview')==undefined)?'default':$(node.metadataepm).attr('displayview');
 	this.displayitselforg = ($(node.metadataepm).attr('displayitselforg')==undefined)?'default':$(node.metadataepm).attr('displayitselforg');
@@ -86,6 +83,8 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 					)
 				);
 	this.submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
+	this.unsubmitroles = ($(node.metadatawad).attr('unsubmitroles')==undefined)?'none':$(node.metadatawad).attr('unsubmitroles');
+	this.textssubmit = ($(node.metadatawad).attr('textssubmit')==undefined)?'':$(node.metadatawad).attr('textssubmit');
 	this.submitall = ($(node.metadatawad).attr('submitall')==undefined)?'none':$(node.metadatawad).attr('submitall');
 	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'N':$(node.metadatawad).attr('submitted');
 	this.submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
@@ -97,6 +96,9 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?"":$(node.metadatawad).attr('langnotvisible');
 	if (this.resource!=undefined || this.resource!=null)
 		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
+	if (this.submitted=='Y' && this.unsubmitroles=='none') {
+		this.menu = false;
+	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------------
@@ -473,6 +475,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles',false,true);
+	this.displayMetadataWadAttributeEditor('metadata-part2','unsubmitroles');
+	this.displayMetadataWadAttributeEditor('metadata-part2','textssubmit');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitall',true);
 	//-----------------------------------------
@@ -810,6 +814,7 @@ UIFactory["Node"].prototype.displayMetainfo = function(dest)
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'delnoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'commentnoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'submitroles');
+	html += UIFactory.Node.getMetadataInfo(metadatawad,'unsubmitroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'editcoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'editnoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'duplicateroles');
