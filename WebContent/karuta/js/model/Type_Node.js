@@ -1796,7 +1796,7 @@ UIFactory['Node'].reloadStruct = function(uuid,redisplay)
 			if (g_bar_type.indexOf('horizontal')>-1) {
 				$("#menu_bar").html("");
 				$("#menu_bar").show();
-				UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar',null,null,g_edit,UICom.rootid);
+				UIFactory.Portfolio.displayHorizontalMenu(UICom.root,'menu_bar',null,null,g_edit,UICom.rootid);
 			} else {
 				$("#sidebar").html("");
 				$("#menu_bar").hide();

@@ -359,56 +359,45 @@ UIFactory["UsersGroup"].add = function(groupid,userid)
 };
 
 //==================================
-UIFactory["UsersGroup"].remove = function(groupid,userid) 
-//==================================
-{
-	var url = serverBCK_API+"/usersgroups?group=" + groupid + "&user="+userid;
-	$.ajax({
-		type : "DELETE",
-		contentType: "application/xml",
-		dataType : "text",
-		url : url,
-		data : "",
-		success : function(data) {
-			usergroups_byid[groupid].loadAndDisplayContent('usergroup');
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Error in UIFactory.UsersGroup.remove : "+jqxhr.responseText);
-		}
-	});
-};
-
-//==================================
-UIFactory["UsersGroup"].confirmDel = function(groupid) 
+UIFactory["UsersGroup"].confirmRemove = function(gid,uid) 
 //==================================
 {
 	var str = karutaStr[LANG]["confirm-delete"];
+	if (uid!=null && uid!='null') {
+		str = karutaStr[LANG]["confirm-remove-item-group"];
+	}
 	document.getElementById('delete-window-body').innerHTML = str;
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"UIFactory.UsersGroup.del('"+groupid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"UIFactory.UsersGroup.remove('"+gid+"','"+uid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-remove"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 };
 
 //==================================
-UIFactory["UsersGroup"].del = function(groupid) 
+UIFactory["UsersGroup"].remove = function(gid,uid) 
 //==================================
 {
-	var url = serverBCK_API+"/usersgroups?group=" + groupid;
+	var url = serverBCK_API+"/usersgroups?group=" + gid;
+	if (uid!=null && uid!='null') {
+		url += "&uuid="+uid;
+	}
 	$.ajax({
 		type : "DELETE",
-		contentType: "application/xml",
-		dataType : "xml",
+		dataType : "text",
 		url : url,
 		data : "",
+		gid : gid,
+		uid : uid,
 		success : function(data) {
-			fill_list_usersgroups('usergroup');
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Error in UIFactory.UsersGroup.del : "+jqxhr.responseText);
+			if (this.uid!=null) {
+				usergroups_byid[this.gid].loadAndDisplayContent('portfoliogroup');
+			} else
+				fill_list_portfoliosgroups();
 		}
 	});
 };
+
+
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------

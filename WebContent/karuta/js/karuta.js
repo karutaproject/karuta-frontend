@@ -1293,6 +1293,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	if (url.indexOf("/application/htm")<0)
 		serverURL = url.substring(0,url.indexOf("/karuta/htm"));
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
+	// url = "karuta-backend-externe"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
 	message = g_sendEmailPublicURL_message.replace("##firstname##",USER.firstname);
@@ -1657,6 +1658,12 @@ function getFirstWords(html,nb) {
 function setVariables(data)
 //==================================
 {
+	//--------------------------
+	g_variables["USER.login"] = USER.username;
+	g_variables["USER.lastname"] = USER.lastname;
+	g_variables["USER.firstname"] = USER.firstname;
+	g_variables["USER.email"] = USER.email;
+	//--------------------------
 	var variable_nodes = $("asmContext:has(metadata[semantictag*='g-variable'])",data);
 	for (var i=0;i<variable_nodes.length;i++) {
 		var var_name = $("name",$("asmResource[xsi_type='Variable']",variable_nodes[i])).text()
@@ -2645,32 +2652,6 @@ function sortTable (tableid)
 	});
 }
 
-//=====================================
-$.fn.hasAttr = function (options)
-//=====================================
-{
-	var defaults= {"attribute":"id","meta":"metadata"};
-	var parameters = $.extend(defaults, options); 
-	return this.each(function() {
-		if ($(">"+parameters.meta,this).attr(parameters.attribute) != undefined)
-			return this;
-	});
-};
-
-//=====================================
-$.fn.hasNotAttr = function (options)
-//=====================================
-{
-	var defaults= { "attribute":"id"};
-	var parameters = $.extend(defaults, options);
-	var result = [];
-	this.each(function() {
-		if ($(">"+parameters.meta,this).attr(parameters.attribute) == undefined)
-			result.push(this);
-	});
-	return result;
-};
-
 //==================================
 function getTarget (knode,menuitem)
 //==================================
@@ -2700,4 +2681,5 @@ function getTarget (knode,menuitem)
 	}
 	return target;
 }
+
 

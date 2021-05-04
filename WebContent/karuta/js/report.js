@@ -25,7 +25,7 @@ var dashboard_current = null;
 var dashboard_id = null;
 var portfolioid_current = null;
 
-var g_report_edit = false;  // false when inside a preview page if not equals to g_edit
+var g_report_edit = true;  // false when inside a preview page if not equals to g_edit
 var g_report_actions = {};
 var g_report_users = {};
 var g_graphs = {};
@@ -69,13 +69,135 @@ jqueryReportSpecificFunctions['.uniqueResourceCode()'] = "";
 jqueryReportSpecificFunctions['.uniqueResourceValue()'] = "";
 jqueryReportSpecificFunctions['.uniqueResourceText()'] = "";
 //---------------
-jqueryReportSpecificFunctions['.resourceTextContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
-jqueryReportSpecificFunctions['.resourceCodeContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
-jqueryReportSpecificFunctions['.resourceValueContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
-jqueryReportSpecificFunctions['.nodeLabelContains('] = "asmResource[xsi_type='nodeRes']>label[lang='#lang#']:contains(";
-jqueryReportSpecificFunctions['.nodeCodeContains('] = "asmResource[xsi_type='nodeRes']>code:contains(";
-jqueryReportSpecificFunctions['.resourceFilenameContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
+//jqueryReportSpecificFunctions['.resourceTextContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
+//jqueryReportSpecificFunctions['.resourceCodeContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
+//jqueryReportSpecificFunctions['.resourceValueContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
+//jqueryReportSpecificFunctions['.nodeLabelContains('] = "asmResource[xsi_type='nodeRes']>label[lang='#lang#']:contains(";
+//jqueryReportSpecificFunctions['.nodeCodeContains('] = "asmResource[xsi_type='nodeRes']>code:contains(";
+//jqueryReportSpecificFunctions['.resourceFilenameContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
 //---------------
+
+//-----------------------------------------------------------------------------
+
+//=====================================
+$.fn.hasAttr = function (options)
+//=====================================
+{
+	var defaults= {"attribute":"id","meta":"metadata"};
+	var parameters = $.extend(defaults, options); 
+	return this.each(function() {
+		if ($(">"+parameters.meta,this).attr(parameters.attribute) != undefined)
+			return this;
+	});
+};
+
+//=====================================
+$.fn.hasNotAttr = function (options)
+//=====================================
+{
+	var defaults= { "attribute":"id"};
+	var parameters = $.extend(defaults, options);
+	var result = [];
+	this.each(function() {
+		if ($(">"+parameters.meta,this).attr(parameters.attribute) == undefined)
+			result.push(this);
+	});
+	return result;
+};
+
+//=====================================
+$.fn.hasChildSemtag = function (options)
+//=====================================
+{
+	var defaults= { "semtag":"s"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]')");
+	return result;
+};
+
+//=====================================
+$.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
+	return result;
+};
+
+//=====================================
+$.fn.resourceCodeContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.resourceTextContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.resourceValueContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.resourceFilenameContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.nodeCodeContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.nodeLabelContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type='nodeRes']>label[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.nodeValueContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type='nodeRes']>value:contains('"+parameters.value+"')");
+	return result;
+};
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 Selector = function(jquery,type,filter1,filter2,unique)
 {
@@ -1933,7 +2055,7 @@ g_report_actions['europass'] = function (destid,action,no,data)
 	var attr_help = "";
 	var selector = r_getSelector('asmUnitStructure.EuropassL','');
 	var nodes = $(selector.jquery,data);
-	if (nodes.length>0 || select.substring(0,1)=="."){
+	if (nodes.length>0){
 		for (var enode=0;enode<nodes.length;enode++) {
 			var semantictag = $("metadata",nodes[enode]).attr('semantictag');
 			if (semantictag=='EuropassL') {
@@ -2632,8 +2754,6 @@ g_report_actions['draw-data'] = function (destid,action,no,data)
 		}
 	}
 }
-
-
 
 
 

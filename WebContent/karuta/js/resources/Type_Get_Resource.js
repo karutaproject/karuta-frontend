@@ -228,8 +228,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				else
 					html += "<div class='"+cleanCode(code)+" view-div' style='";
 				html += style;
-				if (indashboard)
-					html += "background-position:center;";
+//				if (indashboard)
+//					html += "background-position:center;";
 				html += "'>";
 				if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 					html += "<span name='code'>" + cleanCode(code) + "</span> ";
@@ -282,8 +282,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		else
 			html += "<div class='"+cleanCode(code)+" view-div' style='";
 		html += style;
-		if (indashboard)
-			html += "background-position:center;";
+//		if (indashboard)
+//			html += "background-position:center;";
 		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
 			html += "font-weight:bold;"
 		html += "'>";
@@ -309,8 +309,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		else
 			html += "<div class='"+cleanCode(code)+" view-div' style='";
 		html += style;
-		if (indashboard)
-			html += "background-position:center;";
+//		if (indashboard)
+//			html += "background-position:center;";
 		html += "'>";
 		if (code.indexOf("#")>-1 && code.indexOf("##")<0) 
 			html += "<span name='code'>" + cleanCode(code) + "</span> ";

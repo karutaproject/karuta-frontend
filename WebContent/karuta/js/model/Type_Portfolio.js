@@ -426,6 +426,8 @@ UIFactory["Portfolio"].displaySidebar = function(root,destid,type,langcode,edit,
 UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcode,edit,rootid)
 //======================
 {	
+	if (type==null)
+		type = "standard";
 	var html = "";
 	if (g_configVar['portfolio-hmenu-logo']!="")
 		html += "		<div id='portfolio-menu-logo' style=\""+g_configVar['portfolio-hmenu-logo-style']+"\">" + g_configVar['portfolio-hmenu-logo'] + "</div>";

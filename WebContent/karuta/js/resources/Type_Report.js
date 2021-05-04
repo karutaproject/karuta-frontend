@@ -147,9 +147,11 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 				$("#dashboard_"+uuid).html(content_report);
 			},
 			error : function(jqxhr,textStatus) {
-				register_report(uuid);
-				var root_node = g_portfolio_current;
-				genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
+				if (g_userroles[0]!='designer') {
+					register_report(uuid);
+					var root_node = g_portfolio_current;
+					genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
+				}
 			}
 		});
 		$("#exec_button_"+uuid).html($("<div class='exec-button button'>"+karutaStr[LANG]['exec']+"</div>"));
@@ -326,7 +328,7 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlFormObj).append($(htmlpdfGroupObj));
 	}
 	//------------------------
-	var js1 = "javascript:register_report('"+this.id+"')";
+	var js1 = "register_report('"+this.id+"')";
 	var footer = " <button class='btn btn-success' onclick=\""+js1+";\">"+karutaStr[LANG]['register']+"</button>";
 	$("#edit-window-footer").append($(footer));
 	//------------------------

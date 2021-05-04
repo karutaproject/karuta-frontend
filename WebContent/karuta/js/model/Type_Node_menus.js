@@ -141,7 +141,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 			if (subitems.length>8)
 				shares[i][8] = subitems[8]; // condition
 			//----------------------
-			if (shares[i][0].indexOf(node.userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+			if (shares[i][0].indexOf(this.userrole)>-1 || (shares[i][0].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
 				displayShare[i] = true;
 			else
 				displayShare[i] = false;
