@@ -432,8 +432,9 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 //		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
 //		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);
 		this.displayMetadataAttributeEditor('metadata-root','public',true);
-		this.displayMetadataWadAttributeEditor('metadata-root','defaultrole');
 		this.displayMetadataAttributeEditor('metadata-root','autoload',true);
+		this.displayMetadataAttributeEditor('metadata-root','editmode',true);
+		this.displayMetadataWadAttributeEditor('metadata-root','defaultrole');
 	}
 	this.displayMetadataAttributeEditor('metadata-part1','semantictag');
 	if (languages.length>1) { // multilingual application

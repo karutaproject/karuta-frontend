@@ -811,7 +811,7 @@
 	}
 
 	.button{
-		font-size: calc(var(--font-size-coeff) * 1rem);
+//		font-size: calc(var(--font-size-coeff) * 1rem);
 		padding: 6px;
 		cursor:pointer;
 		display: inline-block;
@@ -1773,13 +1773,13 @@
 /* ========================= */
 
 	.td1 {
-		width:40%;
+		width:35%;
 	}
 	.td2 {
-		width:50%;
+		width:45%;
 	}
 	.td3 {
-		width:10%;
+		width:20%;
 	}
 /* ====================== */
 /*         MODEL          */

@@ -106,8 +106,13 @@ function fill_main_page(portfolioid)
 			if (g_display_type=="standard" || g_display_type=="raw") {
 				if (USER.creator)
 					g_edit = true;
-				else
-					g_edit = false;
+				else {
+					var editmode = $("metadata[editmode]",data).attr('editmode');
+					if (editmode=="" || editmode==null || editmode==undefined)
+						g_edit = false;
+					else
+						g_edit = (editmode=='Y');
+					}
 			} else if (g_display_type=="model" || g_display_type=="translate") {
 				g_edit = true;
 			}

@@ -201,7 +201,7 @@ displayHTML["standard-resource-simple"] =	"<div id='node_#uuid#' class='#display
 											"				<div id='resource_#uuid#'  class='resource'></div>" +
 											"				<div id='comments_#uuid#' class='comments'></div>" +
 											"			</td>" +
-											"			<td class='td3'><span id='buttons-#uuid#' class='buttons edit-bar'/></td>" +
+											"			<td class='td3'><span id='menus-#uuid#' class='menus  edit-bar'/><span id='buttons-#uuid#' class='buttons edit-bar'/></td>" +
 											"		</tr></table>" +
 											"	</div>" +
 											"	<div id='metainfo_#uuid#' class='metainfo'></div>" +

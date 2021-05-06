@@ -184,7 +184,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 			if (nb_folders==0 && !USER.admin && !USER.creator) {
 				$("#folders-label").hide();
 			} else {
-				$("#nb_folders_active").html( (nb_folders==0)?0:nb_folders-1);
+				$("#nb_folders_active").html( (nb_folders==0)?0:nb_folders);
 			}
 			//--------------------------------------
 			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
