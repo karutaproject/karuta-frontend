@@ -593,7 +593,7 @@
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
-			<attribute name='text' language-dependent='Y'>
+			<attribute name='text' language-dependent='Y' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
@@ -617,7 +617,7 @@
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
-			<attribute name="text" language-dependent='Y'>
+			<attribute name="text" language-dependent='Y' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
@@ -641,12 +641,12 @@
 					<xsl:value-of select=".//asmContext[metadata/@semantictag='minViewMode']/asmResource[@xsi_type='Field']/text"></xsl:value-of>
 				</txtval>
 			</attribute>
-			<attribute name='format' language-dependent='Y'>
+			<attribute name='format' language-dependent='Y' replace-variable='Y'>
 				<txtval>
 					<xsl:value-of select=".//asmContext[metadata/@semantictag='format']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 				</txtval>
 			</attribute>
-			<attribute name='text' language-dependent='Y'>
+			<attribute name='text' language-dependent='Y' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">date</xsl:with-param>
 				</xsl:call-template>
@@ -670,13 +670,13 @@
 		</xsl:variable>
 		<update-resource type='Variable' select="{$select}" test="{$test}">
 			<xsl:if test="$variable-name!=''">
-				<attribute name='name' language-dependent='N'>
+				<attribute name='name' language-dependent='N' replace-variable='Y'>
 					<txtval>
 						<xsl:value-of select='$variable-name'/>
 					</txtval>
 				</attribute>
 			</xsl:if>
-			<attribute name='value' language-dependent='N'>
+			<attribute name='value' language-dependent='N' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">variable-value</xsl:with-param>
 				</xsl:call-template>
@@ -704,13 +704,13 @@
 			<attribute name='filename' language-dependent='Y'>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='filename']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 			</attribute>
-			<attribute name='size' language-dependent='Y'>
+			<attribute name='size' language-dependent='Y' replace-variable='Y'>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='size']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 			</attribute>
-			<attribute name='type' language-dependent='Y'>
+			<attribute name='type' language-dependent='Y' replace-variable='Y'>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='type']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 			</attribute>
-			<attribute name='fileid' language-dependent='Y'>
+			<attribute name='fileid' language-dependent='Y' replace-variable='Y'>
 				<xsl:value-of select=".//asmContext[metadata/@semantictag='fileid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 			</attribute>
 		</update-resource>
@@ -787,7 +787,7 @@
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
-			<attribute name='text' language-dependent='Y'>
+			<attribute name='text' language-dependent='Y' replace-variable='N'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>
@@ -805,17 +805,17 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='test']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
 		<update-resource type='Item' select="{$select}" test="{$test}">
-			<attribute name='code' language-dependent='N'>
+			<attribute name='code' language-dependent='N' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">code</xsl:with-param>
 				</xsl:call-template>
 			</attribute>
-			<attribute name='label' language-dependent='Y'>
+			<attribute name='label' language-dependent='Y' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">libelle</xsl:with-param>
 				</xsl:call-template>
 			</attribute>
-			<attribute name='code' language-dependent='N'>
+			<attribute name='code' language-dependent='N' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">value</xsl:with-param>
 				</xsl:call-template>
@@ -839,7 +839,7 @@
 			<xsl:if test="$source!=''">
 				<source select="{$source}"/>
 			</xsl:if>
-			<attribute name='text' language-dependent='Y'>
+			<attribute name='text' language-dependent='Y' replace-variable='Y'>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">text</xsl:with-param>
 				</xsl:call-template>

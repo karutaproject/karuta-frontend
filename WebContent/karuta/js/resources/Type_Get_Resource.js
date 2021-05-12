@@ -1583,17 +1583,17 @@ UIFactory["Get_Resource"].importMultiple = function(parentid,targetid,srce)
 	while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
 		parent = $(parent).parent();
 	}
-	var parentid = $(parent).attr("id");
+	var reloadid = $(parent).attr("id");
 	if ($(parent).prop("nodeName") == "asmUnit"){
 		callback = UIFactory.Node.reloadUnit;
-		param2 = parentid;
-		if ($("#page").attr('uuid')!=parentid)
+		param2 = reloadid;
+		if ($("#page").attr('uuid')!=reloadid)
 			param3 = false;
 	}
 	else {
 		callback = UIFactory.Node.reloadStruct;
 		param2 = g_portfolio_rootid;
-		if ($("#page").attr('uuid')!=parentid)
+		if ($("#page").attr('uuid')!=reloadid)
 			param3 = false;
 	}
 	for (var j=0; j<inputs.length;j++){

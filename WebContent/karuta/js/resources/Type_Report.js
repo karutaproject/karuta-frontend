@@ -144,7 +144,7 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 			dataType: 'html',
 			success : function(data) {
 				var content_report =  $(data).find("#dashboard_"+uuid).html();
-				$("#dashboard_"+uuid).html(content_report);
+				$("#dashboard_"+uuid).html(data);
 			},
 			error : function(jqxhr,textStatus) {
 				if (g_userroles[0]!='designer') {

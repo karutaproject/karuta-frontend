@@ -811,7 +811,7 @@
 	}
 
 	.button{
-//		font-size: calc(var(--font-size-coeff) * 1rem);
+		font-size: calc(var(--font-size-coeff) * 1rem);
 		padding: 6px;
 		cursor:pointer;
 		display: inline-block;
@@ -875,7 +875,7 @@
 			position: relative;
 			&>.dropdown-menu {
 				top: 2rem;
-				left:-10px;
+				left:20px;
 				margin-top: -6px;
 				margin-left: -1px;
 				-webkit-border-radius: 0 6px 6px 6px;

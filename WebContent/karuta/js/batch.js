@@ -112,7 +112,7 @@ function getTxtvalsWithoutReplacement(node)
 		}
 		str += text;
 	}
-	return r_replaceVariable(str.trim());
+	return str.trim();
 }
 
 //==================================
@@ -1515,7 +1515,12 @@ g_actions['update-resource'] = function updateResource(node)
 					for (var j=0; j<attributes.length; j++){
 						var attribute_name = $(attributes[j]).attr("name");
 						var language_dependent = $(attributes[j]).attr("language-dependent");
-						var attribute_value =  getTxtvals($("attribute[name='"+attribute_name+"']",node));
+						var replace_variable = $(attributes[j]).attr("replace-variable");
+						var attribute_value = "";
+						if (replace_variable=='Y')
+							attribute_value = getTxtvals($("attribute[name='"+attribute_name+"']",node));
+						else
+							attribute_value = getTxtvalsWithoutReplacement($("attribute[name='"+attribute_name+"']",node));
 						if (language_dependent=='Y')
 							$(attribute_name+"[lang='"+LANG+"']",resource).text(attribute_value);
 						else
