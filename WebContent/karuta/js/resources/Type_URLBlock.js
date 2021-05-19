@@ -123,7 +123,7 @@ UIFactory["URLBlock"].prototype.getButtons = function(dest,type,langcode)
 		langcode = LANGCODE;
 	//---------------------
 	var html = "";
-	if (this.image_editresroles.containsArrayElt(g_userroles) || this.image_editresroles.containsArrayElt(g_userroles)){
+	if (this.image_editresroles.containsArrayElt(g_userroles) || this.url_editresroles.containsArrayElt(g_userroles)){
 		html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
 	}
 	if (html!="")

@@ -379,7 +379,7 @@ UIFactory["UsersGroup"].remove = function(gid,uid)
 {
 	var url = serverBCK_API+"/usersgroups?group=" + gid;
 	if (uid!=null && uid!='null') {
-		url += "&uuid="+uid;
+		url += "&user="+uid;
 	}
 	$.ajax({
 		type : "DELETE",

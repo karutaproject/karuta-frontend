@@ -1981,10 +1981,10 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 				prefix_id += "value_";
 			}
 			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel();
+				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
 			}
 			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel();
+				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
 			}
 			if (selector.type=='node code') {
 				text = UICom.structure["ui"][nodeid].getCode();

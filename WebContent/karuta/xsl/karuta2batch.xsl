@@ -300,12 +300,10 @@
 	</xsl:template>
 
 	<xsl:template match="*[metadata/@semantictag='delete-tree']">
-		<delete-tree>
-			<code>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">code</xsl:with-param>
-				</xsl:call-template>
-			</code>
+		<xsl:variable name="id">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
+		<delete-tree select="{$id}">
 		</delete-tree>
 	</xsl:template>
 
@@ -1058,8 +1056,8 @@
 		<xsl:variable name="varname"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='variable-name']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<xsl:variable name="uuid"><xsl:value-of select=".//*[metadata/@semantictag=$parent]//asmContext[metadata/@semantictag='uuid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
 		<!-- for backward compatibility -->
-		<xsl:variable name="old-select"><xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of></xsl:variable>
-		<xsl:variable name="old-tree-select"><xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of></xsl:variable>
+		<xsl:variable name="old-select"><!--xsl:value-of select=".//asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of--></xsl:variable>
+		<xsl:variable name="old-tree-select"><!--xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of--></xsl:variable>
 		<!-- ==================================== -->
 		 <!--===parent:<xsl:value-of select='$parent'/>===old-tree-select:<xsl:value-of select='$old-tree-select'/>===old-select:<xsl:value-of select='$old-select'/>===uuid:<xsl:value-of select='$uuid'/>===select:<xsl:value-of select='$select'/>===ref-id:<xsl:value-of select='$ref-id'/>===portfoliocode:<xsl:value-of select='$portfoliocode'/>===semtag:<xsl:value-of select='$semtag'/>=== -->
 		<xsl:choose>
