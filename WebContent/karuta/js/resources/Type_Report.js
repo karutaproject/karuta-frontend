@@ -155,7 +155,14 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 			}
 		});
 		$("#exec_button_"+uuid).html($("<div class='exec-button button'>"+karutaStr[LANG]['exec']+"</div>"));
-		$("#exec_button_"+uuid).click(function(){$("#dashboard_"+uuid).html('');genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);});
+		$("#exec_button_"+uuid).click(function(){
+			$("#dashboard_"+uuid).html('');
+			if (g_userroles[0]!='designer') {
+				register_report(uuid);
+				var root_node = g_portfolio_current;
+				genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
+			}
+		});
 		//---------- display csv or pdf -------
 		var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
 		if (csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {

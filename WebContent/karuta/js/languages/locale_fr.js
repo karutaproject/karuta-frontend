@@ -1,4 +1,5 @@
 
+karutaStr['fr'] = new Array();
 
 //----------------------------------------------------
 karutaStr['fr']['language']="Français";

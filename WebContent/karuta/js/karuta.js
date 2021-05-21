@@ -1293,7 +1293,6 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	if (url.indexOf("/application/htm")<0)
 		serverURL = url.substring(0,url.indexOf("/karuta/htm"));
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
-	// url = "karuta-backend-externe"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
 	message = g_sendEmailPublicURL_message.replace("##firstname##",USER.firstname);

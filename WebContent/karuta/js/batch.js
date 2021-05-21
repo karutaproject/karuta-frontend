@@ -416,7 +416,7 @@ g_actions['create-user'] = function createUser(node)
 			xml +="	<lastname>"+lastname+"</lastname>";
 			xml +="	<firstname>"+firstname+"</firstname>";
 			xml +="	<email>"+email+"</email>";
-			xml +="	<password>"+password+"</password>";
+//			xml +="	<password>"+password+"</password>"; user may have changed his/her password
 			xml +="	<active>1</active>";
 			xml +="	<other>"+other+"</other>";
 			xml +="	<admin>0</admin>";
@@ -436,7 +436,7 @@ g_actions['create-user'] = function createUser(node)
 					$("#batch-log").append("<br>- user updated("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in create/update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR 1</span> in create/update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
 				}
 			});
 			},
@@ -461,7 +461,7 @@ g_actions['create-user'] = function createUser(node)
 				async : false,
 				type : "POST",
 				contentType: "application/xml; charset=UTF-8",
-				dataType : "xml",
+				dataType : "text",
 				url : url,
 				data : xml,
 				success : function(data) {
@@ -470,7 +470,7 @@ g_actions['create-user'] = function createUser(node)
 					$("#batch-log").append("<br>- user created("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in create-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR 2</span> in create-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
 				}
 			});
 		}
@@ -512,7 +512,7 @@ g_actions['update-user'] = function updateUser(node)
 				async : false,
 				type : "GET",
 				contentType: "application/xml",
-				dataType : "text",
+				dataType : "xml",
 				url : url,
 				success : function(data) {
 					ok = true;
@@ -523,6 +523,8 @@ g_actions['update-user'] = function updateUser(node)
 					updateUserAttribute(data,"admin",newadmin)
 					updateUserAttribute(data,"password",newpassword)
 					updateUserAttribute(data,"other",newother)
+					var newdata = "<user>" + $(":root",data).html() + "</user>";
+					var strippeddata = newdata.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 					var url = serverBCK_API+"/users/user/"+userid;
 					$.ajax({
 						async : false,
@@ -530,24 +532,24 @@ g_actions['update-user'] = function updateUser(node)
 						contentType: "application/xml; charset=UTF-8",
 						dataType : "text",
 						url : url,
-						data : data,
+						data : strippeddata,
 						success : function(data) {
 							userid = data;
 							ok = true;
-							$("#batch-log").append("<br>- user updated("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);
+							$("#batch-log").append("<br>- user updated("+userid+") - identifier:"+identifier);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR 1</span> in update-user ("+userid+") - identifier:"+identifier);
 						}
 					});
 				},
 				error : function(data) {
-					$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+					$("#batch-log").append("<br>- ***<span class='danger'>ERROR 2</span> in update-user ("+userid+") - identifier:"+identifier);
 				}
 			});
 		},
 		error : function(data) {
-			$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update-user ("+userid+") - identifier:"+identifier+" lastname:"+lastname+" firstname:"+firstname);					
+			$("#batch-log").append("<br>- ***<span class='danger'>ERROR 3</span> in update-user ("+userid+") - identifier:"+identifier);
 		}
 	});
 	return ok;
@@ -3172,6 +3174,8 @@ function get_usergroupid(groupname)
 function execBatchForm()
 //==================================================
 {
+	$("#wait-window").modal('show');
+	g_execbatch = false;
 	var line0 = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLine0'])",g_portfolio_current);
 	var lines = $("asmUnitStructure:has(metadata[semantictag*='BatchFormLines'])",g_portfolio_current);
 	var model_code_node = $("asmContext:has(metadata[semantictag='model_code'])",g_portfolio_current);
@@ -3186,6 +3190,7 @@ function execBatchForm()
 	display_execBatch()
 	//------------------------------
 	getModelAndProcess(g_json.model_code);
+	$("#wait-window").modal('hide');
 };
 
 //==================================================
@@ -3344,7 +3349,7 @@ function saveLog(model_code,portfoliologcode,logtext)
 function displayExecBatchButton()
 //=================================================
 {
-	var html = "<div id='create-portfolio' class='alert alert-success'>"+g_execbatchbuttonlabel1[LANG]+"</div>";
+	var html = "<div id='create-portfolio' class='alert alert-success'>"+buttonlabel1[LANG]+"</div>";
 	$("#main-list").html(html);
 	initBatchVars();
 	prepareBatch();

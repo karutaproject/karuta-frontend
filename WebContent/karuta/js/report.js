@@ -431,8 +431,6 @@ function report_processCode()
 function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 {
-	var xml_model = "";
-	var xml_model = "";
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -641,10 +639,10 @@ function register_report(uuid)
 		data : data,
 		dataType: "text",
 		success : function(data) {
-			alertHTML("OK - rapport inscrit");
+			alertHTML("OK - Rapport en exécution sur le serveur");
 		},
 		error : function(jqxhr, textStatus, err) {
-			alertHTML("Erreur - rapport non inscrit:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
+			alertHTML("Erreur - rapport non exécuté:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
 		}
 	});
 }
@@ -1642,9 +1640,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//----------------------------
 			if (selector.type=='resource') {
 				try {
-					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,'none',null,true);
+					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_node_resource"+nodeid,'none',null,true);
 				} catch(e){
-					text = UICom.structure["ui"][nodeid].structured_resource.getView("dashboard_"+nodeid,null,null,true);
+					text = UICom.structure["ui"][nodeid].structured_resource.getView("dashboard_node_resource"+nodeid,null,null,true);
 				}
 				
 			}
