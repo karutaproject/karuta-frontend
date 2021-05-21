@@ -733,7 +733,7 @@ UIFactory["Portfolio"].create = function(parentcode)
 		if (code!='') {
 			var xml = "";
 			xml +="<?xml version='1.0' encoding='UTF-8'?>";
-			xml +="<portfolio code='"+code+"'>";
+			xml +="<portfolio code='"+parentcode+"."+code+"'>";
 			xml +="	<asmRoot>";
 			xml +="		<metadata semantictag='root' sharedNode='N' sharedResource='N' multilingual-node='Y' />";
 			xml +="		<metadata-wad seenoderoles='all' />";

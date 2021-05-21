@@ -605,8 +605,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		for (var uuid in this.folders){
 			portfolio_list += "," + uuid + folders_byid[uuid].contentList();
 		}
-		if (portfolio_list.length>0)
-			portfolio_list = this.id+portfolio_list;
+		portfolio_list = this.id+portfolio_list;
 		$("#export-"+this.id).attr("href",serverBCK_API+"/portfolios/zip?portfolios="+portfolio_list);
 		//---------------------
 		this.displayOwner('owner_'+this.id);

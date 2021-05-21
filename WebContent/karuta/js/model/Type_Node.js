@@ -2562,3 +2562,46 @@ UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,i
 }
 
 
+//==================================================
+UIFactory["Node"].prototype.exportNode = function()
+//==================================================
+{
+	var portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
+	var foldercode = portfoliocode.substring(0,portfoliocode.indexOf('.'));
+	var exportcode = foldercode+"."+this.semantictag;
+	var exportlabel = "Export-" + this.getLabel(null,'none');
+	var menuroles = exportcode + "," + this.semantictag +",Ajouter "+this.getLabel(null,'none')+"@fr/Add "+this.getLabel(null,'none')+"@en,designer";
+	var nodestring = this.node.outerHTML;
+	var xml = "";
+	xml += "<portfolio code='"+portfoliocode+"'>";
+	xml += "	<asmRoot>";
+	xml += "		<metadata-wad menuroles='"+menuroles+"' seenoderoles='all' />";
+	xml += "		<metadata-epm />";
+	xml += "		<metadata multilingual-node='Y' semantictag='root' sharedNode='N' sharedResource='N' />";
+	xml += "		<asmResource xsi_type='nodeRes'><code>"+exportcode+"</code><label lang='fr'>"+exportlabel+"</label><label lang='en'>"+exportlabel+"</label></asmResource>";
+	xml += "		<asmResource xsi_type='context'></asmResource>";
+	xml += nodestring;
+	xml += "	</asmRoot>";
+	xml += "</portfolio>";
+	$.ajax({
+		type : "POST",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios",
+		data : xml,
+		success : function(data) {
+			alert("Enregistré");
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+		}
+	});
+}
+
+
+//==================================
+function export_node(nodeid)
+//==================================
+{
+	UICom.structure.ui[nodeid].exportNode();
+}
