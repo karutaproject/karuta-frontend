@@ -1,0 +1,132 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+		<!-- =============================================================== -->
+		<script src="./other/js/jquery-3.3.1.min.js"></script>
+		<script src="./other/js/popper.min.js"></script>
+		<script src="./other/bootstrap-4.4.0-dist/js/bootstrap.min.js"></script>
+		<!-- =============================================================== -->
+		<!-- Only one source for report generation for now -->
+		<script src="/univ-smb-config/_init.js"></script>
+		<!-- =============================================================== -->
+		<script src="./karuta/js/karuta.js"></script>
+		<script src="./karuta/js/UICom.js"></script>
+		<script src="./karuta/js/report.js"></script>
+		<!-- =============================================================== -->
+		<script src="./karuta/js/resources/Type_Calendar.js"></script>
+		<script src="./karuta/js/resources/Type_Comments.js"></script>
+		<script src="./karuta/js/resources/Type_Document.js"></script>
+		<script src="./karuta/js/resources/Type_DocumentBlock.js"></script>
+		<script src="./karuta/js/resources/Type_Proxy.js"></script>
+		<script src="./karuta/js/resources/Type_Get_Proxy.js"></script>
+		<script src="./karuta/js/resources/Type_TextField.js"></script>
+		<script src="./karuta/js/resources/Type_TextFieldBlock.js"></script>
+		<script src="./karuta/js/resources/Type_Field.js"></script>
+		<script src="./karuta/js/resources/Type_Image.js"></script>
+		<script src="./karuta/js/resources/Type_ImageBlock.js"></script>
+		<script src="./karuta/js/resources/Type_Get_Resource.js"></script>
+		<script src="./karuta/js/resources/Type_Get_Double_Resource.js"></script>
+		<script src="./karuta/js/resources/Type_Get_Get_Resource.js"></script>
+		<script src="./karuta/js/resources/Type_URL.js"></script>
+		<script src="./karuta/js/resources/Type_URLBlock.js"></script>
+		<script src="./karuta/js/resources/Type_Item.js"></script>
+		<script src="./karuta/js/resources/Type_Video.js"></script>
+		<script src="./karuta/js/resources/Type_CompetencyEvaluation.js"></script>
+		<script src="./karuta/js/resources/Type_Oembed.js"></script>
+		<script src="./karuta/js/resources/Type_Audio.js"></script>
+		<script src="./karuta/js/resources/Type_SendEmail.js"></script>
+		<script src="./karuta/js/resources/Type_URL2Unit.js"></script>
+		<script src="./karuta/js/resources/Type_URL2UnitBlock.js"></script>
+		<script src="./karuta/js/resources/Type_URL2Portfolio.js"></script>
+		<script src="./karuta/js/resources/Type_URL2PortfolioBlock.js"></script>
+		<script src="./karuta/js/resources/Type_Dashboard.js"></script>
+		<script src="./karuta/js/resources/Type_Report.js"></script>
+		<script src="./karuta/js/resources/Type_BatchForm.js"></script>
+		<script src="./karuta/js/resources/Type_Color.js"></script>
+		<script src="./karuta/js/resources/Type_Variable.js"></script>
+		<!-- =============================================================== -->
+		<script src="./karuta/js/model/Type_Portfolio.js"></script>
+		<script src="./karuta/js/model/Type_Node.js"></script>
+		<script src="./karuta/js/model/Type_Node_metadata.js"></script>
+		<script src="./karuta/js/model/Type_Node_menus.js"></script>
+		<script src="./karuta/js/model/Type_User.js"></script>
+		<script src="./karuta/js/model/Type_UsersGroup.js"></script>
+		<!-- =============================================================== -->		
+		<script src="./karuta/js/resources/Type_Bubble.js"></script>
+		<!-- =============================================================== -->		
+		<script src="./karuta/js/resources/Type_EuropassL.js"></script>
+		<!-- =============================================================== -->
+		<script src="./other/js/js.cookie.js"></script>
+		<script src="./other/js/jquery.sortElements.js"></script>
+		<!-- =============================================================== -->
+		<script src="./other/js/jquery-qrcode-0.14.0.js"></script>
+		<!-- =============================================================== -->
+
+		<script src="./karuta/js/languages/locale_fr.js"></script>
+		<script src="./karuta/js/languages/locale_en.js"></script>
+
+<script>
+//loadLanguages(getLanguage);
+//getLanguage();
+LANGCODE=0;
+
+
+var display = function(uuid, dashuuid)
+{
+	var depth = 1;
+	var edit = true;
+	var langcode = 0;
+	var cb = function(data){
+		UICom.parseStructure(data);
+		setVariables(data);
+		var dashboard_div = "<div id='dashboard_"+dashuuid+"' class='createreport col-md-offset-1 col-md-11'></div>";
+		$("#contenu").append(dashboard_div);
+		genDashboardContent('dashboard_'+dashuuid,dashuuid,data,data);
+	};
+	$.ajax({
+		type: "GET",
+// 		url: "/"+serverBCK+"/nodes/node/"+uuid+"?resources=true",
+		url: "/"+serverBCK+"/rest/api/portfolios/portfolio/"+uuid+"?resources=true",
+		success: cb,
+		dataType: 'text xml',
+	});
+};
+
+var cb_start = function(data)
+{
+	// Needed parameter: code, find which portfolio id from it
+	// Check list parameter, if exist, show uuid list
+	// If uuid given, display asked one
+	var q = window.location.search.slice(1).split('#')[0];
+	var arr = q.split('&');
+	var params = {};
+	for(var i=0; i<arr.length; ++i){
+		var a = arr[i].split('=');
+		params[a[0]] = a[1];
+	}
+
+	USER = new UIFactory["User"]($("user",data));
+
+	var uuid = params['uuid'];
+	var dashid = params['dashid'];
+	display(uuid, dashid);
+};
+
+$.ajax({
+	type : "GET",
+	dataType : "xml",
+	url : "/"+serverBCK+"/rest/api/credential",
+	data: "",
+	success : cb_start,
+});
+
+</script>
+
+
+</head>
+<body>
+<div id="contenu"></div></body>
+<div id="alert-window-footer" class="model-footer"></div>
+</html>
