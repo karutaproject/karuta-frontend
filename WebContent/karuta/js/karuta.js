@@ -354,6 +354,24 @@ function getEditBox(uuid,js2) {
 	$("#edit-window-footer").html($(footer));
 	var html = "";
 	//--------------------------
+	if (UICom.structure['tree'][uuid]==null || UICom.structure['tree'][uuid]==undefined) {  // if resource is in report and not loaded (report on server)
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
+			success : function(data) {
+				UICom.parseStructure(data);
+				UICom.structure["ui"][uuid].resource.display["dashboard_node_resource"+uuid] = LANGCODE;
+			},
+			error : function() {
+				var html = "";
+				html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
+				$("#preview-window-body").html(html);
+				$("#preview-window").modal('show');
+			}
+		});		
+	}
 	if(UICom.structure["ui"][uuid].resource!=null) {
 		try {
 			html = UICom.structure["ui"][uuid].resource.getEditor();
@@ -731,17 +749,31 @@ function previewPage(uuid,depth,type,langcode)
 	$("#preview-window-footer").append($(footer));
 	$("#preview-window-body").html("");
 	if (UICom.structure['tree'][uuid]!=null) {
-		if (type=='standard') {
-			g_report_edit = false;
-			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
-			g_report_edit = g_edit;
-		}
+		g_report_edit = false;
+		UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+		g_report_edit = g_edit;
 		$("#preview-window").modal('show');
 	} else {
-		var html = "";
-		html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
-		$("#preview-window-body").html(html);
-		$("#preview-window").modal('show');
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
+			success : function(data) {
+				UICom.parseStructure(data);
+				g_report_edit = false;
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+				g_report_edit = g_edit;
+				$("#preview-window").modal('show');
+
+			},
+			error : function() {
+				var html = "";
+				html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
+				$("#preview-window-body").html(html);
+				$("#preview-window").modal('show');
+
+			}
+		});
 	}
 }
 
@@ -880,7 +912,15 @@ function submit(uuid,submitall)
 		url : urlS,
 		uuid : uuid,
 		success : function (data){
-			UIFactory.Node.reloadUnit();
+			if ($("#submit-"+uuid).parent().hasClass("submit-inreport")) {
+				var parent = $("#submit-"+uuid).parent();
+				while (!$(parent).hasClass("submit-tohide") && $(parent).prop("nodeName")!="table")
+					parent = $(parent).parent();
+				if ($(parent).hasClass("submit-tohide"))
+					$(parent).hide();
+				register_report($("#submit-"+uuid).parent().attr('dashboardid'));
+			} else
+				UIFactory.Node.reloadUnit();
 		}
 	});
 }

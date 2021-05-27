@@ -213,7 +213,6 @@ function r_replaceVariable(text)
 //==================================
 {
 	var n=0;
-	var text_original = text;
 	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
 		var variable_name = test_string.substring(0,test_string.indexOf("##}"));
@@ -230,7 +229,6 @@ function r_replaceVariable(text)
 			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
 			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
 			i = r_replaceVariable(i);
-			var variable_array1 = text.replace("["+i+"]","");
 			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
 				text = g_variables[variable_value][i];
 			}
@@ -378,7 +376,7 @@ function r_processPortfolio(no,xmlReport,destid,data,line)
 	$.ajaxSetup({async: false});
 	if (no==0){
 		dashboard_current = destid;
-		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data};
+		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data,'dashboardid':dashboard_id};
 	}
 	var children = $(":root",xmlReport).children();
 	processReportActions(destid,children,data);
@@ -621,31 +619,6 @@ function html2IMG(contentid)
 //===============================================================
 //===============================================================
 
-//==================================
-function register_report(uuid)
-//==================================
-{
-	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
-	var node_resource = UICom.structure["ui"][uuid].resource;
-	var startday = node_resource.startday_node.text();
-	var time = node_resource.time_node.text();
-	var freq = node_resource.freq_node.text();
-	var comments = node_resource.comments_node[LANGCODE].text();
-	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
-	var url = serverBCK+"/report";
-	$.ajax({
-		type : "POST",
-		url : url,
-		data : data,
-		dataType: "text",
-		success : function(data) {
-			alertHTML("OK - Rapport en exécution sur le serveur");
-		},
-		error : function(jqxhr, textStatus, err) {
-			alertHTML("Erreur - rapport non exécuté:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
-		}
-	});
-}
 
 //==================================
 function genDashboardContent(destid,uuid,parent,root_node)
@@ -1784,9 +1757,13 @@ g_report_actions['menu'] = function (destid,action,no,data)
 		var nodeid = targetid = $(node).attr("id");
 		if(UICom.structure.ui[nodeid].menuroles==undefined) // in case of display before the node
 			UICom.structure.ui[nodeid].setMetadata();
+		document.getElementById(destid).setAttribute('dashboardid',dashboard_infos[dashboard_current].dashboardid);
+		$("#"+destid).attr('dashboardid',dashboard_infos[dashboard_current].dashboardid);
+		var text = "<span dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
+		$("#"+destid).append($(text));
 		UICom.structure.ui[nodeid].displayMenus("#"+destid,LANGCODE);
-//		var html = UIFactory.Node.getReportMenus("",mtext,nodeid,targetid,LANGCODE)
-//		$("#"+destid).append(html);
+		var text = "<span dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
+		$("#"+destid).append($(text));
 	}
 
 }
