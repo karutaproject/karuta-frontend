@@ -749,7 +749,6 @@ body,
   padding: 6px;
   cursor: pointer;
   display: inline-block;
-  white-space: nowrap;
 }
 
 .menus a.text-button {

@@ -457,7 +457,6 @@ UIFactory["PortfolioFolder"].prototype.displayContent = function(type,parentid,v
 		viewtype = type;
 	else
 		viewtype = list_view_type;
-	var folder_code = this.code_node.text();
 	//--------------------
 	this.displayFolderDetail(type,parentid,type);
 	//------------------ folders ---------------------------
@@ -477,22 +476,21 @@ UIFactory["PortfolioFolder"].prototype.displayContent = function(type,parentid,v
 	}
 	for (uuid in this.children){
 		var portfolio = portfolios_byid[uuid];
-		var portfoliocode = portfolio.code_node.text();
-			//-------------------- PORTFOLIO ----------------------
-			var portfolio_parentcode = portfoliocode.substring(0,portfoliocode.indexOf("."));
-				if (portfolio.visible || (USER.creator && !USER.limited) ) {
-					if (viewtype=='card')
-						$("#"+type+"-porfolios-deck").append($("<div class='card portfolio-card' id='"+type+"_"+portfolio.id+"' onclick=\"display_main_page('"+uuid+"')\" parentid='"+this.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
-					else if (viewtype=='card-admin')
-						$("#"+type+"-porfolios-deck").append($("<div class='card portfolio-card' id='"+type+"_"+portfolio.id+"' parentid='"+this.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
-					else
-						$("#"+type+"-portfolios-content").append($("<div class='row portfolio-row' id='"+type+"_"+portfolio.id+"' parentid='"+this.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
-					$("#"+type+"_"+portfolio.id).html(portfolio.getPortfolioView("portfolio_"+portfolio.id,viewtype));
-					portfolio.displayOwner('owner_'+portfolio.id);
-				}
-		$(window).scrollTop(0);
-		$("#wait-window").hide();
+		//-------------------- PORTFOLIO ----------------------
+		if (portfolio.visible || (USER.creator && !USER.limited) ) {
+			if (viewtype=='card')
+				$("#"+type+"-porfolios-deck").append($("<div class='card portfolio-card' id='"+type+"_"+portfolio.id+"' onclick=\"display_main_page('"+uuid+"')\" parentid='"+this.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
+			else if (viewtype=='card-admin')
+				$("#"+type+"-porfolios-deck").append($("<div class='card portfolio-card' id='"+type+"_"+portfolio.id+"' parentid='"+this.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
+			else
+				$("#"+type+"-portfolios-content").append($("<div class='row portfolio-row' id='"+type+"_"+portfolio.id+"' parentid='"+this.id+"' draggable='true' ondragstart='dragPortfolio(event)'></div>"));
+			$("#"+type+"_"+portfolio.id).html(portfolio.getPortfolioView("portfolio_"+portfolio.id,viewtype));
+			if (portfolio.ownerid!=null)
+				portfolio.displayOwner('owner_'+portfolio.id);
+		}
 	}
+	$(window).scrollTop(0);
+	$("#wait-window").hide();
 }
 
 //==================================

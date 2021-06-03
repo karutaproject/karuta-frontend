@@ -1292,7 +1292,10 @@ UIFactory["Portfolio"].import = function(zip,instance,foldercode)
 		html +="</div><br>";
 		html +=" <form id='fileupload' action='"+url+"'>";
 		html += " <input type='hidden' id='project' name='project' value=''>";
-		html += " <input type='hidden' id='instance' name='instance' value='false'>";
+		if (instance) 
+			html += " <input type='hidden' id='instance' name='instance' value='true'>";
+		else
+			html += " <input type='hidden' id='instance' name='instance' value='false'>";
 		html += " <input id='uploadfile' type='file' name='uploadfile'>";
 		html += "</form>";
 		html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";

@@ -1493,6 +1493,7 @@ g_actions['update-resource'] = function updateResource(node)
 		test = replaceVariable(test);
 		test=getTest(test);
 	}
+	var semtag = getSemtag(node);
 	//------------ Target --------------------
 	var url = getTargetUrl(node);
 	//--------------------------------
@@ -1541,10 +1542,10 @@ g_actions['update-resource'] = function updateResource(node)
 						url : serverBCK_API+"/resources/resource/" + nodeid,
 						success : function(data) {
 							ok++;
-							$("#batch-log").append("<br>- resource updated "+type+" - attributes :"+attributes[0]);
+							$("#batch-log").append("<br>- resource updated "+type+" - "+semtag+":"+attribute_value);
 						},
 						error : function(data) {
-							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource "+type+" - attribute :"+attributes[0]);
+							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource "+type+" - "+semtag+":"+attribute_value);
 						}
 					});
 					//-------------------

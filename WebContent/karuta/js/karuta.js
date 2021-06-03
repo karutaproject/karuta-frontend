@@ -2702,19 +2702,19 @@ function getTarget (knode,menuitem)
 		target = $("*:has(>metadata[semantictag='"+semtag+"'])",node);
 	} else if (menuitem.indexOf("parent.parent.parent.parent.parent.")>-1) {
 		var semtag = menuitem.substring("parent.parent.parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent().parent());
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
 	} else if (menuitem.indexOf("parent.parent.parent.parent")>-1) {
 		var semtag = menuitem.substring("parent.parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent());
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
 	} else if (menuitem.indexOf("parent.parent.parent")>-1) {
 		var semtag = menuitem.substring("parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent());
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
 	} else if (menuitem.indexOf("parent.parent")>-1) {
 		var semtag = menuitem.substring("parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent());
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
 	} else if (menuitem.indexOf("parent.")>-1) {
 		var semtag = menuitem.substring("parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])").addBack("*:has(>metadata[semantictag='"+semtag+"'])");
 	} else {
 		target = $("*:has(>metadata[semantictag='"+menuitem+"'])",g_portfolio_current);
 	}

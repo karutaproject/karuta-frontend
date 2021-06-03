@@ -75,7 +75,7 @@ function fill_list_portfoliosgroups()
 	$("#main-portfoliosgroup").html(html);
 	UIFactory.PortfolioFolder.displayPortfolioSearch("portfoliogroup-portfolio",true);	
 	UIFactory.PortfoliosGroup.loadAndDisplayAll('portfoliogroup');
-	UIFactory.PortfolioFolder.displayAll('portfoliogroup-portfolio'); // already loaded
+	UIFactory.PortfolioFolder.loadAndDisplayAll('portfoliogroup-portfolio'); // already loaded
 }
 
 //==============================
