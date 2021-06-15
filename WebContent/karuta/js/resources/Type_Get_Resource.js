@@ -247,10 +247,10 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	//--------------------------------------------------
 	} else  if (label.indexOf("nodelabel:")>-1) {
 		var elts = label.split("|");
-			var text = "";
-			var label = "";
-			var code = "";
-			var style = "";
+		var text = "";
+		var label = "";
+		var code = "";
+		var style = "";
 		try {
 			var resid = elts[0].substring(10);
 			var node = UICom.structure["ui"][resid];
@@ -275,6 +275,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 					}
 					this.save();
 				}
+			} else {
+				label = elts[2].substring(6);
 			}
 		}
 		if (indashboard)
