@@ -9,7 +9,7 @@ Karuta
 Download Karuta
 -------
 
-To download executable files go to [ePortfolium website](http://www.eportfolium.com/)
+To download executable files go to [ePortfolium website](http://www.eportfolium.com)
 
 Installing Karuta Source Code
 -------
