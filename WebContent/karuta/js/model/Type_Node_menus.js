@@ -612,8 +612,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 							} else {
 								sharetoemail = shareto;
 							}
-							var js = "getSendSharingURL('"+targetid+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
-//							var js = "getSendSharingURL('"+targetid+"','"+sharewithrole+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"'"+")";
+							var js = "getSendSharingURL('"+node.id+"','"+targetid+"','"+sharewithrole+"','"+sharetoemail+"','"+sharetoroles+"',"+langcode+",'"+sharelevel+"','"+shareduration+"','"+sharerole+"','"+shareoptions+"')";
 							if (sharelabel!='') {
 								var label = "";
 								var labels = sharelabel.split("/");
@@ -627,9 +626,10 @@ UIFactory["Node"].getMenus = function(node,langcode)
 							}
 						}
 					} else {
-						if (node.shareroles.indexOf('2world')>-1) {
+						if (shareto.indexOf('2world')>-1) {
 							html_toadd = "<span id='2world-"+node.id+"'></span>";
-						} else {
+						}
+						if (shareto.indexOf('?')>-1) {
 							html_toadd = "<span class='button fas fa-share' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+targetid+"','"+node.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 						}
 					}

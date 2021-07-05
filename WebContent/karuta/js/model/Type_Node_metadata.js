@@ -645,6 +645,22 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	html += karutaStr[languages[langcode]]['help3']+"</label>";
 	$('#metadata_texts').append($(html));
 	this.displayMetadatawWadTextAttributeEditor('metadata_texts','help');
+	//------------------------Get_Get_Resource Error-------------------------
+	if (name=='asmContext' && this.resource.type=='Get_Get_Resource') {
+		html = "<br><label>"+karutaStr[languages[langcode]]['error'];
+		if (languages.length>1){
+			var first = true;
+			for (var i=0; i<languages.length;i++){
+				if (!first)
+					html += "/";
+				html += karutaStr[languages[i]]['error2'];
+				first = false;
+			}
+		}
+		html += karutaStr[languages[langcode]]['error3']+"</label>";
+		$('#metadata_texts').append($(html));
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','error');
+	}
 };
 
 //---------------------------------------------------------

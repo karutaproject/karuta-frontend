@@ -1097,7 +1097,7 @@ function getSendPublicURL(uuid,shareroles)
 }
 
 //==================================
-function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole,shareoptions)
+function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole,shareoptions)
 //==================================
 {
 	var emailsarray = [];
@@ -1129,6 +1129,17 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 		}
 		if (sharetoemail!='' && shareduration!='') {
 			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode,sharetomessage,sharetoobj);
+		}
+		if (shareoptions.indexOf('function:')>-1) {
+			var functionelts = shareoptions.substring(9).split('/');
+			var functionstring = functionelts[0] + "(";
+			for (var i=1; i<functionelts.length; i++) {
+				functionstring += functionelts[i];
+				if (i<functionelts.length-1)
+					functionstring += ",";
+			}
+			functionstring += ")";
+			eval (functionstring);
 		}
 	});
 	$("#edit-window-footer").append(obj);

@@ -373,24 +373,20 @@ g_unique_functions['uniqueResourceText'] = function (index,node)
 function r_processPortfolio(no,xmlReport,destid,data,line)
 //==================================
 {
-	$.ajaxSetup({async: false});
 	if (no==0){
 		dashboard_current = destid;
 		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data,'dashboardid':dashboard_id};
 	}
 	var children = $(":root",xmlReport).children();
 	processReportActions(destid,children,data);
-	$.ajaxSetup({async: true});
 }
 
 //==================================
 function r_report_process(xmlDoc,json)
 //==================================
 {
-	$.ajaxSetup({async: false});
 	var children = $(":root",xmlDoc).children();
 	processReportActions("report-content",children);
-	$.ajaxSetup({async: true});
 }
 
 //=================================================
@@ -430,6 +426,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 //==================================
 {
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
@@ -439,6 +436,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 			// ---- transform karuta portfolio to report model
 			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : urlS,
@@ -465,6 +463,7 @@ function report_getModelAndProcess(model_code,json)
 {
 	$('#wait-window').show();
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&search="+model_code,
@@ -472,6 +471,7 @@ function report_getModelAndProcess(model_code,json)
 			var items = $("portfolio",data);
 			var uuid = $(items[0]).attr('id');
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/portfolios/portfolio/"+uuid,
@@ -480,6 +480,7 @@ function report_getModelAndProcess(model_code,json)
 					// ---- transform karuta portfolio to report model
 					var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
 					$.ajax({
+						async:false,
 						type : "GET",
 						dataType : "xml",
 						url : urlS,
@@ -879,6 +880,7 @@ g_report_actions['show-sharing'] = function (destid,action,no,data)
 //==================================
 {
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid_current,
@@ -896,6 +898,7 @@ g_report_actions['display-sharing'] = function (destid,action,no,data)
 //==================================
 {
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid_current,
@@ -1035,6 +1038,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 		};
 	} else {
 		$.ajax({
+			async:false,
 			type : "GET",
 			dataType : "xml",
 			url : serverBCK_API+"/users",
@@ -1206,6 +1210,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 	}
 	var items_list = [];
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&search="+searchvalue,
@@ -1249,6 +1254,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 					//------------------------------------
 					if (condition && sortag!=""){
 						$.ajax({
+							async:false,
 							type : "GET",
 							dataType : "xml",
 							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,

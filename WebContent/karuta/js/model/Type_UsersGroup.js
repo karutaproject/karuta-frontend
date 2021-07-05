@@ -48,7 +48,7 @@ UIFactory["UsersGroup"] = function(node)
 	//------------------------------
 	this.attributes = {};
 	this.attributes["code"] = this.code_node;
-	this.attributes["label"] = this.code_node;
+	this.attributes["label"] = this.label_node;
 	//------------------------------
 	this.display = {};
 	this.displayLabel = {};
@@ -259,7 +259,7 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type)
 			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
 			html += "		<div class='dropdown-menu  dropdown-menu-right'>";
 			html += "			<a class='dropdown-item' onclick=\"usergroups_byid['"+this.id+"'].edit()\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a>";
-			html += "			<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].confirmDel('"+this.id+"')\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"')\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
 			html += "		</div>";
 		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
 			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle' style='visibility:hidden'></button>";
@@ -362,13 +362,15 @@ UIFactory["UsersGroup"].add = function(groupid,userid)
 UIFactory["UsersGroup"].confirmRemove = function(gid,uid) 
 //==================================
 {
-	var str = karutaStr[LANG]["confirm-delete"];
+	var str1 = karutaStr[LANG]["confirm-delete"];
+	var str2 = karutaStr[LANG]["button-delete"];
 	if (uid!=null && uid!='null') {
-		str = karutaStr[LANG]["confirm-remove-item-group"];
+		str1 = karutaStr[LANG]["confirm-remove-item-group"];
+		str2 = karutaStr[LANG]["button-remove"];
 	}
-	document.getElementById('delete-window-body').innerHTML = str;
+	document.getElementById('delete-window-body').innerHTML = str1;
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"UIFactory.UsersGroup.remove('"+gid+"','"+uid+"');$('#delete-window').modal('hide');\">" + karutaStr[LANG]["button-remove"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"UIFactory.UsersGroup.remove('"+gid+"','"+uid+"');$('#delete-window').modal('hide');\">" + str2 + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 };
@@ -378,7 +380,7 @@ UIFactory["UsersGroup"].remove = function(gid,uid)
 //==================================
 {
 	var url = serverBCK_API+"/usersgroups?group=" + gid;
-	if (uid!=null && uid!='null') {
+	if (uid!=null && uid!='null' && uid!='undefined') {
 		url += "&user="+uid;
 	}
 	$.ajax({
@@ -389,10 +391,10 @@ UIFactory["UsersGroup"].remove = function(gid,uid)
 		gid : gid,
 		uid : uid,
 		success : function(data) {
-			if (this.uid!=null) {
-				usergroups_byid[this.gid].loadAndDisplayContent('portfoliogroup');
+			if (this.uid!=null && uid!='undefined') {
+				usergroups_byid[this.gid].loadAndDisplayContent('usergroup');
 			} else
-				fill_list_portfoliosgroups();
+				fill_list_usersgroups();
 		}
 	});
 };

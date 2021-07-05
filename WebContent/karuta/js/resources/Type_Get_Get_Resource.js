@@ -310,16 +310,16 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (query.indexOf('itselfcode')>-1) {
 				code_parent = $($("code",$(this.node)[0])[0]).text();
 				value_parent = $($("value",$(this.node)[0])[0]).text();
-			} else if (query.indexOf('parentparentparentparentparentcode')>-1) {
+			} else if (query.indexOf('parent.parent.parent.parent.parentcode')>-1) {
 				code_parent = $($("code",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
 				value_parent = $($("value",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
-			} else if (query.indexOf('parentparentparentparentcode')>-1) {
+			} else if (query.indexOf('parent.parent.parent.parentcode')>-1) {
 				code_parent = $($("code",$(this.node).parent().parent().parent().parent()[0])[0]).text();
 				value_parent = $($("value",$(this.node).parent().parent().parent().parent()[0])[0]).text();
-			} else if (query.indexOf('parentparentparentcode')>-1) {
+			} else if (query.indexOf('parent.parent.parentcode')>-1) {
 				code_parent = $($("code",$(this.node).parent().parent().parent()[0])[0]).text();
 				value_parent = $($("value",$(this.node).parent().parent().parent()[0])[0]).text();
-			} else if (query.indexOf('parentparentcode')>-1) {
+			} else if (query.indexOf('parent.parentcode')>-1) {
 				code_parent = $($("code",$(this.node).parent().parent()[0])[0]).text();
 				value_parent = $($("value",$(this.node).parent().parent()[0])[0]).text();
 			} else if (query.indexOf('parentcode')>-1) {
@@ -378,34 +378,37 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			if (portfoliocode_parent.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode_parent!='self')  // There is no project, we add the project of the current portfolio
 				portfoliocode_parent = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode_parent;
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
-				var url ="";
-				if (portfoliocode.indexOf('value?')>-1) {
-					code_parent = replaceVariable(code_parent);
-					value_parent = replaceVariable(value_parent);
-					portfoliocode_parent = value_parent;
-					portfoliocode = portfoliocode_parent;
-					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
-				} else if (portfoliocode.indexOf('parent?')>-1){
-					if (portfoliocode_parent.indexOf("@")>-1) {
-						display_portfoliocode_parent = false;
-						portfoliocode_parent =portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("@"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("@")+1);
-					}
-					if (portfoliocode_parent.indexOf("#")>-1) {
-						portfoliocode_parent = portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("#"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("#")+1);
-					}
-					$(this.portfoliocode_node).text(portfoliocode_parent);
-					portfoliocode = portfoliocode_parent;
-					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
-				} else if (portfoliocode.indexOf('?')>-1 || portfoliocode.indexOf('code?')>-1){
-					code_parent = replaceVariable(code_parent);
-					code_parent = cleanCode(code_parent);
-					$(this.portfoliocode_node).text(code_parent);
-					portfoliocode = code_parent;
-					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
-				} else {
-					$(this.portfoliocode_node).text(portfoliocode);
-					url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
+			//----------------------
+			var url ="";
+			if (portfoliocode.indexOf('value?')>-1) {
+				code_parent = replaceVariable(code_parent);
+				value_parent = replaceVariable(value_parent);
+				portfoliocode_parent = value_parent;
+				portfoliocode = portfoliocode_parent;
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+			} else if (portfoliocode.indexOf('parent?')>-1){
+				if (portfoliocode_parent.indexOf("@")>-1) {
+					display_portfoliocode_parent = false;
+					portfoliocode_parent =portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("@"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("@")+1);
 				}
+				if (portfoliocode_parent.indexOf("#")>-1) {
+					portfoliocode_parent = portfoliocode_parent.substring(0,portfoliocode_parent.indexOf("#"))+portfoliocode_parent.substring(portfoliocode_parent.indexOf("#")+1);
+				}
+				$(this.portfoliocode_node).text(portfoliocode_parent);
+				portfoliocode = portfoliocode_parent;
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode_parent+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;			
+			} else if (portfoliocode.indexOf('?')>-1 || portfoliocode.indexOf('code?')>-1){
+				code_parent = replaceVariable(code_parent);
+				code_parent = cleanCode(code_parent);
+				$(this.portfoliocode_node).text(code_parent);
+				portfoliocode = code_parent;
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
+			} else {
+				$(this.portfoliocode_node).text(portfoliocode);
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+semtag_parent+ "&code_parent="+code_parent;
+			}
+			//----------------------
+			if (code_parent!="") {
 				var self = this;
 				$.ajax({
 					async:false,
@@ -420,9 +423,50 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					error : function(jqxhr,textStatus) {
 						$("#"+destid).html("No result");
 					}
-	
 				});
-
+			} else {
+				//----------- ERROR Parent not selected ---------------------------------------------
+				var data = this.node;
+				if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('error')!=undefined && $($("metadata-wad",data)[0]).attr('error')!=""){
+					var error_text = "";
+					var errorlang = 0;
+					var display_error = false;
+					var attr_error = $($("metadata-wad",data)[0]).attr('error');
+					var errors = attr_error.split("/"); // lang1/lang2/...
+					for (var j=0; j<errors.length; j++){
+						if (errors[j].indexOf("@"+languages[langcode])>-1)
+							errorlang =j;
+					}
+					error_text = errors[errorlang].substring(0,errors[errorlang].indexOf("@"));
+					if (errors[errorlang].indexOf(",")>-1) {
+						var roles = errors[errorlang].substring(errors[errorlang].indexOf(","));
+						if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+						display_error = true;
+					} else {
+						display_error = true;
+					}
+					if (display_error){
+						alertHTML(error_text);
+					}
+				} else { // we execute anyway
+					var self = this;
+					$.ajax({
+						async:false,
+						type : "GET",
+						dataType : "xml",
+						url : url,
+						portfoliocode:portfoliocode,
+						semtag2:semtag2,
+						success : function(data) {
+							UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+						},
+						error : function(jqxhr,textStatus) {
+							$("#"+destid).html("No result");
+						}
+					});
+				}
+			}
+			//----------------------
 		} catch(e) { alertHTML(e);
 			// do nothing - error in the search attribute
 		}

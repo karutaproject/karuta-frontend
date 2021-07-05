@@ -442,6 +442,25 @@ UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcod
 };
 
 //======================
+UIFactory["Portfolio"].displayHorizontalMenu2 = function(root,destid,type,langcode,edit,rootid)
+//======================
+{	
+	if (type==null)
+		type = "standard";
+	var html = "";
+	if (g_configVar['portfolio-hmenu-logo']!="")
+		html += "		<div id='portfolio-menu-logo' style=\""+g_configVar['portfolio-hmenu-logo-style']+"\">" + g_configVar['portfolio-hmenu-logo'] + "</div>";
+	html += "	<div class='navbar-collapse collapse navbars";
+	if (g_bar_type=='horizontal-right')
+		html += " justify-content-end";
+	html += "' id='portfolio-navbars'>";
+	html += "		<div id='parent-"+rootid+"' class='hzmenu-navbar topbarmenu'></ul>";
+	html += "	</div>";
+	$("#"+destid).html($(html));
+	UIFactory.Node.displayHorizontalMenu2(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
+};
+
+//======================
 UIFactory["Portfolio"].displayMenu = function(destid,type,langcode,edit,tree)
 //======================
 {	

@@ -232,7 +232,7 @@ function processAll(model_code,portfoliologcode)
 	$.ajaxSetup({async: false});
 	if (USER.creator){
 		get_list_portfoliosgroups();
-		get_list_usersgroups();
+		get_list_usergroups();
 	}
 	var actions_list = $("model",g_xmlDoc).children();
 	processListActions(actions_list);
@@ -733,7 +733,7 @@ g_actions['create-usergroup'] = function CreateUserGroup(node)
 		success : function(data) {
 			ok = true;
 			var usergroupid = data;
-			get_list_usersgroups();
+			get_list_usergroups();
 			$("#batch-log").append("<br>- usergroup created - label:"+usergroup);
 		},
 		error : function(data) {
@@ -3134,7 +3134,7 @@ function get_portfoliogroupid(groupname)
 }
 
 //==============================
-function get_list_usersgroups()
+function get_list_usergroups()
 //==============================
 {
 	$.ajax({
@@ -3144,7 +3144,7 @@ function get_list_usersgroups()
 		url : serverBCK_API+"/usersgroups",
 		data: "",
 		success : function(data) {
-			UIFactory["UsersGroup"].parse(data);
+			UIFactory.UsersGroup.parse(data);
 		}
 	});
 }
@@ -3154,11 +3154,11 @@ function get_usergroupid(groupname)
 //==============================
 {
 	var groupid = null;
-	if (usersgroups_list.length==0)
-		get_list_usersgroups();
-	for (var i=0;i<usersgroups_list.length;i++){
-		if (usersgroups_list[i].label==groupname){
-			groupid = usersgroups_list[i].id;
+	if (usergroups_list.length==0)
+		get_list_usergroups();
+	for (var i=0;i<usergroups_list.length;i++){
+		if (usergroups_list[i].code==groupname){
+			groupid = usergroups_list[i].id;
 			break;
 		}
 	}
@@ -3350,7 +3350,7 @@ function saveLog(model_code,portfoliologcode,logtext)
 function displayExecBatchButton()
 //=================================================
 {
-	var html = "<div id='create-portfolio' class='alert alert-success'>"+buttonlabel1[LANG]+"</div>";
+	var html = "<div id='create-portfolio' class='alert alert-success'>"+g_execbatchbuttonlabel1[LANG]+"</div>";
 	$("#main-list").html(html);
 	initBatchVars();
 	prepareBatch();
