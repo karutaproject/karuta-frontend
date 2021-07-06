@@ -231,29 +231,6 @@ UIFactory["User"].parse_add = function(data)
 //--------------------------------------------------------------
 
 
-
-//==================================
-UIFactory["User"].displayXXXActive = function(destid,type,lang)
-//==================================
-{
-	$("#"+destid).html("<h3>"+karutaStr[LANG]["active_users"]+"</h3>");
-	$("#"+destid).append("<table id='table_users' class='tablesorter'><thead><th>"+karutaStr[LANG]["firstname"]+"</th><th>"+karutaStr[LANG]["lastname"]+"</th><th>C/A/S</th><th>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='list_users'></tbody></table>");
-	$("#temporary").html("<table id='temp_users'></table>");
-	$("#list_users").append($("<tr><td></td><td></td><td></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
-	for ( var i = 0; i < UsersActive_list.length; i++) {
-		var itemid = destid+"_"+UsersActive_list[i].id;
-		var login = UsersActive_list[i].username_node.text();
-		if (login.length<80){ //not a temporary user
-			$("#list_users").append($("<tr class='item' id='"+itemid+"'></tr>"));
-			$("#"+itemid).html(UsersActive_list[i].getView(destid,type,lang));
-		} else {
-			$('#temporary-users').show();
-			$("#temp_users").append($("<tr id='"+itemid+"'></tr>"));
-			$("#"+itemid).html(UsersActive_list[i].getView(destid,'temporary',lang));
-		}
-	}
-};
-
 //==================================
 UIFactory["User"].displayInactive = function(dest,type,lang)
 //==================================
@@ -261,10 +238,13 @@ UIFactory["User"].displayInactive = function(dest,type,lang)
 //	$("#"+dest).append("<h3>"+karutaStr[LANG]["inactive_users"]+"</h3>");
 	$("#"+type+"-rightside-content1").hide();
 	$("#"+type+"-rightside-content2").show();
+	$("#"+type+"-rightside-content3").hide();
 	$("#"+type+"-rightside-users-content1").html("");
 	$("#"+type+"-rightside-users-content2").html("");
+	$("#"+type+"-rightside-users-content3").html("");
 	$("#"+type+"-rightside-header1").hide();
 	$("#"+type+"-rightside-header2").show();
+	$("#"+type+"-rightside-header3").hide();
 	$("#"+type+"-rightside-navbar-pages-bottom").hide();
 	for ( var i = 0; i < UsersInactive_list.length; i++) {
 		$("#"+dest).append(UsersInactive_list[i].getView(dest,type,lang));
@@ -276,15 +256,22 @@ UIFactory["User"].displayActive = function(dest,type,index,nbindex)
 //==================================
 {
 	if (index==null)
-		index = 0;
+		index = localStorage.getItem('currentUsersIndex')!=undefined ? localStorage.getItem('currentUsersIndex') : 0;
 	if (nbindex==null)
 		nbindex = 1;
-	$("#"+type+"-rightside-content2").hide();
+	localStorage.setItem('currentUsersIndex',index);
 	$("#"+type+"-rightside-content1").show();
+	$("#"+type+"-rightside-content2").hide();
+	$("#"+type+"-rightside-content3").hide();
+	$("#"+type+"-rightside-content4").hide();
 	$("#"+type+"-rightside-users-content1").html("");
 	$("#"+type+"-rightside-users-content2").html("");
+	$("#"+type+"-rightside-users-content3").html("");
+	$("#"+type+"-rightside-users-content4").html("");
 	$("#"+type+"-rightside-header1").show();
 	$("#"+type+"-rightside-header2").hide();
+	$("#"+type+"-rightside-header3").hide();
+	$("#"+type+"-rightside-header4").hide();
 	if (!UsersLoaded)
 		$.ajax({
 			type : "GET",
@@ -301,13 +288,90 @@ UIFactory["User"].displayActive = function(dest,type,index,nbindex)
 					$("#"+type+"-rightside-navbar-pages-bottom").hide();
 				else
 					$("#"+type+"-rightside-navbar-pages-bottom").show();
+				if (index>=nbindex)
+					index = 0;
 				UIFactory.User.displayActiveIndexed(this.dest,this.xtype,this.index,nbindex);
 			}
 		});
 	else {
 		nbindex = Math.ceil((UsersActive_list.length)/nb_users_page);
+		if (index>=nbindex)
+			index = 0;
 		UIFactory.User.displayActiveIndexed(dest,type,index,nbindex);
 	}
+	sortTable('users-table');
+};
+
+//==================================
+UIFactory["User"].displayTemporary = function(dest,type)
+//==================================
+{
+	$("#user-rightside-navbar-pages-bottom").hide();
+	$("#"+type+"-rightside-content1").hide();
+	$("#"+type+"-rightside-content2").hide();
+	$("#"+type+"-rightside-content3").show();
+	$("#"+type+"-rightside-content4").hide();
+	$("#"+type+"-rightside-users-content1").html("");
+	$("#"+type+"-rightside-users-content2").html("");
+	$("#"+type+"-rightside-users-content3").html("");
+	$("#"+type+"-rightside-users-content4").html("");
+	$("#"+type+"-rightside-header1").hide();
+	$("#"+type+"-rightside-header2").hide();
+	$("#"+type+"-rightside-header3").show();
+	$("#"+type+"-rightside-header4").hide();
+	if (!UsersLoaded)
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/users",
+			dest : dest,
+			xtype : type,
+			success : function(data) {
+				UsersLoaded = true;
+				UIFactory.User.parse(data);
+				UIFactory.User.displayTemporaryUsers(this.dest,this.xtype);
+			}
+		});
+	else {
+		UIFactory.User.displayTemporaryUsers(dest,type);
+	}
+	sortTable('users-table');
+};
+
+//==================================
+UIFactory["User"].displayEmpty = function(dest,type)
+//==================================
+{
+	$("#user-rightside-navbar-pages-bottom").hide();
+	$("#"+type+"-rightside-content1").hide();
+	$("#"+type+"-rightside-content2").hide();
+	$("#"+type+"-rightside-content3").hide();
+	$("#"+type+"-rightside-content4").show();
+	$("#"+type+"-rightside-users-content1").html("");
+	$("#"+type+"-rightside-users-content2").html("");
+	$("#"+type+"-rightside-users-content3").html("");
+	$("#"+type+"-rightside-users-content4").html("");
+	$("#"+type+"-rightside-header1").hide();
+	$("#"+type+"-rightside-header2").hide();
+	$("#"+type+"-rightside-header3").hide();
+	$("#"+type+"-rightside-header4").show();
+	if (!UsersLoaded)
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/users",
+			dest : dest,
+			xtype : type,
+			success : function(data) {
+				UsersLoaded = true;
+				UIFactory.User.parse(data);
+				UIFactory.User.displayEmptyUsers(this.dest,this.xtype);
+			}
+		});
+	else {
+		UIFactory.User.displayEmptyUsers(dest,type);
+	}
+	sortTable('users-table');
 };
 
 //==================================
@@ -345,6 +409,71 @@ UIFactory["User"].displayActiveIndexed = function(dest,type,index,nb_index)
 }
 
 //==================================
+UIFactory["User"].displayTemporaryUsers = function(dest,type)
+//==================================
+{
+	var html = "";
+	$("#"+dest).html("");
+	var first = 0;
+	var last = UsersActive_list.length;
+	for (var i=first; i<last;i++){
+		var user = UsersActive_list[i];
+		if (user.username.split('-').length>4 || user.username.indexOf('#')>10)
+			html += user.getView(dest,type);
+		html += "</div>";
+	}
+	$("#"+dest).html($(html));
+}
+
+//==================================
+UIFactory["User"].getListEmptyUsers = function() 
+//==================================
+{
+	UsersWithoutPortfolio_list = [];
+	for (var i=0; i<UsersActive_list.length; i++) {
+		if(UsersActive_list[i].id>3)
+			$.ajax({
+				async : false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfolios?active=1&userid="+UsersActive_list[i].id,
+				userid : userid,
+				success : function(data) {
+					var nb_portfolios = parseInt($('portfolios',data).attr('count'));
+					if (nb_portfolios==0){
+						UsersWithoutPortfolio_list[UsersWithoutPortfolio_list.length] = UsersActive_list[i];
+					}
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Server Error GET getListUserWithoutPortfolio: "+textStatus);
+				}
+			});
+	}
+}
+
+//==================================
+UIFactory["User"].displayEmptyUsers = function(dest,type,lang)
+//==================================
+{
+	UIFactory.User.getListEmptyUsers()
+//	$("#"+dest).html("<div><button class='btn btn-xs' onclick=\"confirmDelEmptyUsers()\">"+ karutaStr[LANG]["delete-empty-users"] + "</button></div><table id='table_empty_users' class='tablesorter'><thead><th style='padding-left:20px;'>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='empty_users'></tbody></table>");
+	for ( var i = 0; i < UsersWithoutPortfolio_list.length; i++) {
+		var itemid = dest+"_"+UsersWithoutPortfolio_list[i].id;
+		$("#"+dest).append($("<tr class='item' id='"+itemid+"'></tr>"));
+		$("#"+itemid).html(UsersWithoutPortfolio_list[i].getView(dest,"empty",lang));
+	}
+	$(function () {
+		$('input[name=checkalluserempty]').click(function () {
+	        if ($(this).is(":checked")) {
+	    		$("input[name=empty-user").prop('checked',true);		
+	        } else {
+	    		$("input[name=empty-user").prop('checked',false);		
+	        }
+	    });
+	});
+};
+
+//==================================
 UIFactory["User"].prototype.getEmail = function()
 //==================================
 {
@@ -379,8 +508,8 @@ UIFactory["User"].prototype.getRadio = function(attr,value,name,checked,disabled
 	var html = "<input type='radio' name='"+name+"' username='"+username+"' value='"+userid+"'";
 	if (attr!=null && value!=null)
 		html += " "+attr+"='"+value+"'";
-	if ((userid==1)||disabled)
-		html+= " disabled='disabled' ";			
+//	if ((userid==1)||disabled)
+//		html+= " disabled='disabled' ";			
 	if (checked)
 		html += " checked='true' ";
 	html += "> "+firstname+" "+lastname+" ("+username+") </input>";
@@ -402,7 +531,7 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	var html = "";
 	//--------------------------------------------------------------------------------------------
 	if (type=='user') {
-		html += "<tr class='user-row'>"
+		html += "<tr class='user-row sort-tr'>"
 		html += "<td class='firstname'>"+this.firstname_node.text()+"</td>";
 		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
 		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</td>";
@@ -433,12 +562,12 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	}
 	//--------------------------------------------------------------------------------------------
 	if (type=='usergroup') {
-		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+" ("+this.username_node.text()+") <span class='fas fa-trash' onclick=\"UIFactory.UsersGroup.ConfirmRemove('"+gid+"','"+this.id+"')\"></span></div>";
+		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+" ("+this.username_node.text()+") <span class='fas fa-trash' onclick=\"UIFactory.UsersGroup.confirmRemove('"+gid+"','"+this.id+"')\"></span></div>";
 	}
 	//--------------------------------------------------------------------------------------------
 	if (type=='usergroup-user') {
 		html += "<div class='row user-row' id='usergroup-user_"+this.id+"' draggable='true' ondragstart='dragUser(event)'>";
-		html += "	<div class='usergroup-user-label' >"+this.firstname_node.text()+" "+this.lastname_node.text()+" ("+this.username_node.text()+")</div>";
+		html += "	<div class='usergroup-user-label' ><!--input type='checkbox' name='usergroup-user' id='empty"+this.id+"'-->&nbsp;"+this.firstname_node.text()+" "+this.lastname_node.text()+" ("+this.username_node.text()+")</div>";
 		html += "</div>";
 	}
 	//--------------------------------------------------------------------------------------------
@@ -509,6 +638,12 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 	if (type=='firstname-lastname') {
 		html = this.firstname_node.text() + " " + this.lastname_node.text();
 	}
+	if (type=='(firstname-lastname)') {
+		html = "(" + this.firstname_node.text();
+		if (this.lastname_node.text()!="")
+			html += " " + this.lastname_node.text();
+		html += ")";
+	}
 	if (type=='firstname-lastname-username') {
 		html = this.firstname_node.text() + " " + this.lastname_node.text()+ " (" + this.username_node.text()+")";
 	}
@@ -524,7 +659,10 @@ UIFactory["User"].prototype.getView = function(dest,type,lang,gid)
 		html += "</div></td>";
 	}
 	if (type=='empty' && USER.admin) {
-		html = "<td><input type='checkbox' name='empty-user' id='empty"+this.id+"'>&nbsp;"+this.username_node.text() +"</td>";
+		html += "<td class='firstname'><input type='checkbox' name='empty-user' id='empty"+this.id+"'>&nbsp;"+this.firstname_node.text()+"</td>";
+		html += "<td class='lastname'>"+this.lastname_node.text()+"</td>";
+		html += "<td class='creator'>"+this.designer_node.text()+"/"+this.admin_node.text()+"/"+this.substitute_node.text()+"</td>";
+		html += "<td class='username'>("+this.username_node.text()+")</td>";
 		html += "<td><div class='btn-group'>";
 		html += "<button class='btn btn-xs' onclick=\"UIFactory['User'].confirmRemove('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' relx='tooltip'>";
 		html += "<i class='fas fa-trash'></i>";
@@ -596,8 +734,12 @@ UIFactory["User"].displaySearched = function (value,search_type,type)
 			} else {
 				$("#"+type+"-rightside-content1").show();
 				$("#"+type+"-rightside-content2").show();
+				$("#"+type+"-rightside-content3").hide();
+				$("#"+type+"-rightside-content4").hide();
 				$("#"+type+"-rightside-header1").show();
 				$("#"+type+"-rightside-header2").show();
+				$("#"+type+"-rightside-header3").hide();
+				$("#"+type+"-rightside-header4").hide();
 				$("#"+type+"-rightside-users-content1").html("");
 				$("#"+type+"-rightside-users-content2").html("");
 				for (var i=0; i<searched_active_users_list.length;i++){
@@ -1173,20 +1315,17 @@ UIFactory["User"].getPasswordCreator = function()
 };
 
 //==================================
-UIFactory["User"].deleteTemporaryUsers = function() 
+UIFactory["User"].deleteTemporaryUsers = function()
 //==================================
 {
-	$("#wait-window").show();
-	//----------------
-	$.ajaxSetup({async: false});
-	var temp_users = $("#temporary tr");
-	for (var i=0;i<temp_users.length;i++){
-		var userid = $(temp_users[i]).attr("id").substring(7);
-		UIFactory.User.remove(userid); 
+	var first = 0;
+	var last = UsersActive_list.length;
+	for (var i=first; i<last;i++){
+		var user = UsersActive_list[i];
+		if (user.username.split('-').length>4 || user.username.indexOf('#')>10)
+			UIFactory.User.remove(user.id); 
 	}
-	$("#wait-window").hide();
-	$.ajaxSetup({async: true});
-	//----------------
+	$("#user-rightside-users-content3").html("");
 }
 
 //==================================
@@ -1215,53 +1354,7 @@ UIFactory["User"].removeUsers = function()
 	//----------------
 }
 
-//==================================
-UIFactory["User"].getListUserWithoutPortfolio = function() 
-//==================================
-{
-	UsersWithoutPortfolio_list = [];
-	for (var i=0; i<UsersActive_list.length; i++) {
-		if(UsersActive_list[i].id>3)
-			$.ajax({
-				async : false,
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/portfolios?active=1&userid="+UsersActive_list[i].id,
-				userid : userid,
-				success : function(data) {
-					var nb_portfolios = parseInt($('portfolios',data).attr('count'));
-					if (nb_portfolios==0){
-						UsersWithoutPortfolio_list[UsersWithoutPortfolio_list.length] = UsersActive_list[i];
-					}
-				},
-				error : function(jqxhr,textStatus) {
-					alertHTML("Server Error GET getListUserWithoutPortfolio: "+textStatus);
-				}
-			});
-	}
-}
 
-//==================================
-UIFactory["User"].displayUserWithoutPortfolio = function(destid,type,lang)
-//==================================
-{
-	$("#"+destid).html("<div><button class='btn btn-xs' onclick=\"confirmDelEmptyUsers()\">"+ karutaStr[LANG]["delete-empty-users"] + "</button></div><table id='table_empty_users' class='tablesorter'><thead><th style='padding-left:20px;'>"+karutaStr[LANG]["username"]+"</th><th></th></thead><tbody id='empty_users'></tbody></table>");
-	$("#empty_users").append($("<tr><td><input type='checkbox' name='checkalluserempty'></td><td></td><td></td></tr>")); // to avoid js error: table.config.parsers[c] is undefined
-	for ( var i = 0; i < UsersWithoutPortfolio_list.length; i++) {
-		var itemid = destid+"_"+UsersWithoutPortfolio_list[i].id;
-			$("#empty_users").append($("<tr class='item' id='"+itemid+"'></tr>"));
-			$("#"+itemid).html(UsersWithoutPortfolio_list[i].getView(destid,"empty",lang));
-	}
-	$(function () {
-		$('input[name=checkalluserempty]').click(function () {
-	        if ($(this).is(":checked")) {
-	    		$("input[name=empty-user").prop('checked',true);		
-	        } else {
-	    		$("input[name=empty-user").prop('checked',false);		
-	        }
-	    });
-	});
-};
 
 //==================================
 function checkalluserempty() 
@@ -1302,10 +1395,12 @@ UIFactory["User"].deleteEmptyUsers = function()
 {
 	$("#wait-window").show();
 	//----------------
+	var selectedlist = $("input[name=empty-user]").filter(':checked');
 	$.ajaxSetup({async: false});
-	for (var i=0;i<UsersWithoutPortfolio_list.length;i++){
-		var userid = UsersWithoutPortfolio_list[i].id;
-		UIFactory.User.remove(userid); 
+	for (var i=0;i<selectedlist.length;i++){
+		var userid = $(selectedlist[i]).attr('id').substring(5);
+		UIFactory.User.remove(userid,'users');
+		$("#user-rightside-users-content4_"+userid).hide();
 	}
 	$("#wait-window").hide();
 	$.ajaxSetup({async: true});

@@ -252,7 +252,7 @@ UIFactory["URL2Portfolio"].parse = function(destid,type,langcode,data,self,disab
 		$(select).append($(select_item_a));
 		//---------------------
 		if (target=='label') {
-			var items = $("portfolio>asmRoot",data);
+			var items = $("portfolio",data);
 			for ( var i = 0; i < items.length; i++) {
 				var uuid = $(items[i]).attr('id');
 				var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();

@@ -17,15 +17,18 @@ var userid = null; // current user
 var report_refresh = true;
 var csvline = "";
 
-var csvreport = null;
+var csvreport = [];
 var report_not_in_a_portfolio = false;
 
 var dashboard_infos = {};
 var dashboard_current = null;
+var dashboard_id = null;
 var portfolioid_current = null;
 
+var g_report_edit = true;  // false when inside a preview page if not equals to g_edit
 var g_report_actions = {};
 var g_report_users = {};
+var g_graphs = {};
 var g_unique_functions = {};
 var current_nodes = null;
 
@@ -66,6 +69,135 @@ jqueryReportSpecificFunctions['.uniqueResourceCode()'] = "";
 jqueryReportSpecificFunctions['.uniqueResourceValue()'] = "";
 jqueryReportSpecificFunctions['.uniqueResourceText()'] = "";
 //---------------
+//jqueryReportSpecificFunctions['.resourceTextContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='#lang#']:contains(";
+//jqueryReportSpecificFunctions['.resourceCodeContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains(";
+//jqueryReportSpecificFunctions['.resourceValueContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains(";
+//jqueryReportSpecificFunctions['.nodeLabelContains('] = "asmResource[xsi_type='nodeRes']>label[lang='#lang#']:contains(";
+//jqueryReportSpecificFunctions['.nodeCodeContains('] = "asmResource[xsi_type='nodeRes']>code:contains(";
+//jqueryReportSpecificFunctions['.resourceFilenameContains('] = "asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='#lang#']:contains(";
+//---------------
+
+//-----------------------------------------------------------------------------
+
+//=====================================
+$.fn.hasAttr = function (options)
+//=====================================
+{
+	var defaults= {"attribute":"id","meta":"metadata"};
+	var parameters = $.extend(defaults, options); 
+	return this.each(function() {
+		if ($(">"+parameters.meta,this).attr(parameters.attribute) != undefined)
+			return this;
+	});
+};
+
+//=====================================
+$.fn.hasNotAttr = function (options)
+//=====================================
+{
+	var defaults= { "attribute":"id"};
+	var parameters = $.extend(defaults, options);
+	var result = [];
+	this.each(function() {
+		if ($(">"+parameters.meta,this).attr(parameters.attribute) == undefined)
+			result.push(this);
+	});
+	return result;
+};
+
+//=====================================
+$.fn.hasChildSemtag = function (options)
+//=====================================
+{
+	var defaults= { "semtag":"s"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]')");
+	return result;
+};
+
+//=====================================
+$.fn.hasChildSemtagAndResourceCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
+	return result;
+};
+
+//=====================================
+$.fn.resourceCodeContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>code:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.resourceTextContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>text[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.resourceValueContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>value:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.resourceFilenameContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type!='context'][xsi_type!='nodeRes']>filename[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.nodeCodeContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.nodeLabelContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type='nodeRes']>label[lang='"+languages[LANGCODE]+"']:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.nodeValueContains = function (options)
+//=====================================
+{
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).has("asmResource[xsi_type='nodeRes']>value:contains('"+parameters.value+"')");
+	return result;
+};
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 Selector = function(jquery,type,filter1,filter2,unique)
 {
@@ -81,7 +213,6 @@ function r_replaceVariable(text)
 //==================================
 {
 	var n=0;
-	var text_original = text;
 	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
 		var variable_name = test_string.substring(0,test_string.indexOf("##}"));
@@ -98,13 +229,26 @@ function r_replaceVariable(text)
 			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
 			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
 			i = r_replaceVariable(i);
-			var variable_array1 = text.replace("["+i+"]","");
 			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
 				text = g_variables[variable_value][i];
 			}
 		n++; // to avoid infinite loop
 	}
 	return text;
+}
+
+//==================================
+function r_getTest(test)
+//==================================
+{
+	for (fct in jqueryReportSpecificFunctions) {
+		if (test.indexOf(fct)>-1) {
+			test = ".has(\"" + test.replace(fct,jqueryReportSpecificFunctions[fct]) + "\")";
+			if (test.indexOf("#lang#")>-1)
+				test = test.replace(/#lang#/g,languages[LANGCODE]);
+		}
+	}
+	return test;
 }
 
 //==================================
@@ -129,14 +273,14 @@ function r_getSelector(select,test)
 	var selects = select.split("."); // nodetype.semtag.[node|resource] or .[node|resource]
 	if (selects[0]=="")
 		selects[0] = "*";
-	var jquery = selects[0];
+	var jquery = ""; //selects[0];
 	var filter1 = null;
 	var filter2 = null;
 	if (selects[1]!="") {
-		jquery +=":has(metadata[semantictag*='"+selects[1]+"'])";
+		jquery +="*:has(>metadata[semantictag*='"+selects[1]+"'])";
 		filter1 = function(){return $(this).children("metadata[semantictag*='"+selects[1]+"']").length>0};
 	}	else {
-		jquery +=":has(metadata)";
+		jquery +=":has(>metadata)";
 		filter1 = function(){return $(this).children("metadata").length>0};
 	}
 	var filter2 = test; // test = .has("metadata-wad[submitted='Y']").last()
@@ -158,29 +302,91 @@ function r_getSelector(select,test)
 	return selector;
 }
 
+//====================================================================
+//====================================================================
+
+//==================================
+g_unique_functions['uniqueNodeCode'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueNodeLabel'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueResourceValue'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueResourceCode'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//==================================
+g_unique_functions['uniqueResourceText'] = function (index,node)
+//==================================
+{
+	if (index>0) {
+		var current = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
+		var previous = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
+		return current!=previous;
+	} else 
+		return true;
+}
+
+//====================================================================
+//====================================================================
+//====================================================================
 
 //==================================
 function r_processPortfolio(no,xmlReport,destid,data,line)
 //==================================
 {
-	$.ajaxSetup({async: false});
 	if (no==0){
 		dashboard_current = destid;
-		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data};
+		dashboard_infos[destid] = {'xmlReport':xmlReport,'data':data,'dashboardid':dashboard_id};
 	}
 	var children = $(":root",xmlReport).children();
 	processReportActions(destid,children,data);
-	$.ajaxSetup({async: true});
 }
 
 //==================================
 function r_report_process(xmlDoc,json)
 //==================================
 {
-	$.ajaxSetup({async: false});
 	var children = $(":root",xmlDoc).children();
 	processReportActions("report-content",children);
-	$.ajaxSetup({async: true});
 }
 
 //=================================================
@@ -192,6 +398,282 @@ function processReportActions(destid,actions,data)
 		g_report_actions[tagname](destid,actions[i],i.toString(),data);
 	};
 };
+
+//===============================================================
+//===============================================================
+//===============================================================
+//===============================================================
+
+//==================================
+function refresh_report(dashboard_current)
+//==================================
+{
+	$("#"+dashboard_current).html("");
+	r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
+	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
+}
+
+//==================================
+function report_processCode()
+//==================================
+{
+	var model_code = $("#report-model_code").val();
+	report_getModelAndProcess(model_code);
+}
+
+//==================================
+function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
+//==================================
+{
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
+		success : function(data) {
+			setVariables(data);
+			var nodeid = $("asmRoot",data).attr("id");
+			// ---- transform karuta portfolio to report model
+			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : urlS,
+				success : function(data) {
+					g_dashboard_models[model_code] = data;
+					try {
+						r_processPortfolio(0,data,destid,node,0);
+					}
+					catch(err) {
+						alertHTML("Error in Dashboard : " + err.message);
+					}
+					$("#wait-window").hide();
+					$("#wait-window").modal('hide');
+				}
+			 });
+		}
+	});
+}
+
+//==================================
+function report_getModelAndProcess(model_code,json)
+//==================================
+/// csv +report
+{
+	$('#wait-window').show();
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios?active=1&search="+model_code,
+		success : function(data) {
+			var items = $("portfolio",data);
+			var uuid = $(items[0]).attr('id');
+			$.ajax({
+				async:false,
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/portfolios/portfolio/"+uuid,
+				success : function(data) {
+					var nodeid = $("asmRoot",data).attr("id");
+					// ---- transform karuta portfolio to report model
+					var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
+					$.ajax({
+						async:false,
+						type : "GET",
+						dataType : "xml",
+						url : urlS,
+						success : function(data) {
+							r_report_process(data,json);
+							$("#wait-window").hide();
+							$("#wait-window").modal('hide');
+						}
+					 });
+				}
+			});
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Server Error GET active: "+textStatus);
+		}
+	});
+
+}
+
+//===============================================================
+//===============================================================
+//===============================================================
+//===============================================================
+
+//==================================
+function xml2PDF(content)
+//==================================
+{
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
+	var data = $('#'+content).html();
+	data = data.replace(/&nbsp;/g, ' ');
+	data = data.replace(/<hr>/g, '<hr/>');
+	data = data.replace(/<br>/g, '<br/>');
+	data = data.replace(/<hr>/g, '<hr/>');
+	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
+	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
+	var url = window.location.href;
+	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
+	postAndDownload(urlS,data);
+}
+
+//==================================
+function displayPDFButton()
+//==================================
+{
+	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2PDF('report-pdf')\">PDF</button>";
+	$("#report-pdf").html(html);
+}
+
+//==================================
+function xml2RTF(content)
+//==================================
+{
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
+	var data = $('#'+content).html();
+	data = data.replace(/&nbsp;/g, ' ');
+	data = data.replace(/<hr>/g, '<hr/>');
+	data = data.replace(/<br>/g, '<br/>');
+	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
+	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
+	var url = window.location.href;
+	var serverURL = url.substring(0,url.indexOf(appliname)-1);
+	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
+	postAndDownload(urlS,data);
+}
+
+//==================================
+function displayRTFButton()
+//==================================
+{
+	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2RTF('report-pdf')\">RTF/Word</button>";
+	$("#report-pdf").html(html);
+}
+
+
+//==================================
+function xml2CSV(content)
+//==================================
+{
+	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
+	var data = $('#'+content).html();
+	data = data.replace(/<hr>/g, '<hr/>');
+	data = data.replace(/<br>/g, '<br/>');
+	data = data.replace(/<br\/>/g, '\n');
+	data = data.replace(/(<img[^>]*?[^\/]\s*)(>)/g, "$1/$2");
+	data = data.replace(/"(?![^<]*>)/g, '""');
+	data = data.replace(/(<span[^>]*>)(?!<\/span)([\s\S]*?)(<\/span>)/g, "$1\"$2\"$3");
+	data = data.replace('&nbsp;', ' ');
+	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"\">]><div>" + data + "</div>";
+	var url =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
+	postAndDownload(url,data);
+}
+
+//==================================
+function displayCSVButton()
+//==================================
+{
+	var html = "<h4 class='line'><span class='badge'>4</span></h4><button onclick=\"javascript:xml2CSV('report-content')\">CSV</button>";
+	$("#report-csv").html(html);
+}
+
+//==================================
+function html2IMG(contentid)
+//==================================
+{
+	var js1 = "javascript:$('#image-window').modal('hide')";
+	var buttons = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#image-window-header").html($(buttons));
+	$("#image-window-footer").html($(buttons));
+	$("#image-window-body").html("");
+	$("#image-window").modal('show');
+	var svgnode = $("svg",document.getElementById(contentid));
+	if(svgnode.length>0) {
+		var img = SVGToPNG(svgnode);
+		$("#image-window-body").append(img);
+	} else {
+		var htmlnode = document.getElementById(contentid);
+		var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>";
+		svg += "<foreignObject width='100%' height='100%'>";
+		svg += xml2string(htmlnode);
+		svg += "</foreignObject>";
+		svg += "</svg>";
+		var htmlcanvas = "<canvas id='canvas' width='400' height='400'></canvas>"
+		html2canvas(htmlnode).then(function(canvas) {
+			var src_img = canvas.toDataURL();
+			var img = document.createElement('img');
+			img.src = src_img;
+			document.getElementById("image-window-body").appendChild(img);
+	});
+
+	}
+}
+
+//===============================================================
+//===============================================================
+//===============================================================
+//===============================================================
+
+
+//==================================
+function genDashboardContent(destid,uuid,parent,root_node)
+//==================================
+{
+	dashboard_id = uuid;
+	var spinning = true;
+	var dashboard_code = r_replaceVariable(UICom.structure["ui"][uuid].resource.getView());
+	var folder_code = dashboard_code.substring(0,dashboard_code.indexOf('.'));
+	var part_code = dashboard_code.substring(dashboard_code.indexOf('.'));
+	var model_code = "";
+	if (part_code.indexOf('/')>-1){
+		var parameters = part_code.substring(part_code.indexOf('/')+1).split('/');
+		for (var i=0; i<parameters.length;i++){
+			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = parameters[i].substring(parameters[i].indexOf(":")+1);
+		}
+		model_code = folder_code + part_code.substring(0,part_code.indexOf("/"));
+	} else {
+		model_code = folder_code + part_code;
+	}
+	if (model_code.indexOf("@local")>-1){
+		root_node = parent.node;
+		model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
+	}
+	if (model_code.indexOf("@norefresh")>-1){
+		report_refresh = false;
+		model_code = removeStr(model_code,"@norefresh");
+	}
+	if (model_code.indexOf("@nospinning")>-1){
+		spinning = false;
+		model_code = model_code.substring(0,model_code.indexOf("@nospinning"))+model_code.substring(model_code.indexOf("@nospinning")+11);
+	}
+	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
+		model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
+	try {
+		if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
+			r_processPortfolio(0,g_dashboard_models[model_code],destid,root_node,0,spinning);
+		else
+			report_getModelAndPortfolio(model_code,root_node,destid,g_dashboard_models,spinning);
+	}
+	catch(err) {
+		alertHTML("Error in Dashboard : " + err.message);
+	}
+	if (spinning)
+		$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});
+};
+
+//#######################################################################################################################################
+//#######################################################################################################################################
+//############################################### G_REPORT_ACTIONS ######################################################################
+//#######################################################################################################################################
+//#######################################################################################################################################
+
 
 //=============================================================================
 //=============================================================================
@@ -273,8 +755,11 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 		test = r_replaceVariable(test);
 	if (select!=undefined) {
 		select = r_replaceVariable(select);
-		var selector = r_getSelector(select,test);
-		var nodeold = $(selector.jquery,data);
+		var selector = null;
+		if (test.indexOf('notFound')<0)
+			selector = r_getSelector(select,test);
+		else 
+			selector = r_getSelector(select,"");		
 		var nodes = $(selector.jquery,data).filter(selector.filter1);
 		selector.filter2 = r_replaceVariable(selector.filter2);
 		nodes = eval("$(nodes)"+selector.filter2);
@@ -288,26 +773,34 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 		}
 		//---------------------------
 		var actions = $(action).children();
-		for (var j=0; j<nodes.length;j++){
-			//----------------------------------
-			if (countvar!=undefined) {
-				g_variables[countvar] = j;
-			}
-			//----------------------------------
-			var ref_init = $(action).attr("ref-init");
-			if (ref_init!=undefined) {
-				ref_init = r_replaceVariable(ref_init);
-				var ref_inits = ref_init.split("/"); // ref1/ref2/...
-				for (var k=0;k<ref_inits.length;k++)
-					g_variables[ref_inits[k]] = new Array();
-			}
-			//----------------------------------
+		if (test.indexOf('notFound')<0) {
+			for (var j=0; j<nodes.length;j++){
+				//----------------------------------
+				if (countvar!=undefined) {
+					g_variables[countvar] = j;
+				}
+				//----------------------------------
+				var ref_init = $(action).attr("ref-init");
+				if (ref_init!=undefined) {
+					ref_init = r_replaceVariable(ref_init);
+					var ref_inits = ref_init.split("/"); // ref1/ref2/...
+					for (var k=0;k<ref_inits.length;k++)
+						g_variables[ref_inits[k]] = new Array();
+				}
+				//----------------------------------
+				for (var i=0; i<actions.length;i++){
+					var tagname = $(actions[i])[0].tagName;
+					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
+				}
+				//----------------------------------
+			};
+		}
+		else if (nodes.length==0){
 			for (var i=0; i<actions.length;i++){
 				var tagname = $(actions[i])[0].tagName;
-				g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+'-'+i.toString(),nodes[j]);
+				g_report_actions[tagname](destid,actions[i],no,data);
 			}
-			//----------------------------------
-		};
+		}
 	}
 }
 
@@ -387,6 +880,7 @@ g_report_actions['show-sharing'] = function (destid,action,no,data)
 //==================================
 {
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid_current,
@@ -404,6 +898,7 @@ g_report_actions['display-sharing'] = function (destid,action,no,data)
 //==================================
 {
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolioid_current,
@@ -445,6 +940,9 @@ g_report_actions['table'] = function (destid,action,no,data)
 		var tagname = $(actions[i])[0].tagName;
 		g_report_actions[tagname](destid+'-'+no,actions[i],i.toString(),data);
 	};
+	//-----------SORT----------------
+	if (cssclass!=undefined && cssclass.indexOf('sort-table')>-1)
+		sortTable(destid+'-'+no);
 }
 
 //==================================
@@ -485,6 +983,8 @@ g_report_actions['cell'] = function (destid,action,no,data)
 	if (colspan!=null && colspan!='0')
 		html += "colspan='"+colspan+"' "
 	html += "><span id='help_"+destid+'-'+no+"' class='ihelp'></span>";
+	if (cssclass!=undefined && cssclass.indexOf('sort-th')>-1)
+		html+= "<i class='fas fa-sort' aria-hidden='true'></i> ";
 	html += "</td>";
 	$("#"+destid).append($(html));
 	if (attr_help!=undefined && attr_help!="") {
@@ -501,12 +1001,12 @@ g_report_actions['cell'] = function (destid,action,no,data)
 		var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
 		$("#help_"+destid+'-'+no).html(help);
 		$(".popinfo").popover({ 
-		    placement : 'bottom',
-		    container : 'body',
-		    title:karutaStr[LANG]['help-label'],
-		    html : true,
-		    trigger:'click hover',
-		    content: help_text
+			placement : 'bottom',
+			container : 'body',
+			title:karutaStr[LANG]['help-label'],
+			html : true,
+			trigger:'click hover',
+			content: help_text
 		});
 	}
 	//---------------------------
@@ -538,6 +1038,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 		};
 	} else {
 		$.ajax({
+			async:false,
 			type : "GET",
 			dataType : "xml",
 			url : serverBCK_API+"/users",
@@ -598,7 +1099,7 @@ g_report_actions['for-each-person'] = function (destid,action,no,data)
 //=============================================================================
 
 //==================================
-g_report_actions['username'] = function (destid,action,no,userid,is_out_csv)
+g_report_actions['login'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
 	var text ="";
@@ -618,7 +1119,7 @@ g_report_actions['username'] = function (destid,action,no,userid,is_out_csv)
 }
 
 //==================================
-g_report_actions['firstname'] = function (destid,action,no,userid,is_out_csv)
+g_report_actions['firstname'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
 	var text ="";
@@ -638,7 +1139,7 @@ g_report_actions['firstname'] = function (destid,action,no,userid,is_out_csv)
 }
 
 //==================================
-g_report_actions['lastname'] = function (destid,action,no,userid,is_out_csv)
+g_report_actions['lastname'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
 	var text ="";
@@ -658,7 +1159,7 @@ g_report_actions['lastname'] = function (destid,action,no,userid,is_out_csv)
 }
 
 //==================================
-g_report_actions['firstname-lastname'] = function (destid,action,no,userid,is_out_csv)
+g_report_actions['firstname-lastname'] = function (destid,action,no,data,is_out_csv)
 //==================================
 {
 	var text1 ="";
@@ -709,6 +1210,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 	}
 	var items_list = [];
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/portfolios?active=1&search="+searchvalue,
@@ -752,6 +1254,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 					//------------------------------------
 					if (condition && sortag!=""){
 						$.ajax({
+							async:false,
 							type : "GET",
 							dataType : "xml",
 							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
@@ -962,7 +1465,6 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 							dataType : "xml",
 							url : serverBCK_API+"/nodes?portfoliocode=" + code + "&semtag="+sortag,
 							success : function(data) {
-								var text = ";"
 								if (sortelt=='resource code') {
 									sortvalue = $("code",data)[0].text();
 								}
@@ -1099,12 +1601,16 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//----------------------------
 			var node = UICom.structure["ui"][nodeid];
 			var writenode = ($(node.node).attr('write')=='Y')? true:false;
+			if (editresroles.indexOf("user")>-1)
+				editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
 			if (g_designerrole || writenode) {
-				writenode = (editresroles.containsArrayElt(g_userroles))? true : false;
+				writenode = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf($(USER.username_node).text())>-1 )
 			}
 			var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
+			if (delnoderoles.indexOf("user")>-1)
+				delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
 			if (g_designerrole || deletenode) {
-				deletenode = (delnoderoles.containsArrayElt(g_userroles))? true : false;
+				deletenode = (delnoderoles.containsArrayElt(g_userroles) || delnoderoles.indexOf($(USER.username_node).text())>-1);
 			}
 			var inline = false;
 			var inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
@@ -1113,9 +1619,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//----------------------------
 			if (selector.type=='resource') {
 				try {
-					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,'none',null,true);
+					text = UICom.structure["ui"][nodeid].resource.getView("dashboard_node_resource"+nodeid,'none',null,true);
 				} catch(e){
-					text = UICom.structure["ui"][nodeid].structured_resource.getView("dashboard_"+nodeid,null,null,true);
+					text = UICom.structure["ui"][nodeid].structured_resource.getView("dashboard_node_resource"+nodeid,null,null,true);
 				}
 				
 			}
@@ -1159,16 +1665,16 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 					g_variables[ref] = new Array();
 				g_variables[ref][g_variables[ref].length] = text;
 			}
-			text = "<span id='dashboard_"+prefix_id+nodeid+"' style='"+style+"'>"+text+"</span>";
-			if (writenode) {
+			text = "<span id='dashboard_node_resource"+nodeid+"' style='"+style+"'>"+text+"</span>";
+			if (g_report_edit && writenode) {
 				text += "<span class='button fas fa-pencil-alt' data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-edit"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 			}
-			if (deletenode) {
+			if (g_report_edit && deletenode) {
 				var type = UICom.structure["ui"][nodeid].asmtype;
 				text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
 			}
 			//----------------------------
-			if (inline & writenode) {
+			if (g_report_edit && inline & writenode) {
 				//-----------------------
 				if(UICom.structure["ui"][nodeid].resource!=null) {
 					try {
@@ -1194,12 +1700,35 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 	if ($("#report_display_editor_"+nodeid).length>0) {
 		UICom.structure["ui"][nodeid].resource.displayEditor("report_display_editor_"+nodeid);
 	}
-	if (report_refresh && $("#dashboard_"+prefix_id+nodeid).length>0 && editresroles.length>0) {
-		$("#dashboard_"+prefix_id+nodeid).attr('dashboard',dashboard_current);
+
+/*
+	// -------- if resource changed refresh the report - editor not inline
+	if (report_refresh && $("#dashboard_node_resource"+nodeid).length>0 && editresroles.length>0) {
 		$("#dashboard_"+prefix_id+nodeid).on('DOMSubtreeModified',function (){
-			refresh_report(this.attributes['dashboard'].value);
+			refresh_report(dashboard_current);
 		});
 	}
+*/
+
+	// -------- if resource changed refresh the report - editor not inline
+	if (report_refresh && $("#dashboard_node_resource"+nodeid).length>0 && editresroles.length>0) {
+		$("#dashboard_node_resource"+nodeid).attr('dashboard',dashboard_current);
+		var config = { attributes: true, childList: true, characterData: true, subtree:true }
+		var observer = new MutationObserver(function(mutations) {
+			var nodeid = mutations[0].target.parentNode.parentNode.attributes['id'].value;
+			var dashboardid = document.getElementById("dashboard_node_resource"+nodeid).attributes['dashboard'].value;
+			this.disconnect();
+			refresh_report(dashboardid);
+		});
+		//-----------
+		var target = $("#"+nodeid,data)[0];
+		if ($("#"+nodeid,data).length==0)
+			target = data; //node itself
+		//-----------
+		observer.observe(target, config);
+	}
+
+	// -------- if resource changed refresh the report - editor inline
 	if (report_refresh && $("#report_get_editor_"+nodeid).length>0) {
 		$("#report_get_editor_"+nodeid).append(UICom.structure["ui"][nodeid].resource.getEditor());
 		var input = $('input',$("#report_get_editor_"+nodeid));
@@ -1210,6 +1739,40 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 	}
 }
 
+//=============================================================================
+//=============================================================================
+//====================== MENU =========================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['menu'] = function (destid,action,no,data)
+//==================================
+{
+	var select = $(action).attr("select");
+	select = r_replaceVariable(select);
+	var mtext = $("mtext",action).text();
+	mtext = r_replaceVariable(mtext);
+	var selector = r_getSelector(select);
+	var node = $(selector.jquery,data);
+	if (node.length==0) // try the node itself
+		node = $(selector.jquery,data).addBack();
+	if (select.substring(0,2)=="..") // node itself
+		node = data;
+	if (g_report_edit && (node.length>0 || select.substring(0,1)==".")){
+		var nodeid = targetid = $(node).attr("id");
+		if(UICom.structure.ui[nodeid].menuroles==undefined) // in case of display before the node
+			UICom.structure.ui[nodeid].setMetadata();
+		document.getElementById(destid).setAttribute('dashboardid',dashboard_infos[dashboard_current].dashboardid);
+		$("#"+destid).attr('dashboardid',dashboard_infos[dashboard_current].dashboardid);
+		var text = "<span dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
+		$("#"+destid).append($(text));
+		UICom.structure.ui[nodeid].displayMenus("#"+destid,LANGCODE);
+		var text = "<span dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
+		$("#"+destid).append($(text));
+	}
+
+}
 //=============================================================================
 //=============================================================================
 //====================== Variable =============================================
@@ -1362,6 +1925,7 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 	var attr_help = "";
 	var prefix_id = "";
 	try {
+		//----------selector---------------------
 		var select = $(action).attr("select");
 		while (select.indexOf("##")>-1) {
 			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
@@ -1374,6 +1938,14 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 			node = $(selector.jquery,data).addBack();
 		if (select.substring(0,2)=="..") // node itself
 			node = data;
+		//---------------test-----------------
+		var test = $(action).attr("test");
+		if (test!=undefined) {
+			test = r_replaceVariable(test);
+			test = getTest(test);
+			node = eval("$(node)"+test);
+		}
+		//------------------------------
 		if (node.length>0 || select.substring(0,1)=="."){
 			var nodeid = $(node).attr("id");
 			//----------------------------
@@ -1390,10 +1962,10 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 				prefix_id += "value_";
 			}
 			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel();
+				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
 			}
 			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel();
+				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
 			}
 			if (selector.type=='node code') {
 				text = UICom.structure["ui"][nodeid].getCode();
@@ -1416,6 +1988,9 @@ g_report_actions['csv-value'] = function (destid,action,no,data)
 		csvseparator = ";";
 	text = r_replaceVariable(text);
 	csvline += text + csvseparator;
+	// to display for testing
+	$("#"+destid).append(text);
+
 }
 
 //=============================================================================
@@ -1461,7 +2036,7 @@ g_report_actions['europass'] = function (destid,action,no,data)
 	var attr_help = "";
 	var selector = r_getSelector('asmUnitStructure.EuropassL','');
 	var nodes = $(selector.jquery,data);
-	if (nodes.length>0 || select.substring(0,1)=="."){
+	if (nodes.length>0){
 		for (var enode=0;enode<nodes.length;enode++) {
 			var semantictag = $("metadata",nodes[enode]).attr('semantictag');
 			if (semantictag=='EuropassL') {
@@ -1508,6 +2083,7 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 	text = "<span id='txt"+nodeid+"' style='"+style+"' class='"+cssclass+"'>"+text+"</span>";
 	$("#"+destid).append($(text));
 }
+
 
 //=============================================================================
 //=============================================================================
@@ -1726,278 +2302,6 @@ g_report_actions['operation'] = function (destid,action,no,data)
 	$("#"+destid).append($(result));
 }
 
-//===============================================================
-//===============================================================
-//===============================================================
-//===============================================================
-
-//==================================
-function refresh_report(dashboard_current)
-//==================================
-{
-	$("#"+dashboard_current).html("");
-	r_processPortfolio(99,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);
-	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
-}
-
-//==================================
-function report_processCode()
-//==================================
-{
-	var model_code = $("#report-model_code").val();
-	report_getModelAndProcess(model_code);
-}
-
-//==================================
-function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
-//==================================
-{
-	var xml_model = "";
-	var xml_model = "";
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios/portfolio/code/"+model_code,
-		success : function(data) {
-			var nodeid = $("asmRoot",data).attr("id");
-			// ---- transform karuta portfolio to report model
-			var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : urlS,
-				success : function(data) {
-					g_dashboard_models[model_code] = data;
-//					try {
-						r_processPortfolio(0,data,destid,node,0);
-//					}
-//					catch(err) {
-//						alertHTML("Error in Dashboard : " + err.message);
-//					}
-					$("#wait-window").hide();
-					$("#wait-window").modal('hide');
-				}
-			 });
-		}
-	});
-}
-
-//==================================
-function report_getModelAndProcess(model_code,json)
-//==================================
-/// csv +report
-{
-	$('#wait-window').show();
-	$.ajax({
-		type : "GET",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios?active=1&search="+model_code,
-		success : function(data) {
-			var items = $("portfolio",data);
-			var uuid = $(items[0]).attr('id');
-			$.ajax({
-				type : "GET",
-				dataType : "xml",
-				url : serverBCK_API+"/portfolios/portfolio/"+uuid,
-				success : function(data) {
-					var nodeid = $("asmRoot",data).attr("id");
-					// ---- transform karuta portfolio to report model
-					var urlS = serverBCK_API+"/nodes/"+nodeid+"?xsl-file="+appliname+"/karuta/xsl/karuta2report.xsl&lang="+LANG;
-					$.ajax({
-						type : "GET",
-						dataType : "xml",
-						url : urlS,
-						success : function(data) {
-							r_report_process(data,json);
-							$("#wait-window").hide();
-							$("#wait-window").modal('hide');
-						}
-					 });
-				}
-			});
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET active: "+textStatus);
-		}
-	});
-
-}
-
-//==================================
-function xml2PDF(content)
-//==================================
-{
-	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
-	var data = $('#'+content).html();
-	data = data.replace(/&nbsp;/g, ' ');
-	data = data.replace(/<hr>/g, '<hr/>');
-	data = data.replace(/<br>/g, '<br/>');
-	data = data.replace(/<hr>/g, '<hr/>');
-	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
-	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
-	var url = window.location.href;
-	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/pdf";
-	postAndDownload(urlS,data);
-}
-
-//==================================
-function displayPDFButton()
-//==================================
-{
-	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2PDF('report-pdf')\">PDF</button>";
-	$("#report-pdf").html(html);
-}
-
-//==================================
-function xml2RTF(content)
-//==================================
-{
-	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
-	var data = $('#'+content).html();
-	data = data.replace(/&nbsp;/g, ' ');
-	data = data.replace(/<hr>/g, '<hr/>');
-	data = data.replace(/<br>/g, '<br/>');
-	data = data.replace(/(<img("[^"]*"|[^\/">])*)>/g, "$1/>");
-	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"&amp;#160;\">]><div>" + data + "</div>";
-	var url = window.location.href;
-	var serverURL = url.substring(0,url.indexOf(appliname)-1);
-	var urlS =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2fo.xsl&parameters=lang:"+LANG+";url:"+serverURL+"/"+serverBCK+";url-appli:"+serverURL+"/"+appliname+"&format=application/rtf";
-	postAndDownload(urlS,data);
-}
-
-//==================================
-function displayRTFButton()
-//==================================
-{
-	var html = "<h4 class='line'><span class='badge'>3</span></h4><button onclick=\"javascript:xml2RTF('report-pdf')\">RTF/Word</button>";
-	$("#report-pdf").html(html);
-}
-
-
-//==================================
-function xml2CSV(content)
-//==================================
-{
-	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
-	var data = $('#'+content).html();
-	data = data.replace('&nbsp;', ' ');
-	data = "<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp \"\">]><div>" + data + "</div>";
-	var url =  "../../../"+serverBCK+"/xsl?xsl="+appliname+"/karuta/xsl/html2csv.xsl&parameters=lang:"+LANG+"&format=application/csv";
-	postAndDownload(url,data);
-}
-
-//==================================
-function displayCSVButton()
-//==================================
-{
-	var html = "<h4 class='line'><span class='badge'>4</span></h4><button onclick=\"javascript:xml2CSV('report-content')\">CSV</button>";
-	$("#report-csv").html(html);
-}
-
-//==================================
-function html2IMG(contentid)
-//==================================
-{
-	var js1 = "javascript:$('#image-window').modal('hide')";
-	var buttons = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#image-window-header").html($(buttons));
-	$("#image-window-footer").html($(buttons));
-	$("#image-window-body").html("");
-	$("#image-window").modal('show');
-	var svgnode = $("svg",document.getElementById(contentid));
-	if(svgnode.length>0) {
-		var img = SVGToPNG(svgnode);
-		$("#image-window-body").append(img);
-	} else {
-		var htmlnode = document.getElementById(contentid);
-		var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>";
-		svg += "<foreignObject width='100%' height='100%'>";
-		svg += xml2string(htmlnode);
-		svg += "</foreignObject>";
-		svg += "</svg>";
-		var htmlcanvas = "<canvas id='canvas' width='400' height='400'></canvas>"
-		html2canvas(htmlnode).then(function(canvas) {
-			var src_img = canvas.toDataURL();
-			var img = document.createElement('img');
-			img.src = src_img;
-			document.getElementById("image-window-body").appendChild(img);
-	});
-
-	}
-}
-
-//==================================
-function register_report(uuid)
-//==================================
-{
-	$("#wait-window").show(2000,function(){$("#wait-window").hide(1000)});
-	var node_resource = UICom.structure["ui"][uuid].resource;
-	var startday = node_resource.startday_node.text();
-	var time = node_resource.time_node.text();
-	var freq = node_resource.freq_node.text();
-	var comments = node_resource.comments_node[LANGCODE].text();
-	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
-	var url = serverBCK+"/report";
-	$.ajax({
-		type : "POST",
-		url : url,
-		data : data,
-		dataType: "text",
-		success : function(data) {
-			alertHTML("OK - rapport inscrit");
-		},
-		error : function(jqxhr, textStatus, err) {
-			alertHTML("Erreur - rapport non inscrit:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
-		}
-	});
-}
-
-//==================================
-function genDashboardContent(destid,uuid,parent,root_node)
-//==================================
-{
-	var spinning = true;
-	var dashboard_code = r_replaceVariable(UICom.structure["ui"][uuid].resource.getView());
-	var folder_code = dashboard_code.substring(0,dashboard_code.indexOf('.'));
-	var part_code = dashboard_code.substring(dashboard_code.indexOf('.'));
-	var model_code = "";
-	if (part_code.indexOf('/')>-1){
-		var parameters = part_code.substring(part_code.indexOf('/')+1).split('/');
-		for (var i=0; i<parameters.length;i++){
-			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = parameters[i].substring(parameters[i].indexOf(":")+1);
-		}
-		model_code = folder_code + part_code.substring(0,part_code.indexOf("/"));
-	} else {
-		model_code = folder_code + part_code;
-	}
-	if (model_code.indexOf("@local")>-1){
-		root_node = parent.node;
-		model_code = model_code.substring(0,model_code.indexOf("@local"))+model_code.substring(model_code.indexOf("@local")+6);
-	}
-	if (model_code.indexOf("@norefresh")>-1){
-		report_refresh = false;
-		model_code = removeStr(model_code,"@norefresh");
-	}
-	if (model_code.indexOf("@nospinning")>-1){
-		spinning = false;
-		model_code = model_code.substring(0,model_code.indexOf("@nospinning"))+model_code.substring(model_code.indexOf("@nospinning")+11);
-	}
-	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	if (model_code.indexOf('.')<0 && model_code!='self' && model_code!='')  // There is no project, we add the project of the current portfolio
-		model_code = selfcode.substring(0,selfcode.indexOf('.')) + "." + model_code;
-	try {
-		if (g_dashboard_models[model_code]!=null && g_dashboard_models[model_code]!=undefined)
-			r_processPortfolio(0,g_dashboard_models[model_code],destid,root_node,0,spinning);
-		else
-			report_getModelAndPortfolio(model_code,root_node,destid,g_dashboard_models,spinning);
-	}
-	catch(err) {
-		alertHTML("Error in Dashboard : " + err.message);
-	}
-	if (spinning)
-		$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});
-};
 
 //=========================================================================
 //=========================================================================
@@ -2008,8 +2312,8 @@ function genDashboardContent(destid,uuid,parent,root_node)
 
 var svgfontname = 'Arial';
 var svgfontsize = 16;
-var svgcenter = {'x':500,'y':500};
-var svgaxislength = 500;
+var svgcenter = {'x':600,'y':600};
+var svgaxislength = 600;
 
 function makeSVG(tag, attrs,val) {
 	var elt= document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -2085,14 +2389,88 @@ function drawLine(destid,value1,angle1,value2,angle2,center,cssclass){
 	document.getElementById(destid).appendChild(line);
 }
 
+function getTextSize(destid,text,svgfontsize,svgfontname) {
+	var size = 0;
+	var textsvg = makeSVG('text',{'x':-100,'id':'x123','y':-100,'font-size':svgfontsize,'font-family':svgfontname},text);
+		document.getElementById(destid).appendChild(textsvg);
+		size = document.getElementById('x123').getComputedTextLength();
+		document.getElementById('x123').remove();
+	return size;
+}
+
+function getPoints(data,select) {
+	var points = [];
+	var selector = r_getSelector(select,null);
+	var nodes = $(selector.jquery,data).filter(selector.filter1);
+	nodes = eval("nodes"+selector.filter2);
+	var angle = 360 / nodes.length;
+	for (var i=0; i<nodes.length;i++){
+		//---------------------------
+		var nodeid = $(nodes[i]).attr("id");
+		if (selector.type=='resource') {
+			text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+		} else if (selector.type=='resource code') {
+			text = UICom.structure["ui"][nodeid].resource.getCode();
+		} else if (selector.type=='resource value') {
+			text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+		} else if (selector.type=='resource label') {
+			text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+		} else if (selector.type=='node label') {
+			text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+		} else if (selector.type=='node value') {
+			text = UICom.structure["ui"][nodeid].getValue();
+		} else if (selector.type=='node code') {
+			text = UICom.structure["ui"][nodeid].getCode();
+		} else if (selector.type=='node context') {
+			text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
+		}
+		if (text.length>0)
+			points[points.length] = {'value': parseInt(text),'x':0,'y':0};
+		else
+			points[points.length] = {'value': null};
+	};
+	return points;
+}
+
+function getResText(data,select) {
+	var texts = [];
+	var selector = r_getSelector(select,null);
+	var nodes = $(selector.jquery,data).filter(selector.filter1);
+	nodes = eval("nodes"+selector.filter2);
+	if (nodes.length==0)
+		nodes = $(data); //node itself
+	for (var i=0; i<nodes.length;i++){
+		//---------------------------
+		var nodeid = $(nodes[i]).attr("id");
+		if (selector.type=='resource') {
+			text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
+		} else if (selector.type=='resource code') {
+			text = UICom.structure["ui"][nodeid].resource.getCode();
+		} else if (selector.type=='resource value') {
+			text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
+		} else if (selector.type=='resource label') {
+			text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
+		} else if (selector.type=='node label') {
+			text = UICom.structure["ui"][nodeid].getLabel(null,'none');
+		} else if (selector.type=='node value') {
+			text = UICom.structure["ui"][nodeid].getValue();
+		} else if (selector.type=='node code') {
+			text = UICom.structure["ui"][nodeid].getCode();
+		} else if (selector.type=='node context') {
+			text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
+		}
+		texts[texts.length] = text;
+	};
+	return texts;
+}
+
 
 //==================================
 g_report_actions['svg'] = function (destid,action,no,data)
 //==================================
 {
-	var min_height = $(action).attr("min-height");
-	var min_width = $(action).attr("min-width");
-	var html = "<svg id='"+destid+'-'+no+"' min-width='"+min_width+"' min-height='"+min_height+"' viewbox='0 0 1000 1000'></svg>";
+	var width = $(action).attr("min-width");
+	var html = "<svg id='"+destid+'-'+no+"' width='"+width+"' viewbox='0 0 1200 1200'></svg>";
 	var svg = $(html);
 	$("#"+destid).append(svg);
 	//----------------------------------
@@ -2108,48 +2486,12 @@ g_report_actions['draw-web-title'] = function (destid,action,no,data)
 //==================================
 {
 	var select = $(action).attr("select");
+	var txt = $(action).attr("text");
 	if (select!=undefined) {
-		while (select.indexOf("##")>-1) {
-			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-			var variable_name = test_string.substring(0,test_string.indexOf("##"));
-			select = select.replace("##"+variable_name+"##", g_variables[variable_name]);
-		}
-		var selector = r_getSelector(select,null);
-		var nodes = $(selector.jquery,data).addBack(selector.jquery).filter(selector.filter1);
-		nodes = eval("nodes"+selector.filter2);
-		var text = 'Title';
-		for (var i=0; i<nodes.length;i++){
-			//---------------------------
-			var nodeid = $(nodes[i]).attr("id");
-			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-			}
-			if (selector.type=='resource code') {
-				text = UICom.structure["ui"][nodeid].resource.getCode();
-			}
-			if (selector.type=='resource value') {
-				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-			}
-			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-			}
-			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-			}
-			if (selector.type=='node code') {
-				text = UICom.structure["ui"][nodeid].getCode();
-			}
-			if (selector.type=='node value') {
-				text = UICom.structure["ui"][nodeid].getValue();
-			}
-			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid);
-			}
-		};
-//		var l = getWidthOfText(text, svgfontname, svgfontsize*2);
-//		var x = svgaxislength*2-l*3.2;
-		var x = 10;
-		var svgtext = makeSVG('text',{'x':x,'y':40,'font-size':svgfontsize*2,'font-family':svgfontname},text);
+		select = replaceVariable(select);
+		var text = getResText(data,select)[0];
+		var size = getTextSize(destid,text+txt,svgfontsize*2,svgfontname)
+		var svgtext = makeSVG('text',{'x':1100-size,'y':40,'font-size':svgfontsize*2,'font-family':svgfontname},text+txt);
 		document.getElementById(destid).appendChild(svgtext);
 	}
 }
@@ -2159,45 +2501,13 @@ g_report_actions['draw-web-axis'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	if (select!=undefined) {
-		while (select.indexOf("##")>-1) {
-			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-			var variable_name = test_string.substring(0,test_string.indexOf("##"));
-			select = select.replace("##"+variable_name+"##", g_variables[variable_name]);
+		
+		select = replaceVariable(select);
+		var texts = getResText(data,select);
+		var angle = 360 / texts.length;
+		for (var i=0; i<texts.length;i++){
+			drawAxis(destid,texts[i],svgfontname,svgfontsize,angle*i,svgcenter,svgaxislength);
 		}
-		var selector = r_getSelector(select,null);
-		var nodes = $(selector.jquery,data).filter(selector.filter1);
-		nodes = eval("nodes"+selector.filter2);
-		var angle = 360 / nodes.length;
-		for (var i=0; i<nodes.length;i++){
-			//---------------------------
-			var text = "";
-			var nodeid = $(nodes[i]).attr("id");
-			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-			}
-			if (selector.type=='resource code') {
-				text = UICom.structure["ui"][nodeid].resource.getCode();
-			}
-			if (selector.type=='resource value') {
-				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-			}
-			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-			}
-			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-			}
-			if (selector.type=='node code') {
-				text = UICom.structure["ui"][nodeid].getCode();
-			}
-			if (selector.type=='node value') {
-				text = UICom.structure["ui"][nodeid].getValue();
-			}
-			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
-			}
-			drawAxis(destid,text,svgfontname,svgfontsize,angle*i,svgcenter,svgaxislength);
-		};
 	}
 }
 
@@ -2207,61 +2517,20 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 {
 	var select = $(action).attr("select");
 	var legendselect = $(action).attr("legendselect");
-	var test = $(action).attr("test");
 	var min = parseInt($(action).attr("min"));
 	var max = parseInt($(action).attr("max"));
 	var pos = $(action).attr("pos");
 	if (pos==undefined)
 		pos = 0;
-//	if (pos > no)
-//		no = pos;
-	var html = "";
 	if (select!=undefined) {
-		while (select.indexOf("##")>-1) {
-			var test_string = select.substring(select.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-			var variable_name = test_string.substring(0,test_string.indexOf("##"));
-			select = select.replace("##"+variable_name+"##", g_variables[variable_name]);
-		}
-		var selector = r_getSelector(select,null);
-		var nodes = $(selector.jquery,data).filter(selector.filter1);
-		nodes = eval("nodes"+selector.filter2);
-		var angle = 360 / nodes.length;
-		var points = [];
-		for (var i=0; i<nodes.length;i++){
-			//---------------------------
-			var nodeid = $(nodes[i]).attr("id");
-			if (selector.type=='resource') {
-				text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-			}
-			if (selector.type=='resource code') {
-				text = UICom.structure["ui"][nodeid].resource.getCode();
-			}
-			if (selector.type=='resource value') {
-				text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-			}
-			if (selector.type=='resource label') {
-				text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-			}
-			if (selector.type=='node label') {
-				text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-			}
-			if (selector.type=='node value') {
-				text = UICom.structure["ui"][nodeid].getValue();
-			}
-			if (selector.type=='node code') {
-				text = UICom.structure["ui"][nodeid].getCode();
-			}
-			if (selector.type=='node context') {
-				text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
-			}
-			if (text.length>0)
-				points[points.length] = {'value': ((text - min)/(max-min))*svgaxislength, 'angle':angle*i};
-			else
-				points[points.length] = {'value': null, 'angle':angle*i};
-		};
-		for (var i=0; i<nodes.length;i++){
-			if (points[i].value!=null)
+		select = replaceVariable(select);
+		var points = getPoints(data,select);
+		var angle = 360 / points.length;
+		for (var i=0; i<points.length;i++){
+			if (points[i].value!=null) {
+				points[i] = {'value': ((points[i].value - min)/(max-min))*svgaxislength, 'angle':angle*i};
 				drawValue(destid,points[i].value,points[i].angle,svgcenter,'svg-web-value'+pos);
+				}
 			if (pos==0){ // draw gaduations
 				for (var j=0;j<=Math.abs(max-min);j++) {
 					if (j>0)
@@ -2277,43 +2546,10 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 			drawLine(destid,points[i-1].value,points[i-1].angle,points[0].value,points[0].angle,svgcenter,'svg-web-line'+pos);
 		// draw legend
 		if (legendselect!=undefined) {
-			var selector = r_getSelector(legendselect,null);
-			var nodes = $(selector.jquery,data).filter(selector.filter1);
-			nodes = eval("nodes"+selector.filter2);
-			var text = 'legend';
-			for (var i=0; i<nodes.length;i++){
-				//---------------------------
-				var nodeid = $(nodes[i]).attr("id");
-				if (selector.type=='resource') {
-					text = UICom.structure["ui"][nodeid].resource.getView("svg_"+nodeid,'none');
-				}
-				if (selector.type=='resource code') {
-					text = UICom.structure["ui"][nodeid].resource.getCode();
-				}
-				if (selector.type=='resource value') {
-					text = UICom.structure["ui"][nodeid].resource.getValue("svg_value_"+nodeid);
-				}
-				if (selector.type=='resource label') {
-					text = UICom.structure["ui"][nodeid].resource.getLabel(null,'none');
-				}
-				if (selector.type=='node label') {
-					text = UICom.structure["ui"][nodeid].getLabel(null,'none');
-				}
-				if (selector.type=='node value') {
-					text = UICom.structure["ui"][nodeid].getValue();
-				}
-				if (selector.type=='node code') {
-					text = UICom.structure["ui"][nodeid].getCode();
-				}
-				if (selector.type=='node context') {
-					text = UICom.structure["ui"][nodeid].getContext("svg_context_"+nodeid,'none');
-				}
-			};
+			var text = getResText(data,legendselect)[0];
 			var line = makeSVG('line',{'x1':10,'y1':975-20*pos,'x2':10,'y2':975-20*pos,'class':'svg-web-value'+pos});
-//			var line = makeSVG('line',{'x1':10,'y1':25+20*no,'x2':10,'y2':25+20*no,'class':'svg-web-value'+no});
 			document.getElementById(destid).appendChild(line);
 			var svgtext = makeSVG('text',{'x':20,'y':980-20*pos,'font-size':svgfontsize,'font-family':svgfontname},text);
-//			var svgtext = makeSVG('text',{'x':20,'y':30+20*no,'font-size':svgfontsize,'font-family':svgfontname},text);
 			document.getElementById(destid).appendChild(svgtext);
 		}
 
@@ -2324,88 +2560,181 @@ g_report_actions['draw-web-line'] = function (destid,action,no,data)
 g_report_actions['draw-xy-axis'] = function (destid,action,no,data)
 //==================================
 {
+	var select = $(action).attr("select");
+	var legendselect = $(action).attr("legendselect");
+	var graphid = $(action).attr("ref");
+	var graphtype = $(action).attr("graphtype");
 	var xlegend = $(action).attr("xlegend");
 	var ylegend = $(action).attr("ylegend");
-	var xyaxis = parseInt($(action).attr("xyaxis"));
-	var yxaxis = parseInt($(action).attr("yxaxis"));
+	var xaxis = parseInt($(action).attr("xaxis"));
+	var yaxis = parseInt($(action).attr("yaxis"));
 	var xmin = parseInt($(action).attr("xmin"));
 	var xmax = parseInt($(action).attr("xmax"));
+	var xnbgraduation = parseInt($(action).attr("x-nbgraduation"));
+	var xdisplaygraduation = parseInt($(action).attr("x-displaygraduation"));
+	var xlegendtext = $(action).attr("xlegendtext");
 	var ymin = parseInt($(action).attr("ymin"));
 	var ymax = parseInt($(action).attr("ymax"));
-	if (xyaxis==undefined)
-		xyaxis = 0;
-	if (yxaxis==undefined)
-		yxaxis = 0;
-	var xline = makeSVG('line',{'x1':0,'y1':500+yxaxis,'x2':1000,'y2':500+yxaxis,'stroke':'black','stroke-width': 2});
-	document.getElementById(destid).appendChild(xline);
-	var yline = makeSVG('line',{'x1':500+xyaxis,'y1':0,'x2':500+xyaxis,'y2':1000,'stroke':'black','stroke-width': 2});
+	var ynbgraduation = parseInt($(action).attr("y-nbgraduation"));
+	var ydisplaygraduation = parseInt($(action).attr("y-displaygraduation"));
+	var ylegendtext = $(action).attr("ylegendtext");
+	if (xaxis==undefined)
+		xaxis = 0;
+	if (yaxis==undefined)
+		yaxis = 0;
+	// store graph axis information
+	if (graphid!="")
+		g_graphs [graphid] = {'xaxis':xaxis,'yaxis':yaxis,'xmin':xmin,'xmax':xmax,'ymin':ymin,'ymax':ymax,'xnbgraduation':xnbgraduation,'ynbgraduation':ynbgraduation,'xdisplaygraduation':xdisplaygraduation,'ydisplaygraduation':ydisplaygraduation,'nbdata':0}
+	//--------------------------
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':0,'y2':1200,'stroke':'red','stroke-width': 2}));
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':1200,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':0,'x2':1200,'y2':1200,'stroke':'red','stroke-width': 2}));
+//	document.getElementById(destid).appendChild(makeSVG('line',{'x1':0,'y1':1200,'x2':1200,'y2':0,'stroke':'red','stroke-width': 2}));
+	// x axis
+	var yline = makeSVG('line',{'x1':100+xaxis,'y1':100,'x2':100+xaxis,'y2':1100,'stroke':'black','stroke-width': 2});
 	document.getElementById(destid).appendChild(yline);
+	// x axis graduation
+	if (xnbgraduation>0) {
+		for (var j=0;j<=xnbgraduation;j++) {
+			var x = 100+xaxis + (1000-xaxis) / xnbgraduation * j ;
+			var line = makeSVG('line',{'x1':x,'y1':1100-yaxis-5,'x2':x,'y2':1100-yaxis+5,'stroke':'black','stroke-width': 1});
+			document.getElementById(destid).appendChild(line);
+			// x graduation label
+			if (xdisplaygraduation=='1') {
+				var label = (xmax - xmin) / xnbgraduation * j ;
+				var text = makeSVG('text',{'x':x,'y':1100-yaxis+25,'font-size':svgfontsize,'font-family':svgfontname},label);
+				document.getElementById(destid).appendChild(text);
+			}
+		}
+	}
+	// x legend
+	if (xlegendtext!=""){
+		var size = getTextSize(destid,xlegendtext,svgfontsize,svgfontname);
+		var text = makeSVG('text',{'x':1100-size,'y':1100-yaxis+75,'font-size':svgfontsize+4,'font-family':svgfontname},xlegendtext);
+		document.getElementById(destid).appendChild(text);
+	}
+	// y axis
+	var xline = makeSVG('line',{'x1':100,'y1':1100-yaxis,'x2':1100,'y2':1100-yaxis,'stroke':'black','stroke-width': 2});
+	document.getElementById(destid).appendChild(xline);
+	// y axis graduation
+	if (ynbgraduation>0) {
+		for (var j=0;j<=ynbgraduation;j++) {
+			var y = 1100-yaxis - (1000-yaxis) / ynbgraduation * j  ;
+			var line = makeSVG('line',{'x1':100+xaxis-5,'y1':y,'x2':100+xaxis+5,'y2':y,'stroke':'black','stroke-width': 1});
+			document.getElementById(destid).appendChild(line);
+			// y graduation label
+			if (ydisplaygraduation=='1') {
+				var label = (ymax - ymin) / ynbgraduation * j ;
+				var text = makeSVG('text',{'x':100+xaxis-25,'y':y,'font-size':svgfontsize,'font-family':svgfontname},label);
+				document.getElementById(destid).appendChild(text);
+			}
+		}
+	}
+	if (ylegendtext!=""){
+		var text = makeSVG('text',{'x':50+xaxis,'y':75,'font-size':svgfontsize+4,'font-family':svgfontname},ylegendtext);
+		document.getElementById(destid).appendChild(text);
+	}
+
 }
 
-//====================================================================
-//====================================================================
-//====================================================================
-//====================================================================
-//====================================================================
-
 //==================================
-g_unique_functions['uniqueNodeCode'] = function (index,node)
+g_report_actions['draw-data'] = function (destid,action,no,data)
 //==================================
 {
-	if (index>0) {
-		var current = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("code",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
-		return current!=previous;
-	} else 
-		return true;
+	var graphid = $(action).attr("ref");
+	var graphtype = $(action).attr("graphtype");
+	var pointvariable = $(action).attr("point-variable");
+	var pointselect = $(action).attr("point-select");
+	var legendvariable = $(action).attr("legend-variable");
+	var legendselect = $(action).attr("legend-select");
+	var gradvariable = $(action).attr("grad-variable");
+	var gradselect = $(action).attr("grad-select");
+	//-----------------
+	var xaxis = g_graphs[graphid].xaxis;
+	var yaxis = g_graphs[graphid].yaxis;
+	var xnbgraduation = g_graphs[graphid].xnbgraduation;
+	var ymin = g_graphs[graphid].ymin;
+	var ymax = g_graphs[graphid].ymax;
+	var nbdata = g_graphs[graphid].nbdata++;
+	//----------------
+	if (pointselect!=undefined || pointvariable!="") {
+		var points = [];
+		if (pointselect!=undefined){
+			pointselect = r_replaceVariable(pointselect);
+			// draw points
+			points = getPoints(data,pointselect);
+		}
+		if (pointvariable!="") {
+			for (var i=0; i<g_variables[pointvariable].length;i++){
+				points[points.length] = {'value': parseInt(g_variables[pointvariable][i]),'x':0,'y':0};
+			}
+		}
+		if (graphtype=='point' || graphtype=='line') {
+			for (var i=0; i<points.length;i++){
+				if (points[i].value!=null){
+					points[i].x = 100+xaxis + (1000-xaxis) / xnbgraduation * (i+1) ;
+					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
+					var line = makeSVG('line',{'x1':points[i].x,'y1':points[i].y,'x2':points[i].x,'y2':points[i].y,'class':'svg-web-value'+nbdata});
+					document.getElementById(destid).appendChild(line);
+				}
+				if (i>0 && points[i-1].value!=null && points[i].value!=null && graphtype=='line') {
+					var line = makeSVG('line',{'x1':points[i-1].x,'y1':points[i-1].y,'x2':points[i].x,'y2':points[i].y,'class':'svg-web-line'+nbdata});
+					document.getElementById(destid).appendChild(line);
+				}
+			}
+		}
+		if (graphtype=='bar') {
+			for (var i=0; i<points.length;i++){
+				if (points[i].value!=null){
+					points[i].x = 90+xaxis+ (20*nbdata) + (1000-xaxis) / xnbgraduation * (i+1) ;
+					points[i].y = 1100-yaxis - (1000-yaxis) / (ymax-ymin) * points[i].value ;
+					var rect = makeSVG('rect',{'x':points[i].x,'y':points[i].y,'width':20,'height':(1000-yaxis) / (ymax-ymin) * points[i].value,'class':'svg-web-rect'+nbdata});
+					document.getElementById(destid).appendChild(rect);
+				}
+			}
+		}
+		// draw legend
+		if (legendselect!=undefined || legendvariable!="") {
+			var texts = [];
+			if (legendselect!=undefined){
+				legendselect = r_replaceVariable(legendselect);
+				texts = getResText(data,legendselect);
+			}
+			if (legendvariable!="") {
+				for (var i=0; i<g_variables[legendvariable].length;i++){
+					texts[texts.length] = g_variables[legendvariable][i];
+				}
+			}
+			for (var i=0; i<texts.length;i++){
+				var line = makeSVG('line',{'x1':100,'y1':1140+20*nbdata,'x2':100,'y2':1140+20*nbdata,'class':'svg-web-value'+nbdata});
+				document.getElementById(destid).appendChild(line);
+				var svgtext = makeSVG('text',{'x':120,'y':1145+20*nbdata,'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
+				document.getElementById(destid).appendChild(svgtext);
+			}
+		}
+		// draw x graduation
+		if (gradselect!=undefined || gradvariable!="") {
+			var texts = [];
+			if (gradselect!=undefined){
+				gradselect = r_replaceVariable(gradselect);
+				texts = getResText(data,gradselect);
+			}
+			if (gradvariable!="") {
+				for (var i=0; i<g_variables[gradvariable].length;i++){
+					texts[texts.length] = g_variables[gradvariable][i];
+				}
+			}
+			for (var i=0; i<texts.length;i++){
+				var x = 100+xaxis + (20*nbdata) + (1000-xaxis) / xnbgraduation * (i+1) ;
+				var y = 1120 ;
+				var svgtext = makeSVG('text',{'x':x,'y':y,'transform':"rotate(45 "+x+" "+y+")",'font-size':svgfontsize,'font-family':svgfontname},texts[i]);
+				document.getElementById(destid).appendChild(svgtext);
+			}
+		}
+	}
 }
 
-//==================================
-g_unique_functions['uniqueNodeLabel'] = function (index,node)
-//==================================
-{
-	if (index>0) {
-		var current = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("label[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type='nodeRes']",$(g_current_nodes[index-1]))).text();
-		return current!=previous;
-	} else 
-		return true;
-}
-
-//==================================
-g_unique_functions['uniqueResourceValue'] = function (index,node)
-//==================================
-{
-	if (index>0) {
-		var current = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("value",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
-		return current!=previous;
-	} else 
-		return true;
-}
-
-//==================================
-g_unique_functions['uniqueResourceCode'] = function (index,node)
-//==================================
-{
-	if (index>0) {
-		var current = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("code",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
-		return current!=previous;
-	} else 
-		return true;
-}
-
-//==================================
-g_unique_functions['uniqueResourceText'] = function (index,node)
-//==================================
-{
-	if (index>0) {
-		var current = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index]))).text();
-		var previous = $("text[lang='"+languages[LANGCODE]+"']",$("asmResource[xsi_type!='context'][xsi_type!='nodeRes']",$(g_current_nodes[index-1]))).text();
-		return current!=previous;
-	} else 
-		return true;
-}
 
 

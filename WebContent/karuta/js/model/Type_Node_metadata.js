@@ -68,9 +68,6 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
 	this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
-	if (this.submitted=='Y') {
-		this.menu = false;
-	}
 	this.cssclass = ($(node.metadataepm).attr('cssclass')==undefined)?'':$(node.metadataepm).attr('cssclass');
 	this.displayview = ($(node.metadataepm).attr('displayview')==undefined)?'default':$(node.metadataepm).attr('displayview');
 	this.displayitselforg = ($(node.metadataepm).attr('displayitselforg')==undefined)?'default':$(node.metadataepm).attr('displayitselforg');
@@ -86,6 +83,8 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 					)
 				);
 	this.submitroles = ($(node.metadatawad).attr('submitroles')==undefined)?'none':$(node.metadatawad).attr('submitroles');
+	this.unsubmitroles = ($(node.metadatawad).attr('unsubmitroles')==undefined)?'none':$(node.metadatawad).attr('unsubmitroles');
+	this.textssubmit = ($(node.metadatawad).attr('textssubmit')==undefined)?'':$(node.metadatawad).attr('textssubmit');
 	this.submitall = ($(node.metadatawad).attr('submitall')==undefined)?'none':$(node.metadatawad).attr('submitall');
 	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'N':$(node.metadatawad).attr('submitted');
 	this.submitteddate = ($(node.metadatawad).attr('submitteddate')==undefined)?'none':$(node.metadatawad).attr('submitteddate');
@@ -94,8 +93,12 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.menuroles = ($(node.metadatawad).attr('menuroles')==undefined)?'none':$(node.metadatawad).attr('menuroles');
 	this.menulabels = r_replaceVariable(($(node.metadatawad).attr('menulabels')==undefined)?'none':$(node.metadatawad).attr('menulabels'));
 	this.js = ($(node.metadatawad).attr('js')==undefined)?"":$(node.metadatawad).attr('js');
+	this.langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?"":$(node.metadatawad).attr('langnotvisible');
 	if (this.resource!=undefined || this.resource!=null)
 		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
+	if (this.submitted=='Y' && this.unsubmitroles=='none') {
+		this.menu = false;
+	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------------
@@ -234,6 +237,16 @@ UIFactory["Node"].getDataContentStyle = function(data)
 	style += UIFactory.Node.getMetadataEpm(data,'node-width',true);
 	style += UIFactory.Node.getMetadataEpm(data,'node-height',true);
 	style += UIFactory.Node.getOtherMetadataEpm(data,'node-othercss');
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].prototype.getMenuStyle = function()
+//==================================================
+{
+	metadataepm = this.metadataepm;
+	var style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'nds-menus-color',false);
 	return style;
 }
 
@@ -419,8 +432,9 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 //		this.displayMetadataAttributeEditor('metadata-root','export-rtf',true);
 //		this.displayMetadataAttributeEditor('metadata-root','export-htm',true);
 		this.displayMetadataAttributeEditor('metadata-root','public',true);
-		this.displayMetadataWadAttributeEditor('metadata-root','defaultrole');
 		this.displayMetadataAttributeEditor('metadata-root','autoload',true);
+		this.displayMetadataAttributeEditor('metadata-root','editmode',true);
+		this.displayMetadataWadAttributeEditor('metadata-root','defaultrole');
 	}
 	this.displayMetadataAttributeEditor('metadata-part1','semantictag');
 	if (languages.length>1) { // multilingual application
@@ -432,8 +446,6 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 				this.displayMetadataAttributeEditor('metadata-part1','multilingual-resource',true,true);
 		}
 	}
-	if (name=='asmContext' && this.resource.type=='URL2Unit')
-		this.displayMetadataAttributeEditor('metadata-part1','preview',true);
 //	if (name=='asmContext') {
 //		if (this.resource.type=='Field' || this.resource.type=='TextField' || this.resource.type=='Get_Resource' || this.resource.type=='Get_Get_Resource' || this.resource.type=='Get_Double_Resource')
 //			this.displayMetadataAttributeEditor('metadata-part1','encrypted',true);
@@ -464,6 +476,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles',false,true);
+	this.displayMetadataWadAttributeEditor('metadata-part2','unsubmitroles');
+	this.displayMetadataWadAttributeEditor('metadata-part2','textssubmit');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitall',true);
 	//-----------------------------------------
@@ -540,8 +554,11 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	this.displayMetadataWadAttributeEditor('metadata-part2','logcode');
 	this.displayMetadataWadAttributeEditor('metadata-part2','js');
 	//--------------------------------------
+	if (name=='asmContext' && (this.resource.type=='URL2Unit' || this.resource.type=='Get_Resource'))
+		this.displayMetadataAttributeEditor('metadata-part2','preview',true);
 	if (name!='asmRoot')
 		this.displayMetadataWadAttributeEditor('metadata-part2','display',true);
+	this.displayMetadataWadAttributeEditor('metadata-part2','langnotvisible');
 	if (name=='asmUnitStructure')
 		this.displayMetadataWadAttributeEditor('metadata-part2','collapsible',true);
 	if (name=='asmContext' && this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL' && this.resource.type!='Oembed')
@@ -628,6 +645,22 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	html += karutaStr[languages[langcode]]['help3']+"</label>";
 	$('#metadata_texts').append($(html));
 	this.displayMetadatawWadTextAttributeEditor('metadata_texts','help');
+	//------------------------Get_Get_Resource Error-------------------------
+	if (name=='asmContext' && this.resource.type=='Get_Get_Resource') {
+		html = "<br><label>"+karutaStr[languages[langcode]]['error'];
+		if (languages.length>1){
+			var first = true;
+			for (var i=0; i<languages.length;i++){
+				if (!first)
+					html += "/";
+				html += karutaStr[languages[i]]['error2'];
+				first = false;
+			}
+		}
+		html += karutaStr[languages[langcode]]['error3']+"</label>";
+		$('#metadata_texts').append($(html));
+		this.displayMetadatawWadTextAttributeEditor('metadata_texts','error');
+	}
 };
 
 //---------------------------------------------------------
@@ -651,6 +684,8 @@ UIFactory["Node"].getMetadataEpm = function(data,attribute,number)
 			html += attribute.substring(8) + value;
 		else if (attribute.indexOf("node-")>-1)
 			html += attribute.substring(5) + ":" + value;
+		else if (attribute.indexOf("nds-menus-")>-1)
+			html += attribute.substring(10) + ":" + value;
 		else if (attribute.indexOf("nds-")>-1)
 			html += attribute.substring(4) + ":" + value;
 		else if (attribute.indexOf("inparent-")>-1)
@@ -796,6 +831,7 @@ UIFactory["Node"].prototype.displayMetainfo = function(dest)
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'delnoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'commentnoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'submitroles');
+	html += UIFactory.Node.getMetadataInfo(metadatawad,'unsubmitroles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'editcoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'editnoderoles');
 	html += UIFactory.Node.getMetadataInfo(metadatawad,'duplicateroles');
@@ -838,6 +874,7 @@ UIFactory["Node"].prototype.displayMetaEpmInfo = function(destid)
 	//------------------------------------
 	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-margin-top');
 	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-othercss');
+	html += UIFactory.Node.getMetadataEpmInfo(data,'nds-menus-color');
 	//------------------------------------
 	html += UIFactory.Node.getMetadataEpmInfo(data,'node-font-weight');
 	html += UIFactory.Node.getMetadataEpmInfo(data,'node-font-style');
@@ -1029,6 +1066,8 @@ UIFactory["Node"].prototype.displayMetadataWadAttributeEditor = function(destid,
 		html += "</div>";
 	} else if (attribute.indexOf('role')>-1){
 		this.displaySelectRole(destid,attribute,yes_no,disabled);
+	} else if (attribute.indexOf('lang')>-1){
+		this.displaySelectLanguage(destid,attribute,yes_no,disabled);
 	} else {
 		html += "<div class='input-group '>";
 		html += "	<div class='input-group-prepend'>";
@@ -1192,7 +1231,52 @@ UIFactory["Node"].prototype.displaySelectRole= function(destid,attribute,yes_no,
 		$("#"+destid).append($(html));
 	}
 	addautocomplete(document.getElementById(attribute+nodeid), rolesarray);
+}
 
+//==================================
+UIFactory["Node"].prototype.displaySelectLanguage= function(destid,attribute,yes_no,disabled) 
+//==================================
+{
+	var languagessarray = [];
+	var value = $(this.metadatawad).attr(attribute);
+	if (value==null || value==undefined || value=='undefined')
+		value = "";
+	var nodeid = this.id;
+	var langcode = LANGCODE;
+	var html = "";
+	html += "<div class='input-group '>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<div class='input-group-text'>";
+	html += karutaStr[languages[langcode]][attribute];
+	html += "</div>";
+	html += "	</div>";
+	html += "	<input id='"+attribute+nodeid+"' type='text' class='form-control'  onchange=\"javascript:UIFactory['Node'].updateMetadataWadAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\"";
+	if(disabled!=null && disabled)
+		html+= " disabled='disabled' ";			
+	html += ">";
+	if(disabled==null || !disabled) {
+		html += "<div class='input-group-append'>";
+		html += "	<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+		html += "	<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
+//		html += "		<div class='dropdown-menu'>";
+		html += "			<a class='dropdown-item' value='' onclick=\"$('#"+attribute+nodeid+"').val('');$('#"+attribute+nodeid+"').change();\")>&nbsp;</a>";
+		//---------------------
+	for (var i=0; i<languages.length;i++) {
+		languagessarray[languagessarray.length] = {'libelle':karutaStr[languages[i]]['language']};
+		html += "<a class='dropdown-item' id='lang-menu-"+languages[i]+"' onclick=\"var v=$('#"+attribute+nodeid+"').val();$('#"+attribute+nodeid+"').val(v+' "+karutaStr[languages[i]]['language']+"');$('#"+attribute+nodeid+"').change();\">";
+		html += karutaStr[languages[i]]['language'];
+		html += "</a>"
+	}
+		html += "	</div>";
+		html += "</div>";
+	}
+	html += "</div>";
+	$("#"+destid).append($(html));
+	if (attribute=='seenoderoles'){
+		html = "<div id='see-calendar' class='collapse'></div>"
+		$("#"+destid).append($(html));
+	}
+	addautocomplete(document.getElementById(attribute+nodeid), languagessarray);
 }
 
 
@@ -1402,7 +1486,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		else
 			html += "<h5 class='metadata-node-resource'>"+karutaStr[languages[langcode]]['node-content']+"</h5>";
 		html += "	<div id='metadata-node-resource'></div>";
-		if (name=='asmStructure' || name=='asmUnit') {
+		if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit') {
 			html += "<hr><h5>"+karutaStr[languages[langcode]]['inparent']+"</h5>";
 			html += "	<div id='metadata-inparent'></div>";
 		}
@@ -1433,6 +1517,7 @@ UIFactory["Node"].prototype.displayMetadataEpmAttributesEditor = function(destid
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','padding-top',$(this.metadataepm).attr('padding-top'));
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','color',$(this.metadataepm).attr('color'));
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','background-color',$(this.metadataepm).attr('background-color'));
+		this.displayMetadataEpmAttributeEditor('metadata-epm-label','nds-menus-color',$(this.metadataepm).attr('nds-menus-color'));
 		this.displayMetadataEpmAttributeEditor('metadata-epm-label','othercss',$(this.metadataepm).attr('othercss'));
 		//----------------------------------
 		this.displayMetadataEpmAttributeEditor('metadata-node-resource','node-font-weight',$(this.metadataepm).attr('node-font-weight'));

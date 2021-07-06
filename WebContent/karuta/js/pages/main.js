@@ -1,7 +1,7 @@
 
 
 //==============================
-function show_main_page(rootid)
+function show_main_page()
 //==============================
 {
 	hideAllPages();
@@ -17,7 +17,7 @@ function show_main_page(rootid)
 }
 
 //==============================
-function fill_main_page(rootid,portfolioid)
+function fill_main_page(portfolioid)
 //==============================
 {
 	setLanguageMenu("fill_main_page()");
@@ -29,16 +29,8 @@ function fill_main_page(rootid,portfolioid)
 	$("#portfolio-container").html(html);
 	g_welcome_add = false;
 	//-------------------------------------------
-	if (rootid!=null){
-		var parentid = $($(UICom.structure.ui[rootid].node).parent()).attr('id');
-		if (parentid!=undefined && $($(UICom.structure.ui[rootid].node).parent())) {
-			g_portfolioid = parentid;
-		} else {
-			rootid = g_portfolio_rootid;
-		}
-	} else {
-		rootid = g_portfolio_rootid;
-	}
+	if (portfolioid!=null)
+		g_portfolioid = portfolioid;
 	//-------------------------------------------
 	userrole = g_userroles[0];
 	if (userrole=='undefined')
@@ -114,8 +106,13 @@ function fill_main_page(rootid,portfolioid)
 			if (g_display_type=="standard" || g_display_type=="raw") {
 				if (USER.creator)
 					g_edit = true;
-				else
-					g_edit = false;
+				else {
+					var editmode = $("metadata[editmode]",data).attr('editmode');
+					if (editmode=="" || editmode==null || editmode==undefined)
+						g_edit = false;
+					else
+						g_edit = (editmode=='Y');
+					}
 			} else if (g_display_type=="model" || g_display_type=="translate") {
 				g_edit = true;
 			}
@@ -157,18 +154,6 @@ function fill_main_page(rootid,portfolioid)
 				loadLanguages(function() {g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);});
 			//---------------------------
 			$("#wait-window").modal('hide');
-
-/*			if (root_semantictag.indexOf('karuta-batch')>-1){
-				g_userroles[0] = 'batcher';
-				USER.admin = false;
-				$("#userrole").html('batcher');
-			}
-			if (root_semantictag.indexOf('karuta-report')>-1){
-				g_userroles[0] = 'reporter';
-				USER.admin = false;
-				$("#userrole").html('reporter');
-			}
-*/
 			//---------------------------
 			var welcomes = $("asmUnit:has(metadata[semantictag*='WELCOME'])",data);
 			if (welcomes.length==0) // for backward compatibility
@@ -214,12 +199,12 @@ function fill_main_page(rootid,portfolioid)
 }
 
 //==============================
-function display_main_page(rootid,portfolioid)
+function display_main_page(portfolioid)
 //==============================
 {
 	$("#sub-bar").show();
 	$("#welcome-bar").hide();
-	fill_main_page(rootid,portfolioid);
-	show_main_page(rootid);		
+	fill_main_page(portfolioid);
+	show_main_page();		
 }
 

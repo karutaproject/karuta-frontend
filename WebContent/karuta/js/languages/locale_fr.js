@@ -1,7 +1,9 @@
 
+karutaStr['fr'] = new Array();
 
 //----------------------------------------------------
 karutaStr['fr']['language']="Français";
+karutaStr['fr']['langshort']="FR";
 karutaStr['fr']['flag-name']="France";
 //----------------------------------------------------
 karutaStr['fr']['new']="Nouvel élément";
@@ -91,6 +93,7 @@ karutaStr['fr']['quit']="Quitter";
 karutaStr['fr']['menu']="Menu";
 karutaStr['fr']['block-image-size']="Taille recommandée en pixels<br>&nbsp; - Hauteur : 220<br>&nbsp; - Largeur : 800 divisé par le nombre de colonnes<br>&nbsp;";
 karutaStr['fr']['list-novisible']="Portfolio non visible";
+karutaStr['fr']['editmode']="Édition par défaut";
 karutaStr['fr']['empty-bin']="Vider la poubelle";
 karutaStr['fr']['see-bin']="Voir la poubelle";
 karutaStr['fr']['complex']="Chargement partiel";
@@ -108,6 +111,7 @@ karutaStr["fr"]["copied"] = "Copié";
 karutaStr['fr']['error-existing-code']="ERREUR - Le code existe déjà. Veuillez en choisir un autre.";
 karutaStr['fr']['error-existing-login']="ERREUR - Le login existe déjà ou une entrée est invalide. Veuillez choisir un autre login ou vérifiez les champs.";
 karutaStr['fr']['error-empty-code']="ERREUR - Le code ne peut être vide.";
+karutaStr['fr']['error-notfound']="ERREUR - non trouvé";
 
 //=========================================
 //========== NODE =========================
@@ -134,6 +138,8 @@ karutaStr['fr']['delnoderoles']="Supprimer";
 karutaStr['fr']['commentnoderoles']="Commenter";
 karutaStr['fr']['annotnoderoles']="Annoter";
 karutaStr['fr']['submitroles']="Soumettre";
+karutaStr['fr']['txtsubmitroles']="Textes Soumettre";
+karutaStr['fr']['unsubmitroles']="Réinitialiser Soumettre";
 karutaStr['fr']['submitall']="Soumettre pour tous les rôles";
 karutaStr['fr']['nodenopencil']="Noeud sans crayon";
 karutaStr['fr']['editnoderoles']="Éditer libellé";
@@ -170,7 +176,10 @@ karutaStr['fr']['menulabels2']="libellé@fr";
 karutaStr['fr']['menulabels3']=",rôles[;autre libellé]</span>";
 karutaStr['fr']['help']="Bulle d'aide <br/><span style='font-size:smaller'>";
 karutaStr['fr']['help2']="texte en français@fr";
-karutaStr['fr']['help3']="</span>";
+karutaStr['fr']['help3']="[,rôle]</span>";
+karutaStr['fr']['error']="Message si parent non sélectionné <br/><span style='font-size:smaller'>";
+karutaStr['fr']['error2']="texte en français@fr";
+karutaStr['fr']['error3']="[,rôle]</span>";
 karutaStr['fr']['font-size']="Taille police (px)";
 karutaStr['fr']['font-weight']="Poids de la police";
 karutaStr['fr']['font-style']="Style de la police";
@@ -186,6 +195,7 @@ karutaStr['fr']['displayview']="Type de vue";
 karutaStr['fr']['displayitselforg']="Largeur d'affichage";
 karutaStr['fr']['displaychildorg']="Type d'affichage du contenu";
 karutaStr['fr']['margin-top']="Marge supérieure (px)";
+karutaStr['fr']['menus-color']="Couleur des menus, boutons et +/-";
 karutaStr['fr']['sharedResource']="Ressource partagée";
 karutaStr['fr']['sharedNodeResource']="Ress. du noeud partagée";
 karutaStr['fr']['resizeroles']="Modifier taille image";
@@ -220,6 +230,7 @@ karutaStr['fr']['seltype']="Présentation ";
 karutaStr['fr']['shareroles']="Partager<br/><span style='font-size:smaller'> rôle qui partage,rôle visiteur,rôles et/ou courriels destinataires,niveau (0-4),durée de vie du lien (en heures),";
 karutaStr['fr']['shareroles2']="libellé du bouton@fr";
 karutaStr['fr']['shareroles3']="[,condition][;autre partage]";
+karutaStr['fr']['textssubmit']="Textes de Soumission";
 karutaStr['fr']['submitted']="Soumis le ";
 karutaStr['fr']['notsubmitted']="Non soumis";
 karutaStr['fr']['collapsible']="Repliable";
@@ -252,6 +263,7 @@ karutaStr['fr']['alt']="Texte alternatif";
 karutaStr['fr']['node-comment']="Commentaires du noeud";
 karutaStr['fr']['autoload']="Autoload";
 karutaStr['fr']['defaultrole']="Rôle par défaut";
+karutaStr['fr']['langnotvisible']="Non visible en";
 
 //=========================================
 //========== ADMIN ========================
@@ -364,6 +376,7 @@ karutaStr['fr']['active_users']="Usagers actifs";
 karutaStr['fr']['inactive_users']="Usagers inactifs";
 karutaStr['fr']['temporary_users']="Usagers temporaires";
 karutaStr['fr']['empty_users']="Usagers sans portfolio";
+karutaStr['fr']['warning-empty-users']="ATTENTION : Le temps de traitement pour les usagers sans portfolios peut-être très long";
 karutaStr['fr']['username']="Login";
 karutaStr['fr']['lastname']="Nom";
 karutaStr['fr']['firstname']="Prénom";

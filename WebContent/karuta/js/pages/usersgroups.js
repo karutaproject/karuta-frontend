@@ -89,6 +89,7 @@ function fill_list_usersgroups(type)
 function display_list_usersgroups(type)
 //==============================
 {
+	USER.admin = USER.admin_original; // reset if role playing when reload
 	if (type==null)
 		type='list-forusergroup';
 	if ($("#usersgroup-create").length) {

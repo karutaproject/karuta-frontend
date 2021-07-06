@@ -260,7 +260,7 @@ UIFactory["SendEmail"].send = function(obj,itself,langcode)
 	var message = $("#message_SendEmail",obj).val();
 	//---------------------
 	var xml ="<node>";
-	xml +="<recipient>"+$(itself.email_node[langcode]).text()+"</recipient>";
+	xml +="<recipient>" + replaceVariable($(itself.email_node[langcode]).text()) + "</recipient>";
 	xml +="<subject>"+subject+"</subject>";
 	xml +="<message>"+message+"</message>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";

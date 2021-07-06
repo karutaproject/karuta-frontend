@@ -1,7 +1,9 @@
+karutaStr['en'] = new Array();
 
 
 //----------------------------------------------------
 karutaStr['en']['language']="English";
+karutaStr['en']['langshort']="EN";
 karutaStr['en']['flag-name']="United-Kingdom";
 //----------------------------------------------------
 karutaStr['en']['new']="New Element";
@@ -91,6 +93,7 @@ karutaStr['en']['quit']="Quit";
 karutaStr['en']['menu']="Menu";
 karutaStr['en']['block-image-size']="Recommended size in pixels<br>&nbsp; - Height : 220<br>&nbsp; - Width : 800 divided by number of columns<br>&nbsp;";
 karutaStr['en']['list-novisible']="Portfolio Not Visible";
+karutaStr['en']['editmode']="Edit mode par default";
 karutaStr['en']['empty-bin']="Empty bin";
 karutaStr['en']['see-bin']="See Bin";
 karutaStr['en']['complex']="Partial Loading";
@@ -108,6 +111,7 @@ karutaStr["en"]["copied"] = "Copied";
 karutaStr['en']['error-existing-code']="ERROR - The code already exists. Please choose another one.";
 karutaStr['en']['error-existing-login']="ERROR - The login already exists or an input is invalid. Please choose another login or check input fields.";
 karutaStr['en']['error-empty-code']="ERROR - The code cannot be empty.";
+karutaStr['en']['error-notfound']="ERROR - not found";
 
 //=========================================
 //========== NODE =====================
@@ -134,6 +138,8 @@ karutaStr['en']['delnoderoles']="Delete";
 karutaStr['en']['commentnoderoles']="Comment";
 karutaStr['en']['annotnoderoles']="Annotate";
 karutaStr['en']['submitroles']="Submit";
+karutaStr['en']['unsubmitroles']="Unsubmit";
+karutaStr['en']['txtsubmitroles']="Submit Texts";
 karutaStr['en']['submitall']="Submit For All Roles";
 karutaStr['en']['nodenopencil']="Node Without Pencil";
 karutaStr['en']['editnoderoles']="Edit Label";
@@ -170,7 +176,10 @@ karutaStr['en']['menulabels2']="label@en";
 karutaStr['en']['menulabels3']=",roles[;other label]</span>";
 karutaStr['en']['help']="Help Bubble<br/><span style='font-size:smaller'>";
 karutaStr['en']['help2']="Text in English@en";
-karutaStr['en']['help3']="</span>";
+karutaStr['en']['help3']="[,role]</span>";
+karutaStr['en']['error']="Message if parent not selected<br/><span style='font-size:smaller'>";
+karutaStr['en']['error2']="Text in English@en";
+karutaStr['en']['error3']="[,role]</span>";
 karutaStr['en']['font-size']="Font Size (px)";
 karutaStr['en']['font-weight']="Font Weight";
 karutaStr['en']['font-style']="Font Style";
@@ -186,6 +195,7 @@ karutaStr['en']['displayview']="View Type";
 karutaStr['en']['displayitselforg']="Display Width";
 karutaStr['en']['displaychildorg']="Content Display Type";
 karutaStr['en']['margin-top']="Margin Top (px)";
+karutaStr['en']['menus-color']="Menus, Buttons and +/-";
 karutaStr['en']['sharedResource']="Shared Resource";
 karutaStr['en']['sharedNodeResource']="Shared Node Resource";
 karutaStr['en']['resizeroles']="Resize Image";
@@ -220,6 +230,7 @@ karutaStr['en']['seltype']="Display";
 karutaStr['en']['shareroles']="Share<br/><span style='font-size:smaller'> role that shares,visitor role,recipient roles and/or emails,level (0-4),link lifespan (in hours),";
 karutaStr['en']['shareroles2']="button label@en";
 karutaStr['en']['shareroles3']="[,condition][;other sharing]";
+karutaStr['en']['textssubmit']="Submission Texts";
 karutaStr['en']['submitted']="Submitted on ";
 karutaStr['en']['notsubmitted']="Not Submitted";
 karutaStr['en']['collapsible']="Collapsible";
@@ -252,6 +263,7 @@ karutaStr['en']['alt']="Alternate Text";
 karutaStr['en']['node-comment']="Node Comments";
 karutaStr['en']['autoload']="Autoload";
 karutaStr['en']['defaultrole']="Default Role";
+karutaStr['en']['langnotvisible']="Not visible in";
 
 //=========================================
 //========== ADMIN ========================
@@ -364,6 +376,7 @@ karutaStr['en']['active_users']="Active Users";
 karutaStr['en']['inactive_users']="Inactive Users";
 karutaStr['en']['temporary_users']="Temporary Users";
 karutaStr['en']['empty_users']="Users without Portfolio";
+karutaStr['en']['warning-empty-users']="WARNING : Processing time may be very long";
 karutaStr['en']['username']="Login";
 karutaStr['en']['lastname']="Last Name";
 karutaStr['en']['firstname']="First Name";

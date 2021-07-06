@@ -1,9 +1,9 @@
 //----------------------------------
-var application_version = "2.0";
-var application_date = "2017-10-30";
+var application_version = "3.0";
+var application_date = "2021-02-22";
 //----------------------------------
-var appliname = 'karuta3.0';
-var bckname = '3.0';
+var appliname = 'karuta';
+var bckname = '';
 var serverBCK = "../../../karuta-backend"+bckname; // fileserver backend
 var serverBCK_API = "../../../karuta-backend"+bckname+"/rest/api";
 var cas_url = "";

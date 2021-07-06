@@ -38,7 +38,7 @@ var g_bar_type = "vertical"; // default value
 var g_edit = false;
 var g_visible = 'hidden';
 var g_display_sidebar = true;
-
+var g_execbatch = false;
 //---- caches -----
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_report_models = {}; // cache for report_models
@@ -108,7 +108,8 @@ function getLanguageMenu(js)
 	var html = "";
 	for (var i=0; i<languages.length;i++) {
 		html += "<a class='dropdown-item' id='lang-menu-"+languages[i]+"' onclick=\"setLanguage('"+languages[i]+"');"+js+"\">";
-		html += "	<img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
+//		html += "	<img width='20px;' src='../../karuta/img/flags/"+karutaStr[languages[i]]['flag-name']+".png'/>&nbsp;&nbsp;"+karutaStr[languages[i]]['language'];
+		html += karutaStr[languages[i]]['langshort']
 		html += "</a>"
 	}
 	return html;
@@ -120,7 +121,7 @@ function setLanguageMenu(js)
 //==============================
 {
 	for (var i=0; i<languages.length;i++) {
-		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');$('#navigation-bar').html(getNavBar('list',null));setWelcomeTitles();"+js);
+		$("#lang-menu-"+languages[i]).attr("onclick","setLanguage('"+languages[i]+"');$('#navigation-bar').html(getNavBar('list',null));applyNavbarConfiguration();setWelcomeTitles();"+js);
 	}
 }
 
@@ -162,7 +163,8 @@ function getNavBar(type,portfolioid,edit)
 	if (languages.length>1) {
 		html += "	<li id='navbar-language' class='nav-item dropdown'>";
 		html += "		<a class='nav-link dropdown-toggle' href='#' id='languageDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-		html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
+//		html += "			<img id='flagimage' style='width:25px;margin-top:-5px;' src='../../karuta/img/flags/"+karutaStr[LANG]['flag-name']+".png'/>";
+		html += karutaStr[LANG]['langshort'];
 		html += "		</a>";
 		html += "		<div class='dropdown-menu' aria-labelledby='languageDropdown'>";
 		if(type=="login")
@@ -170,7 +172,7 @@ function getNavBar(type,portfolioid,edit)
 		else if(type=="create_account")
 			html += getLanguageMenu("displayKarutaCreateAccount();");
 		else
-			html += getLanguageMenu("setWelcomeTitles();fill_list_page();$('#navigation-bar').html(getNavBar('list',null));$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
+			html += getLanguageMenu("setWelcomeTitles();fill_list_page();$('#navigation-bar').html(getNavBar('list',null));applyNavbarConfiguration();$('#search-portfolio-div').html(getSearch());$('#search-user-div').html(getSearchUser());");
 		html += "		</div>";
 		html += "	</li>";
 	}
@@ -352,6 +354,24 @@ function getEditBox(uuid,js2) {
 	$("#edit-window-footer").html($(footer));
 	var html = "";
 	//--------------------------
+	if (UICom.structure['tree'][uuid]==null || UICom.structure['tree'][uuid]==undefined) {  // if resource is in report and not loaded (report on server)
+		$.ajax({
+			async : false,
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
+			success : function(data) {
+				UICom.parseStructure(data);
+				UICom.structure["ui"][uuid].resource.display["dashboard_node_resource"+uuid] = LANGCODE;
+			},
+			error : function() {
+				var html = "";
+				html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
+				$("#preview-window-body").html(html);
+				$("#preview-window").modal('show');
+			}
+		});		
+	}
 	if(UICom.structure["ui"][uuid].resource!=null) {
 		try {
 			html = UICom.structure["ui"][uuid].resource.getEditor();
@@ -417,9 +437,10 @@ function getEditBoxOnCallback(data,param2,param3,param4) {
 function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
 //==============================
 {
+	var menus_style = UICom.structure.ui[uuid].getMenuStyle();
 	var html = "";
 	html += "\n<!-- ==================== Delete Button ==================== -->";
-	html += "<i id='del-"+uuid+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom'></i>";
+	html += "<i id='del-"+uuid+"' style='"+menus_style+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom'></i>";
 	return html;
 }
 
@@ -728,10 +749,31 @@ function previewPage(uuid,depth,type,langcode)
 	$("#preview-window-footer").append($(footer));
 	$("#preview-window-body").html("");
 	if (UICom.structure['tree'][uuid]!=null) {
-		if (type=='standard') {
-			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
-		}
+		g_report_edit = false;
+		UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+		g_report_edit = g_edit;
 		$("#preview-window").modal('show');
+	} else {
+		$.ajax({
+			type : "GET",
+			dataType : "xml",
+			url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
+			success : function(data) {
+				UICom.parseStructure(data);
+				g_report_edit = false;
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+				g_report_edit = g_edit;
+				$("#preview-window").modal('show');
+
+			},
+			error : function() {
+				var html = "";
+				html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
+				$("#preview-window-body").html(html);
+				$("#preview-window").modal('show');
+
+			}
+		});
 	}
 }
 
@@ -870,7 +912,15 @@ function submit(uuid,submitall)
 		url : urlS,
 		uuid : uuid,
 		success : function (data){
-			UIFactory.Node.reloadUnit();
+			if ($("#submit-"+uuid).parent().hasClass("submit-inreport")) {
+				var parent = $("#submit-"+uuid).parent();
+				while (!$(parent).hasClass("submit-tohide") && $(parent).prop("nodeName")!="table")
+					parent = $(parent).parent();
+				if ($(parent).hasClass("submit-tohide"))
+					$(parent).hide();
+				register_report($("#submit-"+uuid).parent().attr('dashboardid'));
+			} else
+				UIFactory.Node.reloadUnit();
 		}
 	});
 }
@@ -1047,7 +1097,7 @@ function getSendPublicURL(uuid,shareroles)
 }
 
 //==================================
-function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole,shareoptions)
+function getSendSharingURL(nodeid,uuid,sharewithrole,sharetoemail,sharetoroles,langcode,sharelevel,shareduration,sharerole,shareoptions)
 //==================================
 {
 	var emailsarray = [];
@@ -1079,6 +1129,17 @@ function getSendSharingURL(uuid,sharewithrole,sharetoemail,sharetoroles,langcode
 		}
 		if (sharetoemail!='' && shareduration!='') {
 			getPublicURL(uuid,sharetoemail,sharerole,sharewithrole,sharelevel,shareduration,langcode,sharetomessage,sharetoobj);
+		}
+		if (shareoptions.indexOf('function:')>-1) {
+			var functionelts = shareoptions.substring(9).split('/');
+			var functionstring = functionelts[0] + "(";
+			for (var i=1; i<functionelts.length; i++) {
+				functionstring += functionelts[i];
+				if (i<functionelts.length-1)
+					functionstring += ",";
+			}
+			functionstring += ")";
+			eval (functionstring);
 		}
 	});
 	$("#edit-window-footer").append(obj);
@@ -1647,18 +1708,39 @@ function getFirstWords(html,nb) {
 function setVariables(data)
 //==================================
 {
+	//--------------------------
+	g_variables["USER.login"] = USER.username;
+	g_variables["USER.lastname"] = USER.lastname;
+	g_variables["USER.firstname"] = USER.firstname;
+	g_variables["USER.email"] = USER.email;
+	//--------------------------
 	var variable_nodes = $("asmContext:has(metadata[semantictag*='g-variable'])",data);
 	for (var i=0;i<variable_nodes.length;i++) {
-		g_variables[UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().name] = UICom.structure["ui"][$(variable_nodes[i]).attr("id")].resource.getAttributes().value;
+		var var_name = $("name",$("asmResource[xsi_type='Variable']",variable_nodes[i])).text()
+		var var_value = $("value",$("asmResource[xsi_type='Variable']",variable_nodes[i])).text()
+		g_variables[var_name] = var_value;
 	}
-	var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
-	for (var i=0;i<select_variable_nodes.length;i++) {
-		var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
-		var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
-		var variable_value = (value=="") ? code : value;
-		g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = cleanCode(variable_value,true);
-	}	
+	try {
+		var select_variable_nodes = $("asmContext:has(metadata[semantictag*='g-select-variable'])",data);
+		for (var i=0;i<select_variable_nodes.length;i++) {
+			var value = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().value;
+			var code = UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].resource.getAttributes().code;
+			var variable_value = (value=="") ? code : value;
+			g_variables[UICom.structure.ui[$(select_variable_nodes[i]).attr("id")].getCode()] = cleanCode(variable_value,true);
+		}
+	} catch(e){}
 }
+
+//==================================
+function updateVariable(node)
+//==================================
+{
+	var value = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().value;
+	var code = UICom.structure.ui[$(node).attr("id")].resource.getAttributes().code;
+	var variable_value = (value=="") ? code : value;
+	g_variables[UICom.structure.ui[$(node).attr("id")].getCode()] = cleanCode(variable_value,true);
+}
+
 
 //==============================
 function logout()
@@ -1816,10 +1898,10 @@ function toggleMode()
 //==============================
 {
 	if (g_edit) {
-		g_edit = false;
+		g_report_edit = g_edit = false;
 		$("#toggle-mode-icon").removeClass('fas fa-toggle-on').addClass('fas fa-toggle-off');
 	} else {
-		g_edit = true;
+		g_report_edit = g_edit = true;
 		$("#toggle-mode-icon").removeClass('fas fa-toggle-off').addClass('fas fa-toggle-on');
 	}
 //	UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar','standard',LANGCODE,g_edit,g_portfolio_rootid);
@@ -2183,7 +2265,6 @@ function replaceVariable(text)
 			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
 			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
 			i = replaceVariable(i);
-			var variable_array1 = text.replace("["+i+"]","");
 			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
 				text = g_variables[variable_value][i];
 			}
@@ -2192,7 +2273,9 @@ function replaceVariable(text)
 	return text;
 }
 
+//==================================
 function addParentCode (parentid) {
+//==================================
 	var parentCode = UICom.structure.ui[parentid].getCode();
 	var parentcode_parts = parentCode.split("*");
 	var nodes = $("asmUnitStructure:has(code:not(:empty))",UICom.structure.ui[parentid].node);
@@ -2232,7 +2315,9 @@ function addParentCode (parentid) {
 	}
 }
 
+//==================================
 function updateParentCode (node) {
+//==================================
 	var uuid = $(node).attr("id");
 	var parentcode = UICom.structure.ui[uuid].getCode();
 	var nodes = $("> asmUnitStructure:has(code:not(:empty))",UICom.structure.ui[uuid].node);
@@ -2265,6 +2350,16 @@ function updateParentCode (node) {
 	UIFactory.Node.reloadUnit;
 }
 
+//==================================
+function getNodeIdBySemtag(semtag)
+//==================================
+{
+	var nodeid = "";
+	var nodes = $("*:has(>metadata[semantictag='"+semtag+"'])",g_portfolio_current);
+	if (nodes.length>0)
+		nodeid = $(nodes[0]).attr("id");
+	return nodeid;
+}
 //=====================================================================================================
 //=====================================================================================================
 //============================== TREE MANAGEMENT ====================================================
@@ -2346,3 +2441,295 @@ function outCopy(id)
 	$(element).tooltip('hide');
 	$(element).attr('title', karutaStr[LANG]['copy'] +" : "+element.textContent);
 }
+
+
+
+
+//==================================
+function callmajcodenum (nodeid) {
+//==================================
+	majcodenum(UICom.structure.ui[nodeid].node);
+}
+
+//=====================================================================================================
+//=====================================================================================================
+//============================== UTILITIES =======================================================
+//=====================================================================================================
+//=====================================================================================================
+
+//==================================
+function updatelabel (uuid) {
+//==================================
+	var label = UICom.structure.ui[uuid].getLabel(null,'none');
+	var nodes = $("*:has(>metadata[semantictag*='updatelabel'])",UICom.structure.ui[uuid].node);
+	for (var i=0;i<nodes.length;i++) {
+		var nodeid = $(nodes[i]).attr("id");
+		var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+		$("label[lang='"+LANG+"']",resource).text(label);
+		var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+		//-------------------
+		$.ajax({
+			async : false,
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : strippeddata,
+			url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+			success : function(data) {
+			},
+			error : function(data) {
+			}
+		});
+		//-------------------
+	}
+	//-------------------------------------------------------------------------
+	if (UICom.structure.ui[uuid].asmtype=='asmStructure')
+		UIFactory.Node.reloadStruct();
+	else
+		UIFactory.Node.reloadUnit();
+}
+
+//==================================
+function updatecodenum (uuid) {
+//==================================
+	var code = UICom.structure.ui[uuid].getCode();
+	if (code.indexOf("*")>-1)
+		code = code.substring(0,code.indexOf("*"));
+	var nodes = $("*:has(>metadata[semantictag*='updatecode'])",UICom.structure.ui[uuid].node);
+	for (var i=0;i<nodes.length;i++) {
+		var nodeid = $(nodes[i]).attr("id");
+		var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+		var nodecode =  UICom.structure.ui[nodeid].getCode();
+		var newnodecode = nodecode;
+		if (nodecode.indexOf("*")>-1) {
+			var oldpartcode = nodecode.substring(nodecode.indexOf("*"));
+			newnodecode = code+oldpartcode;
+		}
+		$("code",resource).text(newnodecode);
+		var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+		//-------------------
+		$.ajax({
+			async : false,
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : strippeddata,
+			url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+			success : function(data) {
+			},
+			error : function(data) {
+			}
+		});
+		//-------------------
+	}
+	//-----Node ordering-------------------------------------------------------
+	var nodes = $("*:has(>metadata[semantictag*='updatenum'])",UICom.structure.ui[uuid].node);
+	var tableau1 = new Array();
+	for ( var i = 0; i < $(nodes).length; i++) {
+		var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+		var code = $('code',resource).text();
+		tableau1[i] = [code.substring(0,code.indexOf("*")+2),nodes[i]];
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
+	//-------------------------------------------------------------------------
+	var num = 0;
+	var currentletter = "";
+	for ( var i = 0; i < newTableau1.length; i++) {
+		var oldcode = newTableau1[i][0];
+		var starindex = oldcode.indexOf("*");
+		var letter = oldcode.substring(starindex+1,starindex+2);
+		if (letter!=currentletter) {
+			num = 0;
+			currentletter = letter;
+		}
+		num++;
+		var newcode = oldcode.substring(0,starindex+1)+currentletter+(num>9?"":"0")+num.toString();
+		//--------------- maj resource --------------
+		var nodeid = $(newTableau1[i][1]).attr('id');
+		var resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1])[0];
+		$("code",resource).text(newcode);
+		var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+		//-------------------
+		$.ajax({
+			async : false,
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : strippeddata,
+			url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+			success : function(data) {
+			},
+			error : function(data) {
+			}
+		});
+		//-------------------
+	}
+	//-------------------------------------------------------------------------
+	if (UICom.structure.ui[uuid].asmtype=='asmStructure')
+		UIFactory.Node.reloadStruct();
+	else
+		UIFactory.Node.reloadUnit();
+}
+
+//==================================
+function callmajcodenum (nodeid) {
+//==================================
+	majcodenum(UICom.structure.ui[nodeid].node);
+}
+
+//==================================
+function majcodenum (node) {
+//==================================
+	var uuid = $(node).attr("id");
+	var code = UICom.structure.ui[uuid].getCode();
+	if (code.indexOf("*")>-1)
+		code = code.substring(0,code.indexOf("*"));
+	var nodes = $("*:has(>metadata[semantictag*='majcode'])",node);
+	for (var i=0;i<nodes.length;i++) {
+		var nodeid = $(nodes[i]).attr("id");
+		if (UICom.structure.ui[nodeid].semantictag.indexOf('majcode')>-1) {
+			var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+			var nodecode =  UICom.structure.ui[nodeid].getCode();
+			var newnodecode = nodecode;
+			if (nodecode.indexOf("*")>-1) {
+				var oldpartcode = nodecode.substring(nodecode.indexOf("*"));
+				newnodecode = code+oldpartcode;
+			}
+			$("code",resource).text(newnodecode);
+			var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+			//-------------------
+			$.ajax({
+				async : false,
+				type : "PUT",
+				contentType: "application/xml",
+				dataType : "text",
+				data : strippeddata,
+				url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+				success : function(data) {
+				},
+				error : function(data) {
+				}
+			});
+			//-------------------
+		}
+	}
+	//-----Node ordering-------------------------------------------------------
+	var nodes = $("*:has(>metadata[semantictag*='majnum'])",node);
+	var tableau1 = new Array();
+	for ( var i = 0; i < $(nodes).length; i++) {
+		var resource = $("asmResource[xsi_type='nodeRes']",nodes[i])[0];
+		var code = $('code',resource).text();
+		tableau1[i] = [code.substring(0,code.indexOf("*")+2),nodes[i]];
+	}
+	var newTableau1 = tableau1.sort(sortOn1);
+	//-------------------------------------------------------------------------
+	var num = 0;
+	var currentletter = "";
+	for ( var i = 0; i < newTableau1.length; i++) {
+		var oldcode = newTableau1[i][0];
+		var starindex = oldcode.indexOf("*");
+		var letter = oldcode.substring(starindex+1,starindex+2);
+		if (letter!=currentletter) {
+			num = 0;
+			currentletter = letter;
+		}
+		num++;
+		var newcode = oldcode.substring(0,starindex+1)+currentletter+(num>9?"":"0")+num.toString();
+		//--------------- maj resource --------------
+		var nodeid = $(newTableau1[i][1]).attr('id');
+		var resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1])[0];
+		$("code",resource).text(newcode);
+		var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
+		var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
+		//-------------------
+		$.ajax({
+			async : false,
+			type : "PUT",
+			contentType: "application/xml",
+			dataType : "text",
+			data : strippeddata,
+			url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
+			success : function(data) {
+			},
+			error : function(data) {
+			}
+		});
+		//-------------------
+	}
+	//-------------------------------------------------------------------------
+	if (UICom.structure.ui[uuid].asmtype=='asmStructure')
+		UIFactory.Node.reloadStruct();
+	else
+		UIFactory.Node.reloadUnit();
+}
+
+//==================================
+function sortTable (tableid)
+//==================================
+{
+	// adapted from Pierre Giraud - www.pierre-giraud.com
+	const compare = function(ids, asc){
+		return function(row1, row2){
+			const tdValue = function(row, ids){
+				return row.children[ids].textContent;
+			}
+			const tri = function(v1, v2){
+				if (v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2)){
+					return v1 - v2;
+				} else {
+					return v1.toString().localeCompare(v2);
+				}
+				return v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2);
+			};
+			return tri(tdValue(asc ? row1 : row2, ids), tdValue(asc ? row2 : row1, ids));
+		}
+	}
+
+	var table = document.getElementById(tableid);
+	var ths = table.querySelectorAll(".sort-th");
+	var trs = table.querySelectorAll(".sort-tr");
+	ths.forEach(function(th){
+		th.addEventListener('click', function(){
+			let classe = Array.from(trs).sort(compare(Array.from(ths).indexOf(th), this.asc = !this.asc));
+			classe.forEach(function(tr){
+				table.appendChild(tr)
+			});
+		});
+	});
+}
+
+//==================================
+function getTarget (knode,menuitem)
+//==================================
+{
+	var node = knode.node;
+	var target = "";
+	if (menuitem.indexOf("child.")>-1) {
+		var semtag = menuitem.substring("child.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",node);
+	} else if (menuitem.indexOf("parent.parent.parent.parent.parent.")>-1) {
+		var semtag = menuitem.substring("parent.parent.parent.parent.parent.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+	} else if (menuitem.indexOf("parent.parent.parent.parent")>-1) {
+		var semtag = menuitem.substring("parent.parent.parent.parent.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+	} else if (menuitem.indexOf("parent.parent.parent")>-1) {
+		var semtag = menuitem.substring("parent.parent.parent.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+	} else if (menuitem.indexOf("parent.parent")>-1) {
+		var semtag = menuitem.substring("parent.parent.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+	} else if (menuitem.indexOf("parent.")>-1) {
+		var semtag = menuitem.substring("parent.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])").addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+	} else {
+		target = $("*:has(>metadata[semantictag='"+menuitem+"'])",g_portfolio_current);
+	}
+	return target;
+}
+
+

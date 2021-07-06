@@ -120,6 +120,7 @@ UIFactory["Portfolio"].getLogicalMetadataAttribute= function(node,attribute)
 function dragPortfolio(ev)
 //==================================
 {
+	folder_last_drop = ""; // init
 	var portfolioid = ev.target.id.substring(ev.target.id.lastIndexOf('_')+1);
 	var parentid = ev.target.getAttribute('parentid');
 	var index = ev.target.getAttribute('index');
@@ -141,9 +142,9 @@ UIFactory["Portfolio"].prototype.displayOwner = function(dest)
 //==================================
 {
 	if (Users_byid[this.ownerid]==null)
-		UIFactory.User.loadUserAndDisplay(this.ownerid,dest,'firstname-lastname');
+		UIFactory.User.loadUserAndDisplay(this.ownerid,dest,'(firstname-lastname)');
 	else {
-		var owner = Users_byid[this.ownerid].getView(null,'firstname-lastname',null);
+		var owner = Users_byid[this.ownerid].getView(null,'(firstname-lastname)',null);
 		$("#"+dest).html(owner);
 	}
 }
@@ -199,10 +200,9 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	var html = "";
 	//--------------------------------------------------------------------------------------------
 	if (type=='list' || type=='portfolio') {
-		html += "<div class='portfolio-label col-10 col-md-4' onclick=\"display_main_page('"+this.rootid+"','"+this.id+"')\" ><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+"</div>";
+		html += "<div class='portfolio-label col-10 col-md-5' onclick=\"display_main_page('"+this.id+"')\" ><a class='portfolio-label' >"+portfolio_label+"</a> "+tree_type+" <span id='owner_"+this.id+"' class='owner'/> </div>";
 		if (USER.creator && !USER.limited) {
-			html += "<div id='owner_"+this.id+"' class='col-2 d-none d-md-block'></div>";
-			html += "<div class='col-3 d-none d-md-block'>";
+			html += "<div class='col-4 d-none d-md-block'>";
 			html += "<span id='pcode_"+this.id+"' class='portfolio-code'>"+this.code_node.text()+"</span>";
 			html += " <span class='copy-button fas fa-clipboard' ";
 			html += "   onclick=\"copyInclipboad('"+this.id+"')\" ";
@@ -212,7 +212,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 			html += "</div>";
 		}
 		if (this.date_modified!=null) {
-			html += "<div class='col-2 d-none d-md-block' onclick=\"display_main_page('"+this.rootid+"','"+this.id+"')\">"+dmodified+"</div>";
+			html += "<div class='col-2 d-none d-md-block' onclick=\"display_main_page('"+this.id+"')\">"+dmodified+"</div>";
 		}
 		//------------ buttons ---------------
 		html += "<div class='col-1'>";
@@ -247,7 +247,7 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 	//--------------------------------------------------------------------------------------------
 	if (type=='card-admin') {
 		html += "<div class='card-header' >";
-		html += tree_type + " <a class='portfolio-label' onclick=\"display_main_page('"+this.rootid+"','"+this.id+"')\" >"+portfolio_label+"</a></div>"
+		html += tree_type + " <a class='portfolio-label' onclick=\"display_main_page('"+this.id+"')\" >"+portfolio_label+"</a></div>"
 		html += "	</div>";
 		html += "<div class='card-body' >";
 		if (this.context_text_node[langcode].text()!="")
@@ -404,10 +404,6 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 		UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',type,LANGCODE,edit,UICom.rootid);
 	}
 	//---------------------------------------
-	if (typeof checkIfSpecialApp == 'function') { 
-		checkIfSpecialApp(UICom.structure["ui"][rootid].getCode());
-	}
-	//---------------------------------------
 	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 
 };
@@ -430,6 +426,8 @@ UIFactory["Portfolio"].displaySidebar = function(root,destid,type,langcode,edit,
 UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcode,edit,rootid)
 //======================
 {	
+	if (type==null)
+		type = "standard";
 	var html = "";
 	if (g_configVar['portfolio-hmenu-logo']!="")
 		html += "		<div id='portfolio-menu-logo' style=\""+g_configVar['portfolio-hmenu-logo-style']+"\">" + g_configVar['portfolio-hmenu-logo'] + "</div>";
@@ -441,6 +439,25 @@ UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcod
 	html += "	</div>";
 	$("#"+destid).html($(html));
 	UIFactory.Node.displayHorizontalMenu(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
+};
+
+//======================
+UIFactory["Portfolio"].displayHorizontalMenu2 = function(root,destid,type,langcode,edit,rootid)
+//======================
+{	
+	if (type==null)
+		type = "standard";
+	var html = "";
+	if (g_configVar['portfolio-hmenu-logo']!="")
+		html += "		<div id='portfolio-menu-logo' style=\""+g_configVar['portfolio-hmenu-logo-style']+"\">" + g_configVar['portfolio-hmenu-logo'] + "</div>";
+	html += "	<div class='navbar-collapse collapse navbars";
+	if (g_bar_type=='horizontal-right')
+		html += " justify-content-end";
+	html += "' id='portfolio-navbars'>";
+	html += "		<div id='parent-"+rootid+"' class='hzmenu-navbar topbarmenu'></ul>";
+	html += "	</div>";
+	$("#"+destid).html($(html));
+	UIFactory.Node.displayHorizontalMenu2(root,'parent-'+UICom.rootid,type,langcode,edit,rootid);
 };
 
 //======================
@@ -607,6 +624,7 @@ UIFactory["Portfolio"].reload = function(portfolioid)
 		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
+			setVariables(data);
 		}
 	});
 };
@@ -621,6 +639,7 @@ UIFactory["Portfolio"].reloadparse = function(portfolioid)
 		url : serverBCK_API+"/portfolios/portfolio/" + portfolioid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
+			setVariables(data);
 			UIFactory["Portfolio"].parse_add(data);
 			$("#sidebar").html("");
 			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.root);
@@ -733,7 +752,7 @@ UIFactory["Portfolio"].create = function(parentcode)
 		if (code!='') {
 			var xml = "";
 			xml +="<?xml version='1.0' encoding='UTF-8'?>";
-			xml +="<portfolio code='"+code+"'>";
+			xml +="<portfolio code='"+parentcode+"."+code+"'>";
 			xml +="	<asmRoot>";
 			xml +="		<metadata semantictag='root' sharedNode='N' sharedResource='N' multilingual-node='Y' />";
 			xml +="		<metadata-wad seenoderoles='all' />";
@@ -1292,7 +1311,10 @@ UIFactory["Portfolio"].import = function(zip,instance,foldercode)
 		html +="</div><br>";
 		html +=" <form id='fileupload' action='"+url+"'>";
 		html += " <input type='hidden' id='project' name='project' value=''>";
-		html += " <input type='hidden' id='instance' name='instance' value='false'>";
+		if (instance) 
+			html += " <input type='hidden' id='instance' name='instance' value='true'>";
+		else
+			html += " <input type='hidden' id='instance' name='instance' value='false'>";
 		html += " <input id='uploadfile' type='file' name='uploadfile'>";
 		html += "</form>";
 		html +=" <div id='progress'><div class='bar' style='width: 0%;'></div></div>";

@@ -96,8 +96,15 @@ UIFactory["Get_Resource"] = function(node,condition)
 	}
 	this.version_node = $("version",$("asmResource[xsi_type='"+this.type+"']",node));
 	//--------------------
+	if ($("asmResource[xsi_type='"+this.type+"']",node).length>0 && $("uuid",$("asmResource[xsi_type='"+this.type+"']",node)).length==0){  // for backward compatibility
+		var newelement = createXmlElement("uuid");
+		$("asmResource[xsi_type='"+this.type+"']",node)[0].appendChild(newelement);
+	}
+	this.uuid_node = $("uuid",$("asmResource[xsi_type='"+this.type+"']",node));
+	//--------------------
 	this.multilingual = ($("metadata",node).attr('multilingual-resource')=='Y') ? true : false;
 	//--------------------
+	this.preview = ($("metadata",node).attr('preview')=='Y') ? true : false;
 };
 
 //==================================
@@ -118,6 +125,7 @@ UIFactory["Get_Resource"].prototype.getAttributes = function(type,langcode)
 		result['code'] = this.code_node.text();
 		result['style'] = this.style_node.text();
 		result['label'] = this.label_node[langcode].text();
+		result['uuid'] = this.uuid_node.text();
 	}
 	return result;
 }
@@ -194,6 +202,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 	var code = $(this.code_node).text();
 	var style = $(this.style_node).text();
 	var html = "";
+	//--------------------------------------------------
 	if (label.indexOf("resource:")>-1) {
 		var elts = label.split("|");
 		try {
@@ -219,10 +228,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				else
 					html += "<div class='"+cleanCode(code)+" view-div' style='";
 				html += style;
-				if (indashboard)
-					html += "background-position:center;";
-				if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
-					html += "font-weight:bold;"
+//				if (indashboard)
+//					html += "background-position:center;";
 				html += "'>";
 				if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 					html += "<span name='code'>" + cleanCode(code) + "</span> ";
@@ -235,40 +242,97 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 					html += "</span>";
 				else
 					html += "</div>";
-				if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1){
-					html += text;
-				}
 			}
 		}
+	//--------------------------------------------------
+	} else  if (label.indexOf("nodelabel:")>-1) {
+		var elts = label.split("|");
+		var text = "";
+		var label = "";
+		var code = "";
+		var style = "";
+		try {
+			var resid = elts[0].substring(10);
+			var node = UICom.structure["ui"][resid];
+			label = node.label_node[langcode].text();
+			code = node.code_node.text();
+			style = this.style_node.text();
+		}
+		catch(e) {
+			var semtag = elts[1].substring(7);
+			// search for resource uuid
+			var res_node = $("*:has(>metadata[semantictag='"+semtag+"']):has(>code:contains('"+code+"'))",g_portfolio_current);
+			if (res_node.length>0) {
+				var resid = $($(res_node)[0]).attr('id');
+				if (resid!=undefined) {
+					//update get_resource
+					var node = UICom.structure["ui"][resid];
+					label = node.label_node[langcode].text();
+					code = node.code_node.text();
+					style = this.style_node.text();
+					for (var i=0; i<languages.length;i++){
+						this.label_node[i].text("nodelabel:"+resid+"|semtag:"+semtag+"|label:"+label);
+					}
+					this.save();
+				}
+			} else {
+				label = elts[2].substring(6);
+			}
+		}
+		if (indashboard)
+			html += "<span class='"+cleanCode(code)+"' style='";
+		else
+			html += "<div class='"+cleanCode(code)+" view-div' style='";
+		html += style;
+//		if (indashboard)
+//			html += "background-position:center;";
+		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
+			html += "font-weight:bold;"
+		html += "'>";
+		if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
+			html += "<span name='code'>" + cleanCode(code) + "</span> ";
+		if (code.indexOf("%")<0 && elts[2]!=undefined) {
+				html += "<span name='label'>" + label + "</span> ";
+		} else {
+				html += "<span name='label'>undefined</span> ";
+		}
+		if (code.indexOf("&")>-1)
+			html += " ["+$(this.value_node).text()+ "] ";
+		if (this.preview)
+			html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+resid+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+		if (indashboard)
+			html += "</span>";
+		else
+			html += "</div>";
+	//--------------------------------------------------
 	} else {
 		if (indashboard)
 			html += "<span class='"+cleanCode(code)+"' style='";
 		else
 			html += "<div class='"+cleanCode(code)+" view-div' style='";
 		html += style;
-		if (indashboard)
-			html += "background-position:center;";
-		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
-			html += "font-weight:bold;"
+//		if (indashboard)
+//			html += "background-position:center;";
 		html += "'>";
-		if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
+		if (code.indexOf("#")>-1 && code.indexOf("##")<0) 
 			html += "<span name='code'>" + cleanCode(code) + "</span> ";
 		if (code.indexOf("%")<0) {
 			if (label.indexOf("fileid-")>-1)
 				html += UICom.structure["ui"][label.substring(7)].resource.getView();
 			else
 				html += "<span name='label'>" + label + "</span> ";
-		}
+			}
 		if (code.indexOf("&")>-1)
 			html += " ["+$(this.value_node).text()+ "] ";
+		if (this.preview)
+			html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		if (indashboard)
 			html += "</span>";
 		else
 			html += "</div>";
-		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1){
-			html += text;
-		}
+
 	}
+	//--------------------------------------------------
 	return html;
 };
 
@@ -288,6 +352,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 {
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
+	var uuid = $(selected_item).attr('uuid');
 	var style = $(selected_item).attr('style');
 	//---------------------
 	if (itself.encrypted)
@@ -297,7 +362,8 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 	//---------------------
 	$(itself.value_node[0]).text(value);
 	$(itself.code_node[0]).text(code);
-	$(itself.style_node[0]).text(style);
+	$(itself.uuid_node[0]).text(uuid);
+	$(itself.style_node[0]).text(style.trim());
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);
 		//---------------------
@@ -434,7 +500,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		var select  = $(html);
 		//----------------- null value to erase
 		if (resettable) {
-			html = "<a class='dropdown-item' value='' code='' ";
+			html = "<a class='dropdown-item' value='' code='' uuid='' style='' ";
 			for (var j=0; j<languages.length;j++) {
 				html += "label_"+languages[j]+"='&nbsp;' ";
 			}
@@ -483,7 +549,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					html = "<div class='dropdown-divider'></div>";
 					select_item = $(html);
 				} else {
-					html = "<a class='dropdown-item "+code+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
+					html = "<a class='dropdown-item "+code+"' uuid='"+uuid+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
 					for (var j=0; j<languages.length;j++){
 						html += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 					}
@@ -644,7 +710,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				for (var j=0; j<languages.length;j++){
 					html += "label_"+languages[j]+"=\"resource:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure["ui"][uuid].resource.getLabel(null,'none')+"\" ";
 				}
-				html += ">";
+				html += " style=\""+style+"\">";
 				
 				if (display_code)
 					html += code+" ";
@@ -669,10 +735,64 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code).addClass(code);
 				}
 			}
-		}		//---------------------
+		}
+		//---------------------
+		if (target=='nodelabel') {
+			for ( var i = 0; i < newTableau1.length; i++) {
+				var uuid = $(newTableau1[i][1]).attr('id');
+				var resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				var style = UIFactory.Node.getLabelStyle(uuid);
+				//------------------------------
+				var code = $('code',resource).text();
+				var display_code = false;
+				var display_label = true;
+				if (code.indexOf("$")>-1) 
+					display_label = false;
+				if (code.indexOf("@")<0) {
+					display_code = true;
+				}
+				code = cleanCode(code);
+				//------------------------------
+				if ($('code',resource).text().indexOf('----')>-1) {
+					html = "<li class='divider'></li><li></li>";
+				} else {
+					html = "<li></li>";
+				}
+				var select_item = $(html);
+				html = "<a  value='"+semtag+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
+				for (var j=0; j<languages.length;j++){
+					html += "label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure["ui"][uuid].getLabel(null,'none')+"\" ";
+				}
+				html += " style=\""+style+"\">";
+				
+				if (display_code)
+					html += code+" ";
+				if (display_label)
+					html += UICom.structure["ui"][uuid].getView(null,'span');
+				var select_item_a = $(html);
+				$(select_item_a).click(function (ev){
+					$("#button_"+langcode+self.id).html($(this).attr("label_"+languages[langcode]).substring($(this).attr("label_"+languages[langcode]).indexOf('|label:')+7));
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code).addClass(code);
+					UIFactory["Get_Resource"].update(this,self,langcode);
+				});
+				$(select_item).append($(select_item_a))
+				$(select).append($(select_item));
+				//-------------- update button -----
+				if (code!="" && self_code==$('code',resource).text()) {
+					var html = "";
+					if (display_code)
+						html += code+" ";
+					if (display_label)
+						html += UICom.structure["ui"][uuid].getView(null,'span');
+					$("#button_"+langcode+self.id).html(html);
+					$("#button_"+langcode+self.id).attr('class', 'btn btn-default select select-label').addClass("sel"+code).addClass(code);
+				}
+			}
+		}
+		//---------------------
 		$(btn_group).append($(select));
-		
 	}
+	
 	//------------------------------------------------------------
 	//------------------------------------------------------------
 	if (type.indexOf('radio')>-1) {
@@ -682,7 +802,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		if (resettable) {
 			var radio_obj = $("<div class='get-radio'></div>");
 			var input = "";
-			input += "<input type='radio' class='radio-div'  name='radio_"+self.id+"' value='' code='' ";
+			input += "<input type='radio' class='radio-div'  name='radio_"+self.id+"' value='' code='' uuid='' style='' ";
 			if (disabled)
 				input +="disabled='disabled' ";
 			for (var j=0; j<languages.length;j++){
@@ -766,7 +886,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		//----------------- null value to erase
 		if (resettable){
 			var input = "";
-			input += "<div name='click_"+self.id+"' value='' code='' class='click-item";
+			input += "<div name='click_"+self.id+"' value='' code='' uuid='' style='' class='click-item";
 			if (self_code=="")
 				input += " clicked";
 			input += "' ";
@@ -885,7 +1005,9 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 							input += "label_"+languages[j] + "=\"" + target + "-" + uuid + "\" ";
 						else
 							input += "label_"+languages[j] + "=\"" + target + ":" + uuid + "|semtag:"+semtag+"|label:"+$("label[lang='"+languages[j]+"']",resource).text()+"\" ";
-					} else 
+					} else if (target=='nodelabel')
+						input += "label_"+languages[j]+"=\"nodelabel:"+uuid + "|semtag:"+semtag+"|label:"+UICom.structure["ui"][uuid].getLabel(null,'none')+"\" ";
+					else 
 						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
 				}
 				if (disabled)
@@ -895,7 +1017,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (display_code)
 				input += code + " ";
 			if (display_label) {
-				if (srce=='resource')
+				if (srce=='resource' || srce=='nodelabel')
 					input += $("label[lang='"+languages[langcode]+"']",resource).text()+"</div>";
 				else
 					input += $(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</div>";
@@ -937,7 +1059,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		var select  = $(html);
 		//----------------- null value to erase
 		if (resettable) {
-			html = "<a class='dropdown-item' value='' code='' ";
+			html = "<a class='dropdown-item' value='' code='' uuid='' style='' ";
 			for (var j=0; j<languages.length;j++) {
 				html += "label_"+languages[j]+"='&nbsp;' ";
 			}
@@ -1102,11 +1224,16 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		if (target=='label') {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				//------------------------------
+				var uuid = $(newTableau1[i][1]).attr('id');
+				var style = "";
 				var resource = null;
-				if ($("asmResource",newTableau1[i][1]).length==3)
+				if ($("asmResource",newTableau1[i][1]).length==3) {
+					style = UIFactory.Node.getContentStyle(uuid);
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
-				else
+				} else {
+					style = UIFactory.Node.getLabelStyle(uuid);
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				}
 				//------------------------------
 				var code = $('code',resource).text();
 				var display_code = false;
@@ -1280,6 +1407,8 @@ UIFactory["Get_Resource"].parseChildren = function(dest,self,data,langcode,srce,
 UIFactory["Get_Resource"].prototype.save = function()
 //==================================
 {
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1)
+		updateVariable(this.node);
 	//------------------------------
 	var log = (UICom.structure.ui[this.id]!=undefined && UICom.structure.ui[this.id].logcode!=undefined && UICom.structure.ui[this.id].logcode!="");
 	if (log)
@@ -1325,9 +1454,15 @@ UIFactory["Get_Resource"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Get_Resource"].addSimple = function(parentid,multiple_tags)
+UIFactory["Get_Resource"].addSimple = function(parentid,targetid,multiple_tags)
 //==================================
 {
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined && targetid!="")
+		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
+	//------------------------------
 	$.ajaxSetup({async: false});
 	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
@@ -1344,9 +1479,15 @@ UIFactory["Get_Resource"].addSimple = function(parentid,multiple_tags)
 };
 
 //==================================
-UIFactory["Get_Resource"].addMultiple = function(parentid,multiple_tags)
+UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags)
 //==================================
 {
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined && targetid!="")
+		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
+	//------------------------------
 	$.ajaxSetup({async: false});
 	var elts = multiple_tags.split(",");
 	var part_code = elts[0];
@@ -1367,44 +1508,6 @@ UIFactory["Get_Resource"].addMultiple = function(parentid,multiple_tags)
 		if (j==inputs.length-1)
 			param4 = true;
 		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4,param5,param6);
-	}
-};
-
-//==================================
-UIFactory["Get_Resource"].importMultiple = function(parentid,srce)
-//==================================
-{
-	$.ajaxSetup({async: false});
-	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
-	// for each one import a part
-	var databack = true;
-	var callback = UIFactory.Node.reloadUnit;
-	for (var j=0; j<inputs.length;j++){
-		var code = $(inputs[j]).attr('code');
-		if (srce.indexOf("?")>-1){
-			var newcode = srce.substring(srce.indexOf(".")+1);
-			srce = code;
-			if (srce.indexOf("@")>-1) {
-				srce =srce.substring(0,srce.indexOf("@"))+srce.substring(srce.indexOf("@")+1);
-			}
-			if (srce.indexOf("#")>-1) {
-				srce = srce.substring(0,srce.indexOf("#"))+srce.substring(srce.indexOf("#")+1);
-			}
-			if (srce.indexOf("%")>-1) {
-				srce = srce.substring(0,srce.indexOf("%"))+srce.substring(srce.indexOf("%")+1);
-			}
-			if (code.indexOf("$")>-1) {
-				display_label = false;
-				code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("$")+1);
-			}
-			if (code.indexOf("&")>-1) {
-				display_label = false;
-				code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("&")+1);
-			}
-			code = newcode;
-		}
-//		importBranch(parentid,encodeURIComponent(srce),encodeURIComponent(code),databack,callback);
-		importBranch(parentid,srce,encodeURIComponent(code),databack,callback);
 	}
 };
 
@@ -1432,13 +1535,12 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 		url : serverBCK_API+"/nodes/node/"+partid,
 		last : last,
 		success : function(data) {
-//			var nodeid = $("asmContext:has(metadata[semantictag='"+get_resource_semtag+"'])",data).attr('id');
-			var nodes = $("*:has(metadata[semantictag*='"+get_resource_semtag+"'])",data);
+			var nodes = $("*:has(>metadata[semantictag*='"+get_resource_semtag+"'])",data);
 			if (nodes.length==0)
 				nodes = $( ":root",data ); //node itself
-			var nodeid = $(nodes[nodes.length-1]).attr('id'); // if more than one node (embedded node), the last must be the right one
+			var nodeid = $(nodes[0]).attr('id'); 
 			var url_resource = serverBCK_API+"/resources/resource/" + nodeid;
-			var tagname = $( ":root",data )[ 0 ].nodeName;
+			var tagname = $(nodes[0])[0].nodeName;
 			if( "asmRoot" == tagname || "asmStructure" == tagname || "asmUnit" == tagname || "asmUnitStructure" == tagname) {
 				xml = xml.replace("Get_Resource","nodeRes");
 				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
@@ -1463,11 +1565,80 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 }
 
 //==================================
-function get_simple(parentid,title,query,partcode,get_resource_semtag)
+UIFactory["Get_Resource"].importMultiple = function(parentid,targetid,srce)
 //==================================
 {
+	$.ajaxSetup({async: false});
+	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
+	// for each one import a part
+	//------------------------------
+	if (UICom.structure.ui[targetid]==undefined && targetid!="")
+		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
+	//------------------------------
+	var callback = "";
+	var databack = false;
+	var param2 = "";
+	var param3 = null;
+	var parent = UICom.structure.ui[parentid].node;
+	while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
+		parent = $(parent).parent();
+	}
+	var reloadid = $(parent).attr("id");
+	if ($(parent).prop("nodeName") == "asmUnit"){
+		callback = UIFactory.Node.reloadUnit;
+		param2 = reloadid;
+		if ($("#page").attr('uuid')!=reloadid)
+			param3 = false;
+	}
+	else {
+		callback = UIFactory.Node.reloadStruct;
+		param2 = g_portfolio_rootid;
+		if ($("#page").attr('uuid')!=reloadid)
+			param3 = false;
+	}
+	for (var j=0; j<inputs.length;j++){
+		var code = $(inputs[j]).attr('code');
+		if (srce.indexOf("?")>-1){
+			var newcode = srce.substring(srce.indexOf(".")+1);
+			srce = code;
+			if (srce.indexOf("@")>-1) {
+				srce =srce.substring(0,srce.indexOf("@"))+srce.substring(srce.indexOf("@")+1);
+			}
+			if (srce.indexOf("#")>-1) {
+				srce = srce.substring(0,srce.indexOf("#"))+srce.substring(srce.indexOf("#")+1);
+			}
+			if (srce.indexOf("%")>-1) {
+				srce = srce.substring(0,srce.indexOf("%"))+srce.substring(srce.indexOf("%")+1);
+			}
+			if (code.indexOf("$")>-1) {
+				display_label = false;
+				code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("$")+1);
+			}
+			if (code.indexOf("&")>-1) {
+				display_label = false;
+				code = code.substring(0,code.indexOf("$"))+code.substring(code.indexOf("&")+1);
+			}
+			code = newcode;
+		}
+		importBranch(parentid,srce,encodeURIComponent(code),databack,callback,param2,param3);
+	}
+};
+
+//--------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+//----------------------------------Menu Functions--------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+
+//==================================
+function get_simple(parentid,targetid,title,query,partcode,get_resource_semtag)
+//==================================
+{
+	// targetid not used with get_simple
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
+	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+targetid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title.replaceAll("##apos##","'"));
@@ -1483,11 +1654,12 @@ function get_simple(parentid,title,query,partcode,get_resource_semtag)
 	$('#edit-window').modal('show');
 }
 //==================================
-function get_multiple(parentid,title,query,partcode,get_resource_semtag,fct)
+function get_multiple(parentid,targetid,title,query,partcode,get_resource_semtag,fct)
 //==================================
 {
+	// targetid not used with get_multiple
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+","+fct+"')";
+	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+targetid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+","+fct+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title.replaceAll("##apos##","'"));
@@ -1504,11 +1676,11 @@ function get_multiple(parentid,title,query,partcode,get_resource_semtag,fct)
 }
 
 //==================================
-function import_multiple(parentid,title,query,partcode,get_resource_semtag)
+function import_multiple(parentid,targetid,title,query,partcode,get_resource_semtag)
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+r_replaceVariable(partcode)+"')";
+	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+targetid+"','"+r_replaceVariable(partcode)+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title.replaceAll("##apos##","'"));

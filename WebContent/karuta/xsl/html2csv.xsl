@@ -22,7 +22,7 @@
 <!-- =========================================================================-->
 
 <!-- =====================================-->
-<xsl:template match="table"><xsl:apply-templates select="tbody"/></xsl:template>
+<xsl:template match="table"><xsl:apply-templates select="tbody|tr"/></xsl:template>
 <!-- =====================================-->
 
 

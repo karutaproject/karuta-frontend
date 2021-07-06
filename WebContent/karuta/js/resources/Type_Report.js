@@ -136,24 +136,31 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 	//----------------------------------------
 	$("#extra_"+uuid).append($("<div class='row'><div id='exec_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='dashboard_"+uuid+"' class='createreport col-md-offset-1 col-md-11'></div><div id='csv_button_"+uuid+"' class='col-md-offset-1 col-md-2 btn-group'></div><div id='pdf_button_"+uuid+"' class='col-md-1 btn-group'></div></div>"));
 	var model_code = UICom.structure["ui"][uuid].resource.getView();
-	var root_node = g_portfolio_current;
 	if (model_code!='') {
 		$.ajax({
 			type : "GET",
 			url : serverBCK+"/report/"+uuid+".html",
 			dataType: 'html',
 			success : function(data) {
-				var content_report =  $(data).find("#dashboard_"+uuid).html();
-				$("#dashboard_"+uuid).html(content_report);
+				$("#dashboard_"+uuid).html(data);
 			},
 			error : function(jqxhr,textStatus) {
-				register_report(uuid);
-				var root_node = g_portfolio_current;
-				genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);
+				if (g_userroles[0]!='designer') {
+					alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
+					register_report(uuid);
+					genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
+				}
 			}
 		});
 		$("#exec_button_"+uuid).html($("<div class='exec-button button'>"+karutaStr[LANG]['exec']+"</div>"));
-		$("#exec_button_"+uuid).click(function(){$("#dashboard_"+uuid).html('');genDashboardContent("dashboard_"+uuid,uuid,parent,root_node);});
+		$("#exec_button_"+uuid).click(function(){
+			$("#dashboard_"+uuid).html('');
+			if (g_userroles[0]!='designer') {
+				register_report(uuid);
+				alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
+				genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
+			}
+		});
 		//---------- display csv or pdf -------
 		var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
 		if (csv_roles.containsArrayElt(g_userroles) || (csv_roles!='' && (g_userroles[0]=='designer' || USER.admin))) {
@@ -326,9 +333,9 @@ UIFactory["Report"].prototype.getEditor = function(type,langcode,disabled)
 		$(htmlFormObj).append($(htmlpdfGroupObj));
 	}
 	//------------------------
-	var js1 = "javascript:register_report('"+this.id+"')";
+	var js1 = "register_report('"+this.id+"')";
 	var footer = " <button class='btn btn-success' onclick=\""+js1+";\">"+karutaStr[LANG]['register']+"</button>";
-	$("#edit-window-footer").append($(footer));
+//	$("#edit-window-footer").append($(footer));
 	//------------------------
 	return htmlFormObj;
 
@@ -352,3 +359,28 @@ UIFactory["Report"].prototype.refresh = function()
 	};
 
 };
+
+//==================================
+function register_report(uuid)
+//==================================
+{
+	var node_resource = UICom.structure["ui"][uuid].resource;
+	var startday = node_resource.startday_node.text();
+	var time = node_resource.time_node.text();
+	var freq = node_resource.freq_node.text();
+	var comments = node_resource.comments_node[LANGCODE].text();
+	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
+	var url = serverBCK+"/report";
+	$.ajax({
+		type : "POST",
+		url : url,
+		data : data,
+		dataType: "text",
+		success : function(data) {
+		},
+		error : function(jqxhr, textStatus, err) {
+			alertHTML("Erreur - rapport non exécuté:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
+		}
+	});
+}
+

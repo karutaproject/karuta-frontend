@@ -293,6 +293,7 @@ function setConfigurationPortfolioVariable(data,local,langcode)
 function resetConfigurationPortfolioVariable()
 //==============================
 {
+	g_bar_type = 'verticval';
 	for (item in g_configDefaultVar) {
 		if (item.indexOf('portfolio-')>-1 ||item.indexOf('svg-')>-1)
 			g_configVar[item] = g_configDefaultVar[item];

@@ -98,6 +98,13 @@
 /* ====================
 	Report Dashboard
    ====================*/
+.createreport .button,
+.createreport .btn-group .button,
+.createreport .menus,
+.createreport .add-button {
+  color: var(--portfolio-buttons-color);
+}
+
 .createreport {
   margin-top: 10px;
 }
@@ -237,6 +244,7 @@
 .report .draw-web-title,
 .report .draw-web-line,
 .report .draw-web-axis,
+.report .draw-data,
 .report .draw-xy-axis {
   margin-top: 7px;
   border: 1px solid var(--report-svg-color);

@@ -195,6 +195,30 @@ var UICom =
 								proxies_delete[newid] = delnoderoles;
 								proxies_nodeid[newid] = id; // og: ???
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
+							},
+							error : function(jqxhr,textStatus) {
+								var dataS = "";
+								var newid = "temp-"+id;
+								dataS += "<asmContext id='"+newid+"' delete='Y' read='Y' role='' submit='' write='Y' xsi_type=''>";
+								dataS += "	<metadata-wad seenoderoles='all' />";
+								dataS += "	<metadata-epm displayview='xwide' />";
+								dataS += "	<metadata multilingual-node='Y' multilingual-resource='Y' semantictag='Field' />";
+								dataS += "	<asmResource xsi_type='nodeRes'><lastmodified /><code /><label lang='fr' /><label lang='en' /></asmResource>";
+								dataS += "	<asmResource xsi_type='context'><text lang='fr' /><text lang='en' /></asmResource>";
+								dataS += "	<asmResource xsi_type='Field'>";
+								for (var i=0; i<languages.length;i++){
+									dataS += "<text lang='" + languages[i] + "'>" + karutaStr[languages[i]]['error-notfound'] + "</text>";
+								}
+								dataS += "	</asmResource>";
+								dataS += "</asmContext>";
+								var parser = new DOMParser();
+								var data = parser.parseFromString(dataS, "text/xml");
+								proxies_data[newid] = data;
+								proxies_parent[newid] = $(current).attr("id"); // proxy parentid
+								proxies_edit[newid] = edittargetroles;
+								proxies_delete[newid] = delnoderoles;
+								proxies_nodeid[newid] = id; // proxyid
+								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
 							}
 						});
 					}
@@ -211,7 +235,30 @@ var UICom =
 								proxies_parent[targetid] = $(current).attr("id");
 								proxies_edit[targetid] = edittargetroles;
 								proxies_nodeid[targetid] = id;
-//								UICom.parseStructure(data,false,$(current).attr("id"));
+								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
+							},
+							error : function(jqxhr,textStatus) {
+								var dataS = "";
+								var targetid = "temp-"+id;
+								dataS += "<asmContext id='"+targetid+"' delete='Y' read='Y' role='' submit='' write='Y' xsi_type=''>";
+								dataS += "	<metadata-wad seenoderoles='all' />";
+								dataS += "	<metadata-epm displayview='xwide' />";
+								dataS += "	<metadata multilingual-node='Y' multilingual-resource='Y' semantictag='Field' />";
+								dataS += "	<asmResource xsi_type='nodeRes'><lastmodified /><code /><label lang='fr' /><label lang='en' /></asmResource>";
+								dataS += "	<asmResource xsi_type='context'><text lang='fr' /><text lang='en' /></asmResource>";
+								dataS += "	<asmResource xsi_type='Field'>";
+								for (var i=0; i<languages.length;i++){
+									dataS += "<text lang='" + languages[i] + "'>" + karutaStr[languages[i]]['error-notfound'] + "</text>";
+								}
+								dataS += "	</asmResource>";
+								dataS += "</asmContext>";
+								var parser = new DOMParser();
+								var data = parser.parseFromString(dataS, "text/xml");
+								proxies_data[targetid] = data;
+								proxies_parent[targetid] = $(current).attr("id"); // proxy parentid
+								proxies_edit[targetid] = edittargetroles;
+								proxies_delete[targetid] = delnoderoles;
+								proxies_nodeid[targetid] = id; // proxyid
 								UICom.parseStructure(data,false,$(current).attr("id"),null,null,true);
 							}
 						});
@@ -234,6 +281,7 @@ var UICom =
 		UICom.addRole(node,'delnoderoles');
 		UICom.addRole(node,'commentnoderoles');
 		UICom.addRole(node,'submitroles');
+		UICom.addRole(node,'unsubmitroles');
 		UICom.addRole(node,'editnoderoles');
 		UICom.addRole(node,'shownoderoles');
 		UICom.addRole(node,'showroles');

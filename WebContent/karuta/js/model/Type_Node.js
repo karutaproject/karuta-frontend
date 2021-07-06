@@ -1,5 +1,5 @@
 /* =======================================================
-	Copyright 2018 - ePortfolium - Licensed under the
+	Copyright 2021 - ePortfolium - Licensed under the
 	Educational Community License, Version 2.0 (the "License"); you may
 	not use this file except in compliance with the License. You may
 	obtain a copy of the License at
@@ -153,7 +153,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 	this.setMetadata(dest,depth,langcode,edit,inline,backgroundParent,parent,menu,inblock);
 	var alreadyDisplayed = false;
 	//---------------------------------------
-	if (this.visible) {
+	if (this.visible && this.langnotvisible!=karutaStr[languages[LANGCODE]]['language']) {
 		var node = UICom.structure["ui"][uuid];
 		var structure_node =   node.resource==null 
 							|| node.resource.type!='Proxy' 
@@ -170,13 +170,13 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					var proxy_parent = proxies_parent[uuid];
 					if (proxy_parent==dest.substring(8) || dest=='contenu') { // dest = {parentid}
 						proxy_target = true;
-						edit = menu = (proxies_edit[uuid].containsArrayElt(g_userroles) || g_userroles[0]=='designer');
+						edit = menu = (proxies_edit[uuid].containsArrayElt(g_userroles) || g_userroles[0]=='designer') && g_edit;
 					}
 			}
 			//============================== ASMCONTEXT =============================
 			if (this.nodetype == "asmContext" || (this.structured_resource != null && type!='raw' && this.semantictag!='EuropassL')){
-				this.displayAsmContext(dest,type,langcode,edit,refresh);
 				alreadyDisplayed = true;
+				this.displayAsmContext(dest,type,langcode,edit,refresh,depth);
 			}
 			//============================== NODE ===================================
 			else { // other than asmContext
@@ -187,26 +187,34 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				if (this.depth>0 || this.nodetype == "asmContext") {
 					var help_text = "";
+					var helplang = 0;
+					var display_help = false;
 					var attr_help = $($("metadata-wad",data)[0]).attr('help');
 					var helps = attr_help.split("/"); // lang1/lang2/...
-					if (attr_help.indexOf("@")>-1) { // lang@fr/lang@en/...
-						for (var j=0; j<helps.length; j++){
-							if (helps[j].indexOf("@"+languages[langcode])>-1)
-								help_text = helps[j].substring(0,helps[j].indexOf("@"));
-						}
-					} else { // lang1/lang2/...
-						help_text = helps[langcode];  // lang1/lang2/...
+					for (var j=0; j<helps.length; j++){
+						if (helps[j].indexOf("@"+languages[langcode])>-1)
+							helplang =j;
 					}
-					var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
-					$("#help_"+uuid).html(help);
-					$(".popinfo").popover({ 
-					    placement : 'right',
-					    container : 'body',
-					    title:karutaStr[LANG]['help-label'],
-					    html : true,
-					    trigger:'click hover',
-					    content: help_text
-					});
+					help_text = helps[helplang].substring(0,helps[helplang].indexOf("@"));
+					if (helps[helplang].indexOf(",")>-1) {
+						var roles = helps[helplang].substring(helps[helplang].indexOf(","));
+						if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+						display_help = true;
+					} else {
+						display_help = true;
+					}
+					if (display_help){
+						var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
+						$("#help_"+uuid).html(help);
+						$(".popinfo").popover({ 
+							placement : 'right',
+							container : 'body',
+							title:karutaStr[LANG]['help-label'],
+							html : true,
+							trigger:'click hover',
+							content: help_text
+						});
+					}
 				}
 			}
 			// ===========================================================================
@@ -230,7 +238,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 					}
 				}
 				//------------ Bubble Map -----------------
-				if (this.semantictag=='bubble_level1') {
+				if (this.semantictag.indexOf('bubble_level1')>-1) {
 					alreadyDisplayed = true;
 					if  (this.seeqrcoderoles.containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer') {
 						var map_info = UIFactory.Bubble.getLinkQRcode(uuid);
@@ -349,7 +357,7 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
 	//----------------delete control on proxy parent ------------
-	if (proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
+	if (edit && proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
 		var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
 		$("#buttons-"+uuid).html(html);
 	}
@@ -458,15 +466,16 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	}
 	//-------------------- collapsible -------------------
 	if (this.collapsible=='Y') {
+		var menus_color  = this.getMenuStyle()
 		$("#collapsible_"+uuid).show();
-		$("#collapsible_"+uuid).html("<span id='toggleContent_"+uuid+"' class='button'></span>");
+		$("#collapsible_"+uuid).html("<span id='toggleContent_"+uuid+"' class='button' style='"+menus_color+"'></span>");
 		$("#collapsible_"+uuid).attr("onclick","javascript:toggleContent('"+uuid+"')");
 		if (this.collapsed=='Y') {
-			$("#toggleContent_"+uuid).attr("class","fas fa-plus collapsible");
+			$("#toggleContent_"+uuid).attr("class","fas fa-plus");
 			$("#content-"+uuid).hide();
 		}
 		else {
-			$("#toggleContent_"+uuid).attr("class","fas fa-minus collapsible");
+			$("#toggleContent_"+uuid).attr("class","fas fa-minus");
 			$("#content-"+uuid).show();
 		}
 	} else
@@ -474,7 +483,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	//-------------- label --------------------------
 	var gotView = false;
 	var label_html = ""
-	if (this.semantictag=='bubble_level1'){
+	if (this.semantictag.indexOf("bubble_level1")>-1){
 		label_html += " "+UICom.structure["ui"][uuid].getBubbleView('std_node_'+uuid);
 		gotView = true;
 	}
@@ -487,7 +496,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		html_chckbox += "checked=true";
 	html_chckbox += " type='checkbox' onchange=\"UIFactory.Node.toggleComment('"+uuid+"',this)\">&nbsp;"+karutaStr[LANG]['report-elt-disabled']+"<span>";
 	$("div[class='title']","#label_node_"+uuid).append(html_chckbox);
-	//-------------- buttons --------------------------
+	//-------------- buttons & menus --------------------------
 	if (edit) {
 		if (this.semantictag.indexOf("bubble_level1")>-1)
 			this.menu = false;
@@ -498,11 +507,12 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 		if (buttons!="")
 			buttons = "<div class='btn-group'>"+buttons+"</div><!-- class='btn-group' -->"
 		$("#buttons-"+uuid).html(buttons);
-		if (this.menu)
+		//-------------- menus ---------------
+		if (this.menu || USER.admin || g_userroles[0]=='administrator')
 			this.displayMenus("#menus-"+uuid,langcode);
 	}
 	//----------------delete control on proxy parent ------------
-	if (proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
+	if (edit && proxies_delete[uuid]!=undefined && proxies_delete[uuid].containsArrayElt(g_userroles)) {
 		var html = deleteButton(proxies_nodeid[uuid],"asmContext",undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
 		$("#buttons-"+uuid).html(html);
 	}
@@ -725,22 +735,25 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
+	if(this.editcoderoles==undefined)
+		this.setMetadata();
+
 	//---------------------
 	if (g_userroles[0]=='designer' || USER.admin || this.metadatawad.getAttribute('display')!='N') {
 		//-----------------------------
-			if (type=="default")
+		if (type=="default")
 			html += "<div><div class='title'";
 		if (type=="span")
 			html += "<span class='title'";
 		//----------------------------
 		var style ="";
-		var metadataepm = this.metadataepm;
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
-		style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
-		style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
+//		var metadataepm = this.metadataepm;
+//		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
+//		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
+//		style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
+//		style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
+//		style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
+//		style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
 		if (style.length>0)
 			html += " style='"+style+"' ";
 		//----------------------------
@@ -956,16 +969,17 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 UIFactory["Node"].prototype.save = function()
 //==================================
 {
+	UICom.UpdateNode(this.node);
 	//-------- if function js -------------
 	if (this.js!=undefined && this.js!="") {
 		var fcts = this.js.split(";");
 		for (var i=0;i<fcts.length;i++) {
 			var elts = fcts[i].split("/");
 			if (elts[0]=="update-node")
-				eval(elts[1]+"(this.node,g_portfolioid)");
+				eval(elts[1]+"(this.id)");
 		}
 	}
-	UICom.UpdateNode(this.node);
+	//------------------------------------
 	if (this.logcode!="")
 		this.log();
 	this.refresh();
@@ -984,9 +998,12 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2)
 {
 	//-------- if function js -------------
 	if (UICom.structure.ui[uuid].js!=undefined && UICom.structure.ui[uuid].js!="") {
-		var elts = UICom.structure.ui[uuid].js.split("/");
-		if (elts[0]=="delete")
-			eval(elts[1]+"(UICom.structure.ui[uuid].node,g_portfolioid)");
+		var fcts = UICom.structure.ui[uuid].js.split(";");
+		for (var i=0;i<fcts.length;i++) {
+			var elts = fcts[i].split("/");
+			if (elts[0]=="delete")
+				eval(elts[1]+"(uuid)");
+		}
 	}
 	//---------------------
 	$("#"+uuid,g_portfolio_current).remove();
@@ -1273,8 +1290,9 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 		var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 		var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
 		var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+		var langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
 		var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-		if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
+		if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && (display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
 			if(name == "asmUnit") // Click on Unit
 			{
 				var html = "";
@@ -1342,8 +1360,9 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 			var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+			var langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
 			var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-			if ((display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer'))) {
+			if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && ( (display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')))) {
 				if(name == "asmUnit" && level==0) // first level
 				{
 					$("#"+destid).removeClass("nodisplay");
@@ -1369,22 +1388,6 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
-/*				if(name == "asmStructure" && level==0) // Click on Structure
-				{
-					var depth = 1;
-					var html = "";
-					html += "<div class='nav-item dropdown-submenu";
-					if (privatevalue)
-						html+= "private"
-					html += "' style='cursor:pointer' id='parent-"+uuid+"' role='tabdivst'>";
-					html += "<div class='dropdown-toggle' style='cursor:pointer' href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+text+"</div>";
-					html += "<div id='dropdown"+uuid+"' class='dropdown-menu' aria-labelledby='sidebar_"+uuid+"'>";
-					html += "<div class='dropdown-item first-item'  style='cursor:pointer' href='#' oncdivck=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
-					html += "</div><!-- panel-collapse -->";
-					html += "</div>";
-					$("#"+destid).append($(html));
-					UIFactory["Node"].displayHorizontalMenu(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
-				} */
 				if(name == "asmStructure") // Click on Structure
 				{
 					$("#"+destid).removeClass("nodisplay");
@@ -1403,9 +1406,73 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 			}
 		}
 	};
-		
-		
 
+	//===========================================
+	UIFactory["Node"].displayHorizontalMenu2 = function(root,destid,type,langcode,edit,parentid,level)
+	//===========================================
+	{
+		//---------------------
+		if (langcode==null)
+			langcode = LANGCODE;
+		//---------------------
+		if (level==null)
+			level = 0;
+		//---------------------
+		for( var i=0;i<root.children.length;i++ )
+		{
+			var child = UICom.structure["tree"][root.children[i]].node;
+			var name = child.tagName;
+			var uuid = $(child).attr("id");
+			var text = UICom.structure["ui"][uuid].getLabel('sidebar_'+uuid,'span');
+			var node = UICom.structure["ui"][uuid];
+			var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
+			var showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)? 'none' : $(node.metadatawad).attr('showtoroles');
+			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
+			var langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?'':$(node.metadatawad).attr('langnotvisible');
+			var privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+			if (langnotvisible!=karutaStr[languages[LANGCODE]]['language'] && ( (display=='N' && (g_userroles[0]=='designer' || USER.admin)) || (display=='Y' && (seenoderoles.indexOf("all")>-1 || showtoroles.indexOf("all")>-1 || seenoderoles.containsArrayElt(g_userroles) || showtoroles.containsArrayElt(g_userroles) || g_userroles[0]=='designer')))) {
+				if(name == "asmUnit" && level==0) // first level
+				{
+					$("#"+destid).removeClass("nodisplay");
+					var html = "";
+					var depth = 99;
+					html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+//					html += "<div class='dropdown-submenu";
+//					if (privatevalue)
+//						html+= "private"
+//					html += "' id='parent-"+uuid+"' role='tabdivst'>";
+//					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					$("#"+destid).append($(html));
+				}
+				if(name == "asmUnit" && level==1) // in a dropdown
+				{
+					$("#"+destid).removeClass("nodisplay");
+					var html = "";
+					var depth = 99;
+					html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+//			//				html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					$("#"+destid).append($(html));
+				}
+				if(name == "asmStructure") // Click on Structure
+				{
+					$("#"+destid).removeClass("nodisplay");
+					var depth = 1;
+					var html = "";
+					html += "<div class='subnav";
+					if (privatevalue)
+						html+= "private"
+					if (g_bar_type=='horizontal-right')
+						html += " justify-content-end";
+					html += "' id='parent-"+uuid+"' role='tabdivst'>";
+					html += "<a onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</a>";
+					html += "<div id='dropdown"+uuid+"' class='subnav-content' aria-labelledby='sidebar_"+uuid+"'></div>";
+					html += "</div>";
+					$("#"+destid).append($(html));
+					UIFactory["Node"].displayHorizontalMenu2(UICom.structure["tree"][root.children[i]],'dropdown'+uuid,type,langcode,g_edit,uuid,1);
+				}
+			}
+		}
+	};
 
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
@@ -1536,7 +1603,7 @@ UIFactory['Node'].upNode = function(nodeid)
 };
 
 //==================================
-function moveTO(nodeid,title,destsemtag,srcesemtag,fct) 
+function moveTO(nodeid,targetid,title,destsemtag,srcesemtag,fct) 
 //==================================
 {
 	$('#wait-window').modal('show');
@@ -1624,7 +1691,7 @@ UIFactory["Node"].selectNode = function(nodeid,node,semtag)
 	var uuid = $(node.node).attr("id");
 	var label = UICom.structure["ui"][uuid].label_node[langcode].text();
 	html += "<option uuid = ''>&nbsp;</option>";
-	if (semtag==null)
+	if (semtag=='')
 		html += "<option uuid = '"+uuid+"'>"+label+"</option>";
 	html += UIFactory["Node"].getSubNodes(node, nodeid, UICom.structure.ui[nodeid].asmtype,semtag);
 	html += "</select>";
@@ -1651,7 +1718,7 @@ UIFactory["Node"].getSubNodes = function(root, idmoved, typemoved,semtag)
 			var label = UICom.structure["ui"][uuid].label_node[langcode].text();
 			var name = UICom.structure["ui"][uuid].asmtype;
 			if (name!='asmContext' && (typemoved != "asmUnit" || name != "asmUnit") && (uuid !=idmoved)){
-				if (semantictag.indexOf("welcome-unit")<0 && (semtag==null || (semtag!=null && semantictag==semtag)))
+				if (semantictag.indexOf("welcome-unit")<0 && (semtag=='' || (semtag!='' && semantictag==semtag)))
 					html += "<option uuid = '"+uuid+"'>"+label+"</option>";
 				html += UIFactory["Node"].getSubNodes(UICom.structure["tree"][uuid], idmoved, typemoved,semtag);
 			}
@@ -1688,8 +1755,9 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		depth = 99;
 	//-----------------------------------
 	var html = "";
+	var menus_color = this.getMenuStyle();
 	//-----------------------------------
-	if (this.edit) {
+	if (this.edit && this.id.indexOf('temp-')==-1) {
 		//------------ edit button ---------------------
 		if ( 
 					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles) || this.editnoderoles.indexOf($(USER.username_node).text())>-1 || this.editresroles.indexOf($(USER.username_node).text())>-1))
@@ -1700,7 +1768,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 				|| 	(this.inline && (	(USER.admin || g_userroles[0]=='designer'|| this.editnoderoles.containsArrayElt(g_userroles) || this.editnoderoles.indexOf(this.userrole)>-1) ))
 			)
 		{
-			html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
+			html += "<span data-toggle='modal' data-target='#edit-window' onclick=\"javascript:getEditBox('"+this.id+"')\"><span class='button fas fa-pencil-alt' style='"+menus_color+"' data-toggle='tooltip' data-title='"+karutaStr[LANG]["button-edit"]+"' data-placement='bottom'></span></span>";
 		}
 		//------------ delete button ---------------------
 		if (( (this.deletenode && (this.delnoderoles.containsArrayElt(g_userroles) || this.delnoderoles.indexOf($(USER.username_node).text())>-1) ) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
@@ -1713,14 +1781,14 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		//------------- move node buttons ---------------
 		if (((this.writenode && (this.moveroles.containsArrayElt(g_userroles)  || this.moveroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			if ((this.asmtype!='asmUnit' && this.asmtype!='asmStructure') || depth<1)
-				html+= "<span class='button fas fa-arrow-up' onclick=\"javascript:UIFactory.Node.upNode('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				html+= "<span class='button fas fa-arrow-up' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.upNode('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-up"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		if (((this.writenode && (this.moveinroles.containsArrayElt(g_userroles)  || this.moveinroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			var movein = ($(this.metadatawad).attr('movein')==undefined)?'':$(this.metadatawad).attr('movein');
-			if (movein=='')
-				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root)\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
-			else
-				html+= "<span class='button fas fa-random' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+//			if (movein=='')
+				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root,'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+//			else
+//				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
 		if ( (g_userroles[0]=='designer' && this.asmtype != 'asmRoot') // always duplicate for designer
@@ -1731,24 +1799,22 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 			 	 )
 			)
 		{
-			html+= "<span class='button fas fa-clone' onclick=\"javascript:UIFactory.Node.duplicate('"+this.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html+= "<span class='button fas fa-clone' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.duplicate('"+this.id+"','UIFactory.Node.reloadUnit')\" data-title='"+karutaStr[LANG]["button-duplicate"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 	}
 	//------------- private button -------------------
 	if ((this.showroles.containsArrayElt(g_userroles) || this.showroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.showroles!='none' && this.showroles!='') {
 		if (this.privatevalue) {
-			html += "<span class='button fas fa-eye-slash' onclick=\"javascript:show('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html += "<span class='button fas fa-eye-slash' style='"+menus_color+"' onclick=\"javascript:show('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		} else {
-			html += "<span class='button fas fa-eye' onclick=\"javascript:hide('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html += "<span class='button fas fa-eye' style='"+menus_color+"' onclick=\"javascript:hide('"+this.id+"')\" data-title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 	}
 	//------------- print button -------------------
 	if ((this.printroles.containsArrayElt(g_userroles) || this.printroles.indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') && this.printroles!='none' && this.printroles!='') {
-			html += "<span class='button fas fa-print' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			html += "<span class='button fas fa-print' style='"+menus_color+"' onclick=\"javascript:printSection('#node_"+this.id+"')\" data-title='"+karutaStr[LANG]["button-print"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 	}
-	//-------------------------------------------------
-//	if (html!="")
-//		html = "<div class='btn-group'>"+html+"</div><!-- class='btn-group' -->"
+	//-----------------------------------------------
 	return html;
 }
 
@@ -1759,43 +1825,58 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 //----------------------------------------------------------------------------------------------------------------------------
 
 //==================================================
-UIFactory['Node'].reloadStruct = function(uuid)
+UIFactory['Node'].reloadStruct = function(uuid,redisplay)
 //==================================================
 {
-	$.ajaxSetup({async: false});
+	if (redisplay == null)
+		redisplay = true;
+	if (uuid == null)
+		uuid = g_portfolio_rootid;
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
 		success : function(data) {
 			UICom.parseStructure(data,true);
+			setVariables(data);
 			g_portfolio_current = data;
 			if (g_bar_type.indexOf('horizontal')>-1) {
 				$("#menu_bar").html("");
 				$("#menu_bar").show();
-				UIFactory["Portfolio"].displayHorizontalMenu(UICom.root,'menu_bar',null,null,g_edit,UICom.rootid);
+				UIFactory.Portfolio.displayHorizontalMenu(UICom.root,'menu_bar',null,null,g_edit,UICom.rootid);
 			} else {
 				$("#sidebar").html("");
 				$("#menu_bar").hide();
 				UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
 			}
-			var uuid = $("#page").attr('uuid');
-			if (g_display_type=='model')
-				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
-			else
-				displayPage(uuid,1,g_display_type,LANGCODE,g_edit);
-			$('#wait-window').modal('hide');
+			if (redisplay) {
+				var uuid = $("#page").attr('uuid');
+				if (g_display_type=='model')
+					displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
+				else
+					displayPage(uuid,1,g_display_type,LANGCODE,g_edit);
+				$('#wait-window').modal('hide');
+			}
 		}
 	});
-	$.ajaxSetup({async: true});
 };
 
 //==================================================
-UIFactory['Node'].reloadUnit = function()
+UIFactory['Node'].reloadUnit = function(uuid,redisplay)
 //==================================================
 {
-	var uuid = $("#page").attr('uuid');
-	var parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
+	if (redisplay == null)
+		redisplay = true;
+	if (uuid=="" || uuid==null || redisplay)
+		uuid = $("#page").attr('uuid');
+	var parentid = "";
+	if (uuid==g_portfolio_rootid)
+		parentid = g_portfolio_rootid;
+	else
+		parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
+	if (uuid.indexOf("_")>-1)
+		uuid = uuid.substring(0,uuid.indexOf("_"));
 	$.ajax({
 		async: false,
 		type : "GET",
@@ -1804,6 +1885,7 @@ UIFactory['Node'].reloadUnit = function()
 		parentid : parentid,
 		success : function(data) {
 			UICom.parseStructure(data,false,this.parentid);
+			setVariables(data);
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
 			if (g_bar_type.indexOf('horizontal')>-1) {
 				$("#menu_bar").html("");
@@ -1814,10 +1896,12 @@ UIFactory['Node'].reloadUnit = function()
 				$("#menu_bar").hide();
 				UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar',g_display_type,null,g_edit,UICom.rootid);
 			}
-			if (g_display_type=='model')
-				displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
-			else
-				displayPage(uuid,99,g_display_type,LANGCODE,g_edit);
+			if (redisplay) {
+				if (g_display_type=='model')
+					displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
+				else
+					displayPage(uuid,99,g_display_type,LANGCODE,g_edit);
+			}
 			$('#wait-window').modal('hide');
 		}
 	});
@@ -2500,6 +2584,7 @@ UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,i
 		var nodeid = $(resources[i]).attr("id");
 		style = UIFactory["Node"].getContentStyle(nodeid);
 		html += "<div id='welcome_resource_"+nodeid+"' class='col-md-12' style='"+style+"'>";
+		UICom.structure["ui"][nodeid].setMetadata();
 		html += UICom.structure["ui"][nodeid].resource.getView('welcome_resource_'+nodeid);
 		html += "</div><!-- class='col-md-12' -->";
 	}
@@ -2525,3 +2610,46 @@ UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,i
 }
 
 
+//==================================================
+UIFactory["Node"].prototype.exportNode = function()
+//==================================================
+{
+	var portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
+	var foldercode = portfoliocode.substring(0,portfoliocode.indexOf('.'));
+	var exportcode = foldercode+"."+this.semantictag;
+	var exportlabel = "Export-" + this.getLabel(null,'none');
+	var menuroles = exportcode + "," + this.semantictag +",Ajouter "+this.getLabel(null,'none')+"@fr/Add "+this.getLabel(null,'none')+"@en,designer";
+	var nodestring = this.node.outerHTML;
+	var xml = "";
+	xml += "<portfolio code='"+portfoliocode+"'>";
+	xml += "	<asmRoot>";
+	xml += "		<metadata-wad menuroles='"+menuroles+"' seenoderoles='all' />";
+	xml += "		<metadata-epm />";
+	xml += "		<metadata multilingual-node='Y' semantictag='root' sharedNode='N' sharedResource='N' />";
+	xml += "		<asmResource xsi_type='nodeRes'><code>"+exportcode+"</code><label lang='fr'>"+exportlabel+"</label><label lang='en'>"+exportlabel+"</label></asmResource>";
+	xml += "		<asmResource xsi_type='context'></asmResource>";
+	xml += nodestring;
+	xml += "	</asmRoot>";
+	xml += "</portfolio>";
+	$.ajax({
+		type : "POST",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : serverBCK_API+"/portfolios",
+		data : xml,
+		success : function(data) {
+			alert("Enregistré");
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+		}
+	});
+}
+
+
+//==================================
+function export_node(nodeid)
+//==================================
+{
+	UICom.structure.ui[nodeid].exportNode();
+}
