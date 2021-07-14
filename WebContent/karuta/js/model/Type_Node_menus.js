@@ -630,7 +630,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 							html_toadd = "<span id='2world-"+node.id+"'></span>";
 						}
 						if (shareto.indexOf('?')>-1) {
-							html_toadd = "<span class='button fas fa-share' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+targetid+"','"+node.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+							html_toadd = "<span class='button sharing-button fas fa-share' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+targetid+"','"+node.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 						}
 					}
 					if (shares[i].length<=8 || (shares[i].length>8 && eval(shares[i][8])))
