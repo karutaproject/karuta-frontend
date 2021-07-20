@@ -191,7 +191,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 			$("#wait-window").hide();
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET UIFactory.PortfolioFolder.loadAndDisplayFolders: "+textStatus);
+			alertHTML("Server Error GET UIFactory.PortfolioFolder.loadAndDisplayAll: "+textStatus);
 			$("#wait-window").hide();
 		}
 	});
@@ -965,7 +965,7 @@ UIFactory["PortfolioFolder"].checkPortfolios = function()
 				$("#portfolios-label").hide();
 			else {
 				$("#portfolios-nb").html(nb_portfolios);
-				if (nb_folders==0)
+				if (nb_folders==0 || !USER.admin)
 					UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');
 			}
 		},

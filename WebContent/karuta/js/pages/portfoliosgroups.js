@@ -74,15 +74,15 @@ function fill_list_portfoliosgroups()
 	//-----------------------------------------------------------
 	$("#main-portfoliosgroup").html(html);
 	UIFactory.PortfolioFolder.displayPortfolioSearch("portfoliogroup-portfolio",true);	
+	UIFactory.PortfolioFolder.displayAll('portfoliogroup-portfolio'); // already loaded
 	UIFactory.PortfoliosGroup.loadAndDisplayAll('portfoliogroup');
-	UIFactory.PortfolioFolder.loadAndDisplayAll('portfoliogroup-portfolio'); // already loaded
 }
 
 //==============================
 function display_list_portfoliosgroups()
 //==============================
 {
-	USER.admin = USER.admin_original; // reset if role playing when reload
+	USER.admin = USER.admin_original; // reset if played role when reload
 	if ($("#portfoliogroup-body").length) {
 		show_list_portfoliosgroups();
 	} else {
