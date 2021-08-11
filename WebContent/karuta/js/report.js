@@ -176,6 +176,22 @@ $.fn.nodeCodeContains = function (options)
 };
 
 //=====================================
+$.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"v"})
+//=====================================
+{
+	var result = [];
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var nodes = $(this).has("asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
+	for (var i=0; i<nodes.length;i++){
+		var code = $("code",$("asmResource[xsi_type='nodeRes']",nodes[i])).text();
+		if (code == parameters.value)
+			result.push(nodes[i]);
+	}
+	return result;
+};
+
+//=====================================
 $.fn.nodeLabelContains = function (options)
 //=====================================
 {
@@ -186,7 +202,7 @@ $.fn.nodeLabelContains = function (options)
 };
 
 //=====================================
-$.fn.nodeValueContains = function (options)
+$.fn.nodeValueContains = function (options)  
 //=====================================
 {
 	var defaults= { "value":"v"};
@@ -226,11 +242,12 @@ function r_replaceVariable(text)
 		if (g_variables[variable_name]!=undefined)
 			text = text.replace("##"+variable_name+"##", g_variables[variable_name]);
 		if (text.indexOf("[")>-1) {
-			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+			variable_name = test_string.substring(0,test_string.indexOf("##]##")+3);
+			var variable_value = variable_name.substring(0,variable_name.indexOf("["));
 			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
 			i = r_replaceVariable(i);
 			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
-				text = g_variables[variable_value][i];
+				text = text.replace("##"+variable_name+"##", g_variables[variable_value][i]);
 			}
 		n++; // to avoid infinite loop
 	}
@@ -1416,9 +1433,7 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 //==================================
 {
 	var countvar = $(action).attr("countvar");
-	var userid = data;
-	if (userid==null)
-		userid = USER.id;
+	var userid = USER.id;
 	var items_list = [];
 	$.ajax({
 		async:false,
@@ -2041,7 +2056,7 @@ g_report_actions['europass'] = function (destid,action,no,data)
 			var semantictag = $("metadata",nodes[enode]).attr('semantictag');
 			if (semantictag=='EuropassL') {
 				var nodeid = $(nodes[enode]).attr("id");
-				var text = "<table id='"+destid+"europass' style='width:100%;margin-top:30px;'></table>";
+				var text = "<table id='"+destid+"europass' style='width:100%;'></table>";
 				$("#"+destid).append($(text));
 				var europass_node = UICom.structure["ui"][nodeid];
 				//----------------------------

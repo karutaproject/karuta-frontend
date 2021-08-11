@@ -289,7 +289,12 @@ function importAndSetDateToday(parentid,targetid,label,srce,part_semtag,calendar
 	if (targetid!="" && targetid!=parentid)
 		parentid = targetid;
 	//------------------------------
-	importBranch(parentid,replaceVariable(srce),part_semtag,databack,callback,calendar_semtag);
+	var semtags = part_semtag.split("+");
+	for (var i=0;i<semtags.length;i++){
+		if (semtags[i].length>0)
+			importBranch(parentid,replaceVariable(srce),semtags[i],databack,callback,calendar_semtag);
+	}
+//	importBranch(parentid,replaceVariable(srce),part_semtag,databack,callback,calendar_semtag);
 };
 
 

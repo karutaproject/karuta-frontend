@@ -29,14 +29,14 @@ UIFactory["Node"].getEltMenu = function(parentid,menus,targetid,title,databack,c
 				}
 				html += ");"
 			} else {
-			var semtags = menuelts.split("+");
-			for (var i=0;i<semtags.length;i++){
-				if (semtags[i].length>0)
-					if (targetid!="")
-						html += "importBranch('"+targetid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
-					else
-						html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
-			}
+				var semtags = menuelts.split("+");
+				for (var i=0;i<semtags.length;i++){
+					if (semtags[i].length>0)
+						if (targetid!="")
+							html += "importBranch('"+targetid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+						else
+							html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+				}
 			}
 		}
 	} else if (srce=='function'){
