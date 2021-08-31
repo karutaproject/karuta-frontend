@@ -211,6 +211,22 @@ $.fn.nodeValueContains = function (options)
 	return result;
 };
 
+//=====================================
+$.fn.utcBetween = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s","min":"m","max":"M"};
+	var parameters = $.extend(defaults, options);
+	for (var i=0;i<this.length;i++){
+		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
+		var utc = $("utc",node).text();
+		if (parameters.min < utc && utc < parameters.max)
+			result.push(this[i])
+	}
+	return result;
+};
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -644,16 +660,17 @@ function genDashboardContent(destid,uuid,parent,root_node)
 {
 	dashboard_id = uuid;
 	var spinning = true;
-	var dashboard_code = r_replaceVariable(UICom.structure["ui"][uuid].resource.getView());
-	var folder_code = dashboard_code.substring(0,dashboard_code.indexOf('.'));
+//	var dashboard_code = r_replaceVariable(UICom.structure["ui"][uuid].resource.getView());
+	var dashboard_code = UICom.structure["ui"][uuid].resource.getView();
+	var folder_code = r_replaceVariable(dashboard_code.substring(0,dashboard_code.indexOf('.')));
 	var part_code = dashboard_code.substring(dashboard_code.indexOf('.'));
 	var model_code = "";
 	if (part_code.indexOf('/')>-1){
 		var parameters = part_code.substring(part_code.indexOf('/')+1).split('/');
 		for (var i=0; i<parameters.length;i++){
-			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = parameters[i].substring(parameters[i].indexOf(":")+1);
+			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = r_replaceVariable(parameters[i].substring(parameters[i].indexOf(":")+1));
 		}
-		model_code = folder_code + part_code.substring(0,part_code.indexOf("/"));
+		model_code = folder_code + r_replaceVariable(part_code.substring(0,part_code.indexOf("/")));
 	} else {
 		model_code = folder_code + part_code;
 	}

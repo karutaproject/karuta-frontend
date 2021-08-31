@@ -533,7 +533,6 @@
 		visibility:hidden;
 	}
 
-
 /* ====================== */
 /*     PAGE USERS         */
 /* ====================== */
@@ -634,6 +633,11 @@
 		}
 
 	}
+
+	#sharing_usersgroups .usersgroup-users {
+		margin-left:18px;
+	}
+
 
 /* ====================== */
 /*  PAGE PORTFOLIOGROUP   */
@@ -1964,6 +1968,7 @@
 .usersgroup-users .inactive {
 	text-decoration: line-through;
 }
+
 
 .portfoliosgroup-content,
 .usersgroup-content {
