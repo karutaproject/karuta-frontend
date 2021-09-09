@@ -1000,7 +1000,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 					autoload = portfolios_list[i].id;
 				}
 			}
-			if (nb_visibleportfolios>0)
+			if (nb_visibleportfolios>0 || autoload!="" )
 				if (nb_visibleportfolios>9 && portfoliosnotinfolders.length>9)
 					UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',portfoliosnotinfolders);
 				else if (nb_visibleportfolios>1 && autoload=="")
