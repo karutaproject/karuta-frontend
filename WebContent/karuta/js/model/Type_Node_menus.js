@@ -29,14 +29,14 @@ UIFactory["Node"].getEltMenu = function(parentid,menus,targetid,title,databack,c
 				}
 				html += ");"
 			} else {
-			var semtags = menuelts.split("+");
-			for (var i=0;i<semtags.length;i++){
-				if (semtags[i].length>0)
-					if (targetid!="")
-						html += "importBranch('"+targetid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
-					else
-						html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
-			}
+				var semtags = menuelts.split("+");
+				for (var i=0;i<semtags.length;i++){
+					if (semtags[i].length>0)
+						if (targetid!="")
+							html += "importBranch('"+targetid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+						else
+							html += "importBranch('"+parentid+"','"+srce.trim()+"','"+semtags[i]+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+				}
 			}
 		}
 	} else if (srce=='function'){
@@ -630,7 +630,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 							html_toadd = "<span id='2world-"+node.id+"'></span>";
 						}
 						if (shareto.indexOf('?')>-1) {
-							html_toadd = "<span class='button fas fa-share' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+targetid+"','"+node.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+							html_toadd = "<span class='button sharing-button fas fa-share' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+targetid+"','"+node.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 						}
 					}
 					if (shares[i].length<=8 || (shares[i].length>8 && eval(shares[i][8])))

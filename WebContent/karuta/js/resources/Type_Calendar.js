@@ -89,16 +89,12 @@ UIFactory["Calendar"].prototype.getAttributes = function(type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest]=langcode;
-	}
-	//---------------------
 	if (type==null)
 		type = 'default';
 	//---------------------
 	if (type=='default') {
 		result['restype'] = this.type;
-		result['minViewMode'] = this.minViewMode_node[langcode].text();
+		result['minViewMode'] = this.minViewMode_node.text();
 		result['text'] = this.text_node[langcode].text();
 		result['format'] = this.format_node[langcode].text();
 	}
@@ -117,6 +113,12 @@ UIFactory["Calendar"].prototype.getView = function(dest,type,langcode)
 	if (dest!=null) {
 		this.display[dest] = langcode;
 	}
+	//---------------------
+	if (UICom.structure.ui[this.id].semantictag.indexOf("g-select-variable")>-1) {
+		var variable_name = $(UICom.structure.ui[this.id].code_node).text();
+		g_variables[variable_name] = $(this.utc).text();
+	}
+	//---------------------
 	return $(this.text_node[langcode]).text();
 };
 
@@ -124,14 +126,7 @@ UIFactory["Calendar"].prototype.getView = function(dest,type,langcode)
 UIFactory["Calendar"].prototype.displayView = function(dest,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	var html = $(this.text_node[langcode]).text();
+	var html = this.getView(dest,null,langcode);
 	$("#"+dest).html(html);
 };
 
@@ -289,7 +284,12 @@ function importAndSetDateToday(parentid,targetid,label,srce,part_semtag,calendar
 	if (targetid!="" && targetid!=parentid)
 		parentid = targetid;
 	//------------------------------
-	importBranch(parentid,replaceVariable(srce),part_semtag,databack,callback,calendar_semtag);
+	var semtags = part_semtag.split("+");
+	for (var i=0;i<semtags.length;i++){
+		if (semtags[i].length>0)
+			importBranch(parentid,replaceVariable(srce),semtags[i],databack,callback,calendar_semtag);
+	}
+//	importBranch(parentid,replaceVariable(srce),part_semtag,databack,callback,calendar_semtag);
 };
 
 

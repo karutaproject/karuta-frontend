@@ -350,6 +350,8 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	html += "	</a>";
 	$("#sidebar_"+rootid).replaceWith($(html));
 	//---------------------------------------
+	$("#main-body").attr("userrole",g_userroles[0]);
+	//---------------------------------------
 	html = "";
 	if (type=='model'){
 		html += "<div id='navigation_bar'></div>";
@@ -2708,7 +2710,7 @@ UIFactory["Portfolio"].search = function(type)
 //==================================
 {
 	var value = $("#"+type+"-search-text-input").val();
-	var nodes = $("asmUnit:has(asmResource:has(label[lang='"+LANG+"']:contains(\""+value+"\"),text[lang='"+LANG+"']:contains(\""+value+"\")))",g_portfolio_current);
+	var nodes = $("asmUnit:has(asmResource:has(label[lang='"+LANG+"']:contains(\""+value+"\"),text[lang='"+LANG+"']:contains(\""+value+"\"),code:contains(\""+value+"\")))",g_portfolio_current);
 	var html="";
 	html += "<div class='result-title'>"+karutaStr[LANG]["result-title"]+value+"</div>";
 	html += "<div class='result-subtitle'>"+karutaStr[LANG]["result-subtitle"]+"</div>";

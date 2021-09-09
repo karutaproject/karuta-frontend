@@ -48,7 +48,7 @@ UIFactory["UsersGroup"] = function(node)
 	//------------------------------
 	this.attributes = {};
 	this.attributes["code"] = this.code_node;
-	this.attributes["label"] = this.label_node;
+	this.attributes["label"] = this.code_node;
 	//------------------------------
 	this.display = {};
 	this.displayLabel = {};
@@ -65,7 +65,6 @@ UIFactory["UsersGroup"] = function(node)
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 
-//==================================
 //==================================
 UIFactory["UsersGroup"].ondragover = function (ev)
 //==================================
@@ -259,7 +258,7 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type)
 			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
 			html += "		<div class='dropdown-menu  dropdown-menu-right'>";
 			html += "			<a class='dropdown-item' onclick=\"usergroups_byid['"+this.id+"'].edit()\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a>";
-			html += "			<a class='dropdown-item' onclick=\"UIFactory['UsersGroup'].confirmRemove('"+this.id+"')\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory.UsersGroup.confirmRemove('"+this.id+"')\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
 			html += "		</div>";
 		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
 			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle' style='visibility:hidden'></button>";
@@ -305,7 +304,7 @@ UIFactory["UsersGroup"].prototype.displayContent = function(type)
 	var code = this.code_node.text();
 	//-------------------- header -------------------------------
 	$("#"+type+"-rightside-header").html("");
-	this.displayView(type+"-rightside-header",'header',type);
+	this.displayView(type+"-rightside-header",'header');
 	//------------------ content ---------------------------
 	$("#"+type+"-rightside-content2").html($("<div class='users-content' id='"+type+"-users-content'</div>"));
 	for (uuid in this.children){
@@ -326,6 +325,7 @@ UIFactory["UsersGroup"].prototype.refresh = function()
 		$("#"+dest1).html(group_label);
 	};
 	for (dest2 in this.display) {
+		$("#"+dest2).html("");
 		$("#"+dest2).html(this.displayView(dest2,this.display[dest2]));
 	};
 
@@ -500,7 +500,6 @@ UIFactory["UsersGroup"].prototype.update = function(attribute,value)
 			localStorage.setItem('currentDisplayedUserGroupCode',this.group.code_node.text());
 		}
 	});
-
 };
 
 //==================================================

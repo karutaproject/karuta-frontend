@@ -191,7 +191,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 			$("#wait-window").hide();
 		},
 		error : function(jqxhr,textStatus) {
-			alertHTML("Server Error GET UIFactory.PortfolioFolder.loadAndDisplayFolders: "+textStatus);
+			alertHTML("Server Error GET UIFactory.PortfolioFolder.loadAndDisplayAll: "+textStatus);
 			$("#wait-window").hide();
 		}
 	});
@@ -965,7 +965,7 @@ UIFactory["PortfolioFolder"].checkPortfolios = function()
 				$("#portfolios-label").hide();
 			else {
 				$("#portfolios-nb").html(nb_portfolios);
-				if (nb_folders==0)
+				if (nb_folders==0 || !USER.admin)
 					UIFactory.PortfolioFolder.loadAndDisplayPortfolios('portfolio-content2-rightside','list');
 			}
 		},
@@ -1000,7 +1000,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 					autoload = portfolios_list[i].id;
 				}
 			}
-			if (nb_visibleportfolios>0)
+			if (nb_visibleportfolios>0 || autoload!="" )
 				if (nb_visibleportfolios>9 && portfoliosnotinfolders.length>9)
 					UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',portfoliosnotinfolders);
 				else if (nb_visibleportfolios>1 && autoload=="")

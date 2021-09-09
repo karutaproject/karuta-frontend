@@ -176,6 +176,22 @@ $.fn.nodeCodeContains = function (options)
 };
 
 //=====================================
+$.fn.nodeCodeEquals = function (options) // nodeCodeEquals({"value":"v"})
+//=====================================
+{
+	var result = [];
+	var defaults= { "value":"v"};
+	var parameters = $.extend(defaults, options);
+	var nodes = $(this).has("asmResource[xsi_type='nodeRes']>code:contains('"+parameters.value+"')");
+	for (var i=0; i<nodes.length;i++){
+		var code = $("code",$("asmResource[xsi_type='nodeRes']",nodes[i])).text();
+		if (code == parameters.value)
+			result.push(nodes[i]);
+	}
+	return result;
+};
+
+//=====================================
 $.fn.nodeLabelContains = function (options)
 //=====================================
 {
@@ -186,12 +202,28 @@ $.fn.nodeLabelContains = function (options)
 };
 
 //=====================================
-$.fn.nodeValueContains = function (options)
+$.fn.nodeValueContains = function (options)  
 //=====================================
 {
 	var defaults= { "value":"v"};
 	var parameters = $.extend(defaults, options);
 	var result = $(this).has("asmResource[xsi_type='nodeRes']>value:contains('"+parameters.value+"')");
+	return result;
+};
+
+//=====================================
+$.fn.utcBetween = function (options)  
+//=====================================
+{
+	var result = [];
+	var defaults= {"semtag":"s","min":"m","max":"M"};
+	var parameters = $.extend(defaults, options);
+	for (var i=0;i<this.length;i++){
+		var node = $("asmContext:has('>metadata[semantictag*=" + parameters.semtag + "]')",this[i]);		
+		var utc = $("utc",node).text();
+		if (parameters.min < utc && utc < parameters.max)
+			result.push(this[i])
+	}
 	return result;
 };
 
@@ -226,11 +258,12 @@ function r_replaceVariable(text)
 		if (g_variables[variable_name]!=undefined)
 			text = text.replace("##"+variable_name+"##", g_variables[variable_name]);
 		if (text.indexOf("[")>-1) {
-			var variable_value = variable_name.substring(0,variable_name.indexOf("["))
+			variable_name = test_string.substring(0,test_string.indexOf("##]##")+3);
+			var variable_value = variable_name.substring(0,variable_name.indexOf("["));
 			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
 			i = r_replaceVariable(i);
 			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
-				text = g_variables[variable_value][i];
+				text = text.replace("##"+variable_name+"##", g_variables[variable_value][i]);
 			}
 		n++; // to avoid infinite loop
 	}
@@ -627,16 +660,17 @@ function genDashboardContent(destid,uuid,parent,root_node)
 {
 	dashboard_id = uuid;
 	var spinning = true;
-	var dashboard_code = r_replaceVariable(UICom.structure["ui"][uuid].resource.getView());
-	var folder_code = dashboard_code.substring(0,dashboard_code.indexOf('.'));
+//	var dashboard_code = r_replaceVariable(UICom.structure["ui"][uuid].resource.getView());
+	var dashboard_code = UICom.structure["ui"][uuid].resource.getView();
+	var folder_code = r_replaceVariable(dashboard_code.substring(0,dashboard_code.indexOf('.')));
 	var part_code = dashboard_code.substring(dashboard_code.indexOf('.'));
 	var model_code = "";
 	if (part_code.indexOf('/')>-1){
 		var parameters = part_code.substring(part_code.indexOf('/')+1).split('/');
 		for (var i=0; i<parameters.length;i++){
-			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = parameters[i].substring(parameters[i].indexOf(":")+1);
+			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = r_replaceVariable(parameters[i].substring(parameters[i].indexOf(":")+1));
 		}
-		model_code = folder_code + part_code.substring(0,part_code.indexOf("/"));
+		model_code = folder_code + r_replaceVariable(part_code.substring(0,part_code.indexOf("/")));
 	} else {
 		model_code = folder_code + part_code;
 	}
@@ -1416,9 +1450,7 @@ g_report_actions['for-each-portfolios-nodes'] = function (destid,action,no,data)
 //==================================
 {
 	var countvar = $(action).attr("countvar");
-	var userid = data;
-	if (userid==null)
-		userid = USER.id;
+	var userid = USER.id;
 	var items_list = [];
 	$.ajax({
 		async:false,
@@ -2041,7 +2073,7 @@ g_report_actions['europass'] = function (destid,action,no,data)
 			var semantictag = $("metadata",nodes[enode]).attr('semantictag');
 			if (semantictag=='EuropassL') {
 				var nodeid = $(nodes[enode]).attr("id");
-				var text = "<table id='"+destid+"europass' style='width:100%;margin-top:30px;'></table>";
+				var text = "<table id='"+destid+"europass' style='width:100%;'></table>";
 				$("#"+destid).append($(text));
 				var europass_node = UICom.structure["ui"][nodeid];
 				//----------------------------

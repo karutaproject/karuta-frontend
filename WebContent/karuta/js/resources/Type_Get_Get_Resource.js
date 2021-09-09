@@ -85,10 +85,6 @@ UIFactory["Get_Get_Resource"].prototype.getAttributes = function(type,langcode)
 	if (this.multilingual!=undefined && !this.multilingual)
 		langcode = 0;
 	//---------------------
-	if (dest!=null) {
-		this.display[dest]=langcode;
-	}
-	//---------------------
 	if (type==null)
 		type = 'default';
 	//---------------------
@@ -158,7 +154,7 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 	var html = "";
 	if (type=='default'){
 		html += "<div class='"+cleanCode(code)+" view-div' style=\""+style+"\">";
-		if (($(this.code_node).text()).indexOf("#")>-1)
+		if (($(this.code_node).text()).indexOf("#")>-1 && ($(this.code_node).text()).indexOf("##")<0)
 			html += cleanCode(code) + " ";
 		if (($(this.code_node).text()).indexOf("%")<0)
 			html += label;
@@ -167,7 +163,7 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 		html += "</div>";
 	}
 	if (type=='none'){
-		if (($(this.code_node).text()).indexOf("#")>-1)
+		if (($(this.code_node).text()).indexOf("#")>-1 && ($(this.code_node).text()).indexOf("##")<0)
 			html += cleanCode(code) + " ";
 		if (($(this.code_node).text()).indexOf("%")<0)
 			html += label;
@@ -182,42 +178,10 @@ UIFactory["Get_Get_Resource"].prototype.getView = function(dest,type,langcode)
 UIFactory["Get_Get_Resource"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-	//---------------------
-	if (langcode==null)
-		langcode = LANGCODE;
-	//---------------------
-	if (type==null)
-		type = "default";
-	//---------------------
-	if (dest!=null) {
-		this.display[dest] = langcode;
-	}
-	var label = this.label_node[langcode].text();
-	if (this.encrypted)
-		label = decrypt(label.substring(3),g_rc4key);
-	var code = $(this.code_node).text();
-	var style = $(this.style_node).text();
-	var html = "";
-	if (type=='default'){
-		html += "<div class='"+cleanCode(code)+" view-div' style=\""+style+"\">";
-		if (($(this.code_node).text()).indexOf("#")>-1)
-			html += cleanCode(code) + " ";
-		if (($(this.code_node).text()).indexOf("%")<0)
-			html += label;
-		if (($(this.code_node).text()).indexOf("&")>-1)
-			html += " ["+$(this.value_node).text()+ "] ";
-		html += "</div>";
-	}
-	if (type=='none'){
-		if (($(this.code_node).text()).indexOf("#")>-1)
-			html += cleanCode(code) + " ";
-		if (($(this.code_node).text()).indexOf("%")<0)
-			html += label;
-		if (($(this.code_node).text()).indexOf("&")>-1)
-			html += " ["+$(this.value_node).text()+ "] ";
-	}
+var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
+
 
 
 /// Editor
@@ -422,6 +386,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					},
 					error : function(jqxhr,textStatus) {
 						$("#"+destid).html("No result");
+						UIFactory["Get_Get_Resource"].parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 					}
 				});
 			} else {
@@ -462,6 +427,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 						},
 						error : function(jqxhr,textStatus) {
 							$("#"+destid).html("No result");
+							UIFactory["Get_Get_Resource"].parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 						}
 					});
 				}
