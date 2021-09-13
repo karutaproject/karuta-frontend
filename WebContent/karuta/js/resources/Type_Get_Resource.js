@@ -1436,6 +1436,7 @@ UIFactory["Get_Resource"].prototype.save = function()
 	//---------------------------
 	if (this.reloadpage)
 		UIFactory.Node.reloadUnit();
+		
 };
 
 //==================================
