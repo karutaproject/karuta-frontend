@@ -201,6 +201,7 @@ karutaStr['fr']['sharedNodeResource']="Ress. du noeud partagée";
 karutaStr['fr']['resizeroles']="Modifier taille image";
 karutaStr['fr']['img-size']="Taille image";
 karutaStr['fr']['inline']="Édition en place";
+karutaStr['fr']['reloadpage']="Recharger la page";
 karutaStr['fr']['edittargetroles']="Éditer cible proxy";
 karutaStr['fr']['showroles']="Montrer/Cacher";
 karutaStr['fr']['showtoroles']="Montrer à";

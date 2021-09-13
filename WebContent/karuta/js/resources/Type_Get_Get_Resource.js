@@ -68,6 +68,7 @@ UIFactory["Get_Get_Resource"] = function( node,condition)
 	else // asmUnitStructure - Get_Get_Resource
 		this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.inline = ($("metadata",node).attr('inline')=='Y') ? true : false;
+	this.reloadpage = ($("metadata",node).attr('reloadpage')=='Y') ? true : false;
 	this.display = {};
 	this.displayValue = {};
 	this.displayCode = {};
@@ -1219,7 +1220,10 @@ UIFactory["Get_Get_Resource"].prototype.save = function()
 	else {// Node - Get_Get_Resource {
 		UICom.UpdateNode(this.node);
 		UICom.structure.ui[this.id].refresh()
-	}	
+	}
+	//---------------------
+	if (this.reloadpage)
+		UIFactory.Node.reloadUnit();
 };
 
 //==================================

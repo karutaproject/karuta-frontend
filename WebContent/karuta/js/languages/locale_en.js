@@ -201,6 +201,7 @@ karutaStr['en']['sharedNodeResource']="Shared Node Resource";
 karutaStr['en']['resizeroles']="Resize Image";
 karutaStr['en']['img-size']="Image Size";
 karutaStr['en']['inline']="Inline Editing";
+karutaStr['en']['reloadpage']="Reload the page";
 karutaStr['en']['edittargetroles']="Edit Proxy Target";
 karutaStr['en']['showroles']="Show/Hide";
 karutaStr['en']['showtoroles']="Show To";
