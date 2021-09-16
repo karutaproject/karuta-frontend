@@ -269,14 +269,14 @@ UIFactory["Node"].getMenus = function(node,langcode)
 			//--------------------------------
 			var menus = [];
 			var displayMenu = false;
-			if (node.menuroles.indexOf('function')<0)
-				node.menuroles = replaceVariable(node.menuroles);
+//			if (node.menuroles.indexOf('function')<0)
+//				node.menuroles = replaceVariable(node.menuroles);
 			var items = node.menuroles.split(";");
 			for (var i=0; i<items.length; i++){
 				var subitems = items[i].split(",");
 				menus[i] = [];
 				if (subitems[0]=="#line") {
-					menus[i][0] = subitems[0]; // portfolio code
+					menus[i][0] = replaceVariable(subitems[0]); // portfolio code
 					menus[i][1] = ""; // semantic tag
 					menus[i][2] = ""; // label
 					menus[i][3] = ""; // roles
@@ -284,16 +284,16 @@ UIFactory["Node"].getMenus = function(node,langcode)
 					menus[i][5] = ""; // condition
 					
 				} else {
-					menus[i][0] = subitems[0]; // portfolio code
-					menus[i][1] = subitems[1]; // semantic tag
+					menus[i][0] = replaceVariable(subitems[0]); // portfolio code
+					menus[i][1] = replaceVariable(subitems[1]); // semantic tag
 					menus[i][2] = subitems[2]; // label
-					menus[i][3] = subitems[3]; // roles
+					menus[i][3] = replaceVariable(subitems[3]); // roles
 					if (subitems.length>4)
-						menus[i][4] = subitems[4]; // target
+						menus[i][4] = replaceVariable(subitems[4]); // target
 					else
 						menus[i][4] = ""; // target
 					if (subitems.length>5)
-						menus[i][5] = subitems[5]; // condition
+						menus[i][5] = replaceVariable(subitems[5]); // condition
 					else
 						menus[i][5] = ""; // condition
 				}
@@ -339,6 +339,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 							} catch(e){
 								title = mlabels[i][0];
 							}
+							title = replaceVariable(title);
 							html += title;
 						}
 					}
@@ -439,6 +440,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 				} catch(e){
 					title = menus[i][2];
 				}
+				title = replaceVariable(title);
 				//---------------------target----------------------------------------
 				var targetid = "";
 				if (menus[i][4]!=""){

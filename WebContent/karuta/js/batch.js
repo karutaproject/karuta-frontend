@@ -230,10 +230,10 @@ function processAll(model_code,portfoliologcode)
 //=================================================
 {
 	$.ajaxSetup({async: false});
-	if (USER.creator){
-		get_list_portfoliosgroups();
-		get_list_usergroups();
-	}
+//	if (USER.creator){
+//		get_list_portfoliosgroups();
+//		get_list_usergroups();
+//	}
 	var actions_list = $("model",g_xmlDoc).children();
 	processListActions(actions_list);
 	$("#batch-log").append("<br>=============== THIS IS THE END ===============================");
@@ -3124,6 +3124,8 @@ function get_portfoliogroupid(groupname)
 //==============================
 {
 	var groupid = null;
+	if (PortfoliosGroups_list.length==0)
+		get_list_portfoliosgroups();
 	for (var i=0;i<PortfoliosGroups_list.length;i++){
 		if (PortfoliosGroups_list[i].label==groupname){
 			groupid = PortfoliosGroups_list[i].id;

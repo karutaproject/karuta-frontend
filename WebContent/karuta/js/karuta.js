@@ -2063,13 +2063,13 @@ function printSection(eltid)
 		$(ids).removeAttr("id");
 		var content = $(divcontent).html();
 		$("#print-window").html(content);
-		$("#main-container").addClass("section2hide");
+		$("#main-body").addClass("section2hide");
 		$("#print-window").addClass("section2print");
 		$("#wait-window").hide();
 		
 		window.print();
 		$("#print-window").removeClass("section2print");
-		$("#main-container").removeClass("section2hide");
+		$("#main-body").removeClass("section2hide");
 		$("#print-window").css("display", "none");
 	}
 }

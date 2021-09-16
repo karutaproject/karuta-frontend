@@ -822,11 +822,13 @@ UIFactory["Node"].prototype.update = function(langcode)
 	if ($("#code_"+this.id).length){
 		var code = $.trim($("#code_"+this.id).val());
 		$(this.code_node).text(code);
+		$(UICom.structure.ui[this.id].code_node).text(code);
 	}
 	//---------------------
 	if ($("#value_"+this.id).length){
 		var value = $.trim($("#value_"+this.id).val());
 		$(this.value_node).text(value);
+		$(UICom.structure.ui[this.id].value_node).text(value);
 	}
 	//---------------------
 	var label = $.trim($("#label_"+this.id+"_"+langcode).val());
