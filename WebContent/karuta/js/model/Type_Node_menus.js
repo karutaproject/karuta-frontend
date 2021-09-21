@@ -273,6 +273,16 @@ UIFactory["Node"].getMenus = function(node,langcode)
 //				node.menuroles = replaceVariable(node.menuroles);
 			var items = node.menuroles.split(";");
 			for (var i=0; i<items.length; i++){
+				if (items[i].indexOf(',')<0 && items[i].indexOf('#line')<0) {
+					items[i] = replaceVariable(items[i]);
+					var subitems = items[i].split(";");
+					items.pop();
+					for (var j=0; j<subitems.length; j++){
+						items.push(subitems[j]);
+					}
+				}
+			}
+			for (var i=0; i<items.length; i++){
 				var subitems = items[i].split(",");
 				menus[i] = [];
 				if (subitems[0]=="#line") {
