@@ -1178,15 +1178,15 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 //=================================================
 {
 	var ok = false;
-	var oldcode = getTxtvals($("oldcode",node));
+	var treeref = $(node).attr("select");
 	var newcode = getTxtvals($("newcode",node));
 	var label = getTxtvals($("label",node));
-	if (oldcode!="" && newcode!="") {
+	if (newcode!="") {
 		$.ajax({
 			async : false,
 			type : "GET",
 			dataType : "xml",
-			url : serverBCK_API+"/nodes?portfoliocode=" + oldcode + "&semtag=root",
+			url : serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag=root",
 			success : function(data) {
 				var nodeid = $("asmRoot",data).attr('id');
 				var xml = "<asmResource xsi_type='nodeRes'>";
@@ -1206,19 +1206,19 @@ g_actions['update-tree-root'] = function updateTreeRoot(node)
 					url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
 					success : function(data) {
 						ok = true;
-						$("#batch-log").append("<br>- tree root updated ("+oldcode+") - newcode:"+newcode);
+						$("#batch-log").append("<br>- tree root updated ("+g_trees[treeref][1]+") - newcode:"+newcode);
 					},
 					error : function(data) {
-						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateTreeRoot - code:"+oldcode+" not found");
+						$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateTreeRoot - code:"+g_trees[treeref][1]+" not found");
 					}
 				});
 			},
 			error : function(data) {
-				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateTreeRoot - code:"+oldcode);
+				$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in  updateTreeRoot - code:"+g_trees[treeref][1]);
 			}
 		});
 	} else {
-		$("#batch-log").append("<br>-***<span class='danger'>ERROR</span> in updateTreeRoot - oldcode or newcode is empty");
+		$("#batch-log").append("<br>-***<span class='danger'>ERROR</span> in updateTreeRoot - newcode is empty");
 	}
 	return ok;
 }

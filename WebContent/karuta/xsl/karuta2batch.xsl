@@ -381,14 +381,9 @@
 
 	<xsl:template match="*[metadata/@semantictag='update-tree-root']">
 		<xsl:variable name="id">
-			<xsl:value-of select=".//asmContext[metadata/@semantictag='treeid']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='tree-select']/asmResource[@xsi_type='Get_Resource']/label[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
-		<update-tree-root id="{$id}">
-			<oldcode>
-				<xsl:call-template name="txtval">
-					<xsl:with-param name="semtag">tree-oldcode</xsl:with-param>
-				</xsl:call-template>
-			</oldcode>
+		<update-tree-root select="{$id}">
 			<newcode>
 				<xsl:call-template name="txtval">
 					<xsl:with-param name="semtag">tree-newcode</xsl:with-param>
