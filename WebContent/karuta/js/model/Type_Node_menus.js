@@ -276,9 +276,9 @@ UIFactory["Node"].getMenus = function(node,langcode)
 				if (items[i].indexOf(',')<0 && items[i].indexOf('#line')<0) {
 					items[i] = replaceVariable(items[i]);
 					var subitems = items[i].split(";");
-					items.pop();
+					items.splice(i,1);
 					for (var j=0; j<subitems.length; j++){
-						items.push(subitems[j]);
+						items.splice(i,0,subitems[j]);
 					}
 				}
 			}
