@@ -273,7 +273,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 //				node.menuroles = replaceVariable(node.menuroles);
 			var items = node.menuroles.split(";");
 			for (var i=0; i<items.length; i++){
-				if (items[i].indexOf(',')<0 && items[i].indexOf('#line')<0) {
+				if (items[i].indexOf(',')<0 && items[i].indexOf('#line')<0 && items[i].indexOf('function')<0) {
 					items[i] = replaceVariable(items[i]);
 					var subitems = items[i].split(";");
 					items.splice(i,1);
@@ -295,7 +295,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 					
 				} else {
 					menus[i][0] = replaceVariable(subitems[0]); // portfolio code
-					menus[i][1] = replaceVariable(subitems[1]); // semantic tag
+					menus[i][1] = (subitems[1].indexOf('function')<0) ? subitems[1] :replaceVariable(subitems[1]); // semantic tag
 					menus[i][2] = subitems[2]; // label
 					menus[i][3] = replaceVariable(subitems[3]); // roles
 					if (subitems.length>4)
