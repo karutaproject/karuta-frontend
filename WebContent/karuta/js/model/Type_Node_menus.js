@@ -282,7 +282,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 					menus[i][3] = ""; // roles
 					menus[i][4] = ""; // target
 					menus[i][5] = ""; // condition
-					
+
 				} else {
 					menus[i][0] = subitems[0]; // portfolio code
 					menus[i][1] = subitems[1]; // semantic tag
@@ -401,7 +401,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 								}
 								//---------------------------------------------------------
 							}
-							
+
 						}
 						//-------------------------------------------------------------
 						if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || menus[i][3].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer')
@@ -516,7 +516,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 					html += " >"+labels[1]+"</span>";
 				}
 				html += "<div class='alert alert-success button text-button'>"+labels[2]+node.submitteddate+"</div>";
-			} 
+			}
 			else {
 				html += "<div class='alert alert-danger button text-button'>"+labels[3]+"</div>";
 			}
@@ -644,4 +644,3 @@ UIFactory["Node"].getMenus = function(node,langcode)
 	//--------------------------------------------------
 	return html;
 	}
-

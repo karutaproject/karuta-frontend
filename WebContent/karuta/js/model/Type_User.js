@@ -255,6 +255,7 @@ UIFactory["User"].displayInactive = function(dest,type,lang)
 UIFactory["User"].displayActive = function(dest,type,index,nbindex)
 //==================================
 {
+	nb_users_page = g_configVar['maxuserlist'];
 	if (index==null)
 		index = localStorage.getItem('currentUsersIndex')!=undefined ? localStorage.getItem('currentUsersIndex') : 0;
 	if (nbindex==null)

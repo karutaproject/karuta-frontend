@@ -59,6 +59,9 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.inline_metadata = ($(node.metadata).attr('inline')==undefined)? '' : $(node.metadata).attr('inline');
 	if (this.inline_metadata=='Y')
 		this.inline = true;
+	this.reloadpage_metadata = ($(node.metadata).attr('reloadpage')==undefined)? '' : $(node.metadata).attr('reloadpage');
+	if (this.reloadpage_metadata=='Y')
+		this.reloadpage = true;
 	this.seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
 	this.shareroles = ($(node.metadatawad).attr('shareroles')==undefined)?'none':$(node.metadatawad).attr('shareroles');
 	this.seeqrcoderoles = ($(node.metadatawad).attr('seeqrcoderoles')==undefined)?'':$(node.metadatawad).attr('seeqrcoderoles');
@@ -565,6 +568,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataAttributeEditor('metadata-part2','inline',true);
 //	this.displayMetadataWadAttributeEditor(this.id,'veriffunction',$(this.metadatawad).attr('veriffunction'));
 	if (resource_type=='Get_Resource' || resource_type=='Get_Get_Resource') {
+		this.displayMetadataAttributeEditor('metadata-part2','reloadpage',true);
 		this.displayMetadataWadAttributeEditor('metadata-part2','seltype');
 	}
 	//----------------------Edit Box Title----------------------------

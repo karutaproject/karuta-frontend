@@ -1009,12 +1009,15 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 					display_main_page(autoload);
 				else   // nb_visibleportfolios == 1
 					display_main_page(visibleid);
+			else if (portfolios_list.length==1) 
+				display_main_page(portfolios_list[0].id);
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
 		}
 	});
 }
+
 
 
 //==================================
