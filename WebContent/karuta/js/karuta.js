@@ -288,6 +288,7 @@ function fillEditBoxBody()
 		html += "\n					<li class='nav-item'><a class='nav-link active' href='#edit-window-body-main' aria-controls='edit-window-body-main' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
 		html += "\n					<li class='nav-item'><a class='nav-link' href='#edit-window-body-metadata' aria-controls='edit-window-body-metadata' role='tab' data-toggle='tab'>"+karutaStr[LANG]['metadata']+"</a></li>";
 		html += "\n					<li class='nav-item'><a class='nav-link' href='#edit-window-body-metadata-epm' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>"+karutaStr[LANG]['css-styles']+"</a></li>";
+		html += "\n					<li class='nav-item'><a class='nav-link' href='#edit-window-body-menu' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>"+karutaStr[LANG]['menu']+"</a></li>";
 		html += "\n				</ul>";
 		html += "\n				<div class='tab-content'>";
 		html += "\n					<div role='tabpanel' class='tab-pane active' id='edit-window-body-main' style='margin-top:10px'>";
@@ -297,6 +298,7 @@ function fillEditBoxBody()
 		html += "\n					</div>";
 		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata'></div>";
 		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata-epm'></div>";
+		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-menu'></div>";
 		html += "\n				</div>";
 //		html += "\n			</div>";
 	}
@@ -306,6 +308,7 @@ function fillEditBoxBody()
 		html += "\n					<div id='edit-window-body-context'></div>";
 		html += "\n					<div id='edit-window-body-metadata'></div>";
 		html += "\n					<div id='edit-window-body-metadata-epm'></div>";
+		html += "\n					<div id='edit-window-body-menu'></div>";
 	}
 	$('#edit-window-body').html(html);
 }
@@ -415,6 +418,7 @@ function getEditBox(uuid,js2) {
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
 		UICom.structure.ui[uuid].displayMetadataAttributesEditor("edit-window-body-metadata");
+		UICom.structure.ui[uuid].displayMenuEditor("edit-window-body-menu");
 	}
 	// ------------------------------
 //	$(".modal-dialog").css('width','70%');

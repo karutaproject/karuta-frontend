@@ -427,7 +427,11 @@ UIFactory["Node"].getMenus = function(node,langcode)
 				var titles = [];
 				var title = "";
 				try {
-					titles = menus[i][2].split("/");
+					for (var j=0;j<menus[i][2].length;j++){
+						if (menus[i][2].charAt(j)=='/' && j>3 && menus[i][2].charAt(j-3) == '@')
+							menus[i][2] = menus[i][2].substring(0, j) + '|' + menus[i][2].substring(j + 1);
+					}
+					titles = menus[i][2].split("|");
 					if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
 						for (var j=0; j<titles.length; j++){
 							if (titles[j].indexOf("@"+languages[langcode])>-1)
@@ -644,3 +648,120 @@ UIFactory["Node"].getMenus = function(node,langcode)
 	//--------------------------------------------------
 	return html;
 	}
+
+
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//--------------------------------- EDITOR ------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+
+//==================================
+UIFactory["Node"].prototype.displayXmlMenuEditor = function(destid,element,destmenu)
+//==================================
+{
+	var langcode = LANGCODE;
+	var nodeid = this.id;
+	var attribute="";
+	var value = $(element).text();
+	var html = "";
+	html += "<div class='input-group "+attribute+"'>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";
+	html += "	</div>";
+	html += "	<input type='text' class='form-control' aria-label='"+karutaStr[languages[langcode]][attribute]+"' aria-describedby='"+attribute+nodeid+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\">";
+	html += "</div>";
+	$("#"+destid).append($(html));
+	//---------------------------
+	$("#"+nodeid+"_").change(function(){UIFactory.Node.updateMetadatawWadMenuAttribute(nodeid,attribute);UICom.structure.ui[nodeid].displayMenuEditor(destmenu)});
+	//---------------------------
+};
+
+//==================================
+UIFactory["Node"].prototype.displayMetadatawWadMenusEditor = function(destid,attribute,destmenu)
+//==================================
+{
+	var nodeid = this.id;
+	var text = $(this.metadatawad).attr(attribute)
+	html = "<div id='"+attribute+"_"+nodeid+"'><textarea id='"+nodeid+"_"+attribute+"' class='form-control' style='height:50px'>"+text+"</textarea></div>";
+	$("#"+destid).append($(html));
+	//---------------------------
+	$("#"+nodeid+"_"+attribute).change(function(){UIFactory.Node.updateMetadatawWadMenuAttribute(nodeid,attribute);UICom.structure.ui[nodeid].displayMenuEditor(destmenu)});
+	//---------------------------
+};
+
+//==================================================
+UIFactory["Node"].updateMetadatawWadMenuAttribute = function(nodeid,attribute)
+//==================================================
+{
+	var node = UICom.structure["ui"][nodeid].node;
+	var value = $.trim($("#"+nodeid+"_"+attribute).val());
+	$($("metadata-wad",node)[0]).attr(attribute,value);
+	UICom.UpdateMetaWad(nodeid);
+};
+
+
+//==================================================
+UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
+//==================================================
+{
+	var langcode = LANGCODE;
+	var html = "";
+	html += "<form id='metadata-menu' class='metadata-menu'>";
+	html += "</form>";
+	$("#"+destmenu).html($(html));
+	var name = this.asmtype;
+	
+
+	//----------------------Menu----------------------------
+	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
+		if (this.menuroles.charAt(0)!="<") {
+			html  = "<label>"+karutaStr[languages[langcode]]['menuroles'];
+			if (languages.length>1){
+				var first = true;
+				for (var i=0; i<languages.length;i++){
+					if (!first)
+						html += "/";
+					html += karutaStr[languages[i]]['menuroles2'];
+					first = false;
+				}
+			} else {
+				html += karutaStr[languages[langcode]]['menuroles2'];
+			}
+			html += karutaStr[languages[langcode]]['menuroles3']+"</label>";
+			$("#metadata-menu").append($(html));
+			this.displayMetadatawWadTextAttributeEditor('edit-window-body-menu','menuroles');
+			//-----------------------
+			html  = "<label>"+karutaStr[languages[langcode]]['menulabels'];
+			if (languages.length>1){
+				var first = true;
+				for (var i=0; i<languages.length;i++){
+					if (!first)
+						html += "/";
+					html += karutaStr[languages[i]]['menulabels2'];
+					first = false;
+				}
+			} else {
+				html += karutaStr[languages[langcode]]['menulabels2'];
+			}
+			html += karutaStr[languages[langcode]]['menulabels3']+"</label>";
+			$("#metadata-menu").append($(html));
+			this.displayMetadatawWadTextAttributeEditor('edit-window-body-menu','menulabels');
+			//-----------------------
+		} else {
+			this.displayMetadatawWadMenusEditor('metadata-menu','menuroles',destmenu);
+			var parser = new DOMParser();
+			var xmlDoc = parser.parseFromString(this.menuroles,"text/xml");
+			var menus = $("menu",xmlDoc);
+			var html = "";
+			for (var i=0;i<menus.length;i++) {
+				var menulabel = $("menulabel",menus[i]);
+				html = "<div id='"+i+"menulabel'>Menu "+(i+1)+" <span class='type badge badge-primary'>"+$(menulabel).text()+"</span> ";
+				$("#"+destmenu).append(html);
+				this.displayXmlMenuEditor(i+"menulabel",menulabel,destmenu);
+
+			}
+
+		}
+	}
+};

@@ -599,7 +599,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		$('#metadata_texts').append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','shareroles');
 	}
-	//----------------------Menu----------------------------
+/*	//----------------------Menu----------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
 		//-----------------------
 		html  = "<label>"+karutaStr[languages[langcode]]['menuroles'];
@@ -634,7 +634,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menulabels');
 		//-----------------------
-	}
+	} */
 	//------------------------Help-------------------------
 	html = "<br><label>"+karutaStr[languages[langcode]]['help'];
 	if (languages.length>1){
