@@ -1992,7 +1992,6 @@ function getImg(semtag,data,langcode,fluid)
 {
 	var result = "";
 	if ($("filename[lang='"+languages[langcode]+"']",$("asmResource[xsi_type='Image']",$("metadata[semantictag='"+semtag+"']",data).parent())).text()!="") {
-//	if ($("metadata[semantictag='"+semtag+"']",data).length>0) {
 		if (langcode==null)
 			langcode = LANGCODE;
 		if (fluid==null)
@@ -2003,7 +2002,7 @@ function getImg(semtag,data,langcode,fluid)
 		result += "<img ";
 		if (fluid)
 			result += "class='img-fluid' ";
-		result += "width='"+width+"' height='"+height+"' style='display:inline;' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"'/>";
+		result += "style='display:inline"+(width!=""?';width:'+width:"")+""+(height!=""?';height:'+height:"")+"' src='../../../"+serverBCK+"/resources/resource/file/"+getNodeid(semtag,data)+"?lang="+languages[langcode]+"'/>";
 	}
 	return result;
 }
