@@ -1787,10 +1787,22 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		}
 		if (((this.writenode && (this.moveinroles.containsArrayElt(g_userroles)  || this.moveinroles.indexOf($(USER.username_node).text())>-1)) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			var movein = ($(this.metadatawad).attr('movein')==undefined)?'':$(this.metadatawad).attr('movein');
-//			if (movein=='')
+			var target = null;
+			if (movein.indexOf('parent.parent.parent.parent.parent')>-1) {
+				target = $(this.node).parent().parent().parent().parent().parent().attr('id');
+			} else if (movein.indexOf('parent.parent.parent.parent')>-1) {
+				target = $(this.node).parent().parent().parent().parent().attr('id');
+			} else if (movein.indexOf('parent.parent.parent')>-1) {
+				target = $(this.node).parent().parent().parent().attr('id');
+			} else	if (movein.indexOf('parent.parent')>-1) {
+				target = $(this.node).parent().parent().attr('id');
+			} else if (movein.indexOf('parent')>-1) {
+				target = $(this.node).parent().attr('id');
+			}
+			if (movein.indexOf('.')<0)
 				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.root,'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
-//			else
-//				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree[$('#page').attr('uuid')],'"+movein+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			else
+				html+= "<span class='button fas fa-random' style='"+menus_color+"' onclick=\"javascript:UIFactory.Node.selectNode('"+this.id+"',UICom.structure.tree['"+target+"'],'"+movein.substring(movein.lastIndexOf('.')+1)+"')\" data-title='"+karutaStr[LANG]["move"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 		}
 		//------------- duplicate node buttons ---------------
 		if ( (g_userroles[0]=='designer' && this.asmtype != 'asmRoot') // always duplicate for designer
