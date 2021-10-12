@@ -305,18 +305,32 @@ var UICom =
 				var roles = null;
 				var attribute_value = r_replaceVariable($("metadata-wad",node).attr(attribute) != undefined ? $("metadata-wad",node).attr(attribute):"");
 				if (attribute == 'menuroles' && attribute_value.length>10) {
-					var items = attribute_value.split(";");
-					for (var i=0; i<items.length; i++){
-						var subitems = items[i].split(",");
-						if (subitems[0]!="#line") {
-							roles = subitems[3].split(" ");
+					if (attribute_value.charAt(0)!="<") {
+						var items = attribute_value.split(";");
+						for (var i=0; i<items.length; i++){
+							var subitems = items[i].split(",");
+							if (subitems[0]!="#line") {
+								roles = subitems[3].split(" ");
+								//----------------------------
+								for (var j=0;j<roles.length;j++){
+									if (roles[j]!='' && roles[j]!='user')
+										UICom.roles[roles[j]] = true;
+								}
+							}
+							//----------------------------
+						}
+					} else {
+						var parser = new DOMParser();
+						var xmlDoc = parser.parseFromString(attribute_value,"text/xml");
+						var roleselts = $("roles",xmlDoc);
+						for (var i=0; i<roleselts.length; i++){
+							var roles = $(roleselts[i]).text().split(" ");
 							//----------------------------
 							for (var j=0;j<roles.length;j++){
 								if (roles[j]!='' && roles[j]!='user')
 									UICom.roles[roles[j]] = true;
 							}
 						}
-						//----------------------------
 					}
 				}
 				else {

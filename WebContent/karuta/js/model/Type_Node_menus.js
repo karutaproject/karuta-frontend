@@ -258,77 +258,114 @@ UIFactory["Node"].getMenus = function(node,langcode)
 	try {
 		if ((node.depth>0 || node.asmtype == 'asmUnitStructure') && node.menuroles != undefined && node.menuroles.length>10 && (node.menuroles.indexOf(node.userrole)>-1 || node.menuroles.indexOf($(USER.username_node).text())>-1 || (node.menuroles.containsArrayElt(g_userroles) && node.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
 			//--------------------------------
-			var mlabels = [];
-			var labelitems = node.menulabels.split(";");
-			for (var i=0; i<labelitems.length; i++){
-				var subitems = labelitems[i].split(",");
-				mlabels[i] = [];
-				mlabels[i][0] = subitems[0]; // label
-				mlabels[i][1] = subitems[1]; // roles
-			}
-			//--------------------------------
-			var menus = [];
-			var displayMenu = false;
-			if (node.menuroles.indexOf('function')<0)
-				node.menuroles = replaceVariable(node.menuroles);
-			var items = node.menuroles.split(";");
-			for (var i=0; i<items.length; i++){
-				var subitems = items[i].split(",");
-				menus[i] = [];
-				if (subitems[0]=="#line") {
-					menus[i][0] = subitems[0]; // portfolio code
-					menus[i][1] = ""; // semantic tag
-					menus[i][2] = ""; // label
-					menus[i][3] = ""; // roles
-					menus[i][4] = ""; // target
-					menus[i][5] = ""; // condition
-
-				} else {
-					menus[i][0] = subitems[0]; // portfolio code
-					menus[i][1] = subitems[1]; // semantic tag
-					menus[i][2] = subitems[2]; // label
-					menus[i][3] = subitems[3]; // roles
-					if (subitems.length>4)
-						menus[i][4] = subitems[4]; // target
-					else
+			if (node.menuroles.charAt(0)!="<") {
+				var mlabels = [];
+				var labelitems = node.menulabels.split(";");
+				for (var i=0; i<labelitems.length; i++){
+					var subitems = labelitems[i].split(",");
+					mlabels[i] = [];
+					mlabels[i][0] = subitems[0]; // label
+					mlabels[i][1] = subitems[1]; // roles
+				}
+				//--------------------------------
+				var menus = [];
+				var displayMenu = false;
+				if (node.menuroles.indexOf('function')<0)
+					node.menuroles = replaceVariable(node.menuroles);
+				var items = node.menuroles.split(";");
+				for (var i=0; i<items.length; i++){
+					var subitems = items[i].split(",");
+					menus[i] = [];
+					if (subitems[0]=="#line") {
+						menus[i][0] = subitems[0]; // portfolio code
+						menus[i][1] = ""; // semantic tag
+						menus[i][2] = ""; // label
+						menus[i][3] = ""; // roles
 						menus[i][4] = ""; // target
-					if (subitems.length>5)
-						menus[i][5] = subitems[5]; // condition
-					else
 						menus[i][5] = ""; // condition
-				}
-				if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].indexOf($(USER.username_node).text())>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
-					if (menus[i][5]==""){
-						displayMenu = true;  // node.userrole may be included in semantictag
-						no_monomenu = i;
+	
+					} else {
+						menus[i][0] = subitems[0]; // portfolio code
+						menus[i][1] = subitems[1]; // semantic tag
+						menus[i][2] = subitems[2]; // label
+						menus[i][3] = subitems[3]; // roles
+						if (subitems.length>4)
+							menus[i][4] = subitems[4]; // target
+						else
+							menus[i][4] = ""; // target
+						if (subitems.length>5)
+							menus[i][5] = subitems[5]; // condition
+						else
+							menus[i][5] = ""; // condition
 					}
-					else if(eval(menus[i][5])){
-						displayMenu = true;
-						no_monomenu = i;
+					if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].indexOf($(USER.username_node).text())>-1 || (menus[i][3].containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
+						if (menus[i][5]==""){
+							displayMenu = true;  // node.userrole may be included in semantictag
+							no_monomenu = i;
+						}
+						else if(eval(menus[i][5])){
+							displayMenu = true;
+							no_monomenu = i;
+						}
 					}
 				}
-			}
-			//--------------------------------
-			var nbmenus = 0;
-			for (var i=0; i<menus.length; i++){
-				if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].indexOf($(USER.username_node).text())>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
-						nbmenus++;
-			}
-			var monomenu = (nbmenus==1);
-			//--------------------------------
-			if (displayMenu && !monomenu) {
-				//-----------------------
-				html += "<span class='dropdown'>";
-				html += "	<button class='btn dropdown-toggle add-button' style='"+menus_style+"' type='button' id='specific_"+node.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
-				//-----------
-				if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
-					for (var i=0; i<mlabels.length; i++){
-						if (mlabels[i][1].indexOf(node.userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || mlabels[i][1].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') {
+				//--------------------------------
+				var nbmenus = 0;
+				for (var i=0; i<menus.length; i++){
+					if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].indexOf($(USER.username_node).text())>-1 || menus[i][3].containsArrayElt(g_userroles) || USER.admin || g_userroles[0]=='designer')
+							nbmenus++;
+				}
+				var monomenu = (nbmenus==1);
+				//--------------------------------
+				if (displayMenu && !monomenu) {
+					//-----------------------
+					html += "<span class='dropdown'>";
+					html += "	<button class='btn dropdown-toggle add-button' style='"+menus_style+"' type='button' id='specific_"+node.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+					//-----------
+					if (mlabels[0][0]!='none' && mlabels[0][0]!='') {
+						for (var i=0; i<mlabels.length; i++){
+							if (mlabels[i][1].indexOf(node.userrole)>-1 || mlabels[i][1].containsArrayElt(g_userroles) || mlabels[i][1].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer') {
+								var titles = [];
+								var title = "";
+								try {
+									titles = mlabels[i][0].split("/");
+									if (mlabels[i][0].indexOf("@")>-1) { // lang@fr/lang@en/...
+										for (var j=0; j<titles.length; j++){
+											if (titles[j].indexOf("@"+languages[langcode])>-1)
+												title = titles[j].substring(0,titles[j].indexOf("@"));
+										}
+									} else { // lang1/lang2/...
+										title = titles[langcode];  // lang1/lang2/...
+									}
+								} catch(e){
+									title = mlabels[i][0];
+								}
+								html += title;
+							}
+						}
+					} else {
+							html += karutaStr[languages[langcode]]['menu'];
+					}
+					//-----------
+					html += "	</button>";
+					html += "	<div class='dropdown-menu dropdown-menu-right' style='"+menus_style+"' aria-labelledby='specific_"+node.id+"'>";
+					//--------------------------menu items--------------------------------------
+					var databack = false;
+					for (var i=0; i<menus.length; i++){
+						var callback = "UIFactory.Node.reloadUnit";
+						if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' )
+							callback = "UIFactory.Node.reloadStruct";
+						var param2 = null;
+						var param3 = null;
+						var param4 = null;
+						if (menus[i][0]=="#line") {
+							html += "<div class='dropdown-divider'></div>";
+						} else {
 							var titles = [];
 							var title = "";
 							try {
-								titles = mlabels[i][0].split("/");
-								if (mlabels[i][0].indexOf("@")>-1) { // lang@fr/lang@en/...
+								titles = menus[i][2].split("/");
+								if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
 									for (var j=0; j<titles.length; j++){
 										if (titles[j].indexOf("@"+languages[langcode])>-1)
 											title = titles[j].substring(0,titles[j].indexOf("@"));
@@ -337,142 +374,107 @@ UIFactory["Node"].getMenus = function(node,langcode)
 									title = titles[langcode];  // lang1/lang2/...
 								}
 							} catch(e){
-								title = mlabels[i][0];
+								title = menus[i][2];
 							}
-							html += title;
+							//---------------------target----------------------------------------
+							var targetid = "";
+							if (menus[i][4]!=""){
+								target = getTarget (node,menus[i][4]);
+								if (target.length>0) {
+									targetid = $(target[0]).attr("id");
+									//---------- search for parent to reload after import------
+									var parent = target[0];
+									while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
+										parent = $(parent).parent();
+									}
+									var parentid = $(parent).attr("id");
+									if ($(parent).prop("nodeName") == "asmUnit"){
+										callback = "UIFactory.Node.reloadUnit";
+										param2 = "'"+parentid+"'";
+										if ($("#page").attr('uuid')!=parentid)
+											param3 = false;
+									}
+									else {
+										callback = "UIFactory.Node.reloadStruct";
+										param2 = "'"+g_portfolio_rootid+"'";
+										if ($("#page").attr('uuid')!=parentid)
+											param3 = false;
+									}
+									//---------------------------------------------------------
+								}
+	
+							}
+							//-------------------------------------------------------------
+							if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || menus[i][3].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer')
+								html += UIFactory["Node"].getSpecificMenu(node.id,menus[i],targetid,title,databack,callback,param2,param3,param4);
 						}
 					}
-				} else {
-						html += karutaStr[languages[langcode]]['menu'];
+					//----------------------------------------------------------------
+					html += "		</div>"; // class='dropdown-menu'
+					html += "	</span><!-- class='dropdown -->";
 				}
-				//-----------
-				html += "	</button>";
-				html += "	<div class='dropdown-menu dropdown-menu-right' style='"+menus_style+"' aria-labelledby='specific_"+node.id+"'>";
-				//--------------------------menu items--------------------------------------
-				var databack = false;
-				for (var i=0; i<menus.length; i++){
-					var callback = "UIFactory.Node.reloadUnit";
-					if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' )
-						callback = "UIFactory.Node.reloadStruct";
+				if (displayMenu && monomenu) {
+					var databack = false;
 					var param2 = null;
 					var param3 = null;
 					var param4 = null;
-					if (menus[i][0]=="#line") {
-						html += "<div class='dropdown-divider'></div>";
-					} else {
-						var titles = [];
-						var title = "";
-						try {
-							titles = menus[i][2].split("/");
-							if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
-								for (var j=0; j<titles.length; j++){
-									if (titles[j].indexOf("@"+languages[langcode])>-1)
-										title = titles[j].substring(0,titles[j].indexOf("@"));
-								}
-							} else { // lang1/lang2/...
-								title = titles[langcode];  // lang1/lang2/...
+					var callback = "UIFactory.Node.reloadUnit";
+					if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' ) {
+						callback = "UIFactory.Node.reloadStruct";
+						param2 = "'"+g_portfolio_rootid+"'";
+					}
+					var i = no_monomenu;
+					//-------------------
+					var titles = [];
+					var title = "";
+					try {
+						for (var j=0;j<menus[i][2].length;j++){
+							if (menus[i][2].charAt(j)=='/' && j>3 && menus[i][2].charAt(j-3) == '@')
+								menus[i][2] = menus[i][2].substring(0, j) + '|' + menus[i][2].substring(j + 1);
+						}
+						titles = menus[i][2].split("|");
+						if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
+							for (var j=0; j<titles.length; j++){
+								if (titles[j].indexOf("@"+languages[langcode])>-1)
+									title = titles[j].substring(0,titles[j].indexOf("@"));
 							}
-						} catch(e){
-							title = menus[i][2];
+						} else { // lang1/lang2/...
+							title = titles[langcode];  // lang1/lang2/...
 						}
-						//---------------------target----------------------------------------
-						var targetid = "";
-						if (menus[i][4]!=""){
-							target = getTarget (node,menus[i][4]);
-							if (target.length>0) {
-								targetid = $(target[0]).attr("id");
-								//---------- search for parent to reload after import------
-								var parent = target[0];
-								while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
-									parent = $(parent).parent();
-								}
-								var parentid = $(parent).attr("id");
-								if ($(parent).prop("nodeName") == "asmUnit"){
-									callback = "UIFactory.Node.reloadUnit";
-									param2 = "'"+parentid+"'";
-									if ($("#page").attr('uuid')!=parentid)
-										param3 = false;
-								}
-								else {
-									callback = "UIFactory.Node.reloadStruct";
-									param2 = "'"+g_portfolio_rootid+"'";
-									if ($("#page").attr('uuid')!=parentid)
-										param3 = false;
-								}
-								//---------------------------------------------------------
+					} catch(e){
+						title = menus[i][2];
+					}
+					//---------------------target----------------------------------------
+					var targetid = "";
+					if (menus[i][4]!=""){
+						target = getTarget (node,menus[i][4]);
+						if (target.length>0) {
+							targetid = $(target[0]).attr("id");
+							//---------- search for parent to reload after import------
+							var parent = target[0];
+							while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
+								parent = $(parent).parent();
 							}
-
+							var parentid = $(parent).attr("id");
+							if ($(parent).prop("nodeName") == "asmUnit"){
+								callback = "UIFactory.Node.reloadUnit";
+								param2 = "'"+parentid+"'";
+								if ($("#page").attr('uuid')!=parentid)
+									param3 = false;
+							}
+							else {
+								callback = "UIFactory.Node.reloadStruct";
+								param2 = "'"+g_portfolio_rootid+"'";
+								if ($("#page").attr('uuid')!=parentid)
+									param3 = false;
+							}
+							//---------------------------------------------------------
 						}
-						//-------------------------------------------------------------
-						if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || menus[i][3].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer')
-							html += UIFactory["Node"].getSpecificMenu(node.id,menus[i],targetid,title,databack,callback,param2,param3,param4);
 					}
+					if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || menus[i][3].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer')
+						html += UIFactory["Node"].getSingleMenu(node.id,menus[i],targetid,title,databack,callback,param2,param3,param4);
+					//------------------
 				}
-				//----------------------------------------------------------------
-				html += "		</div>"; // class='dropdown-menu'
-				html += "	</span><!-- class='dropdown -->";
-			}
-			if (displayMenu && monomenu) {
-				var databack = false;
-				var param2 = null;
-				var param3 = null;
-				var param4 = null;
-				var callback = "UIFactory.Node.reloadUnit";
-				if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' ) {
-					callback = "UIFactory.Node.reloadStruct";
-					param2 = "'"+g_portfolio_rootid+"'";
-				}
-				var i = no_monomenu;
-				//-------------------
-				var titles = [];
-				var title = "";
-				try {
-					for (var j=0;j<menus[i][2].length;j++){
-						if (menus[i][2].charAt(j)=='/' && j>3 && menus[i][2].charAt(j-3) == '@')
-							menus[i][2] = menus[i][2].substring(0, j) + '|' + menus[i][2].substring(j + 1);
-					}
-					titles = menus[i][2].split("|");
-					if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
-						for (var j=0; j<titles.length; j++){
-							if (titles[j].indexOf("@"+languages[langcode])>-1)
-								title = titles[j].substring(0,titles[j].indexOf("@"));
-						}
-					} else { // lang1/lang2/...
-						title = titles[langcode];  // lang1/lang2/...
-					}
-				} catch(e){
-					title = menus[i][2];
-				}
-				//---------------------target----------------------------------------
-				var targetid = "";
-				if (menus[i][4]!=""){
-					target = getTarget (node,menus[i][4]);
-					if (target.length>0) {
-						targetid = $(target[0]).attr("id");
-						//---------- search for parent to reload after import------
-						var parent = target[0];
-						while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
-							parent = $(parent).parent();
-						}
-						var parentid = $(parent).attr("id");
-						if ($(parent).prop("nodeName") == "asmUnit"){
-							callback = "UIFactory.Node.reloadUnit";
-							param2 = "'"+parentid+"'";
-							if ($("#page").attr('uuid')!=parentid)
-								param3 = false;
-						}
-						else {
-							callback = "UIFactory.Node.reloadStruct";
-							param2 = "'"+g_portfolio_rootid+"'";
-							if ($("#page").attr('uuid')!=parentid)
-								param3 = false;
-						}
-						//---------------------------------------------------------
-					}
-				}
-				if (menus[i][3].indexOf(node.userrole)>-1 || menus[i][3].containsArrayElt(g_userroles) || menus[i][3].indexOf($(USER.username_node).text())>-1 || USER.admin || g_userroles[0]=='designer')
-					html += UIFactory["Node"].getSingleMenu(node.id,menus[i],targetid,title,databack,callback,param2,param3,param4);
-				//------------------
 			}
 		}
 	} catch(e){
@@ -657,28 +659,50 @@ UIFactory["Node"].getMenus = function(node,langcode)
 //----------------------------------------------------------------------------------------------------------------------------
 
 //==================================
-UIFactory["Node"].prototype.displayXmlMenuEditor = function(destid,element,destmenu)
+UIFactory["Node"].prototype.displayXmlMenuEditor = function(xmlDoc,destid,element,destmenu,edit)
 //==================================
 {
 	var langcode = LANGCODE;
+	if (edit==null)
+		edit=false;
 	var nodeid = this.id;
-	var attribute="";
+	var attribute=$(element).prop("nodeName");
 	var value = $(element).text();
 	var html = "";
 	html += "<div class='input-group "+attribute+"'>";
 	html += "	<div class='input-group-prepend'>";
 	html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";
 	html += "	</div>";
-	html += "	<input type='text' class='form-control' aria-label='"+karutaStr[languages[langcode]][attribute]+"' aria-describedby='"+attribute+nodeid+"' onchange=\"javascript:UIFactory['Node'].updateMetadataEpmAttribute('"+nodeid+"','"+attribute+"',this.value)\" value=\""+value+"\">";
+	html += "	<input id='"+nodeid+"_"+destid+attribute+"' ";
+	if (!edit)
+		html+=" disabled ";
+	html += " type='text' class='form-control' aria-label='"+karutaStr[languages[langcode]][attribute]+"' aria-describedby='"+attribute+nodeid+"'  value=\""+value+"\">";
 	html += "</div>";
 	$("#"+destid).append($(html));
 	//---------------------------
-	$("#"+nodeid+"_").change(function(){UIFactory.Node.updateMetadatawWadMenuAttribute(nodeid,attribute);UICom.structure.ui[nodeid].displayMenuEditor(destmenu)});
+	$("#"+nodeid+"_"+destid+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(xmlDoc,destid,element,destmenu,nodeid)});
 	//---------------------------
 };
 
+//==================================================
+UIFactory["Node"].updateMetadataXmlMenuAttribute = function(xmlDoc,destid,element,destmenu,nodeid)
+//==================================================
+{
+	var node = UICom.structure["ui"][nodeid].node;
+	var attribute=$(element).prop("nodeName");
+	var eltvalue = $.trim($("#"+nodeid+"_"+destid+attribute).val());
+	$(element).text(eltvalue);
+	var value= xml2string(xmlDoc);
+	$($("metadata-wad",node)[0]).attr('menuroles',value);
+	UICom.UpdateMetaWad(nodeid);
+	UICom.structure.ui[nodeid].displayMenuEditor(destmenu);
+};
+
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 //==================================
-UIFactory["Node"].prototype.displayMetadatawWadMenusEditor = function(destid,attribute,destmenu)
+UIFactory["Node"].prototype.displayMetadataWadMenusEditor = function(destid,attribute,destmenu)
 //==================================
 {
 	var nodeid = this.id;
@@ -686,12 +710,12 @@ UIFactory["Node"].prototype.displayMetadatawWadMenusEditor = function(destid,att
 	html = "<div id='"+attribute+"_"+nodeid+"'><textarea id='"+nodeid+"_"+attribute+"' class='form-control' style='height:50px'>"+text+"</textarea></div>";
 	$("#"+destid).append($(html));
 	//---------------------------
-	$("#"+nodeid+"_"+attribute).change(function(){UIFactory.Node.updateMetadatawWadMenuAttribute(nodeid,attribute);UICom.structure.ui[nodeid].displayMenuEditor(destmenu)});
+	$("#"+nodeid+"_"+attribute).change(function(){UIFactory.Node.updateMetadataWadMenuAttribute(nodeid,attribute);UICom.structure.ui[nodeid].displayMenuEditor(destmenu)});
 	//---------------------------
 };
 
 //==================================================
-UIFactory["Node"].updateMetadatawWadMenuAttribute = function(nodeid,attribute)
+UIFactory["Node"].updateMetadataWadMenuAttribute = function(nodeid,attribute)
 //==================================================
 {
 	var node = UICom.structure["ui"][nodeid].node;
@@ -699,7 +723,34 @@ UIFactory["Node"].updateMetadatawWadMenuAttribute = function(nodeid,attribute)
 	$($("metadata-wad",node)[0]).attr(attribute,value);
 	UICom.UpdateMetaWad(nodeid);
 };
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+//==================================================
+UIFactory["Node"].prototype.displayMenuSubEditor = function(xmlDoc,tag,subitem,dest,destmenu)
+//==================================================
+{
+	var elts = $(tag,subitem);
+	for (var k=0;k<elts.length;k++){
+		html = "<div id='"+dest+tag+k.toString()+"content' class='"+tag+"content'></div>";
+		$("#"+dest+"content").append(html);
+		if ($("folder",elts[k]).length>0)
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("folder",elts[k]),destmenu,true);
+		if ($("foliocode",elts[k]).length>0)
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("foliocode",elts[k]),destmenu,true);
+		if ($("semtag",elts[k]).length>0)
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("semtag",elts[k]),destmenu,true);
+		if ($("parentposition",elts[k]).length>0)
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("parentposition",elts[k]),destmenu,true);
+		if ($("parentsemtag",elts[k]).length>0)
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("parentsemtag",elts[k]),destmenu,true);
+		if ($("target",elts[k]).length>0)
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("target",elts[k]),destmenu,true);
+		if ($("updatedtag",elts[k]).length>0)
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("updatedtag",elts[k]),destmenu,true);
 
+	}
+}
 
 //==================================================
 UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
@@ -749,17 +800,43 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 			this.displayMetadatawWadTextAttributeEditor('edit-window-body-menu','menulabels');
 			//-----------------------
 		} else {
-			this.displayMetadatawWadMenusEditor('metadata-menu','menuroles',destmenu);
+			this.displayMetadataWadMenusEditor('metadata-menu','menuroles',destmenu);
 			var parser = new DOMParser();
 			var xmlDoc = parser.parseFromString(this.menuroles,"text/xml");
 			var menus = $("menu",xmlDoc);
 			var html = "";
 			for (var i=0;i<menus.length;i++) {
 				var menulabel = $("menulabel",menus[i]);
-				html = "<div id='"+i+"menulabel'>Menu "+(i+1)+" <span class='type badge badge-primary'>"+$(menulabel).text()+"</span> ";
+				html = "<div id='"+i.toString()+"menulabel'>Menu "+(i+1)+" <span class='type badge badge-primary'>"+$(menulabel).text()+"</span> <div id='"+i.toString()+"content' class='menucontent'></div></div>";
 				$("#"+destmenu).append(html);
-				this.displayXmlMenuEditor(i+"menulabel",menulabel,destmenu);
-
+				this.displayXmlMenuEditor(xmlDoc,i.toString()+"content",menulabel,destmenu,true);
+				var items = $("item",menus[i])
+				for (var j=0;j<items.length;j++) {
+					var type = $("itemtype",items[j]).text();
+					html = "<div id='"+i.toString()+j.toString()+"itemlabel'>Item "+(j+1)+" <span class='type badge badge-success'>"+$("itemlabel",items[j]).text()+"</span> <div id='"+i.toString()+j.toString()+"content' class='itemcontent'></div></div>";
+					$("#"+i.toString()+"content").append(html);
+					this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("itemtype",items[j]),destmenu,false);
+					this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("itemlabel",items[j]),destmenu,true);
+					if (type=='importsingle') {
+						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true);
+						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
+						this.displayMenuSubEditor(xmlDoc,'action',items[j],i.toString()+j.toString(),destmenu);
+					}
+					if (type=='importgmultipe' || type=='importgsingle') {
+						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("boxlabel",items[j]),destmenu,true);
+						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true);
+						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
+						this.displayMenuSubEditor(xmlDoc,'search',items[j],i.toString()+j.toString(),destmenu);
+						this.displayMenuSubEditor(xmlDoc,'action',items[j],i.toString()+j.toString(),destmenu);
+					}
+					if (type=='importggmultipe' || type=='importggsingle') {
+						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("boxlabel",items[j]),destmenu,true);
+						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true);
+						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
+						this.displayMenuSubEditor(xmlDoc,'search',items[j],i.toString()+j.toString(),destmenu);
+						this.displayMenuSubEditor(xmlDoc,'action',items[j],i.toString()+j.toString(),destmenu);
+					}
+				}
 			}
 
 		}

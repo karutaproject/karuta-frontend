@@ -2039,9 +2039,26 @@
 */
 /* ============================================================ */
 
+/* ================ */
+/*   MENU EDITOR    */
+/* ================ */
 
+	.menucontent,
+	.itemcontent,
+	.actioncontent {
+		margin-left:20px;
+		margin-top:5px;
+	}
 
+	.searchcontent {
+		border-left:1px solid blue;
+		padding-left:2px;
+	}
 
+	.actioncontent {
+		border-left:1px solid red;
+		padding-left:2px;
+	}
 
 
 
