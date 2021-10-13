@@ -1914,6 +1914,11 @@ h3 {
   padding-left: 2px;
 }
 
+.targetcontent {
+  border-left: 1px solid green;
+  padding-left: 2px;
+}
+
 /* =========== PORTFOLIO-WELCOME EDIT MODE ================= */
 .standard .welcome-block {
   margin-left: 20px;

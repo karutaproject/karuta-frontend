@@ -475,6 +475,79 @@ UIFactory["Node"].getMenus = function(node,langcode)
 						html += UIFactory["Node"].getSingleMenu(node.id,menus[i],targetid,title,databack,callback,param2,param3,param4);
 					//------------------
 				}
+			} else { //new menus ============================================================================================================
+				//------------------
+				var databack = false;
+				var param2 = null;
+				var param3 = null;
+				var param4 = null;
+				var callback = "UIFactory.Node.reloadUnit";
+				if (node.asmtype=='asmStructure' || node.asmtype=='asmRoot' ) {
+					callback = "UIFactory.Node.reloadStruct";
+					param2 = "'"+g_portfolio_rootid+"'";
+				}
+				//------------------
+				var parser = new DOMParser();
+				var xmlDoc = parser.parseFromString(node.menuroles,"text/xml");
+				var menus = $("menu",xmlDoc);
+				for (var i=0;i<menus.length;i++){
+					var menulabel = $("menulabel",menus[i]).text();
+					var items = $("item",menus[i]);
+					var nbitems = 0;
+					for (var j=0;j<items.length;j++) {
+						var roles = $("roles",items[j]).text();
+						var condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
+						if (UIFactory.Node.testDisplay(node,roles,condition))
+							nbitems++;
+					}
+					if (nbitems>1){
+						html += "<span class='dropdown'>";
+						html += "	<button class='btn dropdown-toggle add-button' style='"+menus_style+"' type='button' id='specific_"+node.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
+						html += UIFactory.Node.getMenuLabel(menulabel,langcode);
+						html += "	</button>";
+						html += "	<div class='dropdown-menu dropdown-menu-right' style='"+menus_style+"' aria-labelledby='specific_"+node.id+"'>";
+						
+						html += "	</div>"; // class='dropdown-menu'
+//						html += "	</span><!-- class='dropdown -->";
+
+					} else if (nbitems>0){
+						if(menulabel!="")
+							title = UIFactory.Node.getMenuLabel(menulabel,langcode);
+						else
+							title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
+						html += "<a class='button text-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</a>";
+						//---------------------target----------------------------------------
+						var parentid = node.id; // default value
+						var targetid = "";
+						if ($("target",items[0]).length>0){
+							target = getTarget (node,$("target",items[0]).text());
+							if (target.length>0) {
+								targetid = $(target[0]).attr("id");
+								//---------- search for parent to reload after import------
+								var parent = target[0];
+								while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
+									parent = $(parent).parent();
+								}
+								parentid = $(parent).attr("id");
+								if ($(parent).prop("nodeName") == "asmUnit"){
+									callback = "UIFactory.Node.reloadUnit";
+									param2 = "'"+parentid+"'";
+									if ($("#page").attr('uuid')!=parentid)
+										param3 = false;
+								}
+								else {
+									callback = "UIFactory.Node.reloadStruct";
+									param2 = "'"+g_portfolio_rootid+"'";
+									if ($("#page").attr('uuid')!=parentid)
+										param3 = false;
+								}
+								//---------------------------------------------------------
+							}
+						}
+						html = html.replace("##",UIFactory.Node.getXmlItemMenu(parentid,items[0],targetid,title,databack,callback,param2,param3,param4));
+					}
+				}
+				//------------------
 			}
 		}
 	} catch(e){
@@ -735,17 +808,18 @@ UIFactory["Node"].prototype.displayMenuSubEditor = function(xmlDoc,tag,subitem,d
 		html = "<div id='"+dest+tag+k.toString()+"content' class='"+tag+"content'></div>";
 		$("#"+dest+"content").append(html);
 		if ($("folder",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("folder",elts[k]),destmenu,true);
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("folder",elts[k])[0],destmenu,true);
 		if ($("foliocode",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("foliocode",elts[k]),destmenu,true);
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("foliocode",elts[k])[0],destmenu,true);
 		if ($("semtag",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("semtag",elts[k]),destmenu,true);
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("semtag",elts[k])[0],destmenu,true);
 		if ($("parentposition",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("parentposition",elts[k]),destmenu,true);
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("parentposition",elts[k])[0],destmenu,true);
 		if ($("parentsemtag",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("parentsemtag",elts[k]),destmenu,true);
+			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("parentsemtag",elts[k])[0],destmenu,true);
 		if ($("target",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("target",elts[k]),destmenu,true);
+			this.displayMenuSubEditor(xmlDoc,'target',elts[k],dest+tag+k.toString(),destmenu);
+//			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("target",elts[k]),destmenu,true);
 		if ($("updatedtag",elts[k]).length>0)
 			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("updatedtag",elts[k]),destmenu,true);
 
@@ -842,3 +916,68 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 		}
 	}
 };
+
+//==================================================
+UIFactory["Node"].testDisplay = function(node,roles,condition)
+//==================================================
+{
+	var display = false;
+	if (roles.indexOf(node.userrole)>-1 || roles.indexOf($(USER.username_node).text())>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer'){
+		if (condition==""){
+			display = true;
+		}
+		else if(eval(condition)){
+			display = true;
+		}
+	}
+	return display;
+}
+
+//==================================================
+UIFactory["Node"].getMenuLabel = function(menulabel,langcode)
+//==================================================
+{
+	var titles = [];
+	var title = "";
+	if (menulabel!="")
+		try {
+			titles = menulabel.split("/");
+			for (var j=0; j<titles.length; j++){
+				if (titles[j].indexOf("@"+languages[langcode])>-1)
+					title = titles[j].substring(0,titles[j].indexOf("@"));
+			}
+		} catch(e){
+			title =karutaStr[languages[langcode]]['menu'];
+		}
+	else
+		title = karutaStr[languages[langcode]]['menu'];
+	return title
+}
+
+//==================================================
+UIFactory["Node"].getXmlItemMenu = function(parentid,item,targetid,title,databack,callback,param2,param3,param4)
+//==================================================
+{
+	var html = "";
+	var type = $("itemtype",item).text();
+	if (type=='importsingle') {
+		var actions = $("action",item);
+		for (var i=0;i<actions.length;i++){
+			var folder = replaceVariable( ($("folder",actions[i]).length>0)?$("folder",actions[i]).text():"" );
+			var foliocode = replaceVariable( ($("foliocode",actions[i]).length>0)?$("foliocode",actions[i]).text():"" );
+			var semtag =  replaceVariable( ($("semtag",actions[i]).length>0)?$("semtag",actions[i]).text():"" );
+			if (targetid!="")
+				html += "importBranch('"+targetid+"','"+folder+"."+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+			else
+				html += "importBranch('"+parentid+"','"+folder+"."+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+		}
+	}
+	return html;
+}
+
+
+
+
+
+
+

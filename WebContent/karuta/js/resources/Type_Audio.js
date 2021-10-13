@@ -249,6 +249,9 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 	html += "<span id='fileAudio_"+this.id+"_"+langcode+"'>"+$(this.filename_node[langcode]).text()+"</span>";
 	html += "<span id='loaded_"+this.id+langcode+"'></span>"
 	html +=  " <button type='button' class='btn ' onclick=\"UIFactory.Audio.remove('"+this.id+"',"+langcode+")\">"+karutaStr[LANG]['button-delete']+"</button>";
+	html +=  " <button type='button' class='btn ' onclick=\"navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError)\">"+karutaStr[LANG]['record']+"</button>";
+	;
+	html +=  " <section class='main-controls'><canvas class='visualizer' height='60px'></canvas><div id='buttons'><button class='record'>Record</button><button class='stop'>Stop</button></div></section>";
 	$("#"+destid).append($(html));
 	var loadedid = 'loaded_'+this.id+langcode;
 	$("#f_"+this.id+"_"+langcode).fileupload({
@@ -276,7 +279,7 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 			var uuid = data.url.substring(data.url.lastIndexOf('/')+1,data.url.indexOf('?'));
 			UIFactory["Audio"].update(data.result,uuid,langcode,filename);
 		}
-    });
+	});
 };
 
 //==================================
