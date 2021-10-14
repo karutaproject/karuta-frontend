@@ -148,8 +148,8 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 				if (g_userroles[0]!='designer') {
 					alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
 					register_report(uuid);
-					genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
 				}
+				genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
 			}
 		});
 		$("#exec_button_"+uuid).html($("<div class='exec-button button'>"+karutaStr[LANG]['exec']+"</div>"));
@@ -158,8 +158,8 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 			if (g_userroles[0]!='designer') {
 				register_report(uuid);
 				alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
-				genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
 			}
+			genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
 		});
 		//---------- display csv or pdf -------
 		var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
