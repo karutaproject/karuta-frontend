@@ -145,21 +145,21 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 				$("#dashboard_"+uuid).html(data);
 			},
 			error : function(jqxhr,textStatus) {
-				if (g_userroles[0]!='designer') {
-					alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
-					register_report(uuid);
-				}
 				genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
+				if (g_userroles[0]!='designer') {
+					if (register_report(uuid))
+						alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
+				}
 			}
 		});
 		$("#exec_button_"+uuid).html($("<div class='exec-button button'>"+karutaStr[LANG]['exec']+"</div>"));
 		$("#exec_button_"+uuid).click(function(){
 			$("#dashboard_"+uuid).html('');
-			if (g_userroles[0]!='designer') {
-				register_report(uuid);
-				alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
-			}
 			genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
+			if (g_userroles[0]!='designer') {
+				if (register_report(uuid))
+					alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
+			}
 		});
 		//---------- display csv or pdf -------
 		var csv_roles = $(UICom.structure["ui"][uuid].resource.csv_node).text();
@@ -371,7 +371,9 @@ function register_report(uuid)
 	var comments = node_resource.comments_node[LANGCODE].text();
 	var data={code:uuid,portfolioid:g_portfolioid,startday:startday,time:time,freq:freq,comments:comments};
 	var url = serverBCK+"/report";
+	var ok = true;
 	$.ajax({
+		async: false,
 		type : "POST",
 		url : url,
 		data : data,
@@ -379,8 +381,10 @@ function register_report(uuid)
 		success : function(data) {
 		},
 		error : function(jqxhr, textStatus, err) {
-			alertHTML("Erreur - rapport non exécuté:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
+			ok = false;
+			console.log("Erreur - rapport non exécuté:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
 		}
 	});
+	return ok;
 }
 
