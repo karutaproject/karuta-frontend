@@ -145,20 +145,20 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 				$("#dashboard_"+uuid).html(data);
 			},
 			error : function(jqxhr,textStatus) {
+				genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
 				if (g_userroles[0]!='designer') {
-					alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
-					register_report(uuid);
-					genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
+					if (register_report(uuid))
+						alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
 				}
 			}
 		});
 		$("#exec_button_"+uuid).html($("<div class='exec-button button'>"+karutaStr[LANG]['exec']+"</div>"));
 		$("#exec_button_"+uuid).click(function(){
 			$("#dashboard_"+uuid).html('');
+			genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
 			if (g_userroles[0]!='designer') {
-				register_report(uuid);
-				alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
-				genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
+				if (register_report(uuid))
+					alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
 			}
 		});
 		//---------- display csv or pdf -------

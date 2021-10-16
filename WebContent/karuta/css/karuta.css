@@ -3046,6 +3046,14 @@ table.tablesorter th.restore {
 }
 
 /* ===========================
+	AUDIO RECORDER
+   ===========================*/
+.audiosavebutton {
+  margin-top: -45px;
+  margin-left: 20px;
+}
+
+/* ===========================
 	PRINT STYLESHEET
    ===========================*/
 @media print {
