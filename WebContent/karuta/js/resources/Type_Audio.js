@@ -1,4 +1,6 @@
 
+
+
 /// Check namespace existence
 if( UIFactory === undefined )
 {
@@ -297,6 +299,9 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 		}
 	});
 	//---------------- recorder -----------------------------
+	// Web-dictaphone - CC0 1.0 Universal
+	//https://github.com/mdn/web-dictaphone
+
 	if (navigator.mediaDevices.getUserMedia) {
 		html = "";
 		html += "<div class='recorder-body'>";
@@ -326,7 +331,6 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 			record.onclick = function() {
 				mediaRecorder.start();
 				record.style.background = "red";
-
 				stop.disabled = false;
 				record.disabled = true;
 			}
@@ -335,15 +339,11 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 				mediaRecorder.stop();
 				record.style.background = "";
 				record.style.color = "";
-	 
 				stop.disabled = true;
 				record.disabled = false;
 			}
 
 			mediaRecorder.onstop = function(e) {
-
-				const clipName = "";
-
 				const clipContainer = document.createElement('div');
 				const audio = document.createElement('audio');
 				const savebutton = document.createElement('button');
@@ -366,7 +366,6 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 				savebutton.onclick = function(e) {
 					//----------------
 					var fd = new FormData();
-//					fd.append('fname', 'test.wav');
 					fd.append('uploadfile', blob);
 					$.ajax({
 						async : false,
@@ -394,7 +393,7 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 			console.log('The following error occured: ' + err);
 		}
 
-	  navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
+		navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
 
 	} else {
 		console.log('getUserMedia not supported on your browser!');
@@ -425,22 +424,23 @@ UIFactory["Audio"].prototype.refresh = function()
 
 };
 
+//==================================
+function visualize(stream,audioCtx,canvas,canvasCtx)
+//==================================
+//Web-dictaphone - CC0 1.0 Universal
+//https://github.com/mdn/web-dictaphone
 
-function visualize(stream,audioCtx,canvas,canvasCtx) {
+{
 	if(!audioCtx) {
 		audioCtx = new AudioContext();
 	}
-
-	
 	const source = audioCtx.createMediaStreamSource(stream);
-	
 	const analyser = audioCtx.createAnalyser();
 	analyser.fftSize = 2048;
 	const bufferLength = analyser.frequencyBinCount;
 	const dataArray = new Uint8Array(bufferLength);
 	
 	source.connect(analyser);
-	//analyser.connect(audioCtx.destination);
 	
 	draw()
 	
