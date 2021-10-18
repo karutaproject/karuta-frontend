@@ -732,6 +732,46 @@ UIFactory["Node"].getMenus = function(node,langcode)
 //----------------------------------------------------------------------------------------------------------------------------
 
 //==================================
+UIFactory["Node"].prototype.displayMetadataWadMenusEditor = function(destid,attribute,destmenu)
+//==================================
+{
+	var nodeid = this.id;
+	var text = $(this.metadatawad).attr(attribute)
+	html = "<div id='"+attribute+"_"+nodeid+"'><textarea id='"+nodeid+"_"+attribute+"' class='form-control' style='height:50px'>"+text+"</textarea></div>";
+	$("#"+destid).append($(html));
+	//---------------------------
+	$("#"+nodeid+"_"+attribute).change(function(){UIFactory.Node.updateMetadataWadMenuAttribute(nodeid,attribute);UICom.structure.ui[nodeid].displayMenuEditor(destmenu)});
+	//---------------------------
+};
+
+//==================================================
+UIFactory["Node"].updateMetadataWadMenuAttribute = function(nodeid,attribute)
+//==================================================
+{
+	var node = UICom.structure["ui"][nodeid].node;
+	var value = $.trim($("#"+nodeid+"_"+attribute).val());
+	$($("metadata-wad",node)[0]).attr(attribute,value);
+	UICom.UpdateMetaWad(nodeid);
+};
+
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+
+//==================================
+UIFactory["Node"].addMenuelt = function(xmlDoc,tag,destid,element,destmenu,edit)
+//==================================
+{
+	if (tag=='source') {
+		const str = "<srce><folder></folder><foliocode></foliocode><semtag></semtag></srce>";
+		const parser = new DOMParser();
+		const srce = parser.parseFromString(str,"text/xml");
+
+	}
+}
+
+
+//==================================
 UIFactory["Node"].prototype.displayXmlMenuEditor = function(xmlDoc,destid,element,destmenu,edit)
 //==================================
 {
@@ -774,37 +814,18 @@ UIFactory["Node"].updateMetadataXmlMenuAttribute = function(xmlDoc,destid,elemen
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
-//==================================
-UIFactory["Node"].prototype.displayMetadataWadMenusEditor = function(destid,attribute,destmenu)
-//==================================
-{
-	var nodeid = this.id;
-	var text = $(this.metadatawad).attr(attribute)
-	html = "<div id='"+attribute+"_"+nodeid+"'><textarea id='"+nodeid+"_"+attribute+"' class='form-control' style='height:50px'>"+text+"</textarea></div>";
-	$("#"+destid).append($(html));
-	//---------------------------
-	$("#"+nodeid+"_"+attribute).change(function(){UIFactory.Node.updateMetadataWadMenuAttribute(nodeid,attribute);UICom.structure.ui[nodeid].displayMenuEditor(destmenu)});
-	//---------------------------
-};
-
 //==================================================
-UIFactory["Node"].updateMetadataWadMenuAttribute = function(nodeid,attribute)
+UIFactory["Node"].prototype.displayMenuBaseEditor = function(xmlDoc,tag,subitem,dest,destmenu)
 //==================================================
 {
-	var node = UICom.structure["ui"][nodeid].node;
-	var value = $.trim($("#"+nodeid+"_"+attribute).val());
-	$($("metadata-wad",node)[0]).attr(attribute,value);
-	UICom.UpdateMetaWad(nodeid);
-};
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
-//==================================================
-UIFactory["Node"].prototype.displayMenuSubEditor = function(xmlDoc,tag,subitem,dest,destmenu)
-//==================================================
-{
-	var elts = $(tag,subitem);
+	const elts = $(tag,subitem);
+	if (tag=="action"){
+		html = "<div class='"+tag+"title'>Actions</div>";
+		$("#"+dest+"content").append(html);
+	}
 	for (var k=0;k<elts.length;k++){
+		html = "<div class='"+tag+"title'>"+tag+"</div>";
+		$("#"+dest+"content").append(html);
 		html = "<div id='"+dest+tag+k.toString()+"content' class='"+tag+"content'></div>";
 		$("#"+dest+"content").append(html);
 		if ($("folder",elts[k]).length>0)
@@ -817,12 +838,30 @@ UIFactory["Node"].prototype.displayMenuSubEditor = function(xmlDoc,tag,subitem,d
 			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("parentposition",elts[k])[0],destmenu,true);
 		if ($("parentsemtag",elts[k]).length>0)
 			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("parentsemtag",elts[k])[0],destmenu,true);
-		if ($("target",elts[k]).length>0)
-			this.displayMenuSubEditor(xmlDoc,'target',elts[k],dest+tag+k.toString(),destmenu);
-//			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("target",elts[k]),destmenu,true);
 		if ($("updatedtag",elts[k]).length>0)
 			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("updatedtag",elts[k]),destmenu,true);
 
+	}
+}
+
+//==================================================
+UIFactory["Node"].prototype.displayMenuSubEditor = function(xmlDoc,tag,subitem,dest,destmenu)
+//==================================================
+{
+	const elts = $(tag,subitem);
+	if (tag=="action"){
+		html = "<div class='"+tag+"title'>Actions</div>";
+		$("#"+dest+"content").append(html);
+	}
+	for (var k=0;k<elts.length;k++){
+		html = "<div class='"+tag+"title'>"+tag+"</div>";
+		$("#"+dest+"content").append(html);
+		html = "<div id='"+dest+tag+k.toString()+"content' class='"+tag+"content'></div>";
+		$("#"+dest+"content").append(html);
+		if ($("srce",elts[k]).length>0)
+			this.displayMenuBaseEditor(xmlDoc,'srce',elts[k],dest+tag+k.toString(),destmenu);
+		if ($("target",elts[k]).length>0)
+			this.displayMenuBaseEditor(xmlDoc,'target',elts[k],dest+tag+k.toString(),destmenu);
 	}
 }
 
