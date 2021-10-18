@@ -439,10 +439,9 @@ function visualize(stream,audioCtx,canvas,canvasCtx)
 	analyser.fftSize = 2048;
 	const bufferLength = analyser.frequencyBinCount;
 	const dataArray = new Uint8Array(bufferLength);
-	
 	source.connect(analyser);
 	
-	draw()
+	draw();
 	
 	function draw() {
 		const WIDTH = canvas.width
