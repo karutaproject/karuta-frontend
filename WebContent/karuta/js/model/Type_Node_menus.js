@@ -1,4 +1,14 @@
 
+var menuElts = {};
+menuElts ["action"]= "<action><srce><folder></folder><foliocode></foliocode><semtag></semtag></srce></action>";
+menuElts ["srce"]= "<srce><folder></folder><foliocode></foliocode><semtag></semtag></srce>";
+menuElts ["trgt"]= "<trgt><folder></folder><foliocode></foliocode><semtag></semtag></trgt>";
+
+var menuItems = {};
+menuItems['importsingleaction']= ["trgt"];
+
+var menueltslist =[];
+var xmlMenuDoc = null;
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //--------------------------------- MENUS ------------------------------------------------------------------------------------
@@ -754,25 +764,27 @@ UIFactory["Node"].updateMetadataWadMenuAttribute = function(nodeid,attribute)
 	UICom.UpdateMetaWad(nodeid);
 };
 
-//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------s
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
 //==================================
-UIFactory["Node"].addMenuelt = function(xmlDoc,tag,destid,element,destmenu,edit)
+UIFactory["Node"].addMenuElt = function(tag,noitem,nodeid,destmenu)
 //==================================
-{
-	if (tag=='source') {
-		const str = "<srce><folder></folder><foliocode></foliocode><semtag></semtag></srce>";
-		const parser = new DOMParser();
-		const srce = parser.parseFromString(str,"text/xml");
-
-	}
+{	
+	const parser = new DOMParser();
+	const elt = parser.parseFromString(menuElts[tag],"text/xml");
+	$(menueltslist[noitem]).append(elt.getElementsByTagName(tag)[0]);
+	var value= xml2string(xmlDoc);
+	var node = UICom.structure["ui"][nodeid].node;
+	$($("metadata-wad",node)[0]).attr('menuroles',value);
+	UICom.UpdateMetaWad(nodeid);
+	UICom.structure.ui[nodeid].displayMenuEditor(destmenu);
 }
 
 
 //==================================
-UIFactory["Node"].prototype.displayXmlMenuEditor = function(xmlDoc,destid,element,destmenu,edit)
+UIFactory["Node"].prototype.displayXmlMenuEditor = function(destid,element,destmenu,edit)
 //==================================
 {
 	var langcode = LANGCODE;
@@ -793,12 +805,12 @@ UIFactory["Node"].prototype.displayXmlMenuEditor = function(xmlDoc,destid,elemen
 	html += "</div>";
 	$("#"+destid).append($(html));
 	//---------------------------
-	$("#"+nodeid+"_"+destid+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(xmlDoc,destid,element,destmenu,nodeid)});
+	$("#"+nodeid+"_"+destid+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(destid,element,destmenu,nodeid)});
 	//---------------------------
 };
 
 //==================================================
-UIFactory["Node"].updateMetadataXmlMenuAttribute = function(xmlDoc,destid,element,destmenu,nodeid)
+UIFactory["Node"].updateMetadataXmlMenuAttribute = function(destid,element,destmenu,nodeid)
 //==================================================
 {
 	var node = UICom.structure["ui"][nodeid].node;
@@ -815,37 +827,33 @@ UIFactory["Node"].updateMetadataXmlMenuAttribute = function(xmlDoc,destid,elemen
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 //==================================================
-UIFactory["Node"].prototype.displayMenuBaseEditor = function(xmlDoc,tag,subitem,dest,destmenu)
+UIFactory["Node"].prototype.displayMenuBaseEditor = function(tag,subitem,dest,destmenu)
 //==================================================
 {
 	const elts = $(tag,subitem);
-	if (tag=="action"){
-		html = "<div class='"+tag+"title'>Actions</div>";
-		$("#"+dest+"content").append(html);
-	}
 	for (var k=0;k<elts.length;k++){
 		html = "<div class='"+tag+"title'>"+tag+"</div>";
 		$("#"+dest+"content").append(html);
 		html = "<div id='"+dest+tag+k.toString()+"content' class='"+tag+"content'></div>";
 		$("#"+dest+"content").append(html);
 		if ($("folder",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("folder",elts[k])[0],destmenu,true);
+			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("folder",elts[k])[0],destmenu,true);
 		if ($("foliocode",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("foliocode",elts[k])[0],destmenu,true);
+			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("foliocode",elts[k])[0],destmenu,true);
 		if ($("semtag",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("semtag",elts[k])[0],destmenu,true);
+			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("semtag",elts[k])[0],destmenu,true);
 		if ($("parentposition",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("parentposition",elts[k])[0],destmenu,true);
+			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("parentposition",elts[k])[0],destmenu,true);
 		if ($("parentsemtag",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("parentsemtag",elts[k])[0],destmenu,true);
+			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("parentsemtag",elts[k])[0],destmenu,true);
 		if ($("updatedtag",elts[k]).length>0)
-			this.displayXmlMenuEditor(xmlDoc,dest+tag+k.toString()+"content",$("updatedtag",elts[k]),destmenu,true);
+			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("updatedtag",elts[k]),destmenu,true);
 
 	}
 }
 
 //==================================================
-UIFactory["Node"].prototype.displayMenuSubEditor = function(xmlDoc,tag,subitem,dest,destmenu)
+UIFactory["Node"].prototype.displayMenuSubEditor = function(tag,subitem,dest,destmenu,itemtype)
 //==================================================
 {
 	const elts = $(tag,subitem);
@@ -854,14 +862,34 @@ UIFactory["Node"].prototype.displayMenuSubEditor = function(xmlDoc,tag,subitem,d
 		$("#"+dest+"content").append(html);
 	}
 	for (var k=0;k<elts.length;k++){
-		html = "<div class='"+tag+"title'>"+tag+"</div>";
-		$("#"+dest+"content").append(html);
+		menueltslist.push(elts[k]);
+		//---------- title + menu ------------
+		const div = document.createElement('div');
+		div.classList.add(tag+"title");
+		div.innerHTML = tag;
+		const span = document.createElement('span');
+		span.classList.add("dropdown");
+		span.innerHTML = "<button class='btn dropdown-toggle add-button' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Ajouter</button>";
+		const menu = document.createElement('div');
+		menu.classList.add("dropdown-menu");
+		menu.classList.add("dropdown-menu-right");
+		for (let i=0;i<menuItems[itemtype+tag].length;i++){
+			const menuitem = document.createElement('div');
+			menuitem.classList.add("dropdown-item");
+			menuitem.innerHTML = menuItems[itemtype+tag][i];
+			menuitem.setAttribute('onclick', "UIFactory.Node.addMenuElt('"+menuItems[itemtype+tag][i]+"','"+(menueltslist.length-1)+"','"+this.id+"','"+destmenu+"')");
+			menu.appendChild(menuitem);
+		}
+		span.appendChild(menu);
+		div.appendChild(span);
+		$("#"+dest+"content").append(div);
+		//--------------------------------
 		html = "<div id='"+dest+tag+k.toString()+"content' class='"+tag+"content'></div>";
 		$("#"+dest+"content").append(html);
 		if ($("srce",elts[k]).length>0)
-			this.displayMenuBaseEditor(xmlDoc,'srce',elts[k],dest+tag+k.toString(),destmenu);
-		if ($("target",elts[k]).length>0)
-			this.displayMenuBaseEditor(xmlDoc,'target',elts[k],dest+tag+k.toString(),destmenu);
+			this.displayMenuBaseEditor('srce',elts[k],dest+tag+k.toString(),destmenu);
+		if ($("trgt",elts[k]).length>0)
+			this.displayMenuBaseEditor('trgt',elts[k],dest+tag+k.toString(),destmenu);
 	}
 }
 
@@ -877,8 +905,8 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 	var name = this.asmtype;
 	
 
-	//----------------------Menu----------------------------
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
+		//---------------------- OLD Menu----------------------------
 		if (this.menuroles.charAt(0)!="<") {
 			html  = "<label>"+karutaStr[languages[langcode]]['menuroles'];
 			if (languages.length>1){
@@ -913,41 +941,44 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 			this.displayMetadatawWadTextAttributeEditor('edit-window-body-menu','menulabels');
 			//-----------------------
 		} else {
+			//---------------------- NEW Menu----------------------------
+			menueltslist = [];
 			this.displayMetadataWadMenusEditor('metadata-menu','menuroles',destmenu);
 			var parser = new DOMParser();
-			var xmlDoc = parser.parseFromString(this.menuroles,"text/xml");
+			xmlDoc = parser.parseFromString(this.menuroles,"text/xml");
 			var menus = $("menu",xmlDoc);
 			var html = "";
 			for (var i=0;i<menus.length;i++) {
+				menueltslist.push(menus[i]);
 				var menulabel = $("menulabel",menus[i]);
 				html = "<div id='"+i.toString()+"menulabel'>Menu "+(i+1)+" <span class='type badge badge-primary'>"+$(menulabel).text()+"</span> <div id='"+i.toString()+"content' class='menucontent'></div></div>";
 				$("#"+destmenu).append(html);
-				this.displayXmlMenuEditor(xmlDoc,i.toString()+"content",menulabel,destmenu,true);
+				this.displayXmlMenuEditor(i.toString()+"content",menulabel,destmenu,true);
 				var items = $("item",menus[i])
 				for (var j=0;j<items.length;j++) {
-					var type = $("itemtype",items[j]).text();
+					const itemtype = $("itemtype",items[j]).text();
 					html = "<div id='"+i.toString()+j.toString()+"itemlabel'>Item "+(j+1)+" <span class='type badge badge-success'>"+$("itemlabel",items[j]).text()+"</span> <div id='"+i.toString()+j.toString()+"content' class='itemcontent'></div></div>";
 					$("#"+i.toString()+"content").append(html);
-					this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("itemtype",items[j]),destmenu,false);
-					this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("itemlabel",items[j]),destmenu,true);
-					if (type=='importsingle') {
-						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true);
-						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
-						this.displayMenuSubEditor(xmlDoc,'action',items[j],i.toString()+j.toString(),destmenu);
+					this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("itemtype",items[j]),destmenu,false,);
+					this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("itemlabel",items[j]),destmenu,true);
+					if (itemtype=='importsingle') {
+						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true,);
+						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
+						this.displayMenuSubEditor('action',items[j],i.toString()+j.toString(),destmenu,itemtype);
 					}
-					if (type=='importgmultipe' || type=='importgsingle') {
-						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("boxlabel",items[j]),destmenu,true);
-						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true);
-						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
-						this.displayMenuSubEditor(xmlDoc,'search',items[j],i.toString()+j.toString(),destmenu);
-						this.displayMenuSubEditor(xmlDoc,'action',items[j],i.toString()+j.toString(),destmenu);
+					if (itemtype=='importgmultipe' || itemtype=='importgsingle') {
+						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("boxlabel",items[j]),destmenu,true);
+						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true);
+						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
+						this.displayMenuSubEditor('search',items[j],i.toString()+j.toString(),destmenu,itemtype);
+						this.displayMenuSubEditor('action',items[j],i.toString()+j.toString(),destmenu,itemtype);
 					}
-					if (type=='importggmultipe' || type=='importggsingle') {
-						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("boxlabel",items[j]),destmenu,true);
-						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true);
-						this.displayXmlMenuEditor(xmlDoc,i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
-						this.displayMenuSubEditor(xmlDoc,'search',items[j],i.toString()+j.toString(),destmenu);
-						this.displayMenuSubEditor(xmlDoc,'action',items[j],i.toString()+j.toString(),destmenu);
+					if (itemtype=='importggmultipe' || itemtype=='importggsingle') {
+						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("boxlabel",items[j]),destmenu,true);
+						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true);
+						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
+						this.displayMenuSubEditor('search',items[j],i.toString()+j.toString(),destmenu,itemtype);
+						this.displayMenuSubEditor('action',items[j],i.toString()+j.toString(),destmenu,itemtype);
 					}
 				}
 			}
