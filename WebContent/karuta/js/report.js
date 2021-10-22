@@ -2095,6 +2095,8 @@ g_report_actions['text'] = function (destid,action,no,data,is_out_csv)
 {
 	var nodeid = $(data).attr("id");
 	var text = $(action).text();
+	if (text.indexOf("##today##")>-1)
+		text = text.replace("##today##",new Date().toLocaleString());
 	text = r_replaceVariable(text);
 	var style = r_replaceVariable($(action).attr("style"));
 	var cssclass = r_replaceVariable($(action).attr("class"));
