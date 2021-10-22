@@ -1,7 +1,8 @@
 
 let menuElts = {};
 menuElts ["menu."]= "<menu><menulabel></menulabel><items></items></menu>";
-menuElts ["item.importsingle"]= "<item><itemlabel></itemlabel><itemtype>importsingle</itemtype><roles></roles><action><srce><folder></folder><foliocode></foliocode><semtag></semtag></srce></action></item>";
+menuElts ["item.importsingle"]= "<item><itemlabel></itemlabel><itemtype>function</itemtype><roles></roles><functionjs></functionjs></item>";
+menuElts ["item.function"]= "<item><itemlabel></itemlabel><itemtype>importsingle</itemtype><roles></roles><action><srce><folder></folder><foliocode></foliocode><semtag></semtag></srce></action></item>";
 menuElts ["condition."]= "<condition></condition>";
 menuElts ["action."]= "<action><srce><folder></folder><foliocode></foliocode><semtag></semtag></srce></action>";
 menuElts ["srce."]= "<srce><folder></folder><foliocode></foliocode><semtag></semtag></srce>";
@@ -11,6 +12,7 @@ let menuItems = {};
 menuItems['menus']= ["menu."];
 menuItems['importsingleaction']= ["trgt."];
 menuItems['menuitem']= ["item.importsingle"];
+menuItems['menuitem']= ["item.function"];
 menuItems['actions']= ["action."];
 
 let deletableItems = {};
