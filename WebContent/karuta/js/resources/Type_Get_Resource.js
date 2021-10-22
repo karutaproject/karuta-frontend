@@ -1429,6 +1429,17 @@ UIFactory["Get_Resource"].prototype.save = function()
 		UICom.UpdateNode(this.node);
 		UICom.structure.ui[this.id].refresh()
 	}
+	//-------- if function js -------------
+	if (UICom.structure.ui[this.id].js!=undefined && UICom.structure.ui[this.id].js!="") {
+		var fcts = UICom.structure.ui[this.id].js.split(";");
+		for (var i=0;i<fcts.length;i++) {
+			var elts = fcts[i].split("/");
+			if (elts[0]=="update-node")
+				eval(elts[1]+"(this.id)");
+		}
+	}
+	//------------------------------------
+
 	//--------- log -------------
 	if (log) {
 		UICom.structure.ui[this.id].log();
