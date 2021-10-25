@@ -298,7 +298,7 @@ function fillEditBoxBody()
 		html += "\n					</div>";
 		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata'></div>";
 		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-metadata-epm'></div>";
-		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-menu'><form id='menumetadata' class='metadata'></div></div>";
+		html += "\n					<div role='tabpanel' class='tab-pane' id='edit-window-body-menu'></div>";
 		html += "\n				</div>";
 //		html += "\n			</div>";
 	}
@@ -418,7 +418,7 @@ function getEditBox(uuid,js2) {
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
 		UICom.structure.ui[uuid].displayMetadataAttributesEditor("edit-window-body-metadata");
-		UICom.structure.ui[uuid].displayMenuEditor("menumetadata");
+		UICom.structure.ui[uuid].displayMenuEditor("edit-window-body-menu");
 	}
 	// ------------------------------
 //	$(".modal-dialog").css('width','70%');

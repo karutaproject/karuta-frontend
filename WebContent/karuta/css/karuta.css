@@ -1897,26 +1897,17 @@ h3 {
 /* ================ */
 /*   MENU EDITOR    */
 /* ================ */
-.menucontent,
-.itemcontent,
-.actioncontent {
+#edit-window-body-menu .menucontent,
+#edit-window-body-menu .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent .menucontent .menucontent .menucontent.menucontent {
   margin-left: 20px;
   margin-top: 5px;
-}
-
-.searchcontent {
-  border-left: 1px solid blue;
-  padding-left: 2px;
-}
-
-.actioncontent {
-  border-left: 1px solid red;
-  padding-left: 2px;
-}
-
-.targetcontent {
-  border-left: 1px solid green;
-  padding-left: 2px;
 }
 
 /* =========== PORTFOLIO-WELCOME EDIT MODE ================= */

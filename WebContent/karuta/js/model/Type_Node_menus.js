@@ -1,23 +1,25 @@
 
 let menuElts = {};
-menuElts ["menu."]= "<menu><menulabel></menulabel><items></items></menu>";
-menuElts ["item.importsingle"]= "<item><itemlabel></itemlabel><itemtype>function</itemtype><roles></roles><functionjs></functionjs></item>";
-menuElts ["item.function"]= "<item><itemlabel></itemlabel><itemtype>importsingle</itemtype><roles></roles><action><srce><folder></folder><foliocode></foliocode><semtag></semtag></srce></action></item>";
-menuElts ["condition."]= "<condition></condition>";
-menuElts ["action."]= "<action><srce><folder></folder><foliocode></foliocode><semtag></semtag></srce></action>";
-menuElts ["srce."]= "<srce><folder></folder><foliocode></foliocode><semtag></semtag></srce>";
-menuElts ["trgt."]= "<trgt><folder></folder><foliocode></foliocode><semtag></semtag></trgt>";
+menuElts ["menu"]= "<menu><menulabel/><items/></menu>";
+menuElts ["item"]= "<item><itemlabel/><roles/><condition/></item>";
+menuElts ["function"]= "<itemelt type='function><js/></function>";
+menuElts ["import"]= "<import><srce><foliocode/><semtag/></srce></import>";
+menuElts ["action"]= "<action><srce><portfoliocode/><semtag/></srce></action>";
+menuElts ["srce"]= "<srce><foliocode/><semtag/></srce>";
+menuElts ["trgt"]= "<trgt><foliocode/><semtag/></trgt>";
+//menuElts ["import"]= "<item-elt xsi-type='import'><action><srce><portfoliocode/><semtag/></srce></action></item-elt>";
 
 let menuItems = {};
-menuItems['menus']= ["menu."];
-menuItems['importsingleaction']= ["trgt."];
-menuItems['menuitem']= ["item.importsingle"];
-menuItems['menuitem']= ["item.function"];
-menuItems['actions']= ["action."];
+menuItems['menus']= ["menu"];
+menuItems['import']= ["trgt"];
+menuItems['menu']= ["item"];
+menuItems['item']= ["import","function","get_single","get_multiple","get_get_single","get_get_multiple"];
 
 let deletableItems = {};
 deletableItems["menu"]=true;
 deletableItems["item"]=true;
+deletableItems["function"]=true;
+deletableItems["import"]=true;
 deletableItems["action"]=true;
 deletableItems["srce"]=false;
 deletableItems["trgt"]=true;
@@ -789,7 +791,7 @@ UIFactory["Node"].addMenuElt = function(tag,noitem,nodeid,destmenu)
 {	
 	const parser = new DOMParser();
 	const elt = parser.parseFromString(menuElts[tag],"text/xml");
-	$(menueltslist[noitem])[0].append(elt.getElementsByTagName(tag.substring(0,tag.indexOf(".")))[0]);
+	$(menueltslist[noitem])[0].append(elt.getElementsByTagName(tag)[0]);
 	var value= xml2string(xmlDoc);
 	var node = UICom.structure["ui"][nodeid].node;
 	$($("metadata-wad",node)[0]).attr('menuroles',value);
@@ -810,39 +812,14 @@ UIFactory["Node"].removeMenuElt = function(noitem,nodeid,destmenu)
 }
 
 
-//==================================
-UIFactory["Node"].prototype.displayXmlMenuEditor = function(destid,element,destmenu,edit)
-//==================================
-{
-	var langcode = LANGCODE;
-	if (edit==null)
-		edit=false;
-	var nodeid = this.id;
-	var attribute=$(element).prop("nodeName");
-	var value = $(element).text();
-	var html = "";
-	html += "<div class='input-group "+attribute+"'>";
-	html += "	<div class='input-group-prepend'>";
-	html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[langcode]][attribute]+"</span>";
-	html += "	</div>";
-	html += "	<input id='"+nodeid+"_"+destid+attribute+"' ";
-	if (!edit)
-		html+=" disabled ";
-	html += " type='text' class='form-control' aria-label='"+karutaStr[languages[langcode]][attribute]+"' aria-describedby='"+attribute+nodeid+"'  value=\""+value+"\">";
-	html += "</div>";
-	$("#"+destid).append($(html));
-	//---------------------------
-	$("#"+nodeid+"_"+destid+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(destid,element,destmenu,nodeid)});
-	//---------------------------
-};
 
 //==================================================
-UIFactory["Node"].updateMetadataXmlMenuAttribute = function(destid,element,destmenu,nodeid)
+UIFactory["Node"].updateMetadataXmlMenuAttribute = function(eltidx,element,destmenu,nodeid)
 //==================================================
 {
 	var node = UICom.structure["ui"][nodeid].node;
 	var attribute=$(element).prop("nodeName");
-	var eltvalue = $.trim($("#"+nodeid+"_"+destid+attribute).val());
+	var eltvalue = $.trim($("#"+nodeid+"_"+eltidx+attribute).val());
 	$(element).text(eltvalue);
 	var value= xml2string(xmlDoc);
 	$($("metadata-wad",node)[0]).attr('menuroles',value);
@@ -853,77 +830,75 @@ UIFactory["Node"].updateMetadataXmlMenuAttribute = function(destid,element,destm
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
-//==================================================
-UIFactory["Node"].prototype.displayMenuBaseEditor = function(tag,subitem,dest,destmenu,listno)
-//==================================================
+//==================================
+UIFactory["Node"].prototype.displayXmlMenuEditor = function(cntidx,destmenu)
+//==================================
 {
-	const elts = $(tag,subitem);
-	for (var k=0;k<elts.length;k++){
-		html = "<div class='"+tag+"title'>"+tag;
-		if (deletableItems[tag])
-			html +=" <i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+listno+"','"+nodeid+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
-		html += "</div>";
-		$("#"+dest+"content").append(html);
-		html = "<div id='"+dest+tag+k.toString()+"content' class='"+tag+"content'></div>";
-		$("#"+dest+"content").append(html);
-		if ($("folder",elts[k]).length>0)
-			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("folder",elts[k])[0],destmenu,true);
-		if ($("foliocode",elts[k]).length>0)
-			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("foliocode",elts[k])[0],destmenu,true);
-		if ($("semtag",elts[k]).length>0)
-			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("semtag",elts[k])[0],destmenu,true);
-		if ($("parentposition",elts[k]).length>0)
-			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("parentposition",elts[k])[0],destmenu,true);
-		if ($("parentsemtag",elts[k]).length>0)
-			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("parentsemtag",elts[k])[0],destmenu,true);
-		if ($("updatedtag",elts[k]).length>0)
-			this.displayXmlMenuEditor(dest+tag+k.toString()+"content",$("updatedtag",elts[k]),destmenu,true);
+	const nodeid = this.id;
+	const eltidx = menueltslist.length-1;
+	const element = menueltslist[eltidx];
 
-	}
-}
+	const attribute=$(element).prop("nodeName");
+	const value = $(element).text();
+	let html = "";
+	html += "<div class='input-group "+attribute+"'>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[LANGCODE]][attribute]+"</span>";
+	html += "	</div>";
+	html += "	<input id='"+nodeid+"_"+eltidx+attribute+"' ";
+	html += " type='text' class='form-control' aria-label='"+karutaStr[languages[LANGCODE]][attribute]+"' aria-describedby='"+attribute+nodeid+"'  value=\""+value+"\">";
+	html += "</div>";
+	$("#content"+cntidx).append(html);
+	//---------------------------
+	$("#"+nodeid+"_"+eltidx+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(eltidx,element,destmenu,nodeid)});
+	//---------------------------
+};
 
 //==================================================
-UIFactory["Node"].prototype.displayMenuSubEditor = function(tag,subitem,dest,destmenu,itemtype)
-//==================================================
-{
-	const elts = $(tag,subitem);
-	if (tag=="action"){
-		menueltslist.push(subitem);
-		html = UIFactory.Node.getMenuHtml('actions','','Actions',menueltslist.length-1,this.id,destmenu);
-		$("#"+dest+"content").append(html);
-	}
-	for (var k=0;k<elts.length;k++){
-		menueltslist.push(elts[k]);
-		//---------- title + menu ------------
-		html = UIFactory.Node.getMenuHtml(tag,itemtype,tag,menueltslist.length-1,this.id,destmenu);
-		$("#"+dest+"content").append(html);
-		//--------------------------------
-		html = "<div id='"+dest+tag+k.toString()+"content' class='"+tag+"content'></div>";
-		$("#"+dest+"content").append(html);
-		if ($("srce",elts[k]).length>0)
-			this.displayMenuBaseEditor('srce',elts[k],dest+tag+k.toString(),destmenu,menueltslist.length-1);
-		if ($("trgt",elts[k]).length>0)
-			this.displayMenuBaseEditor('trgt',elts[k],dest+tag+k.toString(),destmenu,menueltslist.length-1);
-	}
-}
-
-
-//==================================================
-UIFactory["Node"].getMenuHtml = function(tag,itemtype,title,listno,nodeid,destmenu)
+UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
 //==================================================
 {
 	let html = "";
-	html += "<div class='"+tag+"title' style='margin-top:14px;border-top:1px dashed #ced4da'><span>"+title+"</span><span class='dropdown' style=>";
+	let eltidx = menueltslist.length-1;
+	let elt = menueltslist[eltidx];
+	let tag = $(elt).prop("tagName");
+
+	html += "<div class='"+tag+"title' style='margin-top:14px;border-top:1px dashed #ced4da'><span>"+tag+"</span>";
 	if (deletableItems[tag])
-		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+listno+"','"+nodeid+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
-	html += "<button class='btn dropdown-toggle add-button' style='background-color:transparent;float:right;' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Ajouter</button>";
-	html += "<div class='dropdown-menu dropdown-menu-right'>";
-	for (let i=0;i<menuItems[itemtype+tag].length;i++){
-		html += "<div class='dropdown-item' onclick=\"UIFactory.Node.addMenuElt('"+menuItems[itemtype+tag][i]+"','"+listno+"','"+nodeid+"','"+destmenu+"')\">"+menuItems[itemtype+tag][i]+"</div>";
+		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+eltidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
+	if (menuItems[tag]!=undefined && menuItems[tag].length>0){
+		html += "<span class='dropdown'>";
+		html += "<button class='btn dropdown-toggle add-button' style='background-color:transparent;float:right;' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Ajouter</button>";
+		html += "<div class='dropdown-menu dropdown-menu-right'>";
+		for (let i=0;i<menuItems[tag].length;i++){
+			html += "<div class='dropdown-item' onclick=\"UIFactory.Node.addMenuElt('"+menuItems[tag][i]+"','"+eltidx+"','"+this.id+"','"+destmenu+"')\">"+menuItems[tag][i]+"</div>";
+		}
+		html += "</div></span>";
 	}
-	html += "</div></span><div>";
-	return html;
+	html += "</div>";
+	html += "<div id='content"+eltidx+"' class='menucontent'></div>"
+	$("#content"+cntidx).append(html);
 }
+
+//==================================================
+UIFactory["Node"].prototype.displaySubMenuEditor = function(cntidx,destmenu)
+//==================================================
+{
+	let eltidx = menueltslist.length-1;
+	this.displayEltMenu(cntidx,destmenu);
+	const elts = $(">*",menueltslist[eltidx]);
+	for (var k=0;k<elts.length;k++){
+		menueltslist.push(elts[k]);
+		let tag = $(elts[k]).prop("tagName");
+		if (menuElts[tag]!=undefined && menuElts[tag].length>0){
+			this.displaySubMenuEditor (eltidx,destmenu)
+		} else {
+			this.displayXmlMenuEditor(eltidx,destmenu);
+		}
+	}
+};
+
+
 
 //==================================================
 UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
@@ -932,7 +907,7 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 	var langcode = LANGCODE;
 	var html = "";
 	html += "<form id='metadata-menu' class='metadata-menu'></form>";
-	html += "<div id='metadata-menueditor'></di>";
+	html += "<div id='content-1' class='metadata'></div>";
 	$("#"+destmenu).html($(html));
 	var name = this.asmtype;
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
@@ -947,47 +922,7 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 			menueltslist.push($("menus",xmlDoc));
 			var menus = $("menu",xmlDoc);
 			var html = "";
-			destmenu = "metadata-menueditor";
-			//---------- title + menu ------------
-			html = UIFactory.Node.getMenuHtml('menus','','Menus',0,this.id,destmenu);
-			$("#metadata-menueditor").append(html);
-			//------------------------------------
-			for (var i=0;i<menus.length;i++) {
-				menueltslist.push(menus[i]);
-				var menulabel = $("menulabel",menus[i]);
-				html = UIFactory.Node.getMenuHtml('item','menu','Menu '+(i+1),menueltslist.length-1,this.id,destmenu);
-				html += " <div class='type badge badge-primary'>"+$(menulabel).text()+"</div>";
-				html += "<div id='"+i.toString()+"content' class='menucontent'></div>";
-				$("#"+destmenu).append(html);
-				this.displayXmlMenuEditor(i.toString()+"content",menulabel,destmenu,true);
-				var items = $("item",menus[i])
-				for (var j=0;j<items.length;j++) {
-					const itemtype = $("itemtype",items[j]).text();
-					html = "<div id='"+i.toString()+j.toString()+"itemlabel'>Item "+(j+1)+" <span class='type badge badge-success'>"+$("itemlabel",items[j]).text()+"</span> <div id='"+i.toString()+j.toString()+"content' class='itemcontent'></div></div>";
-					$("#"+i.toString()+"content").append(html);
-					this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("itemtype",items[j]),destmenu,false,);
-					this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("itemlabel",items[j]),destmenu,true);
-					if (itemtype=='importsingle') {
-						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true,);
-//						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
-						this.displayMenuSubEditor('action',items[j],i.toString()+j.toString(),destmenu,itemtype);
-					}
-					if (itemtype=='importgmultipe' || itemtype=='importgsingle') {
-						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("boxlabel",items[j]),destmenu,true);
-						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true);
-						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
-						this.displayMenuSubEditor('search',items[j],i.toString()+j.toString(),destmenu,itemtype);
-						this.displayMenuSubEditor('action',items[j],i.toString()+j.toString(),destmenu,itemtype);
-					}
-					if (itemtype=='importggmultipe' || itemtype=='importggsingle') {
-						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("boxlabel",items[j]),destmenu,true);
-						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("roles",items[j]),destmenu,true);
-						this.displayXmlMenuEditor(i.toString()+j.toString()+"content",$("condition",items[j]),destmenu,true);
-						this.displayMenuSubEditor('search',items[j],i.toString()+j.toString(),destmenu,itemtype);
-						this.displayMenuSubEditor('action',items[j],i.toString()+j.toString(),destmenu,itemtype);
-					}
-				}
-			}
+			this.displaySubMenuEditor(-1,destmenu)
 		} else {
 			//---------------------- OLD Menu----------------------------
 			html  = "<label>"+karutaStr[languages[langcode]]['menuroles'];
