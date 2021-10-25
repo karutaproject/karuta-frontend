@@ -2,7 +2,7 @@
 let menuElts = {};
 menuElts ["menu"]= "<menu><menulabel/><items/></menu>";
 menuElts ["item"]= "<item><itemlabel/><roles/><condition/></item>";
-menuElts ["function"]= "<itemelt type='function><js/></function>";
+menuElts ["function"]= "<function><js/></function>";
 menuElts ["import"]= "<import><srce><foliocode/><semtag/></srce></import>";
 menuElts ["action"]= "<action><srce><portfoliocode/><semtag/></srce></action>";
 menuElts ["srce"]= "<srce><foliocode/><semtag/></srce>";
@@ -754,7 +754,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
-//--------------------------------- EDITOR ------------------------------------------------------------------------------------
+//--------------------------------- NEW MENU EDITOR --------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 
@@ -830,6 +830,7 @@ UIFactory["Node"].updateMetadataXmlMenuAttribute = function(eltidx,element,destm
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
+
 //==================================
 UIFactory["Node"].prototype.displayXmlMenuEditor = function(cntidx,destmenu)
 //==================================
@@ -846,7 +847,7 @@ UIFactory["Node"].prototype.displayXmlMenuEditor = function(cntidx,destmenu)
 	html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[LANGCODE]][attribute]+"</span>";
 	html += "	</div>";
 	html += "	<input id='"+nodeid+"_"+eltidx+attribute+"' ";
-	html += " type='text' class='form-control' aria-label='"+karutaStr[languages[LANGCODE]][attribute]+"' aria-describedby='"+attribute+nodeid+"'  value=\""+value+"\">";
+	html += " type='text' class='form-control "+attribute+"' aria-label='"+karutaStr[languages[LANGCODE]][attribute]+"' aria-describedby='"+attribute+nodeid+"'  value=\""+value+"\">";
 	html += "</div>";
 	$("#content"+cntidx).append(html);
 	//---------------------------
@@ -920,9 +921,7 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 				this.menuroles = "<menus></menus>";
 			xmlDoc = parser.parseFromString(this.menuroles,"text/xml");
 			menueltslist.push($("menus",xmlDoc));
-			var menus = $("menu",xmlDoc);
-			var html = "";
-			this.displaySubMenuEditor(-1,destmenu)
+			this.displaySubMenuEditor(-1,destmenu);
 		} else {
 			//---------------------- OLD Menu----------------------------
 			html  = "<label>"+karutaStr[languages[langcode]]['menuroles'];
@@ -960,6 +959,11 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 		}
 	}
 };
+
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+
 
 //==================================================
 UIFactory["Node"].testDisplay = function(node,roles,condition)
