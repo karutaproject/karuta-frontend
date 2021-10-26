@@ -2714,6 +2714,9 @@ function getTarget (knode,menuitem)
 	if (menuitem.indexOf("child.")>-1) {
 		var semtag = menuitem.substring("child.".length);
 		target = $("*:has(>metadata[semantictag='"+semtag+"'])",node);
+	} else	if (menuitem.indexOf("sibling.")>-1) {
+		var semtag = menuitem.substring("sibling.".length);
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent());
 	} else if (menuitem.indexOf("parent.parent.parent.parent.parent.")>-1) {
 		var semtag = menuitem.substring("parent.parent.parent.parent.parent.".length);
 		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
@@ -2728,7 +2731,7 @@ function getTarget (knode,menuitem)
 		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
 	} else if (menuitem.indexOf("parent.")>-1) {
 		var semtag = menuitem.substring("parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])").addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
 	} else {
 		target = $("*:has(>metadata[semantictag='"+menuitem+"'])",g_portfolio_current);
 	}

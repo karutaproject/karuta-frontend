@@ -6,7 +6,7 @@ menuElts ["function"]= "<function><js/></function>";
 menuElts ["import"]= "<import><srce><foliocode/><semtag/></srce></import>";
 menuElts ["action"]= "<action><srce><portfoliocode/><semtag/></srce></action>";
 menuElts ["srce"]= "<srce><foliocode/><semtag/></srce>";
-menuElts ["trgt"]= "<trgt><foliocode/><semtag/></trgt>";
+menuElts ["trgt"]= "<trgt><foliocode/><position/><semtag/></trgt>";
 //menuElts ["import"]= "<item-elt xsi-type='import'><action><srce><portfoliocode/><semtag/></srce></action></item-elt>";
 
 let menuItems = {};
@@ -533,6 +533,9 @@ UIFactory["Node"].getMenus = function(node,langcode)
 						html += "	</button>";
 						html += "	<div class='dropdown-menu dropdown-menu-right' style='"+menus_style+"' aria-labelledby='specific_"+node.id+"'>";
 						for (var j=0;j<items.length;j++) {
+							let title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
+							let temphtml = "<div class='dropdown-item' onclick=\"##\">" + title + "</div>";
+							html += temphtml.replace("##",UIFactory.Node.getXmlItemMenu(node,parentid,items[j],title,databack,callback,param2,param3,param4));
 						}
 						html += "	</div>"; // class='dropdown-menu'
 //						html += "	</span><!-- class='dropdown -->";
@@ -571,7 +574,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 								//---------------------------------------------------------
 							}
 						}
-						html = html.replace("##",UIFactory.Node.getXmlItemMenu(parentid,items[0],targetid,title,databack,callback,param2,param3,param4));
+						html = html.replace("##",UIFactory.Node.getXmlItemMenu(node,parentid,items[0],title,databack,callback,param2,param3,param4));
 					}
 				}
 				//------------------
@@ -796,6 +799,7 @@ UIFactory["Node"].addMenuElt = function(tag,noitem,nodeid,destmenu)
 	var node = UICom.structure["ui"][nodeid].node;
 	$($("metadata-wad",node)[0]).attr('menuroles',value);
 	UICom.UpdateMetaWad(nodeid);
+	UICom.structure.ui[nodeid].setMetadata();
 	UICom.structure.ui[nodeid].displayMenuEditor("edit-window-body-menu");
 }
 
@@ -808,6 +812,7 @@ UIFactory["Node"].removeMenuElt = function(noitem,nodeid,destmenu)
 	var node = UICom.structure["ui"][nodeid].node;
 	$($("metadata-wad",node)[0]).attr('menuroles',value);
 	UICom.UpdateMetaWad(nodeid);
+	UICom.structure.ui[nodeid].setMetadata();
 	UICom.structure.ui[nodeid].displayMenuEditor("edit-window-body-menu");
 }
 
@@ -824,6 +829,7 @@ UIFactory["Node"].updateMetadataXmlMenuAttribute = function(eltidx,element,destm
 	var value= xml2string(xmlDoc);
 	$($("metadata-wad",node)[0]).attr('menuroles',value);
 	UICom.UpdateMetaWad(nodeid);
+	UICom.structure.ui[nodeid].setMetadata();
 	UICom.structure.ui[nodeid].displayMenuEditor("edit-window-body-menu");
 };
 
@@ -1003,24 +1009,40 @@ UIFactory["Node"].getMenuLabel = function(menulabel,langcode)
 }
 
 //==================================================
-UIFactory["Node"].getXmlItemMenu = function(parentid,item,targetid,title,databack,callback,param2,param3,param4)
+UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,callback,param2,param3,param4)
 //==================================================
 {
-	var html = "";
-	var type = $("itemtype",item).text();
-	if (type=='importsingle') {
-		var actions = $("action",item);
-		for (var i=0;i<actions.length;i++){
-			var folder = replaceVariable( ($("folder",actions[i]).length>0)?$("folder",actions[i]).text():"" );
-			var foliocode = replaceVariable( ($("foliocode",actions[i]).length>0)?$("foliocode",actions[i]).text():"" );
-			var semtag =  replaceVariable( ($("semtag",actions[i]).length>0)?$("semtag",actions[i]).text():"" );
-			if (targetid!="")
-				html += "importBranch('"+targetid+"','"+folder+"."+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
-			else
-				html += "importBranch('"+parentid+"','"+folder+"."+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+	let onclick = "";
+	const itemelts = $(">*",item);
+	for (let i=0;i<itemelts.length;i++){
+		const type = $(itemelts[i]).prop("tagName");
+		if (type=='function') {
+			const js = $("js",itemelts[i]).text();
+			onclick += js + ";";
+		}
+		if (type=='import') {
+			let srce = $("srce",itemelts[i])[0];
+			let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+			let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+			let trgts = $("trgt",itemelts[i]);
+			if (trgts.length>0) {
+				for (let j=0;j<trgts.length;j++){
+					let position = $("position",trgts[j]).text();
+					let trgtsemtag = $("semtag",trgts[j]).text();
+					let target = getTarget (node,position+"."+trgtsemtag);
+					if (target.length>0) {
+						let targetid = $(target[0]).attr("id");
+						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+					} else {
+						onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+					}
+				}
+			} else {
+				onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+			}
 		}
 	}
-	return html;
+	return onclick;
 }
 
 
