@@ -103,6 +103,7 @@ karutaStr["en"]["button-increase"] = "Increase Character Size";
 karutaStr["en"]["button-decrease"] = "Decrease Character Size";
 karutaStr["en"]["copy"] = "Copy";
 karutaStr["en"]["copied"] = "Copied";
+karutaStr["en"]["waitreport"] = "Wait, the report is executed on the server. Come back in a few minutes to view the report.";
 
 //=========================================
 //========== ERRORS =======================
