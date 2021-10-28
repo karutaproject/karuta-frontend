@@ -145,10 +145,10 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 				$("#dashboard_"+uuid).html(data);
 			},
 			error : function(jqxhr,textStatus) {
-				genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
+//				genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
 				if (g_userroles[0]!='designer') {
 					if (register_report(uuid))
-						alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
+						alertHTML(karutaStr[LANG]['waitreport']);
 				}
 			}
 		});
@@ -157,8 +157,7 @@ UIFactory["Report"].prototype.displayView = function(dest,langcode)
 			$("#dashboard_"+uuid).html('');
 			genDashboardContent("dashboard_"+uuid,uuid,parent,g_portfolio_current);
 			if (g_userroles[0]!='designer') {
-				if (register_report(uuid))
-					alertHTML("Patience ... Rapport en exécution sur le serveur et dans le navigateur...");
+				register_report(uuid);
 			}
 		});
 		//---------- display csv or pdf -------
@@ -382,7 +381,7 @@ function register_report(uuid)
 		},
 		error : function(jqxhr, textStatus, err) {
 			ok = false;
-			console.log("Erreur - rapport non exécuté:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
+			console.log("Error - rapport not executed:"+textStatus+"/"+jqxhr.status+"/"+jqxhr.statusText);
 		}
 	});
 	return ok;
