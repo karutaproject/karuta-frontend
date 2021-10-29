@@ -844,6 +844,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			if (code.indexOf("@")<0) {
 				display_code = true;
 			}
+			var original_code = code
 			code = cleanCode(code);
 			//------------------------------
 			input += "<input class='radio-div' type='radio' name='radio_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' ";
@@ -874,6 +875,12 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				UIFactory["Get_Resource"].update(this,self,langcode,type);
 			});
 			$(radio_obj).append(obj);
+			// ---------------------- children ---------
+			if (semtag2!="") {
+				var semtag_parent = semtag.replace("!","");
+				UIFactory.Get_Resource.getChildren(radio_obj,self,langcode,srce,target,portfoliocode,semtag2,semtag_parent,original_code,cachable);
+			}
+			//------------------------------------------
 			$("#"+destid).append(radio_obj);
 		}
 	}
@@ -1375,7 +1382,7 @@ UIFactory["Get_Resource"].parseChildren = function(dest,self,data,langcode,srce,
 		}
 		code = cleanCode(code);
 		//------------------------------
-		input += "<div id='"+code+"'>";
+		input += "<div id='"+code+"' class='subget_ressource'>";
 		if (selectable) {
 			input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 			input += "' ";
