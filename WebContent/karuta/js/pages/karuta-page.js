@@ -34,7 +34,6 @@ function initKarutaPage()
 	$('body').append(imageBox());
 	$('body').append(LangueBox());
 	$('body').append(previewBox());
-	
 	//--------------------------
 	var spinner1 = new Spinner().spin(document.getElementById('wait-spin'));
 	var spinner2 = new Spinner().spin(document.getElementById('export-spin'));
@@ -59,6 +58,8 @@ function displayKarutaPage()
 			setConfigurationUIVariables(LANGCODE);
 			applyKarutaConfiguration();
 			USER = new UIFactory["User"]($("user",data));
+			//--------------------------
+			$("body").attr("other",USER.other);
 			//-------------------------------
 			if (g_configVar['maintenance-display']=="1" && !USER.admin && !USER.creator)
 				window.location="login.htm";
@@ -331,7 +332,7 @@ function setConfigurationTechVariables(langcode)
 				g_variables[name] = value;
 			}
 			//----------------------
-			g_configVar['technical-support'] = getImg('config-technical-support',data,langcode);
+			g_configVar['technical-support'] = getText('config-technical-support','Field','text',data,langcode);
 			//----------------------
 			g_configVar['send-email-logo'] = getImg('config-send-email-logo',data,langcode);
 			g_configVar['send-email-image'] = getImg('config-send-email-image',data,langcode);

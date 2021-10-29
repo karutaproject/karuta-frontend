@@ -427,7 +427,11 @@ UIFactory["Node"].getMenus = function(node,langcode)
 				var titles = [];
 				var title = "";
 				try {
-					titles = menus[i][2].split("/");
+					for (var j=0;j<menus[i][2].length;j++){
+						if (menus[i][2].charAt(j)=='/' && j>3 && menus[i][2].charAt(j-3) == '@')
+							menus[i][2] = menus[i][2].substring(0, j) + '|' + menus[i][2].substring(j + 1);
+					}
+					titles = menus[i][2].split("|");
 					if (menus[i][2].indexOf("@")>-1) { // lang@fr/lang@en/...
 						for (var j=0; j<titles.length; j++){
 							if (titles[j].indexOf("@"+languages[langcode])>-1)

@@ -93,11 +93,13 @@ UIFactory["Portfolio"] = function( node )
 	this.displayLabel = {};
 	this.groups = [];
 	this.roles = [];
-	if (this.semantictag.indexOf("karuta-project")>-1)
-		this.rights = "";
-	else
-		this.rights = this.root.getRights(this.rootid);
-	this.model = $("role",this.rights).length==0;
+	if (USER.creator) {
+		if (this.semantictag.indexOf("karuta-project")>-1)
+			this.rights = "";
+		else
+			this.rights = this.root.getRights(this.rootid);
+		this.model = $("role",this.rights).length==0;
+	}
 };
 
 //==================================
