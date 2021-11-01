@@ -7,11 +7,12 @@ menuElts ["import"]= "<import><srce><foliocode/><semtag/></srce></import>";
 menuElts ["action"]= "<action><srce><portfoliocode/><semtag/></srce></action>";
 menuElts ["srce"]= "<srce><foliocode/><semtag/></srce>";
 menuElts ["trgt"]= "<trgt><foliocode/><position/><semtag/></trgt>";
-//menuElts ["import"]= "<item-elt xsi-type='import'><action><srce><portfoliocode/><semtag/></srce></action></item-elt>";
+menuElts ["get_single"]= "<get_single><srce><foliocode/><semtag/></srce></get_single>";
 
 let menuItems = {};
 menuItems['menus']= ["menu"];
 menuItems['import']= ["trgt"];
+menuItems['get_single']= ["trgt"];
 menuItems['menu']= ["item"];
 menuItems['item']= ["import","function","get_single","get_multiple","get_get_single","get_get_multiple"];
 
@@ -23,6 +24,7 @@ deletableItems["import"]=true;
 deletableItems["action"]=true;
 deletableItems["srce"]=false;
 deletableItems["trgt"]=true;
+deletableItems["get_single"]=true;
 
 let menueltslist =[];
 //----------------------------------------------------------------------------------------------------------------------------
@@ -766,7 +768,9 @@ UIFactory["Node"].prototype.displayMetadataWadMenusEditor = function(destid,attr
 //==================================
 {
 	var nodeid = this.id;
-	var text = $(this.metadatawad).attr(attribute)
+	var text = $(this.metadatawad).attr(attribute);
+	if (text==undefined)
+		text = "";
 	html = "<div id='"+attribute+"_"+nodeid+"'><textarea id='"+nodeid+"_"+attribute+"' class='form-control' style='height:50px'>"+text+"</textarea></div>";
 	$("#"+destid).append($(html));
 	//---------------------------
@@ -850,7 +854,7 @@ UIFactory["Node"].prototype.displayXmlMenuEditor = function(cntidx,destmenu)
 	let html = "";
 	html += "<div class='input-group "+attribute+"'>";
 	html += "	<div class='input-group-prepend'>";
-	html += "		<span class='input-group-text' id='"+attribute+nodeid+"'>"+karutaStr[languages[LANGCODE]][attribute]+"</span>";
+	html += "		<span class='input-group-text'>"+karutaStr[languages[LANGCODE]][attribute]+"</span>";
 	html += "	</div>";
 	html += "	<input id='"+nodeid+"_"+eltidx+attribute+"' ";
 	html += " type='text' class='form-control "+attribute+"' aria-label='"+karutaStr[languages[LANGCODE]][attribute]+"' aria-describedby='"+attribute+nodeid+"'  value=\""+value+"\">";
@@ -860,6 +864,47 @@ UIFactory["Node"].prototype.displayXmlMenuEditor = function(cntidx,destmenu)
 	$("#"+nodeid+"_"+eltidx+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(eltidx,element,destmenu,nodeid)});
 	//---------------------------
 };
+
+//==================================
+UIFactory["Node"].prototype.displayXMLSelectRole= function(cntidx,destmenu) 
+//==================================
+{
+	const nodeid = this.id;
+	const eltidx = menueltslist.length-1;
+	const element = menueltslist[eltidx];
+
+	const attribute=$(element).prop("nodeName");
+	const value = $(element).text();
+
+	let rolesarray = [];
+	const langcode = LANGCODE;
+	let html = "";
+	html += "<div class='input-group '>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<div class='input-group-text'>";
+	html += karutaStr[languages[langcode]][attribute];
+	html += "		</div>";
+	html += "	</div>";
+	html += "	<input id='"+nodeid+"_"+eltidx+attribute+"' type='text' class='form-control' value=\""+value+"\" ";
+	html += "	<div class='input-group-append'>";
+	html += "		<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+	html += "		<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
+	html += "			<a class='dropdown-item' value='' onclick=\"$('#"+nodeid+"_"+eltidx+attribute+"').val('');$('#"+nodeid+"_"+eltidx+attribute+"').change();\")>&nbsp;</a>";
+	//---------------------
+	for (let role in UICom.roles) {
+		html += "		<a  class='dropdown-item' value='"+role+"' onclick=\"var v=$('#"+nodeid+"_"+eltidx+attribute+"').val();$('#"+nodeid+"_"+eltidx+attribute+"').val(v+' "+role+"');$('#"+nodeid+"_"+eltidx+attribute+"').change();\")>"+role+"</a>";
+		rolesarray[rolesarray.length] = {'libelle':role};
+	}
+	html += "		</div>";
+	html += "	</div>";
+	html += "</div>";
+	$("#content"+cntidx).append(html);
+	addautocomplete(document.getElementById(nodeid+"_"+eltidx+attribute), rolesarray);
+	//---------------------------
+	$("#"+nodeid+"_"+eltidx+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(eltidx,element,destmenu,nodeid)});
+	//---------------------------
+
+}
 
 //==================================================
 UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
@@ -900,7 +945,10 @@ UIFactory["Node"].prototype.displaySubMenuEditor = function(cntidx,destmenu)
 		if (menuElts[tag]!=undefined && menuElts[tag].length>0){
 			this.displaySubMenuEditor (eltidx,destmenu)
 		} else {
-			this.displayXmlMenuEditor(eltidx,destmenu);
+			if (tag.indexOf('role')>-1)
+				this.displayXMLSelectRole(eltidx,destmenu);
+			else
+				this.displayXmlMenuEditor(eltidx,destmenu);
 		}
 	}
 };
@@ -921,10 +969,10 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 		if (this.menuroles.charAt(0)=="<" || this.menuroles=="" || this.menuroles=="none") {
 			//---------------------- NEW Menu----------------------------
 			menueltslist = [];
-			this.displayMetadataWadMenusEditor('metadata-menu','menuroles',destmenu);
 			var parser = new DOMParser();
 			if (this.menuroles=="" || this.menuroles=="none")
 				this.menuroles = "<menus></menus>";
+			this.displayMetadataWadMenusEditor('metadata-menu','menuroles',destmenu);
 			xmlDoc = parser.parseFromString(this.menuroles,"text/xml");
 			menueltslist.push($("menus",xmlDoc));
 			this.displaySubMenuEditor(-1,destmenu);
@@ -944,7 +992,7 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 			}
 			html += karutaStr[languages[langcode]]['menuroles3']+"</label>";
 			$("#metadata-menu").append($(html));
-			this.displayMetadatawWadTextAttributeEditor('edit-window-body-menu','menuroles');
+			this.displayMetadatawWadTextAttributeEditor('metadata-menu','menuroles');
 			//-----------------------
 			html  = "<label>"+karutaStr[languages[langcode]]['menulabels'];
 			if (languages.length>1){
@@ -960,7 +1008,7 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 			}
 			html += karutaStr[languages[langcode]]['menulabels3']+"</label>";
 			$("#metadata-menu").append($(html));
-			this.displayMetadatawWadTextAttributeEditor('edit-window-body-menu','menulabels');
+			this.displayMetadatawWadTextAttributeEditor('metadata-menu','menulabels');
 			//-----------------------
 		}
 	}
