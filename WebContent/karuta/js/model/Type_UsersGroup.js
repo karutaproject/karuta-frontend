@@ -56,7 +56,6 @@ UIFactory["UsersGroup"] = function(node)
 	this.loaded = false;
 	this.nbchildren = 0;
 	this.children = {};
-	this.loadContent();
 }
 
 //--------------------------------------------------------------
@@ -158,7 +157,8 @@ UIFactory["UsersGroup"].prototype.toggleContent = function(type)
 //==================================
 {
 	if ($("#tree_usergroup_label_"+this.id).hasClass('active')) {
-		localStorage.setItem('currentDisplayedUserGroupCode','none');
+		$(".usergroup-label").removeClass('active');
+		$("#usergroup-rightside").html("");
 	} else {
 		if (this.loaded)
 			this.displayContent(type);
@@ -166,8 +166,28 @@ UIFactory["UsersGroup"].prototype.toggleContent = function(type)
 			this.loadAndDisplayContent(type);
 		$(".usergroup-label").removeClass('active');
 		$("#tree_usergroup-label_"+this.id).addClass('active');
-		localStorage.setItem('currentDisplayedUserGroupCode',this.code_node.text());
 	}
+}
+
+//==============================
+UIFactory["UsersGroup"].prototype.loadNumberOfUsers = function (type)
+//==============================
+{
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/usersgroups?group="+this.id,
+		data: "",
+		group : this, // passing group to success
+		success : function(data) {
+			var items = $("user",data);
+			this.group.nbchildren = items.length;
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+		}
+	});
 }
 
 //==============================
@@ -234,6 +254,7 @@ UIFactory["UsersGroup"].displayAll = function(type)
 {
 	$("#"+type+"-leftside-content1").html("");
 	for ( var i = 0; i < usergroups_list.length; i++) {
+		usergroups_list[i].loadNumberOfUsers();
 		usergroups_list[i].displayView(type+"-leftside-content1",type);
 	}
 };
@@ -288,11 +309,6 @@ UIFactory["UsersGroup"].prototype.displayView = function(dest,type)
 		html += "</div>"
 		$("#"+dest).append($(html));
 		//-------------------------------------------------
-		if (!this.loaded && localStorage.getItem('currentDisplayedUserGroupCode')==usergroup_code) {
-			this.loadAndDisplayContent(type);
-			$(".usergroup-label").removeClass('active');
-			$("#tree_usergroup-label_"+this.id).addClass('active');
-		}
 	}
 	//---------------------------------------------------------
 };
@@ -497,7 +513,6 @@ UIFactory["UsersGroup"].prototype.update = function(attribute,value)
 		group: this,
 		success : function(data) {
 			this.group.refresh();
-			localStorage.setItem('currentDisplayedUserGroupCode',this.group.code_node.text());
 		}
 	});
 };

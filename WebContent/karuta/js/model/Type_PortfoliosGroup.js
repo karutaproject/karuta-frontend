@@ -60,7 +60,6 @@ UIFactory["PortfoliosGroup"] = function( node )
 	this.roles = [];
 	this.rrg = {};
 	//------------------------------
-	this.loadContent()
 ;};
 
 //--------------------------------------------------------------
@@ -171,7 +170,8 @@ UIFactory["PortfoliosGroup"].prototype.toggleContent = function(type)
 //==================================
 {
 	if ($("#tree_portfoliogroup_label_"+this.id).hasClass('active')) {
-		localStorage.setItem('currentDisplayedPortfolioGroupCode','none');
+		$(".portfoliogroup-label").removeClass('active');
+		$("#portfoliogroup-rightside").html("");
 	} else {
 		if (this.loaded)
 			this.displayContent(type);
@@ -179,8 +179,28 @@ UIFactory["PortfoliosGroup"].prototype.toggleContent = function(type)
 			this.loadAndDisplayContent(type);
 		$(".portfoliogroup-label").removeClass('active');
 		$("#tree_portfoliogroup-label_"+this.id).addClass('active');
-		localStorage.setItem('currentDisplayedPortfolioGroupCode',this.code_node.text());
 	}
+}
+
+//==============================
+UIFactory["PortfoliosGroup"].prototype.loadNumberOfPortfolios = function ()
+//==============================
+{
+	$.ajax({
+		async:false,
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/portfoliogroups?group="+this.id,
+		data: "",
+		group : this, // passing group to success
+		success : function(data) {
+			var items = $("portfolio",data);
+			this.group.nbchildren = items.length;
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error : "+jqxhr.responseText);
+		}
+	});
 }
 
 //==============================
@@ -243,6 +263,7 @@ UIFactory["PortfoliosGroup"].displayAll = function(type)
 {
 	$("#"+type+"-leftside-content1").html("");
 	for ( var i = 0; i < portfoliogroups_list.length; i++) {
+		portfoliogroups_list[i].loadNumberOfPortfolios();
 		portfoliogroups_list[i].displayView(type+"-leftside-content1",type);
 	}
 };
@@ -280,6 +301,8 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,type)
 			html += "		<div class='dropdown-menu  dropdown-menu-right'>";
 			html += "			<a class='dropdown-item' onclick=\"portfoliogroups_byid['"+this.id+"'].edit()\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["button-edit"]+"</a>";
 			html += "			<a class='dropdown-item' onclick=\"UIFactory.PortfoliosGroup.confirmRemove('"+this.id+"')\" ><i class='fa fa-times'></i> "+karutaStr[LANG]["button-delete"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callShareUsers('"+this.id+"')\" ><i class='fas fa-share-alt'></i> "+karutaStr[LANG]["addshare-users"]+"</a>";
+			html += "			<a class='dropdown-item' onclick=\"UIFactory['PortfoliosGroup'].callShareUsersGroups('"+this.id+"')\" ><i class='fa fa-share-alt-square'></i> "+karutaStr[LANG]["addshare-usersgroups"]+"</a>";
 			html += "		</div>";
 		} else { // pour que toutes les lignes aient la même hauteur : bouton avec visibility hidden
 			html += "		<button  data-toggle='dropdown' class='btn dropdown-toggle' style='visibility:hidden'></button>";
@@ -311,11 +334,11 @@ UIFactory["PortfoliosGroup"].prototype.displayView = function(dest,type)
 		html += "</div>"
 		$("#"+dest).append($(html));
 		//-------------------------------------------------
-		if (!this.loaded && localStorage.getItem('currentDisplayedPortfolioGroupCode')==portfoliogroup_code) {
-			this.loadAndDisplayContent(type);
-			$(".portfoliogroup-label").removeClass('active');
-			$("#tree_portfoliogroup-label_"+this.id).addClass('active');
-		}
+//		if (!this.loaded && localStorage.getItem('currentDisplayedPortfolioGroupCode')==portfoliogroup_code) {
+//			this.loadAndDisplayContent(type);
+//			$(".portfoliogroup-label").removeClass('active');
+//			$("#tree_portfoliogroup-label_"+this.id).addClass('active');
+//		}
 	}
 	//---------------------------------------------------------
 };
@@ -517,7 +540,7 @@ UIFactory["PortfoliosGroup"].prototype.update = function(attribute,value)
 		group: this,
 		success : function(data) {
 			this.group.refresh();
-			localStorage.setItem('currentDisplayedPortfolioGroupCode',this.group.code_node.text());
+//			localStorage.setItem('currentDisplayedPortfolioGroupCode',this.group.code_node.text());
 		}
 	});
 };
