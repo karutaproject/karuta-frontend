@@ -111,9 +111,9 @@ function getTxtvalsWithoutReplacement(node)
 				text = eval(text);
 			}
 		}
-		str += text;
+		str += text.trim();
 	}
-	return str.trim();
+	return str;
 }
 
 //==================================
@@ -148,10 +148,10 @@ function getvarvals(node)
 					text = eval(text);
 				}
 			}
-			str += text;
+			str += text.trim();
 		}
 	}
-	return replaceVariable(str.trim());
+	return replaceVariable(str);
 }
 
 //==================================
