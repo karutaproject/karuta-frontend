@@ -502,14 +502,15 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 		$(select).append($(select_item_a));
 		//--------------------
 		for ( var i = 0; i < newTableau1.length; i++) {
-				var uuid = $(newTableau1[i][1]).attr('id');
-				var style = "";
+			var uuid = $(newTableau1[i][1]).attr('id');
+			var style = "";
 			var resource = null;
+			//------------------------------
 			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getContentStyle(uuid);
+				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 			} else {
-				style = UIFactory.Node.getLabelStyle(uuid);
+				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			}
 			//------------------------------
@@ -605,13 +606,13 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			var style = "";
 			var radio_obj = $("<div class='get-radio'></div>");
 			var input = "";
-			//------------------------------
 			var resource = null;
+			//------------------------------
 			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getContentStyle(uuid);
+				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 			} else {
-				style = UIFactory.Node.getLabelStyle(uuid);
+				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			}
 			//------------------------------
@@ -674,13 +675,13 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			var uuid = $(newTableau1[i][1]).attr('id');
 			var style = "";
 			var input = "";
-			//------------------------------
 			var resource = null;
+			//------------------------------
 			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getContentStyle(uuid);
+				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 			} else {
-				style = UIFactory.Node.getLabelStyle(uuid);
+				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			}
 			//------------------------------
@@ -730,15 +731,14 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 			var uuid = $(newTableau1[i][1]).attr('id');
 			var input = "";
 			var style = "";
-			//------------------------------
 			var resource = null;
-			if ($("asmResource",newTableau1[i][1]).length==3 && srce!='node') {
-				style = UIFactory.Node.getContentStyle(uuid);
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]);
+			//------------------------------
+			if ($("asmResource",newTableau1[i][1]).length==3) {
+				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 			} else {
-				style = UIFactory.Node.getLabelStyle(uuid);
+				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
-				srce = 'label';
 			}
 			//------------------------------
 			var code = $('code',resource).text();
@@ -853,13 +853,13 @@ UIFactory["Get_Get_Resource"].parseChildren = function(dest,data,langcode,self,s
 		//------------------------------
 		var input = "";
 		var style = "";
-		//------------------------------
 		var resource = null;
+		//------------------------------
 		if ($("asmResource",newTableau1[i][1]).length==3) {
-			style = UIFactory.Node.getContentStyle(uuid);
+			style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 			resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 		} else {
-			style = UIFactory.Node.getLabelStyle(uuid);
+			style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 			resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 		}
 		//------------------------------
