@@ -444,6 +444,36 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		}
 		//------------
 	}
+	if (this.get_type=="import_comp"){
+		let portfoliocode = cleanCode(r_replaceVariable(this.query_portfolio));
+		let semtag = this.query_semtag;
+		let semtag2 = "";
+		if (semtag.indexOf('+')>-1) {
+			semtag2 = semtag.substring(semtag.indexOf('+')+1);
+			semtag = semtag.substring(0,semtag.indexOf('+'));
+		}
+		let srce = this.query_object;
+		let target = this.query_object;
+		type = 'multiple';
+		//------------
+		var self = this;
+		if (cachable && g_Get_Resource_caches[portfoliocode+semtag]!=undefined && g_Get_Resource_caches[portfoliocode+semtag]!="")
+			UIFactory["Get_Resource"].parse(destid,type,langcode,g_Get_Resource_caches[portfoliocode+semtag],self,disabled,srce,resettable,target,semtag,null,portfoliocode,semtag2,cachable);
+		else {
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag.replace("!",""),
+				success : function(data) {
+					if (cachable)
+						g_Get_Resource_caches[portfoliocode+semtag] = data;
+					UIFactory["Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,resettable,target,semtag,null,portfoliocode,semtag2,cachable);
+				}
+			});
+		}
+		//------------
+	}
+
 };
 
 
@@ -522,11 +552,12 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				var uuid = $(newTableau1[i][1]).attr('id');
 				var style = "";
 				var resource = null;
+				//------------------------------
 				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getContentStyle(uuid);
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 				} else {
-					style = UIFactory.Node.getLabelStyle(uuid);
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 				}
 				//------------------------------
@@ -605,7 +636,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		if (target=='text') {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				var uuid = $(newTableau1[i][1]).attr('id');
-				var style = UIFactory.Node.getContentStyle(uuid);
+				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 				html = "<a class='dropdown-item' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='sel"+code+"' ";
 				for (var j=0; j<languages.length;j++){
@@ -742,8 +773,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			for ( var i = 0; i < newTableau1.length; i++) {
 				var uuid = $(newTableau1[i][1]).attr('id');
 				var resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
-				var style = UIFactory.Node.getLabelStyle(uuid);
-				//------------------------------
+				var style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				var code = $('code',resource).text();
 				var display_code = false;
 				var display_label = true;
@@ -826,13 +856,13 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			var style = "";
 			var radio_obj = $("<div class='get-radio'></div>");
 			var input = "";
-			//------------------------------
 			var resource = null;
+			//------------------------------
 			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getContentStyle(uuid);
+				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 			} else {
-				style = UIFactory.Node.getLabelStyle(uuid);
+				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			}
 			//------------------------------
@@ -917,11 +947,12 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			var input = "";
 			var style = "";
 			var resource = null;
+			//------------------------------
 			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getContentStyle(uuid);
+				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 			} else {
-				style = UIFactory.Node.getLabelStyle(uuid);
+				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 			}
 			//------------------------------
@@ -972,16 +1003,16 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 			var uuid = $(newTableau1[i][1]).attr('id');
 			var input = "";
 			var style = "";
-			//------------------------------
 			var resource = null;
+			//------------------------------
 			if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getContentStyle(uuid);
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
-				} else {
-					style = UIFactory.Node.getLabelStyle(uuid);
-					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
-				}
-				//------------------------------
+				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+			} else {
+				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
+				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+			}
+			//------------------------------
 			var code = $('code',resource).text();
 			var selectable = true;
 			var disabled = false;
@@ -1088,13 +1119,15 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				var uuid = $(newTableau1[i][1]).attr('id');
 				var style = "";
 				var resource = null;
+				//------------------------------
 				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getContentStyle(uuid);
+					style = UIFactory.Node.getDataConentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 				} else {
-					style = UIFactory.Node.getLabelStyle(uuid);
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 				}
+				//------------------------------
 				//------------------------------
 				var value = $('value',resource).text();
 				var code = $('code',resource).text();
@@ -1173,7 +1206,7 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 		if (target=='text') {
 			for ( var i = 0; i < newTableau1.length; i++) {
 				var uuid = $(newTableau1[i][1]).attr('id');
-				var style = UIFactory.Node.getContentStyle(uuid);
+				var style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 				var resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 				html = "<li></li>";
 				var select_item = $(html);
@@ -1235,11 +1268,12 @@ UIFactory["Get_Resource"].parse = function(destid,type,langcode,data,self,disabl
 				var uuid = $(newTableau1[i][1]).attr('id');
 				var style = "";
 				var resource = null;
+				//------------------------------
 				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getContentStyle(uuid);
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 				} else {
-					style = UIFactory.Node.getLabelStyle(uuid);
+					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
 					resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
 				}
 				//------------------------------
@@ -1382,7 +1416,7 @@ UIFactory["Get_Resource"].parseChildren = function(dest,self,data,langcode,srce,
 		}
 		code = cleanCode(code);
 		//------------------------------
-		input += "<div id='"+code+"'>";
+		input += "<div id='"+code+"' class='subget_ressource'>";
 		if (selectable) {
 			input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' class='multiple-item";
 			input += "' ";
@@ -1436,17 +1470,6 @@ UIFactory["Get_Resource"].prototype.save = function()
 		UICom.UpdateNode(this.node);
 		UICom.structure.ui[this.id].refresh()
 	}
-	//-------- if function js -------------
-	if (UICom.structure.ui[this.id].js!=undefined && UICom.structure.ui[this.id].js!="") {
-		var fcts = UICom.structure.ui[this.id].js.split(";");
-		for (var i=0;i<fcts.length;i++) {
-			var elts = fcts[i].split("/");
-			if (elts[0]=="update-node")
-				eval(elts[1]+"(this.id)");
-		}
-	}
-	//------------------------------------
-
 	//--------- log -------------
 	if (log) {
 		UICom.structure.ui[this.id].log();
@@ -1507,8 +1530,6 @@ UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags
 	//------------------------------
 	if (UICom.structure.ui[targetid]==undefined && targetid!="")
 		targetid = getNodeIdBySemtag(targetid);
-	if (targetid!="" && targetid!=parentid)
-		parentid = targetid;
 	//------------------------------
 	$.ajaxSetup({async: false});
 	var elts = multiple_tags.split(",");
@@ -1525,6 +1546,8 @@ UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags
 	var param4 = false;
 	var param5 = parentid;
 	var param6 = fct;
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
 	for (var j=0; j<inputs.length;j++){
 		var param3 = inputs[j];
 		if (j==inputs.length-1)
@@ -1718,3 +1741,41 @@ function import_multiple(parentid,targetid,title,query,partcode,get_resource_sem
 	$('#edit-window').modal('show');
 
 }
+
+//==================================
+function import_get_multiple(parentid,targetid,title,query_portfolio,query_semtag,query_object,actns)
+//==================================
+{
+	const acts = actns.split(';');
+	let actions = [];
+	for (let i=0;i<acts.length-1;i++) {
+		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
+	}
+	let js1 = "javascript:$('#edit-window').modal('hide')";
+	let js2 = "";
+	for (let i=0;i<actions.length;i++) {
+		if (actions[i].type=="import_comp") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++) {
+				js2 += "UIFactory.Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"','"+actions[i].fcts+"');";
+			}
+		}
+	}
+	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#edit-window-footer").html(footer);
+	$("#edit-window-title").html(title.replaceAll("##apos##","'"));
+	var html = "<div id='get-resource-node'></div>";
+	$("#edit-window-body").html(html);
+	$("#edit-window-body-node").html("");
+	$("#edit-window-type").html("");
+	$("#edit-window-body-metadata").html("");
+	$("#edit-window-body-metadata-epm").html("");
+	var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
+	getResource.get_type = "import_comp";
+	getResource.query_portfolio = query_portfolio;
+	getResource.query_semtag = query_semtag;
+	getResource.query_object = query_object;
+	getResource.displayEditor("get-resource-node");
+	$('#edit-window').modal('show');
+}
+

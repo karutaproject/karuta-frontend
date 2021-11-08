@@ -49,6 +49,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.collapsible = ($(node.metadatawad).attr('collapsible')==undefined)?'N':$(node.metadatawad).attr('collapsible');
 	this.resnopencil = ($(node.metadatawad).attr('resnopencil')==undefined)?'N':$(node.metadatawad).attr('resnopencil');
 	this.nodenopencil = ($(node.metadatawad).attr('nodenopencil')==undefined)?'N':$(node.metadatawad).attr('nodenopencil');
+	this.nodenopencilroles = ($(node.metadatawad).attr('nodenopencilroles')==undefined)?'':$(node.metadatawad).attr('nodenopencilroles');
 	this.editcoderoles = ($(node.metadatawad).attr('editcoderoles')==undefined)?'':$(node.metadatawad).attr('editcoderoles');
 	this.editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
 	this.delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
@@ -69,7 +70,6 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.moveinroles = ($(node.metadatawad).attr('moveinroles')==undefined)?'none':$(node.metadatawad).attr('moveinroles');
 	this.printroles = ($(node.metadatawad).attr('printroles')==undefined)?'':$(node.metadatawad).attr('printroles');
 	this.privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-	this.submitted = ($(node.metadatawad).attr('submitted')==undefined)?'none':$(node.metadatawad).attr('submitted');
 	this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
 	this.cssclass = ($(node.metadataepm).attr('cssclass')==undefined)?'':$(node.metadataepm).attr('cssclass');
 	this.displayview = ($(node.metadataepm).attr('displayview')==undefined)?'default':$(node.metadataepm).attr('displayview');
@@ -99,9 +99,6 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.langnotvisible = ($(node.metadatawad).attr('langnotvisible')==undefined)?"":$(node.metadatawad).attr('langnotvisible');
 	if (this.resource!=undefined || this.resource!=null)
 		this.editable_in_line = this.resource.type!='Proxy' && this.resource.type!='Audio' && this.resource.type!='Video' && this.resource.type!='Document' && this.resource.type!='Image' && this.resource.type!='URL';
-	if (this.submitted=='Y' && this.unsubmitroles=='none') {
-		this.menu = false;
-	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------------
@@ -109,6 +106,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 //----------------------- STYLES ---------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
+
 
 //==================================================
 UIFactory["Node"].prototype.getNodeStyle = function()
@@ -226,30 +224,52 @@ UIFactory["Node"].getCommentStyle = function(uuid)
 }
 
 //==================================================
-UIFactory["Node"].getDataContentStyle = function(data)
-//==================================================
-{
-	var style = "";
-	style += UIFactory.Node.getMetadataEpm(data,'node-padding-top',true);
-	style += UIFactory.Node.getMetadataEpm(data,'node-font-size',true);
-	style += UIFactory.Node.getMetadataEpm(data,'node-font-weight',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-font-style',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-color',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-text-align',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-background-color',false);
-	style += UIFactory.Node.getMetadataEpm(data,'node-width',true);
-	style += UIFactory.Node.getMetadataEpm(data,'node-height',true);
-	style += UIFactory.Node.getOtherMetadataEpm(data,'node-othercss');
-	return style;
-}
-
-//==================================================
 UIFactory["Node"].prototype.getMenuStyle = function()
 //==================================================
 {
 	metadataepm = this.metadataepm;
 	var style = "";
 	style += UIFactory.Node.getMetadataEpm(metadataepm,'nds-menus-color',false);
+	return style;
+}
+
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//-------------------- STYLES With DATA as parameter -------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------
+
+//==================================================
+UIFactory["Node"].getDataLabelStyle = function(metadataepm)
+//==================================================
+{
+	let style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'background-color',false);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'othercss');
+	return style;
+}
+
+//==================================================
+UIFactory["Node"].getDataContentStyle = function(metadataepm)
+//==================================================
+{
+	let style = "";
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-padding-top',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-size',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-weight',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-font-style',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-text-align',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-background-color',false);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-width',true);
+	style += UIFactory.Node.getMetadataEpm(metadataepm,'node-height',true);
+	style += UIFactory.Node.getOtherMetadataEpm(metadataepm,'node-othercss');
 	return style;
 }
 
@@ -494,8 +514,9 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	else
 		this.displayMetadataWadAttributeEditor('metadata-part2','editnoderoles',false,true);
 	//-----------------------------------------
-//	if (model)
+//	if (model) {
 		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',true);
+		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencilroles');
 //	else
 //		this.displayMetadataWadAttributeEditor('metadata-part2','nodenopencil',false,true);
 	//-----------------------------------------
@@ -599,8 +620,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		$('#metadata_texts').append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','shareroles');
 	}
-/*	//----------------------Menu----------------------------
-	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
+	//----------------------Menu----------------------------
+/*	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
 		//-----------------------
 		html  = "<label>"+karutaStr[languages[langcode]]['menuroles'];
 		if (languages.length>1){
@@ -634,7 +655,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		$("#metadata_texts").append($(html));
 		this.displayMetadatawWadTextAttributeEditor('metadata_texts','menulabels');
 		//-----------------------
-	} */
+	}*/
 	//------------------------Help-------------------------
 	html = "<br><label>"+karutaStr[languages[langcode]]['help'];
 	if (languages.length>1){

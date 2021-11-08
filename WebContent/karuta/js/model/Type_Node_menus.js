@@ -4,27 +4,43 @@ menuElts ["menu"]= "<menu><menulabel/><items/></menu>";
 menuElts ["item"]= "<item><itemlabel/><roles/><condition/></item>";
 menuElts ["function"]= "<function><js/></function>";
 menuElts ["import"]= "<import><srce><foliocode/><semtag/></srce></import>";
+menuElts ["import-comp"]= "<import-comp><srce><foliocode/><semtag/><updatedtag/></srce></import-comp>";
+menuElts ["import-elts"]= "<import-elts><srce><foliocode/></srce></import-elts>";
+menuElts ["import-elts-from"]= "<import-elts-from><srce><foliocode>selected code</foliocode><semtag/></srce></import-elts-from>";
 menuElts ["action"]= "<action><srce><portfoliocode/><semtag/></srce></action>";
 menuElts ["srce"]= "<srce><foliocode/><semtag/></srce>";
-menuElts ["trgt"]= "<trgt><foliocode/><position/><semtag/></trgt>";
+menuElts ["search"]= "<search><foliocode/><semtag/><object/></search>";
+menuElts ["trgt"]= "<trgt><position/><semtag/></trgt>";
 menuElts ["get_single"]= "<get_single><srce><foliocode/><semtag/></srce></get_single>";
+menuElts ["get_multiple"]= "<get_multiple><search><foliocode/><semtag/></search><import2><srce><foliocode/><semtag/></srce></import2></get_multiple>";
+menuElts ["import_get_multiple"]= "<import_get_multiple><search><foliocode/><semtag/><object/></search></import_get_multiple>";
 
 let menuItems = {};
 menuItems['menus']= ["menu"];
-menuItems['import']= ["trgt"];
+menuItems['import']= ["trgt","function"];
+menuItems['import-comp']= ["trgt","function"];
+menuItems['import-elts']= ["trgt","function"];
+menuItems['import-elts-from']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
+menuItems['import_get_multiple']= ["import-comp","import-elts","import-elts-from"];
 menuItems['menu']= ["item"];
-menuItems['item']= ["import","function","get_single","get_multiple","get_get_single","get_get_multiple"];
+menuItems['item']= ["import","function","import_get_multiple"];
+//menuItems['item']= ["import","function","get_single","get_multiple","get_get_single","get_get_multiple"];
 
 let deletableItems = {};
 deletableItems["menu"]=true;
 deletableItems["item"]=true;
 deletableItems["function"]=true;
 deletableItems["import"]=true;
+deletableItems["import-comp"]=true;
+deletableItems["import-elts"]=true;
+deletableItems["import-elts-from"]=true;
+deletableItems["import_get_multiple"]=true;
 deletableItems["action"]=true;
 deletableItems["srce"]=false;
 deletableItems["trgt"]=true;
 deletableItems["get_single"]=true;
+deletableItems["get_multiple"]=true;
 
 let menueltslist =[];
 //----------------------------------------------------------------------------------------------------------------------------
@@ -857,6 +873,8 @@ UIFactory["Node"].prototype.displayXmlMenuEditor = function(cntidx,destmenu)
 	html += "		<span class='input-group-text'>"+karutaStr[languages[LANGCODE]][attribute]+"</span>";
 	html += "	</div>";
 	html += "	<input id='"+nodeid+"_"+eltidx+attribute+"' ";
+	if (value=='selected code')
+		html += " disabled=true ";
 	html += " type='text' class='form-control "+attribute+"' aria-label='"+karutaStr[languages[LANGCODE]][attribute]+"' aria-describedby='"+attribute+nodeid+"'  value=\""+value+"\">";
 	html += "</div>";
 	$("#content"+cntidx).append(html);
@@ -974,7 +992,7 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 				this.menuroles = "<menus></menus>";
 			this.displayMetadataWadMenusEditor('metadata-menu','menuroles',destmenu);
 			xmlDoc = parser.parseFromString(this.menuroles,"text/xml");
-			menueltslist.push($("menus",xmlDoc));
+			menueltslist.push($("menus",xmlDoc)[0]);
 			this.displaySubMenuEditor(-1,destmenu);
 		} else {
 			//---------------------- OLD Menu----------------------------
@@ -1064,14 +1082,18 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 	const itemelts = $(">*",item);
 	for (let i=0;i<itemelts.length;i++){
 		const type = $(itemelts[i]).prop("tagName");
+		//------------------------- function --------------------
 		if (type=='function') {
 			const js = $("js",itemelts[i]).text();
 			onclick += js + ";";
 		}
-		if (type=='import') {
+		//------------------------- import --------------------
+		else if (type=='import') {
+			// --------- srce ------------
 			let srce = $("srce",itemelts[i])[0];
 			let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
 			let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+			// --------- targets ------------
 			let trgts = $("trgt",itemelts[i]);
 			if (trgts.length>0) {
 				for (let j=0;j<trgts.length;j++){
@@ -1089,6 +1111,58 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 				onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
 			}
 		}
+		//------------------------- get_multiple --------------------
+		else if (type=='import_get_multiple') {
+			let actions = "";
+			// --------- boxlabel ------------
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i])[0].text():"" );
+			// --------- search ------------
+			let search = $("search",itemelts[i])[0];
+			let foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
+			let semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
+			let object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
+			// --------import-comp ------
+			let import_comps = $("import-comp",itemelts[i]);
+			if (import_comps.length>0) {
+				for (let j=0;j<import_comps.length;j++){
+					let import_comp_srce = $("srce",import_comps[j])[0];
+					let foliocode = replaceVariable( ($("foliocode",import_comp_srce).length>0)?$("foliocode",import_comp_srce).text():"" );
+					let semtag = replaceVariable( ($("semtag",import_comp_srce).length>0)?$("semtag",import_comp_srce).text():"" );
+					let updatedtag = replaceVariable( ($("updatedtag",import_comp_srce).length>0)?$("updatedtag",import_comp_srce).text():"" );
+					// --------- functions ------------
+					let fctarray = [];
+					let fcts = $("function",itemelts[i]);
+					if (fcts.length>0) {
+						for (let k=0;k<fcts.length;k++){
+							fctarray.push($(fcts[k]).text());
+						}
+					}
+					// --------- targets ------------
+					let trgtarray = [];
+					let trgts = $("trgt",itemelts[i]);
+					if (trgts.length>0) {
+						for (let k=0;k<trgts.length;k++){
+							let position = $("position",trgts[k]).text();
+							let trgtsemtag = $("semtag",trgts[k]).text();
+							let trgtelt = (position!="")?position+"."+trgtsemtag:trgtsemtag;
+							let target = getTarget (node,trgtelt);
+							if (target.length>0) {
+								let targetid = $(target[0]).attr("id");
+								trgtarray.push(targetid);
+							} else {
+								trgtarray.push(parentid);
+							}
+							
+						}
+					} 
+					// ----------------------------------
+					let import_comp = "{|type|:|import_comp|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
+					actions += import_comp;
+				}
+			}
+			onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+foliocode+"','"+semtag+"','"+object+"','"+actions+"');";
+		}
+		//----------------------------------------------------------------------
 	}
 	return onclick;
 }

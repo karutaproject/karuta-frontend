@@ -572,6 +572,8 @@ UIFactory["UsersGroup"].displaySelectMultipleWithUsersList = function(destid,typ
 {
 	$("#"+destid).html("");
 	for ( var i = 0; i < usergroups_list.length; i++) {
+		if (!usergroups_list[i].loaded)
+			usergroups_list[i].loadContent(type);
 		var gid = usergroups_list[i].id;
 		var label = usergroups_list[i].code_node.text();
 		var html = "<input type='checkbox' name='select_usersgroups' value='"+gid+"'";

@@ -1762,7 +1762,7 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 	if (this.edit && this.id.indexOf('temp-')==-1) {
 		//------------ edit button ---------------------
 		if ( 
-					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles) || this.editnoderoles.indexOf($(USER.username_node).text())>-1 || this.editresroles.indexOf($(USER.username_node).text())>-1))
+					(!this.inline && ( 	(this.writenode && !this.incrementroles!='Y' && this.resnopencil!='Y' && this.nodenopencil!='Y' && !this.nodenopencilroles.containsArrayElt(g_userroles) && (this.editnoderoles.containsArrayElt(g_userroles) || this.editresroles.containsArrayElt(g_userroles) || this.editnoderoles.indexOf($(USER.username_node).text())>-1 || this.editresroles.indexOf($(USER.username_node).text())>-1))
 									|| USER.admin
 									|| g_userroles[0]=='designer' 
 								)

@@ -731,6 +731,7 @@ UIFactory["User"].displaySearched = function (value,search_type,type)
 			if (type=='sharing-user'){
 				for (var i=0; i<searched_active_users_list.length;i++){
 					$("#"+type+"-rightside-users-content1").append(searched_active_users_list[i].getSelector(null,null,'select_users'));
+					$("#"+type+"-rightside-users-content1").append("<br>");
 				}				
 			} else {
 				$("#"+type+"-rightside-content1").show();

@@ -1944,6 +1944,58 @@ UIFactory["Portfolio"].shareUsers = function(portfolioid)
 };
 
 //==================================
+UIFactory["Portfolio"].sharePortfolio = function(portfolioid,role,login)
+//==================================
+{
+	$.ajax({
+		type : "GET",
+		dataType : "xml",
+		url : serverBCK_API+"/rolerightsgroups?portfolio="+portfolioid,
+		success : function(data) {
+			let groups = $("rolerightsgroup",data);
+			let groupids = {};
+			if (groups.length>0) {
+				//--------------------------
+				for (let i=0; i<groups.length; i++) {
+					groupids[$("label",groups[i]).text()] = $(groups[i]).attr('id');
+				}
+			}
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/users?username="+login,
+				success : function(data) {
+					let users = $("user",data);
+					let userid = $(users[0]).attr('id');
+					let url = serverBCK_API+"/rolerightsgroups/rolerightsgroup/" + groupids[role] + "/users";
+					let xml = "<users><user id='"+userid+"'/></users>";
+					if (xml.length>20) {
+						$.ajax({
+							type : "POST",
+							contentType: "application/xml",
+							dataType : "xml",
+							url : url,
+							data : xml,
+							success : function(data) {
+							},
+							error : function(jqxhr,textStatus) {
+								alertHTML("Error in sharePortfolio : "+jqxhr.responseText);
+							}
+						});
+					}
+				},
+				error : function(jqxhr,textStatus) {
+					alertHTML("Error in sharePortfolio : "+jqxhr.responseText);
+				}
+			});
+		},
+		error : function(jqxhr,textStatus) {
+			alertHTML("Error in sharePortfolio : "+jqxhr.responseText);
+		}
+	});
+};
+
+//==================================
 UIFactory["Portfolio"].callShareUsers = function(portfolioid,langcode)
 //==================================
 {
