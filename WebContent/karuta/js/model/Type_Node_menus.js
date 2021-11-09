@@ -1,38 +1,54 @@
 
 let menuElts = {};
-menuElts ["menu"]= "<menu><menulabel/><items/></menu>";
+menuElts ["menu"]= "<menu><menulabel/></menu>";
 menuElts ["item"]= "<item><itemlabel/><roles/><condition/></item>";
 menuElts ["function"]= "<function><js/></function>";
 menuElts ["import"]= "<import><srce><foliocode/><semtag/></srce></import>";
-menuElts ["import-comp"]= "<import-comp><srce><foliocode/><semtag/><updatedtag/></srce></import-comp>";
-menuElts ["import-elts"]= "<import-elts><srce><foliocode/></srce></import-elts>";
-menuElts ["import-elts-from"]= "<import-elts-from><srce><foliocode>selected code</foliocode><semtag/></srce></import-elts-from>";
+menuElts ["import-component"]= "<import-component><srce><foliocode/><semtag/><updatedtag/></srce></import-component>";
+menuElts ["import-component-via-search"]= "<import-component-via-search><search><foliocode/><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-search>";
+menuElts ["import-component-via-parent"]= "<import-component-via-parent><search><foliocode disabled='y'>parent code</foliocode><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-parent>";
+menuElts ["import-elts"]= "<import-elts><srce><foliocode disabled='y'>search code</foliocode></srce></import-elts>";
+menuElts ["import-elts-from"]= "<import-elts-from><srce><foliocode/><semtag/></srce></import-elts-from>";
+menuElts ["import-elts-from-srce"]= "<import-elts-from-srce><search><foliocode/><semtag/><object/></search><srce><foliocode/><semtag/></srce></import-elts-from-srce>";
+menuElts ["import-elts-from-search"]= "<import-elts-from-search><search><foliocode/><semtag/><object/></search><srce><foliocode disabled='y'>search code</foliocode><semtag/></srce></import-elts-from-search>";
+menuElts ["import-elts-from-parent"]= "<import-elts-from-parent><search><foliocode disabled='y'>parent code</foliocode><semtag/><object/></search><srce><foliocode disabled='y'>parent code</foliocode><semtag/></srce></import-elts-from-parent>";
 menuElts ["action"]= "<action><srce><portfoliocode/><semtag/></srce></action>";
 menuElts ["srce"]= "<srce><foliocode/><semtag/></srce>";
-menuElts ["search"]= "<search><foliocode/><semtag/><object/></search>";
 menuElts ["trgt"]= "<trgt><position/><semtag/></trgt>";
 menuElts ["get_single"]= "<get_single><srce><foliocode/><semtag/></srce></get_single>";
 menuElts ["get_multiple"]= "<get_multiple><search><foliocode/><semtag/></search><import2><srce><foliocode/><semtag/></srce></import2></get_multiple>";
 menuElts ["import_get_multiple"]= "<import_get_multiple><search><foliocode/><semtag/><object/></search></import_get_multiple>";
+menuElts ["import_get_get_multiple"]= "<import_get_get_multiple><parent><position/><semtag/></parent></import_get_get_multiple>";
 
 let menuItems = {};
 menuItems['menus']= ["menu"];
 menuItems['import']= ["trgt","function"];
-menuItems['import-comp']= ["trgt","function"];
+menuItems['import-component']= ["trgt","function"];
 menuItems['import-elts']= ["trgt","function"];
-menuItems['import-elts-from']= ["trgt","function"];
+menuItems['trgt']= ["function"];
+menuItems['import-elts-from']= ["trgt"];
+menuItems['import-component-via-search']= ["trgt","function"];
+menuItems['import-component-via-parent']= ["trgt","function"];
+menuItems['import-component-from-srce']= ["trgt","function"];
+menuItems['import-component-from-search']= ["trgt","function"];
+menuItems['import-component-from-parent']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
-menuItems['import_get_multiple']= ["import-comp","import-elts","import-elts-from"];
+menuItems['import_get_multiple']= ["import-component","import-elts","import-elts-from"];
+menuItems['import_get_get_multiple']= ["import-component-via-search","import-component-via-parent","import-elts-from-srce","import-elts-from-parent","import-elts-from-search"];
 menuItems['menu']= ["item"];
-menuItems['item']= ["import","function","import_get_multiple"];
-//menuItems['item']= ["import","function","get_single","get_multiple","get_get_single","get_get_multiple"];
+menuItems['item']= ["import","function","import_get_multiple","import_get_get_multiple"];
 
 let deletableItems = {};
 deletableItems["menu"]=true;
 deletableItems["item"]=true;
 deletableItems["function"]=true;
 deletableItems["import"]=true;
-deletableItems["import-comp"]=true;
+deletableItems["import-component"]=true;
+deletableItems["import-component-via-search"]=true;
+deletableItems["import-component-via-parent"]=true;
+deletableItems["import-elts-from-srce"]=true;
+deletableItems["import-elts-from-search"]=true;
+deletableItems["import-elts-from-parent"]=true;
 deletableItems["import-elts"]=true;
 deletableItems["import-elts-from"]=true;
 deletableItems["import_get_multiple"]=true;
@@ -41,6 +57,7 @@ deletableItems["srce"]=false;
 deletableItems["trgt"]=true;
 deletableItems["get_single"]=true;
 deletableItems["get_multiple"]=true;
+deletableItems["import_get_get_multiple"]=true;
 
 let menueltslist =[];
 //----------------------------------------------------------------------------------------------------------------------------
@@ -866,6 +883,7 @@ UIFactory["Node"].prototype.displayXmlMenuEditor = function(cntidx,destmenu)
 	const element = menueltslist[eltidx];
 
 	const attribute=$(element).prop("nodeName");
+	const disabled=$(element).attr("disabled");
 	const value = $(element).text();
 	let html = "";
 	html += "<div class='input-group "+attribute+"'>";
@@ -873,7 +891,7 @@ UIFactory["Node"].prototype.displayXmlMenuEditor = function(cntidx,destmenu)
 	html += "		<span class='input-group-text'>"+karutaStr[languages[LANGCODE]][attribute]+"</span>";
 	html += "	</div>";
 	html += "	<input id='"+nodeid+"_"+eltidx+attribute+"' ";
-	if (value=='selected code')
+	if (disabled=='y')
 		html += " disabled=true ";
 	html += " type='text' class='form-control "+attribute+"' aria-label='"+karutaStr[languages[LANGCODE]][attribute]+"' aria-describedby='"+attribute+nodeid+"'  value=\""+value+"\">";
 	html += "</div>";
@@ -934,7 +952,7 @@ UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
 	let tag = $(elt).prop("tagName");
 
 	html += "<div class='"+tag+"title' style='margin-top:14px;border-top:1px dashed #ced4da'><span>"+tag+"</span>";
-	if (deletableItems[tag])
+	if (deletableItems[tag]!=undefined && deletableItems[tag])
 		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+eltidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
 	if (menuItems[tag]!=undefined && menuItems[tag].length>0){
 		html += "<span class='dropdown'>";
@@ -960,7 +978,7 @@ UIFactory["Node"].prototype.displaySubMenuEditor = function(cntidx,destmenu)
 	for (var k=0;k<elts.length;k++){
 		menueltslist.push(elts[k]);
 		let tag = $(elts[k]).prop("tagName");
-		if (menuElts[tag]!=undefined && menuElts[tag].length>0){
+		if ($(">*",elts[k]).length>0){
 			this.displaySubMenuEditor (eltidx,destmenu)
 		} else {
 			if (tag.indexOf('role')>-1)
@@ -1114,58 +1132,91 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 		//------------------------- get_multiple --------------------
 		else if (type=='import_get_multiple') {
 			let actions = "";
+			let imports = "";
 			// --------- boxlabel ------------
 			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i])[0].text():"" );
 			// --------- search ------------
 			let search = $("search",itemelts[i])[0];
-			let foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
-			let semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
-			let object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
+			let search_foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
+			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
+			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
 			// --------import-comp ------
-			let import_comps = $("import-comp",itemelts[i]);
-			if (import_comps.length>0) {
-				for (let j=0;j<import_comps.length;j++){
-					let import_comp_srce = $("srce",import_comps[j])[0];
-					let foliocode = replaceVariable( ($("foliocode",import_comp_srce).length>0)?$("foliocode",import_comp_srce).text():"" );
-					let semtag = replaceVariable( ($("semtag",import_comp_srce).length>0)?$("semtag",import_comp_srce).text():"" );
-					let updatedtag = replaceVariable( ($("updatedtag",import_comp_srce).length>0)?$("updatedtag",import_comp_srce).text():"" );
-					// --------- functions ------------
-					let fctarray = [];
-					let fcts = $("function",itemelts[i]);
-					if (fcts.length>0) {
-						for (let k=0;k<fcts.length;k++){
-							fctarray.push($(fcts[k]).text());
-						}
-					}
-					// --------- targets ------------
-					let trgtarray = [];
-					let trgts = $("trgt",itemelts[i]);
-					if (trgts.length>0) {
-						for (let k=0;k<trgts.length;k++){
-							let position = $("position",trgts[k]).text();
-							let trgtsemtag = $("semtag",trgts[k]).text();
-							let trgtelt = (position!="")?position+"."+trgtsemtag:trgtsemtag;
-							let target = getTarget (node,trgtelt);
-							if (target.length>0) {
-								let targetid = $(target[0]).attr("id");
-								trgtarray.push(targetid);
-							} else {
-								trgtarray.push(parentid);
-							}
-							
-						}
-					} 
-					// ----------------------------------
-					let import_comp = "{|type|:|import_comp|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
-					actions += import_comp;
+			imports = $("import-comp",itemelts[i]);
+			if (imports.length>0) {
+				for (let j=0;j<imports.length;j++){
+					let srce = $("srce",imports[j])[0];
+					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+					let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+					let updatedtag = replaceVariable( ($("updatedtag",srce).length>0)?$("updatedtag",srce).text():"" );
+					let fctarray = UIFactory.Node.getFunctionArray(node,itemelts[i]);
+					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
+					actions += "{|type|:|import_comp|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
 			}
-			onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+foliocode+"','"+semtag+"','"+object+"','"+actions+"');";
+			// --------import-elts ------
+			imports = $("import-elts",itemelts[i]);
+			if (imports.length>0) {
+				for (let j=0;j<imports.length;j++){
+					let fctarray = UIFactory.Node.getFunctionArray(node,itemelts[i]);
+					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
+					actions += "{|type|:|import_elts|,|parentid|:|"+parentid+"|,|foliocode|:|"+search_foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
+				}
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
+			}
+			// --------import-elts-from ------
+			imports = $("import-elts-from",itemelts[i]);
+			if (imports.length>0) {
+				for (let j=0;j<imports.length;j++){
+					let srce = $("srce",imports[j])[0];
+					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+					let fctarray = UIFactory.Node.getFunctionArray(node,itemelts[i]);
+					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
+					actions += "{|type|:|import_elts-from|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
+				}
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
+			}
+			//----------------------------------------------------------------------
 		}
-		//----------------------------------------------------------------------
 	}
 	return onclick;
 }
 
+//==================================================
+UIFactory["Node"].getTargetArray = function(node,parentid,item)
+//==================================================
+{
+	let trgtarray = [];
+	let trgts = $("trgt",item);
+	if (trgts.length>0) {
+		for (let k=0;k<trgts.length;k++){
+			let position = $("position",trgts[k]).text();
+			let trgtsemtag = $("semtag",trgts[k]).text();
+			let trgtelt = (position!="")?position+"."+trgtsemtag:trgtsemtag;
+			let target = getTarget (node,trgtelt);
+			if (target.length>0) {
+				let targetid = $(target[0]).attr("id");
+				trgtarray.push(targetid);
+			} else {
+				trgtarray.push(parentid);
+			}
+			
+		}
+	} 
+	return trgtarray;
+}
 
+//==================================================
+UIFactory["Node"].getFunctionArray = function(node,item)
+//==================================================
+{
+	let fctarray = [];
+	let fcts = $("function",item);
+	if (fcts.length>0) {
+		for (let k=0;k<fcts.length;k++){
+			fctarray.push($(fcts[k]).text());
+		}
+	}
+	return fctarray;
+}
 

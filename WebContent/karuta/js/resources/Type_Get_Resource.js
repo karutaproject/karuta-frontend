@@ -1754,11 +1754,38 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 	let js1 = "javascript:$('#edit-window').modal('hide')";
 	let js2 = "";
 	for (let i=0;i<actions.length;i++) {
+		//--------------- import_comp ------------
 		if (actions[i].type=="import_comp") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
-				js2 += "UIFactory.Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"','"+actions[i].fcts+"');";
+				js2 += "UIFactory.Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
 			}
+			let fcts = actions[i].fcts.split(',');
+			for (let j=0;j<fcts.length;j++) {
+				js2 += fcts[j]+";";
+			}		
+		}
+		//--------------- import_elts ------------
+		if (actions[i].type=="import_elts") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++) {
+				js2 += "UIFactory.Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
+			}
+			let fcts = actions[i].fcts.split(',');
+			for (let j=0;j<fcts.length;j++) {
+				js2 += fcts[j]+";";
+			}		
+		}
+		//--------------- import_elts-from ------------
+		if (actions[i].type=="import_elts-from") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++) {
+				js2 += "UIFactory.Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode)+"','?');";
+			}
+			let fcts = actions[i].fcts.split(',');
+			for (let j=0;j<fcts.length;j++) {
+				js2 += fcts[j]+";";
+			}		
 		}
 	}
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
