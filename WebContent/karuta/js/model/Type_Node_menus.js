@@ -4,7 +4,11 @@ menuElts ["menu"]= "<menu><menulabel/></menu>";
 menuElts ["item"]= "<item><itemlabel/><roles/><condition/></item>";
 menuElts ["function"]= "<function><js/></function>";
 menuElts ["import"]= "<import><srce><foliocode/><semtag/></srce></import>";
+menuElts ["import-today-date"]= "<import-today-date></import-today-date>";
+menuElts ["import-component-w-today-date"]= "<import-component-w-today-date><srce><foliocode/><semtag/></srce><calendar-semtag/></import-component-w-today-date>";
+menuElts ["moveTO"]= "<moveTO><start-semtag/><destination-semtag/></moveTO>";
 menuElts ["import-component"]= "<import-component><srce><foliocode/><semtag/><updatedtag/></srce></import-component>";
+menuElts ["import-proxy"]= "<import-proxy><srce><foliocode/><semtag/><updatedtag/></srce></import-proxy>";
 menuElts ["import-component-via-search"]= "<import-component-via-search><search><foliocode/><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-search>";
 menuElts ["import-component-via-parent"]= "<import-component-via-parent><search><foliocode disabled='y'>parent code</foliocode><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-parent>";
 menuElts ["import-elts"]= "<import-elts><srce><foliocode disabled='y'>search code</foliocode></srce></import-elts>";
@@ -19,6 +23,7 @@ menuElts ["get_single"]= "<get_single><srce><foliocode/><semtag/></srce></get_si
 menuElts ["get_multiple"]= "<get_multiple><search><foliocode/><semtag/></search><import2><srce><foliocode/><semtag/></srce></import2></get_multiple>";
 menuElts ["import_get_multiple"]= "<import_get_multiple><search><foliocode/><semtag/><object/></search></import_get_multiple>";
 menuElts ["import_get_get_multiple"]= "<import_get_get_multiple><parent><position/><semtag/></parent></import_get_get_multiple>";
+menuElts ["execReportforBatchCSV"]= "<execReportforBatchCSV><report-code/></execReportforBatchCSV>";
 
 let menuItems = {};
 menuItems['menus']= ["menu"];
@@ -33,10 +38,10 @@ menuItems['import-component-from-srce']= ["trgt","function"];
 menuItems['import-component-from-search']= ["trgt","function"];
 menuItems['import-component-from-parent']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
-menuItems['import_get_multiple']= ["import-component","import-elts","import-elts-from"];
+menuItems['import_get_multiple']= ["import-component","import-elts","import-elts-from","import-proxy"];
 menuItems['import_get_get_multiple']= ["import-component-via-search","import-component-via-parent","import-elts-from-srce","import-elts-from-parent","import-elts-from-search"];
 menuItems['menu']= ["item"];
-menuItems['item']= ["import","function","import_get_multiple","import_get_get_multiple"];
+menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
 
 let deletableItems = {};
 deletableItems["menu"]=true;
