@@ -498,7 +498,7 @@ UIFactory["PortfoliosGroup"].remove = function(gid,uid)
 //==================================
 {
 	var url = serverBCK_API+"/portfoliogroups?group=" + gid;
-	if (this.uid!=null && uid!='undefined') {
+	if (uid!=null && uid!='null' && uid!='undefined') {
 		url += "&uuid="+uid;
 	}
 	$.ajax({

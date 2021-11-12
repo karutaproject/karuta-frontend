@@ -2346,7 +2346,7 @@ function updateParentCode (node) {
 			//-------------------
 		}
 	}
-	UIFactory.Node.reloadUnit;
+	UIFactory.Node.reloadUnit();
 }
 
 //==================================

@@ -1005,20 +1005,24 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 					UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',portfoliosnotinfolders);
 				else if (nb_visibleportfolios>1 && autoload=="")
 					UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
-				else if (autoload!="")
+				else if (autoload!="") {
 					display_main_page(autoload);
-				else   // nb_visibleportfolios == 1
+					UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
+				}
+				else {  // nb_visibleportfolios == 1
 					display_main_page(visibleid);
-			else if (portfolios_list.length==1) 
+					UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
+				}
+			else if (portfolios_list.length==1) {
 				display_main_page(portfolios_list[0].id);
+				UIFactory.PortfolioFolder.displayPortfolios('card-deck-portfolios','false','card',portfoliosnotinfolders);
+			}
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);
 		}
 	});
 }
-
-
 
 //==================================
 UIFactory["PortfolioFolder"].displayPortfolios = function(dest,parentcode,type,items)
