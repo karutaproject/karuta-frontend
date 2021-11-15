@@ -210,7 +210,21 @@ UIFactory["UsersGroup"].prototype.loadContent = function (type)
 			for ( var i = 0; i < items.length; i++) {
 				uuid = $(items[i]).attr('id');
 				if (Users_byid[uuid]==undefined){
-					UIFactory.User.load(uuid);
+					$.ajax({
+						async: false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/users/user/"+uuid,
+						userid : uuid,
+						groupid : this.group.id,
+						success : function(data) {
+							UIFactory.User.parse_add(data);
+						},
+						error : function() {
+							if (confirm("The user "+this.userid+" does not exist anymore. Delete from the Usergroup ?"))
+								UIFactory.UsersGroup.remove(this.groupid,this.userid)
+						}
+					});
 				}
 				if (Users_byid[uuid]!=undefined){
 					var lastname = Users_byid[uuid].lastname;
@@ -227,7 +241,7 @@ UIFactory["UsersGroup"].prototype.loadContent = function (type)
 			}
 			this.group.nbchildren = items.length;
 		},
-		error : function(jqxhr,textStatus) {
+		error : function(jqxhr) {
 			alertHTML("Error : "+jqxhr.responseText);
 		}
 	});
@@ -328,6 +342,7 @@ UIFactory["UsersGroup"].prototype.displayContent = function(type)
 		$("#"+type+"-users-content").append($("<div class='row user-row' id='usergroup_"+user.id+"'</div>"));
 		$("#usergroup_"+user.id).html(user.getView("usergroup_"+user.id,'usergroup',null,this.id));
 	}
+	$("#nbchildren_"+this.id).html(this.nbchildren);
 	$(window).scrollTop(0);
 	$("#wait-window").hide();
 };
@@ -407,7 +422,7 @@ UIFactory["UsersGroup"].remove = function(gid,uid)
 		gid : gid,
 		uid : uid,
 		success : function(data) {
-			if (this.uid!=null && uid!='undefined') {
+			if (this.uid!=null && this.uid!='undefined') {
 				usergroups_byid[this.gid].loadAndDisplayContent('usergroup');
 			} else
 				fill_list_usersgroups();

@@ -223,6 +223,24 @@ UIFactory["PortfoliosGroup"].prototype.loadContent = function ()
 			for ( var i = 0; i < items.length; i++) {
 				uuid = $(items[i]).attr('id');
 				if (portfolios_byid[uuid]==undefined){
+					let param = "?level=1";
+					$.ajax({
+						async: false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/portfolios/portfolio/" + uuid + param,
+						groupid : this.group.id,
+						uuid : uuid,
+						success : function(data) {
+							UICom.parseStructure(data,true);
+							UIFactory.Portfolio.parse_add(data);
+						},
+						error : function() {
+							if (confirm("The portfolio "+this.uuid+" does not exist anymore. Delete from the Portfoliogroup ?"))
+								UIFactory.PortfoliosGroup.remove(this.groupid,this.uuid)
+						}
+
+					});
 					UIFactory.Portfolio.load(uuid,"1");
 				}
 				var code = portfolios_byid[uuid].code_node.text();
@@ -359,6 +377,7 @@ UIFactory["PortfoliosGroup"].prototype.displayContent = function(type)
 		$("#"+type+"-portfolios-content").append($("<div class='row portfolio-row' id='portfoliogroup_"+portfolio.id+"'</div>"));
 		$("#portfoliogroup_"+portfolio.id).html(portfolio.getPortfolioView("portfoliogroup_"+portfolio.id,'portfoliogroup',null,null,null,this.id));
 	}
+	$("#nbchildren_"+this.id).html(this.nbchildren);
 	$(window).scrollTop(0);
 	$("#wait-window").hide();
 };
@@ -498,7 +517,7 @@ UIFactory["PortfoliosGroup"].remove = function(gid,uid)
 //==================================
 {
 	var url = serverBCK_API+"/portfoliogroups?group=" + gid;
-	if (this.uid!=null && uid!='undefined') {
+	if (uid!=null && uid!='null' && uid!='undefined') {
 		url += "&uuid="+uid;
 	}
 	$.ajax({
@@ -509,7 +528,7 @@ UIFactory["PortfoliosGroup"].remove = function(gid,uid)
 		gid : gid,
 		uid : uid,
 		success : function(data) {
-			if (this.uid!=null && uid!='undefined') {
+			if (this.uid!=null && this.uid!='undefined') {
 				portfoliogroups_byid[this.gid].loadAndDisplayContent('portfoliogroup');
 			} else
 				fill_list_portfoliosgroups();

@@ -13,17 +13,19 @@ menuElts ["import-component-via-search"]= "<import-component-via-search><search>
 menuElts ["import-component-via-parent"]= "<import-component-via-parent><search><foliocode disabled='y'>parent code</foliocode><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-parent>";
 menuElts ["import-elts"]= "<import-elts><srce><foliocode disabled='y'>search code</foliocode></srce></import-elts>";
 menuElts ["import-elts-from"]= "<import-elts-from><srce><foliocode/><semtag/></srce></import-elts-from>";
-menuElts ["import-elts-from-srce"]= "<import-elts-from-srce><search><foliocode/><semtag/><object/></search><srce><foliocode/><semtag/></srce></import-elts-from-srce>";
-menuElts ["import-elts-from-search"]= "<import-elts-from-search><search><foliocode/><semtag/><object/></search><srce><foliocode disabled='y'>search code</foliocode><semtag/></srce></import-elts-from-search>";
-menuElts ["import-elts-from-parent"]= "<import-elts-from-parent><search><foliocode disabled='y'>parent code</foliocode><semtag/><object/></search><srce><foliocode disabled='y'>parent code</foliocode><semtag/></srce></import-elts-from-parent>";
+menuElts ["import-elts-from-source"]= "<import-elts-from-source><srce><foliocode/><semtag/></srce></import-elts-from-source>";
+menuElts ["import-elts-from-search"]= "<import-elts-from-search><srce><foliocode disabled='y'>search code</foliocode><semtag/></srce></import-elts-from-search>";
 menuElts ["action"]= "<action><srce><portfoliocode/><semtag/></srce></action>";
 menuElts ["srce"]= "<srce><foliocode/><semtag/></srce>";
 menuElts ["trgt"]= "<trgt><position/><semtag/></trgt>";
 menuElts ["get_single"]= "<get_single><srce><foliocode/><semtag/></srce></get_single>";
 menuElts ["get_multiple"]= "<get_multiple><search><foliocode/><semtag/></search><import2><srce><foliocode/><semtag/></srce></import2></get_multiple>";
-menuElts ["import_get_multiple"]= "<import_get_multiple><search><foliocode/><semtag/><object/></search></import_get_multiple>";
-menuElts ["import_get_get_multiple"]= "<import_get_get_multiple><parent><position/><semtag/></parent></import_get_get_multiple>";
+menuElts ["import_get_multiple"]= "<import_get_multiple><search><foliocode/><semtag/><object/></search><g_actions><nop/></g_actions></import_get_multiple>";
+menuElts ["import_get_get_multiple"]= "<import_get_get_multiple><parent><position/><semtag/></parent><gg_search><nop/></gg_search><gg_actions><nop/></gg_actions></import_get_get_multiple>";
 menuElts ["execReportforBatchCSV"]= "<execReportforBatchCSV><report-code/></execReportforBatchCSV>";
+menuElts ["search-source"]= "<search-source><foliocode/><semtag/><object/></search-source>";
+menuElts ["search-in-parent"]= "<search-in-parent><foliocode disabled='y'>parent code</foliocode><semtag/><object/></search-in-parent>";
+
 
 let menuItems = {};
 menuItems['menus']= ["menu"];
@@ -38,10 +40,12 @@ menuItems['import-component-from-srce']= ["trgt","function"];
 menuItems['import-component-from-search']= ["trgt","function"];
 menuItems['import-component-from-parent']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
-menuItems['import_get_multiple']= ["import-component","import-elts","import-elts-from","import-proxy"];
-menuItems['import_get_get_multiple']= ["import-component-via-search","import-component-via-parent","import-elts-from-srce","import-elts-from-parent","import-elts-from-search"];
 menuItems['menu']= ["item"];
 menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
+menuItems['g_actions']= ["import-component","import-elts","import-elts-from","import-proxy"];
+menuItems['gg_search']= ["search-source","#or","search-in-parent"];
+menuItems['gg_actions']= ["import-component","import-elts-from-source","import-elts-from-search"];
+
 
 let deletableItems = {};
 deletableItems["menu"]=true;
@@ -49,9 +53,7 @@ deletableItems["item"]=true;
 deletableItems["function"]=true;
 deletableItems["import"]=true;
 deletableItems["import-component"]=true;
-deletableItems["import-component-via-search"]=true;
-deletableItems["import-component-via-parent"]=true;
-deletableItems["import-elts-from-srce"]=true;
+deletableItems["import-elts-from-source"]=true;
 deletableItems["import-elts-from-search"]=true;
 deletableItems["import-elts-from-parent"]=true;
 deletableItems["import-elts"]=true;
@@ -63,6 +65,9 @@ deletableItems["trgt"]=true;
 deletableItems["get_single"]=true;
 deletableItems["get_multiple"]=true;
 deletableItems["import_get_get_multiple"]=true;
+deletableItems["search-source"]=true;
+deletableItems["search-in-parent"]=true;
+
 
 let menueltslist =[];
 //----------------------------------------------------------------------------------------------------------------------------
@@ -960,13 +965,18 @@ UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
 	if (deletableItems[tag]!=undefined && deletableItems[tag])
 		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+eltidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
 	if (menuItems[tag]!=undefined && menuItems[tag].length>0){
-		html += "<span class='dropdown'>";
+		html += "<div class='dropdown dropleft'>";
 		html += "<button class='btn dropdown-toggle add-button' style='background-color:transparent;float:right;' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Ajouter</button>";
 		html += "<div class='dropdown-menu dropdown-menu-right'>";
 		for (let i=0;i<menuItems[tag].length;i++){
-			html += "<div class='dropdown-item' onclick=\"UIFactory.Node.addMenuElt('"+menuItems[tag][i]+"','"+eltidx+"','"+this.id+"','"+destmenu+"')\">"+menuItems[tag][i]+"</div>";
+			if (menuItems[tag][i]=="#line")
+				html += "<div class='dropdown-divider'/>";
+			else if (menuItems[tag][i]=="#or")
+				html += "<div class='dropdown-item' disabled>OR</div>";
+			else
+				html += "<div class='dropdown-item' onclick=\"UIFactory.Node.addMenuElt('"+menuItems[tag][i]+"','"+eltidx+"','"+this.id+"','"+destmenu+"')\">"+menuItems[tag][i]+"</div>";
 		}
-		html += "</div></span>";
+		html += "</div></div>";
 	}
 	html += "</div>";
 	html += "<div id='content"+eltidx+"' class='menucontent'></div>"
@@ -986,10 +996,11 @@ UIFactory["Node"].prototype.displaySubMenuEditor = function(cntidx,destmenu)
 		if ($(">*",elts[k]).length>0){
 			this.displaySubMenuEditor (eltidx,destmenu)
 		} else {
-			if (tag.indexOf('role')>-1)
-				this.displayXMLSelectRole(eltidx,destmenu);
-			else
-				this.displayXmlMenuEditor(eltidx,destmenu);
+			if (tag!="nop")
+				if (tag.indexOf('role')>-1)
+					this.displayXMLSelectRole(eltidx,destmenu);
+				else
+					this.displayXmlMenuEditor(eltidx,destmenu);
 		}
 	}
 };
