@@ -123,8 +123,6 @@
 <!-- =============================================================== -->
 
 <script>
-//loadLanguages(getLanguage);
-//getLanguage();
 LANGCODE=0;
 var pathname = window.location.pathname;
 var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
@@ -152,8 +150,7 @@ var display = function(uuid, dashuuid)
 	};
 	$.ajax({
 		type: "GET",
-// 		url: "/"+serverBCK+"/nodes/node/"+uuid+"?resources=true",
-		url: "/"+serverBCK+"/rest/api/portfolios/portfolio/"+uuid+"?resources=true",
+		url: serverBCK_API+"/portfolios/portfolio/"+uuid+"?resources=true",
 		success: cb,
 		dataType: 'text xml',
 	});
@@ -182,7 +179,7 @@ var cb_start = function(data)
 $.ajax({
 	type : "GET",
 	dataType : "xml",
-	url : "/"+serverBCK+"/rest/api/credential",
+	url : serverBCK_API+"/credential",
 	data: "",
 	success : cb_start,
 });
