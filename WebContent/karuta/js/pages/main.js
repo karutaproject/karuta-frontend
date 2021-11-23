@@ -67,7 +67,24 @@ function fill_main_page(portfolioid)
 				g_designerrole = true;
 				g_visible = localStorage.getItem('metadata');
 				toggleMetadata(g_visible);
-			}
+			} // https://eportfolio.cyu.fr/karuta-backend/rest/api/rolerightsgroups/all/users?portfolio=59e3ae44-6cde-4c8e-bf1f-a6916118780e
+			$.ajax({
+				type : "GET",
+				dataType : "xml",
+				url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + g_portfolioid,
+				success : function(data) {
+					const rrgs = $("rrg",data);
+					for (let i=0;i<rrgs.length;i++) {
+						const label = $("label",rrgs[i]).text();
+						const users = $("user",rrgs[i]);
+						for (let j=0;j<users.length;j++) {
+							if ($(users[j]).attr("id")==USER.id)
+								g_userroles.push(label);
+						}
+					}
+				}
+			});
+
 			// --------------------------
 			UICom.parseStructure(data,true);
 			// --------Display Type------------------
