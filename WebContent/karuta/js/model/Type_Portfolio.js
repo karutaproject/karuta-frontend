@@ -51,6 +51,8 @@ UIFactory["Portfolio"] = function( node )
 	this.code_node = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",node));
 	this.date_modified = $(node).attr('modified');
 	this.semantictag = $("metadata",node).attr('semantictag');
+	if (this.semantictag==undefined)
+		this.semantictag = 'xxx';
 	this.multilingual = ($("metadata",node).attr('multilingual-node')=='Y') ? true : false;
 	this.visible = ($("metadata",node).attr('list-novisible')=='Y') ? false : true;
 	this.autoload = ($("metadata",node).attr('autoload')=='Y') ? true : false;
