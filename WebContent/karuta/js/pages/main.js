@@ -67,7 +67,7 @@ function fill_main_page(portfolioid)
 				g_designerrole = true;
 				g_visible = localStorage.getItem('metadata');
 				toggleMetadata(g_visible);
-			} // https://eportfolio.cyu.fr/karuta-backend/rest/api/rolerightsgroups/all/users?portfolio=59e3ae44-6cde-4c8e-bf1f-a6916118780e
+			} 
 			$.ajax({
 				type : "GET",
 				dataType : "xml",
@@ -84,7 +84,6 @@ function fill_main_page(portfolioid)
 					}
 				}
 			});
-
 			// --------------------------
 			UICom.parseStructure(data,true);
 			// --------Display Type------------------
