@@ -235,7 +235,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 					html += "<span name='code'>" + cleanCode(code) + "</span> ";
 				if (code.indexOf("%")<0) {
-						html += "<span name='label'>" + elts[2].substring(6) + "</span> ";
+						html += "<span name='label'>" + elts[1].substring(6) + "</span> ";
 				}
 				if (code.indexOf("&")>-1)
 					html += " ["+$(this.value_node).text()+ "] ";

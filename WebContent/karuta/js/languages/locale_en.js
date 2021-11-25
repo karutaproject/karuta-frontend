@@ -272,14 +272,16 @@ karutaStr['en']['itemlabel']="Menu Item Label";
 karutaStr['en']['folder']="Folder";
 karutaStr['en']['foliocode']="Portfolio code";
 karutaStr['en']['semtag']="Semantic Tag";
+karutaStr['en']['parent-semtag']="Parent Semantic Tag";
 karutaStr['en']['itemtype']="Item Type";
 karutaStr['en']['roles']="Roles";
-karutaStr['en']['position']="Position";
+karutaStr['en']['position']="Search Position";
 karutaStr['en']['parentsemtag']="Parent Semantic Tag";
 karutaStr['en']['condition']="Condition";
 karutaStr['en']['boxlabel']="Edit Box Label";
 karutaStr['en']['updatedtag']="Semantic Tag to Update";
 karutaStr['en']['target']="Semantic Tag of import place";
+karutaStr['en']['object']="Search Element";
 
 //=========================================
 //========== ADMIN ========================

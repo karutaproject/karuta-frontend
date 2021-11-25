@@ -3124,11 +3124,10 @@ function get_portfoliogroupid(groupname)
 //==============================
 {
 	var groupid = null;
-	if (PortfoliosGroups_list.length==0)
-		get_list_portfoliosgroups();
-	for (var i=0;i<PortfoliosGroups_list.length;i++){
-		if (PortfoliosGroups_list[i].label==groupname){
-			groupid = PortfoliosGroups_list[i].id;
+	get_list_portfoliosgroups();
+	for (var i=0;i<portfoliogroups_list.length;i++){
+		if (portfoliogroups_list[i].code==groupname){
+			groupid = portfoliogroups_list[i].id;
 			break;
 		}
 	}
@@ -3156,8 +3155,7 @@ function get_usergroupid(groupname)
 //==============================
 {
 	var groupid = null;
-	if (usergroups_list.length==0)
-		get_list_usergroups();
+	get_list_usergroups();
 	for (var i=0;i<usergroups_list.length;i++){
 		if (usergroups_list[i].code==groupname){
 			groupid = usergroups_list[i].id;

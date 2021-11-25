@@ -272,14 +272,16 @@ karutaStr['fr']['itemlabel']="Libellé de l'item de menu";
 karutaStr['fr']['folder']="Dossier";
 karutaStr['fr']['foliocode']="Code du portfolio";
 karutaStr['fr']['semtag']="Tag sémantique";
+karutaStr['fr']['parent-semtag']="Tag sémantique du parent";
 karutaStr['fr']['itemtype']="Type d'item";
 karutaStr['fr']['roles']="Rôles";
-karutaStr['fr']['position']="Position";
+karutaStr['fr']['position']="Position de recherche";
 karutaStr['fr']['parentsemtag']="Tag sémantique du parent";
 karutaStr['fr']['condition']="Condition";
 karutaStr['fr']['boxlabel']="Libellé de la boîte d'édition";
 karutaStr['fr']['updatedtag']="Tag sémantique à mettre à jour";
 karutaStr['fr']['target']="Tag sémantique où importer";
+karutaStr['fr']['object']="Élément à rechercher";
 
 //=========================================
 //========== ADMIN ========================

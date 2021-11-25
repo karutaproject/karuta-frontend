@@ -694,7 +694,7 @@ body,
 #edit-window-body .dropdown-menu {
   max-height: 350px;
   overflow-y: auto;
-  width: 100%;
+  width: 50%;
 }
 #edit-window-body .dropdown-item {
   white-space: inherit;

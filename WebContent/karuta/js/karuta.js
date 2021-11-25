@@ -53,6 +53,8 @@ var g_nb_trees = 0;
 var g_sum_trees = 0;
 var g_roles = []; // list of portfolio roles for designer
 var g_variables = {}; // variables for substitution in Get_resource and menus
+var g_importednodestack = [];
+
 //-------------- used for designer-----
 var redisplays = {};
 // -------------backward compatibility------------------------
@@ -827,6 +829,9 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 {
 	$("#wait-window").modal('show');
 	//------------
+	if (destid=='last-imported')
+		destid = g_importednodestack.pop();
+	//------------
 	srcecode = cleanCode(replaceVariable(srcecode));
 	var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 	if (srcecode.indexOf('.')<0 && srcecode!='self')  // There is no project, we add the project of the current portfolio
@@ -850,6 +855,8 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 		success : function(data) {
 			if (data=='Inexistent selection'){
 				alertHTML(karutaStr[languages[LANGCODE]]['inexistent-selection']);
+			} else {
+				g_importednodestack.push(data);
 			}
 			if (callback!=null)
 				if (databack)

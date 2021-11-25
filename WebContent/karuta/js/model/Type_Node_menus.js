@@ -1,30 +1,31 @@
+let getObjs = ['label', 'text']
 
 let menuElts = {};
-menuElts ["menu"]= "<menu><menulabel/></menu>";
-menuElts ["item"]= "<item><itemlabel/><roles/><condition/></item>";
-menuElts ["function"]= "<function><js/></function>";
-menuElts ["import"]= "<import><srce><foliocode/><semtag/></srce></import>";
-menuElts ["import-today-date"]= "<import-today-date></import-today-date>";
-menuElts ["import-component-w-today-date"]= "<import-component-w-today-date><srce><foliocode/><semtag/></srce><calendar-semtag/></import-component-w-today-date>";
-menuElts ["moveTO"]= "<moveTO><start-semtag/><destination-semtag/></moveTO>";
-menuElts ["import-component"]= "<import-component><srce><foliocode/><semtag/><updatedtag/></srce></import-component>";
-menuElts ["import-proxy"]= "<import-proxy><srce><foliocode/><semtag/><updatedtag/></srce></import-proxy>";
-menuElts ["import-component-via-search"]= "<import-component-via-search><search><foliocode/><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-search>";
-menuElts ["import-component-via-parent"]= "<import-component-via-parent><search><foliocode disabled='y'>parent code</foliocode><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-parent>";
-menuElts ["import-elts"]= "<import-elts><srce><foliocode disabled='y'>search code</foliocode></srce></import-elts>";
-menuElts ["import-elts-from"]= "<import-elts-from><srce><foliocode/><semtag/></srce></import-elts-from>";
-menuElts ["import-elts-from-source"]= "<import-elts-from-source><srce><foliocode/><semtag/></srce></import-elts-from-source>";
-menuElts ["import-elts-from-search"]= "<import-elts-from-search><srce><foliocode disabled='y'>search code</foliocode><semtag/></srce></import-elts-from-search>";
-menuElts ["action"]= "<action><srce><portfoliocode/><semtag/></srce></action>";
-menuElts ["srce"]= "<srce><foliocode/><semtag/></srce>";
-menuElts ["trgt"]= "<trgt><position/><semtag/></trgt>";
-menuElts ["get_single"]= "<get_single><srce><foliocode/><semtag/></srce></get_single>";
-menuElts ["get_multiple"]= "<get_multiple><search><foliocode/><semtag/></search><import2><srce><foliocode/><semtag/></srce></import2></get_multiple>";
-menuElts ["import_get_multiple"]= "<import_get_multiple><search><foliocode/><semtag/><object/></search><g_actions><nop/></g_actions></import_get_multiple>";
-menuElts ["import_get_get_multiple"]= "<import_get_get_multiple><parent><position/><semtag/></parent><gg_search><nop/></gg_search><gg_actions><nop/></gg_actions></import_get_get_multiple>";
-menuElts ["execReportforBatchCSV"]= "<execReportforBatchCSV><report-code/></execReportforBatchCSV>";
-menuElts ["search-source"]= "<search-source><foliocode/><semtag/><object/></search-source>";
-menuElts ["search-in-parent"]= "<search-in-parent><foliocode disabled='y'>parent code</foliocode><semtag/><object/></search-in-parent>";
+menuElts ["menu"]= "<menu del='y'><menulabel/></menu>";
+menuElts ["item"]= "<item del='y'><itemlabel/><roles/><condition/></item>";
+menuElts ["function"]= "<function del='y'><js/></function>";
+menuElts ["import"]= "<import del='y'><srce><foliocode/><semtag/></srce></import>";
+menuElts ["import-today-date"]= "<import-today-date del='y'></import-today-date>";
+menuElts ["import-component-w-today-date"]= "<import-component-w-today-date del='y'><srce><foliocode/><semtag/></srce><calendar-semtag/></import-component-w-today-date>";
+menuElts ["moveTO"]= "<moveTO del='y'><start-semtag/><destination-semtag/></moveTO>";
+menuElts ["import-component"]= "<import-component del='y'><srce><foliocode/><semtag/><updatedtag/></srce></import-component>";
+menuElts ["import-proxy"]= "<import-proxy del='y'><srce><foliocode/><semtag/><updatedtag/></srce></import-proxy>";
+menuElts ["import-component-via-search"]= "<import-component-via-search del='y'><search><foliocode/><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-search>";
+menuElts ["import-component-via-parent"]= "<import-component-via-parent del='y'><search><foliocode disabled='y'>parent code</foliocode><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-parent>";
+menuElts ["import-elts"]= "<import-elts del='y'><srce><foliocode disabled='y'>search code</foliocode></srce></import-elts>";
+menuElts ["import-elts-from"]= "<import-elts-from del='y'><srce><foliocode/></srce></import-elts-from>";
+menuElts ["import-elts-from-source"]= "<import-elts-from-source del='y'><srce><foliocode/><semtag/></srce></import-elts-from-source>";
+menuElts ["import-elts-from-search"]= "<import-elts-from-search del='y'><srce><foliocode disabled='y'>search code</foliocode><semtag/></srce></import-elts-from-search>";
+menuElts ["action"]= "<action del='y'><srce><portfoliocode/><semtag/></srce></action>";
+menuElts ["srce"]= "<srce del='n'><foliocode/><semtag/></srce>";
+menuElts ["trgt"]= "<trgt del='y'><position/><semtag/></trgt>";
+menuElts ["get_single"]= "<get_single del='y'><srce><foliocode/><semtag/></srce></get_single>";
+menuElts ["get_multiple"]= "<get_multiple del='y'><search><foliocode/><semtag/></search><import2><srce><foliocode/><semtag/></srce></import2></get_multiple>";
+menuElts ["import_get_multiple"]= "<import_get_multiple del='y'><search><foliocode/><semtag/><object/></search><g_actions><nop/></g_actions></import_get_multiple>";
+menuElts ["import_get_get_multiple"]= "<import_get_get_multiple del='y'><parent><position/><semtag/></parent><gg_search><nop/></gg_search><gg_actions><nop/></gg_actions></import_get_get_multiple>";
+menuElts ["execReportforBatchCSV"]= "<execReportforBatchCSV del='y'><report-code/></execReportforBatchCSV>";
+menuElts ["search-source"]= "<search-source del='y'><foliocode/><parent-semtag></parent-semtag><semtag/><object disabled='y'>label</object></search-source>";
+menuElts ["search-in-parent"]= "<search-in-parent del='y'><foliocode disabled='y'>parent-code</foliocode><semtag/><object/></search-in-parent>";
 
 
 let menuItems = {};
@@ -42,31 +43,10 @@ menuItems['import-component-from-parent']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
 menuItems['menu']= ["item"];
 menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
-menuItems['g_actions']= ["import-component","import-elts","import-elts-from","import-proxy"];
+menuItems['g_actions']= ["import-component","import-elts-from","import-proxy"];
 menuItems['gg_search']= ["search-source","#or","search-in-parent"];
-menuItems['gg_actions']= ["import-component","import-elts-from-source","import-elts-from-search"];
+menuItems['gg_actions']= ["import-component","import-elts-from"];
 
-
-let deletableItems = {};
-deletableItems["menu"]=true;
-deletableItems["item"]=true;
-deletableItems["function"]=true;
-deletableItems["import"]=true;
-deletableItems["import-component"]=true;
-deletableItems["import-elts-from-source"]=true;
-deletableItems["import-elts-from-search"]=true;
-deletableItems["import-elts-from-parent"]=true;
-deletableItems["import-elts"]=true;
-deletableItems["import-elts-from"]=true;
-deletableItems["import_get_multiple"]=true;
-deletableItems["action"]=true;
-deletableItems["srce"]=false;
-deletableItems["trgt"]=true;
-deletableItems["get_single"]=true;
-deletableItems["get_multiple"]=true;
-deletableItems["import_get_get_multiple"]=true;
-deletableItems["search-source"]=true;
-deletableItems["search-in-parent"]=true;
 
 
 let menueltslist =[];
@@ -234,7 +214,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 				url : urlS,
 				success : function (data){
 					var url = window.location.href;
-					var serverURL = url.substring(0,url.lastIndexOf(appliname)+appliname.length);
+					var serverURL = url.substring(0,url.lastIndexOf(appliname+"/")+appliname.length);
 					url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
 					$("#2world-"+this.id).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-toggle='tooltip' data-placement='bottom'></a> ");
 				}
@@ -922,7 +902,6 @@ UIFactory["Node"].prototype.displayXMLSelectRole= function(cntidx,destmenu)
 	const attribute=$(element).prop("nodeName");
 	const value = $(element).text();
 
-	let rolesarray = [];
 	const langcode = LANGCODE;
 	let html = "";
 	html += "<div class='input-group '>";
@@ -937,6 +916,7 @@ UIFactory["Node"].prototype.displayXMLSelectRole= function(cntidx,destmenu)
 	html += "		<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
 	html += "			<a class='dropdown-item' value='' onclick=\"$('#"+nodeid+"_"+eltidx+attribute+"').val('');$('#"+nodeid+"_"+eltidx+attribute+"').change();\")>&nbsp;</a>";
 	//---------------------
+	let rolesarray = [];
 	for (let role in UICom.roles) {
 		html += "		<a  class='dropdown-item' value='"+role+"' onclick=\"var v=$('#"+nodeid+"_"+eltidx+attribute+"').val();$('#"+nodeid+"_"+eltidx+attribute+"').val(v+' "+role+"');$('#"+nodeid+"_"+eltidx+attribute+"').change();\")>"+role+"</a>";
 		rolesarray[rolesarray.length] = {'libelle':role};
@@ -949,7 +929,43 @@ UIFactory["Node"].prototype.displayXMLSelectRole= function(cntidx,destmenu)
 	//---------------------------
 	$("#"+nodeid+"_"+eltidx+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(eltidx,element,destmenu,nodeid)});
 	//---------------------------
+}
 
+//==================================
+UIFactory["Node"].prototype.displayXMLSelect= function(cntidx,destmenu,items) 
+//==================================
+{
+	const nodeid = this.id;
+	const eltidx = menueltslist.length-1;
+	const element = menueltslist[eltidx];
+
+	const attribute=$(element).prop("nodeName");
+	const value = $(element).text();
+
+	const langcode = LANGCODE;
+	let html = "";
+	html += "<div class='input-group '>";
+	html += "	<div class='input-group-prepend'>";
+	html += "		<div class='input-group-text'>";
+	html += karutaStr[languages[langcode]][attribute];
+	html += "		</div>";
+	html += "	</div>";
+	html += "	<input id='"+nodeid+"_"+eltidx+attribute+"' type='text' class='form-control' value=\""+value+"\" ";
+	html += "	<div class='input-group-append'>";
+	html += "		<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
+	html += "		<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
+	html += "			<a class='dropdown-item' value='' onclick=\"$('#"+nodeid+"_"+eltidx+attribute+"').val('');$('#"+nodeid+"_"+eltidx+attribute+"').change();\")>&nbsp;</a>";
+	//---------------------
+	for (let i=0;i<items.length;i++) {
+		html += "		<a  class='dropdown-item' value='"+items[i]+"' onclick=\"var v=$('#"+nodeid+"_"+eltidx+attribute+"').val();$('#"+nodeid+"_"+eltidx+attribute+"').val(v+' "+items[i]+"');$('#"+nodeid+"_"+eltidx+attribute+"').change();\")>"+items[i]+"</a>";
+	}
+	html += "		</div>";
+	html += "	</div>";
+	html += "</div>";
+	$("#content"+cntidx).append(html);
+	//---------------------------
+	$("#"+nodeid+"_"+eltidx+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(eltidx,element,destmenu,nodeid)});
+	//---------------------------
 }
 
 //==================================================
@@ -960,14 +976,13 @@ UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
 	let eltidx = menueltslist.length-1;
 	let elt = menueltslist[eltidx];
 	let tag = $(elt).prop("tagName");
+	let del = $(elt).attr("del");
 
-	html += "<div class='"+tag+"title' style='margin-top:14px;border-top:1px dashed #ced4da'><span>"+tag+"</span>";
-	if (deletableItems[tag]!=undefined && deletableItems[tag])
-		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+eltidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
+	html += "<div class='"+tag+"title' style='margin-top:14px;border-top:1px dashed #ced4da'>";
 	if (menuItems[tag]!=undefined && menuItems[tag].length>0){
-		html += "<div class='dropdown dropleft'>";
+		html += "<div class='dropdown '>";
 		html += "<button class='btn dropdown-toggle add-button' style='background-color:transparent;float:right;' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Ajouter</button>";
-		html += "<div class='dropdown-menu dropdown-menu-right'>";
+		html += "<div class='dropdown-menu'>";
 		for (let i=0;i<menuItems[tag].length;i++){
 			if (menuItems[tag][i]=="#line")
 				html += "<div class='dropdown-divider'/>";
@@ -978,6 +993,9 @@ UIFactory["Node"].prototype.displayEltMenu = function(cntidx,destmenu)
 		}
 		html += "</div></div>";
 	}
+	html += "<span>"+tag+"</span>";
+	if (del!=undefined && del=='y')
+		html +="<i style='' class='button fas fa-trash-alt' onclick=\"UIFactory.Node.removeMenuElt('"+eltidx+"','"+this.id+"','"+destmenu+"')\" data-title='Supprimer' data-toggle='tooltip' data-placement='bottom' data-original-title='' title=''></i>";
 	html += "</div>";
 	html += "<div id='content"+eltidx+"' class='menucontent'></div>"
 	$("#content"+cntidx).append(html);
@@ -1137,15 +1155,34 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					if (target.length>0) {
 						let targetid = $(target[0]).attr("id");
 						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+					} else if (position=='last-imported') {
+							let targetid = position;
+							onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
 					} else {
-						onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+							onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+					}
+					// --------- fcts ------------
+					let jss = $("js",trgts[j]);
+					if (jss.length>0) {
+						for (let k=0;k<jss.length;k++){
+							onclick += $(jss[k]).text()+";";
+						}
 					}
 				}
 			} else {
 				onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
 			}
+			// --------- fcts ------------
+			let jss = $("js", $(">function",itemelts[i]));
+			if (jss.length>0) {
+				for (let j=0;j<jss.length;j++){
+					onclick += $(jss[j]).text()+";";
+				}
+			}
 		}
+		//-----------------------------------------------------------
 		//------------------------- get_multiple --------------------
+		//-----------------------------------------------------------
 		else if (type=='import_get_multiple') {
 			let actions = "";
 			let imports = "";
@@ -1157,7 +1194,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
 			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
 			// --------import-comp ------
-			imports = $("import-comp",itemelts[i]);
+			imports = $("import-component",itemelts[i]);
 			if (imports.length>0) {
 				for (let j=0;j<imports.length;j++){
 					let srce = $("srce",imports[j])[0];
@@ -1192,7 +1229,56 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 				}
 				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
 			}
-			//----------------------------------------------------------------------
+		}
+		//-----------------------------------------------------------
+		//------------------------- get_get_multiple ----------------
+		//-----------------------------------------------------------
+		else if (type=='import_get_get_multiple') {
+			let actions = "";
+			let imports = "";
+			// --------- boxlabel ------------
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i])[0].text():"" );
+			// --------- parent ------------
+			let parent = $("parent",itemelts[i])[0];
+			let parent_position = replaceVariable( ($("position",parent).length>0)?$("position",parent).text():"" );
+			let parent_semtag = replaceVariable( ($("semtag",parent).length>0)?$("semtag",parent).text():"" );
+			// --------- search ------------
+			let search = $("search-source",itemelts[i]);
+			if (search.length>0)
+				search = $("search-source",itemelts[i])[0];
+			else
+				search = $("search-in-parent",itemelts[i])[0];
+			let search_foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
+			let search_parent_semtag = replaceVariable( ($("parent-semtag",search).length>0)?$("parent-semtag",search).text():"" );
+			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
+			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
+			// -----------------------------
+			imports = $("import-component",itemelts[i]);
+			if (imports.length>0) {
+				for (let j=0;j<imports.length;j++){
+					let srce = $("srce",imports[j])[0];
+					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+					let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+					let updatedtag = replaceVariable( ($("updatedtag",srce).length>0)?$("updatedtag",srce).text():"" );
+					let fctarray = UIFactory.Node.getFunctionArray(node,itemelts[i]);
+					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
+					actions += "{|type|:|import_comp|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
+				} 
+				onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
+			}
+			// --------import-elts-from ------
+			imports = $("import-elts-from",itemelts[i]);
+			if (imports.length>0) {
+				for (let j=0;j<imports.length;j++){
+					let srce = $("srce",imports[j])[0];
+					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+					let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+					let fctarray = UIFactory.Node.getFunctionArray(node,itemelts[i]);
+					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
+					actions += "{|type|:|import_elts-from|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
+				}
+				onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
+			}
 		}
 	}
 	return onclick;

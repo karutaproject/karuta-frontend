@@ -251,10 +251,14 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 				if (!alreadyDisplayed) {
 					for( var i=0; i<root.children.length; ++i ) {
 						// Recurse
-						var child = UICom.structure["tree"][root.children[i]];
-						var childnode = UICom.structure["ui"][root.children[i]];
-						var childsemtag = $(childnode.metadata).attr('semantictag');
+						let child = UICom.structure["tree"][root.children[i]];
+						let childnode = UICom.structure["ui"][root.children[i]];
+						let childsemtag = $(childnode.metadata).attr('semantictag');
+						let original_edit = edit;
+						if (this.submitted=='Y' && this.submitall=='Y')
+							edit = false;
 						childnode.displayNode(type,child, 'content-'+uuid, this.depth-1,langcode,edit,inline,backgroundParent,root,menu);
+						edit = original_edit;
 					}
 				}
 			}
