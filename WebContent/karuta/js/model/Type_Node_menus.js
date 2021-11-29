@@ -5,13 +5,11 @@ menuElts ["menu"]= "<menu del='y'><menulabel/></menu>";
 menuElts ["item"]= "<item del='y'><itemlabel/><roles/><condition/></item>";
 menuElts ["function"]= "<function del='y'><js/></function>";
 menuElts ["import"]= "<import del='y'><srce><foliocode/><semtag/></srce></import>";
-menuElts ["import-today-date"]= "<import-today-date del='y'></import-today-date>";
-menuElts ["import-component-w-today-date"]= "<import-component-w-today-date del='y'><srce><foliocode/><semtag/></srce><calendar-semtag/></import-component-w-today-date>";
+menuElts ["import-today-date"]= "<import-today-date del='y'><nop/></import-today-date>";
+menuElts ["import-component-w-today-date"]= "<import-component-w-today-date del='y'><srce><foliocode/><semtag/><updatedtag/></srce></import-component-w-today-date>";
 menuElts ["moveTO"]= "<moveTO del='y'><start-semtag/><destination-semtag/></moveTO>";
 menuElts ["import-component"]= "<import-component del='y'><srce><foliocode/><semtag/><updatedtag/></srce></import-component>";
 menuElts ["import-proxy"]= "<import-proxy del='y'><srce><foliocode/><semtag/><updatedtag/></srce></import-proxy>";
-menuElts ["import-component-via-search"]= "<import-component-via-search del='y'><search><foliocode/><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-search>";
-menuElts ["import-component-via-parent"]= "<import-component-via-parent del='y'><search><foliocode disabled='y'>parent code</foliocode><semtag/><object/></search><srce><foliocode/><semtag/><updatedtag/></srce></import-component-via-parent>";
 menuElts ["import-elts"]= "<import-elts del='y'><srce><foliocode disabled='y'>search code</foliocode></srce></import-elts>";
 menuElts ["import-elts-from"]= "<import-elts-from del='y'><srce><foliocode/></srce></import-elts-from>";
 menuElts ["import-elts-from-source"]= "<import-elts-from-source del='y'><srce><foliocode/><semtag/></srce></import-elts-from-source>";
@@ -35,21 +33,17 @@ menuItems['import-component']= ["trgt","function"];
 menuItems['import-elts']= ["trgt","function"];
 menuItems['trgt']= ["function"];
 menuItems['import-elts-from']= ["trgt"];
-menuItems['import-component-via-search']= ["trgt","function"];
-menuItems['import-component-via-parent']= ["trgt","function"];
-menuItems['import-component-from-srce']= ["trgt","function"];
-menuItems['import-component-from-search']= ["trgt","function"];
-menuItems['import-component-from-parent']= ["trgt","function"];
+menuItems['import-today-date']= ["trgt","function"];
+menuItems['import-component-w-today-date']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
 menuItems['menu']= ["item"];
 menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
 menuItems['g_actions']= ["import-component","import-elts-from","import-proxy"];
 menuItems['gg_search']= ["search-source","#or","search-in-parent"];
-menuItems['gg_actions']= ["import-component","import-elts-from"];
-
-
+menuItems['gg_actions']= ["import-component","import-elts-from","#line","import","import-component-w-today-date","import-today-date"];
 
 let menueltslist =[];
+
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 //--------------------------------- MENUS ------------------------------------------------------------------------------------
@@ -1035,6 +1029,8 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 	html += "<div id='content-1' class='metadata'></div>";
 	$("#"+destmenu).html($(html));
 	var name = this.asmtype;
+	if (this.menuroles==undefined)
+		UICom.structure.ui[this.id].setMetadata();
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
 		if (this.menuroles.charAt(0)=="<" || this.menuroles=="" || this.menuroles=="none") {
 			//---------------------- NEW Menu----------------------------
@@ -1109,20 +1105,25 @@ UIFactory["Node"].testDisplay = function(node,roles,condition)
 UIFactory["Node"].getMenuLabel = function(menulabel,langcode)
 //==================================================
 {
-	var titles = [];
-	var title = "";
-	if (menulabel!="")
+	let titles = [];
+	let title = karutaStr[languages[langcode]]['menu'];
+	let notfound = true;
+	menulabel = replaceVariable(menulabel);
+	while (menulabel!="" && notfound)
 		try {
-			titles = menulabel.split("/");
-			for (var j=0; j<titles.length; j++){
-				if (titles[j].indexOf("@"+languages[langcode])>-1)
-					title = titles[j].substring(0,titles[j].indexOf("@"));
+			let firsta = menulabel.indexOf("@");
+			let firstslash = menulabel.indexOf("/",firsta);
+			if (firstslash==-1)
+				firstslash = menulabel.length;
+			if (menulabel.substring(0,firstslash).indexOf("@"+languages[langcode])>-1) {
+				title = menulabel.substring(0,firsta);
+				notfound = false;
 			}
+			else
+				menulabel = menulabel.substring(firstslash+1);
 		} catch(e){
-			title =karutaStr[languages[langcode]]['menu'];
+			// do nothing
 		}
-	else
-		title = karutaStr[languages[langcode]]['menu'];
 	return title
 }
 
@@ -1139,12 +1140,40 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			const js = $("js",itemelts[i]).text();
 			onclick += js + ";";
 		}
-		//------------------------- import --------------------
-		else if (type=='import') {
+		//--------------- execReport_BatchCSV( --------------------
+		else if (type=='execReportforBatchCSV') {
+			let codeReport = replaceVariable( ($("report-code",itemelts[i]).length>0)?$("report-code",itemelts[i]).text():"" );
+			onclick += "execReport_BatchCSV('"+parentid+"',null,null,'"+codeReport+"',true);";
+		}
+		//------------------------- moveTO --------------------
+		else if (type=='moveTO') {
+			let actualparentid = $(node.node).parent().attr('id');
+			// --------- start/destination ------------
+			let start = replaceVariable( ($("start-semtag",itemelts[i]).length>0)?$("start-semtag",itemelts[i]).text():"" );
+			let startid = $(getTarget (node,start)).attr("id");
+			let dest = replaceVariable( ($("destination-semtag",itemelts[i]).length>0)?$("destination-semtag",itemelts[i]).text():"" );
+			let destid = $(getTarget (node,dest)).attr("id");
+			if (actualparentid == startid)
+				onclick = "UIFactory.Node.moveTo('"+parentid+"','"+destid+"');UIFactory.Node.loadNode('"+destid+"')";
+			else
+				onclick = "UIFactory.Node.moveTo('"+parentid+"','"+startid+"');UIFactory.Node.loadNode('"+startid+"')";
+		// --------- fcts ------------
+			let jss = $("js", $(">function",itemelts[i]));
+			if (jss.length>0) {
+				for (let j=0;j<jss.length;j++){
+					onclick += $(jss[j]).text()+";";
+				}
+			}
+		}
+		//-----------------------------------------------------------
+		//-------- import-component-w-today-date --------------------
+		//-----------------------------------------------------------
+		else if (type=='import-component-w-today-date') {
 			// --------- srce ------------
 			let srce = $("srce",itemelts[i])[0];
 			let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
 			let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+			let calendar_semtag = replaceVariable( ($("calendar-semtag",itemelts[i]).length>0)?$("calendar-semtag",itemelts[i]).text():"" );
 			// --------- targets ------------
 			let trgts = $("trgt",itemelts[i]);
 			if (trgts.length>0) {
@@ -1152,14 +1181,25 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let position = $("position",trgts[j]).text();
 					let trgtsemtag = $("semtag",trgts[j]).text();
 					let target = getTarget (node,position+"."+trgtsemtag);
-					if (target.length>0) {
-						let targetid = $(target[0]).attr("id");
-						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
-					} else if (position=='last-imported') {
-							let targetid = position;
-							onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
-					} else {
-							onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
+					
+					$.ajaxSetup({async: false});
+					var databack = true;
+					var callback = 'UIFactory.Calendar.updateaddedpart';
+					var semtags = semtag.split("+");
+					for (let k=0;k<semtags.length;k++){
+						let targetid = parentid; // default value
+						if (semtags[k].length>0) {
+							if (target.length>0) {
+								let targetid = $(target[0]).attr("id");
+//								onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag[k]+"',"+databack+","+callback+",'"+calendar_semtag+"');"
+							} else if (position=='last-imported') {
+									let targetid = position;
+//									onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag[k]+"',"+databack+","+callback+",'"+calendar_semtag+"');"
+							}
+							//else {
+//									onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+calendar_semtag+");"
+						}
+						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag[k]+"',"+databack+","+callback+",'"+calendar_semtag+"');"
 					}
 					// --------- fcts ------------
 					let jss = $("js",trgts[j]);
@@ -1169,8 +1209,6 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 						}
 					}
 				}
-			} else {
-				onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+param2+","+param3+","+param4+");"
 			}
 			// --------- fcts ------------
 			let jss = $("js", $(">function",itemelts[i]));
@@ -1180,6 +1218,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 				}
 			}
 		}
+
 		//-----------------------------------------------------------
 		//------------------------- get_multiple --------------------
 		//-----------------------------------------------------------
@@ -1234,8 +1273,6 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 		//------------------------- get_get_multiple ----------------
 		//-----------------------------------------------------------
 		else if (type=='import_get_get_multiple') {
-			let actions = "";
-			let imports = "";
 			// --------- boxlabel ------------
 			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i])[0].text():"" );
 			// --------- parent ------------
@@ -1252,36 +1289,44 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let search_parent_semtag = replaceVariable( ($("parent-semtag",search).length>0)?$("parent-semtag",search).text():"" );
 			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
 			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
+			// -------- actions ------------
+			let actions = UIFactory.Node.getActions(parentid,node,itemelts[i]);
 			// -----------------------------
-			imports = $("import-component",itemelts[i]);
-			if (imports.length>0) {
-				for (let j=0;j<imports.length;j++){
-					let srce = $("srce",imports[j])[0];
-					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
-					let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
-					let updatedtag = replaceVariable( ($("updatedtag",srce).length>0)?$("updatedtag",srce).text():"" );
-					let fctarray = UIFactory.Node.getFunctionArray(node,itemelts[i]);
-					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
-					actions += "{|type|:|import_comp|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
-				} 
-				onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
-			}
-			// --------import-elts-from ------
-			imports = $("import-elts-from",itemelts[i]);
-			if (imports.length>0) {
-				for (let j=0;j<imports.length;j++){
-					let srce = $("srce",imports[j])[0];
-					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
-					let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
-					let fctarray = UIFactory.Node.getFunctionArray(node,itemelts[i]);
-					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
-					actions += "{|type|:|import_elts-from|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
-				}
-				onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
-			}
+			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
+			//------------------------------------
 		}
 	}
 	return onclick;
+}
+
+//==================================================
+UIFactory["Node"].getActions = function(parentid,node,item)
+//==================================================
+{
+	let result = "";
+	let children = $("gg_actions>*",item);
+	for (let child=0;child<children.length;child++){
+		result += UIFactory.Node.getAction(parentid,node,children[child]);
+	}
+	return result ;
+}
+//==================================================
+UIFactory["Node"].getAction = function(parentid,node,action)
+//==================================================
+{
+	let result = "";
+	let tag = $(action).prop("tagName");
+//	if (tag=="import-component" || tag=="import" || tag=="import-elts-from" || tag=='import-component-w-today-date') {
+		let srce = $("srce",action)[0];
+		let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+		let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+		let updatedtag = replaceVariable( ($("updatedtag",srce).length>0)?$("updatedtag",srce).text():"" );
+		let fctarray = UIFactory.Node.getFunctionArray(node,action);
+		let trgtarray = UIFactory.Node.getTargetArray(node,parentid,action);
+		result += "{|type|:|"+tag+"|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
+//	}
+
+	return result;
 }
 
 //==================================================
@@ -1299,12 +1344,14 @@ UIFactory["Node"].getTargetArray = function(node,parentid,item)
 			if (target.length>0) {
 				let targetid = $(target[0]).attr("id");
 				trgtarray.push(targetid);
+			} else if (position=='last-imported') {
+				trgtarray.push(position);
 			} else {
 				trgtarray.push(parentid);
 			}
 			
 		}
-	} 
+	}
 	return trgtarray;
 }
 

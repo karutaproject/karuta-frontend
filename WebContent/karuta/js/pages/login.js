@@ -138,7 +138,7 @@ function getNewAccount()
 function displayKarutaLogin()
 //==============================
 {
-//	loginPublic();
+	loginPublic();
 	setLoginTechnicalVariables();
 	setLoginConfigurationVariables();
 	var html = "";
@@ -318,6 +318,8 @@ function setLoginTechnicalVariables()
 			loadLanguages(function() {
 				getLanguage();
 			});
+			//---------Tecnical Support--------------
+			g_configVar['technical-support'] = getText('config-technical-support','Field','text',data,LANGCODE);
 			//---------Navigation Bar--------------
 			g_configVar['navbar-brand-logo'] = getImg('config-navbar-brand-logo',data,LANGCODE);
 			g_configVar['navbar-brand-logo-style'] = getContentStyle('config-navbar-brand-logo',data);

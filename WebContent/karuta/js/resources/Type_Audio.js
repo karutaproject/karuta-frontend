@@ -243,22 +243,23 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 		langcode = LANGCODE;
 	//---------------------
 	var html ="";
-	//html += "<div class='audio-video-format'>Format: mp3</div>"
 	var url = serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode];
 	//-------------------------------
-	html +="<ul class='nav nav-tabs' role='tablist'>";
-	html +=" <li class='nav-item'><a class='nav-link active' href='#edit-window-upload' aria-controls='edit-window-upload' role='tab' data-toggle='tab'>Téléverser un fichier audio</a></li>";
-	html +=" <li class='nav-item'><a class='nav-link' href='#edit-window-record' aria-controls='edit-window-record' role='tab' data-toggle='tab'>Enregistrer un fichier audio</a></li>";
-	html +="</ul>";
-	html +="<div class='tab-content'>";
-
-	html +=" <div role='tabpanel' class='tab-pane active' id='edit-window-upload' style='margin-top:10px'>";
-	html +=" </div>";
-
-	html +=" <div role='tabpanel' class='tab-pane' id='edit-window-record' style='margin-top:10px'>";
-	html +=" </div>";
-
-	html += "</div>";
+	let record_only = ($(UICom.structure.ui[this.id].metadata).attr('audio-record-only')==undefined)?'N':$(UICom.structure.ui[this.id].metadata).attr('audio-record-only');
+	if (record_only!="Y") {
+		html +="<ul id='audio-nav-tabs' class='nav nav-tabs' role='tablist'>";
+		html +=" <li class='nav-item'><a class='nav-link active' href='#edit-window-upload' aria-controls='edit-window-upload' role='tab' data-toggle='tab'>Téléverser un fichier audio</a></li>";
+		html +=" <li class='nav-item'><a class='nav-link' href='#edit-window-record' aria-controls='edit-window-record' role='tab' data-toggle='tab'>Enregistrer un fichier audio</a></li>";
+		html +="</ul>";
+		html +="<div class='tab-content'>";
+		html +=" <div role='tabpanel' class='tab-pane active' id='edit-window-upload' style='margin-top:10px'>";
+		html +=" </div>";
+		html +=" <div role='tabpanel' class='tab-pane' id='edit-window-record' style='margin-top:10px'>";
+		html +=" </div>";
+		html += "</div>";
+	} else {
+		html +=" <div role='tabpanel' class='tab-pane' id='edit-window-record' style='margin-top:10px'>";
+	}
 
 	$("#"+destid).append($(html));
 
@@ -353,6 +354,8 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 				savebutton.classList.add("btn");
 				savebutton.classList.add("audiosavebutton");
 				savebutton.textContent = 'Save';
+				savebutton.style.background = "green";
+				savebutton.style.color = "white";
 
 				clipContainer.appendChild(audio);
 				clipContainer.appendChild(savebutton);
@@ -377,6 +380,7 @@ UIFactory["Audio"].prototype.displayEditor = function(destid,type,langcode)
 						success : function(data) {
 							var uuid = data.files[0].url.substring(data.files[0].url.lastIndexOf('/')+1);
 							UIFactory["Audio"].update(data,uuid,langcode,'record');
+							$('#edit-window').modal('hide');
 						}
 					});
 					//----------------

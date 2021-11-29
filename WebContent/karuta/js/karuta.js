@@ -231,16 +231,22 @@ function getNavBar(type,portfolioid,edit)
 		html += "	</li>";
 		if (USER.username.indexOf("karuser")<0) {
 			//-----------------USERNAME-----------------------------------------
-			html += "	<li class='nav-item dropdown'>";
-			html += "		<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
-			html += "			<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
-			html += " 		</a>";
-			html += "		<div class='dropdown-menu dropdown-menu-right' aria-labelledby='userDropdown'>";
-			html += "				<a class='dropdown-item' href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a>";
-			if ((USER.creator && !USER.limited)  && !USER.admin)
-				html += "			<a class='dropdown-item' href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a>";
-			html += "		</div>";
-			html += "	</li>";
+			if (cas_url=="") {
+				html += "	<li class='nav-item dropdown'>";
+				html += "		<a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'  data-title='"+karutaStr[LANG]["button-change-password"]+"' data-toggle='tooltip' data-placement='bottom'>";
+				html += "			<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
+				html += " 		</a>";
+				html += "		<div class='dropdown-menu dropdown-menu-right' aria-labelledby='userDropdown'>";
+				html += "				<a class='dropdown-item' href=\"javascript:UIFactory['User'].callChangePassword()\">"+karutaStr[LANG]['change_password']+"</a>";
+				if ((USER.creator && !USER.limited)  && !USER.admin)
+					html += "			<a class='dropdown-item' href=\"javascript:UIFactory['User'].callCreateTestUser()\">"+karutaStr[LANG]['create-test-user']+"</a>";
+				html += "		</div>";
+				html += "	</li>";
+			} else {
+				html += "	<li class='nav-item dropdown'>";
+				html += "		<i class='fas fa-user'></i>&nbsp;&nbsp;"+USER.firstname+" "+USER.lastname;
+				html += "	</li>";
+			}
 			//-----------------LOGOUT-----------------------------------------
 			html += "	<li class='nav-item icon'>";
 			html += "				<a class='nav-link' onclick='logout()' data-title='"+karutaStr[LANG]["button-disconnect"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-sign-out-alt'></i></a>";
@@ -821,6 +827,27 @@ function writeSaved(uuid,data)
 {
 	$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 }
+
+//==================================
+function importComponent(parentid,targetid,srce,part_semtag)
+//==================================
+{
+	$.ajaxSetup({async: false});
+	var databack = false;
+	var callback = UIFactory.Node.reloadUnit;
+	//------------------------------
+	if (targetid!='last-imported')
+		if (UICom.structure.ui[targetid]==undefined && targetid!="")
+			targetid = getNodeIdBySemtag(targetid);
+	if (targetid!="" && targetid!=parentid)
+		parentid = targetid;
+	//------------------------------
+	var semtags = part_semtag.split("+");
+	for (var i=0;i<semtags.length;i++){
+		if (semtags[i].length>0)
+			importBranch(parentid,replaceVariable(srce),semtags[i],databack,callback);
+	}
+};
 
 //=======================================================================
 function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,param4,param5,param6,param7,param8) 

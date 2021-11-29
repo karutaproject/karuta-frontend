@@ -282,6 +282,9 @@ karutaStr['fr']['boxlabel']="Libellé de la boîte d'édition";
 karutaStr['fr']['updatedtag']="Tag sémantique à mettre à jour";
 karutaStr['fr']['target']="Tag sémantique où importer";
 karutaStr['fr']['object']="Élément à rechercher";
+karutaStr['fr']['start-semtag']="Tag sémantique de départ";
+karutaStr['fr']['destination-semtag']="Tag sémantique d'arrivée";
+karutaStr['fr']['audio-record-only']="Enregistrement seulement";
 
 //=========================================
 //========== ADMIN ========================

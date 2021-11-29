@@ -279,8 +279,9 @@ function importAndSetDateToday(parentid,targetid,label,srce,part_semtag,calendar
 	var databack = true;
 	var callback = UIFactory.Calendar.updateaddedpart;
 	//------------------------------
-	if (UICom.structure.ui[targetid]==undefined && targetid!="")
-		targetid = getNodeIdBySemtag(targetid);
+	if (targetid!='last-imported')
+		if (UICom.structure.ui[targetid]==undefined && targetid!="")
+			targetid = getNodeIdBySemtag(targetid);
 	if (targetid!="" && targetid!=parentid)
 		parentid = targetid;
 	//------------------------------
@@ -289,7 +290,6 @@ function importAndSetDateToday(parentid,targetid,label,srce,part_semtag,calendar
 		if (semtags[i].length>0)
 			importBranch(parentid,replaceVariable(srce),semtags[i],databack,callback,calendar_semtag);
 	}
-//	importBranch(parentid,replaceVariable(srce),part_semtag,databack,callback,calendar_semtag);
 };
 
 
@@ -299,6 +299,7 @@ UIFactory["Calendar"].updateaddedpart = function(data,calendar_semtag)
 {
 	var partid = data;
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/"+partid,
@@ -319,6 +320,7 @@ UIFactory["Calendar"].updateaddedpart = function(data,calendar_semtag)
 			var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 			//---------------------------
 			$.ajax({
+				async:false,
 				type : "PUT",
 				contentType: "application/xml",
 				dataType : "text",

@@ -1433,13 +1433,8 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_
 	var part_code = elts[0];
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
 	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
-	var get_resource_semtag = elts[1];
+//	var get_resource_semtag = elts[1];
 	var fct = elts[2];
-
-//	var part_code = multiple_tags.substring(0,multiple_tags.indexOf(','));
-//	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
-//	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
-//	var get_resource_semtag = multiple_tags.substring(multiple_tags.indexOf(',')+1);
 
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	//------------------------------
@@ -1451,7 +1446,7 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_
 	// for each one create a part
 	var databack = true;
 	var callback = UIFactory.Get_Get_Resource.updateaddedpart;
-	var param2 = get_resource_semtag;
+	var param2 = get_get_resource_semtag;
 	var param4 = false;
 	var param5 = parentid;
 	var param6 = fct;
@@ -1485,6 +1480,7 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 	}
 	xml += "</asmResource>";
 	$.ajax({
+		async : false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/"+partid,
@@ -1498,6 +1494,7 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 				url_resource = serverBCK_API+"/nodes/node/" + nodeid + "/noderesource";
 			}
 			$.ajax({
+				async : false,
 				type : "PUT",
 				contentType: "application/xml",
 				dataType : "text",
@@ -1554,7 +1551,7 @@ UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,f
 			srce = $(inputs[j]).attr('portfoliocode');
 		importBranch(parentid,srce,code,databack,callback,param2,param3);
 	}
-	if (fct!=null) {
+	if (fct!=null && fct!="") {
 		fct(parentid);
 		UIFactory.Node.reloadUnit();
 	}
@@ -1663,28 +1660,38 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 	let js1 = "javascript:$('#edit-window').modal('hide')";
 	let js2 = "";
 	for (let i=0;i<actions.length;i++) {
-		//--------------- import_comp ------------
-		if (actions[i].type=="import_comp") {
+		//--------------- import_component ------------
+		if (actions[i].type=="import-component") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
 				js2 += "UIFactory.Get_Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
 			}
-			let fcts = actions[i].fcts.split(',');
-			for (let j=0;j<fcts.length;j++) {
-				js2 += fcts[j]+";";
-			}		
-		}
-		//--------------- import_elts ------------
-		if (actions[i].type=="import_elts-from") {
+		} else if (actions[i].type=="import-elts-from") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
 				js2 += "UIFactory.Get_Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
 			}
-			let fcts = actions[i].fcts.split(',');
-			for (let j=0;j<fcts.length;j++) {
-				js2 += fcts[j]+";";
-			}		
+		} else if (actions[i].type=="import-component-w-today-date") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++){
+					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+r_replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
+			}
+		} else if (actions[i].type=="import") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++){
+					js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
+			}
+		} else if (actions[i].type=="import-today-date") {
+			let targets = actions[i].trgts.split(',');
+			for (let j=0;j<targets.length;j++){
+					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','karuta.karuta-resources','Calendar','Calendar');";
+			}
 		}
+		let fcts = actions[i].fcts.split(',');
+		for (let j=0;j<fcts.length;j++) {
+			js2 += fcts[j]+";";
+		}		
+
 	}
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
