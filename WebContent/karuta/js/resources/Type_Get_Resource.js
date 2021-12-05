@@ -235,7 +235,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 					html += "<span name='code'>" + cleanCode(code) + "</span> ";
 				if (code.indexOf("%")<0) {
-						html += "<span name='label'>" + elts[1].substring(6) + "</span> ";
+						html += "<span name='label'>" + elts[2].substring(6) + "</span> ";
 				}
 				if (code.indexOf("&")>-1)
 					html += " ["+$(this.value_node).text()+ "] ";
@@ -307,30 +307,34 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			html += "</div>";
 	//--------------------------------------------------
 	} else {
-		if (indashboard)
-			html += "<span class='"+cleanCode(code)+"' style='";
-		else
-			html += "<div class='"+cleanCode(code)+" view-div' style='";
-		html += style;
-//		if (indashboard)
-//			html += "background-position:center;";
-		html += "'>";
-		if (code.indexOf("#")>-1 && code.indexOf("##")<0) 
-			html += "<span name='code'>" + cleanCode(code) + "</span> ";
-		if (code.indexOf("%")<0) {
-			if (label.indexOf("fileid-")>-1)
-				html += UICom.structure["ui"][label.substring(7)].resource.getView();
+		if ("type!=batchform") {
+			if (indashboard)
+				html += "<span class='"+cleanCode(code)+"' style='";
 			else
-				html += "<span name='label'>" + label + "</span> ";
-			}
-		if (code.indexOf("&")>-1)
-			html += " ["+$(this.value_node).text()+ "] ";
-		if (this.preview)
-			html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
-		if (indashboard)
-			html += "</span>";
-		else
-			html += "</div>";
+				html += "<div class='"+cleanCode(code)+" view-div' style='";
+			html += style;
+	//		if (indashboard)
+	//			html += "background-position:center;";
+			html += "'>";
+			if (code.indexOf("#")>-1 && code.indexOf("##")<0) 
+				html += "<span name='code'>" + cleanCode(code) + "</span> ";
+			if (code.indexOf("%")<0) {
+				if (label.indexOf("fileid-")>-1)
+					html += UICom.structure["ui"][label.substring(7)].resource.getView();
+				else
+					html += "<span name='label'>" + label + "</span> ";
+				}
+			if (code.indexOf("&")>-1)
+				html += " ["+$(this.value_node).text()+ "] ";
+			if (this.preview)
+				html+= "&nbsp;<span class='button preview-button fas fa-binoculars' onclick=\"previewPage('"+this.uuid_node.text()+"',100,'standard') \" data-title='"+karutaStr[LANG]["preview"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+			if (indashboard)
+				html += "</span>";
+			else
+				html += "</div>";
+		} else {	// type=='batchform'
+			html = label;
+		}
 
 	}
 	//--------------------------------------------------

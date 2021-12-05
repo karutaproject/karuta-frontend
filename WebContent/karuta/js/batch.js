@@ -3198,14 +3198,21 @@ function execBatchForm()
 function getInputsLine(node)
 //==================================================
 {
-	line_inputs = $("asmContext:has(metadata[semantictag*='BatchFormInput'])",node);
-	var g_json_line = {};
+	let json_line = {};
+	let line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInput'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
 		code = UICom.structure["ui"][inputid].getCode().trim();
-		g_json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+		json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
 	}
-	return g_json_line;
+	line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInputCode'])",node);
+	for ( var j = 0; j < line_inputs.length; j++) {
+		var inputid = $(line_inputs[j]).attr('id');
+		code = UICom.structure["ui"][inputid].getCode();
+		if (UICom.structure["ui"][inputid].resource.type=="Get_Resource")
+			json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode());
+	}
+	return json_line;
 };
 
 //==================================

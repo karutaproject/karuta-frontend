@@ -785,6 +785,15 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	var test = $(action).attr("test");
 	var countvar = $(action).attr("countvar");
+	//----------------------------------
+	var ref_init = $(action).attr("ref-init");
+	if (ref_init!=undefined) {
+		ref_init = r_replaceVariable(ref_init);
+		var ref_inits = ref_init.split("/"); // ref1/ref2/...
+		for (var k=0;k<ref_inits.length;k++)
+			g_variables[ref_inits[k]] = new Array();
+	}
+	//----------------------------------
 	if (test!=undefined) 
 		test = r_replaceVariable(test);
 	if (select!=undefined) {
@@ -812,14 +821,6 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 				//----------------------------------
 				if (countvar!=undefined) {
 					g_variables[countvar] = j;
-				}
-				//----------------------------------
-				var ref_init = $(action).attr("ref-init");
-				if (ref_init!=undefined) {
-					ref_init = r_replaceVariable(ref_init);
-					var ref_inits = ref_init.split("/"); // ref1/ref2/...
-					for (var k=0;k<ref_inits.length;k++)
-						g_variables[ref_inits[k]] = new Array();
 				}
 				//----------------------------------
 				for (var i=0; i<actions.length;i++){

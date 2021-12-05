@@ -1696,7 +1696,6 @@ UIFactory["Node"].selectNode = function(nodeid,node,semtag)
 	var html = "<select class='form-control'>";
 	var uuid = $(node.node).attr("id");
 	var label = UICom.structure["ui"][uuid].label_node[langcode].text();
-	html += "<option uuid = ''>&nbsp;</option>";
 	if (semtag=='')
 		html += "<option uuid = '"+uuid+"'>"+label+"</option>";
 	html += UIFactory["Node"].getSubNodes(node, nodeid, UICom.structure.ui[nodeid].asmtype,semtag);
