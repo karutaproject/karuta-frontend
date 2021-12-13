@@ -2227,7 +2227,7 @@ g_report_actions['url2portfolio'] = function (destid,action,no,data)
 		dataType : "xml",
 		url : url,
 		success : function(data) {
-			uuid = $("asmRoot",data).attr("id");
+			uuid = $("portfolio",data).attr("id");
 			label = $("label[lang='"+languages[LANGCODE]+"']",$("asmRoot>asmResource[xsi_type='nodeRes']",data)[0]).text();
 		}
 	});

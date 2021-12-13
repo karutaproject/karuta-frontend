@@ -234,6 +234,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				html += "'>";
 				if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 					html += "<span name='code'>" + cleanCode(code) + "</span> ";
+				if (code.indexOf("*")>-1)
+					html += "<span name='code'>" + cleanCode(code) + "</span> ";
 				if (code.indexOf("%")<0) {
 						html += "<span name='label'>" + elts[2].substring(6) + "</span> ";
 				}
@@ -292,6 +294,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		html += "'>";
 		if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 			html += "<span name='code'>" + cleanCode(code) + "</span> ";
+		if (code.indexOf("*")>-1)
+			html += "<span name='code'>" + cleanCode(code) + "</span> ";
 		if (code.indexOf("%")<0 && elts[2]!=undefined) {
 				html += "<span name='label'>" + label + "</span> ";
 		} else {
@@ -318,6 +322,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			html += "'>";
 			if (code.indexOf("#")>-1 && code.indexOf("##")<0) 
 				html += "<span name='code'>" + cleanCode(code) + "</span> ";
+			if (code.indexOf("*")>-1)
+				html += "<span name='code'>" + cleanCode(code) + "</span> ";
 			if (code.indexOf("%")<0) {
 				if (label.indexOf("fileid-")>-1)
 					html += UICom.structure["ui"][label.substring(7)].resource.getView();
@@ -337,7 +343,21 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		}
 
 	}
-	//--------------------------------------------------
+	//-------- if function js -------------
+	if (UICom.structure["ui"][this.id].js!="") {
+		
+		var fcts = UICom.structure["ui"][this.id].js.split("|");
+		for (let i=0;i<fcts.length;i++) {
+			let elts = fcts[i].split("/");
+			if (elts[0]=="display-resource") {
+				fctjs = elts[1].split(";");
+				for (let j=0;j<fctjs.length;j++) {
+					eval(fctjs[j]+"(this.node,g_portfolioid)");
+				}
+			}
+		}
+	}
+	//---------------------
 	return html;
 };
 
@@ -345,7 +365,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 UIFactory["Get_Resource"].prototype.displayView = function(dest,type,langcode)
 //==================================
 {
-var html = this.getView(dest,type,langcode);
+	var html = this.getView(dest,type,langcode);
 	$("#"+dest).html(html);
 };
 
@@ -379,9 +399,16 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 	}
 	//-------- if function js -------------
 	if (UICom.structure["ui"][itself.id].js!="") {
-		var elts = UICom.structure["ui"][itself.id].js.split("/");
-		if (elts[0]=="update-resource")
-			eval(elts[1]+"(itself.node,g_portfolioid)");
+		var fcts = UICom.structure["ui"][itself.id].js.split("|");
+		for (let i=0;i<fcts.length;i++) {
+			let elts = fcts[i].split("/");
+			if (elts[0]=="update-resource") {
+				fctjs = elts[1].split(";");
+				for (let j=0;j<fctjs.length;j++) {
+					eval(fctjs[j]+"(itself.node,g_portfolioid)");
+				}
+			}
+		}
 	}
 	//---------------------
 	itself.save();
@@ -436,6 +463,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 			UIFactory["Get_Resource"].parse(destid,type,langcode,g_Get_Resource_caches[portfoliocode+semtag],self,disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 		else {
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag.replace("!",""),
@@ -446,7 +474,20 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 				}
 			});
 		}
-		//------------
+		//-------- if function js -------------
+		if (UICom.structure["ui"][this.id].js!="") {
+			var fcts = UICom.structure["ui"][this.id].js.split("|");
+			for (let i=0;i<fcts.length;i++) {
+				let elts = fcts[i].split("/");
+				if (elts[0]=="edit-resource") {
+					fctjs = elts[1].split(";");
+					for (let j=0;j<fctjs.length;j++) {
+						eval(fctjs[j]+"(this.node,g_portfolioid)");
+					}
+				}
+			}
+		}
+		//---------------------
 	}
 };
 

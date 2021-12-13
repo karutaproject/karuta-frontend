@@ -992,6 +992,7 @@ g_actions['create-tree'] = function createTree(node)
 	var code = getvarvals($("code",node));
 	if (code=="")
 		code = getTxtvals($("code",node));
+	code = replaceVariable(code);
 	var treeref = $(node).attr('id');
 	if (code!="") {
 		var url = serverBCK_API+"/portfolios/portfolio/code/" + code;
@@ -3126,7 +3127,7 @@ function get_portfoliogroupid(groupname)
 	var groupid = null;
 	get_list_portfoliosgroups();
 	for (var i=0;i<portfoliogroups_list.length;i++){
-		if (portfoliogroups_list[i].label==groupname){
+		if (portfoliogroups_list[i].code==groupname){
 			groupid = portfoliogroups_list[i].id;
 			break;
 		}
