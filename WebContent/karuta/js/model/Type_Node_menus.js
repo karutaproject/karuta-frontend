@@ -199,20 +199,22 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 			}
 		}
 		for (var i=0; i<items.length; i++){
-			var urlS = serverBCK+"/direct?uuid="+targetid+"&role="+shares[i][1]+"&lang="+languages[langcode]+"&l="+shares[i][3]+"&d="+shares[i][4]+"&type=showtorole&showtorole="+shares[i][2]+"&sharerole="+shares[i][0];
-			$.ajax({
-				id : this.id,
-				type : "POST",
-				dataType : "text",
-				contentType: "application/xml",
-				url : urlS,
-				success : function (data){
-					var url = window.location.href;
-					var serverURL = url.substring(0,url.lastIndexOf(appliname+"/")+appliname.length);
-					url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
-					$("#2world-"+this.id).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-toggle='tooltip' data-placement='bottom'></a> ");
-				}
-			});
+			if (shares[i][2]=='2world') {
+				var urlS = serverBCK+"/direct?uuid="+targetid+"&role="+shares[i][1]+"&lang="+languages[langcode]+"&l="+shares[i][3]+"&d="+shares[i][4]+"&type=showtorole&showtorole="+shares[i][2]+"&sharerole="+shares[i][0];
+				$.ajax({
+					id : this.id,
+					type : "POST",
+					dataType : "text",
+					contentType: "application/xml",
+					url : urlS,
+					success : function (data){
+						var url = window.location.href;
+						var serverURL = url.substring(0,url.lastIndexOf(appliname+"/")+appliname.length);
+						url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
+						$("#2world-"+this.id).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-toggle='tooltip' data-placement='bottom'></a> ");
+					}
+				});
+			}
 		}
 	}
 }

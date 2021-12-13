@@ -1827,6 +1827,7 @@ function cleanCode(code,variable)
 	if (!variable)
 		code = removeStr(code,"#");
 	code = removeStr(code,"%");
+	code = removeStr(code,"*");
 	code = removeStr(code,"$");
 	code = removeStr(code,"&");
 	code = removeStr(code,"!");

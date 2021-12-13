@@ -881,6 +881,38 @@ g_actions['leave-usergroup'] = function LeaveUserGroup(node)
 	return ok;
 }
 
+//=================================================
+g_actions['delete-usergroup'] = function DeleteUserGroup(node)
+//=================================================
+{
+}
+
+//=================================================
+g_actions['create-usergroup-by-id'] = function DeleteUserGroupById(node)
+//=================================================
+{
+	var ok = false;
+	var usergroup = getTxtvals($("usergroup",node));
+	var url = serverBCK_API+"/usersgroups?group="+usergroup;
+	$.ajax({
+		async : false,
+		type : "DELETE",
+		contentType: "application/xml; charset=UTF-8",
+		dataType : "text",
+		url : url,
+		success : function(data) {
+			ok = true;
+			var usergroupid = data;
+			get_list_usergroups();
+			$("#batch-log").append("<br>- usergroup delete - id:"+usergroup);
+		},
+		error : function(data) {
+			$("#batch-log").append("<br>- *** not exist - id:"+usergroup);
+		}
+	});
+	return ok;
+}
+
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
 //------------------------ Delete Tree ----------------------------------
@@ -3198,14 +3230,21 @@ function execBatchForm()
 function getInputsLine(node)
 //==================================================
 {
-	line_inputs = $("asmContext:has(metadata[semantictag*='BatchFormInput'])",node);
-	var g_json_line = {};
+	let json_line = {};
+	let line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInput'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
 		var inputid = $(line_inputs[j]).attr('id');
 		code = UICom.structure["ui"][inputid].getCode().trim();
-		g_json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+		json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
 	}
-	return g_json_line;
+	line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInputCode'])",node);
+	for ( var j = 0; j < line_inputs.length; j++) {
+		var inputid = $(line_inputs[j]).attr('id');
+		code = UICom.structure["ui"][inputid].getCode();
+		if (UICom.structure["ui"][inputid].resource.type=="Get_Resource")
+			json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
+	}
+	return json_line;
 };
 
 //==================================
