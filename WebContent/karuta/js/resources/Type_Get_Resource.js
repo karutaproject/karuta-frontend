@@ -311,7 +311,7 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			html += "</div>";
 	//--------------------------------------------------
 	} else {
-		if ("type!=batchform") {
+		if (type!="batchform") {
 			if (indashboard)
 				html += "<span class='"+cleanCode(code)+"' style='";
 			else
