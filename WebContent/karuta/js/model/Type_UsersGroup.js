@@ -618,34 +618,23 @@ UIFactory["UsersGroup"].toggleUsersList = function(gid,destid,checked)
 		$("#"+destid).html(html);
 		$("#"+destid).show();
 		//--------------------------
-		$.ajax({
-			type : "GET",
-			dataType : "xml",
-			url : serverBCK_API+"/usersgroups?group="+gid,
-			data: "",
-			success : function(data) {
-				$("#"+destid).html("");
-				var users_ids = parseList("user",data);
-				for ( var i = 0; i < users_ids.length; i++) {
-					if (Users_byid[users_ids[i]]!=null && Users_byid[users_ids[i]]!=undefined) {
-						var itemid = destid+"_"+users_ids[i];
-						if (Users_byid[users_ids[i]].active_node.text()=='1')
-							$("#"+destid).append($("<div class='item' id='"+itemid+"'></div>"));
-						else
-							$("#"+destid).append($("<div class='item inactive' id='"+itemid+"'></div>"));
-						html = "<div>"+Users_byid[users_ids[i]].getSelector(null,null,"users-in-group",true,true)+"</div>";
-						$("#"+itemid).html(html);
-					}
-				}
-				var items = $("div[class='item']",$("#"+destid));
-				if (items.length==0)
-					$("#"+destid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
-				//----------------
-			},
-			error : function(jqxhr,textStatus) {
-				alertHTML("Error : "+jqxhr.responseText);
+		if (!usergroups_byid[gid].loaded)
+			usergroups_byid[gid].loadContent();
+		for (uuid in usergroups_byid[gid].children){
+			let user = Users_byid[uuid];
+			if (user!=null && user!=undefined) {
+				let itemid = destid+"_"+user.id;
+				if (user.active_node.text()=='1')
+					$("#"+destid).append($("<div class='item' id='"+itemid+"'></div>"));
+				else
+					$("#"+destid).append($("<div class='item inactive' id='"+itemid+"'></div>"));
+				html = "<div>"+user.getSelector(null,null,"users-in-group",true,true)+"</div>";
+				$("#"+itemid).html(html);
 			}
-		});		
+		}
+		var items = $("div[class='item']",$("#"+destid));
+		if (items.length==0)
+			$("#"+destid).html("<h5>"+karutaStr[LANG]['empty-group']+"</h5>");
 	} else {
 		$("#"+destid).html("");
 		$("#"+destid).hide();

@@ -96,8 +96,10 @@ function getTxtvalsWithoutReplacement(node)
 					text = new Date().toLocaleString();
 				else
 					text = eval("g_json."+select.substring(2));
-			} else if (select.indexOf("/")>-1)
+			} else if (select.indexOf("/")>-1) {
 				text = eval("g_users['"+select.substring(1)+"']");
+			} else if (select.indexOf("##")>-1)
+				text = replaceVariable(select);
 			else
 				text = eval("g_json.lines["+g_noline+"]."+select);
 			if (fct!=null)
@@ -3233,16 +3235,25 @@ function getInputsLine(node)
 	let json_line = {};
 	let line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInput'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
-		var inputid = $(line_inputs[j]).attr('id');
-		code = UICom.structure["ui"][inputid].getCode().trim();
-		json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+		let inputid = $(line_inputs[j]).attr('id');
+		let variable = UICom.structure["ui"][inputid].getCode().trim();
+		json_line[variable] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
 	}
 	line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInputCode'])",node);
 	for ( var j = 0; j < line_inputs.length; j++) {
-		var inputid = $(line_inputs[j]).attr('id');
-		code = UICom.structure["ui"][inputid].getCode();
+		let inputid = $(line_inputs[j]).attr('id');
+		let variable = UICom.structure["ui"][inputid].getCode();
 		if (UICom.structure["ui"][inputid].resource.type=="Get_Resource")
-			json_line[code] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
+			json_line[variable] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
+	}
+	line_inputs = $("asmContext:has(metadata[semantictag='BatchFormInputLabelCode'])",node);
+	for ( var j = 0; j < line_inputs.length; j++) {
+		var inputid = $(line_inputs[j]).attr('id');
+		let variable = UICom.structure["ui"][inputid].getCode();
+		if (UICom.structure["ui"][inputid].resource.type=="Get_Resource") {
+			json_line[variable+"_code"] = replaceVariable(UICom.structure["ui"][inputid].resource.getCode(null));
+			json_line[variable+"_label"] = replaceVariable(UICom.structure["ui"][inputid].resource.getView(null,'batchform').trim());
+		}
 	}
 	return json_line;
 };
