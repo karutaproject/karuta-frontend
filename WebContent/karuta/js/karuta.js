@@ -2774,5 +2774,30 @@ function getTarget (knode,position_semtag)
 	return target;
 }
 
-
+//==================================
+function toggleDraft (nodeid)
+//==================================
+{
+	const node = UICom.structure.ui[nodeid];
+	let semtag = node.metadata.getAttribute('semantictag');
+	if (semtag.indexOf("@draft@")>-1) {
+		semtag = semtag.replace("@draft@","").replace("draft-node","");
+		$($("metadata",node.node)[0]).attr('semantictag',semtag);
+		UICom.UpdateMetadata(node.id);
+		node.semantictag = semtag;
+		node.refresh();
+		if (g_userroles[0]=='designer' || USER.admin) {  
+			node.displayMetainfo("metainfo_"+node.id);
+		}
+	} else {
+		semtag = semtag.substring(0,1)+"@draft@"+semtag.substring(1)+" draft-node";
+		$($("metadata",node.node)[0]).attr('semantictag',semtag);
+		UICom.UpdateMetadata(node.id);
+		node.semantictag = semtag;
+		node.refresh();
+		if (g_userroles[0]=='designer' || USER.admin) {  
+			node.displayMetainfo("metainfo_"+node.id);
+		}
+	}
+}
 

@@ -554,48 +554,57 @@ UIFactory["Node"].getMenus = function(node,langcode)
 						html += "	</button>";
 						html += "	<div class='dropdown-menu dropdown-menu-right' style='"+menus_style+"' aria-labelledby='specific_"+node.id+"'>";
 						for (var j=0;j<items.length;j++) {
-							let title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
-							let temphtml = "<div class='dropdown-item' onclick=\"##\">" + title + "</div>";
-							html += temphtml.replace("##",UIFactory.Node.getXmlItemMenu(node,parentid,items[j],title,databack,callback,param2,param3,param4));
+							var condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
+							if (UIFactory.Node.testDisplay(node,roles,condition)) {
+								let title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
+								let temphtml = "<div class='dropdown-item' onclick=\"##\">" + title + "</div>";
+								html += temphtml.replace("##",UIFactory.Node.getXmlItemMenu(node,parentid,items[j],title,databack,callback,param2,param3,param4));
+							}
 						}
 						html += "	</div>"; // class='dropdown-menu'
 //						html += "	</span><!-- class='dropdown -->";
 
 					} else if (nbitems>0){
-						if(menulabel!="")
-							title = UIFactory.Node.getMenuLabel(menulabel,langcode);
-						else
-							title = UIFactory.Node.getMenuLabel($("itemlabel",items[0]).text(),langcode);
-						html += "<a class='button text-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</a>";
-						//---------------------target----------------------------------------
-						var parentid = node.id; // default value
-						var targetid = "";
-						if ($("target",items[0]).length>0){
-							target = getTarget (node,$("target",items[0]).text());
-							if (target.length>0) {
-								targetid = $(target[0]).attr("id");
-								//---------- search for parent to reload after import------
-								var parent = target[0];
-								while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
-									parent = $(parent).parent();
+						//html = html.replace("##",UIFactory.Node.getXmlItemMenu(node,parentid,items[0],title,databack,callback,param2,param3,param4));
+						for (var j=0;j<items.length;j++) {
+							var condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
+							if (UIFactory.Node.testDisplay(node,roles,condition)) {
+								if(menulabel!="")
+									title = UIFactory.Node.getMenuLabel(menulabel,langcode);
+								else
+									title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
+								let temphtml = "<a class='button text-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</a>";
+								//---------------------target----------------------------------------
+								var parentid = node.id; // default value
+								var targetid = "";
+								if ($("target",items[0]).length>0){
+									target = getTarget (node,$("target",items[0]).text());
+									if (target.length>0) {
+										targetid = $(target[0]).attr("id");
+										//---------- search for parent to reload after import------
+										var parent = target[0];
+										while ($(parent).prop("nodeName")!="asmUnit" && $(parent).prop("nodeName")!="asmStructure" && $(parent).prop("nodeName")!="asmRoot") {
+											parent = $(parent).parent();
+										}
+										parentid = $(parent).attr("id");
+										if ($(parent).prop("nodeName") == "asmUnit"){
+											callback = "UIFactory.Node.reloadUnit";
+											param2 = "'"+parentid+"'";
+											if ($("#page").attr('uuid')!=parentid)
+												param3 = false;
+										}
+										else {
+											callback = "UIFactory.Node.reloadStruct";
+											param2 = "'"+g_portfolio_rootid+"'";
+											if ($("#page").attr('uuid')!=parentid)
+												param3 = false;
+										}
+										//---------------------------------------------------------
+									}
 								}
-								parentid = $(parent).attr("id");
-								if ($(parent).prop("nodeName") == "asmUnit"){
-									callback = "UIFactory.Node.reloadUnit";
-									param2 = "'"+parentid+"'";
-									if ($("#page").attr('uuid')!=parentid)
-										param3 = false;
-								}
-								else {
-									callback = "UIFactory.Node.reloadStruct";
-									param2 = "'"+g_portfolio_rootid+"'";
-									if ($("#page").attr('uuid')!=parentid)
-										param3 = false;
-								}
-								//---------------------------------------------------------
+								html += temphtml.replace("##",UIFactory.Node.getXmlItemMenu(node,parentid,items[j],title,databack,callback,param2,param3,param4));
 							}
 						}
-						html = html.replace("##",UIFactory.Node.getXmlItemMenu(node,parentid,items[0],title,databack,callback,param2,param3,param4));
 					}
 				}
 				//------------------
@@ -705,7 +714,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 							targetid = $(target[0]).attr("id");
 					}
 					var shareoptions = (shares[i].length>7) ? shares[i][7] : "";
-					if (shareto!='' && node.shareroles.indexOf('2world')<0) {
+					if (shareto!='' && shareto.indexOf('2world')<0) {
 						if (shareto!='?' && shareduration!='?') {
 							var sharetoemail = "";
 							var sharetoroles = "";
@@ -842,9 +851,10 @@ UIFactory["Node"].removeMenuElt = function(noitem,nodeid,destmenu)
 
 
 //==================================================
-UIFactory["Node"].updateMetadataXmlMenuAttribute = function(eltidx,element,destmenu,nodeid)
+UIFactory["Node"].updateMetadataXmlMenuAttribute = function(eltidx,destmenu,nodeid)
 //==================================================
 {
+	const element = menueltslist[eltidx];
 	var node = UICom.structure["ui"][nodeid].node;
 	var attribute=$(element).prop("nodeName");
 	var eltvalue = $.trim($("#"+nodeid+"_"+eltidx+attribute).val());
@@ -883,7 +893,7 @@ UIFactory["Node"].prototype.displayXmlMenuEditor = function(cntidx,destmenu)
 	html += "</div>";
 	$("#content"+cntidx).append(html);
 	//---------------------------
-	$("#"+nodeid+"_"+eltidx+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(eltidx,element,destmenu,nodeid)});
+	$("#"+nodeid+"_"+eltidx+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(eltidx,destmenu,nodeid)});
 	//---------------------------
 };
 
@@ -906,7 +916,7 @@ UIFactory["Node"].prototype.displayXMLSelectRole= function(cntidx,destmenu)
 	html += karutaStr[languages[langcode]][attribute];
 	html += "		</div>";
 	html += "	</div>";
-	html += "	<input id='"+nodeid+"_"+eltidx+attribute+"' type='text' class='form-control' value=\""+value+"\" ";
+	html += "	<input id='"+nodeid+"_"+eltidx+attribute+"' onchange=\"UIFactory.Node.updateMetadataXmlMenuAttribute('"+eltidx+"','"+destmenu+"','"+nodeid+"')\" type='text' class='form-control' value=\""+value+"\" >";
 	html += "	<div class='input-group-append'>";
 	html += "		<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
 	html += "		<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
@@ -921,10 +931,8 @@ UIFactory["Node"].prototype.displayXMLSelectRole= function(cntidx,destmenu)
 	html += "	</div>";
 	html += "</div>";
 	$("#content"+cntidx).append(html);
+	//---------------------------
 	addautocomplete(document.getElementById(nodeid+"_"+eltidx+attribute), rolesarray);
-	//---------------------------
-	$("#"+nodeid+"_"+eltidx+attribute).change(function(){UIFactory.Node.updateMetadataXmlMenuAttribute(eltidx,element,destmenu,nodeid)});
-	//---------------------------
 }
 
 //==================================
@@ -1034,10 +1042,10 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 	if (this.menuroles==undefined)
 		UICom.structure.ui[this.id].setMetadata();
 	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
-		if (this.menuroles.charAt(0)=="<" || this.menuroles=="" || this.menuroles=="none") {
+		if (this.menuroles.charAt(0)=="<") {
 			//---------------------- NEW Menu----------------------------
 			menueltslist = [];
-			var parser = new DOMParser();
+			let parser = new DOMParser();
 			if (this.menuroles=="" || this.menuroles=="none")
 				this.menuroles = "<menus></menus>";
 			this.displayMetadataWadMenusEditor('metadata-menu','menuroles',destmenu);
@@ -1077,7 +1085,15 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 			html += karutaStr[languages[langcode]]['menulabels3']+"</label>";
 			$("#metadata-menu").append($(html));
 			this.displayMetadatawWadTextAttributeEditor('metadata-menu','menulabels');
-			//-----------------------
+			//------------------------------------------
+			menueltslist = [];
+			let parser = new DOMParser();
+			if (this.menuroles=="" || this.menuroles=="none")
+				this.menuroles = "<menus></menus>";
+			xmlDoc = parser.parseFromString(this.menuroles,"text/xml");
+			menueltslist.push($("menus",xmlDoc)[0]);
+			this.displaySubMenuEditor(-1,destmenu);
+			//------------------------------------------
 		}
 	}
 };
@@ -1126,7 +1142,7 @@ UIFactory["Node"].getMenuLabel = function(menulabel,langcode)
 		} catch(e){
 			// do nothing
 		}
-	return title
+	return title;
 }
 
 //==================================================
@@ -1141,6 +1157,8 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 		if (type=='function') {
 			const js = $("js",itemelts[i]).text();
 			onclick += js + ";";
+			if (onclick.indexOf("##nodeid##")>-1)
+				onclick = onclick.replace("##nodeid##","'"+node.id+"'");
 		}
 		//--------------- execReport_BatchCSV( --------------------
 		else if (type=='execReportforBatchCSV') {
@@ -1164,6 +1182,8 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			if (jss.length>0) {
 				for (let j=0;j<jss.length;j++){
 					onclick += $(jss[j]).text()+";";
+					if (onclick.indexOf("##nodeid##")>-1)
+						onclick = onclick.replace("##nodeid##","'"+node.id+"'");
 				}
 			}
 		}
@@ -1208,6 +1228,8 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					if (jss.length>0) {
 						for (let k=0;k<jss.length;k++){
 							onclick += $(jss[k]).text()+";";
+							if (onclick.indexOf("##nodeid##")>-1)
+								onclick = onclick.replace("##nodeid##","'"+node.id+"'");
 						}
 					}
 				}
@@ -1217,6 +1239,8 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			if (jss.length>0) {
 				for (let j=0;j<jss.length;j++){
 					onclick += $(jss[j]).text()+";";
+					if (onclick.indexOf("##nodeid##")>-1)
+						onclick = onclick.replace("##nodeid##",node.id);
 				}
 			}
 		}

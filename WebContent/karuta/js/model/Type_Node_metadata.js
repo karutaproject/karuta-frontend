@@ -814,7 +814,10 @@ UIFactory["Node"].getMetadataInfo = function(data,attribute)
 {
 	var html = "";
 	if (data.getAttribute(attribute)!=undefined && data.getAttribute(attribute)!="")
-		html += "<span>"+attribute+":"+data.getAttribute(attribute)+"|</span>";
+		if (data.getAttribute(attribute).indexOf("<menus>")>-1)
+			html += "<span>"+attribute+":XML Menu|</span>";
+		else
+			html += "<span>"+attribute+":"+data.getAttribute(attribute)+"|</span>";
 	return html;
 };
 

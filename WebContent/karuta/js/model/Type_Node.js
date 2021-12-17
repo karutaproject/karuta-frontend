@@ -186,34 +186,39 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			var data = this.node;
 			if ($("metadata-wad",data)[0]!=undefined && $($("metadata-wad",data)[0]).attr('help')!=undefined && $($("metadata-wad",data)[0]).attr('help')!=""){
 				if (this.depth>0 || this.nodetype == "asmContext") {
-					var help_text = "";
-					var helplang = 0;
-					var display_help = false;
-					var attr_help = $($("metadata-wad",data)[0]).attr('help');
-					var helps = attr_help.split("/"); // lang1/lang2/...
-					for (var j=0; j<helps.length; j++){
-						if (helps[j].indexOf("@"+languages[langcode])>-1)
-							helplang =j;
-					}
-					help_text = helps[helplang].substring(0,helps[helplang].indexOf("@"));
-					if (helps[helplang].indexOf(",")>-1) {
-						var roles = helps[helplang].substring(helps[helplang].indexOf(","));
-						if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
-						display_help = true;
-					} else {
-						display_help = true;
-					}
-					if (display_help){
-						var help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
-						$("#help_"+uuid).html(help);
-						$(".popinfo").popover({ 
-							placement : 'right',
-							container : 'body',
-							title:karutaStr[LANG]['help-label'],
-							html : true,
-							trigger:'click hover',
-							content: help_text
-						});
+					let help_text = "";
+					let helplang = 0;
+					let attr_help = $($("metadata-wad",data)[0]).attr('help');
+					let help_items = attr_help.split(";"); // lang1/lang2,roles;lang1/lang2,roles
+					for (let i=0; i<help_items.length; i++){
+						let display_help = false;
+						let helps = help_items[i];
+						if (help_items[i].indexOf(",")>-1) {
+							let roles = help_items[i].substring(help_items[i].indexOf(",")+1);
+							if (roles.indexOf(this.userrole)>-1 || (roles.containsArrayElt(g_userroles) && g_userroles[0]!='designer') || USER.admin || g_userroles[0]=='designer')
+							display_help = true;
+							helps = help_items[i].substring(0,help_items[i].indexOf(","));
+						} else {
+							display_help = true;
+						}
+						helps = help_items[i].split("/"); // lang1/lang2/...
+						for (let j=0; j<helps.length; j++){
+							if (helps[j].indexOf("@"+languages[langcode])>-1)
+								helplang =j;
+						}
+						if (display_help){
+							help_text += helps[helplang].substring(0,helps[helplang].indexOf("@"));
+							let help = " <a href='javascript://' class='popinfo'><span style='font-size:12px' class='fas fa-question-circle'></span></a> ";
+							$("#help_"+uuid).html(help);
+							$(".popinfo").popover({ 
+								placement : 'right',
+								container : 'body',
+								title:karutaStr[LANG]['help-label'],
+								html : true,
+								trigger:'click hover',
+								content: help_text
+							});
+						}
 					}
 				}
 			}
