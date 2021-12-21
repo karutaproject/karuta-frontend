@@ -296,7 +296,7 @@ function fillEditBoxBody()
 		html += "\n					<li class='nav-item'><a class='nav-link active' href='#edit-window-body-main' aria-controls='edit-window-body-main' role='tab' data-toggle='tab'>"+karutaStr[LANG]['resource']+"</a></li>";
 		html += "\n					<li class='nav-item'><a class='nav-link' href='#edit-window-body-metadata' aria-controls='edit-window-body-metadata' role='tab' data-toggle='tab'>"+karutaStr[LANG]['metadata']+"</a></li>";
 		html += "\n					<li class='nav-item'><a class='nav-link' href='#edit-window-body-metadata-epm' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>"+karutaStr[LANG]['css-styles']+"</a></li>";
-		html += "\n					<li class='nav-item'><a class='nav-link' href='#edit-window-body-menu' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>"+karutaStr[LANG]['menu']+"</a></li>";
+		html += "\n					<li id='edit-window-body-menu-item' style='display:none' class='nav-item'><a class='nav-link' href='#edit-window-body-menu' aria-controls='edit-window-body-metadata-epm' role='tab' data-toggle='tab'>"+karutaStr[LANG]['menu']+"</a></li>";
 		html += "\n				</ul>";
 		html += "\n				<div class='tab-content'>";
 		html += "\n					<div role='tabpanel' class='tab-pane active' id='edit-window-body-main' style='margin-top:10px'>";
@@ -426,13 +426,17 @@ function getEditBox(uuid,js2) {
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
 		UICom.structure.ui[uuid].displayMetadataAttributesEditor("edit-window-body-metadata");
-		UICom.structure.ui[uuid].displayMenuEditor("edit-window-body-menu");
+		if(UICom.structure["ui"][uuid].resource==null) {
+			$("#edit-window-body-menu-item").show();
+			UICom.structure.ui[uuid].displayMenuEditor("edit-window-body-menu");
+		}
 	}
+	$('#edit-window').modal('toggle');
 	// ------------------------------
-//	$(".modal-dialog").css('width','70%');
+	$('#edit-window').animate({ scrollTop: 0 }, 'slow');
+	// ------------------------------
+//	$('#edit-window').show();
 	$(".pickcolor").colorpicker();
-	// ------------------------------
-	$('#edit-window-body').animate({ scrollTop: 0 }, 'slow');
 }
 
 
@@ -854,7 +858,6 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 //=======================================================================
 // if srcetag does not exist as semantictag search as code
 {
-	$("#wait-window").modal('show');
 	//------------
 	if (destid=='last-imported')
 		destid = g_importednodestack.pop();
@@ -890,11 +893,9 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 					callback(data,param2,param3,param4,param5,param6,param7,param8);
 				else
 					callback(param2,param3,param4,param5,param6,param7,param8);
-			$("#wait-window").modal('hide');			
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML(karutaStr[languages[LANGCODE]]['inexistent-selection']);
-			$("#wait-window").modal('hide');			
 		}
 	});
 }
@@ -2283,7 +2284,7 @@ function addautocomplete(input,arrayOfValues)
 
 
 //==================================
-function replaceVariable(text)
+function replaceVariable(text,node)
 //==================================
 {
 	var n=0;
@@ -2308,6 +2309,8 @@ function replaceVariable(text)
 			}
 		n++; // to avoid infinite loop
 	}
+	if (node!=null && node!=undefined)
+		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]").replaceAll('##nodeid##',"'"+node.id+"'");
 	return text;
 }
 

@@ -1228,9 +1228,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let jss = $("js",trgts[j]);
 					if (jss.length>0) {
 						for (let k=0;k<jss.length;k++){
-							onclick += $(jss[k]).text()+";";
-							if (onclick.indexOf("##nodeid##")>-1)
-								onclick = onclick.replace("##nodeid##","'"+node.id+"'");
+							onclick += replaceVariable($(jss[k]).text()+";",node);
 						}
 					}
 				}
@@ -1239,9 +1237,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let jss = $("js", $(">function",itemelts[i]));
 			if (jss.length>0) {
 				for (let j=0;j<jss.length;j++){
-					onclick += $(jss[j]).text()+";";
-					if (onclick.indexOf("##nodeid##")>-1)
-						onclick = onclick.replace("##nodeid##",node.id);
+					onclick += replaceVariable($(jss[j]).text()+";",node);
 				}
 			}
 		}
@@ -1287,7 +1283,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 						for (let k=0;k<jss.length;k++){
 							onclick += $(jss[k]).text()+";";
 							if (onclick.indexOf("##nodeid##")>-1)
-								onclick = onclick.replace("##nodeid##","'"+node.id+"'");
+								onclick = UIFactory.Node.onclick.replace("##nodeid##","'"+node.id+"'");
 						}
 					}
 				}
@@ -1447,9 +1443,8 @@ UIFactory["Node"].getFunctionArray = function(node,item)
 	let fcts = $("function",item);
 	if (fcts.length>0) {
 		for (let k=0;k<fcts.length;k++){
-			fctarray.push($(fcts[k]).text().replaceAll('##nodeid##',node.id).replaceAll("(","<<").replaceAll(")",">>"));
+			fctarray.push(replaceVariable($(fcts[k]).text().replaceAll("(","<<").replaceAll(")",">>")),node);
 		}
 	}
 	return fctarray;
 }
-
