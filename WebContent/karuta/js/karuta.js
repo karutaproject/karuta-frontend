@@ -377,7 +377,7 @@ function getEditBox(uuid,js2) {
 			},
 			error : function() {
 				var html = "";
-				html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
+				html += "<div>" + karutaStr[languages[LANGCODE]]['error-notfound'] + "</div>";
 				$("#preview-window-body").html(html);
 				$("#preview-window").modal('show');
 			}

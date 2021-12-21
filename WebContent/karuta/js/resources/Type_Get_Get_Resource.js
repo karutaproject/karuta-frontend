@@ -1655,7 +1655,7 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 	const acts = actns.split(';');
 	let actions = [];
 	for (let i=0;i<acts.length-1;i++) {
-		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
+		actions.push(JSON.parse(acts[i].replaceAll("|","\"").replaceAll("<<","(").replaceAll(">>",")")));
 	}
 	let js1 = "javascript:$('#edit-window').modal('hide')";
 	let js2 = "";

@@ -1087,12 +1087,13 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 			this.displayMetadatawWadTextAttributeEditor('metadata-menu','menulabels');
 			//------------------------------------------
 			menueltslist = [];
-			let parser = new DOMParser();
-			if (this.menuroles=="" || this.menuroles=="none")
+			if (this.menuroles=="" || this.menuroles=="none") {
+				let parser = new DOMParser();
 				this.menuroles = "<menus></menus>";
-			xmlDoc = parser.parseFromString(this.menuroles,"text/xml");
-			menueltslist.push($("menus",xmlDoc)[0]);
-			this.displaySubMenuEditor(-1,destmenu);
+				xmlDoc = parser.parseFromString(this.menuroles,"text/xml");
+				menueltslist.push($("menus",xmlDoc)[0]);
+				this.displaySubMenuEditor(-1,destmenu);
+			}
 			//------------------------------------------
 		}
 	}
@@ -1188,6 +1189,63 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			}
 		}
 		//-----------------------------------------------------------
+		//-------- import --------------------------------------------
+		//-----------------------------------------------------------
+		else if (type=='import') {
+			// --------- srce ------------
+			let srce = $("srce",itemelts[i])[0];
+			let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
+			let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+			// --------- targets ------------
+			let trgts = $("trgt",itemelts[i]);
+			if (trgts.length>0) {
+				for (let j=0;j<trgts.length;j++){
+					let position = $("position",trgts[j]).text();
+					let trgtsemtag = $("semtag",trgts[j]).text();
+					let target = getTarget (node,position+"."+trgtsemtag);
+					//----------------
+					$.ajaxSetup({async: false});
+					let databack = false;
+					let callback = "UIFactory.Node.reloadUnit";
+					if (node.asmtype == 'asmRoot' || node.asmtype == 'asmStructure') {
+						callback = "UIFactory.Node.reloadStruct";
+					}
+					let param2 = "'"+g_portfolio_rootid+"'";
+					//-----------------
+					let semtags = semtag.split("+");
+					for (let k=0;k<semtags.length;k++){
+						let targetid = parentid; // default value
+						if (semtags[k].length>0) {
+							if (target.length>0) {
+								let targetid = $(target[0]).attr("id");
+							} else if (position=='last-imported') {
+									let targetid = position;
+							}
+						}
+						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+","+param2+");"
+					}
+					// --------- fcts ------------
+					let jss = $("js",trgts[j]);
+					if (jss.length>0) {
+						for (let k=0;k<jss.length;k++){
+							onclick += $(jss[k]).text()+";";
+							if (onclick.indexOf("##nodeid##")>-1)
+								onclick = onclick.replace("##nodeid##","'"+node.id+"'");
+						}
+					}
+				}
+			}
+			// --------- fcts ------------
+			let jss = $("js", $(">function",itemelts[i]));
+			if (jss.length>0) {
+				for (let j=0;j<jss.length;j++){
+					onclick += $(jss[j]).text()+";";
+					if (onclick.indexOf("##nodeid##")>-1)
+						onclick = onclick.replace("##nodeid##",node.id);
+				}
+			}
+		}
+		//-----------------------------------------------------------
 		//-------- import-component-w-today-date --------------------
 		//-----------------------------------------------------------
 		else if (type=='import-component-w-today-date') {
@@ -1221,7 +1279,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 							//else {
 //									onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+calendar_semtag+");"
 						}
-						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag[k]+"',"+databack+","+callback+",'"+calendar_semtag+"');"
+						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+calendar_semtag+"');"
 					}
 					// --------- fcts ------------
 					let jss = $("js",trgts[j]);
@@ -1389,7 +1447,7 @@ UIFactory["Node"].getFunctionArray = function(node,item)
 	let fcts = $("function",item);
 	if (fcts.length>0) {
 		for (let k=0;k<fcts.length;k++){
-			fctarray.push($(fcts[k]).text());
+			fctarray.push($(fcts[k]).text().replaceAll('##nodeid##',node.id).replaceAll("(","<<").replaceAll(")",">>"));
 		}
 	}
 	return fctarray;
