@@ -1219,6 +1219,8 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 								targetid = $(target[0]).attr("id");
 							} else if (position=='##lastimported##') {
 								targetid = position;
+							} else if (position=='##currentnode##') {
+								targetid = node.id;
 							}
 						}
 						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+","+param2+");"
