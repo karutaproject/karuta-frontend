@@ -4,7 +4,7 @@ let menuElts = {};
 menuElts ["menu"]= "<menu del='y'><menulabel/></menu>";
 menuElts ["item"]= "<item del='y'><itemlabel/><roles/><condition/></item>";
 menuElts ["function"]= "<function del='y'><js/></function>";
-menuElts ["import"]= "<import del='y'><srce><foliocode/><semtag/></srce></import>";
+menuElts ["import"]= "<import del='y'><srce><foliocode/><semtag/></srce><trgt del='y'><position>##currentnode##</position><semtag/></trgt></import>";
 menuElts ["import-today-date"]= "<import-today-date del='y'><nop/></import-today-date>";
 menuElts ["import-component-w-today-date"]= "<import-component-w-today-date del='y'><srce><foliocode/><semtag/><updatedtag/></srce></import-component-w-today-date>";
 menuElts ["moveTO"]= "<moveTO del='y'><start-semtag/><destination-semtag/></moveTO>";
@@ -23,7 +23,8 @@ menuElts ["import_get_multiple"]= "<import_get_multiple del='y'><search><folioco
 menuElts ["import_get_get_multiple"]= "<import_get_get_multiple del='y'><parent><position/><semtag/></parent><gg_search><nop/></gg_search><gg_actions><nop/></gg_actions></import_get_get_multiple>";
 menuElts ["execReportforBatchCSV"]= "<execReportforBatchCSV del='y'><report-code/></execReportforBatchCSV>";
 menuElts ["search-source"]= "<search-source del='y'><foliocode/><parent-semtag></parent-semtag><semtag/><object disabled='y'>label</object></search-source>";
-menuElts ["search-in-parent"]= "<search-in-parent del='y'><foliocode disabled='y'>parent-code</foliocode><semtag/><object/></search-in-parent>";
+menuElts ["search-in-parent"]= "<search-in-parent del='y'><foliocode disabled='y'>##parentcode##</foliocode><semtag/><object/></search-in-parent>";
+menuElts ["search-w-parent"]= "<search-w-parent del='y'><foliocode>##parentcode##</foliocode><semtag/><object/></search-w-parent>";
 
 
 let menuItems = {};
@@ -39,7 +40,7 @@ menuItems['get_single']= ["trgt"];
 menuItems['menu']= ["item"];
 menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
 menuItems['g_actions']= ["import-component","import-elts-from","import-proxy"];
-menuItems['gg_search']= ["search-source","#or","search-in-parent"];
+menuItems['gg_search']= ["search-source","#or","search-in-parent","#or","search-w-parent"];
 menuItems['gg_actions']= ["import-component","import-elts-from","#line","import","import-component-w-today-date","import-today-date"];
 
 let menueltslist =[];
@@ -1158,8 +1159,8 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 		if (type=='function') {
 			const js = $("js",itemelts[i]).text();
 			onclick += js + ";";
-			if (onclick.indexOf("##nodeid##")>-1)
-				onclick = onclick.replace("##nodeid##","'"+node.id+"'");
+			if (onclick.indexOf("##currentnode##")>-1)
+				onclick = onclick.replace("##currentnode##","'"+node.id+"'");
 		}
 		//--------------- execReport_BatchCSV( --------------------
 		else if (type=='execReportforBatchCSV') {
@@ -1182,9 +1183,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let jss = $("js", $(">function",itemelts[i]));
 			if (jss.length>0) {
 				for (let j=0;j<jss.length;j++){
-					onclick += $(jss[j]).text()+";";
-					if (onclick.indexOf("##nodeid##")>-1)
-						onclick = onclick.replace("##nodeid##","'"+node.id+"'");
+					onclick += replaceVariable($(jss[j]).text()+";",node);
 				}
 			}
 		}
@@ -1217,9 +1216,9 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 						let targetid = parentid; // default value
 						if (semtags[k].length>0) {
 							if (target.length>0) {
-								let targetid = $(target[0]).attr("id");
-							} else if (position=='last-imported') {
-									let targetid = position;
+								targetid = $(target[0]).attr("id");
+							} else if (position=='##lastimported##') {
+								targetid = position;
 							}
 						}
 						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+","+param2+");"
@@ -1267,13 +1266,9 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 						if (semtags[k].length>0) {
 							if (target.length>0) {
 								let targetid = $(target[0]).attr("id");
-//								onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag[k]+"',"+databack+","+callback+",'"+calendar_semtag+"');"
-							} else if (position=='last-imported') {
+							} else if (position=='##lastimported##') {
 									let targetid = position;
-//									onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtag[k]+"',"+databack+","+callback+",'"+calendar_semtag+"');"
 							}
-							//else {
-//									onclick += "importBranch('"+parentid+"','"+foliocode+"','"+semtag+"',"+databack+","+callback+","+calendar_semtag+");"
 						}
 						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+calendar_semtag+"');"
 					}
@@ -1281,9 +1276,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let jss = $("js",trgts[j]);
 					if (jss.length>0) {
 						for (let k=0;k<jss.length;k++){
-							onclick += $(jss[k]).text()+";";
-							if (onclick.indexOf("##nodeid##")>-1)
-								onclick = UIFactory.Node.onclick.replace("##nodeid##","'"+node.id+"'");
+							onclick += replaceVariable($(jss[k]).text()+";",node);
 						}
 					}
 				}
@@ -1292,9 +1285,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let jss = $("js", $(">function",itemelts[i]));
 			if (jss.length>0) {
 				for (let j=0;j<jss.length;j++){
-					onclick += $(jss[j]).text()+";";
-					if (onclick.indexOf("##nodeid##")>-1)
-						onclick = onclick.replace("##nodeid##",node.id);
+					onclick += replaceVariable($(jss[j]).text()+";",node);
 				}
 			}
 		}
@@ -1322,7 +1313,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let updatedtag = replaceVariable( ($("updatedtag",srce).length>0)?$("updatedtag",srce).text():"" );
 					let fctarray = UIFactory.Node.getFunctionArray(node,itemelts[i]);
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
-					actions += "{|type|:|import_comp|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
+					actions += "{|type|:|import_component|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
 				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
 			}
@@ -1360,11 +1351,13 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let parent_position = replaceVariable( ($("position",parent).length>0)?$("position",parent).text():"" );
 			let parent_semtag = replaceVariable( ($("semtag",parent).length>0)?$("semtag",parent).text():"" );
 			// --------- search ------------
-			let search = $("search-source",itemelts[i]);
-			if (search.length>0)
+			let search = "";
+			if ($("search-source",itemelts[i]).length>0)
 				search = $("search-source",itemelts[i])[0];
-			else
+			else if ($("search-in-parent",itemelts[i]).length>0)
 				search = $("search-in-parent",itemelts[i])[0];
+			else if ($("search-w-parent",itemelts[i]).length>0)
+				search = $("search-w-parent",itemelts[i])[0];
 			let search_foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
 			let search_parent_semtag = replaceVariable( ($("parent-semtag",search).length>0)?$("parent-semtag",search).text():"" );
 			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
@@ -1386,7 +1379,9 @@ UIFactory["Node"].getActions = function(parentid,node,item)
 	let result = "";
 	let children = $("gg_actions>*",item);
 	for (let child=0;child<children.length;child++){
-		result += UIFactory.Node.getAction(parentid,node,children[child]);
+		let tag = $(children[child]).prop("tagName");
+		if (tag!="nop")
+			result += UIFactory.Node.getAction(parentid,node,children[child]);
 	}
 	return result ;
 }
@@ -1424,7 +1419,7 @@ UIFactory["Node"].getTargetArray = function(node,parentid,item)
 			if (target.length>0) {
 				let targetid = $(target[0]).attr("id");
 				trgtarray.push(targetid);
-			} else if (position=='last-imported') {
+			} else if (position=='##lastimported##') {
 				trgtarray.push(position);
 			} else {
 				trgtarray.push(parentid);

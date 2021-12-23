@@ -331,9 +331,6 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				}
 			}
 			//----------------------
-//			if ($("*:has(metadata[semantictag*='"+semtag_parent+"'][encrypted='Y'])",parent).length>0)
-//				code_parent = decrypt(code_parent.substring(3),g_rc4key);
-			//----------------------
 			if (removestar>-1) {
 				var elts = code_parent.split("*");
 				code_parent = elts[removestar];
@@ -544,15 +541,19 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 			//----------------------
 			var url ="";
-			if (portfoliocode.indexOf('parent-code')>-1) {
-				url = serverBCK_API+"/nodes?portfoliocode="+cleanCode(code_parent)+"&semtag="+semtag.replace("!","");
+			if (portfoliocode=="##parentcode##") {
+				portfoliocode = cleanCode(code_parent);
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
+			} else if (portfoliocode.indexOf("##parentcode##")>-1) {
+				let js2 = $("#js2").attr("onclick");
+				js2 = js2.replaceAll("##parentcode##",cleanCode(code_parent));
+				$("#js2").attr("onclick",js2);
+				portfoliocode = portfoliocode.replaceAll("##parentcode##",cleanCode(code_parent));
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
 			} else {
 				$(this.portfoliocode_node).text(portfoliocode);
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+query_parent_semtag+ "&code_parent="+code_parent;
 			}
-			//----------------------
-			if (portfoliocode.indexOf('parent-code')>-1)
-				portfoliocode = cleanCode(code_parent);
 			//----------------------
 			if (code_parent!="") {
 				var self = this;
@@ -1569,7 +1570,7 @@ function get_get_multiple(parentid,targetid,title,query,partcode,get_get_resourc
 {
 	// targetid not used with get_get_multiple
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Get_Resource.addMultiple('"+parentid+"','"+targetid+"','"+partcode+","+get_get_resource_semtag+"')";
+	var js2 = "UIFactory.Get_Get_Resource.addMultiple('"+parentid+"','"+targetid+"','"+partcode+"','"+get_get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
@@ -1630,7 +1631,7 @@ function functions_ggmultiple(parentid,targetid,title,query,functions)
 				js2 += ",'"+items[3]+"'";
 			else
 				js2 += ",'"+targetid+"'";
-			js2 += ",'"+items[1]+","+items[2]+"');";
+			js2 += ",'"+items[1]+"','"+items[2]+"');";
 		}
 	}
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
@@ -1691,9 +1692,8 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 		for (let j=0;j<fcts.length;j++) {
 			js2 += fcts[j]+";";
 		}		
-
 	}
-	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<button id='js2' class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title);
 	var html = "<div id='get-get-resource-node'></div>";

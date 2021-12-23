@@ -383,7 +383,7 @@ function getEditBox(uuid,js2) {
 			}
 		});		
 	}
-	if(UICom.structure["ui"][uuid].resource!=null) {
+	if(UICom.structure["ui"][uuid].resource!=null && UICom.structure["ui"][uuid].editresroles.containsArrayElt(g_userroles)) {
 		try {
 			html = UICom.structure["ui"][uuid].resource.getEditor();
 			$("#edit-window-body-resource").html($(html));
@@ -840,7 +840,7 @@ function importComponent(parentid,targetid,srce,part_semtag)
 	var databack = false;
 	var callback = UIFactory.Node.reloadUnit;
 	//------------------------------
-	if (targetid!='last-imported')
+	if (targetid!='##lastimported##')
 		if (UICom.structure.ui[targetid]==undefined && targetid!="")
 			targetid = getNodeIdBySemtag(targetid);
 	if (targetid!="" && targetid!=parentid)
@@ -859,7 +859,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 // if srcetag does not exist as semantictag search as code
 {
 	//------------
-	if (destid=='last-imported')
+	if (destid=='##lastimported##')
 		destid = g_importednodestack.pop();
 	//------------
 	srcecode = cleanCode(replaceVariable(srcecode));
@@ -2310,7 +2310,7 @@ function replaceVariable(text,node)
 		n++; // to avoid infinite loop
 	}
 	if (node!=null && node!=undefined)
-		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]").replaceAll('##nodeid##',"'"+node.id+"'");
+		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]").replaceAll('##currentnode##',"'"+node.id+"'");
 	return text;
 }
 

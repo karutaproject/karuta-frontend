@@ -279,7 +279,7 @@ function importAndSetDateToday(parentid,targetid,label,srce,part_semtag,calendar
 	var databack = true;
 	var callback = UIFactory.Calendar.updateaddedpart;
 	//------------------------------
-	if (targetid!='last-imported')
+	if (targetid!='##lastimported##')
 		if (UICom.structure.ui[targetid]==undefined && targetid!="")
 			targetid = getNodeIdBySemtag(targetid);
 	if (targetid!="" && targetid!=parentid)
