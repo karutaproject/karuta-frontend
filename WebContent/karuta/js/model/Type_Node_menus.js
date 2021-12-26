@@ -917,7 +917,7 @@ UIFactory["Node"].prototype.displayXMLSelectRole= function(cntidx,destmenu)
 	html += karutaStr[languages[langcode]][attribute];
 	html += "		</div>";
 	html += "	</div>";
-	html += "	<input id='"+nodeid+"_"+eltidx+attribute+"' onchange=\"UIFactory.Node.updateMetadataXmlMenuAttribute('"+eltidx+"','"+destmenu+"','"+nodeid+"')\" type='text' class='form-control' value=\""+value+"\" >";
+	html += "	<input autocomplete='off' id='"+nodeid+"_"+eltidx+attribute+"' onxchange=\"UIFactory.Node.updateMetadataXmlMenuAttribute('"+eltidx+"','"+destmenu+"','"+nodeid+"')\" type='text' class='form-control' value=\""+value+"\" >";
 	html += "	<div class='input-group-append'>";
 	html += "		<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
 	html += "		<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
@@ -933,7 +933,8 @@ UIFactory["Node"].prototype.displayXMLSelectRole= function(cntidx,destmenu)
 	html += "</div>";
 	$("#content"+cntidx).append(html);
 	//---------------------------
-	addautocomplete(document.getElementById(nodeid+"_"+eltidx+attribute), rolesarray);
+	let onupdate = "UIFactory.Node.updateMetadataXmlMenuAttribute('"+eltidx+"','"+destmenu+"','"+nodeid+"')";
+	addautocomplete(document.getElementById(nodeid+"_"+eltidx+attribute), rolesarray,onupdate,this,langcode);
 }
 
 //==================================
@@ -1187,14 +1188,16 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 				}
 			}
 		}
+
 		//-----------------------------------------------------------
-		//-------- import --------------------------------------------
+		//-------- import import-component-w-today-date -------------
 		//-----------------------------------------------------------
-		else if (type=='import') {
+		else if (type=='import' || type=='import-component-w-today-date') {
 			// --------- srce ------------
 			let srce = $("srce",itemelts[i])[0];
 			let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
 			let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
+//			let calendar_semtag = replaceVariable( ($("calendar-semtag",itemelts[i]).length>0)?$("calendar-semtag",itemelts[i]).text():"" );
 			// --------- targets ------------
 			let trgts = $("trgt",itemelts[i]);
 			if (trgts.length>0) {
@@ -1204,64 +1207,20 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let target = getTarget (node,position+"."+trgtsemtag);
 					//----------------
 					$.ajaxSetup({async: false});
-					let databack = false;
-					let callback = "UIFactory.Node.reloadUnit";
-					if (node.asmtype == 'asmRoot' || node.asmtype == 'asmStructure') {
-						callback = "UIFactory.Node.reloadStruct";
+					if (type=='import-component-w-today-date') {
+						var databack = true;
+						var callback = 'UIFactory.Calendar.updateaddedpart';
+						let param2 = replaceVariable( ($("calendar-semtag",itemelts[i]).length>0)?$("calendar-semtag",itemelts[i]).text():"" );
 					}
-					let param2 = "'"+g_portfolio_rootid+"'";
-					//-----------------
-					let semtags = semtag.split("+");
-					for (let k=0;k<semtags.length;k++){
-						let targetid = parentid; // default value
-						if (semtags[k].length>0) {
-							if (target.length>0) {
-								targetid = $(target[0]).attr("id");
-							} else if (position=='##lastimported##') {
-								targetid = position;
-							} else if (position=='##currentnode##') {
-								targetid = node.id;
-							}
+					if (type=='import-component-w-today-date') {
+						let databack = false;
+						let callback = "UIFactory.Node.reloadUnit";
+						if (node.asmtype == 'asmRoot' || node.asmtype == 'asmStructure') {
+							callback = "UIFactory.Node.reloadStruct";
 						}
-						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+","+param2+");"
+						let param2 = "'"+g_portfolio_rootid+"'";
 					}
-					// --------- fcts ------------
-					let jss = $("js",trgts[j]);
-					if (jss.length>0) {
-						for (let k=0;k<jss.length;k++){
-							onclick += replaceVariable($(jss[k]).text()+";",node);
-						}
-					}
-				}
-			}
-			// --------- fcts ------------
-			let jss = $("js", $(">function",itemelts[i]));
-			if (jss.length>0) {
-				for (let j=0;j<jss.length;j++){
-					onclick += replaceVariable($(jss[j]).text()+";",node);
-				}
-			}
-		}
-		//-----------------------------------------------------------
-		//-------- import-component-w-today-date --------------------
-		//-----------------------------------------------------------
-		else if (type=='import-component-w-today-date') {
-			// --------- srce ------------
-			let srce = $("srce",itemelts[i])[0];
-			let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
-			let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
-			let calendar_semtag = replaceVariable( ($("calendar-semtag",itemelts[i]).length>0)?$("calendar-semtag",itemelts[i]).text():"" );
-			// --------- targets ------------
-			let trgts = $("trgt",itemelts[i]);
-			if (trgts.length>0) {
-				for (let j=0;j<trgts.length;j++){
-					let position = $("position",trgts[j]).text();
-					let trgtsemtag = $("semtag",trgts[j]).text();
-					let target = getTarget (node,position+"."+trgtsemtag);
-					
-					$.ajaxSetup({async: false});
-					var databack = true;
-					var callback = 'UIFactory.Calendar.updateaddedpart';
+					//----------------
 					var semtags = semtag.split("+");
 					for (let k=0;k<semtags.length;k++){
 						let targetid = parentid; // default value
@@ -1272,7 +1231,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 									let targetid = position;
 							}
 						}
-						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+calendar_semtag+"');"
+						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"');"
 					}
 					// --------- fcts ------------
 					let jss = $("js",trgts[j]);
