@@ -361,7 +361,7 @@ UIFactory["Image"].prototype.displayEditor = function(destid,type,langcode,disab
 	if (USER.admin || g_userroles[0]=='designer') {
 		var semtag =  ($("metadata",this.node)[0]==undefined || $($("metadata",this.node)[0]).attr('semantictag')==undefined)?'': $($("metadata",this.node)[0]).attr('semantictag');
 		if (semtag=="config-img-css")
-			html += "<div class='iamge-url'>url : ../../../"+serverBCK+"/resources/resource/file/"+this.id+"</div>";
+			html += "<div class='iamge-url'>url : ../../../"+serverBCK+"/resources/resource/file/"+this.id+"?lang="+languages[langcode]+"</div>";
 	}
 	$("#"+destid).append($(html));
 	var loadedid = 'loaded_'+this.id+langcode;

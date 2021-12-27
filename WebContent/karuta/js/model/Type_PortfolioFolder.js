@@ -148,7 +148,7 @@ function dropPortfolioFolder(ev)
 			folders_byid[portfolioid].renameFolderCode(newportfolio_code);
 		}
 		if (type=="portfolio") {
-			var newportfolio_code = folder_code.substring(0,folder_code.lastIndexOf('/')) + (portfolio_code.indexOf(".")<-1)? ".":"" + portfolio_code.substring(portfolio_code.indexOf('.'));
+			var newportfolio_code = folder_code.substring(0,folder_code.lastIndexOf('/')) + ((portfolio_code.indexOf(".")<0)? ".":"") + portfolio_code.substring(portfolio_code.indexOf('.'));
 			portfolios_byid[portfolioid].renamePortfolioCode(newportfolio_code);
 			if (parentid!="") {
 				folders_byid[parentid].loaded = false;

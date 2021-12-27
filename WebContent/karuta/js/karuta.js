@@ -2812,3 +2812,160 @@ function toggleDraft (nodeid)
 	}
 }
 
+//=========================================================
+//==================API Vector Functions===================
+//=========================================================
+
+//==================================
+function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	var xml = "<vector><a1>"+((a1==undefined)?"":a1)+"</a1><a2>"+((a2==undefined)?"":a2)+"</a2><a3>"+((a3==undefined)?"":a3)+"</a3><a4>"+((a4==undefined)?"":a4)+"</a4><a5>"+((a5==undefined)?"":a5)+"</a5><a6>"+((a6==undefined)?"":a6)+"</a6><a7>"+((a7==undefined)?"":a7)+"</a7><a8>"+((a8==undefined)?"":a8)+"</a8><a9>"+((a9==undefined)?"":a9)+"</a9><a10>"+((a10==undefined)?"":a10)+"</a10></vector>";
+	$.ajax({
+		type : "POST",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : serverBCK+"/vector",
+		data : xml,
+		success : function(data) {
+			return true;
+		},
+		error : function(jqxhr,textStatus) {
+			return false;
+		}
+	});
+}
+
+//==================================
+function deleteVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	let url = serverBCK+"/vector?";
+	if (a1!=null)
+		url += "a1="+a1;
+	if (a2!=null)
+		if (url=="")
+			url += "a2="+a2;
+		else
+			url += "&a2="+a2;
+	if (a3!=null)
+		if (url=="")
+			url += "a3="+a3;
+		else
+			url += "&a3="+a3;
+	if (a4!=null)
+		if (url=="")
+			url += "a4="+a4;
+		else
+			url += "&a4="+a4;
+	if (a5!=null)
+		if (url=="")
+			url += "a5="+a5;
+		else
+			url += "&a5="+a5;
+	if (a6!=null)
+		if (url=="")
+			url += "a6="+a6;
+		else
+			url += "&a6="+a6;
+	if (a7!=null)
+		if (url=="")
+			url += "a7="+a7;
+		else
+			url += "&a7="+a7;
+	if (a8!=null)
+		if (url=="")
+			url += "a8="+a8;
+		else
+			url += "&a8="+a8;
+	if (a9!=null)
+		if (url=="")
+			url += "a9="+a9;
+		else
+			url += "&a9="+a9;
+	if (a10!=null)
+		if (url=="")
+			url += "a10="+a10;
+		else
+			url += "&a10="+a10;
+	$.ajax({
+		type : "DELETE",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			return true;
+		},
+		error : function(jqxhr,textStatus) {
+			return false;
+		}
+	});
+}
+
+//==================================
+function searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	let result = [];
+	let query = "";
+	if (a1!=null)
+		query += "a1="+a1;
+	if (a2!=null)
+		if (query=="")
+			query += "a2="+a2;
+		else
+			query += "&a2="+a2;
+	if (a3!=null)
+		if (query=="")
+			query += "a3="+a3;
+		else
+			query += "&a3="+a3;
+	if (a4!=null)
+		if (query=="")
+			query += "a4="+a4;
+		else
+			query += "&a4="+a4;
+	if (a5!=null)
+		if (query=="")
+			query += "a5="+a5;
+		else
+			query += "&a5="+a5;
+	if (a6!=null)
+		if (query=="")
+			query += "a6="+a6;
+		else
+			query += "&a6="+a6;
+	if (a7!=null)
+		if (query=="")
+			query += "a7="+a7;
+		else
+			query += "&a7="+a7;
+	if (a8!=null)
+		if (query=="")
+			query += "a8="+a8;
+		else
+			query += "&a8="+a8;
+	if (a9!=null)
+		if (query=="")
+			query += "a9="+a9;
+		else
+			query += "&a9="+a9;
+	if (a10!=null)
+		if (query=="")
+			query += "a10="+a10;
+		else
+			query += "&a10="+a10;
+	$.ajax({
+		async:false,
+		type : "GET",
+		contentType: "application/xml",
+		url : serverBCK+"/vector?"+query,
+		success : function(data) {
+			result = data;
+		},
+		error : function(jqxhr,textStatus) {
+			return false;
+		}
+	});
+	return result;
+}
