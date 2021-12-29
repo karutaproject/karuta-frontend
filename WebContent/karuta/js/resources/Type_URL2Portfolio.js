@@ -166,7 +166,7 @@ UIFactory["URL2Portfolio"].prototype.displayEditor = function(destid,type,langco
 	var self = this;
 	var queryattr_value = this.query;
 	if (queryattr_value!=undefined && queryattr_value!='') {
-		queryattr_value = r_replaceVariable(queryattr_value);
+		queryattr_value = replaceVariable(queryattr_value);
 		//------------
 		var target_indx = queryattr_value.lastIndexOf('.');
 		var target = queryattr_value.substring(target_indx+1);
@@ -314,7 +314,7 @@ UIFactory["URL2Portfolio"].prototype.bringUpToDate = function()
 {
 	var queryattr_value = this.query;
 	if (queryattr_value!=undefined && queryattr_value!='') {
-		queryattr_value = r_replaceVariable(queryattr_value);
+		queryattr_value = replaceVariable(queryattr_value);
 		//------------
 		var target_indx = queryattr_value.lastIndexOf('.');
 		var target = queryattr_value.substring(target_indx+1);

@@ -1665,22 +1665,22 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 		if (actions[i].type=="import-component") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
-				js2 += "UIFactory.Get_Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
+				js2 += "UIFactory.Get_Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
 			}
 		} else if (actions[i].type=="import-elts-from") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
-				js2 += "UIFactory.Get_Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
+				js2 += "UIFactory.Get_Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
 			}
 		} else if (actions[i].type=="import-component-w-today-date") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
-					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+r_replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
+					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
 			}
 		} else if (actions[i].type=="import") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
-					js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
+					js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
 			}
 		} else if (actions[i].type=="import-today-date") {
 			let targets = actions[i].trgts.split(',');

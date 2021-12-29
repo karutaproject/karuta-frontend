@@ -190,7 +190,7 @@ UIFactory["Get_Proxy"].prototype.displayEditor = function(destid,type,langcode)
 	var queryattr_value = $("metadata-wad",this.node).attr('query');
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------------
-		queryattr_value = cleanCode(r_replaceVariable(queryattr_value));
+		queryattr_value = cleanCode(replaceVariable(queryattr_value));
 		var parts = queryattr_value.split("|");
 		var queryattr_value = parts[0];
 		var proxy_semtag = parts[1]

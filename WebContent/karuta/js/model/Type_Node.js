@@ -333,13 +333,13 @@ UIFactory["Node"].prototype.displayAsmContext = function (dest,type,langcode,edi
 	//-------------------- STYLES ---------------------------------------
 	var style = "";
 	//-------------------- node style -------------------
-	style = r_replaceVariable(this.getNodeStyle(uuid));
+	style = replaceVariable(this.getNodeStyle(uuid));
 	$("#node_"+uuid).attr("style",style);
 	//-------------------- label style -------------------
-	style = r_replaceVariable(this.getLabelStyle(uuid));
+	style = replaceVariable(this.getLabelStyle(uuid));
 	$("*[name='res-lbl-div']","#node_"+uuid).attr("style",style);
 	//-------------------- resource style -------------------
-	style = r_replaceVariable(this.getContentStyle());
+	style = replaceVariable(this.getContentStyle());
 	$("*[name='res-div']","#node_"+uuid).attr("style",style);
 	//---------------- display resource ---------------------------------
 	if (this.edit && this.inline && this.writenode && this.editable_in_line)
@@ -456,7 +456,7 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	//-------------------- node style -------------------
 	var style = "";
 	if (this.depth>0 && type!='raw') {
-		style = r_replaceVariable(this.getNodeStyle(uuid));
+		style = replaceVariable(this.getNodeStyle(uuid));
 		$("#node_"+uuid).attr("style",style);
 	}
 	//-------------------- label style -------------------
@@ -465,12 +465,12 @@ UIFactory["Node"].prototype.displayAsmNode = function(dest,type,langcode,edit,re
 	} else {
 		style = UIFactory.Node.getInParentLabelStyle(uuid);
 	}
-	style = r_replaceVariable(style);
+	style = replaceVariable(style);
 	if (type!='raw')
 		$("div[name='lbl-div']","#node_"+uuid).attr("style",style);
 	//-------------------- content style -------------------
 	if (type!='model' && type!='raw') {
-		style = r_replaceVariable(this.getContentStyle(uuid));
+		style = replaceVariable(this.getContentStyle(uuid));
 		$("div[name='cnt-div']","#node_"+uuid).attr("style",style);
 	}
 	//-------------------- collapsible -------------------
@@ -891,7 +891,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		editnoderoles="";
 	if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
 		var htmlFormObj = $("<form class='form-horizontal'></form>");
-		var query = r_replaceVariable($(this.metadatawad).attr('query'));
+		var query = replaceVariable($(this.metadatawad).attr('query'));
 		if (query==undefined || query=='' || this.asmtype=='asmContext' || g_display_type=='raw'){
 			if (g_userroles[0]=='designer' || USER.admin || editcoderoles.containsArrayElt(g_userroles) || editcoderoles.indexOf(this.userrole)>-1 || editcoderoles.indexOf($(USER.username_node).text())>-1) {
 				//---------------------- code ----------------------------

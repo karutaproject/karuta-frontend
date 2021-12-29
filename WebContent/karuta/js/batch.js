@@ -180,7 +180,7 @@ function getTargetUrl(node)
 	else
 		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag;
 	return url;
-//	return r_replaceVariable(url);
+//	return replaceVariable(url);
 }
 
 //==================================
@@ -218,7 +218,7 @@ function getSourceUrl(node)
 	else
 		url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[treeref][1] + "&semtag="+semtag;
 	return url;
-//	return r_replaceVariable(url);
+//	return replaceVariable(url);
 }
 
 //-----------------------------------------------------------------------

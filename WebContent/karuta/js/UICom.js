@@ -303,7 +303,7 @@ var UICom =
 			try {
 				//----------------------------
 				var roles = null;
-				var attribute_value = r_replaceVariable($("metadata-wad",node).attr(attribute) != undefined ? $("metadata-wad",node).attr(attribute):"");
+				var attribute_value = replaceVariable($("metadata-wad",node).attr(attribute) != undefined ? $("metadata-wad",node).attr(attribute):"");
 				if (attribute == 'menuroles' && attribute_value.length>10) {
 					if (attribute_value.charAt(0)!="<") {
 						var items = attribute_value.split(";");

@@ -434,7 +434,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 	}
 	if (queryattr_value!=undefined && queryattr_value!='') {
 		//------------------
-		queryattr_value = r_replaceVariable(queryattr_value);
+		queryattr_value = replaceVariable(queryattr_value);
 		//------------
 		var srce_indx = queryattr_value.lastIndexOf('.');
 		var srce = queryattr_value.substring(srce_indx+1);
@@ -447,7 +447,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		}
 		var target = queryattr_value.substring(srce_indx+1); // label or text
 		//------------
-		var portfoliocode = cleanCode(r_replaceVariable(queryattr_value.substring(0,semtag_indx)));
+		var portfoliocode = cleanCode(replaceVariable(queryattr_value.substring(0,semtag_indx)));
 		var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
 		if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
 			portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
@@ -474,7 +474,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 		//------------
 	}
 	if (this.get_type=="import_comp"){
-		let portfoliocode = cleanCode(r_replaceVariable(this.query_portfolio));
+		let portfoliocode = cleanCode(replaceVariable(this.query_portfolio));
 		let semtag = this.query_semtag;
 		let semtag2 = "";
 		if (semtag.indexOf('+')>-1) {
@@ -1724,7 +1724,7 @@ function get_simple(parentid,targetid,title,query,partcode,get_resource_semtag)
 {
 	// targetid not used with get_simple
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+targetid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+"')";
+	var js2 = "UIFactory.Get_Resource.addSimple('"+parentid+"','"+targetid+"','"+replaceVariable(partcode)+","+get_resource_semtag+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title.replaceAll("##apos##","'"));
@@ -1745,7 +1745,7 @@ function get_multiple(parentid,targetid,title,query,partcode,get_resource_semtag
 {
 	// targetid not used with get_multiple
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+targetid+"','"+r_replaceVariable(partcode)+","+get_resource_semtag+","+fct+"')";
+	var js2 = "UIFactory.Get_Resource.addMultiple('"+parentid+"','"+targetid+"','"+replaceVariable(partcode)+","+get_resource_semtag+","+fct+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title.replaceAll("##apos##","'"));
@@ -1766,7 +1766,7 @@ function import_multiple(parentid,targetid,title,query,partcode,get_resource_sem
 //==================================
 {
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+targetid+"','"+r_replaceVariable(partcode)+"')";
+	var js2 = "UIFactory.Get_Resource.importMultiple('"+parentid+"','"+targetid+"','"+replaceVariable(partcode)+"')";
 	var footer = "<button class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);
 	$("#edit-window-title").html(title.replaceAll("##apos##","'"));
@@ -1799,27 +1799,27 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 		if (actions[i].type=="import_component") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
-				js2 += "UIFactory.Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
+				js2 += "UIFactory.Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
 			}
 		} else if (actions[i].type=="import_elts") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
-				js2 += "UIFactory.Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
+				js2 += "UIFactory.Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
 			}
 		} else if (actions[i].type=="import_elts-from") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
-				js2 += "UIFactory.Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode)+"','?');";
+				js2 += "UIFactory.Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode)+"','?');";
 			}
 		} else if (actions[i].type=="import-component-w-today-date") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
-					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+r_replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
+					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
 			}
 		} else if (actions[i].type=="import") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
-					js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+r_replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
+					js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
 			}
 		} else if (actions[i].type=="import-today-date") {
 			let targets = actions[i].trgts.split(',');

@@ -2295,6 +2295,8 @@ function addautocomplete(input,arrayOfValues,onupdate,self,langcode)
 function replaceVariable(text,node)
 //==================================
 {
+	if (node!=null && node!=undefined)
+		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]").replaceAll('##currentnode##',"'"+node.id+"'");
 	var n=0;
 	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
@@ -2317,10 +2319,9 @@ function replaceVariable(text,node)
 			}
 		n++; // to avoid infinite loop
 	}
-	if (node!=null && node!=undefined)
-		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]").replaceAll('##currentnode##',"'"+node.id+"'");
 	return text;
 }
+
 
 //==================================
 function addParentCode (parentid) {
