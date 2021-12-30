@@ -18,13 +18,14 @@ menuElts ["action"]= "<action del='y'><srce><portfoliocode/><semtag/></srce></ac
 menuElts ["srce"]= "<srce del='n'><foliocode/><semtag/></srce>";
 menuElts ["trgt"]= "<trgt del='y'><position/><semtag/></trgt>";
 menuElts ["get_single"]= "<get_single del='y'><srce><foliocode/><semtag/></srce></get_single>";
-menuElts ["get_multiple"]= "<get_multiple del='y'><search><foliocode/><semtag/></search><import2><srce><foliocode/><semtag/></srce></import2></get_multiple>";
+//menuElts ["get_multiple"]= "<get_multiple del='y'><search><foliocode/><semtag/></search><import2><srce><foliocode/><semtag/></srce></import2></get_multiple>";
 menuElts ["import_get_multiple"]= "<import_get_multiple del='y'><search><foliocode/><semtag/><object/></search><g_actions><nop/></g_actions></import_get_multiple>";
 menuElts ["import_get_get_multiple"]= "<import_get_get_multiple del='y'><parent><position/><semtag/></parent><gg_search><nop/></gg_search><gg_actions><nop/></gg_actions></import_get_get_multiple>";
 menuElts ["execReportforBatchCSV"]= "<execReportforBatchCSV del='y'><report-code/></execReportforBatchCSV>";
 menuElts ["search-source"]= "<search-source del='y'><foliocode/><parent-semtag></parent-semtag><semtag/><object disabled='y'>label</object></search-source>";
 menuElts ["search-in-parent"]= "<search-in-parent del='y'><foliocode disabled='y'>##parentcode##</foliocode><semtag/><object/></search-in-parent>";
 menuElts ["search-w-parent"]= "<search-w-parent del='y'><foliocode>##parentcode##</foliocode><semtag/><object/></search-w-parent>";
+menuElts ["export_get_multiple"]= "<export_get_multiple del='y'><search><foliocode/><semtag/><object/></search></export_get_multiple>";
 
 
 let menuItems = {};
@@ -38,7 +39,7 @@ menuItems['import-today-date']= ["trgt","function"];
 menuItems['import-component-w-today-date']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
 menuItems['menu']= ["item"];
-menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
+menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date","export_get_multiple"];
 menuItems['g_actions']= ["import-component","import-elts-from","import-proxy"];
 menuItems['gg_search']= ["search-source","#or","search-in-parent","#or","search-w-parent"];
 menuItems['gg_actions']= ["import-component","import-elts-from","#line","import","import-component-w-today-date","import-today-date"];
@@ -290,6 +291,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Proxy','Proxy',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','g-variable','Variable',databack,callback,param2,param3,param4);
 		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Proxy','Get_Proxy',databack,callback,param2,param3,param4);
+		html += UIFactory["Node"].getItemMenu(node.id,'karuta.karuta-resources','Get_Portfolio','Get_Portfolio',databack,callback,param2,param3,param4);
 		//--------------------------------
 		if (plugin_resources.length>0){
 			html += "<hr>";
@@ -549,6 +551,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 							nbitems++;
 					}
 					if (nbitems>1){
+						var parentid = node.id; // default value
 						html += "<span class='dropdown'>";
 						html += "	<button class='btn dropdown-toggle add-button' style='"+menus_style+"' type='button' id='specific_"+node.id+"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>";
 						html += UIFactory.Node.getMenuLabel(menulabel,langcode);
@@ -1205,20 +1208,23 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let position = $("position",trgts[j]).text();
 					let trgtsemtag = $("semtag",trgts[j]).text();
 					let target = getTarget (node,position+"."+trgtsemtag);
+					let databack = null;
+					let callback = null;
+					let param2 = null;
 					//----------------
 					$.ajaxSetup({async: false});
 					if (type=='import-component-w-today-date') {
-						var databack = true;
-						var callback = 'UIFactory.Calendar.updateaddedpart';
-						let param2 = replaceVariable( ($("calendar-semtag",itemelts[i]).length>0)?$("calendar-semtag",itemelts[i]).text():"" );
+						databack = true;
+						callback = 'UIFactory.Calendar.updateaddedpart';
+						param2 = replaceVariable( ($("calendar-semtag",itemelts[i]).length>0)?$("calendar-semtag",itemelts[i]).text():"" );
 					}
-					if (type=='import-component-w-today-date') {
-						let databack = false;
-						let callback = "UIFactory.Node.reloadUnit";
+					if (type=='import') {
+						databack = false;
+						callback = "UIFactory.Node.reloadUnit";
 						if (node.asmtype == 'asmRoot' || node.asmtype == 'asmStructure') {
 							callback = "UIFactory.Node.reloadStruct";
 						}
-						let param2 = "'"+g_portfolio_rootid+"'";
+						param2 = g_portfolio_rootid;
 					}
 					//----------------
 					var semtags = semtag.split("+");
@@ -1226,9 +1232,9 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 						let targetid = parentid; // default value
 						if (semtags[k].length>0) {
 							if (target.length>0) {
-								let targetid = $(target[0]).attr("id");
+								targetid = $(target[0]).attr("id");
 							} else if (position=='##lastimported##') {
-									let targetid = position;
+									targetid = position;
 							}
 						}
 						onclick += "importBranch('"+targetid+"','"+foliocode+"','"+semtags[k]+"',"+databack+","+callback+",'"+param2+"');"
@@ -1328,6 +1334,20 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			// -----------------------------
 			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
 			//------------------------------------
+		}
+		//-----------------------------------------------------------
+		//------------------------- export_get_multiple ----------------
+		//-----------------------------------------------------------
+		else if (type=='export_get_multiple') {
+			let actions = "";
+			// --------- boxlabel ------------
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i])[0].text():"" );
+			// --------- search ------------
+			let search = $("search",itemelts[i])[0];
+			let search_foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
+			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
+			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
+			onclick += "export_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
 		}
 	}
 	return onclick;

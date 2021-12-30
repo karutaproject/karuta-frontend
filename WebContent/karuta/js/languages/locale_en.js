@@ -104,6 +104,7 @@ karutaStr["en"]["button-decrease"] = "Decrease Character Size";
 karutaStr["en"]["copy"] = "Copy";
 karutaStr["en"]["copied"] = "Copied";
 karutaStr["en"]["waitreport"] = "Wait, the report is executed on the server. Come back in a few minutes to view the report.";
+karutaStr["en"]["instruction-export-menu"] = "Copy the menu and paste it where you want to import it.";
 
 //=========================================
 //========== ERRORS =======================
@@ -589,6 +590,7 @@ karutaStr['en']['Get_Get_Resource']="GetGetResource";
 karutaStr['en']['Get_Double_Resource']="GetDoubleResource";
 karutaStr['en']['Proxy']="Proxy";
 karutaStr['en']['Get_Proxy']="GetProxy";
+karutaStr['en']['Get_Portfolio']="GetPortfolio";
 
 karutaStr['en']['Variable']="Variable";
 karutaStr['en']['var-name']="Variable Name";

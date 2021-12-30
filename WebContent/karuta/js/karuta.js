@@ -43,6 +43,7 @@ var g_execbatch = false;
 var g_dashboard_models = {}; // cache for dashboard_models
 var g_report_models = {}; // cache for report_models
 var g_Get_Resource_caches = {};
+var g_Get_Portfolio_caches = {};
 //------------------
 var g_wysihtml5_autosave = 60000; // 60 seconds
 var g_portfolio_current = ""; // XML jQuery Object - must be set after loading xml

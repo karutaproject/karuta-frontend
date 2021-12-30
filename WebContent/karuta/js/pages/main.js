@@ -26,6 +26,7 @@ function fill_main_page(portfolioid)
 	g_dashboard_models = {};
 	g_report_models = {};
 	g_Get_Resource_caches = {};
+	g_Get_Portfolio_caches = {};
 	var html = "";
 	$("#portfolio-container").html(html);
 	g_welcome_add = false;

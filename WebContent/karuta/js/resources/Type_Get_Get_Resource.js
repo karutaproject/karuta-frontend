@@ -455,8 +455,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 			srce = this.query_object;
 			//------------
 			var selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
-				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
+//			if (portfoliocode.indexOf('.')<0 && selfcode.indexOf('.')>0 && portfoliocode!='self')  // There is no project, we add the project of the current portfolio
+//				portfoliocode = selfcode.substring(0,selfcode.indexOf('.')) + "." + portfoliocode;
 			if (portfoliocode=='self')
 				portfoliocode = selfcode;
 			//------------
@@ -1548,7 +1548,7 @@ UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,f
 	}
 	for (var j=0; j<inputs.length;j++){
 		var code = $(inputs[j]).attr('code');
-		if (srce=='?' || srce=='parent-code')
+		if (srce=='?' || srce=='parent-code' || srce=='##parentcode##')
 			srce = $(inputs[j]).attr('portfoliocode');
 		importBranch(parentid,srce,code,databack,callback,param2,param3);
 	}
