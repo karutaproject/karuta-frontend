@@ -403,7 +403,10 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 			if (elts[0]=="update-resource") {
 				fctjs = elts[1].split(";");
 				for (let j=0;j<fctjs.length;j++) {
-					eval(fctjs[j]+"(itself.node,g_portfolioid)");
+					if (fctjs[j].indexOf("##"))
+						eval(replaceVariable(fctjs[j],itself.node));
+					else
+						eval(fctjs[j]+"(itself.node,g_portfolioid)");
 				}
 			}
 		}
@@ -1792,10 +1795,11 @@ function import_multiple(parentid,targetid,title,query,partcode,get_resource_sem
 function import_get_multiple(parentid,targetid,title,query_portfolio,query_semtag,query_object,actns)
 //==================================
 {
+	$.ajaxSetup({async: false});
 	const acts = actns.split(';');
 	let actions = [];
 	for (let i=0;i<acts.length-1;i++) {
-		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
+		actions.push(JSON.parse(acts[i].replaceAll("|","\"").replaceAll("<<","(").replaceAll(">>",")")));
 	}
 	let js1 = "javascript:$('#edit-window').modal('hide')";
 	let js2 = "";

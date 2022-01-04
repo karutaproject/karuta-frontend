@@ -1941,8 +1941,8 @@ UIFactory['Node'].loadNode = function(uuid)
 //==================================================
 {
 	var parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
-	$.ajaxSetup({async: false});
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/" + uuid + "?resources=true",
@@ -1950,8 +1950,12 @@ UIFactory['Node'].loadNode = function(uuid)
 		success : function(data) {
 			UICom.parseStructure(data,false,parentid);
 			$("#"+this.uuid,g_portfolio_current).replaceWith($(":root",data));
-			if (UICom.structure.ui[this.uuid].asmtype=='asmUnit')
+			if (UICom.structure.ui[this.uuid].asmtype=='asmUnit') {
 				UICom.structure.ui[this.uuid].loaded = true;
+			}
+			if (UICom.structure.ui[this.uuid].asmtype=='asmStructure') {
+				UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
+			}
 		}
 	});
 	$.ajaxSetup({async: true});
@@ -1962,8 +1966,8 @@ UIFactory['Node'].loadStructure = function(uuid)
 //==================================================
 {
 	var parentid = $($(UICom.structure["ui"][uuid].node).parent()).attr('id');
-	$.ajaxSetup({async: false});
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/" + uuid + "?level=2",
@@ -2631,177 +2635,3 @@ UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,i
 	//-------------------------------------------------------
 }
 
-
-//==================================================
-UIFactory["Node"].prototype.exportNode = function()
-//==================================================
-{
-	var portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
-	var foldercode = portfoliocode.substring(0,portfoliocode.indexOf('.'));
-	var exportcode = foldercode+"."+this.semantictag;
-	var exportlabel = "Export-" + this.getLabel(null,'none');
-	var menuroles = exportcode + "," + this.semantictag +",Ajouter "+this.getLabel(null,'none')+"@fr/Add "+this.getLabel(null,'none')+"@en,designer";
-	var nodestring = this.node.outerHTML;
-	//--------------------
-	var instructions = "";
-	for (var i=0; i<languages.length;i++){
-		instructions += "<text lang='"+languages[i]+"'>"+karutaStr[languages[i]]['instruction-export-menu']+"</text>"
-	}
-	//--------------------
-	var xml = "";
-	xml += "<portfolio code='"+portfoliocode+"'>";
-	xml += "	<asmRoot>";
-	xml += "		<metadata-wad menuroles='"+menuroles+"' seenoderoles='all' />";
-	xml += "		<metadata-epm />";
-	xml += "		<metadata multilingual-node='Y' semantictag='root' sharedNode='N' sharedResource='N' />";
-	xml += "		<asmResource xsi_type='nodeRes'><code>"+exportcode+"</code><label lang='fr'>"+exportlabel+"</label><label lang='en'>"+exportlabel+"</label></asmResource>";
-	xml += "		<asmResource xsi_type='context'>"+instructions+"</asmResource>";
-	xml += nodestring;
-	xml += "	</asmRoot>";
-	xml += "</portfolio>";
-	$.ajax({
-		type : "POST",
-		contentType: "application/xml",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios",
-		data : xml,
-		success : function(data) {
-			alert("Enregistré");
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Error : "+jqxhr.responseText);
-		}
-	});
-}
-
-
-//==================================
-function exportNode(nodeid)
-//==================================
-{
-	UICom.structure.ui[nodeid].exportNode();
-}
-
-
-//==================================================
-UIFactory["Node"].prototype.exportMultiple = function()
-//==================================================
-{
-	var inputs = $("input[name='multiple_"+this.id+"']").filter(':checked');
-	var portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
-	var foldercode = portfoliocode.substring(0,portfoliocode.indexOf('.'));
-	var exportcode = foldercode+".exportxml-"+this.semantictag;
-	var exportlabel = "Export-" + this.getLabel(null,'none');
-	var nodestring = "";
-	for (var j=0; j<inputs.length;j++){
-		var uuid = $(inputs[j]).attr('uuid');
-		nodestring += UICom.structure.ui[uuid].node.outerHTML;
-	}
-	//--------------------
-	var instructions = "";
-	for (var i=0; i<languages.length;i++){
-		instructions += "<text lang='"+languages[i]+"'>"+karutaStr[languages[i]]['instruction-export-menu']+"</text>"
-	}
-	//--------------------
-	var xml = "";
-	xml += "<portfolio code='"+exportcode+"'>";
-	xml += "	<asmRoot>";
-	xml += "		<metadata-wad seenoderoles='all' />";
-	xml += "		<metadata-epm />";
-	xml += "		<metadata multilingual-node='Y' semantictag='root' sharedNode='N' sharedResource='N' public='Y'/>";
-	xml += "		<asmResource xsi_type='nodeRes'><code>"+exportcode+"</code><label lang='fr'>"+exportlabel+"</label><label lang='en'>"+exportlabel+"</label></asmResource>";
-	xml += "		<asmResource xsi_type='context'>"+instructions+"</asmResource>";
-	xml += nodestring;
-	xml += "	</asmRoot>";
-	xml += "</portfolio>";
-	$.ajax({
-		type : "POST",
-		contentType: "application/xml",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios",
-		data : xml,
-		success : function(data) {
-			alert("saved");
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Error : "+jqxhr.responseText);
-		}
-	});
-}
-
-
-//==================================
-UIFactory["Node"].exportMultiple =function(nodeid)
-//==================================
-{
-	UICom.structure.ui[nodeid].exportMultiple();
-}
-
-
-
-
-//==================================================
-UIFactory["Node"].prototype.TEMPexportNode = function(portfolio)
-//==================================================
-{
-	if (portfolio==null || undefined)
-		portfolio = false;
-	let exportlabel = "Export-" + this.getLabel(null,'none');
-	let xml = "";
-	if (portfolio) {
-		var portfoliocode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",g_portfolio_current)).text();
-		var foldercode = portfoliocode.substring(0,portfoliocode.indexOf('.'));
-		var exportcode = foldercode+"."+this.semantictag;
-		exportlabel = "Export-" + this.getLabel(null,'none');
-		var menuroles = exportcode + "," + this.semantictag +",Ajouter "+this.getLabel(null,'none')+"@fr/Add "+this.getLabel(null,'none')+"@en,designer";
-		var nodestring = this.node.outerHTML;
-		xml += "<?xml version='1.0' encoding='UTF-8'?><portfolio code='"+exportcode+"'>";
-		xml += "	<asmRoot>";
-		xml += "		<metadata-wad menuroles='"+menuroles+"' seenoderoles='all' />";
-		xml += "		<metadata-epm />";
-		xml += "		<metadata multilingual-node='Y' semantictag='root' sharedNode='N' sharedResource='N' />";
-		xml += "		<asmResource xsi_type='nodeRes'><code>"+exportcode+"</code><label lang='fr'>"+exportlabel+"</label><label lang='en'>"+exportlabel+"</label></asmResource>";
-		xml += "		<asmResource xsi_type='context'></asmResource>";
-		xml += nodestring;
-		xml += "	</asmRoot>";
-		xml += "</portfolio>";
-	} else {
-		xml = "<?xml version='1.0' encoding='UTF-8'?>"+this.node.outerHTML;
-		
-	}
-	download(exportlabel+".xml", xml);
-
-/*	$.ajax({
-		type : "POST",
-		contentType: "application/xml",
-		dataType : "xml",
-		url : serverBCK_API+"/portfolios",
-		data : xml,
-		success : function(data) {
-			alert("Enregistré");
-		},
-		error : function(jqxhr,textStatus) {
-			alertHTML("Error : "+jqxhr.responseText);
-		}
-	});
-*/
-}
-
-
-
-
-//=========================================================
-//================== Download Node ========================
-//=========================================================
-
-function download(filename, string) {
-
-	var element = document.createElement('a');
-	element.setAttribute('href','data:text/plain;charset=utf-8, ' + encodeURIComponent(string));
-	element.setAttribute('id','temp');
-	element.setAttribute('download', filename);
-	element.setAttribute('style','display:none');
-	document.body.appendChild(element);
-	element.click();
-	document.body.removeChild(element);
-}

@@ -16,7 +16,7 @@ menuElts ["import-elts-from-source"]= "<import-elts-from-source del='y'><srce><f
 menuElts ["import-elts-from-search"]= "<import-elts-from-search del='y'><srce><foliocode disabled='y'>search code</foliocode><semtag/></srce></import-elts-from-search>";
 menuElts ["action"]= "<action del='y'><srce><portfoliocode/><semtag/></srce></action>";
 menuElts ["srce"]= "<srce del='n'><foliocode/><semtag/></srce>";
-menuElts ["trgt"]= "<trgt del='y'><position/><semtag/></trgt>";
+menuElts ["trgt"]= "<trgt del='y'><position>##currentnode##</position><semtag/></trgt>";
 menuElts ["get_single"]= "<get_single del='y'><srce><foliocode/><semtag/></srce></get_single>";
 //menuElts ["get_multiple"]= "<get_multiple del='y'><search><foliocode/><semtag/></search><import2><srce><foliocode/><semtag/></srce></import2></get_multiple>";
 menuElts ["import_get_multiple"]= "<import_get_multiple del='y'><search><foliocode/><semtag/><object/></search><g_actions><nop/></g_actions></import_get_multiple>";
@@ -25,7 +25,6 @@ menuElts ["execReportforBatchCSV"]= "<execReportforBatchCSV del='y'><report-code
 menuElts ["search-source"]= "<search-source del='y'><foliocode/><parent-semtag></parent-semtag><semtag/><object disabled='y'>label</object></search-source>";
 menuElts ["search-in-parent"]= "<search-in-parent del='y'><foliocode disabled='y'>##parentcode##</foliocode><semtag/><object/></search-in-parent>";
 menuElts ["search-w-parent"]= "<search-w-parent del='y'><foliocode>##parentcode##</foliocode><semtag/><object/></search-w-parent>";
-menuElts ["export_get_multiple"]= "<export_get_multiple del='y'><search><foliocode/><semtag/><object/></search></export_get_multiple>";
 
 
 let menuItems = {};
@@ -39,7 +38,7 @@ menuItems['import-today-date']= ["trgt","function"];
 menuItems['import-component-w-today-date']= ["trgt","function"];
 menuItems['get_single']= ["trgt"];
 menuItems['menu']= ["item"];
-menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date","export_get_multiple"];
+menuItems['item']= ["import","function","moveTO","import_get_multiple","import_get_get_multiple","execReportforBatchCSV","import-today-date","import-component-w-today-date"];
 menuItems['g_actions']= ["import-component","import-elts-from","import-proxy"];
 menuItems['gg_search']= ["search-source","#or","search-in-parent","#or","search-w-parent"];
 menuItems['gg_actions']= ["import-component","import-elts-from","#line","import","import-component-w-today-date","import-today-date"];
@@ -306,7 +305,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 	//------------- specific menu ---------------
 	var no_monomenu = 0;
 	try {
-		if ((node.depth>0 || node.asmtype == 'asmUnitStructure') && node.menuroles != undefined && node.menuroles.length>10 && (node.menuroles.indexOf(node.userrole)>-1 || node.menuroles.indexOf($(USER.username_node).text())>-1 || (node.menuroles.containsArrayElt(g_userroles) && node.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
+		if ((g_menuinreport || node.depth>0 || node.asmtype == 'asmUnitStructure' || node.asmtype == 'asmContext') && node.menuroles != undefined && node.menuroles.length>10 && (node.menuroles.indexOf(node.userrole)>-1 || node.menuroles.indexOf($(USER.username_node).text())>-1 || (node.menuroles.containsArrayElt(g_userroles) && node.menuroles.indexOf("designer")<0) || USER.admin || g_userroles[0]=='designer') ){
 			//--------------------------------
 			if (node.menuroles.charAt(0)!="<") {
 				var mlabels = [];
@@ -577,7 +576,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 									title = UIFactory.Node.getMenuLabel(menulabel,langcode);
 								else
 									title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
-								let temphtml = "<a class='button text-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</a>";
+								let temphtml = "<a class='button text-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</a> ";
 								//---------------------target----------------------------------------
 								var parentid = node.id; // default value
 								var targetid = "";
@@ -643,7 +642,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 				|| ( g_userroles[1]=='designer' && node.submitroles.indexOf(g_userroles[0])>-1)
 				|| node.submitroles.indexOf(node.userrole)>-1 )))
 		{
-			html += "<span id='submit-"+node.id+"' style='"+menus_style+"' class='button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
+			html += "<span id='submit-"+node.id+"' style='"+menus_style+"' class='submitbutton button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
 			if (node.submitall=='Y')
 				html += ",true";
 			html += ")\" ";
@@ -920,7 +919,7 @@ UIFactory["Node"].prototype.displayXMLSelectRole= function(cntidx,destmenu)
 	html += karutaStr[languages[langcode]][attribute];
 	html += "		</div>";
 	html += "	</div>";
-	html += "	<input autocomplete='off' id='"+nodeid+"_"+eltidx+attribute+"' onxchange=\"UIFactory.Node.updateMetadataXmlMenuAttribute('"+eltidx+"','"+destmenu+"','"+nodeid+"')\" type='text' class='form-control' value=\""+value+"\" >";
+	html += "	<input autocomplete='off' id='"+nodeid+"_"+eltidx+attribute+"' onchange=\"UIFactory.Node.updateMetadataXmlMenuAttribute('"+eltidx+"','"+destmenu+"','"+nodeid+"')\" type='text' class='form-control' value=\""+value+"\" >";
 	html += "	<div class='input-group-append'>";
 	html += "		<button class='btn btn-select-role dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>";
 	html += "		<div class='dropdown-menu dropdown-menu-right button-role-caret'>";
@@ -936,8 +935,9 @@ UIFactory["Node"].prototype.displayXMLSelectRole= function(cntidx,destmenu)
 	html += "</div>";
 	$("#content"+cntidx).append(html);
 	//---------------------------
-	let onupdate = "UIFactory.Node.updateMetadataXmlMenuAttribute('"+eltidx+"','"+destmenu+"','"+nodeid+"')";
-	addautocomplete(document.getElementById(nodeid+"_"+eltidx+attribute), rolesarray,onupdate,this,langcode);
+//	document.getElementById(nodeid+"_"+eltidx+attribute).onchange = function() {UIFactory.Node.updateMetadataXmlMenuAttribute(eltidx,destmenu,nodeid)};
+//	let onupdate = "UIFactory.Node.updateMetadataXmlMenuAttribute('"+eltidx+"','"+destmenu+"','"+nodeid+"')";
+//	addautocomplete(document.getElementById(nodeid+"_"+eltidx+attribute), rolesarray);
 }
 
 //==================================
@@ -1046,7 +1046,7 @@ UIFactory["Node"].prototype.displayMenuEditor = function(destmenu)
 	var name = this.asmtype;
 	if (this.menuroles==undefined)
 		UICom.structure.ui[this.id].setMetadata();
-	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure') {
+	if (name=='asmRoot' || name=='asmStructure' || name=='asmUnit' || name=='asmUnitStructure'  || name=='asmContext') {
 		if (this.menuroles.charAt(0)=="<") {
 			//---------------------- NEW Menu----------------------------
 			menueltslist = [];
@@ -1161,10 +1161,9 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 		const type = $(itemelts[i]).prop("tagName");
 		//------------------------- function --------------------
 		if (type=='function') {
-			const js = $("js",itemelts[i]).text();
+			let js = $("js",itemelts[i]).text();
+			js = replaceVariable(js,node);
 			onclick += js + ";";
-			if (onclick.indexOf("##currentnode##")>-1)
-				onclick = onclick.replace("##currentnode##","'"+node.id+"'");
 		}
 		//--------------- execReport_BatchCSV( --------------------
 		else if (type=='execReportforBatchCSV') {
@@ -1180,9 +1179,9 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let dest = replaceVariable( ($("destination-semtag",itemelts[i]).length>0)?$("destination-semtag",itemelts[i]).text():"" );
 			let destid = $(getTarget (node,dest)).attr("id");
 			if (actualparentid == startid)
-				onclick = "UIFactory.Node.moveTo('"+parentid+"','"+destid+"');UIFactory.Node.loadNode('"+destid+"')";
+				onclick = "UIFactory.Node.moveTo('"+parentid+"','"+destid+"');UIFactory.Node.loadNode('"+startid+"');UIFactory.Node.loadNode('"+destid+"')";
 			else
-				onclick = "UIFactory.Node.moveTo('"+parentid+"','"+startid+"');UIFactory.Node.loadNode('"+startid+"')";
+				onclick = "UIFactory.Node.moveTo('"+parentid+"','"+startid+"');UIFactory.Node.loadNode('"+startid+"');UIFactory.Node.loadNode('"+destid+"')";
 		// --------- fcts ------------
 			let jss = $("js", $(">function",itemelts[i]));
 			if (jss.length>0) {
@@ -1335,20 +1334,6 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
 			//------------------------------------
 		}
-		//-----------------------------------------------------------
-		//------------------------- export_get_multiple ----------------
-		//-----------------------------------------------------------
-		else if (type=='export_get_multiple') {
-			let actions = "";
-			// --------- boxlabel ------------
-			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i])[0].text():"" );
-			// --------- search ------------
-			let search = $("search",itemelts[i])[0];
-			let search_foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
-			let search_semtag = replaceVariable( ($("semtag",search).length>0)?$("semtag",search).text():"" );
-			let search_object = replaceVariable( ($("object",search).length>0)?$("object",search).text():"" );
-			onclick += "export_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
-		}
 	}
 	return onclick;
 }
@@ -1419,7 +1404,7 @@ UIFactory["Node"].getFunctionArray = function(node,item)
 	let fcts = $("function",item);
 	if (fcts.length>0) {
 		for (let k=0;k<fcts.length;k++){
-			fctarray.push(replaceVariable($(fcts[k]).text().replaceAll("(","<<").replaceAll(")",">>")),node);
+			fctarray.push(replaceVariable($(fcts[k]).text().replaceAll("(","<<").replaceAll(")",">>"),node));
 		}
 	}
 	return fctarray;

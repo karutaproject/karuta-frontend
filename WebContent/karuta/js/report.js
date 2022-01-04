@@ -30,6 +30,7 @@ var g_report_actions = {};
 var g_report_users = {};
 var g_graphs = {};
 var g_unique_functions = {};
+var g_menuinreport = false;
 var current_nodes = null;
 
 var jqueryReportSpecificFunctions = {};
@@ -1828,7 +1829,9 @@ g_report_actions['menu'] = function (destid,action,no,data)
 		$("#"+destid).attr('dashboardid',dashboard_infos[dashboard_current].dashboardid);
 		var text = "<span dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
 		$("#"+destid).append($(text));
+		g_menuinreport = true;
 		UICom.structure.ui[nodeid].displayMenus("#"+destid,LANGCODE);
+		g_menuinreport = false;
 		var text = "<span dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
 		$("#"+destid).append($(text));
 	}

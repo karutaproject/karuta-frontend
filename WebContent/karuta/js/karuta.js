@@ -366,6 +366,9 @@ function getEditBox(uuid,js2) {
 	$("#edit-window-footer").html($(footer));
 	var html = "";
 	//--------------------------
+	if (UICom.structure["ui"][uuid].editresroles==undefined)
+		UICom.structure["ui"][uuid].setMetadata();
+	//--------------------------
 	if (UICom.structure['tree'][uuid]==null || UICom.structure['tree'][uuid]==undefined) {  // if resource is in report and not loaded (report on server)
 		$.ajax({
 			async : false,
@@ -427,10 +430,8 @@ function getEditBox(uuid,js2) {
 	// ------------admin and designer----------
 	if (USER.admin || g_userroles[0]=='designer') {
 		UICom.structure.ui[uuid].displayMetadataAttributesEditor("edit-window-body-metadata");
-		if(UICom.structure["ui"][uuid].resource==null) {
-			$("#edit-window-body-menu-item").show();
-			UICom.structure.ui[uuid].displayMenuEditor("edit-window-body-menu");
-		}
+		$("#edit-window-body-menu-item").show();
+		UICom.structure.ui[uuid].displayMenuEditor("edit-window-body-menu");
 	}
 	$('#edit-window').modal('toggle');
 	// ------------------------------
@@ -602,9 +603,13 @@ function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2)
 }
 
 //=======================================================================
-function confirmSubmit(uuid,submitall) 
+function confirmSubmit(uuid,submitall,js) 
 // =======================================================================
 {
+	if (js==null || js==undefined)
+		js = "";
+	if (js!="")
+		js = js + "('" + uuid + "')";
 	var href = "";
 	var type = "";
 	try {
@@ -620,7 +625,7 @@ function confirmSubmit(uuid,submitall)
 	{
 		document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-submit"];
 		var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+")\">" + karutaStr[LANG]["button-submit"] + "</button>";
+		buttons += "<button class='btn btn-danger' onclick=\"$('#delete-window').modal('hide');submit('"+uuid+"',"+submitall+");"+js+"\">" + karutaStr[LANG]["button-submit"] + "</button>";
 		document.getElementById('delete-window-footer').innerHTML = buttons;
 		$('#delete-window').modal('show');
     }
@@ -2814,6 +2819,12 @@ function toggleDraft (nodeid)
 	}
 }
 
+function setNodeCode(nodeid) {
+	const nomid = $(nom).attr("id");
+	UICom.structure.ui[prenom_nomid].code_node.text(UICom.structure.ui[prenomid].resource.getView()+" "+UICom.structure.ui[nomid].resource.getView());
+	UICom.structure.ui[prenom_nomid].resource.save();
+}
+
 //=========================================================
 //==================API Vector Functions===================
 //=========================================================
@@ -2971,3 +2982,84 @@ function searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 	});
 	return result;
 }
+
+
+//=========================================================
+//==================Specific Vector Functions==============
+//=========================================================
+
+function buildSaveVectorKAPC(nodeid,type) {
+	const saeid = $("#page").attr('uuid');
+	const enseignants = $("asmContext:has(metadata[semantictag='enseignant-select'])",UICom.structure.ui[saeid].node);
+	const today = new Date();
+	const annee = today.getFullYear();
+	const selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+
+	for (let i=0;i<enseignants.length;i++){
+		const enseignantid = $("code",enseignants[i]).text();
+		saveVector(enseignantid,type,g_portfolioid,nodeid,USER.id,annee,selfcode);
+	}
+}
+
+function searchVectorKAPC(enseignantid,type1,type2) {
+	const search1 = $("vector",searchVector(enseignantid,type1));
+	let tableau = [];
+	// on ajoute tous les uuids qui ont type1
+	for (let i=0;i<search1.length;i++){
+		let portfolioid = $("a3",search1[i]).text();
+		let nodeid = $("a4",search1[i]).text();
+		tableau.push([portfolioid,nodeid]);
+	}
+	if (type2!=null && type2!=""){
+		// on retire tous les uuids qui ont type2 et le même nodeid
+		const search2 = $("vector",searchVector(enseignantid,type2));
+		for (let i=0;i<search2.length;i++){
+			let portfolioid = $("a3",search2[i]).text();
+			let nodeid = $("a4",search2[i]).text();
+			const indx = tableau.indexOf([portfolioid,nodeid]);
+			if (indx>-1)
+				tableau.splice(indx,1);
+		}
+	}
+	let result =  [];
+	for (let i=0;i<tableau.length;i++){ // copie dans result en éliminant les doublons
+		if (result.indexOf(tableau[i][0])<0)
+			result.push(tableau[i][0]);
+	}
+	return result;
+}
+
+function demanderSaeFeedback(nodeid){
+	buildSaveVectorKAPC(nodeid,'sae-feedback');
+}
+
+function soumettreSaeFeedback(nodeid){
+	buildSaveVectorKAPC(nodeid,'sae-feedback-done');
+}
+
+function demanderSaeEvaluation(nodeid) {
+	const saeid = $("#page").attr('uuid');
+	const val = UICom.structure.ui[nodeid].resource.getValue();
+	if (val=='1')
+		buildSaveVectorKAPC(saeid,'sae-evaluation')
+	else
+		deleteVector(saeid,'sae-evaluation');
+}
+
+function soumettreSaeEvaluation(nodeid){
+	buildSaveVectorKAPC(nodeid,'sae-evaluation-done');
+}
+
+function setPrenomNom(nodeid) {
+	const prenom_nom =  $("*:has(>metadata[semantictag*='prenom_nom'])",UICom.structure.ui[nodeid].node)[0];
+	const prenom_nomid = $(prenom_nom).attr("id");
+	const prenom = $("*:has(>metadata[semantictag*='prenom-etudiant'])",g_portfolio_current)[0];
+	const prenomid = $(prenom).attr("id");
+	const nom = $("*:has(>metadata[semantictag*='nom-famille-etudiant'])",g_portfolio_current)[0];
+	const nomid = $(nom).attr("id");
+	UICom.structure.ui[prenom_nomid].resource.text_node[LANGCODE].text(UICom.structure.ui[prenomid].resource.getView()+" "+UICom.structure.ui[nomid].resource.getView());
+	UICom.structure.ui[prenom_nomid].resource.save();
+}
+
+
+

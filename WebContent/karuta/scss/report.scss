@@ -80,6 +80,11 @@
 	}
 }
 
+.cacherPublier a:first-child,
+.cacherDepublier a:first-child {
+		display:none;
+}
+
 /* ====================
 	Report Graphicer
    ====================*/
@@ -192,6 +197,7 @@
 	.for-each-person,
 	.for-each-line,
 	.for-each-portfolio,
+	.for-each-portfolio-js,
 	.for-each-portfolios-nodes,
 	.for-each-node,
 	.loop
