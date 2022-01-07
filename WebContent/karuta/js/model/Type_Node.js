@@ -770,13 +770,13 @@ UIFactory["Node"].prototype.getView = function(dest,type,langcode)
 		//----- code -----
 		var displayCodeValue = (this.editcoderoles.containsArrayElt(g_userroles) || this.editcoderoles.indexOf(this.userrole)>-1 || this.editcoderoles.indexOf($(USER.username_node).text())>-1) && this.nodenopencil=='N';
 		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userroles[0]=='designer' || USER.admin || displayCodeValue)) {
-			html += this.code_node.text()+" ";
+			html += "<span class='ncode'>"+this.code_node.text()+"</span> ";
 		}
 		//----- label -----
 		var label = this.label_node[langcode].text();
 		if (label == "")
 			label="&nbsp;";
-		html += label+"<span id='help_"+this.id+"' class='ihelp'></span>";
+		html += "<span class='nlabel'>"+label+"</span><span id='help_"+this.id+"' class='ihelp'></span>";
 		//----- value -----
 		if (this.asmtype!='asmRoot' && this.code_node.text()!='' && (g_userroles[0]=='designer' || USER.admin || displayCodeValue)) {
 			if (this.value_node.text()!='')
@@ -809,10 +809,12 @@ UIFactory["Node"].prototype.updateLabel = function(langcode)
 		langcode = LANGCODE;
 	var label = $.trim($("#label_"+this.id+"_"+langcode).val());
 	$(this.label_node[langcode]).text(label);
+	$(UICom.structure.ui[this.id].label_node[LANGCODE]).text(label);
 	//---------------------
 	if (!this.multilingual) {
 		for (var i=0; i<languages.length; i++) {
 			$(this.label_node[i]).text(label);
+			$(UICom.structure.ui[this.id].label_node[i]).text(label);
 		}
 	}
 	//---------------------
@@ -842,10 +844,12 @@ UIFactory["Node"].prototype.update = function(langcode)
 	//---------------------
 	var label = $.trim($("#label_"+this.id+"_"+langcode).val());
 	$(this.label_node[langcode]).text(label);
+	$(UICom.structure.ui[this.id].label_node[langcode]).text(label);
 	//---------------------
 	if (!this.multilingual) {
 		for (var i=0; i<languages.length; langcode++) {
 			$(this.label_node[i]).text(label);
+			$(UICom.structure.ui[this.id].label_node[i]).text(label);
 		}
 	}
 	//---------------------
@@ -895,7 +899,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 		if (query==undefined || query=='' || this.asmtype=='asmContext' || g_display_type=='raw'){
 			if (g_userroles[0]=='designer' || USER.admin || editcoderoles.containsArrayElt(g_userroles) || editcoderoles.indexOf(this.userrole)>-1 || editcoderoles.indexOf($(USER.username_node).text())>-1) {
 				//---------------------- code ----------------------------
-				var htmlCodeGroupObj = $("<div class='form-group'></div>")
+				var htmlCodeGroupObj = $("<div class='form-group ncode'></div>")
 				var htmlCodeLabelObj = $("<label for='code_"+this.id+"' class='col-sm-3 control-label'>Code</label>");
 				var htmlCodeDivObj = $("<div class='node-code'></div>");
 				var htmlCodeInputObj = $("<input id='code_"+this.id+"' type='text' class='form-control' name='input_code' value=\""+this.code_node.text()+"\">");
@@ -907,7 +911,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 				$(htmlCodeGroupObj).append($(htmlCodeDivObj));
 				$(htmlFormObj).append($(htmlCodeGroupObj));
 				//---------------------- value ----------------------------
-				var htmlValueGroupObj = $("<div class='form-group'></div>")
+				var htmlValueGroupObj = $("<div class='form-group nvalue'></div>")
 				var htmlValueLabelObj = $("<label for='value_"+this.id+"' class='col-sm-3 control-label'>Value</label>");
 				var htmlValueDivObj = $("<div class='node-value'></div>");
 				var htmlValueInputObj = $("<input id='value_"+this.id+"' type='text' class='form-control' name='input_value' value=\""+this.value_node.text()+"\">");
@@ -920,7 +924,7 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 				$(htmlFormObj).append($(htmlValueGroupObj));
 			}
 			if (g_userroles[0]=='designer' || USER.admin || editnoderoles.containsArrayElt(g_userroles) || editnoderoles.indexOf(this.userrole)>-1 || editnoderoles.indexOf($(USER.username_node).text())>-1) {
-				var htmlLabelGroupObj = $("<div class='form-group'></div>")
+				var htmlLabelGroupObj = $("<div class='form-group nlabel'></div>")
 				var htmlLabelLabelObj = $("<label for='label_"+this.id+"' class='col-sm-3 control-label'>"+karutaStr[LANG]['label']+"</label>");
 				var htmlLabelDivObj = $("<div class='node-label'></div>");
 				var htmlLabelInputObj = $("<input id='label_"+this.id+"_"+langcode+"' type='text' class='form-control' value=\""+this.label_node[langcode].text()+"\">");
@@ -986,8 +990,12 @@ UIFactory["Node"].prototype.save = function()
 		var fcts = this.js.split(";");
 		for (var i=0;i<fcts.length;i++) {
 			var elts = fcts[i].split("/");
-			if (elts[0]=="update-node")
-				eval(elts[1]+"(this.id)");
+			if (elts[0]=="update-node") {
+				if (elts[1].indexOf("(")<0)
+					eval(elts[1]+"(this.id)");
+				else
+					eval(replaceVariable(elts[1],this.node));
+			}
 		}
 	}
 	//------------------------------------

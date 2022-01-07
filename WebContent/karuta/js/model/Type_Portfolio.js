@@ -350,6 +350,7 @@ UIFactory["Portfolio"].displayPortfolio = function(destid,type,langcode,edit)
 	html += "	</a>";
 	$("#sidebar_"+rootid).replaceWith($(html));
 	//---------------------------------------
+	$("body").attr("userrole",g_userroles[0]);
 	$("#main-body").attr("userrole",g_userroles[0]);
 	//---------------------------------------
 	html = "";

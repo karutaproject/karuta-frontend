@@ -360,8 +360,12 @@ function getEditBox(uuid,js2) {
 	$("#edit-window").attr("role",g_userroles[0]);
 	fillEditBoxBody();
 	var js1 = "javascript:$('#edit-window').modal('hide')";
-	if (js2!=null)
+	if (js2!=null) {
+		j2 = replaceVariable(js2);
+		if (j2.indexOf("(")<0)
+			js2 = js2+"('"+uuid+"')";
 		js1 += ";"+js2;
+	}
 	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
 	var html = "";
@@ -963,11 +967,12 @@ function submit(uuid,submitall)
 					parent = $(parent).parent();
 				if ($(parent).hasClass("submit-tohide"))
 					$(parent).hide();
-				register_report($("#submit-"+uuid).parent().attr('dashboardid'));
+				if (UICom.structure.ui[$("#submit-"+uuid).parent().attr('dashboardid')].startday_node!=null)
+					register_report($("#submit-"+uuid).parent().attr('dashboardid'));
 			} else
 				UIFactory.Node.reloadUnit();
 		}
-	});
+	}); 
 }
 
 //=======================================================================
@@ -2819,12 +2824,6 @@ function toggleDraft (nodeid)
 	}
 }
 
-function setNodeCode(nodeid) {
-	const nomid = $(nom).attr("id");
-	UICom.structure.ui[prenom_nomid].code_node.text(UICom.structure.ui[prenomid].resource.getView()+" "+UICom.structure.ui[nomid].resource.getView());
-	UICom.structure.ui[prenom_nomid].resource.save();
-}
-
 //=========================================================
 //==================API Vector Functions===================
 //=========================================================
@@ -2983,7 +2982,25 @@ function searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 	return result;
 }
 
+function deleteAllVectors(nodeid){
+	const date = UICom.structure.ui[nodeid].resource.getView();
+	let url = serverBCK+"/vector?";
+	if (date!=null)
+		url += "date="+date;
+	$.ajax({
+		type : "DELETE",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			return true;
+		},
+		error : function(jqxhr,textStatus) {
+			return false;
+		}
+	});
 
+}
 //=========================================================
 //==================Specific Vector Functions==============
 //=========================================================
@@ -2999,6 +3016,21 @@ function buildSaveVectorKAPC(nodeid,type) {
 		const enseignantid = $("code",enseignants[i]).text();
 		saveVector(enseignantid,type,g_portfolioid,nodeid,USER.id,annee,selfcode);
 	}
+}
+
+function buildSubmitVectorKAPC(nodeid,type) {
+	const today = new Date();
+	const annee = today.getFullYear();
+	const selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
+	const portfolioidnodes = $(".portfolioid",document);
+	const tab = $(portfolioidnodes).map(function() {return $(this).text();}).get();
+	let portfolioid ="";
+	for (let i=0;i<tab.length;i++){
+		let uuids = tab[i].split("_");
+		if (uuids[0]==nodeid)
+			portfolioid = uuids[1];
+	}
+	saveVector(USER.username,type,portfolioid,nodeid,USER.id,annee,selfcode);
 }
 
 function searchVectorKAPC(enseignantid,type1,type2) {
@@ -3047,7 +3079,7 @@ function demanderSaeEvaluation(nodeid) {
 }
 
 function soumettreSaeEvaluation(nodeid){
-	buildSaveVectorKAPC(nodeid,'sae-evaluation-done');
+	buildSubmitVectorKAPC(nodeid,'sae-evaluation-done');
 }
 
 function setPrenomNom(nodeid) {
@@ -3057,9 +3089,34 @@ function setPrenomNom(nodeid) {
 	const prenomid = $(prenom).attr("id");
 	const nom = $("*:has(>metadata[semantictag*='nom-famille-etudiant'])",g_portfolio_current)[0];
 	const nomid = $(nom).attr("id");
-	UICom.structure.ui[prenom_nomid].resource.text_node[LANGCODE].text(UICom.structure.ui[prenomid].resource.getView()+" "+UICom.structure.ui[nomid].resource.getView());
+	$(UICom.structure.ui[prenom_nomid].resource.text_node[LANGCODE]).text(UICom.structure.ui[prenomid].resource.getView()+" "+UICom.structure.ui[nomid].resource.getView());
 	UICom.structure.ui[prenom_nomid].resource.save();
 }
 
+function setNodeCode(nodeid, code){
+	if(UICom.structure.ui[nodeid].node_code==undefined) // in case of access before node ndisplay
+		UICom.structure.ui[nodeid].setMetadata();
+	$(UICom.structure.ui[nodeid].code_node).text(code);
+	UICom.structure.ui[nodeid].save();
+}
 
+
+// mise à jour du code et du libellé dela compétence dans la section 'mes compétences'
+function setCompetenceCodeLabel(nodeid){
+	let js = replaceVariable("setNodeCodeLabel(##currentnode##,##lastimported##)",UICom.structure.ui[nodeid].node);
+	eval(js);
+}
+
+function setNodeCodeLabel(nodeid,targetid){
+	if (nodeid!=targetid) {
+		if(UICom.structure.ui[nodeid].node_code==undefined) // in case of access before node ndisplay
+			UICom.structure.ui[nodeid].setMetadata();
+		if(UICom.structure.ui[targetid].node_code==undefined) // in case of access before node ndisplay
+			UICom.structure.ui[nodeid].setMetadata();
+		//-----------------------
+		$(UICom.structure.ui[targetid].code_node).text($(UICom.structure.ui[nodeid].code_node).text());
+		$(UICom.structure.ui[targetid].label_node[LANGCODE]).text($(UICom.structure.ui[nodeid].label_node[LANGCODE]).text());
+		UICom.structure.ui[targetid].save();
+	}
+}
 

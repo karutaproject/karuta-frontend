@@ -1424,6 +1424,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 //==================================
 {
 	var countvar = $(action).attr("countvar");
+	var portfoliovar = $(action).attr("portfoliovar");
 	if (userid==null)
 		userid = USER.id;
 	var searchvalue = "";
@@ -1445,6 +1446,9 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 				g_variables[ref_inits[i]] = new Array();
 		}
 		portfolioid = portfolioids[j];
+		if (portfoliovar!=undefined) {
+			g_variables[portfoliovar] = portfolioid;
+		}
 		portfolioid_current = portfolioid;
 		$.ajax({
 			async:false,
@@ -1832,8 +1836,6 @@ g_report_actions['menu'] = function (destid,action,no,data)
 		g_menuinreport = true;
 		UICom.structure.ui[nodeid].displayMenus("#"+destid,LANGCODE);
 		g_menuinreport = false;
-		var text = "<span dashboardid='"+dashboard_infos[dashboard_current].dashboardid+"'></span>"
-		$("#"+destid).append($(text));
 	}
 
 }

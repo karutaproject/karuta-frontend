@@ -614,6 +614,9 @@
 		<xsl:variable name="countvar">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='countvar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
+		<xsl:variable name="portfoliovar">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='portfoliovar']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="select">
 			<xsl:value-of select="asmContext[metadata/@semantictag='select']/asmResource[@xsi_type='Field']/text[@lang=$lang]"/>
 		</xsl:variable>
@@ -623,6 +626,9 @@
 			</xsl:if>
 			<xsl:if test="not($countvar='')">
 				<xsl:attribute name="countvar"><xsl:value-of select="$countvar"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(portfoliovar='')">
+				<xsl:attribute name="portfoliovar"><xsl:value-of select="$portfoliovar"/></xsl:attribute>
 			</xsl:if>
 			<xsl:apply-templates select='asmUnitStructure'/>
 		</for-each-portfolio-js>
