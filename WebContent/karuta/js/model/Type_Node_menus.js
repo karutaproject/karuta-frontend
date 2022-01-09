@@ -19,8 +19,8 @@ menuElts ["srce"]= "<srce del='n'><foliocode/><semtag/></srce>";
 menuElts ["trgt"]= "<trgt del='y'><position>##currentnode##</position><semtag/></trgt>";
 menuElts ["get_single"]= "<get_single del='y'><srce><foliocode/><semtag/></srce></get_single>";
 //menuElts ["get_multiple"]= "<get_multiple del='y'><search><foliocode/><semtag/></search><import2><srce><foliocode/><semtag/></srce></import2></get_multiple>";
-menuElts ["import_get_multiple"]= "<import_get_multiple del='y'><search><foliocode/><semtag/><object/></search><g_actions><nop/></g_actions></import_get_multiple>";
-menuElts ["import_get_get_multiple"]= "<import_get_get_multiple del='y'><parent><position/><semtag/></parent><gg_search><nop/></gg_search><gg_actions><nop/></gg_actions></import_get_get_multiple>";
+menuElts ["import_get_multiple"]= "<import_get_multiple del='y'><boxlabel></boxlabel><unique>true</unique><search><foliocode/><semtag/><object/></search><g_actions><nop/></g_actions></import_get_multiple>";
+menuElts ["import_get_get_multiple"]= "<import_get_get_multiple del='y'><boxlabel></boxlabel><unique>true</unique><parent><position/><semtag/></parent><gg_search><nop/></gg_search><gg_actions><nop/></gg_actions></import_get_get_multiple>";
 menuElts ["execReportforBatchCSV"]= "<execReportforBatchCSV del='y'><report-code/></execReportforBatchCSV>";
 menuElts ["search-source"]= "<search-source del='y'><foliocode/><parent-semtag></parent-semtag><semtag/><object disabled='y'>label</object></search-source>";
 menuElts ["search-in-parent"]= "<search-in-parent del='y'><foliocode disabled='y'>##parentcode##</foliocode><semtag/><object/></search-in-parent>";
@@ -1263,7 +1263,9 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			let actions = "";
 			let imports = "";
 			// --------- boxlabel ------------
-			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i])[0].text():"" );
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i]).text():"" );
+			// --------- unique ------------
+			let unique = ($("unique",itemelts[i]).length>0)?$("unique",itemelts[i]).text():"";
 			// --------- search ------------
 			let search = $("search",itemelts[i])[0];
 			let search_foliocode = replaceVariable( ($("foliocode",search).length>0)?$("foliocode",search).text():"" );
@@ -1281,7 +1283,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
 					actions += "{|type|:|import_component|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"',"+unique+");";
 			}
 			// --------import-elts ------
 			imports = $("import-elts",itemelts[i]);
@@ -1291,7 +1293,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
 					actions += "{|type|:|import_elts|,|parentid|:|"+parentid+"|,|foliocode|:|"+search_foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"',"+unique+");";
 			}
 			// --------import-elts-from ------
 			imports = $("import-elts-from",itemelts[i]);
@@ -1303,7 +1305,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
 					actions += "{|type|:|import_elts-from|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"',"+unique+");";
 			}
 		}
 		//-----------------------------------------------------------
@@ -1311,7 +1313,9 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 		//-----------------------------------------------------------
 		else if (type=='import_get_get_multiple') {
 			// --------- boxlabel ------------
-			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i])[0].text():"" );
+			let boxlabel = replaceVariable( ($("boxlabel",itemelts[i]).length>0)?$("boxlabel",itemelts[i]).text():"" );
+			// --------- unique ------------
+			let unique = ($("unique",itemelts[i]).length>0)?$("unique",itemelts[i]).text():"";
 			// --------- parent ------------
 			let parent = $("parent",itemelts[i])[0];
 			let parent_position = replaceVariable( ($("position",parent).length>0)?$("position",parent).text():"" );
@@ -1331,7 +1335,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			// -------- actions ------------
 			let actions = UIFactory.Node.getActions(parentid,node,itemelts[i]);
 			// -----------------------------
-			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"');";
+			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"',"+unique+");";
 			//------------------------------------
 		}
 	}

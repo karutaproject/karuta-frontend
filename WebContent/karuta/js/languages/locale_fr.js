@@ -286,6 +286,7 @@ karutaStr['fr']['object']="Élément à rechercher";
 karutaStr['fr']['start-semtag']="Tag sémantique de départ";
 karutaStr['fr']['destination-semtag']="Tag sémantique d'arrivée";
 karutaStr['fr']['audio-record-only']="Enregistrement seulement";
+karutaStr['fr']['unique']="Sans doublons";
 
 //=========================================
 //========== ADMIN ========================

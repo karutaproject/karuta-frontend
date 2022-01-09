@@ -555,8 +555,8 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+query_parent_semtag+ "&code_parent="+code_parent;
 			}
 			//----------------------
+			var self = this;
 			if (code_parent!="") {
-				var self = this;
 				$.ajax({
 					async:false,
 					type : "GET",
@@ -565,11 +565,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					portfoliocode:portfoliocode,
 					semtag2:semtag2,
 					success : function(data) {
-						UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+						self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 					},
 					error : function(jqxhr,textStatus) {
 						$("#"+destid).html("No result");
-						UIFactory["Get_Get_Resource"].parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+						self.parse(destid,type,langcode,null,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 					}
 				});
 			} else {
@@ -607,11 +607,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 						semtag:semtag,
 						semtag2:semtag2,
 						success : function(data) {
-							UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,this.semtag,this.semtag2,cachable);
+							self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,this.semtag,this.semtag2,cachable);
 						},
 						error : function(jqxhr,textStatus) {
 							$("#"+destid).html("No result");
-							UIFactory["Get_Get_Resource"].parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,this.semtag,this.semtag2,cachable);
+							self.parse(destid,type,langcode,null,disabled,srce,this.portfoliocode,this.semtag,this.semtag2,cachable);
 						}
 					});
 				}
@@ -625,20 +625,15 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 
 
 //==================================
-UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,disabled,srce,portfoliocode,semtag,semtag2,cachable) {
+UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,data,disabled,srce,portfoliocode,semtag,semtag2,cachable) {
 //==================================
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
+	let self = this;
 	var self_code = $(self.code_node).text();
-	if (self.encrypted)
-		self_code = decrypt(self_code.substring(3),g_rc4key);
-	//---------------------
-	//---------------------
 	var self_value = $(self.value_node).text();
-	if (self.encrypted)
-		self_value = decrypt(self_value.substring(3),g_rc4key);
 	//---------------------
 	if (type==undefined || type==null)
 		type = 'select';
@@ -908,20 +903,47 @@ UIFactory["Get_Get_Resource"].parse = function(destid,type,langcode,data,self,di
 	//------------------------------------------------------------
 		var inputs = "<div id='get_get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
-		//-----------------------
-		var nodes = $("node",data);
-		for ( var i = 0; i < newTableau1.length; ++i) {
-			var uuid = $(newTableau1[i][1]).attr('id');
+		//-----search for already added------------------
+		if (this.unique) {
+			var targetid = this.targetid;
+			var semtag = this.importedtag;
+			var data = UICom.structure.ui[targetid].node;
+			var allreadyadded = $("*:has(>metadata[semantictag='"+semtag+"'])",data);
+			var tabadded = [];
+			for ( var i = 0; i < allreadyadded.length; i++) {
+				let resource = null;
+				if ($("asmResource",allreadyadded[i]).length==3)
+					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",allreadyadded[i]); 
+				else
+					resource = $("asmResource[xsi_type='nodeRes']",allreadyadded[i]);
+				let code = $('code',resource).text();
+				tabadded[i] = code;
+			}
+		}
+		//----------remove allready added----------------
+		var newTableau2 = [];
+		if (this.unique) {
+			for ( var i = 0; i < newTableau1.length; ++i) {
+				const indx = tabadded.indexOf(newTableau1[i][0]);
+				if (indx==-1)
+					newTableau2.push(newTableau1[i]);
+			}
+		} else {
+			newTableau2 = newTableau1;
+		}
+		//------------------------------------------------
+		for ( var i = 0; i < newTableau2.length; ++i) {
+			var uuid = $(newTableau2[i][1]).attr('id');
 			var input = "";
 			var style = "";
 			var resource = null;
 			//------------------------------
-			if ($("asmResource",newTableau1[i][1]).length==3) {
-				style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
+			if ($("asmResource",newTableau2[i][1]).length==3) {
+				style = UIFactory.Node.getDataContentStyle(newTableau2[i][1].querySelector("metadata-epm"));
+				resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau2[i][1]); 
 			} else {
-				style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
-				resource = $("asmResource[xsi_type='nodeRes']",newTableau1[i][1]);
+				style = UIFactory.Node.getDataLabelStyle(newTableau2[i][1].querySelector("metadata-epm"));
+				resource = $("asmResource[xsi_type='nodeRes']",newTableau2[i][1]);
 			}
 			//------------------------------
 			var code = $('code',resource).text();
@@ -1650,10 +1672,13 @@ function functions_ggmultiple(parentid,targetid,title,query,functions)
 }
 
 //==================================
-function import_get_get_multiple(parentid,targetid,title,parent_position,parent_semtag,query_portfolio,query_parent_semtag,query_semtag,query_object,actns)
+function import_get_get_multiple(parentid,targetid,title,parent_position,parent_semtag,query_portfolio,query_parent_semtag,query_semtag,query_object,actns,unique)
 //==================================
 {
 	const acts = actns.split(';');
+	var importedtag = "";
+	if (unique==null)
+		unique = true;
 	let actions = [];
 	for (let i=0;i<acts.length-1;i++) {
 		actions.push(JSON.parse(acts[i].replaceAll("|","\"").replaceAll("<<","(").replaceAll(">>",")")));
@@ -1665,26 +1690,41 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 		if (actions[i].type=="import-component") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
+				if (targetid=="")
+					targetid = targets[j];
+				importedtag = actions[i].semtag;
 				js2 += "UIFactory.Get_Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
 			}
 		} else if (actions[i].type=="import-elts-from") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
+				if (targetid=="")
+					targetid = targets[j];
+				importedtag = actions[i].semtag;
 				js2 += "UIFactory.Get_Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
 			}
 		} else if (actions[i].type=="import-component-w-today-date") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
+				if (targetid=="")
+					targetid = targets[j];
+				importedtag = actions[i].semtag;
 					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
 			}
 		} else if (actions[i].type=="import") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
+				if (targetid=="")
+					targetid = targets[j];
+				importedtag = actions[i].semtag;
 					js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
 			}
 		} else if (actions[i].type=="import-today-date") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
+				if (targetid=="")
+					targetid = targets[j];
+				importedtag = 'Calendar';
 					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','karuta.karuta-resources','Calendar','Calendar');";
 			}
 		}
@@ -1710,6 +1750,9 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 	getgetResource.query_parent_semtag = query_parent_semtag;	
 	getgetResource.query_semtag = query_semtag;
 	getgetResource.query_object = query_object;
+	getgetResource.importedtag = importedtag;
+	getgetResource.targetid = targetid;
+	getgetResource.unique = unique;
 	getgetResource.displayEditor("get-get-resource-node");
 	$('#edit-window').modal('show');
 }

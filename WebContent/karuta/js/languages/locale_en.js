@@ -286,6 +286,7 @@ karutaStr['en']['object']="Search Element";
 karutaStr['en']['start-semtag']="Start Semantic Tag";
 karutaStr['en']['destination-semtag']="Destination Semantic Tag";
 karutaStr['en']['audio-record-only']="Record only";
+karutaStr['en']['unique']="No duplicates";
 
 //=========================================
 //========== ADMIN ========================
