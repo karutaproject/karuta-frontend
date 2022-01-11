@@ -657,6 +657,17 @@ function confirmDelObject(id,type)
 	$('#delete-window').modal('show');
 }
 
+//=======================================================================
+function confirmDelete(js) 
+// =======================================================================
+{
+	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
+	var buttons = "<button class='btn' onclick=\"$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\""+js+";$('#delete-window').modal('hide')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	document.getElementById('delete-window-footer').innerHTML = buttons;
+	$('#delete-window').modal('show');
+}
+
 //==================================
 function getURLParameter(sParam) {
 //==================================
@@ -3001,6 +3012,11 @@ function deleteAllVectors(nodeid){
 	});
 
 }
+
+function confirmDeleteAllVectors(nodeid){
+	let js = "deleteAllVectors('"+nodeid+"')";
+	confirmDelete(js);
+}
 //=========================================================
 //==================Specific Vector Functions==============
 //=========================================================
@@ -3064,6 +3080,14 @@ function searchVectorKAPC(enseignantid,type1,type2) {
 //======================================
 function demanderEvaluation(nodeid,type) {
 	const uuid = $("#page").attr('uuid');
+	const semtag = UICom.structure.ui[uuid].semantictag;
+	var type = "";
+	if (semtag.indexOf('sae')>-1)
+		type = 'sae';
+	else if (semtag.indexOf('stage')>-1)
+		type='stage'
+	else if (semtag.indexOf('autre')>-1)
+		type='action'
 	const val = UICom.structure.ui[nodeid].resource.getValue();
 	if (val=='1')
 		buildSaveVectorKAPC(uuid,type+'-evaluation')
@@ -3071,18 +3095,47 @@ function demanderEvaluation(nodeid,type) {
 		deleteVector(uuid,type+'-evaluation')
 }
 
-function demanderFeedback(nodeid,type){
-	buildSaveVectorKAPC(nodeid,type);
+function demanderFeedback(nodeid){
+	const uuid = $("#page").attr('uuid');
+	const semtag = UICom.structure.ui[uuid].semantictag;
+	var type = "";
+	if (semtag.indexOf('sae')>-1)
+		type = 'sae';
+	else if (semtag.indexOf('stage')>-1)
+		type='stage'
+	else if (semtag.indexOf('autre')>-1)
+		type='action'
+	buildSaveVectorKAPC(nodeid,type+"-feedback");
 }
+
+function supprimerFeedback(nodeid){
+	const uuid = $("#page").attr('uuid');
+	const semtag = UICom.structure.ui[uuid].semantictag;
+	var type = "";
+	if (semtag.indexOf('sae')>-1)
+		type = 'sae';
+	else if (semtag.indexOf('stage')>-1)
+		type='stage';
+	else if (semtag.indexOf('autre')>-1)
+		type='action';
+	deleteVector(nodeid,type+"-feedback");
+}
+
 
 //============== SAES ===================
 function demanderSaeFeedback(nodeid){
 	buildSaveVectorKAPC(nodeid,'sae-feedback');
 }
 
+function supprimerSaeFeedback(nodeid){
+	deleteVector(nodeid,'sae-feedback');
+}
+
 function soumettreSaeFeedback(nodeid){
 	buildSaveVectorKAPC(nodeid,'sae-feedback-done');
 }
+
+//-------------
 
 function demanderSaeEvaluation(nodeid) {
 	demanderEvaluation(nodeid,'sae');
@@ -3097,9 +3150,15 @@ function demanderStageFeedback(nodeid){
 	buildSaveVectorKAPC(nodeid,'stage-feedback');
 }
 
+function supprimerStageFeedback(nodeid){
+	deleteVector(nodeid,'stage-feedback');
+}
+
 function soumettreStageFeedback(nodeid){
 	buildSaveVectorKAPC(nodeid,'stage-feedback-done');
 }
+
+//-------------
 
 function demanderStageEvaluation(nodeid) {
 	demanderEvaluation(nodeid,'stage');
@@ -3114,9 +3173,15 @@ function demanderActionFeedback(nodeid){
 	buildSaveVectorKAPC(nodeid,'action-feedback');
 }
 
+function supprimerActionFeedback(nodeid){
+	deleteVector(nodeid,'action-feedback');
+}
+
 function soumettreActionFeedback(nodeid){
 	buildSaveVectorKAPC(nodeid,'action-feedback-done');
 }
+
+//-------------
 
 function demanderActionEvaluation(nodeid) {
 	demanderEvaluation(nodeid,'action');
@@ -3131,9 +3196,15 @@ function demanderCompetenceFeedback(nodeid){
 	buildSaveVectorKAPC(nodeid,'competence-feedback');
 }
 
+function supprimerCompetenceFeedback(nodeid){
+	deleteVector(nodeid,'action-feedback');
+}
+
 function soumettreCompetenceFeedback(nodeid){
 	buildSaveVectorKAPC(nodeid,'competence-feedback-done');
 }
+
+//-------------
 
 function demanderCompetenceEvaluation(nodeid) {
 	demanderEvaluation(nodeid,'competence');
