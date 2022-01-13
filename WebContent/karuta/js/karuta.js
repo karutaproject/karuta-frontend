@@ -3021,7 +3021,7 @@ function confirmDeleteAllVectors(nodeid){
 //==================Specific Vector Functions==============
 //=========================================================
 
-function buildSaveVectorKAPC(nodeid,type) {
+function buildSaveVectorKAPC(nodeid,uuid,type) {
 	const saeid = $("#page").attr('uuid');
 	const enseignants = $("asmContext:has(metadata[semantictag='enseignant-select'])",UICom.structure.ui[saeid].node);
 	const today = new Date();
@@ -3030,11 +3030,11 @@ function buildSaveVectorKAPC(nodeid,type) {
 
 	for (let i=0;i<enseignants.length;i++){
 		const enseignantid = $("code",enseignants[i]).text();
-		saveVector(enseignantid,type,g_portfolioid,nodeid,USER.id,annee,selfcode);
+		saveVector(enseignantid,type,nodeid,uuid,g_portfolioid,USER.id,annee,selfcode);
 	}
 }
 
-function buildSubmitVectorKAPC(nodeid,type) {
+function buildSubmitVectorKAPC(nodeid,uuid,type) {
 	const today = new Date();
 	const annee = today.getFullYear();
 	const selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
@@ -3046,7 +3046,7 @@ function buildSubmitVectorKAPC(nodeid,type) {
 		if (uuids[0]==nodeid)
 			portfolioid = uuids[1];
 	}
-	saveVector(USER.username,type,portfolioid,nodeid,USER.id,annee,selfcode);
+	saveVector(USER.username,type,nodeid,uuid,portfolioid,USER.id,annee,selfcode);
 }
 
 function searchVectorKAPC(enseignantid,type1,type2) {
@@ -3054,17 +3054,17 @@ function searchVectorKAPC(enseignantid,type1,type2) {
 	let tableau = [];
 	// on ajoute tous les uuids qui ont type1
 	for (let i=0;i<search1.length;i++){
-		let portfolioid = $("a3",search1[i]).text();
+		let portfolioid = $("a5",search1[i]).text();
 		let nodeid = $("a4",search1[i]).text();
-		tableau.push([portfolioid,nodeid]);
+		tableau.push(portfolioid+"_"+nodeid);
 	}
 	if (type2!=null && type2!=""){
 		// on retire tous les uuids qui ont type2 et le même nodeid
 		const search2 = $("vector",searchVector(enseignantid,type2));
 		for (let i=0;i<search2.length;i++){
-			let portfolioid = $("a3",search2[i]).text();
-			let nodeid = $("a4",search2[i]).text();
-			const indx = tableau.indexOf([portfolioid,nodeid]);
+			let portfolioid = $("a5",search2[i]).text();
+			let nodeid = $("a3",search2[i]).text();
+			const indx = tableau.indexOf(portfolioid+"_"+nodeid);
 			if (indx>-1)
 				tableau.splice(indx,1);
 		}
@@ -3072,12 +3072,12 @@ function searchVectorKAPC(enseignantid,type1,type2) {
 	let result =  [];
 	for (let i=0;i<tableau.length;i++){ // copie dans result en éliminant les doublons
 		if (result.indexOf(tableau[i][0])<0)
-			result.push(tableau[i][0]);
+			result.push(tableau[i].substring(0,tableau[i].indexOf("_")));
 	}
 	return result;
 }
 
-//======================================
+//=============== EVALUATION =======================
 function demanderEvaluation(nodeid,type) {
 	const uuid = $("#page").attr('uuid');
 	const semtag = UICom.structure.ui[uuid].semantictag;
@@ -3085,16 +3085,34 @@ function demanderEvaluation(nodeid,type) {
 	if (semtag.indexOf('sae')>-1)
 		type = 'sae';
 	else if (semtag.indexOf('stage')>-1)
-		type='stage'
+		type='stage';
 	else if (semtag.indexOf('autre')>-1)
-		type='action'
+		type='action';
+	else if (semtag.indexOf('competence')>-1)
+		type='competence';
 	const val = UICom.structure.ui[nodeid].resource.getValue();
 	if (val=='1')
-		buildSaveVectorKAPC(uuid,type+'-evaluation')
+		buildSaveVectorKAPC(nodeid,uuid,type+'-evaluation');
 	else
-		deleteVector(uuid,type+'-evaluation')
+		deleteVector(null,type+'-evaluation',nodeid);
 }
 
+function soumettreEvaluation(nodeid){
+	const uuid = $("#page").attr('uuid');
+	const semtag = UICom.structure.ui[uuid].semantictag;
+	var type = "";
+	if (semtag.indexOf('sae')>-1)
+		type = 'sae';
+	else if (semtag.indexOf('stage')>-1)
+		type='stage';
+	else if (semtag.indexOf('autre')>-1)
+		type='action';
+	else if (semtag.indexOf('competence')>-1)
+		type='competence';
+	buildSubmitVectorKAPC(nodeid,uuid,type+"-evaluation-done");
+}
+
+//=============== FEEDBACK ========================
 function demanderFeedback(nodeid){
 	const uuid = $("#page").attr('uuid');
 	const semtag = UICom.structure.ui[uuid].semantictag;
@@ -3102,10 +3120,12 @@ function demanderFeedback(nodeid){
 	if (semtag.indexOf('sae')>-1)
 		type = 'sae';
 	else if (semtag.indexOf('stage')>-1)
-		type='stage'
+		type='stage';
 	else if (semtag.indexOf('autre')>-1)
-		type='action'
-	buildSaveVectorKAPC(nodeid,type+"-feedback");
+		type='action';
+	else if (semtag.indexOf('competence')>-1)
+		type='competence';
+	buildSaveVectorKAPC(nodeid,uuid,type+"-feedback");
 }
 
 function supprimerFeedback(nodeid){
@@ -3118,100 +3138,24 @@ function supprimerFeedback(nodeid){
 		type='stage';
 	else if (semtag.indexOf('autre')>-1)
 		type='action';
-	deleteVector(nodeid,type+"-feedback");
+	else if (semtag.indexOf('competence')>-1)
+		type='competence';
+	deleteVector(null,type+"-feedback",nodeid);
 }
 
-
-//============== SAES ===================
-function demanderSaeFeedback(nodeid){
-	buildSaveVectorKAPC(nodeid,'sae-feedback');
-}
-
-function supprimerSaeFeedback(nodeid){
-	deleteVector(nodeid,'sae-feedback');
-}
-
-function soumettreSaeFeedback(nodeid){
-	buildSaveVectorKAPC(nodeid,'sae-feedback-done');
-}
-
-//-------------
-
-function demanderSaeEvaluation(nodeid) {
-	demanderEvaluation(nodeid,'sae');
-}
-
-function soumettreSaeEvaluation(nodeid){
-	buildSubmitVectorKAPC(nodeid,'sae-evaluation-done');
-}
-
-//============== STAGES ===================
-function demanderStageFeedback(nodeid){
-	buildSaveVectorKAPC(nodeid,'stage-feedback');
-}
-
-function supprimerStageFeedback(nodeid){
-	deleteVector(nodeid,'stage-feedback');
-}
-
-function soumettreStageFeedback(nodeid){
-	buildSaveVectorKAPC(nodeid,'stage-feedback-done');
-}
-
-//-------------
-
-function demanderStageEvaluation(nodeid) {
-	demanderEvaluation(nodeid,'stage');
-}
-
-function soumettreStageEvaluation(nodeid){
-	buildSubmitVectorKAPC(nodeid,'stage-evaluation-done');
-}
-
-//============== Actions ===================
-function demanderActionFeedback(nodeid){
-	buildSaveVectorKAPC(nodeid,'action-feedback');
-}
-
-function supprimerActionFeedback(nodeid){
-	deleteVector(nodeid,'action-feedback');
-}
-
-function soumettreActionFeedback(nodeid){
-	buildSaveVectorKAPC(nodeid,'action-feedback-done');
-}
-
-//-------------
-
-function demanderActionEvaluation(nodeid) {
-	demanderEvaluation(nodeid,'action');
-}
-
-function soumettreActionEvaluation(nodeid){
-	buildSubmitVectorKAPC(nodeid,'action-evaluation-done');
-}
-
-//============== Compétences ===================
-function demanderCompetenceFeedback(nodeid){
-	buildSaveVectorKAPC(nodeid,'competence-feedback');
-}
-
-function supprimerCompetenceFeedback(nodeid){
-	deleteVector(nodeid,'action-feedback');
-}
-
-function soumettreCompetenceFeedback(nodeid){
-	buildSaveVectorKAPC(nodeid,'competence-feedback-done');
-}
-
-//-------------
-
-function demanderCompetenceEvaluation(nodeid) {
-	demanderEvaluation(nodeid,'competence');
-}
-
-function soumettreCompetenceEvaluation(nodeid){
-	buildSubmitVectorKAPC(nodeid,'competence-evaluation-done');
+function soumettreFeedback(nodeid){
+	const uuid = $("#page").attr('uuid');
+	const semtag = UICom.structure.ui[uuid].semantictag;
+	var type = "";
+	if (semtag.indexOf('sae')>-1)
+		type = 'sae';
+	else if (semtag.indexOf('stage')>-1)
+		type='stage';
+	else if (semtag.indexOf('autre')>-1)
+		type='action';
+	else if (semtag.indexOf('competence')>-1)
+		type='competence';
+	buildSubmitVectorKAPC(nodeid,uuid,type+"-feedback-done");
 }
 
 //==============================================
