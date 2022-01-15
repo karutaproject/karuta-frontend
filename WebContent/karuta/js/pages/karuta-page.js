@@ -44,8 +44,8 @@ function initKarutaPage()
 function displayKarutaPage()
 //==============================
 {
-	$.ajaxSetup({async: false});
 	$.ajax({
+		async: false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/credential",
@@ -59,6 +59,8 @@ function displayKarutaPage()
 			setConfigurationUIVariables(LANGCODE);
 			applyKarutaConfiguration();
 			USER = new UIFactory["User"]($("user",data));
+			//--------------------------
+			$("body").attr("other",USER.other);
 			//-------------------------------
 			if (g_configVar['maintenance-display']=="1" && !USER.admin && !USER.creator)
 				window.location="login.htm";
@@ -109,7 +111,6 @@ function displayKarutaPage()
 			});
 		}
 	});
-	$.ajaxSetup({async: true});
 	$('[data-tooltip="true"]').tooltip({html: true, trigger: 'hover'});
 }
 

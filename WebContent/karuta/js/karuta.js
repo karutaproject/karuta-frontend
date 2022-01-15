@@ -2783,27 +2783,27 @@ function getTarget (knode,position_semtag)
 	var target = "";
 	if (position_semtag.indexOf("child.")>-1) {
 		var semtag = position_semtag.substring("child.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",node);
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",node);
 	} else	if (position_semtag.indexOf("sibling.")>-1) {
 		var semtag = position_semtag.substring("sibling.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent());
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent());
 	} else if (position_semtag.indexOf("parent.parent.parent.parent.parent.")>-1) {
 		var semtag = position_semtag.substring("parent.parent.parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
 	} else if (position_semtag.indexOf("parent.parent.parent.parent")>-1) {
 		var semtag = position_semtag.substring("parent.parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
 	} else if (position_semtag.indexOf("parent.parent.parent")>-1) {
 		var semtag = position_semtag.substring("parent.parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
 	} else if (position_semtag.indexOf("parent.parent")>-1) {
 		var semtag = position_semtag.substring("parent.parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent().parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
 	} else if (position_semtag.indexOf("parent.")>-1) {
 		var semtag = position_semtag.substring("parent.".length);
-		target = $("*:has(>metadata[semantictag='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag='"+semtag+"'])");
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
 	} else {
-		target = $("*:has(>metadata[semantictag='"+position_semtag+"'])",g_portfolio_current);
+		target = $("*:has(>metadata[semantictag*='"+position_semtag+"'])",g_portfolio_current);
 	}
 	return target;
 }
@@ -2833,6 +2833,17 @@ function toggleDraft (nodeid)
 			node.displayMetainfo("metainfo_"+node.id);
 		}
 	}
+}
+
+//==================================
+function notExistChild (nodeid,semtag)
+//==================================
+{
+	const node = UICom.structure.ui[nodeid].node;
+	if ( $("*:has(>metadata[semantictag*='"+semtag+"'])",node).length==0 )
+		return true;
+	else
+		return false;
 }
 
 //=========================================================

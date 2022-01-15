@@ -75,6 +75,7 @@ UIFactory["User"] = function( node )
 	this.admin = this.admin_node.text()=='1';
 	this.admin_original = this.admin_node.text()=='1';
 	this.creator = this.designer_node.text()=='1' || this.admin_node.text()=='1';
+	this.other = this.other_node.text();
 	this.limited = this.other_node.text().indexOf('limited')>-1;
 	this.xlimited = this.other_node.text().indexOf('xlimited')>-1;
 	//-----------------------------------

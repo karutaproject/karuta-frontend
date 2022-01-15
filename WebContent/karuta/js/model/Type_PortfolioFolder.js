@@ -992,6 +992,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 			var visibleid = "";
 			var autoload = "";
 			for (var i=0;i<portfolios_list.length;i++){
+				//--------------------------
 				if (portfolios_list[i].visible || portfolios_list[i].ownerid==USER.id) {
 					nb_visibleportfolios++;
 					visibleid = portfolios_list[i].id;
@@ -1000,6 +1001,22 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 					autoload = portfolios_list[i].id;
 				}
 			}
+			// -- if there is no autoload portfolio, we search if one has the role set in USER.other ---
+			if (autoload=="" && USER.other!="" && nb_visibleportfolios>1) {
+				for (var i=0;i<portfolios_list.length;i++){
+					$.ajax({
+						async:false,
+						type : "GET",
+						dataType : "xml",
+						url : serverBCK_API+"/rolerightsgroups/all/users?portfolio="+portfolios_list[i].id,
+						success : function(data) {
+							if ($("rrg:has('user[id="+USER.id+"]'):has('label:contains("+USER.other+")')",data).length>0)
+								autoload = portfolios_list[i].id;
+						}
+					});
+				}
+			}
+			//---------------------------------------------------------------------------------------------
 			if (nb_visibleportfolios>0 || autoload!="" )
 				if (nb_visibleportfolios>9 && portfoliosnotinfolders.length>9)
 					UIFactory.PortfolioFolder.displayPortfolios('project-portfolios','false','list',portfoliosnotinfolders);

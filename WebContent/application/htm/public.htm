@@ -145,6 +145,9 @@
 				}
 			});
 			window.addEventListener("load", function() {
+				setConfigurationTechVariables(LANGCODE);
+				setConfigurationUIVariables(LANGCODE);
+				applyKarutaConfiguration();
 				displayKarutaPublic();
 			});
 			$('[data-toggle="tooltip"]').tooltip({
