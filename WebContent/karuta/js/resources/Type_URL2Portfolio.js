@@ -131,7 +131,7 @@ UIFactory["URL2Portfolio"].prototype.displayView = function(dest,type,langcode)
 UIFactory["URL2Portfolio"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
 	//---------------------

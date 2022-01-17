@@ -2765,16 +2765,22 @@ UIFactory["Portfolio"].search = function(type)
 	var value = $("#"+type+"-search-text-input").val();
 	var nodes = $("asmUnit:has(asmResource:has(label[lang='"+LANG+"']:contains(\""+value+"\"),text[lang='"+LANG+"']:contains(\""+value+"\"),code:contains(\""+value+"\")))",g_portfolio_current);
 	var html="";
+	if (value!=""){
 	html += "<div class='result-title'>"+karutaStr[LANG]["result-title"]+value+"</div>";
 	html += "<div class='result-subtitle'>"+karutaStr[LANG]["result-subtitle"]+"</div>";
 	html += "<div class='result-nb'>"+karutaStr[LANG]["result-nb"] + nodes.length + "</div>";
-	for (var i=0; i<nodes.length;i++){
-		var nodeid = $(nodes[i]).attr('id');
-		var node_label = UICom.structure.ui[nodeid].getLabel();
-		html += "<div class='result-page' onclick=\"displayPage('"+nodeid+"',99,'standard','0',false)\">"+node_label+"</div>";
+		for (var i=0; i<nodes.length;i++){
+			var nodeid = $(nodes[i]).attr('id');
+			var node_label = UICom.structure.ui[nodeid].getLabel();
+			html += "<div class='result-page' onclick=\"displayPage('"+nodeid+"',99,'standard','0',false)\">"+node_label+"</div>";
+		}
 	}
 	$("#contenu").html(html);
 }
+// contains will be case insensitive
+jQuery.expr[':'].contains = function(a, i, m) {
+	return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+};
 
 //-----------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------

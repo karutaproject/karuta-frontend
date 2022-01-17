@@ -1527,7 +1527,7 @@ UIFactory["Get_Resource"].prototype.save = function()
 	if (log)
 		$(this.user_node).text(USER.firstname+" "+USER.lastname);
 	//------------------------------
-	$(this.lastmodified_node).text(new Date().toLocaleString());
+	$(this.lastmodified_node).text(new Date().getTime());
 	//------------------------------
 	if (this.clause=="xsi_type='Get_Resource'") {
 		UICom.UpdateResource(this.id,writeSaved);

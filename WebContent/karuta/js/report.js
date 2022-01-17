@@ -66,6 +66,10 @@ jqueryReportSpecificFunctions['.filename_or_url_not_empty()'] = ".has(\"asmResou
 jqueryReportSpecificFunctions['.filename_or_text_or_url_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty),asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty),asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > url[lang='#lang#']:empty\")";
 jqueryReportSpecificFunctions['.filename_or_text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > filename[lang='#lang#']:not(:empty),asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\")";
 jqueryReportSpecificFunctions['.url_or_text_not_empty()'] = ".has(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes'] > url[lang='#lang#']:not(:empty),asmResource[xsi_type!='context'][xsi_type!='nodeRes']  > text[lang='#lang#']:not(:empty)\")";
+jqueryReportSpecificFunctions['.sortResourceLastModified()'] = ".sort(function(a, b){ return $(\"lastmodified\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jqueryReportSpecificFunctions['.invsortResourceLastModified()'] = ".sort(function(a, b){ return $(\"lastmodified\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(a))).text() > $(\"utc\",$(\"asmResource[xsi_type!='context'][xsi_type!='nodeRes']\",$(b))).text() ? -1 : 1; })";
+jqueryReportSpecificFunctions['.sortNodeLastModified()'] = ".sort(function(a, b){ return $(\"lastmodified\",$(\"asmResource[xsi_type='nodeRes']\",$(a))).text() > $(\"code\",$(\"asmResource[xsi_type='nodeRes']\",$(b))).text() ? 1 : -1; })";
+jqueryReportSpecificFunctions['.invsortNodeLastModified()'] = ".sort(function(a, b){ return $(\"lastmodified\",$(\"asmResource[xsi_type='nodeRes']\",$(a))).text() > $(\"code\",$(\"asmResource[xsi_type='nodeRes']\",$(b))).text() ? -1 : 1; })";
 //---------------
 jqueryReportSpecificFunctions['.uniqueNodeLabel()'] = "";
 jqueryReportSpecificFunctions['.uniqueNodeCode()'] = "";
@@ -252,6 +256,40 @@ $.fn.utcBetween = function (options)
 $.fn.test_utcBetween = function (options) { return result = ($(this).utcBetween(options).length>0) ? true : false;};
 //=====================================
 
+//=====================================
+$.fn.hasParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).addBack().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
+	return result;
+};
+$.fn.test_hasParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
+$.fn.hasParentParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).addBack().parent().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
+	return result;
+};
+$.fn.test_hasParentParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
+
+//=====================================
+$.fn.hasParentParentParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = $(this).addBack().parent().parent().parent().has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type!=context][xsi_type!=nodeRes]>code:contains("+parameters.value+")')");
+	return result;
+};
+$.fn.test_hasParentParentParentSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasParentParentParentSemtagAndNodeCodeContains(options).length>0) ? true : false;};
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -265,37 +303,7 @@ Selector = function(jquery,type,filter1,filter2,unique)
 	this.unique = unique
 };
 
-/*
-//==================================
-function replaceVariable(text)
-//==================================
-{
-	var n=0;
-	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
-		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
-		var variable_name = test_string.substring(0,test_string.indexOf("##}"));
-		if (g_variables[variable_name]!=undefined)
-			text = text.replace("{##"+variable_name+"##}", g_variables[variable_name]);
-		n++; // to avoid infinite loop
-	}
-	while (text!=undefined && text.indexOf("##")>-1 && n<100) {
-		var test_string = text.substring(text.indexOf("##")+2); // test_string = abcd##variable##efgh.....
-		var variable_name = test_string.substring(0,test_string.indexOf("##"));
-		if (g_variables[variable_name]!=undefined)
-			text = text.replace("##"+variable_name+"##", g_variables[variable_name]);
-		if (text.indexOf("[")>-1) {
-			variable_name = test_string.substring(0,test_string.indexOf("##]##")+3);
-			var variable_value = variable_name.substring(0,variable_name.indexOf("["));
-			var i = text.substring(text.indexOf("[")+1,text.indexOf("]"));
-			i = replaceVariable(i);
-			if (g_variables[variable_value]!=undefined && g_variables[variable_value].length>=i)
-				text = text.replace("##"+variable_name+"##", g_variables[variable_value][i]);
-			}
-		n++; // to avoid infinite loop
-	}
-	return text;
-}
-*/
+
 //==================================
 function r_getTest(test)
 //==================================
@@ -1715,6 +1723,9 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 					}
 				catch(error) {text="/"};
 			}
+			if (selector.type=='lastmodified') {
+				text = UICom.structure["ui"][nodeid].resource.lastmodified_node.text();
+			}
 			if (selector.type=='node value') {
 				text = UICom.structure["ui"][nodeid].getValue();
 			}
@@ -1857,6 +1868,7 @@ g_report_actions['variable'] = function (destid,action,no,data)
 		var varlabel = $(action).attr("varlabel");
 		var ref = $(action).attr("ref");
 		var aggregatetype = $(action).attr("aggregatetype");
+		var fct = $(action).attr("function");
 		//------------ aggregate ------------------
 		if (aggregatetype!=undefined && aggregatetype!="") {
 			var select = $(action).attr("aggregationselect");
@@ -1888,6 +1900,8 @@ g_report_actions['variable'] = function (destid,action,no,data)
 			}
 			if (!$.isNumeric(text))
 				text="";
+		} else if (fct!=undefined && fct!=""){
+			text = eval(fct);
 		} else {
 			var select = $(action).attr("select");
 			if (select!=undefined && select.length>0) {

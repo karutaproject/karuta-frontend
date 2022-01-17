@@ -177,7 +177,7 @@ UIFactory["Audio"].update = function(data,uuid,langcode,filename)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	var size = data.files[0].size;
 	var type = data.files[0].type;
 	$("#fileAudio_"+uuid+"_"+langcode).html(filename);

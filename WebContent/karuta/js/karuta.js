@@ -682,7 +682,7 @@ function getURLParameter(sParam) {
 }
 
 //==================================
-function displayPage(uuid,depth,type,langcode) {
+function displayPage(uuid,depth,type,langcode,nodepth) {
 //==================================
 	//---------------------
 	if (langcode==null)
@@ -723,7 +723,7 @@ function displayPage(uuid,depth,type,langcode) {
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (depth==null)
 		depth=100;
-	if (name=='asmRoot' || name=='asmStructure')
+	if ( (name=='asmRoot' || name=='asmStructure') && nodepth==null)
 		depth = 1;
 	if (UICom.structure['tree'][uuid]!=null) {
 		if (type=='standard') {
@@ -2846,6 +2846,13 @@ function notExistChild (nodeid,semtag)
 		return false;
 }
 
+//==================================
+function displayRoot (destid)
+//==================================
+{
+	
+}
+
 //=========================================================
 //==================API Vector Functions===================
 //=========================================================
@@ -3033,8 +3040,7 @@ function confirmDeleteAllVectors(nodeid){
 //=========================================================
 
 function buildSaveVectorKAPC(nodeid,uuid,type) {
-	const saeid = $("#page").attr('uuid');
-	const enseignants = $("asmContext:has(metadata[semantictag='enseignant-select'])",UICom.structure.ui[saeid].node);
+	const enseignants = $("asmContext:has(metadata[semantictag='enseignant-select'])",UICom.structure.ui[uuid].node);
 	const today = new Date();
 	const annee = today.getFullYear();
 	const selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
@@ -3066,7 +3072,7 @@ function searchVectorKAPC(enseignantid,type1,type2) {
 	// on ajoute tous les uuids qui ont type1
 	for (let i=0;i<search1.length;i++){
 		let portfolioid = $("a5",search1[i]).text();
-		let nodeid = $("a4",search1[i]).text();
+		let nodeid = $("a3",search1[i]).text();
 		tableau.push(portfolioid+"_"+nodeid);
 	}
 	if (type2!=null && type2!=""){
@@ -3088,6 +3094,11 @@ function searchVectorKAPC(enseignantid,type1,type2) {
 	return result;
 }
 
+function numberVectorKAPC(enseignantid,type1,type2) {
+	let tab = searchVectorKAPC(enseignantid,type1,type2);
+	return tab.length;
+}
+
 //=============== EVALUATION =======================
 function demanderEvaluation(nodeid,type) {
 	const uuid = $("#page").attr('uuid');
@@ -3103,9 +3114,9 @@ function demanderEvaluation(nodeid,type) {
 		type='competence';
 	const val = UICom.structure.ui[nodeid].resource.getValue();
 	if (val=='1')
-		buildSaveVectorKAPC(nodeid,uuid,type+'-evaluation');
+		buildSaveVectorKAPC(uuid,uuid,type+'-evaluation');
 	else
-		deleteVector(null,type+'-evaluation',nodeid);
+		deleteVector(null,type+'-evaluation',uuid);
 }
 
 function soumettreEvaluation(nodeid){
@@ -3120,7 +3131,7 @@ function soumettreEvaluation(nodeid){
 		type='action';
 	else if (semtag.indexOf('competence')>-1)
 		type='competence';
-	buildSubmitVectorKAPC(nodeid,uuid,type+"-evaluation-done");
+	buildSubmitVectorKAPC(uuid,uuid,type+"-evaluation-done");
 }
 
 //=============== FEEDBACK ========================

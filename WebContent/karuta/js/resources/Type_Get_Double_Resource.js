@@ -194,7 +194,7 @@ UIFactory["Get_Double_Resource"].prototype.displayView = function(dest,type,lang
 UIFactory["Get_Double_Resource"].update = function(itself,langcode,type)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	if (itself.encrypted) {
 		$(itself.label1_node).text("rc4"+encrypt($(itself.label1_node).text(),g_rc4key));
 		$(itself.code1_node).text("rc4"+encrypt($(itself.code1_node).text(),g_rc4key));

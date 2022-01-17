@@ -120,7 +120,7 @@ UIFactory["Field"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Field"].prototype.update = function(langcode)
 //==================================
 {
-	$(this.lastmodified_node).text(new Date().toLocaleString());
+	$(this.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	if (!this.multilingual) {
 		var value = $(this.text_node[langcode]).text();

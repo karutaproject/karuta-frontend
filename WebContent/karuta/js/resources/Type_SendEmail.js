@@ -137,7 +137,7 @@ UIFactory["SendEmail"].prototype.displayView = function(dest,type,langcode)
 UIFactory["SendEmail"].update = function(obj,itself,langcode)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;

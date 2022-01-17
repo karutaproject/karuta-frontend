@@ -145,7 +145,7 @@ UIFactory["URL2Unit"].prototype.displayView = function(dest,type,langcode)
 UIFactory["URL2Unit"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	var value = $(selected_item).attr('value');
 	if (itself.encrypted)

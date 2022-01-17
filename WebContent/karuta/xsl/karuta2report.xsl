@@ -369,6 +369,9 @@
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='todisplay']/asmResource[@xsi_type='Get_Resource']/value"></xsl:value-of>
 		</xsl:variable>
 		<xsl:variable name="select"><xsl:value-of select="$nodetype"/>.<xsl:value-of select="$semtag"/>.<xsl:value-of select="$todisplay"/></xsl:variable>
+		<xsl:variable name="function">
+			<xsl:value-of select=".//asmContext[metadata/@semantictag='function']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+		</xsl:variable>
 		<xsl:variable name="aggregationselect">
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='aggregationselect']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</xsl:variable>
@@ -398,7 +401,10 @@
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
 			</xsl:if>
 			<xsl:if test="not($aggregatetype='')">
-				<xsl:attribute name="ref"><xsl:value-of select="$aggregatetype"/></xsl:attribute>
+				<xsl:attribute name="aggregatetype"><xsl:value-of select="$aggregatetype"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not($function='')">
+				<xsl:attribute name="function"><xsl:value-of select="$function"/></xsl:attribute>
 			</xsl:if>
 			<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
 		</variable>

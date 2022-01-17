@@ -129,7 +129,7 @@ UIFactory["Get_Proxy"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Get_Proxy"].update = function(selected_item,itself,lang,type)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	if (lang==null)
 		lang = LANG;
 	var code = $(selected_item).attr('code');
@@ -160,7 +160,7 @@ UIFactory["Get_Proxy"].update = function(selected_item,itself,lang,type)
 UIFactory["Get_Proxy"].update2 = function(data,itself,lang,type,code)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	var nodes = $("node",data);
 	var resource = null;
 	if ($("asmResource",nodes[0]).length==3)

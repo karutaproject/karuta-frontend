@@ -123,7 +123,7 @@ UIFactory["Proxy"].prototype.displayView = function(dest,type,langcode)
 UIFactory["Proxy"].update = function(itself,lang,type,portfolio_label)
 //==================================
 {
-	$(itself.lastmodified_node).text(new Date().toLocaleString());
+	$(itself.lastmodified_node).text(new Date().getTime());
 	itself.save();
 };
 

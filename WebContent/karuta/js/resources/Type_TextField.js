@@ -139,7 +139,7 @@ UIFactory["TextField"].prototype.displayView = function(dest,type,langcode)
 UIFactory["TextField"].prototype.update = function(langcode)
 //==================================
 {
-	$(this.lastmodified_node).text(new Date().toLocaleString());
+	$(this.lastmodified_node).text(new Date().getTime());
 	//---------------------
 	if (langcode==null)
 		langcode = LANGCODE;
@@ -240,9 +240,13 @@ UIFactory["TextField"].prototype.displayEditor = function(destid,type,langcode,d
 	if (this.maxword>0) {
 		$("#counter_"+uuid).html(countWords(text)+"/"+this.maxword);
 	}
+	let htmleditor = false;
+	if (g_userroles[0]=='designer' || USER.admin) {
+		htmleditor = true;
+	}
 	$("#"+uuid+"_edit_"+langcode+(inline?'inline':'')).wysihtml5(
 		{
-			toolbar:{"size":"xs","font-styles": false,"html":true,"blockquote": true,"image": false,"link": false},
+			toolbar:{"size":"xs","font-styles": false,"html":htmleditor,"blockquote": true,"image": false,"link": false},
 			"uuid":uuid,
 			"locale":LANG,
 			'events': {
