@@ -128,7 +128,13 @@ UIFactory["Node"] = function( node )
 		if (this.xsi_type!="null" && this.xsi_type!=null && this.xsi_type!=undefined && this.xsi_type!='' && this.xsi_type != this.asmtype) { // structured resource
 			this.structured_resource = new UIFactory[this.xsi_type](node);
 		}
-		//------------------------------
+		//--------------------
+		if ($("lastmodified",$("asmResource[xsi_type='nodeRes']",node)).length==0){  // for backward compatibility
+			var newelement = createXmlElement("lastmodified");
+			$("asmResource[xsi_type='nodeRes']",node)[0].appendChild(newelement);
+		}
+		this.lastmodified_node = $("lastmodified",$("asmResource[xsi_type='nodeRes']",node)[0]);
+		//--------------------
 	}
 	catch(err) {
 		alertHTML("UIFactory.Node -- flag_error:"+flag_error+"--"+err.message+"--id:"+this.id+"--resource_type:"+this.resource_type+"--asmtype:"+this.asmtype+"--xsi_type:"+this.xsi_type);
@@ -984,6 +990,8 @@ UIFactory["Node"].prototype.getEditor = function(type,langcode)
 UIFactory["Node"].prototype.save = function()
 //==================================
 {
+	$(this.lastmodified_node).text(new Date().getTime());
+	//------------------------------
 	UICom.UpdateNode(this.node);
 	//-------- if function js -------------
 	if (this.js!=undefined && this.js!="") {
@@ -1321,11 +1329,12 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 		if (level==null)
 			level = 0;
 		//---------------------
+		const welcomeid = $("asmUnit:has(metadata[semantictag*='WELCOME'])",UICom.structure.ui[UICom.rootid].node).attr('id');
 		for( var i=0;i<root.children.length;i++ )
 		{
 			var child = UICom.structure["tree"][root.children[i]].node;
-			var name = child.tagName;
 			var uuid = $(child).attr("id");
+			var name = child.tagName;
 			var text = UICom.structure["ui"][uuid].getLabel('sidebar_'+uuid,'span');
 			var node = UICom.structure["ui"][uuid];
 			var seenoderoles = ($(node.metadatawad).attr('seenoderoles')==undefined)? 'all' : $(node.metadatawad).attr('seenoderoles');
@@ -1343,12 +1352,11 @@ UIFactory["Node"].displaySidebar = function(root,destid,type,langcode,edit,paren
 					if (privatevalue)
 						html+= "private"
 					html += "' id='parent-"+uuid+"' role='tabdivst'>";
-					html += "<div class='dropdown-item' style='cursor:pointer' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
+					html += "<div class='dropdown-item' style='cursor:pointer ";
+					if (g_configVar['portfolio-hmenu-logo']!="" && uuid==welcomeid)
+						html += ";display:none";
+					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" id='sidebar_"+uuid+"'>"+text+"</div>";
 
-//					html += "<div style='cursor:pointer' id='sidebar_"+uuid+"' class='dropdown-item";
-//					if (privatevalue)
-//						html+= " private";
-//					html += "' onclick=\"displayPage('"+uuid+"',"+depth+",'"+type+"','"+langcode+"',"+g_edit+")\" >"+text+"</div>";
 					$("#"+destid).append($(html));
 				}
 				if(name == "asmUnit" && level==1) // in a dropdown
@@ -2545,8 +2553,6 @@ UIFactory["Node"].buttons = function(node,type,langcode,inline,depth,edit,menu,b
 //==================================================
 {
 };
-
-
 
 //==================================================
 UIFactory["Node"].displayWelcomeBlock = function(root,dest,depth,langcode,edit,inline,backgroundParent)

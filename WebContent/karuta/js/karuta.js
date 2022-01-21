@@ -3035,162 +3035,6 @@ function confirmDeleteAllVectors(nodeid){
 	let js = "deleteAllVectors('"+nodeid+"')";
 	confirmDelete(js);
 }
-//=========================================================
-//==================Specific Vector Functions==============
-//=========================================================
-
-function buildSaveVectorKAPC(nodeid,uuid,type) {
-	const enseignants = $("asmContext:has(metadata[semantictag='enseignant-select'])",UICom.structure.ui[uuid].node);
-	const today = new Date();
-	const annee = today.getFullYear();
-	const selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-
-	for (let i=0;i<enseignants.length;i++){
-		const enseignantid = $("code",enseignants[i]).text();
-		saveVector(enseignantid,type,nodeid,uuid,g_portfolioid,USER.id,annee,selfcode);
-	}
-}
-
-function buildSubmitVectorKAPC(nodeid,uuid,type) {
-	const today = new Date();
-	const annee = today.getFullYear();
-	const selfcode = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",UICom.root.node)).text();
-	const portfolioidnodes = $(".portfolioid",document);
-	const tab = $(portfolioidnodes).map(function() {return $(this).text();}).get();
-	let portfolioid ="";
-	for (let i=0;i<tab.length;i++){
-		let uuids = tab[i].split("_");
-		if (uuids[0]==nodeid)
-			portfolioid = uuids[1];
-	}
-	saveVector(USER.username,type,nodeid,uuid,portfolioid,USER.id,annee,selfcode);
-}
-
-function searchVectorKAPC(enseignantid,type1,type2) {
-	const search1 = $("vector",searchVector(enseignantid,type1));
-	let tableau = [];
-	// on ajoute tous les uuids qui ont type1
-	for (let i=0;i<search1.length;i++){
-		let portfolioid = $("a5",search1[i]).text();
-		let nodeid = $("a3",search1[i]).text();
-		tableau.push(portfolioid+"_"+nodeid);
-	}
-	if (type2!=null && type2!=""){
-		// on retire tous les uuids qui ont type2 et le même nodeid
-		const search2 = $("vector",searchVector(enseignantid,type2));
-		for (let i=0;i<search2.length;i++){
-			let portfolioid = $("a5",search2[i]).text();
-			let nodeid = $("a3",search2[i]).text();
-			const indx = tableau.indexOf(portfolioid+"_"+nodeid);
-			if (indx>-1)
-				tableau.splice(indx,1);
-		}
-	}
-	let result =  [];
-	for (let i=0;i<tableau.length;i++){ // copie dans result en éliminant les doublons
-		if (result.indexOf(tableau[i][0])<0)
-			result.push(tableau[i].substring(0,tableau[i].indexOf("_")));
-	}
-	return result;
-}
-
-function numberVectorKAPC(enseignantid,type1,type2) {
-	let tab = searchVectorKAPC(enseignantid,type1,type2);
-	return tab.length;
-}
-
-//=============== EVALUATION =======================
-function demanderEvaluation(nodeid,type) {
-	const uuid = $("#page").attr('uuid');
-	const semtag = UICom.structure.ui[uuid].semantictag;
-	var type = "";
-	if (semtag.indexOf('sae')>-1)
-		type = 'sae';
-	else if (semtag.indexOf('stage')>-1)
-		type='stage';
-	else if (semtag.indexOf('autre')>-1)
-		type='action';
-	else if (semtag.indexOf('competence')>-1)
-		type='competence';
-	const val = UICom.structure.ui[nodeid].resource.getValue();
-	if (val=='1')
-		buildSaveVectorKAPC(uuid,uuid,type+'-evaluation');
-	else
-		deleteVector(null,type+'-evaluation',uuid);
-}
-
-function soumettreEvaluation(nodeid){
-	const uuid = $("#page").attr('uuid');
-	const semtag = UICom.structure.ui[uuid].semantictag;
-	var type = "";
-	if (semtag.indexOf('sae')>-1)
-		type = 'sae';
-	else if (semtag.indexOf('stage')>-1)
-		type='stage';
-	else if (semtag.indexOf('autre')>-1)
-		type='action';
-	else if (semtag.indexOf('competence')>-1)
-		type='competence';
-	buildSubmitVectorKAPC(uuid,uuid,type+"-evaluation-done");
-}
-
-//=============== FEEDBACK ========================
-function demanderFeedback(nodeid){
-	const uuid = $("#page").attr('uuid');
-	const semtag = UICom.structure.ui[uuid].semantictag;
-	var type = "";
-	if (semtag.indexOf('sae')>-1)
-		type = 'sae';
-	else if (semtag.indexOf('stage')>-1)
-		type='stage';
-	else if (semtag.indexOf('autre')>-1)
-		type='action';
-	else if (semtag.indexOf('competence')>-1)
-		type='competence';
-	buildSaveVectorKAPC(nodeid,uuid,type+"-feedback");
-}
-
-function supprimerFeedback(nodeid){
-	const uuid = $("#page").attr('uuid');
-	const semtag = UICom.structure.ui[uuid].semantictag;
-	var type = "";
-	if (semtag.indexOf('sae')>-1)
-		type = 'sae';
-	else if (semtag.indexOf('stage')>-1)
-		type='stage';
-	else if (semtag.indexOf('autre')>-1)
-		type='action';
-	else if (semtag.indexOf('competence')>-1)
-		type='competence';
-	deleteVector(null,type+"-feedback",nodeid);
-}
-
-function soumettreFeedback(nodeid){
-	const uuid = $("#page").attr('uuid');
-	const semtag = UICom.structure.ui[uuid].semantictag;
-	var type = "";
-	if (semtag.indexOf('sae')>-1)
-		type = 'sae';
-	else if (semtag.indexOf('stage')>-1)
-		type='stage';
-	else if (semtag.indexOf('autre')>-1)
-		type='action';
-	else if (semtag.indexOf('competence')>-1)
-		type='competence';
-	buildSubmitVectorKAPC(nodeid,uuid,type+"-feedback-done");
-}
-
-//==============================================
-function setPrenomNom(nodeid) {
-	const prenom_nom =  $("*:has(>metadata[semantictag*='prenom_nom'])",UICom.structure.ui[nodeid].node)[0];
-	const prenom_nomid = $(prenom_nom).attr("id");
-	const prenom = $("*:has(>metadata[semantictag*='prenom-etudiant'])",g_portfolio_current)[0];
-	const prenomid = $(prenom).attr("id");
-	const nom = $("*:has(>metadata[semantictag*='nom-famille-etudiant'])",g_portfolio_current)[0];
-	const nomid = $(nom).attr("id");
-	$(UICom.structure.ui[prenom_nomid].resource.text_node[LANGCODE]).text(UICom.structure.ui[prenomid].resource.getView()+" "+UICom.structure.ui[nomid].resource.getView());
-	UICom.structure.ui[prenom_nomid].resource.save();
-}
 
 function setNodeCode(nodeid, code){
 	if(UICom.structure.ui[nodeid].node_code==undefined) // in case of access before node ndisplay
@@ -3199,15 +3043,7 @@ function setNodeCode(nodeid, code){
 	UICom.structure.ui[nodeid].save();
 }
 
-function demandeEnregistree(nodeid){
-	alert('Demande enregistrée')
-}
-// mise à jour du code et du libellé dela compétence dans la section 'mes compétences'
-function setCompetenceCodeLabel(nodeid){
-	let js = replaceVariable("setNodeCodeLabel(##currentnode##,##lastimported##)",UICom.structure.ui[nodeid].node);
-	eval(js);
-}
-
+//=========================================================
 function setNodeCodeLabel(nodeid,targetid){
 	if (nodeid!=targetid) {
 		if(UICom.structure.ui[nodeid].node_code==undefined) // in case of access before node ndisplay
@@ -3220,4 +3056,11 @@ function setNodeCodeLabel(nodeid,targetid){
 		UICom.structure.ui[targetid].save();
 	}
 }
+//=========================================================
+//=========================================================
+
+
+
+
+
 

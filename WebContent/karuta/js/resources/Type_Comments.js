@@ -58,6 +58,7 @@ UIFactory["Comments"] = function( node )
 		this.save();
 	}
 	//--------------------
+	
 	this.display = {};
 };
 
@@ -169,8 +170,7 @@ UIFactory["Comments"].prototype.update = function(langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	var now = new Date().toLocaleString();
-	$(this.lastModified).text(now);
+	$(this.lastmodified_node).text(new Date().getTime());
 	var author = USER.getView(null,'firstname-lastname');
 	this.date_node.text(now);
 	this.author_node.text(author);

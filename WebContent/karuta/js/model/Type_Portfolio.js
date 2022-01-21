@@ -432,8 +432,10 @@ UIFactory["Portfolio"].displayHorizontalMenu = function(root,destid,type,langcod
 	if (type==null)
 		type = "standard";
 	var html = "";
-	if (g_configVar['portfolio-hmenu-logo']!="")
-		html += "		<div id='portfolio-menu-logo' style=\""+g_configVar['portfolio-hmenu-logo-style']+"\">" + g_configVar['portfolio-hmenu-logo'] + "</div>";
+	if (g_configVar['portfolio-hmenu-logo']!="") {
+		const welcomeid = $("asmUnit:has(metadata[semantictag*='WELCOME'])",UICom.structure.ui[rootid].node).attr('id');
+		html += "		<div id='portfolio-menu-logo' onclick=\"displayPage('"+welcomeid+"',99,'standard','0',true)\" style=\"cursor:pointer;"+g_configVar['portfolio-hmenu-logo-style']+"\">" + g_configVar['portfolio-hmenu-logo'] + "</div>";
+	}
 	html += "	<div class='navbar-collapse collapse navbars";
 	if (g_bar_type=='horizontal-right')
 		html += " justify-content-end";

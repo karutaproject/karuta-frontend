@@ -698,7 +698,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 					UIFactory["Get_Resource"].update(this,self,langcode);
 				});
 				//-------------- update button -----
-				if ((code!="" && self_code==$('code',resource).text()) || (self_label==$(srce+"[lang='"+languages[langcode]+"']",resource).text())) {
+				if ( (self_code!="" && self_code==$('code',resource).text()) || self_label==$(srce+"[lang='"+languages[langcode]+"']",resource).text() ) {
 					var html = "";
 					html += $(srce+"[lang='"+languages[langcode]+"']",resource).text();
 					$("#button_"+langcode+self.id).attr("style",style);

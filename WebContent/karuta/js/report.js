@@ -257,6 +257,32 @@ $.fn.test_utcBetween = function (options) { return result = ($(this).utcBetween(
 //=====================================
 
 //=====================================
+$.fn.hasAncestorSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
+//=====================================
+{
+	var defaults= {"semtag":"s","value":"v"};
+	var parameters = $.extend(defaults, options);
+	var result = [];
+	for (var i=0;i<this.length;i++){
+		var parent = $(this[i]).parent();
+		var tagname = $(parent).prop("tagName");
+		var search = [];
+		while (tagname!='asmRoot' && search.length==0){
+			search = $(parent).has("*:has('>metadata[semantictag*=" + parameters.semtag + "]'):has('asmResource[xsi_type=nodeRes]>code:contains("+parameters.value+")')");
+			if (search.length==0)
+				search = $(parent).has(">metadata[semantictag*=" + parameters.semtag + "]:has('asmResource[xsi_type=nodeRes]>code:contains("+parameters.value+")')");
+			parent = $(parent).parent();
+			tagname = $(parent).prop("tagName");
+		}
+		if (search.length>0)
+			result.push(this[i])
+	}
+	return result;
+};
+$.fn.test_hasAncestorSemtagAndNodeCodeContains = function (options) { return result = ($(this).hasAncestorSemtagAndNodeCodeContains(options).length>0) ? true : false;};
+//=====================================
+
+//=====================================
 $.fn.hasParentSemtagAndNodeCodeContains = function (options)   // hasChildSemtagAndResourceCodeContains({"semtag":"s","value":"v"})
 //=====================================
 {
@@ -1716,15 +1742,18 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				text = UICom.structure["ui"][nodeid].getCode();
 			}
 			if (selector.type=='loginfo') {
-				var lastmodified = UICom.structure["ui"][nodeid].resource.lastmodified_node.text();
+				var lastmodified = UICom.structure["ui"][nodeid].resource.lastmodified_node.text().toLocaleString();
 				var user = UICom.structure["ui"][nodeid].resource.user_node.text();
 				try {
 					text = lastmodified+" - user : "+user;
 					}
 				catch(error) {text="/"};
 			}
-			if (selector.type=='lastmodified') {
-				text = UICom.structure["ui"][nodeid].resource.lastmodified_node.text();
+			if (selector.type=='resourcelastmodified') {
+				text = new Date(parseInt(UICom.structure["ui"][nodeid].resource.lastmodified_node.text())).toLocaleString();
+			}
+			if (selector.type=='nodelastmodified') {
+				text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
 			}
 			if (selector.type=='node value') {
 				text = UICom.structure["ui"][nodeid].getValue();
@@ -1921,29 +1950,35 @@ g_report_actions['variable'] = function (destid,action,no,data)
 					if (selector.type=='resource') {
 						text = UICom.structure["ui"][nodeid].resource.getView("dashboard_"+nodeid,null,null,true);
 					}
-					if (selector.type=='resource code') {
+					else if (selector.type=='resource code') {
 						text = UICom.structure["ui"][nodeid].resource.getCode();
 					}
-					if (selector.type=='resource value') {
+					else if (selector.type=='resource value') {
 						text = UICom.structure["ui"][nodeid].resource.getValue("dashboard_value_"+nodeid);
 						prefix_id += "value_";
 					}
-					if (selector.type=='resource label') {
+					else if (selector.type=='resource label') {
 						text = UICom.structure["ui"][nodeid].resource.getLabel();
 					}
-					if (selector.type=='node label') {
+					else if (selector.type=='node label') {
 						text = UICom.structure["ui"][nodeid].getLabel();
 					}
-					if (selector.type=='node code') {
+					else if (selector.type=='node code') {
 						text = UICom.structure["ui"][nodeid].getCode();
 					}
-					if (selector.type=='node value') {
+					else if (selector.type=='node value') {
 						text = UICom.structure["ui"][nodeid].getValue();
 					}
-					if (selector.type=='uuid') {
+					else if (selector.type=='resourcelastmodified') {
+						text = new Date(parseInt(UICom.structure["ui"][nodeid].resource.lastmodified_node.text())).toLocaleString();
+					}
+					else if (selector.type=='nodelastmodified') {
+						text = new Date(parseInt(UICom.structure["ui"][nodeid].lastmodified_node.text())).toLocaleString();
+					}
+					else if (selector.type=='uuid') {
 						text = nodeid;
 					}
-					if (selector.type=='node context') {
+					else if (selector.type=='node context') {
 						text = UICom.structure["ui"][nodeid].getContext("dashboard_context_"+nodeid);
 						prefix_id += "context_";
 					}
