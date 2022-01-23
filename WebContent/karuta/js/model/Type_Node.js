@@ -233,13 +233,13 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 			// ===========================================================================
 			var backgroundParent = UIFactory.Node.getMetadataEpm(this.metadataepm,'node-background-color',false);
 			
-			if (this.semantictag.indexOf('asmColumns')>-1 && type!='raw') {
+//			if (this.semantictag.indexOf('asmColumns')>-1 && type!='raw') {
+//				//-------------- for backward compatibility -----------
+//				UIFactory["Node"].displayColumns(type,root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
+//			} else if (this.semantictag.indexOf('asm-block')>-1 && type!='raw') {
 				//-------------- for backward compatibility -----------
-				UIFactory["Node"].displayColumns(type,root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
-			} else if (this.semantictag.indexOf('asm-block')>-1 && type!='raw') {
-				//-------------- for backward compatibility -----------
-				UIFactory["Node"].displayBlocks(root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
-			} else {
+//				UIFactory["Node"].displayBlocks(root,dest,depth,langcode,edit,this.inline,this.backgroundParent,this.parent,this.menu);
+//			} else {
 				//------------ EuropassL -----------------
 				if (this.semantictag=="EuropassL"){
 					alreadyDisplayed = true;
@@ -272,7 +272,7 @@ UIFactory["Node"].prototype.displayNode = function(type,root,dest,depth,langcode
 						edit = original_edit;
 					}
 				}
-			}
+//			}
 			//-------------------------------------------------------
 			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 			$(".pickcolor").colorpicker();
