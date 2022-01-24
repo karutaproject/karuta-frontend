@@ -20,7 +20,7 @@
 
 	.btn-default {
 		border-color: #ccc;
-	}
+	} 
 
 	body {
 		font-family :var(--font-family);
@@ -689,14 +689,24 @@
 /* ====================== */
 /*     PREVIEW WINDOW        */
 /* ====================== */
-	#preview-window {
-		.modal-dialog {
-			width:95%;
+	.preview-window {
+			position:absolute;
+			top:10px;
 			height:100%;
 			max-width:none;
 			transform: scale(0.8);
-		}
 	}
+
+	.preview-backdrop {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background-color:black;
+		opacity:.5
+	}
+
 
 /* ====================== */
 /*     EDIT WINDOW        */
@@ -761,7 +771,7 @@
 		.dropdown-menu{
 			max-height:350px;
 			overflow-y:auto;
-			width:50%;
+			width:90%;
 		}
 		.dropdown-toggle{
 //			border: 1px solid var(--edit-window-border-color);

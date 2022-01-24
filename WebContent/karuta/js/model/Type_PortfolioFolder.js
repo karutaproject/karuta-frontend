@@ -494,6 +494,30 @@ UIFactory["PortfolioFolder"].prototype.displayContent = function(type,parentid,v
 }
 
 //==================================
+UIFactory["PortfolioFolder"].prototype.setRights = function()
+//==================================
+{
+	for (uuid in this.children){
+		var portfolio = portfolios_byid[uuid];
+		portfolio.rights = portfolio.root.getRights();
+	}
+}
+
+//==================================
+UIFactory["PortfolioFolder"].setRights = function(folderid)
+//==================================
+{
+	$("#wait-window").show();
+	var previewbackdrop = document.createElement("DIV");
+	previewbackdrop.setAttribute("class", "preview-backdrop");
+	previewbackdrop.setAttribute("id", "previewbackdrop-"+folderid);
+	$('body').append(previewbackdrop);
+	folders_byid[folderid].setRights();
+	$("#wait-window").hide();
+	$("#previewbackdrop-"+folderid).remove();
+}
+
+//==================================
 UIFactory["PortfolioFolder"].prototype.displayOwner = function(dest)
 //==================================
 {
@@ -548,6 +572,7 @@ UIFactory["PortfolioFolder"].prototype.displayFolderDetail = function(type,paren
 		if (USER.admin || (this.owner=='Y' && !USER.xlimited)) {
 			html += "			<button  data-toggle='dropdown' class='btn dropdown-toggle'></button>";
 			html += "			<div class='dropdown-menu  dropdown-menu-right'>";
+			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.setRights('"+this.id+"');folders_byid['"+this.id+"'].displayContent('portfolio')\" ><i class='far fa-file'></i> "+karutaStr[LANG]["setrights"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.callRename('"+this.id+"',null,true)\" ><i class='fa fa-edit'></i> "+karutaStr[LANG]["rename"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.createFolder('"+folder_code+"/')\" ><i class='fas fa-folder'></i> "+karutaStr[LANG]["create_subfolder"]+"</a>";
 			html += "				<a class='dropdown-item' onclick=\"UIFactory.PortfolioFolder.confirmDelFolderContent('"+this.id+"')\" ><i class='fa fa-trash'></i> "+karutaStr[LANG]["button-delete-content"]+"</a>";
@@ -992,7 +1017,7 @@ UIFactory["PortfolioFolder"].loadAndDisplayPortfolios = function(dest,type)
 			var autoload = "";
 			try {
 				specificDisplayPortfolios();
-			} catch {
+			} catch(e) {
 				for (var i=0;i<portfolios_list.length;i++){
 					//--------------------------
 					if (portfolios_list[i].visible || portfolios_list[i].ownerid==USER.id) {

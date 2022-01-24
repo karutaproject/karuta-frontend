@@ -93,10 +93,7 @@ UIFactory["Portfolio"] = function( node )
 	this.displayLabel = {};
 	this.groups = [];
 	this.roles = [];
-	if (this.semantictag.indexOf("karuta-project")>-1)
-		this.rights = "";
-	else
-		this.rights = this.root.getRights(this.rootid);
+	this.rights = "";
 	this.model = $("role",this.rights).length==0;
 };
 
@@ -171,8 +168,18 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		semtag = this.semantictag;
 	if (semtag.indexOf('karuta-components')>-1)
 		tree_type='<span class="fa fa-wrench" aria-hidden="true"></span>';
-	if (semtag.indexOf('karuta-model')>-1)
+	if (semtag.indexOf('karuta-model')>-1) {
 		tree_type='<span class="far fa-file" aria-hidden="true"></span>';
+		//---------------------
+		var roles = $("role",this.rights);
+		var model = roles.length==0;
+		if (this.rights!="") {
+			if (model)
+				tree_type='<span class="far fa-file-alt" aria-hidden="true"></span>';
+			else
+				tree_type = '<span class="fas fa-file-alt" aria-hidden="true"></span>';
+		}
+	}
 	if (semtag.indexOf('karuta-instance')>-1)
 		tree_type='<span class="fas fa-file" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-report')>-1)
@@ -187,11 +194,6 @@ UIFactory["Portfolio"].prototype.getPortfolioView = function(dest,type,langcode,
 		tree_type='<span class="fab fa-wpforms" aria-hidden="true"></span>';
 	if (semtag.indexOf('karuta-dashboard')>-1)
 		tree_type='<span class="fa fa-line-chart" aria-hidden="true"></span>';
-	//---------------------
-	var roles = $("role",this.rights);
-	var model = roles.length==0;
-	if (!model)
-		tree_type = '<span class="fas fa-file" aria-hidden="true"></span>';
 	//---------------------
 	var portfolio_label = this.label_node[langcode].text();
 	if (portfolio_label==undefined || portfolio_label=='' || portfolio_label=='&nbsp;')

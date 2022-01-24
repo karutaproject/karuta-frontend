@@ -388,6 +388,7 @@ karutaStr['en']['create_folder']="Create a Folder";
 karutaStr['en']['create_subfolder']="Create a Subfolder";
 karutaStr['en']['parent_code']="Parent Code";
 karutaStr['en']['folder_code']="Folder Code";
+karutaStr['en']['setrights']="Distinguish model  <i class='far fa-file-alt'></i> and instance  <i class='fas fa-file-alt'></i>";
 
 //=========================================
 //========== USERS ========================

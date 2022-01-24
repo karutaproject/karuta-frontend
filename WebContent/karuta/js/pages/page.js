@@ -43,7 +43,6 @@ function displayOnePage()
 	$('body').append(alertBox());
 	$('body').append(messageBox());
 	$('body').append(imageBox());
-	$('body').append(previewBox());
 
 	//---------------------------
 	$("#welcome").html(welcome[LANG]);

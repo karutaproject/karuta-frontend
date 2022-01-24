@@ -380,11 +380,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					portfoliocode:portfoliocode,
 					semtag2:semtag2,
 					success : function(data) {
-						self.parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+						self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 					},
 					error : function(jqxhr,textStatus) {
 						$("#"+destid).html("No result");
-						self.parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+						self.parse(destid,type,langcode,null,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 					}
 				});
 			} else {
@@ -421,11 +421,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 						portfoliocode:portfoliocode,
 						semtag2:semtag2,
 						success : function(data) {
-							self.parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+							self.parse(destid,type,langcode,data,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 						},
 						error : function(jqxhr,textStatus) {
 							$("#"+destid).html("No result");
-							self.parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+							self.parse(destid,type,langcode,null,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 						}
 					});
 				}
@@ -478,26 +478,30 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				semtag_parent = elts[removestar];
 			}
 			// ------- search for parent ----
-			if (query.indexOf('itselfcode')>-1) {
-				code_parent = $($("code",$(this.node)[0])[0]).text();
-				value_parent = $($("value",$(this.node)[0])[0]).text();
-			} else if (query.indexOf('parent.parent.parent.parent.parentcode')>-1) {
-				code_parent = $($("code",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
-				value_parent = $($("value",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
-			} else if (query.indexOf('parent.parent.parent.parentcode')>-1) {
-				code_parent = $($("code",$(this.node).parent().parent().parent().parent()[0])[0]).text();
-				value_parent = $($("value",$(this.node).parent().parent().parent().parent()[0])[0]).text();
-			} else if (query.indexOf('parent.parent.parentcode')>-1) {
-				code_parent = $($("code",$(this.node).parent().parent().parent()[0])[0]).text();
-				value_parent = $($("value",$(this.node).parent().parent().parent()[0])[0]).text();
-			} else if (query.indexOf('parent.parentcode')>-1) {
-				code_parent = $($("code",$(this.node).parent().parent()[0])[0]).text();
-				value_parent = $($("value",$(this.node).parent().parent()[0])[0]).text();
-			} else if (query.indexOf('parentcode')>-1) {
-				code_parent = $($("code",$(this.node).parent()[0])[0]).text();
-				value_parent = $($("value",$(this.node).parent()[0])[0]).text();
+			if (query.indexOf('code')>-1){
+				if (query.indexOf('itselfcode')>-1) {
+					code_parent = $($("code",$(this.node)[0])[0]).text();
+					value_parent = $($("value",$(this.node)[0])[0]).text();
+				} else if (query.indexOf('parent.parent.parent.parent.parentcode')>-1) {
+					code_parent = $($("code",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
+					value_parent = $($("value",$(this.node).parent().parent().parent().parent().parent()[0])[0]).text();
+				} else if (query.indexOf('parent.parent.parent.parentcode')>-1) {
+					code_parent = $($("code",$(this.node).parent().parent().parent().parent()[0])[0]).text();
+					value_parent = $($("value",$(this.node).parent().parent().parent().parent()[0])[0]).text();
+				} else if (query.indexOf('parent.parent.parentcode')>-1) {
+					code_parent = $($("code",$(this.node).parent().parent().parent()[0])[0]).text();
+					value_parent = $($("value",$(this.node).parent().parent().parent()[0])[0]).text();
+				} else if (query.indexOf('parent.parentcode')>-1) {
+					code_parent = $($("code",$(this.node).parent().parent()[0])[0]).text();
+					value_parent = $($("value",$(this.node).parent().parent()[0])[0]).text();
+				} else if (query.indexOf('parentcode')>-1) {
+					code_parent = $($("code",$(this.node).parent()[0])[0]).text();
+					value_parent = $($("value",$(this.node).parent()[0])[0]).text();
+				}
 			} else {
-				if (query.indexOf('child')>-1) {
+				if (this.parent_position=='') {
+					parent = UICom.root.node;
+				} else if (query.indexOf('child')>-1) {
 					parent = this.node;
 				} else if (query.indexOf('sibling')>-1) {
 					parent = $(this.node).parent();
@@ -512,21 +516,21 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				} else if (query.indexOf('parent')>-1) {
 					parent = $(this.node).parent().parent();
 				}
-				//-----------
-				var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
-				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
-				if (child.length==0 && itself.length>0){
-					code_parent = $($("code",itself)[0]).text();
-					value_parent = $($("value",itself)[0]).text();
-				} else {
-					var nodetype = $(child).prop("nodeName"); // name of the xml tag
-					if (nodetype=='asmContext') {
-						code_parent = $($("code",child)[1]).text();
-						value_parent = $($("value",child)[1]).text();
-					 } else {
-						code_parent = $($("code",child)[0]).text();
-						value_parent = $($("value",child)[0]).text();
-					}
+			}
+			//-----------
+			var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
+			var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
+			if (child.length==0 && itself.length>0){
+				code_parent = $($("code",itself)[0]).text();
+				value_parent = $($("value",itself)[0]).text();
+			} else {
+				var nodetype = $(child).prop("nodeName"); // name of the xml tag
+				if (nodetype=='asmContext') {
+					code_parent = $($("code",child)[1]).text();
+					value_parent = $($("value",child)[1]).text();
+				 } else {
+					code_parent = $($("code",child)[0]).text();
+					value_parent = $($("value",child)[0]).text();
 				}
 			}
 			//----------------------
@@ -552,11 +556,19 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				portfoliocode = portfoliocode.replaceAll("##parentcode##",cleanCode(code_parent));
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
 			} else {
+				if (portfoliocode.indexOf("##parentvalue##")>-1){
+					portfoliocode = value_parent;
+					let js2 = $("#js2").attr("onclick");
+					js2 = js2.replaceAll("##parentvalue##",value_parent);
+					$("#js2").attr("onclick",js2);
+				}
 				$(this.portfoliocode_node).text(portfoliocode);
-				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+query_parent_semtag+ "&code_parent="+code_parent;
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+this.query_parent_semtag+ "&code_parent="+code_parent;
 			}
 			//----------------------
 			var self = this;
+			portfoliocode = replaceVariable(portfoliocode);
+			url = replaceVariable(url);
 			if (code_parent!="") {
 				$.ajax({
 					async:false,
@@ -910,14 +922,14 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			var semtag = this.query_semtag;
 			var data = UICom.structure.ui[targetid].node;
 			var searchsemtag = (this.unique=='true')?semtag:this.unique;
-			var allreadyadded = $("*:has(>metadata[semantictag="+searchsemtag+"])",data);
+			var allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
 			var tabadded = [];
 			for ( var i = 0; i < allreadyadded.length; i++) {
 				let resource = null;
 				if ($("asmResource",allreadyadded[i]).length==3)
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",allreadyadded[i]); 
+					resource = $(">asmResource[xsi_type!='nodeRes'][xsi_type!='context']",allreadyadded[i]); 
 				else
-					resource = $("asmResource[xsi_type='nodeRes']",allreadyadded[i]);
+					resource = $(">asmResource[xsi_type='nodeRes']",allreadyadded[i]);
 				let code = $('code',resource).text();
 				tabadded[i] = code;
 			}

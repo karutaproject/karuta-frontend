@@ -33,7 +33,6 @@ function initKarutaPage()
 	$('body').append(messageBox());
 	$('body').append(imageBox());
 	$('body').append(LangueBox());
-	$('body').append(previewBox());
 	
 	//--------------------------
 	var spinner1 = new Spinner().spin(document.getElementById('wait-spin'));

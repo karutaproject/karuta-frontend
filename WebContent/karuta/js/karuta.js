@@ -549,17 +549,17 @@ function messageBox()
 }
 
 //==============================
-function previewBox()
+function previewBox(id)
 //==============================
 {
 	var html = "";
 	html += "\n<!-- ==================== Message box ==================== -->";
-	html += "\n<div id='preview-window' class='modal fade'>";
-	html += "\n		<div class='modal-dialog'>";
+	html += "\n<div id='preview-window-"+id+"'>";
+	html += "\n		<div class=''>";
 	html += "\n			<div class='modal-content'>";
-	html += "\n				<div id='preview-window-body' class='modal-body'>";
+	html += "\n				<div id='preview-window-body-"+id+"' class=''>";
 	html += "\n				</div>";
-	html += "\n				<div id='preview-window-footer' class='modal-footer' >";
+	html += "\n				<div id='preview-window-footer-"+id+"' class='modal-footer' >";
 	html += "\n				</div>";
 	html += "\n			</div>";
 	html += "\n		</div>";
@@ -781,15 +781,25 @@ function previewPage(uuid,depth,type,langcode)
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
-	$("#preview-window-footer").html("");
-	var footer = "<button class='btn' onclick=\"$('#preview-window').modal('hide');\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#preview-window-footer").append($(footer));
-	$("#preview-window-body").html("");
+	var previewbackdrop = document.createElement("DIV");
+	previewbackdrop.setAttribute("class", "preview-backdrop");
+	previewbackdrop.setAttribute("id", "previewbackdrop-"+uuid);
+	$('body').append(previewbackdrop);
+
+	var previewwindow = document.createElement("DIV");
+	previewwindow.setAttribute("class", "preview-window");
+	previewwindow.innerHTML =  previewBox(uuid);
+	$('body').append(previewwindow);
+	var footer = "<button class='btn' onclick=\"$('#preview-window-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#preview-window-footer-"+uuid).html(footer);
+	$("#preview-window-body-"+uuid).html("");
 	if (UICom.structure['tree'][uuid]!=null) {
 		g_report_edit = false;
-		UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+		UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,false);
 		g_report_edit = g_edit;
-		$("#preview-window").modal('show');
+		$("#preview-window-"+uuid).show();
+		$("#previewbackdrop-"+uuid).show();
+		window.scrollTo(0,0);
 	} else {
 		$.ajax({
 			type : "GET",
@@ -798,17 +808,21 @@ function previewPage(uuid,depth,type,langcode)
 			success : function(data) {
 				UICom.parseStructure(data);
 				g_report_edit = false;
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body",depth,langcode,false);
+				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,false);
 				g_report_edit = g_edit;
-				$("#preview-window").modal('show');
-
+				$("#preview-window-"+uuid).show();
+				$("#previewbackdrop-"+uuid).show();
+				$('body').append(previewbackdrop);
+				window.scrollTo(0,0);
 			},
 			error : function() {
 				var html = "";
 				html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
-				$("#preview-window-body").html(html);
-				$("#preview-window").modal('show');
-
+				$("#preview-window-body-"+uuid).html(html);
+				$("#preview-window-"+uuid).show();
+				$("#previewbackdrop-"+uuid).show();
+				$('body').append(previewbackdrop);
+				window.scrollTo(0,0);
 			}
 		});
 	}

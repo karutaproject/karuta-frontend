@@ -359,8 +359,8 @@ UIFactory["Node"].prototype.getRights = function()
 //==================================
 {
 	var rights = null;
-	$.ajaxSetup({async: false});
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : serverBCK_API+"/nodes/node/"+this.id+"/rights",
@@ -368,7 +368,6 @@ UIFactory["Node"].prototype.getRights = function()
 			rights = data;
 		}
 	});
-	$.ajaxSetup({async: true});
 	return rights;
 }
 
