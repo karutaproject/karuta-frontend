@@ -568,13 +568,12 @@ UIFactory["Node"].getMenus = function(node,langcode)
 //						html += "	</span><!-- class='dropdown -->";
 
 					} else if (nbitems>0){
-						//html = html.replace("##",UIFactory.Node.getXmlItemMenu(node,parentid,items[0],title,databack,callback,param2,param3,param4));
 						for (var j=0;j<items.length;j++) {
 							var condition = ($("condition",items[j]).length>0)?$("condition",items[j]).text():"";
 							if (UIFactory.Node.testDisplay(node,roles,condition)) {
-								if(menulabel!="")
-									title = UIFactory.Node.getMenuLabel(menulabel,langcode);
-								else
+//								if(menulabel!="")
+//									title = UIFactory.Node.getMenuLabel(menulabel,langcode);
+//								else
 									title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
 								let temphtml = "<a class='button text-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</a> ";
 								//---------------------target----------------------------------------
@@ -1284,7 +1283,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
 					actions += "{|type|:|import_component|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"',"+unique+");";
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
 			// --------import-elts ------
 			imports = $("import-elts",itemelts[i]);
@@ -1294,7 +1293,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
 					actions += "{|type|:|import_elts|,|parentid|:|"+parentid+"|,|foliocode|:|"+search_foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"',"+unique+");";
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
 			// --------import-elts-from ------
 			imports = $("import-elts-from",itemelts[i]);
@@ -1306,7 +1305,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
 					actions += "{|type|:|import_elts-from|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
-				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"',"+unique+");";
+				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			}
 		}
 		//-----------------------------------------------------------
@@ -1336,7 +1335,7 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 			// -------- actions ------------
 			let actions = UIFactory.Node.getActions(parentid,node,itemelts[i]);
 			// -----------------------------
-			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"',"+unique+");";
+			onclick += "import_get_get_multiple('"+parentid+"','','"+boxlabel+"','"+parent_position+"','"+parent_semtag+"','"+search_foliocode+"','"+search_parent_semtag+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";
 			//------------------------------------
 		}
 	}

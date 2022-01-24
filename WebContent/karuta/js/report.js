@@ -1688,6 +1688,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 		ref = replaceVariable(ref);
 		var editresroles = $(action).attr("editresroles");
 		var delnoderoles = $(action).attr("delnoderoles");
+		var showroles = ($(action).attr("showroles")==undefined)? "":$(action).attr("showroles");
 		style = replaceVariable($(action).attr("style"));
 		var selector = r_getSelector(select);
 		var node = $(selector.jquery,data);
@@ -1705,6 +1706,10 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
 			if (g_designerrole || writenode) {
 				writenode = (editresroles.containsArrayElt(g_userroles) || editresroles.indexOf($(USER.username_node).text())>-1 )
+			}
+			var shownode = false;
+			if (g_designerrole || writenode) {
+				shownode = (showroles.containsArrayElt(g_userroles) || showroles.indexOf($(USER.username_node).text())>-1 )
 			}
 			var deletenode = ($(node.node).attr('delete')=='Y')? true:false;
 			if (delnoderoles.indexOf("user")>-1)
@@ -1779,6 +1784,17 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				var type = UICom.structure["ui"][nodeid].asmtype;
 				text += deleteButton(nodeid,type,null,null,'UIFactory.Node.reloadUnit',null,null);
 			}
+			//------------- private button -------------------
+			if (shownode) {
+				privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
+
+				if (privatevalue) {
+					text += "<span class='button fas fa-eye-slash' style='' onclick=\"javascript:show('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				} else {
+					text += "<span class='button fas fa-eye' style='' onclick=\"javascript:hide('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+				}
+			}
+
 			//----------------------------
 			if (g_report_edit && inline & writenode) {
 				//-----------------------

@@ -380,11 +380,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 					portfoliocode:portfoliocode,
 					semtag2:semtag2,
 					success : function(data) {
-						UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+						self.parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 					},
 					error : function(jqxhr,textStatus) {
 						$("#"+destid).html("No result");
-						UIFactory["Get_Get_Resource"].parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+						self.parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 					}
 				});
 			} else {
@@ -421,11 +421,11 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 						portfoliocode:portfoliocode,
 						semtag2:semtag2,
 						success : function(data) {
-							UIFactory["Get_Get_Resource"].parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+							self.parse(destid,type,langcode,data,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 						},
 						error : function(jqxhr,textStatus) {
 							$("#"+destid).html("No result");
-							UIFactory["Get_Get_Resource"].parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
+							self.parse(destid,type,langcode,null,self,disabled,srce,this.portfoliocode,semtag,semtag2,cachable);
 						}
 					});
 				}
@@ -541,6 +541,7 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 //			alertHTML('portfoliocode:'+portfoliocode+'--semtag:'+semtag+'--semtag_parent:'+semtag_parent+'--code_parent:'+code_parent+'--portfoliocode_parent:'+portfoliocode_parent);
 			//----------------------
 			var url ="";
+			code_parent = replaceVariable(code_parent);
 			if (portfoliocode=="##parentcode##") {
 				portfoliocode = cleanCode(code_parent);
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","");
@@ -904,11 +905,12 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		var inputs = "<div id='get_get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
 		//-----search for already added------------------
-		if (this.unique) {
+		if (this.unique!="") {
 			var targetid = this.targetid;
-			var semtag = this.importedtag;
+			var semtag = this.query_semtag;
 			var data = UICom.structure.ui[targetid].node;
-			var allreadyadded = $("*:has(>metadata[semantictag='"+semtag+"'])",data);
+			var searchsemtag = (this.unique=='true')?semtag:this.unique;
+			var allreadyadded = $("*:has(>metadata[semantictag="+searchsemtag+"])",data);
 			var tabadded = [];
 			for ( var i = 0; i < allreadyadded.length; i++) {
 				let resource = null;
@@ -922,7 +924,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		}
 		//----------remove allready added----------------
 		var newTableau2 = [];
-		if (this.unique) {
+		if (this.unique!="") {
 			for ( var i = 0; i < newTableau1.length; ++i) {
 				const indx = tabadded.indexOf(newTableau1[i][0]);
 				if (indx==-1)
@@ -1676,9 +1678,8 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 //==================================
 {
 	const acts = actns.split(';');
-	var importedtag = "";
 	if (unique==null)
-		unique = true;
+		unique = '';
 	let actions = [];
 	for (let i=0;i<acts.length-1;i++) {
 		actions.push(JSON.parse(acts[i].replaceAll("|","\"").replaceAll("<<","(").replaceAll(">>",")")));
@@ -1692,7 +1693,6 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 			for (let j=0;j<targets.length;j++) {
 				if (targetid=="")
 					targetid = targets[j];
-				importedtag = actions[i].semtag;
 				js2 += "UIFactory.Get_Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
 			}
 		} else if (actions[i].type=="import-elts-from") {
@@ -1700,7 +1700,6 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 			for (let j=0;j<targets.length;j++) {
 				if (targetid=="")
 					targetid = targets[j];
-				importedtag = actions[i].semtag;
 				js2 += "UIFactory.Get_Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
 			}
 		} else if (actions[i].type=="import-component-w-today-date") {
@@ -1708,7 +1707,6 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 			for (let j=0;j<targets.length;j++){
 				if (targetid=="")
 					targetid = targets[j];
-				importedtag = actions[i].semtag;
 					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
 			}
 		} else if (actions[i].type=="import") {
@@ -1716,7 +1714,6 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 			for (let j=0;j<targets.length;j++){
 				if (targetid=="")
 					targetid = targets[j];
-				importedtag = actions[i].semtag;
 					js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
 			}
 		} else if (actions[i].type=="import-today-date") {
@@ -1724,7 +1721,6 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 			for (let j=0;j<targets.length;j++){
 				if (targetid=="")
 					targetid = targets[j];
-				importedtag = 'Calendar';
 					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','karuta.karuta-resources','Calendar','Calendar');";
 			}
 		}
@@ -1750,7 +1746,6 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 	getgetResource.query_parent_semtag = query_parent_semtag;	
 	getgetResource.query_semtag = query_semtag;
 	getgetResource.query_object = query_object;
-	getgetResource.importedtag = importedtag;
 	getgetResource.targetid = targetid;
 	getgetResource.unique = unique;
 	getgetResource.displayEditor("get-get-resource-node");

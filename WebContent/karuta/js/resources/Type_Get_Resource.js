@@ -1044,11 +1044,14 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		var inputs = "<div id='get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
 		//-----search for already added------------------
-		if (this.unique) {
+		if (this.unique!="") {
 			var targetid = this.targetid;
-			var semtag = this.query_semtag;
+			if (targetid=="")
+				targetid = this.parentid;
+			var query_semtag = this.query_semtag;
 			var data = UICom.structure.ui[targetid].node;
-			var allreadyadded = $("*:has(>metadata[semantictag='"+semtag+"'])",data);
+			var searchsemtag = (this.unique=='true')?query_semtag:this.unique;
+			var allreadyadded = $("*:has(>metadata[semantictag="+searchsemtag+"])",data);
 			var tabadded = [];
 			for ( var i = 0; i < allreadyadded.length; i++) {
 				let resource = null;
@@ -1062,7 +1065,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 		//----------remove allready added----------------
 		var newTableau2 = [];
-		if (this.unique) {
+		if (this.unique!="") {
 			for ( var i = 0; i < newTableau1.length; ++i) {
 				const indx = tabadded.indexOf(newTableau1[i][0]);
 				if (indx==-1)
@@ -1606,6 +1609,8 @@ UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags
 	//------------------------------
 	if (UICom.structure.ui[targetid]==undefined && targetid!="")
 		targetid = getNodeIdBySemtag(targetid);
+	else
+		targetid = parentid;
 	//------------------------------
 	$.ajaxSetup({async: false});
 	var elts = multiple_tags.split(",");
@@ -1673,10 +1678,14 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 				data : xml,
 				last : this.last,
 				url : url_resource,
+				tagname : tagname,
 				success : function(data) {
 					if (this.last) {
 						$('#edit-window').modal('hide');
-						UIFactory.Node.reloadUnit();
+						if (this.tagname=='asmUnit' || this.tagname=='asmStructure')
+							UIFactory.Node.reloadStruct();
+						else
+							UIFactory.Node.reloadUnit();
 					}
 				}
 			});
@@ -1792,6 +1801,8 @@ function get_multiple(parentid,targetid,title,query,partcode,get_resource_semtag
 	$("#edit-window-body-metadata-epm").html("");
 	var getResource = new UIFactory["Get_Resource"](UICom.structure["ui"][parentid].node,"xsi_type='nodeRes'");
 	getResource.multiple = query+"/"+partcode+","+get_resource_semtag+","+fct;
+	getResource.parentid = parentid;
+	getResource.targetid = targetid;
 	getResource.displayEditor("get-resource-node");
 	$('#edit-window').modal('show');
 }
@@ -1823,7 +1834,7 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 //==================================
 {
 	if (unique==null)
-		unique = true;
+		unique = '';
 	$.ajaxSetup({async: false});
 	const acts = actns.split(';');
 	let actions = [];

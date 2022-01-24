@@ -730,11 +730,11 @@ function displayPage(uuid,depth,type,langcode,nodepth) {
 			var node = UICom.structure['ui'][uuid].node;
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
-			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
-				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
-			else {
+//			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
+//				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
+//			else {
 				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
-			}
+//			}
 		}
 		if (type=='translate')
 			UICom.structure["ui"][uuid].displayTranslateNode(type,UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
