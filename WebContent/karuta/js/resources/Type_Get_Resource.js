@@ -1056,9 +1056,9 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			for ( var i = 0; i < allreadyadded.length; i++) {
 				let resource = null;
 				if ($("asmResource",allreadyadded[i]).length==3)
-					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",allreadyadded[i]); 
+					resource = $(">asmResource[xsi_type!='nodeRes'][xsi_type!='context']",allreadyadded[i]); 
 				else
-					resource = $("asmResource[xsi_type='nodeRes']",allreadyadded[i]);
+					resource = $(">asmResource[xsi_type='nodeRes']",allreadyadded[i]);
 				let code = $('code',resource).text();
 				tabadded[i] = code;
 			}

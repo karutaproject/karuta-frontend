@@ -893,6 +893,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 //=======================================================================
 // if srcetag does not exist as semantictag search as code
 {
+	var result = "";
 	//------------
 	if (destid=='##lastimported##')
 		destid = g_importednodestack.pop();
@@ -923,6 +924,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 			} else {
 				g_importednodestack.push(data);
 			}
+			result = data;
 			if (callback!=null)
 				if (databack)
 					callback(data,param2,param3,param4,param5,param6,param7,param8);
@@ -933,6 +935,7 @@ function importBranch(destid,srcecode,srcetag,databack,callback,param2,param3,pa
 			alertHTML(karutaStr[languages[LANGCODE]]['inexistent-selection']);
 		}
 	});
+	return result;
 }
 
 //=======================================================================
@@ -3050,7 +3053,14 @@ function confirmDeleteAllVectors(nodeid){
 	confirmDelete(js);
 }
 
-function setNodeCode(nodeid, code){
+//=========================================================
+//=========================================================
+
+function setNodeCode(nodeid, code, visible){
+	if (visible==null)
+		visible = false;
+	if (!visible)
+		code +="@";
 	if(UICom.structure.ui[nodeid].node_code==undefined) // in case of access before node ndisplay
 		UICom.structure.ui[nodeid].setMetadata();
 	$(UICom.structure.ui[nodeid].code_node).text(code);
@@ -3072,7 +3082,6 @@ function setNodeCodeLabel(nodeid,targetid){
 }
 //=========================================================
 //=========================================================
-
 
 
 

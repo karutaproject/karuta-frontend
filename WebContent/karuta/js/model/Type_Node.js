@@ -1564,15 +1564,18 @@ UIFactory["Node"].prototype.updateComments = function(langcode)
 //----------------------------------------------------------------------------------------------------------------------------
 
 //==================================================
-UIFactory['Node'].upNode = function(nodeid)
+UIFactory['Node'].upNode = function(nodeid,reload)
 //==================================================
 {
+	if (reload==null)
+		reload = true;
 	$.ajax({
 		type : "POST",
 		dataType : "text",
 		url : serverBCK_API+"/nodes/node/" + nodeid + "/moveup",
 		success : function(data) {
-			UIFactory.Node.reloadUnit();
+			if (reload)
+				UIFactory.Node.reloadUnit();
 			$("#edit-window").modal('hide');	
 		},
 		error : function(jqxhr,textStatus) {
