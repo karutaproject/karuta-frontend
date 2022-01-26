@@ -516,21 +516,21 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				} else if (query.indexOf('parent')>-1) {
 					parent = $(this.node).parent().parent();
 				}
-			}
-			//-----------
-			var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
-			var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
-			if (child.length==0 && itself.length>0){
-				code_parent = $($("code",itself)[0]).text();
-				value_parent = $($("value",itself)[0]).text();
-			} else {
-				var nodetype = $(child).prop("nodeName"); // name of the xml tag
-				if (nodetype=='asmContext') {
-					code_parent = $($("code",child)[1]).text();
-					value_parent = $($("value",child)[1]).text();
-				 } else {
-					code_parent = $($("code",child)[0]).text();
-					value_parent = $($("value",child)[0]).text();
+				//-----------
+				var child = $("metadata[semantictag*='"+semtag_parent+"']",parent).parent();
+				var itself = $(parent).has("metadata[semantictag*='"+semtag_parent+"']");
+				if (child.length==0 && itself.length>0){
+					code_parent = $($("code",itself)[0]).text();
+					value_parent = $($("value",itself)[0]).text();
+				} else {
+					var nodetype = $(child).prop("nodeName"); // name of the xml tag
+					if (nodetype=='asmContext') {
+						code_parent = $($("code",child)[1]).text();
+						value_parent = $($("value",child)[1]).text();
+					 } else {
+						code_parent = $($("code",child)[0]).text();
+						value_parent = $($("value",child)[0]).text();
+					}
 				}
 			}
 			//----------------------
@@ -918,10 +918,12 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 		var inputs_obj = $(inputs);
 		//-----search for already added------------------
 		if (this.unique!="") {
+			if (this.targetid==undefined || this.targetid=="")
+				this.targetid = this.parentid;
 			var targetid = this.targetid;
-			var semtag = this.query_semtag;
+			var searchsemtag = (this.query_semtag!=undefined)?this.query_semtag:semtag;
+			searchsemtag = (this.unique=='true')?searchsemtag:this.unique;
 			var data = UICom.structure.ui[targetid].node;
-			var searchsemtag = (this.unique=='true')?semtag:this.unique;
 			var allreadyadded = $("*:has(>metadata[semantictag*="+searchsemtag+"])",data);
 			var tabadded = [];
 			for ( var i = 0; i < allreadyadded.length; i++) {
@@ -1470,7 +1472,8 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_
 	var part_code = elts[0];
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
 	var part_semtag = part_code.substring(part_code.lastIndexOf('.')+1);
-//	var get_resource_semtag = elts[1];
+	if (get_get_resource_semtag==undefined || get_get_resource_semtag==null)
+		get_get_resource_semtag = elts[1];
 	var fct = elts[2];
 
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
