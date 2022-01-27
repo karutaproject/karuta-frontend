@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head>
+<script src="../../other/js/jquery-3.3.1.min.js"></script>
+<style>
+	input {width:100px}
+</style>
+<script>
+//==================================
+function displayVector(destid,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	var html = ""
+	const vectors = $("vector",searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10));
+	if (vectors.length==0)
+		html += "no result";
+	else {
+		//---------------------
+		for (var i=0;i<vectors.length;i++){
+			html += "<tr>";
+			const elts = $("*",vectors[i]);
+			for (var j=0;j<elts.length;j++){
+				html += "<td style='background-color:#F5F5F5'>"+$(elts[j]).text()+"</td>";
+			}
+			html += "</tr>";
+		}
+	}
+	$("#"+destid).append(html);
+}
+
+//==================================
+function searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	let result = [];
+	let query = "";
+	if (a1!=null)
+		query += "a1="+a1;
+	if (a2!=null)
+		if (query=="")
+			query += "a2="+a2;
+		else
+			query += "&a2="+a2;
+	if (a3!=null)
+		if (query=="")
+			query += "a3="+a3;
+		else
+			query += "&a3="+a3;
+	if (a4!=null)
+		if (query=="")
+			query += "a4="+a4;
+		else
+			query += "&a4="+a4;
+	if (a5!=null)
+		if (query=="")
+			query += "a5="+a5;
+		else
+			query += "&a5="+a5;
+	if (a6!=null)
+		if (query=="")
+			query += "a6="+a6;
+		else
+			query += "&a6="+a6;
+	if (a7!=null)
+		if (query=="")
+			query += "a7="+a7;
+		else
+			query += "&a7="+a7;
+	if (a8!=null)
+		if (query=="")
+			query += "a8="+a8;
+		else
+			query += "&a8="+a8;
+	if (a9!=null)
+		if (query=="")
+			query += "a9="+a9;
+		else
+			query += "&a9="+a9;
+	if (a10!=null)
+		if (query=="")
+			query += "a10="+a10;
+		else
+			query += "&a10="+a10;
+	$.ajax({
+		async:false,
+		type : "GET",
+		contentType: "application/xml",
+		url : serverBCK+"/vector?"+query,
+		success : function(data) {
+			result = data;
+		},
+		error : function(jqxhr,textStatus) {
+			return false;
+		}
+	});
+	return result;
+}
+
+function displayvectors() {
+	var tabas = [];
+	for (var i=1;i<11;i++){
+		const val = document.getElementById("a"+i).value;
+		tabas[i] = (val!="")? val : null;
+	}
+	displayVector('report',tabas[1],tabas[2],tabas[3],tabas[4],tabas[5],tabas[6],tabas[7],tabas[8],tabas[9],tabas[10])
+}
+
+			var pathname = window.location.pathname;
+			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
+			var url = "../../.." + appliname + "-config/_init.js"
+			$.ajax({
+				async:false,
+				url: url,
+				dataType: "script",
+				error : function(jqxhr,textStatus) {
+					alert(appliname + "-config/_init.js not found");
+				}
+			});
+
+</script>
+</head>
+<body>
+<table id='report'>
+<tr>
+<th>a1</th><th>a2</th><th>a3</th><th>a4</th><th>a5</th><th>a6</th><th>a7</th><th>a8</th><th>a9</th><th>a10</th>
+</tr>
+<tr>
+<td><input type='text' id='a1'></td><td><input type='text' id='a2'></td><td><input type='text' id='a3'></td><td><input type='text' id='a4'></td><td><input type='text' id='a5'></td><td><input type='text' id='a6'></td><td><input type='text' id='a7'></td><td><input type='text' id='a8'></td><td><input type='text' id='a9'></td><td><input type='text' id='a10'></td>
+</tr>
+</table>
+<button onclick='displayvectors()'>Exec</button>
+<div id='report'></div>
+</body>
+</html>
