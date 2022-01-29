@@ -575,7 +575,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 //									title = UIFactory.Node.getMenuLabel(menulabel,langcode);
 //								else
 									title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
-								let temphtml = "<a class='button text-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</a> ";
+								let temphtml = "<button class='button text-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</button> ";
 								//---------------------target----------------------------------------
 								var parentid = node.id; // default value
 								var targetid = "";

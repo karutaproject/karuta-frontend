@@ -2278,7 +2278,8 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 {
 	var nodeid = $(data).attr("id");
 	var targetid = "";
-	var text = "";
+	var html = "";
+	var text = $("text",action).text();
 	var style = replaceVariable($(action).attr("style"));
 	var cssclass = replaceVariable($(action).attr("class"));
 	var select = $(action).attr("select");
@@ -2294,8 +2295,10 @@ g_report_actions['url2unit'] = function (destid,action,no,data)
 		targetid = UICom.structure["ui"][nodeid].getUuid();
 		label = UICom.structure["ui"][nodeid].getLabel(null,'none');
 	}
-	text = "<span id='"+nodeid+"' style='"+style+"' class='report-url2unit "+cssclass+"' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
-	$("#"+destid).append($(text));
+	if (text!="")
+		label = replaceVariable(text);
+	html = "<span id='"+nodeid+"' style='"+style+"' class='report-url2unit "+cssclass+"' onclick=\"$('#sidebar_"+targetid+"').click()\">"+label+"</span>";
+	$("#"+destid).append($(html));
 	$("#"+nodeid).attr("style",style);
 }
 

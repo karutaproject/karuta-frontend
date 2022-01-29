@@ -465,6 +465,10 @@
 			<xsl:if test="not($style='..')">
 				<xsl:attribute name="style"><xsl:value-of select="$style"/></xsl:attribute>
 			</xsl:if>
+			<text>
+				<xsl:value-of select=".//asmContext[metadata/@semantictag='text-value']/asmResource[@xsi_type='Field']/text[@lang=$lang]"></xsl:value-of>
+			
+			</text>
 		</url2unit>
 	</xsl:template>
 	<!-- ================ url2portfolio ============================ -->
