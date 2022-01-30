@@ -138,7 +138,7 @@ function getNewAccount()
 function displayKarutaLogin()
 //==============================
 {
-	loginPublic();
+//	loginPublic();
 	setLoginTechnicalVariables();
 	setLoginConfigurationVariables();
 	var html = "";

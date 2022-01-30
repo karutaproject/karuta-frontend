@@ -93,7 +93,7 @@ function callSubmit()
 function displayKarutaCreateAccount()
 //==============================
 {
-	loginPublic();
+//	loginPublic();
 	setLoginTechnicalVariables();
 	setLoginConfigurationVariables();
 	var html = "";

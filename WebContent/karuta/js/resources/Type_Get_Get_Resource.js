@@ -948,6 +948,7 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			newTableau2 = newTableau1;
 		}
 		//------------------------------------------------
+		var previouscode = "";
 		for ( var i = 0; i < newTableau2.length; ++i) {
 			var uuid = $(newTableau2[i][1]).attr('id');
 			var input = "";
@@ -963,60 +964,63 @@ UIFactory["Get_Get_Resource"].prototype.parse = function(destid,type,langcode,da
 			}
 			//------------------------------
 			var code = $('code',resource).text();
-			var selectable = true;
-			var disabled = false;
-			var display_code = false;
-			var display_label = true;
-			//------------------------
-			if (code.indexOf("$")>-1){ 
-				display_label = false;
-			}
-			if (code.indexOf("@")<0) {
-				display_code = true;
-			}
-			if (code.indexOf("?")>-1) {
-				disabled = true;
-			}
-			if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1) {
-				selectable = false;
-			}
-			code = cleanCode(code);
-			//------------------------------
-			input += "<div id='"+code+"' style=\""+style+"\">";
-			if (selectable) {
-				input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' portfoliocode='"+portfoliocode+"' class='multiple-item";
-				input += "' ";
-				if (srce=="resource") {
-					for (var j=0; j<languages.length;j++){
+			if (code!=previouscode){
+				previouscode = code
+				var selectable = true;
+				var disabled = false;
+				var display_code = false;
+				var display_label = true;
+				//------------------------
+				if (code.indexOf("$")>-1){ 
+					display_label = false;
+				}
+				if (code.indexOf("@")<0) {
+					display_code = true;
+				}
+				if (code.indexOf("?")>-1) {
+					disabled = true;
+				}
+				if (code.indexOf("!")>-1 || semtag.indexOf("!")>-1) {
+					selectable = false;
+				}
+				code = cleanCode(code);
+				//------------------------------
+				input += "<div id='"+code+"' style=\""+style+"\">";
+				if (selectable) {
+					input += "	<input type='checkbox' name='multiple_"+self.id+"' value='"+$('value',resource).text()+"' code='"+$('code',resource).text()+"' portfoliocode='"+portfoliocode+"' class='multiple-item";
+					input += "' ";
+					if (srce=="resource") {
+						for (var j=0; j<languages.length;j++){
+							var elts = $("label[lang='"+languages[langcode]+"']",resource).text().split("|");
+							input += "label_"+languages[j]+"=\""+elts[2].substring(6)+"\" ";
+						}
+					}
+					else {
+						for (var j=0; j<languages.length;j++){
+							input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
+						}
+					}
+					if (disabled)
+						input += "disabled";
+					input += "> ";
+				}
+				if (display_code)
+					input += code + " ";
+					if (srce=="resource") {
 						var elts = $("label[lang='"+languages[langcode]+"']",resource).text().split("|");
-						input += "label_"+languages[j]+"=\""+elts[2].substring(6)+"\" ";
+						input +="<span  class='"+code+"'>" + elts[2].substring(6) + "</span></div>";
 					}
+				else	
+					input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
+				var input_obj = $(input);
+				$(inputs_obj).append(input_obj);
+				// ---------------------- children ---------
+				if (semtag2!="") {
+					var semtag_parent = semtag.replace("!","");
+					UIFactory.Get_Get_Resource.getChildren(inputs_obj,langcode,self,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
 				}
-				else {
-					for (var j=0; j<languages.length;j++){
-						input += "label_"+languages[j]+"=\""+$(srce+"[lang='"+languages[j]+"']",resource).text()+"\" ";
-					}
-				}
-				if (disabled)
-					input += "disabled";
-				input += "> ";
+				//------------------------------------------
 			}
-			if (display_code)
-				input += code + " ";
-				if (srce=="resource") {
-					var elts = $("label[lang='"+languages[langcode]+"']",resource).text().split("|");
-					input +="<span  class='"+code+"'>" + elts[2].substring(6) + "</span></div>";
-				}
-			else	
-				input +="<span  class='"+code+"'>"+$(srce+"[lang='"+languages[langcode]+"']",resource).text()+"</span></div>";
-			var input_obj = $(input);
-			$(inputs_obj).append(input_obj);
-			// ---------------------- children ---------
-			if (semtag2!="") {
-				var semtag_parent = semtag.replace("!","");
-				UIFactory.Get_Get_Resource.getChildren(inputs_obj,langcode,self,srce,portfoliocode,semtag2,semtag_parent,code,cachable);
-			}
-			//------------------------------------------
 		}
 		//------------------------------
 		$("#"+destid).append(inputs_obj);
