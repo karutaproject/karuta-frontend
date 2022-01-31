@@ -373,46 +373,68 @@ var html = this.getView(dest,type,langcode);
 UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 //==================================
 {
-	var value = $(selected_item).attr('value');
-	var code = $(selected_item).attr('code');
-	var uuid = $(selected_item).attr('uuid');
-	var style = $(selected_item).attr('style');
-	//---------------------
-	if (itself.encrypted)
-		value = "rc4"+encrypt(value,g_rc4key);
-	if (itself.encrypted)
-		code = "rc4"+encrypt(code,g_rc4key);
-	//---------------------
-	$(itself.value_node[0]).text(value);
-	$(itself.code_node[0]).text(code);
-	$(itself.uuid_node[0]).text(uuid);
-	$(itself.style_node[0]).text(style.trim());
-	for (var i=0; i<languages.length;i++){
-		var label = $(selected_item).attr('label_'+languages[i]);
-		//---------------------
-		if (itself.encrypted)
-			label = "rc4"+encrypt(label,g_rc4key);
-		//---------------------
-		$(itself.label_node[i][0]).text(label);
-	}
-	//-------- if function js -------------
-	if (UICom.structure["ui"][itself.id].js!="") {
-		var fcts = UICom.structure["ui"][itself.id].js.split("|");
-		for (let i=0;i<fcts.length;i++) {
-			let elts = fcts[i].split("/");
-			if (elts[0]=="update-resource") {
-				fctjs = elts[1].split(";");
-				for (let j=0;j<fctjs.length;j++) {
-					if (fctjs[j].indexOf("##"))
-						eval(replaceVariable(fctjs[j],itself.node));
-					else
-						eval(fctjs[j]+"(itself.node,g_portfolioid)");
+	try {
+		//-------- if function js -------------
+		if (UICom.structure["ui"][itself.id].js!="") {
+			var fcts = UICom.structure["ui"][itself.id].js.split("|");
+			for (let i=0;i<fcts.length;i++) {
+				let elts = fcts[i].split("/");
+				if (elts[0]=="update-resource-before") {
+					fctjs = elts[1].split(";");
+					for (let j=0;j<fctjs.length;j++) {
+						if (fctjs[j].indexOf("##"))
+							eval(replaceVariable(fctjs[j],itself.node));
+						else
+							eval(fctjs[j]+"(itself.node,g_portfolioid)");
+					}
 				}
 			}
 		}
+		var value = $(selected_item).attr('value');
+		var code = $(selected_item).attr('code');
+		var uuid = $(selected_item).attr('uuid');
+		var style = $(selected_item).attr('style');
+		//---------------------
+		if (itself.encrypted)
+			value = "rc4"+encrypt(value,g_rc4key);
+		if (itself.encrypted)
+			code = "rc4"+encrypt(code,g_rc4key);
+		//---------------------
+		$(itself.value_node[0]).text(value);
+		$(itself.code_node[0]).text(code);
+		$(itself.uuid_node[0]).text(uuid);
+		$(itself.style_node[0]).text(style.trim());
+		for (var i=0; i<languages.length;i++){
+			var label = $(selected_item).attr('label_'+languages[i]);
+			//---------------------
+			if (itself.encrypted)
+				label = "rc4"+encrypt(label,g_rc4key);
+			//---------------------
+			$(itself.label_node[i][0]).text(label);
+		}
+		//-------- if function js -------------
+		if (UICom.structure["ui"][itself.id].js!="") {
+			var fcts = UICom.structure["ui"][itself.id].js.split("|");
+			for (let i=0;i<fcts.length;i++) {
+				let elts = fcts[i].split("/");
+				if (elts[0]=="update-resource") {
+					fctjs = elts[1].split(";");
+					for (let j=0;j<fctjs.length;j++) {
+						if (fctjs[j].indexOf("##"))
+							eval(replaceVariable(fctjs[j],itself.node));
+						else
+							eval(fctjs[j]+"(itself.node,g_portfolioid)");
+					}
+				}
+			}
+		}
+		//---------------------
+		itself.save();
 	}
-	//---------------------
-	itself.save();
+	catch(e) {
+		console.log(e);
+		// do nothing
+	}
 };
 
 //==================================
@@ -1843,7 +1865,8 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 	const acts = actns.split(';');
 	let actions = [];
 	for (let i=0;i<acts.length-1;i++) {
-		actions.push(JSON.parse(acts[i].replaceAll("|","\"").replaceAll("<<","(").replaceAll(">>",")")));
+		//actions.push(JSON.parse(acts[i].replaceAll("|","\"").replaceAll("<<","(").replaceAll(">>",")")));
+		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
 	}
 	let js1 = "$('#edit-window').modal('hide')";
 	let js2 = "";

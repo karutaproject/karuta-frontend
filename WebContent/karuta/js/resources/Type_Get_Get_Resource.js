@@ -578,6 +578,10 @@ UIFactory["Get_Get_Resource"].prototype.displayEditor = function(destid,type,lan
 				js2 = js2.replaceAll("##parentportfoliocode##",pcode_parent);
 				$("#js2").attr("onclick",js2);
 				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+this.query_parent_semtag+ "&code_parent="+code_parent;
+			} else {
+				let js2 = $("#js2").attr("onclick");
+				$("#js2").attr("onclick",js2);
+				url = serverBCK_API+"/nodes?portfoliocode="+portfoliocode+"&semtag="+semtag.replace("!","")+"&semtag_parent="+this.query_parent_semtag+ "&code_parent="+code_parent;
 			}
 			$(this.portfoliocode_node).text(portfoliocode);
 			//----------------------
@@ -1716,7 +1720,8 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 		unique = '';
 	let actions = [];
 	for (let i=0;i<acts.length-1;i++) {
-		actions.push(JSON.parse(acts[i].replaceAll("|","\"").replaceAll("<<","(").replaceAll(">>",")")));
+		//actions.push(JSON.parse(acts[i].replaceAll("|","\"").replaceAll("<<","(").replaceAll(">>",")")));
+		actions.push(JSON.parse(acts[i].replaceAll("|","\"")));
 	}
 	let js1 = "javascript:$('#edit-window').modal('hide')";
 	let js2 = "";
@@ -1760,7 +1765,7 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 		}
 		let fcts = actions[i].fcts.split(',');
 		for (let j=0;j<fcts.length;j++) {
-			js2 += fcts[j]+";";
+			js2 += decode(fcts[j])+";";
 		}		
 	}
 	var footer = "<button id='js2' class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";

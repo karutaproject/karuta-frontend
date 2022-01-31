@@ -2334,8 +2334,13 @@ function addautocomplete(input,arrayOfValues,onupdate,self,langcode)
 function replaceVariable(text,node)
 //==================================
 {
+	if (text!=undefined && text.indexOf('lastimported')>-1) {
+		text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
+		text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
+		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
+	}
 	if (node!=null && node!=undefined)
-		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]").replaceAll('##currentnode##',"'"+node.id+"'");
+		text = text.replaceAll('##currentnode##',"'"+node.id+"'");
 	var n=0;
 	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
@@ -3083,3 +3088,23 @@ function setNodeCodeLabel(nodeid,targetid){
 //=========================================================
 //=========================================================
 
+
+function encode(s) {
+	var result = ('' + s)
+		.replace(/,/g, '%2C')
+		.replace(/'/g, '%27')
+		.replace(/"/g, '%22')
+		.replace(/</g, '%3C')
+		.replace(/>/g, '%3E');
+	return result
+}
+
+function decode(s) {
+	var result = ('' + s)
+		.replace(/%3E/g, '>')
+		.replace(/%3C/g, '<')
+		.replace(/%22/g, '"')
+		.replace(/%27/g, "'")
+		.replace(/%2C/g, ",")
+	return result
+}
