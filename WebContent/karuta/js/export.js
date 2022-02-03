@@ -61,7 +61,7 @@ function export_html()
 		}
 		$("#wait-window").modal('show');
 		displayPage(uuid,1,'standard','0',true)
-		$("#wait-window").show();	
+		$("#wait-window").modal('show');	
 		// Delay so everything has time to render
 		setTimeout(printy, 1000);
 		$("#wait-window").modal('show');
@@ -95,7 +95,7 @@ function export_html()
 			$("#content",form).val(content);
 			$(form).submit();
 			$(form).remove();
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 //			$.post("/karuta-backend/export", {pid: g_portfolioid, content: document.documentElement.outerHTML}, function(data){atob(data)});
 		}
 	};

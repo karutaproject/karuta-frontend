@@ -1066,7 +1066,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		var inputs = "<div id='get_multiple' class='multiple'></div>";
 		var inputs_obj = $(inputs);
 		//-----search for already added------------------
-		if (this.unique!="") {
+		if (this.unique!=undefined && this.unique!="") {
 			var targetid = this.targetid;
 			if (targetid=="")
 				targetid = this.parentid;
@@ -1087,7 +1087,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 		}
 		//----------remove allready added----------------
 		var newTableau2 = [];
-		if (this.unique!="") {
+		if (this.unique!=undefined && this.unique!="") {
 			for ( var i = 0; i < newTableau1.length; ++i) {
 				const indx = tabadded.indexOf(newTableau1[i][0]);
 				if (indx==-1)
@@ -1113,7 +1113,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 			}
 			//------------------------------
 			var code = $('code',resource).text();
-			if (code!=previouscode){
+			if (code=="" || code!=previouscode){
 				previouscode = code
 				var selectable = true;
 				var disabled = false;
@@ -1670,12 +1670,14 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 	var partid = data;
 	var value = $(selected_item).attr('value');
 	var code = $(selected_item).attr('code');
+	var uuid = $(selected_item).attr('uuid');
 	if (fct=="addParentCode") {
 		code = UICom.structure.ui[parentid].getCode() + "*" + code;
 	}
 	var xml = "<asmResource xsi_type='Get_Resource'>";
 	xml += "<code>"+code+"</code>";
 	xml += "<value>"+value+"</value>";
+	xml += "<uuid>"+uuid+"</uuid>";
 	for (var i=0; i<languages.length;i++){
 		var label = $(selected_item).attr('label_'+languages[i]);
 		xml += "<label lang='"+languages[i]+"'>"+label+"</label>";

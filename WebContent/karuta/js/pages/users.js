@@ -124,10 +124,10 @@ function toggleUsersList(list) {
 //==================================
 	if ($("#"+list+"-users-button").hasClass("fa-plus")) {
 		if (list=='empty') {
-			$("#wait-window").show();
+			$("#wait-window").modal('show');
 			UIFactory.User.getListUserWithoutPortfolio();
 			UIFactory.User.displayUserWithoutPortfolio('empty')
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		}
 		$("#"+list+"-users-button").removeClass("fa-plus");
 		$("#"+list+"-users-button").addClass("fa-minus");

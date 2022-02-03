@@ -456,13 +456,13 @@ function getEditBoxOnCallback(data,param2,param3,param4) {
 
 
 //==============================
-function deleteButton(uuid,type,parentid,destid,callback,param1,param2)
+function deleteButton(uuid,type,parentid,destid,callback,param1,param2,param3,param4)
 //==============================
 {
 	var menus_style = UICom.structure.ui[uuid].getMenuStyle();
 	var html = "";
 	html += "\n<!-- ==================== Delete Button ==================== -->";
-	html += "<i id='del-"+uuid+"' style='"+menus_style+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom'></i>";
+	html += "<i id='del-"+uuid+"' style='"+menus_style+"' class='button fas fa-trash-alt' onclick=\"confirmDel('"+uuid+"','"+type+"','"+parentid+"','"+destid+"','"+callback+"','"+param1+"','"+param2+"','"+param3+"','"+param4+"')\" data-title='"+karutaStr[LANG]["button-delete"]+"' data-toggle='tooltip' data-placement='bottom'></i>";
 	return html;
 }
 
@@ -586,13 +586,13 @@ function imageBox()
 }
 
 //=======================================================================
-function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2) 
+function deleteandhidewindow(uuid,type,parentid,destid,callback,param1,param2,param3,param4) 
 // =======================================================================
 {
 	$('#delete-window').modal('hide');
 	$('#wait-window').modal('show');
 	if (type!=null && (type=='asmStructure' || type=='asmUnit' || type=='asmUnitStructure' || type=='asmContext')) {
-		UIFactory['Node'].remove(uuid,callback,param1,param2); //asm node
+		UIFactory['Node'].remove(uuid,callback,param1,param2,param3,param4); //asm node
 		if (parentid!=null) {
 			parent = $("#"+parentid);
 			$("#"+uuid,parent).remove();
@@ -636,12 +636,12 @@ function confirmSubmit(uuid,submitall,js)
 }
 
 //=======================================================================
-function confirmDel(uuid,type,parentid,destid,callback,param1,param2) 
+function confirmDel(uuid,type,parentid,destid,callback,param1,param2,param3,param4) 
 // =======================================================================
 {
 	document.getElementById('delete-window-body').innerHTML = karutaStr[LANG]["confirm-delete"];
 	var buttons = "<button class='btn' onclick=\"javascript:$('#delete-window').modal('hide');\">" + karutaStr[LANG]["Cancel"] + "</button>";
-	buttons += "<button class='btn btn-danger' onclick=\"javascript:deleteandhidewindow('"+uuid+"','"+type+"','"+parentid+"','"+destid+"',"+callback+",'"+param1+"','"+param2+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
+	buttons += "<button class='btn btn-danger' onclick=\"javascript:deleteandhidewindow('"+uuid+"','"+type+"','"+parentid+"','"+destid+"',"+callback+",'"+param1+"','"+param2+"','"+param3+"','"+param4+"')\">" + karutaStr[LANG]["button-delete"] + "</button>";
 	document.getElementById('delete-window-footer').innerHTML = buttons;
 	$('#delete-window').modal('show');
 }
@@ -2134,7 +2134,7 @@ function printSection(eltid)
 	if (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot')
 		window.print();
 	else {
-		$("#wait-window").show();
+		$("#wait-window").modal('show');
 		$("#print-window").html("");
 		var divcontent = $(eltid).clone();
 		var ids = $("*[id]", divcontent);
@@ -2143,7 +2143,7 @@ function printSection(eltid)
 		$("#print-window").html(content);
 		$("#main-body").addClass("section2hide");
 		$("#print-window").addClass("section2print");
-		$("#wait-window").hide();
+		$("#wait-window").modal('hide');
 		
 		window.print();
 		$("#print-window").removeClass("section2print");
@@ -3108,3 +3108,23 @@ function decode(s) {
 		.replace(/%2C/g, ",")
 	return result
 }
+
+//=========================================================
+//=========================================================
+
+function supprimerCompetenceMonBilan(uuid){
+	const code = UICom.structure.ui[uuid].getCode();
+	const target = getTarget (UICom.structure.ui[uuid].node,'mes-competences');
+	if (target.length>0) {
+		targetid = $(target[0]).attr("id");
+		const compnode = $("asmUnit:has(metadata[semantictag*=page-competence-specification])",UICom.structure.ui[targetid].node);
+		for (let i=0;i<compnode.length;i++){
+			const nodeid = $(compnode[i]).attr("id");
+			const nodecode = UICom.structure.ui[nodeid].getCode();
+			if (nodecode==code)
+				UIFactory.Node.remove(nodeid);
+		}
+		UIFactory.Node.reloadStruct();
+	}
+}
+

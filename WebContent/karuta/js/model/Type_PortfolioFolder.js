@@ -188,11 +188,11 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 			}
 			//--------------------------------------
 			$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET UIFactory.PortfolioFolder.loadAndDisplayAll: "+textStatus);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		}
 	});
 }
@@ -490,7 +490,7 @@ UIFactory["PortfolioFolder"].prototype.displayContent = function(type,parentid,v
 		}
 	}
 	$(window).scrollTop(0);
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 }
 
 //==================================
@@ -507,13 +507,13 @@ UIFactory["PortfolioFolder"].prototype.setRights = function()
 UIFactory["PortfolioFolder"].setRights = function(folderid)
 //==================================
 {
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	var previewbackdrop = document.createElement("DIV");
 	previewbackdrop.setAttribute("class", "preview-backdrop");
 	previewbackdrop.setAttribute("id", "previewbackdrop-"+folderid);
 	$('body').append(previewbackdrop);
 	folders_byid[folderid].setRights();
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 	$("#previewbackdrop-"+folderid).remove();
 }
 
@@ -995,7 +995,7 @@ UIFactory["PortfolioFolder"].checkPortfolios = function()
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active=1&project=false: "+textStatus);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		}
 	});
 }
@@ -1106,7 +1106,7 @@ UIFactory["PortfolioFolder"].displayPortfolios = function(dest,parentcode,type,i
 			}
 	}
 	$(window).scrollTop(0);
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 }
 
 //--------------------------------------------------------------
@@ -1159,7 +1159,7 @@ UIFactory["PortfolioFolder"].displaySearchedPortfolios = function(code,type)
 	$("#"+type+"-rightside-header").html("");
 	$("#"+type+"-rightside-content1").html("");
 	$("#"+type+"-rightside-content2").html("");
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	cleanList();
 	//----------------
 	$.ajax({
@@ -1192,7 +1192,7 @@ UIFactory["PortfolioFolder"].displaySearchedPortfolios = function(code,type)
 			$("#archive-button").removeAttr("disabled");
 			$("#archive-button").attr("href",archive_href);
 			$("#remove-button").prop("disabled",false);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active: "+textStatus);

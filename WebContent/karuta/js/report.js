@@ -541,7 +541,7 @@ function report_getModelAndPortfolio(model_code,node,destid,g_dashboard_models)
 					catch(err) {
 						alertHTML("Error in Dashboard : " + err.message);
 					}
-					$("#wait-window").hide();
+					$("#wait-window").modal('hide');
 					$("#wait-window").modal('hide');
 				}
 			 });
@@ -579,7 +579,7 @@ function report_getModelAndProcess(model_code,json)
 						url : urlS,
 						success : function(data) {
 							r_report_process(data,json);
-							$("#wait-window").hide();
+							$("#wait-window").modal('hide');
 							$("#wait-window").modal('hide');
 						}
 					 });

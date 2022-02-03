@@ -943,7 +943,7 @@ UIFactory["Portfolio"].instantiate_bycode = function(sourcecode,targetcode,callb
 			url : url,
 			data : "",
 			success : function(data) {
-				$("#wait-window").hide();
+				$("#wait-window").modal('hide');
 				uuid = data;
 				if (callback!=null)
 					callback(data);
@@ -971,7 +971,7 @@ UIFactory["Portfolio"].instantiate = function(templateid,targetcode,reload)
 			data : "",
 			success : function(data) {
 				uuid = data;
-				$("#wait-window").hide();
+				$("#wait-window").modal('hide');
 				if (reload!=null && reload)
 					window.location.reload();
 			},
@@ -1064,12 +1064,12 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 						data : xml,
 						url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
 						success : function(data) {
-							$("#wait-window").hide();
+							$("#wait-window").modal('hide');
 							if (reload!=null && reload)
 								window.location.reload();
 						},
 						error : function(jqxhr,textStatus) {
-							$("#wait-window").hide();
+							$("#wait-window").modal('hide');
 							alertHTML("Error in instantiate_rename : "+jqxhr.responseText);
 						}
 					});
@@ -1077,7 +1077,7 @@ UIFactory["Portfolio"].instantiate_rename = function(templateid,targetcode,reloa
 			});
 		},
 		error : function(jqxhr,textStatus) {
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 			if (jqxhr.responseText.indexOf('code exist')>-1)
 				alertHTML(karutaStr[LANG]['error-existing-code']);
 			else
@@ -1102,7 +1102,7 @@ UIFactory["Portfolio"].copy_bycode = function(sourcecode,targetcode,reload)
 			url : url,
 			data : "",
 			success : function(data) {
-				$("#wait-window").hide();
+				$("#wait-window").modal('hide');
 				uuid = data;
 				if (reload!=null && reload)
 					window.location.reload();
@@ -1130,7 +1130,7 @@ UIFactory["Portfolio"].copy = function(templateid,targetcode,reload)
 			data : "",
 			success : function(data) {
 				uuid = data;
-				$("#wait-window").hide();
+				$("#wait-window").modal('hide');
 				if (reload!=null && reload)
 					window.location.reload();
 			},
@@ -1224,14 +1224,14 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 						data : xml,
 						url : serverBCK_API+"/nodes/node/" + nodeid + "/noderesource",
 						success : function(data) {
-							$("#wait-window").hide();
+							$("#wait-window").modal('hide');
 							$('#edit-window').modal('hide');
 							if (rootsemtag=="karuta-project") // folder creation - we open the new folder
 								localStorage.setItem('currentDisplayedportfolioCode',targetcode);
 							fill_list_page();
 						},
 						error : function(jqxhr,textStatus) {
-							$("#wait-window").hide();
+							$("#wait-window").modal('hide');
 							alertHTML("Error : "+jqxhr.responseText);
 						}
 					});
@@ -1242,7 +1242,7 @@ UIFactory["Portfolio"].copy_rename = function(templateid,targetcode,reload,targe
 			});
 		},
 		error : function(jqxhr,textStatus) {
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 			if (jqxhr.responseText.indexOf('code exist')>-1)
 				alertHTML(karutaStr[LANG]['error-existing-code']);
 			else
@@ -1345,14 +1345,14 @@ UIFactory["Portfolio"].import = function(zip,instance,foldercode)
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress .bar').css('width',progress + '%');
 			$("#uploadfile").hide();
-			$("#wait-window").show();
+			$("#wait-window").modal('show');
 		},
 		success : function(data) {
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 			window.location.reload();
 		},
 		error : function(jqxhr,textStatus) {
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 			if (jqxhr.status != 200)
 				alertHTML("Error : "+jqxhr.responseText);
 			else
@@ -1436,14 +1436,14 @@ UIFactory["Portfolio"].importZip = function(instance,project)
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress .bar').css('width',progress + '%');
 			$("#uploadfile").hide();
-			$("#wait-window").show();
+			$("#wait-window").modal('show');
 		},
 		success : function(data) {
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 			window.location.reload();
 		},
 		error : function(jqxhr,textStatus) {
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 			alertHTML("Error : "+jqxhr.responseText);
 		}
     });
@@ -2619,7 +2619,7 @@ UIFactory["Portfolio"].prototype.getTreeType = function()
 UIFactory["Portfolio"].removeSearchedPortfolios = function() 
 //==================================
 {
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	//----------------
 	$.ajaxSetup({async: false});
 	for (var i=0;i<searched_portfolios_list.length;i++){
@@ -2639,7 +2639,7 @@ UIFactory["Portfolio"].removeSearchedPortfolios = function()
 		});
 	}
 	searchPortfolio();
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 	$.ajaxSetup({async: true});
 	//----------------
 }
@@ -2671,7 +2671,7 @@ UIFactory["Portfolio"].getListPortfolios = function(userid,firstname,lastname)
 				}
 			}
 			UIFactory.Portfolio.displayListPortfolios(list,this.userid,this.firstname,this.lastname);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET active=1: "+textStatus);

@@ -62,7 +62,7 @@ function show_list_page()
 function fill_list_page()
 //==============================
 {
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	$("[data-toggle='tooltip']").tooltip("hide");
 	setLanguageMenu("fill_list_page()");
 	//--------------------------

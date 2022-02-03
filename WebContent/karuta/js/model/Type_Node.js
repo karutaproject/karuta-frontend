@@ -31,7 +31,6 @@ UIFactory["Node"] = function( node )
 		if (this.asmtype=="node")
 			this.asmtype = $(node).attr('xsi_type');
 		this.code_node = $($("code",node)[0]);
-		this.js = "";
 		//--------------------
 		this.logcode = ($(node.metadatawad).attr('logcode')==undefined)?'':$(node.metadatawad).attr('logcode');
 		//--------------------
@@ -994,6 +993,8 @@ UIFactory["Node"].prototype.save = function()
 	//------------------------------
 	UICom.UpdateNode(this.node);
 	//-------- if function js -------------
+	if (this.js==undefined)
+		this.set
 	if (this.js!=undefined && this.js!="") {
 		var fcts = this.js.split(";");
 		for (var i=0;i<fcts.length;i++) {
@@ -1020,10 +1021,14 @@ UIFactory["Node"].prototype.remove = function()
 };
 
 //==================================
-UIFactory["Node"].remove = function(uuid,callback,param1,param2)
+UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 //==================================
 {
 	//-------- if function js -------------
+	if (UICom.structure.ui[uuid].js==undefined){
+		var node = UICom.structure.ui[uuid];
+		UICom.structure.ui[uuid].js = ($(node.metadatawad).attr('js')==undefined)?"":$(node.metadatawad).attr('js');
+	}
 	if (UICom.structure.ui[uuid].js!=undefined && UICom.structure.ui[uuid].js!="") {
 		var fcts = UICom.structure.ui[uuid].js.split(";");
 		for (var i=0;i<fcts.length;i++) {
@@ -1034,7 +1039,7 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2)
 	}
 	//---------------------
 	$("#"+uuid,g_portfolio_current).remove();
-	UICom.DeleteNode(uuid,callback,param1,param2);
+	UICom.DeleteNode(uuid,callback,param1,param2,param3,param4);
 };
 
 //==================================
@@ -1754,9 +1759,18 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 		//------------ delete button ---------------------
 		if (( (this.deletenode && (this.delnoderoles.containsArrayElt(g_userroles) || this.delnoderoles.indexOf($(USER.username_node).text())>-1) ) || USER.admin || g_userroles[0]=='designer') && this.asmtype != 'asmRoot') {
 			if (this.asmtype == 'asmStructure' || this.asmtype == 'asmUnit') {
-				html += deleteButton(this.id,this.asmtype,undefined,undefined,"UIFactory.Node.reloadStruct",g_portfolio_rootid,null);
+				if ($("#page").attr('uuid')!=this.id) {
+					html += deleteButton(this.id,this.asmtype,undefined,undefined,"UIFactory.Node.reloadStruct",g_portfolio_rootid,null,null);
+				} else {
+					var parent = $(this.node).parent();
+					if ($(parent).prop("nodeName")=="asmStructure") {
+						html += deleteButton(this.id,this.asmtype,undefined,undefined,"UIFactory.Node.reloadStruct",g_portfolio_rootid,null,$(parent).attr('id'));
+					} else {
+						html += deleteButton(this.id,this.asmtype,undefined,undefined,"fill_main_page",g_portfolioid,null,null);
+					}
+				}
 			} else {
-				html += deleteButton(this.id,this.asmtype,undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null);
+				html += deleteButton(this.id,this.asmtype,undefined,undefined,"UIFactory.Node.reloadUnit",g_portfolioid,null,null);
 			}
 		}
 		//------------- move node buttons ---------------
@@ -1818,12 +1832,12 @@ UIFactory["Node"].prototype.getButtons = function(dest,type,langcode,inline,dept
 //----------------------------------------------------------------------------------------------------------------------------
 
 //==================================================
-UIFactory['Node'].reloadStruct = function(uuid,redisplay)
+UIFactory['Node'].reloadStruct = function(uuid,redisplay,redisplay_uuid)
 //==================================================
 {
-	if (redisplay == null)
+	if (redisplay == null || redisplay == 'null')
 		redisplay = true;
-	if (uuid == null)
+	if (uuid == null || uuid == 'null')
 		uuid = g_portfolio_rootid;
 	$.ajax({
 		async: false,
@@ -1844,7 +1858,7 @@ UIFactory['Node'].reloadStruct = function(uuid,redisplay)
 				UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
 			}
 			if (redisplay) {
-				var uuid = $("#page").attr('uuid');
+				var uuid = (redisplay_uuid==null || redisplay_uuid=="null")?$("#page").attr('uuid'):redisplay_uuid;
 				if (g_display_type=='model')
 					displayPage(UICom.rootid,1,g_display_type,LANGCODE,g_edit);
 				else

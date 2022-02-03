@@ -551,11 +551,12 @@ var UICom =
 	
 	
 	//=======================================================================
-	  DeleteNode: function( uuid, callback,param1,param2 )
+	  DeleteNode: function( uuid, callback,param1,param2,param3,param4)
 	//=======================================================================
 	{
-			$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
-			$.ajax({
+		$("#saved-window-body").html("<img src='../../karuta/img/red.png'/> recording...");
+		$.ajax({
+			async:false,
 			type : "DELETE",
 			dataType : "text",
 			url : serverBCK_API+"/nodes/node/" + uuid,
@@ -563,17 +564,15 @@ var UICom =
 				$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> deleted : "+new Date().toLocaleString());
 				if (callback!=null && callback!='undefined')
 					if (jQuery.isFunction(callback))
-						callback(param1,param2);
+						callback(param1,param2,param3,param4);
 					else
-						eval(callback+"('"+param1+"','"+param2+"')");
+						eval(callback+"('"+param1+"','"+param2+"','"+param3+"','"+param4+"')");
 			},
 			error : function(jqxhr,textStatus) {
 				alertDisconnected();
 				alertHTML("Error in DeleteNode : "+jqxhr.responseText);
 				alertHTML(karutaStr[LANG]['disconnected']);
-//				window.location = "login.htm";
 			}
-
 		});
 	}
 	

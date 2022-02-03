@@ -97,7 +97,7 @@ function displayOnePage()
 							loadLanguages();
 						if (g_encrypted)
 							g_rc4key = window.prompt(karutaStr[LANG]['get_rc4key']);
-						$("#wait-window").hide();
+						$("#wait-window").modal('hide');
 					}
 				});
 			});

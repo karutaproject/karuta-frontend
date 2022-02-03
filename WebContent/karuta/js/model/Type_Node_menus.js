@@ -115,7 +115,7 @@ UIFactory["Node"].getSingleMenu = function(parentid,menus,targetid,title,databac
 //==================================================
 {	// note: #xxx is to avoid to scroll to the top of the page
 	var menus_style = UICom.structure.ui[parentid].getMenuStyle();
-	var html = "<a class='button text-button btn' style='"+menus_style+"' onclick=\"";
+	var html = "<a class='button add-button btn' style='"+menus_style+"' onclick=\"";
 	html += UIFactory.Node.getEltMenu(parentid,menus,targetid,title,databack,callback,param2,param3,param4);
 	html += "</a>";
 	return html;
@@ -126,7 +126,7 @@ UIFactory["Node"].getSpecificMenu = function(parentid,menus,targetid,title,datab
 //==================================================
 {
 	var menus_style = UICom.structure.ui[parentid].getMenuStyle();
-	var html = "<div class='dropdown-item btn text-button' style='"+menus_style+"' onclick=\"";
+	var html = "<div class='dropdown-item btn add-button' style='"+menus_style+"' onclick=\"";
 	html += UIFactory.Node.getEltMenu(parentid,menus,targetid,title,databack,callback,param2,param3,param4);
 	html += "</div>";
 	return html;
@@ -575,7 +575,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 //									title = UIFactory.Node.getMenuLabel(menulabel,langcode);
 //								else
 									title = UIFactory.Node.getMenuLabel($("itemlabel",items[j]).text(),langcode);
-								let temphtml = "<button class='button text-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</button> ";
+								let temphtml = "<button class='button add-button btn' style='"+menus_style+"' onclick=\"##\">" + title + "</button> ";
 								//---------------------target----------------------------------------
 								var parentid = node.id; // default value
 								var targetid = "";
@@ -641,7 +641,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 				|| ( g_userroles[1]=='designer' && node.submitroles.indexOf(g_userroles[0])>-1)
 				|| node.submitroles.indexOf(node.userrole)>-1 )))
 		{
-			html += "<span id='submit-"+node.id+"' style='"+menus_style+"' class='submitbutton button text-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
+			html += "<span id='submit-"+node.id+"' style='"+menus_style+"' class='submitbutton button add-button' onclick=\"javascript:confirmSubmit('"+node.id+"'";
 			if (node.submitall=='Y')
 				html += ",true";
 			html += ")\" ";
@@ -653,13 +653,13 @@ UIFactory["Node"].getMenus = function(node,langcode)
 				|| g_userroles[0]=='designer'
 				|| ( g_userroles[1]=='designer' && node.unsubmitroles.indexOf(g_userroles[0])>-1)
 				|| node.unsubmitroles.indexOf(node.userrole)>-1 ) {
-					html += "<span id='submit-"+node.id+"' class='button text-button' onclick=\"javascript:reset('"+node.id+"')\" ";
+					html += "<span id='submit-"+node.id+"' class='button add-button' onclick=\"javascript:reset('"+node.id+"')\" ";
 					html += " >"+labels[1]+"</span>";
 				}
-				html += "<div class='alert alert-success button text-button'>"+labels[2]+node.submitteddate+"</div>";
+				html += "<div class='alert submitted button add-button'>"+labels[2]+node.submitteddate+"</div>";
 			}
 			else {
-				html += "<div class='alert alert-danger button text-button'>"+labels[3]+"</div>";
+				html += "<div class='alert not-submitted button add-button'>"+labels[3]+"</div>";
 			}
 		}
 	}

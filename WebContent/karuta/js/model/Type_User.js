@@ -1336,7 +1336,7 @@ UIFactory["User"].deleteTemporaryUsers = function()
 UIFactory["User"].removeUsers = function() 
 //==================================
 {
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	//----------------
 	$.ajaxSetup({async: false});
 	for (var i=0;i<UsersActive_list.length;i++){
@@ -1351,7 +1351,7 @@ UIFactory["User"].removeUsers = function()
 			}
 		});
 	}
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 	$.ajaxSetup({async: true});
 	fill_list_users();
 	$("#user-refresh").click();
@@ -1397,7 +1397,7 @@ function confirmDelEmptyUsers()
 UIFactory["User"].deleteEmptyUsers = function() 
 //==================================
 {
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	//----------------
 	var selectedlist = $("input[name=empty-user]").filter(':checked');
 	$.ajaxSetup({async: false});
@@ -1406,7 +1406,7 @@ UIFactory["User"].deleteEmptyUsers = function()
 		UIFactory.User.remove(userid,'users');
 		$("#user-rightside-users-content4_"+userid).hide();
 	}
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 	$.ajaxSetup({async: true});
 	//----------------
 }

@@ -112,7 +112,7 @@ UIFactory["UsersGroup"].drop = function(ev)
 UIFactory["UsersGroup"].loadAndDisplayAll = function (type)
 //==================================
 {
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	$.ajax({
 		async: false,
 		type : "GET",
@@ -122,11 +122,11 @@ UIFactory["UsersGroup"].loadAndDisplayAll = function (type)
 		success : function(data) {
 			UIFactory.UsersGroup.parse(data);
 			UIFactory.UsersGroup.displayAll(type);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET UIFactory.UsersGroup.loadAndDisplayGroups: "+textStatus);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		}
 	});
 }
@@ -344,7 +344,7 @@ UIFactory["UsersGroup"].prototype.displayContent = function(type)
 	}
 	$("#nbchildren_"+this.id).html(this.nbchildren);
 	$(window).scrollTop(0);
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 };
 
 //==================================

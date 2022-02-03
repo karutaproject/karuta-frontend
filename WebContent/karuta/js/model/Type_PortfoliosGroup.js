@@ -125,7 +125,7 @@ function dropPortfolioGroup(ev)
 UIFactory["PortfoliosGroup"].loadAndDisplayAll = function (type)
 //==================================
 {
-	$("#wait-window").show();
+	$("#wait-window").modal('show');
 	$.ajax({
 		type : "GET",
 		dataType : "xml",
@@ -134,12 +134,12 @@ UIFactory["PortfoliosGroup"].loadAndDisplayAll = function (type)
 		success : function(data) {
 			UIFactory.PortfoliosGroup.parse(data);
 			UIFactory.PortfoliosGroup.displayAll(type);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 			//----------------
 		},
 		error : function(jqxhr,textStatus) {
 			alertHTML("Server Error GET UIFactory.PortfoliosGroup.loadAndDisplayGroups: "+textStatus);
-			$("#wait-window").hide();
+			$("#wait-window").modal('hide');
 		}
 	});
 }
@@ -379,7 +379,7 @@ UIFactory["PortfoliosGroup"].prototype.displayContent = function(type)
 	}
 	$("#nbchildren_"+this.id).html(this.nbchildren);
 	$(window).scrollTop(0);
-	$("#wait-window").hide();
+	$("#wait-window").modal('hide');
 };
 
 //==================================

@@ -42,6 +42,7 @@ function fill_main_page(portfolioid)
 	//-------------------------------------------
 	var url = serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true";
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "xml",
 		url : url,
@@ -71,6 +72,7 @@ function fill_main_page(portfolioid)
 				toggleMetadata(g_visible);
 			}
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/rolerightsgroups/all/users?portfolio=" + g_portfolioid,
@@ -202,10 +204,9 @@ function fill_main_page(portfolioid)
 			else {
 				alertHTML("<h4>Error in fill_main_page</h4><h5>responseText</h5><p>"+jqxhr.responseText+"</p><h5>textStatus</h5><p>"+textStatus+"<h5>status</h5><p>"+jqxhr.status);
 				}
-		$("#wait-window").modal('hide');
+			$("#wait-window").modal('hide');
 		}
 	});
-	$.ajaxSetup({async: false});
 	//=====================================================
 	$('[data-toggle=tooltip]').tooltip({html: true, trigger: 'hover'}); 
 	$(document).click(function(e) {
