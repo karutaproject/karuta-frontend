@@ -1795,7 +1795,7 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 				privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
 
 				if (privatevalue) {
-					text += "<span class='button fas fa-eye-slash' style='' onclick=\"javascript:show('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+					text = "<span class='private'>"+text+"<span class='button fas fa-eye-slash' style='' onclick=\"javascript:show('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>"+"</span>";
 				} else {
 					text += "<span class='button fas fa-eye' style='' onclick=\"javascript:hide('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 				}

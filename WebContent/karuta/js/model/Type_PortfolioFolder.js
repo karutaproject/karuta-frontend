@@ -182,7 +182,8 @@ UIFactory["PortfolioFolder"].loadAndDisplayAll = function (type)
 			UIFactory["PortfolioFolder"].displayAll(type);
 			//--------------------------------------
 			if (nb_folders==0 && !USER.admin && !USER.creator) {
-				$("#folders-label").hide();
+//				$("#folders-label").hide();
+				$("#portfolio-leftside").hide();
 			} else {
 				$("#nb_folders_active").html( (nb_folders==0)?0:nb_folders);
 			}

@@ -55,6 +55,7 @@ var g_sum_trees = 0;
 var g_roles = []; // list of portfolio roles for designer
 var g_variables = {}; // variables for substitution in Get_resource and menus
 var g_importednodestack = [];
+var g_backstack = [];
 
 //-------------- used for designer-----
 var redisplays = {};
@@ -684,7 +685,15 @@ function getURLParameter(sParam) {
 //==================================
 function displayPage(uuid,depth,type,langcode,nodepth) {
 //==================================
+	if (g_backstack[g_backstack.length]!=uuid)
+		g_backstack.push(uuid);
 	//---------------------
+	if (uuid==null)
+		uuid = localStorage.getItem('currentDisplayedPage');
+	localStorage.setItem('currentDisplayedPage',uuid);
+	//---------------------
+	if (type==null)
+		type = "standard";
 	if (langcode==null)
 		langcode = LANGCODE;
 	//---------------------
@@ -696,7 +705,7 @@ function displayPage(uuid,depth,type,langcode,nodepth) {
 		scrollLeft = 0;
 		g_current_page = uuid;
 	}
-	localStorage.setItem('currentDisplayedPage',uuid);
+	
 	//---------------------
 	$("#contenu").html("<div id='page' uuid='"+uuid+"'></div>");
 	$('.selected').removeClass('selected');
@@ -730,11 +739,7 @@ function displayPage(uuid,depth,type,langcode,nodepth) {
 			var node = UICom.structure['ui'][uuid].node;
 			var display = ($(node.metadatawad).attr('display')==undefined)?'Y':$(node.metadatawad).attr('display');
 			$("#welcome-edit").html("");
-//			if (UICom.structure["ui"][uuid].semantictag.indexOf('welcome-unit')>-1 && !g_welcome_edit && display=='Y')
-//				UIFactory['Node'].displayWelcomePage(UICom.structure.tree[uuid],'contenu',depth,langcode,g_edit);
-//			else {
-				UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
-//			}
+			UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
 		}
 		if (type=='translate')
 			UICom.structure["ui"][uuid].displayTranslateNode(type,UICom.structure['tree'][uuid],'contenu',depth,langcode,g_edit);
@@ -761,7 +766,6 @@ function displayPage(uuid,depth,type,langcode,nodepth) {
 		html += "			</div>";
 		$("#welcome-add").html(html);
 	}
-	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
 	$("#wait-window").modal('hide');
 	if ($("#standard-search-text-input").val()!=undefined && $("#standard-search-text-input").val()!="") {
 		var searched_text = $("#standard-search-text-input").val();
@@ -771,6 +775,7 @@ function displayPage(uuid,depth,type,langcode,nodepth) {
 		document.getElementById("contenu").innerHTML = newhtml;
 	}
 	window.scrollTo(scrollLeft, scrollTop);
+	$('[data-toggle="tooltip"]').tooltip({html: true, trigger: 'hover'});
 }
 
 //==================================

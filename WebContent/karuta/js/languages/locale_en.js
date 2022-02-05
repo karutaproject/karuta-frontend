@@ -105,6 +105,7 @@ karutaStr["en"]["copy"] = "Copy";
 karutaStr["en"]["copied"] = "Copied";
 karutaStr["en"]["waitreport"] = "Wait, the report is executed on the server. Come back in a few minutes to view the report.";
 karutaStr["en"]["instruction-export-menu"] = "Copy the menu and paste it where you want to import it.";
+karutaStr["en"]["back"] = "Click to go back";
 
 //=========================================
 //========== ERRORS =======================
