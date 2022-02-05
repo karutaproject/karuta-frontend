@@ -542,8 +542,7 @@ karutaStr['fr']['inexistent-user']="Désolé. Votre login n'a pas été trouvé.
 //========== TECHNICAL SUPPORT ============
 //=========================================
 
-karutaStr['fr']['technical_support']="Soutien technique";
-karutaStr['fr']['technical-support']="Soutien technique";
+karutaStr['fr']['technical_support']="Support technique";
 karutaStr['fr']['application-server']="Application";
 karutaStr['fr']['user-name']="Votre nom";
 karutaStr['fr']['user-email']="Votre courriel";

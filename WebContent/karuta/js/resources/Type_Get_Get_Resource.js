@@ -1487,10 +1487,13 @@ UIFactory["Get_Get_Resource"].prototype.refresh = function()
 };
 
 //==================================
-UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags,get_get_resource_semtag)
+UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags,get_get_resource_semtag,fctjs)
 //==================================
 {
-	$.ajaxSetup({async: false});
+	if (fctjs==null)
+		fctjs = "";
+	else
+		fctjs = decode(fctjs);
 	var elts = multiple_tags.split(",");
 	var part_code = elts[0];
 	var srce = part_code.substring(0,part_code.lastIndexOf('.'));
@@ -1518,6 +1521,8 @@ UIFactory["Get_Get_Resource"].addMultiple = function(parentid,targetid,multiple_
 		if (j==inputs.length-1)
 			param4 = true;
 		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4,param5,param6);
+		if(fctjs!="")
+			eval(fctjs);
 	}
 };
 
@@ -1576,10 +1581,13 @@ UIFactory["Get_Get_Resource"].updateaddedpart = function(data,get_resource_semta
 }
 
 //==================================
-UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,fct)
+UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,fct,fctjs)
 //==================================
 {
-	$.ajaxSetup({async: false});
+	if (fctjs==null)
+		fctjs = "";
+	else
+		fctjs = decode(fctjs);
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	//------------------------------
 	if (UICom.structure.ui[targetid]==undefined)
@@ -1613,6 +1621,8 @@ UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,f
 		if (srce=='?' || srce=='parent-code' || srce=='##parentcode##')
 			srce = $(inputs[j]).attr('portfoliocode');
 		importBranch(parentid,srce,code,databack,callback,param2,param3);
+		if(fctjs!="")
+			eval(fctjs);
 	}
 	if (fct!=null && fct!="") {
 		fct(parentid);
@@ -1726,47 +1736,50 @@ function import_get_get_multiple(parentid,targetid,title,parent_position,parent_
 	let js1 = "javascript:$('#edit-window').modal('hide')";
 	let js2 = "";
 	for (let i=0;i<actions.length;i++) {
-		//--------------- import_component ------------
+		//-----------------
+		let fctjs = "";
+		let fcts = actions[i].fcts.split(',');
+		for (let j=0;j<fcts.length;j++) {
+			fctjs += fcts[j]+";";
+		}		
+		fctjs = encode(fctjs);
+		//------------------
 		if (actions[i].type=="import-component") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
 				if (targetid=="")
 					targetid = targets[j];
-				js2 += "UIFactory.Get_Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
+				js2 += "UIFactory.Get_Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"','"+fctjs+"');";
 			}
 		} else if (actions[i].type=="import-elts-from") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
 				if (targetid=="")
 					targetid = targets[j];
-				js2 += "UIFactory.Get_Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
+				js2 += "UIFactory.Get_Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode)+"',null,'"+fctjs+"');";
 			}
 		} else if (actions[i].type=="import-component-w-today-date") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
 				if (targetid=="")
 					targetid = targets[j];
-					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
+					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"','"+fctjs+"');";
 			}
 		} else if (actions[i].type=="import") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
 				if (targetid=="")
 					targetid = targets[j];
-					js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
+					js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+fctjs+"');";
 			}
 		} else if (actions[i].type=="import-today-date") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
 				if (targetid=="")
 					targetid = targets[j];
-					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','karuta.karuta-resources','Calendar','Calendar');";
+					js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','karuta.karuta-resources','Calendar','Calendar','"+fctjs+"');";
 			}
 		}
-		let fcts = actions[i].fcts.split(',');
-		for (let j=0;j<fcts.length;j++) {
-			js2 += decode(fcts[j])+";";
-		}		
 	}
 	var footer = "<button id='js2' class='btn' onclick=\""+js2+";\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);

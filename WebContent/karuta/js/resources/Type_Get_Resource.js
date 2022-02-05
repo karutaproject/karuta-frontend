@@ -343,6 +343,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		}
 	}
 	//-------- if function js -------------
+	if (UICom.structure["ui"][this.id].js==undefined)
+		UICom.structure["ui"][this.id].setMetadata();
 	if (UICom.structure["ui"][this.id].js!="") {
 		var fcts = UICom.structure["ui"][this.id].js.split("|");
 		for (let i=0;i<fcts.length;i++) {
@@ -486,6 +488,7 @@ UIFactory["Get_Resource"].prototype.displayEditor = function(destid,type,langcod
 			self.parse(destid,type,langcode,g_Get_Resource_caches[portfoliocode+semtag],disabled,srce,resettable,target,semtag,multiple_tags,portfoliocode,semtag2,cachable);
 		else {
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/nodes?portfoliocode=" + portfoliocode + "&semtag="+semtag.replace("!",""),
@@ -1629,9 +1632,13 @@ UIFactory["Get_Resource"].addSimple = function(parentid,targetid,multiple_tags)
 };
 
 //==================================
-UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags)
+UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags,fctjs)
 //==================================
 {
+	if (fctjs==null)
+		fctjs = "";
+	else
+		fctjs = decode(fctjs);
 	//------------------------------
 	if (UICom.structure.ui[targetid]==undefined && targetid!="")
 		targetid = getNodeIdBySemtag(targetid);
@@ -1660,6 +1667,8 @@ UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags
 		if (j==inputs.length-1)
 			param4 = true;
 		importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4,param5,param6);
+		if (fctjs!="")
+			eval(fctjs);
 	}
 };
 
@@ -1723,10 +1732,13 @@ UIFactory["Get_Resource"].updateaddedpart = function(data,get_resource_semtag,se
 }
 
 //==================================
-UIFactory["Get_Resource"].importMultiple = function(parentid,targetid,srce)
+UIFactory["Get_Resource"].importMultiple = function(parentid,targetid,srce,fctjs)
 //==================================
 {
-	$.ajaxSetup({async: false});
+	if (fctjs==null)
+		fctjs = "";
+	else
+		fctjs = decode(fctjs);
 	var inputs = $("input[name='multiple_"+parentid+"']").filter(':checked');
 	// for each one import a part
 	//------------------------------
@@ -1781,6 +1793,8 @@ UIFactory["Get_Resource"].importMultiple = function(parentid,targetid,srce)
 			code = newcode;
 		}
 		importBranch(parentid,srce,encodeURIComponent(code),databack,callback,param2,param3);
+		if (fctjs!="")
+			eval(fctjs);
 	}
 };
 
@@ -1873,54 +1887,57 @@ function import_get_multiple(parentid,targetid,title,query_portfolio,query_semta
 	let js1 = "$('#edit-window').modal('hide')";
 	let js2 = "";
 	for (let i=0;i<actions.length;i++) {
-		//--------------- import_comp ------------
+		//-----------------
+		let fctjs = "";
+		let fcts = actions[i].fcts.split(',');
+		for (let j=0;j<fcts.length;j++) {
+			fctjs += fcts[j]+";";
+		}		
+		fctjs = encode(fctjs);
+		//------------------
 		if (actions[i].type=="import_component") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
 				if (targetid=="")
 					targetid = targets[j];
-				js2 += "UIFactory.Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
+				js2 += "UIFactory.Get_Resource.addMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"."+actions[i].semtag)+"','"+actions[i].updatedtag+"','"+fctjs+"');";
 			}
 		} else if (actions[i].type=="import_elts") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
 				if (targetid=="")
 					targetid = targets[j];
-				js2 += "UIFactory.Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
+				js2 += "UIFactory.Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+fctjs+"');";
 			}
 		} else if (actions[i].type=="import_elts-from") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++) {
 				if (targetid=="")
 					targetid = targets[j];
-				js2 += "UIFactory.Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode)+"','?');";
+				js2 += "UIFactory.Get_Resource.importMultiple('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode)+"','"+fctjs+"');";
 			}
 		} else if (actions[i].type=="import-component-w-today-date") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
 				if (targetid=="")
 					targetid = targets[j];
-				js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"');";
+				js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+actions[i].updatedtag+"','"+fctjs+"');";
 			}
 		} else if (actions[i].type=="import") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
 				if (targetid=="")
 					targetid = targets[j];
-				js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"');";
+				js2 += "importComponent('"+actions[i].parentid+"','"+targets[j]+"','"+replaceVariable(actions[i].foliocode+"','"+actions[i].semtag)+"','"+fctjs+"');";
 			}
 		} else if (actions[i].type=="import-today-date") {
 			let targets = actions[i].trgts.split(',');
 			for (let j=0;j<targets.length;j++){
 				if (targetid=="")
 					targetid = targets[j];
-				js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','karuta.karuta-resources','Calendar','Calendar');";
+				js2 += "importAndSetDateToday('"+actions[i].parentid+"','"+targets[j]+"','','karuta.karuta-resources','Calendar','Calendar','"+fctjs+"');";
 			}
 		}
-		let fcts = actions[i].fcts.split(',');
-		for (let j=0;j<fcts.length;j++) {
-			js2 += fcts[j]+";";
-		}		
 	}
 	var footer = "<button class='btn' onclick=\""+js2+js1+"\">"+karutaStr[LANG]['Add']+"</button> <button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html(footer);

@@ -797,8 +797,8 @@ function previewPage(uuid,depth,type,langcode)
 		g_report_edit = false;
 		UICom.structure["ui"][uuid].displayNode('standard',UICom.structure['tree'][uuid],"preview-window-body-"+uuid,depth,langcode,false);
 		g_report_edit = g_edit;
-		$("#preview-window-"+uuid).show();
 		$("#previewbackdrop-"+uuid).show();
+		$("#preview-window-"+uuid).show();
 		window.scrollTo(0,0);
 	} else {
 		$.ajax({
@@ -812,16 +812,14 @@ function previewPage(uuid,depth,type,langcode)
 				g_report_edit = g_edit;
 				$("#preview-window-"+uuid).show();
 				$("#previewbackdrop-"+uuid).show();
-				$('body').append(previewbackdrop);
 				window.scrollTo(0,0);
 			},
 			error : function() {
 				var html = "";
 				html += "<div>" + karutaStr[languages[langcode]]['error-notfound'] + "</div>";
 				$("#preview-window-body-"+uuid).html(html);
-				$("#preview-window-"+uuid).show();
 				$("#previewbackdrop-"+uuid).show();
-				$('body').append(previewbackdrop);
+				$("#preview-window-"+uuid).show();
 				window.scrollTo(0,0);
 			}
 		});
@@ -868,9 +866,13 @@ function writeSaved(uuid,data)
 }
 
 //==================================
-function importComponent(parentid,targetid,srce,part_semtag)
+function importComponent(parentid,targetid,srce,part_semtag,fctjs)
 //==================================
 {
+	if (fctjs==null)
+		fctjs = "";
+	else
+		fctjs = decode(fctjs);
 	$.ajaxSetup({async: false});
 	var databack = false;
 	var callback = UIFactory.Node.reloadUnit;
@@ -885,6 +887,8 @@ function importComponent(parentid,targetid,srce,part_semtag)
 	for (var i=0;i<semtags.length;i++){
 		if (semtags[i].length>0)
 			importBranch(parentid,replaceVariable(srce),semtags[i],databack,callback);
+			if (fctjs!="")
+				eval(fctjs);
 	}
 };
 
@@ -3111,20 +3115,3 @@ function decode(s) {
 
 //=========================================================
 //=========================================================
-
-function supprimerCompetenceMonBilan(uuid){
-	const code = UICom.structure.ui[uuid].getCode();
-	const target = getTarget (UICom.structure.ui[uuid].node,'mes-competences');
-	if (target.length>0) {
-		targetid = $(target[0]).attr("id");
-		const compnode = $("asmUnit:has(metadata[semantictag*=page-competence-specification])",UICom.structure.ui[targetid].node);
-		for (let i=0;i<compnode.length;i++){
-			const nodeid = $(compnode[i]).attr("id");
-			const nodecode = UICom.structure.ui[nodeid].getCode();
-			if (nodecode==code)
-				UIFactory.Node.remove(nodeid);
-		}
-		UIFactory.Node.reloadStruct();
-	}
-}
-

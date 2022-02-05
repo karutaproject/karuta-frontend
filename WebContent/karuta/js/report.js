@@ -1465,8 +1465,14 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
 
-	var portfolioids = eval(select); // return array of portfolioids
-	
+	var tableau = eval(select); // return array of portfolioids
+	let portfolioids =  [];
+	for (let i=0;i<tableau.length;i++){ // copie dans result en éliminant les doublons
+		const uuid = tableau[i].substring(0,tableau[i].indexOf("_"));
+		if (portfolioids.indexOf(uuid)<0)
+			portfolioids.push(uuid);
+	}
+
 	//----------------------------------
 	for ( var j = 0; j < portfolioids.length; j++) {
 		if (countvar!=undefined) {

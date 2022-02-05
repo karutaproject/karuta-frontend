@@ -272,9 +272,13 @@ UIFactory["Calendar"].prototype.refresh = function()
 //============================================================
 
 //==================================
-function importAndSetDateToday(parentid,targetid,label,srce,part_semtag,calendar_semtag)
+function importAndSetDateToday(parentid,targetid,label,srce,part_semtag,calendar_semtag,fctjs)
 //==================================
 {
+	if (fctjs==null)
+		fctjs = "";
+	else
+		fctjs = decode(fctjs);
 	$.ajaxSetup({async: false});
 	var databack = true;
 	var callback = UIFactory.Calendar.updateaddedpart;
@@ -289,6 +293,8 @@ function importAndSetDateToday(parentid,targetid,label,srce,part_semtag,calendar
 	for (var i=0;i<semtags.length;i++){
 		if (semtags[i].length>0)
 			importBranch(parentid,replaceVariable(srce),semtags[i],databack,callback,calendar_semtag);
+			if (fctjs!="")
+				eval(fctj);
 	}
 };
 

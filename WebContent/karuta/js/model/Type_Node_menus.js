@@ -656,7 +656,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 					html += "<span id='submit-"+node.id+"' class='button add-button' onclick=\"javascript:reset('"+node.id+"')\" ";
 					html += " >"+labels[1]+"</span>";
 				}
-				html += "<div class='alert submitted button add-button'>"+labels[2]+node.submitteddate+"</div>";
+				html += "<div class='alert submitted button add-button'>"+labels[2] + " " +node.submitteddate+"</div>";
 			}
 			else {
 				html += "<div class='alert not-submitted button add-button'>"+labels[3]+"</div>";
