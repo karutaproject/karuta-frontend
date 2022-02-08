@@ -96,6 +96,72 @@ function searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 	return result;
 }
 
+//==================================
+function deleteVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
+//==================================
+{
+	let url = serverBCK+"/vector?";
+	if (a1!=null)
+		url += "a1="+a1;
+	if (a2!=null)
+		if (url=="")
+			url += "a2="+a2;
+		else
+			url += "&a2="+a2;
+	if (a3!=null)
+		if (url=="")
+			url += "a3="+a3;
+		else
+			url += "&a3="+a3;
+	if (a4!=null)
+		if (url=="")
+			url += "a4="+a4;
+		else
+			url += "&a4="+a4;
+	if (a5!=null)
+		if (url=="")
+			url += "a5="+a5;
+		else
+			url += "&a5="+a5;
+	if (a6!=null)
+		if (url=="")
+			url += "a6="+a6;
+		else
+			url += "&a6="+a6;
+	if (a7!=null)
+		if (url=="")
+			url += "a7="+a7;
+		else
+			url += "&a7="+a7;
+	if (a8!=null)
+		if (url=="")
+			url += "a8="+a8;
+		else
+			url += "&a8="+a8;
+	if (a9!=null)
+		if (url=="")
+			url += "a9="+a9;
+		else
+			url += "&a9="+a9;
+	if (a10!=null)
+		if (url=="")
+			url += "a10="+a10;
+		else
+			url += "&a10="+a10;
+	$.ajax({
+		type : "DELETE",
+		contentType: "application/xml",
+		dataType : "xml",
+		url : url,
+		success : function(data) {
+			return true;
+		},
+		error : function(jqxhr,textStatus) {
+			return false;
+		}
+	});
+}
+
 function displayvectors() {
 	var tabas = [];
 	for (var i=1;i<11;i++){
@@ -104,6 +170,16 @@ function displayvectors() {
 	}
 	displayVector('report',tabas[1],tabas[2],tabas[3],tabas[4],tabas[5],tabas[6],tabas[7],tabas[8],tabas[9],tabas[10])
 }
+
+function deletevectors() {
+	var tabas = [];
+	for (var i=1;i<11;i++){
+		const val = document.getElementById("a"+i).value;
+		tabas[i] = (val!="")? val : null;
+	}
+	deleteVector(tabas[1],tabas[2],tabas[3],tabas[4],tabas[5],tabas[6],tabas[7],tabas[8],tabas[9],tabas[10])
+}
+
 
 			var pathname = window.location.pathname;
 			var appliname = pathname.substring(0,pathname.substring(1).indexOf('/')+1);
@@ -128,7 +204,8 @@ function displayvectors() {
 <td><input type='text' id='a1'></td><td><input type='text' id='a2'></td><td><input type='text' id='a3'></td><td><input type='text' id='a4'></td><td><input type='text' id='a5'></td><td><input type='text' id='a6'></td><td><input type='text' id='a7'></td><td><input type='text' id='a8'></td><td><input type='text' id='a9'></td><td><input type='text' id='a10'></td>
 </tr>
 </table>
-<button onclick='displayvectors()'>Exec</button>
+<button onclick='displayvectors()'>Search</button>
+<button onclick='deletevectors()'>Delete</button>
 <div id='report'></div>
 </body>
 </html>

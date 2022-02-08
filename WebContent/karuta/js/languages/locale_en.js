@@ -139,6 +139,7 @@ karutaStr['en']['resnopencil']="Resource Without Pencil ";
 karutaStr['en']['editresroles']="Edit Resource";
 karutaStr['en']['delnoderoles']="Delete";
 karutaStr['en']['commentnoderoles']="Comment";
+karutaStr['en']['seecommentnoderoles']="See Comments";
 karutaStr['en']['annotnoderoles']="Annotate";
 karutaStr['en']['submitroles']="Submit";
 karutaStr['en']['unsubmitroles']="Unsubmit";

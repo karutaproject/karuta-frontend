@@ -170,9 +170,9 @@ UIFactory["Get_Resource"].prototype.getLabel = function(dest,type,langcode)
 	var label = this.label_node[langcode].text();
 	if (type=="div")
 		html =   "<div>"+label+"</div>";
-	if (type=="span")
+	else if (type=="span")
 		html =   "<span>"+label+"</span>";
-	if (type=="none")
+	else if (type=="none")
 		html = label;
 	return html;
 };
@@ -181,6 +181,21 @@ UIFactory["Get_Resource"].prototype.getLabel = function(dest,type,langcode)
 UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indashboard)
 //==================================
 {
+	//-------- if function js -------------
+	if (UICom.structure["ui"][this.id].js==undefined)
+		UICom.structure["ui"][this.id].setMetadata();
+	if (UICom.structure["ui"][this.id].js!="") {
+		var fcts = UICom.structure["ui"][this.id].js.split("|");
+		for (let i=0;i<fcts.length;i++) {
+			let elts = fcts[i].split("/");
+			if (elts[0]=="display-resource-before") {
+				fctjs = elts[1].split(";");
+				for (let j=0;j<fctjs.length;j++) {
+					eval(fctjs[j]+"(this.node,g_portfolioid)");
+				}
+			}
+		}
+	}
 	//---------------------
 	if (indashboard==null)
 		indashboard = false;
@@ -229,8 +244,6 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 				else
 					html += "<div class='"+cleanCode(code)+" view-div' style='";
 				html += style;
-//				if (indashboard)
-//					html += "background-position:center;";
 				html += "'>";
 				if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
 					html += "<span name='code'>" + cleanCode(code) + "</span> ";
@@ -287,12 +300,8 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		else
 			html += "<div class='"+cleanCode(code)+" view-div' style='";
 		html += style;
-//		if (indashboard)
-//			html += "background-position:center;";
-		if (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1)
-			html += "font-weight:bold;"
 		html += "'>";
-		if ((code.indexOf("#")>-1 && code.indexOf("##")<0) || (this.queryattr_value != undefined && this.queryattr_value.indexOf("CNAM")>-1))
+		if (code.indexOf("#")>-1 && code.indexOf("##")<0)
 			html += "<span name='code'>" + cleanCode(code) + "</span> ";
 		if (code.indexOf("*")>-1)
 			html += "<span name='code'>" + cleanCode(code) + "</span> ";
@@ -317,8 +326,6 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 			else
 				html += "<div class='"+cleanCode(code)+" view-div' style='";
 			html += style;
-	//		if (indashboard)
-	//			html += "background-position:center;";
 			html += "'>";
 			if (code.indexOf("#")>-1 && code.indexOf("##")<0) 
 				html += "<span name='code'>" + cleanCode(code) + "</span> ";
@@ -343,8 +350,6 @@ UIFactory["Get_Resource"].prototype.getView = function(dest,type,langcode,indash
 		}
 	}
 	//-------- if function js -------------
-	if (UICom.structure["ui"][this.id].js==undefined)
-		UICom.structure["ui"][this.id].setMetadata();
 	if (UICom.structure["ui"][this.id].js!="") {
 		var fcts = UICom.structure["ui"][this.id].js.split("|");
 		for (let i=0;i<fcts.length;i++) {
@@ -377,6 +382,8 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 {
 	try {
 		//-------- if function js -------------
+		if (UICom.structure["ui"][itself.id].js==undefined)
+			UICom.structure["ui"][itself.id].setMetadata();
 		if (UICom.structure["ui"][itself.id].js!="") {
 			var fcts = UICom.structure["ui"][itself.id].js.split("|");
 			for (let i=0;i<fcts.length;i++) {
@@ -1632,7 +1639,7 @@ UIFactory["Get_Resource"].addSimple = function(parentid,targetid,multiple_tags)
 };
 
 //==================================
-UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags,fctjs)
+UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags,updated_semtag,fctjs)
 //==================================
 {
 	if (fctjs==null)
@@ -1642,7 +1649,7 @@ UIFactory["Get_Resource"].addMultiple = function(parentid,targetid,multiple_tags
 	//------------------------------
 	if (UICom.structure.ui[targetid]==undefined && targetid!="")
 		targetid = getNodeIdBySemtag(targetid);
-	else
+	else if (targetid=="")
 		targetid = parentid;
 	//------------------------------
 	$.ajaxSetup({async: false});

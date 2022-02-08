@@ -138,6 +138,7 @@ karutaStr['fr']['resnopencil']="Ressource sans crayon ";
 karutaStr['fr']['editresroles']="Éditer ressource";
 karutaStr['fr']['delnoderoles']="Supprimer";
 karutaStr['fr']['commentnoderoles']="Commenter";
+karutaStr['fr']['seecommentnoderoles']="Voir les commentaires";
 karutaStr['fr']['annotnoderoles']="Annoter";
 karutaStr['fr']['submitroles']="Soumettre";
 karutaStr['fr']['txtsubmitroles']="Textes Soumettre";

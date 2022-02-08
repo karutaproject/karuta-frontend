@@ -1033,8 +1033,12 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 		var fcts = UICom.structure.ui[uuid].js.split(";");
 		for (var i=0;i<fcts.length;i++) {
 			var elts = fcts[i].split("/");
-			if (elts[0]=="delete")
-				eval(elts[1]+"(uuid)");
+			if (elts[0]=="delete") {
+				if (elts[1].indexOf("(")<0)
+					eval(elts[1]+"(uuid)");
+				else
+					eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
+			}
 		}
 	}
 	//---------------------
@@ -1472,15 +1476,18 @@ UIFactory["Node"].displayComments = function(destid,node,type,langcode)
 	var showtoroles = $(node.metadatawad).attr('showtoroles');
 	if (showtoroles==undefined)
 		showtoroles = "";
-	var seenoderoles = $(node.metadatawad).attr('seenoderoles');
-	if (seenoderoles==undefined)
-		seenoderoles = "all";
-	if (seenoderoles!="" && (seenoderoles.indexOf("all")>-1
-			|| USER.admin
-			|| g_userroles[0]=='designer'
-			|| seenoderoles.containsArrayElt(g_userroles)
-			|| showtoroles.containsArrayElt(g_userroles)
-			|| seenoderoles.indexOf(this.userrole)>-1)) {
+	var seecommentnoderoles = $(node.metadatawad).attr('seecommentnoderoles');
+	if (seecommentnoderoles==undefined)
+		seecommentnoderoles = "all";
+	if (seecommentnoderoles!="" && (seecommentnoderoles.indexOf("all")>-1
+									|| USER.admin
+									|| g_userroles[0]=='designer'
+									|| seecommentnoderoles.containsArrayElt(g_userroles)
+									|| (showtoroles.containsArrayElt(g_userroles) && seecommentnoderoles.containsArrayElt(g_userroles))
+									|| seecommentnoderoles.indexOf(this.userrole)>-1
+								   )
+		)
+	{
 		//---------------------
 		if (langcode==null)
 			langcode = LANGCODE;

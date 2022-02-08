@@ -54,6 +54,7 @@ UIFactory["Node"].prototype.setMetadata = function(dest,depth,langcode,edit,inli
 	this.editnoderoles = ($(node.metadatawad).attr('editnoderoles')==undefined)?'':$(node.metadatawad).attr('editnoderoles');
 	this.delnoderoles = ($(node.metadatawad).attr('delnoderoles')==undefined)?'':$(node.metadatawad).attr('delnoderoles');
 	this.commentnoderoles = ($(node.metadatawad).attr('commentnoderoles')==undefined)?'':$(node.metadatawad).attr('commentnoderoles');
+	this.seecommentnoderoles = ($(node.metadatawad).attr('seecommentnoderoles')==undefined)?'':$(node.metadatawad).attr('seecommentnoderoles');
 	this.showroles = ($(node.metadatawad).attr('showroles')==undefined)?'':$(node.metadatawad).attr('showroles');
 	this.showtoroles = ($(node.metadatawad).attr('showtoroles')==undefined)?'':$(node.metadatawad).attr('showtoroles');
 	this.editresroles = ($(node.metadatawad).attr('editresroles')==undefined)?'':$(node.metadatawad).attr('editresroles');
@@ -493,6 +494,7 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 		this.displayMetadataWadAttributeEditor('metadata-part2','resnopencil',true);
 	}
 	this.displayMetadataWadAttributeEditor('metadata-part2','commentnoderoles');
+	this.displayMetadataWadAttributeEditor('metadata-part2','seecommentnoderoles');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','submitroles');
 	else

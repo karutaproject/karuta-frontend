@@ -337,6 +337,8 @@ function setConfigurationTechVariables(langcode)
 			//----------------------
 			g_configVar['send-email-logo'] = getImg('config-send-email-logo',data,langcode);
 			g_configVar['send-email-image'] = getImg('config-send-email-image',data,langcode);
+			g_configVar['send-email-url'] = getText('config-send-email-url','Field','text',data,langcode);
+			g_configVar['send-email-url-style'] = getContentStyle('config-send-email-url',data);
 			g_configVar['send-email-message'] = getText('config-send-email-message','TextField','text',data,langcode);
 			// --------CSS Text------------------
 			var csstext = $("text[lang='"+LANG+"']",$("asmResource[xsi_type='TextField']",$("asmContext:has(metadata[semantictag='config-css'])",data))).text();

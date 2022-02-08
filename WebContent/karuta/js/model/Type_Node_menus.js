@@ -1279,8 +1279,8 @@ UIFactory["Node"].getXmlItemMenu = function(node,parentid,item,title,databack,ca
 					let foliocode = replaceVariable( ($("foliocode",srce).length>0)?$("foliocode",srce).text():"" );
 					let semtag = replaceVariable( ($("semtag",srce).length>0)?$("semtag",srce).text():"" );
 					let updatedtag = replaceVariable( ($("updatedtag",srce).length>0)?$("updatedtag",srce).text():"" );
-					let fctarray = UIFactory.Node.getFunctionArray(node,itemelts[i]);
-					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,itemelts[i]);
+					let fctarray = UIFactory.Node.getFunctionArray(node,imports[j]);
+					let trgtarray = UIFactory.Node.getTargetArray(node,parentid,imports[j]);
 					actions += "{|type|:|import_component|,|parentid|:|"+parentid+"|,|foliocode|:|"+foliocode+"|,|semtag|:|"+semtag+"|,|updatedtag|:|"+updatedtag+"|,|trgts|:|"+trgtarray.toString()+"|,|fcts|:|"+fctarray.toString()+"|};";
 				}
 				onclick += "import_get_multiple('"+parentid+"','','"+boxlabel+"','"+search_foliocode+"','"+search_semtag+"','"+search_object+"','"+actions+"','"+unique+"');";

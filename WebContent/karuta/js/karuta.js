@@ -1433,22 +1433,23 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
-	message = g_sendEmailPublicURL_message.replace("##firstname##",USER.firstname);
-	message = message.replace("##lastname##",USER.lastname);
-	message = message.replace("#want-sharing#",karutaStr[LANG]['want-sharing']);
-	message = message.replace("#see#",karutaStr[LANG]['see']);
-	message = message.replace("#do not edit this#",url);
+//	message = g_sendEmailPublicURL_message.replace("##firstname##",USER.firstname);
+//	message = message.replace("##lastname##",USER.lastname);
+//	message = message.replace("#want-sharing#",karutaStr[LANG]['want-sharing']);
+//	message = message.replace("#see#",karutaStr[LANG]['see']);
+//	message = message.replace("#do not edit this#",url);
 	//------------------------------
-/*
-	message = g_configVar['send-email-logo'] + g_configVar['send-email-message'];
+
+	message = g_configVar['send-email-logo'] + "<br>" + g_configVar['send-email-message'];
 	message = message.replace("##firstname##",USER.firstname);
 	message = message.replace("##lastname##",USER.lastname);
-	message = message.replace("##click-here##","<a href='"+url+"'>"+g_configVar['send-email-image']+"</a>");
+	const urlhtml = g_configVar['send-email-url']==""?g_configVar['send-email-image']:g_configVar['send-email-url']
+	message = message.replace("##click-here##","<a href='"+url+"' style='"+g_configVar['send-email-url-style']+"'>"+urlhtml+"</a>");
 	var elt = document.createElement("p");
 	elt.textContent = message;
 	message = elt.innerHTML;
 	message = message.replace(/..\/..\/..\/..\/..\/../g, window.location.protocol+"//"+window.location.host);
-*/	
+
 	//------------------------------
 	var xml ="<node>";
 	xml +="<sender>"+$(USER.email_node).text()+"</sender>";
@@ -2340,16 +2341,20 @@ function addautocomplete(input,arrayOfValues,onupdate,self,langcode)
 
 
 //==================================
-function replaceVariable(text,node)
+function replaceVariable(text,node,withquote)
 //==================================
 {
+	if (withquote==null)
+		withquote = true;
 	if (text!=undefined && text.indexOf('lastimported')>-1) {
 		text = text.replaceAll('##lastimported-1##',"g_importednodestack[g_importednodestack.length-2]");
 		text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
 		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
 	}
-	if (node!=null && node!=undefined)
-		text = text.replaceAll('##currentnode##',"'"+node.id+"'");
+	if (node!=null && node!=undefined && withquote)
+		text = text.replaceAll('##currentnode##',"'"+node.id+"'").replaceAll('##currentcode##',"'"+node.getCode()+"'");
+	if (node!=null && node!=undefined && !withquote)
+		text = text.replaceAll('##currentnode##',node.id).replaceAll('##currentcode##',node.getCode());
 	var n=0;
 	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....
@@ -2833,8 +2838,18 @@ function getTarget (knode,position_semtag)
 	} else if (position_semtag.indexOf("parent.")>-1) {
 		var semtag = position_semtag.substring("parent.".length);
 		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",$(node).parent()).addBack("*:has(>metadata[semantictag*='"+semtag+"'])");
+	} else if (position_semtag.indexOf(".")==0) {  // position is empty
+		var semtag = position_semtag.substring(".".length);
+		target = $("*:has(>metadata[semantictag*='"+semtag+"'])",g_portfolio_current);
 	} else {
 		target = $("*:has(>metadata[semantictag*='"+position_semtag+"'])",g_portfolio_current);
+		if (target.length==0) {
+			position_semtag = position_semtag.replace(".","|")
+			position_semtag = replaceVariable(position_semtag,knode,false);
+			const code = position_semtag.substring(0,position_semtag.indexOf("|"));
+			const semtag = position_semtag.substring(position_semtag.indexOf("|")+1);
+			target = $("*:has(>metadata[semantictag*='"+semtag+"']):has(code:contains('"+code+"'))",g_portfolio_current);
+		}
 	}
 	return target;
 }
@@ -3119,4 +3134,60 @@ function decode(s) {
 }
 
 //=========================================================
+// Test Functions for Menus
 //=========================================================
+
+function testExist(semtag,uuid) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	return (nodes.length>0);
+}
+
+function testNotExist(semtag,uuid) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	return (nodes.length==0);
+}
+
+function testCodeNotEmpty(semtag,uuid) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	if ($("asmResource",nodes[0]).length==3) {
+		resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[0]); 
+	} else {
+		resource = $("asmResource[xsi_type='nodeRes']",nodes[0]);
+	}
+	return($("code",resource).text()!="");
+}
+
+function testCodeEmpty(semtag,uuid) {
+	if (uuid == null)
+		uuid = $("#page").attr('uuid');
+	const nodes = $("*:has(>metadata[semantictag*="+semtag+"])",UICom.structure.ui[uuid].node);
+	if ($("asmResource",nodes[0]).length==3) {
+		resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",nodes[0]); 
+	} else {
+		resource = $("asmResource[xsi_type='nodeRes']",nodes[0]);
+	}
+	return($("code",resource).text()=="");
+}
+
+function deleteSameCode(uuid,targetsemtag,srcesemtag){
+	const code = UICom.structure.ui[uuid].getCode();
+	const target = getTarget (UICom.structure.ui[uuid].node,targetsemtag);
+	if (target.length>0) {
+		targetid = $(target[0]).attr("id");
+		const compnode = $("*:has(>metadata[semantictag*="+srcesemtag+"])",UICom.structure.ui[targetid].node);
+		for (let i=0;i<compnode.length;i++){
+			const nodeid = $(compnode[i]).attr("id");
+			const nodecode = UICom.structure.ui[nodeid].getCode();
+			if (nodecode==code)
+				UIFactory.Node.remove(nodeid);
+		}
+		UIFactory.Node.reloadStruct();
+	}
+}
+
