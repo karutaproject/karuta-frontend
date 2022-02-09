@@ -367,7 +367,7 @@ function getEditBox(uuid,js2) {
 			js2 = js2+"('"+uuid+"')";
 		js1 += ";"+js2;
 	}
-	var footer = "<button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
+	var footer = "<span id='footer-before-close'></span><button class='btn' onclick=\""+js1+";\">"+karutaStr[LANG]['Close']+"</button>";
 	$("#edit-window-footer").html($(footer));
 	var html = "";
 	//--------------------------
@@ -2351,10 +2351,14 @@ function replaceVariable(text,node,withquote)
 		text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
 		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
 	}
-	if (node!=null && node!=undefined && withquote)
-		text = text.replaceAll('##currentnode##',"'"+node.id+"'").replaceAll('##currentcode##',"'"+node.getCode()+"'");
-	if (node!=null && node!=undefined && !withquote)
-		text = text.replaceAll('##currentnode##',node.id).replaceAll('##currentcode##',node.getCode());
+	if (node!=null && node!=undefined && withquote && text.indexOf('##currentnode##')>-1)
+		text = text.replaceAll('##currentnode##',"'"+node.id+"'");
+	if (node!=null && node!=undefined && withquote && text.indexOf('##currentcode##')>-1)
+		text = text.replaceAll('##currentcode##',node.getCode());
+	if (node!=null && node!=undefined && !withquote && text.indexOf('##currentnode##')>-1)
+		text = text.replaceAll('##currentnode##',node.id);
+	if (node!=null && node!=undefined && !withquote && text.indexOf('##currentcode##')>-1)
+		text = text.replaceAll('##currentcode##',node.getCode());
 	var n=0;
 	while (text!=undefined && text.indexOf("{##")>-1 && n<100) {
 		var test_string = text.substring(text.indexOf("{##")+3); // test_string = abcd{##variable##}efgh.....

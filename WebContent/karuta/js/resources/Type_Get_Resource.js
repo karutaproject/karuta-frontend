@@ -1636,6 +1636,7 @@ UIFactory["Get_Resource"].addSimple = function(parentid,targetid,multiple_tags)
 	var param3 = input;
 	var param4 = true;
 	importBranch(parentid,srce,part_semtag,databack,callback,param2,param3,param4);
+	$('#edit-window').modal('hide');
 };
 
 //==================================
@@ -1803,6 +1804,7 @@ UIFactory["Get_Resource"].importMultiple = function(parentid,targetid,srce,fctjs
 		if (fctjs!="")
 			eval(fctjs);
 	}
+	$('#edit-window').modal('hide');
 };
 
 //--------------------------------------------------------------------------------------------------------

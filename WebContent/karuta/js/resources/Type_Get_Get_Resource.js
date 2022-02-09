@@ -1628,6 +1628,7 @@ UIFactory["Get_Get_Resource"].importMultiple = function(parentid,targetid,srce,f
 		fct(parentid);
 		UIFactory.Node.reloadUnit();
 	}
+	$('#edit-window').modal('hide');
 }
 
 //--------------------------------------------------------------------------------------------------------
