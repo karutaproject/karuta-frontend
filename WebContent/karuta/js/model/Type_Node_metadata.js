@@ -472,8 +472,8 @@ UIFactory["Node"].prototype.displayMetadataAttributesEditor = function(destid)
 	if (name=='asmContext' && this.resource.type=='Audio') {
 		this.displayMetadataAttributeEditor('metadata-part1','audio-record-only',true);
 	}
-	if (!model)
-		this.displayRights('metadata-rights');
+//	if (!model)
+	this.displayRights('metadata-rights');
 	if (model)
 		this.displayMetadataWadAttributeEditor('metadata-part2','seenoderoles');
 	else

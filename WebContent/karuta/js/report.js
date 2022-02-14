@@ -718,9 +718,10 @@ function html2IMG(contentid)
 function genDashboardContent(destid,uuid,parent,root_node)
 //==================================
 {
+	g_variables['NBELT'] = "";
+	g_variables['NOELT'] = "";
 	dashboard_id = uuid;
 	var spinning = true;
-//	var dashboard_code = replaceVariable(UICom.structure["ui"][uuid].resource.getView());
 	var dashboard_code = UICom.structure["ui"][uuid].resource.getView();
 	var folder_code = replaceVariable(dashboard_code.substring(0,dashboard_code.indexOf('.')));
 	var part_code = dashboard_code.substring(dashboard_code.indexOf('.'));
@@ -1291,6 +1292,8 @@ g_report_actions['firstname-lastname'] = function (destid,action,no,data,is_out_
 g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 //==================================
 {
+	const NBELT = g_variables["NBELT"];
+	const NOELT = g_variables["NOELT"];
 	var countvar = $(action).attr("countvar");
 	if (userid==null)
 		userid = USER.id;
@@ -1317,7 +1320,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 			var value = "";
 			var condition = "";
 			var portfolioid = "";
-			//----------------------------------
+			//----------- optional sort -----------------------
 			var sortag = $(action).attr("sortag");
 			var sortelt = $(action).attr("sortelt");
 			var tableau = new Array();
@@ -1385,8 +1388,15 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 					items_list[i] = portfolios_byid[$(items[i]).attr('id')]
 				}
 			}
+			//======================================================
+			var first = 0;
+			var last = items_list.length;
+			if (NBELT!="" && NOELT!="") {
+				first = parseInt(NOELT);
+				last = (parseInt(NOELT)+parseInt(NBELT)<items_list.length)? parseInt(NOELT)+parseInt(NBELT):items_list.length;
+			}
 			//----------------------------------
-			for ( var j = 0; j < items_list.length; j++) {
+			for ( var j = first; j < last; j++) {
 				if (countvar!=undefined) {
 					g_variables[countvar] = j;
 				}
@@ -1448,8 +1458,15 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 						}
 					});
 				}
-					//------------------------------------
-			}		}
+				//------------------------------------
+			}
+			if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<items_list.length) {
+				g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
+				let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
+				let next = "<br>"+first +" - "+ last + "/" +items_list.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
+				$("#"+dashboard_current).append(next);
+			}
+		}
 	});
 }
 
@@ -1457,24 +1474,22 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 //==================================
 {
+	const NBELT = g_variables["NBELT"];
+	const NOELT = g_variables["NOELT"];
 	var countvar = $(action).attr("countvar");
 	var portfoliovar = $(action).attr("portfoliovar");
-	if (userid==null)
-		userid = USER.id;
-	var searchvalue = "";
 	var select = $(action).attr("select");
 	select = replaceVariable(select);
-
-	var tableau = eval(select); // return array of portfolioids
-	let portfolioids =  [];
-	for (let i=0;i<tableau.length;i++){ // copie dans result en éliminant les doublons
-		const uuid = tableau[i].substring(0,tableau[i].indexOf("_"));
-		if (portfolioids.indexOf(uuid)<0)
-			portfolioids.push(uuid);
-	}
-
+	var portfolioids = eval(select); // return array of portfolioids
 	//----------------------------------
-	for ( var j = 0; j < portfolioids.length; j++) {
+	var first = 0;
+	var last = items_list.length;
+	if (NBELT!="" && NOELT!="") {
+		first = parseInt(NOELT);
+		last = (parseInt(NOELT)+parseInt(NBELT)<items_list.length)? parseInt(NOELT)+parseInt(NBELT):items_list.length;
+	}
+	//----------------------------------
+	for ( var j = first; j < last; j++) {
 		if (countvar!=undefined) {
 			g_variables[countvar] = j;
 		}
@@ -1509,6 +1524,12 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 				};
 			}
 		});
+	}
+	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<items_list.length) {
+		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
+		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
+		let next = "<br>"+first +" - "+ last + "/" +items_list.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
+		$("#"+dashboard_current).append(next);
 	}
 }
 

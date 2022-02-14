@@ -1231,7 +1231,7 @@ UIFactory["Get_Resource"].prototype.parse = function(destid,type,langcode,data,d
 				var resource = null;
 				//------------------------------
 				if ($("asmResource",newTableau1[i][1]).length==3) {
-					style = UIFactory.Node.getDataConentStyle(newTableau1[i][1].querySelector("metadata-epm"));
+					style = UIFactory.Node.getDataContentStyle(newTableau1[i][1].querySelector("metadata-epm"));
 					resource = $("asmResource[xsi_type!='nodeRes'][xsi_type!='context']",newTableau1[i][1]); 
 				} else {
 					style = UIFactory.Node.getDataLabelStyle(newTableau1[i][1].querySelector("metadata-epm"));
