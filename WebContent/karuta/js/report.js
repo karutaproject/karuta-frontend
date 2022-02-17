@@ -1483,10 +1483,10 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	var portfolioids = eval(select); // return array of portfolioids
 	//----------------------------------
 	var first = 0;
-	var last = items_list.length;
+	var last = portfolioids.length;
 	if (NBELT!="" && NOELT!="") {
 		first = parseInt(NOELT);
-		last = (parseInt(NOELT)+parseInt(NBELT)<items_list.length)? parseInt(NOELT)+parseInt(NBELT):items_list.length;
+		last = (parseInt(NOELT)+parseInt(NBELT)<portfolioids.length)? parseInt(NOELT)+parseInt(NBELT):portfolioids.length;
 	}
 	//----------------------------------
 	for ( var j = first; j < last; j++) {
@@ -1525,7 +1525,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 			}
 		});
 	}
-	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<items_list.length) {
+	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<portfolioids.length) {
 		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
 		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
 		let next = "<br>"+first +" - "+ last + "/" +items_list.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"

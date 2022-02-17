@@ -153,6 +153,12 @@ function fill_main_page(portfolioid)
 			//-------------------------------------------------
 			UIFactory.Portfolio.displayPortfolio('portfolio-container',g_display_type,LANGCODE,g_edit);
 			// --------------------------
+			try {
+				specificEnterDisplayPortfolio();
+			} catch(e) {
+				// do nothing
+			}
+			// --------------------------
 			if (g_bar_type.indexOf('horizontal')>-1) {
 				$("#toggleSideBar").hide();
 			}

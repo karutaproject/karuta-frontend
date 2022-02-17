@@ -144,7 +144,6 @@ function getNavBar(type,portfolioid,edit)
 		html += "	<div class='dropdown-menu versions' aria-labelledby='navbar-brand-logo'>";
 		html += "		<a class='dropdown-item'><b>Versions</b></a>";
 		html += "		<div class='dropdown-divider'></div>";
-		html += "		<a class='dropdown-item'>Application : "+application_version+" (" +application_date+")</a>";
 		html += "		<a class='dropdown-item'>Karuta-frontend : "+karuta_version+" (" +karuta_date+")</a>";
 		html += "		<a class='dropdown-item'>Karuta-backend : "+karuta_backend_version+" (" +karuta_backend_date+")</a>";
 		html += "		<a class='dropdown-item'>Karuta-fileserver : "+karuta_fileserver_version+" (" +karuta_fileserver_date+")</a>";
@@ -554,7 +553,7 @@ function previewBox(id)
 //==============================
 {
 	var html = "";
-	html += "\n<!-- ==================== Message box ==================== -->";
+	html += "\n<!-- ==================== Preview box ==================== -->";
 	html += "\n<div id='preview-window-"+id+"'>";
 	html += "\n		<div class=''>";
 	html += "\n			<div class='modal-content'>";
@@ -613,8 +612,10 @@ function confirmSubmit(uuid,submitall,js)
 {
 	if (js==null || js==undefined)
 		js = "";
-	if (js!="")
+	if (js!="" && js.indexOf('(')<0)
 		js = js + "('" + uuid + "')";
+	else 
+		js = replaceVariable(js);
 	var href = "";
 	var type = "";
 	try {
@@ -992,6 +993,7 @@ function submit(uuid,submitall)
 	if (submitall!=null && submitall)
 		urlS += 'all';
 	$.ajax({
+		async:false,
 		type : "POST",
 		dataType : "text",
 		contentType: "application/xml",
@@ -1430,7 +1432,7 @@ function sendEmailPublicURL(encodeddata,email,langcode) {
 	var serverURL = url.substring(0,url.indexOf("/application/htm"));
 	if (url.indexOf("/application/htm")<0)
 		serverURL = url.substring(0,url.indexOf("/karuta/htm"));
-	url = serverURL+"/application/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
+	url = serverURL+"/karuta/htm/public.htm?i="+encodeddata+"&amp;lang="+languages[langcode];
 	//------------------------------
 	var message = "";
 //	message = g_sendEmailPublicURL_message.replace("##firstname##",USER.firstname);
@@ -3141,6 +3143,18 @@ function decode(s) {
 // Test Functions for Menus
 //=========================================================
 
+function testSubmitted(uuid) {
+	if (UICom.structure.ui[uuid].submitted==undefined)
+		UICom.structure.ui[uuid].setMetadata();
+	return UICom.structure.ui[uuid].submitted=="Y";
+}
+
+function testNotSubmitted(uuid) {
+	if (UICom.structure.ui[uuid].submitted==undefined)
+		UICom.structure.ui[uuid].setMetadata();
+	return UICom.structure.ui[uuid].submitted!="Y";
+}
+
 function testExist(semtag,uuid) {
 	if (uuid == null)
 		uuid = $("#page").attr('uuid');
@@ -3194,4 +3208,6 @@ function deleteSameCode(uuid,targetsemtag,srcesemtag){
 		UIFactory.Node.reloadStruct();
 	}
 }
+
+//================================================
 

@@ -2703,30 +2703,10 @@ table.tablesorter th.restore {
 		padding-left:40px;
 	}
 
-
-/* ====================
-	Isabelle
-   ====================*/
-
-/* list of structures/units in a portfolio
-.{
-	height:1.5rem;
-	cursor:pointer;
-}
- */
-/* no underline in sidebar
-.well a:focus,
-.well a:hover {
-	text-decoration: none;
-}
- */
- 
-
 /* for submitted / not submitted alert */
 
-.hidesubmitbutton {
- 	.submitbutton {display:none}
- }
+.hidesubmitbutton .submitbutton {display:none}
+.hidesubmitbutton .showsubmitbutton .submitbutton {background-color:red;display:block}
 
 .alert {
 	padding: 1px 5px;

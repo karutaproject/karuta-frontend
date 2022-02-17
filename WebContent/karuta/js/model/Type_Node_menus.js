@@ -211,7 +211,7 @@ UIFactory["Node"].prototype.displayMenus = function(dest,langcode)
 					success : function (data){
 						var url = window.location.href;
 						var serverURL = url.substring(0,url.lastIndexOf(appliname+"/")+appliname.length);
-						url = serverURL+"/application/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
+						url = serverURL+"/karuta/htm/public.htm?i="+data+"&amp;lang="+languages[langcode];
 						$("#2world-"+this.id).html("<a  class='fas fa-globe button' target='_blank' href='"+url+"' data-title='"+karutaStr[LANG]["button-2world"]+"' data-toggle='tooltip' data-placement='bottom'></a> ");
 					}
 				});
@@ -774,8 +774,15 @@ UIFactory["Node"].getMenus = function(node,langcode)
 							html_toadd = "<span class='button sharing-button fas fa-share' style='"+menus_style+"' data-toggle='modal' data-target='#edit-window' onclick=\"getSendPublicURL('"+targetid+"','"+node.shareroles+"')\" data-title='"+karutaStr[LANG]["button-share"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 						}
 					}
-					if (shares[i].length<=8 || (shares[i].length>8 && eval(shares[i][8])))
+					if (shares[i].length<=8)
 						html += html_toadd;
+					else if (shares[i].length>8){
+						if (shares[i][8].indexOf ('(')<0)
+							shares[i][8] += "('"+node.id+"')"
+						if (eval(shares[i][8]))
+							html += html_toadd;
+					}
+						
 				}
 			}
 		} catch(e){

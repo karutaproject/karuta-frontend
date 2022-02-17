@@ -1078,13 +1078,13 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 	$("#wait-window").modal('show');
 	var urlS = serverBCK_API+"/nodes/node/import/"+destid+"?uuid="+uuid;  // instance by default
 	if (USER.admin || g_userrole=='designer') {
-//		var rights = UIFactory["Node"].getRights(destid);
 		var rights = UICom.structure["ui"][uuid].getRights();
 		var roles = $("role",rights);
 		if (roles.length==0) // test if model (otherwise it is an instance and we import)
 			urlS = serverBCK_API+"/nodes/node/copy/"+destid+"?uuid="+uuid;
 	}
 	$.ajax({
+		async:false,
 		type : "POST",
 		dataType : "text",
 		url : urlS,
@@ -1185,7 +1185,10 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 											success : function (data){
 												$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 												$("#wait-window").modal('hide');			
-												UIFactory.Node.reloadUnit();
+												if (UICom.structure["ui"][destid].asmtype=='asmContext')
+													UIFactory.Node.reloadUnit();
+												else
+													UIFactory.Node.reloadStruct();
 											},
 											error : function(jqxhr,textStatus) {
 												alert("Error in duplicate rename : "+jqxhr.responseText);
@@ -1195,11 +1198,17 @@ UIFactory["Node"].duplicate = function(uuid,callback,databack,param2,param3,para
 								}
 								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 								$("#wait-window").modal('hide');
-								UIFactory.Node.reloadUnit();
+								if (UICom.structure["ui"][destid].asmtype=='asmContext')
+									UIFactory.Node.reloadUnit();
+								else
+									UIFactory.Node.reloadStruct();
 							} else {
 								$("#saved-window-body").html("<img src='../../karuta/img/green.png'/> saved : "+new Date().toLocaleString());
 								$("#wait-window").modal('hide');
-								UIFactory.Node.reloadUnit();
+								if (UICom.structure["ui"][destid].asmtype=='asmContext')
+									UIFactory.Node.reloadUnit();
+								else
+									UIFactory.Node.reloadStruct();
 							}
 							//------------------------------------------
 						},
@@ -1582,12 +1591,16 @@ UIFactory['Node'].upNode = function(nodeid,reload)
 	if (reload==null)
 		reload = true;
 	$.ajax({
+		uuid:nodeid,
 		type : "POST",
 		dataType : "text",
 		url : serverBCK_API+"/nodes/node/" + nodeid + "/moveup",
 		success : function(data) {
 			if (reload)
-				UIFactory.Node.reloadUnit();
+				if (UICom.structure["ui"][this.uuid].asmtype=='asmContext')
+					UIFactory.Node.reloadUnit();
+				else
+					UIFactory.Node.reloadStruct();
 			$("#edit-window").modal('hide');	
 		},
 		error : function(jqxhr,textStatus) {

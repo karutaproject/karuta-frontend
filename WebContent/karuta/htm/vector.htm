@@ -24,12 +24,15 @@ function displayVector(destid,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 		for (var i=0;i<vectors.length;i++){
 			html += "<tr>";
 			const elts = $("*",vectors[i]);
+			param = "";
 			for (var j=0;j<elts.length;j++){
 				html += "<td style='background-color:#F5F5F5'>"+$(elts[j]).text()+"</td>";
 				param += "'"+$(elts[j]).text()+"'";
 				if (j<elts.length-1)
 					param += ",";
 			}
+			var date = new Date(parseInt($(elts[6]).text()))
+			html += "<td>"+date.toLocaleDateString()+"</td>"
 			html += "<td><button onclick=\"deleteVector("+param+")\">Del</button></td>"
 			html += "</tr>";
 		}

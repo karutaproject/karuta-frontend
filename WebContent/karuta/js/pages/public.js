@@ -49,9 +49,9 @@ function displayKarutaPublic()
 	//---------------------------
 	$("#welcome").html(welcome[LANG]);
 	//----------------
-	$.ajaxSetup({async: false});
-	loadLanguages(function(data) {
-		getLanguage();
+	getLanguage();
+	loadLanguages(function() {
+//				getLanguage();
 	});
 	$.ajax({
 		type : "GET",
@@ -61,6 +61,7 @@ function displayKarutaPublic()
 			g_uuid = data;
 			//----------------
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/credential",
@@ -74,6 +75,10 @@ function displayKarutaPublic()
 					}						
 				}
 			});
+				setConfigurationTechVariables(LANGCODE);
+				setConfigurationUIVariables(LANGCODE);
+				applyKarutaConfiguration();
+
 			//----------------
 			$.ajax({	// get id of the portfolio that contains the node
 				async : false,
@@ -86,6 +91,7 @@ function displayKarutaPublic()
 			});
 			//----------------
 			$.ajax({	// get id of the portfolio that contains the node
+				async:false,
 				type : "GET",
 				dataType : "text",
 				url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
@@ -99,6 +105,7 @@ function displayKarutaPublic()
 
 			//----------------
 			$.ajax({
+				async:false,
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/nodes/node/" + g_uuid,
