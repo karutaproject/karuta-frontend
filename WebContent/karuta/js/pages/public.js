@@ -54,6 +54,7 @@ function displayKarutaPublic()
 //				getLanguage();
 	});
 	$.ajax({
+		async:false,
 		type : "GET",
 		dataType : "text",
 		url : serverBCK+"/direct?i=" + iid,
@@ -75,12 +76,13 @@ function displayKarutaPublic()
 					}						
 				}
 			});
-				setConfigurationTechVariables(LANGCODE);
-				setConfigurationUIVariables(LANGCODE);
-				applyKarutaConfiguration();
+			setConfigurationTechVariables(LANGCODE);
+			setConfigurationUIVariables(LANGCODE);
+			applyKarutaConfiguration();
 
+/*
 			//----------------
-/*			$.ajax({	// get id of the portfolio that contains the node
+			$.ajax({	// get id of the portfolio that contains the node
 				async : false,
 				type : "GET",
 				dataType : "text",
@@ -152,6 +154,9 @@ function displayKarutaPublic()
 						var rootid = $(root[0]).attr('id');
 						$("#sidebar_"+rootid).click();
 					}
+				},		
+				error : function( jqXHR, textStatus, errorThrown ) {
+					alert("Fermer votre browser et rouvrir le lien pour accéder au portfolio.");
 				}
 			});
 		},
@@ -164,7 +169,6 @@ function displayKarutaPublic()
 			$('.tooltip').hide();
 		}
 	});
-	$.ajaxSetup({async: true});
 }
 
 
