@@ -30,7 +30,7 @@ function displayKarutaPublic()
 	html += "<div id='portfolio-container'>";
 	html += "<div class='main-row row'>";
 	html += "	<div class='col-sm-3'>";
-	html += "		<div id='welcome'></div>";
+//	html += "		<div id='welcome'></div>";
 	html += "		<div id='sidebar'><div id='sidebar-content'><div  class='panel-group' id='sidebar-parent' role='tablist'></div></div></div>";
 	html += "	</div>";
 	html += "	<div class='col-sm-9' id='contenu'></div>";
@@ -80,7 +80,7 @@ function displayKarutaPublic()
 				applyKarutaConfiguration();
 
 			//----------------
-			$.ajax({	// get id of the portfolio that contains the node
+/*			$.ajax({	// get id of the portfolio that contains the node
 				async : false,
 				type : "GET",
 				dataType : "text",
@@ -94,7 +94,7 @@ function displayKarutaPublic()
 				async:false,
 				type : "GET",
 				dataType : "text",
-				url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=true",
+				url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=false",
 				success : function(data) {
 					var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
 //					setConfigurationPortfolioVariable(config_unit,true);
@@ -102,7 +102,7 @@ function displayKarutaPublic()
 					setVariables(data);
 				}
 			});
-
+*/
 			//----------------
 			$.ajax({
 				async:false,
