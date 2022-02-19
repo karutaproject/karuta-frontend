@@ -557,6 +557,8 @@ function previewBox(id)
 	html += "\n<div id='preview-window-"+id+"'>";
 	html += "\n		<div class=''>";
 	html += "\n			<div class='modal-content'>";
+	html += "\n				<div id='preview-window-header-"+id+"' class='modal-footer' >";
+	html += "\n				</div>";
 	html += "\n				<div id='preview-window-body-"+id+"' class=''>";
 	html += "\n				</div>";
 	html += "\n				<div id='preview-window-footer-"+id+"' class='modal-footer' >";
@@ -796,8 +798,8 @@ function previewPage(uuid,depth,type,langcode)
 	previewwindow.setAttribute("class", "preview-window");
 	previewwindow.innerHTML =  previewBox(uuid);
 	$('body').append(previewwindow);
-	var footer = "<button class='btn' onclick=\"$('#preview-window-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
-	$("#preview-window-footer-"+uuid).html(footer);
+	var header = "<button class='btn add-button' style='float:right' onclick=\"$('#preview-window-"+uuid+"').remove();$('#previewbackdrop-"+uuid+"').remove();\">"+karutaStr[LANG]['Close']+"</button>";
+	$("#preview-window-header-"+uuid).html(header);
 	$("#preview-window-body-"+uuid).html("");
 	if (UICom.structure['tree'][uuid]!=null) {
 		g_report_edit = false;

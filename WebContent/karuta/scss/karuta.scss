@@ -694,6 +694,9 @@
 		max-width:none;
 		transform: scale(0.8);
 		z-index:10;
+		button{
+			background-color: var(--edit-window-button-background-color);
+		}
 	}
 
 	.preview-backdrop {
@@ -705,6 +708,7 @@
 		background-color:black;
 		opacity:.5
 	}
+
 
 
 /* ====================== */
