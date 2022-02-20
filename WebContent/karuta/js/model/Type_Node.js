@@ -1024,6 +1024,7 @@ UIFactory["Node"].prototype.remove = function()
 UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 //==================================
 {
+	let remove = true;
 	//-------- if function js -------------
 	if (UICom.structure.ui[uuid].js==undefined){
 		var node = UICom.structure.ui[uuid];
@@ -1039,11 +1040,21 @@ UIFactory["Node"].remove = function(uuid,callback,param1,param2,param3,param4)
 				else
 					eval(replaceVariable(elts[1],UICom.structure.ui[uuid]));
 			}
+			if (elts[0]=="delete-if") {
+				if (elts[1].indexOf("(")<0) {
+					if (!eval(elts[1]+"(uuid)"))
+						remove = false;
+				} else {
+					if (!eval(replaceVariable(elts[1],UICom.structure.ui[uuid])))
+						remove = false;
+				}
+			}
 		}
 	}
-	//---------------------
-	$("#"+uuid,g_portfolio_current).remove();
-	UICom.DeleteNode(uuid,callback,param1,param2,param3,param4);
+	if (remove) {
+		$("#"+uuid,g_portfolio_current).remove();
+		UICom.DeleteNode(uuid,callback,param1,param2,param3,param4);
+	}
 };
 
 //==================================
