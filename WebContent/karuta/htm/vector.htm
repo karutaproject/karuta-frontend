@@ -116,18 +116,23 @@ $.ajax({
 <h2>KARUTA Vector Management</h2>
 <table id='report'>
 <tr>
-<th>userid/date</th><th>a1</th><th>a2</th><th>a3</th><th>a4</th><th>a5</th><th>a6</th><th>a7</th><th>a8</th><th>a9</th><th>a10</th>
+	<th>userid/date</th><th>a1</th><th>a2</th><th>a3</th><th>a4</th><th>a5</th><th>a6</th><th>a7</th><th>a8</th><th>a9</th><th>a10</th>
 </tr>
 <tr>
-<td></td><td><input type='text' id='a1'></td><td><input type='text' id='a2'></td><td><input type='text' id='a3'></td><td><input type='text' id='a4'></td><td><input type='text' id='a5'></td><td><input type='text' id='a6'></td><td><input type='text' id='a7'></td><td><input type='text' id='a8'></td><td><input type='text' id='a9'></td><td><input type='text' id='a10'></td>
+	<td></td>
+	<td><input type='text' id='a1'></td><td><input type='text' id='a2'></td>
+	<td><input type='text' id='a3'></td><td><input type='text' id='a4'></td>
+	<td><input type='text' id='a5'></td><td><input type='text' id='a6'></td>
+	<td><input type='text' id='a7'></td><td><input type='text' id='a8'></td>
+	<td><input type='text' id='a9'></td><td><input type='text' id='a10'></td>
+	<td><button onclick="copyPasteVector('','','','','','','','','','')">Clear</button></td>
 </tr>
 </table>
 <br>
 <button style='background-color:green;color:white' onclick='displayvectors()'>Search</button>
-<button onclick="copyPasteVector('','','','','','','','','','')">Clear</button>
 <button class='danger' onclick="if (confirm('Delete?'))deletevectors()">Delete</button>
 <button onclick='saveNewVector()'>Save</button>
-<button onclick='location.reload()'>Reload</button>
+<button onclick='location.reload()'>Clear All</button>
 <div id='report'></div>
 </body>
 </html>
