@@ -1261,7 +1261,7 @@ g_report_actions['for-each-portfolio'] = function (destid,action,no,data)
 			var tableau = new Array();
 			var sortvalue = "";
 			if (sortag!=undefined && sortag!="") {
-				for ( var j = 0; j < items.length; j++) {
+				for ( var i = 0; i < items.length; i++) {
 					portfolioid = $(items[i]).attr('id');
 					var code = $("code",$("asmRoot>asmResource[xsi_type='nodeRes']",items[i])).text();
 					//------------------------------------

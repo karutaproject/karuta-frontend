@@ -323,7 +323,8 @@
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }
-.batch .refresh-tree-url2unit {
+.batch .refresh-tree-url2unit,
+.batch .update-get-resource {
   margin-top: 7px;
   border: 1px solid var(--batch-resource-color);
 }

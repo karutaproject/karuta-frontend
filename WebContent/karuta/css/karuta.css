@@ -76,6 +76,13 @@ body,
 }
 
 /* ====================== */
+/*    @DRAFT@       */
+/* ====================== */
+.draft-node {
+  font-style: italic;
+}
+
+/* ====================== */
 /*    SEARCH-RESULT       */
 /* ====================== */
 .highlight {
@@ -628,11 +635,23 @@ body,
 /* ====================== */
 /*     PREVIEW WINDOW        */
 /* ====================== */
-#preview-window .modal-dialog {
-  width: 95%;
+.preview-window {
+  position: absolute;
+  top: 10px;
   height: 100%;
   max-width: none;
   transform: scale(0.8);
+  z-index: 10;
+}
+
+.preview-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 0.5;
 }
 
 /* ====================== */
@@ -694,7 +713,7 @@ body,
 #edit-window-body .dropdown-menu {
   max-height: 350px;
   overflow-y: auto;
-  width: 100%;
+  width: 90%;
 }
 #edit-window-body .dropdown-item {
   white-space: inherit;
@@ -1894,6 +1913,29 @@ h3 {
 }
 */
 /* ============================================================ */
+/* ================ */
+/*   MENU EDITOR    */
+/* ================ */
+#edit-window-body-menu .menucontent,
+#edit-window-body-menu .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent .menucontent .menucontent .menucontent,
+#edit-window-body-menu .menucontent .menucontent .menucontent .menucontent .menucontent .menucontent.menucontent {
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+#edit-window-body-menu .menulabel {
+  background-color: #b9d531;
+}
+#edit-window-body-menu .itemlabel {
+  background-color: #13bdd8;
+}
+
 /* =========== PORTFOLIO-WELCOME EDIT MODE ================= */
 .standard .welcome-block {
   margin-left: 20px;
@@ -2206,11 +2248,6 @@ hr {
   margin-bottom: 2px;
 }
 
-.subget_ressource {
-  margin-left: 25px;
-  font-size: 90%;
-}
-
 input[type=radio].radio-div {
   float: left;
   margin: 5px;
@@ -2219,6 +2256,11 @@ input[type=radio].radio-div {
 .radio-label {
   display: inline-block;
   max-width: 90%;
+}
+
+.subget_ressource {
+  margin-left: 25px;
+  font-size: 90%;
 }
 
 button.selected-label {
@@ -2512,25 +2554,31 @@ table.tablesorter th.restore {
   padding-left: 40px;
 }
 
-/* ====================
-	Isabelle
-   ====================*/
-/* list of structures/units in a portfolio
-.{
-	height:1.5rem;
-	cursor:pointer;
-}
- */
-/* no underline in sidebar
-.well a:focus,
-.well a:hover {
-	text-decoration: none;
-}
- */
 /* for submitted / not submitted alert */
+.hidesubmitbutton .submitbutton {
+  display: none;
+}
+
+.hidesubmitbutton .showsubmitbutton .submitbutton {
+  color: red;
+  display: block;
+}
+
 .alert {
   padding: 1px 5px;
   margin-bottom: 0px;
+}
+
+.submitted {
+  color: #155724 !important;
+  background-color: #d4edda !important;
+  border-color: #c3e6cb !important;
+}
+
+.not-submitted {
+  color: #721c24 !important;
+  background-color: #f8d7da !important;
+  border-color: #f5c6cb !important;
 }
 
 /* ====================
@@ -2990,9 +3038,9 @@ table.tablesorter th.restore {
 	autocomplete
    ===========================*/
 .autocomplete {
-  /*the container must be positioned relative:*/
+  /*the container must be positioned relative:
   position: relative;
-  display: inline-block;
+  display: inline-block;*/
 }
 
 .autocomplete-items {
@@ -3023,6 +3071,14 @@ table.tablesorter th.restore {
   /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important;
   color: #ffffff;
+}
+
+/* ===========================
+	AUDIO RECORDER
+   ===========================*/
+.audiosavebutton {
+  margin-top: -45px;
+  margin-left: 20px;
 }
 
 /* ===========================
