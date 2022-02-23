@@ -1576,7 +1576,7 @@ g_actions['update-resource'] = function updateResource(node)
 						url : serverBCK_API+"/resources/resource/" + nodeid,
 						success : function(data) {
 							ok++;
-							$("#batch-log").append("<br>- resource updated "+type+" - "+semtag+":"+attribute_value);
+							$("#batch-log").append("<br>- resource updated "+type+" - "+semtag+" - "+attribute_value);
 						},
 						error : function(data) {
 							$("#batch-log").append("<br>- ***<span class='danger'>ERROR</span> in update resource "+type+" - "+semtag+":"+attribute_value);

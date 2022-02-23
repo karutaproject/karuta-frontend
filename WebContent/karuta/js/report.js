@@ -726,7 +726,13 @@ function genDashboardContent(destid,uuid,parent,root_node)
 	var folder_code = replaceVariable(dashboard_code.substring(0,dashboard_code.indexOf('.')));
 	var part_code = dashboard_code.substring(dashboard_code.indexOf('.'));
 	var model_code = "";
-	if (part_code.indexOf('/')>-1){
+	if (part_code.indexOf('|')>-1){
+		var parameters = part_code.substring(part_code.indexOf('|')+1).split('|');
+		for (var i=0; i<parameters.length;i++){
+			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = replaceVariable(parameters[i].substring(parameters[i].indexOf(":")+1));
+		}
+		model_code = folder_code + replaceVariable(part_code.substring(0,part_code.indexOf("|")));
+	} else if (part_code.indexOf('/')>-1){
 		var parameters = part_code.substring(part_code.indexOf('/')+1).split('/');
 		for (var i=0; i<parameters.length;i++){
 			g_variables[parameters[i].substring(0,parameters[i].indexOf(":"))] = replaceVariable(parameters[i].substring(parameters[i].indexOf(":")+1));
