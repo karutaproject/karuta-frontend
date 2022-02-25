@@ -1969,8 +1969,14 @@ UIFactory['Node'].loadNode = function(uuid)
 			if (UICom.structure.ui[this.uuid].asmtype=='asmUnit') {
 				UICom.structure.ui[this.uuid].loaded = true;
 			}
-			if (UICom.structure.ui[this.uuid].asmtype=='asmStructure') {
-				UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
+			if (g_bar_type.indexOf('horizontal')>-1) {
+				$("#menu_bar").html("");
+				$("#menu_bar").show();
+				UIFactory.Portfolio.displayHorizontalMenu(UICom.root,'menu_bar',g_display_type,null,g_edit,UICom.rootid);
+			} else {
+				$("#sidebar").html("");
+				$("#menu_bar").hide();
+				UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar',g_display_type,null,g_edit,UICom.rootid);
 			}
 		}
 	});
@@ -1996,7 +2002,15 @@ UIFactory['Node'].loadStructure = function(uuid)
 				UIFactory.Node.loadNode(nodeid);
 			}
 			$("#"+uuid,g_portfolio_current).replaceWith($(":root",data));
-			UIFactory["Portfolio"].displaySidebar(UICom.root,'sidebar',null,null,g_edit,UICom.rootid);
+			if (g_bar_type.indexOf('horizontal')>-1) {
+				$("#menu_bar").html("");
+				$("#menu_bar").show();
+				UIFactory.Portfolio.displayHorizontalMenu(UICom.root,'menu_bar',g_display_type,null,g_edit,UICom.rootid);
+			} else {
+				$("#sidebar").html("");
+				$("#menu_bar").hide();
+				UIFactory.Portfolio.displaySidebar(UICom.root,'sidebar',g_display_type,null,g_edit,UICom.rootid);
+			}
 			UICom.structure.ui[this.uuid].loaded = true;
 		}
 	});

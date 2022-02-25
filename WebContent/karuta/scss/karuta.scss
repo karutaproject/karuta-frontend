@@ -2729,6 +2729,9 @@ table.tablesorter th.restore {
 	border-color: #f5c6cb !important;
 }
 
+.hide-span-label {
+	span[name=label] {display:none}
+}
 
 /* ====================
 	EUROPASS

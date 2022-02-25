@@ -391,7 +391,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 				if (elts[0]=="update-resource-before") {
 					fctjs = elts[1].split(";");
 					for (let j=0;j<fctjs.length;j++) {
-						if (fctjs[j].indexOf("##"))
+						if (fctjs[j].indexOf("##")>-1)
 							eval(replaceVariable(fctjs[j],itself.node));
 						else
 							eval(fctjs[j]+"(itself.node,g_portfolioid)");
@@ -429,7 +429,7 @@ UIFactory["Get_Resource"].update = function(selected_item,itself,langcode,type)
 				if (elts[0]=="update-resource") {
 					fctjs = elts[1].split(";");
 					for (let j=0;j<fctjs.length;j++) {
-						if (fctjs[j].indexOf("##"))
+						if (fctjs[j].indexOf("##")>-1)
 							eval(replaceVariable(fctjs[j],itself.node));
 						else
 							eval(fctjs[j]+"(itself.node,g_portfolioid)");

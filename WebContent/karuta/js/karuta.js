@@ -13,6 +13,24 @@
 	permissions and limitations under the License.
    ======================================================= */
 
+/* ======================================================= */
+function soumettreEvaluation2(nodeid){
+	const pageid = $("#page").attr('uuid');
+	const semtag = UICom.structure.ui[pageid].semantictag;
+	var type = "";
+	if (semtag.indexOf('sae')>-1)
+		type = 'sae';
+	else if (semtag.indexOf('stage')>-1)
+		type='stage';
+	else if (semtag.indexOf('autre')>-1)
+		type='action';
+	else if (semtag.indexOf('competence')>-1)
+		type='competence';
+	buildSubmitVectorKAPC(nodeid,nodeid,type+"-evaluation-done");
+}
+/* ======================================================= */
+
+
 //--------- for languages
 //var karutaStr = new Array();
 
@@ -2355,6 +2373,8 @@ function replaceVariable(text,node,withquote)
 		text = text.replaceAll('##lastimported-2##',"g_importednodestack[g_importednodestack.length-3]");
 		text = text.replaceAll('##lastimported##',"g_importednodestack[g_importednodestack.length-1]");
 	}
+	if (node!=null && node!=undefined && withquote && text.indexOf('##parentnode##')>-1)
+		text = text.replaceAll('##parentnode##',"'"+$(node).parent().attr('id')+"'");
 	if (node!=null && node!=undefined && withquote && text.indexOf('##currentnode##')>-1)
 		text = text.replaceAll('##currentnode##',"'"+node.id+"'");
 	if (node!=null && node!=undefined && withquote && text.indexOf('##currentcode##')>-1)
@@ -2935,7 +2955,7 @@ function saveVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 function deleteVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 //==================================
 {
-	let url = serverBCK+"/vector?";
+	let url = ""
 	if (a1!=null)
 		url += "a1="+a1;
 	if (a2!=null)
@@ -2983,6 +3003,7 @@ function deleteVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 			url += "a10="+a10;
 		else
 			url += "&a10="+a10;
+	url = serverBCK+"/vector?" + url;
 	$.ajax({
 		type : "DELETE",
 		contentType: "application/xml",
@@ -3139,6 +3160,18 @@ function decode(s) {
 		.replace(/%27/g, "'")
 		.replace(/%2C/g, ",")
 	return result
+}
+
+//=========================================================
+// Functions for Resources
+//=========================================================
+
+function testNumber(text) {
+	return (!isNaN(text))
+}
+
+function testNotNumber(text) {
+	return (isNaN(text))
 }
 
 //=========================================================

@@ -7,46 +7,63 @@
 	input {width:100px}
 </style>
 <script>
+
+var param = "";
+//==================================
+function getVectorElt(vector)
+//==================================
+{
+	let html = "";
+	let nbelts =  $("*",vector).length;
+	for (var j=1;j<11;j++){
+		const elt = $("a"+j,vector);
+		if (elt.length>0){
+			html += "<td style='background-color:#F5F5F5'>"+$(elt).text();
+			if (!isNaN($(elt).text())){
+				try {
+					if (parseInt($(elt).text())>10000000) {
+						const date = new Date(parseInt($(elt).text()))
+						html += "<br><span style='font-style:italic'>" + date.toLocaleDateString() + "</span>";
+					}
+				}
+				catch(e){};
+			}
+			html += "</td>";
+			param += "'"+$(elt).text()+"'";
+			if (j<nbelts)
+				param += ",";
+		} else {
+			html += "<td></td>";
+			if (j<nbelts){
+				param += "'',";
+				nbelts++; // element vide
+			}
+		}
+	}
+	return html;
+}
+
 //==================================
 function displayVector(destid,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 //==================================
 {
 	var html = "";
-	var param = "";
 	const vectors = $("vector",searchVector(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10));
 	if (vectors.length==0)
 		html += "no result";
 	else {
 		//---------------------
 		for (var i=0;i<vectors.length;i++){
-			const elts = $("*",vectors[i]);
 			if (i==0) {
 				html += "<tr>";
-				for (let k=0;k<elts.length+1;k++){html+="<td style='background-color:black'></td>"}
+				for (let k=0;k<11;k++){html+="<td style='background-color:black'></td>"}
 				html += "</tr>";
 			}
 			html += "<tr id='tr-"+i+"'>";
 			param = "";
 			html += "<td style='font-size:80%;background-color:#D7D7D7'>userid:"+$(vectors[i]).attr('uid')+"<br>"+$(vectors[i]).attr('date')+"</td>"
-			for (var j=0;j<elts.length;j++){
-				if ($(elts[j]).text()!=""){
-					html += "<td style='background-color:#F5F5F5'>"+$(elts[j]).text();
-					if (!isNaN($(elts[j]).text())){
-						try {
-							if (parseInt($(elts[j]).text())>10000000) {
-								const date = new Date(parseInt($(elts[j]).text()))
-								html += "<br><span style='font-style:italic'>" + date.toLocaleDateString() + "</span>";
-							}
-						}
-						catch(e){};
-					}
-					html += "</td>";
-					param += "'"+$(elts[j]).text()+"'";
-					if (j<elts.length-1)
-						param += ",";
-				}
-			}
-			html += "<td><button class='danger' onclick=\"if (confirm('Delete?')){deleteVector("+param+");displayvectors()}\">Del</button>"
+			html += getVectorElt(vectors[i]);
+			html += "<td><button class='danger' onclick=\"if (confirm('Delete?')){deleteVector("+param+")}\">Del</button>"
 			html += " <button  onclick=\"copyPasteVector("+param+")\">Copy-Paste</button></td>"
 			html += "</tr>";
 		}
@@ -60,7 +77,7 @@ function displayvectors() {
 		const val = document.getElementById("a"+i).value;
 		tabas[i] = (val!="")? val : null;
 	}
-	displayVector('report',tabas[1],tabas[2],tabas[3],tabas[4],tabas[5],tabas[6],tabas[7],tabas[8],tabas[9],tabas[10])
+	displayVector('report',tabas[1],tabas[2],tabas[3],tabas[4],tabas[5],tabas[6],tabas[7],tabas[8],tabas[9],tabas[10]);
 }
 
 function deletevectors() {
@@ -69,7 +86,7 @@ function deletevectors() {
 		const val = document.getElementById("a"+i).value;
 		tabas[i] = (val!="")? val : null;
 	}
-	deleteVector(tabas[1],tabas[2],tabas[3],tabas[4],tabas[5],tabas[6],tabas[7],tabas[8],tabas[9],tabas[10])
+	deleteVector(tabas[1],tabas[2],tabas[3],tabas[4],tabas[5],tabas[6],tabas[7],tabas[8],tabas[9],tabas[10]);
 }
 
 function saveNewVector() {
@@ -125,13 +142,13 @@ $.ajax({
 	<td><input type='text' id='a5'></td><td><input type='text' id='a6'></td>
 	<td><input type='text' id='a7'></td><td><input type='text' id='a8'></td>
 	<td><input type='text' id='a9'></td><td><input type='text' id='a10'></td>
-	<td><button onclick="copyPasteVector('','','','','','','','','','')">Clear</button></td>
+	<td><button onclick="copyPasteVector('','','','','','','','','','')">Clear</button> <button class='danger' onclick='saveNewVector()'>Save</button>
+	</td>
 </tr>
 </table>
 <br>
 <button style='background-color:green;color:white' onclick='displayvectors()'>Search</button>
 <button class='danger' onclick="if (confirm('Delete?'))deletevectors()">Delete</button>
-<button onclick='saveNewVector()'>Save</button>
 <button onclick='location.reload()'>Clear All</button>
 <div id='report'></div>
 </body>
