@@ -1326,8 +1326,11 @@ UIFactory["User"].deleteTemporaryUsers = function()
 	var last = UsersActive_list.length;
 	for (var i=first; i<last;i++){
 		var user = UsersActive_list[i];
+		try {
 		if (user.username.split('-').length>4 || user.username.indexOf('#')>10)
 			UIFactory.User.remove(user.id); 
+		} 
+		catch {}
 	}
 	$("#user-rightside-users-content3").html("");
 }

@@ -2567,6 +2567,10 @@ table.tablesorter th.restore {
   display: block;
 }
 
+.hideresetbutton .resetbutton {
+  display: none;
+}
+
 .alert {
   padding: 1px 5px;
   margin-bottom: 0px;

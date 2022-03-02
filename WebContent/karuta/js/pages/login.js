@@ -138,9 +138,17 @@ function getNewAccount()
 function displayKarutaLogin()
 //==============================
 {
-//	loginPublic();
+	loginPublic();
 	setLoginTechnicalVariables();
 	setLoginConfigurationVariables();
+	$.ajax({
+		async:false,
+		type: "GET",
+		dataType: "text",
+		url: serverBCK_API+"/credential/logout",
+		data: ""
+	});
+	//-------------------------
 	var html = "";
 	html += "<div id='main-welcome'>";
 	html += "<div id='navigation-bar'></div>";

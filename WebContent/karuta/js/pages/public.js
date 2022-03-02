@@ -56,7 +56,6 @@ function displayKarutaPublic()
 	$.ajax({
 		async:false,
 		type : "GET",
-		dataType : "text",
 		url : serverBCK+"/direct?i=" + iid,
 		success : function(data) {
 			g_uuid = data;
@@ -66,7 +65,6 @@ function displayKarutaPublic()
 				type : "GET",
 				dataType : "xml",
 				url : serverBCK_API+"/credential",
-				data: "",
 				success : function(data) {
 					USER = new UIFactory["User"]($("user",data));
 				},
@@ -79,32 +77,6 @@ function displayKarutaPublic()
 			setConfigurationTechVariables(LANGCODE);
 			setConfigurationUIVariables(LANGCODE);
 			applyKarutaConfiguration();
-
-/*
-			//----------------
-			$.ajax({	// get id of the portfolio that contains the node
-				async : false,
-				type : "GET",
-				dataType : "text",
-				url : serverBCK_API+"/nodes/node/" + g_uuid  +"/portfolioid",
-				success : function(data) {
-					g_portfolioid = data;
-				}
-			});
-			//----------------
-			$.ajax({	// get id of the portfolio that contains the node
-				async:false,
-				type : "GET",
-				dataType : "text",
-				url : serverBCK_API+"/portfolios/portfolio/" + g_portfolioid + "?resources=false",
-				success : function(data) {
-					var config_unit = $("asmUnit:has(metadata[semantictag*='configuration-unit'])",data);
-//					setConfigurationPortfolioVariable(config_unit,true);
-					setCSSportfolio(config_unit);
-					setVariables(data);
-				}
-			});
-*/
 			//----------------
 			$.ajax({
 				async:false,

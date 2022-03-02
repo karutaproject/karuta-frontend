@@ -14,20 +14,6 @@
    ======================================================= */
 
 /* ======================================================= */
-function soumettreEvaluation2(nodeid){
-	const pageid = $("#page").attr('uuid');
-	const semtag = UICom.structure.ui[pageid].semantictag;
-	var type = "";
-	if (semtag.indexOf('sae')>-1)
-		type = 'sae';
-	else if (semtag.indexOf('stage')>-1)
-		type='stage';
-	else if (semtag.indexOf('autre')>-1)
-		type='action';
-	else if (semtag.indexOf('competence')>-1)
-		type='competence';
-	buildSubmitVectorKAPC(nodeid,nodeid,type+"-evaluation-done");
-}
 /* ======================================================= */
 
 
@@ -1079,6 +1065,25 @@ function show(uuid)
 }
 
 //=======================================================================
+function showinreport(uuid)
+//=======================================================================
+{
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/show';
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		uuid:uuid,
+		success : function (data){
+			$("#report"+this.uuid).removeClass('private');
+			$(".fa-eye-slash",$("#report"+this.uuid)).removeClass('fa-eye-slash').addClass('fa-eye').attr('onclick',"hideinreport('"+this.uuid+"')").attr('title',karutaStr[LANG]["button-hide"]).tooltip();
+		}
+	});
+}
+
+
+//=======================================================================
 function hide(uuid)
 //=======================================================================
 {
@@ -1094,6 +1099,23 @@ function hide(uuid)
 	});
 }
 
+//=======================================================================
+function hideinreport(uuid)
+//=======================================================================
+{
+	var urlS = serverBCK_API+'/nodes/node/'+uuid+'/action/hide';
+	$.ajax({
+		type : "POST",
+		dataType : "text",
+		contentType: "application/xml",
+		url : urlS,
+		uuid:uuid,
+		success : function (data){
+			$("#report"+this.uuid).addClass('private');
+			$(".fa-eye",$("#report"+this.uuid)).removeClass('fa-eye').addClass('fa-eye-slash').attr('onclick',"showinreport('"+this.uuid+"')").attr('title',karutaStr[LANG]["button-show"]).tooltip();
+		}
+	});
+}
 
 //=======================================================================
 function Set()
@@ -1857,6 +1879,7 @@ function logout()
 //==============================
 {
 	$.ajax({
+		async:false,
 		type: "GET",
 		dataType: "text",
 		url: serverBCK_API+"/credential/logout",

@@ -68,7 +68,7 @@ function displayVector(destid,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10)
 			html += "</tr>";
 		}
 	}
-	$("#"+destid).append(html);
+	$("#"+destid).html(html);
 }
 
 function displayvectors() {
@@ -131,7 +131,7 @@ $.ajax({
 </head>
 <body>
 <h2>KARUTA Vector Management</h2>
-<table id='report'>
+<table>
 <tr>
 	<th>userid/date</th><th>a1</th><th>a2</th><th>a3</th><th>a4</th><th>a5</th><th>a6</th><th>a7</th><th>a8</th><th>a9</th><th>a10</th>
 </tr>
@@ -145,11 +145,13 @@ $.ajax({
 	<td><button onclick="copyPasteVector('','','','','','','','','','')">Clear</button> <button class='danger' onclick='saveNewVector()'>Save</button>
 	</td>
 </tr>
+<tbody id="report">
+</tbody>
 </table>
 <br>
 <button style='background-color:green;color:white' onclick='displayvectors()'>Search</button>
 <button class='danger' onclick="if (confirm('Delete?'))deletevectors()">Delete</button>
+<button onclick='$("#report").html("")'>Clear</button>
 <button onclick='location.reload()'>Clear All</button>
-<div id='report'></div>
 </body>
 </html>

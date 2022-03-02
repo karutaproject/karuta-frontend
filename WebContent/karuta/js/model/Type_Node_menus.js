@@ -653,7 +653,7 @@ UIFactory["Node"].getMenus = function(node,langcode)
 				|| g_userroles[0]=='designer'
 				|| ( g_userroles[1]=='designer' && node.unsubmitroles.indexOf(g_userroles[0])>-1)
 				|| node.unsubmitroles.indexOf(node.userrole)>-1 ) {
-					html += "<span id='submit-"+node.id+"' class='button add-button' onclick=\"javascript:reset('"+node.id+"')\" ";
+					html += "<span id='submit-"+node.id+"' class='resetbutton button add-button' onclick=\"javascript:reset('"+node.id+"')\" ";
 					html += " >"+labels[1]+"</span>";
 				}
 				html += "<div class='alert submitted button add-button'>"+labels[2] + " " +node.submitteddate+"</div>";

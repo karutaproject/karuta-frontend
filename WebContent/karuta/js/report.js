@@ -765,8 +765,6 @@ function genDashboardContent(destid,uuid,parent,root_node)
 	catch(err) {
 		alertHTML("Error in Dashboard : " + err.message);
 	}
-	if (spinning)
-		$("#wait-window").show(1000,function(){sleep(1000);$("#wait-window").hide(1000)});
 };
 
 //#######################################################################################################################################
@@ -1820,11 +1818,10 @@ g_report_actions['node_resource'] = function (destid,action,no,data)
 			//------------- private button -------------------
 			if (shownode) {
 				privatevalue = ($(node.metadatawad).attr('private')==undefined)?false:$(node.metadatawad).attr('private')=='Y';
-
 				if (privatevalue) {
-					text = "<span class='private'>"+text+"<span class='button fas fa-eye-slash' style='' onclick=\"javascript:show('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>"+"</span>";
+					text = "<span id='report"+nodeid+"' class='private'>"+text+"<span class='button fas fa-eye-slash' style='' onclick=\"showinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-show"]+"' data-toggle='tooltip' data-placement='bottom'></span>"+"</span>";
 				} else {
-					text += "<span class='button fas fa-eye' style='' onclick=\"javascript:hide('"+nodeid+"')\" data-title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
+					text = "<span id='report"+nodeid+"'>"+text+"<span class='button fas fa-eye' style='' onclick=\"hideinreport('"+nodeid+"')\" title='"+karutaStr[LANG]["button-hide"]+"' data-toggle='tooltip' data-placement='bottom'></span>";
 				}
 			}
 

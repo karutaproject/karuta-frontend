@@ -80,7 +80,6 @@
 		<script src="../../karuta/js/model/Type_User.js"></script>
 		<script src="../../karuta/js/model/Type_UsersGroup.js"></script>
 		<!-- =============================================================== -->
-		<script src="../../application/js/version.js"></script>
 		<script src="../../karuta/js/version.js"></script>
 		<!-- =============================================================== -->
 		<script src="../../karuta/js/SVGToIMG.js"></script>
@@ -147,10 +146,6 @@
 			window.addEventListener("load", function() {
 				try {
 					displayKarutaPublic();
-					if (sessionStorage.getItem('reload')==undefined || sessionStorage.getItem('reload')!=pathname) {
-						location.reload();
-						sessionStorage.setItem('reload',pathname);
-					}
 				}
 				catch (e) {
 					alert("Fermer votre browser et rouvrir le lien pour accéder au portfolio.");
