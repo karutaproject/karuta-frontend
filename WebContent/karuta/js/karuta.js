@@ -690,7 +690,7 @@ function getURLParameter(sParam) {
 }
 
 //==================================
-function displayPage(uuid,depth,type,langcode,nodepth) {
+function displayPage(uuid,depth,type,langcode) {
 //==================================
 	if (g_backstack[g_backstack.length]!=uuid)
 		g_backstack.push(uuid);
@@ -739,7 +739,7 @@ function displayPage(uuid,depth,type,langcode,nodepth) {
 	var name = $(UICom.structure['ui'][uuid].node).prop("nodeName");
 	if (depth==null)
 		depth=100;
-	if ( (name=='asmRoot' || name=='asmStructure') && nodepth==null)
+	if ( (name=='asmRoot' || name=='asmStructure'))
 		depth = 1;
 	if (UICom.structure['tree'][uuid]!=null) {
 		if (type=='standard') {

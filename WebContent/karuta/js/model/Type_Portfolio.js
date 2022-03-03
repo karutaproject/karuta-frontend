@@ -2777,7 +2777,7 @@ UIFactory["Portfolio"].search = function(type)
 		for (var i=0; i<nodes.length;i++){
 			var nodeid = $(nodes[i]).attr('id');
 			var node_label = UICom.structure.ui[nodeid].getLabel();
-			html += "<div class='result-page' onclick=\"displayPage('"+nodeid+"',99,'standard','0',false)\">"+node_label+"</div>";
+			html += "<div class='result-page' onclick=\"displayPage('"+nodeid+"',99,'standard','0')\">"+node_label+"</div>";
 		}
 	}
 	$("#contenu").html(html);

@@ -908,6 +908,71 @@ g_report_actions['for-each-node'] = function (destid,action,no,data)
 
 //=============================================================================
 //=============================================================================
+//======================= FOR-EACH-NODE-JS =======================================
+//=============================================================================
+//=============================================================================
+
+//==================================
+g_report_actions['for-each-node-js'] = function (destid,action,no,data)
+//==================================
+{
+	const NBELT = g_variables["NBELT"];
+	const NOELT = g_variables["NOELT"];
+	var countvar = $(action).attr("countvar");
+	var nodevar = $(action).attr("nodevar");
+	var select = $(action).attr("select");
+	select = replaceVariable(select);
+	var nodeids = eval(select); // return array of nodeids
+	//----------------------------------
+	var first = 0;
+	var last = nodeids.length;
+	if (NBELT!="" && NOELT!="") {
+		first = parseInt(NOELT);
+		last = (parseInt(NOELT)+parseInt(NBELT)<nodeids.length)? parseInt(NOELT)+parseInt(NBELT):nodeids.length;
+	}
+	//----------------------------------
+	for ( var j = first; j < last; j++) {
+		if (countvar!=undefined) {
+			g_variables[countvar] = j;
+		}
+		var ref_init = $(action).attr("ref-init");
+		if (ref_init!=undefined) {
+			ref_init = replaceVariable(ref_init);
+			var ref_inits = ref_init.split("/"); // ref1/ref2/...
+			for (var i=0;i<ref_inits.length;i++)
+				g_variables[ref_inits[i]] = new Array();
+		}
+		nodeid = nodeids[j];
+		if (nodevar!=undefined) {
+			g_variables[nodevar] = nodeid;
+		}
+		$.ajax({
+			async:false,
+			type : "GET",
+			dataType : "xml",
+			j : j,
+			url : serverBCK_API+"/nodes/node/" + nodeid,
+			success : function(data) {
+				UICom.parseStructure(data,true, null, null,true);
+				var actions = $(action).children();
+				for (var i=0; i<actions.length;i++){
+					var tagname = $(actions[i])[0].tagName;
+					g_report_actions[tagname](destid,actions[i],no+'-'+j.toString()+i.toString(),data);
+				};
+			}
+		});
+	}
+	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<nodeids.length) {
+		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
+		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
+		let next = "<br>"+first +" - "+ last + "/" +nodeids.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
+		$("#"+dashboard_current).append(next);
+	}
+}
+
+
+//=============================================================================
+//=============================================================================
 //================================= LOOP ======================================
 //=============================================================================
 //=============================================================================
@@ -1532,7 +1597,7 @@ g_report_actions['for-each-portfolio-js'] = function (destid,action,no,data)
 	if (NBELT!="" && NOELT!="" && parseInt(NOELT)+parseInt(NBELT)<portfolioids.length) {
 		g_variables["NOELT"] = parseInt(NOELT) + parseInt(NBELT);
 		let js = "$(\"#\"+dashboard_current).html(\"\");r_processPortfolio(0,dashboard_infos[dashboard_current].xmlReport,dashboard_current,dashboard_infos[dashboard_current].data,0);"
-		let next = "<br>"+first +" - "+ last + "/" +items_list.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
+		let next = "<br>"+first +" - "+ last + "/" +portfolioids.length+ " <button class='btn' onclick='"+js+"'>NEXT</button>"
 		$("#"+dashboard_current).append(next);
 	}
 }

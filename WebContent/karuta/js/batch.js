@@ -2734,7 +2734,107 @@ g_actions['import-node'] = function importNode(node)
 	return ok;
 }
 
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
+//------------------------- Move Node ----------------------------------
+//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
+//=================================================
+g_actions['move-node'] = function moveNode(node)
+//=================================================
+{
+	var ok = false
+	//------------------------------------
+	var source = $("source",node).text();
+	var srce_idx = source.lastIndexOf(".");
+	var srce_treeref = source.substring(0,srce_idx);
+	var srce_semtag = source.substring(srce_idx+1);
+	//------------------------------------
+	var select = $(node).attr("select");
+	var dest_idx = select.lastIndexOf(".");
+	var dest_treeref = select.substring(0,dest_idx);
+	var dest_semtag = select.substring(dest_idx+1);
+	//------------- source -----------------------
+	var nodeid = "";
+	if (source.indexOf('#current_node')+source.indexOf('#uuid')>-2){
+		if (source.indexOf('#current_node')>-1)
+			nodeid = g_current_node_uuid;
+		else
+			nodeid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+	} else {
+		//------------  --------------------
+		var url = "";
+		if (srce_treeref.indexOf("#")>-1)
+			url = serverBCK_API+"/nodes?portfoliocode=" + srce_treeref.substring(1) + "&semtag="+srce_semtag;	
+		else
+			url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[srce_treeref][1] + "&semtag="+srce_semtag;
+		//--------------------------------
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				var nodes = $("node",data);
+				if (nodes.length>0){
+					nodeid = $(nodes[0]).attr('id');
+				} else {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR </span> in move NOT FOUND - source="+source);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in move - source="+source);
+			}
+		});
+	}
+	//------------ Target --------------------
+	if (select.indexOf('#current_node')+select.indexOf('#uuid')>-2){
+		if (select.indexOf('#current_node')>-1)
+			destid = g_current_node_uuid;
+		else
+			destid = replaceVariable(b_replaceVariable(treeref)); // select = porfolio_uuid.#uuid
+	} else {
+		var url = "";
+		if (dest_treeref.indexOf("#")>-1)
+			url = serverBCK_API+"/nodes?portfoliocode=" + dest_treeref.substring(1) + "&semtag="+dest_semtag;	
+		else
+			url = serverBCK_API+"/nodes?portfoliocode=" + g_trees[dest_treeref][1] + "&semtag="+dest_semtag;
+		//--------------------------------
+		$.ajax({
+			async: false,
+			type : "GET",
+			dataType : "xml",
+			url : url,
+			success : function(data) {
+				var nodes = $("node",data);
+				if (nodes.length>0){
+					destid = $(nodes[0]).attr('id');
+				} else {
+					$("#batch-log").append("<br>- <span class='danger'>ERROR</span> NOT FOUND - dest="+select);
+				}
+			},
+			error : function(data) {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in move NOT FOUND - dest="+select);
+			}
+		});
+		//----------------- move node ------------------------
+		$.ajax({
+			async:false,
+			type : "POST",
+			dataType : "text",
+			url : serverBCK_API+"/nodes/node/" + nodeid + "/parentof/"+destid,
+			success : function(data) {
+				$("#batch-log").append("<br>- node moved from -"+source+ " to "+select);
+			},
+			error : function(jqxhr,textStatus) {
+				$("#batch-log").append("<br>- <span class='danger'>ERROR</span> in move from -"+source+ " to "+select);
+			}
+		});
+
+	}
+	return ok;
+}
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
