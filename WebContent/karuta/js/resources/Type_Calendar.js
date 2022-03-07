@@ -136,6 +136,8 @@ UIFactory["Calendar"].update = function(itself,langcode)
 //==================================
 {
 	$(itself.lastmodified_node).text(new Date().getTime());
+	if ($(itself.text_node[langcode]).text()=="")
+		$(itself.utc).text("null");
 	//---------------------
 	if (!itself.multilingual) {
 		var text = $(itself.text_node[langcode]).text();

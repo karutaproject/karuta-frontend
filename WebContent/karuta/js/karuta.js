@@ -158,7 +158,7 @@ function getNavBar(type,portfolioid,edit)
 	html += "			<span class='navbar-toggler-icon'></span>";
 	html += "		</button>";
 	html += "		<div class='navbar-collapse collapse' id='collapse-1'>";
-	html += "			<ul class='mr-auto navbar-nav'>";
+	html += "			<ul id='navbar-icons' class='mr-auto navbar-nav'>";
 	//---------------------HOME - TECHNICAL SUPPORT-----------------------
 	if (type=='login' || type=="create_account") {
 		html += "			<li id='navbar-mailto' class='nav-item icon'><a class='nav-link' href='mailto:"+g_configVar['technical-support']+"?subject="+karutaStr[LANG]['technical_support']+" ("+appliname+")' data-title='"+karutaStr[LANG]["button-technical-support"]+"' data-toggle='tooltip' data-placement='bottom'><i class='fas fa-envelope' data-title='"+karutaStr[LANG]["technical_support"]+"' data-toggle='tooltip' data-placement='bottom'></i></a></li>";
@@ -2182,11 +2182,13 @@ function getText(semtag,objtype,elttype,data,langcode)
 //------------------------------------------------------
 
 //==============================
-function printSection(eltid)
+function printSection(eltid,notinreport)
 //==============================
 {
+	if (notinreport==null)
+		notinreport = true;
 	var node_type = UICom.structure.ui[eltid.substring(6)].asmtype;
-	if (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot')
+	if ( (node_type=='asmUnit' || node_type=='asmStructure' || node_type=='asmRoot') && notinreport) // g_report_edit==false when inside preview
 		window.print();
 	else {
 		$("#wait-window").modal('show');
@@ -2194,13 +2196,22 @@ function printSection(eltid)
 		var divcontent = $(eltid).clone();
 		var ids = $("*[id]", divcontent);
 		$(ids).removeAttr("id");
-		var content = $(divcontent).html();
+		var content = $(divcontent)[0].outerHTML;
 		$("#print-window").html(content);
 		$("#main-body").addClass("section2hide");
 		$("#print-window").addClass("section2print");
 		$("#wait-window").modal('hide');
-		
+		if (!notinreport) {
+			$(".preview-window").hide();
+			$(".preview-backdrop").hide();
+		}
+		//------------------
 		window.print();
+		//------------------
+		if (!notinreport) {
+			$(".preview-window").show();
+			$(".preview-backdrop").show();
+		}
 		$("#print-window").removeClass("section2print");
 		$("#main-body").removeClass("section2hide");
 		$("#print-window").css("display", "none");

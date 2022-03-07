@@ -1634,10 +1634,18 @@ g_actions['update-node-resource'] = function updateResource(node)
 					//-------------------
 					var nodeid = $(nodes[i]).attr('id');
 					var resource = $("asmResource[xsi_type='nodeRes']",nodes[i]);
+					var oldcode = $("code",resource).text();
+					var oldlabel =$("label[lang='"+LANG+"']",resource).text();
 					var code = getTxtvals($("newcode",node));
+					if (code.indexOf("##oldcode##")>-1)
+						code = code.replaceAll("##oldcode##",oldcode);
 					var label = getTxtvals($("label",node));
-					$("code",resource).text(code);
-					$("label[lang='"+LANG+"']",resource).text(label);
+					if (label.indexOf("##oldlabel##")>-1)
+						label = label.replaceAll("##oldlabel##",oldlabel);
+					if (code!="")
+						$("code",resource).text(code);
+					if (label!="")
+						$("label[lang='"+LANG+"']",resource).text(label);
 					var data = "<asmResource xsi_type='nodeRes'>" + $(resource).html() + "</asmResource>";
 					var strippeddata = data.replace(/xmlns=\"http:\/\/www.w3.org\/1999\/xhtml\"/g,"");  // remove xmlns attribute
 					//-------------------
@@ -1668,6 +1676,7 @@ g_actions['update-node-resource'] = function updateResource(node)
 	});
 	return (ok!=0 && ok == nodes.length);
 }
+
 
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
